@@ -101,7 +101,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="AR21300Model.AR_Area" Width="1.5" PointX="2.875" PointY="16.75" />
+        <EntityTypeShape EntityType="AR21300Model.AR_Area" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

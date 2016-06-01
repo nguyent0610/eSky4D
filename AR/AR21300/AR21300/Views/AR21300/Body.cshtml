@@ -28,6 +28,10 @@
                 .KeyMap(Util.SetupKeyMap())
                 .TopBar(Util.SetupToolbar("Print", true, ""))
                 .Layout(LayoutType.Fit)
+                .Listeners(l =>
+                    {
+                        l.BoxReady.Handler = "firstLoad()";
+                    })
                 .Height(480)
                 .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
                 .Items(
@@ -49,23 +53,21 @@
                                 .ServerProxy(
                                             X.AjaxProxy()
                                             .Url(Url.Action("GetData"))
-                                            )
+                                            ).AutoLoad(false)
                                 .Listeners(l =>
-                                {
-                                    l.BeforeLoad.Fn = "stoBeforeLoad";
-                                    l.Load.Fn = "stoLoad";
-                                    l.Update.Fn = "stoChanged";                 
-                                })
-                            )
-                        .Listeners(p =>
-                        {
-                            p.BoxReady.Handler = "firstLoad();";
-                        })
+                                            {
+                                                l.Load.Fn = "stoLoad";
+                                                l.Update.Fn = "frmChange";
+                                            })
+                                        )
+                        .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdChannel');")
                         .SortableColumns(false)
                         .ColumnModel(
                                     X.RowNumbererColumn(),
-                                    X.Column().Text(Util.GetLang("Area")).DataIndex("Area").Width(150).Editor(X.TextField().MaxLength(10)),
-                                    X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(200)),
+                                   X.Column().Text(Util.GetLang("Area")).DataIndex("Area").Width(200)
+				                             .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
+                                     X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
+				                              .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true)),       
                                     X.CommandColumn().Width(150)
                                                     .Commands(
                                                                 X.GridCommand()
@@ -101,7 +103,7 @@
                                                                     l.Select.Fn = "HQ.grid.onPageSelect";
                                                                 })
                                         )
-                                    .Plugins(X.ProgressBarPager())
+                                            .Plugins(X.ProgressBarPager())
                                     )
                         .Plugins( //Cho phep edit
                                 X.CellEditing()

@@ -1,1 +1,210 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('l a=["\\z\\h\\b\\f","\\t\\h\\k\\z\\h\\b\\f","\\G\\g\\h\\d\\e","\\t\\h\\g\\k","\\J\\h\\b\\H","\\m\\b\\1f\\e","\\n\\f\\d\\e","\\g\\d\\1t\\r\\f\\m\\t\\b","","\\h\\b\\G\\h\\b\\d\\r","\\d\\r\\p\\R","\\x\\b\\d\\d\\f\\t\\b","\\g\\d\\1v\\g\\h\\d\\e\\1h\\p\\f\\k","\\h\\b\\n\\p\\f\\k","\\d\\e\\p\\z\\h\\b\\f","\\g\\d\\1j\\m\\d\\b\\h\\e","\\g\\m\\d\\b\\h\\e","\\m\\b\\R","\\g\\e\\b\\x\\d","\\d\\b\\n\\b\\j\\e\\b\\k","\\d\\n\\x\\z\\h\\b\\f","\\g\\m\\k\\b\\1f\\L\\b\\n\\b\\j\\e","\\k\\b\\n\\b\\e\\b\\F\\f\\e\\f","\\k\\b\\n\\b\\e\\b","\\g\\d\\1G\\J\\k\\f\\e\\b","\\g\\d\\F\\b\\n\\b\\e\\b","\\j\\r\\b\\j\\D\\I\\b\\1D\\P\\g\\h\\b\\1E\\f\\d\\d","\\d\\e\\p\\h\\b","\\d\\f\\H\\b","\\J\\h\\g\\m\\e","\\j\\n\\p\\d\\b","\\j\\p\\x\\x\\p\\m","\\z\\I\\1n\\1m\\1l\\K\\K","\\j\\r\\f\\m\\t\\b\\F\\f\\e\\f","\\d\\r\\p\\R\\N\\P\\d\\M","\\g\\m\\d\\b\\h\\e\\N\\n\\f\\m\\D","\\n\\p\\f\\k\\g\\m\\t\\k\\f\\e\\f","\\t\\b\\e\\1h\\f\\m\\t","\\j\\r\\b\\j\\D\\N\\b\\G\\p\\h\\b\\1i\\k\\g\\e","\\j\\r\\b\\j\\D\\1j\\m\\d\\b\\h\\e\\1x\\b\\M","\\j\\r\\b\\j\\D\\1d\\f\\n\\g\\k\\f\\e\\b\\1i\\k\\g\\e","\\j\\r\\b\\j\\D\\I\\b\\1B\\b\\j\\e","\\g\\d\\1d\\f\\n\\g\\k","\\G\\h\\x\\1z\\f\\g\\m","\\L\\f\\H\\g\\m\\t\\F\\f\\e\\f","\\z\\I\\1n\\1m\\1l\\K\\K\\1C\\L\\f\\H\\b","\\t\\b\\e\\F\\f\\e\\f","\\J\\h\\p\\j\\b\\d\\d","\\d\\P\\1y\\x\\g\\e","\\M\\b\\d","\\k\\b\\n\\b\\e\\b\\L\\b\\n\\b\\j\\e\\b\\k"];l w=[a[0]];l W=[a[0]];l V=[a[0]];l 1e=o(Z){1w(Z){u a[2]:c[a[3]][a[2]](i[a[1]]);s;u a[4]:c[a[3]][a[4]](i[a[1]]);s;u a[5]:c[a[3]][a[5]](i[a[1]]);s;u a[6]:c[a[3]][a[6]](i[a[1]]);s;u a[9]:q(c[a[7]]){c[a[11]][a[10]](1s,a[8],a[9])}1u{c[a[7]]=E;c[a[12]]=v;i[a[14]][a[13]]()};s;u a[17]:q(c[a[15]]){c[a[3]][a[16]](i[a[1]],w)};s;u a[23]:q(i[a[20]][a[19]][a[18]][0]!=1A){l T=c[a[3]][a[21]](i[a[1]]);q(T!=a[8]){c[a[11]][a[10]](1H,[c[a[3]][a[21]](i[a[1]]),a[8]],a[22],v)}};s;u a[28]:q(c[a[24]]||c[a[15]]||c[a[25]]){q(c[a[27]][a[26]](i[a[14]],w,W,V)){1o()}};s;u a[29]:s;u a[X]:c[a[y]][a[X]](2j);s}};l 2k=o(){c[a[12]]=v;i[a[14]][a[13]]()};l Q=o(B){c[a[7]]=c[a[27]][a[7]](B);c[a[y]][a[Y]](c[a[7]],a[U])};l 2l=o(B){c[a[12]]=v;c[a[y]][a[1b]](E);c[a[7]]=c[a[27]][a[7]](B);c[a[y]][a[Y]](c[a[7]],a[U]);q(c[a[12]]){q(c[a[15]]){c[a[27]][a[2g]](B,w)};c[a[12]]=E}};l 1P=o(B){c[a[y]][a[1b]](v,c[a[y]][a[1g]](a[2h]))};l 1Q=o(1R,A){1c c[a[3]][a[1S]](A,w)};l 1O=o(C,A){c[a[3]][a[1N]](i[a[1]],A,w)};l 1J=o(C,A){1c c[a[3]][a[1I]](i[a[1]],A,w)};l 1K=o(1p){c[a[3]][a[1L]](1p,i[a[1]]);Q(i[a[14]])};l 1o=o(){q(i[a[1k]][a[1M]]()){i[a[1k]][a[1T]]({1U:2c,2d:c[a[y]][a[1g]](a[2e]),2f:a[2b],2a:{1W:c[a[27]][a[1V]](i[a[14]])},1X:o(O,S){c[a[11]][a[10]](1Y);c[a[7]]=E;1e(a[9])},1Z:o(O,S){c[a[11]][a[2i]](O,S,v)}})}};l 1q=o(C){q(C==a[1a]){i[a[1]][a[1r]]();Q(i[a[14]])}};o 1F(C){q(C==a[1a]){c[a[7]]=E;c[a[12]]=v;i[a[14]][a[13]]()}}', 62, 146, '||||||||||_0x5238|x65|HQ|x73|x74|x61|x69|x72|App|x63|x64|var|x6E|x6C|function|x6F|if|x68|break|x67|case|true|keys|x6D|31|x41|_0xf450xe|_0xf450x9|_0xf450x10|x6B|false|x44|x66|x76|x52|x70|x30|x53|x79|x42|_0xf450x15|x75|stoChanged|x77|_0xf450x16|_0xf450x6|32|fieldsLangCheckRequire|fieldsCheckRequire|30|33|_0xf450x5|||||||||||49|34|return|x56|menuClick|x78|37|x4C|x45|x49|43|x33|x31|x32|save|_0xf450x13|deleteData|50|20150303|x43|else|x46|switch|x4B|x62|x4D|undefined|x6A|x2F|x71|x50|refresh|x55|2015020807|40|grdArea_ValidateEdit|grdArea_Reject|41|42|39|grdArea_Edit|stoBeforeLoad|grdArea_BeforeEdit|_0xf450xd|38|48|timeout|46|lstAR_Area|success|201405071|failure|||||||||||params|45|1800000|waitMsg|44|url|35|36|47|this|firstLoad|stoLoad'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['Area'];
+var fieldsCheckRequire = ["Area", "Descr"]
+var fieldsLangCheckRequire = ["Area","Diễn Giải"];
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+/////////////////////Store////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoArea.reload();
+        HQ.common.showBusy(false);
+    }
+};
+////////////////Event///////////////////////
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdArea);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdArea);
+            break;
+        case "next":
+            HQ.grid.next(App.grdArea);
+            break;
+        case "last":
+            HQ.grid.last(App.grdArea);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoArea.reload();
+            }
+            break;
+           
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdArea, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmArea.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    if (App.slmArea.selected.items[0] != undefined) {
+                        if (App.slmArea.selected.items[0].data.Area != "") {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdArea)], 'deleteData', true);
+                        }
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoArea, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+
+};
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+    checkLoad(); // Mới
+};
+
+var frmChange = function () {
+    HQ.isChange = HQ.store.isChange(App.stoArea);
+    HQ.common.changeData(HQ.isChange, 'AR21300');//co thay doi du lieu gan * tren tab title header
+};
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoArea.reload();
+    }
+};
+
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false; //sto load cuoi se su dung
+    }
+    frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var grdArea_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdArea_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdArea, e, keys);
+};
+
+var grdArea_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdArea, e, keys);
+};
+
+var grdArea_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdArea);
+    frmChange();
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+//var save = function () {
+//    if (App.frmMain.isValid()) {
+//        App.frmMain.submit({
+//            timeout: 1800000,
+//            waitMsg: HQ.common.getLang("SavingData"),
+//            url: 'AR21300/Save',
+//            params: {
+//                lstAR_Area: HQ.store.getData(App.stoArea)
+//            },
+//            success: function (msg, data) {
+//                HQ.message.show(201405071);
+//                HQ.isChange = false;
+//                refresh("yes");
+//            },
+//            failure: function (msg, data) {
+//                HQ.message.process(msg, data, true);
+//            }
+//        });
+//    }
+//};
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'AR21300/Save',
+            params: {
+                lstAR_Area: HQ.store.getData(App.stoArea)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                refresh("yes");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdArea.deleteSelected();
+        frmChange();
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoArea.reload();
+    }
+};
+var checkRequire = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
+            if (items[i][Area].trim() == "") {
+                HQ.message.show(15, HQ.common.getLang("Area"));
+                return false;
+            }
+            if (items[i]["Descr"].trim() == "") {
+                HQ.message.show(15, HQ.common.getLang("Descr"));
+                return false;
+            }
+
+        }
+        return true;
+    } else {
+        return true;
+    }
+};
+
+///////////////////////////////////
