@@ -1,4 +1,4 @@
-﻿using HQ.eSkyFramework;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -47,26 +47,16 @@ namespace AR21100.Controllers
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstChannel"]);
                 ChangeRecords<AR_Channel> lstChannel = dataHandler.BatchObjectData<AR_Channel>();
-
-                lstChannel.Created.AddRange(lstChannel.Updated);
-
-                foreach (AR_Channel del in lstChannel.Deleted)
+                foreach (AR_Channel deleted in lstChannel.Deleted)
                 {
-                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
-                    if (lstChannel.Created.Where(p => p.Code == del.Code).Count() > 0)
+                    var del = _db.AR_Channel.Where(p => p.Code == deleted.Code).FirstOrDefault();
+                    if (del != null)
                     {
-                        lstChannel.Created.Where(p => p.Code == del.Code).FirstOrDefault().tstamp = del.tstamp;
-                    }
-                    else
-                    {
-                        var objDel = _db.AR_Channel.ToList().Where(p => p.Code == del.Code).FirstOrDefault();
-                        if (objDel != null)
-                        {
-                            _db.AR_Channel.DeleteObject(objDel);
-                        }
+                        _db.AR_Channel.DeleteObject(del);
                     }
                 }
 
+                lstChannel.Created.AddRange(lstChannel.Updated);
 
                 foreach (AR_Channel curChannel in lstChannel.Created)
                 {
@@ -88,7 +78,6 @@ namespace AR21100.Controllers
                     else
                     {
                         Channel = new AR_Channel();
-                        Channel.ResetET();
                         Update_AR_Channel(Channel, curChannel, true);
                         _db.AR_Channel.AddObject(Channel);
                     }

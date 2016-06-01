@@ -17,47 +17,46 @@
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
-    .Layout(LayoutType.Border)
-    .Listeners(l =>
-    {
-        l.BoxReady.Handler = "firstLoad()";
-    })
+    .Layout(LayoutType.Fit)
     .Items(
         ////Thiet ke giao dien o day
+
         X.GridPanel()
-            .Scroll(ScrollMode.Both)
-            .View(X.GridView().TrackOver(false))
-            .ID("grdChannel")
-            //.SelectionMemory(false)
-            .Region(Region.Center).Flex(1)
-            .Store(
-                X.Store()
-                .ID("stoChannel").AutoLoad(false)
-                .PageSize(50)
-                .Model(Util.GenerateModel(typeof(AR21100_pgLoadChannel_Result), "mdlAR21100_pgLoadChannel", ""))
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetChannel")))
-                .Listeners(l =>
-                {
-                    l.Load.Fn = "stoLoad";
-                    l.Update.Fn = "frmChange";
-                })
-            )
-        .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdChannel');")
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdChannel")
+        .Store(
+            X.Store()
+            .ID("stoChannel")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(AR21100_pgLoadChannel_Result), "mdlAR21100_pgLoadChannel", "Code"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetChannel"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";                 
+            })
+        )
+        .Listeners(p =>
+                 {
+                     p.BoxReady.Handler = "firstLoad();";
+                 })
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
             X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150)
-                .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
+                    .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
-                .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),
+                    .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),
             X.CommandColumn()
             .Width(150)
             .Commands(
-                    X.GridCommand()
-                    .Text(Util.GetLang("Reject"))
-                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                    .CommandName("reject")
-                    .Icon(Icon.ArrowUndo)
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
             )
             .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
             .Listeners(l => l.Command.Handler = "grdChannel_Reject(record);")
@@ -99,8 +98,5 @@
                    X.StringFilter().DataIndex("Descr")
                 )
         )
-    ).Listeners(lst =>
-        {
-            lst.Render.Handler = "HQ.common.control_render(this,'grdChannel')";
-        })
+    )
 ))
