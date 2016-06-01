@@ -18,9 +18,9 @@
     <head>
         <meta name="viewport" content="width=device-width" />
         <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
-        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
-        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
-        <script src='@Url.Content("Scripts/Screen/OM00000.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/screen/OM00000.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
 
         <script type="text/javascript">
             HQ.cpnyID = '@Current.CpnyID';
@@ -61,13 +61,18 @@
                 //ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
                 //ps.Add(new StoreParameter("slsperid", "App.cboSlsperid.getValue()", ParameterMode.Raw));
             })      
-            .Listeners(p=>p.Load.Fn="Event.Store.stoSetup_load" )
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";                   
+                }
+            )
             // Store: stoSalesPerson
         )
 
         @(
             Html.HQ().Store().ID("stoDetDiscGxC1")
-            .HQProcedure("OM00000_pcDiscountType").AutoLoad(false)
+            .HQProcedure("OM00000_pcDiscountType")
             .HQParam(new StoreParameterCollection() 
             { 
                 new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
@@ -78,7 +83,7 @@
 
         @(
             Html.HQ().Store().ID("stoPriceSeqxx")
-            .HQProcedure("OM00000_pcPriceSeq").AutoLoad(false)
+            .HQProcedure("OM00000_pcPriceSeq")
             .HQParam(new StoreParameterCollection() 
             { 
                 new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
@@ -89,7 +94,7 @@
 
         @(
             Html.HQ().Store().ID("stoGroupDiscGxC1")
-            .HQProcedure("OM00000_pcDiscountType").AutoLoad(false)
+            .HQProcedure("OM00000_pcDiscountType")
             .HQParam(new StoreParameterCollection() 
             { 
                 new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
@@ -100,7 +105,7 @@
 
         @(
             Html.HQ().Store().ID("stoDocDiscGxCx")
-            .HQProcedure("OM00000_pcDiscountType").AutoLoad(false)
+            .HQProcedure("OM00000_pcDiscountType")
             .HQParam(new StoreParameterCollection() 
             { 
                 new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
