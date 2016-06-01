@@ -199,12 +199,24 @@ function save() {
 
     if (HQ.isInsert || HQ.isUpdate) {
         var curRecord = App.frmMain.getRecord();
+        
+        
         //curRecord.data.Name = App.txtName.getValue();
-        var checkShipEmail = HQ.util.checkEmail(App.ShipEmail.getValue());
-        var checkBillEmail = HQ.util.checkEmail(App.BillEmail.getValue());
 
+        if (!Ext.isEmpty(App.ShipEmail.getValue())) {
+            var checkShipEmail = HQ.util.checkEmail(App.ShipEmail.getValue());
+            if (!checkShipEmail) {
+                return;
+            }
+        }
+        if (!Ext.isEmpty(App.ShipEmail.getValue())) {
+            var checkBillEmail = HQ.util.checkEmail(App.BillEmail.getValue());
+            if (!checkBillEmail) {
+                return;
+            }
+        }
         App.frmMain.getForm().updateRecord();
-        if (checkShipEmail && checkBillEmail) {
+       
             if (App.frmMain.isValid()) {
                 App.frmMain.submit({
                     waitMsg: HQ.common.getLang('Submiting...'),
@@ -224,10 +236,7 @@ function save() {
                     }
                 });
             }
-        } else {
-            HQ.message.show(9112014, '', null);
         }
-    }
 
 };
 
