@@ -18,6 +18,10 @@
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar("Print", true, ""))
         .Layout(LayoutType.Fit)
+             .Listeners(l =>
+        {
+            l.BoxReady.Handler = "firstLoad()";
+        })
         .Items(
             ////Thiet ke giao dien o day
 
@@ -26,18 +30,18 @@
             .View(X.GridView().TrackOver(false))
             .ID("grdLocation")
             .Store(
-                X.Store()
+                X.Store().AutoLoad(false)
                 .ID("stoLocation")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(AR21200_pgLoadLocation_Result), "mdAR_Location", "Location"))
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetLocation")))
-                .Listeners(l =>
-                {
-                    l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                    l.Load.Handler = "HQ.common.showBusy(false);"; 
-                })
-            )
-            .Listeners(p => p.BoxReady.Handler = "App.stoLocation.reload();")
+                   .Listeners(l =>
+                    {
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "frmChange";
+                    })
+                )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdChannel');")
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)
@@ -87,7 +91,6 @@
                     ls.BeforeEdit.Fn = "grdLocation_BeforeEdit";
                     ls.Edit.Fn = "grdLocation_Edit";
                     ls.ValidateEdit.Fn = "grdLocation_ValidateEdit";
-                    ls.CancelEdit.Fn = "grdLocation_CancelEdit";
                 })
             )
 

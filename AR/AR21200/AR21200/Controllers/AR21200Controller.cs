@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -29,7 +29,7 @@ namespace AR21200.Controllers
             return View();
         }
 
-       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -48,16 +48,24 @@ namespace AR21200.Controllers
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstLocation"]);
                 ChangeRecords<AR_Location> lstLocation = dataHandler.BatchObjectData<AR_Location>();
-                foreach (AR_Location deleted in lstLocation.Deleted)
+               
+                lstLocation.Created.AddRange(lstLocation.Updated);
+                foreach (AR_Location del in lstLocation.Deleted)
                 {
-                    var del = _db.AR_Location.Where(p => p.Location == deleted.Location).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstLocation.Created.Where(p => p.Location == del.Location).Count() > 0)
                     {
-                        _db.AR_Location.DeleteObject(del);
+                        lstLocation.Created.Where(p => p.Location == del.Location).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.AR_Location.ToList().Where(p => p.Location == del.Location).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.AR_Location.DeleteObject(objDel);
+                        }
                     }
                 }
-
-                lstLocation.Created.AddRange(lstLocation.Updated);
 
                 foreach (AR_Location curLocation in lstLocation.Created)
                 {
@@ -79,6 +87,7 @@ namespace AR21200.Controllers
                     else
                     {
                         Location = new AR_Location();
+                        Location.ResetET();
                         Update_AR_Location(Location, curLocation, true);
                         _db.AR_Location.AddObject(Location);
                     }

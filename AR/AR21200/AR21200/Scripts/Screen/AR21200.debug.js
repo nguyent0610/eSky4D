@@ -1,9 +1,18 @@
-//// Declare //////////////////////////////////////////////////////////
-
+﻿//// Declare //////////////////////////////////////////////////////////
+var fieldsCheckRequire = ["Location", "Descr"];
 var keys = ['Location'];
 ///////////////////////////////////////////////////////////////////////
 
 //// Store /////////////////////////////////////////////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoLocation.reload();
+        HQ.common.showBusy(false);
+    }
+};
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -25,8 +34,14 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdLocation);
             break;
         case "refresh":
-            App.stoLocation.reload();
-            HQ.grid.first(App.grdLocation);
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoChannel.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
@@ -34,15 +49,29 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
-            if (App.slmLocation.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
+            //if (App.slmLocation.selected.items[0] != undefined) {
+            //    if (HQ.isDelete) {
+            //        HQ.message.show(11, '', 'deleteData');
+            //    }
+            //}
+            //break;
+            if (HQ.isDelete) {
+                if (App.slmLocation.selected.items[0] != undefined) {
+                    if (App.slmLocation.selected.items[0].data.Location != "") {
+                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.slmLocation)], 'deleteData', true);
+                    }
                 }
             }
             break;
         case "save":
+            //if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+            //    if (checkRequire(App.stoLocation.getChangedData().Created) && checkRequire(App.stoLocation.getChangedData().Updated)) {
+            //        save();
+            //    }
+            //}
+            //break;
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (checkRequire(App.stoLocation.getChangedData().Created) && checkRequire(App.stoLocation.getChangedData().Updated)) {
+                if (HQ.store.checkRequirePass(App.stoLocation, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -58,6 +87,12 @@ var menuClick = function (command) {
             break;
     }
 
+};
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+    checkLoad(); // Mới
 };
 var grdLocation_BeforeEdit = function (editor, e) {
     if (!HQ.isUpdate) return false; 
