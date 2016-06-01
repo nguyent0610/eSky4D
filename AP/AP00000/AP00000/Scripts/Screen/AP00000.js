@@ -19,7 +19,8 @@ var checkLoad = function (sto) {
 ////////////////////////////////////////////////////////////////////////
 //// First Load ////////////////////////////////////////////////////////
 var firstLoad = function () {
-    HQ.util.checkAccessRight(); //Kiểm tra quyền Insert Update Delete để disable các button trên topbar(Bắt buộc)
+    if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false)
+        App.menuClickbtnSave.disable();
     App.frmMain.isValid(); //Require các field yêu cầu trên man hình
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     HQ.isFirstLoad = true;
@@ -60,11 +61,10 @@ var menuClick = function (command) {
                 HQ.message.show(20150303, '', 'refresh');
             }
             else {
-                HQ.isChange = false;
-                App.stoAP00000Header.reload();
+                refresh("yes");
             }
             break;
-            
+
         default:
     }
 };
@@ -75,15 +75,31 @@ var frmChange = function () {
 
     HQ.isChange = HQ.store.isChange(App.stoAP00000Header);
     HQ.common.changeData(HQ.isChange, 'AP00000');
+    
 };
 
 var stoLoad = function (sto) {
+  
     HQ.isNew = false;
     HQ.common.lockItem(App.frmMain, false);
-    if (App.stoAP00000Header.getCount() == 0) {
-        App.stoAP00000Header.insert(0, Ext.data.Record());
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "");
+        record = sto.getAt(0);
+        HQ.isNew = true; //record la new 
+        HQ.isFirstLoad = true;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require 
+        sto.commitChanges();
     }
-    App.frmMain.getForm().loadRecord(App.stoAP00000Header.getAt(0));
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+
+    if (!HQ.isInsert && HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    
     if (_isLoadMaster) {
         HQ.common.showBusy(false);
         frmChange();
@@ -109,9 +125,7 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
-                //VendID = data.result.VendID;
-                HQ.isChange = false;
-                App.stoAP00000Header.reload();
+                refresh("yes");
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
