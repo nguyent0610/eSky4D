@@ -792,7 +792,7 @@ namespace AR20400.Controllers
             }
         }
 
-        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, string nodeType, string CpnyID)
+        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z, string CpnyID)
         {
             var node = new Node();
             var k = -1;
@@ -815,7 +815,7 @@ namespace AR20400.Controllers
 
             var childrenInactiveHierachies = _db.SI_Hierarchy
                 .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
-                    && p.Type == nodeType
+                    && p.Type == inactiveHierachy.Type
                     && p.NodeLevel == level).ToList();
 
             if (tmps != null && tmps.Count > 0)
@@ -835,7 +835,7 @@ namespace AR20400.Controllers
             {
                 foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
                 {
-                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, nodeType, CpnyID));
+                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, z++, CpnyID));
                 }
             }
             else
@@ -871,7 +871,7 @@ namespace AR20400.Controllers
                 Type = nodeType
             };
             var z = 0;
-            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, nodeType, CpnyID);
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z, CpnyID);
 
             //quan trong dung de refresh slmTree
             this.GetCmp<TreePanel>("treeCust").SetRootNode(node);

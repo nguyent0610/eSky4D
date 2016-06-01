@@ -41,6 +41,8 @@ namespace AR20400
             Current.Server = "EARTHSVR\\SQL2012";
             Current.DBSys = "ND_eSky4DSys";
             AccessRight acc = new AccessRight();
+            Current.FormatDateJS = "dd/MM/yyyy";
+            Current.FormatDate = "dd/MM/yyyy";
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;

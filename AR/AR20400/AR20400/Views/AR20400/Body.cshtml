@@ -868,13 +868,13 @@
 
                                 , X.CheckColumn().Text(Util.GetLang("Active")).DataIndex("Active").Editable(true).Width(80)
 
-                                , HQ.DateColumn().Text(Util.GetLang("FromDate")).DataIndex("FromDate").Width(100)
+                                , X.DateColumn().Text(Util.GetLang("FromDate")).DataIndex("FromDate").Width(100)
                                     .Editor(HQ.DateField())
 
-                                , HQ.DateColumn().Text(Util.GetLang("ToDate")).DataIndex("ToDate").Width(100)
+                                , X.DateColumn().Text(Util.GetLang("ToDate")).DataIndex("ToDate").Width(100)
                                     .Editor(HQ.DateField())
 
-                                , HQ.DateColumn().Text(Util.GetLang("ExtDate")).DataIndex("ExtDate").Width(100)
+                                , X.DateColumn().Text(Util.GetLang("ExtDate")).DataIndex("ExtDate").Width(100)
                                     .Editor(HQ.DateField())
 
                                 , X.NumberColumn().Text(Util.GetLang("MonthNo")).DataIndex("MonthNum")
@@ -1156,7 +1156,7 @@
                             .Width(120).Align(Alignment.Right).Format("0,000")
                             .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
 
-                        , HQ.DateColumn().Text(Util.GetLang("FitupDate")).DataIndex("FitupDate").Width(100)
+                        , X.DateColumn().Text(Util.GetLang("FitupDate")).DataIndex("FitupDate").Width(100)
                             .Editor(HQ.DateField())
 
                         , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(100)
