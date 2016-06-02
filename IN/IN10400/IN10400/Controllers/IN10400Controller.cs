@@ -125,8 +125,9 @@ namespace IN10400.Controllers
         {
             List<IN_ItemLot> lstLot = new List<IN_ItemLot>();
 
-            List<IN_ItemLot> lstLotDB = _app.IN_ItemLot.Where(p => p.SiteID == siteID && p.InvtID == invtID && p.QtyAvail > 0).ToList();
+            //List<IN_ItemLot> lstLotDB = _app.IN_ItemLot.Where(p => p.SiteID == siteID && p.InvtID == invtID && p.QtyAvail > 0).ToList();
 
+            List<IN_ItemLot> lstLotDB = _app.IN_ItemLot.Where(p => p.SiteID == siteID && p.InvtID == invtID ).ToList();
             foreach (var item in lstLotDB)
             {
                 lstLot.Add(item);
