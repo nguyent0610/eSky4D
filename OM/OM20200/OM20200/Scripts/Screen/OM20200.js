@@ -1,1 +1,211 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('m a=["\\H\\h\\g\\i\\b\\I\\k\\e\\d\\d\\T\\x","\\x\\b\\d\\i\\h","\\t\\h\\l\\F\\E\\P\\H\\h\\g\\i\\b\\I\\k\\e\\d\\d","\\N\\g\\h\\d\\f","\\t\\h\\g\\l","\\K\\h\\b\\L","\\n\\b\\1D\\f","\\k\\e\\d\\f","\\g\\d\\I\\r\\e\\n\\t\\b","","\\h\\b\\N\\h\\b\\d\\r","\\d\\r\\p\\V","\\y\\b\\d\\d\\e\\t\\b","\\g\\d\\1x\\g\\h\\d\\f\\1h\\p\\e\\l","\\h\\b\\k\\p\\e\\l","\\d\\f\\p\\F\\E\\P\\H\\h\\g\\i\\b\\I\\k\\e\\d\\d","\\g\\d\\T\\n\\d\\b\\h\\f","\\g\\n\\d\\b\\h\\f","\\n\\b\\V","\\g\\f\\b\\y\\d","\\d\\b\\k\\b\\i\\f\\b\\l","\\d\\k\\y\\F\\E\\P\\H\\h\\g\\i\\b\\I\\k\\e\\d\\d","\\g\\d\\x\\b\\k\\b\\f\\b","\\l\\b\\k\\b\\f\\b\\x\\e\\f\\e","\\l\\b\\k\\b\\f\\b","\\g\\d\\1C\\K\\l\\e\\f\\b","\\i\\r\\b\\i\\z\\1k\\b\\1y\\O\\g\\h\\b\\H\\e\\d\\d","\\d\\f\\p\\h\\b","\\d\\e\\L\\b","\\K\\h\\g\\n\\f","\\i\\k\\p\\d\\b","\\i\\p\\y\\y\\p\\n","\\F\\E\\M\\B\\M\\B\\B","\\i\\r\\e\\n\\t\\b\\x\\e\\f\\e","\\d\\r\\p\\V\\U\\O\\d\\X","\\g\\n\\d\\b\\h\\f\\U\\k\\e\\n\\z","\\k\\p\\e\\l\\g\\n\\t\\l\\e\\f\\e","\\t\\b\\f\\1h\\e\\n\\t","\\i\\r\\b\\i\\z\\U\\b\\N\\p\\h\\b\\1l\\l\\g\\f","\\i\\r\\b\\i\\z\\T\\n\\d\\b\\h\\f\\1v\\b\\X","\\i\\r\\b\\i\\z\\1n\\e\\k\\g\\l\\e\\f\\b\\1l\\l\\g\\f","\\i\\r\\b\\i\\z\\1k\\b\\1B\\b\\i\\f","\\g\\d\\1n\\e\\k\\g\\l","\\N\\h\\y\\E\\e\\g\\n","\\W\\e\\L\\g\\n\\t\\x\\e\\f\\e","\\F\\E\\M\\B\\M\\B\\B\\1s\\W\\e\\L\\b","\\t\\b\\f\\x\\e\\f\\e","\\K\\h\\p\\i\\b\\d\\d","\\d\\O\\1z\\y\\g\\f","\\X\\b\\d","\\l\\b\\k\\b\\f\\b\\W\\b\\k\\b\\i\\f\\b\\l"];m v=[a[0]];m 1f=[a[0],a[1]];m 1a=[a[0],a[1]];m 1g=o(Y){1t(Y){u a[3]:c[a[4]][a[3]](j[a[2]]);s;u a[5]:c[a[4]][a[5]](j[a[2]]);s;u a[6]:c[a[4]][a[6]](j[a[2]]);s;u a[7]:c[a[4]][a[7]](j[a[2]]);s;u a[10]:q(c[a[8]]){c[a[12]][a[11]](1u,a[9],a[10])}1w{c[a[8]]=J;c[a[13]]=G;j[a[15]][a[14]]()};s;u a[18]:q(c[a[16]]){c[a[4]][a[17]](j[a[2]],v)};s;u a[24]:q(j[a[21]][a[20]][a[19]][0]!=1E){q(c[a[22]]){c[a[12]][a[11]](11,a[9],a[23])}};s;u a[28]:q(c[a[25]]||c[a[16]]||c[a[22]]){q(c[a[27]][a[26]](j[a[15]],v,1f,1a)){1o()}};s;u a[29]:s;u a[1c]:c[a[w]][a[1c]](2f);s}};m 2g=o(){c[a[13]]=G;j[a[15]][a[14]]()};m R=o(C){c[a[8]]=c[a[27]][a[8]](C);c[a[w]][a[1b]](c[a[8]],a[1e])};m 2c=o(C){c[a[w]][a[Z]](J);c[a[8]]=c[a[27]][a[8]](C);c[a[w]][a[1b]](c[a[8]],a[1e]);q(c[a[13]]){q(c[a[16]]){c[a[27]][a[1M]](C,v)};c[a[13]]=J}};m 2d=o(C){c[a[w]][a[Z]](G,c[a[w]][a[1m]](a[1N]))};m 1O=o(1P,D){1p c[a[4]][a[1L]](D,v)};m 1K=o(A,D){c[a[4]][a[1G]](j[a[2]],D,v)};m 1F=o(A,D){1p c[a[4]][a[1H]](j[a[2]],D,v)};m 1I=o(1i){c[a[4]][a[1J]](1i,j[a[2]]);R(j[a[15]])};m 1o=o(){q(j[a[1j]][a[1Q]]()){j[a[1j]][a[1R]]({1Y:c[a[w]][a[1m]](a[1Z]),2a:a[2b],1X:{1W:c[a[27]][a[1S]](j[a[15]])},1T:o(Q,S){c[a[12]][a[11]](1U);c[a[8]]=J;1g(a[10])},1V:o(Q,S){c[a[12]][a[2e]](Q,S,G)}})}};m 1q=o(A){q(A==a[1d]){j[a[2]][a[1r]]();R(j[a[15]])}};o 1A(A){q(A==a[1d]){c[a[8]]=J;c[a[13]]=G;j[a[15]][a[14]]()}}', 62, 141, '||||||||||_0xb3dc|x65|HQ|x73|x61|x74|x69|x72|x63|App|x6C|x64|var|x6E|function|x6F|if|x68|break|x67|case|keys|31|x44|x6D|x6B|_0xe8fexf|x30|_0xe8fex8|_0xe8fexd|x4D|x4F|true|x50|x43|false|x70|x76|x32|x66|x75|x5F|_0xe8fex14|stoChanged|_0xe8fex15|x49|x42|x77|x53|x79|_0xe8fex5|34|||||||||||fieldsLangCheckRequire|33|30|49|32|fieldsCheckRequire|menuClick|x4C|_0xe8fex12|43|x52|x45|37|x56|save|return|deleteData|50|x2F|switch|20150303|x4B|else|x46|x71|x62|refresh|x6A|x55|x78|undefined|grdOM_PriceClass_ValidateEdit|39|40|grdOM_PriceClass_Reject|41|grdOM_PriceClass_Edit|38|35|36|grdOM_PriceClass_BeforeEdit|_0xe8fexc|42|48|46|success|201405071|failure|lstOM_PriceClass|params|waitMsg|44|||||||||||url|45|stoLoad|stoBeforeLoad|47|this|firstLoad'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+
+var keys = ['PriceClassID'];
+var fieldsCheckRequire = ["PriceClassID", "Descr"];
+var fieldsLangCheckRequire = ["PriceClassID", "Descr"];
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+///////////////////////////////////////////////////////////////////////
+
+// Store /////////////////////////////////////////////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoOM_PriceClass.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+////////////////////////////////////////////////////////////////////////
+
+
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdOM_PriceClass);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdOM_PriceClass);
+            break;
+        case "next":
+            HQ.grid.next(App.grdOM_PriceClass);
+            break;
+        case "last":
+            HQ.grid.last(App.grdOM_PriceClass);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoOM_PriceClass.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdOM_PriceClass);
+            }
+            break;
+        case "delete":
+            if (App.slmOM_PriceClass.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    if (App.slmOM_PriceClass.selected.items[0] != undefined) {
+                        if (App.slmOM_PriceClass.selected.items[0].data.PriceClassID != "") {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdOM_PriceClass)], 'deleteData', true);
+                        }
+                    }
+                }
+            }
+            break;
+
+        case "save":
+
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoOM_PriceClass, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+
+};
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+    checkLoad(); // Mới
+};
+
+
+var frmChange = function () {
+    HQ.isChange = HQ.store.isChange(App.stoOM_PriceClass);
+    HQ.common.changeData(HQ.isChange, 'OM20200');//co thay doi du lieu gan * tren tab title header
+};
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoOM_PriceClass.reload();
+    }
+};
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false; //sto load cuoi se su dung
+    }
+    frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+var grdOM_PriceClass_BeforeEdit = function (editor, e) {
+    if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
+};
+var grdOM_PriceClass_Edit = function (item, e) {
+
+    HQ.grid.checkInsertKey(App.grdOM_PriceClass, e, keys);
+    frmChange();
+};
+var grdOM_PriceClass_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdOM_PriceClass, e, keys);
+};
+
+var grdOM_PriceClass_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_PriceClass);
+    frmChange();
+};
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+//// Process Data ///////////////////////////////////////////////////////
+
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'OM20200/Save',
+            params: {
+                lstOM_PriceClass: HQ.store.getData(App.stoOM_PriceClass)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                refresh("yes");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdOM_PriceClass.deleteSelected();
+        frmChange();
+    }
+};
+//kiem tra key da nhap du chua
+var isAllValidKey = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var j = 0; j < keys.length; j++) {
+                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
+                    return false;
+            }
+        }
+        return true;
+    } else {
+        return true;
+    }
+};
+//kiem tra nhung field yeu cau bat buoc nhap
+var checkRequire = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
+            if (items[i]["PriceClassID"].trim() == "") {
+                HQ.message.show(15, HQ.common.getLang("PriceClassID"));
+                return false;
+            }
+            if (items[i]["Descr"].trim() == "") {
+                HQ.message.show(15, HQ.common.getLang("Descr"));
+                return false;
+            }
+
+        }
+        return true;
+    } else {
+        return true;
+    }
+};
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+/////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+

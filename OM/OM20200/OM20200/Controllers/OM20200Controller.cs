@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -25,7 +25,7 @@ namespace OM20200.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -42,16 +42,33 @@ namespace OM20200.Controllers
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_PriceClass"]);
                 ChangeRecords<OM20200_pgOM_PriceClass_Result> lstOM_PriceClass = dataHandler.BatchObjectData<OM20200_pgOM_PriceClass_Result>();
-                foreach (OM20200_pgOM_PriceClass_Result deleted in lstOM_PriceClass.Deleted)
+                lstOM_PriceClass.Created.AddRange(lstOM_PriceClass.Updated);
+                foreach (OM20200_pgOM_PriceClass_Result del in lstOM_PriceClass.Deleted)
                 {
-                    var del = _db.OM_PriceClass.Where(p => p.PriceClassID == deleted.PriceClassID).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstOM_PriceClass.Created.Where(p => p.PriceClassID == del.PriceClassID).Count() > 0)
                     {
-                        _db.OM_PriceClass.DeleteObject(del);
+                        lstOM_PriceClass.Created.Where(p => p.PriceClassID == del.PriceClassID).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.OM_PriceClass.ToList().Where(p => p.PriceClassID == del.PriceClassID).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.OM_PriceClass.DeleteObject(objDel);
+                        }
                     }
                 }
+                //foreach (OM20200_pgOM_PriceClass_Result deleted in lstOM_PriceClass.Deleted)
+                //{
+                //    var del = _db.OM_PriceClass.Where(p => p.PriceClassID == deleted.PriceClassID).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.OM_PriceClass.DeleteObject(del);
+                //    }
+                //}
 
-                lstOM_PriceClass.Created.AddRange(lstOM_PriceClass.Updated);
+                //lstOM_PriceClass.Created.AddRange(lstOM_PriceClass.Updated);
 
                 foreach (OM20200_pgOM_PriceClass_Result curLang in lstOM_PriceClass.Created)
                 {

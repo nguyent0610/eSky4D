@@ -18,6 +18,10 @@
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Fit)
+    .Listeners(l =>
+                    {
+                        l.BoxReady.Handler = "firstLoad()";
+                    })
     .Items(
         ////Thiet ke giao dien o day
 
@@ -32,16 +36,13 @@
             .Model(Util.GenerateModel(typeof(OM20200_pgOM_PriceClass_Result), "mdlOM20200_pgOM_PriceClass", "PriceClassID"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_PriceClass"))).AutoLoad(false)
             .Listeners(l =>
-            {
-                l.BeforeLoad.Fn = "stoBeforeLoad";
-                l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";
-            })
-        )
-        .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
+                    {
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "frmChange";
+                    })
+           )
+   
+        .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdChannel');")
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
