@@ -31,7 +31,7 @@
                     HQ.Combo().ID("cboClassId").Name("cboClassId").HQLangCode("ClassId").HQProcedure("AR20100_pcCustClass")
                     .HQColumnShow("ClassId,Descr").DisplayField("ClassId").ValueField("ClassId")
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").AllowBlank(false)
-                    .HQDBSys(false).MaxLength(6).EnforceMaxLength(true).HQAutoLoad(false)
+                    .HQDBSys(false).MaxLength(6).EnforceMaxLength(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
                         .Listeners(lst =>
@@ -40,13 +40,13 @@
                                 lst.Change.Fn = "cboClassId_Changed";
                             })
                     // cboClassId                    
-                    , HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("Descr")
+                    , HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("Descr").AllowBlank(false)
                     .Width(350).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true).DataIndex("Descr")  
                                       
                     ,HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQLangCode("Territory").HQProcedure("AR20100_pcTerritory")
                     .HQColumnShow("Territory,Descr").DisplayField("Descr").ValueField("Territory").DataIndex("Territory")
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                    .HQDBSys(false).ForceSelection(true).HQAutoLoad(false)
+                    .HQDBSys(false).ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
                     {
@@ -62,7 +62,7 @@
                     , HQ.Combo().ID("cboCountry").Name("cboCountry").HQLangCode("Country").HQProcedure("AR20100_pcCountry")
                     .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").DataIndex("Country")
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                    .HQDBSys(false).HQAutoLoad(false)
+                    .HQDBSys(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
                     .Listeners(lst =>
@@ -144,7 +144,7 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     }) // cboPriceClass
-                    , HQ.NumberField().ID("txtTradeDisc").Name("txtTradeDisc").HQLangCode("TradeDisc")
+                    , HQ.NumberField().ID("txtTradeDisc").Name("txtTradeDisc").HQLangCode("TradeDisc").MinValue(0)
                     .Width(350).MarginSpec("5 5 5 0").EnforceMaxLength(true).DataIndex("TradeDisc")
             ) //frmLeft
                 , X.Panel()
@@ -152,7 +152,7 @@
                 .ID("pnlRight")
                 .Items(
                      HQ.Combo().ID("cboTaxDflt").Name("cboTaxDflt").HQLangCode("TAXDEFAULT").HQProcedure("AR20100_pcTaxDefault")
-                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("TaxDflt").HQValue("C", false)
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("TaxDflt").HQValue("C", false)
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                     .HQDBSys(false).EnforceMaxLength(true).ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })

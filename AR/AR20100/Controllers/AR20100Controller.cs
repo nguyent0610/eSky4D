@@ -22,7 +22,7 @@ namespace AR20100.Controllers
         private string _userName = Current.UserName;
         AR20100Entities _db = Util.CreateObjectContext<AR20100Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-        
+
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
@@ -49,37 +49,38 @@ namespace AR20100.Controllers
                 string ClassId = data["cboClassId"].PassNull();
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstAR_CustClass"]);
-                ChangeRecords<AR_CustClass> lstAR_CustClass = dataHandler.BatchObjectData<AR_CustClass>();
+                //ChangeRecords<AR_CustClass> lstAR_CustClass = dataHandler.BatchObjectData<AR_CustClass>();
 
-                lstAR_CustClass.Created.AddRange(lstAR_CustClass.Updated);
-                foreach (AR_CustClass curHeader in lstAR_CustClass.Created)
+                //lstAR_CustClass.Created.AddRange(lstAR_CustClass.Updated);
+
+                var curHeader = dataHandler.ObjectData<AR_CustClass>().FirstOrDefault();
+
+
+                var header = _db.AR_CustClass.FirstOrDefault(p => p.ClassId == ClassId);
+                if (header != null)
                 {
-                    if (ClassId.PassNull() == "") continue;
-
-                    var header = _db.AR_CustClass.FirstOrDefault(p => p.ClassId == ClassId);
-                    if (header != null)
+                    if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
-                        {
-                            UpdatingHeader(ref header, curHeader);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
+                        UpdatingHeader(ref header, curHeader);
                     }
                     else
                     {
-                        //string images = getPathThenUploadImage(curHeader, UserID);
-                        header = new AR_CustClass();
-                        header.ClassId = ClassId;
-                        header.Crtd_DateTime = DateTime.Now;
-                        header.Crtd_Prog = _screenNbr;
-                        header.Crtd_User = Current.UserName;
-                        UpdatingHeader(ref header, curHeader);
-                        _db.AR_CustClass.AddObject(header);
+                        throw new MessageException(MessageType.Message, "19");
                     }
                 }
+                else
+                {
+                    //string images = getPathThenUploadImage(curHeader, UserID);
+                    header = new AR_CustClass();
+                    header.ClassId = ClassId;
+                    header.Crtd_DateTime = DateTime.Now;
+                    header.Crtd_Prog = _screenNbr;
+                    header.Crtd_User = Current.UserName;
+                    UpdatingHeader(ref header, curHeader);
+                    _db.AR_CustClass.AddObject(header);
+                }
+
+
 
                 _db.SaveChanges();
                 return Json(new { success = true, ClassId = ClassId });
@@ -106,7 +107,7 @@ namespace AR20100.Controllers
             t.TaxID00 = s.TaxID00;
             t.TaxID01 = s.TaxID01;
             t.TaxID02 = s.TaxID02;
-            t.TaxID03 = s.TaxID03;  
+            t.TaxID03 = s.TaxID03;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

@@ -4,15 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="AR_CustClass" EntityType="eBiz4DWebSysModel.Store.AR_CustClass" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_CustClass">
           <Key>
             <PropertyRef Name="ClassId" />
           </Key>
-          <Property Name="ClassId" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="ClassId" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="City" Type="varchar" MaxLength="10" />
           <Property Name="Country" Type="varchar" MaxLength="3" />
           <Property Name="Descr" Type="nvarchar" MaxLength="30" />
@@ -23,12 +20,12 @@
           <Property Name="Territory" Type="varchar" MaxLength="10" />
           <Property Name="TradeDisc" Type="float" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="TaxDflt" Type="varchar" MaxLength="1" />
           <Property Name="TaxID00" Type="varchar" MaxLength="10" />
           <Property Name="TaxID01" Type="varchar" MaxLength="10" />
@@ -36,41 +33,17 @@
           <Property Name="TaxID03" Type="varchar" MaxLength="10" />
         </EntityType>
         <Function Name="AR20100_ppAR_CustClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="AR_CustClass" EntityType="Self.AR_CustClass" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AR20100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="AR20100Entities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="AR_CustClass" EntityType="AR20100Model.AR_CustClass" />
           <FunctionImport Name="AR20100_ppAR_CustClass" ReturnType="Collection(AR20100Model.AR20100_ppAR_CustClass_Result)" />
+          <EntitySet Name="AR_CustClass" EntityType="AR20100Model.AR_CustClass" />
         </EntityContainer>
-        <EntityType Name="AR_CustClass">
-          <Key>
-            <PropertyRef Name="ClassId" />
-          </Key>
-          <Property Type="String" Name="ClassId" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="City" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Descr" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="District" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="PriceClass" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Terms" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Territory" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="TradeDisc" Nullable="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="String" Name="TaxDflt" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxID00" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxID01" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxID02" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxID03" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
         <ComplexType Name="AR20100_ppAR_CustClass_Result">
           <Property Type="String" Name="ClassId" Nullable="false" MaxLength="6" />
           <Property Type="String" Name="City" Nullable="true" MaxLength="10" />
@@ -89,13 +62,62 @@
           <Property Type="String" Name="TaxID02" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="TaxID03" Nullable="true" MaxLength="10" />
         </ComplexType>
+        <EntityType Name="AR_CustClass">
+          <Key>
+            <PropertyRef Name="ClassId" />
+          </Key>
+          <Property Name="ClassId" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="Descr" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="District" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PriceClass" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Terms" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="Territory" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TradeDisc" Type="Double" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="TaxDflt" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="TaxID00" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TaxID01" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TaxID02" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TaxID03" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="AR20100Entities" >
-        <EntitySetMapping Name="AR_CustClass">
+          <FunctionImportMapping FunctionImportName="AR20100_ppAR_CustClass" FunctionName="eBiz4DWebSysModel.Store.AR20100_ppAR_CustClass">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20100Model.AR20100_ppAR_CustClass_Result">
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="PriceClass" ColumnName="PriceClass" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="TradeDisc" ColumnName="TradeDisc" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="TaxDflt" ColumnName="TaxDflt" />
+                <ScalarProperty Name="TaxID00" ColumnName="TaxID00" />
+                <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />
+                <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
+                <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="AR_CustClass">
             <EntityTypeMapping TypeName="AR20100Model.AR_CustClass">
               <MappingFragment StoreEntitySet="AR_CustClass">
                 <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
@@ -123,28 +145,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AR20100_ppAR_CustClass" FunctionName="eBiz4DWebSysModel.Store.AR20100_ppAR_CustClass">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AR20100Model.AR20100_ppAR_CustClass_Result">
-                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="District" ColumnName="District" />
-                <ScalarProperty Name="PriceClass" ColumnName="PriceClass" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Terms" ColumnName="Terms" />
-                <ScalarProperty Name="Territory" ColumnName="Territory" />
-                <ScalarProperty Name="TradeDisc" ColumnName="TradeDisc" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="TaxDflt" ColumnName="TaxDflt" />
-                <ScalarProperty Name="TaxID00" ColumnName="TaxID00" />
-                <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />
-                <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
-                <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -161,12 +161,13 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="70" >
-        <EntityTypeShape EntityType="AR20100Model.AR_CustClass" Width="1.5" PointX="9.1068861731825788" PointY="2.0552101293835836" />
+        <EntityTypeShape EntityType="AR20100Model.AR_CustClass" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
