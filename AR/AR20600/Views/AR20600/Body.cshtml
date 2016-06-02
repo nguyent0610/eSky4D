@@ -16,7 +16,7 @@
         .ID("frmMain")
         .AutoScroll(true)
         .BodyPadding(0)
-        .TopBar(Util.SetupToolbar("AR20600",true))
+        .TopBar(Util.SetupToolbar("Print",true,""))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Listeners(l =>
         {
@@ -31,7 +31,7 @@
                     HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").HQProcedure("AR20600_pcCustomer")
                     .HQColumnShow("CustId,CustName,Addr1,Addr2").DisplayField("CustId").ValueField("CustId")
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").AllowBlank(false)
-                    .HQDBSys(false).MaxLength(50).EnforceMaxLength(true).HQAutoLoad(false)
+                    .HQDBSys(false).MaxLength(50).EnforceMaxLength(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
                     {
@@ -81,7 +81,7 @@
                      , HQ.Combo().ID("cboCountry").Name("cboCountry").HQLangCode("Country").HQProcedure("AR20600_pcCountry")
                     .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID").DataIndex("Country")
                     .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                    .HQDBSys(false).HQAutoLoad(false)
+                    .HQDBSys(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
                     .Listeners(lst =>
@@ -142,13 +142,13 @@
                         lst.Focus.Handler = "this.forceSelection = true;";
                     })
                                     
-                    ,HQ.TextBox().ID("txtZip").Name("txtZip").HQLangCode("ZIP")
+                    ,HQ.TextBox().ID("txtZip").Name("txtZip").HQLangCode("ZIP").MaskRe(@"/[0-9]/")
                     .Width(300).MarginSpec("5 0 0 0").MaxLength(10).EnforceMaxLength(true).DataIndex("Zip")
                                     
-                    ,HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("PHONE")
+                    ,HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("PHONE").MaskRe(@"/[0-9]/")
                     .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true).DataIndex("Phone")
                                     
-                    ,HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("FAX")
+                    ,HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("FAX").MaskRe(@"/[0-9]/")
                     .Width(300).MarginSpec("5 0 5 0").MaxLength(30).EnforceMaxLength(true).DataIndex("Fax")
             ) //frmLeft
             , X.Panel()

@@ -28,7 +28,7 @@ namespace AR20600.Controllers
             return View();
         }
         
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -125,11 +125,26 @@ namespace AR20600.Controllers
             {
                 string CustId = data["cboCustId"].PassNull();
                 string ShipToId = data["cboShipToId"].PassNull();
+                double convertShipToIdToDouble = double.Parse(ShipToId);
 
                 var obj = _db.AR_SOAddress.FirstOrDefault(p =>p.BranchID==_BranchID && p.CustId == CustId && p.ShipToId == ShipToId);
-                if (obj != null)
+
+                var checkPO_Receipt = _db.PO_Receipt.FirstOrDefault(p => p.BranchID == _BranchID && p.ShiptoID == ShipToId);
+                var checkPO_Trans = _db.PO_Trans.FirstOrDefault(p => p.BranchID == _BranchID && p.ShiptoID == convertShipToIdToDouble);
+                var checkAR_Customer = _db.AR_Customer.FirstOrDefault(p => p.BranchID == _BranchID && p.CustId == CustId);
+                var checkPO_Header = _db.PO_Header.FirstOrDefault(p => p.BranchID == _BranchID && p.ShiptoID == ShipToId);
+                var checkOM_OrdAddr = _db.OM_OrdAddr.FirstOrDefault(p => p.BranchID == _BranchID && p.ShiptoID == ShipToId);
+
+                if (checkPO_Receipt == null && checkPO_Trans == null && checkAR_Customer == null && checkPO_Header == null && checkOM_OrdAddr == null)
                 {
-                    _db.AR_SOAddress.DeleteObject(obj);
+                    if (obj != null)
+                    {
+                        _db.AR_SOAddress.DeleteObject(obj);
+                    }
+                }
+                else
+                {
+                    throw new MessageException(MessageType.Message, "2016060201");
                 }
 
                 _db.SaveChanges();

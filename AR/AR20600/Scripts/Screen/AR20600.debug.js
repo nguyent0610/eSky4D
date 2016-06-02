@@ -215,11 +215,14 @@ function deleteData(item) {
                 App.cboShipToId.getStore().load(function () { cboShipToId_Change(App.cboShipToId); });
 
             },
-            failure: function (action, data) {
-                if (data.result.msgCode) {
-                    HQ.message.show(data.result.msgCode, data.result.msgParam, '');
-                }
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
             }
+            //failure: function (action, data) {
+            //    if (data.result.msgCode) {
+            //        HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+            //    }
+            //}
         });
     }
 };

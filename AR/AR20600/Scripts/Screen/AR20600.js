@@ -1,1 +1,247 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('r a=["\\l\\h\\f\\j\\i\\o\\p\\B\\f\\d\\f","\\p\\b\\d\\1l\\f\\o\\p","\\m\\h\\s\\s\\h\\o","\\g\\v\\h\\W\\1M\\t\\g\\L","\\k\\b\\l\\h\\f\\j","\\g\\d\\h\\w\\1C\\M\\j\\j\\k\\b\\g\\g","\\l\\h\\f\\j","\\p\\b\\d\\w\\d\\h\\k\\b","\\m\\x\\h\\A\\h\\t\\o\\d\\k\\L","\\m\\x\\h\\w\\v\\i\\G\\1b\\h\\F\\j","\\m\\x\\h\\A\\t\\g\\d\\F\\j","\\i\\g\\A\\v\\f\\o\\p\\b","\\P\\i\\k\\g\\d","\\m\\h\\s\\x\\h","\\o\\b\\1S\\d","\\G\\k\\b\\Q","\\l\\f\\g\\d","\\i\\g\\1X\\G\\j\\f\\d\\b","\\i\\g\\F\\o\\g\\b\\k\\d","\\i\\g\\B\\b\\l\\b\\d\\b","\\P\\k\\s\\1x\\f\\i\\o","\\m\\v\\b\\m\\1I\\y\\b\\1y\\t\\i\\k\\b\\1L\\f\\g\\g","\\P\\h\\k\\s","\\g\\f\\Q\\b","","\\g\\v\\h\\W","\\s\\b\\g\\g\\f\\p\\b","\\g\\b\\d\\1F\\f\\l\\t\\b","\\o\\b\\W","\\p\\b\\d\\y\\b\\m\\h\\k\\j","\\j\\b\\l\\b\\d\\b\\B\\f\\d\\f","\\j\\b\\l\\b\\d\\b","\\k\\b\\P\\k\\b\\g\\v","\\m\\l\\h\\g\\b","\\m\\x\\h\\w\\d\\f\\d\\b","\\m\\x\\h\\A\\i\\d\\L","\\m\\x\\h\\B\\i\\g\\d\\k\\i\\m\\d","\\l\\h\\f\\j\\i\\o\\p\\j\\f\\d\\f","\\i\\g\\1Z\\b\\W","\\P\\h\\k\\m\\b\\w\\b\\l\\b\\m\\d\\i\\h\\o","\\m\\x\\h\\w\\i\\d\\b\\F\\j","\\m\\l\\b\\f\\k\\1d\\i\\l\\d\\b\\k","\\g\\d\\h\\k\\b","\\l\\b\\o\\p\\d\\v","\\j\\f\\d\\f","\\A\\t\\g\\d\\F\\j\\1R\\w\\v\\i\\G\\1b\\h\\F\\j","\\i\\o\\g\\b\\k\\d\\1M\\l\\f\\o\\1I","\\p\\b\\d\\M\\d","\\m\\h\\s\\s\\i\\d\\A\\v\\f\\o\\p\\b\\g","\\g\\b\\d\\y\\b\\1y\\t\\i\\k\\b","\\l\\h\\f\\j\\y\\b\\m\\h\\k\\j","\\p\\b\\d\\1d\\h\\k\\s","\\Q\\f\\l\\t\\b","\\A\\h\\t\\o\\d\\k\\L","\\w\\d\\f\\d\\b","\\t\\G\\j\\f\\d\\b\\y\\b\\m\\h\\k\\j","\\M\\y\\1a\\z\\1e\\z\\z","\\m\\v\\f\\o\\p\\b\\B\\f\\d\\f","\\Q\\f\\l\\t\\b\\1x\\h\\j\\b\\l\\g","\\g\\b\\d\\y\\b\\f\\j\\1C\\o\\l\\L","\\i\\g\\1F\\f\\l\\i\\j","\\w\\t\\x\\s\\i\\d\\i\\o\\p\\1h\\1h\\1h","\\M\\y\\1a\\z\\1e\\z\\z\\1E\\w\\f\\Q\\b","\\p\\b\\d\\A\\v\\f\\o\\p\\b\\j\\B\\f\\d\\f","\\b\\o\\m\\h\\j\\b","\\w\\v\\i\\G\\1b\\h\\F\\j","\\k\\b\\g\\t\\l\\d","\\G\\k\\h\\m\\b\\g\\g","\\g\\t\\x\\s\\i\\d","\\L\\b\\g","\\B\\b\\l\\b\\d\\i\\o\\p\\B\\f\\d\\f","\\M\\y\\1a\\z\\1e\\z\\z\\1E\\B\\b\\l\\b\\d\\b\\M\\l\\l","\\s\\g\\p\\A\\h\\j\\b","\\s\\g\\p\\1L\\f\\k\\f\\s","\\i\\g\\1d\\i\\k\\g\\d\\1l\\h\\f\\j"];r 1n=n(){e[a[2]][a[3]](I,e[a[2]][a[1]](a[0]));c[a[10]][a[7]]()[a[6]](n(){c[a[9]][a[7]]()[a[6]](n(){c[a[8]][a[7]]()[a[6]](n(){c[a[5]][a[4]]()})})})};r 1W=n(1t){1V(1t){C a[12]:e[a[13]][a[12]](c[a[9]],e[a[11]]);E;C a[14]:e[a[13]][a[14]](c[a[9]],e[a[11]]);E;C a[15]:e[a[13]][a[15]](c[a[9]],e[a[11]]);E;C a[16]:e[a[13]][a[16]](c[a[9]],e[a[11]]);E;C a[23]:q(e[a[17]]||e[a[18]]||e[a[19]]){q(e[a[22]][a[21]](c[a[20]])){1H()}};E;C a[28]:q(e[a[18]]){q(e[a[11]]){e[a[26]][a[25]](1Y,a[24],a[24])}N{c[a[9]][a[27]](a[24])}};E;C a[1U]:q(e[a[19]]){r 1c=c[a[20]][a[29]]();q(1c){e[a[26]][a[25]](11,a[24],a[2a])}};E;C a[1o]:q(e[a[11]]){e[a[26]][a[25]](1T,a[24],a[1o])}N{e[a[11]]=u;c[a[5]][a[4]]()};E;C a[1p]:e[a[2]][a[1p]](1Q);E;2q:}};r 2B=n(X,Y){c[a[9]][a[27]](a[24]);c[a[9]][a[7]]()[a[6]]()};r 2C=n(X,Y){c[a[5]][a[4]]()};r 1i=n(X,Y){c[a[O]][a[7]]()[a[6]]()};r 1w=n(X,Y){c[a[1r]][a[7]]()[a[6]]();c[a[1q]][a[7]]()[a[6]]()};r 2D=n(H){e[a[2]][a[3]](I,e[a[2]][a[1]](a[2A]))};r 2z=n(){1n()};r 2w=n(H){e[a[2]][a[3]](u);e[a[U]]=u;c[a[9]][a[J]]=u;c[a[10]][a[J]]=u;c[a[8]][a[J]]=u;c[a[O]][a[J]]=u;c[a[1q]][a[J]]=u;c[a[1r]][a[J]]=u;c[a[2E]][a[J]]=u;c[a[8]][a[V]][a[1m]]();c[a[O]][a[V]][a[1m]]();q(H[a[R]][a[2u]]==0){e[a[V]][a[2h]](H,a[2i]);K=H[a[1v]](0);H[a[2b]]();e[a[U]]=I;e[a[2]][a[2g]](c[a[20]])};r K=H[a[1v]](0);c[a[20]][a[1g]]()[a[2c]](K);q(c[a[8]][a[1j]]==K[a[R]][a[2d]]){1i(c[a[8]],K[a[R]].2k)}N{q(c[a[O]][a[1j]]==K[a[R]][a[2l]]){1w(c[a[O]],K[a[R]].2r)}};1K()};r 1K=n(){c[a[20]][a[1g]]()[a[1B]]();e[a[11]]=e[a[V]][a[11]](c[a[5]]);e[a[2]][a[2s]](e[a[11]],a[2t]);q(c[a[10]][a[1O]]==1P||e[a[U]]==I){c[a[10]][a[T]](u)}N{c[a[10]][a[T]](e[a[11]])};q(c[a[9]][a[1O]]==1P||e[a[U]]==I){c[a[9]][a[T]](u)}N{c[a[9]][a[T]](e[a[11]])}};n 1H(){q(e[a[18]]||e[a[17]]){r 1c=c[a[20]][a[29]]();c[a[20]][a[1g]]()[a[1B]]();q(c[a[20]][a[2o]]()){c[a[20]][a[1N]]({1G:e[a[2]][a[1]](a[2N]),1A:a[2n],2m:{2f:2j[a[2v]](c[a[5]][a[2H]]({2G:u}))},1D:n(1f,D){e[a[26]][a[25]](2J,a[24],a[24]);r 1k=D[a[S]][a[2M]];c[a[9]][a[7]]()[a[6]](n(){c[a[9]][a[27]](1k);c[a[5]][a[4]]()})},1z:n(1J,D){e[a[26]][a[2F]](1J,D,I)}})}}}n 2x(Z){q(Z==a[1s]){c[a[20]][a[1N]]({1G:e[a[2]][a[1]](a[2p]),1A:a[2e],1D:n(1f,D){c[a[9]][a[27]](a[24]);c[a[9]][a[7]]()[a[6]](n(){2I(c[a[9]])})},1z:n(1f,D){q(D[a[S]][a[1u]]){e[a[26]][a[25]](D[a[S]][a[1u]],D[a[S]][a[2K]],a[24])}}})}}n 2L(Z){q(Z==a[1s]){e[a[11]]=u;e[a[2y]]=I;c[a[5]][a[4]]()}}', 62, 174, '||||||||||_0xc1de|x65|App|x74|HQ|x61|x73|x6F|x69|x64|x72|x6C|x63|function|x6E|x67|if|var|x6D|x75|false|x68|x53|x62|x52|x30|x43|x44|case|_0x872bx13|break|x49|x70|_0x872bxc|true|39|_0x872bxf|x79|x41|else|34|x66|x76|44|66|59|38|42|x77|_0x872bx6|_0x872bx7|_0x872bx17|||||||||||x32|x54|_0x872bx4|x46|x36|_0x872bx12|51|x2E|cboCountry_Changed|52|_0x872bx14|x4C|41|loadSourceCombo|32|33|36|35|69|_0x872bx3|72|47|cboState_Changed|x4D|x71|failure|url|55|x4F|success|x2F|x56|waitMsg|save|x6B|_0x872bx15|frmChange|x50|x42|68|58|null|this|x2C|x78|20150303|31|switch|menuClick|x55|150|x4E|||||||||||30|48|50|53|71|lstAR_SOAddress|49|46|45|Ext|Country|54|params|62|60|70|default|State|57|56|43|64|stoLoad|deleteData|74|firstLoad|37|cboCustID_Changed|cboShipToId_Changed|stoBeforeLoad|40|67|skipIdForPhantomRecords|63|cboShipToId_Change|201405071|73|refresh|65|61'.split('|'), 0, {}))
+﻿////////////////////////////////////////////////////////////////////////
+//// Declare ///////////////////////////////////////////////////////////
+var _Source = 0;
+var _maxSource = 8;
+var _isLoadMaster = false;
+
+////////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoSOAddress.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+////////////////////////////////////////////////////////////////////////
+//// First Load ////////////////////////////////////////////////////////
+var firstLoad = function () {
+    //if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false)
+    //    App.menuClickbtnSave.disable();
+    HQ.util.checkAccessRight();
+    App.frmMain.isValid(); //Require các field yêu cầu trên man hình
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    HQ.isFirstLoad = true;
+    App.cboCustId.getStore().addListener('load', checkLoad);
+    App.cboCountry.getStore().addListener('load', checkLoad);
+    App.cboSiteId.getStore().addListener('load', checkLoad);
+    App.cboShipViaID.getStore().addListener('load', checkLoad);
+    App.cboTaxID00.getStore().addListener('load', checkLoad);
+    App.cboTaxID01.getStore().addListener('load', checkLoad);
+    App.cboTaxID02.getStore().addListener('load', checkLoad);
+    App.cboTaxID03.getStore().addListener('load', checkLoad);
+};
+
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+// Load and show binding data to the form
+// Command of the topbar on screen
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.combo.first(App.cboShipToId, HQ.isChange);
+            break;
+        case "next":
+            HQ.combo.next(App.cboShipToId, HQ.isChange);
+            break;
+        case "prev":
+            HQ.combo.prev(App.cboShipToId, HQ.isChange);
+            break;
+        case "last":
+            HQ.combo.last(App.cboShipToId, HQ.isChange);
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain)) {
+                    save();
+                }
+            }
+            break;
+
+        case "close":
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', '');
+                }
+                else {
+                    App.cboShipToId.setValue('');
+                }
+            }
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh("yes");
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                var curRecord = App.frmMain.getRecord();
+                if (curRecord) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            break;
+
+        default:
+    }
+};
+
+var frmChange = function () {
+    if (App.stoSOAddress.getCount() > 0)
+        App.frmMain.getForm().updateRecord();
+
+    HQ.isChange = HQ.store.isChange(App.stoSOAddress);
+    HQ.common.changeData(HQ.isChange, 'AR20600');
+    if (App.cboCustId.valueModels == null || HQ.isNew == true)
+        App.cboCustId.setReadOnly(false);
+    else App.cboCustId.setReadOnly(HQ.isChange);
+
+    if (App.cboShipToId.valueModels == null || HQ.isNew == true)
+        App.cboShipToId.setReadOnly(false);
+    else App.cboShipToId.setReadOnly(HQ.isChange);
+};
+
+var stoLoad = function (sto) {
+
+    HQ.isNew = false;
+    HQ.common.lockItem(App.frmMain, false);
+    App.cboShipToId.forceSelection = false;
+    //App.cboCustId.forceSelection = false;
+    App.cboCountry.forceSelection = false;
+    App.cboState.forceSelection = false;
+    App.cboDistrict.forceSelection = false;
+    App.cboCity.forceSelection = false;
+    App.cboSiteId.forceSelection = false;
+    App.cboCountry.store.clearFilter();
+    App.cboState.store.clearFilter();
+
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "CustId,ShipToId");
+        record = sto.getAt(0);
+        HQ.isNew = true; //record la new 
+        HQ.isFirstLoad = true;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require 
+        sto.commitChanges();
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+
+    if (!HQ.isInsert && HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+
+    if (App.cboCountry.value == record.data.Country) {
+        cboCountry_Changed(App.cboCountry, record.data.Country);
+    }
+    else if (App.cboState.value == record.data.State) {
+        cboState_Changed(App.cboState, record.data.State);
+    }
+
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+        frmChange();
+    }
+};
+
+
+var cboCustID_Changed = function (sender, e) {
+    App.cboShipToId.setValue("");
+    App.cboShipToId.getStore().load();
+};
+
+var cboShipToId_Changed = function (sender, e) {
+    App.stoSOAddress.reload();
+};
+
+var cboCountry_Changed = function (sender, e) {
+    App.cboState.getStore().load();
+};
+
+var cboState_Changed = function (sender, e) {
+    App.cboCity.getStore().load();
+    App.cboDistrict.getStore().load();
+};
+
+//Truoc khi load store se hien Busy
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+// Submit the changed data (created, updated) into server side
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.updateRecord();
+        if (HQ.util.checkSpecialChar(App.cboShipToId.getValue()) == true) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang("WaitMsg"),
+                url: 'AR20600/Save',
+                params: {
+                    lstAR_SOAddress: Ext.encode(App.stoSOAddress.getChangedData({ skipIdForPhantomRecords: false }))
+                },
+                success: function (msg, data) {
+                    HQ.message.show(201405071);
+                    var ShipToId = data.result.ShipToId;
+                    App.cboShipToId.getStore().load(function () {
+                        App.cboShipToId.setValue(ShipToId);
+                        App.stoSOAddress.reload();
+                    });
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+        else {
+            HQ.message.show(2015123111, App.cboShipToId.fieldLabel);
+            App.cboShipToId.focus();
+            App.cboShipToId.selectText();
+        }
+        
+    }
+};
+
+function deleteData(item) {
+    if (item == 'yes') {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang('DeletingData'),
+            url: 'AR20600/DeleteAll',
+            timeout: 7200,
+            success: function (action, data) {
+                //App.cboShipToId.setValue("");
+                App.cboShipToId.getStore().load(function () { cboShipToId_Change(App.cboShipToId); });
+                menuClick("new");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        if (HQ.isNew)
+        //App.cboVendID.setValue('');
+        HQ.isChange = false;
+        App.stoSOAddress.reload();
+    }
+};
+///////////////////////////////////
