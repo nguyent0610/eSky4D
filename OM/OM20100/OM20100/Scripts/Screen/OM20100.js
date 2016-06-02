@@ -6,7 +6,7 @@ var fieldsLangCheckRequire = ["PriceClassID"];
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
-/////////////////////Store////////////////////
+/////////////////////Store///////////////////
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
