@@ -580,12 +580,12 @@ var btnLotOK_Click = function () {
         var flat = null;
         App.stoLotTrans.data.each(function (item) {
             if (!Ext.isEmpty(item.data.LotSerNbr)) {
-                if (item.data.Qty == 0) {
-                    HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
-                    flat = item;
-                    return false;
-                }
-
+                //if (item.data.Qty == 0) {
+                //    HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
+                //    flat = item;
+                //    return false;
+                //}
+                //// no check qty Lot = 0
                 if (Ext.isEmpty(item.data.UnitDesc)) {
                     HQ.message.show(1000, [HQ.common.getLang('unit')], '', true);
                     flat = item;

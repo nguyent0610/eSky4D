@@ -600,17 +600,26 @@ namespace IN10400.Controllers
                 double qtyTot = 0;
                 if (!string.IsNullOrEmpty(invtID))
                 {
+                    var obj = _app.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
+                    if (obj == null)
+                    {
+                        throw new MessageException("2016042101", new[] { invtID, siteID });
+                    }
                      IN_Inventory objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
                      if (objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack != "N")
                      {
-                         if (_lstTrans[i].Qty == 0 && _lstLot.Where(p => p.INTranLineRef == _lstTrans[i].LineRef && p.Qty != 0).Count() == 0)
+                         //if (_lstTrans[i].Qty == 0 && _lstLot.Where(p => p.INTranLineRef == _lstTrans[i].LineRef && p.Qty != 0).Count() == 0)
+                         //{
+                         //    throw new MessageException("201605301", new[] { Util.GetLang("Qty") });
+                         //}
+                         if (_lstTrans[i].Qty == 0 && _lstTrans[i].TranAmt == 0)
                          {
                              throw new MessageException("201605301", new[] { Util.GetLang("Qty") });
                          }
                      }
                      else
                      {
-                         if (_lstTrans[i].Qty == 0 )
+                         if (_lstTrans[i].Qty == 0 && _lstTrans[i].TranAmt == 0)
                          {
                              throw new MessageException("201605301", new[] { Util.GetLang("Qty") });
                          }
