@@ -18,6 +18,11 @@
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Fit)
+    .Listeners(l =>
+                    {
+                        l.BoxReady.Handler = "firstLoad()";
+                    }
+               )
     .Items(
         ////Thiet ke giao dien o day
 
@@ -34,15 +39,12 @@
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_PriceClass"))).AutoLoad(false)
             .Listeners(l =>
             {
-                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoBeforeLoad";
                 l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
+                l.Update.Fn = "frmChange";                 
             })
         )
-        .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
+        .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdChannel');")
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
@@ -75,7 +77,7 @@
                     })
             )
             .Plugins(X.ProgressBarPager())
-        )
+                 )
         .Plugins(
             X.CellEditing()
             .ClicksToEdit(1)
@@ -92,12 +94,9 @@
             X.GridFilters()
                 .Local(true)
                 .Filters(
-                    X.StringFilter().DataIndex("Code"),
-                    X.StringFilter().DataIndex("Lang00"),
-                    X.StringFilter().DataIndex("Lang01"),
-                    X.StringFilter().DataIndex("Lang02"),
-                    X.StringFilter().DataIndex("Lang03"),
-                    X.StringFilter().DataIndex("Lang04")
+                        X.StringFilter().DataIndex("PriceClassID"),
+                        X.StringFilter().DataIndex("Descr")
+                    
                 )
         )
     )

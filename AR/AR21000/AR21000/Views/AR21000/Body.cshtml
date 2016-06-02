@@ -18,6 +18,10 @@
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar("Print", true, ""))
         .Layout(LayoutType.Fit)
+        .Listeners(l =>
+                    {
+                        l.BoxReady.Handler = "firstLoad()";
+                    })
         .Items(
             ////Thiet ke giao dien o day
 
@@ -30,21 +34,21 @@
                 .ID("stoShopType")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(AR21000_pgLoadShopType_Result), "mdAR_ShopType", "Code"))
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetShopType")))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetShopType"))).AutoLoad(false)
                 .Listeners(l =>
-                {
-                    l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                    l.Load.Handler = "HQ.common.showBusy(false);"; 
-                })
-            )
-            .Listeners(p => p.BoxReady.Handler = "App.stoShopType.reload();")
+                        {
+                            l.Load.Fn = "stoLoad";
+                            l.Update.Fn = "frmChange";
+                        })
+                    )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdChannel');")
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)
                 , Html.X().Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(20100))
+                    .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true))
                 , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(100100))
+                        .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true))
                 , Html.X().CommandColumn().Width(150)
                                         .Commands(
                                             Html.X().GridCommand()
@@ -87,7 +91,6 @@
                     ls.BeforeEdit.Fn = "grdShopType_BeforeEdit";
                     ls.Edit.Fn = "grdShopType_Edit";
                     ls.ValidateEdit.Fn = "grdShopType_ValidateEdit";
-                    ls.CancelEdit.Fn = "grdShopType_CancelEdit";
                 })
             )
 

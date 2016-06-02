@@ -1,1 +1,231 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('r b=["\\P\\j\\q\\c","\\t\\m\\q\\M\\z\\j\\u\\1c\\U\\u\\c","\\K\\l\\m\\f\\e","\\t\\m\\l\\q","\\u\\m\\c\\Q","\\o\\c\\1d\\e","\\n\\h\\f\\e","\\m\\c\\n\\j\\h\\q","\\f\\e\\j\\M\\z\\j\\u\\1c\\U\\u\\c","\\m\\c\\K\\m\\c\\f\\z","\\l\\f\\1o\\o\\f\\c\\m\\e","\\l\\o\\f\\c\\m\\e","\\o\\c\\V","\\l\\e\\c\\x\\f","\\f\\c\\n\\c\\p\\e\\c\\q","\\f\\n\\x\\M\\z\\j\\u\\1c\\U\\u\\c","\\l\\f\\I\\c\\n\\c\\e\\c","","\\q\\c\\n\\c\\e\\c\\I\\h\\e\\h","\\f\\z\\j\\V","\\x\\c\\f\\f\\h\\t\\c","\\q\\c\\n\\c\\e\\c","\\l\\f\\2i\\u\\q\\h\\e\\c","\\t\\c\\e\\P\\z\\h\\o\\t\\c\\q\\I\\h\\e\\h","\\f\\h\\Q\\c","\\u\\m\\l\\o\\e","\\l\\f\\P\\z\\h\\o\\t\\c","\\f\\e\\j\\m\\c","\\h\\f\\J\\P\\n\\j\\f\\c","\\p\\n\\j\\f\\c","\\p\\j\\x\\x\\j\\o","\\K\\l\\c\\n\\q","\\l\\o\\q\\c\\1d\\2g\\K","\\e\\f\\e\\h\\x\\u","\\q\\h\\e\\h","\\m\\c\\p\\j\\m\\q","\\p\\z\\c\\p\\J\\1o\\o\\u\\F\\e","\\Q\\h\\n\\F\\c","\\l\\o\\f\\c\\m\\e\\2k\\n\\h\\o\\J","\\p\\z\\c\\p\\J\\I\\F\\u\\n\\l\\p\\h\\e\\c","\\x\\h\\e\\p\\z","\\e\\c\\1d\\e","\\p\\j\\n\\F\\x\\o","\\u\\z\\h\\o\\e\\j\\x","\\m\\c\\x\\j\\Q\\c","\\t\\c\\e\\P\\j\\F\\o\\e","\\K\\j\\p\\F\\f\\1e\\j\\V","\\t\\c\\e\\1q\\l\\c\\V","\\f\\c\\n\\c\\p\\e","\\t\\c\\e\\M\\c\\n\\c\\p\\e\\l\\j\\o\\X\\j\\q\\c\\n","\\m\\c\\2v\\c\\p\\e","\\l\\f\\1q\\h\\n\\l\\q","\\K\\m\\x\\X\\h\\l\\o","\\1K\\h\\l\\e\\X\\f\\t","\\t\\c\\e\\1L\\h\\o\\t","\\1N\\1e\\1P\\1Q\\1b\\1b\\1b\\1J\\M\\h\\Q\\c","\\t\\c\\e\\I\\h\\e\\h","\\u\\m\\j\\p\\c\\f\\f","\\f\\F\\1F\\x\\l\\e","\\U\\c\\f","\\q\\c\\n\\c\\e\\c\\M\\c\\n\\c\\p\\e\\c\\q","\\n\\c\\o\\t\\e\\z","\\p\\z\\c\\p\\J\\1e\\c\\1V\\F\\l\\m\\c\\1S\\h\\f\\f","\\e\\m\\l\\x","\\I\\c\\f\\p\\m","\\o\\j","\\j\\J"];r C=[b[0]];r 1t=v(1s){1O(1s){D b[2]:g[b[3]][b[2]](k[b[1]]);E;D b[4]:g[b[3]][b[4]](k[b[1]]);E;D b[5]:g[b[3]][b[5]](k[b[1]]);E;D b[6]:g[b[3]][b[6]](k[b[1]]);E;D b[9]:k[b[8]][b[7]]();g[b[3]][b[2]](k[b[1]]);E;D b[12]:i(g[b[10]]){g[b[3]][b[11]](k[b[1]])};E;D b[21]:i(k[b[15]][b[14]][b[13]][0]!=S){i(g[b[16]]){g[b[20]][b[19]](11,b[17],b[18])}};E;D b[24]:i(g[b[22]]||g[b[10]]||g[b[16]]){i(1l(k[b[8]][b[23]]().1n)&&1l(k[b[8]][b[23]]().1x)){1A()}};E;D b[25]:E;D b[29]:i(g[b[27]][b[26]](k[b[8]])){g[b[20]][b[19]](5,b[17],b[28])}N{g[b[R]][b[29]](1r)};E}};r 2D=v(1u,s){i(!g[b[22]]){y H};i(C[b[Y]](s[b[W]])!=-1){i(s[b[1a]][b[1D]][b[1C]]!=b[17]){y H}};y g[b[3]][b[2A]](s,C)};r 2x=v(G,s){i(C[b[Y]](s[b[W]])!=-1){i(s[b[1f]]!=b[17]&&1i(k[b[8]][b[23]]().1n)&&1i(k[b[8]][b[23]]().1x)){g[b[27]][b[2H]](k[b[8]])}}};r 2G=v(G,s){i(C[b[Y]](s[b[W]])!=-1){i(g[b[3]][b[2l]](k[b[1]],s,C)){g[b[20]][b[19]](2m,s[b[1f]]);y H};r 1p=/^(\\w*(\\d|[a-2h-Z]))[\\2n]*$/;i(s[b[1f]][b[2o]](1p)){y L}N{g[b[20]][b[19]](2t,s[b[2u]][b[2s]]);y H}}};r 2r=v(1u,s){i(s[b[1a]][b[2p]]){s[b[27]][b[1y]](s[b[1a]])}};r 2a=v(T){i(T[b[1D]][b[1C]]==b[17]){k[b[8]][b[1y]](T);k[b[1]][b[2j]]()[b[2y]](k[b[8]][b[1B]]()-1);k[b[1]][b[2f]]()[b[1H]](k[b[8]][b[1B]]()-1)}N{T[b[1I]]()}};r 1A=v(){i(k[b[1z]][b[1Z]]()){k[b[1z]][b[1X]]({1T:g[b[R]][b[1h]](b[1U]),1W:b[1M],1G:{2q:g[b[27]][b[2w]](k[b[8]])},2C:v(1g,1j){g[b[20]][b[19]](1E);1t(b[9])},2e:v(1g,1j){g[b[20]][b[1R]](1g,1j,L)}})}};r 2b=v(G){i(G==b[2c]){k[b[1]][b[1Y]]()}};r 1i=v(A){i(A!=S){1m(r B=0;B<A[b[1k]];B++){1m(r O=0;O<C[b[1k]];O++){i(A[B][C[O]]==b[17]||A[B][C[O]]==S){y H}}};y L}N{y L}};r 1l=v(A){i(A!=S){1m(r B=0;B<A[b[1k]];B++){i(g[b[3]][b[2F]](A[B],C)){2d};i(A[B][b[0]][b[1v]]()==b[17]){g[b[20]][b[19]](15,g[b[R]][b[1h]](b[0]));y H};i(A[B][b[1w]][b[1v]]()==b[17]){g[b[20]][b[19]](15,g[b[R]][b[1h]](b[1w]));y H}};y L}N{y L}};r 2B=v(G){i(G==b[2z]||G==b[2E]){g[b[R]][b[29]](1r)}};', 62, 168, '|||||||||||_0xc313|x65||x74|x73|HQ|x61|if|x6F|App|x69|x72|x6C|x6E|x63|x64|var|_0x74d8x6|x67|x70|function||x6D|return|x68|_0x74d8x13|_0x74d8x14|keys|case|break|x75|_0x74d8x8|false|x44|x6B|x66|true|x53|else|_0x74d8x15|x43|x76|30|undefined|_0x74d8xd|x79|x77|31|x4D|32||||||||||||35|x30|x54|x78|x52|37|_0x74d8xf|54|isAllValidKey|_0x74d8x10|61|checkRequire|for|Created|x49|_0x74d8xa|x56|this|_0x74d8x3|menuClick|_0x74d8x5|63|64|Updated|44|52|save|45|33|34|201405071|x62|params|48|50|x2F|x57|x4C|55|x41|switch|x32|x31|57|x50|waitMsg|53|x71|url|58|60|51|||||||||||grd_Reject|deleteData|59|continue|failure|49|x4F|zA|x55|47|x42|39|1112|_|40|43|lstShopType|grdShopType_CancelEdit|41|20140811|42|x6A|56|grdShopType_Edit|46|65|36|askClose|success|grdShopType_BeforeEdit|66|62|grdShopType_ValidateEdit|38'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+
+
+var fieldsCheckRequire = ["Code", "Descr"];
+var keys = ['Code'];
+var fieldsLangCheckRequire = ["Code", "Descr"];
+
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+///////////////////////////////////////////////////////////////////////
+
+//// Store /////////////////////////////////////////////////////////////
+
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoShopType.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+////////////////////////////////////////////////////////////////////////
+
+
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdShopType);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdShopType);
+            break;
+        case "next":
+            HQ.grid.next(App.grdShopType);
+            break;
+        case "last":
+            HQ.grid.last(App.grdShopType);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoShopType.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdShopType);
+            }
+            break;
+        case "delete":
+            if (App.slmShopType.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    if (App.slmShopType.selected.items[0] != undefined) {
+                        if (App.slmShopType.selected.items[0].data.Code != "") {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdShopType)], 'deleteData', true);
+                        }
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoShopType, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+        case "print":
+            break;
+        case "close": 
+            break;
+    }
+
+};
+
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+    checkLoad(); // Mới
+};
+
+
+var frmChange = function () {
+    HQ.isChange = HQ.store.isChange(App.stoShopType);
+    HQ.common.changeData(HQ.isChange, 'AR21000');//co thay doi du lieu gan * tren tab title header
+};
+function refresh(item) {stoLoad
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoShopType.reload();
+    }
+};
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false; //sto load cuoi se su dung
+    }
+    frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+
+
+
+var grdShopType_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdShopType_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdShopType, e, keys);
+};
+var grdShopType_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdShopType, e, keys);
+};
+
+var grd_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdShopType);
+    frmChange();
+};
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+//// Process Data ///////////////////////////////////////////////////////
+
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'AR21000/Save',
+            params: {
+                lstShopType: HQ.store.getData(App.stoShopType)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                refresh("yes");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdShopType.deleteSelected();
+        frmChange();
+    }
+};
+//kiem tra key da nhap du chua
+var isAllValidKey = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var j = 0; j < keys.length; j++) {
+                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
+                    return false;
+            }
+        }
+        return true;
+    } else {
+        return true;
+    }
+}
+//kiem tra nhung field yeu cau bat buoc nhap
+var checkRequire = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var j = 0; j < keys.length; j++) {
+                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
+                    return false;
+            }
+        }
+        return true;
+    } else {
+        return true;
+    }
+};
+
+var checkRequire = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
+            if (items[i]["Code"].trim() == "") {
+                HQ.message.show(15, HQ.common.getLang("Code"));
+                return false;
+            }
+            if (items[i]["Descr"].trim() == "") {
+                HQ.message.show(15, HQ.common.getLang("Descr"));
+                return false;
+            }
+
+        }
+        return true;
+    } else {
+        return true;
+    }
+};
+
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+/////////////////////////////////////////////////////////////////////////
+
+
+
+//// Other Functions ////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+

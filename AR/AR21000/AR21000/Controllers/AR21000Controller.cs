@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -29,7 +29,7 @@ namespace AR21000.Controllers
             return View();
         }
 
-       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -48,17 +48,24 @@ namespace AR21000.Controllers
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstShopType"]);
                 ChangeRecords<AR_ShopType> lstShopType = dataHandler.BatchObjectData<AR_ShopType>();
-                foreach (AR_ShopType deleted in lstShopType.Deleted)
-                {
-                    var del = _db.AR_ShopType.Where(p => p.Code == deleted.Code).FirstOrDefault();
-                    if (del != null)
-                    {
-                        _db.AR_ShopType.DeleteObject(del);
-                    }
-                }
 
                 lstShopType.Created.AddRange(lstShopType.Updated);
-
+                foreach (AR_ShopType del in lstShopType.Deleted)
+                {
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstShopType.Created.Where(p => p.Code == del.Code).Count() > 0)
+                    {
+                        lstShopType.Created.Where(p => p.Code == del.Code).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.AR_ShopType.ToList().Where(p => p.Code == del.Code).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.AR_ShopType.DeleteObject(objDel);
+                        }
+                    }
+                }
                 foreach (AR_ShopType curShopType in lstShopType.Created)
                 {
                     if (curShopType.Code.PassNull() == "") continue;
