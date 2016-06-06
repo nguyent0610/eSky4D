@@ -1,1 +1,287 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('x a=["\\k\\g\\c\\q\\p\\l\\m\\u\\c\\d\\c","\\m\\b\\d\\1q\\c\\l\\m","\\h\\g\\w\\w\\g\\l","\\i\\D\\g\\Z\\1d\\B\\i\\1f","\\n\\b\\k\\g\\c\\q","\\i\\d\\g\\n\\b\\J\\Q\\2G\\C\\c\\s","\\k\\g\\c\\q","\\m\\b\\d\\J\\d\\g\\n\\b","\\h\\r\\g\\v\\c\\d\\S\\s\\h\\b\\A\\d\\t\\2I","\\h\\r\\g\\v\\c\\d\\S\\s\\h\\b\\A\\d\\t\\2K","\\h\\r\\g\\v\\c\\d\\S\\s\\h\\b\\A\\d\\t\\2W","\\h\\r\\g\\v\\c\\d\\S\\s\\h\\b\\A\\d\\t\\1b","\\h\\r\\g\\v\\c\\d\\S\\s\\h\\b\\A\\d\\t\\Y","\\h\\r\\g\\v\\c\\d\\S\\s\\h\\b\\A\\d\\t\\t","\\h\\r\\g\\v\\c\\d\\1w\\k\\m","\\h\\r\\g\\G\\1j\\C\\c\\s\\G\\d\\u\\c\\d\\b","\\h\\r\\g\\1j\\G\\C\\c\\s\\G\\d\\u\\c\\d\\b","\\h\\r\\g\\1s\\G\\d\\c\\s\\G\\C\\u\\c\\d\\b","\\h\\r\\g\\1s\\R\\d\\c\\s\\G\\C\\u\\c\\d\\b","\\h\\r\\g\\C\\c\\s\\v\\c\\k\\h\\1q\\b\\W\\b\\k","\\h\\r\\g\\C\\c\\s\\v\\c\\k\\h\\C\\1f\\A\\b","\\h\\r\\g\\C\\c\\s\\1d\\c\\i\\p\\i","\\h\\r\\g\\C\\c\\s\\Q\\u","\\p\\i\\v\\D\\c\\l\\m\\b","\\O\\p\\n\\i\\d","\\h\\g\\w\\r\\g","\\l\\b\\s\\d","\\A\\n\\b\\W","\\k\\c\\i\\d","\\p\\i\\2O\\A\\q\\c\\d\\b","\\p\\i\\Q\\l\\i\\b\\n\\d","\\p\\i\\u\\b\\k\\b\\d\\b","\\O\\n\\w\\1z\\c\\p\\l","\\h\\D\\b\\h\\1p\\R\\b\\2P\\B\\p\\n\\b\\G\\c\\i\\i","\\O\\g\\n\\w","\\i\\c\\W\\b","\\m\\b\\d\\R\\b\\h\\g\\n\\q","","\\q\\b\\k\\b\\d\\b\\u\\c\\d\\c","\\i\\D\\g\\Z","\\w\\b\\i\\i\\c\\m\\b","\\q\\b\\k\\b\\d\\b","\\h\\k\\g\\i\\b","\\i\\b\\d\\1g\\c\\k\\B\\b","\\l\\b\\Z","\\n\\b\\O\\n\\b\\i\\D","\\W\\c\\k\\B\\b\\1z\\g\\q\\b\\k\\i","\\p\\i\\2Q\\b\\Z","\\O\\g\\n\\h\\b\\J\\b\\k\\b\\h\\d\\p\\g\\l","\\k\\b\\l\\m\\d\\D","\\q\\c\\d\\c","\\C\\c\\s\\Q\\u","\\p\\l\\i\\b\\n\\d\\1d\\k\\c\\l\\1p","\\i\\d\\g\\n\\b","\\m\\b\\d\\1s\\d","\\h\\g\\w\\w\\p\\d\\v\\D\\c\\l\\m\\b\\i","\\O\\g\\h\\B\\i","\\k\\g\\c\\q\\R\\b\\h\\g\\n\\q","\\m\\b\\d\\1w\\g\\n\\w","\\k\\g\\c\\q\\p\\l\\m\\q\\c\\d\\c","\\B\\A\\q\\c\\d\\b\\R\\b\\h\\g\\n\\q","\\J\\Q\\1b\\Y\\t\\t\\t","\\h\\D\\c\\l\\m\\b\\u\\c\\d\\c","\\k\\g\\h\\1p\\1d\\B\\d\\d\\g\\l\\v\\D\\c\\l\\m\\b","\\i\\b\\d\\R\\b\\c\\q\\1j\\l\\k\\1f","\\h\\g\\k\\k\\c\\A\\i\\b","\\p\\i\\1g\\c\\k\\p\\q","\\J\\B\\r\\w\\p\\d\\p\\l\\m\\1n\\1n\\1n","\\J\\Q\\1b\\Y\\t\\t\\t\\1A\\J\\c\\W\\b","\\m\\b\\d\\v\\D\\c\\l\\m\\b\\q\\u\\c\\d\\c","\\b\\l\\h\\g\\q\\b","\\m\\b\\d\\1g\\c\\k\\B\\b","\\w\\i\\m\\v\\g\\q\\b","\\n\\b\\i\\B\\k\\d","\\O\\p\\b\\k\\q\\1q\\c\\r\\b\\k","\\w\\i\\m\\G\\c\\n\\c\\w","\\A\\n\\g\\h\\b\\i\\i","\\i\\B\\r\\w\\p\\d","\\1f\\b\\i","\\u\\b\\k\\b\\d\\p\\l\\m\\u\\c\\d\\c","\\J\\Q\\1b\\Y\\t\\t\\t\\1A\\u\\b\\k\\b\\d\\b"];x 1u=j(){f[a[2]][a[3]](M,f[a[2]][a[1]](a[0]));e[a[22]][a[7]]()[a[6]](j(){e[a[21]][a[7]]()[a[6]](j(){e[a[20]][a[7]]()[a[6]](j(){e[a[19]][a[7]]()[a[6]](j(){e[a[18]][a[7]]()[a[6]](j(){e[a[17]][a[7]]()[a[6]](j(){e[a[16]][a[7]]()[a[6]](j(){e[a[15]][a[7]]()[a[6]](j(){e[a[14]][a[7]]()[a[6]](j(){e[a[13]][a[7]]()[a[6]](j(){e[a[12]][a[7]]()[a[6]](j(){e[a[11]][a[7]]()[a[6]](j(){e[a[10]][a[7]]()[a[6]](j(){e[a[9]][a[7]]()[a[6]](j(){e[a[8]][a[7]]()[a[6]](j(){e[a[5]][a[4]]()})})})})})})})})})})})})})})})};x 2u=j(1B){2R(1B){H a[24]:f[a[25]][a[24]](e[a[22]],f[a[23]]);E;H a[26]:f[a[25]][a[26]](e[a[22]],f[a[23]]);E;H a[27]:f[a[25]][a[27]](e[a[22]],f[a[23]]);E;H a[28]:f[a[25]][a[28]](e[a[22]],f[a[23]]);E;H a[2S]:o(f[a[29]]||f[a[1o]]||f[a[1C]]){o(f[a[1F]][a[2T]](e[a[F]])){1J()}};E;H a[2Y]:x 1m=e[a[F]][a[1N]]();o(1m){o(f[a[1C]]){f[a[K]][a[N]](11,a[z],a[2U])}};E;H a[1y]:f[a[2]][a[1y]](2V);E;H a[2N]:o(f[a[1o]]){o(f[a[23]]){f[a[K]][a[N]](2M,a[z],a[z])}U{e[a[22]][a[V]](a[z]);1h(e[a[22]])}};E;H a[1x]:o(f[a[23]]){f[a[K]][a[N]](2B,a[z],a[1x])}U{f[a[23]]=L;o(e[a[22]][a[X]]==1a){e[a[22]][a[V]](a[z])};e[a[22]][a[7]]()[a[4]]();e[a[5]][a[4]]()};E;2z:}};x 2y=j(){1u()};x 2w=j(P){f[a[2]][a[3]](L);f[a[1e]]=L;e[a[22]][a[1E]]=M;o(P[a[1H]][a[1Q]]==0){f[a[1U]][a[2x]](P,a[2D]);1l=P[a[1v]](0);P[a[2E]]();f[a[1e]]=M;e[a[22]][a[1E]]=L;e[a[22]][a[2L]](M)};x 1l=P[a[1v]](0);e[a[F]][a[1t]]()[a[2J]](1l);1D()};x 2F=j(P){f[a[2]][a[3]](M,f[a[2]][a[1]](a[2H]))};x 1D=j(){o(e[a[5]][a[1H]][a[1Q]]>0){e[a[F]][a[1t]]()[a[1M]]();f[a[23]]=f[a[1U]][a[23]](e[a[5]]);f[a[2]][a[2v]](f[a[23]],a[2C]);f[a[1F]][a[2A]](f[a[23]],e);o(e[a[22]][a[X]]==1a||f[a[1e]]==M){e[a[22]][a[1L]](L)}U{e[a[22]][a[1L]](f[a[23]])}}};x 1h=j(1i,1O){o(1i[a[X]]!=1a){e[a[5]][a[4]]()}};x 2X=j(1i,1O){o(f[a[23]]){e[a[22]][a[2a]]()}};j 1J(){o(f[a[1o]]||f[a[29]]){x 1m=e[a[F]][a[1N]]();e[a[F]][a[1t]]()[a[1M]]();o(e[a[F]][a[2b]]()){e[a[F]][a[1R]]({1W:f[a[2]][a[1]](a[2t]),1G:a[2o],1P:{2n:2e[a[2p]](e[a[5]][a[2q]]({2s:L})),2r:f[a[1e]]},1V:j(1r,y){f[a[K]][a[N]](2m,a[z],a[z]);x 1I=e[a[22]][a[1k]]();e[a[22]][a[7]]()[a[6]](j(){e[a[22]][a[V]](1I);e[a[5]][a[4]]()})},1S:j(1X,y){o(y[a[I]][a[T]]){o(y[a[I]][a[T]]==2l){f[a[K]][a[N]](y[a[I]][a[T]],[e[a[22]][a[2g]],e[a[22]][a[1k]]()],a[z],M)}U{f[a[K]][a[N]](y[a[I]][a[T]],y[a[I]][a[1T]],a[z])}}U{f[a[K]][a[2f]](1X,y,M)}}})}}}j 2h(1c){o(1c==a[1K]){e[a[F]][a[1R]]({2i:L,2k:2j,1W:f[a[2]][a[1]](a[1Z]),1G:a[2c],1P:{2d:e[a[22]][a[1k]]()},1V:j(1r,y){e[a[22]][a[V]](a[z]);e[a[22]][a[7]]()[a[6]](j(){1h(e[a[22]])})},1S:j(1r,y){o(y[a[I]][a[T]]){f[a[K]][a[N]](y[a[I]][a[T]],y[a[I]][a[1T]],a[z])}}})}}j 1Y(1c){o(1c==a[1K]){f[a[23]]=L;o(e[a[22]][a[X]]==1a){e[a[22]][a[V]](a[z])};e[a[22]][a[7]]()[a[4]]();e[a[5]][a[4]]()}}', 62, 185, '||||||||||_0xaf70|x65|x61|x74|App|HQ|x6F|x63|x73|function|x6C|x6E|x67|x72|if|x69|x64|x62|x78|x30|x44|x43|x6D|var|_0xc617x11|37|x70|x75|x54|x68|break|32|x50|case|73|x53|40|false|true|39|x66|_0xc617x7|x49|x52|x45|72|else|43|x76|46|x31|x77|||||||||||null|x32|_0xc617x15|x42|47|x79|x56|cboTaxID_Change|_0xc617xc|x4F|71|_0xc617x8|_0xc617x4|x2E|30|x6B|x4C|_0xc617x10|x41|58|loadSourceCombo|54|x46|45|42|x4D|x2F|_0xc617x3|31|frmChange|48|34|url|50|_0xc617x12|save|78|64|60|36|_0xc617xd|params|49|77|failure|75|53|success|waitMsg|_0xc617x13|refresh|79|||||||||||65|66|80|taxID|Ext|76|74|deleteData|clientValidation|1800000|timeout|2000|201405071|lstTax|68|70|69|isNew|skipIdForPhantomRecords|67|menuClick|62|stoLoad|52|firstLoad|default|63|20150303|61|51|55|stoBeforeLoad|x5F|59|x35|57|x34|56|150|44|x55|x71|x4E|switch|35|33|38|this|x33|cboTaxID_Expand|41'.split('|'), 0, {}))
+﻿////////////////////////////////////////////////////////////////////////
+//// Declare ///////////////////////////////////////////////////////////
+var _Source = 0;
+var _maxSource = 15;
+var _isLoadMaster = false;
+var TaxID = '';
+
+////////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.storeSI_Tax.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+////////////////////////////////////////////////////////////////////////
+//// First Load ////////////////////////////////////////////////////////
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // Kiem tra quyen Insert Update Delete de disable button tren top bar
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid(); // Require cac field yeu cau tren from
+
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+
+    App.cboTaxID.getStore().addListener('load', checkLoad);
+    App.cboTaxBasis.getStore().addListener('load', checkLoad);
+    App.cboTaxCalcType.getStore().addListener('load', checkLoad);
+    App.cboTaxCalcLevel.getStore().addListener('load', checkLoad);
+    App.cboARtaxPTDate.getStore().addListener('load', checkLoad);
+    App.cboAPtaxPTDate.getStore().addListener('load', checkLoad);
+    App.cboOPTaxPtDate.getStore().addListener('load', checkLoad);
+    App.cboPOTaxPtDate.getStore().addListener('load', checkLoad);
+    App.cboCatFlg.getStore().addListener('load', checkLoad);
+    //
+    App.cboCatExcept00.getStore().addListener('load', checkLoad);
+    App.cboCatExcept01.getStore().addListener('load', checkLoad);
+    App.cboCatExcept02.getStore().addListener('load', checkLoad);
+    App.cboCatExcept03.getStore().addListener('load', checkLoad);
+    App.cboCatExcept04.getStore().addListener('load', checkLoad);
+    App.cboCatExcept05.getStore().addListener('load', checkLoad);
+};
+
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+// Load and show binding data to the form
+// Command of the topbar on screen
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.combo.first(App.cboTaxID, HQ.isChange);
+            break;
+        case "prev":
+            HQ.combo.prev(App.cboTaxID, HQ.isChange);
+            break;
+        case "next":
+            HQ.combo.next(App.cboTaxID, HQ.isChange);
+            break;
+        case "last":
+            HQ.combo.last(App.cboTaxID, HQ.isChange);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh("yes");
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', 'refresh');
+                } else {
+                    App.cboTaxID.setValue('');
+                    App.storeSI_Tax.reload();
+                }
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                if (App.cboTaxID.getValue()) {
+                    HQ.message.show(11, '', 'deleteData');
+                } else {
+                    menuClick('new');
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            //HQ.common.close(this);
+            break;
+    }
+};
+
+var frmChange = function () {
+    if (App.storeSI_Tax.data.length > 0) {
+        App.frmMain.getForm().updateRecord();
+        HQ.isChange = HQ.store.isChange(App.storeSI_Tax);
+        HQ.common.changeData(HQ.isChange, 'SI21000');//co thay doi du lieu gan * tren tab title header
+        HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+        if (App.cboTaxID.valueModels == null || HQ.isNew == true)//App.cboTaxID.valueModels == null khi ko co select item nao
+            App.cboTaxID.setReadOnly(false);
+        else App.cboTaxID.setReadOnly(HQ.isChange);
+    }
+};
+
+var stoLoad = function (sto) {
+    HQ.isNew = false;
+    HQ.common.lockItem(App.frmMain, false);
+    App.cboTaxID.forceSelection = true;
+
+    if (sto.data.length == 0) {
+        HQ.common.showBusy(false);
+        HQ.isNew = false;
+        App.cboTaxID.forceSelection = true;
+        if (sto.data.length == 0) {
+            HQ.store.insertBlank(sto, "TaxID");
+            record = sto.getAt(0);
+            sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
+            HQ.isNew = true;//record la new
+            App.cboTaxID.forceSelection = false;
+            //HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+            App.cboTaxID.focus(true);//focus ma khi tao moi
+        }
+
+        }
+        var record = sto.getAt(0);
+        App.frmMain.getForm().loadRecord(record);
+
+    if (!HQ.isInsert && HQ.isNew) {
+        App.cboTaxID.forceSelection = true;
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+        frmChange();
+    }
+};
+
+//Truoc khi load store se hien Busy
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+
+var cboTaxID_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null && !App.storeSI_Tax.loading) {
+        TaxID = value;
+        App.cboDfltOrdFromId.store.reload();
+        App.storeSI_Tax.reload();
+    }
+};
+
+var cboTaxID_Select = function (sender, value) {
+    if (sender.valueModels != null && !App.storeSI_Tax.loading) {
+        TaxID = value;
+        App.cboDfltOrdFromId.store.reload();
+        App.storeSI_Tax.reload();
+    }
+};
+
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+
+
+
+
+
+var cboTaxID_Change = function (sender, value) {
+    //if (sender.valueModels != null) {
+    //    App.storeSI_Tax.reload();
+    //}
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null && !App.storeSI_Tax.loading) {
+        TaxID = value;
+        //App.cboDfltOrdFromId.store.reload();
+        App.storeSI_Tax.reload();
+    }
+
+};
+    //khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboTaxID_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboTaxID.collapse();
+    }
+};
+
+//var btnCopy_Click = function (sender, e) {
+//    App.txtBillAddr1.setValue(App.txtAddr1.getValue());
+//    App.txtBillAddr2.setValue(App.txtAddr2.getValue());
+//    App.txtBillAttn.setValue(App.txtAttn.getValue());
+//    App.txtBillFax.setValue(App.txtFax.getValue());
+//    App.txtBillName.setValue(App.txtShipName.getValue());
+//    App.txtBillPhone.setValue(App.txtPhone.getValue());
+//    App.txtBillSalut.setValue(App.txtSalut.getValue());
+//    App.txtBillZip.setValue(App.txtShipZip.getValue());
+//    App.cboBillCountry.setValue(App.cboCountry.getValue());
+//    App.cboBillState.setValue(App.cboState.getValue());
+//    App.cboBillCity.setValue(App.cboCity.getValue());
+//};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+// Submit the changed data (created, updated) into server side
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.updateRecord();
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'SI21000/Save',
+            params: {
+                lstTax: Ext.encode(App.storeSI_Tax.getRecordsValues())
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                TaxID = data.result.TaxID;
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.cboTaxID.getStore().load({
+                    callback: function () {
+                        if (Ext.isEmpty(App.cboTaxID.getValue())) {
+                            App.cboTaxID.setValue(TaxID);
+                            App.storeSI_Tax.reload();
+                        }
+                        else {
+                            App.cboTaxID.setValue(TaxID);
+                            App.storeSI_Tax.reload();
+                        }
+                    }
+                });
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+// Submit the deleted data into server side
+var deleteData = function (item) {
+    if (item == "yes") {
+        if (App.frmMain.isValid()) {
+            App.frmMain.updateRecord();
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang("DeletingData"),
+                url: 'SI21000/DeleteAll',
+                timeout: 7200,
+                success: function (msg, data) {
+                    App.cboTaxID.getStore().load();
+                    menuClick("new");
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        if (HQ.isNew)
+            App.cboTaxID.setValue('');
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.storeSI_Tax.reload();
+    }
+};
+///////////////////////////////////

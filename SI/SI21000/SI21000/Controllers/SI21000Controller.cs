@@ -27,7 +27,7 @@ namespace SI21000.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -42,53 +42,81 @@ namespace SI21000.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Save(FormCollection data, bool isNew)
+        public ActionResult Save(FormCollection data)
         {
             try
             {
                 // Get params from data that's sent from client (Ajax)
-                string taxID = data["cboTaxID"];
+                string taxID = data["cboTaxID"].PassNull();
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstTax"]);
-                ChangeRecords<SI_Tax> lstTax = dataHandler.BatchObjectData<SI_Tax>();
-                foreach (SI_Tax createdTax in lstTax.Updated)
-                {
-                    var objHeader = _db.SI_Tax.FirstOrDefault(p => p.TaxID == taxID);
-                    if (isNew)//new record
-                    {
-                        if (objHeader != null)
-                            return Json(new { success = false, msgCode = 2000, msgParam = taxID });//quang message ma nha cung cap da ton tai ko the them
-                        else
-                        {
-                            objHeader = new SI_Tax();
-                            objHeader.TaxID = taxID;
-                            objHeader.Crtd_DateTime = DateTime.Now;
-                            objHeader.Crtd_Prog = _screenNbr;
-                            objHeader.Crtd_User = Current.UserName;
-                            UpdatingHeader(createdTax, ref objHeader);
-                            // Add data to SI_Tax
-                            _db.SI_Tax.AddObject(objHeader);
-                            _db.SaveChanges();
-                        }
-                    }
-                    else if (objHeader != null)//update record
-                    {
-                        if (objHeader.tstamp.ToHex() == createdTax.tstamp.ToHex())
-                        {
-                            UpdatingHeader(createdTax, ref objHeader);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
-                        _db.SaveChanges();
+                //ChangeRecords<SI_Tax> lstTax = dataHandler.BatchObjectData<SI_Tax>();
+                #region Old
+                //foreach (SI_Tax createdTax in lstTax.Updated)
+                //{
+                //    var objHeader = _db.SI_Tax.FirstOrDefault(p => p.TaxID == taxID);
+                //    if (isNew)//new record
+                //    {
+                //        if (objHeader != null)
+                //            return Json(new { success = false, msgCode = 2000, msgParam = taxID });//quang message ma nha cung cap da ton tai ko the them
+                //        else
+                //        {
+                //            objHeader = new SI_Tax();
+                //            objHeader.TaxID = taxID;
+                //            objHeader.Crtd_DateTime = DateTime.Now;
+                //            objHeader.Crtd_Prog = _screenNbr;
+                //            objHeader.Crtd_User = Current.UserName;
+                //            UpdatingHeader(createdTax, ref objHeader);
+                //            // Add data to SI_Tax
+                //            _db.SI_Tax.AddObject(objHeader);
+                //            _db.SaveChanges();
+                //        }
+                //    }
+                //    else if (objHeader != null)//update record
+                //    {
+                //        if (objHeader.tstamp.ToHex() == createdTax.tstamp.ToHex())
+                //        {
+                //            UpdatingHeader(createdTax, ref objHeader);
+                //        }
+                //        else
+                //        {
+                //            throw new MessageException(MessageType.Message, "19");
+                //        }
+                //        _db.SaveChanges();
 
+                //    }
+                //    else
+                //    {
+                //        throw new MessageException(MessageType.Message, "19");
+                //    }
+                //}
+                #endregion
+                #region New Save
+                var curHeader = dataHandler.ObjectData<SI_Tax>().FirstOrDefault();
+                var header = _db.SI_Tax.FirstOrDefault(p => p.TaxID == taxID);
+                if (header != null)
+                {
+                    if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
+                    {
+                        UpdatingHeader(curHeader,ref header ,false);
                     }
                     else
                     {
                         throw new MessageException(MessageType.Message, "19");
                     }
                 }
-                return Json(new { success = true });
+                else
+                {
+                    header = new SI_Tax();
+                    header.ResetET();
+                    header.TaxID = taxID;
+                    
+                    UpdatingHeader(curHeader,ref header ,true);
+                    _db.SI_Tax.AddObject(header);
+                }
+                #endregion
+                _db.SaveChanges();
+
+                return Json(new { success = true, TaxID = taxID }, "text/html");
             }
             catch (Exception ex)
             {
@@ -99,10 +127,11 @@ namespace SI21000.Controllers
 
         // Delete a SI_Tax
         [HttpPost]
-        public ActionResult Delete(string taxID)
+        public ActionResult DeleteAll(FormCollection data)
         {
             try
             {
+                string taxID = data["cboTaxID"].PassNull();
                 var cpny = _db.SI_Tax.FirstOrDefault(p => p.TaxID == taxID);
                 if (cpny != null)
                 {
@@ -111,7 +140,7 @@ namespace SI21000.Controllers
                 }
 
                 _db.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true }, "text/html");
             }
             catch (Exception ex)
             {
@@ -120,8 +149,14 @@ namespace SI21000.Controllers
 
         }
 
-        private void UpdatingHeader(SI_Tax s, ref SI_Tax t)
+        private void UpdatingHeader(SI_Tax s, ref SI_Tax t, bool isNew)
         {
+            if(isNew){
+
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = Current.UserName;
+            }
             t.Descr = s.Descr;
             t.TaxRate = s.TaxRate;
             t.TaxBasis = s.TaxBasis;
