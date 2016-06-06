@@ -26,15 +26,15 @@
         .ID("grdSI_City")
         .Store(
              X.Store()
-            .ID("stoData")
+            .ID("stoSI_City")
             .PageSize(50)
             .Model(Util.GenerateModel(typeof(SI20500_pgLoadGrid_Result), "mdlSI_City", "City"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_City"))).AutoLoad(false)
             .Listeners(l =>
             {
                 l.BeforeLoad.Fn = "stoBeforeLoad";
-                l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";
+                l.Load.Fn = "stoSI_City_Load";
+                l.Update.Fn = "frmChange";
             })
         )
         .Listeners(p => p.BoxReady.Handler = "firstLoad();")
@@ -46,10 +46,12 @@
                         HQ.Combo().ID("cboCountryID").Name("cboCountryID").HQProcedure("SI20500_pcCountryAll")
                         .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID")
                         .Width(300).HQHeightWidth(500, 400)
-                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)                        
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)  
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })                      
                         .LoadData()
                         .Listeners(
                             x => {
+                                x.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 x.Change.Fn = "cboCountry_Change";//set lai du lieu cho state ='' khi thay doi country
                             }
                         )
@@ -59,10 +61,15 @@
                     .Editor(                      
                         HQ.Combo().ID("cboState").HQProcedure("SI20500_pcStateAll")
                         .HQColumnShow("State,Descr").HQHeightWidth(300, 400).ForceSelection(true)
-                        .ValueField("State").DisplayField("State")                     
+                        .ValueField("State").DisplayField("State")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })                     
                         .HQParam(new StoreParameterCollection() { 
                             new StoreParameter("@Country","App.slmSI_City.selected.items[0]==undefined ? '':  App.slmSI_City.selected.items[0].data.Country",ParameterMode.Raw)
                         })
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
                         .LoadData()
                     )
                     ,X.Column().Text(Util.GetLang("City")).DataIndex("City").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))

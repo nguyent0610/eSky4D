@@ -25,12 +25,12 @@ namespace SI20500.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-        public ActionResult GetData()
+        public ActionResult GetSI_City()
         {
             return this.Store(_db.SI20500_pgLoadGrid().ToList());
         }
