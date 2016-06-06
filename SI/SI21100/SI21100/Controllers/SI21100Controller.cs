@@ -28,7 +28,7 @@ namespace SI21100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -40,55 +40,44 @@ namespace SI21100.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(FormCollection data, bool isNew)
+        public ActionResult Save(FormCollection data)
         {
 
             try
             {
-                string TermsID = data["cboTermsID"];
+                string TermsID = data["cboTermsID"].PassNull();
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_Terms"]);
-                ChangeRecords<SI_Terms> lstSI_Terms = dataHandler.BatchObjectData<SI_Terms>();
-
-                foreach (SI_Terms setup in lstSI_Terms.Updated)
+                
+                var curHeader = dataHandler.ObjectData<SI_Terms>().FirstOrDefault();
+                #region Save Terms
+                var header = _db.SI_Terms.FirstOrDefault(p => p.TermsID == TermsID);
+                if (header != null)
                 {
-                    var objHeader = _db.SI_Terms.FirstOrDefault(p => p.TermsID == TermsID);
-                    if (isNew)//new record
+                    if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        if (objHeader != null)
-                            return Json(new { success = false, msgCode = 2000, msgParam = TermsID });//quang message ma nha cung cap da ton tai ko the them
-                        else
-                        {
-                            objHeader = new SI_Terms();
-                            objHeader.TermsID = TermsID;
-                            objHeader.Crtd_DateTime = DateTime.Now;
-                            objHeader.Crtd_Prog = _screenNbr;
-                            objHeader.Crtd_User = Current.UserName;
-                            UpdatingHeader(setup, ref objHeader);
-                            // Add data to SI_Terms
-                            _db.SI_Terms.AddObject(objHeader);
-                            _db.SaveChanges();
-                        }
-                    }
-                    else if (objHeader != null)//update record
-                    {
-                        if (objHeader.tstamp.ToHex() == setup.tstamp.ToHex())
-                        {
-                            UpdatingHeader(setup, ref objHeader);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
-                        _db.SaveChanges();
-
+                        UpdatingHeader( curHeader,ref header);
                     }
                     else
                     {
                         throw new MessageException(MessageType.Message, "19");
                     }
                 }
-                return Json(new { success = true, TermsID=TermsID });
+                else
+                {
+                    header = new SI_Terms();
+                    header.ResetET();
+                    header.TermsID = TermsID;
+                    header.Crtd_DateTime = DateTime.Now;
+                    header.Crtd_Prog = _screenNbr;
+                    header.Crtd_User = Current.UserName;
+                    UpdatingHeader( curHeader,ref header);
+                    _db.SI_Terms.AddObject(header);
+                }
+                #endregion
+
+                _db.SaveChanges();
+                return Json(new { success = true, TermsID = TermsID }, "text/html");
             }
             catch (Exception ex)
             {
@@ -115,14 +104,14 @@ namespace SI21100.Controllers
         public ActionResult DeleteAll(FormCollection data)
         {
             try{
-                string TermsID = data["cboTermsID"];
+                string TermsID = data["cboTermsID"].PassNull();
                 var cpny = _db.SI_Terms.FirstOrDefault(p => p.TermsID == TermsID);
                 if (cpny != null)
                 {
                     _db.SI_Terms.DeleteObject(cpny);
                 }
                 _db.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true }, "text/html");
             }
             catch (Exception ex)
             {

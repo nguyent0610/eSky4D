@@ -37,9 +37,14 @@
                     .HQHeightWidth(400, 300)
                     .MultiSelect(false)
                     .MarginSpec("5 0 5 0")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
                     .Listeners(lst =>
                     {
+                        lst.TriggerClick.Fn = "cboTermsID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
+                        //lst.Change.Fn = "cboVendID_Change";//khi thay doi du lieu
+                        lst.Select.Fn = "cboTermsID_Select";
+                        lst.Expand.Fn = "cboTermsID_Expand";//khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
                         lst.Change.Fn = "cboTermsID_Change";
                     }),
                     

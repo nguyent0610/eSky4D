@@ -1,1 +1,248 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('t a=["\\q\\U\\h\\V\\b\\i\\s\\e\\y\\v","\\k\\e\\Q\\r\\f\\m\\l\\b","\\K\\k\\i\\e\\c","\\q\\h\\s\\U\\h","\\E\\i\\b\\N","\\m\\b\\1L\\c","\\j\\f\\e\\c","","\\i\\b\\K\\i\\b\\e\\r","\\e\\r\\h\\M","\\s\\b\\e\\e\\f\\l\\b","\\i\\b\\j\\h\\f\\n","\\e\\c\\h\\A\\y\\1K\\V\\b\\i\\s\\e","\\e\\b\\c\\X\\f\\j\\u\\b","\\m\\b\\M","\\N\\f\\j\\u\\b","\\k\\e\\v\\b\\j\\b\\c\\b","\\n\\b\\j\\b\\c\\b\\v\\f\\c\\f","\\n\\b\\j\\b\\c\\b","\\k\\e\\1J\\E\\n\\f\\c\\b","\\k\\e\\y\\m\\e\\b\\i\\c","\\K\\i\\s\\T\\f\\k\\m","\\q\\r\\b\\q\\1f\\F\\b\\1F\\u\\k\\i\\b\\1M\\f\\e\\e","\\K\\h\\i\\s","\\e\\f\\N\\b","\\E\\i\\k\\m\\c","\\l\\b\\c\\F\\b\\q\\h\\i\\n","\\u\\E\\n\\f\\c\\b\\F\\b\\q\\h\\i\\n","\\e\\c\\h\\i\\b","\\f\\e\\1f\\Q\\j\\h\\e\\b","\\q\\j\\h\\e\\b","\\q\\h\\s\\s\\h\\m","\\K\\h\\q\\u\\e","\\E\\f\\i\\b\\m\\c\\1b\\u\\c\\h\\1B\\h\\f\\n\\Q\\h\\m\\c\\i\\h\\j","\\l\\b\\c\\1n\\b\\k\\l\\r\\c","\\e\\b\\c\\1n\\b\\k\\l\\r\\c","\\r\\b\\k\\l\\r\\c","\\l\\b\\c\\X\\k\\b\\M\\A\\k\\1N\\b","\\l\\b\\c\\S\\h\\n\\R","\\j\\h\\f\\n","\\e\\r\\h\\M\\S\\u\\e\\R","\\k\\e\\1Q\\b\\M","\\j\\b\\m\\l\\c\\r","\\n\\f\\c\\f","\\S\\i\\f\\m\\q\\r\\y\\v","\\k\\m\\e\\b\\i\\c\\S\\j\\f\\m\\1f","\\l\\b\\c\\1b\\c","\\q\\h\\s\\s\\k\\c\\Q\\r\\f\\m\\l\\b\\e","\\e\\b\\c\\F\\b\\1F\\u\\k\\i\\b","\\j\\h\\f\\n\\F\\b\\q\\h\\i\\n","\\l\\b\\c\\1P\\h\\i\\s","\\A\\y\\W\\H\\H\\G\\G","\\q\\r\\f\\m\\l\\b\\v\\f\\c\\f","\\N\\f\\j\\u\\b\\T\\h\\n\\b\\j\\e","\\e\\b\\c\\F\\b\\f\\n\\1O\\m\\j\\R","\\j\\h\\f\\n\\k\\m\\l\\n\\f\\c\\f","\\l\\b\\c\\1B\\f\\m\\l","\\k\\e\\X\\f\\j\\k\\n","\\1I\\f\\k\\c\\T\\e\\l","\\A\\y\\W\\H\\H\\G\\G\\1k\\A\\f\\N\\b","\\l\\b\\c\\v\\f\\c\\f","\\l\\b\\c\\A\\c\\h\\i\\b","\\V\\b\\i\\s\\e\\y\\v","\\i\\b\\e\\u\\j\\c","\\E\\i\\h\\q\\b\\e\\e","\\e\\u\\U\\s\\k\\c","\\R\\b\\e","\\v\\b\\j\\b\\c\\k\\m\\l\\v\\f\\c\\f","\\A\\y\\W\\H\\H\\G\\G\\1k\\v\\b\\j\\b\\c\\b\\1b\\j\\j"];t Z=o(1p){1G(1p){w a[2]:d[a[3]][a[2]](g[a[0]],d[a[1]]);x;w a[4]:d[a[3]][a[4]](g[a[0]],d[a[1]]);x;w a[5]:d[a[3]][a[5]](g[a[0]],d[a[1]]);x;w a[6]:d[a[3]][a[6]](g[a[0]],d[a[1]]);x;w a[8]:p(d[a[1]]){d[a[10]][a[9]](1H,a[7],a[8])}O{d[a[1]]=L;g[a[12]][a[11]]()};x;w a[14]:g[a[0]][a[13]](a[7]);x;w a[18]:p(g[a[0]][a[15]]){p(d[a[16]]){d[a[10]][a[9]](11,a[7],a[17])}}O{Z(a[14])};x;w a[24]:p(d[a[19]]||d[a[20]]||d[a[16]]){p(d[a[23]][a[22]](g[a[21]])){1y()}};x;w a[25]:x;w a[1t]:p(g[a[21]][a[26]]()!=1R){g[a[21]][a[27]]()};p(d[a[28]][a[1]](g[a[12]])){d[a[10]][a[9]](7,a[7],a[29])}O{d[a[z]][a[1t]](1e)};x}};t 2z=o(C){p(g[1s]){g[1s][a[2A]]()}};t 2x=o(1d){p(1e[a[1m]]!=1w){1d[a[1g]](1e[a[1m]][a[2B]]()-1i)}O{1d[a[1g]](2C[a[1S]]()[a[2F]]()[a[2E]]-1i)}};t 2D=o(C,2G,2y){g[a[12]][a[1a]]()};t 2v=o(){};t 2c=o(D){d[a[z]][a[1z]](L);d[a[P]]=L;p(D[a[2b]][a[2d]]==0){d[a[28]][a[2e]](D,a[2w]);2f=D[a[1l]](0);D[a[2a]]();d[a[P]]=J;d[a[z]][a[1Z]](g[a[21]])};g[a[21]][a[1j]]()[a[1U]](g[a[12]][a[1l]](0));1h()};t 1h=o(){g[a[21]][a[1j]]()[a[27]]();d[a[1]]=d[a[28]][a[1]](g[a[12]]);d[a[z]][a[1T]](d[a[1]],a[1V]);p(g[a[0]][a[1W]]==1w||d[a[P]]==J){g[a[0]][a[1A]](L)}O{g[a[0]][a[1A]](d[a[1]])}};t 1Y=o(D){d[a[z]][a[1z]](J,d[a[z]][a[1c]](a[1X]))};t 1y=o(){p(g[a[21]][a[1D]]()){g[a[21]][a[27]]();g[a[21]][a[1E]]({1x:d[a[z]][a[1c]](a[2g]),1q:a[2h],2r:{2q:d[a[28]][a[2s]](g[a[21]][a[26]]()[a[28]]),2t:d[a[P]]},1o:o(I,B){d[a[10]][a[9]](2u);g[a[0]][a[Y]]()[a[11]]();t 1C=B[a[2p]][a[2o]];g[a[0]][a[Y]]()[a[1a]](o(){g[a[0]][a[13]](1C);g[a[12]][a[11]]()})},1r:o(I,B){d[a[10]][a[1v]](I,B,J)}})}};t 2j=o(C){p(C==a[1u]){p(g[a[21]][a[1D]]()){g[a[21]][a[27]]();g[a[21]][a[1E]]({1x:d[a[z]][a[1c]](a[2i]),1q:a[2k],2l:2n,1o:o(I,B){g[a[0]][a[Y]]()[a[1a]]();Z(a[14])},1r:o(I,B){d[a[10]][a[1v]](I,B,J)}})}}};o 2m(C){p(C==a[1u]){d[a[1]]=L;g[a[12]][a[11]]()}}', 62, 167, '||||||||||_0x5f72|x65|x74|HQ|x73|x61|App|x6F|x72|x6C|x69|x67|x6E|x64|function|if|x63|x68|x6D|var|x75|x44|case|break|x49|31|x53|_0x9619x11|_0x9619x4|_0x9619xc|x70|x52|x30|x31|_0x9619x10|true|x66|false|x77|x76|else|41|x43|x79|x42|x4D|x62|x54|x32|x56|61|menuClick|||||||||||39|x41|56|_0x9619x6|this|x6B|35|frmChange|100|50|x2F|46|33|x48|success|_0x9619x2|url|failure|invalidField|30|66|64|null|waitMsg|save|40|54|x4C|_0x9619x12|57|65|x71|switch|20150303|x57|x55|x5F|x78|x50|x7A|x4F|x46|x4E|undefined|38|52|49|51|53|55|stoBeforeLoad|48|||||||||||47|43|stoLoad|42|45|record|58|59|67|deleteData|68|timeout|refresh|7200|62|63|lstSI_Terms|params|60|isNew|201405071|firstLoad|44|tabSI21100_AfterRender|_0x9619x9|focusChecking|32|34|Ext|cboTermsID_Change|36|37|_0x9619x8'.split('|'), 0, {}))
+﻿////////////////////////////////////////////////////////////////////////
+//// Declare ///////////////////////////////////////////////////////////
+var _Source = 0;
+var _maxSource = 4;
+var _isLoadMaster = false;
+var TermsID = '';
+
+////////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoSI_Terms.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+////////////////////////////////////////////////////////////////////////
+//// First Load ////////////////////////////////////////////////////////
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // Kiem tra quyen Insert Update Delete de disable button tren top bar
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid(); // Require cac field yeu cau tren from
+
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+
+    App.cboTermsID.getStore().addListener('load', checkLoad);
+    App.ApplyTo.getStore().addListener('load', checkLoad);
+    App.DiscType.getStore().addListener('load', checkLoad);
+    App.DueType.getStore().addListener('load', checkLoad);
+    
+};
+
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+// Load and show binding data to the form
+// Command of the topbar on screen
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.combo.first(App.cboTermsID, HQ.isChange);
+            break;
+        case "prev":
+            HQ.combo.prev(App.cboTermsID, HQ.isChange);
+            break;
+        case "next":
+            HQ.combo.next(App.cboTermsID, HQ.isChange);
+            break;
+        case "last":
+            HQ.combo.last(App.cboTermsID, HQ.isChange);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh("yes");
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', 'refresh');
+                } else {
+                    App.cboTermsID.setValue('');
+                    App.stoSI_Terms.reload();
+                }
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                if (App.cboTermsID.getValue()) {
+                    HQ.message.show(11, '', 'deleteData');
+                } else {
+                    menuClick('new');
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+};
+
+var frmChange = function () {
+    if (App.stoSI_Terms.getCount() > 0)
+        App.frmMain.getForm().updateRecord();
+
+    HQ.isChange = HQ.store.isChange(App.stoSI_Terms);
+    HQ.common.changeData(HQ.isChange, 'SI21100');
+
+    if (App.cboTermsID.valueModels == null || HQ.isNew == true)
+        App.cboTermsID.setReadOnly(false);
+    else
+        App.cboTermsID.setReadOnly(HQ.isChange);
+};
+
+var stoLoad = function (sto) {
+    HQ.isNew = false;
+
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "TermsID");
+        HQ.isNew = true; //record la new 
+        HQ.isFirstLoad = true;
+        App.cboTermsID.forceSelection = false;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboTermsID.focus(true); //focus ma khi tao moi
+        sto.commitChanges();
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+
+    if (!HQ.isInsert && HQ.isNew) {
+        App.cboTermsID.forceSelection = true;
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+        frmChange();
+    }
+};
+
+//Truoc khi load store se hien Busy
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+
+var cboTermsID_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null && !App.stoSI_Terms.loading) {
+        VendID = value;
+        App.stoSI_Terms.reload();
+    }
+};
+
+var cboTermsID_Select = function (sender, value) {
+    if (sender.valueModels != null && !App.stoSI_Terms.loading) {
+        TermsID = value;
+        App.stoSI_Terms.reload();
+    }
+};
+
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboTermsID_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboTermsID.collapse();
+    }
+};
+
+//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
+var cboTermsID_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        App.cboTermsID.setValue('');
+    }
+};
+
+
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+// Submit the changed data (created, updated) into server side
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.updateRecord();
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'SI21100/Save',
+            params: {
+                lstSI_Terms: Ext.encode(App.stoSI_Terms.getRecordsValues())
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                TermsID = data.result.TermsID;
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.cboTermsID.getStore().load({
+                    callback: function () {
+                        if (Ext.isEmpty(App.cboTermsID.getValue())) {
+                            App.cboTermsID.setValue(TermsID);
+                            App.stoSI_Terms.reload();
+                        }
+                        else {
+                            App.cboTermsID.setValue(TermsID);
+                            App.stoSI_Terms.reload();
+                        }
+                    }
+                });
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+// Submit the deleted data into server side
+var deleteData = function (item) {
+    if (item == "yes") {
+        if (App.frmMain.isValid()) {
+            App.frmMain.updateRecord();
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang("DeletingData"),
+                url: 'SI21100/DeleteAll',
+                timeout: 7200,
+                success: function (msg, data) {
+                    App.cboTermsID.getStore().load();
+                    menuClick("new");
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        if (HQ.isNew)
+            App.cboTermsID.setValue('');
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSI_Terms.reload();
+    }
+};
+///////////////////////////////////
