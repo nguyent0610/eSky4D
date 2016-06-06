@@ -34,8 +34,8 @@
             .Listeners(l =>
             {
                 l.BeforeLoad.Fn = "stoBeforeLoad";
-                l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
+                l.Load.Fn = "stoTaxCat_Load";
+                l.Update.Fn = "frmChange";                 
             })
         )
         .Listeners(p =>

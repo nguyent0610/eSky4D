@@ -26,7 +26,7 @@ namespace SI20900.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -45,10 +45,18 @@ namespace SI20900.Controllers
                 ChangeRecords<SI20900_pgLoadTaxCat_Result> lstTaxCat = dataHandler.BatchObjectData<SI20900_pgLoadTaxCat_Result>();
                 foreach (SI20900_pgLoadTaxCat_Result deleted in lstTaxCat.Deleted)
                 {
-                    var del = _db.SI_TaxCat.Where(p => p.CatID == deleted.CatID).FirstOrDefault();
-                    if (del != null)
+
+                    if (lstTaxCat.Created.Where(p => p.CatID == deleted.CatID).Count() > 0)
                     {
-                        _db.SI_TaxCat.DeleteObject(del);
+                        lstTaxCat.Created.Where(p => p.CatID == deleted.CatID).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var del = _db.SI_TaxCat.Where(p => p.CatID == deleted.CatID).FirstOrDefault();
+                        if (del != null)
+                        {
+                            _db.SI_TaxCat.DeleteObject(del);
+                        }
                     }
                 }
 
