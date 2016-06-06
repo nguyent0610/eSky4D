@@ -33,9 +33,9 @@
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
             .Listeners(l =>
             {
-                l.BeforeLoad.Fn = "stoData_beforeLoad";
-                l.Load.Fn = "stoData_load";
-                l.Update.Fn = "stoData_changed";             
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoData_Load";
+                l.Update.Fn = "frmChange";             
             })
         )
         .Listeners(p =>
@@ -51,6 +51,11 @@
                                 .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID")
                                 .Width(300).HQHeightWidth(500, 400)
                                 .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
                                 .LoadData()
                             ),
             X.Column().ID("State").Text(Util.GetLang("State")).DataIndex("State").Width(150)
@@ -63,6 +68,11 @@
                         .HQColumnShow("Territory,Descr").DisplayField("Territory").ValueField("Territory")
                         .Width(300).HQHeightWidth(500, 400)
                         .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
                         .LoadData()
                     ),
             X.CommandColumn()
