@@ -35,8 +35,8 @@
                 .Listeners(l =>
                 {
                     l.BeforeLoad.Fn = "stoBeforeLoad";
-                    l.Load.Fn = "stoLoad";
-                    l.Update.Fn = "stoChanged"; 
+                    l.Load.Fn = "stoSI_District_Load";
+                    l.Update.Fn = "frmChange"; 
                 }) // stoSI_District
             )
             .Listeners(p => p.BoxReady.Handler = "firstLoad();")
@@ -50,9 +50,11 @@
                     .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID")
                     .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
                     .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
                         {
                             lst.Change.Fn = "cboCountry_Change";
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                      .LoadData()
                 )
@@ -61,10 +63,15 @@
                 .Editor(
                      HQ.Combo().ID("cboState").HQProcedure("SI21700_pcStateAll")
                         .HQColumnShow("State,Descr").HQHeightWidth(300, 400).ForceSelection(true)
-                        .ValueField("State").DisplayField("State")
-                        .HQParam(new StoreParameterCollection() { 
+                        .ValueField("State").DisplayField("State").HQAutoLoad(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection()  { 
                             //do cboState load dựa vào cboCountry nên ta sử dụng bắt giá trị Country của hàng đang click vào trên grid
-                            new StoreParameter("@Country","App.slmSI_District.selected.items[0]==undefined ? '':  App.slmSI_District.selected.items[0].data.Country",ParameterMode.Raw)
+                            new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw }
+                        })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                         .LoadData()
                 ) 

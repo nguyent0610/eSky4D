@@ -27,7 +27,7 @@ namespace SI21700.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -45,11 +45,19 @@ namespace SI21700.Controllers
                 ChangeRecords<SI21700_pgLoadDistrict_Result> lstSI_District = dataHandler.BatchObjectData<SI21700_pgLoadDistrict_Result>();
                 foreach (SI21700_pgLoadDistrict_Result deleted in lstSI_District.Deleted)
                 {
-                    var del = _db.SI_District.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.District == deleted.District).FirstOrDefault();
-                    if (del != null)
+                    if (lstSI_District.Created.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.District == deleted.District).Count() > 0)
                     {
-                        _db.SI_District.DeleteObject(del);
+                        lstSI_District.Created.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.District == deleted.District).FirstOrDefault().tstamp = deleted.tstamp;
                     }
+                    else
+                    {
+                        var del = _db.SI_District.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.District == deleted.District).FirstOrDefault();
+                        if (del != null)
+                        {
+                            _db.SI_District.DeleteObject(del);
+                        }
+                    }
+                   
                 }
 
                 lstSI_District.Created.AddRange(lstSI_District.Updated);
