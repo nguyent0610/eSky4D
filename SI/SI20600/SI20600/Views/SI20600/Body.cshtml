@@ -32,9 +32,9 @@
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
             .Listeners(l =>
             {
-                l.BeforeLoad.Fn = "stoData_beforeLoad";
-                l.Load.Fn = "stoData_load";
-                l.Update.Fn = "stoData_changed";                 
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoData_Load";
+                l.Update.Fn = "frmChange";                 
             })
         )
         .Listeners(p =>

@@ -26,7 +26,7 @@ namespace SI20600.Controllers
             Util.InitRight(_screenNbr);// lấy quyền cho user khi truy cập màn hình này
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]//cache lại giao diện chi sinh lần đầu
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]//cache lại giao diện chi sinh lần đầu
         public PartialViewResult Body(string lang)
         {
             return PartialView();
