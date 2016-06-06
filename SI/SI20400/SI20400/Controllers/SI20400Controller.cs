@@ -28,7 +28,7 @@ namespace SI20400.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -48,11 +48,20 @@ namespace SI20400.Controllers
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_MaterialType"]);
                 ChangeRecords<SI20400_pgLoadGrid_Result> lstSI_MaterialType = dataHandler.BatchObjectData<SI20400_pgLoadGrid_Result>();
                 foreach (SI20400_pgLoadGrid_Result deleted in lstSI_MaterialType.Deleted)
+
                 {
-                    var del = _db.SI_MaterialType.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault();
-                    if (del != null)
+
+                    if (lstSI_MaterialType.Created.Where(p => p.MaterialType == deleted.MaterialType).Count() > 0)
                     {
-                        _db.SI_MaterialType.DeleteObject(del);
+                        lstSI_MaterialType.Created.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var del = _db.SI_MaterialType.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault();
+                        if (del != null)
+                        {
+                            _db.SI_MaterialType.DeleteObject(del);
+                        }
                     }
                 }
 

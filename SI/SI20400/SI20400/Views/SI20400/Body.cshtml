@@ -34,8 +34,8 @@
             .Listeners(l =>
             {
                 l.BeforeLoad.Fn = "stoBeforeLoad";
-                l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
+                l.Load.Fn = "stoSI_MaterialType_Load";
+                l.Update.Fn = "frmChange";                 
             })
         )
         .Listeners(p =>
@@ -53,10 +53,15 @@
                         .HQColumnShow("Buyer,BuyerName").DisplayField("Buyer").ValueField("Buyer")
                         .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
                         .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection() { 
                             //new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID" , Mode = ParameterMode.Raw }
                         })
                         .LoadData()
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
                     )
 
                     , X.CommandColumn().Width(150)
