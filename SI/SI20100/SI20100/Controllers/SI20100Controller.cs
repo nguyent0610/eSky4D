@@ -47,10 +47,18 @@ namespace SI20100.Controllers
                 ChangeRecords<SI20100_pgLoadGrid_Result> lstIN_Buyer = dataHandler.BatchObjectData<SI20100_pgLoadGrid_Result>();
                 foreach (SI20100_pgLoadGrid_Result deleted in lstIN_Buyer.Deleted)
                 {
-                    var del = _db.SI_Buyer.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault();
-                    if (del != null)
+
+                    if (lstIN_Buyer.Created.Where(p => p.Buyer == deleted.Buyer).Count() > 0)
                     {
-                        _db.SI_Buyer.DeleteObject(del);
+                        lstIN_Buyer.Created.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var del = _db.SI_Buyer.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault();
+                        if (del != null)
+                        {
+                            _db.SI_Buyer.DeleteObject(del);
+                        }
                     }
                 }
 

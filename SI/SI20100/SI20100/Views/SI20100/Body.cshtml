@@ -35,7 +35,7 @@
             {
                 l.BeforeLoad.Fn = "stoBeforeLoad";
                 l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
+                l.Update.Fn = "frmChange";                 
             })
         )
         .Listeners(p =>
@@ -50,23 +50,18 @@
                     , X.Column().Text(Util.GetLang("BuyerName")).DataIndex("BuyerName").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true))
                     
                     , X.CommandColumn().Width(150)
-                    .Commands(
-                        X.GridCommand()
-                        .Text(Util.GetLang("Reject"))
-                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                        .CommandName("reject")
-                        .Icon(Icon.ArrowUndo)
-                    )
-                    .PrepareToolbar(t =>
-                    {
-                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                    })
-                    .Listeners(l =>
-                    {
-                        l.Command.Handler = "grdIN_Buyer_Reject(record);";
-                    })
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdIN_Buyer_Reject(record);")
+            )
         
-        )
+        
         .SelectionModel(X.RowSelectionModel().ID("slmIN_Buyer").Mode(SelectionMode.Multi))
         .BottomBar(
             X.PagingToolbar()
