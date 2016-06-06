@@ -26,7 +26,8 @@ namespace SI21900.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -44,11 +45,20 @@ namespace SI21900.Controllers
                 ChangeRecords<SI21900_pgLoadTerritory_Result> lstTerritory = dataHandler.BatchObjectData<SI21900_pgLoadTerritory_Result>();
                 foreach (SI21900_pgLoadTerritory_Result deleted in lstTerritory.Deleted)
                 {
-                    var del = _db.SI_Territory.Where(p => p.Territory == deleted.Territory).FirstOrDefault();
-                    if (del != null)
+
+                    if (lstTerritory.Created.Where(p => p.Territory == deleted.Territory).Count() > 0)
                     {
-                        _db.SI_Territory.DeleteObject(del);
+                        lstTerritory.Created.Where(p => p.Territory == deleted.Territory).FirstOrDefault().tstamp = deleted.tstamp;
                     }
+                    else
+                    {
+                        var del = _db.SI_Territory.Where(p => p.Territory == deleted.Territory).FirstOrDefault();
+                        if (del != null)
+                        {
+                            _db.SI_Territory.DeleteObject(del);
+                        }
+                    }
+
                 }
 
                 lstTerritory.Created.AddRange(lstTerritory.Updated);
