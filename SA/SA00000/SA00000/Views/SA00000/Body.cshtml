@@ -46,7 +46,7 @@
                 })
 
             , HQ.TextBox().ID("CpnyName").Name("CpnyName").HQLangCode("CPNYNAME").MarginSpec("5 0 5 0")
-                .Width(600).AllowBlank(false).MaxLength(200).EnforceMaxLength(true) 
+                .Width(600).AllowBlank(false).MaxLength(250).EnforceMaxLength(true) 
         )
         .Listeners(lss =>
         {
@@ -61,10 +61,10 @@
             .Layout(LayoutType.VBox).AutoScroll(true)
             .Items(
                 HQ.TextBox().ID("Address").Name("Address").HQLangCode("Addr").MarginSpec("5 0 0 0").Width(600).AllowBlank(false).MaxLength(200).EnforceMaxLength(true)
-                , HQ.TextBox().ID("Address1").Name("Address1").HQLangCode("Addr1").MarginSpec("5 0 0 0").Width(600).MaxLength(400).EnforceMaxLength(true)
-                , HQ.TextBox().ID("Address2").Name("Address2").HQLangCode("Addr2").MarginSpec("5 0 0 0").Width(600).MaxLength(400).EnforceMaxLength(true)
-                , HQ.TextBox().ID("Tel").Name("Tel").HQLangCode("Tel").MarginSpec("5 0 0 0").Width(600).AllowBlank(false).MaxLength(20).EnforceMaxLength(true)
-                , HQ.TextBox().ID("Fax").Name("Fax").HQLangCode("Fax").MarginSpec("5 0 0 0").Width(600).AllowBlank(false).MaxLength(20).EnforceMaxLength(true)
+                , HQ.TextBox().ID("Address1").Name("Address1").HQLangCode("Addr1").MarginSpec("5 0 0 0").Width(600).MaxLength(250).EnforceMaxLength(true)
+                , HQ.TextBox().ID("Address2").Name("Address2").HQLangCode("Addr2").MarginSpec("5 0 0 0").Width(600).MaxLength(250).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("Tel").Name("Tel").HQLangCode("Tel").MarginSpec("5 0 0 0").Width(600).AllowBlank(false).MaxLength(20).EnforceMaxLength(true).MaskRe(@"/[0-9]/")
+                    , HQ.TextBox().ID("Fax").Name("Fax").HQLangCode("Fax").MarginSpec("5 0 0 0").Width(600).AllowBlank(false).MaxLength(20).EnforceMaxLength(true).MaskRe(@"/[0-9]/")
                 , HQ.TextBox().ID("TaxRegNbr").Name("TaxRegNbr").HQLangCode("TAXREGNBR").MarginSpec("5 0 0 0").Width(600).MaxLength(20).EnforceMaxLength(true)
 
 
@@ -175,8 +175,8 @@
                     })
 
                 , HQ.TextBox().ID("Email").Name("Email").HQLangCode("EMAIL").MarginSpec("5 0 0 0").Width(600).AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
-                , HQ.TextBox().ID("Owner").Name("Owner").HQLangCode("OWNER").MarginSpec("5 0 0 0").Width(600).MaxLength(100).EnforceMaxLength(true)
-                , HQ.TextBox().ID("Plant").Name("Plant").HQLangCode("PLANT").MarginSpec("5 0 0 0").Width(600).MaxLength(30).EnforceMaxLength(true)
+                , HQ.TextBox().ID("Owner").Name("Owner").HQLangCode("OWNER").MarginSpec("5 0 0 0").Width(600).MaxLength(250).EnforceMaxLength(true)
+                , HQ.TextBox().ID("Plant").Name("Plant").HQLangCode("PLANT").MarginSpec("5 0 0 0").Width(600).MaxLength(4).EnforceMaxLength(true)
                 , HQ.TextBox().ID("DatabaseName").Name("DatabaseName").HQLangCode("DATABASENAME").MarginSpec("5 0 0 0").Width(600).ReadOnly(true)
 
                 , HQ.NumberField().ID("Deposit").Name("Deposit").HQLangCode("Deposit").MarginSpec("5 0 0 0").Width(600).MinValue(0).DecimalPrecision(0)
@@ -278,13 +278,13 @@
                             )
 
                         , X.Column().Text(Util.GetLang("Zip")).DataIndex("Zip").Width(150)
-                            .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true))
+                                .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true).MaskRe(@"/[0-9]/"))
                         , X.Column().Text(Util.GetLang("Fax")).DataIndex("Fax").Width(150)
-                            .Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
+                                .Editor(X.TextField().MaxLength(30).EnforceMaxLength(true).MaskRe(@"/[0-9]/"))
                         , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(150)
                             .Editor(X.TextField().MaxLength(250).EnforceMaxLength(true))
                         , X.Column().Text(Util.GetLang("Phone")).DataIndex("Phone").Width(150)
-                            .Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
+                                .Editor(X.TextField().MaxLength(30).EnforceMaxLength(true).MaskRe(@"/[0-9]/"))
                         , X.Column().Text(Util.GetLang("Salut")).DataIndex("Salut").Width(150)
                             .Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
 
@@ -404,6 +404,13 @@
                                 X.StringFilter().DataIndex("Salut"),
                                 X.StringFilter().DataIndex("Zip"),
                                 X.StringFilter().DataIndex("TaxRegNbr"),
+                                X.StringFilter().DataIndex("City"),
+                                X.StringFilter().DataIndex("Country"),
+                                X.StringFilter().DataIndex("State"),
+                                X.StringFilter().DataIndex("TaxId00"),
+                                X.StringFilter().DataIndex("TaxId01"),
+                                X.StringFilter().DataIndex("TaxId02"),
+                                X.StringFilter().DataIndex("TaxId03"),
                                 X.StringFilter().DataIndex("TaxLocId")
                             )
                     )
@@ -453,8 +460,8 @@
                                 })
                                 .LoadData()
                             )
-                            
-                        , X.Column().Text(Util.GetLang("Sub_BranchName")).Width(250).DataIndex("SubCpnyID").Renderer("renderBranchName")
+
+                            , X.Column().Text(Util.GetLang("Sub_BranchName")).Width(250).DataIndex("SubCpnyName")//.Renderer("renderBranchName")
 
                         , X.CommandColumn().Width(150)
                         .Commands(
@@ -505,7 +512,10 @@
                             X.GridFilters()
                                 .Local(true)
                                 .Filters(
-                                    X.StringFilter().DataIndex("SubCpnyID")
+                                    X.StringFilter().DataIndex("SubCpnyID"),
+                                    X.StringFilter().DataIndex("SubCpnyName")
+                                    
+                                        
                                 )
                         )
                 )

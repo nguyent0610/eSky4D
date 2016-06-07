@@ -162,7 +162,6 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            HQ.common.close(this);
             break;
     }
 };
@@ -416,6 +415,13 @@ var grdSYS_SubCompany_BeforeEdit = function (editor, e) {
 
 var grdSYS_SubCompany_Edit = function (item, e) {
     //Kiem tra cac key da duoc nhap se insert them dong moi
+    if (e.field == 'SubCpnyID')
+    {
+        var objCate = App.cboSubCpnyIDSA00000_pcCompanyAll.findRecord(['CpnyID'], [e.value]);
+        if (objCate) {
+            e.record.set('SubCpnyName', objCate.data.CpnyName);
+        }
+    }
     HQ.grid.checkInsertKey(App.grdSYS_SubCompany, e, keys1);
     frmChange();
 };
@@ -514,12 +520,12 @@ function refresh(item) {
     }
 };
 
-var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
-    var record = App.cboSubCpnyIDSA00000_pcCompanyAll.findRecord("CpnyID", rec.data.SubCpnyID);
-    if (record) {
-        return record.data.CpnyName;
-    }
-    else {
-        return value;
-    }
-};
+//var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
+//    var record = App.cboSubCpnyIDSA00000_pcCompanyAll.findRecord("CpnyID", rec.data.SubCpnyID);
+//    if (record) {
+//        return record.data.CpnyName;
+//    }
+//    else {
+//        return value;
+//    }
+//};
