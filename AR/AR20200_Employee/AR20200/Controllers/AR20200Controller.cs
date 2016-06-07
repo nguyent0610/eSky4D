@@ -55,7 +55,7 @@ namespace AR20200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -135,7 +135,7 @@ namespace AR20200.Controllers
             var treeCpnyAddr = X.GetCmp<Panel>(panelID);
 
             //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
-            tree.Listeners.CheckChange.Fn = "Event.Tree.treePanelCpnyAddr_checkChange";
+            tree.Listeners.CheckChange.Fn = "treePanelCpnyAddr_checkChange";
 
             tree.AddTo(treeCpnyAddr);
 

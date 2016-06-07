@@ -19,8 +19,13 @@
         //.DefaultAnchor("100%")
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
-        .TopBar(Util.SetupToolbar("print,close", true, "Event.Form.menuClick"))
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar("print,close", true, ""))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .Listeners(l=>{
+            l.BoxReady.Handler = "firstLoad()";
+            l.FieldChange.Fn = "frmChange";
+        })
         .Items(
             X.Panel().ID("pnlHeader")
             .Layout(LayoutType.HBox).Region(Region.North)
@@ -47,8 +52,10 @@
                     .LoadData()
                     .Listeners(lst =>
                         {
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                            lst.Change.Fn = "Event.Form.cboBranchID_change";
+                            lst.TriggerClick.Fn = "cboBranchID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
+                            lst.Change.Fn = "cboBranchID_change";
+                            lst.Select.Fn = "cboBranchID_Select";
+                            lst.Expand.Fn = "cboBranchID_Expand";//khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
                         })
 
                     , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
@@ -67,7 +74,7 @@
                         .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Change.Fn = "Event.Form.cboSlsperid_change";
+                                lst.Change.Fn = "cboSlsperid_change";
                             })
 
                         , HQ.Checkbox().ID("chkActive").Name("chkActive").HQLangCode("ACTIVE")
@@ -77,9 +84,14 @@
                     , HQ.Combo().ID("cboPosition").Name("cboPosition").HQLangCode("Position").HQProcedure("AR20200_pcPosition")
                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("Position")
                     .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                     .LoadData()
 
@@ -98,19 +110,29 @@
                     , HQ.Combo().ID("cboDeliveryMan").Name("cboDeliveryMan").HQLangCode("DeliveryMan").HQProcedure("AR20200_pcDeliveryPerson")
                     .HQColumnShow("Slsperid,Name").DisplayField("Name").ValueField("Slsperid").DataIndex("DeliveryMan")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
+                        })
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                     .LoadData()
 
                     , HQ.Combo().ID("cboSupID").Name("cboSupID").HQLangCode("SALESSUP").HQProcedure("AR20200_pcUser")
                     .HQColumnShow("Slsperid,Name").DisplayField("Name").ValueField("Slsperid").DataIndex("SupID")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        })
+                     .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                     .LoadData()
 
@@ -125,6 +147,11 @@
                         { 
                             new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                     .LoadData()
                 )
@@ -143,7 +170,13 @@
                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                         })
                     .LoadData()
-                    .Listeners(lst=>lst.Change.Fn="Event.Form.cboStatus_change")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboStatus_change";
+                        })
+                    
 
                     , HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20200_pcApproveHandle")
                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
@@ -161,28 +194,33 @@
                     .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").DataIndex("Country")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false).ForceSelection(true)
                     .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst=>{
-                        lst.Change.Fn = "Event.Form.cboCountryId_change";
+                        lst.Change.Fn = "cboCountryId_change";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
 
                     , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("State").HQProcedure("AR20200_pcStateByCountry")
                     .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").DataIndex("State")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
                     .AllowBlank(false)//.ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@Country", Value = "App.cboCountryId.getValue()", Mode = ParameterMode.Raw }                                                                                    
                         })
                     .LoadData()
                     .Listeners(lst=>{
-                        lst.Change.Fn = "Event.Form.cboState_change";
-                        lst.Focus.Handler = "this.forceSelection = true;";
+                        lst.Change.Fn = "cboState_change";
+                        //lst.Focus.Handler = "this.forceSelection = true;";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
 
                     , HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQLangCode("District").HQProcedure("AR20200_pcDistrictByCountryState")
                     .HQColumnShow("District,Name").DisplayField("Name").ValueField("District").DataIndex("District")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
                     .AllowBlank(false)//.ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@Country", Value = "App.cboCountryId.getValue()", Mode = ParameterMode.Raw },
@@ -190,7 +228,8 @@
                         })
                     .LoadData()
                     .Listeners(lst=>{
-                        lst.Focus.Handler = "this.forceSelection = true;";
+                        //lst.Focus.Handler = "this.forceSelection = true;";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
 
                     , HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("Phone").DataIndex("Phone")
@@ -224,10 +263,11 @@
                     .Items(
                         X.FileUploadField().ID("fupImages").Icon(Icon.ImageAdd).ButtonText(Util.GetLang("ChooseImage"))
                         .ButtonOnly(true).MarginSpec("0 5 5 5")
-                        .Listeners(lst=>lst.Change.Fn="Event.Form.fupImages_change")
+                        .Listeners(lst=>lst.Change.Fn="fupImages_change")
 
                         , X.Button().ID("btnClearImage").Icon(Icon.ImageDelete).Text(Util.GetLang("ClearImage")).MarginSpec("0 5 5 5")
-                        .Handler("Event.Form.btnClearImage_click")
+                        .Listeners(lst => lst.Click.Fn = "btnClearImage_click")
+                        //.Handler("btnClearImage_click")
                     )
                 )
             ) // pnlHeader
@@ -275,7 +315,8 @@
                         , HQ.Button().ID("btnExpand")
                         .HQLangCode("Expand")
                         .Icon(Icon.BulletTogglePlus)
-                        .Handler("Event.Tree.btnExpand_click")
+                        //.Handler("Event.Tree.btnExpand_click")
+                        .Listeners(lst => lst.Click.Fn = "btnExpand_click")
 
                         , X.ToolbarSpacer()
                         , X.ToolbarSeparator()
@@ -284,7 +325,8 @@
                         , HQ.Button().ID("btnCollapse")
                         .HQLangCode("Collapse")
                         .Icon(Icon.BulletToggleMinus)
-                        .Handler("Event.Tree.btnCollapse_click")
+                        //.Handler("Event.Tree.btnCollapse_click")
+                        .Listeners(lst => lst.Click.Fn = "btnCollapse_click")
 
                         , X.ToolbarFill()
                     )
@@ -299,22 +341,26 @@
                     HQ.Button().ID("btnAddAll")
                     .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
                     .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
-                    .Handler("Event.Tree.btnAddAll_click")
+                    //.Handler("Event.Tree.btnAddAll_click")
+                    .Listeners(lst => lst.Click.Fn = "btnAddAll_click")
 
                     , HQ.Button().ID("btnAdd")
                     .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
                     .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
-                    .Handler("Event.Tree.btnAdd_click")
+                    //.Handler("Event.Tree.btnAdd_click")
+                    .Listeners(lst => lst.Click.Fn = "btnAdd_click")
 
                     , HQ.Button().ID("btnDel")
                     .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
                     .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
-                    .Handler("Event.Tree.btnDel_click")
+                    //.Handler("Event.Tree.btnDel_click")
+                    .Listeners(lst => lst.Click.Fn = "btnDel_click")
 
                     , HQ.Button().ID("btnDelAll")
                     .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
                     .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
-                    .Handler("Event.Tree.btnDelAll_click")
+                    //.Handler("Event.Tree.btnDelAll_click")
+                    .Listeners(lst => lst.Click.Fn = "btnDelAll_click")
                 ) // Panel
             
                 , X.GridPanel().ID("grdSlsperCpnyAddr")
@@ -355,7 +401,7 @@
                         .Icon(Icon.ArrowUndo)
                     )
                     .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                    .Listeners(l => l.Command.Handler = "Event.Grid.grdSlsperCpnyAddr_reject(this, record);")
+                    .Listeners(l => l.Command.Handler = "grdSlsperCpnyAddr_reject(this, record);")
                 )
                 .SelectionModel(X.RowSelectionModel().ID("slmSlsperCpnyAddr").Mode(SelectionMode.Multi))
                 .Plugins(
@@ -363,16 +409,16 @@
                     .ClicksToEdit(1)
                     .Listeners(ls =>
                     {
-                        ls.BeforeEdit.Fn = "Event.Grid.grdSlsperCpnyAddr_beforeEdit";
-                        ls.Edit.Fn = "Event.Grid.grdSlsperCpnyAddr_edit";
-                        ls.ValidateEdit.Fn = "Event.Grid.grdSlsperCpnyAddr_validateEdit";
+                        ls.BeforeEdit.Fn = "grdSlsperCpnyAddr_beforeEdit";
+                        ls.Edit.Fn = "grdSlsperCpnyAddr_edit";
+                        ls.ValidateEdit.Fn = "grdSlsperCpnyAddr_validateEdit";
                     })
                 ) // grdSlsperCpnyAddr
             )// pnlSlsperCpnyAddr
         )
-        .Listeners(lst => {
-            lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
-            lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
-        })// Form: frmMain
+        //.Listeners(lst => {
+        //    lst.BoxReady.Fn = "frmMain_boxReady";
+        //    lst.FieldChange.Fn = "frmMain_fieldChange";
+        //})// Form: frmMain
     )
 )
