@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -28,7 +28,7 @@ namespace SA00500.Controllers
             return View();
         }
 
-       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -46,16 +46,33 @@ namespace SA00500.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
                 ChangeRecords<SYS_Group> lstLang = dataHandler.BatchObjectData<SYS_Group>();
-                foreach (SYS_Group deleted in lstLang.Deleted)
+                lstLang.Created.AddRange(lstLang.Updated);
+                foreach (SYS_Group del in lstLang.Deleted)
                 {
-                    var del = _db.SYS_Group.Where(p => p.GroupID == deleted.GroupID).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstLang.Created.Where(p => p.GroupID == del.GroupID).Count() > 0)
                     {
-                        _db.SYS_Group.DeleteObject(del);
+                        lstLang.Created.Where(p => p.GroupID == del.GroupID).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.SYS_Group.ToList().Where(p => p.GroupID == del.GroupID).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.SYS_Group.DeleteObject(objDel);
+                        }
                     }
                 }
+                //foreach (SYS_Group deleted in lstLang.Deleted)
+                //{
+                //    var del = _db.SYS_Group.Where(p => p.GroupID == deleted.GroupID).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.SYS_Group.DeleteObject(del);
+                //    }
+                //}
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                //lstLang.Created.AddRange(lstLang.Updated);
 
                 foreach (SYS_Group curLang in lstLang.Created)
                 {
