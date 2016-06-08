@@ -1,7 +1,7 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 var keys = ['Buyer'];
-var fieldsCheckRequire = ["Buyer"];
-var fieldsLangCheckRequire = ["Buyer"];
+var fieldsCheckRequire = ["Buyer", "BuyerName"];
+var fieldsLangCheckRequire = ["Buyer", "BuyerName"];
 
 var _Source = 0;
 var _maxSource = 1;
@@ -142,6 +142,7 @@ var save = function () {
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
+                refresh('yes');
             }
         });
     }
@@ -163,3 +164,19 @@ function refresh(item) {
         App.stoIN_Buyer.reload();
     }
 };
+
+var stringFilter = function (record) {
+    //if (HQ.focus == 'pnlIN_InventoryMapJnJ') {
+    //    if (this.dataIndex == 'InvtID_JnJ') {
+    //        App.cboInvtID_JnJ.store.clearFilter();
+    //        return HQ.grid.filterComboDescr(record, this, App.cboInvtID_JnJ.store, "InvtID", "Name");
+    //    }
+    //}
+    //else if (this.dataIndex == 'Zone') {
+    //    App.cboZone.store.clearFilter();
+    //    return HQ.grid.filterComboDescr(record, this, App.cboZone.store, "Code", "Descr");
+    //}
+
+    //else
+    return HQ.grid.filterString(record, this);
+}

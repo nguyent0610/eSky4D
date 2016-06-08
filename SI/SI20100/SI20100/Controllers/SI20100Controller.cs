@@ -27,7 +27,7 @@ namespace SI20100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -47,18 +47,29 @@ namespace SI20100.Controllers
                 ChangeRecords<SI20100_pgLoadGrid_Result> lstIN_Buyer = dataHandler.BatchObjectData<SI20100_pgLoadGrid_Result>();
                 foreach (SI20100_pgLoadGrid_Result deleted in lstIN_Buyer.Deleted)
                 {
+                    var check_IN_Inventory = _db.IN_Inventory.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault();
+                    var check_IN_ProductClass = _db.IN_ProductClass.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault();
+                    var check_PO_Header = _db.PO_Header.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault();
+                    var check_SI_MaterialType = _db.SI_MaterialType.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault();
 
-                    if (lstIN_Buyer.Created.Where(p => p.Buyer == deleted.Buyer).Count() > 0)
+                    if (check_IN_Inventory == null && check_IN_ProductClass == null && check_PO_Header == null && check_SI_MaterialType == null)
                     {
-                        lstIN_Buyer.Created.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault().tstamp = deleted.tstamp;
+                        if (lstIN_Buyer.Created.Where(p => p.Buyer == deleted.Buyer).Count() > 0)
+                        {
+                            lstIN_Buyer.Created.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault().tstamp = deleted.tstamp;
+                        }
+                        else
+                        {
+                            var del = _db.SI_Buyer.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault();
+                            if (del != null)
+                            {
+                                _db.SI_Buyer.DeleteObject(del);
+                            }
+                        }
                     }
                     else
                     {
-                        var del = _db.SI_Buyer.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault();
-                        if (del != null)
-                        {
-                            _db.SI_Buyer.DeleteObject(del);
-                        }
+                        throw new MessageException(MessageType.Message, "2016060201");
                     }
                 }
 

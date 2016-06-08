@@ -91,10 +91,11 @@
             X.GridFilters()
                 .Local(true)
                 .Filters(
-                    X.StringFilter().DataIndex("Buyer"),
+                    X.StringFilter().DataIndex("Buyer")
+                    .ValidateRecord(p=>p.Fn="stringFilter"),
                     X.StringFilter().DataIndex("BuyerName")
-      
-                )
+                    .ValidateRecord(p=>p.Fn="stringFilter")
+                )              
         )
     )
 ))
