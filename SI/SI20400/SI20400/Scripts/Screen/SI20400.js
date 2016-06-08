@@ -1,7 +1,7 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 var keys = ['MaterialType'];
-var fieldsCheckRequire = ["MaterialType"];
-var fieldsLangCheckRequire = ["MaterialType"];
+var fieldsCheckRequire = ["MaterialType", "Descr"];
+var fieldsLangCheckRequire = ["MaterialType", "Descr"];
 
 var _Source = 0;
 var _maxSource = 1;
@@ -9,7 +9,7 @@ var _isLoadMaster = false;
 
 
 ///////////////////////////////////////////////////////////////////////
-//// Store ////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -147,6 +147,7 @@ var save = function () {
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
+                refresh('yes');
             }
         });
     }

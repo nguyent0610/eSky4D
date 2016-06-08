@@ -28,7 +28,7 @@ namespace SI20400.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -50,18 +50,26 @@ namespace SI20400.Controllers
                 foreach (SI20400_pgLoadGrid_Result deleted in lstSI_MaterialType.Deleted)
 
                 {
-
-                    if (lstSI_MaterialType.Created.Where(p => p.MaterialType == deleted.MaterialType).Count() > 0)
+                    var check_IN_Inventory = _db.IN_Inventory.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault();
+                    var check_IN_ProductClass = _db.IN_ProductClass.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault();
+                    if (check_IN_Inventory == null && check_IN_ProductClass == null)
                     {
-                        lstSI_MaterialType.Created.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault().tstamp = deleted.tstamp;
+                        if (lstSI_MaterialType.Created.Where(p => p.MaterialType == deleted.MaterialType).Count() > 0)
+                        {
+                            lstSI_MaterialType.Created.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault().tstamp = deleted.tstamp;
+                        }
+                        else
+                        {
+                            var del = _db.SI_MaterialType.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault();
+                            if (del != null)
+                            {
+                                _db.SI_MaterialType.DeleteObject(del);
+                            }
+                        }
                     }
                     else
                     {
-                        var del = _db.SI_MaterialType.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault();
-                        if (del != null)
-                        {
-                            _db.SI_MaterialType.DeleteObject(del);
-                        }
+                        throw new MessageException(MessageType.Message, "2016060201");
                     }
                 }
 
