@@ -5,7 +5,7 @@ var _maxSource = 10;
 var _isLoadMaster = false;
 
 ////////////////////////////////////////////////////////////////////////
-//// Store ////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -71,7 +71,7 @@ var menuClick = function (command) {
                     HQ.message.show(150, '', '');
                 }
                 else {
-                    App.cboShipToId.setValue('');
+                    App.cboClassId.setValue('');
                 }
             }
             break;
@@ -102,6 +102,7 @@ var frmChange = function () {
 
     HQ.isChange = HQ.store.isChange(App.stoAR_CustClass);
     HQ.common.changeData(HQ.isChange, 'AR20100');
+
     if (App.cboClassId.valueModels == null || HQ.isNew == true)
         App.cboClassId.setReadOnly(false);
     else App.cboClassId.setReadOnly(HQ.isChange);
@@ -153,8 +154,20 @@ var stoLoad = function (sto) {
 };
 
 
-var cboClassId_Changed = function () {
-    App.stoAR_CustClass.reload();
+var cboClassId_Changed = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null && !App.stoAR_CustClass.loading) {
+        App.stoAR_CustClass.reload();
+    }
+};
+
+var cboClassId_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        App.cboClassId.setValue('');
+    }
 };
 
 var cboCountry_Changed = function (sender, newValue, oldValue) {
@@ -234,7 +247,7 @@ var save = function () {
             });
         }
         else {
-            HQ.message.show(2015123111, App.cboClassId.fieldLabel);
+            HQ.message.show(20140811, App.cboClassId.fieldLabel);
             App.cboClassId.focus();
             App.cboClassId.selectText();
         }
@@ -248,10 +261,9 @@ function deleteData(item) {
             waitMsg: HQ.common.getLang('DeletingData'),
             url: 'AR20100/DeleteAll',
             timeout: 7200,
-            success: function (action, data) {
-                //App.cboClassId.setValue("");
-                App.cboClassId.getStore().load(function () { cboClassId_Changed(App.cboClassId); });
-                menuClick("refresh");
+            success: function (msg, data) {
+                App.cboClassId.getStore().load();
+                menuClick("new");
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -268,8 +280,8 @@ function deleteData(item) {
 //// Other Functions ////////////////////////////////////////////////////
 function refresh(item) {
     if (item == 'yes') {
-        //if (HQ.isNew)
-            //App.cboClassId.setValue('');
+        if (HQ.isNew)
+            App.cboClassId.setValue('');
             HQ.isChange = false;
         App.stoAR_CustClass.reload();
     }

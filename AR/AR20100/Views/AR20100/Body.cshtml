@@ -36,7 +36,7 @@
                     .LoadData()
                         .Listeners(lst =>
                             {
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                lst.TriggerClick.Fn = "cboClassId_TriggerClick";
                                 lst.Change.Fn = "cboClassId_Changed";
                             })
                     // cboClassId                    
@@ -152,7 +152,7 @@
                 .ID("pnlRight")
                 .Items(
                      HQ.Combo().ID("cboTaxDflt").Name("cboTaxDflt").HQLangCode("TAXDEFAULT").HQProcedure("AR20100_pcTaxDefault")
-                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("TaxDflt").HQValue("C", false)
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("TaxDflt")
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                     .HQDBSys(false).EnforceMaxLength(true).ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
