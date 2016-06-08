@@ -35,7 +35,7 @@
             X.Store()
             .ID("stoOM_PriceClass")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(OM20100_pgPriceClass_Result), "mdlOM20100_pgPriceClass", "PriceClassID"))
+            .Model(Util.GenerateModel(typeof(OM20100_pgPriceClass_Result), "mdlOM20100_pgPriceClass", ""))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_PriceClass"))).AutoLoad(false)
             .Listeners(l =>
             {

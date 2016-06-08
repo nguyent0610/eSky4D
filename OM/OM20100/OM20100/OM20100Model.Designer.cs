@@ -100,9 +100,31 @@ namespace OM20100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<OM20100_pgPriceClass_Result> OM20100_pgPriceClass()
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        public ObjectResult<OM20100_pgPriceClass_Result> OM20100_pgPriceClass(global::System.String userName, global::System.String cpnyID)
         {
-            return base.ExecuteFunction<OM20100_pgPriceClass_Result>("OM20100_pgPriceClass");
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM20100_pgPriceClass_Result>("OM20100_pgPriceClass", userNameParameter, cpnyIDParameter);
         }
 
         #endregion

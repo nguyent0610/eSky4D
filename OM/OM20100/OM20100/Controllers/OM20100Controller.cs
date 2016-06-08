@@ -33,7 +33,7 @@ namespace OM20100.Controllers
         }
         public ActionResult GetOM_PriceClass()
         {           
-            return this.Store(_db.OM20100_pgPriceClass().ToList());
+            return this.Store(_db.OM20100_pgPriceClass(Current.CpnyID, Current.UserName).ToList());
         }
         [HttpPost]
         public ActionResult Save(FormCollection data)
