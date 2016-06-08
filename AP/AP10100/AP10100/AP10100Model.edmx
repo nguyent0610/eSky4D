@@ -10,7 +10,6 @@
           <EntitySet Name="AP_Setup" EntityType="eBiz4DWebSysModel.Store.AP_Setup" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AP_Trans" EntityType="eBiz4DWebSysModel.Store.AP_Trans" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Batch" EntityType="eBiz4DWebSysModel.Store.Batch" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="RPTRunning" EntityType="eBiz4DWebSysModel.Store.RPTRunning" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="AP_Doc">
           <Key>
@@ -168,42 +167,6 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <EntityType Name="RPTRunning">
-          <Key>
-            <PropertyRef Name="ReportNbr" />
-            <PropertyRef Name="ReportID" />
-            <PropertyRef Name="MachineName" />
-          </Key>
-          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
-          <Property Name="ReportID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="MachineName" Type="nvarchar" Nullable="false" MaxLength="20" />
-          <Property Name="ReportName" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="ReportCap" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="ReportDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="StringParm00" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="StringParm01" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="StringParm02" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="StringParm03" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="DateParm00" Type="smalldatetime" Nullable="false" />
-          <Property Name="DateParm01" Type="smalldatetime" Nullable="false" />
-          <Property Name="DateParm02" Type="smalldatetime" Nullable="false" />
-          <Property Name="DateParm03" Type="smalldatetime" Nullable="false" />
-          <Property Name="BooleanParm00" Type="smallint" Nullable="false" />
-          <Property Name="BooleanParm01" Type="smallint" Nullable="false" />
-          <Property Name="BooleanParm02" Type="smallint" Nullable="false" />
-          <Property Name="BooleanParm03" Type="smallint" Nullable="false" />
-          <Property Name="SelectionFormular" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="AppPath" Type="varchar" Nullable="false" MaxLength="400" />
-          <Property Name="ClientName" Type="varchar" Nullable="false" MaxLength="40" />
-          <Property Name="LoggedCpnyID" Type="varchar" MaxLength="30" />
-          <Property Name="CpnyID" Type="varchar(max)" />
-          <Property Name="LangID" Type="smallint" />
-          <Property Name="ListParm00" Type="nvarchar(max)" />
-          <Property Name="ListParm01" Type="nvarchar(max)" />
-          <Property Name="ListParm02" Type="nvarchar(max)" />
-          <Property Name="ListParm03" Type="nvarchar(max)" />
-        </EntityType>
         <Function Name="AP10100_pcGetVendor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -239,33 +202,32 @@
           <EntitySet Name="AP_Setup" EntityType="AP10100Model.AP_Setup" />
           <EntitySet Name="AP_Trans" EntityType="AP10100Model.AP_Trans" />
           <EntitySet Name="Batches" EntityType="AP10100Model.Batch" />
+          <FunctionImport Name="AP10100_pdHeader" ReturnType="Collection(AP10100Model.AP10100_pdHeader_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="AP10100_pgLoadInvoiceMemo" ReturnType="Collection(AP10100Model.AP10100_pgLoadInvoiceMemo_Result)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="BatNbr" Mode="In" Type="String" />
             <Parameter Name="RefNbr" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="AP10100_pdHeader" ReturnType="Collection(AP10100Model.AP10100_pdHeader_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="BatNbr" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AP10100_pgLoadTaxTrans" ReturnType="Collection(AP10100Model.AP10100_pgLoadTaxTrans_Result)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="BatNbr" Mode="In" Type="String" />
             <Parameter Name="RefNbr" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AP10100_ppCheckCloseDate" ReturnType="Collection(String)">
+          <FunctionImport Name="AP10100_pcGetVendor" ReturnType="Collection(AP10100Model.AP10100_pcGetVendor_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="DocDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="APNumbering" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AP10100_pcGetVendor" ReturnType="Collection(AP10100Model.AP10100_pcGetVendor_Result)">
-            <Parameter Name="UserID" Mode="In" Type="String" />
+          <FunctionImport Name="AP10100_ppCheckCloseDate" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="DocDate" Mode="In" Type="DateTime" />
           </FunctionImport>
-          <EntitySet Name="RPTRunnings" EntityType="AP10100Model.RPTRunning" />
         </EntityContainer>
         <EntityType Name="AP_Doc">
           <Key>
@@ -423,52 +385,14 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="AP10100_pgLoadInvoiceMemo_Result">
-          <Property Type="String" Name="LineType" Nullable="true" MaxLength="1" />
-          <Property Type="String" Name="InvtID" Nullable="true" MaxLength="30" />
-          <Property Type="Double" Name="Qty" Nullable="false" />
-          <Property Type="Double" Name="UnitPrice" Nullable="false" />
-          <Property Type="Double" Name="TranAmt" Nullable="false" />
-          <Property Type="String" Name="TranDesc" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="TranType" Nullable="true" MaxLength="2" />
-          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
-          <Property Type="String" Name="TaxCat" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="TaxId00" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="TaxId01" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="TaxId02" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="TaxId03" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="tstamp" Nullable="true" />
-          <Property Type="Double" Name="TaxAmt00" Nullable="false" />
-          <Property Type="Double" Name="TaxAmt01" Nullable="false" />
-          <Property Type="Double" Name="TaxAmt02" Nullable="false" />
-          <Property Type="Double" Name="TaxAmt03" Nullable="false" />
-          <Property Type="Double" Name="TxblAmt00" Nullable="false" />
-          <Property Type="Double" Name="TxblAmt01" Nullable="false" />
-          <Property Type="Double" Name="TxblAmt02" Nullable="false" />
-          <Property Type="Double" Name="TxblAmt03" Nullable="false" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Addr" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="InvcNbr" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="InvcNote" Nullable="true" MaxLength="10" />
-          <Property Type="DateTime" Name="InvcDate" Nullable="false" Precision="23" />
-          <Property Type="String" Name="JrnlType" Nullable="true" MaxLength="3" />
-          <Property Type="String" Name="POLineRef" Nullable="true" MaxLength="5" />
-          <Property Type="String" Name="PONbr" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="TaxID" Nullable="true" MaxLength="43" />
-          <Property Type="String" Name="TranClass" Nullable="true" MaxLength="1" />
-          <Property Type="DateTime" Name="TranDate" Nullable="false" Precision="16" />
-          <Property Type="String" Name="TaxRegNbr" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="VendID" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="VendName" Nullable="true" MaxLength="200" />
-          </ComplexType>
         <ComplexType Name="AP10100_pdHeader_Result">
           <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="IntRefNbr" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="RvdBatNbr" Nullable="true" MaxLength="10" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="Double" Name="TotAmt" Nullable="false" />
+          <Property Type="String" Name="PONbr" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="RcptNbr" Nullable="false" MaxLength="15" />
           <Property Type="String" Name="DocType" Nullable="false" MaxLength="2" />
           <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="VendID" Nullable="false" MaxLength="15" />
@@ -480,22 +404,60 @@
           <Property Type="DateTime" Name="DueDate" Nullable="false" Precision="16" />
           <Property Type="DateTime" Name="DiscDate" Nullable="false" Precision="16" />
           <Property Type="String" Name="DocDesc" Nullable="false" MaxLength="100" />
-          <Property Type="Double" Name="TaxTot00" Nullable="false" />
-          <Property Type="Double" Name="TxblTot00" Nullable="false" />
-          <Property Type="Double" Name="OrigDocAmt" Nullable="false" />
           <Property Type="DateTime" Name="InvcDate" Nullable="false" Precision="16" />
-          <Property Type="String" Name="PONbr" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="RcptNbr" Nullable="false" MaxLength="15" />
+          <Property Type="Double" Name="OrigDocAmt" Nullable="false" />
           <Property Type="String" Name="TaxId00" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="TaxId01" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="TaxId02" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="TaxId03" Nullable="false" MaxLength="10" />
+          <Property Type="Double" Name="TaxTot00" Nullable="false" />
           <Property Type="Double" Name="TaxTot01" Nullable="false" />
           <Property Type="Double" Name="TaxTot02" Nullable="false" />
           <Property Type="Double" Name="TaxTot03" Nullable="false" />
+          <Property Type="Double" Name="TxblTot00" Nullable="false" />
           <Property Type="Double" Name="TxblTot01" Nullable="false" />
           <Property Type="Double" Name="TxblTot02" Nullable="false" />
           <Property Type="Double" Name="TxblTot03" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="AP10100_pgLoadInvoiceMemo_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="Addr" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="InvcNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="InvcNote" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="InvtID" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="InvcDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="JrnlType" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="LineType" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="POLineRef" Nullable="true" MaxLength="5" />
+          <Property Type="String" Name="PONbr" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="Double" Name="TaxAmt00" Nullable="false" />
+          <Property Type="Double" Name="TaxAmt01" Nullable="false" />
+          <Property Type="Double" Name="TaxAmt02" Nullable="false" />
+          <Property Type="Double" Name="TaxAmt03" Nullable="false" />
+          <Property Type="String" Name="TaxCat" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxID" Nullable="true" MaxLength="43" />
+          <Property Type="String" Name="TaxId00" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxId01" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxId02" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxId03" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="TranAmt" Nullable="false" />
+          <Property Type="String" Name="TranClass" Nullable="true" MaxLength="1" />
+          <Property Type="DateTime" Name="TranDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="TranDesc" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="TranType" Nullable="true" MaxLength="2" />
+          <Property Type="Double" Name="TxblAmt00" Nullable="false" />
+          <Property Type="Double" Name="TxblAmt01" Nullable="false" />
+          <Property Type="Double" Name="TxblAmt02" Nullable="false" />
+          <Property Type="Double" Name="TxblAmt03" Nullable="false" />
+          <Property Type="String" Name="TaxRegNbr" Nullable="true" MaxLength="20" />
+          <Property Type="Double" Name="UnitPrice" Nullable="false" />
+          <Property Type="String" Name="VendID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="VendName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
         </ComplexType>
         <ComplexType Name="AP10100_pgLoadTaxTrans_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -514,49 +476,13 @@
           <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Address" Nullable="false" MaxLength="400" />
         </ComplexType>
-        <EntityType Name="RPTRunning">
-          <Key>
-            <PropertyRef Name="ReportNbr" />
-            <PropertyRef Name="ReportID" />
-            <PropertyRef Name="MachineName" />
-          </Key>
-          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="ReportID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="MachineName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ReportName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ReportCap" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="ReportDate" Nullable="false" Precision="0" />
-          <Property Type="String" Name="StringParm00" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="StringParm01" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="StringParm02" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="StringParm03" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="DateParm00" Nullable="false" Precision="0" />
-          <Property Type="DateTime" Name="DateParm01" Nullable="false" Precision="0" />
-          <Property Type="DateTime" Name="DateParm02" Nullable="false" Precision="0" />
-          <Property Type="DateTime" Name="DateParm03" Nullable="false" Precision="0" />
-          <Property Type="Int16" Name="BooleanParm00" Nullable="false" />
-          <Property Type="Int16" Name="BooleanParm01" Nullable="false" />
-          <Property Type="Int16" Name="BooleanParm02" Nullable="false" />
-          <Property Type="Int16" Name="BooleanParm03" Nullable="false" />
-          <Property Type="String" Name="SelectionFormular" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="AppPath" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ClientName" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LoggedCpnyID" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="CpnyID" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="LangID" />
-          <Property Type="String" Name="ListParm00" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ListParm01" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ListParm02" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ListParm03" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="AP10100Entities" >
-        <EntitySetMapping Name="AP_Doc">
+          <EntitySetMapping Name="AP_Doc">
             <EntityTypeMapping TypeName="AP10100Model.AP_Doc">
               <MappingFragment StoreEntitySet="AP_Doc">
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -708,50 +634,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AP10100_pgLoadInvoiceMemo" FunctionName="eBiz4DWebSysModel.Store.AP10100_pgLoadInvoiceMemo">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AP10100Model.AP10100_pgLoadInvoiceMemo_Result">
-                <ScalarProperty Name="LineType" ColumnName="LineType" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="TranAmt" ColumnName="TranAmt" />
-                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
-                <ScalarProperty Name="TranType" ColumnName="TranType" />
-                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
-                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
-                <ScalarProperty Name="TaxId00" ColumnName="TaxId00" />
-                <ScalarProperty Name="TaxId01" ColumnName="TaxId01" />
-                <ScalarProperty Name="TaxId02" ColumnName="TaxId02" />
-                <ScalarProperty Name="TaxId03" ColumnName="TaxId03" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="TaxAmt00" ColumnName="TaxAmt00" />
-                <ScalarProperty Name="TaxAmt01" ColumnName="TaxAmt01" />
-                <ScalarProperty Name="TaxAmt02" ColumnName="TaxAmt02" />
-                <ScalarProperty Name="TaxAmt03" ColumnName="TaxAmt03" />
-                <ScalarProperty Name="TxblAmt00" ColumnName="TxblAmt00" />
-                <ScalarProperty Name="TxblAmt01" ColumnName="TxblAmt01" />
-                <ScalarProperty Name="TxblAmt02" ColumnName="TxblAmt02" />
-                <ScalarProperty Name="TxblAmt03" ColumnName="TxblAmt03" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
-                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
-                <ScalarProperty Name="Addr" ColumnName="Addr" />
-                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
-                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
-                <ScalarProperty Name="InvcDate" ColumnName="InvcDate" />
-                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
-                <ScalarProperty Name="POLineRef" ColumnName="POLineRef" />
-                <ScalarProperty Name="PONbr" ColumnName="PONbr" />
-                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
-                <ScalarProperty Name="TranClass" ColumnName="TranClass" />
-                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
-                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
-                <ScalarProperty Name="VendID" ColumnName="VendID" />
-                <ScalarProperty Name="VendName" ColumnName="VendName" />
-                </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AP10100_pdHeader" FunctionName="eBiz4DWebSysModel.Store.AP10100_pdHeader">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AP10100Model.AP10100_pdHeader_Result">
@@ -760,6 +642,8 @@
                 <ScalarProperty Name="RvdBatNbr" ColumnName="RvdBatNbr" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+                <ScalarProperty Name="PONbr" ColumnName="PONbr" />
+                <ScalarProperty Name="RcptNbr" ColumnName="RcptNbr" />
                 <ScalarProperty Name="DocType" ColumnName="DocType" />
                 <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
                 <ScalarProperty Name="VendID" ColumnName="VendID" />
@@ -771,22 +655,64 @@
                 <ScalarProperty Name="DueDate" ColumnName="DueDate" />
                 <ScalarProperty Name="DiscDate" ColumnName="DiscDate" />
                 <ScalarProperty Name="DocDesc" ColumnName="DocDesc" />
-                <ScalarProperty Name="TaxTot00" ColumnName="TaxTot00" />
-                <ScalarProperty Name="TxblTot00" ColumnName="TxblTot00" />
-                <ScalarProperty Name="OrigDocAmt" ColumnName="OrigDocAmt" />
                 <ScalarProperty Name="InvcDate" ColumnName="InvcDate" />
-                <ScalarProperty Name="PONbr" ColumnName="PONbr" />
-                <ScalarProperty Name="RcptNbr" ColumnName="RcptNbr" />
+                <ScalarProperty Name="OrigDocAmt" ColumnName="OrigDocAmt" />
                 <ScalarProperty Name="TaxId00" ColumnName="TaxId00" />
                 <ScalarProperty Name="TaxId01" ColumnName="TaxId01" />
                 <ScalarProperty Name="TaxId02" ColumnName="TaxId02" />
                 <ScalarProperty Name="TaxId03" ColumnName="TaxId03" />
+                <ScalarProperty Name="TaxTot00" ColumnName="TaxTot00" />
                 <ScalarProperty Name="TaxTot01" ColumnName="TaxTot01" />
                 <ScalarProperty Name="TaxTot02" ColumnName="TaxTot02" />
                 <ScalarProperty Name="TaxTot03" ColumnName="TaxTot03" />
+                <ScalarProperty Name="TxblTot00" ColumnName="TxblTot00" />
                 <ScalarProperty Name="TxblTot01" ColumnName="TxblTot01" />
                 <ScalarProperty Name="TxblTot02" ColumnName="TxblTot02" />
                 <ScalarProperty Name="TxblTot03" ColumnName="TxblTot03" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AP10100_pgLoadInvoiceMemo" FunctionName="eBiz4DWebSysModel.Store.AP10100_pgLoadInvoiceMemo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AP10100Model.AP10100_pgLoadInvoiceMemo_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
+                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="InvcDate" ColumnName="InvcDate" />
+                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
+                <ScalarProperty Name="LineType" ColumnName="LineType" />
+                <ScalarProperty Name="POLineRef" ColumnName="POLineRef" />
+                <ScalarProperty Name="PONbr" ColumnName="PONbr" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="TaxAmt00" ColumnName="TaxAmt00" />
+                <ScalarProperty Name="TaxAmt01" ColumnName="TaxAmt01" />
+                <ScalarProperty Name="TaxAmt02" ColumnName="TaxAmt02" />
+                <ScalarProperty Name="TaxAmt03" ColumnName="TaxAmt03" />
+                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
+                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+                <ScalarProperty Name="TaxId00" ColumnName="TaxId00" />
+                <ScalarProperty Name="TaxId01" ColumnName="TaxId01" />
+                <ScalarProperty Name="TaxId02" ColumnName="TaxId02" />
+                <ScalarProperty Name="TaxId03" ColumnName="TaxId03" />
+                <ScalarProperty Name="TranAmt" ColumnName="TranAmt" />
+                <ScalarProperty Name="TranClass" ColumnName="TranClass" />
+                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
+                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
+                <ScalarProperty Name="TranType" ColumnName="TranType" />
+                <ScalarProperty Name="TxblAmt00" ColumnName="TxblAmt00" />
+                <ScalarProperty Name="TxblAmt01" ColumnName="TxblAmt01" />
+                <ScalarProperty Name="TxblAmt02" ColumnName="TxblAmt02" />
+                <ScalarProperty Name="TxblAmt03" ColumnName="TxblAmt03" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+                <ScalarProperty Name="VendName" ColumnName="VendName" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -805,8 +731,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="AP10100_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.AP10100_ppCheckCloseDate" />
-          <FunctionImportMapping FunctionImportName="APNumbering" FunctionName="eBiz4DWebSysModel.Store.APNumbering" />
           <FunctionImportMapping FunctionImportName="AP10100_pcGetVendor" FunctionName="eBiz4DWebSysModel.Store.AP10100_pcGetVendor">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AP10100Model.AP10100_pcGetVendor_Result">
@@ -817,41 +741,8 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="RPTRunnings">
-            <EntityTypeMapping TypeName="AP10100Model.RPTRunning">
-              <MappingFragment StoreEntitySet="RPTRunning">
-                <ScalarProperty Name="ListParm03" ColumnName="ListParm03" />
-                <ScalarProperty Name="ListParm02" ColumnName="ListParm02" />
-                <ScalarProperty Name="ListParm01" ColumnName="ListParm01" />
-                <ScalarProperty Name="ListParm00" ColumnName="ListParm00" />
-                <ScalarProperty Name="LangID" ColumnName="LangID" />
-                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
-                <ScalarProperty Name="LoggedCpnyID" ColumnName="LoggedCpnyID" />
-                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
-                <ScalarProperty Name="AppPath" ColumnName="AppPath" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="SelectionFormular" ColumnName="SelectionFormular" />
-                <ScalarProperty Name="BooleanParm03" ColumnName="BooleanParm03" />
-                <ScalarProperty Name="BooleanParm02" ColumnName="BooleanParm02" />
-                <ScalarProperty Name="BooleanParm01" ColumnName="BooleanParm01" />
-                <ScalarProperty Name="BooleanParm00" ColumnName="BooleanParm00" />
-                <ScalarProperty Name="DateParm03" ColumnName="DateParm03" />
-                <ScalarProperty Name="DateParm02" ColumnName="DateParm02" />
-                <ScalarProperty Name="DateParm01" ColumnName="DateParm01" />
-                <ScalarProperty Name="DateParm00" ColumnName="DateParm00" />
-                <ScalarProperty Name="StringParm03" ColumnName="StringParm03" />
-                <ScalarProperty Name="StringParm02" ColumnName="StringParm02" />
-                <ScalarProperty Name="StringParm01" ColumnName="StringParm01" />
-                <ScalarProperty Name="StringParm00" ColumnName="StringParm00" />
-                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
-                <ScalarProperty Name="ReportCap" ColumnName="ReportCap" />
-                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
-                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
-                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
-                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="APNumbering" FunctionName="eBiz4DWebSysModel.Store.APNumbering" />
+          <FunctionImportMapping FunctionImportName="AP10100_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.AP10100_ppCheckCloseDate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -872,12 +763,11 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="63" >
-        <EntityTypeShape EntityType="AP10100Model.AP_Doc" Width="1.5" PointX="2.125" PointY="0.5" />
-        <EntityTypeShape EntityType="AP10100Model.AP_Setup" Width="1.5" PointX="7.25" PointY="0.5" />
-        <EntityTypeShape EntityType="AP10100Model.AP_Trans" Width="1.5" PointX="3.75" PointY="0.5" />
-        <EntityTypeShape EntityType="AP10100Model.Batch" Width="1.5" PointX="0.5" PointY="0.5" />
-        <EntityTypeShape EntityType="AP10100Model.RPTRunning" Width="1.5" PointX="11.473696527757541" PointY="27.554552731828089" />
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="88" >
+        <EntityTypeShape EntityType="AP10100Model.AP_Doc" Width="1.5" PointX="6.6388067652652065" PointY="25.370090749752752" />
+        <EntityTypeShape EntityType="AP10100Model.AP_Setup" Width="1.5" PointX="6.6590790742352048" PointY="1.3286794430244153" />
+        <EntityTypeShape EntityType="AP10100Model.AP_Trans" Width="1.5" PointX="10.127574008948903" PointY="2.2830677639148513" />
+        <EntityTypeShape EntityType="AP10100Model.Batch" Width="1.5" PointX="7.481015389543499" PointY="26.222414192847168" />
       </Diagram>
     </Diagrams>
   </Designer>

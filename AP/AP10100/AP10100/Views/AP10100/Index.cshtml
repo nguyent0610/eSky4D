@@ -14,108 +14,37 @@
 }
 <!DOCTYPE html>
 <html>
-    <head>
+ <!--Không thay đổi phần head Đổi mã màn hình AP10100.js tùy theo màn hình đổi lại-->
+<head>
     <meta name="viewport" content="width=device-width" />
-
-    <script src='@Url.Content("Scripts/hq.language"+ Current.LangID+ ".js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/AP10100.js")' type="text/javascript"></script>
-<style type="text/css"> @*Thuoc tinh hover tren grid *@
-    .x-grid-row-over .x-grid-cell-inner {
-        font-weight : bold;
-    }
-</style>
-<script>
-
-
-</script>
-<script>
-    HQ.cpnyID = '@Current.CpnyID';
-    HQ.langID = '@Current.LangID';
-    HQ.userName = '@Current.UserName';
-    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-    HQ.businessDate = new Date('@DateTime.Now.ToDateShort()');//lay ngay server trong controller
-</script>
-  <title>@ViewBag.Title</title>
-    </head>
-
-    <body>
-@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
-
-        @X.GridFilters()<!--Khi cache cho grid-->
-        @X.ProgressBarPager()<!--Khi cache cho grid -->   
-
-
-@(Html.X().Store().ID("storeFormTop").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(Batch), "mdlBatch", "BranchID,Module,BatNbr"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataFormTop", "AP10100"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-        .Parameters(ps =>
-        {
-            ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
-            ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
-            
-        })
-        .Listeners(p => p.Load.Handler = "loadDataAutoHeaderTop()")
-  )
-
-
-@(Html.X().Store().ID("storeFormBot").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AP_Doc), "mdlAP_Doc", "BranchID,BatNbr,RefNbr"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataFormBot", "AP10100"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-        .Parameters(ps =>
-        {
-            ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
-            ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
-            ps.Add(new StoreParameter("RefNbr", "App.cboRefNbr.value", ParameterMode.Raw));
-        })
-        .Listeners(p => p.Load.Handler = "loadDataAutoHeaderBot()")
-  )
-
-@(Html.X().Store().ID("stoAP_TransTopTab2").AutoLoad(false)
-        .Model(
-            X.Model()
-            .ID("GetGrid1Tab2ResultModel")
-            //.IDProperty("Grid1Tab2")
-            .Fields(
-            
-                X.ModelField().Name("LineRef").Type(ModelFieldType.String)
-                ,X.ModelField().Name("TaxID").Type(ModelFieldType.String)
-                ,X.ModelField().Name("TaxRate").Type(ModelFieldType.String)
-                ,X.ModelField().Name("TaxAmt").Type(ModelFieldType.String)
-                ,X.ModelField().Name("TxblAmt").Type(ModelFieldType.String)
-                ,X.ModelField().Name("Level").Type(ModelFieldType.String)
-                
-                
-            )
-        )    
-
-  )
-
-
-
+   <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/AP10100.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+        HQ.cpnyID = '@ViewBag.BranchID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.businessDate = new Date()
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');      
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+  
+      
         @(Html.X().Store().ID("stoAP10100_pdHeader").AutoLoad(false)
         .Model(Util.GenerateModel(typeof(AP10100_pdHeader_Result), "AP10100_pdHeaderModel", "RefNbr"))
         .Proxy(
             X.AjaxProxy()
-            .Url(Url.Action("GetAP10100_pdHeader", "AP10100"))
+            .Url(Url.Action("GetHeader", "AP10100"))
             .ActionMethods(action =>
             {
                 action.Read = HttpMethod.POST;
@@ -139,12 +68,11 @@
   )
 
 
-
-  @(Html.X().Store().ID("stoAP10100_pgLoadTaxTrans").AutoLoad(false)   
+    @(Html.X().Store().ID("stoAP10100_pgLoadTaxTrans").AutoLoad(false)   
                                 .Model(Util.GenerateModel(typeof(AP10100_pgLoadTaxTrans_Result), "ModelAP10100_pgLoadTaxTrans_Result", ""))                                 
                                 .Proxy(
                                         X.AjaxProxy()                
-                                        .Url(Url.Action("GetAP10100_pgLoadTaxTrans", "AP10100"))                
+                                        .Url(Url.Action("GetTaxTrans", "AP10100"))                
                                         .ActionMethods(action =>
                                         {
                                             action.Read = HttpMethod.POST;
@@ -157,19 +85,18 @@
                                                     ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
                                                     ps.Add(new StoreParameter("refNbr", "App.txtRefNbr.getValue()", ParameterMode.Raw));
                                                 })
-                            .Listeners(p => p.Load.Handler = "loadstoAP10100_pgLoadTaxTrans();")       
+                            .Listeners(p => p.Load.Handler = "stoTaxTrans_Load();")       
    
         )
-
-  
-      @(HQ.Store().ID("stoAP10100_pdSI_Tax").HQProcedure("AP10100_pdSI_Tax").HQDBSys(false).HQParam(new StoreParameterCollection() {
+        @(HQ.Store().ID("stoAP10100_pdSI_Tax").HQProcedure("AP10100_pdSI_Tax").HQDBSys(false).HQParam(new StoreParameterCollection() {
 											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
                                                                 
 						                            }).LoadData().AutoLoad(true))
-
-
-     @{Html.RenderAction("Body", new { lang=@Current.LangID});}
-    </body>
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        <!-- Gọi hàm Body trong AP10100Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
+        @{Html.RenderAction("Body", new { lang=@Current.LangID});}   
+    
+</body>
 </html>
-
-
+ 

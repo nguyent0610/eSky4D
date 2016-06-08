@@ -54,7 +54,7 @@ intellisense.annotate(jQuery, {
     /// </signature>
   },
   'boxModel': function() {
-    /// <summary>Deprecated in jQuery 1.3 (see jQuery.support). States if the current page, in the user's browser, is being rendered using the W3C CSS Box Model.</summary>
+    /// <summary>Deprecated in jQuery 1.3 (see jQuery.support). AR_Dets if the current page, in the user's browser, is being rendered using the W3C CSS Box Model.</summary>
     /// <returns type="Boolean" />
   },
   'browser': function() {
@@ -446,7 +446,7 @@ intellisense.annotate(_object, {
     /// </signature>
   },
   'lock': function() {
-    /// <summary>Lock a callback list in its current state.</summary>
+    /// <summary>Lock a callback list in its current AR_Det.</summary>
   },
   'locked': function() {
     /// <summary>Determine if the callbacks list has been locked.</summary>
@@ -573,8 +573,8 @@ intellisense.annotate(_object, {
     ///   <returns type="Deferred" />
     /// </signature>
   },
-  'state': function() {
-    /// <summary>Determine the current state of a Deferred object.</summary>
+  'AR_Det': function() {
+    /// <summary>Determine the current AR_Det of a Deferred object.</summary>
     /// <returns type="String" />
   },
   'then': function() {
@@ -1184,7 +1184,7 @@ intellisense.annotate(jQuery.fn, {
     /// <summary>Selects all elements that are enabled.</summary>
   },
   'end': function() {
-    /// <summary>End the most recent filtering operation in the current chain and return the set of matched elements to its previous state.</summary>
+    /// <summary>End the most recent filtering operation in the current chain and return the set of matched elements to its previous AR_Det.</summary>
     /// <returns type="jQuery" />
   },
   'eq': function() {
