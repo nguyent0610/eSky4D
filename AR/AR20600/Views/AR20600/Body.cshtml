@@ -142,13 +142,13 @@
                         lst.Focus.Handler = "this.forceSelection = true;";
                     })
                                     
-                    ,HQ.TextBox().ID("txtZip").Name("txtZip").HQLangCode("ZIP").MaskRe(@"/[0-9]/")
+                    ,HQ.TextBox().ID("txtZip").Name("txtZip").HQLangCode("ZIP").MaskRe(@"/[0-9-,.*#()+/]/")
                     .Width(300).MarginSpec("5 0 0 0").MaxLength(10).EnforceMaxLength(true).DataIndex("Zip")
                                     
-                    ,HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("PHONE").MaskRe(@"/[0-9]/")
+                    ,HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("PHONE").MaskRe(@"/[0-9-,.*#()+/]/")
                     .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true).DataIndex("Phone")
                                     
-                    ,HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("FAX").MaskRe(@"/[0-9]/")
+                    ,HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("FAX").MaskRe(@"/[0-9-,.*#()+/]/")
                     .Width(300).MarginSpec("5 0 5 0").MaxLength(30).EnforceMaxLength(true).DataIndex("Fax")
             ) //frmLeft
             , X.Panel()

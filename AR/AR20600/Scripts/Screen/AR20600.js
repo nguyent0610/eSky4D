@@ -4,7 +4,7 @@ var _Source = 0;
 var _maxSource = 8;
 var _isLoadMaster = false;
 
-///////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 var checkLoad = function (sto) {
     _Source += 1;
@@ -205,7 +205,7 @@ var save = function () {
             });
         }
         else {
-            HQ.message.show(2015123111, App.cboShipToId.fieldLabel);
+            HQ.message.show(20140811, App.cboShipToId.fieldLabel);
             App.cboShipToId.focus();
             App.cboShipToId.selectText();
         }
@@ -221,7 +221,7 @@ function deleteData(item) {
             timeout: 7200,
             success: function (action, data) {
                 //App.cboShipToId.setValue("");
-                App.cboShipToId.getStore().load(function () { cboShipToId_Change(App.cboShipToId); });
+                App.cboShipToId.getStore().load(function () { cboShipToId_Changed(App.cboShipToId); });
                 menuClick("new");
             },
             failure: function (msg, data) {

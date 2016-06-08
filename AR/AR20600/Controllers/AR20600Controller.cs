@@ -125,13 +125,17 @@ namespace AR20600.Controllers
             {
                 string CustId = data["cboCustId"].PassNull();
                 string ShipToId = data["cboShipToId"].PassNull();
-                double convertShipToIdToDouble = double.Parse(ShipToId);
+                double convertShipToIdToDouble = 0;
+                bool j = double.TryParse(ShipToId,out convertShipToIdToDouble);
 
                 var obj = _db.AR_SOAddress.FirstOrDefault(p =>p.BranchID==_BranchID && p.CustId == CustId && p.ShipToId == ShipToId);
-
+                var checkPO_Trans = (PO_Trans)null;
                 var checkPO_Receipt = _db.PO_Receipt.FirstOrDefault(p => p.BranchID == _BranchID && p.ShiptoID == ShipToId);
-                var checkPO_Trans = _db.PO_Trans.FirstOrDefault(p => p.BranchID == _BranchID && p.ShiptoID == convertShipToIdToDouble);
-                var checkAR_Customer = _db.AR_Customer.FirstOrDefault(p => p.BranchID == _BranchID && p.CustId == CustId);
+                if (j)
+                {
+                    checkPO_Trans = _db.PO_Trans.FirstOrDefault(p => p.BranchID == _BranchID && p.ShiptoID == convertShipToIdToDouble);
+                }
+                var checkAR_Customer = _db.AR_Customer.FirstOrDefault(p => p.BranchID == _BranchID && p.DfltShipToId == ShipToId);
                 var checkPO_Header = _db.PO_Header.FirstOrDefault(p => p.BranchID == _BranchID && p.ShiptoID == ShipToId);
                 var checkOM_OrdAddr = _db.OM_OrdAddr.FirstOrDefault(p => p.BranchID == _BranchID && p.ShiptoID == ShipToId);
 
