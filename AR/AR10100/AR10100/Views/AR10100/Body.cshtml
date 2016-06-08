@@ -37,7 +37,7 @@
                 X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
                 .Items(
                         HQ.Combo().ID("cboBatNbr").Name("cboBatNbr").HQLangCode("BATNBR").HQProcedure("AR10100_pcBatch")
-                            .HQColumnShow("BatNbr,TotAmt,Descr,Status").DisplayField("BatNbr").ValueField("BatNbr")
+                            .HQColumnShow("BatNbr,TotAmt,Status").DisplayField("BatNbr").ValueField("BatNbr")
                             .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 500).ForceSelection(true).Tag("X")
                             .HQDBSys(false)
                             .HQParam(new StoreParameterCollection()
@@ -102,7 +102,7 @@
 
                         )//ngoac ket thuc row2                              
                     , HQ.TextBox().ID("txtRvdBatNbr").Name("txtRvdBatNbr").HQLangCode("CANCELLEDBATNBR").DataIndex("RvdBatNbr")
-                        .LabelWidth(150).InputWidth(150).MaxLength(200).EnforceMaxLength(true).MarginSpec("3 0 0 0")
+                        .LabelWidth(150).InputWidth(150).MaxLength(200).EnforceMaxLength(true).MarginSpec("3 0 3 0")
                         .ReadOnly(true).Tag("X")// row3                                   
                 )
                 , X.TabPanel()
@@ -143,7 +143,7 @@
 
                                         //RefNbr
                                          , HQ.TextBox().ID("txtRefNbr").Name("txtRefNbr").HQLangCode("REFNBR").DataIndex("RefNbr")
-                                            .LabelWidth(150).InputWidth(150).MaxLength(200).EnforceMaxLength(true).MarginSpec("3 0 0 0")
+                                            .LabelWidth(150).InputWidth(150).MaxLength(200).EnforceMaxLength(true)
                                             .ReadOnly(true).Tag("X")
                         
                                         //, HQ.Combo().ID("cboRefNbr").Name("cboRefNbr").HQLangCode("REFNBR").HQProcedure("AR10100_pcRefNbr")
@@ -252,7 +252,7 @@
                                             .LabelWidth(150).InputWidth(150).ReadOnly(true).Tag("X")
                                     )//end row4
 
-                                , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 3 0")
                                  .Items(
                                         HQ.TextBox().ID("txtDocDescr").Name("txtDocDescr").HQLangCode("DOCDESC").DataIndex("DocDesc")
                                             .LabelWidth(150).InputWidth(455).MaxLength(100).EnforceMaxLength(true).AllowBlank(false)

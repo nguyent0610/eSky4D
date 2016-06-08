@@ -1,11 +1,9 @@
-﻿
-var keys = ['TranAmt'];
-var fieldsCheckRequire = [ 'TranAmt'];
-var fieldsLangCheckRequire = [ 'TranAmt'];
+﻿var keys = ['TranAmt'];
+var fieldsCheckRequire = ['TranAmt'];
+var fieldsLangCheckRequire = ['TranAmt'];
 var menuClick = function (command) {
     switch (command) {
         case "first":
-        
             if (HQ.focus == 'header_Batch') {
                 HQ.combo.first(App.cboBatNbr, HQ.isChange);          
             } else if (HQ.focus == 'grdAR_Trans') {
@@ -13,7 +11,6 @@ var menuClick = function (command) {
             }
             break;
         case "prev":
- 
             if (HQ.focus == 'header_Batch') {
                 HQ.combo.prev(App.cboBatNbr, HQ.isChange);          
             } else if (HQ.focus == 'grdAR_Trans') {
@@ -21,7 +18,6 @@ var menuClick = function (command) {
             }
             break;
         case "next":
-
             if (HQ.focus == 'header_Batch') {
                 HQ.combo.next(App.cboBatNbr, HQ.isChange);         
             } else if (HQ.focus == 'grdAR_Trans') {
@@ -29,14 +25,11 @@ var menuClick = function (command) {
             }
             break;
         case "last":
-
             if (HQ.focus == 'header_Batch') {
                 HQ.combo.last(App.cboBatNbr, HQ.isChange);          
             } else if (HQ.focus == 'grdAR_Trans') {
                 HQ.grid.last(App.grdAR_Trans);
             }
-
-
             break;
         case "refresh":
             if (HQ.isChange) {
@@ -48,7 +41,6 @@ var menuClick = function (command) {
             break;
         case "new":
             if (HQ.isInsert) {
-
                 if (HQ.focus == 'header_Batch' ) {
                     if (HQ.isChange) {
                         HQ.message.show(150, '', '');
@@ -59,11 +51,9 @@ var menuClick = function (command) {
                 } else if (HQ.focus == 'grdAR_Trans') {
                     HQ.grid.insert(App.grdAR_Trans, keys);                                   
                 }
-
             }
             break;
         case "delete":
-
             if (HQ.isDelete) {
                 if (App.cboBatNbr.value != "" && App.cboStatus.value != "C" && App.cboStatus.value != "V") {
                     if (HQ.focus == 'header_Batch') {
@@ -79,7 +69,7 @@ var menuClick = function (command) {
             break;
         case "save":          
             if (App.cboStatus.getValue() == "V" || ((Ext.isEmpty(App.cboHandle.getValue()) || App.cboHandle.getValue() == "N") && App.cboStatus.getValue() == "C")) return;
-            if (App.txtCuryDocBal.getValue()=='0') {
+            if (App.txtCuryDocBal.getValue() == '0') {
                 HQ.message.show(20151111901, '', '');
                 return;
             }
@@ -87,18 +77,13 @@ var menuClick = function (command) {
                 if (HQ.form.checkRequirePass(App.frmMain) &&                 
                     HQ.store.checkRequirePass(App.stoAR_Trans, keys, fieldsCheckRequire, fieldsLangCheckRequire)
                     ){
-
                     Save();
-     
-
                 }
             }
             break;
         case "print":
-            alert(command);
             break;
         case "close":
-            Close();
             break;
     }
 
@@ -110,7 +95,6 @@ function refresh(item) {
         App.cboBatNbr.getStore().load(function () {             
                 App.stoAR10100_pdHeader.reload();               
         });
-       
     }
 };
 ////////Save////////////////
@@ -137,13 +121,12 @@ function Save() {
                 if (BatNbr != '') {
                     App.cboBatNbr.getStore().load(function () {
                         if(Ext.isEmpty(App.cboBatNbr.getValue()))
-                        {
                             App.cboBatNbr.setValue(BatNbr);                                                                            
-                        }else   App.stoAR10100_pdHeader.reload();
+                        else
+                            App.stoAR10100_pdHeader.reload();
                          
                     });
                 }
-             
             }
             , failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -177,9 +160,7 @@ var deleteRecordFormTopBatch = function (item) {
             success: function (action, data) {
                 App.cboBatNbr.setValue("");
                 App.cboBatNbr.getStore().load(function () { cboBatNbr_Change(App.cboBatNbr); });
-
             },
-
             failure: function (action, data) {
                 if (data.result.msgCode) {
                     HQ.message.show(data.result.msgCode, data.result.msgParam, '');
@@ -207,8 +188,8 @@ var deleteRecordGrid = function (item) {
 var firstLoad = function () {
     App.txtBranchID.setValue(HQ.cpnyID);
     App.cboBatNbr.getStore().load(function () { App.stoAR10100_pdHeader.reload(); });
-   
 };
+
 var frmChange = function () {
     if (App.stoAR10100_pdHeader.data.length > 0 ) {
         App.frmMain.getForm().updateRecord();
@@ -222,6 +203,7 @@ var frmChange = function () {
         HQ.common.changeData(HQ.isChange, 'AR10100');
     }
 };
+
 //////////////Form Batch///////////////////////////
 /////////////////////////////////////////////////
 var stoAR10100_pdHeader_BeforeLoad = function (store) {
