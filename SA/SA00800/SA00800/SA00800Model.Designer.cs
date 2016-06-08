@@ -2578,11 +2578,13 @@ namespace SA00800
         /// <summary>
         /// Create a new SA00800_pgSYS_ReportParm_Result object.
         /// </summary>
+        /// <param name="reportNbr">Initial value of the ReportNbr property.</param>
         /// <param name="reportFormat">Initial value of the ReportFormat property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SA00800_pgSYS_ReportParm_Result CreateSA00800_pgSYS_ReportParm_Result(global::System.String reportFormat, global::System.Byte[] tstamp)
+        public static SA00800_pgSYS_ReportParm_Result CreateSA00800_pgSYS_ReportParm_Result(global::System.String reportNbr, global::System.String reportFormat, global::System.Byte[] tstamp)
         {
             SA00800_pgSYS_ReportParm_Result sA00800_pgSYS_ReportParm_Result = new SA00800_pgSYS_ReportParm_Result();
+            sA00800_pgSYS_ReportParm_Result.ReportNbr = reportNbr;
             sA00800_pgSYS_ReportParm_Result.ReportFormat = reportFormat;
             sA00800_pgSYS_ReportParm_Result.tstamp = tstamp;
             return sA00800_pgSYS_ReportParm_Result;
@@ -2591,6 +2593,30 @@ namespace SA00800
         #endregion
 
         #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ReportNbr
+        {
+            get
+            {
+                return _ReportNbr;
+            }
+            set
+            {
+                OnReportNbrChanging(value);
+                ReportPropertyChanging("ReportNbr");
+                _ReportNbr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ReportNbr");
+                OnReportNbrChanged();
+            }
+        }
+        private global::System.String _ReportNbr;
+        partial void OnReportNbrChanging(global::System.String value);
+        partial void OnReportNbrChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

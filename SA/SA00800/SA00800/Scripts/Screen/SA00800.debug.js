@@ -26,18 +26,18 @@ var pnl_render = function (cmd) {
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            if (_focusNo == 0) {
+            if (HQ.focus == 'header') {
                 HQ.combo.first(App.cboReportNbr, HQ.isChange);
             }
-            else {
+            else if (HQ.focus == 'grid') {
                 HQ.grid.first(App.grdSYS_ReportParm);
             }
             break;
         case "prev":
-            if (_focusNo == 0) {
+            if (HQ.focus == 'header') {
                 HQ.combo.prev(App.cboReportNbr, HQ.isChange);
             }
-            else {
+            else if (HQ.focus == 'grid') {
                 HQ.grid.prev(App.grdSYS_ReportParm);
             }
             break;
@@ -45,7 +45,7 @@ var menuClick = function (command) {
             if (_focusNo == 0) {
                 HQ.combo.next(App.cboReportNbr, HQ.isChange);
             }
-            else {
+            else if (HQ.focus == 'grid') {
                 HQ.grid.next(App.grdSYS_ReportParm);
             }
             break;
@@ -53,7 +53,7 @@ var menuClick = function (command) {
             if (_focusNo == 0) {
                 HQ.combo.last(App.cboReportNbr, HQ.isChange);
             }
-            else {
+            else if (HQ.focus == 'grid') {
                 HQ.grid.last(App.grdSYS_ReportParm);
             }
             break;
@@ -71,7 +71,7 @@ var menuClick = function (command) {
             break;
         case "new":
             if (HQ.isInsert) {
-                if (_focusNo == 0) {
+                if (HQ.focus == 'header') {
                     if (HQ.isChange) {
                         HQ.message.show(150, '', '');
                     }

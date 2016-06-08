@@ -56,7 +56,7 @@ namespace SA00800.Controllers
         {
             try
             {
-                string ReportNbr = data["cboReportNbr"];
+                string ReportNbr = data["cboReportNbr"].PassNull();
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_ReportControl"]);
                 ChangeRecords<SYS_ReportControl> lstSYS_ReportControl = dataHandler.BatchObjectData<SYS_ReportControl>();
@@ -100,11 +100,19 @@ namespace SA00800.Controllers
                 #region Save SYS_ReportParm
                 foreach (SA00800_pgSYS_ReportParm_Result deleted in lstSYS_ReportParm.Deleted)
                 {
-                    var objDelete = _db.SYS_ReportParm.FirstOrDefault(p => p.ReportNbr == ReportNbr && p.ReportFormat == deleted.ReportFormat);
-                    if (objDelete != null)
+                    if (lstSYS_ReportParm.Created.Where(p => p.ReportNbr == ReportNbr && p.ReportFormat == deleted.ReportFormat).Count() > 0)
                     {
-                        _db.SYS_ReportParm.DeleteObject(objDelete);
+                        lstSYS_ReportParm.Created.Where(p => p.ReportNbr == ReportNbr && p.ReportFormat == deleted.ReportFormat).FirstOrDefault().tstamp = deleted.tstamp;
                     }
+                    else
+                    {
+                        var objDelete = _db.SYS_ReportParm.FirstOrDefault(p => p.ReportNbr == ReportNbr && p.ReportFormat == deleted.ReportFormat);
+                        if (objDelete != null)
+                        {
+                            _db.SYS_ReportParm.DeleteObject(objDelete);
+                        }
+                    }
+                    
                 }
 
                 lstSYS_ReportParm.Created.AddRange(lstSYS_ReportParm.Updated);

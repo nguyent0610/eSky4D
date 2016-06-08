@@ -34,7 +34,7 @@
                 HQ.Combo().ID("cboReportNbr").Name("cboReportNbr").HQLangCode("Report").HQProcedure("SA00800_pcGetReportNbr")
                 .HQColumnShow("ReportNbr,Descr").DisplayField("ReportNbr").ValueField("ReportNbr")
                 .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                .HQDBSys(true).ForceSelection(false).MaxLength(50).EnforceMaxLength(true)
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .LoadData()
                 .Listeners(lst =>
@@ -50,8 +50,8 @@
             )
             , X.Container().Layout(LayoutType.HBox)
                 .Items(
-                    HQ.TextBox().ID("txtReportNbr").Name("txtReportNbr").HQLangCode("ReportNbr").DataIndex("ReportNbr").MarginSpec("0 0 5 0").Width(400).AllowBlank(false)
-                    , HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("Descr").DataIndex("Descr").MarginSpec("0 0 5 0").Width(400).AllowBlank(false)
+                    //HQ.TextBox().ID("txtReportNbr").Name("txtReportNbr").HQLangCode("ReportNbr").DataIndex("ReportNbr").MarginSpec("0 0 5 0").Width(400).AllowBlank(false)
+                     HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("Descr").DataIndex("Descr").MarginSpec("0 0 5 0").Width(400).AllowBlank(false)
                 )
         )
         .Listeners(lss =>
