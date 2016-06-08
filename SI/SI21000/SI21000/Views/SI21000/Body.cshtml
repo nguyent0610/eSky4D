@@ -20,7 +20,7 @@
         .BodyPadding(10)
         .BodyBorder(0)
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar("SI21000"))
+        .TopBar(Util.SetupToolbar("Print", true, ""))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 170; })
         .Listeners(l =>
                     {
@@ -34,7 +34,7 @@
                    X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Items(
                         HQ.Combo().ID("cboTaxID").DataIndex("TaxID").HQLangCode("TaxID").HQProcedure("SI21000_pcLoadTaxAll").AllowBlank(false)
                             .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID").Width(400).HQHeightWidth(400, 300)
-                            .HQControlFocus("txtTaxRate").MarginSpec("5 0 0 0")
+                            .HQControlFocus("txtTaxRate").MarginSpec("5 0 0 0").MaxLength(10).EnforceMaxLength(true)
                             .LoadData()
                             .Listeners(lst =>
                             {
@@ -44,7 +44,7 @@
                             }),
 
                         HQ.NumberField().ID("txtTaxRate").Name("txtTaxRate").HQLangCode("TaxRate").DataIndex("TaxRate").Value(0)
-                            .Width(400).MarginSpec("5 0 0 0").HQControlFocus("txtDescr")
+                            .Width(400).MarginSpec("5 0 0 0").HQControlFocus("txtDescr").MinValue(0)
                         ),
                    HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("Descr").DataIndex("Descr")
                         .Width(800).MarginSpec("5 0 5 0").MaxLength(30).EnforceMaxLength(true).HQControlFocus("tabInfo")

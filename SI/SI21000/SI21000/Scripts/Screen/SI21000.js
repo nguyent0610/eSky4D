@@ -21,6 +21,9 @@ var checkLoad = function (sto) {
 //// First Load ////////////////////////////////////////////////////////
 var firstLoad = function () {
     HQ.util.checkAccessRight(); // Kiem tra quyen Insert Update Delete de disable button tren top bar
+    if (HQ.isInsert == false && HQ.isDelete == true && HQ.isUpdate == false) {
+        App.menuClickbtnSave.disable();
+    }
     HQ.isFirstLoad = true;
     App.frmMain.isValid(); // Require cac field yeu cau tren from
 
@@ -109,7 +112,8 @@ var frmChange = function () {
         App.frmMain.getForm().updateRecord();
         HQ.isChange = HQ.store.isChange(App.storeSI_Tax);
         HQ.common.changeData(HQ.isChange, 'SI21000');//co thay doi du lieu gan * tren tab title header
-        HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+
+        //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
         if (App.cboTaxID.valueModels == null || HQ.isNew == true)//App.cboTaxID.valueModels == null khi ko co select item nao
             App.cboTaxID.setReadOnly(false);
         else App.cboTaxID.setReadOnly(HQ.isChange);
@@ -200,19 +204,7 @@ var cboTaxID_Expand = function (sender, value) {
     }
 };
 
-//var btnCopy_Click = function (sender, e) {
-//    App.txtBillAddr1.setValue(App.txtAddr1.getValue());
-//    App.txtBillAddr2.setValue(App.txtAddr2.getValue());
-//    App.txtBillAttn.setValue(App.txtAttn.getValue());
-//    App.txtBillFax.setValue(App.txtFax.getValue());
-//    App.txtBillName.setValue(App.txtShipName.getValue());
-//    App.txtBillPhone.setValue(App.txtPhone.getValue());
-//    App.txtBillSalut.setValue(App.txtSalut.getValue());
-//    App.txtBillZip.setValue(App.txtShipZip.getValue());
-//    App.cboBillCountry.setValue(App.cboCountry.getValue());
-//    App.cboBillState.setValue(App.cboState.getValue());
-//    App.cboBillCity.setValue(App.cboCity.getValue());
-//};
+
 
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
