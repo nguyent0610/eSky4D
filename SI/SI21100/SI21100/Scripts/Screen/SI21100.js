@@ -181,34 +181,41 @@ var cboTermsID_TriggerClick = function (sender, value) {
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.updateRecord();
-        App.frmMain.submit({
-            waitMsg: HQ.common.getLang("WaitMsg"),
-            url: 'SI21100/Save',
-            params: {
-                lstSI_Terms: Ext.encode(App.stoSI_Terms.getRecordsValues())
-            },
-            success: function (msg, data) {
-                HQ.message.show(201405071);
-                TermsID = data.result.TermsID;
-                HQ.isChange = false;
-                HQ.isFirstLoad = true;
-                App.cboTermsID.getStore().load({
-                    callback: function () {
-                        if (Ext.isEmpty(App.cboTermsID.getValue())) {
-                            App.cboTermsID.setValue(TermsID);
-                            App.stoSI_Terms.reload();
+        if (HQ.util.checkSpecialChar(App.cboTermsID.getValue()) == true) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang("WaitMsg"),
+                url: 'SI21100/Save',
+                params: {
+                    lstSI_Terms: Ext.encode(App.stoSI_Terms.getRecordsValues())
+                },
+                success: function (msg, data) {
+                    HQ.message.show(201405071);
+                    TermsID = data.result.TermsID;
+                    HQ.isChange = false;
+                    HQ.isFirstLoad = true;
+                    App.cboTermsID.getStore().load({
+                        callback: function () {
+                            if (Ext.isEmpty(App.cboTermsID.getValue())) {
+                                App.cboTermsID.setValue(TermsID);
+                                App.stoSI_Terms.reload();
+                            }
+                            else {
+                                App.cboTermsID.setValue(TermsID);
+                                App.stoSI_Terms.reload();
+                            }
                         }
-                        else {
-                            App.cboTermsID.setValue(TermsID);
-                            App.stoSI_Terms.reload();
-                        }
-                    }
-                });
-            },
-            failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
-            }
-        });
+                    });
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+        else {
+            HQ.message.show(20140811, App.cboTermsID.fieldLabel);
+            App.cboTermsID.focus();
+            //App.cboTermsID.selectText();
+        }
     }
 };
 
@@ -245,4 +252,23 @@ function refresh(item) {
         App.stoSI_Terms.reload();
     }
 };
+
+var checkNumberDueIntrv = function () {
+    if (App.DueIntrv.value < 0) {
+        App.DueIntrv.setValue(0)
+    }
+};
+
+var checkNumberDiscPct = function () {
+    if (App.DiscPct.value < 0) {
+        App.DiscPct.setValue(0)
+    }
+};
+
+var checkNumberDiscIntrv = function () {
+    if (App.DiscIntrv.value < 0) {
+        App.DiscIntrv.setValue(0)
+    }
+};
+
 ///////////////////////////////////
