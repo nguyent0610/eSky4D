@@ -40,7 +40,7 @@
                         {
                             l.BeforeLoad.Fn = "stoBeforeLoad";
                             l.Load.Fn = "stoLoad";
-                            l.Update.Fn = "stoChanged";                 
+                            l.Update.Fn = "frmChange";                 
                         })
                 )
                 .Listeners(p =>
@@ -51,14 +51,20 @@
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
            
-            X.Column().ID("ClassID").Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(20).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
+            X.Column().ID("ClassID").Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(10).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(30).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Terms")).DataIndex("Terms").Width(150).Editor(
                                                  HQ.Combo().ID("cboTerms").Name("cboTerms").HQProcedure("AP20100_pcTerms")
                                                 .HQColumnShow("TermsID,Descr").DisplayField("TermsID").ValueField("TermsID")
                                                 .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
                                                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                                                 .LoadData()
+                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                .Listeners(lst =>
+                                                    {
+                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+
+                                                    })
                                                 ),
         X.CommandColumn()
             .Width(150)
