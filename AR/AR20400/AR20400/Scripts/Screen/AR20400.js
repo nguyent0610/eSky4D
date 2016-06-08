@@ -336,7 +336,7 @@ var stoBeforeLoad = function (sto) {
 };
 
 var stoLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
     HQ.common.setForceSelection(App.frmMain, false, "cboCpnyID,cboCustId,cboHandle");
     App.cboCpnyID.forceSelection = true;
     App.cboCustId.forceSelection = true;
@@ -354,6 +354,8 @@ var stoLoad = function (sto) {
         record.set('Birthdate', HQ.bussinessDate);
         HQ.isNew = true;
         App.cboCustId.forceSelection = false;
+        if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1')
+            App.cboCustId.forceSelection = true;
         HQ.common.setRequire(App.frmMain);
         sto.commitChanges();
     }
@@ -379,7 +381,7 @@ var stoLoad = function (sto) {
 
 /////////////////////////////// GIRD AR_LTTContract /////////////////////////////////
 var stoAR_LTTContract_Load = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             //HQ.store.insertBlank(sto, keysTab_4);
@@ -438,7 +440,7 @@ var grdAR_LTTContract_Reject = function (record) {
 
 /////////////////////////////// GIRD AR_LTTContractDetail /////////////////////////////////
 var stoAR_LTTContractDetail_Load = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keysTab_41);
@@ -475,7 +477,7 @@ var grdAR_LTTContract_Reject = function (record) {
 
 /////////////////////////////// GIRD AR_CustAdvTool /////////////////////////////////
 var stoAR_CustAdvTool_Load = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             //HQ.store.insertBlank(sto, keysTab_5);
@@ -537,7 +539,7 @@ var grdAR_CustAdvTool_Reject = function (record) {
 
 /////////////////////////////// GIRD AR_CustSellingProducts /////////////////////////////////
 var stoAR_CustSellingProducts_Load = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keysTab_7);
@@ -577,7 +579,7 @@ var grdAR_CustSellingProducts_Reject = function (record) {
 
 /////////////////////////////// GIRD AR_CustDisplayMethod /////////////////////////////////
 var stoAR_CustDisplayMethod_Load = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keysTab_6);
@@ -801,8 +803,8 @@ var cboCustId_Change = function (sender, value) {
         App.cboDfltShipToId.store.reload();
         App.cboLTTContract.setValue('');
         App.cboLTTContract.store.reload();
-        if(_hiddenTree == 'false' && value)
-            searchNode();
+        //if(_hiddenTree == 'false' && value)
+        //    searchNode();
     }
 };
 
@@ -814,8 +816,8 @@ var cboCustId_Select = function (sender, value) {
         App.cboDfltShipToId.store.reload();
         App.cboLTTContract.setValue('');
         App.cboLTTContract.store.reload();
-        if (_hiddenTree == 'false' && value)
-            searchNode();
+        //if (_hiddenTree == 'false' && value)
+        //    searchNode();
     }
 };
 
@@ -1014,10 +1016,12 @@ var filterComboBillCity = function (sender, e) {
         if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1') {
             App.cboCustId.allowBlank = true;
             App.cboCustId.isValid(false);
+            App.cboCustId.forceSelection = true;
         }
         else {
             App.cboCustId.allowBlank = false;
             App.cboCustId.isValid(true);
+            App.cboCustId.forceSelection = false;
         }
     };
 
@@ -1060,6 +1064,7 @@ var filterComboBillCity = function (sender, e) {
     };
 
     var nodeSelected_Change = function (store, operation, options) {
+        
         if (operation.internalId != 'root') {
             _root = 'false';
             var CustID1 = '';
@@ -1084,13 +1089,18 @@ var filterComboBillCity = function (sender, e) {
             _root = 'true';
             _nodeID = '';
             _nodeLevel = '1';
-            _parentRecordID ='0';
+            _parentRecordID = '0';
             _recordID = '0';
         }
 
         if (CustID1) {
-            App.cboCustId.setValue(CustID1);
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else
+                App.cboCustId.setValue(CustID1);
         }
+        
     };
 
     var ReloadTree = function (type) {
