@@ -74,9 +74,9 @@ var menuClick = function (command) {
             }
             break;
         case "save":
-            if (!App.grdTrans.view.loadMask.isHidden()) {
-                return;
-            }
+            //if (!App.grdTrans.view.loadMask.isHidden()) {
+            //    return;
+            //}
             save();
             break;
         case "delete":
@@ -118,9 +118,11 @@ var menuClick = function (command) {
             break;
         case "new":
             if (HQ.focus == 'batch') {
-                if (HQ.isChange) {
-                    HQ.message.show(2015030201, '', "askNew", true);
-                } else {
+                // if (HQ.isChange || App.grdTrans.isChange) {
+                if (HQ.isChange ) {
+                    HQ.message.show(150, '', '');
+                }
+                else {
                     defaultOnNew();
                 }
             }
@@ -283,7 +285,8 @@ var grdTrans_SelectionChange = function (item, selected) {
     if (selected.length > 0) {
         if (!Ext.isEmpty(selected[0].data.InvtID)) {
             HQ.numSelectTrans = 0;
-            App.grdTrans.view.loadMask.show();
+            // App.grdTrans.view.loadMask.show();
+            HQ.common.showBusy(true, 'Process...');
             App.stoItemSite.load({
                 params: { siteID: App.cboSiteID.getValue(), invtID: selected[0].data.InvtID },
                 callback: checkSelect,
@@ -334,7 +337,7 @@ var grdTrans_Edit = function (item, e) {
                         return;
                     }
                 }
-                App.grdTrans.view.loadMask.show();
+                HQ.common.showBusy(true, 'Process...');
                 HQ.numEditTrans = 0;
                 HQ.maxEditTrans = 3;
                 App.stoUnit.load({
@@ -353,7 +356,7 @@ var grdTrans_Edit = function (item, e) {
                     row: e
                 });
             } else if (key == 'UnitDesc') {
-                App.grdTrans.view.loadMask.show();
+                HQ.common.showBusy(true, 'Process...');
                 HQ.numEditTrans = 0;
                 HQ.maxEditTrans = 2;
                 App.stoItemSite.load({
@@ -499,7 +502,7 @@ var stoUserDefault_Load = function () {
 }
 
 var stoTrans_BeforeLoad = function () {
-    App.grdTrans.view.loadMask.disable();
+    HQ.common.showBusy(true, 'Process...');
 }
 ///////////////////
 ////////////cbo//////////////
@@ -774,6 +777,11 @@ var save = function () {
         HQ.message.show(15, [App.txtDescr.fieldLabel], '', true);
         return;
     }
+    if (Ext.isEmpty(App.txtDateEnt.getValue())) {
+        HQ.message.show(15, [App.txtDateEnt.fieldLabel], '', true);
+        return;
+    }
+
     var flat = false;
     App.stoLotTrans.clearFilter();
     App.stoTrans.data.each(function (item) {
@@ -1031,8 +1039,8 @@ var checkExitEdit = function (row) {
             trans.UnitMultDiv = '';
             trans.UnitPrice = 0;
             row.record.commit();
-            App.grdTrans.view.loadMask.hide();
-            App.grdTrans.view.loadMask.setDisabled(false)
+            HQ.common.showBusy(false);
+           // App.grdTrans.view.loadMask.setDisabled(false)
             return;
         }
 
@@ -1077,8 +1085,9 @@ var checkExitEdit = function (row) {
             trans.Qty = 0;
             trans.TranAmt = 0;
             row.record.commit();
-            App.grdTrans.view.loadMask.hide();
-            App.grdTrans.view.loadMask.setDisabled(false)
+            // App.grdTrans.view.loadMask.hide();
+            HQ.common.showBusy(false);
+            //App.grdTrans.view.loadMask.setDisabled(false)
             return;
         }
 
@@ -1106,8 +1115,9 @@ var checkExitEdit = function (row) {
             trans.Qty = 0;
             row.record.commit();
             HQ.message.show(2016042101, [trans.InvtID, trans.SiteID], '', true);
-            App.grdTrans.view.loadMask.hide();
-            App.grdTrans.view.loadMask.setDisabled(false)
+            //App.grdTrans.view.loadMask.hide();
+            HQ.common.showBusy(false);
+            //App.grdTrans.view.loadMask.setDisabled(false)
             return;
         }
 
@@ -1129,8 +1139,9 @@ var checkExitEdit = function (row) {
                         trans.Qty = 0;
                         row.record.commit();
                         HQ.message.show(35, '', '', true);
-                        App.grdTrans.view.loadMask.hide();
-                        App.grdTrans.view.loadMask.setDisabled(false)
+                        //App.grdTrans.view.loadMask.hide();
+                        HQ.common.showBusy(false);
+                       // App.grdTrans.view.loadMask.setDisabled(false)
                         return;
                     }
                 }
@@ -1157,8 +1168,9 @@ var checkExitEdit = function (row) {
             trans.TranAmt = 0;
             row.record.commit();
             HQ.message.show(2016042101, [trans.InvtID, trans.SiteID], '', true);
-            App.grdTrans.view.loadMask.hide();
-            App.grdTrans.view.loadMask.setDisabled(false)
+            //App.grdTrans.view.loadMask.hide();
+            HQ.common.showBusy(false);
+           // App.grdTrans.view.loadMask.setDisabled(false)
             return;
         }
         if (invt.StkItem == 1)
@@ -1172,8 +1184,9 @@ var checkExitEdit = function (row) {
                     trans.TranAmt = 0;
                     row.record.commit();
                     HQ.message.show(607, [trans.InvtID, trans.SiteID], '', true);
-                    App.grdTrans.view.loadMask.hide();
-                    App.grdTrans.view.loadMask.setDisabled(false)
+                    // App.grdTrans.view.loadMask.hide();
+                    HQ.common.showBusy(false);
+                    //App.grdTrans.view.loadMask.setDisabled(false)
                 }
             }
 
@@ -1193,8 +1206,9 @@ var checkExitEdit = function (row) {
 
     checkTransAdd();
 
-    App.grdTrans.view.loadMask.hide();
-    App.grdTrans.view.loadMask.setDisabled(false)
+    //App.grdTrans.view.loadMask.hide();
+    HQ.common.showBusy(false);
+  //  App.grdTrans.view.loadMask.setDisabled(false)
 
     handleTab(key);
 
@@ -1203,8 +1217,9 @@ var checkExitEdit = function (row) {
 var checkSelect = function (records, options, success) {
     HQ.numSelectTrans++;
     if (HQ.numSelectTrans == HQ.maxSelectTrans) {
-        App.grdTrans.view.loadMask.hide();
-        App.grdTrans.view.loadMask.setDisabled(false)
+        //App.grdTrans.view.loadMask.hide();
+        HQ.common.showBusy(false);
+        //App.grdTrans.view.loadMask.setDisabled(false)
         getQtyAvail(options.row);
     }
 }

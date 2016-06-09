@@ -29,7 +29,7 @@ namespace IN10400.Controllers
         private string _handle = "";
         IN10400Entities _app = Util.CreateObjectContext<IN10400Entities>(false);
         private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-        private IN10400_pcINAdjustmentBatch_Result _objBatch;
+        private IN10400_pcBatch_Result _objBatch;
         private FormCollection _form;
         private IN_Setup _objIN;
         private List<IN10400_pgAdjustmentLoad_Result> _lstTrans;
@@ -66,20 +66,20 @@ namespace IN10400.Controllers
         }
 
         #region LoadData
-        //public ActionResult GetBatch(string branchID, string query, int start, int limit, int page)
-        //{
-        //    query = query ?? string.Empty;
-        //    if (page != 1) query = string.Empty;
-        //    var lstBatch = _app.IN10200_pcBatch(branchID, query, start, start + 20).ToList();
-        //    var paging = new Paging<IN10200_pcBatch_Result>(lstBatch, lstBatch.Count > 0 ? lstBatch[0].TotalRecords.Value : 0);
-        //    return this.Store(paging.Data, paging.TotalRecords);
-        //}
-
-        public ActionResult GetBatch(string branchID)
+        public ActionResult GetBatch(string branchID, string query, int start, int limit, int page)
         {
-            var lstBatch = _app.IN10400_pcINAdjustmentBatch(branchID ).ToList();
-            return this.Store(lstBatch);
+            query = query ?? string.Empty;
+            if (page != 1) query = string.Empty;
+            var lstBatch = _app.IN10400_pcBatch(branchID, query, start, start + 20).ToList();
+            var paging = new Paging<IN10400_pcBatch_Result>(lstBatch, lstBatch.Count > 0 ? lstBatch[0].TotalRecords.Value : 0);
+            return this.Store(paging.Data, paging.TotalRecords);
         }
+
+        //public ActionResult GetBatch(string branchID)
+        //{
+        //    var lstBatch = _app.IN10400_pcINAdjustmentBatch(branchID ).ToList();
+        //    return this.Store(lstBatch);
+        //}
 
         public ActionResult GetUserDefault()
         {
@@ -219,7 +219,7 @@ namespace IN10400.Controllers
                 }
                 string branchID = data["txtBranchID"];
                 string batNbr = data["cboBatNbr"];
-                _objBatch = _app.IN10400_pcINAdjustmentBatch(branchID).FirstOrDefault(p => p.BatNbr == batNbr);
+                _objBatch = data.ConvertToObject<IN10400_pcBatch_Result>();
 
                 if (_objBatch.Status != "H")
                 {
@@ -298,7 +298,7 @@ namespace IN10400.Controllers
                 //_objBatch = data.ConvertToObject<IN10400_pcINAdjustmentBatch_Result>();
                 string branchID = data["txtBranchID"];
                 string batNbr = data["cboBatNbr"];
-                _objBatch = _objBatch = _app.IN10400_pcINAdjustmentBatch(branchID).FirstOrDefault(p => p.BatNbr == batNbr);
+                _objBatch = data.ConvertToObject<IN10400_pcBatch_Result>();
                 if (_objBatch.Status != "H")
                 {
                     throw new MessageException(MessageType.Message, "2015020805", "", new string[] { _objBatch.BatNbr });
@@ -455,35 +455,49 @@ namespace IN10400.Controllers
                 var lotHandler = new StoreDataHandler(data["lstLot"]);
                 _lstLot = lotHandler.ObjectData<IN_LotTrans>().Where(p => Util.PassNull(p.INTranLineRef) != string.Empty && Util.PassNull(p.LotSerNbr) != string.Empty && Util.PassNull(p.InvtID) != string.Empty).ToList();
             }
-            if (string.IsNullOrEmpty(batNbr))
-            {
 
-                _objBatch = _app.IN10400_pcINAdjustmentBatch(branchID).FirstOrDefault(p => p.BatNbr == batNbr);
-                if (_objBatch == null)
-                {
-                    _objBatch = new IN10400_pcINAdjustmentBatch_Result();
-                    _objBatch.EditScrnNbr = "IN10400";
-                    _objBatch.Descr = data["txtDescr"];
-                    _objBatch.ReasonCD = data["cboReasonCD"];
-                    _objBatch.BranchID = branchID;
-                    _objBatch.TotAmt = Convert.ToDouble(data["txtTotAmt"]);
-                    _objBatch.Module = "IN";
-                    _objBatch.JrnlType = "IN";
-                    _objBatch.DateEnt = Convert.ToDateTime(data["txtDateEnt"]);
+            _objBatch = data.ConvertToObject<IN10400_pcBatch_Result>();
 
-                }
-            }
-            else {
-                _objBatch = _app.IN10400_pcINAdjustmentBatch(branchID).FirstOrDefault(p => p.BatNbr == batNbr);
-                if (_objBatch != null)
-                {
-                    _objBatch = new IN10400_pcINAdjustmentBatch_Result();
-                    _objBatch.ResetET();
-                    var bacth = new StoreDataHandler(data["lstbatch"]);
-                    _objBatch = new IN10400_pcINAdjustmentBatch_Result();
-                    _objBatch = bacth.ObjectData<IN10400_pcINAdjustmentBatch_Result>().FirstOrDefault(p=>p.BatNbr == batNbr);
-                }
-            }
+            //if (string.IsNullOrEmpty(batNbr))
+            //{
+
+            //    _objBatch = _app.IN10400_pcINAdjustmentBatch(branchID).FirstOrDefault(p => p.BatNbr == batNbr);
+            //    if (_objBatch == null)
+            //    {
+            //        _objBatch = new IN10400_pcINAdjustmentBatch_Result();
+            //        _objBatch.EditScrnNbr = "IN10400";
+            //        _objBatch.Descr = data["txtDescr"];
+            //        _objBatch.ReasonCD = data["cboReasonCD"];
+            //        _objBatch.BranchID = branchID;
+            //        _objBatch.TotAmt = Convert.ToDouble(data["txtTotAmt"]);
+            //        _objBatch.Module = "IN";
+            //        _objBatch.JrnlType = "IN";
+            //        _objBatch.DateEnt = Convert.ToDateTime(data["txtDateEnt"]);
+
+            //    }
+            //}
+            //else {
+            //    _objBatch = _app.IN10400_pcINAdjustmentBatch(branchID).FirstOrDefault(p => p.BatNbr == batNbr);
+            //    if (_objBatch != null)
+            //    {
+            //        _objBatch = new IN10400_pcINAdjustmentBatch_Result();
+            //        _objBatch.ResetET();
+            //        var bacth = new StoreDataHandler(data["lstbatch"]);
+                
+            //        _objBatch = bacth.ObjectData<IN10400_pcINAdjustmentBatch_Result>().FirstOrDefault(p => p.BatNbr == batNbr);
+            //    }
+            //    else {
+            //        _objBatch = new IN10400_pcINAdjustmentBatch_Result();
+            //        _objBatch.EditScrnNbr = "IN10400";
+            //        _objBatch.Descr = data["txtDescr"];
+            //        _objBatch.ReasonCD = data["cboReasonCD"];
+            //        _objBatch.BranchID = branchID;
+            //        _objBatch.TotAmt = Convert.ToDouble(data["txtTotAmt"]);
+            //        _objBatch.Module = "IN";
+            //        _objBatch.JrnlType = "IN";
+            //        _objBatch.DateEnt = Convert.ToDateTime(data["txtDateEnt"]);
+            //    }
+            //}
             _decAmt = _app.vs_Configurations.FirstOrDefault(p => p.Code.ToLower() == "DecPlTranAmt".ToLower()).IntVal;
             _decPrice = _app.vs_Configurations.FirstOrDefault(p => p.Code.ToLower() == "DecPlUnitPrice".ToLower()).IntVal;
             _decQty = _app.vs_Configurations.FirstOrDefault(p => p.Code.ToLower() == "DecPlQty".ToLower()).IntVal;
@@ -663,13 +677,13 @@ namespace IN10400.Controllers
                 //}
             }
         }
-        private void Save_Batch(Batch batch,FormCollection data,IN10400_pcINAdjustmentBatch_Result s)
+        private void Save_Batch(Batch batch,FormCollection data,IN10400_pcBatch_Result s)
         {
            
 
             if (batch != null)
             {
-                if (batch.tstamp.ToHex() != s.tstamp.ToHex())
+                if (batch.tstamp.ToHex() != _form["tstamp"].ToHex())
                 {
                     throw new MessageException(MessageType.Message, "19");
                 }

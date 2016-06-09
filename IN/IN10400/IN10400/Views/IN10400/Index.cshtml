@@ -115,8 +115,8 @@
 
 
 
-@(X.Store().ID("stoTrans")
-    .AutoLoad(false)
+@*@(X.Store().ID("stoTrans")
+    .AutoLoad(false).PageSize(50)
     .Model(Util.GenerateModel(typeof(IN10400_pgAdjustmentLoad_Result), "mdlTrans", ""))
     .Proxy(
         X.AjaxProxy()
@@ -136,7 +136,7 @@
         p.Load.Fn = "stoDetail_Load";
         p.BeforeLoad.Fn= "stoTrans_BeforeLoad";
     })
-)
+)*@
 @(
     X.Store().ID("stoOldTrans")
     .AutoLoad(false)
