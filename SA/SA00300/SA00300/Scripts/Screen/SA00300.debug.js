@@ -249,7 +249,7 @@ var stoBeforeLoad = function (sto) {
 };
 
 var stoLoad = function (sto) {
-    //HQ.isFirstLoad = true;
+    HQ.isFirstLoad = true;
     HQ.isNew = false;
     HQ.common.showBusy(false);
 

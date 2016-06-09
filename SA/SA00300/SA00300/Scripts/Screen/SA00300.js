@@ -1,1 +1,557 @@
-var _0x8d0b = ["\x47\x72\x6F\x75\x70\x49\x44", "\x6C\x6F\x61\x64\x69\x6E\x67\x44\x61\x74\x61", "\x67\x65\x74\x4C\x61\x6E\x67", "\x63\x6F\x6D\x6D\x6F\x6E", "\x73\x68\x6F\x77\x42\x75\x73\x79", "\x72\x65\x6C\x6F\x61\x64", "\x73\x74\x6F\x55\x73\x65\x72", "\x6C\x6F\x61\x64", "\x67\x65\x74\x53\x74\x6F\x72\x65", "\x63\x62\x6F\x55\x73\x65\x72\x49\x44", "\x73\x74\x6F\x53\x59\x53\x5F\x55\x73\x65\x72\x47\x72\x6F\x75\x70", "\x63\x62\x6F\x47\x72\x6F\x75\x70\x49\x44\x43\x6F\x6D\x70\x61\x6E\x79", "\x63\x62\x6F\x47\x72\x6F\x75\x70\x49\x44\x47\x72\x6F\x75\x70", "\x6D\x6F\x75\x73\x65\x64\x6F\x77\x6E", "\x69\x64", "\x70\x6E\x6C\x55\x73\x65\x72\x47\x72\x6F\x75\x70", "\x70\x6E\x6C\x55\x73\x65\x72\x43\x6F\x6D\x70\x61\x6E\x79", "\x6F\x6E", "\x67\x65\x74\x45\x6C", "\x69\x73\x43\x68\x61\x6E\x67\x65", "\x66\x69\x72\x73\x74", "\x63\x6F\x6D\x62\x6F", "\x67\x72\x64\x53\x59\x53\x5F\x55\x73\x65\x72\x47\x72\x6F\x75\x70", "\x67\x72\x69\x64", "\x67\x72\x64\x53\x59\x53\x5F\x55\x73\x65\x72\x43\x6F\x6D\x70\x61\x6E\x79", "\x70\x72\x65\x76", "\x6E\x65\x78\x74", "\x6C\x61\x73\x74", "", "\x72\x65\x66\x72\x65\x73\x68", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x79\x65\x73", "\x73\x65\x74\x56\x61\x6C\x75\x65", "\x73\x74\x6F\x53\x59\x53\x5F\x55\x73\x65\x72\x43\x6F\x6D\x70\x61\x6E\x79", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x69\x6E\x73\x65\x72\x74", "\x6E\x65\x77", "\x76\x61\x6C\x75\x65", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x64\x65\x6C\x65\x74\x65\x44\x61\x74\x61", "\x69\x74\x65\x6D\x73", "\x73\x65\x6C\x65\x63\x74\x65\x64", "\x73\x6C\x6D\x53\x59\x53\x5F\x55\x73\x65\x72\x47\x72\x6F\x75\x70", "\x73\x6C\x6D\x53\x59\x53\x5F\x55\x73\x65\x72\x43\x6F\x6D\x70\x61\x6E\x79", "\x64\x65\x6C\x65\x74\x65", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x54\x65\x78\x74\x56\x61\x6C", "\x31", "\x6D\x61\x74\x63\x68", "\x50\x61\x73\x73\x77\x6F\x72\x64", "\x66\x6F\x63\x75\x73", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x63\x68\x65\x63\x6B\x52\x65\x71\x75\x69\x72\x65\x50\x61\x73\x73", "\x66\x6F\x72\x6D", "\x45\x6D\x61\x69\x6C", "\x63\x68\x65\x63\x6B\x45\x6D\x61\x69\x6C", "\x75\x74\x69\x6C", "\x73\x74\x6F\x72\x65", "\x73\x61\x76\x65", "\x70\x72\x69\x6E\x74", "\x63\x6C\x6F\x73\x65", "\x70\x61\x72\x65\x6E\x74\x41\x75\x74\x6F\x4C\x6F\x61\x64\x43\x6F\x6E\x74\x72\x6F\x6C", "\x67\x65\x74\x48\x65\x69\x67\x68\x74", "\x73\x65\x74\x48\x65\x69\x67\x68\x74", "\x68\x65\x69\x67\x68\x74", "\x67\x65\x74\x56\x69\x65\x77\x53\x69\x7A\x65", "\x67\x65\x74\x42\x6F\x64\x79", "\x69\x73\x46\x69\x72\x73\x74\x4C\x6F\x61\x64", "\x76\x61\x6C\x75\x65\x4D\x6F\x64\x65\x6C\x73", "\x6C\x6F\x61\x64\x69\x6E\x67", "\x63\x6F\x6C\x6C\x61\x70\x73\x65", "\x63\x68\x65\x63\x6B\x65\x64", "\x63\x68\x6B\x41\x75\x74\x6F", "\x73\x65\x74\x44\x69\x73\x61\x62\x6C\x65\x64", "\x75\x70\x64\x61\x74\x65\x52\x65\x63\x6F\x72\x64", "\x67\x65\x74\x46\x6F\x72\x6D", "\x53\x41\x30\x30\x33\x30\x30", "\x63\x68\x61\x6E\x67\x65\x44\x61\x74\x61", "\x69\x73\x4E\x65\x77", "\x73\x65\x74\x52\x65\x61\x64\x4F\x6E\x6C\x79", "\x6C\x6F\x61\x64\x69\x6E\x67\x64\x61\x74\x61", "\x66\x6F\x72\x63\x65\x53\x65\x6C\x65\x63\x74\x69\x6F\x6E", "\x43\x70\x6E\x79\x49\x44", "\x55\x73\x65\x72\x54\x79\x70\x65\x73", "\x43\x68\x61\x6E\x6E\x65\x6C", "\x4D\x61\x6E\x61\x67\x65\x72", "\x44\x65\x70\x61\x72\x74\x6D\x65\x6E\x74", "\x48\x6F\x6D\x65\x53\x63\x72\x65\x65\x6E\x4E\x62\x72", "\x6C\x65\x6E\x67\x74\x68", "\x64\x61\x74\x61", "\x55\x73\x65\x72\x49\x44", "\x69\x6E\x73\x65\x72\x74\x42\x6C\x61\x6E\x6B", "\x67\x65\x74\x41\x74", "\x73\x65\x74\x52\x65\x71\x75\x69\x72\x65", "\x63\x6F\x6D\x6D\x69\x74\x43\x68\x61\x6E\x67\x65\x73", "\x6C\x6F\x61\x64\x52\x65\x63\x6F\x72\x64", "\x49\x6D\x61\x67\x65\x73", "\x69\x6D\x67\x49\x6D\x61\x67\x65\x73", "\x73\x65\x74\x49\x6D\x61\x67\x65\x55\x72\x6C", "\x70\x6E\x6C\x50\x4F\x5F\x50\x72\x69\x63\x65\x43\x70\x6E\x79", "\x63\x6C\x6F\x73\x65\x54\x61\x62", "\x74\x61\x62\x44\x65\x74\x61\x69\x6C", "\x61\x64\x64\x54\x61\x62", "\x63\x68\x65\x63\x6B\x42\x65\x66\x6F\x72\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x49\x6E\x73\x65\x72\x74\x4B\x65\x79", "\x66\x69\x65\x6C\x64", "\x66\x69\x6E\x64\x52\x65\x63\x6F\x72\x64", "\x44\x65\x73\x63\x72", "\x73\x65\x74", "\x72\x65\x63\x6F\x72\x64", "\x63\x68\x65\x63\x6B\x56\x61\x6C\x69\x64\x61\x74\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x52\x65\x6A\x65\x63\x74", "\x4C\x69\x73\x74\x43\x70\x6E\x79", "\x69\x73\x56\x61\x6C\x69\x64", "\x57\x61\x69\x74\x4D\x73\x67", "\x53\x41\x30\x30\x33\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x52\x65\x63\x6F\x72\x64", "\x67\x65\x74\x44\x61\x74\x61", "\x67\x65\x74\x56\x61\x6C\x75\x65", "\x72\x65\x73\x75\x6C\x74", "\x70\x72\x6F\x63\x65\x73\x73", "\x72\x65\x73\x65\x74", "\x66\x75\x70\x49\x6D\x61\x67\x65\x73", "\x68\x64\x6E\x49\x6D\x61\x67\x65\x73", "\x73\x75\x62\x6D\x69\x74", "\x44\x65\x6C\x65\x74\x69\x6E\x67\x44\x61\x74\x61", "\x53\x41\x30\x30\x33\x30\x30\x2F\x44\x65\x6C\x65\x74\x65\x41\x6C\x6C", "\x64\x65\x6C\x65\x74\x65\x53\x65\x6C\x65\x63\x74\x65\x64", "\x53\x41\x30\x30\x33\x30\x30\x2F\x49\x6D\x61\x67\x65\x54\x6F\x42\x69\x6E", "\x50\x4F\x53\x54", "\x61\x70\x70\x6C\x69\x63\x61\x74\x69\x6F\x6E\x2F\x6A\x73\x6F\x6E", "\x73\x74\x72\x69\x6E\x67\x69\x66\x79", "\x72\x65\x73\x70\x6F\x6E\x73\x65\x54\x65\x78\x74", "\x64\x65\x63\x6F\x64\x65", "\x69\x6D\x67\x53\x72\x63", "\x72\x65\x71\x75\x65\x73\x74", "\x41\x6A\x61\x78", "\x66\x69\x6C\x65\x73", "\x64\x6F\x6D", "\x66\x69\x6C\x65\x49\x6E\x70\x75\x74\x45\x6C", "\x6F\x6E\x6C\x6F\x61\x64", "\x74\x61\x72\x67\x65\x74", "\x72\x65\x61\x64\x41\x73\x44\x61\x74\x61\x55\x52\x4C", "\x74\x6F\x4C\x6F\x77\x65\x72\x43\x61\x73\x65", "\x70\x6F\x70", "\x2E", "\x73\x70\x6C\x69\x74", "\x6A\x70\x67", "\x70\x6E\x67", "\x67\x69\x66"]; var keys = [_0x8d0b[0]]; var fieldsCheckRequireUserGroup = [_0x8d0b[0]]; var fieldsLangCheckRequireUserGroup = [_0x8d0b[0]]; var keys1 = [_0x8d0b[0]]; var fieldsCheckRequireUserCompany = [_0x8d0b[0]]; var fieldsLangCheckRequireUserCompany = [_0x8d0b[0]]; var _focusNo = 0; var loadSourceCombo = function () { HQ[_0x8d0b[3]][_0x8d0b[4]](true, HQ[_0x8d0b[3]][_0x8d0b[2]](_0x8d0b[1])); App[_0x8d0b[9]][_0x8d0b[8]]()[_0x8d0b[7]](function () { App[_0x8d0b[6]][_0x8d0b[5]]() }); }; var loadComboGrid = function () { HQ[_0x8d0b[3]][_0x8d0b[4]](true, HQ[_0x8d0b[3]][_0x8d0b[2]](_0x8d0b[1])); App[_0x8d0b[12]][_0x8d0b[8]]()[_0x8d0b[7]](function () { App[_0x8d0b[11]][_0x8d0b[8]]()[_0x8d0b[7]](function () { App[_0x8d0b[10]][_0x8d0b[5]](); HQ[_0x8d0b[3]][_0x8d0b[4]](false, HQ[_0x8d0b[3]][_0x8d0b[2]](_0x8d0b[1])); }) }); }; var pnl_render = function (_0xc29fxb) { _0xc29fxb[_0x8d0b[18]]()[_0x8d0b[17]](_0x8d0b[13], function () { if (_0xc29fxb[_0x8d0b[14]] == _0x8d0b[15]) { _focusNo = 1 } else { if (_0xc29fxb[_0x8d0b[14]] == _0x8d0b[16]) { _focusNo = 2 } else { _focusNo = 0 } } }) }; var menuClick = function (_0xc29fxd) { switch (_0xc29fxd) { case _0x8d0b[20]: if (_focusNo == 0) { HQ[_0x8d0b[21]][_0x8d0b[20]](App[_0x8d0b[9]], HQ[_0x8d0b[19]]) } else { if (_focusNo == 1) { HQ[_0x8d0b[23]][_0x8d0b[20]](App[_0x8d0b[22]]) } else { if (_focusNo == 2) { HQ[_0x8d0b[23]][_0x8d0b[20]](App[_0x8d0b[24]]) } } }; break;; case _0x8d0b[25]: if (_focusNo == 0) { HQ[_0x8d0b[21]][_0x8d0b[25]](App[_0x8d0b[9]], HQ[_0x8d0b[19]]) } else { if (_focusNo == 1) { HQ[_0x8d0b[23]][_0x8d0b[25]](App[_0x8d0b[22]]) } else { if (_focusNo == 2) { HQ[_0x8d0b[23]][_0x8d0b[25]](App[_0x8d0b[24]]) } } }; break;; case _0x8d0b[26]: if (_focusNo == 0) { HQ[_0x8d0b[21]][_0x8d0b[26]](App[_0x8d0b[9]], HQ[_0x8d0b[19]]) } else { if (_focusNo == 1) { HQ[_0x8d0b[23]][_0x8d0b[26]](App[_0x8d0b[22]]) } else { if (_focusNo == 2) { HQ[_0x8d0b[23]][_0x8d0b[26]](App[_0x8d0b[24]]) } } }; break;; case _0x8d0b[27]: if (_focusNo == 0) { HQ[_0x8d0b[21]][_0x8d0b[27]](App[_0x8d0b[9]], HQ[_0x8d0b[19]]) } else { if (_focusNo == 1) { HQ[_0x8d0b[23]][_0x8d0b[27]](App[_0x8d0b[22]]) } else { if (_focusNo == 2) { HQ[_0x8d0b[23]][_0x8d0b[27]](App[_0x8d0b[24]]) } } }; break;; case _0x8d0b[29]: if (HQ[_0x8d0b[19]]) { HQ[_0x8d0b[31]][_0x8d0b[30]](20150303, _0x8d0b[28], _0x8d0b[29]) } else { refresh(_0x8d0b[32]) }; break;; case _0x8d0b[37]: if (_focusNo == 0) { App[_0x8d0b[9]][_0x8d0b[33]](_0x8d0b[28]); App[_0x8d0b[10]][_0x8d0b[5]](); App[_0x8d0b[34]][_0x8d0b[5]](); } else { if (_focusNo == 1) { if (HQ[_0x8d0b[35]]) { HQ[_0x8d0b[23]][_0x8d0b[36]](App[_0x8d0b[22]]) } } else { if (_focusNo == 2) { if (HQ[_0x8d0b[35]]) { HQ[_0x8d0b[23]][_0x8d0b[36]](App[_0x8d0b[24]]) } } } }; break;; case _0x8d0b[45]: if (_focusNo == 0) { if (App[_0x8d0b[9]][_0x8d0b[38]]) { if (HQ[_0x8d0b[39]]) { HQ[_0x8d0b[31]][_0x8d0b[30]](11, _0x8d0b[28], _0x8d0b[40]) } } else { menuClick(_0x8d0b[37]) } } else { if (_focusNo == 1) { if (App[_0x8d0b[43]][_0x8d0b[42]][_0x8d0b[41]][0] != undefined) { if (HQ[_0x8d0b[39]]) { HQ[_0x8d0b[31]][_0x8d0b[30]](11, _0x8d0b[28], _0x8d0b[40]) } } } else { if (_focusNo == 2) { if (App[_0x8d0b[44]][_0x8d0b[42]][_0x8d0b[41]][0] != undefined) { if (HQ[_0x8d0b[39]]) { HQ[_0x8d0b[31]][_0x8d0b[30]](11, _0x8d0b[28], _0x8d0b[40]) } } } } }; break;; case _0x8d0b[59]: if (HQ[_0x8d0b[46]] || HQ[_0x8d0b[35]] || HQ[_0x8d0b[39]]) { if (HQ[_0x8d0b[47]] == _0x8d0b[48]) { var _0xc29fxe = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/; if (!App[_0x8d0b[50]][_0x8d0b[38]][_0x8d0b[49]](_0xc29fxe)) { HQ[_0x8d0b[31]][_0x8d0b[30]](998, _0x8d0b[28], null); App[_0x8d0b[50]][_0x8d0b[51]](); break; }; }; if (HQ[_0x8d0b[54]][_0x8d0b[53]](App[_0x8d0b[52]]) && HQ[_0x8d0b[57]][_0x8d0b[56]](App[_0x8d0b[55]][_0x8d0b[38]]) && HQ[_0x8d0b[58]][_0x8d0b[53]](App[_0x8d0b[10]], keys, fieldsCheckRequireUserGroup, fieldsLangCheckRequireUserGroup) && HQ[_0x8d0b[58]][_0x8d0b[53]](App[_0x8d0b[34]], keys, fieldsCheckRequireUserCompany, fieldsLangCheckRequireUserCompany)) { save() }; }; break;; case _0x8d0b[60]: break;; case _0x8d0b[61]: HQ[_0x8d0b[3]][_0x8d0b[61]](this); break;; } }; var focusChecking = function (_0xc29fx10) { if (App[invalidField]) { App[invalidField][_0x8d0b[51]]() } }; var tabDetail_AfterRender = function (_0xc29fx12) { if (this[_0x8d0b[62]] != null) { _0xc29fx12[_0x8d0b[64]](this[_0x8d0b[62]][_0x8d0b[63]]() - 100) } else { _0xc29fx12[_0x8d0b[64]](Ext[_0x8d0b[67]]()[_0x8d0b[66]]()[_0x8d0b[65]] - 100) } }; var cboUserID_Change = function (_0xc29fx14, _0xc29fx15) { HQ[_0x8d0b[68]] = true; if (_0xc29fx14[_0x8d0b[69]] != null) { App[_0x8d0b[6]][_0x8d0b[5]](); chkAutoChange(); }; }; var cboUserID_Select = function (_0xc29fx14, _0xc29fx15) { if (_0xc29fx14[_0x8d0b[69]] != null && !App[_0x8d0b[6]][_0x8d0b[70]]) { App[_0x8d0b[6]][_0x8d0b[5]]() } }; var cboUserID_Expand = function (_0xc29fx14, _0xc29fx15) { if (HQ[_0x8d0b[19]]) { App[_0x8d0b[9]][_0x8d0b[71]]() } }; var cboUserID_TriggerClick = function (_0xc29fx14, _0xc29fx15) { if (HQ[_0x8d0b[19]]) { HQ[_0x8d0b[31]][_0x8d0b[30]](150, _0x8d0b[28], _0x8d0b[28]) } else { menuClick(_0x8d0b[37]) } }; function chkAutoChange() { if (App[_0x8d0b[73]][_0x8d0b[72]]) { App[_0x8d0b[9]][_0x8d0b[33]](_0x8d0b[28]); App[_0x8d0b[9]][_0x8d0b[74]](true); } else { App[_0x8d0b[9]][_0x8d0b[74]](false) } } var firstLoad = function () { HQ[_0x8d0b[68]] = true; loadSourceCombo(); }; var frmChange = function () { App[_0x8d0b[52]][_0x8d0b[76]]()[_0x8d0b[75]](); HQ[_0x8d0b[19]] = (HQ[_0x8d0b[58]][_0x8d0b[19]](App[_0x8d0b[6]]) == false ? HQ[_0x8d0b[58]][_0x8d0b[19]](App[_0x8d0b[10]]) : true) || (HQ[_0x8d0b[58]][_0x8d0b[19]](App[_0x8d0b[6]]) == false ? HQ[_0x8d0b[58]][_0x8d0b[19]](App[_0x8d0b[34]]) : true); HQ[_0x8d0b[3]][_0x8d0b[78]](HQ[_0x8d0b[19]], _0x8d0b[77]); if (App[_0x8d0b[9]][_0x8d0b[69]] == null || HQ[_0x8d0b[79]] == true) { App[_0x8d0b[9]][_0x8d0b[80]](false) } else { App[_0x8d0b[9]][_0x8d0b[80]](HQ[_0x8d0b[19]]) }; }; var stoBeforeLoad = function (_0xc29fx1d) { HQ[_0x8d0b[3]][_0x8d0b[4]](true, HQ[_0x8d0b[3]][_0x8d0b[2]](_0x8d0b[81])) }; var stoLoad = function (_0xc29fx1d) { HQ[_0x8d0b[79]] = false; HQ[_0x8d0b[3]][_0x8d0b[4]](false); App[_0x8d0b[9]][_0x8d0b[82]] = true; App[_0x8d0b[83]][_0x8d0b[82]] = false; App[_0x8d0b[84]][_0x8d0b[82]] = false; App[_0x8d0b[85]][_0x8d0b[82]] = false; App[_0x8d0b[86]][_0x8d0b[82]] = false; App[_0x8d0b[87]][_0x8d0b[82]] = false; App[_0x8d0b[88]][_0x8d0b[82]] = false; if (_0xc29fx1d[_0x8d0b[90]][_0x8d0b[89]] == 0) { HQ[_0x8d0b[58]][_0x8d0b[92]](_0xc29fx1d, _0x8d0b[91]); _0xc29fx1f = _0xc29fx1d[_0x8d0b[93]](0); HQ[_0x8d0b[79]] = true; App[_0x8d0b[9]][_0x8d0b[82]] = false; HQ[_0x8d0b[3]][_0x8d0b[94]](App[_0x8d0b[52]]); App[_0x8d0b[9]][_0x8d0b[51]](true); _0xc29fx1d[_0x8d0b[95]](); }; var _0xc29fx1f = _0xc29fx1d[_0x8d0b[93]](0); App[_0x8d0b[52]][_0x8d0b[76]]()[_0x8d0b[96]](_0xc29fx1f); loadComboGrid(); if (_0xc29fx1f[_0x8d0b[90]][_0x8d0b[97]]) { displayImage(App[_0x8d0b[98]], _0xc29fx1f[_0x8d0b[90]].Images) } else { App[_0x8d0b[98]][_0x8d0b[99]](_0x8d0b[28]) }; }; var chkPublic_Change = function (_0xc29fx21, _0xc29fx22) { if (_0xc29fx22) { App[_0x8d0b[102]][_0x8d0b[101]](App[_0x8d0b[100]]) } else { App[_0x8d0b[102]][_0x8d0b[103]](App[_0x8d0b[100]]) } }; var cboInvtID_Change = function (_0xc29fx10, _0xc29fx24, _0xc29fx25) { }; var stoSYS_UserGroup_Load = function (_0xc29fx1d) { if (HQ[_0x8d0b[68]]) { if (HQ[_0x8d0b[35]]) { HQ[_0x8d0b[58]][_0x8d0b[92]](_0xc29fx1d, keys) } }; App[_0x8d0b[34]][_0x8d0b[5]](); frmChange(); HQ[_0x8d0b[3]][_0x8d0b[4]](false); }; var grdSYS_UserGroup_BeforeEdit = function (_0xc29fx28, _0xc29fx29) { if (!HQ[_0x8d0b[23]][_0x8d0b[104]](_0xc29fx29, keys)) { return false } }; var grdSYS_UserGroup_Edit = function (_0xc29fx10, _0xc29fx29) { HQ[_0x8d0b[23]][_0x8d0b[105]](App[_0x8d0b[22]], _0xc29fx29, keys); frmChange(); if (_0xc29fx29[_0x8d0b[106]] == _0x8d0b[0]) { var _0xc29fx2b = App[_0x8d0b[12]][_0x8d0b[58]][_0x8d0b[107]](_0xc29fx29[_0x8d0b[106]], _0xc29fx29[_0x8d0b[38]]); if (_0xc29fx2b) { _0xc29fx29[_0x8d0b[110]][_0x8d0b[109]](_0x8d0b[108], _0xc29fx2b[_0x8d0b[90]].Descr) } else { _0xc29fx29[_0x8d0b[110]][_0x8d0b[109]](_0x8d0b[108], _0x8d0b[28]) }; }; }; var grdSYS_UserGroup_ValidateEdit = function (_0xc29fx10, _0xc29fx29) { return HQ[_0x8d0b[23]][_0x8d0b[111]](App[_0x8d0b[22]], _0xc29fx29, keys) }; var grdSYS_UserGroup_Reject = function (_0xc29fx1f) { HQ[_0x8d0b[23]][_0x8d0b[112]](_0xc29fx1f, App[_0x8d0b[22]]); frmChange(); }; var stoSYS_UserCompany_Load = function (_0xc29fx1d) { if (HQ[_0x8d0b[68]]) { if (HQ[_0x8d0b[35]]) { HQ[_0x8d0b[58]][_0x8d0b[92]](_0xc29fx1d, keys1) }; HQ[_0x8d0b[68]] = false; }; frmChange(); HQ[_0x8d0b[3]][_0x8d0b[4]](false); }; var grdSYS_UserCompany_BeforeEdit = function (_0xc29fx28, _0xc29fx29) { HQ[_0x8d0b[23]][_0x8d0b[105]](App[_0x8d0b[24]], _0xc29fx29, keys1) }; var grdSYS_UserCompany_Edit = function (_0xc29fx10, _0xc29fx29) { HQ[_0x8d0b[23]][_0x8d0b[105]](App[_0x8d0b[24]], _0xc29fx29, keys1); frmChange(); if (_0xc29fx29[_0x8d0b[106]] == _0x8d0b[0]) { var _0xc29fx2b = App[_0x8d0b[11]][_0x8d0b[58]][_0x8d0b[107]](_0xc29fx29[_0x8d0b[106]], _0xc29fx29[_0x8d0b[38]]); if (_0xc29fx2b) { _0xc29fx29[_0x8d0b[110]][_0x8d0b[109]](_0x8d0b[113], _0xc29fx2b[_0x8d0b[90]].ListCpny); _0xc29fx29[_0x8d0b[110]][_0x8d0b[109]](_0x8d0b[108], _0xc29fx2b[_0x8d0b[90]].Descr); } else { _0xc29fx29[_0x8d0b[110]][_0x8d0b[109]](_0x8d0b[113], _0x8d0b[28]); _0xc29fx29[_0x8d0b[110]][_0x8d0b[109]](_0x8d0b[108], _0x8d0b[28]); }; }; }; var grdSYS_UserCompany_ValidateEdit = function (_0xc29fx10, _0xc29fx29) { return HQ[_0x8d0b[23]][_0x8d0b[111]](App[_0x8d0b[24]], _0xc29fx29, keys1) }; var grdSYS_UserCompany_Reject = function (_0xc29fx1f) { HQ[_0x8d0b[23]][_0x8d0b[112]](_0xc29fx1f, App[_0x8d0b[24]]); frmChange(); }; var save = function () { if (App[_0x8d0b[52]][_0x8d0b[114]]()) { App[_0x8d0b[52]][_0x8d0b[75]](); App[_0x8d0b[52]][_0x8d0b[125]]({ waitMsg: HQ[_0x8d0b[3]][_0x8d0b[2]](_0x8d0b[115]), url: _0x8d0b[116], params: { lstUser: HQ[_0x8d0b[58]][_0x8d0b[118]](App[_0x8d0b[52]][_0x8d0b[117]]()[_0x8d0b[58]]), lstSYS_UserCompany: HQ[_0x8d0b[58]][_0x8d0b[118]](App[_0x8d0b[34]]), lstSYS_UserGroup: HQ[_0x8d0b[58]][_0x8d0b[118]](App[_0x8d0b[10]]), Auto: App[_0x8d0b[73]][_0x8d0b[119]]() }, success: function (_0xc29fx34, _0xc29fx35) { HQ[_0x8d0b[31]][_0x8d0b[30]](201405071); App[_0x8d0b[73]][_0x8d0b[33]](false); var _0xc29fx36 = _0xc29fx35[_0x8d0b[120]][_0x8d0b[91]]; App[_0x8d0b[9]][_0x8d0b[8]]()[_0x8d0b[7]](function () { App[_0x8d0b[9]][_0x8d0b[33]](_0xc29fx36); App[_0x8d0b[6]][_0x8d0b[5]](); }); }, failure: function (_0xc29fx34, _0xc29fx35) { HQ[_0x8d0b[31]][_0x8d0b[121]](_0xc29fx34, _0xc29fx35, true); App[_0x8d0b[123]][_0x8d0b[122]](); App[_0x8d0b[98]][_0x8d0b[99]](_0x8d0b[28]); App[_0x8d0b[124]][_0x8d0b[33]](_0x8d0b[28]); } }); } }; var deleteData = function (_0xc29fx10) { if (_0xc29fx10 == _0x8d0b[32]) { if (_focusNo == 0) { if (App[_0x8d0b[52]][_0x8d0b[114]]()) { App[_0x8d0b[52]][_0x8d0b[75]](); App[_0x8d0b[52]][_0x8d0b[125]]({ waitMsg: HQ[_0x8d0b[3]][_0x8d0b[2]](_0x8d0b[126]), url: _0x8d0b[127], timeout: 7200, success: function (_0xc29fx34, _0xc29fx35) { App[_0x8d0b[9]][_0x8d0b[8]]()[_0x8d0b[7]](); menuClick(_0x8d0b[37]); }, failure: function (_0xc29fx34, _0xc29fx35) { HQ[_0x8d0b[31]][_0x8d0b[121]](_0xc29fx34, _0xc29fx35, true) } }); } } else { if (_focusNo == 1) { App[_0x8d0b[22]][_0x8d0b[128]]() } else { if (_focusNo == 2) { App[_0x8d0b[24]][_0x8d0b[128]]() } } } } }; var displayImage = function (_0xc29fx39, _0xc29fx3a) { Ext[_0x8d0b[137]][_0x8d0b[136]]({ url: _0x8d0b[129], method: _0x8d0b[130], headers: { "\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65": _0x8d0b[131] }, params: JSON[_0x8d0b[132]]({ fileName: _0xc29fx3a }), success: function (_0xc29fx3b) { var _0xc29fx3c = Ext[_0x8d0b[134]](_0xc29fx3b[_0x8d0b[133]]); if (_0xc29fx3c[_0x8d0b[135]]) { _0xc29fx39[_0x8d0b[99]](_0xc29fx3c[_0x8d0b[135]]) } else { _0xc29fx39[_0x8d0b[99]](_0x8d0b[28]) }; }, failure: function (_0xc29fx3d, _0xc29fx35) { HQ[_0x8d0b[31]][_0x8d0b[121]](_0xc29fx3d, _0xc29fx35, true) } }) }; var readImage = function (_0xc29fx3f, _0xc29fx39) { var _0xc29fx40 = _0xc29fx3f[_0x8d0b[140]][_0x8d0b[139]][_0x8d0b[138]]; if (_0xc29fx40 && _0xc29fx40[0]) { var _0xc29fx41 = new FileReader(); _0xc29fx41[_0x8d0b[141]] = function (_0xc29fx29) { _0xc29fx39[_0x8d0b[99]](_0xc29fx29[_0x8d0b[142]][_0x8d0b[120]]) }; _0xc29fx41[_0x8d0b[143]](_0xc29fx40[0]); }; }; var fupImages_change = function (_0xc29fx3f, _0xc29fx24, _0xc29fx25, _0xc29fx43) { if (_0xc29fx3f[_0x8d0b[38]]) { var _0xc29fx44 = _0xc29fx3f[_0x8d0b[38]][_0x8d0b[147]](_0x8d0b[146])[_0x8d0b[145]]()[_0x8d0b[144]](); if (_0xc29fx44 == _0x8d0b[148] || _0xc29fx44 == _0x8d0b[149] || _0xc29fx44 == _0x8d0b[150]) { App[_0x8d0b[124]][_0x8d0b[33]](_0xc29fx3f[_0x8d0b[38]]); readImage(_0xc29fx3f, App[_0x8d0b[98]]); } else { HQ[_0x8d0b[31]][_0x8d0b[30]](148, _0x8d0b[28], _0x8d0b[28]) }; } }; var btnClearImage_click = function (_0xc29fx46, _0xc29fx43) { App[_0x8d0b[123]][_0x8d0b[122]](); App[_0x8d0b[98]][_0x8d0b[99]](_0x8d0b[28]); App[_0x8d0b[124]][_0x8d0b[33]](_0x8d0b[28]); }; function refresh(_0xc29fx10) { if (_0xc29fx10 == _0x8d0b[32]) { HQ[_0x8d0b[19]] = false; HQ[_0x8d0b[68]] = true; App[_0x8d0b[6]][_0x8d0b[5]](); } }
+
+var keys = ['GroupID'];
+var fieldsCheckRequireUserGroup = ["GroupID"];
+var fieldsLangCheckRequireUserGroup = ["GroupID"];
+
+
+var keys1 = ['GroupID'];
+var fieldsCheckRequireUserCompany = ["GroupID"];
+var fieldsLangCheckRequireUserCompany = ["GroupID"];
+
+var _focusNo = 0;
+
+// Declare
+var _beginStatus = "H";
+var _Source = 0;
+var _maxSource = 9;
+var _isLoadMaster = false;
+
+
+////////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoUser.reload();
+        HQ.common.showBusy(false);
+        //App.cboBranchID.setValue(HQ.cpnyID);
+    }
+};
+
+////////////////////////////////////////////////////////////////////////
+//// First Load ////////////////////////////////////////////////////////
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // Kiem tra quyen Insert Update Delete de disable button tren top bar
+    HQ.isFirstLoad = true;
+    //HQ.focus = "header";
+    App.frmMain.isValid(); // Require cac field yeu cau tren from
+
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+
+    App.cboUserID.getStore().addListener('load', checkLoad);
+    App.CpnyID.getStore().addListener('load', checkLoad);
+    App.UserTypes.getStore().addListener('load', checkLoad);
+    App.Channel.getStore().addListener('load', checkLoad);
+    App.Manager.getStore().addListener('load', checkLoad);
+    App.Department.getStore().addListener('load', checkLoad);
+    App.HomeScreenNbr.getStore().addListener('load', checkLoad);
+    App.cboGroupIDGroup.getStore().addListener('load', checkLoad);
+    App.cboGroupIDCompany.getStore().addListener('load', checkLoad);
+};
+
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+// Load and show binding data to the form
+// Command of the topbar on screen
+var menuClick = function (command) {
+    if (App.stoUser.isLoading()) return;
+    switch (command) {
+        case "first":
+            if (_focusNo == 0) {
+                HQ.combo.first(App.cboUserID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.first(App.grdSYS_UserGroup);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.first(App.grdSYS_UserCompany);
+            }
+            break;
+        case "prev":
+            if (_focusNo == 0) {
+                HQ.combo.prev(App.cboUserID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.prev(App.grdSYS_UserGroup);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.prev(App.grdSYS_UserCompany);
+            }
+            break;
+        case "next":
+            if (_focusNo == 0) {
+                HQ.combo.next(App.cboUserID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.next(App.grdSYS_UserGroup);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.next(App.grdSYS_UserCompany);
+            }
+            break;
+        case "last":
+            if (_focusNo == 0) {
+                HQ.combo.last(App.cboUserID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.last(App.grdSYS_UserGroup);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.last(App.grdSYS_UserCompany);
+            }
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh("yes");
+            }
+            break;
+        case "new":
+            if (_focusNo == 0) {
+                App.cboUserID.setValue("");
+                App.stoSYS_UserGroup.reload();
+                App.stoSYS_UserCompany.reload();
+            }
+            else if (_focusNo == 1) {
+                if (HQ.isInsert) {
+                    HQ.grid.insert(App.grdSYS_UserGroup);
+                }
+            }
+            else if (_focusNo == 2) {
+                if (HQ.isInsert) {
+                    HQ.grid.insert(App.grdSYS_UserCompany);
+                }
+            }
+            break;
+        case "delete":
+            if (_focusNo == 0) {
+                if (App.cboUserID.value) {
+                    if (HQ.isDelete) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
+                } else {
+                    menuClick('new');
+                }
+            }
+            else if (_focusNo == 1) {
+                if (App.slmSYS_UserGroup.selected.items[0] != undefined) {
+                    if (HQ.isDelete) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
+                }
+            }
+            else if (_focusNo == 2) {
+                if (App.slmSYS_UserCompany.selected.items[0] != undefined) {
+                    if (HQ.isDelete) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.TextVal == '1') {
+                    var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+                    if (!App.Password.value.match(decimal)) {
+                        HQ.message.show(998, '', null);
+                        App.Password.focus();
+                        break;
+                    }
+                }
+                if (HQ.form.checkRequirePass(App.frmMain) && HQ.util.checkEmail(App.Email.value) && HQ.store.checkRequirePass(App.stoSYS_UserGroup, keys, fieldsCheckRequireUserGroup, fieldsLangCheckRequireUserGroup)
+                        && HQ.store.checkRequirePass(App.stoSYS_UserCompany, keys, fieldsCheckRequireUserCompany, fieldsLangCheckRequireUserCompany)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            //HQ.common.close(this);
+            break;
+    }
+};
+
+var frmChange = function () {
+
+    App.frmMain.getForm().updateRecord();
+    //HQ.isChange = (HQ.store.isChange(App.stoUser) == false ? HQ.store.isChange(App.stoSYS_UserGroup) : true) || (HQ.store.isChange(App.stoUser) == false ? HQ.store.isChange(App.stoSYS_UserCompany) : true);
+    if (!HQ.store.isChange(App.stoUser)) {
+        if (!HQ.store.isChange(App.stoSYS_UserGroup)) {
+            HQ.isChange = HQ.store.isChange(App.stoSYS_UserCompany);
+        }
+    }
+    else {
+        HQ.isChange = true;
+    }
+    HQ.common.changeData(HQ.isChange, 'SA00300');
+    if (App.cboUserID.valueModels == null || HQ.isNew == true)
+        App.cboUserID.setReadOnly(false);
+    else App.cboUserID.setReadOnly(HQ.isChange);
+    
+
+};
+
+var stoLoad = function (sto) {
+    HQ.isNew = false;
+    HQ.common.showBusy(false);
+
+    App.cboUserID.forceSelection = true;
+    App.CpnyID.forceSelection = false;
+    App.UserTypes.forceSelection = false;
+    App.Channel.forceSelection = false;
+    App.Manager.forceSelection = false;
+    App.Department.forceSelection = false;
+    App.HomeScreenNbr.forceSelection = false;
+
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "UserID");
+        record = sto.getAt(0);
+        HQ.isNew = true;//record la new    
+        App.cboUserID.forceSelection = false;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboUserID.focus(true);//focus ma khi tao moi
+        sto.commitChanges();
+    }
+
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+
+    App.stoSYS_UserCompany.reload();
+    App.stoSYS_UserGroup.reload();
+
+    //loadComboGrid();
+    // display image
+    if (record.data.Images) {
+        displayImage(App.imgImages, record.data.Images);
+    }
+    else {
+        App.imgImages.setImageUrl("");
+    }
+
+
+    if (!HQ.isInsert && HQ.isNew) {
+        App.cboBranchID.forceSelection = true;
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+        frmChange();
+    }
+};
+
+//Truoc khi load store se hien Busy
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+
+
+var pnl_render = function (cmd) {
+    cmd.getEl().on('mousedown', function () {
+        if (cmd.id == 'pnlUserGroup') {
+            _focusNo = 1;
+        }
+        else if (cmd.id == 'pnlUserCompany') {
+            _focusNo = 2;
+        }
+        else {//pnlHeader
+            _focusNo = 0;
+        }
+    });
+};
+//
+
+
+
+var cboUserID_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null) {
+        App.stoUser.reload();
+        //App.stoSYS_UserCompany.reload();
+        //App.stoSYS_UserGroup.reload();
+        //chkAutoChange();
+    }
+};
+
+var cboUserID_Select = function (sender, value) {
+    if (sender.valueModels != null && !App.stoUser.loading) {
+        App.stoUser.reload();
+    }
+};
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboUserID_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboUserID.collapse();
+    }
+};
+
+//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
+var cboUserID_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
+    }
+
+};
+
+function chkAutoChange() {
+    if (App.chkAuto.checked) {
+        App.cboUserID.setValue('');
+        App.cboUserID.setDisabled(true);
+    }
+    else {
+        App.cboUserID.setDisabled(false);
+        //App.cboUserID.getStore().reload();
+    }
+};
+
+var chkPublic_Change = function (checkbox, checked) {
+    if (checked) {
+        App.tabDetail.closeTab(App.pnlPO_PriceCpny);
+    }
+    else {
+        App.tabDetail.addTab(App.pnlPO_PriceCpny);
+    }
+};
+
+
+
+/////////////////////////////////
+//Image
+var btnClearImage_click = function (btn, eOpts) {
+    App.fupImages.reset();
+    App.imgImages.setImageUrl("");
+    App.hdnImages.setValue("");
+};
+
+var fupImages_change = function (fup, newValue, oldValue, eOpts) {
+    if (fup.value) {
+        var ext = fup.value.split(".").pop().toLowerCase();
+        if (ext == "jpg" || ext == "png" || ext == "gif") {
+            App.hdnImages.setValue(fup.value);
+            readImage(fup, App.imgImages);
+        }
+        else {
+            HQ.message.show(148, '', '');
+        }
+    }
+};
+
+
+///////////////////////////////////////////
+//Grid
+
+//grd SYS_UserGroup
+var stoSYS_UserGroup_Load = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        //HQ.isFirstLoad = false;
+    }
+    App.stoSYS_UserCompany.reload();
+    frmChange();
+    HQ.common.showBusy(false);
+};
+
+var grdSYS_UserGroup_BeforeEdit = function (editor, e) {
+    if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
+};
+
+var grdSYS_UserGroup_Edit = function (item, e) {
+    //Kiem tra cac key da duoc nhap se insert them dong moi
+    HQ.grid.checkInsertKey(App.grdSYS_UserGroup, e, keys);
+    frmChange();
+    if (e.field == "GroupID") {
+        var selectedRecord = App.cboGroupIDGroup.store.findRecord(e.field, e.value);
+        if (selectedRecord) {
+            e.record.set("Descr", selectedRecord.data.Descr);
+        }
+        else {
+            e.record.set("Descr", "");
+        }
+    }
+
+};
+
+var grdSYS_UserGroup_ValidateEdit = function (item, e) {
+    //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
+    return HQ.grid.checkValidateEdit(App.grdSYS_UserGroup, e, keys);
+};
+
+var grdSYS_UserGroup_Reject = function (record) {
+    //reject dong thay doi du lieu ve ban dau
+    HQ.grid.checkReject(record, App.grdSYS_UserGroup);
+    frmChange();
+};
+
+
+//grd SYS_UserCompany
+var stoSYS_UserCompany_Load = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys1);
+        }
+        HQ.isFirstLoad = false;
+    }
+    frmChange();
+    HQ.common.showBusy(false);
+};
+
+var grdSYS_UserCompany_BeforeEdit = function (editor, e) {
+    //Kiem tra cac key da duoc nhap se insert them dong moi
+    HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys1);
+
+};
+
+var grdSYS_UserCompany_Edit = function (item, e) {
+    //Kiem tra cac key da duoc nhap se insert them dong moi
+    HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys1);
+    frmChange();
+    if (e.field == "GroupID") {
+        var selectedRecord = App.cboGroupIDCompany.store.findRecord(e.field, e.value);
+        if (selectedRecord) {
+            e.record.set("ListCpny", selectedRecord.data.ListCpny);
+            e.record.set("Descr", selectedRecord.data.Descr);
+        }
+        else {
+            e.record.set("ListCpny", "");
+            e.record.set("Descr", "");
+        }
+    }
+
+};
+
+var grdSYS_UserCompany_ValidateEdit = function (item, e) {
+    //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
+    return HQ.grid.checkValidateEdit(App.grdSYS_UserCompany, e, keys1);
+};
+
+var grdSYS_UserCompany_Reject = function (record) {
+    //reject dong thay doi du lieu ve ban dau
+    HQ.grid.checkReject(record, App.grdSYS_UserCompany);
+    frmChange();
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+// Submit the changed data (created, updated) into server side
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.updateRecord();
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'SA00300/Save',
+            params: {
+                lstUser: HQ.store.getData(App.frmMain.getRecord().store),
+                lstSYS_UserCompany: HQ.store.getData(App.stoSYS_UserCompany),
+                lstSYS_UserGroup: HQ.store.getData(App.stoSYS_UserGroup),
+                Auto: App.chkAuto.getValue()
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                App.chkAuto.setValue(false);
+                //refresh("yes");
+                var UserID = data.result.UserID;
+                App.cboUserID.getStore().load(function () {
+                    App.cboUserID.setValue(UserID);
+                    App.stoUser.reload();
+                });
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+                App.fupImages.reset();
+                App.imgImages.setImageUrl("");
+                App.hdnImages.setValue("");
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        if (_focusNo == 0) {
+            if (App.frmMain.isValid()) {
+                App.frmMain.updateRecord();
+                App.frmMain.submit({
+                    waitMsg: HQ.common.getLang("DeletingData"),
+                    url: 'SA00300/DeleteAll',
+                    timeout: 7200,
+                    success: function (msg, data) {
+                        App.cboUserID.getStore().load();
+                        menuClick("new");
+                    },
+                    failure: function (msg, data) {
+                        HQ.message.process(msg, data, true);
+                    }
+                });
+            }
+
+        }
+        else if (_focusNo == 1) {
+            App.grdSYS_UserGroup.deleteSelected();
+        }
+        else if (_focusNo == 2) {
+            App.grdSYS_UserCompany.deleteSelected();
+        }
+    }
+};
+
+///Img
+
+var displayImage = function (imgControl, fileName) {
+    Ext.Ajax.request({
+        url: 'SA00300/ImageToBin',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        params: JSON.stringify({
+            fileName: fileName
+        }),
+        success: function (result) {
+            var jsonData = Ext.decode(result.responseText);
+            if (jsonData.imgSrc) {
+                imgControl.setImageUrl(jsonData.imgSrc);
+            }
+            else {
+                imgControl.setImageUrl("");
+            }
+        },
+        failure: function (errorMsg, data) {
+            HQ.message.process(errorMsg, data, true);
+        }
+    });
+};
+
+var readImage = function (fup, imgControl) {
+    var files = fup.fileInputEl.dom.files;
+    if (files && files[0]) {
+        var FR = new FileReader();
+        FR.onload = function (e) {
+            imgControl.setImageUrl(e.target.result);
+        };
+        FR.readAsDataURL(files[0]);
+    }
+};
+
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+    function refresh(item) {
+        if (item == 'yes') {
+            HQ.isChange = false;
+            HQ.isFirstLoad = true;
+            App.stoUser.reload();
+        }
+    };
+///////////////////////////////////
