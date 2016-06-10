@@ -40,7 +40,7 @@ namespace AR20200.Controllers
                 }
                 else
                 {
-                    _filePath = Server.MapPath("\\Images\\AR20200");
+                    _filePath = Server.MapPath("~\\Images\\AR20200");
                 }
                 return _filePath;
             }
@@ -50,12 +50,11 @@ namespace AR20200.Controllers
         // GET: /AR20200/
         public ActionResult Index()
         {
-            
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -67,7 +66,7 @@ namespace AR20200.Controllers
             return this.Store(slsper);
         }
 
-        public ActionResult GetSlsperCpnyAddr(string branchId, string slsperid) 
+        public ActionResult GetSlsperCpnyAddr(string branchId, string slsperid)
         {
             var slsperCpnyAddrs = _db.AR20200_pgSlsperCpnyAddr(Current.UserName, branchId, slsperid).ToList();
             return this.Store(slsperCpnyAddrs);
@@ -143,22 +142,24 @@ namespace AR20200.Controllers
         }
 
         [ValidateInput(false)]
-        public ActionResult SaveData(FormCollection data, bool isNew, string channel)
+        public ActionResult SaveData(FormCollection data, bool isNew, string channel, string HandleCombo)
         {
             try
             {
-                string slsperID = data["cboSlsperid"];
-                string branchID = data["cboBranchID"];
-
+                string slsperID = data["cboSlsperid"].PassNull();
+                string branchID = data["cboBranchID"].PassNull();
+                string Status = data["cboStatus"].PassNull();
+                string Handle = data["cboHandle"].PassNull();
                 if (!string.IsNullOrWhiteSpace(branchID))
                 {
-                    string handle = data["cboHandle"];
-                    var slsperHandler = new StoreDataHandler(data["lstSalesPerson"]);
-                    var inputSlsper = slsperHandler.ObjectData<AR_Salesperson>()
-                                .FirstOrDefault(p => p.SlsperId == slsperID && p.BranchID == branchID);
+                    //var slsperHandler = new StoreDataHandler(data["lstSalesPerson"]);
+                    //var inputSlsper = slsperHandler.ObjectData<AR_Salesperson>()
+                    //            .FirstOrDefault(p => p.SlsperId == slsperID && p.BranchID == branchID);
 
-                    if (inputSlsper != null)
-                    {
+                    StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSalesPerson"]);
+                    var inputSlsper = dataHandler1.ObjectData<AR_Salesperson>().FirstOrDefault();
+                    //if (inputSlsper != null)
+                    //{
                         #region Slsperson info
                         var slsper = _db.AR_Salesperson.FirstOrDefault(x => x.BranchID == branchID && x.SlsperId == slsperID);
                         if (slsper != null)
@@ -168,49 +169,7 @@ namespace AR20200.Controllers
                                 // update
                                 if (slsper.tstamp.ToHex() == inputSlsper.tstamp.ToHex())
                                 {
-                                    updateSlsper(ref slsper, inputSlsper, false);
-
-                                    if (!string.IsNullOrWhiteSpace(handle) && handle != _noneStatus)
-                                    {
-                                        //// Check pending task
-                                        //var task = _db.HO_PendingTasks.FirstOrDefault(p => p.ObjectID == slsperID
-                                        //            && p.EditScreenNbr == _screenNbr && p.BranchID == branchID);
-
-                                        // Checking right of approval
-                                        var roles = _sys.Users.FirstOrDefault(x => x.UserName.ToLower() == Current.UserName.ToLower()).UserTypes;
-                                        var arrRoles = (!string.IsNullOrEmpty(roles) && roles.Contains(","))
-                                            ? roles.Split(',') : (!string.IsNullOrEmpty(roles) ? new string[] { roles } : new string[] { "" });
-                                        
-                                        var approveHandle = _db.SI_ApprovalFlowHandle
-                                            .FirstOrDefault(p => p.AppFolID == _screenNbr
-                                                                && p.Status == inputSlsper.Status
-                                                                && p.Handle == handle
-                                                                && arrRoles.Contains(p.RoleID));
-
-                                        // If not in pending task but has right of approval, then add pending task
-                                        if (approveHandle != null)
-                                        {
-                                            updatePendingTask(slsper, approveHandle);
-                                            slsper.Status = approveHandle.ToStatus;
-                                        }
-
-                                        // If has right of approval, then send email
-                                        if (approveHandle != null)
-                                        {
-                                            try
-                                            {
-                                                // send email
-                                                Approve.Mail_Approve(_screenNbr, slsperID,
-                                                    approveHandle.RoleID, approveHandle.Status, approveHandle.Handle,
-                                                    Current.LangID.ToString(), Current.UserName, branchID, Current.CpnyID,
-                                                    string.Empty, string.Empty, string.Empty);
-                                            }
-                                            catch
-                                            {
-                                                throw new MessageException(MessageType.Message, "11032015");
-                                            }
-                                        }
-                                    }
+                                    updateSlsper(ref slsper, inputSlsper, Status, Handle, slsperID, branchID, HandleCombo);
                                 }
                                 else
                                 {
@@ -219,31 +178,24 @@ namespace AR20200.Controllers
                             }
                             else
                             {
-                                throw new MessageException(MessageType.Message, "2000","",new string[]{
-                                    Util.GetLang("Slsperid")
-                                });
+                                throw new MessageException(MessageType.Message, "19");
                             }
                         }
                         else
                         {
-                            if (isNew)
-                            {
-                                slsperID=slsperID.PassNull()==""?_db.AR20200_pdAutoSlsperID(branchID,Current.UserName,inputSlsper.State,inputSlsper.District).FirstOrDefault().PassNull():slsperID;
-                                // Create slsper
-                                slsper = new AR_Salesperson();
-                                slsper.BranchID = branchID;
-                                slsper.SlsperId = slsperID;
 
-                                updateSlsper(ref slsper, inputSlsper, true);
-                                _db.AR_Salesperson.AddObject(slsper);
-
-                                // Add data to Sales Per Hist
-                                AddSalesPerHist(slsper);
-                            }
-                            else
-                            {
-                                throw new MessageException(MessageType.Message, "19");
-                            }
+                            slsperID = slsperID.PassNull() == "" ? _db.AR20200_pdAutoSlsperID(branchID, Current.UserName, inputSlsper.State, inputSlsper.District).FirstOrDefault().PassNull() : slsperID;
+                            // Create slsper
+                            slsper = new AR_Salesperson();
+                            slsper.ResetET();
+                            slsper.BranchID = branchID;
+                            slsper.SlsperId = slsperID;
+                            slsper.Crtd_DateTime = DateTime.Now;
+                            slsper.Crtd_Prog = _screenNbr;
+                            slsper.Crtd_User = Current.UserName;
+                            updateSlsper(ref slsper, inputSlsper, Status, Handle, slsperID, branchID, HandleCombo);
+                            _db.AR_Salesperson.AddObject(slsper);
+                            AddSalesPerHist(slsper);
                         }
                         #endregion
 
@@ -326,7 +278,7 @@ namespace AR20200.Controllers
                             files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
                             slsper.Images = newFileName;
                         }
-                        else 
+                        else
                         {
                             if (!string.IsNullOrWhiteSpace(slsper.Images) && string.IsNullOrWhiteSpace(inputSlsper.Images))
                             {
@@ -343,12 +295,12 @@ namespace AR20200.Controllers
 
                         _db.SaveChanges();
 
-                        return Json(new { success = true, msgCode = 201405071 ,slsperID=slsperID});
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "1555");
-                    }
+                        return Json(new { success = true, msgCode = 201405071, slsperID = slsperID });
+                    //}
+                    //else
+                    //{
+                    //    throw new MessageException(MessageType.Message, "1555");
+                    //}
                 }
                 else
                 {
@@ -393,40 +345,93 @@ namespace AR20200.Controllers
         {
             try
             {
-                var slsper = _db.AR_Salesperson.FirstOrDefault(p => p.SlsperId == slsperID && p.BranchID == branchID);
-                if (slsper != null)
+                var check_AR_Doc = _db.AR_Doc.Where(p => p.SlsperId == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_AR_SalesOrderHeader = _db.AR_SalesOrderHeader.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_OM_UserDefault = _db.OM_UserDefault.Where(p => p.DfltSlsPerID == slsperID && p.DfltBranchID == branchID).FirstOrDefault();
+                var check_AR_RedInvoiceDoc = _db.AR_RedInvoiceDoc.Where(p => p.SlsPerID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_IN_StockRecoveryCust = _db.IN_StockRecoveryCust.Where(p => p.SlsPerID == slsperID && p.BranchID == branchID).FirstOrDefault();
+
+                var check_AR_SalesPerson_Map_IN_ProductClass = _db.AR_SalesPerson_Map_IN_ProductClass.Where(p => p.SlsperId == slsperID).FirstOrDefault();
+
+                var check_OM_TDisplayImage = _db.OM_TDisplayImage.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_AR_SalespersonCpnyAddr = _db.AR_SalespersonCpnyAddr.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+
+                var check_AR_Setup = _db.AR_Setup.Where(p => p.BranchID == branchID).FirstOrDefault();
+
+                var check_OM_Invoice = _db.OM_Invoice.Where(p => p.SlsPerID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_OM_TDisplayCustomerHist = _db.OM_TDisplayCustomerHist.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_IN_POSMCust = _db.IN_POSMCust.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_AR_SalespersonLocationTrace = _db.AR_SalespersonLocationTrace.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_OM_TBonusCustomer = _db.OM_TBonusCustomer.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_AR_Customer = _db.AR_Customer.Where(p => p.SlsperId == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_OM_OrdDisc = _db.OM_OrdDisc.Where(p => p.SlsPerID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_OM_SalesRouteDet = _db.OM_SalesRouteDet.Where(p => p.SlsPerID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_OM_PDAOrdDisc = _db.OM_PDAOrdDisc.Where(p => p.SlsPerID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_OM_FCS = _db.OM_FCS.Where(p => p.SlsperId == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_OM_SalesOrd = _db.OM_SalesOrd.Where(p => p.SlsPerID == slsperID && p.BranchID == branchID).FirstOrDefault();
+
+                var check_OM_CustDisD = _db.OM_CustDisD.Where(p => p.SlsperID == slsperID).FirstOrDefault();
+
+                var check_PO_Header = _db.PO_Header.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+                var check_OM_DiscClaimOrd = _db.OM_DiscClaimOrd.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+
+                var check_OM_SalPerObj = _db.OM_SalPerObj.Where(p => p.SlsPerID == slsperID).FirstOrDefault();
+
+                var check_AR_NewCustomerInfor = _db.AR_NewCustomerInfor.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+
+                var check_IN_POSM = _db.IN_POSM.Where(p => p.SlsPerId == slsperID).FirstOrDefault();
+
+                //var check_OM_KPISell_Detail = _db.OM_KPISell_Detail.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).FirstOrDefault();
+
+                if (check_AR_Doc == null && check_AR_SalesOrderHeader == null && check_OM_UserDefault == null &&
+                   check_AR_RedInvoiceDoc == null && check_IN_StockRecoveryCust == null && check_AR_SalesPerson_Map_IN_ProductClass == null &&
+                    check_OM_TDisplayImage == null && check_AR_SalespersonCpnyAddr == null && check_OM_Invoice == null &&
+                    check_OM_TDisplayCustomerHist == null && check_IN_POSMCust == null && check_AR_SalespersonLocationTrace == null &&
+                    check_OM_TBonusCustomer == null && check_AR_Customer == null && check_OM_OrdDisc == null &&
+                    check_OM_SalesRouteDet == null && check_OM_PDAOrdDisc == null && check_OM_SalesRouteDet == null &&
+                    check_OM_PDAOrdDisc == null && check_OM_FCS == null && check_OM_SalesOrd == null &&
+                    check_OM_CustDisD == null && check_PO_Header == null && check_OM_DiscClaimOrd == null &&
+                    check_OM_SalPerObj == null && check_AR_NewCustomerInfor == null && check_IN_POSM == null)
                 {
-                    if (slsper.Status == _beginStatus)
+                    var slsper = _db.AR_Salesperson.FirstOrDefault(p => p.SlsperId == slsperID && p.BranchID == branchID);
+                    if (slsper != null)
                     {
-                        var fileName = slsper.Images;
-                        _db.AR_Salesperson.DeleteObject(slsper);
-                        var lstAddr = _db.AR_SalespersonCpnyAddr.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).ToList();
-                        foreach (var addr in lstAddr)
+                        if (slsper.Status == _beginStatus)
                         {
-                            _db.AR_SalespersonCpnyAddr.DeleteObject(addr);
-                        }
-                        _db.SaveChanges();
-
-                        if (!string.IsNullOrWhiteSpace(fileName))
-                        {
-                            // Xoa file cu di
-                            var oldPath = string.Format("{0}\\{1}", FilePath, fileName);
-                            if (System.IO.File.Exists(oldPath))
+                            var fileName = slsper.Images;
+                            _db.AR_Salesperson.DeleteObject(slsper);
+                            var lstAddr = _db.AR_SalespersonCpnyAddr.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).ToList();
+                            foreach (var addr in lstAddr)
                             {
-                                System.IO.File.Delete(oldPath);
+                                _db.AR_SalespersonCpnyAddr.DeleteObject(addr);
                             }
-                        }
+                            _db.SaveChanges();
 
-                        return Json(new { success = true });
+                            if (!string.IsNullOrWhiteSpace(fileName))
+                            {
+                                // Xoa file cu di
+                                var oldPath = string.Format("{0}\\{1}", FilePath, fileName);
+                                if (System.IO.File.Exists(oldPath))
+                                {
+                                    System.IO.File.Delete(oldPath);
+                                }
+                            }
+
+                            return Json(new { success = true });
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "20140306");
+                        }
                     }
                     else
                     {
-                        throw new MessageException(MessageType.Message, "20140306");
+                        return Json(new { success = true });
                     }
                 }
                 else
                 {
-                    return Json(new { success = true });
+                    throw new MessageException(MessageType.Message, "2016060201");
                 }
             }
             catch (Exception ex)
@@ -442,16 +447,40 @@ namespace AR20200.Controllers
             }
         }
 
-        private void updateSlsper(ref AR_Salesperson slsper, AR_Salesperson inputSlsper, bool isNew)
+        private void updateSlsper(ref AR_Salesperson slsper, AR_Salesperson inputSlsper, string Status, string Handle, string SlsperId, string BranchID, string HandleCombo)
         {
-            if (isNew)
+            if (Handle == string.Empty || Handle == "N")
+                slsper.Status = Status;
+            else
             {
-                slsper.Status = _beginStatus;
-                slsper.Crtd_DateTime = DateTime.Now;
-                slsper.Crtd_Prog = _screenNbr;
-                slsper.Crtd_User = Current.UserName;
-            }
+                var roles = _sys.Users.FirstOrDefault(x => x.UserName.ToLower() == Current.UserName.ToLower()).UserTypes;
+                var arrRoles = (!string.IsNullOrEmpty(roles) && roles.Contains(","))
+                    ? roles.Split(',') : (!string.IsNullOrEmpty(roles) ? new string[] { roles } : new string[] { "" });
 
+                var approveHandle = _db.SI_ApprovalFlowHandle
+                    .FirstOrDefault(p => p.AppFolID == _screenNbr
+                                        && p.Status == inputSlsper.Status
+                                        && p.Handle == HandleCombo
+                                        && arrRoles.Contains(p.RoleID));
+
+                // If has right of approval, then send email
+                if (approveHandle != null)
+                {
+                    slsper.Status = approveHandle.ToStatus;
+                    try
+                    {
+                        // send email
+                        Approve.Mail_Approve(_screenNbr, SlsperId,
+                            approveHandle.RoleID, approveHandle.Status, approveHandle.Handle,
+                            Current.LangID.ToString(), Current.UserName, BranchID, Current.CpnyID,
+                            string.Empty, string.Empty, string.Empty);
+                    }
+                    catch
+                    {
+                        throw new MessageException(MessageType.Message, "11032015");
+                    }
+                }
+            }
             slsper.Addr1 = inputSlsper.Addr1;
             slsper.Addr2 = inputSlsper.Addr2;
             slsper.CmmnPct = inputSlsper.CmmnPct;
@@ -460,7 +489,7 @@ namespace AR20200.Controllers
             slsper.Fax = inputSlsper.Fax;
             slsper.Name = inputSlsper.Name;
             slsper.Phone = inputSlsper.Phone;
-            //slsper.ProductGroup = inputSlsper.ProductGroup;
+            slsper.ProductGroup = inputSlsper.ProductGroup;
             slsper.State = inputSlsper.State;
             slsper.DeliveryMan = inputSlsper.DeliveryMan;
             slsper.Position = inputSlsper.Position;
@@ -502,7 +531,6 @@ namespace AR20200.Controllers
             objSalesHist.LUpd_DateTime = now;
             objSalesHist.LUpd_Prog = _screenNbr;
             objSalesHist.LUpd_User = Current.UserName;
-            objSalesHist.tstamp = new byte[0];
             objSalesHist.Note = "Tạo mới Nhân viên";
             objSalesHist.FromDate = new DateTime(now.Year, now.Month, now.Day);
             objSalesHist.ToDate = (new DateTime(now.Year, now.Month, now.Day)).AddYears(100);
@@ -510,25 +538,6 @@ namespace AR20200.Controllers
             _db.AR_SalesPerHist.AddObject(objSalesHist);
         }
 
-        public void updatePendingTask(AR_Salesperson slsper, SI_ApprovalFlowHandle approveHandle)
-        {
-            if (!approveHandle.Param00.PassNull().Split(',').Any(p => p.ToLower() == "notapprove"))
-            {
-                HO_PendingTasks newTask = new HO_PendingTasks();
-                newTask.BranchID = slsper.BranchID;
-                newTask.ObjectID = slsper.SlsperId;
-                newTask.EditScreenNbr = _screenNbr;
-                newTask.Content = string.Format(approveHandle.ContentApprove, slsper.SlsperId, slsper.Name, slsper.BranchID);
-                newTask.Crtd_Datetime = newTask.LUpd_Datetime = DateTime.Now;
-                newTask.Crtd_Prog = newTask.LUpd_Prog = _screenNbr;
-                newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
-                newTask.Status = approveHandle.ToStatus;
-                newTask.Parm00 = string.Empty;
-                newTask.Parm01 = string.Empty;
-                newTask.Parm02 = string.Empty;
-                _db.HO_PendingTasks.AddObject(newTask);
-            }
-        }
 
         public ActionResult ImageToBin(string fileName)
         {
@@ -553,7 +562,7 @@ namespace AR20200.Controllers
                     return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (ex is MessageException)
                 {
