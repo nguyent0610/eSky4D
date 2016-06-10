@@ -258,7 +258,7 @@ var menuClick = function (command) {
                             return false;
                     if (App.cboCustId.allowBlank == false) {
                         if (HQ.util.checkSpecialChar(App.cboCustId.getValue()) == false) {
-                            HQ.message.show(2015123111, App.cboCustId.fieldLabel);
+                            HQ.message.show(20140811, App.cboCustId.fieldLabel);
                             App.cboCustId.focus();
                             App.cboCustId.selectText();
                             return false;
