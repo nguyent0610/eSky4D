@@ -276,4 +276,10 @@ function refresh(item) {
         App.storeSI_Tax.reload();
     }
 };
+
+var checkNumberTaxRate = function () {
+    if (App.txtTaxRate.value < 0) {
+        App.txtTaxRate.setValue(0)
+    }
+}
 ///////////////////////////////////
