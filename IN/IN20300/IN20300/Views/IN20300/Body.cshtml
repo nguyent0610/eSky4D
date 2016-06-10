@@ -33,7 +33,7 @@
                     HQ.Combo().ID("cboBranchID").Name("cboBranchID").MarginSpec("5 0 0 0").Width(350)//.AllowBlank(false)
                     .HQLangCode("CPNYID").HQDBSys(false).HQProcedure("IN20300_pcBranchAllByUser")
                     .HQColumnShow("BranchID,BranchName").ForceSelection(true).AllowBlank(false)
-                    .DisplayField("BranchID").ValueField("BranchID").HQHeightWidth(400, 300)
+                    .DisplayField("BranchID").ValueField("BranchID").HQHeightWidth(400, 300).Tag("X")
                     .HQParam(new StoreParameterCollection() {
                         new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
                     })
@@ -45,7 +45,7 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue();}";
                     })
                     .LoadData()
-                    
+
                     , HQ.Combo().ID("cboSiteId").Name("cboSiteId").HQLangCode("SiteId").HQProcedure("IN20300_pcSitebyBranch")
                     .HQColumnShow("SiteId,Name").DisplayField("SiteId").ValueField("SiteId").MarginSpec("5 0 5 0")
                     .Width(350).HQHeightWidth(400, 500).AllowBlank(false)

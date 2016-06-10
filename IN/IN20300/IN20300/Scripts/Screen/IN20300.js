@@ -1,9 +1,15 @@
-﻿var _Source = 0;
-var _maxSource = 2;
-var _isLoadMaster = false;
-var SiteId = '';
+﻿var keys = ['SiteId'];
+var fieldsCheckRequire = ["SiteId"];
+var fieldsLangCheckRequire = ["SiteId"];
 
-var checkLoad = function () {
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+
+
+var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
         _isLoadMaster = true;
@@ -68,16 +74,23 @@ var menuClick = function (command) {
                 }
                 else {
                     if (HQ.form.checkRequirePass(App.frmMain)) {
-                        save();
+                      //  if (HQ.util.checkSpecialChar(App.cboSiteId.getValue()) == true) {
+                            save();
+                       // }
+                        //else {
+                        //    HQ.message.show(2015123111, App.cboSiteId.fieldLabel);
+                        //    App.cboSiteId.focus();
+                        //    App.cboSiteId.selectText();
+                        //}
                     }
+
                 }
 
             }
-            break;
+                     break;
         case "print":
             break;
         case "close":
-            HQ.common.close(this);
             break;
     }   
 };
@@ -158,9 +171,12 @@ var cboState_Changed = function () {
 };
 
 var firstLoad = function () {
-    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.cboBranchID.getStore().addListener('load', checkLoad);
-    App.cboCountry.getStore().addListener('load', checkLoad);
+   
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+   
+    checkLoad(); // Mới
 };
 
 //load store khi co su thay doi
@@ -193,6 +209,15 @@ var stoLoad = function (sto) {
     if (_isLoadMaster) {
         HQ.common.showBusy(false);
     }
+    if (HQ.isNew == false) {
+        if (HQ.isUpdate == false) {
+            HQ.common.lockItem(App.frmMain, true);
+        }
+    }
+    else {
+        HQ.common.lockItem(App.frmMain, false);
+       
+    }
 };
 
 //khi co su thay doi du lieu cua cac conttol tren form
@@ -213,6 +238,12 @@ var stoBeforeLoad = function (sto) {
 
 function save() {
     if (HQ.isInsert || HQ.isUpdate) {
+        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/;
+        var value = App.cboSiteId.getValue();
+        if (!HQ.util.passNull(value.toString()).match(regex)) {
+            HQ.message.show(20140811, App.cboSiteId.fieldLabel, '');
+            return
+        }
         var curRecord = App.frmMain.getRecord();
         //curRecord.data.Name = App.txtName.getValue();
         App.frmMain.getForm().updateRecord();
