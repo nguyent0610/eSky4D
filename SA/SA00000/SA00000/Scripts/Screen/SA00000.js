@@ -152,7 +152,7 @@ var menuClick = function (command) {
                         save();
                     }
                     else {
-                        HQ.message.show(2015123111, App.cboCpnyID.fieldLabel);
+                        HQ.message.show(20140811, App.cboCpnyID.fieldLabel);
                         App.cboCpnyID.focus();
                         App.cboCpnyID.selectText();
                     }
@@ -162,6 +162,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
+            HQ.common.close(this);
             break;
     }
 };
@@ -415,13 +416,6 @@ var grdSYS_SubCompany_BeforeEdit = function (editor, e) {
 
 var grdSYS_SubCompany_Edit = function (item, e) {
     //Kiem tra cac key da duoc nhap se insert them dong moi
-    if (e.field == 'SubCpnyID')
-    {
-        var objCate = App.cboSubCpnyIDSA00000_pcCompanyAll.findRecord(['CpnyID'], [e.value]);
-        if (objCate) {
-            e.record.set('SubCpnyName', objCate.data.CpnyName);
-        }
-    }
     HQ.grid.checkInsertKey(App.grdSYS_SubCompany, e, keys1);
     frmChange();
 };
@@ -442,36 +436,38 @@ var grdSYS_SubCompany_Reject = function (record) {
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.updateRecord();
-        App.frmMain.submit({
-            waitMsg: HQ.common.getLang("WaitMsg"),
-            url: 'SA00000/Save',
-            params: {
-                lstSYS_Company: Ext.encode(App.stoSYS_Company.getRecordsValues()),
-                lstSys_CompanyAddr: HQ.store.getData(App.stoSys_CompanyAddr),
-                lstSYS_SubCompany: HQ.store.getData(App.stoSYS_SubCompany),
-            },
-            success: function (msg, data) {
-                HQ.message.show(201405071);
-                CpnyID = data.result.CpnyID;
-                HQ.isChange = false;
-                HQ.isFirstLoad = true;
-                App.cboCpnyID.getStore().load({
-                    callback: function () {
-                        if (Ext.isEmpty(App.cboCpnyID.getValue())) {
-                            App.cboCpnyID.setValue(CpnyID);
-                            App.stoSYS_Company.reload();
+        
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang("WaitMsg"),
+                url: 'SA00000/Save',
+                params: {
+                    lstSYS_Company: Ext.encode(App.stoSYS_Company.getRecordsValues()),
+                    lstSys_CompanyAddr: HQ.store.getData(App.stoSys_CompanyAddr),
+                    lstSYS_SubCompany: HQ.store.getData(App.stoSYS_SubCompany),
+                },
+                success: function (msg, data) {
+                    HQ.message.show(201405071);
+                    CpnyID = data.result.CpnyID;
+                    HQ.isChange = false;
+                    HQ.isFirstLoad = true;
+                    App.cboCpnyID.getStore().load({
+                        callback: function () {
+                            if (Ext.isEmpty(App.cboCpnyID.getValue())) {
+                                App.cboCpnyID.setValue(CpnyID);
+                                App.stoSYS_Company.reload();
+                            }
+                            else {
+                                App.cboCpnyID.setValue(CpnyID);
+                                App.stoSYS_Company.reload();
+                            }
                         }
-                        else {
-                            App.cboCpnyID.setValue(CpnyID);
-                            App.stoSYS_Company.reload();
-                        }
-                    }
-                });
-            },
-            failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
-            }
-        });
+                    });
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+
     }
 };
 
@@ -520,12 +516,12 @@ function refresh(item) {
     }
 };
 
-//var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
-//    var record = App.cboSubCpnyIDSA00000_pcCompanyAll.findRecord("CpnyID", rec.data.SubCpnyID);
-//    if (record) {
-//        return record.data.CpnyName;
-//    }
-//    else {
-//        return value;
-//    }
-//};
+var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboSubCpnyIDSA00000_pcCompanyAll.findRecord("CpnyID", rec.data.SubCpnyID);
+    if (record) {
+        return record.data.CpnyName;
+    }
+    else {
+        return value;
+    }
+};

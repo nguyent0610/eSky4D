@@ -303,26 +303,6 @@ namespace SA00000.Controllers
             try
             {
                 string CpnyID = data["cboCpnyID"].PassNull();
-                var lstQue = _db.Queries.FirstOrDefault(p => p.CpnyID == CpnyID);
-                if( lstQue != null )
-                {
-                    throw new MessageException(MessageType.Message, "2016060201");
-                }
-                var lstAcc = _db.SYS_AccessDetRights.FirstOrDefault(p => p.CpnyID == CpnyID);
-                if(lstAcc != null)
-                {
-                    throw new MessageException(MessageType.Message, "2016060201");
-                }
-                var lstMail = _db.Server_MailAutoDetail.FirstOrDefault(p => p.CpnyID == CpnyID);
-                if(lstMail != null)
-                {
-                    throw new MessageException(MessageType.Message, "2016060201");
-                }
-                var lstUser = _db.Users.FirstOrDefault(p => p.CpnyID == CpnyID);
-                if (lstUser != null)
-                {
-                    throw new MessageException(MessageType.Message, "2016060201");
-                }
                 var cpny = _db.SYS_Company.FirstOrDefault(p => p.CpnyID == CpnyID);
                 if (cpny != null)
                 {

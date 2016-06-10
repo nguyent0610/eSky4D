@@ -19,7 +19,6 @@
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/screen/SA00000.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
@@ -32,9 +31,6 @@
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-        //HQ.isDelete = true;
-        //HQ.isInsert = false;
-        //HQ.isUpdate = false;
         HQ.DatabaseName = '@Current.DBApp';
     </script>  
     <title>@ViewBag.Title</title>
