@@ -17,12 +17,13 @@
     .ID("frmMain")
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
-    .TopBar(Util.SetupToolbar("Print,New", true, ""))
+    .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Border)
     .Listeners(lst =>
     {
         lst.BoxReady.Fn = "loadSourceCombo";
     })
+    
     .Items(
         ////Thiet ke giao dien o day
         X.Panel().ID("pnlHeader")
@@ -30,7 +31,7 @@
             .Items(
 
                 HQ.Combo().ID("cboRecType")
-                    .Name("cboRecType").HQLangCode("RecType").HQProcedure("SA00700_pcLoadComboTypeMVC")
+                    .Name("cboRecType").HQLangCode("Type").HQProcedure("SA00700_pcLoadComboTypeMVC")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                     .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("G")
@@ -75,7 +76,7 @@
                     .LoadData()
 
                 , X.Button().MarginSpec("5 0 5 160").Width(150)
-                 .Text("Load Data").Listeners(p =>
+                 .Text(Util.GetLang("LoadData")).Listeners(p =>
                      {
                          p.Click.Fn = "LoadGrid";
                      })
@@ -85,6 +86,10 @@
             X.Panel().ID("pnlgrd")
             .Region(Region.Center)
             .Layout(LayoutType.Border)
+            .Listeners(l =>
+                        {
+                            l.BoxReady.Handler = "firstLoad()";
+                        })
             .Items(
                 X.GridPanel().ID("grdSYS_AccessDetRights")
                 .Hidden(true)
@@ -107,15 +112,11 @@
                     })
                     .Listeners(l =>
                     {
-                        l.BeforeLoad.Fn = "stoBeforeLoad";
                         l.Load.Fn = "stoLoad";
-                        l.Update.Fn = "stoChanged";
+                        l.Update.Fn = "frmChange";
                     })
                 )
-                .Listeners(p =>
-                {
-                    p.BoxReady.Handler = "firstLoad();";
-                })
+                .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_AccessDetRights');")
                 .SortableColumns(false)
                 .ColumnModel(
                     X.RowNumbererColumn().Width(40)
@@ -136,7 +137,7 @@
 
                     //Colum Init
                     , X.CheckColumn().ID("txtInitRights")
-                    .DataIndex("InitRights").Width(150).Editable(true).HideTitleEl(true)
+                    .DataIndex("InitRights").Text(Util.GetLang("InitRights")).Width(150).Editable(true).HideTitleEl(true)
                     .HeaderItems(
                         HQ.Checkbox().ID("InitRightsCheckAll").HQLangCode("InitRights").MarginSpec("0 0 0 50")
                             .Listeners(l =>
@@ -147,7 +148,7 @@
 
                     //Colum Insert
                     , X.CheckColumn().ID("txtInsertRights")
-                    .DataIndex("InsertRights").Width(150).Editable(true).HideTitleEl(true)
+                    .DataIndex("InsertRights").Text(Util.GetLang("InsertRights")).Width(150).Editable(true).HideTitleEl(true)
                     .HeaderItems(
                         HQ.Checkbox().ID("InsertRightsCheckAll").HQLangCode("InsertRights").MarginSpec("0 0 0 50")
                             .Listeners(l =>
@@ -158,7 +159,7 @@
 
                     //Colum Update
                     , X.CheckColumn().ID("txtUpdateRights")
-                    .DataIndex("UpdateRights").Width(150).Editable(true).HideTitleEl(true)
+                    .DataIndex("UpdateRights").Text(Util.GetLang("UpdateRights")).Width(150).Editable(true).HideTitleEl(true)
                     .HeaderItems(
                         HQ.Checkbox().ID("UpdateRightsCheckAll").HQLangCode("UpdateRights").MarginSpec("0 0 0 50")
                             .Listeners(l =>
@@ -169,7 +170,7 @@
 
                     //Colum Delete
                     , X.CheckColumn().ID("txtDeleteRights")
-                    .DataIndex("DeleteRights").Width(150).Editable(true).HideTitleEl(true)
+                    .DataIndex("DeleteRights").Text(Util.GetLang("DeleteRights")).Width(150).Editable(true).HideTitleEl(true)
                     .HeaderItems(
                         HQ.Checkbox().ID("DeleteRightsCheckAll").HQLangCode("DeleteRights").MarginSpec("0 0 0 50")
                             .Listeners(l =>
@@ -180,7 +181,7 @@
 
                     //Colum View
                     , X.CheckColumn().ID("txtViewRights")
-                    .DataIndex("ViewRights").Width(150).Editable(true).HideTitleEl(true)
+                    .DataIndex("ViewRights").Text(Util.GetLang("ViewRights")).Width(150).Editable(true).HideTitleEl(true)
                     .HeaderItems(
                         HQ.Checkbox().ID("ViewRightsCheckAll").HQLangCode("ViewRights").MarginSpec("0 0 0 50")
                             .Listeners(l =>
@@ -191,7 +192,7 @@
 
                     //Colum Release
                     , X.CheckColumn().ID("txtReleaseRights")
-                    .DataIndex("ReleaseRights").Width(150).Editable(true).HideTitleEl(true)
+                    .DataIndex("ReleaseRights").Text(Util.GetLang("ReleaseRights")).Width(150).Editable(true).HideTitleEl(true)
                     .HeaderItems(
                         HQ.Checkbox().ID("ReleaseRightsCheckAll").HQLangCode("ReleaseRights").MarginSpec("0 0 0 50")
                             .Listeners(l =>

@@ -1,1 +1,284 @@
-﻿var _0x6e10 = ["\x53\x63\x72\x65\x65\x6E\x4E\x75\x6D\x62\x65\x72", "\x6C\x6F\x61\x64\x69\x6E\x67\x44\x61\x74\x61", "\x67\x65\x74\x4C\x61\x6E\x67", "\x63\x6F\x6D\x6D\x6F\x6E", "\x73\x68\x6F\x77\x42\x75\x73\x79", "\x6C\x6F\x61\x64", "\x67\x65\x74\x53\x74\x6F\x72\x65", "\x63\x62\x6F\x4D\x6F\x64\x75\x6C\x65", "\x63\x62\x6F\x43\x70\x6E\x79", "\x63\x62\x6F\x55\x73\x72\x5F\x47\x72\x42\x79\x54\x79\x70\x65", "\x63\x62\x6F\x52\x65\x63\x54\x79\x70\x65", "\x74\x78\x74\x49\x6E\x69\x74\x52\x69\x67\x68\x74\x73", "\x67\x72\x64\x53\x59\x53\x5F\x41\x63\x63\x65\x73\x73\x44\x65\x74\x52\x69\x67\x68\x74\x73", "\x66\x69\x72\x73\x74", "\x67\x72\x69\x64", "\x70\x72\x65\x76", "\x6E\x65\x78\x74", "\x6C\x61\x73\x74", "\x69\x73\x43\x68\x61\x6E\x67\x65", "", "\x72\x65\x66\x72\x65\x73\x68", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x69\x73\x46\x69\x72\x73\x74\x4C\x6F\x61\x64", "\x72\x65\x6C\x6F\x61\x64", "\x73\x74\x6F\x53\x59\x53\x5F\x41\x63\x63\x65\x73\x73\x44\x65\x74\x52\x69\x67\x68\x74\x73", "\x6E\x65\x77", "\x69\x74\x65\x6D\x73", "\x73\x65\x6C\x65\x63\x74\x65\x64", "\x73\x6C\x6D\x53\x59\x53\x5F\x41\x63\x63\x65\x73\x73\x44\x65\x74\x52\x69\x67\x68\x74\x73", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x64\x65\x6C\x65\x74\x65\x44\x61\x74\x61", "\x64\x65\x6C\x65\x74\x65", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x63\x68\x65\x63\x6B\x52\x65\x71\x75\x69\x72\x65\x50\x61\x73\x73", "\x73\x74\x6F\x72\x65", "\x73\x61\x76\x65", "\x70\x72\x69\x6E\x74", "\x63\x6C\x6F\x73\x65", "\x53\x41\x30\x30\x37\x30\x30", "\x63\x68\x61\x6E\x67\x65\x44\x61\x74\x61", "\x69\x6E\x73\x65\x72\x74\x42\x6C\x61\x6E\x6B", "\x6C\x6F\x61\x64\x69\x6E\x67\x64\x61\x74\x61", "\x63\x68\x65\x63\x6B\x42\x65\x66\x6F\x72\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x49\x6E\x73\x65\x72\x74\x4B\x65\x79", "\x63\x68\x65\x63\x6B\x56\x61\x6C\x69\x64\x61\x74\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x52\x65\x6A\x65\x63\x74", "\x73\x75\x73\x70\x65\x6E\x64\x45\x76\x65\x6E\x74\x73", "\x49\x6E\x69\x74\x52\x69\x67\x68\x74\x73", "\x63\x68\x65\x63\x6B\x65\x64", "\x73\x65\x74", "\x65\x61\x63\x68", "\x72\x65\x73\x75\x6D\x65\x45\x76\x65\x6E\x74\x73", "\x76\x69\x65\x77", "\x49\x6E\x73\x65\x72\x74\x52\x69\x67\x68\x74\x73", "\x55\x70\x64\x61\x74\x65\x52\x69\x67\x68\x74\x73", "\x44\x65\x6C\x65\x74\x65\x52\x69\x67\x68\x74\x73", "\x56\x69\x65\x77\x52\x69\x67\x68\x74\x73", "\x52\x65\x6C\x65\x61\x73\x65\x52\x69\x67\x68\x74\x73", "\x76\x61\x6C\x75\x65", "\x49\x6E\x69\x74\x52\x69\x67\x68\x74\x73\x43\x68\x65\x63\x6B\x41\x6C\x6C", "\x49\x6E\x73\x65\x72\x74\x52\x69\x67\x68\x74\x73\x43\x68\x65\x63\x6B\x41\x6C\x6C", "\x55\x70\x64\x61\x74\x65\x52\x69\x67\x68\x74\x73\x43\x68\x65\x63\x6B\x41\x6C\x6C", "\x44\x65\x6C\x65\x74\x65\x52\x69\x67\x68\x74\x73\x43\x68\x65\x63\x6B\x41\x6C\x6C", "\x56\x69\x65\x77\x52\x69\x67\x68\x74\x73\x43\x68\x65\x63\x6B\x41\x6C\x6C", "\x52\x65\x6C\x65\x61\x73\x65\x52\x69\x67\x68\x74\x73\x43\x68\x65\x63\x6B\x41\x6C\x6C", "\x73\x65\x74\x56\x61\x6C\x75\x65", "\x44\x65\x73\x63\x72", "\x64\x69\x73\x70\x6C\x61\x79\x54\x70\x6C\x44\x61\x74\x61", "\x69\x73\x56\x61\x6C\x69\x64", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x53\x61\x76\x69\x6E\x67\x44\x61\x74\x61", "\x53\x41\x30\x30\x37\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x44\x61\x74\x61", "\x67\x65\x74\x56\x61\x6C\x75\x65", "\x70\x72\x6F\x63\x65\x73\x73", "\x73\x75\x62\x6D\x69\x74", "\x79\x65\x73", "\x64\x65\x6C\x65\x74\x65\x53\x65\x6C\x65\x63\x74\x65\x64"]; var keys = [_0x6e10[0]]; var fieldsCheckRequire = [_0x6e10[0]]; var fieldsLangCheckRequire = [_0x6e10[0]]; var loadSourceCombo = function () { HQ[_0x6e10[3]][_0x6e10[4]](true, HQ[_0x6e10[3]][_0x6e10[2]](_0x6e10[1])); App[_0x6e10[10]][_0x6e10[6]]()[_0x6e10[5]](function () { App[_0x6e10[9]][_0x6e10[6]]()[_0x6e10[5]](function () { App[_0x6e10[8]][_0x6e10[6]]()[_0x6e10[5]](function () { App[_0x6e10[7]][_0x6e10[6]]()[_0x6e10[5]](function () { HQ[_0x6e10[3]][_0x6e10[4]](false, HQ[_0x6e10[3]][_0x6e10[2]](_0x6e10[1])) }) }) }) }); }; var loadCheck = function () { HQ[_0x6e10[3]][_0x6e10[4]](true, HQ[_0x6e10[3]][_0x6e10[2]](_0x6e10[1])); App[_0x6e10[11]][_0x6e10[6]]()[_0x6e10[5]](function () { HQ[_0x6e10[3]][_0x6e10[4]](false, HQ[_0x6e10[3]][_0x6e10[2]](_0x6e10[1])) }); }; var menuClick = function (_0x69c4x7) { switch (_0x69c4x7) { case _0x6e10[13]: HQ[_0x6e10[14]][_0x6e10[13]](App[_0x6e10[12]]); break;; case _0x6e10[15]: HQ[_0x6e10[14]][_0x6e10[15]](App[_0x6e10[12]]); break;; case _0x6e10[16]: HQ[_0x6e10[14]][_0x6e10[16]](App[_0x6e10[12]]); break;; case _0x6e10[17]: HQ[_0x6e10[14]][_0x6e10[17]](App[_0x6e10[12]]); break;; case _0x6e10[20]: if (HQ[_0x6e10[18]]) { HQ[_0x6e10[22]][_0x6e10[21]](20150303, _0x6e10[19], _0x6e10[20]) } else { HQ[_0x6e10[18]] = false; HQ[_0x6e10[23]] = true; App[_0x6e10[25]][_0x6e10[24]](); }; break;; case _0x6e10[26]:; case _0x6e10[32]: if (App[_0x6e10[29]][_0x6e10[28]][_0x6e10[27]][0] != undefined) { if (HQ[_0x6e10[30]]) { HQ[_0x6e10[22]][_0x6e10[21]](11, _0x6e10[19], _0x6e10[31]) } }; break;; case _0x6e10[37]: if (HQ[_0x6e10[33]] || HQ[_0x6e10[34]] || HQ[_0x6e10[30]]) { if (HQ[_0x6e10[36]][_0x6e10[35]](App[_0x6e10[25]], keys, fieldsCheckRequire, fieldsLangCheckRequire)) { save() } }; break;; case _0x6e10[38]: break;; case _0x6e10[39]: HQ[_0x6e10[3]][_0x6e10[39]](this); break;; } }; var beforeSelectcombo = function () { loadSourceCombo() }; var firstLoad = function () { HQ[_0x6e10[23]] = true; App[_0x6e10[25]][_0x6e10[24]](); }; var stoChanged = function (_0x69c4xb) { HQ[_0x6e10[18]] = HQ[_0x6e10[36]][_0x6e10[18]](_0x69c4xb); HQ[_0x6e10[3]][_0x6e10[41]](HQ[_0x6e10[18]], _0x6e10[40]); }; var stoLoad = function (_0x69c4xb) { HQ[_0x6e10[3]][_0x6e10[4]](false); HQ[_0x6e10[18]] = HQ[_0x6e10[36]][_0x6e10[18]](_0x69c4xb); HQ[_0x6e10[3]][_0x6e10[41]](HQ[_0x6e10[18]], _0x6e10[40]); if (HQ[_0x6e10[23]]) { if (HQ[_0x6e10[34]]) { HQ[_0x6e10[36]][_0x6e10[42]](_0x69c4xb, keys) }; HQ[_0x6e10[23]] = false; }; }; var stoBeforeLoad = function (_0x69c4xb) { HQ[_0x6e10[3]][_0x6e10[4]](true, HQ[_0x6e10[3]][_0x6e10[2]](_0x6e10[43])) }; var grdSYS_AccessDetRights_BeforeEdit = function (_0x69c4xf, _0x69c4x10) { return HQ[_0x6e10[14]][_0x6e10[44]](_0x69c4x10, keys) }; var grdSYS_AccessDetRights_Edit = function (_0x69c4x12, _0x69c4x10) { HQ[_0x6e10[14]][_0x6e10[45]](App[_0x6e10[12]], _0x69c4x10, keys) }; var grdSYS_AccessDetRights_ValidateEdit = function (_0x69c4x12, _0x69c4x10) { return HQ[_0x6e10[14]][_0x6e10[46]](App[_0x6e10[12]], _0x69c4x10, keys) }; var grdSYS_AccessDetRights_Reject = function (_0x69c4x15) { HQ[_0x6e10[14]][_0x6e10[47]](_0x69c4x15, App[_0x6e10[12]]); stoChanged(App[_0x6e10[25]]); }; var InitRightsCheckAll_Change = function (_0x69c4x17) { if (_0x69c4x17) { App[_0x6e10[25]][_0x6e10[48]](); App[_0x6e10[12]][_0x6e10[6]]()[_0x6e10[52]](function (_0x69c4x12) { _0x69c4x12[_0x6e10[51]](_0x6e10[49], _0x69c4x17[_0x6e10[50]]) }); App[_0x6e10[25]][_0x6e10[53]](); App[_0x6e10[12]][_0x6e10[54]][_0x6e10[20]](); } }; var InsertRightsCheckAll_Change = function (_0x69c4x17) { if (_0x69c4x17) { App[_0x6e10[25]][_0x6e10[48]](); App[_0x6e10[12]][_0x6e10[6]]()[_0x6e10[52]](function (_0x69c4x12) { _0x69c4x12[_0x6e10[51]](_0x6e10[55], _0x69c4x17[_0x6e10[50]]) }); App[_0x6e10[25]][_0x6e10[53]](); App[_0x6e10[12]][_0x6e10[54]][_0x6e10[20]](); } }; var UpdateRightsCheckAll_Change = function (_0x69c4x17) { if (_0x69c4x17) { App[_0x6e10[25]][_0x6e10[48]](); App[_0x6e10[12]][_0x6e10[6]]()[_0x6e10[52]](function (_0x69c4x12) { _0x69c4x12[_0x6e10[51]](_0x6e10[56], _0x69c4x17[_0x6e10[50]]) }); App[_0x6e10[25]][_0x6e10[53]](); App[_0x6e10[12]][_0x6e10[54]][_0x6e10[20]](); } }; var DeleteRightsCheckAll_Change = function (_0x69c4x17) { if (_0x69c4x17) { App[_0x6e10[25]][_0x6e10[48]](); App[_0x6e10[12]][_0x6e10[6]]()[_0x6e10[52]](function (_0x69c4x12) { _0x69c4x12[_0x6e10[51]](_0x6e10[57], _0x69c4x17[_0x6e10[50]]) }); App[_0x6e10[25]][_0x6e10[53]](); App[_0x6e10[12]][_0x6e10[54]][_0x6e10[20]](); } }; var ViewRightsCheckAll_Change = function (_0x69c4x17) { if (_0x69c4x17) { App[_0x6e10[25]][_0x6e10[48]](); App[_0x6e10[12]][_0x6e10[6]]()[_0x6e10[52]](function (_0x69c4x12) { _0x69c4x12[_0x6e10[51]](_0x6e10[58], _0x69c4x17[_0x6e10[50]]) }); App[_0x6e10[25]][_0x6e10[53]](); App[_0x6e10[12]][_0x6e10[54]][_0x6e10[20]](); } }; var ReleaseRightsCheckAll_Change = function (_0x69c4x17) { if (_0x69c4x17) { App[_0x6e10[25]][_0x6e10[48]](); App[_0x6e10[12]][_0x6e10[6]]()[_0x6e10[52]](function (_0x69c4x12) { _0x69c4x12[_0x6e10[51]](_0x6e10[59], _0x69c4x17[_0x6e10[50]]) }); App[_0x6e10[25]][_0x6e10[53]](); App[_0x6e10[12]][_0x6e10[54]][_0x6e10[20]](); } }; var LoadGrid = function (_0x69c4x1e, _0x69c4x10) { App[_0x6e10[12]][_0x6e10[21]](); App[_0x6e10[25]][_0x6e10[24]](); if (App[_0x6e10[61]][_0x6e10[60]] == true || App[_0x6e10[62]][_0x6e10[60]] == true || App[_0x6e10[63]][_0x6e10[60]] == true || App[_0x6e10[64]][_0x6e10[60]] == true || App[_0x6e10[65]][_0x6e10[60]] == true || App[_0x6e10[66]][_0x6e10[60]] == true) { App[_0x6e10[61]][_0x6e10[67]](false); App[_0x6e10[62]][_0x6e10[67]](false); App[_0x6e10[63]][_0x6e10[67]](false); App[_0x6e10[64]][_0x6e10[67]](false); App[_0x6e10[65]][_0x6e10[67]](false); App[_0x6e10[66]][_0x6e10[67]](false); }; }; var cboRecType_Change = function (_0x69c4x1e, _0x69c4x10) { App[_0x6e10[9]][_0x6e10[36]][_0x6e10[5]]() }; var cboScreenNumber_Change = function (_0x69c4x17) { var _0x69c4x21 = _0x69c4x17[_0x6e10[69]][0][_0x6e10[68]]; App[_0x6e10[29]][_0x6e10[28]][_0x6e10[27]][0][_0x6e10[51]](_0x6e10[68], _0x69c4x21); }; var save = function () { if (App[_0x6e10[71]][_0x6e10[70]]()) { App[_0x6e10[71]][_0x6e10[77]]({ waitMsg: HQ[_0x6e10[3]][_0x6e10[2]](_0x6e10[72]), url: _0x6e10[73], params: { lstSYS_AccessDetRights: HQ[_0x6e10[36]][_0x6e10[74]](App[_0x6e10[25]]), RecType: App[_0x6e10[10]][_0x6e10[75]](), UserID: App[_0x6e10[9]][_0x6e10[75]](), CpnyID: App[_0x6e10[8]][_0x6e10[75]]() }, success: function (_0x69c4x23, _0x69c4x24) { HQ[_0x6e10[22]][_0x6e10[21]](201405071); App[_0x6e10[25]][_0x6e10[24]](); }, failure: function (_0x69c4x23, _0x69c4x24) { HQ[_0x6e10[22]][_0x6e10[76]](_0x69c4x23, _0x69c4x24, true) } }) } }; var deleteData = function (_0x69c4x12) { if (_0x69c4x12 == _0x6e10[78]) { App[_0x6e10[12]][_0x6e10[79]](); stoChanged(App[_0x6e10[25]]); } }; function refresh(_0x69c4x12) { if (_0x69c4x12 == _0x6e10[78]) { HQ[_0x6e10[18]] = false; HQ[_0x6e10[23]] = true; App[_0x6e10[25]][_0x6e10[24]](); } }
+﻿//// Declare //////////////////////////////////////////////////////////
+
+var keys = ['ScreenNumber'];
+var fieldsCheckRequire = ["ScreenNumber"];
+var fieldsLangCheckRequire = ["ScreenNumber"];
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+/////////////////////Store////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoSYS_AccessDetRights.reload();
+        HQ.common.showBusy(false);
+    }
+};
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboRecType.getStore().load(function () {
+        App.cboUsr_GrByType.getStore().load(function () {
+            App.cboCpny.getStore().load(function () {
+                App.cboModule.getStore().load(function () {
+                    HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                })
+            })
+        })
+    })
+};
+
+var loadCheck = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.txtInitRights.getStore().load(function () {
+        HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+    })
+};
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdSYS_AccessDetRights);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdSYS_AccessDetRights);
+            break;
+        case "next":
+            HQ.grid.next(App.grdSYS_AccessDetRights);
+            break;
+        case "last":
+            HQ.grid.last(App.grdSYS_AccessDetRights);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSYS_AccessDetRights.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdSYS_AccessDetRights, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmSYS_AccessDetRights.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    if (App.slmSYS_AccessDetRights.selected.items[0] != undefined) {
+                        if (App.slmSYS_AccessDetRights.selected.items[0].data.ScreenNumber != "") {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_AccessDetRights)], 'deleteData', true);
+                        }
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoSYS_AccessDetRights, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+
+};
+var beforeSelectcombo = function () {
+    loadSourceCombo();
+};
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+    checkLoad(); // Mới
+};
+
+var frmChange = function () {
+    HQ.isChange = HQ.store.isChange(App.stoSYS_AccessDetRights);
+    HQ.common.changeData(HQ.isChange, 'SA00700');//co thay doi du lieu gan * tren tab title header
+};
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_AccessDetRights.reload();
+    }
+};
+
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false; //sto load cuoi se su dung
+    }
+    frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+var grdSYS_AccessDetRights_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdSYS_AccessDetRights_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSYS_AccessDetRights, e, keys);
+};
+var grdSYS_AccessDetRights_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_AccessDetRights, e, keys);
+};
+var grdSYS_AccessDetRights_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_AccessDetRights);
+    frmChange();
+};
+
+var InitRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("InitRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+
+};
+
+var InsertRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("InsertRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+};
+
+var UpdateRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("UpdateRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+};
+
+var DeleteRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("DeleteRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+};
+
+var ViewRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("ViewRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+};
+
+var ReleaseRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("ReleaseRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+};
+
+var LoadGrid = function (sender, e) {
+    App.grdSYS_AccessDetRights.show();
+    App.stoSYS_AccessDetRights.reload();
+    if (App.InitRightsCheckAll.value == true || App.InsertRightsCheckAll.value == true ||
+        App.UpdateRightsCheckAll.value == true || App.DeleteRightsCheckAll.value == true ||
+        App.ViewRightsCheckAll.value == true || App.ReleaseRightsCheckAll.value == true) {
+        App.InitRightsCheckAll.setValue(false);
+        App.InsertRightsCheckAll.setValue(false);
+        App.UpdateRightsCheckAll.setValue(false);
+        App.DeleteRightsCheckAll.setValue(false);
+        App.ViewRightsCheckAll.setValue(false);
+        App.ReleaseRightsCheckAll.setValue(false);
+    }
+};
+
+var cboRecType_Change = function (sender, e) {
+    App.cboUsr_GrByType.store.load();
+};
+
+var cboScreenNumber_Change = function (value) {
+    var k = value.displayTplData[0].Descr;
+    App.slmSYS_AccessDetRights.selected.items[0].set('Descr', k);
+};
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SA00700/Save',
+            params: {
+                lstSYS_AccessDetRights: HQ.store.getData(App.stoSYS_AccessDetRights),
+                RecType: App.cboRecType.getValue(),
+                UserID: App.cboUsr_GrByType.getValue(),
+                CpnyID: App.cboCpny.getValue()
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                //menuClick("refresh");
+                refresh("yes");
+                App.stoSYS_AccessDetRights.reload();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdSYS_AccessDetRights.deleteSelected();
+        frmChange();
+    }
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_AccessDetRights.reload();
+    }
+};
+///////////////////////////////////
