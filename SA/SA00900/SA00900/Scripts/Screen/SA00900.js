@@ -5,6 +5,20 @@ var fieldsCheckRequire = ["Code", "Lang00", "Lang01"];
 var fieldsLangCheckRequire = ["Code", "Lang00", "Lang01"];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+
+
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoSYS_Language.reload();
+        HQ.common.showBusy(false);
+    }
+};
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
 
@@ -41,7 +55,11 @@ var menuClick = function (command) {
         case "delete":
             if (App.slmSYS_Language.selected.items[0] != undefined) {
                 if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
+                    if (App.slmSYS_Language.selected.items[0] != undefined) {
+                        if (App.slmSYS_Language.selected.items[0].data.Code != "") {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_Language)], 'deleteData', true);
+                        }
+                    }
                 }
             }
             break;
@@ -54,32 +72,44 @@ var menuClick = function (command) {
             break;
         case "print":
             break;
-        case "close":
-            HQ.common.close(this);            
+        case "close":         
             break;
     }
 
 };
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
     HQ.isFirstLoad = true;
-    App.stoSYS_Language.reload();
-}
-//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
-var stoChanged = function (sto) {
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SA00900');
+    App.frmMain.isValid();
+    checkLoad(); // Mới
 };
+
+var frmChange = function () {
+    HQ.isChange = HQ.store.isChange(App.stoSYS_Language);
+    HQ.common.changeData(HQ.isChange, 'SA00900');//co thay doi du lieu gan * tren tab title header
+};
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_Language.reload();
+    }
+};
+
+
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
-    HQ.common.showBusy(false);
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SA00900');
+    HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keys);
         }
-        HQ.isFirstLoad = false;
+        HQ.isFirstLoad = false; //sto load cuoi se su dung
+    }
+    frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
     }
 };
 //trước khi load trang busy la dang load data
@@ -97,7 +127,7 @@ var grdSYS_Language_ValidateEdit = function (item, e) {
 };
 var grdSYS_Language_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSYS_Language);
-    stoChanged(App.stoSYS_Language);
+    frmChange();
 };
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
@@ -113,7 +143,7 @@ var save = function () {
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 HQ.isChange = false;
-                menuClick("refresh");
+                refresh("yes");
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -125,7 +155,7 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSYS_Language.deleteSelected();
-        stoChanged(App.stoSYS_Language);
+        frmChange();
     }
 };
 

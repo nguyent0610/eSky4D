@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -28,7 +28,7 @@ namespace SA00900.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             
@@ -60,16 +60,33 @@ namespace SA00900.Controllers
                
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Language"]);
                 ChangeRecords<SA00900_pgLoadSYS_Language_Result> lstLang = dataHandler.BatchObjectData<SA00900_pgLoadSYS_Language_Result>();
-                foreach (SA00900_pgLoadSYS_Language_Result deleted in lstLang.Deleted)
+                lstLang.Created.AddRange(lstLang.Updated);
+                foreach (SA00900_pgLoadSYS_Language_Result del in lstLang.Deleted)
                 {
-                    var del = _db.SYS_Language.Where(p => p.Code == deleted.Code).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstLang.Created.Where(p => p.Code == del.Code).Count() > 0)
                     {
-                        _db.SYS_Language.DeleteObject(del);
+                        lstLang.Created.Where(p => p.Code == del.Code).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.SYS_Language.ToList().Where(p => p.Code == del.Code).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.SYS_Language.DeleteObject(objDel);
+                        }
                     }
                 }
+                //foreach (SA00900_pgLoadSYS_Language_Result deleted in lstLang.Deleted)
+                //{
+                //    var del = _db.SYS_Language.Where(p => p.Code == deleted.Code).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.SYS_Language.DeleteObject(del);
+                //    }
+                //}
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                //lstLang.Created.AddRange(lstLang.Updated);
 
                 foreach (SA00900_pgLoadSYS_Language_Result curLang in lstLang.Created)
                 {

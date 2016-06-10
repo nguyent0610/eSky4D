@@ -18,6 +18,10 @@
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Fit)
+    .Listeners(p =>
+             {
+               p.BoxReady.Handler = "firstLoad();";
+             })
     .Items(
         ////Thiet ke giao dien o day
 
@@ -34,15 +38,11 @@
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Language"))).AutoLoad(false)
             .Listeners(l =>
             {
-                l.BeforeLoad.Fn = "stoBeforeLoad";
                 l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
+                l.Update.Fn = "frmChange";                 
             })
         )
-        .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
+        .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_Language');")
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
