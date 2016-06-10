@@ -269,10 +269,10 @@
                             //lst.Focus.Handler = "this.forceSelection = true;";  
                         })
 
-                    , HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("Phone").DataIndex("Phone")
+                    , HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("Phone").DataIndex("Phone").MaskRe(@"/[0-9-,.*#()+/ ]/")
                     .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
 
-                    , HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("Fax").DataIndex("Fax")
+                    , HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("Fax").DataIndex("Fax").MaskRe(@"/[0-9-,.*#()+/ ]/")
                     .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.NumberField().ID("txtCmmnPct").Name("txtCmmnPct").HQLangCode("CmmnPct").DataIndex("CmmnPct")
