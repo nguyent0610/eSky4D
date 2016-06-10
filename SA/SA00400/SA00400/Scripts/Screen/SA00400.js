@@ -1,1 +1,171 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('m a=["\\I\\e\\d\\N\\x","\\x\\b\\f\\i\\h","\\s\\h\\l\\q\\1m\\q\\1k\\q\\i\\h\\b\\b\\k\\I\\e\\d","\\J\\g\\h\\f\\d","\\s\\h\\g\\l","\\K\\h\\b\\H","\\k\\b\\1z\\d","\\n\\e\\f\\d","\\g\\f\\I\\t\\e\\k\\s\\b","","\\h\\b\\J\\h\\b\\f\\t","\\f\\t\\p\\O","\\y\\b\\f\\f\\e\\s\\b","\\g\\f\\1r\\g\\h\\f\\d\\1h\\p\\e\\l","\\h\\b\\n\\p\\e\\l","\\f\\d\\p\\q\\1m\\q\\1k\\q\\i\\h\\b\\b\\k\\I\\e\\d","\\g\\f\\N\\k\\f\\b\\h\\d","\\g\\k\\f\\b\\h\\d","\\k\\b\\O","\\g\\d\\b\\y\\f","\\f\\b\\n\\b\\i\\d\\b\\l","\\f\\n\\y\\x\\e\\d\\e","\\g\\f\\x\\b\\n\\b\\d\\b","\\l\\b\\n\\b\\d\\b\\x\\e\\d\\e","\\l\\b\\n\\b\\d\\b","\\g\\f\\1G\\K\\l\\e\\d\\b","\\i\\t\\b\\i\\D\\U\\b\\1P\\S\\g\\h\\b\\1N\\e\\f\\f","\\f\\d\\p\\h\\b","\\f\\e\\H\\b","\\K\\h\\g\\k\\d","\\i\\n\\p\\f\\b","\\i\\p\\y\\y\\p\\k","\\i\\t\\b\\i\\D\\R\\b\\J\\p\\h\\b\\Y\\l\\g\\d","\\i\\t\\b\\i\\D\\N\\k\\f\\b\\h\\d\\1X\\b\\M","\\i\\t\\b\\i\\D\\T\\e\\n\\g\\l\\e\\d\\b\\Y\\l\\g\\d","\\i\\t\\b\\i\\D\\U\\b\\2e\\b\\i\\d","\\g\\f\\T\\e\\n\\g\\l","\\J\\h\\y\\2d\\e\\g\\k","\\q\\e\\H\\g\\k\\s\\x\\e\\d\\e","\\s\\b\\d\\1h\\e\\k\\s","\\q\\1g\\w\\w\\Z\\w\\w\\1Z\\q\\e\\H\\b","\\s\\b\\d\\x\\e\\d\\e","\\K\\h\\p\\i\\b\\f\\f","\\f\\S\\2c\\y\\g\\d","\\M\\b\\f","\\l\\b\\n\\b\\d\\b\\q\\b\\n\\b\\i\\d\\b\\l","\\q\\1g\\w\\w\\Z\\w\\w","\\i\\t\\e\\k\\s\\b\\x\\e\\d\\e","\\f\\t\\p\\O\\R\\S\\f\\M","\\g\\k\\f\\b\\h\\d\\R\\n\\e\\k\\D","\\n\\p\\e\\l\\g\\k\\s\\l\\e\\d\\e"];m A=[a[0]];m X=[a[0],a[1]];m W=[a[0],a[1]];m 1l=o(1e){1y(1e){v a[3]:c[a[4]][a[3]](j[a[2]]);u;v a[5]:c[a[4]][a[5]](j[a[2]]);u;v a[6]:c[a[4]][a[6]](j[a[2]]);u;v a[7]:c[a[4]][a[7]](j[a[2]]);u;v a[10]:r(c[a[8]]){c[a[12]][a[11]](1u,a[9],a[10])}1J{c[a[8]]=F;c[a[13]]=G;j[a[15]][a[14]]()};u;v a[18]:r(c[a[16]]){c[a[4]][a[17]](j[a[2]],A)};u;v a[24]:r(j[a[21]][a[20]][a[19]][0]!=2h){r(c[a[22]]){c[a[12]][a[11]](11,a[9],a[23])}};u;v a[28]:r(c[a[25]]||c[a[16]]||c[a[22]]){r(c[a[27]][a[26]](j[a[15]],A,X,W)){1n()}};u;v a[29]:u;v a[1i]:c[a[z]][a[1i]](1M);u}};m 1R=o(1V,C){1d c[a[4]][a[1U]](C,A)};m 1T=o(B,C){c[a[4]][a[1S]](j[a[2]],C,A)};m 2b=o(B,C){1d c[a[4]][a[1Q]](j[a[2]],C,A)};m 1O=o(1o){c[a[4]][a[1W]](1o,j[a[2]]);L(j[a[15]])};m 1n=o(){r(j[a[1j]][a[2g]]()){j[a[1j]][a[1Y]]({2a:c[a[z]][a[1b]](a[1K]),1t:a[1v],1w:{1s:c[a[27]][a[1q]](j[a[15]])},1x:o(Q,P){c[a[12]][a[11]](1F);c[a[8]]=F;1l(a[10])},1E:o(Q,P){c[a[12]][a[1A]](Q,P,G)}})}};m 1B=o(B){r(B==a[1c]){j[a[2]][a[1C]]();L(j[a[15]])}};m 1D=o(){c[a[13]]=G;j[a[15]][a[14]]()};m L=o(E){c[a[8]]=c[a[27]][a[8]](E);c[a[z]][a[V]](c[a[8]],a[1f])};m 1L=o(E){c[a[z]][a[1a]](F);c[a[8]]=c[a[27]][a[8]](E);c[a[z]][a[V]](c[a[8]],a[1f]);r(c[a[13]]){r(c[a[16]]){c[a[27]][a[2f]](E,A)};c[a[13]]=F}};m 1p=o(E){c[a[z]][a[1a]](G,c[a[z]][a[1b]](a[1H]))};o 1I(B){r(B==a[1c]){c[a[8]]=F;c[a[13]]=G;j[a[15]][a[14]]()}}', 62, 142, '||||||||||_0x5746|x65|HQ|x74|x61|x73|x69|x72|x63|App|x6E|x64|var|x6C|function|x6F|x53|if|x67|x68|break|case|x30|x44|x6D|31|keys|_0xd793xa|_0xd793x8|x6B|_0xd793x14|false|true|x76|x43|x66|x70|stoChanged|x79|x49|x77|_0xd793x10|_0xd793xf|x42|x75|x56|x52|47|fieldsLangCheckRequire|fieldsCheckRequire|x45|x34|||||||||||48|39|44|return|_0xd793x5|46|x41|x4C|30|37|x5F|menuClick|x59|save|_0xd793xd|stoBeforeLoad|41|x46|lstData|url|20150303|40|params|success|switch|x78|42|deleteData|45|firstLoad|failure|201405071|x55|50|refresh|else|38|stoLoad|this|x50|grdSYS_ScreenCat_Reject|x71|34|grdSYS_ScreenCat_BeforeEdit|33|grdSYS_ScreenCat_Edit|32|_0xd793x7|35|x4B|43|x2F|||||||||||waitMsg|grdSYS_ScreenCat_ValidateEdit|x62|x4D|x6A|49|36|undefined'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+
+var keys = ['CatID'];
+var fieldsCheckRequire = ["CatID", "Descr"];
+var fieldsLangCheckRequire = ["CatID", "Descr"];
+///////////////////////////////////////////////////////////////////////
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+
+//// Store /////////////////////////////////////////////////////////////
+
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoSYS_ScreenCat.reload();
+        HQ.common.showBusy(false);
+    }
+};
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdSYS_ScreenCat);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdSYS_ScreenCat);
+            break;
+        case "next":
+            HQ.grid.next(App.grdSYS_ScreenCat);
+            break;
+        case "last":
+            HQ.grid.last(App.grdSYS_ScreenCat);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSYS_ScreenCat.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdSYS_ScreenCat, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmData.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    if (App.slmData.selected.items[0] != undefined) {
+                        if (App.slmData.selected.items[0].data.CatID != "") {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_ScreenCat)], 'deleteData', true);
+                        }
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoSYS_ScreenCat, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+
+};
+var grdSYS_ScreenCat_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdSYS_ScreenCat_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSYS_ScreenCat, e, keys);
+};
+var grdSYS_ScreenCat_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_ScreenCat, e, keys);
+};
+var grdSYS_ScreenCat_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_ScreenCat);
+    frmChange();
+};
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SA00400/Save',
+            params: {
+                lstData: HQ.store.getData(App.stoSYS_ScreenCat)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                refresh("yes");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdSYS_ScreenCat.deleteSelected();
+        frmChange();
+    }
+};
+
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+    checkLoad(); // Mới
+};
+
+var frmChange = function () {
+    HQ.isChange = HQ.store.isChange(App.stoSYS_ScreenCat);
+    HQ.common.changeData(HQ.isChange, 'SA00400');//co thay doi du lieu gan * tren tab title header
+};
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_ScreenCat.reload();
+    }
+};
+
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false; //sto load cuoi se su dung
+    }
+    frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_ScreenCat.reload();
+    }
+};
+///////////////////////////////////

@@ -17,7 +17,11 @@
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
-    .Layout(LayoutType.Fit)   
+    .Layout(LayoutType.Fit)
+    .Listeners(p =>
+                     {
+                         p.BoxReady.Handler = "firstLoad();";
+                     })
     .Items(
         ////Thiet ke giao dien o day
 
@@ -33,21 +37,17 @@
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
             .Listeners(l =>
             {
-                l.BeforeLoad.Fn = "stoBeforeLoad";
                 l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
+                l.Update.Fn = "frmChange";                 
             })
         )
-        .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
+        .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_ScreenCat');")
         .SortableColumns(false)
         .ColumnModel(
          X.RowNumbererColumn()
          
-            , X.Column().Text(Util.GetLang("CatID")).DataIndex("CatID").Width(150).Editor(X.TextField().MaxLength(10))
-            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(100))
+            , X.Column().Text(Util.GetLang("CatID")).DataIndex("CatID").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))
+            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
                                                 
             , X.CommandColumn().Width(150)
             .Commands(
