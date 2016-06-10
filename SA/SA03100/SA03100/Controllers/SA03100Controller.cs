@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -42,16 +42,33 @@ namespace SA03100.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_CompanyGroup"]);
                 ChangeRecords<SA03100_pgSYS_CompanyGroup_Result> lstSYS_CompanyGroup = dataHandler.BatchObjectData<SA03100_pgSYS_CompanyGroup_Result>();
-                foreach (SA03100_pgSYS_CompanyGroup_Result deleted in lstSYS_CompanyGroup.Deleted)
+                lstSYS_CompanyGroup.Created.AddRange(lstSYS_CompanyGroup.Updated);
+                foreach (SA03100_pgSYS_CompanyGroup_Result del in lstSYS_CompanyGroup.Deleted)
                 {
-                    var del = _db.SYS_CompanyGroup.Where(p => p.GroupID == deleted.GroupID).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstSYS_CompanyGroup.Created.Where(p => p.GroupID == del.GroupID).Count() > 0)
                     {
-                        _db.SYS_CompanyGroup.DeleteObject(del);
+                        lstSYS_CompanyGroup.Created.Where(p => p.GroupID == del.GroupID).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.SYS_CompanyGroup.ToList().Where(p => p.GroupID == del.GroupID).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.SYS_CompanyGroup.DeleteObject(objDel);
+                        }
                     }
                 }
+                //foreach (SA03100_pgSYS_CompanyGroup_Result deleted in lstSYS_CompanyGroup.Deleted)
+                //{
+                //    var del = _db.SYS_CompanyGroup.Where(p => p.GroupID == deleted.GroupID).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.SYS_CompanyGroup.DeleteObject(del);
+                //    }
+                //}
 
-                lstSYS_CompanyGroup.Created.AddRange(lstSYS_CompanyGroup.Updated);
+                //lstSYS_CompanyGroup.Created.AddRange(lstSYS_CompanyGroup.Updated);
 
                 foreach (SA03100_pgSYS_CompanyGroup_Result curLang in lstSYS_CompanyGroup.Created)
                 {
