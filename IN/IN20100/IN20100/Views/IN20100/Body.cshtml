@@ -18,10 +18,10 @@
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Fit)
-    .Listeners(lst =>
-    {
-        //lst.BoxReady.Fn = "loadSourceCombo";
-    })
+    .Listeners(p =>
+            {
+                p.BoxReady.Handler = "firstLoad();";
+            })
     .Items(
         ////Thiet ke giao dien o day
 
@@ -39,13 +39,10 @@
             {
                 l.BeforeLoad.Fn = "stoBeforeLoad";
                 l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
+                l.Update.Fn = "frmChange";                 
             })
         )
-        .Listeners(p =>
-        {
-            p.BoxReady.Handler = "firstLoad();";
-        })
+        .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdUnitConversion');")
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
@@ -54,7 +51,7 @@
             .Editor(
                 HQ.Combo().ID("cboUnitType").Name("cboUnitType").HQProcedure("IN20100_pcLoadUnitType")
                 .HQColumnShow("UnitType,Code").DisplayField("Code").ValueField("UnitType")
-                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
+                .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID" , Mode = ParameterMode.Raw }
@@ -66,7 +63,7 @@
             .Editor(
                 HQ.Combo().ID("cboClassID").Name("cboClassID").HQProcedure("IN20100_pcLoadClasID")
                 .HQColumnShow("ClassID,Descr").DisplayField("ClassID").ValueField("ClassID")
-                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
+                .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .LoadData()
             ),
@@ -75,7 +72,7 @@
             .Editor(
                 HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQProcedure("IN20100_pcLoadInventory")
                 .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
-                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
+                .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .LoadData()
              ),
@@ -101,7 +98,7 @@
             .Editor(
                 HQ.Combo().ID("cboMultDiv").Name("cboMultDiv").HQProcedure("IN20100_pcLoadMultDiv")
                 .HQColumnShow("MultDiv,Code").DisplayField("Code").ValueField("MultDiv")
-                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
+                .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
                 new StoreParameter() { Name = "@LangID", Value = "HQ.langID" , Mode = ParameterMode.Raw }
@@ -110,7 +107,7 @@
             ),
             
             X.NumberColumn().Text(Util.GetLang("CnvFact")).DataIndex("CnvFact").Width(150).Format("0,000").Align(Alignment.Right)
-                    .Editor(X.NumberField().EnforceMaxLength(true).DecimalPrecision(0)),        
+               .Editor(X.NumberField().EnforceMaxLength(true).DecimalPrecision(0).MinValue( 0 )),        
             X.CommandColumn()
             .Width(150)
             .Commands(

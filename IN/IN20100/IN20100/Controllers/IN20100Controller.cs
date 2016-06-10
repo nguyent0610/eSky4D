@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -27,7 +27,7 @@ namespace IN20100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -44,16 +44,33 @@ namespace IN20100.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstUnitConversion"]);
                 ChangeRecords<IN20100_pgLoadUnitConversion_Result> lstUnitConversion = dataHandler.BatchObjectData<IN20100_pgLoadUnitConversion_Result>();
-                foreach (IN20100_pgLoadUnitConversion_Result deleted in lstUnitConversion.Deleted)
+                lstUnitConversion.Created.AddRange(lstUnitConversion.Updated);
+                foreach (IN20100_pgLoadUnitConversion_Result del in lstUnitConversion.Deleted)
                 {
-                    var del = _db.IN_UnitConversion.Where(p => p.UnitType == deleted.UnitType && p.ClassID == deleted.ClassID && p.InvtID == deleted.InvtID && p.FromUnit == deleted.FromUnit && p.ToUnit == deleted.ToUnit).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstUnitConversion.Created.Where(p => p.UnitType == del.UnitType).Count() > 0)
                     {
-                        _db.IN_UnitConversion.DeleteObject(del);
+                        lstUnitConversion.Created.Where(p => p.UnitType == del.UnitType).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.IN_UnitConversion.ToList().Where(p => p.UnitType == del.UnitType).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.IN_UnitConversion.DeleteObject(objDel);
+                        }
                     }
                 }
+                //foreach (IN20100_pgLoadUnitConversion_Result deleted in lstUnitConversion.Deleted)
+                //{
+                //    var del = _db.IN_UnitConversion.Where(p => p.UnitType == deleted.UnitType && p.ClassID == deleted.ClassID && p.InvtID == deleted.InvtID && p.FromUnit == deleted.FromUnit && p.ToUnit == deleted.ToUnit).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.IN_UnitConversion.DeleteObject(del);
+                //    }
+                //}
 
-                lstUnitConversion.Created.AddRange(lstUnitConversion.Updated);
+                //lstUnitConversion.Created.AddRange(lstUnitConversion.Updated);
 
                 foreach (IN20100_pgLoadUnitConversion_Result curUnitConversion in lstUnitConversion.Created)
                 {

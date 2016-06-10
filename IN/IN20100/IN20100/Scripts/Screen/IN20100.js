@@ -1,1 +1,285 @@
-﻿var _0x79a3 = ["\x55\x6E\x69\x74\x54\x79\x70\x65", "\x43\x6C\x61\x73\x73\x49\x44", "\x49\x6E\x76\x74\x49\x44", "\x46\x72\x6F\x6D\x55\x6E\x69\x74", "\x54\x6F\x55\x6E\x69\x74", "\x4D\x75\x6C\x74\x44\x69\x76", "\x43\x6E\x76\x46\x61\x63\x74", "\x6C\x6F\x61\x64\x69\x6E\x67\x44\x61\x74\x61", "\x67\x65\x74\x4C\x61\x6E\x67", "\x63\x6F\x6D\x6D\x6F\x6E", "\x73\x68\x6F\x77\x42\x75\x73\x79", "\x72\x65\x6C\x6F\x61\x64", "\x73\x74\x6F\x55\x6E\x69\x74\x43\x6F\x6E\x76\x65\x72\x73\x69\x6F\x6E", "\x64\x61\x74\x61", "\x69\x6E\x64\x65\x78\x4F\x66", "\x43\x6F\x64\x65", "\x70\x75\x73\x68", "\x65\x61\x63\x68", "\x67\x65\x74\x53\x74\x6F\x72\x65", "\x63\x62\x6F\x55\x6E\x69\x74\x54\x79\x70\x65", "\x66\x69\x6C\x74\x65\x72\x73", "\x67\x72\x64\x55\x6E\x69\x74\x43\x6F\x6E\x76\x65\x72\x73\x69\x6F\x6E", "\x67\x65\x74\x46\x69\x6C\x74\x65\x72", "\x6D\x65\x6E\x75", "\x63\x72\x65\x61\x74\x65\x4D\x65\x6E\x75", "\x63\x62\x6F\x4D\x75\x6C\x74\x44\x69\x76", "\x6C\x6F\x61\x64", "\x63\x62\x6F\x49\x6E\x76\x74\x49\x44", "\x63\x62\x6F\x43\x6C\x61\x73\x73\x49\x44", "\x66\x69\x72\x73\x74", "\x67\x72\x69\x64", "\x70\x72\x65\x76", "\x6E\x65\x78\x74", "\x6C\x61\x73\x74", "\x69\x73\x43\x68\x61\x6E\x67\x65", "", "\x72\x65\x66\x72\x65\x73\x68", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x69\x73\x46\x69\x72\x73\x74\x4C\x6F\x61\x64", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x69\x6E\x73\x65\x72\x74", "\x6E\x65\x77", "\x69\x74\x65\x6D\x73", "\x73\x65\x6C\x65\x63\x74\x65\x64", "\x73\x6C\x6D\x55\x6E\x69\x74\x43\x6F\x6E\x76\x65\x72\x73\x69\x6F\x6E", "\x69\x6E\x64\x65\x78\x53\x65\x6C\x65\x63\x74", "\x64\x65\x6C\x65\x74\x65\x44\x61\x74\x61", "\x64\x65\x6C\x65\x74\x65", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x63\x68\x65\x63\x6B\x52\x65\x71\x75\x69\x72\x65\x50\x61\x73\x73", "\x73\x74\x6F\x72\x65", "\x73\x61\x76\x65", "\x70\x72\x69\x6E\x74", "\x63\x6C\x6F\x73\x65", "\x66\x69\x6E\x64\x52\x65\x63\x6F\x72\x64", "\x63\x62\x6F\x55\x6E\x69\x74\x54\x79\x70\x65\x49\x4E\x32\x30\x31\x30\x30\x5F\x70\x63\x4C\x6F\x61\x64\x55\x6E\x69\x74\x54\x79\x70\x65", "\x63\x62\x6F\x4D\x75\x6C\x74\x44\x69\x76\x49\x4E\x32\x30\x31\x30\x30\x5F\x70\x63\x4C\x6F\x61\x64\x4D\x75\x6C\x74\x44\x69\x76", "\x63\x62\x6F\x49\x6E\x76\x74\x49\x44\x31\x49\x4E\x32\x30\x31\x30\x30\x5F\x70\x63\x4C\x6F\x61\x64\x49\x6E\x76\x65\x6E\x74\x6F\x72\x79", "\x44\x65\x73\x63\x72", "\x49\x4E\x32\x30\x31\x30\x30", "\x63\x68\x61\x6E\x67\x65\x44\x61\x74\x61", "\x31", "\x4D", "\x2A", "\x69\x6E\x73\x65\x72\x74\x52\x65\x63\x6F\x72\x64", "\x6C\x6F\x61\x64\x69\x6E\x67\x64\x61\x74\x61", "\x66\x69\x65\x6C\x64", "\x72\x65\x63\x6F\x72\x64", "\x32", "\x33", "\x63\x68\x65\x63\x6B\x42\x65\x66\x6F\x72\x65\x45\x64\x69\x74", "\x76\x61\x6C\x75\x65", "\x73\x65\x74", "\x63\x68\x65\x63\x6B\x49\x6E\x73\x65\x72\x74\x4B\x65\x79", "\x63\x68\x65\x63\x6B\x56\x61\x6C\x69\x64\x61\x74\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x52\x65\x6A\x65\x63\x74", "\x69\x73\x56\x61\x6C\x69\x64", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x53\x61\x76\x69\x6E\x67\x44\x61\x74\x61", "\x49\x4E\x32\x30\x31\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x44\x61\x74\x61", "\x70\x72\x6F\x63\x65\x73\x73", "\x73\x75\x62\x6D\x69\x74", "\x79\x65\x73", "\x64\x65\x6C\x65\x74\x65\x53\x65\x6C\x65\x63\x74\x65\x64"]; var keys = [_0x79a3[0], _0x79a3[1], _0x79a3[2], _0x79a3[3], _0x79a3[4]]; var fieldsCheckRequire = [_0x79a3[0], _0x79a3[1], _0x79a3[2], _0x79a3[3], _0x79a3[4], _0x79a3[5], _0x79a3[6]]; var fieldsLangCheckRequire = [_0x79a3[0], _0x79a3[1], _0x79a3[2], _0x79a3[3], _0x79a3[4], _0x79a3[5], _0x79a3[6]]; var loadSourceCombo = function () { HQ[_0x79a3[9]][_0x79a3[10]](true, HQ[_0x79a3[9]][_0x79a3[8]](_0x79a3[7])); App[_0x79a3[19]][_0x79a3[18]]()[_0x79a3[26]](function () { App[_0x79a3[28]][_0x79a3[18]]()[_0x79a3[26]](function () { App[_0x79a3[27]][_0x79a3[18]]()[_0x79a3[26]](function () { App[_0x79a3[25]][_0x79a3[18]]()[_0x79a3[26]](function () { HQ[_0x79a3[9]][_0x79a3[10]](false, HQ[_0x79a3[9]][_0x79a3[8]](_0x79a3[7])); App[_0x79a3[12]][_0x79a3[11]](); var _0x3b9cx5 = []; App[_0x79a3[19]][_0x79a3[18]]()[_0x79a3[13]][_0x79a3[17]](function (_0x3b9cx6) { if (_0x3b9cx5[_0x79a3[14]](_0x3b9cx6[_0x79a3[13]].Code) == -1) { _0x3b9cx5[_0x79a3[16]]([_0x3b9cx6[_0x79a3[13]][_0x79a3[0]], _0x3b9cx6[_0x79a3[13]][_0x79a3[15]]]) } }); filterFeature = App[_0x79a3[21]][_0x79a3[20]]; colAFilter = filterFeature[_0x79a3[22]](_0x79a3[0]); colAFilter[_0x79a3[23]] = colAFilter[_0x79a3[24]]({ options: _0x3b9cx5 }); var _0x3b9cx7 = []; App[_0x79a3[25]][_0x79a3[18]]()[_0x79a3[13]][_0x79a3[17]](function (_0x3b9cx6) { if (_0x3b9cx7[_0x79a3[14]](_0x3b9cx6[_0x79a3[13]].Code) == -1) { _0x3b9cx7[_0x79a3[16]]([_0x3b9cx6[_0x79a3[13]][_0x79a3[5]], _0x3b9cx6[_0x79a3[13]][_0x79a3[15]]]) } }); colAFilter = filterFeature[_0x79a3[22]](_0x79a3[5]); colAFilter[_0x79a3[23]] = colAFilter[_0x79a3[24]]({ options: _0x3b9cx7 }); }) }) }) }); }; var menuClick = function (_0x3b9cx9) { switch (_0x3b9cx9) { case _0x79a3[29]: HQ[_0x79a3[30]][_0x79a3[29]](App[_0x79a3[21]]); break;; case _0x79a3[31]: HQ[_0x79a3[30]][_0x79a3[31]](App[_0x79a3[21]]); break;; case _0x79a3[32]: HQ[_0x79a3[30]][_0x79a3[32]](App[_0x79a3[21]]); break;; case _0x79a3[33]: HQ[_0x79a3[30]][_0x79a3[33]](App[_0x79a3[21]]); break;; case _0x79a3[36]: if (HQ[_0x79a3[34]]) { HQ[_0x79a3[38]][_0x79a3[37]](20150303, _0x79a3[35], _0x79a3[36]) } else { HQ[_0x79a3[34]] = false; HQ[_0x79a3[39]] = true; App[_0x79a3[12]][_0x79a3[11]](); }; break;; case _0x79a3[42]: if (HQ[_0x79a3[40]]) { HQ[_0x79a3[30]][_0x79a3[41]](App[_0x79a3[21]], keys) }; break;; case _0x79a3[48]: if (App[_0x79a3[45]][_0x79a3[44]][_0x79a3[43]][0] != undefined) { var _0x3b9cxa = HQ[_0x79a3[30]][_0x79a3[46]](App[_0x79a3[21]]); if (_0x3b9cxa != _0x79a3[35]) { HQ[_0x79a3[38]][_0x79a3[37]](2015020807, [HQ[_0x79a3[30]][_0x79a3[46]](App[_0x79a3[21]]), _0x79a3[35]], _0x79a3[47], true) }; }; break;; case _0x79a3[53]: if (HQ[_0x79a3[49]] || HQ[_0x79a3[40]] || HQ[_0x79a3[50]]) { if (HQ[_0x79a3[52]][_0x79a3[51]](App[_0x79a3[12]], keys, fieldsCheckRequire, fieldsLangCheckRequire)) { save() } }; break;; case _0x79a3[54]: break;; case _0x79a3[55]: HQ[_0x79a3[9]][_0x79a3[55]](this); break;; } }; var UnitTypechange = function (_0x3b9cxc, _0x3b9cxd, _0x3b9cxe, _0x3b9cxf, _0x3b9cx10, _0x3b9cx11) { var _0x3b9cx12 = App[_0x79a3[57]][_0x79a3[56]](_0x79a3[0], _0x3b9cxe[_0x79a3[13]].UnitType); if (_0x3b9cx12) { return _0x3b9cx12[_0x79a3[13]][_0x79a3[15]] } else { return _0x3b9cxc }; }; var MultDivchange = function (_0x3b9cxc, _0x3b9cxd, _0x3b9cxe, _0x3b9cxf, _0x3b9cx10, _0x3b9cx11) { var _0x3b9cx12 = App[_0x79a3[58]][_0x79a3[56]](_0x79a3[5], _0x3b9cxe[_0x79a3[13]].MultDiv); if (_0x3b9cx12) { return _0x3b9cx12[_0x79a3[13]][_0x79a3[15]] } else { return _0x3b9cxc }; }; var getDescr = function (_0x3b9cxc, _0x3b9cxd, _0x3b9cxe, _0x3b9cxf, _0x3b9cx10, _0x3b9cx11) { var _0x3b9cx12 = App[_0x79a3[59]][_0x79a3[56]](_0x79a3[2], _0x3b9cxe[_0x79a3[13]].InvtID); if (_0x3b9cx12) { return _0x3b9cx12[_0x79a3[13]][_0x79a3[60]] } else { return _0x3b9cxc }; }; var firstLoad = function () { HQ[_0x79a3[39]] = true; loadSourceCombo(); }; var stoChanged = function (_0x3b9cx17) { HQ[_0x79a3[34]] = HQ[_0x79a3[52]][_0x79a3[34]](_0x3b9cx17); HQ[_0x79a3[9]][_0x79a3[62]](HQ[_0x79a3[34]], _0x79a3[61]); }; var stoLoad = function (_0x3b9cx17) { HQ[_0x79a3[9]][_0x79a3[10]](false); HQ[_0x79a3[34]] = HQ[_0x79a3[52]][_0x79a3[34]](_0x3b9cx17); HQ[_0x79a3[9]][_0x79a3[62]](HQ[_0x79a3[34]], _0x79a3[61]); if (HQ[_0x79a3[39]]) { if (HQ[_0x79a3[40]]) { var _0x3b9cx12 = { UnitType: _0x79a3[63], MultDiv: _0x79a3[64], ClassID: _0x79a3[65], InvtID: _0x79a3[65], Descr: _0x79a3[65] }; HQ[_0x79a3[52]][_0x79a3[66]](_0x3b9cx17, keys, _0x3b9cx12, true); }; HQ[_0x79a3[39]] = false; }; }; var stoBeforeLoad = function (_0x3b9cx17) { HQ[_0x79a3[9]][_0x79a3[10]](true, HQ[_0x79a3[9]][_0x79a3[8]](_0x79a3[67])) }; var grdUnitConversion_BeforeEdit = function (_0x3b9cx1b, _0x3b9cx1c) { if (_0x3b9cx1c[_0x79a3[68]] == _0x79a3[60]) { return false }; if (_0x3b9cx1c[_0x79a3[69]][_0x79a3[13]][_0x79a3[0]] == _0x79a3[63]) { if (_0x3b9cx1c[_0x79a3[68]] == _0x79a3[2] || _0x3b9cx1c[_0x79a3[68]] == _0x79a3[1]) { return false } }; if (_0x3b9cx1c[_0x79a3[69]][_0x79a3[13]][_0x79a3[0]] == _0x79a3[70]) { if (_0x3b9cx1c[_0x79a3[68]] == _0x79a3[2]) { return false } }; if (_0x3b9cx1c[_0x79a3[69]][_0x79a3[13]][_0x79a3[0]] == _0x79a3[71]) { if (_0x3b9cx1c[_0x79a3[68]] == _0x79a3[1]) { return false } }; return HQ[_0x79a3[30]][_0x79a3[72]](_0x3b9cx1c, keys); }; var grdUnitConversion_Edit = function (_0x3b9cx6, _0x3b9cx1c) { if (_0x3b9cx1c[_0x79a3[68]] == _0x79a3[0]) { if (_0x3b9cx1c[_0x79a3[73]] == _0x79a3[63]) { _0x3b9cx1c[_0x79a3[69]][_0x79a3[74]](_0x79a3[1], _0x79a3[65]); _0x3b9cx1c[_0x79a3[69]][_0x79a3[74]](_0x79a3[2], _0x79a3[65]); _0x3b9cx1c[_0x79a3[69]][_0x79a3[74]](_0x79a3[60], _0x79a3[65]); }; if (_0x3b9cx1c[_0x79a3[73]] == _0x79a3[70]) { _0x3b9cx1c[_0x79a3[69]][_0x79a3[74]](_0x79a3[2], _0x79a3[65]); _0x3b9cx1c[_0x79a3[69]][_0x79a3[74]](_0x79a3[60], _0x79a3[65]); _0x3b9cx1c[_0x79a3[69]][_0x79a3[74]](_0x79a3[1], _0x79a3[35]); }; if (_0x3b9cx1c[_0x79a3[73]] == _0x79a3[71]) { _0x3b9cx1c[_0x79a3[69]][_0x79a3[74]](_0x79a3[2], _0x79a3[35]); _0x3b9cx1c[_0x79a3[69]][_0x79a3[74]](_0x79a3[60], _0x79a3[35]); _0x3b9cx1c[_0x79a3[69]][_0x79a3[74]](_0x79a3[1], _0x79a3[65]); }; }; HQ[_0x79a3[30]][_0x79a3[75]](App[_0x79a3[21]], _0x3b9cx1c, keys); }; var grdUnitConversion_ValidateEdit = function (_0x3b9cx6, _0x3b9cx1c) { return HQ[_0x79a3[30]][_0x79a3[76]](App[_0x79a3[21]], _0x3b9cx1c, keys) }; var grdUnitConversion_Reject = function (_0x3b9cx12) { HQ[_0x79a3[30]][_0x79a3[77]](_0x3b9cx12, App[_0x79a3[21]]); stoChanged(App[_0x79a3[12]]); }; var save = function () { if (App[_0x79a3[79]][_0x79a3[78]]()) { App[_0x79a3[79]][_0x79a3[84]]({ timeout: 1800000, waitMsg: HQ[_0x79a3[9]][_0x79a3[8]](_0x79a3[80]), url: _0x79a3[81], params: { lstUnitConversion: HQ[_0x79a3[52]][_0x79a3[82]](App[_0x79a3[12]]) }, success: function (_0x3b9cx21, _0x3b9cx22) { HQ[_0x79a3[38]][_0x79a3[37]](201405071); HQ[_0x79a3[34]] = false; menuClick(_0x79a3[36]); }, failure: function (_0x3b9cx21, _0x3b9cx22) { HQ[_0x79a3[38]][_0x79a3[83]](_0x3b9cx21, _0x3b9cx22, true) } }) } }; var deleteData = function (_0x3b9cx6) { if (_0x3b9cx6 == _0x79a3[85]) { App[_0x79a3[21]][_0x79a3[86]](); stoChanged(App[_0x79a3[12]]); } }; function refresh(_0x3b9cx6) { if (_0x3b9cx6 == _0x79a3[85]) { HQ[_0x79a3[34]] = false; HQ[_0x79a3[39]] = true; App[_0x79a3[12]][_0x79a3[11]](); } }
+﻿//// Declare ///////////////////////////////////////////////////////////
+var keys = ['UnitType', 'ClassID', 'InvtID', 'FromUnit', 'ToUnit'];
+var fieldsCheckRequire = ["UnitType", "ClassID", "InvtID", "FromUnit", "ToUnit", "MultDiv", "CnvFact"];
+var fieldsLangCheckRequire = ["UnitType", "ClassID", "InvtID", "FromUnit", "ToUnit", "MultDiv", "CnvFact"];
+////////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoUnitConversion.reload();
+        HQ.common.showBusy(false);
+    }
+};
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboUnitType.getStore().load(function () {
+        App.cboClassID.getStore().load(function () {
+            App.cboInvtID.getStore().load(function () {
+                App.cboMultDiv.getStore().load(function () {
+                    HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                    App.stoUnitConversion.reload();
+
+                    var UnitType = [];
+                    App.cboUnitType.getStore().data.each(function (item) {
+                        if (UnitType.indexOf(item.data.Code) == -1) {
+                            UnitType.push([item.data.UnitType, item.data.Code]);
+                        }
+                    });
+                    filterFeature = App.grdUnitConversion.filters;
+                    colAFilter = filterFeature.getFilter('UnitType');
+                    colAFilter.menu = colAFilter.createMenu({
+                        options: UnitType
+                    });
+
+                    var MultDiv = [];
+                    App.cboMultDiv.getStore().data.each(function (item) {
+                        if (MultDiv.indexOf(item.data.Code) == -1) {
+                            MultDiv.push([item.data.MultDiv, item.data.Code]);
+                        }
+                    });
+
+                    colAFilter = filterFeature.getFilter('MultDiv');
+                    colAFilter.menu = colAFilter.createMenu({
+                        options: MultDiv
+                    });
+                })
+            })
+        })
+    })
+};
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdUnitConversion);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdUnitConversion);
+            break;
+        case "next":
+            HQ.grid.next(App.grdUnitConversion);
+            break;
+        case "last":
+            HQ.grid.last(App.grdUnitConversion);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoUnitConversion.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdUnitConversion, keys);
+               
+            }
+            break;
+        case "delete":
+            if (App.slmUnitConversion.selected.items[0] != undefined) {
+                var rowindex = HQ.grid.indexSelect(App.grdUnitConversion);
+                if (rowindex != '')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdUnitConversion), ''], 'deleteData', true)
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoUnitConversion, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+};
+
+var UnitTypechange = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboUnitTypeIN20100_pcLoadUnitType.findRecord("UnitType", rec.data.UnitType);
+    if (record) {
+        return record.data.Code;
+    }
+    else {
+        return value;
+    }
+};
+
+var MultDivchange = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboMultDivIN20100_pcLoadMultDiv.findRecord("MultDiv", rec.data.MultDiv);
+    if (record) {
+        return record.data.Code;
+    }
+    else {
+        return value;
+    }
+};
+
+//var getDescr = function (value) {
+//    var record = App.cboInvtID.findRecord("InvtID", value);
+//    if (record) {
+//        return record.data.Descr;
+//    }
+//    else {
+//        return value;
+//    }
+//};
+
+var getDescr = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboInvtID1IN20100_pcLoadInventory.findRecord("InvtID", rec.data.InvtID);
+    if (record) {
+        return record.data.Descr;
+    }
+    else {
+        return value;
+    }
+};
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+    checkLoad(); // Mới
+};
+
+var frmChange = function () {
+    HQ.isChange = HQ.store.isChange(App.stoUnitConversion);
+    HQ.common.changeData(HQ.isChange, 'IN20100');//co thay doi du lieu gan * tren tab title header
+};
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoUnitConversion.reload();
+    }
+};
+
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false; //sto load cuoi se su dung
+    }
+    frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var grdUnitConversion_BeforeEdit = function (editor, e) {
+    if (e.field == 'Descr') {
+        return false;
+    }
+    if (e.record.data.UnitType == '1') {
+        if (e.field == 'InvtID' || e.field == 'ClassID')
+            return false;
+    }
+    if (e.record.data.UnitType == '2') {
+        if (e.field == 'InvtID')
+            return false;
+    }
+    if (e.record.data.UnitType == '3') {
+        if (e.field == 'ClassID')
+            return false;
+    }
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdUnitConversion_Edit = function (item, e) {
+    if (e.field == 'UnitType') {
+        if (e.value == '1') {
+            e.record.set('ClassID', '*');
+            e.record.set('InvtID', '*');
+            e.record.set('Descr', '*');
+            e.record.set('CnvFact', 1);
+        }
+        if (e.value == '2') {
+            e.record.set('InvtID', '*');
+            e.record.set('Descr', '*');
+            e.record.set('ClassID', '');
+            e.record.set('CnvFact', 1);
+        }
+        if (e.value == '3') {
+            e.record.set('InvtID', '');
+            e.record.set('Descr', '');
+            e.record.set('ClassID', '*');
+            e.record.set('CnvFact', 1);
+        }
+    }
+    HQ.grid.checkInsertKey(App.grdUnitConversion, e, keys);
+
+};
+
+var grdUnitConversion_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdUnitConversion, e, keys);
+};
+
+var grdUnitConversion_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdUnitConversion);
+    frmChange();
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'IN20100/Save',
+            params: {
+                lstUnitConversion: HQ.store.getData(App.stoUnitConversion)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                refresh("yes");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdUnitConversion.deleteSelected();
+        frmChange();
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoUnitConversion.reload();
+    }
+};
+/////////////////////////////////////////////////////////////////////////
