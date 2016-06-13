@@ -59,7 +59,7 @@
             ) 
             .Parameters(ps =>
                             {
-                                ps.Add(new StoreParameter("branchId", "HQ.cpnyID", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
                                 ps.Add(new StoreParameter("setupID", "AR", ParameterMode.Value));
                             })      
             .Listeners(l =>

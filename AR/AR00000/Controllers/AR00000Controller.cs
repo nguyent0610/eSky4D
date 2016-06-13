@@ -48,8 +48,7 @@ namespace AR00000.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-            string branchId = _cpnyID;
-            string setupID = "AR";
+           
             try
             {
 
@@ -60,7 +59,8 @@ namespace AR00000.Controllers
 
                 //lstSetup.Created.AddRange(lstSetup.Updated);
 
-
+                string branchId = data["BranchID"];
+                string setupID = "AR";
                 #region Save AP_Setup
 
                 var header = _db.AR_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupId == setupID);

@@ -11,7 +11,7 @@ var checkLoad = function (sto) {
     if (_Source == _maxSource) {
         _isLoadMaster = true;
         _Source = 0;
-        App.stoAR00000Header.reload();
+        App.cboBranchID.setValue(HQ.cpnyID);
         HQ.common.showBusy(false);
     }
 };
@@ -29,6 +29,7 @@ var firstLoad = function () {
     App.cboDfltShipViaID.getStore().addListener('load', checkLoad);
     App.cboAddressLevel.getStore().addListener('load', checkLoad);
     App.cboBankAcct.getStore().addListener('load', checkLoad);
+    App.cboBranchID.getStore().addListener('load', checkLoad);
 };
 
 
@@ -39,12 +40,16 @@ var firstLoad = function () {
 var menuClick = function (command) {
     switch (command) {
         case "first":
+            HQ.combo.first(App.cboBranchID, HQ.isChange);
             break;
         case "next":
+            HQ.combo.next(App.cboBranchID, HQ.isChange);
             break;
         case "prev":
+            HQ.combo.prev(App.cboBranchID, HQ.isChange);
             break;
         case "last":
+            HQ.combo.last(App.cboBranchID, HQ.isChange);
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
@@ -79,6 +84,7 @@ var frmChange = function () {
     
     HQ.isChange = HQ.store.isChange(App.stoAR00000Header);
     HQ.common.changeData(HQ.isChange, 'AR00000');
+    App.cboBranchID.setReadOnly(HQ.isChange);
 };
 
 var stoLoad = function (sto) {
@@ -112,7 +118,17 @@ var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
 };
 
-
+//cac store co param la branchID thi load lai sau khi cboBranchID thay doi
+var cboBranchID_Change = function (item, newValue, oldValue) {
+    if (item.valueModels != null && App.cboBranchID.getValue() != null && !item.hasFocus) {//truong hop co chon branchid
+        App.stoAR00000Header.reload();
+    }
+}
+var cboBranchID_Select = function (item, newValue, oldValue) {
+    if (item.hasFocus) {
+        App.stoAR00000Header.reload();
+    }
+}
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
 // Submit the changed data (created, updated) into server side
@@ -163,6 +179,7 @@ function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         App.stoAR00000Header.reload();
+        App.cboBranchID.setReadOnly(HQ.isChange);
     }
 };
 
