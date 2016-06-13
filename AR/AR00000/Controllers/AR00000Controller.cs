@@ -21,8 +21,7 @@ namespace AR00000.Controllers
     {
         private string _screenNbr = "AR00000";
         private string _userName = Current.UserName;
-        private string _cpnyID = Current.CpnyID;
-
+       
         AR00000Entities _db = Util.CreateObjectContext<AR00000Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         public ActionResult Index()
@@ -59,7 +58,7 @@ namespace AR00000.Controllers
 
                 //lstSetup.Created.AddRange(lstSetup.Updated);
 
-                string branchId = data["BranchID"];
+                string branchId = data["cboBranchID"];
                 string setupID = "AR";
                 #region Save AP_Setup
 
@@ -80,6 +79,7 @@ namespace AR00000.Controllers
                 {
                     header = new AR_Setup();
                     header.ResetET();
+                    curHeader.BranchID = branchId;
                     Update_Setup(ref header, curHeader, true);
                     _db.AR_Setup.AddObject(header);
                 }
@@ -99,7 +99,7 @@ namespace AR00000.Controllers
         {
             if (isNew)
             {
-                s.BranchID = _cpnyID;
+                s.BranchID = d.BranchID;
                 s.SetupId = "AR";
                 s.Crtd_DateTime = DateTime.Now;
                 s.Crtd_Prog = _screenNbr;
