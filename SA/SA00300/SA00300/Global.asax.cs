@@ -39,13 +39,13 @@ namespace SA00300
 
             Current.Authorize = false;
             Current.Server = "EARTHSVR\\SQL2012";
-            Current.DBSys = "JJVN_eSky4DSys";
+            Current.DBSys = "ND_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["SA00300"] = acc;
-            Session["DBApp"] = Current.DBApp = "JJVN_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "JNJ";
             Session["Language"] = Current.Language = "vi";
