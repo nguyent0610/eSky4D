@@ -174,8 +174,6 @@ var stoLoad = function (sto) {
         App.cboSlsperid.forceSelection = false;
         if (_Flag == "1")
             App.cboSlsperid.forceSelection = true;
-        //if (App.stoAR20200_pdCheckAutoSales.data.items[0].data.Result == "1")
-        //    App.cboSlsperid.forceSelection = true;
         HQ.common.setRequire(App.frmMain);
         sto.commitChanges();
     }

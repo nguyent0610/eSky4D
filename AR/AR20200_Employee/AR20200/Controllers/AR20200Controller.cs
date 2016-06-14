@@ -475,9 +475,10 @@ namespace AR20200.Controllers
                             Current.LangID.ToString(), Current.UserName, BranchID, Current.CpnyID,
                             string.Empty, string.Empty, string.Empty);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        throw new MessageException(MessageType.Message, "11032015");
+                        throw ex;
+                        //throw new MessageException(MessageType.Message, "11032015");
                     }
                 }
             }
