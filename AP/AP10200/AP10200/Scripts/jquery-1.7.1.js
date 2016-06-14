@@ -450,7 +450,7 @@ jQuery.extend({
 
 		// Catch cases where $(document).ready() is called after the
 		// browser event has already occurred.
-		if ( document.readyState === "complete" ) {
+		if ( document.readyAR_Det === "complete" ) {
 			// Handle it asynchronously to allow scripts the opportunity to delay ready
 			return setTimeout( jQuery.ready, 1 );
 		}
@@ -467,7 +467,7 @@ jQuery.extend({
 		} else if ( document.attachEvent ) {
 			// ensure firing before onload,
 			// maybe late but safe also for iframes
-			document.attachEvent( "onreadystatechange", DOMContentLoaded );
+			document.attachEvent( "onreadyAR_Detchange", DOMContentLoaded );
 
 			// A fallback to window.onload, that will always work
 			window.attachEvent( "onload", jQuery.ready );
@@ -926,8 +926,8 @@ if ( document.addEventListener ) {
 } else if ( document.attachEvent ) {
 	DOMContentLoaded = function() {
 		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
-		if ( document.readyState === "complete" ) {
-			document.detachEvent( "onreadystatechange", DOMContentLoaded );
+		if ( document.readyAR_Det === "complete" ) {
+			document.detachEvent( "onreadyAR_Detchange", DOMContentLoaded );
 			jQuery.ready();
 		}
 	};
@@ -1141,7 +1141,7 @@ jQuery.Callbacks = function( flags ) {
 			disabled: function() {
 				return !list;
 			},
-			// Lock the list in its current state
+			// Lock the list in its current AR_Det
 			lock: function() {
 				stack = undefined;
 				if ( !memory || memory === true ) {
@@ -1192,7 +1192,7 @@ jQuery.extend({
 		var doneList = jQuery.Callbacks( "once memory" ),
 			failList = jQuery.Callbacks( "once memory" ),
 			progressList = jQuery.Callbacks( "memory" ),
-			state = "pending",
+			AR_Det = "pending",
 			lists = {
 				resolve: doneList,
 				reject: failList,
@@ -1203,8 +1203,8 @@ jQuery.extend({
 				fail: failList.add,
 				progress: progressList.add,
 
-				state: function() {
-					return state;
+				AR_Det: function() {
+					return AR_Det;
 				},
 
 				// Deprecated
@@ -1265,11 +1265,11 @@ jQuery.extend({
 			deferred[ key + "With" ] = lists[ key ].fireWith;
 		}
 
-		// Handle state
+		// Handle AR_Det
 		deferred.done( function() {
-			state = "resolved";
+			AR_Det = "resolved";
 		}, failList.disable, progressList.lock ).fail( function() {
-			state = "rejected";
+			AR_Det = "rejected";
 		}, doneList.disable, progressList.lock );
 
 		// Call given func if any
@@ -1460,7 +1460,7 @@ jQuery.support = (function() {
 	fragment = document.createDocumentFragment();
 	fragment.appendChild( div.lastChild );
 
-	// WebKit doesn't clone checked state correctly in fragments
+	// WebKit doesn't clone checked AR_Det correctly in fragments
 	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
 
 	// Check if a disconnected checkbox will retain its checked
@@ -1484,7 +1484,7 @@ jQuery.support = (function() {
 		div.style.width = "2px";
 		div.appendChild( marginDiv );
 		support.reliableMarginRight =
-			( parseFloat( ( window.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
+			( parseInt( ( window.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
 	}
 
 	// Technique from Juriy Zaytsev
@@ -2258,13 +2258,13 @@ jQuery.fn.extend({
 		return this;
 	},
 
-	toggleClass: function( value, stateVal ) {
+	toggleClass: function( value, AR_DetVal ) {
 		var type = typeof value,
-			isBool = typeof stateVal === "boolean";
+			isBool = typeof AR_DetVal === "boolean";
 
 		if ( jQuery.isFunction( value ) ) {
 			return this.each(function( i ) {
-				jQuery( this ).toggleClass( value.call(this, i, this.className, stateVal), stateVal );
+				jQuery( this ).toggleClass( value.call(this, i, this.className, AR_DetVal), AR_DetVal );
 			});
 		}
 
@@ -2274,13 +2274,13 @@ jQuery.fn.extend({
 				var className,
 					i = 0,
 					self = jQuery( this ),
-					state = stateVal,
+					AR_Det = AR_DetVal,
 					classNames = value.split( rspace );
 
 				while ( (className = classNames[ i++ ]) ) {
 					// check each className given, space seperated list
-					state = isBool ? state : !self.hasClass( className );
-					self[ state ? "addClass" : "removeClass" ]( className );
+					AR_Det = isBool ? AR_Det : !self.hasClass( className );
+					self[ AR_Det ? "addClass" : "removeClass" ]( className );
 				}
 
 			} else if ( type === "undefined" || type === "boolean" ) {
@@ -2628,7 +2628,7 @@ jQuery.extend({
 				var attributeNode = elem.getAttributeNode("tabindex");
 
 				return attributeNode && attributeNode.specified ?
-					parseFloat( attributeNode.value, 10 ) :
+					parseInt( attributeNode.value, 10 ) :
 					rfocusable.test( elem.nodeName ) || rclickable.test( elem.nodeName ) && elem.href ?
 						0 :
 						undefined;
@@ -6053,7 +6053,7 @@ function cloneFixAttributes( src, dest ) {
 		dest.outerHTML = src.outerHTML;
 
 	} else if ( nodeName === "input" && (src.type === "checkbox" || src.type === "radio") ) {
-		// IE6-8 fails to persist the checked state of a cloned checkbox
+		// IE6-8 fails to persist the checked AR_Det of a cloned checkbox
 		// or radio button. Worse, IE6-7 fail to give the cloned element
 		// a checked appearance if the defaultChecked value isn't also set
 		if ( src.checked ) {
@@ -6067,7 +6067,7 @@ function cloneFixAttributes( src, dest ) {
 		}
 
 	// IE6-8 fails to return the selected option to the default selected
-	// state when cloning options
+	// AR_Det when cloning options
 	} else if ( nodeName === "option" ) {
 		dest.selected = src.defaultSelected;
 
@@ -6101,7 +6101,7 @@ jQuery.buildFragment = function( args, nodes, scripts ) {
 	}
 
 	// Only cache "small" (1/2 KB) HTML strings that are associated with the main document
-	// Cloning options loses the selected state, so don't cache them
+	// Cloning options loses the selected AR_Det, so don't cache them
 	// IE 6 doesn't like it when you put <object> or <embed> elements in a fragment
 	// Also, WebKit does not clone 'checked' attributes on cloneNode, so don't cache
 	// Lastly, IE6,7,8 will not correctly reuse cached fragments that were created from unknown elems #10501
@@ -7249,8 +7249,8 @@ jQuery.extend({
 			timeoutTimer,
 			// Cross-domain detection vars
 			parts,
-			// The jqXHR state
-			state = 0,
+			// The jqXHR AR_Det
+			AR_Det = 0,
 			// To know if global events are to be dispatched
 			fireGlobals,
 			// Loop variable
@@ -7258,11 +7258,11 @@ jQuery.extend({
 			// Fake xhr
 			jqXHR = {
 
-				readyState: 0,
+				readyAR_Det: 0,
 
 				// Caches the header
 				setRequestHeader: function( name, value ) {
-					if ( !state ) {
+					if ( !AR_Det ) {
 						var lname = name.toLowerCase();
 						name = requestHeadersNames[ lname ] = requestHeadersNames[ lname ] || name;
 						requestHeaders[ name ] = value;
@@ -7272,13 +7272,13 @@ jQuery.extend({
 
 				// Raw string
 				getAllResponseHeaders: function() {
-					return state === 2 ? responseHeadersString : null;
+					return AR_Det === 2 ? responseHeadersString : null;
 				},
 
 				// Builds headers hashtable if needed
 				getResponseHeader: function( key ) {
 					var match;
-					if ( state === 2 ) {
+					if ( AR_Det === 2 ) {
 						if ( !responseHeaders ) {
 							responseHeaders = {};
 							while( ( match = rheaders.exec( responseHeadersString ) ) ) {
@@ -7292,7 +7292,7 @@ jQuery.extend({
 
 				// Overrides response content-type header
 				overrideMimeType: function( type ) {
-					if ( !state ) {
+					if ( !AR_Det ) {
 						s.mimeType = type;
 					}
 					return this;
@@ -7315,12 +7315,12 @@ jQuery.extend({
 		function done( status, nativeStatusText, responses, headers ) {
 
 			// Called once
-			if ( state === 2 ) {
+			if ( AR_Det === 2 ) {
 				return;
 			}
 
-			// State is "done" now
-			state = 2;
+			// AR_Det is "done" now
+			AR_Det = 2;
 
 			// Clear timeout if it exists
 			if ( timeoutTimer ) {
@@ -7334,8 +7334,8 @@ jQuery.extend({
 			// Cache response headers
 			responseHeadersString = headers || "";
 
-			// Set readyState
-			jqXHR.readyState = status > 0 ? 4 : 0;
+			// Set readyAR_Det
+			jqXHR.readyAR_Det = status > 0 ? 4 : 0;
 
 			var isSuccess,
 				success,
@@ -7432,7 +7432,7 @@ jQuery.extend({
 		jqXHR.statusCode = function( map ) {
 			if ( map ) {
 				var tmp;
-				if ( state < 2 ) {
+				if ( AR_Det < 2 ) {
 					for ( tmp in map ) {
 						statusCode[ tmp ] = [ statusCode[tmp], map[tmp] ];
 					}
@@ -7471,7 +7471,7 @@ jQuery.extend({
 		inspectPrefiltersOrTransports( prefilters, s, options, jqXHR );
 
 		// If request was aborted inside a prefiler, stop there
-		if ( state === 2 ) {
+		if ( AR_Det === 2 ) {
 			return false;
 		}
 
@@ -7544,7 +7544,7 @@ jQuery.extend({
 		}
 
 		// Allow custom headers/mimetypes and early abort
-		if ( s.beforeSend && ( s.beforeSend.call( callbackContext, jqXHR, s ) === false || state === 2 ) ) {
+		if ( s.beforeSend && ( s.beforeSend.call( callbackContext, jqXHR, s ) === false || AR_Det === 2 ) ) {
 				// Abort if not done already
 				jqXHR.abort();
 				return false;
@@ -7563,7 +7563,7 @@ jQuery.extend({
 		if ( !transport ) {
 			done( -1, "No Transport" );
 		} else {
-			jqXHR.readyState = 1;
+			jqXHR.readyAR_Det = 1;
 			// Send global event
 			if ( fireGlobals ) {
 				globalEventContext.trigger( "ajaxSend", [ jqXHR, s ] );
@@ -7576,11 +7576,11 @@ jQuery.extend({
 			}
 
 			try {
-				state = 1;
+				AR_Det = 1;
 				transport.send( requestHeaders, done );
 			} catch (e) {
 				// Propagate exception as error if not done
-				if ( state < 2 ) {
+				if ( AR_Det < 2 ) {
 					done( -1, e );
 				// Simply rethrow otherwise
 				} else {
@@ -7959,12 +7959,12 @@ jQuery.ajaxTransport( "script", function(s) {
 				script.src = s.url;
 
 				// Attach handlers for all browsers
-				script.onload = script.onreadystatechange = function( _, isAbort ) {
+				script.onload = script.onreadyAR_Detchange = function( _, isAbort ) {
 
-					if ( isAbort || !script.readyState || /loaded|complete/.test( script.readyState ) ) {
+					if ( isAbort || !script.readyAR_Det || /loaded|complete/.test( script.readyAR_Det ) ) {
 
 						// Handle memory leak in IE
-						script.onload = script.onreadystatechange = null;
+						script.onload = script.onreadyAR_Detchange = null;
 
 						// Remove the script
 						if ( head && script.parentNode ) {
@@ -8116,14 +8116,14 @@ if ( jQuery.support.ajax ) {
 						try {
 
 							// Was never called and is aborted or complete
-							if ( callback && ( isAbort || xhr.readyState === 4 ) ) {
+							if ( callback && ( isAbort || xhr.readyAR_Det === 4 ) ) {
 
 								// Only called once
 								callback = undefined;
 
 								// Do not keep as active anymore
 								if ( handle ) {
-									xhr.onreadystatechange = jQuery.noop;
+									xhr.onreadyAR_Detchange = jQuery.noop;
 									if ( xhrOnUnloadAbort ) {
 										delete xhrCallbacks[ handle ];
 									}
@@ -8132,7 +8132,7 @@ if ( jQuery.support.ajax ) {
 								// If it's an abort
 								if ( isAbort ) {
 									// Abort it manually if needed
-									if ( xhr.readyState !== 4 ) {
+									if ( xhr.readyAR_Det !== 4 ) {
 										xhr.abort();
 									}
 								} else {
@@ -8184,7 +8184,7 @@ if ( jQuery.support.ajax ) {
 					// if we're in sync mode or it's in cache
 					// and has been retrieved directly (IE6 & IE7)
 					// we need to manually fire the callback
-					if ( !s.async || xhr.readyState === 4 ) {
+					if ( !s.async || xhr.readyAR_Det === 4 ) {
 						callback();
 					} else {
 						handle = ++xhrId;
@@ -8198,7 +8198,7 @@ if ( jQuery.support.ajax ) {
 							// Add to list of active xhrs callbacks
 							xhrCallbacks[ handle ] = callback;
 						}
-						xhr.onreadystatechange = callback;
+						xhr.onreadyAR_Detchange = callback;
 					}
 				},
 
@@ -8320,8 +8320,8 @@ jQuery.fn.extend({
 
 		} else if ( fn == null || bool ) {
 			this.each(function() {
-				var state = bool ? fn : jQuery(this).is(":hidden");
-				jQuery(this)[ state ? "show" : "hide" ]();
+				var AR_Det = bool ? fn : jQuery(this).is(":hidden");
+				jQuery(this)[ AR_Det ? "show" : "hide" ]();
 			});
 
 		} else {
@@ -8512,7 +8512,7 @@ jQuery.fn.extend({
 						// force the next step to be the last
 						timers[ index ]( true );
 					} else {
-						timers[ index ].saveState();
+						timers[ index ].saveAR_Det();
 					}
 					hadTimers = true;
 					timers.splice( index, 1 );
@@ -8653,7 +8653,7 @@ jQuery.fx.prototype = {
 		this.startTime = fxNow || createFxNow();
 		this.end = to;
 		this.now = this.start = from;
-		this.pos = this.state = 0;
+		this.pos = this.AR_Det = 0;
 		this.unit = unit || this.unit || ( jQuery.cssNumber[ this.prop ] ? "" : "px" );
 
 		function t( gotoEnd ) {
@@ -8662,7 +8662,7 @@ jQuery.fx.prototype = {
 
 		t.queue = this.options.queue;
 		t.elem = this.elem;
-		t.saveState = function() {
+		t.saveAR_Det = function() {
 			if ( self.options.hide && jQuery._data( self.elem, "fxshow" + self.prop ) === undefined ) {
 				jQuery._data( self.elem, "fxshow" + self.prop, self.start );
 			}
@@ -8714,7 +8714,7 @@ jQuery.fx.prototype = {
 
 		if ( gotoEnd || t >= options.duration + this.startTime ) {
 			this.now = this.end;
-			this.pos = this.state = 1;
+			this.pos = this.AR_Det = 1;
 			this.update();
 
 			options.animatedProperties[ this.prop ] = true;
@@ -8769,10 +8769,10 @@ jQuery.fx.prototype = {
 				this.now = t;
 			} else {
 				n = t - this.startTime;
-				this.state = n / options.duration;
+				this.AR_Det = n / options.duration;
 
 				// Perform the easing function, defaults to swing
-				this.pos = jQuery.easing[ options.animatedProperties[this.prop] ]( this.state, n, 0, 1, options.duration );
+				this.pos = jQuery.easing[ options.animatedProperties[this.prop] ]( this.AR_Det, n, 0, 1, options.duration );
 				this.now = this.start + ( (this.end - this.start) * this.pos );
 			}
 			// Perform the next step of the animation

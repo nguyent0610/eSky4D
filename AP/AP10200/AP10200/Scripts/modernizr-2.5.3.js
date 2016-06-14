@@ -91,7 +91,7 @@ window.Modernizr = (function( window, document, undefined ) {
           // IE6 and 7 won't return offsetWidth or offsetHeight unless it's in the body element, so we fake it.
           fakeBody = body ? body : document.createElement('body');
 
-      if ( parseFloat(nodes, 10) ) {
+      if ( parseInt(nodes, 10) ) {
           // In order not to give false positives we create a node for each test
           // This also allows the method to scale for unspecified uses
           while ( nodes-- ) {
@@ -504,7 +504,7 @@ window.Modernizr = (function( window, document, undefined ) {
     // The old API is still available in 1.6, but as of 2.0 will throw a warning,
     // and in the first release thereafter disappear entirely.
     tests['history'] = function() {
-      return !!(window.history && history.pushState);
+      return !!(window.history && history.pushAR_Det);
     };
 
     tests['draganddrop'] = function() {
@@ -1190,10 +1190,10 @@ window.Modernizr = (function( window, document, undefined ) {
     Modernizr._domPrefixes  = domPrefixes;
     Modernizr._cssomPrefixes  = cssomPrefixes;
     
-    // Modernizr.mq tests a given media query, live against the current state of the window
+    // Modernizr.mq tests a given media query, live against the current AR_Det of the window
     // A few important notes:
     //   * If a browser does not support media queries at all (eg. oldIE) the mq() will always return false
-    //   * A max-width or orientation query will be evaluated against the current state, which may change later.
+    //   * A max-width or orientation query will be evaluated against the current AR_Det, which may change later.
     //   * You must specify values. Eg. If you are testing support for the min-width media query use: 
     //       Modernizr.mq('(min-width:0)')
     // usage:

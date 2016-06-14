@@ -9,7 +9,6 @@
           <EntitySet Name="AP_Doc" EntityType="eBiz4DWebSysModel.Store.AP_Doc" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AP_Setup" EntityType="eBiz4DWebSysModel.Store.AP_Setup" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AP_Trans" EntityType="eBiz4DWebSysModel.Store.AP_Trans" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="AP_Vendor" EntityType="eBiz4DWebSysModel.Store.AP_Vendor" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Batch" EntityType="eBiz4DWebSysModel.Store.Batch" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="AP_Doc">
@@ -134,59 +133,6 @@
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <EntityType Name="AP_Vendor">
-          <Key>
-            <PropertyRef Name="VendID" />
-          </Key>
-          <Property Name="VendID" Type="varchar" Nullable="false" MaxLength="15" />
-          <Property Name="Addr1" Type="nvarchar" Nullable="false" MaxLength="200" />
-          <Property Name="Addr2" Type="nvarchar" Nullable="false" MaxLength="200" />
-          <Property Name="Attn" Type="nvarchar" Nullable="false" MaxLength="200" />
-          <Property Name="City" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Country" Type="varchar" Nullable="false" MaxLength="3" />
-          <Property Name="DfltOrdFromId" Type="varchar" MaxLength="10" />
-          <Property Name="EMailAddr" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="ExpAcct" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="ExpSub" Type="varchar" Nullable="false" MaxLength="24" />
-          <Property Name="Fax" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="Name" Type="nvarchar" MaxLength="200" />
-          <Property Name="Phone" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="RemitAddr1" Type="nvarchar" MaxLength="200" />
-          <Property Name="RemitAddr2" Type="nvarchar" MaxLength="200" />
-          <Property Name="RemitAttn" Type="nvarchar" MaxLength="200" />
-          <Property Name="RemitCity" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="RemitCountry" Type="varchar" Nullable="false" MaxLength="3" />
-          <Property Name="RemitFax" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="RemitName" Type="nvarchar" MaxLength="200" />
-          <Property Name="RemitPhone" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="RemitSalut" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="RemitState" Type="varchar" MaxLength="10" />
-          <Property Name="RemitZip" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Salut" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="State" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Status" Type="nvarchar" Nullable="false" MaxLength="1" />
-          <Property Name="TaxDflt" Type="varchar" Nullable="false" MaxLength="1" />
-          <Property Name="TaxId00" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="TaxId01" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="TaxId02" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="TaxId03" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="TaxLocId" Type="varchar" Nullable="false" MaxLength="15" />
-          <Property Name="TaxRegNbr" Type="varchar" Nullable="false" MaxLength="15" />
-          <Property Name="Terms" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Zip" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="CrLmt" Type="float" Nullable="false" />
-          <Property Name="PmtMethod" Type="nvarchar" MaxLength="200" />
-          <Property Name="MOQVal" Type="float" Nullable="false" />
-          <Property Name="MOQType" Type="varchar" Nullable="false" MaxLength="1" />
-        </EntityType>
         <EntityType Name="Batch">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -238,7 +184,6 @@
           <EntitySet Name="AP_Doc" EntityType="AP10200Model.AP_Doc" />
           <EntitySet Name="AP_Setup" EntityType="AP10200Model.AP_Setup" />
           <EntitySet Name="AP_Trans" EntityType="AP10200Model.AP_Trans" />
-          <EntitySet Name="AP_Vendor" EntityType="AP10200Model.AP_Vendor" />
           <EntitySet Name="Batches" EntityType="AP10200Model.Batch" />
           <FunctionImport Name="AP10200_ppAPNumbering" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -372,59 +317,6 @@
           <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <EntityType Name="AP_Vendor">
-          <Key>
-            <PropertyRef Name="VendID" />
-          </Key>
-          <Property Type="String" Name="VendID" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Addr1" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr2" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Attn" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="City" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Country" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltOrdFromId" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="EMailAddr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ExpAcct" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ExpSub" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Fax" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Name" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Phone" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RemitAddr1" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="RemitAddr2" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="RemitAttn" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="RemitCity" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RemitCountry" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RemitFax" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RemitName" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="RemitPhone" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RemitSalut" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="RemitState" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RemitZip" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Salut" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="State" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Status" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="TaxDflt" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxId00" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxId01" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxId02" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxId03" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxLocId" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxRegNbr" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Terms" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Zip" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="Double" Name="CrLmt" Nullable="false" />
-          <Property Type="String" Name="PmtMethod" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="Double" Name="MOQVal" Nullable="false" />
-          <Property Type="String" Name="MOQType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="Batch">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -460,18 +352,21 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <ComplexType Name="AP10200_pgLoadGridTrans_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" />
           <Property Type="Double" Name="TranAmt" Nullable="false" />
           <Property Type="String" Name="TranDesc" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
-        </Schema>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="AP10200Entities" >
-        <EntitySetMapping Name="AP_Doc">
+          <EntitySetMapping Name="AP_Doc">
             <EntityTypeMapping TypeName="AP10200Model.AP_Doc">
               <MappingFragment StoreEntitySet="AP_Doc">
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -590,60 +485,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AP_Vendor">
-            <EntityTypeMapping TypeName="AP10200Model.AP_Vendor">
-              <MappingFragment StoreEntitySet="AP_Vendor">
-                <ScalarProperty Name="MOQType" ColumnName="MOQType" />
-                <ScalarProperty Name="MOQVal" ColumnName="MOQVal" />
-                <ScalarProperty Name="PmtMethod" ColumnName="PmtMethod" />
-                <ScalarProperty Name="CrLmt" ColumnName="CrLmt" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Zip" ColumnName="Zip" />
-                <ScalarProperty Name="Terms" ColumnName="Terms" />
-                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
-                <ScalarProperty Name="TaxLocId" ColumnName="TaxLocId" />
-                <ScalarProperty Name="TaxId03" ColumnName="TaxId03" />
-                <ScalarProperty Name="TaxId02" ColumnName="TaxId02" />
-                <ScalarProperty Name="TaxId01" ColumnName="TaxId01" />
-                <ScalarProperty Name="TaxId00" ColumnName="TaxId00" />
-                <ScalarProperty Name="TaxDflt" ColumnName="TaxDflt" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Salut" ColumnName="Salut" />
-                <ScalarProperty Name="RemitZip" ColumnName="RemitZip" />
-                <ScalarProperty Name="RemitState" ColumnName="RemitState" />
-                <ScalarProperty Name="RemitSalut" ColumnName="RemitSalut" />
-                <ScalarProperty Name="RemitPhone" ColumnName="RemitPhone" />
-                <ScalarProperty Name="RemitName" ColumnName="RemitName" />
-                <ScalarProperty Name="RemitFax" ColumnName="RemitFax" />
-                <ScalarProperty Name="RemitCountry" ColumnName="RemitCountry" />
-                <ScalarProperty Name="RemitCity" ColumnName="RemitCity" />
-                <ScalarProperty Name="RemitAttn" ColumnName="RemitAttn" />
-                <ScalarProperty Name="RemitAddr2" ColumnName="RemitAddr2" />
-                <ScalarProperty Name="RemitAddr1" ColumnName="RemitAddr1" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="ExpSub" ColumnName="ExpSub" />
-                <ScalarProperty Name="ExpAcct" ColumnName="ExpAcct" />
-                <ScalarProperty Name="EMailAddr" ColumnName="EMailAddr" />
-                <ScalarProperty Name="DfltOrdFromId" ColumnName="DfltOrdFromId" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Attn" ColumnName="Attn" />
-                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
-                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
-                <ScalarProperty Name="VendID" ColumnName="VendID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Batches">
             <EntityTypeMapping TypeName="AP10200Model.Batch">
               <MappingFragment StoreEntitySet="Batch">
@@ -681,6 +522,9 @@
           <FunctionImportMapping FunctionImportName="AP10200_pgLoadGridTrans" FunctionName="eBiz4DWebSysModel.Store.AP10200_pgLoadGridTrans">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AP10200Model.AP10200_pgLoadGridTrans_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
                 <ScalarProperty Name="TranAmt" ColumnName="TranAmt" />
                 <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
                 <ScalarProperty Name="LineRef" ColumnName="LineRef" />
@@ -708,12 +552,11 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="82" >
-        <EntityTypeShape EntityType="AP10200Model.AP_Doc" Width="1.5" PointX="2.375" PointY="0.625" />
-        <EntityTypeShape EntityType="AP10200Model.AP_Setup" Width="1.5" PointX="6" PointY="0.625" />
-        <EntityTypeShape EntityType="AP10200Model.AP_Trans" Width="1.5" PointX="4.125" PointY="0.625" />
-        <EntityTypeShape EntityType="AP10200Model.AP_Vendor" Width="1.5" PointX="7.75" PointY="0.625" />
-        <EntityTypeShape EntityType="AP10200Model.Batch" Width="1.5" PointX="0.75" PointY="0.625" />
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="65" >
+        <EntityTypeShape EntityType="AP10200Model.AP_Doc" Width="1.5" PointX="7.6680026462618276" PointY="15.931813456086355" />
+        <EntityTypeShape EntityType="AP10200Model.AP_Setup" Width="1.5" PointX="9.6626399316185339" PointY="20.743801648143588" />
+        <EntityTypeShape EntityType="AP10200Model.AP_Trans" Width="1.5" PointX="1.9237743736821109" PointY="25.316002812849359" />
+        <EntityTypeShape EntityType="AP10200Model.Batch" Width="1.5" PointX="11.262210873543383" PointY="30.090589015786811" />
       </Diagram>
     </Diagrams>
   </Designer>
