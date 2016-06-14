@@ -12,7 +12,7 @@ using System.IO;
 using System.Text;
 using System.Drawing;
 using HQ.eSkySys;
-using HQSendMailApprove;
+//using HQSendMailApprove;
 using System.Web.Hosting;
 using Ionic.Zip;
 
