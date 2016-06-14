@@ -1,4 +1,4 @@
-﻿if (!Array.prototype.indexOf) {
+if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
 
@@ -55,6 +55,16 @@ Date.prototype.getFromFormat = function (format) {
     format = format.replace(/ss/g, (ss[1] ? ss : "0" + ss[0]));
     return format;
 };
+Number.prototype.format = function (n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
+///vi du 
+//12345678.9.format(2, 3, '.', ',');  // "12.345.678,90"
+//123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
+//12345678.9.format(0, 3, '-');       // "12-345-679"
 var HQ = {
     store: {
         isChange: function (store) {
@@ -147,65 +157,35 @@ var HQ = {
         getAllData: function (store, fields, values, isEqual) {
             var lstData = [];
             if (isEqual == undefined || isEqual == true) {
-                if (store.snapshot != undefined) {
-                    store.snapshot.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] != values[i]) {
-                                    isb = false;
-                                    break;
-                                }
+                var allData = store.snapshot || store.allData || store.data;
+                allData.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
                             }
                         }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                } else {
-                    store.data.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] != values[i]) {
-                                    isb = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
             } else {
-                if (store.snapshot != undefined) {
-                    store.snapshot.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] == values[i]) {
-                                    isb = false;
-                                    break;
-                                }
+                var allData = store.snapshot || store.allData || store.data;
+                allData.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] == values[i]) {
+                                isb = false;
+                                break;
                             }
                         }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                } else {
-                    store.data.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] == values[i]) {
-                                    isb = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
             }
         },
         findInStore: function (store, fields, values) {

@@ -8,183 +8,93 @@
 @{
     Layout = null;
     var X = Html.X();
-    var HQ = Html.HQ();
     ViewBag.Title = "IN20500";
     var acc = Session["IN20500"] as AccessRight;
 }
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width" />
-
-
+ <!--Không thay đổi phần head Đổi mã màn hình IN20500.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/screen/IN20500.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-@*<script src='@Url.Content("Scripts/Screen/uxflash.js")' type="text/javascript"></script>
-<script src='@Url.Content("Scripts/Screen/uxflex.js")' type="text/javascript"></script>
-<script src='@Url.Content("Scripts/Screen/uxmedia-ie.js")' type="text/javascript"></script>
-<script src='@Url.Content("Scripts/Screen/uxmedia.js")' type="text/javascript"></script>
-<script src='@Url.Content("Scripts/Screen/uxvismode.js")' type="text/javascript"></script>*@
-
-
-<style type="text/css"> @*Thuoc tinh hover tren grid *@
-    .x-grid-row-over .x-grid-cell-inner {
-        font-weight : bold;
-    }
-</style>
-
-@*<script type="text/javascript">
-    jwplayer("myElement").setup({
-        file: "https://www.youtube.com/watch?v=IvohXgIKTgU",
-        image: "http://example.com/uploads/myPoster.jpg",
-        width: 640,
-        height: 360
-    });
-</script>*@
-<script>
-
-
-
-
-
-
-
-
-</script>
-<script>
-    HQ.cpnyID = '@Current.CpnyID';
-    HQ.langID = '@Current.LangID';
-    HQ.userName = '@Current.UserName';
-    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-</script>
-<title>@ViewBag.Title</title>
+    <script src='@Url.Content("Scripts/screen/IN20500.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');
+        HQ.IN20500Date = '@DateTime.Now.ToString(Current.FormatDate.Replace("/","").Replace(".","").Replace("-",""))';
+    </script>  
+    <title>@ViewBag.Title</title>
 </head>
-    <body>
-@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
-
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
         @X.GridFilters()<!--Khi cache cho grid-->
-        @X.ProgressBarPager()<!--Khi cache cho grid -->  
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
 
-@(Html.X().Store().ID("stoIN_Inventory").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(IN_Inventory), "IN_InventoryModel", "InvtID",false,"StkItem"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetInventoryClass", "IN20500"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-        .Parameters(ps =>
-        {
-            ps.Add(new StoreParameter("InvtID", "App.cboInvtID.value", ParameterMode.Raw));
-        })
-        .Listeners(p => 
-            {
-                p.BeforeLoad.Fn = "storeBeforeLoad";
-                p.Load.Fn = "stoIN_Inventory_Loaded";
-                
-                
-            })
-  )
-
-
-
-
-@(Html.X().Store().ID("stoIN_ProductClass").AutoLoad(false)
-        //.Model(Util.GenerateModel(typeof(IN_ProductClass), "IN_ProductClassModel", "ClassID",false,"DfltStkItem"))
-        .Model(
-            X.Model()
-            .Name("IN_ProductClassModel")
-            .IDProperty("ClassID")
-            .Fields(
-                X.ModelField().Name("ClassID").Type(ModelFieldType.String)
-                ,X.ModelField().Name("Public").Type(ModelFieldType.Boolean)
-                ,X.ModelField().Name("StkItem").Type(ModelFieldType.Boolean)
-                ,X.ModelField().Name("InvtType").Type(ModelFieldType.String)
-                ,X.ModelField().Name("Source").Type(ModelFieldType.String)
-                ,X.ModelField().Name("ValMthd").Type(ModelFieldType.String)
-                ,X.ModelField().Name("LotSerTrack").Type(ModelFieldType.String)
-                ,X.ModelField().Name("Buyer").Type(ModelFieldType.String)
-                ,X.ModelField().Name("StkUnit").Type(ModelFieldType.String)
-                ,X.ModelField().Name("DfltPOUnit").Type(ModelFieldType.String)
-                ,X.ModelField().Name("DfltSOUnit").Type(ModelFieldType.String)
-                ,X.ModelField().Name("MaterialType").Type(ModelFieldType.String)
-                ,X.ModelField().Name("TaxCat").Type(ModelFieldType.String)
-                ,X.ModelField().Name("SerAssign").Type(ModelFieldType.String)
-                ,X.ModelField().Name("LotSerIssMthd").Type(ModelFieldType.String)
-                ,X.ModelField().Name("ShelfLife").Type(ModelFieldType.Int)
-                ,X.ModelField().Name("WarrantyDays").Type(ModelFieldType.Int)
-                ,X.ModelField().Name("LotSerFxdTyp").Type(ModelFieldType.String)
-                ,X.ModelField().Name("LotSerFxdLen").Type(ModelFieldType.Int)
-                ,X.ModelField().Name("LotSerFxdVal").Type(ModelFieldType.String)
-                ,X.ModelField().Name("LotSerNumLen").Type(ModelFieldType.Int)
-                ,X.ModelField().Name("LotSerNumVal").Type(ModelFieldType.String)
-         
-                
-            )
-        )
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetProductClass", "IN20500"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-        .Parameters(ps =>
-        {
-            ps.Add(new StoreParameter("ClassID", "App.cboClassID.value", ParameterMode.Raw));
-        })
-        .Listeners(p => p.Load.Handler = "stoIN_ProductClass_Loaded()")
-  )
-
-
-@(Html.X().Store().ID("stoCompany").AutoLoad(false)
-        //.Model(Util.GenerateModel(typeof(ppv_IN20500_getCompany_Result), "ppv_IN20500_getCompany_ResultModel", "CpnyID"))
-        .Model(
-            X.Model()
-            .Name("GetCompany_ResultModel")
-            .IDProperty("CpnyID")
-            .Fields(
-                X.ModelField().Name("ClassID").Type(ModelFieldType.String)
-                , X.ModelField().Name("CpnyID").Type(ModelFieldType.String)
-                , X.ModelField().Name("CpnyName").Type(ModelFieldType.String)
-
-
-            )
-        )
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetCompanyClass", "IN20500"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
+        @(X.Store().ID("stoIN_Inventory").AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(IN20500_pdHeader_Result), "mdlIN20500_pdHeader", "",true,"StkItem"))       
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetIN_Inventory", "IN20500"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )
             .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("ClassID", "App.cboClassID.value", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("InvtID", "App.cboInvtID.value", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("chooseGrid", "chooseGrid", ParameterMode.Raw));
-                            })
-        .Listeners(p =>
-        {
-            p.Load.Fn = "loadDataGrid";
-            p.Update.Handler = "frmChange();";
-        })
-  )
+            {
+                ps.Add(new StoreParameter("InvtID", "App.cboInvtID.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";                   
+                }
+            )
+        )
 
+        @(Html.HQ().Store().ID("stoProductCpny")
+            .HQProcedure("IN20500_pdProductCpny")
+            .LoadData()
+        )
 
-@(Html.HQ().Store().ID("ApproveStatusAll").HQProcedure("IN20500_pcApproveStatus").HQDBSys(false).LoadData())
+        @*@(Html.HQ().Store().ID("stoGetMaxHierarchyLevel").AutoLoad(false)
+                .HQProcedure("IN20500_ppGetMaxHierarchyLevel")
+                .HQParam(new StoreParameterCollection() {
+                    new StoreParameter() { Name = "@Type", Value ="C", Mode = ParameterMode.Value}
+                })
+                .Listeners(p=>{
+                    //p.BeforeLoad.Fn = "stoBeforeLoad";
+                    p.Load.Fn = "stoGetMaxHierarchyLevel_Load";
+                })
+                .LoadData()
+        )
 
-    @{Html.RenderAction("Body", new { lang=@Current.LangID});}
+        @(Html.HQ().Store().ID("stoCheckHiddenTree").AutoLoad(false)
+            .HQProcedure("IN20500_ppCheckHiddenTree")
+            .HQParam(new StoreParameterCollection() {
+                new StoreParameter() { Name = "@CpnyID", Value ="App.cboCpnyID.getValue()", Mode = ParameterMode.Raw}
+            })
+            .Listeners(p=>{
+                //p.BeforeLoad.Fn = "stoBeforeLoad";
+                p.Load.Fn = "stoCheckHiddenTree_Load";
+            })
+            .LoadData()
+        )*@
 
-    </body>
+        <!-- Gọi hàm Body trong IN20500Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
+        @{Html.RenderAction("Body", new {lang=Current.LangID});}
+</body>
 </html>
+ 
