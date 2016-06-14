@@ -343,17 +343,31 @@ var save = function () {
             invalidField = App.txtDfltLotSerShelfLife.id;
             HQ.message.show(2015110901, App.txtDfltLotSerShelfLife.fieldLabel, 'HQ.util.focusControl');
             return;
+        } else if (App.txtDfltLotSerFxdLen.getValue() > 0 && !App.txtDfltLotSerFxdVal.getValue()) {
+            invalidField = App.txtDfltLotSerFxdVal.id;
+            HQ.message.show(1000, App.txtDfltLotSerFxdVal.fieldLabel, 'HQ.util.focusControl');
+            return;
         } else if (!App.txtDfltLotSerNumLen.getValue()) {
             invalidField = App.txtDfltLotSerNumLen.id;
             HQ.message.show(1000, App.txtDfltLotSerNumLen.fieldLabel, 'HQ.util.focusControl');
             return;
-        } else if (!App.txtDfltLotSerNumVal.getValue()) {
+        } else if (App.txtDfltLotSerNumLen.getValue() > 0 && !App.txtDfltLotSerNumVal.getValue()) {
             invalidField = App.txtDfltLotSerNumVal.id;
             HQ.message.show(1000, App.txtDfltLotSerNumVal.fieldLabel, 'HQ.util.focusControl');
             return;
-        } else if (!App.lblShowNextLotSerial.getValue()) {
+        }  else if (!App.lblShowNextLotSerial.getValue()) {
             invalidField = App.lblShowNextLotSerial.id;
             HQ.message.show(1000, App.lblShowNextLotSerial.fieldLabel, 'HQ.util.focusControl');
+            return;
+        } else if (App.txtDfltLotSerFxdVal.getValue().length != App.txtDfltLotSerFxdLen.getValue()) {
+            HQ.message.show(2016061401, App.txtDfltLotSerFxdLen.getValue());
+            App.tabDetail.setActiveTab(App.pnlLotSerial);
+            App.txtDfltLotSerFxdVal.focus();
+            return;
+        } else if (App.txtDfltLotSerNumVal.getValue().length != App.txtDfltLotSerNumLen.getValue()) {
+            HQ.message.show(2016061401, App.txtDfltLotSerNumLen.getValue());
+            App.tabDetail.setActiveTab(App.pnlLotSerial);
+            App.txtDfltLotSerNumVal.focus();
             return;
         }
     }
