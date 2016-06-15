@@ -94,7 +94,7 @@
                         , HQ.Button().ID("btnCopy").Width(100).MarginSpec("5 0 0 5")
                             .HQLangCode("CopyFrom").Listeners(p =>
                             {
-                                //p.Click.Fn = "CopyForm_Click";
+                                p.Click.Fn = "btnCopy_Click";
                             })
                             
                         , HQ.TextBox().ID("txtInvtIDCopy").Name("txtInvtIDCopy").HQLangCode("InvtID").MarginSpec("5 0 0 0")

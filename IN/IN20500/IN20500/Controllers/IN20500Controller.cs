@@ -35,17 +35,17 @@ namespace IN20500.Controllers
         {
             get
             {
-                //var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadIN20500");
-                //if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
-                //{
-                //    _filePath = config.TextVal;
-                //    _Path = config.TextVal;
-                //}
-                //else
-                //{
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadIN20500");
+                if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
+                {
+                    _filePath = config.TextVal;
+                    _Path = config.TextVal;
+                }
+                else
+                {
                     _filePath = Server.MapPath("~\\Images\\IN20500");
                     
-                //}
+                }
                 return _filePath;
             }
         }
@@ -54,15 +54,15 @@ namespace IN20500.Controllers
         {
             get
             {
-                //var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "PublicIN20500");
-                //if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
-                //{
-                //    _Path = config.TextVal;
-                //}
-                //else
-                //{
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "PublicIN20500");
+                if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
+                {
+                    _Path = config.TextVal;
+                }
+                else
+                {
                     _Path = Server.MapPath("~\\Images\\IN20500");
-                //}
+                }
                 return _Path;
             }
         }
@@ -92,12 +92,13 @@ namespace IN20500.Controllers
 
 
         [HttpPost]
-        public ActionResult Save(FormCollection data, string NodeID, string NodeLevel, string ParentRecordID, string HiddenTree)
+        public ActionResult Save(FormCollection data, string NodeID, string NodeLevel, string ParentRecordID, string HiddenTree, string Copy)
         {
             try
             {
                 string isNew = "false";
                 string InvtID = data["cboInvtID"].PassNull();
+                string InvtID_Copy = data["txtInvtIDCopy"].PassNull();
                 string BranchID = data["cboCpnyID"].PassNull();
                 string ClassId = data["cboClassId"].PassNull();
                 string Status = data["cboApproveStatus"].PassNull();
@@ -111,6 +112,16 @@ namespace IN20500.Controllers
 
                 #region Save IN_Inventory
                 var header = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == InvtID);
+
+                if (Copy == "true")
+                {
+                    if (header != null)
+                    {
+                        throw new MessageException(MessageType.Message, "8001",
+                          parm: new[] { Util.GetLang("InvtID") + " " + InvtID });
+                    }
+                }
+
                 if (header == null)
                 { 
                     isNew = "true";
@@ -120,14 +131,14 @@ namespace IN20500.Controllers
                     header.Crtd_DateTime = DateTime.Now;
                     header.Crtd_Prog = _screenNbr;
                     header.Crtd_User = Current.UserName;
-                    UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, Status, Handle);
+                    UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, Status, Handle, Copy);
                     _db.IN_Inventory.AddObject(header);
                 }
                 else
                 {
                     if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, Status, Handle);
+                        UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, Status, Handle, Copy);
                     }
                     else
                     {
@@ -139,73 +150,107 @@ namespace IN20500.Controllers
                 #endregion
 
                 #region Image & Media
-                var files = Request.Files;
-                if (files.Count > 0) // Co chon file de upload
+                if (Copy == "false")
                 {
-                    for (int i = 0; i < files.Count; i++)
+                    var files = Request.Files;
+                    if (files.Count > 0) // Co chon file de upload
                     {
-                        if (files[i].ContentLength > 0)
+                        for (int i = 0; i < files.Count; i++)
                         {
-                            if (Path.GetExtension(files[i].FileName).ToLower().Contains("jpg") || Path.GetExtension(files[i].FileName).ToLower().Contains("png") || Path.GetExtension(files[i].FileName).ToLower().Contains("gif"))
+                            if (files[i].ContentLength > 0)
                             {
-                                // Xoa file cu di
-                                var oldPath = string.Format("{0}\\{1}", FilePath, header.Picture);
-                                if (System.IO.File.Exists(oldPath))
+                                if (Path.GetExtension(files[i].FileName).ToLower().Contains("jpg") || Path.GetExtension(files[i].FileName).ToLower().Contains("png") || Path.GetExtension(files[i].FileName).ToLower().Contains("gif"))
                                 {
-                                    System.IO.File.Delete(oldPath);
+                                    // Xoa file cu di
+                                    var oldPath = string.Format("{0}\\{1}", FilePath, header.Picture);
+                                    if (System.IO.File.Exists(oldPath))
+                                    {
+                                        System.IO.File.Delete(oldPath);
+                                    }
+
+                                    // Upload file moi
+                                    string newFileName = string.Format("{0}{1}", InvtID, Path.GetExtension(files[i].FileName));
+                                    files[i].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
+                                    header.Picture = newFileName;
+
+                                    ZipFiles(FilePath, newFileName);
+
                                 }
-
-                                // Upload file moi
-                                string newFileName = string.Format("{0}{1}", InvtID, Path.GetExtension(files[i].FileName));
-                                files[i].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
-                                header.Picture = newFileName;
-
-                                ZipFiles(FilePath, newFileName);
-                                
-                            }
-                            else if (Path.GetExtension(files[i].FileName).ToLower().Contains("mp4") || Path.GetExtension(files[i].FileName).ToLower().Contains("wmv") ||
-                                     Path.GetExtension(files[i].FileName).ToLower().Contains("ppt") || Path.GetExtension(files[i].FileName).ToLower().Contains("pptx") ||
-                                     Path.GetExtension(files[i].FileName).ToLower().Contains("pdf") || Path.GetExtension(files[i].FileName).ToLower().Contains("xls") ||
-                                     Path.GetExtension(files[i].FileName).ToLower().Contains("xlsx") || Path.GetExtension(files[i].FileName).ToLower().Contains("docx") ||
-                                     Path.GetExtension(files[i].FileName).ToLower().Contains("doc"))
-                            {
-                                // Xoa file cu di
-                                var oldPath = string.Format("{0}\\{1}", FilePath, header.Media);
-                                if (System.IO.File.Exists(oldPath))
+                                else if (Path.GetExtension(files[i].FileName).ToLower().Contains("mp4") || Path.GetExtension(files[i].FileName).ToLower().Contains("wmv") ||
+                                         Path.GetExtension(files[i].FileName).ToLower().Contains("ppt") || Path.GetExtension(files[i].FileName).ToLower().Contains("pptx") ||
+                                         Path.GetExtension(files[i].FileName).ToLower().Contains("pdf") || Path.GetExtension(files[i].FileName).ToLower().Contains("xls") ||
+                                         Path.GetExtension(files[i].FileName).ToLower().Contains("xlsx") || Path.GetExtension(files[i].FileName).ToLower().Contains("docx") ||
+                                         Path.GetExtension(files[i].FileName).ToLower().Contains("doc"))
                                 {
-                                    System.IO.File.Delete(oldPath);
-                                }
+                                    // Xoa file cu di
+                                    var oldPath = string.Format("{0}\\{1}", FilePath, header.Media);
+                                    if (System.IO.File.Exists(oldPath))
+                                    {
+                                        System.IO.File.Delete(oldPath);
+                                    }
 
-                                // Upload file moi
-                                string newFileName = string.Format("{0}{1}", InvtID, Path.GetExtension(files[i].FileName));
-                                files[i].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
-                                header.Media = newFileName;
+                                    // Upload file moi
+                                    string newFileName = string.Format("{0}{1}", InvtID, Path.GetExtension(files[i].FileName));
+                                    files[i].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
+                                    header.Media = newFileName;
+                                }
                             }
                         }
                     }
-                }
 
-                if (!string.IsNullOrWhiteSpace(header.Picture) && string.IsNullOrWhiteSpace(curHeader.Picture))
-                {
-                    // Xoa file cu di
-                    var oldPath = string.Format("{0}\\{1}", FilePath, header.Picture);
-                    if (System.IO.File.Exists(oldPath))
+                    if (!string.IsNullOrWhiteSpace(header.Picture) && string.IsNullOrWhiteSpace(curHeader.Picture))
                     {
-                        System.IO.File.Delete(oldPath);
-                    }
-                    DeleteFileInZip(header.Picture, FilePath);
-                    header.Picture = string.Empty;
+                        // Xoa file cu di
+                        var oldPath = string.Format("{0}\\{1}", FilePath, header.Picture);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                        DeleteFileInZip(header.Picture, FilePath);
+                        header.Picture = string.Empty;
 
-                }
-                if (!string.IsNullOrWhiteSpace(header.Media) && string.IsNullOrWhiteSpace(curHeader.Media))
-                {
-                    // Xoa file cu di
-                    var oldPath = string.Format("{0}\\{1}", FilePath, header.Media);
-                    if (System.IO.File.Exists(oldPath))
-                    {
-                        System.IO.File.Delete(oldPath);
                     }
-                    header.Media = string.Empty;
+                    if (!string.IsNullOrWhiteSpace(header.Media) && string.IsNullOrWhiteSpace(curHeader.Media))
+                    {
+                        // Xoa file cu di
+                        var oldPath = string.Format("{0}\\{1}", FilePath, header.Media);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                        header.Media = string.Empty;
+                    }
+                }
+                else
+                {
+                    if (InvtID_Copy != "")
+                    {
+                        var objOld = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == InvtID_Copy);
+                        if (objOld != null)
+                        {
+                            if (objOld.Picture != "")
+                            {
+                                FileInfo file = new FileInfo(FilePath + "\\" + objOld.Picture);
+                                if (file.Exists)
+                                {
+                                    string urlImage = FilePath + "\\" + (InvtID) + file.Extension;
+                                    file.CopyTo(urlImage);
+                                    header.Picture = (InvtID) + file.Extension;
+                                    ZipFiles(FilePath, header.Picture);
+                                }
+                            }
+                            if (objOld.Media != "")
+                            {
+                                FileInfo file = new FileInfo(FilePath + "\\" + objOld.Media);
+                                if (file.Exists)
+                                {
+                                    string urlMedia = FilePath + "\\" + (InvtID) + file.Extension;
+                                    file.CopyTo(urlMedia);
+                                    header.Media = (InvtID) + file.Extension;
+                                }
+                            }
+                        }
+                    }
                 }
                 #endregion
 
@@ -252,7 +297,7 @@ namespace IN20500.Controllers
             }
         }
 
-        private void UpdatingHeader(ref IN_Inventory t, IN20500_pdHeader_Result s, string NodeID, string NodeLevel, string ParentRecordID, string Status, string Handle)
+        private void UpdatingHeader(ref IN_Inventory t, IN20500_pdHeader_Result s, string NodeID, string NodeLevel, string ParentRecordID, string Status, string Handle, string Copy)
         {
             t.NodeID = NodeID;
             t.NodeLevel = short.Parse(NodeLevel.PassNull() == "" ? "0" : NodeLevel);
@@ -319,11 +364,15 @@ namespace IN20500.Controllers
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
-
-            if (Handle == string.Empty || Handle == "N")
-                t.ApproveStatus = Status;
+            if (Copy == "false")
+            {
+                if (Handle == string.Empty || Handle == "N")
+                    t.ApproveStatus = Status;
+                else
+                    t.ApproveStatus = Handle;
+            }
             else
-                t.ApproveStatus = Handle;
+                t.ApproveStatus = "H";
         }
 
         private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z)

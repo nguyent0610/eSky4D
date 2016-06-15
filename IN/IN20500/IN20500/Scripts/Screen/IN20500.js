@@ -17,6 +17,7 @@ var _recordID = '';
 var _root = '';
 var parentRecordIDAll = '';
 var parentRecordID = '';
+var _copy = false;
 
 var checkLoad = function (sto) {
     _Source += 1;
@@ -120,8 +121,10 @@ var menuClick = function (command) {
             if (HQ.isInsert) {
                 if (HQ.focus == 'header') {
                     if (HQ.isChange) {
-                        HQ.message.show(150, '', 'refresh');
+                        HQ.message.show(150);
                     } else {
+                        App.txtInvtIDCopy.setValue('');
+                        _copy = false;
                         InvtID = '';
                         App.cboInvtID.setValue('');
                         App.cboInvtID.focus();
@@ -248,6 +251,10 @@ var stoLoad = function (sto) {
         App.fupPPCStorePicReq.setDisabled(true);
         App.fupPPCStoreMediaReq.setDisabled(true);
         App.txtDfltLotSerFxdVal.setReadOnly(true);
+    }
+
+    if (_copy == true) {
+        App.cboInvtID.forceSelection = false;
     }
 
     if (!HQ.isInsert && HQ.isNew) {
@@ -380,10 +387,14 @@ var save = function () {
                 NodeID: _nodeID,
                 NodeLevel: _nodeLevel,
                 ParentRecordID: _parentRecordID,
+                Copy: _copy,
                 lstIN_Inventory: Ext.encode(App.stoIN_Inventory.getRecordsValues()),
                 lstCpny: HQ.store.getData(App.stoCpny)
+                
             },
             success: function (msg, data) {
+                App.txtInvtIDCopy.setValue('');
+                _copy = false;
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
                 HQ.message.show(201405071);
@@ -429,6 +440,8 @@ var deleteData = function (item) {
 
 function refresh(item) {
     if (item == 'yes') {
+        App.txtInvtIDCopy.setValue('');
+        _copy = false;
         HQ.isChange = false;
         HQ.isFirstLoad = true;
         App.stoIN_Inventory.reload();
@@ -560,13 +573,20 @@ var LastFixValue_Change = function (sender, e) {
     }
 };
 
-var btnCopy = function () {
-
+var btnCopy_Click = function () {
+    if (!Ext.isEmpty(App.txtInvtIDCopy.getValue())) {
+        _tmpOldFileName = App.txtInvtIDCopy.getValue() + ".mp4";
+        var barcode = App.txtInvtIDCopy.value;
+        App.cboInvtID.setValue(barcode);
+        HQ.isNew = true;
+        _copy = true;
+        App.cboInvtID.forceSelection = false;
+    }
 };
 
 var cboInvtID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
-    if (sender.valueModels != null && !App.stoIN_Inventory.loading) {
+    if (sender.valueModels != null && !App.stoIN_Inventory.loading && _copy == false) {
         InvtID = value;
         App.cboDfltPOUnit.store.reload();
         App.cboDfltSOUnit.store.reload();
@@ -697,7 +717,7 @@ var nodeSelected_Change = function (store, operation, options) {
             _recordID = parentRecordIDAll[3];
             var InvtIDall = operation.data.id.split("-");
             InvtID1 = InvtIDall[0];
-            InvtID = InvtIDall[0];
+            //InvtID = InvtIDall[0];
         }
     } else {
         _root = 'true';
@@ -708,11 +728,17 @@ var nodeSelected_Change = function (store, operation, options) {
     }
 
     if (InvtID1) {
-        if (HQ.isChange) {
-            HQ.message.show(20150303, '', 'refresh');
+        if (HQ.isChange && (InvtID1 != InvtID)) {
+            HQ.message.show(150);
+            var objRecord = App.treeInvt.getRootNode().findChild('id', InvtID + '-|', true);
+            if (objRecord)
+                App.treeInvt.getSelectionModel().select(objRecord);
         }
-        else
+        else {
+            InvtID = InvtID1;
             App.cboInvtID.setValue(InvtID1);
+
+        }
     }
 };
 
