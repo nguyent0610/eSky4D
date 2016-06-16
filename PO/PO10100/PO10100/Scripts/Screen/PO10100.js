@@ -236,6 +236,18 @@ var menuClick = function (command) {
 };
 //load lần đầu khi mở
 var firstLoad = function () {
+    var visible = false;
+    if (HQ.exportType == 0) {
+        App.btnImport.setVisible(true);
+        App.btnImportPopup.setVisible(true);
+    } else if (HQ.exportType == 1) {
+        App.btnImport.setVisible(true);
+        App.btnImportPopup.setVisible(false);
+    } else if (HQ.exportType ==2) {
+        App.btnImport.setVisible(false);
+        App.btnImportPopup.setVisible(true);
+    }
+    
     _allowBlankSlsperID = App.cboSlsperID.allowBlank;
 };
 var frmChange = function (sender) {
@@ -262,30 +274,38 @@ var frmChange = function (sender) {
 
     if (App.cboStatus.getValue() != "H") {
         App.btnImport.disable();
+        App.btnImportPopup.disable();
         HQ.isChange = false;//HQ.store.isChange(App.stoPO_Header) == false ? HQ.store.isChange(App.stoPO10100_pgDetail) : true;
         HQ.common.changeData(HQ.isChange, 'PO10100');//co thay doi du lieu gan * tren tab title header
     }
     if (_objPO_Setup == null) {
         App.btnImport.disable();
-
+        App.btnImportPopup.disable();
     }
     else if (HQ.util.passNull(App.cboBranchID.getValue()) == "") {
         App.btnImport.disable();
+        App.btnImportPopup.disable();
     }
     else if (HQ.util.passNull(App.cboPONbr.getValue()) == "" && _objPO_Setup.AutoRef == 0) {
         App.btnImport.disable();
+        App.btnImportPopup.disable();
     }
     else if (HQ.util.passNull(App.cboVendID.getValue()) == "") {
         App.btnImport.disable();
-
+        App.btnImportPopup.disable();
     }
     else if (App.dtPODate.getValue() == "") {
         App.btnImport.disable();
+        App.btnImportPopup.disable();
     }
     else if (App.cboDistAddr.getValue() == "") {
         App.btnImport.disable();
+        App.btnImportPopup.disable();
     }
-    else App.btnImport.enable();
+    else {
+        App.btnImport.enable();
+        App.btnImportPopup.enable();
+    }
     if (!Ext.isEmpty(App.cboPONbr.getValue()) || App.stoPO10100_pgDetail.data.length > 1) {
         App.cboVendID.setReadOnly(true);
     }
@@ -375,8 +395,6 @@ var grdPO_Detail_BeforeEdit = function (editor, e) {
         _stkUnit = objIN_Inventory.StkUnit;
         App.cboPurchUnit.getStore().reload();
     }
-
-
 };
 var grdPO_Detail_ValidateEdit = function (item, e) {
     var objdet = e.record;
@@ -395,7 +413,6 @@ var grdPO_Detail_ValidateEdit = function (item, e) {
         if (r == undefined) {
             objdet.set('TranDesc', "");
             objdet.set('PurchUnit', "");
-            //objdet.set('TranDesc', "");
         }
         else {
             var objIN_Inventory = HQ.store.findInStore(App.stoPO10100_pdIN_Inventory, ["InvtID"], [r.InvtID]);
@@ -525,23 +542,22 @@ var grdPO_Detail_Edit = function (item, e) {
         }
         else if (_objPO_Setup.DfltLstUnitCost == "P") {
             HQ.common.showBusy(true);
-            App.direct.PO10100POPrice(
-               App.cboBranchID.getValue(), objDetail.InvtID, objDetail.PurchUnit, Ext.Date.format(App.dtPODate.getValue(), 'Y-m-d'),
-                {
-                    success: function (result) {
-                        UnitCost = result;
-                        e.record.set("UnitCost", result);
-                        e.record.set("DiscAmt", HQ.util.mathRound((result * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
-                        e.record.set("ExtCost", result * objDetail.QtyOrd - objDetail.DiscAmt);
-                        HQ.common.showBusy(false);
-                        delTax(e.rowIdx);
-                        calcTax(e.rowIdx);
-                        calcTaxTotal();
-                    },
-                    failure: function (result) {
-                        HQ.common.showBusy(false);
-                    }
-                });
+            App.direct.PO10100POPrice(App.cboBranchID.getValue(), objDetail.InvtID, objDetail.PurchUnit, Ext.Date.format(App.dtPODate.getValue(), 'Y-m-d'),
+            {
+                success: function (result) {
+                    UnitCost = result;
+                    e.record.set("UnitCost", result);
+                    e.record.set("DiscAmt", HQ.util.mathRound((result * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
+                    e.record.set("ExtCost", result * objDetail.QtyOrd - objDetail.DiscAmt);
+                    HQ.common.showBusy(false);
+                    delTax(e.rowIdx);
+                    calcTax(e.rowIdx);
+                    calcTaxTotal();
+                },
+                failure: function (result) {
+                    HQ.common.showBusy(false);
+                }
+            });
 
         }
         else if (_objPO_Setup.DfltLstUnitCost == "I") {
@@ -583,8 +599,11 @@ var grdPO_Detail_Deselect = function (item, e) {
 var grdPO_Detail_Reject = function (record) {
     if (record.data.tstamp == '') {
         var index = App.stoPO10100_pgDetail.indexOf(record);
-        delTax(index);      
+        delTax(index);
         App.grdDetail.getStore().remove(record, App.grdDetail);
+        if (!record.data.PurchaseType || !record.data.InvtID) {
+            HQ.store.insertBlank(App.grdDetail.store, _keys);
+        } 
         App.grdDetail.getView().focusRow(App.grdDetail.getStore().getCount() - 1);
         App.grdDetail.getSelectionModel().select(App.grdDetail.getStore().getCount() - 1);
         calcTaxTotal();
@@ -762,7 +781,6 @@ var cboPONbr_Change = function (item, newValue, oldValue) {
     if ((!HQ.isNew || item.valueModels != null) && !App.stoPO_Header.loading) {
         App.stoPO_Header.reload();
     }
-
 };
 var cboPONbr_Select = function (item) {
     if (item.valueModels != null && !App.stoPO_Header.loading) {
@@ -1133,50 +1151,54 @@ var deleteRecordGrid = function (item) {
         }
     }
 };
-var btnImport_Click = function (c, e) {
-    
-    var fileName = c.getValue();
-    var ext = fileName.split(".").pop().toLowerCase();
-    if (ext == "xls" || ext == "xlsx") {
-        App.frmMain.submit({
-            waitMsg: HQ.waitMsg,
-            clientValidation: false,
-            method: 'POST',
-            url: 'PO10100/Import',
-            timeout: 1000000,
-            params: {
-                lstDet: Ext.encode(App.stoPO10100_pgDetail.getRecordsValues())
-            },
-            success: function (msg, data) {
-                if (this.result.data.lstTrans != undefined) {                   
-                    HQ.store.insertBlank(App.stoPO10100_pgDetail, _keys);                  
+var btnImport_Click = function (c, e) {    
+    if (HQ.exportType == 2) {
+        App.txtCopy.setValue('');
+        App.winAdd.show();
+    } else {
+        var fileName = c.getValue();
+        var ext = fileName.split(".").pop().toLowerCase();
+        if (ext == "xls" || ext == "xlsx") {
+            App.frmMain.submit({
+                waitMsg: HQ.waitMsg,
+                clientValidation: false,
+                method: 'POST',
+                url: 'PO10100/Import',
+                timeout: 1000000,
+                params: {
+                    lstDet: Ext.encode(App.stoPO10100_pgDetail.getRecordsValues())
+                },
+                success: function (msg, data) {
+                    if (this.result.data.lstTrans != undefined) {
+                        HQ.store.insertBlank(App.stoPO10100_pgDetail, _keys);
                         this.result.data.lstTrans.forEach(function (item) {
                             insertItemGrid(App.grdDetail, item);
                             //grdPO_Detail_ValidateEdit(App.grdDetail, App.stoPO10100_pgDetail.data.items[0]);
                             //HQ.store.insertRecord(App.stoPO10100_pgDetail, 'InvtID', newTrans, true);
                         });
 
-                     
+
                         //HQ.store.insertRecord(App.stoPO10100_pgDetail, "InvtID", Ext.create('App.mdlPO10100_pgDetailModel'), true);
                         //calculate();
                         //checkTransAdd();
-                   
-                    if (!Ext.isEmpty(this.result.data.message)) {
-                        HQ.message.show('2013103001', [this.result.data.message], '', true);
-                    }
-                } else {
-                    HQ.message.process(msg, data, true);
-                }
 
-            },
-            failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
-                App.btnImport.reset();
-            }
-        });
-    } else {
-        HQ.message.show('2014070701', [ext], '', true);
-        App.btnImport.reset();
+                        if (!Ext.isEmpty(this.result.data.message)) {
+                            HQ.message.show('2013103001', [this.result.data.message], '', true);
+                        }
+                    } else {
+                        HQ.message.process(msg, data, true);
+                    }
+
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                    App.btnImport.reset();
+                }
+            });
+        } else {
+            HQ.message.show('2014070701', [ext], '', true);
+            App.btnImport.reset();
+        }
     }
 };
 var btnExport_Click = function () {
@@ -1778,3 +1800,42 @@ var renderTaxID = function (value) {
     //return value;
 };
 ///////////////////////////////////
+// Check import data
+var btnAddOK_Click = function () {
+    if (App.txtCopy.getValue() == '') {
+        App.winAdd.unmask();
+        App.winAdd.close();
+    }
+    App.winAdd.mask();
+    App.frmMain.submit({
+        waitMsg: HQ.waitMsg,
+        clientValidation: false,
+        method: 'POST',
+        url: 'PO10100/ImportFromPopup',
+        timeout: 1000000,
+        params: {
+            lstDet: Ext.encode(App.stoPO10100_pgDetail.getRecordsValues()),
+            textData: App.txtCopy.getValue()
+        },
+        success: function (msg, data) {
+            if (this.result.data.lstTrans != undefined) {
+                HQ.store.insertBlank(App.stoPO10100_pgDetail, _keys);
+                this.result.data.lstTrans.forEach(function (item) {
+                    insertItemGrid(App.grdDetail, item);
+                });
+
+                if (!Ext.isEmpty(this.result.data.message)) {
+                    HQ.message.show('2013103001', [this.result.data.message], '', true);
+                }
+            } else {
+                HQ.message.process(msg, data, true);
+            }
+            App.winAdd.close();
+            App.winAdd.unmask();
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+            App.winAdd.unmask();
+        }
+    });   
+};

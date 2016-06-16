@@ -19,16 +19,23 @@
         .BodyPadding(10)
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{
+            X.Button().Hidden(true)
+            .ID("btnImportPopup")
+            .Text(Util.GetLang("ImportTem"))
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Click.Fn = "btnImport_Click";
+              
+            }),   
             X.FileUploadField()
             .ID("btnImport")
-            .ButtonText("ImportTemplate")
+            .ButtonText("ImportExcel")
             .ButtonOnly(true)
-            .Icon(Icon.BookAdd)
+            .Icon(Icon.PageExcel)
             .Listeners(p=>{
                 p.Change.Fn = "btnImport_Click";
               
-            }),
-                    
+            }),            
             X.Button()
             .ID("btnExport")
             .Text(Util.GetLang("ExportTemplate"))
@@ -347,8 +354,8 @@
                                         , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("UnitVolume")).DataIndex("UnitVolume").Width(150).Format("0,000,000").Editor(HQ.NumberField().DecimalPrecision(0))
                                         , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("ExtVolume")).DataIndex("ExtVolume").Width(150).Format("0,000,000")//.Editor(HQ.NumberField())
 
-                                        , HQ.DateColumn().Text(Util.GetLang("ReqdDate")).DataIndex("ReqdDate").Width(150).Editor(Html.X().DateField())
-                                        , HQ.DateColumn().Text(Util.GetLang("PromDate")).DataIndex("PromDate").Width(150).Editor(Html.X().DateField())
+                                        , HQ.DateColumn().Text(Util.GetLang("ReqdDate")).DataIndex("ReqdDate").Width(110).Editor(Html.X().DateField())
+                                        , HQ.DateColumn().Text(Util.GetLang("PromDate")).DataIndex("PromDate").Width(110).Editor(Html.X().DateField())
                                         , Html.X().Column().Text(Util.GetLang("VouchStage")).DataIndex("VouchStage").Renderer("renderVouchStage")
                                                                             .Editor(HQ.Combo().ID("VouchStage").Name("VouchStage").HideLabel(true).LabelWidth(0)
                                                                                     .HQDBSys(false).HQProcedure("PO10100_pcVouchStage")
@@ -826,4 +833,26 @@
                         )
                 )
         )
+)
+@*// Insert new record*@
+@(X.Window()
+    .ID("winAdd")
+    .Hidden(true)
+    .Title(Util.GetLang("PO10100HeaderImport"))
+    .Layout(LayoutType.Fit)
+    .Height(500)
+    .Width(450)
+    .MinHeight(200)
+    .MinWidth(200)
+    .Modal(true)
+    .Closable(true)
+    .Buttons(          
+        X.Button().ID("btnAddCancel").Text(Util.GetLang("Exit"))//.OnClientClick("PopupwinCopy.btnCopyCancel_Click();")
+            .Listeners(p => p.Click.Handler = "App.winAdd.close();")
+        , X.Button().ID("btnAddOK").Text(Util.GetLang("OK"))
+            .Listeners(p => p.Click.Fn = "btnAddOK_Click")
+    )     
+    .Items(
+        X.TextArea().ID("txtCopy")
+    )
 )

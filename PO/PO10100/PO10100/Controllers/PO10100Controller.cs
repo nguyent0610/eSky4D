@@ -16,6 +16,7 @@ using Aspose.Cells;
 using HQFramework.DAL;
 using HQFramework.Common;
 using System.Data;
+using HQ.eSkySys;
 namespace PO10100.Controllers
 {
    
@@ -47,9 +48,17 @@ namespace PO10100.Controllers
         private int _countAddItem = 0;
         private OM_UserDefault objOM_UserDefault;      
         public ActionResult Index()
-        {
+        {            
+            eSkySysEntities sys = Util.CreateObjectContext<eSkySysEntities>(true);
+            var obj = sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToLower() == "po10100exporttype");
+            var type = 1;
+            if (obj != null && (obj.IntVal == 0 || obj.IntVal == 2))
+            {
+                type = obj.IntVal;
+            }
             ViewBag.BussinessDate = DateTime.Now.ToDateShort();
             ViewBag.BussinessTime = DateTime.Now;
+            ViewBag.Type = type;
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
@@ -1460,6 +1469,174 @@ namespace PO10100.Controllers
                 else
                 {
                     Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
+                }
+                return _logMessage;
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+        // Export from popup
+        public ActionResult ImportFromPopup(FormCollection data, string textData)
+        {
+            try
+            {
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
+                _status = data["Status"].PassNull();
+                _toStatus = data["Handle"].PassNull() == "" ? _status : data["Handle"].PassNull();
+                DateTime dpoDate = data["PODate"].ToDateShort();
+                
+                string message = string.Empty;
+                List<PO10100_pgDetail_Result> lstRecord = new List<PO10100_pgDetail_Result>();
+                if (data["lstDet"] != null)
+                {
+                    var detHandler = new StoreDataHandler(data["lstDet"]);
+                    _lstPODetailLoad = detHandler.ObjectData<PO10100_pgDetail_Result>()
+                                .Where(p => Util.PassNull(p.LineRef) != string.Empty)
+                                .ToList();
+                }
+                else
+                {
+                    _lstPODetailLoad = new List<PO10100_pgDetail_Result>();
+                }
+                try
+                {                    
+                    
+                    string invtID = string.Empty;
+                    int qty = 0;
+                    //double price = 0;
+                    string unit = string.Empty;
+                    string stt = string.Empty;
+                    var lstRow = textData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    //int lineRef = 1;
+                    for (int i = 0; i < lstRow.Length; i++)
+                    {
+                        var dataRow = lstRow[i].Split(new string[] { "\t" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (dataRow.Length == 3)
+                        {
+                            stt = (i + 1).ToString();
+                            // Kiểm tra có phải kiểu Int
+                            bool isNumber = int.TryParse(dataRow[2], out qty);
+                            if (!isNumber)
+                            {
+                                message += string.Format("Dòng {0} Số Lượng không đúng định dạng <br/>", (i + 1).ToString());
+                                continue;
+                            }
+                            if (qty == 0) continue;
+                            invtID = dataRow[0].PassNull();
+                            unit = dataRow[1].PassNull();
+                            //price = 10;// Tính giá theo store PO10100_peSuggest?
+
+                            var objInvt = _db.PO10100_pcInventoryActive().FirstOrDefault(p => p.InvtID == invtID);
+
+                            if (objInvt == null)
+                            {
+                                message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
+                                continue;
+                            }
+                            var objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID.ToUpper().Trim() == invtID.ToUpper().Trim() && p.FromUnit.ToUpper().Trim() == unit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim()).FirstOrDefault();//truong hop tu From toi to
+                            if (objIN_UnitConversion == null)
+                            {
+                                objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID.ToUpper().Trim() == invtID.ToUpper().Trim() && p.FromUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == unit.ToUpper().Trim()).FirstOrDefault();
+
+                                if (objIN_UnitConversion != null) objIN_UnitConversion.MultDiv = objIN_UnitConversion.MultDiv == "D" ? "M" : "D";
+                                else objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.FromUnit.ToUpper().Trim() == unit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim() && p.ClassID == "*" && p.InvtID == "*").FirstOrDefault();
+
+                                if (objIN_UnitConversion == null)
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} sai đơn vị quy đổi <br/>", (i + 1).ToString(), invtID, unit);
+                                    continue;
+                                }
+                            }
+
+                            if (_lstPODetailLoad.Where(p => p.InvtID == invtID).FirstOrDefault() != null || lstRecord.Where(p => p.InvtID == invtID).FirstOrDefault() != null)
+                            {
+                                message += string.Format("Dòng {0} mặt hàng {1} đã tồn tại <br/>", (i + 1).ToString(), invtID, unit);
+                                continue;
+                            }
+
+                            var objInvtAll = _db.PO10100_pdIN_Inventory(Current.UserName).FirstOrDefault(p => p.InvtID == invtID);
+                            var newrecord = new PO10100_pgDetail_Result();
+                            newrecord.InvtID = invtID;
+                            newrecord.PurchUnit = unit;
+                            newrecord.QtyOrd = qty;
+                            newrecord.TranDesc = objInvt.Descr;
+                            newrecord.UnitMultDiv = objIN_UnitConversion.MultDiv;
+                            newrecord.CnvFact = objIN_UnitConversion.CnvFact;
+                            newrecord.UnitWeight = objInvtAll.StkWt;
+                            newrecord.UnitVolume = objInvtAll.StkVol;
+
+                            newrecord.ExtVolume = objInvtAll.StkWt * newrecord.QtyOrd;
+                            newrecord.ExtWeight = objInvtAll.StkVol * newrecord.QtyOrd;
+                            newrecord.TaxCat = objInvtAll.TaxCat;
+
+                            var objUserDflt = _db.PO10100_pdOM_UserDefault(_branchID, Current.UserName).FirstOrDefault();
+                            var objSite = _db.PO10100_pcSiteAll(_branchID).FirstOrDefault();
+                            if (objUserDflt != null)
+                            {
+                                newrecord.SiteID = objUserDflt.POSite;
+                            }
+                            else if (objSite != null)
+                            {
+                                newrecord.SiteID = objSite.SiteID;
+                            }
+                            else
+                            {
+                                newrecord.SiteID = objInvtAll.DfltSite;
+                            }
+                            var objPO_Setup = _db.PO_Setup.FirstOrDefault(p => p.SetupID == "PO" && p.BranchID == _branchID);
+                            //lay gia
+                            if (objPO_Setup.DfltLstUnitCost == "A")
+                            {
+                                var objIN_ItemSite = _db.IN_ItemSite.Where(p => p.InvtID == newrecord.InvtID && p.SiteID == newrecord.SiteID).FirstOrDefault();
+
+                                newrecord.UnitCost = objIN_ItemSite == null ? 0 : objIN_ItemSite.AvgCost;
+                                newrecord.UnitCost = Math.Round((newrecord.UnitMultDiv == "D" ? (newrecord.UnitCost / newrecord.CnvFact) : (newrecord.UnitCost * newrecord.CnvFact)));
+                                newrecord.ExtCost = newrecord.UnitCost * newrecord.QtyOrd - newrecord.DiscAmt;
+                            }
+                            else if (objPO_Setup.DfltLstUnitCost == "P")
+                            {
+                                var result = _db.PO10100_ppGetPrice(_branchID, invtID, unit, dpoDate).FirstOrDefault().Value;
+                                newrecord.UnitCost = result;
+                                newrecord.ExtCost = result * newrecord.QtyOrd - newrecord.DiscAmt;
+                            }
+                            else if (objPO_Setup.DfltLstUnitCost == "I")
+                            {
+                                var UnitCost = objInvtAll.POPrice;
+                                UnitCost = Math.Round((newrecord.UnitMultDiv == "D" ? (UnitCost / newrecord.CnvFact) : (UnitCost * newrecord.CnvFact)));
+                                newrecord.UnitCost = UnitCost;
+                                newrecord.ExtCost = UnitCost * newrecord.QtyOrd - newrecord.DiscAmt;
+                            }
+
+                            if (newrecord.UnitCost == 0 && objPO_Setup.EditablePOPrice == false)
+                            {
+                                message += string.Format("Dòng {0} mặt hàng {1} không có giá <br/>", (i + 1).ToString(), invtID, unit);
+                                continue;
+                            }
+                            lstRecord.Add(newrecord);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "20407");
+                           // message += string.Format("Dòng {0} Sai định dạng <br/>", (i + 1).ToString());
+                           // continue;
+                        }
+                    }
+                 
+                    Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans = lstRecord });
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
                 }
                 return _logMessage;
             }

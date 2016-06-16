@@ -2071,7 +2071,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="SA00300Model" ZoomLevel="63">
+      <Diagram Name="SA00300Model" ZoomLevel="66">
         <EntityTypeShape EntityType="PO10100Model.PO_Detail" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.IN_Inventory" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.IN_UnitConversion" Width="1.5" PointX="4.75" PointY="0.75" />
