@@ -1,1 +1,55 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('y a=["\\q\\j\\m\\z\\A\\t\\I\\j\\g\\h\\e\\g\\n\\c\\o\\f\\h\\e","\\E\\o\\j\\e\\c","\\q\\j\\o\\m","\\D\\j\\b\\K","\\h\\b\\V\\c","\\i\\g\\e\\c","\\j\\b\\i\\f\\g\\m","\\e\\c\\f\\z\\A\\t\\I\\j\\g\\h\\e\\g\\n\\c\\o\\f\\h\\e","\\q\\b\\c\\Y\\f\\H\\h\\c","\\m\\g\\c\\g","\\e\\c\\f\\z\\A\\1e\\s\\1f\\s\\s\\t\\P\\b\\c\\w\\c\\f\\n\\u\\v\\b\\q\\B\\h\\m\\v\\g\\i","\\o\\c\\b\\x\\e","\\e\\b\\c\\1a\\g\\i\\H\\b","\\i\\C\\i\\v\\b\\q\\o\\h\\w\\c\\f\\n\\u","\\i\\C\\i\\B\\h\\m\\w\\c\\f\\n\\u","\\i\\f\\g\\m","\\j\\b\\E\\j\\b\\e\\Z","\\h\\b\\N","\\m\\b\\i\\b\\c\\b","\\e\\g\\K\\b","\\D\\j\\o\\h\\c","\\n\\i\\f\\e\\b","\\n\\f\\x\\x\\f\\h","\\O\\b\\e"];y M=r(G){1g(G){l a[1]:p[a[2]][a[1]](d[a[0]]);k;l a[3]:p[a[2]][a[3]](d[a[0]]);k;l a[4]:p[a[2]][a[4]](d[a[0]]);k;l a[5]:p[a[2]][a[5]](d[a[0]]);k;l a[16]:d[a[7]][a[6]]();d[a[10]][a[15]](r(){J(d[a[10]][a[9]][a[8]]()>0){d[a[13]][a[12]](d[a[10]][a[9]][a[11]][0][a[9]].1b);d[a[14]][a[12]](d[a[10]][a[9]][a[11]][0][a[9]].1c)}1d{d[a[13]][a[12]](0);d[a[14]][a[12]](0)}});k;l a[17]:k;l a[18]:k;l a[19]:k;l a[X]:k;l a[F]:p[a[S]][a[F]](R);k}};y Q=r(T){};r U(L){J(L==a[W]){d[a[7]][a[6]]()}}', 62, 79, '||||||||||_0x8db5|x65|x74|App|x73|x6F|x61|x6E|x6C|x72|break|case|x64|x63|x69|HQ|x67|function|x30|x5F|x6B|x42|x53|x6D|var|x49|x4E|x45|x62|x70|x66|21|_0xffd0x2|x75|x54|if|x76|_0xffd0x6|menuClick|x77|x79|x47|stoLoadgrdIN_Transactions|this|22|_0xffd0x4|refresh|x78|23|20|x43|x68|||||||||||x56|BeginQty|EndQty|else|x33|x31|switch'.split('|'), 0, {}))
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdIN_Transactions);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdIN_Transactions);
+            break;
+        case "next":
+            HQ.grid.next(App.grdIN_Transactions);
+            break;
+        case "last":
+            HQ.grid.last(App.grdIN_Transactions);
+            break;
+        case "refresh":
+            if (App.frmMain.isValid()) {
+                App.stoIN_Transactions.reload();
+                App.stoIN30100_GetStockBegEndBal.load(function () {
+                    if (App.stoIN30100_GetStockBegEndBal.data.getCount() > 0) {
+                        App.lblBeginStock.setValue(App.stoIN30100_GetStockBegEndBal.data.items[0].data.BeginQty);
+                        App.lblEndStock.setValue(App.stoIN30100_GetStockBegEndBal.data.items[0].data.EndQty);
+                    }
+                    else {
+                        App.lblBeginStock.setValue(0);
+                        App.lblEndStock.setValue(0);
+                    }
+                });
+            }
+            break;
+        case "new":
+            break;
+        case "delete":
+            break;
+        case "save":
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+};
+var stoLoadgrdIN_Transactions = function (sto) {
+
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        if (App.frmMain.isValid()) {
+            App.stoIN_Transactions.reload();
+        }
+    }
+};
+

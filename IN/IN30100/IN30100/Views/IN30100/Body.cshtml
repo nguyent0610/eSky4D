@@ -116,7 +116,7 @@
                                 
                             , HQ.Combo().ID("cboStatus").Name("cboStatus").MarginSpec("5 30 5 0").Width(300)
                                 .HQLangCode("Status").HQDBSys(false).HQProcedure("IN30100_pcStatus")
-                                .HQColumnShow("Descr").ForceSelection(true)
+                                .HQColumnShow("Descr").ForceSelection(true).AllowBlank(false)
                                 .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300).HQValue("-2",false)
                                 .HQParam(new StoreParameterCollection() {
                                     new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
@@ -136,14 +136,14 @@
                     , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                         .Items(
                             HQ.DateField().ID("lblFromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(220)
-                            .Value(DateTime.Now)
+                            .Value(DateTime.Now).AllowBlank(false)
                             
                             , HQ.DateField().ID("lblToDate").MarginSpec("5 0 0 0").HQLangCode("ToDate").Width(220)
-                            .Value(DateTime.Now)
+                            .Value(DateTime.Now).AllowBlank(false)
                             
                             , HQ.Combo().ID("cboJournalType").Name("cboJournalType").MarginSpec("5 158 0 0").Width(300)
                                 .HQLangCode("JrnlType").HQDBSys(false).HQProcedure("IN30100_pcJournalType")
-                                .HQColumnShow("Descr").ForceSelection(true)
+                                .HQColumnShow("Descr").ForceSelection(true).AllowBlank(false)
                                 .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300).HQValue("%",false)
                                 .HQParam(new StoreParameterCollection() {
                                     new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
@@ -160,7 +160,7 @@
                                 
                             , HQ.Combo().ID("cboTransactionType").Name("cboTransactionType").MarginSpec("5 158 5 0").Width(300)
                                 .HQLangCode("TranType").HQDBSys(false).HQProcedure("IN30100_pcTransactionType")
-                                .HQColumnShow("Descr").ForceSelection(true)
+                                .HQColumnShow("Descr").ForceSelection(true).AllowBlank(false)
                                 .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300).HQValue("%",false)
                                 .HQParam(new StoreParameterCollection() {
                                     new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
