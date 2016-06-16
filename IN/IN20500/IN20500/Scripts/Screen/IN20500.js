@@ -220,6 +220,11 @@ var stoLoad = function (sto) {
         sto.commitChanges();
     }
     var record = sto.getAt(0);
+    if (_copy == true) {
+        App.cboInvtID.forceSelection = false;
+        App.cboInvtID.setValue('');
+        record.data.ApproveStatus = 'H';
+    }
     App.frmMain.getForm().loadRecord(record);
     checkLotSerial(record.data.LotSerFxdTyp);
     //image
@@ -253,9 +258,6 @@ var stoLoad = function (sto) {
         App.txtDfltLotSerFxdVal.setReadOnly(true);
     }
 
-    if (_copy == true) {
-        App.cboInvtID.forceSelection = false;
-    }
 
     if (!HQ.isInsert && HQ.isNew) {
         App.cboInvtID.forceSelection = true;
@@ -272,12 +274,15 @@ var stoLoad = function (sto) {
 };
 
 var checkLotSerial = function (type) {
-    App.txtDfltLotSerFxdVal.setReadOnly(false);
-    if (type == 'D')
+    //App.txtDfltLotSerFxdVal.setReadOnly(false);
+    if (type == 'D') {
         App.txtDfltLotSerFxdVal.setReadOnly(true);
-    else
+        App.txtDfltLotSerFxdLen.setReadOnly(true);
+    }
+    else {
         App.txtDfltLotSerFxdVal.setReadOnly(false);
-    
+        App.txtDfltLotSerFxdLen.setReadOnly(false);
+    }
 };
 
 
@@ -737,7 +742,6 @@ var nodeSelected_Change = function (store, operation, options) {
         else {
             InvtID = InvtID1;
             App.cboInvtID.setValue(InvtID1);
-
         }
     }
 };

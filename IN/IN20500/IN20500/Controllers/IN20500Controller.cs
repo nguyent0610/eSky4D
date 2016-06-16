@@ -131,14 +131,14 @@ namespace IN20500.Controllers
                     header.Crtd_DateTime = DateTime.Now;
                     header.Crtd_Prog = _screenNbr;
                     header.Crtd_User = Current.UserName;
-                    UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, Status, Handle, Copy);
+                    UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, Status, Handle);
                     _db.IN_Inventory.AddObject(header);
                 }
                 else
                 {
                     if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, Status, Handle, Copy);
+                        UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, Status, Handle);
                     }
                     else
                     {
@@ -297,7 +297,7 @@ namespace IN20500.Controllers
             }
         }
 
-        private void UpdatingHeader(ref IN_Inventory t, IN20500_pdHeader_Result s, string NodeID, string NodeLevel, string ParentRecordID, string Status, string Handle, string Copy)
+        private void UpdatingHeader(ref IN_Inventory t, IN20500_pdHeader_Result s, string NodeID, string NodeLevel, string ParentRecordID, string Status, string Handle)
         {
             t.NodeID = NodeID;
             t.NodeLevel = short.Parse(NodeLevel.PassNull() == "" ? "0" : NodeLevel);
@@ -364,15 +364,12 @@ namespace IN20500.Controllers
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
-            if (Copy == "false")
-            {
-                if (Handle == string.Empty || Handle == "N")
-                    t.ApproveStatus = Status;
-                else
-                    t.ApproveStatus = Handle;
-            }
+        
+            if (Handle == string.Empty || Handle == "N")
+                t.ApproveStatus = Status;
             else
-                t.ApproveStatus = "H";
+                t.ApproveStatus = Handle;
+        
         }
 
         private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z)
