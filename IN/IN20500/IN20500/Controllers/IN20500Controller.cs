@@ -107,6 +107,8 @@ namespace IN20500.Controllers
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstIN_Inventory"]);
                 var curHeader = dataHandler1.ObjectData<IN20500_pdHeader_Result>().FirstOrDefault();
 
+                //StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstCpny"]);
+                //var lstCpny = dataHandler2.ObjectData<IN20500_pgIN_InvtCpny_Result>();
                 StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstCpny"]);
                 ChangeRecords<IN20500_pgIN_InvtCpny_Result> lstCpny = dataHandler2.BatchObjectData<IN20500_pgIN_InvtCpny_Result>();
 
@@ -255,6 +257,28 @@ namespace IN20500.Controllers
                 #endregion
 
                 #region Save IN_InvtCpny
+                //var lstCpny_DB = _db.IN_InvtCpny.Where(p => p.InvtID == InvtID).ToList();
+
+                //foreach (var del in lstCpny_DB)
+                //{
+                //    if (lstCpny.Where(p => p.CpnyID == del.CpnyID).Count() == 0)
+                //        _db.IN_InvtCpny.DeleteObject(del);
+                //}
+
+                //foreach (var obj in lstCpny)
+                //{
+                //    if (obj.CpnyID.PassNull() == "" || InvtID.PassNull() == "") continue;
+                //    var objCpny = _db.IN_InvtCpny.FirstOrDefault(p => p.CpnyID == obj.CpnyID && p.InvtID == InvtID);
+                //    if (objCpny == null)
+                //    {
+                //        objCpny = new IN_InvtCpny();
+                //        objCpny.ResetET();
+                //        objCpny.InvtID = InvtID;
+                //        objCpny.CpnyID = obj.CpnyID;
+                //        _db.IN_InvtCpny.AddObject(objCpny);
+                //    }
+                //}
+
                 foreach (IN20500_pgIN_InvtCpny_Result deleted in lstCpny.Deleted)
                 {
                     var objDelete = _db.IN_InvtCpny.Where(p => p.InvtID == InvtID

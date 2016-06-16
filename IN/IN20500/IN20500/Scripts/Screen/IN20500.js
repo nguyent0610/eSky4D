@@ -207,7 +207,8 @@ var stoLoad = function (sto) {
     //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
     HQ.common.setForceSelection(App.frmMain, false, "cboInvtID,cboHandle");
     App.cboInvtID.forceSelection = true;
-    HQ.isNew = false;
+    if(_copy == false)
+        HQ.isNew = false;
 
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, '');
@@ -221,8 +222,6 @@ var stoLoad = function (sto) {
     }
     var record = sto.getAt(0);
     if (_copy == true) {
-        App.cboInvtID.forceSelection = false;
-        App.cboInvtID.setValue('');
         record.data.ApproveStatus = 'H';
     }
     App.frmMain.getForm().loadRecord(record);
@@ -257,7 +256,6 @@ var stoLoad = function (sto) {
         App.fupPPCStoreMediaReq.setDisabled(true);
         App.txtDfltLotSerFxdVal.setReadOnly(true);
     }
-
 
     if (!HQ.isInsert && HQ.isNew) {
         App.cboInvtID.forceSelection = true;
@@ -298,6 +296,10 @@ var stoCpny_Load = function (sto) {
     }
     frmChange();
     if (_isLoadMaster) {
+        if (_copy == true) {
+            App.cboInvtID.forceSelection = false;
+            App.cboInvtID.setValue('');
+        }
         HQ.common.showBusy(false);
     }
 };
@@ -510,13 +512,14 @@ var cboLotSerTrack_Change = function (sender, value) {
 
 var cboDfltLotSerFxdTyp_Change = function (sender, value) {
     if (value) {
-        //if (sender.hasFocus) {
-            checkLotSerial(value);
-        //}
-        App.txtDfltLotSerFxdVal.setValue('');
-        if (value == "D") {
-            App.txtDfltLotSerFxdLen.setValue('8');
-            App.txtDfltLotSerFxdVal.setValue(HQ.IN20500Date);
+        checkLotSerial(value);
+        if (sender.hasFocus) {
+            App.txtDfltLotSerFxdLen.setValue(0);
+            App.txtDfltLotSerFxdVal.setValue('');
+            if (value == "D") {
+                App.txtDfltLotSerFxdLen.setValue('8');
+                App.txtDfltLotSerFxdVal.setValue(HQ.IN20500Date);
+            }
         }
     }
 };
