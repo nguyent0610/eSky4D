@@ -24,8 +24,7 @@ namespace PO10100.Controllers
     [CheckSessionOut]
     [DirectController]
     public class PO10100Controller : Controller
-    {
-      
+    {      
         PO10100Entities _db = Util.CreateObjectContext<PO10100Entities>(false);
         private const string ScreenNbr = "PO10100";
         private FormCollection _form;   
