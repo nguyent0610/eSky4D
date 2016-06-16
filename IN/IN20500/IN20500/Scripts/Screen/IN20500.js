@@ -396,7 +396,7 @@ var save = function () {
                 ParentRecordID: _parentRecordID,
                 Copy: _copy,
                 lstIN_Inventory: Ext.encode(App.stoIN_Inventory.getRecordsValues()),
-                lstCpny: HQ.store.getData(App.stoCpny)
+                lstCpny: HQ.store.getAllData(App.stoCpny)
                 
             },
             success: function (msg, data) {
