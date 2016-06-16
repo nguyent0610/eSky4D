@@ -64,21 +64,9 @@
                     .MaxLength(200).EnforceMaxLength(true)
                     .AllowBlank(false).ReadOnly(true)
 
-                    , HQ.Combo().ID("cboHandle")
-                    .Name("cboHandle").HQLangCode("HANDLE").HQProcedure("AR10200_pcGetHandle")
-                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                    .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection()
-                    {
-                        new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()?App.cboStatus.getValue():'H'", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                    })
-                    .LoadData()
-                    .Listeners(lst =>
-                    {
-                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                    })
+                    , HQ.NumberField().ID("txtCuryCrTot")
+                    .Name("txtCuryCrTot").DecimalPrecision(0)
+                    .HQLangCode("TOTAMT").DataIndex("TotAmt").ReadOnly(true)
                 ) // Second Column
 
                 // Third Column
@@ -99,9 +87,23 @@
                         lst.Change.Fn = "Event.Form.cboStatus_Change";
                     })
 
-                    , HQ.NumberField().ID("txtCuryCrTot")
-                    .Name("txtCuryCrTot").DecimalPrecision(0)
-                    .HQLangCode("TOTAMT").DataIndex("TotAmt").ReadOnly(true)
+                    
+                    
+                    , HQ.Combo().ID("cboHandle")
+                    .Name("cboHandle").HQLangCode("HANDLE").HQProcedure("AR10200_pcGetHandle")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                    .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()?App.cboStatus.getValue():'H'", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
                 ) // Third Column
 
             )
@@ -345,7 +347,7 @@
                 )
 
                 , X.DateColumn().Text(Util.GetLang("DocDate")).DataIndex("DocDate")
-                .Width(100).Format("dd-MM-yyyy")
+                .Width(100)
 
                 , X.Column().Text(Util.GetLang("InvcNbr")).Width(150).DataIndex("InvcNbr")
                 .Editor(

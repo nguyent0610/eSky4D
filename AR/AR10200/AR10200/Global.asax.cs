@@ -28,6 +28,8 @@ namespace AR10200
 
         protected void Session_Start(object sender, EventArgs e)
         {
+
+            Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
             Current.Server = "MARSSVR\\SQL2012";
             Current.DBSys = "eSky4DSys";
