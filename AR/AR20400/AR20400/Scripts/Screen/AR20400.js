@@ -177,7 +177,9 @@ var menuClick = function (command) {
                     if (HQ.isChange) {
                         HQ.message.show(150, '', 'refresh');
                     } else {
+                        CustId = '';
                         App.cboCustId.setValue('');
+                        App.cboCustId.focus();
                     }
                 }
                 else if (HQ.focus == 'grdAR_LTTContract') {
@@ -798,6 +800,7 @@ var filterCate = function () {
 var cboCustId_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoAR_Customer.loading) {
+        CustId = value;
         App.stoAR_Customer.reload();
         App.cboDfltShipToId.setValue('');
         App.cboDfltShipToId.store.reload();
@@ -808,18 +811,18 @@ var cboCustId_Change = function (sender, value) {
     }
 };
 
-var cboCustId_Select = function (sender, value) {
-    HQ.isFirstLoad = true;
-    if (sender.valueModels != null && !App.stoAR_Customer.loading) {
-        App.stoAR_Customer.reload();
-        App.cboDfltShipToId.setValue('');
-        App.cboDfltShipToId.store.reload();
-        App.cboLTTContract.setValue('');
-        App.cboLTTContract.store.reload();
-        //if (_hiddenTree == 'false' && value)
-        //    searchNode();
-    }
-};
+//var cboCustId_Select = function (sender, value) {
+//    HQ.isFirstLoad = true;
+//    if (sender.valueModels != null && !App.stoAR_Customer.loading) {
+//        App.stoAR_Customer.reload();
+//        App.cboDfltShipToId.setValue('');
+//        App.cboDfltShipToId.store.reload();
+//        App.cboLTTContract.setValue('');
+//        App.cboLTTContract.store.reload();
+//        //if (_hiddenTree == 'false' && value)
+//        //    searchNode();
+//    }
+//};
 
 var cboCpnyID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
@@ -1083,7 +1086,7 @@ var filterComboBillCity = function (sender, e) {
                 _recordID = parentRecordIDAll[3];
                 var custIDall = operation.data.id.split("-");
                 CustID1 = custIDall[0];
-                CustId = custIDall[0];
+                //CustId = custIDall[0];
             }
         } else {
             _root = 'true';
@@ -1094,11 +1097,16 @@ var filterComboBillCity = function (sender, e) {
         }
 
         if (CustID1) {
-            if (HQ.isChange) {
-                HQ.message.show(20150303, '', 'refresh');
+            if (HQ.isChange && (CustID1 != CustId)) {
+                HQ.message.show(150);
+                var objRecord = App.treeCust.getRootNode().findChild('id', CustId + '-|', true);
+                if (objRecord)
+                    App.treeCust.getSelectionModel().select(objRecord);
             }
-            else
+            else {
+                CustId = CustID1;
                 App.cboCustId.setValue(CustID1);
+            }
         }
         
     };

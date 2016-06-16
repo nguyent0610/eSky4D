@@ -318,7 +318,7 @@
           <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
           <Property Name="CustId" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="ShipToId" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Descr" Type="nvarchar" MaxLength="30" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="200" />
           <Property Name="SOName" Type="nvarchar" MaxLength="200" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
           <Property Name="Addr1" Type="nvarchar" MaxLength="200" />
@@ -443,6 +443,7 @@
           <Parameter Name="SufFix3" Type="varchar" Mode="In" />
           <Parameter Name="SufFix4" Type="varchar" Mode="In" />
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
+          <Parameter Name="CustName" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="AR20400_ppGetAutoCustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -534,6 +535,17 @@
           <FunctionImport Name="AR20400_ppGetLineRefAR_LTTContractDetail" ReturnType="Collection(String)">
           <Parameter Name="LTTContractNbr" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="AR20400_ptCustomer" ReturnType="Collection(AR20400Model.AR20400_ptCustomer_Result)">
+          <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_ppGetMaxHierarchyLevel" ReturnType="Collection(Int16)">
+          <Parameter Name="Type" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
+          <FunctionImport Name="AR20400_ppCheckDeleteCust" ReturnType="Collection(String)">
+            <Parameter Name="CustId" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="AR20400_ppCustID" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="KeyTree" Mode="In" Type="String" />
@@ -546,17 +558,7 @@
             <Parameter Name="SufFix3" Mode="In" Type="String" />
             <Parameter Name="SufFix4" Mode="In" Type="String" />
             <Parameter Name="ClassID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="AR20400_ptCustomer" ReturnType="Collection(AR20400Model.AR20400_ptCustomer_Result)">
-          <Parameter Name="BranchID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="AR20400_ppGetMaxHierarchyLevel" ReturnType="Collection(Int16)">
-          <Parameter Name="Type" Mode="In" Type="String" />
-          </FunctionImport>
-          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
-          <FunctionImport Name="AR20400_ppCheckDeleteCust" ReturnType="Collection(String)">
-            <Parameter Name="CustId" Mode="In" Type="String" />
-            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="CustName" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_CustAdvTool">
@@ -778,7 +780,7 @@
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ShipToId" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Descr" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Descr" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="SOName" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Attn" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Addr1" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -1517,7 +1519,6 @@
           <FunctionImportMapping FunctionImportName="AR20400_ppGetAutoCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetAutoCustID" />
           <FunctionImportMapping FunctionImportName="AR20400_ppGetLineRefAR_CustAdvTool" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetLineRefAR_CustAdvTool" />
           <FunctionImportMapping FunctionImportName="AR20400_ppGetLineRefAR_LTTContractDetail" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetLineRefAR_LTTContractDetail" />
-          <FunctionImportMapping FunctionImportName="AR20400_ppCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCustID" />
           <FunctionImportMapping FunctionImportName="AR20400_ptCustomer" FunctionName="eBiz4DWebSysModel.Store.AR20400_ptCustomer">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AR20400Model.AR20400_ptCustomer_Result">
@@ -1609,6 +1610,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AR20400_ppCheckDeleteCust" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCheckDeleteCust" />
+          <FunctionImportMapping FunctionImportName="AR20400_ppCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCustID" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -765,6 +765,74 @@ namespace AR20400
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20400_ptCustomer_Result> AR20400_ptCustomer(global::System.String branchID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<AR20400_ptCustomer_Result>("AR20400_ptCustomer", branchIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="type">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Int16>> AR20400_ppGetMaxHierarchyLevel(global::System.String type)
+        {
+            ObjectParameter typeParameter;
+            if (type != null)
+            {
+                typeParameter = new ObjectParameter("Type", type);
+            }
+            else
+            {
+                typeParameter = new ObjectParameter("Type", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Int16>>("AR20400_ppGetMaxHierarchyLevel", typeParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="custId">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20400_ppCheckDeleteCust(global::System.String custId, global::System.String branchID)
+        {
+            ObjectParameter custIdParameter;
+            if (custId != null)
+            {
+                custIdParameter = new ObjectParameter("CustId", custId);
+            }
+            else
+            {
+                custIdParameter = new ObjectParameter("CustId", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20400_ppCheckDeleteCust", custIdParameter, branchIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="keyTree">No Metadata Documentation available.</param>
         /// <param name="preFix1">No Metadata Documentation available.</param>
         /// <param name="preFix2">No Metadata Documentation available.</param>
@@ -775,7 +843,8 @@ namespace AR20400
         /// <param name="sufFix3">No Metadata Documentation available.</param>
         /// <param name="sufFix4">No Metadata Documentation available.</param>
         /// <param name="classID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR20400_ppCustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID)
+        /// <param name="custName">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20400_ppCustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID, global::System.String custName)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -887,75 +956,17 @@ namespace AR20400
                 classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("AR20400_ppCustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        public ObjectResult<AR20400_ptCustomer_Result> AR20400_ptCustomer(global::System.String branchID)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
+            ObjectParameter custNameParameter;
+            if (custName != null)
             {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
+                custNameParameter = new ObjectParameter("CustName", custName);
             }
             else
             {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+                custNameParameter = new ObjectParameter("CustName", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR20400_ptCustomer_Result>("AR20400_ptCustomer", branchIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="type">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Int16>> AR20400_ppGetMaxHierarchyLevel(global::System.String type)
-        {
-            ObjectParameter typeParameter;
-            if (type != null)
-            {
-                typeParameter = new ObjectParameter("Type", type);
-            }
-            else
-            {
-                typeParameter = new ObjectParameter("Type", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<Nullable<global::System.Int16>>("AR20400_ppGetMaxHierarchyLevel", typeParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="custId">No Metadata Documentation available.</param>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR20400_ppCheckDeleteCust(global::System.String custId, global::System.String branchID)
-        {
-            ObjectParameter custIdParameter;
-            if (custId != null)
-            {
-                custIdParameter = new ObjectParameter("CustId", custId);
-            }
-            else
-            {
-                custIdParameter = new ObjectParameter("CustId", typeof(global::System.String));
-            }
-    
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("AR20400_ppCheckDeleteCust", custIdParameter, branchIDParameter);
+            return base.ExecuteFunction<global::System.String>("AR20400_ppCustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter, custNameParameter);
         }
 
         #endregion

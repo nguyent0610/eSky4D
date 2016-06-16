@@ -163,7 +163,7 @@ namespace AR20400.Controllers
                         if (objAR_Setup.AutoCustID == true)
                         {
                             isNew = "true";
-                            var objCustID = _db.AR20400_ppCustID(BranchID, "", "", "", "", "", "", "", "", "", ClassId).FirstOrDefault();
+                            var objCustID = _db.AR20400_ppCustID(BranchID, "", "", "", "", "", "", "", "", "", ClassId, curHeader.CustName).FirstOrDefault();
                             header = new AR_Customer();
                             header.ResetET();
                             header.CustId = objCustID.PassNull();
