@@ -1,4 +1,4 @@
-var keys = ['CpnyID'];
+﻿var keys = ['CpnyID'];
 var fieldsCheckRequire = ["CpnyID"];
 var fieldsLangCheckRequire = ["CpnyID"];
 
@@ -20,7 +20,15 @@ var pnl_render = function (cmd) {
         }
     });
 };
-
+var checkLoad = function () {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        App.stoIN_ProductClass.reload();
+        HQ.common.showBusy(false);
+        _Source = 0;
+    }
+};
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -64,18 +72,23 @@ var menuClick = function (command) {
             }
             break;
         case "new":
-            if (_focusNo == 0) {
-                App.cboClassID.setValue('');
-                ClassID = '';
-                HQ.isFirstLoad = true;
-                //App.stoIN_ProductClass.reload();
-            }
-            else{
-                if (HQ.isInsert) {
-                    HQ.grid.insert(App.grdCpny);
+         
+            if (HQ.isInsert) {
+                if (_focusNo == 0) {
+                    if (HQ.isChange) {
+                        HQ.message.show(150, '', 'refresh');
+                    } else {
+                        ClassID = '';
+                        App.cboClassID.setValue('');
+                        HQ.isFirstLoad = true;
+                    }
                 }
-            }
-            break;
+                else 
+                    if (HQ.isInsert)
+                    {
+                    HQ.grid.insert(App.grdCpny);
+                    }
+                }
         case "delete":
             if (_focusNo == 0) {
                 if (App.cboClassID.getValue()) {
@@ -112,20 +125,12 @@ var menuClick = function (command) {
     }
 };
 
-var checkLoad = function () {
-    _Source += 1;
-    if (_Source == _maxSource) {
-        _isLoadMaster = true;
-        App.stoIN_ProductClass.reload();
-        HQ.common.showBusy(false);
-        _Source = 0;
-    }
-};
-
 var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
     HQ.isFirstLoad = true;
     ClassID = '';
     App.frmMain.isValid();
+    checkLoad();
     App.tabDetail.child('#pnlLotSerial').tab.setDisabled(true);
 
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
@@ -143,7 +148,7 @@ var firstLoad = function () {
     App.cboDfltLotSerFxdTyp.getStore().addListener('load', checkLoad);
     App.cboCpnyID.getStore().addListener('load', checkLoad);
 
-    //App.cboDfltStkUnit.getStore().addListener('load', checkLoad_cboDfltStkUnit);
+    App.cboDfltStkUnit.getStore().addListener('load', checkLoad_cboDfltStkUnit);
 
     //App.cboClassID.getStore().reload();
     //App.cboDfltInvtType.getStore().reload();
@@ -271,7 +276,25 @@ var stoLoad = function (sto) {
     }
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
-
+    if (!HQ.isNew) {
+        if (!HQ.isUpdate)
+        {
+            HQ.common.lockItem(App.frmMain, true);
+        }
+        else {
+            HQ.common.lockItem(App.frmMain, false);
+        }
+    }
+    else {
+        if (!HQ.isInsert)
+        {
+            HQ.common.lockItem(App.frmMain, true);
+        }
+        else {
+            HQ.common.lockItem(App.frmMain, false);
+         
+        }
+    }
     App.stoCpny.reload();
 };
 
@@ -307,10 +330,23 @@ var grdCpny_Reject = function (record) {
     frmChange();
 };
 
-var cboDfltLotSerFxdTyp_Change = function (sender, e) {
-    if (e) {
+var cboDfltLotSerFxdTyp_Change =function (sender, value) {
+    //if (e) {
+    //    App.txtDfltLotSerFxdVal.setValue('');
+    //    if (e == "D") {
+    //        App.txtDfltLotSerFxdLen.setValue('8');
+    //        App.txtDfltLotSerFxdVal.setValue(HQ.IN20200Date);
+    //        HQ.common.lockItem(App.pnlLotSerial, true);
+    //        //HQ.common.lockItem(App.pnlLotSerial, true); // Kiểm Tra Lại
+    //    }
+        
+    //}
+    if (value) {
+        //if (sender.hasFocus) {
+        checkLotSerial(value);
+        //}
         App.txtDfltLotSerFxdVal.setValue('');
-        if (e == "D") {
+        if (value == "D") {
             App.txtDfltLotSerFxdLen.setValue('8');
             App.txtDfltLotSerFxdVal.setValue(HQ.IN20200Date);
         }
@@ -322,16 +358,6 @@ var cboDfltStkUnit_Change = function (sender, e) {
     App.cboDfltSOUnit.getStore().reload();
 };
 
-var PrefixValue_Change = function (sender, e) {
-    if (App.txtDfltLotSerFxdVal.value.length > App.txtDfltLotSerFxdLen.value) {
-        HQ.message.show(22, e.value);
-        App.txtDfltLotSerFxdVal.setValue(sender.originalValue);
-    } else {
-        prefixvalue = App.txtDfltLotSerFxdVal.getValue();
-        shownextlotserial = prefixvalue + lastfixvalue;
-        App.lblShowNextLotSerial.setValue(shownextlotserial);
-    }
-};
 
 var LastFixValue_Change = function (sender, e) {
     if (App.txtDfltLotSerNumVal.value.length > App.txtDfltLotSerNumLen.value) {
@@ -364,13 +390,15 @@ var focusControl = function (invalidField) {
 };
 
 var save = function () {
+    
     if (!App.chkPublic.getValue()) {
         if (App.stoCpny.getCount() == 1) {
-            HQ.message.show(1888, '', '');
+            HQ.message.show(1000, App.txtCpny.text, '');
             App.tabDetail.setActiveTab(App.pnlCpnyID);
             return;
         }
     }
+  
 
     if (App.cboDfltLotSerTrack.getValue() != 'N') {
         if (!App.cboDfltLotSerAssign.getValue()) {
@@ -393,11 +421,29 @@ var save = function () {
             invalidField = App.txtDfltLotSerNumVal.id;
             HQ.message.show(1000, App.txtDfltLotSerNumVal.fieldLabel, 'HQ.util.focusControl');
             return;
+        } else if (!App.cboDfltLotSerFxdTyp.getValue()) {
+            invalidField = App.cboDfltLotSerFxdTyp.id;
+            HQ.message.show(1000, App.cboDfltLotSerFxdTyp.fieldLabel, 'HQ.util.focusControl');
+            return;
+        } else if (!App.txtDfltWarrantyDays.getValue()) {
+            invalidField = App.txtDfltWarrantyDays.id;
+            HQ.message.show(1000, App.txtDfltWarrantyDays.fieldLabel, 'HQ.util.focusControl');
+            return;
+        } else if (!App.txtDfltLotSerFxdVal.getValue()) {
+            invalidField = App.txtDfltLotSerFxdVal.id;
+            HQ.message.show(1000, App.txtDfltLotSerFxdVal.fieldLabel, 'HQ.util.focusControl');
+            return;
         } else if (!App.lblShowNextLotSerial.getValue()) {
             invalidField = App.lblShowNextLotSerial.id;
             HQ.message.show(1000, App.lblShowNextLotSerial.fieldLabel, 'HQ.util.focusControl');
             return;
         }
+    }
+    var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/;
+    var value = App.cboClassID.getValue();
+    if (!HQ.util.passNull(value.toString()).match(regex)) {
+        HQ.message.show(20140811, App.cboClassID.fieldLabel, '');
+        return
     }
     if (App.frmMain.isValid()) {
         App.frmMain.updateRecord();
@@ -469,4 +515,80 @@ var renderCpnyID = function (value, metaData, rec, rowIndex, colIndex, store) {
     else {
         return value;
     }
+};
+
+
+//var PrefixValue_Change = function (sender, newValue, oldValue) {
+//    if (App.cboDfltLotSerFxdTyp.getValue() == 'C') {
+//        App.txtDfltLotSerFxdVal.setValue(Ext.util.Format.number(App.txtDfltLotSerFxdVal.getValue().replace(/[\$]/g, ''), '0,000'))
+//    }
+//    if (App.txtDfltLotSerFxdVal.value.length > App.txtDfltLotSerFxdLen.value) {
+//        HQ.message.show(22, newValue, '');
+//    } else {
+//        var prefixvalue = App.txtDfltLotSerFxdVal.getValue();
+//        shownextlotserial = prefixvalue + lastfixvalue;
+//        App.lblShowNextLotSerial.setValue(shownextlotserial);
+//        App.lblShowNextLotSerial.show();
+//    }
+
+//}
+
+var PrefixValue_Change = function (sender, e) {
+    if (App.txtDfltLotSerFxdVal.value.length > App.txtDfltLotSerFxdLen.value) {
+        HQ.message.show(22, e.value);
+        App.txtDfltLotSerFxdVal.setValue(sender.originalValue);
+    } else {
+        prefixvalue = App.txtDfltLotSerFxdVal.getValue();
+        shownextlotserial = prefixvalue + lastfixvalue;
+        App.lblShowNextLotSerial.setValue(shownextlotserial);
+    }
+};
+
+
+//var PrefixValue_Change = function (sender, e) {
+//    if (App.txtDfltLotSerFxdVal.value.length > App.txtDfltLotSerFxdLen.value) {
+//        HQ.message.show(22, e.value);
+//        App.txtDfltLotSerFxdVal.setValue(sender.originalValue);
+//    } else {
+//        prefixvalue = App.txtDfltLotSerFxdVal.getValue();
+//        shownextlotserial = prefixvalue + lastfixvalue;
+//        App.lblShowNextLotSerial.setValue(shownextlotserial);
+//    }
+//};
+
+var checkLotSerial = function (type) {
+    App.txtDfltLotSerFxdVal.setReadOnly(false);
+    if (type == 'D') {
+        App.txtDfltLotSerFxdVal.setReadOnly(true);
+        App.txtDfltLotSerFxdLen.setReadOnly(true);
+    }
+    else {
+        App.txtDfltLotSerFxdVal.setReadOnly(false);
+    }
+
+};
+
+var txtDfltLotSerFxdVal_Blur = function (sender, e) {
+    if (sender.focus) {
+        if (sender.lastValue.length > App.txtDfltLotSerFxdLen.getValue()) {
+            HQ.message.show(22, e.value);
+            App.txtDfltLotSerFxdVal.setValue(sender.originalValue);
+            App.txtDfltLotSerFxdVal.focus();
+        }
+        //else if ((sender.lastValue.length < App.txtDfltLotSerFxdLen.getValue()) && (sender.lastValue.length != App.txtDfltLotSerFxdLen.getValue())) {
+        //    HQ.message.show(22, App.txtDfltLotSerFxdLen.getValue());
+        //    App.txtDfltLotSerFxdVal.focus();
+        //}
+    }
+};
+
+var txtDfltLotSerFxdVal_KeyDown = function (sender, e) {
+    if (App.cboDfltLotSerFxdTyp.getValue() == 'C') {
+        if (((e.ctrlKey == true && e.keyCode == 86) || ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105))) && (e.keyCode != 8 && e.keyCode != 46))
+            e.stopEvent();
+    }
+};
+var txtDfltLotSerShelfLife_KeyDown = function (sender, e) {
+        if (((e.ctrlKey == true && e.keyCode == 86) || ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105))) && (e.keyCode != 8 && e.keyCode != 46))
+            e.stopEvent();
 };
