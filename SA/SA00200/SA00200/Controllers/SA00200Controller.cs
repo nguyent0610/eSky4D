@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -28,7 +28,7 @@ namespace SA00200.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -47,16 +47,33 @@ namespace SA00200.Controllers
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
                 ChangeRecords<SYS_Module> lstLang = dataHandler.BatchObjectData<SYS_Module>();
-                foreach (SYS_Module deleted in lstLang.Deleted)
+                lstLang.Created.AddRange(lstLang.Updated);
+                foreach (SYS_Module del in lstLang.Deleted)
                 {
-                    var del = _db.SYS_Module.Where(p => p.ModuleCode == deleted.ModuleCode && p.ModuleID==deleted.ModuleID).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstLang.Created.Where(p => p.ModuleCode == del.ModuleCode).Count() > 0)
                     {
-                        _db.SYS_Module.DeleteObject(del);
+                        lstLang.Created.Where(p => p.ModuleCode == del.ModuleCode).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.SYS_Module.ToList().Where(p => p.ModuleCode == del.ModuleCode).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.SYS_Module.DeleteObject(objDel);
+                        }
                     }
                 }
+                //foreach (SYS_Module deleted in lstLang.Deleted)
+                //{
+                //    var del = _db.SYS_Module.Where(p => p.ModuleCode == deleted.ModuleCode && p.ModuleID==deleted.ModuleID).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.SYS_Module.DeleteObject(del);
+                //    }
+                //}
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                //lstLang.Created.AddRange(lstLang.Updated);
 
                 foreach (SYS_Module curLang in lstLang.Created)
                 {
