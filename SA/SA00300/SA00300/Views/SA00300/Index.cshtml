@@ -19,7 +19,6 @@
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/screen/SA00300.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
@@ -29,9 +28,9 @@
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
-        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.isUpdate = false;
+        HQ.isInsert = false;
+        HQ.isDelete = false;
         HQ.TextVal = '@ViewBag.TextVal';
 
     </script>  
@@ -42,7 +41,7 @@
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         @(X.Store().ID("stoUser").AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(User), "mdlUser", ""))       
+            .Model(Util.GenerateModel(typeof(User), "mdlUser", "UserName"))       
             .Proxy(
                     X.AjaxProxy()                
                     .Url(Url.Action("GetUser", "SA00300"))                

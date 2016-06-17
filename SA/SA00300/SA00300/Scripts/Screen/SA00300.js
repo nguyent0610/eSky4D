@@ -1,18 +1,21 @@
+
 var keys = ['GroupID'];
 var fieldsCheckRequireUserGroup = ["GroupID"];
 var fieldsLangCheckRequireUserGroup = ["GroupID"];
+
 
 var keys1 = ['GroupID'];
 var fieldsCheckRequireUserCompany = ["GroupID"];
 var fieldsLangCheckRequireUserCompany = ["GroupID"];
 
-// Declare
 var _focusNo = 0;
+
+// Declare
 var _beginStatus = "H";
 var _Source = 0;
 var _maxSource = 9;
 var _isLoadMaster = false;
-var UserID = '';
+
 
 ////////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
@@ -23,6 +26,7 @@ var checkLoad = function (sto) {
         _Source = 0;
         App.stoUser.reload();
         HQ.common.showBusy(false);
+        //App.cboBranchID.setValue(HQ.cpnyID);
     }
 };
 
@@ -31,6 +35,7 @@ var checkLoad = function (sto) {
 var firstLoad = function () {
     HQ.util.checkAccessRight(); // Kiem tra quyen Insert Update Delete de disable button tren top bar
     HQ.isFirstLoad = true;
+    //HQ.focus = "header";
     App.frmMain.isValid(); // Require cac field yeu cau tren from
 
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
@@ -106,22 +111,23 @@ var menuClick = function (command) {
             }
             break;
         case "new":
-            if (HQ.isInsert) {
-                if (_focusNo == 0) {
-                    if (!HQ.isChange) {
-                        UserID = '';
-                        App.cboUserID.setValue('');
-                        App.stoUser.reload();
-                    }
-                    else {
-                        HQ.message.show(150, '', 'refresh');
-                    }
+            if (_focusNo == 0) {
+                if (!HQ.isChange) {
+                    App.cboUserID.setValue("");
+                    App.stoSYS_UserGroup.reload();
+                    App.stoSYS_UserCompany.reload();
                 }
-                else if (_focusNo == 1) {
+                else {
+                    HQ.message.show(150, '', 'refresh');
+                }
+            }
+            else if (_focusNo == 1) {
+                if (HQ.isInsert) {
                     HQ.grid.insert(App.grdSYS_UserGroup);
-
                 }
-                else if (_focusNo == 2) {
+            }
+            else if (_focusNo == 2) {
+                if (HQ.isInsert) {
                     HQ.grid.insert(App.grdSYS_UserCompany);
                 }
             }
@@ -129,19 +135,25 @@ var menuClick = function (command) {
         case "delete":
             if (_focusNo == 0) {
                 if (App.cboUserID.value) {
-                    HQ.message.show(11, '', 'deleteData');
+                    if (HQ.isDelete) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
                 } else {
                     menuClick('new');
                 }
             }
             else if (_focusNo == 1) {
                 if (App.slmSYS_UserGroup.selected.items[0] != undefined) {
-                    HQ.message.show(11, '', 'deleteData');
+                    if (HQ.isDelete) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
                 }
             }
             else if (_focusNo == 2) {
                 if (App.slmSYS_UserCompany.selected.items[0] != undefined) {
-                    HQ.message.show(11, '', 'deleteData');
+                    if (HQ.isDelete) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
                 }
             }
             break;
@@ -171,40 +183,57 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
+            //HQ.common.close(this);
             break;
     }
 };
 
 var frmChange = function () {
-    if (App.stoUser.getCount() > 0) {
-        App.frmMain.getForm().updateRecord();
+
+    App.frmMain.getForm().updateRecord();
+    //HQ.isChange = (HQ.store.isChange(App.stoUser) == false ? HQ.store.isChange(App.stoSYS_UserGroup) : true) || (HQ.store.isChange(App.stoUser) == false ? HQ.store.isChange(App.stoSYS_UserCompany) : true);
+    if (!HQ.store.isChange(App.stoUser)) {
+        if (!HQ.store.isChange(App.stoSYS_UserGroup)) {
+            HQ.isChange = HQ.store.isChange(App.stoSYS_UserCompany);
+        }
     }
-    HQ.isChange = HQ.store.isChange(App.stoUser) == false ? (HQ.store.isChange(App.stoSYS_UserGroup)
-                                                        == false ? (HQ.store.isChange(App.stoSYS_UserCompany)) : true) : true;
+    else {
+        HQ.isChange = true;
+    }
     HQ.common.changeData(HQ.isChange, 'SA00300');
     if (App.cboUserID.valueModels == null || HQ.isNew == true)
         App.cboUserID.setReadOnly(false);
-    else
-        App.cboUserID.setReadOnly(HQ.isChange);
+    else App.cboUserID.setReadOnly(HQ.isChange);
+    
+
 };
 
 var stoLoad = function (sto) {
     HQ.isNew = false;
+    HQ.common.showBusy(false);
+
     App.cboUserID.forceSelection = true;
-    HQ.common.setForceSelection(App.frmMain, false, "cboUserID")
+    App.CpnyID.forceSelection = false;
+    App.UserTypes.forceSelection = false;
+    App.Channel.forceSelection = false;
+    App.Manager.forceSelection = false;
+    App.Department.forceSelection = false;
+    App.HomeScreenNbr.forceSelection = false;
 
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "UserID");
         record = sto.getAt(0);
-        HQ.isNew = true;  
+        HQ.isNew = true;//record la new    
         App.cboUserID.forceSelection = false;
-        HQ.common.setRequire(App.frmMain);       
-        App.cboUserID.focus(true);
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboUserID.focus(true);//focus ma khi tao moi
         sto.commitChanges();
     }
 
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
+
+    App.stoSYS_UserCompany.reload();
     App.stoSYS_UserGroup.reload();
 
     //loadComboGrid();
@@ -216,6 +245,8 @@ var stoLoad = function (sto) {
         App.imgImages.setImageUrl("");
     }
 
+
+
     if (!HQ.isInsert && HQ.isNew) {
         App.cboUserID.forceSelection = true;
         HQ.common.lockItem(App.frmMain, true);
@@ -223,12 +254,18 @@ var stoLoad = function (sto) {
     else if (!HQ.isUpdate && !HQ.isNew) {
         HQ.common.lockItem(App.frmMain, true);
     }
+
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+        frmChange();
+    }
 };
 
 //Truoc khi load store se hien Busy
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
 };
+
 
 var pnl_render = function (cmd) {
     cmd.getEl().on('mousedown', function () {
@@ -243,18 +280,22 @@ var pnl_render = function (cmd) {
         }
     });
 };
+//
+
+
 
 var cboUserID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
-    if (sender.valueModels != null && !App.stoUser.loading) {
-        UserID = value;
+    if (sender.valueModels != null) {
         App.stoUser.reload();
+        //App.stoSYS_UserCompany.reload();
+        //App.stoSYS_UserGroup.reload();
+        //chkAutoChange();
     }
 };
 
 var cboUserID_Select = function (sender, value) {
     if (sender.valueModels != null && !App.stoUser.loading) {
-        UserID = value;
         App.stoUser.reload();
     }
 };
@@ -273,6 +314,7 @@ var cboUserID_TriggerClick = function (sender, value) {
     else {
         menuClick('new');
     }
+
 };
 
 function chkAutoChange() {
@@ -282,6 +324,7 @@ function chkAutoChange() {
     }
     else {
         App.cboUserID.setDisabled(false);
+        //App.cboUserID.getStore().reload();
     }
 };
 
@@ -294,12 +337,14 @@ var chkPublic_Change = function (checkbox, checked) {
     }
 };
 
+
+
 /////////////////////////////////
 //Image
 var btnClearImage_click = function (btn, eOpts) {
     App.fupImages.reset();
-    App.imgImages.setImageUrl('');
-    App.hdnImages.setValue('');
+    App.imgImages.setImageUrl("");
+    App.hdnImages.setValue("");
 };
 
 var fupImages_change = function (fup, newValue, oldValue, eOpts) {
@@ -315,15 +360,21 @@ var fupImages_change = function (fup, newValue, oldValue, eOpts) {
     }
 };
 
+
+///////////////////////////////////////////
+//Grid
+
 //grd SYS_UserGroup
 var stoSYS_UserGroup_Load = function (sto) {
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keys);
         }
+        //HQ.isFirstLoad = false;
     }
     App.stoSYS_UserCompany.reload();
     frmChange();
+    HQ.common.showBusy(false);
 };
 
 var grdSYS_UserGroup_BeforeEdit = function (editor, e) {
@@ -343,6 +394,7 @@ var grdSYS_UserGroup_Edit = function (item, e) {
             e.record.set("Descr", "");
         }
     }
+
 };
 
 var grdSYS_UserGroup_ValidateEdit = function (item, e) {
@@ -356,6 +408,7 @@ var grdSYS_UserGroup_Reject = function (record) {
     frmChange();
 };
 
+
 //grd SYS_UserCompany
 var stoSYS_UserCompany_Load = function (sto) {
     if (HQ.isFirstLoad) {
@@ -365,16 +418,17 @@ var stoSYS_UserCompany_Load = function (sto) {
         HQ.isFirstLoad = false;
     }
     frmChange();
-    if (_isLoadMaster) {
-        HQ.common.showBusy(false);
-    }
+    HQ.common.showBusy(false);
 };
 
 var grdSYS_UserCompany_BeforeEdit = function (editor, e) {
+    //Kiem tra cac key da duoc nhap se insert them dong moi
     HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys1);
+
 };
 
 var grdSYS_UserCompany_Edit = function (item, e) {
+    //Kiem tra cac key da duoc nhap se insert them dong moi
     HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys1);
     frmChange();
     if (e.field == "GroupID") {
@@ -392,10 +446,12 @@ var grdSYS_UserCompany_Edit = function (item, e) {
 };
 
 var grdSYS_UserCompany_ValidateEdit = function (item, e) {
+    //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
     return HQ.grid.checkValidateEdit(App.grdSYS_UserCompany, e, keys1);
 };
 
 var grdSYS_UserCompany_Reject = function (record) {
+    //reject dong thay doi du lieu ve ban dau
     HQ.grid.checkReject(record, App.grdSYS_UserCompany);
     frmChange();
 };
@@ -416,24 +472,14 @@ var save = function () {
                 Auto: App.chkAuto.getValue()
             },
             success: function (msg, data) {
-                HQ.isChange = false;
-                HQ.isFirstLoad = true;
                 HQ.message.show(201405071);
                 App.chkAuto.setValue(false);
-                UserID = data.result.UserID;
-                App.cboUserID.getStore().load({
-                    callback: function () {
-                        if (Ext.isEmpty(App.cboUserID.getValue())) {
-                            App.cboUserID.setValue(UserID);
-                            App.stoUser.reload();
-                        }
-                        else {
-                            App.cboUserID.setValue(UserID);
-                            App.stoUser.reload();
-                        }
-                    }
+                //refresh("yes");
+                var UserID = data.result.UserID;
+                App.cboUserID.getStore().load(function () {
+                    App.cboUserID.setValue(UserID);
+                    App.stoUser.reload();
                 });
-                HQ.common.changeData(false, 'OM22900');
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -519,19 +565,6 @@ var readImage = function (fup, imgControl) {
             HQ.isChange = false;
             HQ.isFirstLoad = true;
             App.stoUser.reload();
-        }
-
-        if (item == 'yes') {
-            if (HQ.isNew == true) {
-                UserID = '';
-                App.cboUserID.setValue('');
-                App.stoUser.reload();
-            }
-            else {
-                HQ.isChange = false;
-                HQ.isFirstLoad = true;
-                App.stoUser.reload();
-            }
         }
     };
 

@@ -95,10 +95,6 @@
                                                     .ValueField("Code")
                                                     .MultiSelect(true)
                                                     .HQHeightWidth(400, 300)
-                                                    .HQParam(new StoreParameterCollection() 
-                                                    { 
-                                                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
-                                                    })
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                         .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; lst.Focus.Handler = "this.forceSelection = true;"; })
                                                     .LoadData().Width(500)      
