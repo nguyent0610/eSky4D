@@ -154,6 +154,15 @@ var stoLoad = function (sto) {
     }
 };
 
+var cboShipToId_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        App.cboShipToId.setValue('');
+    }
+};
+
 
 var cboCustID_Changed = function (sender, e) {
     App.cboShipToId.setValue("");
