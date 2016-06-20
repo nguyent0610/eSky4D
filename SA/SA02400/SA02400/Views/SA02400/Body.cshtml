@@ -57,8 +57,46 @@
                 ,HQ.TextBox().ID("txtPass").Name("txtPass").HQLangCode("Pass").DataIndex("Pass")
                 .Width(400).InputType(Ext.Net.InputType.Password)
                 .MaxLength(100).EnforceMaxLength(true)
-               
+               , HQ.Button().ID("btnSendEmail").HQLangCode("SA20400SendMail").Listeners(p => p.Click.Fn = "btnSendEmail_Click").MarginSpec("0 0 0 105")
             )
         )
     )//giao dien
-))
+)
+)
+@*// Insert new record*@
+@(X.Window()
+    .ID("winSend")
+    .Hidden(true)
+    .Title(Util.GetLang("SendMail"))
+    //.Layout(LayoutType.Anchor)
+    .Height(350)
+    .Width(430)
+    //.MinHeight(500)
+    //.MinWidth(450)
+    //.MaxHeight(500)
+    //.MaxWidth(450)
+    .Modal(true)
+    .Closable(true)
+    .Buttons(          
+        X.Button().ID("btnAddCancel").Text(Util.GetLang("Exit"))//.OnClientClick("PopupwinCopy.btnCopyCancel_Click();")
+            .Listeners(p => p.Click.Handler = "App.winSend.close();")
+        , X.Button().ID("btnAddOK").Text(Util.GetLang("SendMail"))
+            .Listeners(p => p.Click.Fn = "btnSend_Click")
+    )                 
+    .Items(
+        X.Container().Layout(LayoutType.VBox).MarginSpec("10 0 0 10")
+        .Items(
+            HQ.TextBox().ID("txtToEmail").Name("txtToEmail").HQLangCode("EmailAddr")
+            .Width(400).MaxLength(100).EnforceMaxLength(true)
+                                 
+            ,HQ.TextBox().ID("txtSubject").Name("txtSubject").HQLangCode("mailsubject")
+            .Width(400)
+            .MaxLength(100).EnforceMaxLength(true)
+            
+            ,HQ.TextArea().ID("txtContent").Name("txtContent").HQLangCode("Content")
+            .Width(400).Height(220)
+            .MaxLength(1000).EnforceMaxLength(true)
+               
+        )
+    )
+)

@@ -10,6 +10,10 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
+using System.Net;
+using System.Net.Mime;
 namespace SA02400.Controllers
 {
     [DirectController]
@@ -81,7 +85,6 @@ namespace SA02400.Controllers
                             throw new MessageException(MessageType.Message, "19");
                         }
                         _db.SaveChanges();
-
                     }
                     else
                     {
@@ -120,5 +123,84 @@ namespace SA02400.Controllers
             d.LUpd_User = _userName;
         }
 
-    }
+        [HttpPost]
+        public ActionResult Send(string toEmail, string subject, string content)
+        {
+            try 
+	        {	        
+		        var setupData = _db.HO_EmailConfig.FirstOrDefault(p => p.EmailID.ToUpper() == "APPROVE");
+                SendMail(setupData.SMTPServer, setupData.Port, setupData.SSL, setupData.UserName, setupData.Pass, setupData.MailBox, setupData.Name, toEmail, "", subject, content, "");
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+        private void SendMail(string smtp, int port, bool ssl, string userName, string password, string fromMail, string fromName, string toMail, string ccMail, string subject, string content, string attachmentFile)
+		{
+			try
+			{
+                if (toMail == string.Empty && ccMail == string.Empty)
+                {
+                    return;
+                }
+
+				SmtpClient smtpClient = new SmtpClient(smtp, port);
+                string regexEmail = @"\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b";
+				Regex regex = new Regex(regexEmail);
+				if (!regex.IsMatch(fromMail) || !regex.IsMatch(toMail)) throw new Exception("Wrong email address");
+
+				NetworkCredential auth = new NetworkCredential(userName, Encryption.Decrypt(password, "1210Hq10s081f359t"));
+				smtpClient.Credentials = auth;
+				smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+				if (ssl) smtpClient.EnableSsl = true;
+
+				MailAddress from = new MailAddress(fromMail, fromName);
+				MailMessage mail = new MailMessage();
+
+				string[] cc = ccMail.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+				foreach (var item in cc)
+					mail.CC.Add(item);
+
+				string[] to = toMail.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+				foreach (var item in to)
+					mail.To.Add(item);
+
+				mail.From = from;
+				mail.Subject = subject;
+				mail.SubjectEncoding = Encoding.UTF8;
+
+				mail.Body = content;
+				mail.BodyEncoding = Encoding.UTF8;
+				mail.IsBodyHtml = true;
+
+				if (!string.IsNullOrWhiteSpace(attachmentFile))
+				{
+					Attachment attachment = new Attachment(attachmentFile, MediaTypeNames.Application.Octet);
+					mail.Attachments.Add(attachment);
+				}
+				try
+				{
+					smtpClient.SendCompleted += (ss, aa) => {
+						smtpClient.Dispose();
+						mail.Dispose();
+					};
+					smtpClient.SendAsync(mail, null);
+					//smtpClient.Send(mail);					
+				}
+				catch (Exception ex)
+				{
+                    throw ex;// ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+				}
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+		
+    }    
 }
