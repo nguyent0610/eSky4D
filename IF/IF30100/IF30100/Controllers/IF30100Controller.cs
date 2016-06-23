@@ -819,7 +819,7 @@ namespace IF30100.Controllers
                     //    item.ShowDetail = false;
                     //}
                 }
-                if (lstMeasure.Where(p => p.PivotShow).Count() > 0)
+                if (lstMeasure.Where(p => p.PivotShow).Count() > 1)
                 {
                     pivotTable.PivotFields("Data").Orientation = XlPivotFieldOrientation.xlColumnField;
                 }
