@@ -799,6 +799,11 @@ namespace IF30100.Controllers
                                 pvf.NumberFormat = measure.DataFormat;
                             else
                                 pvf.NumberFormat = "#,##";
+
+                            foreach (var item in pvf.PivotItems())
+                            {
+                                item.ShowDetail = false;
+                            }
                         }
                     }
                     catch (Exception)

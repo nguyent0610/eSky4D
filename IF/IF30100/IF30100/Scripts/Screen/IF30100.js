@@ -92,7 +92,7 @@ var getParm = function () {
             var data = grid.store.allData == undefined ? grid.store.data : grid.store.allData;
             data.each(function (item2) {
                 if (item2.data.Sel == true) {
-                    value += item2.data[grid.tag] + ',';
+                    value += item2.data[grid.tag] + ';';
                 }
                
             });
