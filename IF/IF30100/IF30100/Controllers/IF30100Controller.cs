@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -554,7 +554,7 @@ namespace IF30100.Controllers
                     HQ.eSkySys.eSkySysEntities sys2 = Util.CreateObjectContext<HQ.eSkySys.eSkySysEntities>(true);
                     var user = sys2.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
 
-                    pc.Add(new ParamStruct("@CpnyID", DbType.String, user !=null ? user.CpnyID : "" , ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@CpnyID", DbType.String, user !=null ? user.CpnyID : "" , ParameterDirection.Input, Int32.MaxValue));
                     pc.Add(new ParamStruct("@LangID", DbType.Int16, Current.LangID, ParameterDirection.Input, 200));
 
                     int rptID = Convert.ToInt32(dal.ExecScalar(cmdRPT, CommandType.Text, ref pc));
@@ -690,7 +690,7 @@ namespace IF30100.Controllers
 
                 }
 
-                var lstFilter = lstColumn.Where(p => p.PivotType == "F").OrderBy(p => p.PivotOrder).ToList();
+                var lstFilter = lstColumn.Where(p => p.PivotType == "F").OrderByDescending(p => p.PivotOrder).ToList();
 
                 dataSheet.Columns.AutoFit();
                 dataSheet.Protect("Hqs0ft20062099", true, true, true, true, true, true);
@@ -713,15 +713,21 @@ namespace IF30100.Controllers
 
                 foreach (var row in lstRow)
                 {
-                    PivotField pvf = pivotTable.PivotFields(Util.GetLang(row.ColumnDescr));
-                    if (row.PivotShow)
+                    try
                     {
-                        pvf.Orientation = XlPivotFieldOrientation.xlRowField;
-                        pvf.Subtotals[1] = true;
-                        pvf.Subtotals[1] = false;
-                        
+                        PivotField pvf = pivotTable.PivotFields(Util.GetLang(row.ColumnDescr));
+                        if (row.PivotShow)
+                        {
+                            pvf.Orientation = XlPivotFieldOrientation.xlRowField;
+                            pvf.Subtotals[1] = true;
+                            pvf.Subtotals[1] = false;
+
+                        }
                     }
-                   
+                    catch (Exception)
+                    {
+                        throw new MessageException("20410", "", new string[] { string.Format("Dòng {0} - {1} bị lỗi", row.ColumnName, Util.GetLang(row.ColumnDescr)) });
+                    }
                     //foreach (var item in pvf.PivotItems())
                     //{
                     //    item.ShowDetail = false;
@@ -732,15 +738,23 @@ namespace IF30100.Controllers
                 var lstCol = lstColumn.Where(p => p.PivotType == "C").OrderBy(p => p.PivotOrder).ToList();
                 foreach (var col in lstCol)
                 {
-
-                    PivotField pvf = pivotTable.PivotFields(Util.GetLang(col.ColumnDescr));
-                    if (col.PivotShow)
+                    try
                     {
-                        pvf.Orientation = XlPivotFieldOrientation.xlColumnField;
-                        pvf.Subtotals[1] = true;
-                        pvf.Subtotals[1] = false;
-                       
+                        PivotField pvf = pivotTable.PivotFields(Util.GetLang(col.ColumnDescr));
+                        if (col.PivotShow)
+                        {
+                            pvf.Orientation = XlPivotFieldOrientation.xlColumnField;
+                            pvf.Subtotals[1] = true;
+                            pvf.Subtotals[1] = false;
+
+                        }
                     }
+                    catch (Exception)
+                    {
+                        
+                        throw new MessageException("20410", "", new string[] { string.Format("Cột {0} - {1} bị lỗi", col.ColumnName, Util.GetLang(col.ColumnDescr)) });
+                    }
+                   
                   
                     //foreach (var item in pvf.PivotItems())
                     //{
@@ -748,19 +762,51 @@ namespace IF30100.Controllers
                     //}
                 }
 
+                foreach (var colFilter in lstFilter)
+                {
+                    try
+                    {
+                        PivotField pvf = pivotTable.PivotFields(Util.GetLang(colFilter.ColumnDescr));
+                        if (colFilter.PivotShow)
+                        {
+                            pvf.Orientation = XlPivotFieldOrientation.xlPageField;
+                            pvf.CurrentPage = "(All)";
+                            pvf.Subtotals[1] = true;
+                            pvf.Subtotals[1] = false;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw new MessageException("20410", "", new string[] { string.Format("Filter {0} - {1} bị lỗi", colFilter.ColumnName, Util.GetLang(colFilter.ColumnDescr)) });
+                    }
+
+
+                }
+
               
                 foreach (var measure in lstMeasure)
                 {
-                    PivotField pvf = pivotTable.PivotFields(Util.GetLang(measure.ColumnDescr));
-                    if (measure.PivotShow)
+                    try
                     {
-                        pvf.Orientation = XlPivotFieldOrientation.xlDataField;
-                        pvf.Function = GetFunction(measure.MeasureFunc);
-                        if (measure.DataFormat.PassNull()!=string.Empty)
-                            pvf.NumberFormat = measure.DataFormat;
-                        else
-                            pvf.NumberFormat = "#,##";
+                        PivotField pvf = pivotTable.PivotFields(Util.GetLang(measure.ColumnDescr));
+                        if (measure.PivotShow)
+                        {
+                            pvf.Orientation = XlPivotFieldOrientation.xlDataField;
+
+                            pvf.Function = GetFunction(measure.MeasureFunc);
+                            if (measure.DataFormat.PassNull() != string.Empty)
+                                pvf.NumberFormat = measure.DataFormat;
+                            else
+                                pvf.NumberFormat = "#,##";
+                        }
                     }
+                    catch (Exception)
+                    {
+                        throw new MessageException("20410", "", new string[] { string.Format("Measure {0} - {1} bị lỗi", measure.ColumnName, Util.GetLang(measure.ColumnDescr)) });
+                        
+                    }
+                   
                   
                
                     //foreach (var item in pvf.PivotItems())
@@ -768,21 +814,12 @@ namespace IF30100.Controllers
                     //    item.ShowDetail = false;
                     //}
                 }
-
-
-                foreach (var colFilter in lstFilter)
+                if (lstMeasure.Where(p => p.PivotShow).Count() > 0)
                 {
-                    PivotField pvf = pivotTable.PivotFields(Util.GetLang(colFilter.ColumnDescr));
-                    if (colFilter.PivotShow)
-                    {
-                        pvf.Orientation = XlPivotFieldOrientation.xlPageField;
-                        pvf.CurrentPage = "(All)";
-                        pvf.Subtotals[1] = true;
-                        pvf.Subtotals[1] = false;
-                    }
-                    
+                    pivotTable.PivotFields("Data").Orientation = XlPivotFieldOrientation.xlColumnField;
                 }
-
+              
+               
                 pivotTable.CacheIndex = 1;
                 pivotTable.SaveData = false;
                 pivotTable.RefreshTable();
@@ -859,7 +896,7 @@ namespace IF30100.Controllers
                         }
                         else if (ctrFilter.ParmType.ToUpper() == "Date".ToUpper())
                         {
-                            DateTime date = Convert.ToDateTime(parm.Value.Substring(8, 2) + "/" + parm.Value.Substring(5, 2) + "/" + parm.Value.Substring(0, 4));
+                            DateTime date = Convert.ToDateTime(parm.Value.Substring(5, 2) + "/" + parm.Value.Substring(8, 2) + "/" + parm.Value.Substring(0, 4), System.Globalization.CultureInfo.InvariantCulture);
                             if (ctrFilter.DataFormat.PassNull() != string.Empty)
                             {
                                 targetSheet.Cells[start, 2].Value = date.ToString(ctrFilter.DataFormat);
@@ -884,7 +921,7 @@ namespace IF30100.Controllers
                         targetSheet.Cells[start, 4].NumberFormat = "@";
                         if (ctrFilter.ParmType.ToUpper() == "Month".ToUpper())
                         {
-                            targetSheet.Cells[start, 4].Value = parm.Value.Substring(0, 7);
+                            targetSheet.Cells[start, 4].Value = parm.Value.Substring(5, 2) + "/" + parm.Value.Substring(0, 4);
                         }
                         else if (ctrFilter.ParmType.ToUpper() == "Year".ToUpper())
                         {
@@ -892,7 +929,15 @@ namespace IF30100.Controllers
                         }
                         else if (ctrFilter.ParmType.ToUpper() == "Date".ToUpper())
                         {
-                            targetSheet.Cells[start, 4].Value = parm.Value.Substring(0, 10);
+                            DateTime date = Convert.ToDateTime(parm.Value.Substring(5, 2) + "/" + parm.Value.Substring(8, 2) + "/" + parm.Value.Substring(0, 4),System.Globalization.CultureInfo.InvariantCulture);
+                            if (ctrFilter.DataFormat.PassNull() != string.Empty)
+                            {
+                                targetSheet.Cells[start, 4].Value = date.ToString(ctrFilter.DataFormat);
+                            }
+                            else
+                            {
+                                targetSheet.Cells[start, 4].Value = date.ToString("dd/MM/yyyy");
+                            }
                         }
                         else
                         {
