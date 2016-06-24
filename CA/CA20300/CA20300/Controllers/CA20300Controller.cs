@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -29,7 +29,7 @@ namespace CA20300.Controllers
             return View();
         }
 
-       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -48,17 +48,33 @@ namespace CA20300.Controllers
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstCostType"]);
                 ChangeRecords<CA_CostType> lstCostType = dataHandler.BatchObjectData<CA_CostType>();
-                foreach (CA_CostType deleted in lstCostType.Deleted)
+                //foreach (CA_CostType deleted in lstCostType.Deleted)
+                //{
+                //    var del = _db.CA_CostType.Where(p => p.TypeID == deleted.TypeID).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.CA_CostType.DeleteObject(del);
+                //    }
+                //}
+
+                //lstCostType.Created.AddRange(lstCostType.Updated);
+                lstCostType.Created.AddRange(lstCostType.Updated);
+                foreach (CA_CostType del in lstCostType.Deleted)
                 {
-                    var del = _db.CA_CostType.Where(p => p.TypeID == deleted.TypeID).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstCostType.Created.Where(p => p.TypeID == del.TypeID).Count() > 0)
                     {
-                        _db.CA_CostType.DeleteObject(del);
+                        lstCostType.Created.Where(p => p.TypeID == del.TypeID).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.CA_CostType.ToList().Where(p => p.TypeID == del.TypeID).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.CA_CostType.DeleteObject(objDel);
+                        }
                     }
                 }
-
-                lstCostType.Created.AddRange(lstCostType.Updated);
-
                 foreach (CA_CostType curCostType in lstCostType.Created)
                 {
                     if (curCostType.TypeID.PassNull() == "") continue;

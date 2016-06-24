@@ -18,6 +18,10 @@
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar("Print", true, ""))
         .Layout(LayoutType.Fit)
+        .Listeners(l =>
+                        {
+                            l.BoxReady.Handler = "firstLoad()";
+                        })
         .Items(
             ////Thiet ke giao dien o day
 
@@ -30,14 +34,17 @@
                 .ID("stoCostType")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(CA20300_pgLoadCostType_Result), "mdCA_CostType", "TypeID"))
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCostType")))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCostType"))).AutoLoad(false)
                 .Listeners(l =>
                 {
-                    l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                    l.Load.Handler = "HQ.common.showBusy(false);"; 
+                   // l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
+                   // l.Load.Handler = "HQ.common.showBusy(false);";
+                    l.Load.Fn = "stoLoad";
+                    l.Update.Fn = "frmChange";
                 })
             )
-            .Listeners(p => p.BoxReady.Handler = "App.stoCostType.reload();")
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdCostType');")
+           // .Listeners(p => p.BoxReady.Handler = "App.stoCostType.reload();")
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)
@@ -79,17 +86,17 @@
                 )
                 .Plugins(X.ProgressBarPager())
             )
-            .Plugins(
-                X.CellEditing()
-                .ClicksToEdit(1)
-                .Listeners(ls =>
-                {
-                    ls.BeforeEdit.Fn = "grdCostType_BeforeEdit";
-                    ls.Edit.Fn = "grdCostType_Edit";
-                    ls.ValidateEdit.Fn = "grdCostType_ValidateEdit";
-                    ls.CancelEdit.Fn = "grdCostType_CancelEdit";
-                })
-            )
+                  .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdCostType_BeforeEdit";
+                        ls.Edit.Fn = "grdCostType_Edit";
+                        ls.ValidateEdit.Fn = "grdCostType_ValidateEdit";
+                    })
+                )
+
 
             .Features(
                 X.GridFilters()

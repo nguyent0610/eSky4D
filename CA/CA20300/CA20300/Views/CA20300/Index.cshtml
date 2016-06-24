@@ -16,9 +16,9 @@
  <!--Không thay đổi phần head Đổi mã màn hình CA20300.js tùy theo màn hình đổi lại-->
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common..js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/CA20300.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/CA20300.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
@@ -29,9 +29,14 @@
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');
+        HQ.CA20300Date = '@DateTime.Now.ToString("ddMMyyyy")';
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        //HQ.isInsert = true;
+        //HQ.isDelete = false;
+        //HQ.isUpdate = true;
 
     </script>  
     <title>@ViewBag.Title</title>
