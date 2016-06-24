@@ -1,6 +1,6 @@
 //// Declare //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
-var keys = ['LineType', 'InvtID'];
+var keys = ['LineType'];
 
 var fieldsCheckRequire = ['TranAmt'];
 var fieldsLangCheckRequire = ['TranAmt'];
@@ -87,7 +87,24 @@ var menuClick = function (command) {
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdSpecialDet, keys);
+                if (HQ.focus == 'header' || HQ.focus == 'mider') {
+                    if (HQ.isChange) {
+                        HQ.message.show(150, '', '');
+                    }
+                    else {
+                        App.cboBatNbr.forceSelection = false
+                        App.cboBatNbr.events['change'].suspend();
+                        App.cboBatNbr.setValue('');
+                        App.cboBatNbr.events['change'].resume();
+                        App.stoAP10100_pdHeader.reload();
+                    }
+                }
+                else if (HQ.focus == 'AP_Trans') {
+                    if (App.cboStatus.getValue() != 'H')
+                        return;
+                    HQ.grid.insert(App.grdAP_Trans, keys);
+                    App.cboLineType.setValue('N');
+                }
             }
             break;
         case "delete":
@@ -114,10 +131,7 @@ var menuClick = function (command) {
                 if (HQ.form.checkRequirePass(App.frmMain) &&
                     HQ.store.checkRequirePass(App.stoAP_Trans, keys, fieldsCheckRequire, fieldsLangCheckRequire)
                     ) {
-
                     save();
-
-
                 }
             }
             break;
@@ -206,7 +220,11 @@ var stoTaxTrans_Load = function (sto) {
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'AP10100');
-    //frmChange();
+    if (HQ.isChange)
+    {
+        App.cboDocType.setReadOnly(true);
+        App.cboVendID.setReadOnly(true);
+    }
 };
 
 var cboBatNbr_Change = function (sender, value) {
@@ -214,7 +232,11 @@ var cboBatNbr_Change = function (sender, value) {
         App.stoAP10100_pdHeader.reload();
     }
 };
-
+var cboBatNbr_Select = function (sender, value) {
+    if (!App.stoAP10100_pdHeader.loading) {
+        App.stoAP10100_pdHeader.reload();
+    }
+}
 var cboVendID_Change = function (sender, e)
 {
     if (sender.valueModels != null) {
@@ -313,11 +335,11 @@ var grdAP_Trans_BeforeEdit = function (editor, e) {
         e.record.set('LineRef', HQ.store.lastLineRef(App.stoAP_Trans));
         //return false;
     }
-    return HQ.grid.checkBeforeEdit(e, keys);
+    //return HQ.grid.checkBeforeEdit(e, keys);
 };
 
 var grdAP_Trans_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdAP_Trans, e, keys);
+    HQ.grid.checkInsertKey(App.grdAP_Trans, e, 'LineType');
     var r = e.record.data;
     if (e.field == 'Qty') {
         var quantity = e.value;
@@ -333,7 +355,7 @@ var grdAP_Trans_Edit = function (item, e) {
     }
 
 
-    if (e.field == 'InvtId') {
+    if (e.field == 'InvtID') {
         var obj = App.cboInvtID.getStore().findRecord("InvtID", e.value);
         e.record.set("TaxCat", obj == undefined ? '' : obj.data.TaxCat);
     }
@@ -346,7 +368,7 @@ var grdAP_Trans_Edit = function (item, e) {
 };
 
 var grdAP_Trans_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdAP_Trans, e, keys);
+   // return HQ.grid.checkValidateEdit(App.grdAP_Trans, e, keys);
 };
 
 var frmChange = function () {

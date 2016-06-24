@@ -49,7 +49,7 @@
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Change.Fn = "cboBatNbr_Change";
-                                    //lst.Select.Fn = "cboBatNbr_Select";
+                                    lst.Select.Fn = "cboBatNbr_Select";
                                 })
 
                          ,HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BRANCHID").ReadOnly(true).Tag("X").Width(300)
@@ -74,7 +74,12 @@
                         HQ.TextBox().ID("txtRvdBatNbr").Name("txtRvdBatNbr").HQLangCode("CANCELLEDBATNBR").DataIndex("RvdBatNbr").ReadOnly(true).Tag("X").Width(300)
                          .ReadOnly(true).Tag("X")    
                         
-                       ,HQ.Combo().ID("cboHandle").Name("Handle").HQLangCode("HANDLE").HQProcedure("AP10100_pcGetHandle").Width(300)
+                     
+                                
+                       ,HQ.NumberField().ID("txtCuryCrTot").Name("txtCuryCrTot").HQLangCode("TOTAMT").DataIndex("TotAmt").DecimalPrecision(0).Width(300)
+                         .ReadOnly(true).Tag("X")    
+                        
+                        ,HQ.Combo().ID("cboHandle").Name("Handle").HQLangCode("HANDLE").HQProcedure("AP10100_pcGetHandle").Width(300)
                             .Tag("X")    
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                                 .HQHeightWidth(400, 300).ForceSelection(true)
@@ -90,11 +95,7 @@
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                    // lst.Focus.Handler = "this.forceSelection = true;";
-                                })
-                                
-                       ,HQ.NumberField().ID("txtCuryCrTot").Name("txtCuryCrTot").HQLangCode("TOTAMT").DataIndex("TotAmt").DecimalPrecision(0).Width(300)
-                         .ReadOnly(true).Tag("X")    
-                                               
+                                })                    
                     )
             )
             .Listeners(lss =>
@@ -215,7 +216,7 @@
                                 .Items(
                                  
                                     //DOcument Description
-                                    HQ.TextBox().ID("txtDocDescr").Name("txtDocDescr").HQLangCode("DOCDESC").DataIndex("DocDesc").Width(600)
+                                    HQ.TextBox().ID("txtDocDescr").Name("txtDocDescr").HQLangCode("DOCDESC").DataIndex("DocDesc").Width(600).MaxLength(100).EnforceMaxLength(true)
                                     .MaxLength(100).EnforceMaxLength(true).AllowBlank(false)
                         
                                    //Due Date = NowDay + Term xu ly sau
@@ -334,13 +335,12 @@
                                                  
                                                 })
                                                 .HQDBSys(false)
+                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                .LoadData()
                                                 .Listeners(lst =>
                                                 {
-
-                                                   // lst.Focus.Handler = "expand(App.cboTaxID,',');this.forceSelection=true;";
-
+                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                                 })
-                                                .LoadData()
                                            )
                             , Html.X().CommandColumn().Width(150)
                                 .Commands(

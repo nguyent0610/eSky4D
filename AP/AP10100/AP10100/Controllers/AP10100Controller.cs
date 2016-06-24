@@ -504,7 +504,7 @@ namespace AP10100.Controllers
         {
             try
             {
-                var acc = Session["PO10200"] as AccessRight;
+                var acc = Session["AP10100"] as AccessRight;
                 _form = data;
                 _batNbr = data["cboBatNbr"];
                 _refNbr = data["RefNbr"];

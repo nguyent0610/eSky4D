@@ -36,7 +36,7 @@ namespace AP10100
             //Session["CpnyID"] = Current.CpnyID = "HQH00000";
             //Session["Language"] = Current.Language = "vi";
             //Session["LangID"] = 1;
-
+            Current.FormatDate = "dd-MM-yyyy";
             Current.Authorize = false;
             Current.Server = "MARSSVR\\SQL2012";
             Current.DBSys = "eSky4DSys";
