@@ -198,17 +198,26 @@ namespace SI21600.Controllers
         {
             try
             {
-                string Type = data["cboType"];
-                string NodeID = data["cboNodeID"];
+                string Type = data["cboType"].PassNull();
+                string NodeID = data["cboNodeID"].PassNull();
 
-                var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type==Type);
-                if (obj != null)
+                var check_AR_Customer = _sys.AR_Customer.FirstOrDefault(p => p.NodeID == NodeID && p.CustType == Type);
+                var check_IN_Inventory = _sys.IN_Inventory.FirstOrDefault(p => p.NodeID == NodeID && p.InvtType == Type);
+                if (check_AR_Customer == null && check_IN_Inventory == null)
                 {
-                    _sys.SI_Hierarchy.DeleteObject(obj);
-                }
+                    var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type == Type);
+                    if (obj != null)
+                    {
+                        _sys.SI_Hierarchy.DeleteObject(obj);
+                    }
 
-                _sys.SaveChanges();
-                return Json(new { success = true });
+                    _sys.SaveChanges();
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    throw new MessageException(MessageType.Message, "18");
+                }
             }
             catch (Exception ex)
             {

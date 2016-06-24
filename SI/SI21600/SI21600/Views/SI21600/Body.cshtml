@@ -28,7 +28,7 @@
     .Items(
         X.Panel().Region(Region.North)
         .Items(
-        HQ.Combo().ID("cboType").Name("cboType").HQLangCode("SI21600_Type").HQProcedure("SI21600_pcType").HQAutoLoad(false)
+        HQ.Combo().ID("cboType").Name("cboType").HQLangCode("SI21600_Type").HQProcedure("SI21600_pcType").HQAutoLoad(true)
         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
         .Width(300).HQHeightWidth(300, 300).MarginSpec("5 5 5 0")
         .LoadData()
@@ -62,22 +62,23 @@
         .Items(
             HQ.Combo().ID("cboNodeID").Name("cboNodeID").HQLangCode("ID").HQProcedure("SI21600_pcHierarchyAll")
             .HQColumnShow("NodeID,Descr").DisplayField("NodeID").ValueField("NodeID").HQAutoLoad(false)
-            .HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
+            .HQHeightWidth(400, 300).MarginSpec("5 0 5 0").AllowBlank(false)
             .HQParam(new StoreParameterCollection() 
             { 
                 new StoreParameter() { Name = "@Type", Value = "App.cboType.getValue()", Mode = ParameterMode.Raw }
             })
             .LoadData()
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
             .Listeners(lst =>
                 {
-                    //lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    lst.TriggerClick.Fn = "cboNodeID_TriggerClick";
                     lst.Change.Fn = "cboNodeID_Change";
                     lst.Select.Fn = "cboNodeID_Select";
                     //lst.Focus.Handler = "this.forceSelection = true;";
 
                 })
             , HQ.TextBox().ID("txtDescr").Name("Descr").HQLangCode("Descr").DataIndex("Descr")
-                                .Width(500).MaxLength(200).EnforceMaxLength(true)
+                                .Width(500).MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
             , HQ.NumberField().ID("txtNodeLevel").Name("txtNodeLevel").HQLangCode("Level")
                                 .Width(300).MinValue(0).DecimalPrecision(0).ReadOnly(true)
             , HQ.NumberField().ID("txtParentRecordID").Name("txtParentRecordID").HQLangCode("ParentRecordID")

@@ -10,6 +10,32 @@ var parentRecordIDAll = "";
 var parentRecordID = "";
 var _recordID = "";
 var selectNode;
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+/////////////////////////////////////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.cboType.setValue('I');
+        App.stoSI_Hierarchy.reload();
+        HQ.common.showBusy(false);
+    }
+};
+////////////////////////////////////////////////////////////////////////
+//// First Load ////////////////////////////////////////////////////////
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // Kiem tra quyen Insert Update Delete de disable button tren top bar
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid(); // Require cac field yeu cau tren from
+
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+
+    App.cboType.getStore().addListener('load', checkLoad);
+    
+};
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -35,7 +61,7 @@ var menuClick = function (command) {
             }
             else {
                 HQ.isChange = false;
-                if (App.cboNodeID.valueModels == null) App.cboNodeID.setValue('');
+                
                 App.cboNodeID.getStore().load(function () {
                     App.stoSI_Hierarchy.reload();
                 });
@@ -83,7 +109,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            HQ.common.close(this);
+            //HQ.common.close(this);
             break;
     }
 };
@@ -163,6 +189,15 @@ var cboNodeID_Select = function (sender, value) {
     }
 
 };
+
+var cboNodeID_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
+    }
+};
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
 var cboType_Expand = function (sender, value) {
     if (HQ.isChange) {
@@ -181,13 +216,13 @@ var cboType_TriggerClick = function (sender, value) {
 };
 
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
-var firstLoad = function () {
-    App.cboType.getStore().load(function () {
-        App.cboType.setValue('I');
-        HQ.isFirstLoad = true;
-        HQ.isNew = true;
-    });
-};
+//var firstLoad = function () {
+//    App.cboType.getStore().load(function () {
+//        App.cboType.setValue('I');
+//        HQ.isFirstLoad = true;
+//        HQ.isNew = true;
+//    });
+//};
 
 var frmChange = function () {
     if (App.stoSI_Hierarchy.getCount() > 0) {
@@ -195,6 +230,10 @@ var frmChange = function () {
         HQ.isChange = HQ.store.isChange(App.stoSI_Hierarchy);
         HQ.common.changeData(HQ.isChange, 'SI21600');
     }
+    if (App.cboNodeID.valueModels == null || HQ.isNew == true)
+        App.cboNodeID.setReadOnly(false);
+    else
+        App.cboNodeID.setReadOnly(HQ.isChange);
 };
 
 var stoLoadHeader = function (sto) {
@@ -213,8 +252,20 @@ var stoLoadHeader = function (sto) {
     record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
     HQ.common.setRequire(App.frmMain);  //to do cac o la require  
+
+    if (!HQ.isInsert && HQ.isNew) {
+        App.cboNodeID.forceSelection = true;
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+
     frmChange();
     if (!HQ.isNew) searchNode();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
 };
 
 //trước khi load trang busy la dang load data
@@ -268,14 +319,12 @@ function deleteData(item) {
             waitMsg: HQ.common.getLang('DeletingData'),
             url: 'SI21600/DeleteAll',
             success: function (action, data) {
-                App.cboNodeID.setValue("");
-                App.cboNodeID.getStore().load(function () { cboNodeID_Change(App.cboNodeID); });
+                App.stoSI_Hierarchy.reload();
+                menuClick("new");
                 ReloadTree();
             },
-            failure: function (action, data) {
-                if (data.result.msgCode) {
-                    HQ.message.show(data.result.msgCode, data.result.msgParam, '');
-                }
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
             }
         });
 
@@ -284,15 +333,18 @@ function deleteData(item) {
 
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
+
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
+        App.cboType.setValue('I');
+        if (App.cboNodeID.valueModels == null) App.cboNodeID.setValue('');
         App.stoSI_Hierarchy.reload();
     }
 };
 
 var searchNode = function () {
-    HQ.common.showBusy(true, HQ.common.getLang('searching node....'), App.frmMain);
+    HQ.common.showBusy(true, HQ.common.getLang('searchingNode'), App.frmMain);
     //tu dong bat node tree khi chon 1 cai tu cboInvtID
     var inactiveHierachy = App.stoSI_Hierarchy.getAt(0).data;
 
