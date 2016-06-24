@@ -18,6 +18,11 @@
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar("Print", true, ""))
         .Layout(LayoutType.Fit)
+        .Listeners(l =>
+                            {
+                                l.BoxReady.Handler = "firstLoad()";
+                            })
+         
         .Items(
             ////Thiet ke giao dien o day
 
@@ -30,14 +35,15 @@
                 .ID("stoCostCode")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(CA20400_pgLoadCostCode_Result), "mdCA_CostCode", "CostID"))
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCostCode")))
-                .Listeners(l =>
-                {
-                    l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                    l.Load.Handler = "HQ.common.showBusy(false);"; 
-                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCostCode"))).AutoLoad(false)
+               .Listeners(l =>
+               {
+
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "frmChange";
+                    })
             )
-            .Listeners(p => p.BoxReady.Handler = "App.stoCostCode.reload();")
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdCostCode');")
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)
@@ -48,11 +54,15 @@
                 , X.Column().Text(Util.GetLang("Type")).DataIndex("Type").Width(150)
                    .Editor(
                         HQ.Combo().ID("cboTypeID").Name("cboTypeID").HQProcedure("CA20400_pcLoadCostType")
-                      
                         .HQColumnShow("TypeID,Descr").DisplayField("TypeID").ValueField("TypeID")
                         .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
                         .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                         .LoadData()
+                             .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+
+                        })
                         )
                 , X.CommandColumn().Width(150)
                                         .Commands(
@@ -96,7 +106,7 @@
                     ls.BeforeEdit.Fn = "grdCostCode_BeforeEdit";
                     ls.Edit.Fn = "grdCostCode_Edit";
                     ls.ValidateEdit.Fn = "grdCostCode_ValidateEdit";
-                    ls.CancelEdit.Fn = "grdCostCode_CancelEdit";
+                  //  ls.CancelEdit.Fn = "grdCostCode_CancelEdit";
                 })
             )
 
