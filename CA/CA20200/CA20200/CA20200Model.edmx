@@ -4,32 +4,35 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="CA_Account" EntityType="eBiz4DWebSysModel.Store.CA_Account" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="CA_Account">
           <Key>
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="BankAcct" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="BankAcct" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="AcctNbr" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="BankAcct" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="AcctNbr" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
-          <Property Name="AddrID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="AcctName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="AddrID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="AcctName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <Function Name="CA20200_pcBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="CA20200_pcLoadAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="CA20200_pcLoadBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="CA20200_pgLoadAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="CA_Account" EntityType="Self.CA_Account" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -39,6 +42,9 @@
           <FunctionImport Name="CA20200_pcLoadAddress" ReturnType="Collection(CA20200Model.CA20200_pcLoadAddress_Result)" />
           <FunctionImport Name="CA20200_pcLoadBranch" ReturnType="Collection(CA20200Model.CA20200_pcLoadBranch_Result)" />
           <FunctionImport Name="CA20200_pgLoadAccount" ReturnType="Collection(CA20200Model.CA20200_pgLoadAccount_Result)" />
+          <FunctionImport Name="CA20200_pcBranch" ReturnType="Collection(CA20200Model.CA20200_pcBranch_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="CA_Account">
           <Key>
@@ -84,6 +90,11 @@
           <Property Type="String" Name="AddrID" Nullable="false" MaxLength="10" />
           <Property Type="Boolean" Name="Active" Nullable="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="CA20200_pcBranch_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Addr" Nullable="true" MaxLength="200" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -148,6 +159,15 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CA20200_pcBranch" FunctionName="eBiz4DWebSysModel.Store.CA20200_pcBranch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CA20200Model.CA20200_pcBranch_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -164,6 +184,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

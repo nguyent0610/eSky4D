@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -29,7 +29,7 @@ namespace CA20200.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -48,17 +48,33 @@ namespace CA20200.Controllers
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstAccount"]);
                 ChangeRecords<CA_Account> lstAccount = dataHandler.BatchObjectData<CA_Account>();
-                foreach (CA_Account deleted in lstAccount.Deleted)
+                //foreach (CA_Account deleted in lstAccount.Deleted)
+                //{
+                //    var del = _db.CA_Account.Where(p => p.BranchID == deleted.BranchID&& p.BankAcct==deleted.BankAcct).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.CA_Account.DeleteObject(del);
+                //    }
+                //}
+
+                //lstAccount.Created.AddRange(lstAccount.Updated);
+                lstAccount.Created.AddRange(lstAccount.Updated);
+                foreach (CA_Account del in lstAccount.Deleted)
                 {
-                    var del = _db.CA_Account.Where(p => p.BranchID == deleted.BranchID&& p.BankAcct==deleted.BankAcct).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstAccount.Created.Where(p => p.BranchID == del.BranchID).Count() > 0)
                     {
-                        _db.CA_Account.DeleteObject(del);
+                        lstAccount.Created.Where(p => p.BranchID == del.BranchID).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.CA_Account.ToList().Where(p => p.BranchID == del.BranchID).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.CA_Account.DeleteObject(objDel);
+                        }
                     }
                 }
-
-                lstAccount.Created.AddRange(lstAccount.Updated);
-
                 foreach (CA_Account curAccount in lstAccount.Created)
                 {
                     if (curAccount.BranchID.PassNull() == "" && curAccount.BankAcct.PassNull() == "") continue;

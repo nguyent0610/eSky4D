@@ -17,7 +17,13 @@
         .BodyPadding(0)
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar("Print", true, ""))
-        .Layout(LayoutType.Fit)    
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .Layout(LayoutType.Fit)
+        .Listeners(l =>
+                        {
+                            l.BoxReady.Handler = "firstLoad()";
+                        })
+         
         .Items(
             ////Thiet ke giao dien o day
 
@@ -30,48 +36,61 @@
                 .ID("stoAccount")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(CA20200_pgLoadAccount_Result), "mdCA_Account", "BranchID,BankAcct"))
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetAccount")))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetAccount"))).AutoLoad(false)
                 .Listeners(l =>
                 {
-                    l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                    l.Load.Handler = "HQ.common.showBusy(false);"; 
+                    //l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
+                 //   l.Load.Handler = "HQ.common.showBusy(false);";
+                    l.Load.Fn = "stoLoad";
+                    l.Update.Fn = "frmChange";
                 })
             )
-            .Listeners(p => p.BoxReady.Handler = "App.stoAccount.reload();")
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdAccount');")
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)
                 , X.Column().ID("BranchID").Text(Util.GetLang("BranchID")).DataIndex("BranchID").Width(150)
                     .Editor(
-                        HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQProcedure("CA20200_pcLoadBranch")                      
+                         HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQProcedure("CA20200_pcBranch")                      
                         .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
                         .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
                         .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+
+                        })
                         .LoadData()
-                    )
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                            {
+                               
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";   
+                            })
+                            )
                 , X.Column().ID("BankAcct").Text(Util.GetLang("BankAcct")).DataIndex("BankAcct").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true))
+                    .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true))
                 , X.Column().Text(Util.GetLang("AcctName")).DataIndex("AcctName").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(100).EnforceMaxLength(true))
+                    .Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
                 , X.Column().Text(Util.GetLang("AcctNbr")).DataIndex("AcctNbr").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true))
+                    .Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
                 , X.Column().Text(Util.GetLang("AddrID")).DataIndex("AddrID").Width(150)
-                     .Editor(
+                    .Editor(
                         HQ.Combo().ID("cboAddrID").Name("cboAddrID").HQProcedure("CA20200_pcLoadAddress")                      
                         .HQColumnShow("AddrID,Name,Addr1,Addr2").DisplayField("AddrID").ValueField("AddrID")
                         .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
                         .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                         .LoadData()
                     )
-                 ,Html.X().CheckColumn().DataIndex("Active").Width(150).Editable(true).HideTitleEl(false)
-                     .HeaderItems(
-                        HQ.Label().HQLangCode("Active").ID("Activetext").MarginSpec("0 0 0 5")
-                        , HQ.Checkbox().ID("ActiveCheckAll").MarginSpec("10 0 0 24").Listeners(l => l.Change.Fn = "ActiveCheckAll_Change")
-                        )
-                        .ID("txtActive")
+                 ,X.CheckColumn().DataIndex("Active").Width(150).Editable(true).HideTitleEl(true)
+                    .HeaderItems(
+                       // HQ.Label().HQLangCode("Active").ID("Activetext").MarginSpec("0 0 0 5")
+                        HQ.Checkbox().ID("ActiveCheckAll").HQLangCode("Active").Listeners(l => l.Change.Fn = "ActiveCheckAll_Change").MarginSpec("0 0 0 20")
+                      )
+                     //   .ID("txtActive"))
                 , X.CommandColumn().Width(150)
                                         .Commands(
-                                            Html.X().GridCommand()
+                                            X.GridCommand()
                                                 .Text(Util.GetLang("Reject"))
                                                 .ToolTip(t =>
                                                 {
@@ -88,6 +107,7 @@
                                         {
                                             l.Command.Handler = "grd_Reject(record);";
                                         })
+                                        
             )
             .SelectionModel(X.RowSelectionModel().ID("slmAccount").Mode(SelectionMode.Multi))
             .BottomBar(
@@ -120,7 +140,11 @@
                     .Local(true)
                     .Filters(
                         X.StringFilter().DataIndex("BranchID"),
-                        X.StringFilter().DataIndex("Descr")
+                        X.StringFilter().DataIndex("BankAcct"),
+                        X.StringFilter().DataIndex("AcctNbr"),
+                        X.StringFilter().DataIndex("Active"),
+                        X.StringFilter().DataIndex("AddrID"),
+                        X.StringFilter().DataIndex("AcctName")
                      )
             )
         )

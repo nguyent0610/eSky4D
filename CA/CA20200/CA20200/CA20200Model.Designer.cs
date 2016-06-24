@@ -120,6 +120,25 @@ namespace CA20200
         {
             return base.ExecuteFunction<CA20200_pgLoadAccount_Result>("CA20200_pgLoadAccount");
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        public ObjectResult<CA20200_pcBranch_Result> CA20200_pcBranch(global::System.String userID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<CA20200_pcBranch_Result>("CA20200_pcBranch", userIDParameter);
+        }
 
         #endregion
 
@@ -504,6 +523,107 @@ namespace CA20200
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="CA20200Model", Name="CA20200_pcBranch_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class CA20200_pcBranch_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new CA20200_pcBranch_Result object.
+        /// </summary>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static CA20200_pcBranch_Result CreateCA20200_pcBranch_Result(global::System.String branchID)
+        {
+            CA20200_pcBranch_Result cA20200_pcBranch_Result = new CA20200_pcBranch_Result();
+            cA20200_pcBranch_Result.BranchID = branchID;
+            return cA20200_pcBranch_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BranchName
+        {
+            get
+            {
+                return _BranchName;
+            }
+            set
+            {
+                OnBranchNameChanging(value);
+                ReportPropertyChanging("BranchName");
+                _BranchName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchName");
+                OnBranchNameChanged();
+            }
+        }
+        private global::System.String _BranchName;
+        partial void OnBranchNameChanging(global::System.String value);
+        partial void OnBranchNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Addr
+        {
+            get
+            {
+                return _Addr;
+            }
+            set
+            {
+                OnAddrChanging(value);
+                ReportPropertyChanging("Addr");
+                _Addr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Addr");
+                OnAddrChanged();
+            }
+        }
+        private global::System.String _Addr;
+        partial void OnAddrChanging(global::System.String value);
+        partial void OnAddrChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
