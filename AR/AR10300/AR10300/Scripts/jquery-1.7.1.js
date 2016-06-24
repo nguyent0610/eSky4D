@@ -1484,7 +1484,7 @@ jQuery.support = (function() {
 		div.style.width = "2px";
 		div.appendChild( marginDiv );
 		support.reliableMarginRight =
-			( parseFloat( ( window.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
+			( parseInt( ( window.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
 	}
 
 	// Technique from Juriy Zaytsev
@@ -2628,7 +2628,7 @@ jQuery.extend({
 				var attributeNode = elem.getAttributeNode("tabindex");
 
 				return attributeNode && attributeNode.specified ?
-					parseFloat( attributeNode.value, 10 ) :
+					parseInt( attributeNode.value, 10 ) :
 					rfocusable.test( elem.nodeName ) || rclickable.test( elem.nodeName ) && elem.href ?
 						0 :
 						undefined;
@@ -4831,7 +4831,7 @@ if ( document.documentElement.compareDocumentPosition ) {
 		}
 
 		var al, bl,
-			AR = [],
+			ap = [],
 			bp = [],
 			aup = a.parentNode,
 			bup = b.parentNode,
@@ -4852,7 +4852,7 @@ if ( document.documentElement.compareDocumentPosition ) {
 		// Otherwise they're somewhere else in the tree so we need
 		// to build up a full list of the parentNodes for comparison
 		while ( cur ) {
-			AR.unshift( cur );
+			ap.unshift( cur );
 			cur = cur.parentNode;
 		}
 
@@ -4863,20 +4863,20 @@ if ( document.documentElement.compareDocumentPosition ) {
 			cur = cur.parentNode;
 		}
 
-		al = AR.length;
+		al = ap.length;
 		bl = bp.length;
 
 		// Start walking down the tree looking for a discrepancy
 		for ( var i = 0; i < al && i < bl; i++ ) {
-			if ( AR[i] !== bp[i] ) {
-				return siblingCheck( AR[i], bp[i] );
+			if ( ap[i] !== bp[i] ) {
+				return siblingCheck( ap[i], bp[i] );
 			}
 		}
 
 		// We ended someplace up the tree so do a sibling check
 		return i === al ?
 			siblingCheck( a, bp[i], -1 ) :
-			siblingCheck( AR[i], b, 1 );
+			siblingCheck( ap[i], b, 1 );
 	};
 
 	siblingCheck = function( a, b, ret ) {

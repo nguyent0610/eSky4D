@@ -1,8 +1,6 @@
 using HQ.eSkyFramework;
-
 using Ext.Net;
 using Ext.Net.MVC;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +8,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
+//using Aspose.Cells;
+using System.Drawing;
+using HQ.eSkySys;
+
 namespace AR10300.Controllers
 {
     [DirectController]
@@ -17,531 +21,48 @@ namespace AR10300.Controllers
     [CheckSessionOut]
     public class AR10300Controller : Controller
     {
-        string screenNbr = "AR10300";
+        private string _screenNbr = "AR10300";
+        private string _userName = Current.UserName;
         AR10300Entities _db = Util.CreateObjectContext<AR10300Entities>(false);
-        
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
+        //AR10300SysEntities _AR10300sys = Util.CreateObjectContext<AR10300SysEntities>(true,"Sys");
+        private JsonResult _logMessage;
 
-        public ActionResult Index()
+        public ActionResult Index(string branchID)
         {
+            Util.InitRight(_screenNbr);
+            var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
+
+            if (branchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
+            {
+                return View("Popup");
+            }
+
+            if (branchID == null) branchID = Current.CpnyID;
+
+            //var userDft = _db.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID);
+
+            //ViewBag.INSite = userDft == null ? "" : userDft.INSite;
+            ViewBag.BranchID = branchID;
+
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetDataFormTop(String branchID, String batNbr)
+        public ActionResult GetHeader(string BranchID, string BatNbr)
         {
-            var rptCtrl = _db.Batches.FirstOrDefault(p => p.BranchID == branchID && p.Module == "AR" && p.BatNbr == batNbr);
-            return this.Store(rptCtrl);
-        }
-        public ActionResult GetDataFormBot(String branchID, String batNbr, String refNbr)
-        {
-            var lst = _db.AR_Doc.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
-            return this.Store(lst);
+            return this.Store(_db.AR10300_pdHeader(BranchID, BatNbr).FirstOrDefault());
         }
 
-        public ActionResult GetDataGrid(String branchID, String batNbr, String refNbr)
+        public ActionResult GetDetail(string BranchID, string BatNbr)
         {
-            var lst = _db.AR10300_pgLoadGridTrans(branchID ,batNbr, refNbr).ToList();
-
-            return this.Store(lst);
+            return this.Store(_db.AR10300_pgLoadGridTrans(BranchID, BatNbr).ToList());
         }
-
-        [DirectMethod]
-        [HttpPost]
-        public ActionResult Save(FormCollection data, string branchID, string handle, string batNbr, string refNbr, string docType, string intRefNbr, string reasonCD)
-        {
-            StoreDataHandler dataHandlerTop = new StoreDataHandler(data["lstheaderTop"]);
-            ChangeRecords<Batch> lstheaderTop = dataHandlerTop.BatchObjectData<Batch>();
-            StoreDataHandler dataHandlerBot = new StoreDataHandler(data["lstheaderBot"]);
-            ChangeRecords<AR_Doc> lstheaderBot = dataHandlerBot.BatchObjectData<AR_Doc>();
-            StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AR10300_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AR10300_pgLoadGridTrans_Result>();
-
-            var docDate = data["txtDocDate"];
-           
-            var toAmt = data["txtCuryCrTot"];
-            var tmpGridChangeOrNot = 0;
-            //var invcDate = data["txtInvcDate"];
-
-
-            var batNbrIfNull = 0;
-            var tmpBatNbr = "";
-            var tmpRefNbr = "";
-            var tmpcatchHandle = "";
-
-
-
-            //AR_Doc phuc tap neu nhu de trong BatNbr thi ngoai viec them moi AR_Doc thi phai them moi ca Batch
-            foreach (AR_Doc created in lstheaderBot.Created)
-            {
-                var objHeader = _db.AR_Doc.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).FirstOrDefault();
-                //neu objHeader nghia la hien tai BatNbr van chua co cai nao ca , neu vay ta se tao. ra 1 cai Nbr moi
-                if (objHeader == null)
-                {
-                    objHeader = new AR_Doc();
-                    //bat dau xet cac dieu kien batNbr va refNbr
-                    objHeader.BranchID = branchID;
-                    if (batNbr != "")
-                    {
-                        objHeader.BatNbr = batNbr;
-                    }
-                    else
-                    {
-                        batNbrIfNull = 1;
-                        objHeader.BatNbr = functionBatNbrIfNull(branchID);
-                    }
-                    if (refNbr != "")
-                    {
-                        objHeader.RefNbr = refNbr;
-
-                    }
-                    else
-                    {
-                        //neu batNbr khac Null thi ta dang khoi tao cai RefNbr thu 2 cho cai batNbr nay
-                        if (batNbrIfNull == 0)
-                        {
-
-                            objHeader.RefNbr = functionRefNbrIfNull(branchID);
-                        }
-                        //truong hop nguoc lai neu batNbr cung null thi ta tao ca cai batNbr moi va RefNbr moi
-                        else
-                        {
-                            tmpBatNbr = objHeader.BatNbr;
-                            objHeader.RefNbr = functionRefNbrIfNull(branchID);
-                        }
-                    }
-
-                    if (handle == "R")
-                    {
-                        objHeader.Rlsed = 1;
-                    }
-                    else if (handle == "N")
-                    {
-                        objHeader.Rlsed = 0;
-                    }
-
-                    tmpRefNbr = objHeader.RefNbr;
-                    objHeader.DocType = docType;
-                    //objHeader.VendID = vendID;
-                   
-                    UpdatingFormBotAR_Doc(created, ref objHeader);
-
-                    objHeader.Crtd_DateTime = DateTime.Now;
-                    objHeader.Crtd_Prog = screenNbr;
-                    objHeader.Crtd_User = Current.UserName;
-                    objHeader.tstamp = new byte[0];
-
-
-
-                    _db.AR_Doc.AddObject(objHeader);
-                    //_db.SaveChanges();
-
-                    //Add object Batch moi neu nhu tmpBatNbr khac "" co nghia la truong hop nay chi tao moi doc o FormBot chu ko chon 1 cai BatNbr san co
-                    if (tmpBatNbr != "")
-                    {
-                        var objHeaderBatNbr = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AR" && p.BatNbr == batNbr).FirstOrDefault();
-                        if (objHeaderBatNbr == null)
-                        {
-                            objHeaderBatNbr = new Batch();
-                            objHeaderBatNbr.BranchID = branchID;
-                            objHeaderBatNbr.Module = "AR";
-                            objHeaderBatNbr.BatNbr = tmpBatNbr;
-                            if (toAmt != "")
-                            {
-                                objHeaderBatNbr.TotAmt = Convert.ToDouble(toAmt);
-                            }
-                            else
-                            {
-                                objHeaderBatNbr.TotAmt = 0;
-                            }
-                            objHeaderBatNbr.DateEnt = Convert.ToDateTime(docDate);
-                            objHeaderBatNbr.EditScrnNbr = "AR10300";
-                            objHeaderBatNbr.JrnlType = "AR";
-                            objHeaderBatNbr.OrigBranchID = "";
-                            if (handle == "R")
-                            {
-                                objHeaderBatNbr.Rlsed = 1;
-                                objHeaderBatNbr.Status = "C"; // sua lai sau
-                            }
-                            else if (handle == "N")
-                            {
-                                objHeaderBatNbr.Rlsed = 0;
-                                objHeaderBatNbr.Status = "H";
-                            }
-
-                            objHeaderBatNbr.IntRefNbr = intRefNbr;
-                            objHeaderBatNbr.ReasonCD = reasonCD;
-
-                            objHeaderBatNbr.LUpd_DateTime = DateTime.Now;
-                            objHeaderBatNbr.LUpd_Prog = screenNbr;
-                            objHeaderBatNbr.LUpd_User = Current.UserName;
-                            objHeaderBatNbr.Crtd_DateTime = DateTime.Now;
-                            objHeaderBatNbr.Crtd_Prog = screenNbr;
-                            objHeaderBatNbr.Crtd_User = Current.UserName;
-                            objHeaderBatNbr.tstamp = new byte[0];
-
-                            _db.Batches.AddObject(objHeaderBatNbr);
-                            //_db.SaveChanges();
-
-
-                        }
-                    }
-
-                }
-            }
-
-
-            foreach (AR_Doc updated in lstheaderBot.Updated)
-            {
-                // Get the image path
-
-
-                var objHeader = _db.AR_Doc.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).FirstOrDefault();
-                if (objHeader != null)
-                {
-                    //updating
-                    if (handle == "R")
-                    {
-                        objHeader.Rlsed = 1;
-                    }
-                    else if (handle == "N")
-                    {
-                        objHeader.Rlsed = 0;
-                    }
-
-                    UpdatingFormBotAR_Doc(updated, ref objHeader);
-
-                }
-                else
-                {
-
-                }
-
-
-            }
-
-
-
-
-
-
-
-
-
-
-            foreach (AR10300_pgLoadGridTrans_Result created in lstgrd.Created)
-            {
-                tmpGridChangeOrNot = 1;
-                var record = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
-                                             p.LineRef == created.LineRef).FirstOrDefault();
-                //if (created.tstamp.ToHex() == "")
-                //{
-                if (record == null && created.LineRef != "")
-                {
-                    record = new AR_Trans();
-                    record.BranchID = branchID;
-                    //bat dau xet cac dieu kien batNbr va refNbr
-                    if (batNbr != "")
-                    {
-                        record.BatNbr = batNbr;
-                    }
-                    else
-                    {
-                    
-                        record.BatNbr = tmpBatNbr;
-                    }
-                    if (refNbr != "")
-                    {
-                        record.RefNbr = refNbr;
-
-                    }
-                    else
-                    {
-                        //neu batNbr khac Null thi ta dang khoi tao cai RefNbr thu 2 cho cai batNbr nay
-                        if (batNbrIfNull == 0)
-                        {
-            
-                            record.RefNbr = tmpRefNbr;
-                        }
-                        //truong hop nguoc lai neu batNbr cung null thi ta tao ca cai batNbr moi va RefNbr moi
-                        else
-                        {
-
-                            record.BatNbr = tmpBatNbr;
-                            record.RefNbr = tmpRefNbr;
-                        }
-                    }
-
-                    //var recordVendor = _db.AP_Vendor.Where(p => p.VendID == vendID).FirstOrDefault();
-                    //record.Addr = recordVendor.Addr1;
-                    
-                    record.JrnlType = "AR";
-                  
-                    UpdatingGridAR_Trans(created, ref record);
-
-                    //record.VendID = vendID;
-                    //record.VendName = recordVendor.Name;
-                    record.Crtd_DateTime = DateTime.Now;
-                    record.Crtd_Prog = screenNbr;
-                    record.Crtd_User = Current.UserName;
-
-                    _db.AR_Trans.AddObject(record);
-                    _db.SaveChanges();
-
-                }
-                else
-                {
-                    //return Json(new
-                    //{
-                    //    success = false,
-                    //    code = "151",
-                    //    //colName = Util.GetLang("ReportViewID"),
-                    //    //value = created.ReportViewID
-                    //}, JsonRequestBehavior.AllowGet);
-                    //tra ve loi da ton tai ma ngon ngu nay ko the them
-                }
-                // }
-            }
-
-
-
-            foreach (AR10300_pgLoadGridTrans_Result updated in lstgrd.Updated)
-            {
-                tmpGridChangeOrNot = 1;
-                var record = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
-                                             p.LineRef == updated.LineRef).FirstOrDefault();
-
-                if (record != null)
-                {
-
-                    //if (record.tstamp.ToHex() != updated.tstamp.ToHex())
-                    //{
-                    //    return Json(new { success = false, code = "19" }, JsonRequestBehavior.AllowGet);
-                    //}
-
-                    UpdatingGridAR_Trans(updated, ref record);
-                    var recordBatNbrUpdate = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AR" && p.EditScrnNbr == "AR10300" && p.BatNbr == record.BatNbr).FirstOrDefault();
-                    var recordRefNbrUpdate = _db.AR_Doc.Where(p => p.BranchID == branchID && p.BatNbr == record.BatNbr && p.RefNbr == record.RefNbr).FirstOrDefault();
-                    if (recordBatNbrUpdate != null)
-                    {
-                        recordBatNbrUpdate.TotAmt = Convert.ToDouble(toAmt);
-                    }
-                    if (recordRefNbrUpdate != null)
-                    {
-                        recordRefNbrUpdate.DocBal = Convert.ToDouble(toAmt);
-                        recordRefNbrUpdate.OrigDocAmt = Convert.ToDouble(toAmt);
-                    }
-                }
-                else
-                {
-                    if (updated.tstamp.ToHex() == "")
-                    {
-                        if (record == null)
-                        {
-                            record = new AR_Trans();
-                            record.BranchID = branchID;
-
-                            if (batNbr != "")
-                            {
-                                record.BatNbr = batNbr;
-                            }
-                            else
-                            {
-                                record.BatNbr = tmpBatNbr;
-                            }
-                            if (refNbr != "")
-                            {
-                                record.RefNbr = refNbr;
-
-                            }
-                            else
-                            {
-                                //neu batNbr khac Null thi ta dang khoi tao cai RefNbr thu 2 cho cai batNbr nay
-                                if (batNbrIfNull == 0)
-                                {
-                                       record.RefNbr = tmpRefNbr;
-                                }
-                                //truong hop nguoc lai neu batNbr cung null thi ta tao ca cai batNbr moi va RefNbr moi
-                                else
-                                {
-   
-                                    record.BatNbr = tmpBatNbr;
-                                    record.RefNbr = tmpRefNbr;
-                                }
-                            }
-
-                            //var recordVendor = _db.AP_Vendor.Where(p => p.VendID == vendID).FirstOrDefault();
-                            //record.Addr = recordVendor.Addr1;
-                            
-                            record.JrnlType = "AR";
-                         
-                            UpdatingGridAR_Trans(updated, ref record);
-
-                            //record.VendID = vendID;
-                            //record.VendName = recordVendor.Name;
-                            record.Crtd_DateTime = DateTime.Now;
-                            record.Crtd_Prog = screenNbr;
-                            record.Crtd_User = Current.UserName;
-
-                            _db.AR_Trans.AddObject(record);
-                            //_db.SaveChanges();
-
-                        }
-
-                    }
-                    else
-                    {
-
-                        return Json(new { success = false, code = "19" }, JsonRequestBehavior.AllowGet);
-                    }
-                }
-            }
-
-
-            foreach (AR10300_pgLoadGridTrans_Result deleted in lstgrd.Deleted)
-            {
-
-                var del = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
-                                             p.LineRef == deleted.LineRef).FirstOrDefault();
-                if (del != null)
-                {
-                    _db.AR_Trans.DeleteObject(del);
-
-                }
-                tmpGridChangeOrNot = 1;
-            }
-
-            _db.SaveChanges();
-            var justUpdateBatNbr = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AR" && p.EditScrnNbr == "AR10300" && p.BatNbr == batNbr).FirstOrDefault();
-            if (justUpdateBatNbr != null)
-            {
-                justUpdateBatNbr.IntRefNbr = intRefNbr;
-                justUpdateBatNbr.ReasonCD = reasonCD;
-                justUpdateBatNbr.TotAmt = Convert.ToDouble(toAmt);
-                _db.SaveChanges();
-            }
-
-            if (handle == "R")
-            {
-                var recordBatNbrUpdate = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AR" && p.EditScrnNbr == "AR10300" && p.BatNbr == batNbr).FirstOrDefault();
-                var recordRefNbrUpdate = _db.AR_Doc.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).FirstOrDefault();
-                recordBatNbrUpdate.Rlsed = 1;
-                recordBatNbrUpdate.Status = "C";
-                recordRefNbrUpdate.Rlsed = 1;
-                tmpcatchHandle = "1";
-            }
-
-
-            _db.SaveChanges();
-
-
-
-            return Json(new { success = true, value = batNbrIfNull, value1 = tmpRefNbr, value2 = tmpBatNbr, value3 = tmpcatchHandle, value4 = tmpGridChangeOrNot }, JsonRequestBehavior.AllowGet);
-
-
-        }
-
-        [DirectMethod]
-        public ActionResult DeleteFormTopBatch(string batNbr, string branchID)
-        {
-            var recordTopBatch = _db.Batches.FirstOrDefault(p => p.BranchID == branchID && p.BatNbr == batNbr && p.Module == "AR");
-            if (recordTopBatch != null)
-            {
-                var recordBotAP_Doc = _db.AR_Doc.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
-                if (recordBotAP_Doc != null)
-                {
-                    for (int k = 0; k < recordBotAP_Doc.Count; k++)
-                    {
-                        _db.AR_Doc.DeleteObject(recordBotAP_Doc[k]);
-                        var recordGridTrans = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
-                        if (recordGridTrans != null)
-                        {
-                            for (int i = 0; i < recordGridTrans.Count; i++)
-                            {
-                                _db.AR_Trans.DeleteObject(recordGridTrans[i]);
-                            }
-                        }
-                    }
-                }
-                _db.Batches.DeleteObject(recordTopBatch);
-            }
-
-            _db.SaveChanges();
-            return this.Direct();
-        }
-
-        //[DirectMethod]
-        //public ActionResult DeleteFormBotAP_Doc(string refNbr, string batNbr, string branchID)
-        //{
-        //    var recordBotAP_Doc = _db.AR_Doc.FirstOrDefault(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr);
-
-        //    if (recordBotAP_Doc != null)
-        //    {
-        //        _db.AR_Doc.DeleteObject(recordBotAP_Doc);
-        //        var recordGridTrans = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
-        //        if (recordGridTrans != null)
-        //        {
-        //            for (int i = 0; i < recordGridTrans.Count; i++)
-        //            {
-        //                _db.AR_Trans.DeleteObject(recordGridTrans[i]);
-        //            }
-        //        }
-        //    }
-        //    _db.SaveChanges();
-        //    return this.Direct();
-        //}
-
-
-
-        private void UpdatingGridAR_Trans(AR10300_pgLoadGridTrans_Result s, ref AR_Trans d)
-        {
-            d.LineRef = s.LineRef;
-            d.TranAmt = s.TranAmt;
-            d.TranDesc = s.TranDesc;
-            //d.InvcDate = DateTime.Now;
-            d.TranDate = DateTime.Now;
-            d.LUpd_DateTime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
-        }
-
-        private void UpdatingFormBotAR_Doc(AR_Doc s, ref AR_Doc d)
-        {
-      
-            d.DocBal = s.DocBal;
-            d.DocDate = s.DocDate;
-            d.DocDesc = s.DocDesc;
-
-            d.SlsperId = s.SlsperId;
-            d.CustId = s.CustId;
-
-
-            d.InvcNbr = s.InvcNbr;
-            d.DiscDate = s.DocDate;
-            d.DueDate = s.DocDate;
-            //d.InvcDate = s.DocDate;
-            d.InvcNote = "";
-            d.Terms = "";
-            d.TaxId00 = "";
-            d.TaxId01 = "";
-            d.TaxId02 = "";
-            d.TaxId03 = "";
-            //d.RcptNbr = "";
-            d.OrigDocAmt = s.OrigDocAmt;
-            //d.PONbr = s.PONbr;
-
-
-            d.LUpd_DateTime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
-        }
-
-
-
 
         private string functionBatNbrIfNull(string branchID)
         {
@@ -554,17 +75,239 @@ namespace AR10300.Controllers
             var recordLastBatNbr = _db.AR10300_ppARNumbering(branchID, "RefNbr").FirstOrDefault();
             return recordLastBatNbr;
         }
-       
 
+
+        [HttpPost]
+        public ActionResult Save(FormCollection data)
+        {
+            try
+            {
+                var BranchID = data["txtBranchID"].PassNull();
+                var Handle = data["cboHandle"].PassNull();
+                var BatNbr = data["cboBatNbr"].PassNull();
+                var RefNbr = data["cboRefNbr"].PassNull();
+
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstHeader"]);
+                var curHeader = dataHandler1.ObjectData<AR10300_pdHeader_Result>().FirstOrDefault();
+                StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
+                ChangeRecords<AR10300_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AR10300_pgLoadGridTrans_Result>();
+                
+                #region Save Header
+                var headerBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AR" && p.EditScrnNbr == "AR10300");
+                var headerDoc = _db.AR_Doc.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr);
+                if (headerBatch != null)
+                {
+                    if (headerBatch.tstamp.ToHex() == curHeader.tstamp.ToHex())
+                    {
+                        headerBatch.IntRefNbr = curHeader.IntRefNbr;
+                        headerBatch.ReasonCD = curHeader.ReasonCD;
+                        headerBatch.TotAmt = Convert.ToDouble(curHeader.TotAmt);
+                        if (Handle == "R")
+                        {
+                            headerBatch.Rlsed = 1;
+                            headerBatch.Status = "C";
+                        }
+                        UpdatingFormBotAR_Doc(ref headerDoc, curHeader, Handle);
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
+                }
+                else
+                {
+                    headerBatch = new Batch();
+                    headerBatch.ResetET();
+                    headerBatch.BranchID = BranchID;
+                    headerBatch.BatNbr = functionBatNbrIfNull(BranchID);
+                    headerBatch.RefNbr = functionRefNbrIfNull(BranchID);
+                    headerBatch.Module = "AR";
+                    headerBatch.JrnlType = "AR"; 
+                    headerBatch.EditScrnNbr = "AR10300";
+                    headerBatch.TotAmt = curHeader.TotAmt;
+                    headerBatch.DateEnt = curHeader.DocDate;
+                    headerBatch.OrigBranchID = "";
+                    if (Handle == "R")
+                    {
+                        headerBatch.Rlsed = 1;
+                        headerBatch.Status = "C";
+                    }
+                    else if (Handle == "N" || Handle == "")
+                    {
+                        headerBatch.Rlsed = 0;
+                        headerBatch.Status = "H";
+                    }
+                    headerBatch.IntRefNbr = curHeader.IntRefNbr;
+                    headerBatch.ReasonCD = curHeader.ReasonCD;
+                    headerBatch.TotAmt = curHeader.TotAmt;
+                    headerBatch.TotAmt = curHeader.TotAmt;
+                    headerBatch.TotAmt = curHeader.TotAmt;
+
+                    headerBatch.Crtd_DateTime = DateTime.Now;
+                    headerBatch.Crtd_Prog = _screenNbr;
+                    headerBatch.Crtd_User = Current.UserName;
+                    headerBatch.LUpd_DateTime = DateTime.Now;
+                    headerBatch.LUpd_Prog = _screenNbr;
+                    headerBatch.LUpd_User = Current.UserName;
+
+                    _db.Batches.AddObject(headerBatch);
+
+                    headerDoc = new AR_Doc();
+                    headerDoc.ResetET();
+                    headerDoc.BranchID = BranchID;
+                    headerDoc.BatNbr = headerBatch.BatNbr;
+                    headerDoc.RefNbr = headerBatch.RefNbr;
+                    headerDoc.DocType = curHeader.DocType;
+                    headerDoc.Crtd_DateTime = DateTime.Now;
+                    headerDoc.Crtd_Prog = _screenNbr;
+                    headerDoc.Crtd_User = Current.UserName;
+                    UpdatingFormBotAR_Doc(ref headerDoc, curHeader, Handle);
+
+                    _db.AR_Doc.AddObject(headerDoc);
+
+                    BatNbr = headerBatch.BatNbr;
+                    RefNbr = headerBatch.RefNbr;
+                }
+                #endregion
+
+                #region Save AR_Trans
+                foreach (AR10300_pgLoadGridTrans_Result deleted in lstgrd.Deleted)
+                {
+                    var objDelete = _db.AR_Trans.Where(p => p.BranchID == BranchID
+                                                        && p.BatNbr == BatNbr
+                                                        && p.RefNbr == RefNbr
+                                                        && p.LineRef == deleted.LineRef).FirstOrDefault();
+                    if (objDelete != null)
+                    {
+                        _db.AR_Trans.DeleteObject(objDelete);
+                    }
+                }
+
+                lstgrd.Created.AddRange(lstgrd.Updated);
+
+                foreach (AR10300_pgLoadGridTrans_Result curLang in lstgrd.Created)
+                {
+                    if (BranchID.PassNull() == "" || BatNbr.PassNull() == "" || RefNbr.PassNull() == "" || curLang.LineRef.PassNull() == "") continue;
+
+                    var lang = _db.AR_Trans.FirstOrDefault(p => p.BranchID.ToLower() == BranchID.ToLower()
+                                                        && p.BatNbr.ToLower() == BatNbr.ToLower()
+                                                        && p.RefNbr.ToLower() == RefNbr.ToLower()
+                                                        && p.LineRef.ToLower() == curLang.LineRef.ToLower());
+
+                    if (lang != null)
+                    {
+                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        {
+                            UpdatingAR_Trans(lang, curLang, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        lang = new AR_Trans();
+                        lang.ResetET();
+                        lang.BranchID = BranchID;
+                        lang.BatNbr = BatNbr;
+                        lang.RefNbr = RefNbr;
+                        lang.JrnlType = "AR";
+                        UpdatingAR_Trans(lang, curLang, true);
+                        _db.AR_Trans.AddObject(lang);
+                    }
+                }
+                #endregion
+
+                _db.SaveChanges();
+                return Json(new { success = true, BatNbr = BatNbr });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+
+        private void UpdatingFormBotAR_Doc(ref AR_Doc t, AR10300_pdHeader_Result s, string Handle)
+        {
+            if (Handle == "R")
+                t.Rlsed = 1;
+            else if (Handle == "N")
+                t.Rlsed = 0;
+            t.DocBal = s.DocBal;
+            t.DocDate = s.DocDate;
+            t.DocDesc = s.DocDesc;
+            t.SlsperId = s.SlsperId;
+            t.CustId = s.CustId;
+            t.InvcNbr = s.InvcNbr;
+            t.DiscDate = s.DocDate;
+            t.DueDate = s.DocDate;
+            t.InvcNote = "";
+            t.Terms = "";
+            t.TaxId00 = "";
+            t.TaxId01 = "";
+            t.TaxId02 = "";
+            t.TaxId03 = "";
+            t.OrigDocAmt = s.OrigDocAmt;
+
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = Current.UserName;
+        }
+
+        private void UpdatingAR_Trans(AR_Trans t, AR10300_pgLoadGridTrans_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.LineRef = s.LineRef;
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.TranAmt = s.TranAmt;
+            t.TranDesc = s.TranDesc;
+            t.TranDate = DateTime.Now;
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAll(FormCollection data)
+        {
+            try
+            {
+                string BranchID = data["txtBranchID"].PassNull();
+                string BatNbr = data["cboBatNbr"].PassNull();
+
+                var objBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AR");
+                if (objBatch != null)
+                {
+                    _db.Batches.DeleteObject(objBatch);
+                }
+
+                var objDoc = _db.AR_Doc.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr);
+                if (objDoc != null)
+                {
+                    _db.AR_Doc.DeleteObject(objDoc);
+                }
+
+                var lstAR_Trans = _db.AR_Trans.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr).ToList();
+                foreach (var item in lstAR_Trans)
+                {
+                    _db.AR_Trans.DeleteObject(item);
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
     }
 }
-
-
-
-
-
-
-
-
-
-

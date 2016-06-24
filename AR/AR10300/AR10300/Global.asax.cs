@@ -36,19 +36,19 @@ namespace AR10300
             //Session["CpnyID"] = Current.CpnyID = "HQH00000";
             //Session["Language"] = Current.Language = "vi";
             //Session["LangID"] = 1;
-
+            Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "EARTHSVR\\SQL2012";
+            Current.DBSys = "ND_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["AR10300"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "en";
+            Session["CpnyID"] = Current.CpnyID = "C000058";
+            Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }
     }
