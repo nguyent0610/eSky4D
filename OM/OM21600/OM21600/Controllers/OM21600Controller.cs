@@ -43,7 +43,7 @@ namespace OM21600.Controllers
         {
             try
             {
-                string BranchID = data["cboCnpyID"];
+                string BranchID = data["cboCnpyID"].PassNull();
                  
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_SalesRoute"]);
                 ChangeRecords<OM21600_pgLoadSalesRoute_Result> lstOM_SalesRoute = dataHandler.BatchObjectData<OM21600_pgLoadSalesRoute_Result>();

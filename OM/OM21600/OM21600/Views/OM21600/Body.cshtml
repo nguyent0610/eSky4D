@@ -18,10 +18,16 @@
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Border)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad()";
+        //l.FieldChange.Fn = "frmChange";
+    })
     .Items(
         ////Thiet ke giao dien o day
      
             X.Panel().Region(Region.North)
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'header');")
             .Items(
                 HQ.Combo().ID("cboCpnyID").Name("cboCnpyID").DataIndex("CpnyID").HQLangCode("CpnyID").HQProcedure("OM21600_pcLoadBranchAllByUser").AllowBlank(false)
                 .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID").Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
@@ -34,6 +40,7 @@
                         l.Change.Fn = "cboCpnyID_Change";
                         l.TriggerClick.Fn = "cboCpnyID_TriggerClick";
                         l.Expand.Fn = "cboCpnyID_Expand";
+                        l.Select.Fn = "cboCpnyID_Select";
                     })
                     .LoadData()
                     )
@@ -47,7 +54,7 @@
                 .ID("grdSalesRoute")
                 .Store(
                     X.Store()
-                    .ID("stoSalesRoute")
+                    .ID("stoSalesRoute").AutoLoad(false)
                     .PageSize(50)
                     .Model(Util.GenerateModel(typeof(OM21600_pgLoadSalesRoute_Result), "mdlOM21600_pgLoadSalesRoute", "Code"))
                     .ServerProxy(
@@ -69,13 +76,10 @@
                     {
                         l.BeforeLoad.Fn = "stoBeforeLoad";
                         l.Load.Fn = "stoLoad";
-                        l.Update.Fn = "stoChanged";                 
+                        l.Update.Fn = "frmChange";                 
                     })
                 )
-                .Listeners(p =>
-                            {
-                                p.BoxReady.Handler = "firstLoad();";
-                            })
+                .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSalesRoute');")
                 .SortableColumns(false)
                 .ColumnModel(
                     X.RowNumbererColumn().Width(40),
