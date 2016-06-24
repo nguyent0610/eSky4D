@@ -1,1 +1,247 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('r b=["\\V\\n\\e\\i\\F\\1e\\I","\\u\\i\\q\\V\\n\\e\\i\\F\\1b\\F\\x\\c","\\K\\m\\i\\f\\e","\\u\\i\\m\\q","\\x\\i\\c\\O","\\n\\c\\1g\\e","\\p\\h\\f\\e","\\i\\c\\p\\o\\h\\q","\\f\\e\\o\\V\\n\\e\\i\\F\\1b\\F\\x\\c","\\i\\c\\K\\i\\c\\f\\A","\\m\\f\\1e\\n\\f\\c\\i\\e","\\m\\n\\f\\c\\i\\e","\\n\\c\\1a","\\m\\e\\c\\y\\f","\\f\\c\\p\\c\\k\\e\\c\\q","\\f\\p\\y\\V\\n\\e\\i\\F\\1b\\F\\x\\c","\\m\\f\\I\\c\\p\\c\\e\\c","","\\q\\c\\p\\c\\e\\c\\I\\h\\e\\h","\\f\\A\\o\\1a","\\y\\c\\f\\f\\h\\u\\c","\\q\\c\\p\\c\\e\\c","\\m\\f\\1T\\x\\q\\h\\e\\c","\\u\\c\\e\\Q\\A\\h\\n\\u\\c\\q\\I\\h\\e\\h","\\f\\h\\O\\c","\\x\\i\\m\\n\\e","\\m\\f\\Q\\A\\h\\n\\u\\c","\\f\\e\\o\\i\\c","\\h\\f\\L\\Q\\p\\o\\f\\c","\\k\\p\\o\\f\\c","\\k\\o\\y\\y\\o\\n","\\K\\m\\c\\p\\q","\\m\\n\\q\\c\\1g\\1X\\K","\\e\\f\\e\\h\\y\\x","\\q\\h\\e\\h","\\i\\c\\k\\o\\i\\q","\\k\\A\\c\\k\\L\\1e\\n\\x\\H\\e","\\O\\h\\p\\H\\c","\\m\\n\\f\\c\\i\\e\\1O\\p\\h\\n\\L","\\k\\A\\c\\k\\L\\I\\H\\x\\p\\m\\k\\h\\e\\c","\\y\\h\\e\\k\\A","\\e\\c\\1g\\e","\\k\\o\\p\\H\\y\\n","\\x\\A\\h\\n\\e\\o\\y","\\i\\c\\y\\o\\O\\c","\\u\\c\\e\\Q\\o\\H\\n\\e","\\K\\o\\k\\H\\f\\X\\o\\1a","\\u\\c\\e\\1B\\m\\c\\1a","\\f\\c\\p\\c\\k\\e","\\u\\c\\e\\1c\\c\\p\\c\\k\\e\\m\\o\\n\\Y\\o\\q\\c\\p","\\i\\c\\1K\\c\\k\\e","\\m\\f\\1B\\h\\p\\m\\q","\\K\\i\\y\\Y\\h\\m\\n","\\1W\\h\\m\\e\\Y\\f\\u","\\u\\c\\e\\1V\\h\\n\\u","\\Q\\1U\\1Y\\1h\\2b\\1h\\1h\\1S\\1c\\h\\O\\c","\\u\\c\\e\\I\\h\\e\\h","\\x\\i\\o\\k\\c\\f\\f","\\f\\H\\1E\\y\\m\\e","\\F\\c\\f","\\q\\c\\p\\c\\e\\c\\1c\\c\\p\\c\\k\\e\\c\\q","\\p\\c\\n\\u\\e\\A","\\k\\A\\c\\k\\L\\X\\c\\1I\\H\\m\\i\\c\\1L\\h\\f\\f","\\e\\i\\m\\y","\\q\\c\\f\\k\\i","\\X\\k\\x\\e\\I\\m\\f\\1E\\1P\\p\\u","\\n\\o","\\o\\L","\\h\\k\\e\\m\\O\\c","\\k\\A\\c\\k\\L\\c\\q","\\f\\c\\e","\\c\\h\\k\\A","\\u\\c\\e\\1c\\e\\o\\i\\c","\\Q\\o\\q\\c","\\K\\m\\n\\q\\X\\c\\k\\o\\i\\q","\\f\\e\\o\\Y\\h\\f\\e\\c\\i\\1b\\F\\x\\c","\\I\\c\\f\\k\\i"];r D=[b[0]];r 1G=t(1w){1Z(1w){C b[2]:g[b[3]][b[2]](l[b[1]]);E;C b[4]:g[b[3]][b[4]](l[b[1]]);E;C b[5]:g[b[3]][b[5]](l[b[1]]);E;C b[6]:g[b[3]][b[6]](l[b[1]]);E;C b[9]:l[b[8]][b[7]]();g[b[3]][b[2]](l[b[1]]);E;C b[12]:j(g[b[10]]){g[b[3]][b[11]](l[b[1]])};E;C b[21]:j(l[b[15]][b[14]][b[13]][0]!=W){j(g[b[16]]){g[b[20]][b[19]](11,b[17],b[18])}};E;C b[24]:j(g[b[22]]||g[b[10]]||g[b[16]]){j(1r(l[b[8]][b[23]]().1v)&&1r(l[b[8]][b[23]]().1z)){1u()}};E;C b[25]:E;C b[29]:j(g[b[27]][b[26]](l[b[8]])){g[b[20]][b[19]](5,b[17],b[28])}S{g[b[P]][b[29]](1F)};E}};r 2a=t(1x,s){j(!g[b[22]]){v J};j(D[b[1m]](s[b[1n]])!=-1){j(s[b[1f]][b[1d]][b[1y]]!=b[17]){v J}};v g[b[3]][b[2c]](s,D)};r 1R=t(G,s){j(D[b[1m]](s[b[1n]])!=-1){j(s[b[1p]]!=b[17]&&1q(l[b[8]][b[23]]().1v)&&1q(l[b[8]][b[23]]().1z)){g[b[27]][b[1M]](l[b[8]])}}};r 1Q=t(G,s){j(D[b[1m]](s[b[1n]])!=-1){j(g[b[3]][b[1N]](l[b[1]],s,D)){g[b[20]][b[19]](1J,s[b[1p]]);v J};r 1t=/^(\\w*(\\d|[a-2R-Z]))[\\2S]*$/;j(!s[b[1p]][b[2Q]](1t)){g[b[20]][b[19]](2P,s[b[2M]][b[2d]]);v J}}};r 2N=t(1x,s){j(s[b[1f]][b[2O]]){s[b[27]][b[1A]](s[b[1f]])}};r 2U=t(M){j(M[b[1d]][b[1y]]==b[17]){l[b[8]][b[1A]](M);l[b[1]][b[2W]]()[b[2V]](l[b[8]][b[1s]]()-1);l[b[1]][b[2T]]()[b[2K]](l[b[8]][b[1s]]()-1)}S{M[b[2o]]()}};r 1u=t(){j(l[b[1C]][b[2n]]()){l[b[1C]][b[2p]]({2q:g[b[P]][b[U]](b[2L]),2s:b[2r],2m:{2l:g[b[27]][b[2g]](l[b[8]])},2f:t(1i,1j){g[b[20]][b[19]](2e);1G(b[9])},2h:t(1i,1j){g[b[20]][b[2i]](1i,1j,T)}})}};r 2k=t(G){j(G==b[2j]){l[b[1]][b[2t]]()}};r 1q=t(B){j(B!=W){1o(r z=0;z<B[b[1k]];z++){1o(r R=0;R<D[b[1k]];R++){j(B[z][D[R]]==b[17]||B[z][D[R]]==W){v J}}};v T}S{v T}};r 1r=t(B){j(B!=W){1o(r z=0;z<B[b[1k]];z++){j(g[b[3]][b[2u]](B[z],D)){2F};j(B[z][b[0]][b[1l]]()==b[17]){g[b[20]][b[19]](15,g[b[P]][b[U]](b[0]));v J};j(B[z][b[1H]][b[1l]]()==b[17]){g[b[20]][b[19]](15,g[b[P]][b[U]](b[1H]));v J};j(B[z][b[1D]][b[1l]]()==b[17]){g[b[20]][b[19]](15,g[b[P]][b[U]](b[1D]));v J}};v T}S{v T}};r 2E=t(G){j(G==b[2G]||G==b[2H]){g[b[P]][b[29]](1F)}};r 2J=t(N){j(N){l[b[1]][b[2I]]()[b[2D]](t(G){G[b[2C]](b[2x],N[b[2w]])})}};r 2v=t(N){r M=l[b[2y]][b[2z]](b[2B],N);j(M){v M[b[1d]][b[2A]]}S{v N}};', 62, 183, '|||||||||||_0x801f|x65||x74|x73|HQ|x61|x72|if|x63|App|x69|x6E|x6F|x6C|x64|var|_0xc18ax6|function|x67|return||x70|x6D|_0xc18ax14|x68|_0xc18ax13|case|keys|break|x79|_0xc18ax8|x75|x44|false|x66|x6B|_0xc18axd|_0xc18ax19|x76|30|x43|_0xc18ax15|else|true|54|x45|undefined|x52|x4D||||||||||||x77|x54|x53|34|x49|35|x78|x30|_0xc18axf|_0xc18ax10|61|63|32|31|for|37|isAllValidKey|checkRequire|45|_0xc18axa|save|Created|_0xc18ax3|_0xc18ax5|33|Updated|44|x56|52|65|x62|this|menuClick|64|x71|1112|x6A|x50|38|39|x42|x46|grdEntryType_ValidateEdit|grdEntryType_Edit|x2F|x55|x41|x4C|x57|x4F|x32|switch|||||||||||grdEntryType_BeforeEdit|x31|36|41|201405071|success|56|failure|57|59|deleteData|lstEntryType|params|51|50|58|waitMsg|55|url|60|62|change|69|68|75|74|76|73|70|71|askClose|continue|66|67|72|ActiveCheckAll_Change|48|53|42|grdEntryType_CancelEdit|43|20140811|40|zA|_|49|grd_Reject|46|47'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+
+var keys = ['EntryID'];
+///////////////////////////////////////////////////////////////////////
+var fieldsCheckRequire = ['EntryID', 'descr', 'RcptDisbFlg'];
+var fieldsLangCheckRequire = ["EntryID", "Descr", "RcptDisbFlg"];
+
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+///////////////////////////////////////////////////////////////////////
+
+//// Store /////////////////////////////////////////////////////////////
+
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoEntryType.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdEntryType);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdEntryType);
+            break;
+        case "next":
+            HQ.grid.next(App.grdEntryType);
+            break;
+        case "last":
+            HQ.grid.last(App.grdEntryType);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoEntryType.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdEntryType);
+            }
+            break;
+        case "delete":
+            if (App.slmEntryType.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    if (App.slmEntryType.selected.items[0] != undefined) {
+                        if (App.slmEntryType.selected.items[0].data.CostID != "") {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdEntryType)], 'deleteData', true);
+                        }
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoEntryType, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+
+};
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+    // HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    checkLoad(); // Mới
+};
+
+
+var frmChange = function () {
+    HQ.isChange = HQ.store.isChange(App.stoEntryType);
+    HQ.common.changeData(HQ.isChange, 'CA20100');//co thay doi du lieu gan * tren tab title header
+};
+function refresh(item) {
+    stoLoad
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoEntryType.reload();
+    }
+};
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false; //sto load cuoi se su dung
+    }
+    frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+var grdEntryType_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdEntryType_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdEntryType, e, keys);
+    frmChange();
+};
+var grdEntryType_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdEntryType, e, keys);
+};
+
+var grd_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdEntryType);
+    frmChange();
+};
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'CA20100/Save',
+            params: {
+                lstEntryType: HQ.store.getData(App.stoEntryType)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                refresh("yes");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdEntryType.deleteSelected();
+        frmChange();
+    }
+};
+
+//kiem tra key da nhap du chua
+var isAllValidKey = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var j = 0; j < keys.length; j++) {
+                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
+                    return false;
+            }
+        }
+        return true;
+    } else {
+        return true;
+    }
+};
+//kiem tra nhung field yeu cau bat buoc nhap
+//var checkRequire = function (items) {
+//    if (items != undefined) {
+//        for (var i = 0; i < items.length; i++) {
+//            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
+//            if (items[i]["EntryID"].trim() == "") {
+//                HQ.message.show(15,HQ.common.getLang("EntryID"));
+//                return false;
+//            }
+
+//            if (items[i]["descr"].trim() == "") {
+//                HQ.message.show(15, HQ.common.getLang("Descr"));
+//                return false;
+//            }
+//            if (items[i]["RcptDisbFlg"].trim() == "") {
+//                HQ.message.show(15, HQ.common.getLang("RcptDisbFlg"));
+//                return false;
+//            }
+
+//        }
+//        return true;
+//    } else {
+//        return true;
+//    }
+//};
+/////////////////////////////////////////////////////////////////////////
+
+
+
+//// Other Functions ////////////////////////////////////////////////////
+
+var ActiveCheckAll_Change = function (value) {
+    //var colIdx = 3;
+    if (value) {
+        App.grdEntryType.getStore().each(function (item) {
+
+            item.set("active", value.checked);
+        });
+    }
+};
+
+var change = function (value) {
+    var record = App.stoMasterType.findRecord("Code", value);
+    if (record) {
+        return record.data.Descr;
+    }
+    else {
+        return value;
+    }
+    //var descr = "";
+    //for (var i = 0; i < App.stoMasterType.getCount() ; i++) {
+    //    if (App.stoMasterType.data.items[i].data.Code == value) {
+    //        descr = App.stoMasterType.data.items[i].data.Descr;
+    //        break;
+    //    }
+    //}
+    //if (descr) {
+    //    return descr;
+    //}
+    //else {
+    //    return value;
+    //}
+}
+/////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -29,7 +29,7 @@ namespace CA20100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -48,16 +48,34 @@ namespace CA20100.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstEntryType"]);
                 ChangeRecords<CA_EntryType> lstEntryType = dataHandler.BatchObjectData<CA_EntryType>();
-                foreach (CA_EntryType deleted in lstEntryType.Deleted)
+                //foreach (CA_EntryType deleted in lstEntryType.Deleted)
+                //{
+                //    var del = _db.CA_EntryType.Where(p => p.EntryID == deleted.EntryID).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.CA_EntryType.DeleteObject(del);
+                //    }
+                //}
+
+                //lstEntryType.Created.AddRange(lstEntryType.Updated);
+                //lstCostCode.Created.AddRange(lstCostCode.Updated);
+                lstEntryType.Created.AddRange(lstEntryType.Updated);
+                foreach (CA_EntryType del in lstEntryType.Deleted)
                 {
-                    var del = _db.CA_EntryType.Where(p => p.EntryID == deleted.EntryID).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstEntryType.Created.Where(p => p.EntryID == del.EntryID).Count() > 0)
                     {
-                        _db.CA_EntryType.DeleteObject(del);
+                        lstEntryType.Created.Where(p => p.EntryID == del.EntryID).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.CA_EntryType.ToList().Where(p => p.EntryID == del.EntryID).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.CA_EntryType.DeleteObject(objDel);
+                        }
                     }
                 }
-
-                lstEntryType.Created.AddRange(lstEntryType.Updated);
 
                 foreach (CA_EntryType curEntryType in lstEntryType.Created)
                 {
