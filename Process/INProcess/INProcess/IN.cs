@@ -800,6 +800,7 @@ namespace INProcess
                         throw new MessageException(MessageType.Message, "607","", new[] { objItem.InvtID, objItem.SiteID });
                     }
                     objItem.TotCost = Math.Round(objItem.TotCost + tran.Double("ExtCost"), 0);
+                    objItem.AvgCost = Math.Round(objItem.TotCost / objItem.QtyOnHand, 0); // tinh lai AvgCost 20160624
                     objItem.LUpd_DateTime = DateTime.Now;
                     objItem.LUpd_Prog = prog;
                     objItem.LUpd_User = User;
