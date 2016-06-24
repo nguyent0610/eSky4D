@@ -29,7 +29,7 @@ namespace PO20100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
         public PartialViewResult Body()
         {
             return PartialView();
@@ -190,6 +190,8 @@ namespace PO20100.Controllers
 
             t.Descr = s.Descr;
             t.Disc = s.Disc;
+          
+
             t.EffDate = s.EffDate;
             t.HOCreate = s.HOCreate;
             t.Public = s.Public;
@@ -216,7 +218,7 @@ namespace PO20100.Controllers
             t.Descr = s.Descr;
             t.QtyBreak = s.QtyBreak;
             t.Disc = s.Disc;
-
+            t.Price = s.Price + ((s.Price*s.Disc.ToDouble())/100);
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
