@@ -1,1 +1,644 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('h a=["\\Y\\u\\u\\1E\\i\\n\\W\\F","\\1f\\i\\n\\c\\W\\F","\\G\\d\\g\\d\\L\\f","\\1l\\g\\p\\r\\G\\d\\g\\d\\L\\f","\\1W\\g\\p\\o\\n\\c","\\A\\i\\L\\f\\c\\o\\i\\R\\p","\\j\\o","\\u\\p\\n\\U\\i\\u","\\i\\p","\\r\\c\\d\\1g\\n","\\r\\l\\o\\U\\i\\u","\\1e\\j\\l\\f\\d","\\r\\l\\j\\o","\\r\\l\\o\\O\\i\\d","\\u\\l\\c\\T","\\p\\c\\1X\\d","\\n\\g\\f\\d","\\j\\f\\1U\\B\\g\\p\\r\\c","","\\l\\c\\1e\\l\\c\\f\\B","\\f\\B\\i\\R","\\A\\c\\f\\f\\g\\r\\c","\\j\\f\\1E\\j\\l\\f\\d\\1l\\i\\g\\o","\\l\\c\\n\\i\\g\\o","\\f\\d\\i\\U\\i\\u","\\j\\f\\W\\p\\f\\c\\l\\d","\\j\\p\\f\\c\\l\\d","\\p\\c\\R","\\j\\d\\c\\A\\f","\\f\\c\\n\\c\\q\\d\\c\\o","\\f\\n\\A\\U\\i\\u\\1s\\l\\j\\o","\\j\\f\\F\\c\\n\\c\\d\\c","\\o\\c\\n\\c\\d\\c\\F\\g\\d\\g","\\f\\n\\A\\O\\i\\d\\1s\\l\\j\\o","\\o\\c\\n\\c\\d\\c","\\j\\f\\1Y\\u\\o\\g\\d\\c","\\q\\B\\c\\q\\P\\1f\\c\\2e\\L\\j\\l\\c\\1N\\g\\f\\f","\\f\\d\\i\\l\\c","\\f\\d\\i\\O\\i\\d","\\f\\g\\T\\c","\\u\\l\\j\\p\\d","\\q\\n\\i\\f\\c","\\q\\i\\A\\A\\i\\p","\\f\\c\\n\\c\\q\\d","\\l\\i\\R","\\r\\c\\d\\1U\\L\\l\\l\\c\\p\\d\\1N\\i\\f\\j\\d\\j\\i\\p","\\F\\c\\f\\q\\l\\G\\q\\l\\c\\c\\p","\\o\\j\\f\\u\\n\\g\\V\\U\\u\\n\\F\\g\\d\\g","\\f\\c\\d","\\q\\B\\c\\q\\P\\O\\c\\1e\\i\\l\\c\\1g\\o\\j\\d","\\q\\B\\c\\q\\P\\W\\p\\f\\c\\l\\d\\2d\\c\\V","\\q\\B\\c\\q\\P\\1p\\g\\n\\j\\o\\g\\d\\c\\1g\\o\\j\\d","\\q\\B\\c\\q\\P\\1f\\c\\1Z\\c\\q\\d","\\j\\f\\1p\\g\\n\\j\\o","\\1e\\l\\A\\2c\\g\\j\\p","\\G\\g\\T\\j\\p\\r\\F\\g\\d\\g","\\r\\c\\d\\1l\\g\\p\\r","\\G\\Y\\N\\1L\\1R\\N\\N\\2b\\G\\g\\T\\c","\\r\\c\\d\\F\\g\\d\\g","\\o\\g\\d\\g","\\u\\l\\i\\q\\c\\f\\f","\\f\\L\\2a\\A\\j\\d","\\V\\c\\f","\\o\\c\\n\\c\\d\\c\\G\\c\\n\\c\\q\\d\\c\\o","\\l\\c\\A\\i\\T\\c\\Y\\n\\n","\\G\\Y\\N\\1L\\1R\\N\\N","\\q\\B\\g\\p\\r\\c\\F\\g\\d\\g","\\f\\B\\i\\R\\O\\L\\f\\V","\\j\\p\\f\\c\\l\\d\\O\\n\\g\\p\\P","\\n\\i\\g\\o\\j\\p\\r\\o\\g\\d\\g"];h X=0;h J=[a[0],a[1],a[2]];h 1O=[a[0],a[1],a[2],a[3]];h 1A=[a[0],a[1],a[2],a[3]];h M=[a[4]];h 1S=[a[4]];h 1H=[a[4]];h C=0;h H=t;h K=t;h 2h=k(1j){1j[a[9]]()[a[8]](a[5],k(){m(1j[a[6]]==a[7]){C=0}y{C=1}})};h 1J=k(1z){2g(1z){z a[11]:m(C==0){b[a[12]][a[11]](e[a[10]])}y{b[a[12]][a[11]](e[a[13]])};D;z a[14]:m(C==0){b[a[12]][a[14]](e[a[10]])}y{b[a[12]][a[14]](e[a[13]])};D;z a[15]:m(C==0){b[a[12]][a[15]](e[a[10]])}y{b[a[12]][a[15]](e[a[13]])};D;z a[16]:m(C==0){b[a[12]][a[16]](e[a[10]])}y{b[a[12]][a[16]](e[a[13]])};D;z a[19]:m(b[a[17]]||K){b[a[21]][a[20]](1M,a[18],a[19])}y{H=t;b[a[17]]=t;b[a[22]]=E;e[a[24]][a[23]]()};D;z a[27]:m(b[a[25]]){m(C==0){b[a[12]][a[26]](e[a[10]],J)}y{b[a[12]][a[26]](e[a[13]],M)}};D;z a[34]:m(C==0){m(e[a[30]][a[29]][a[28]][0]!=S){m(b[a[31]]){b[a[21]][a[20]](11,a[18],a[32])}}}y{m(e[a[33]][a[29]][a[28]][0]!=S){m(b[a[31]]){b[a[21]][a[20]](11,a[18],a[32])}}};D;z a[2f]:m(b[a[2i]]||b[a[25]]||b[a[31]]){m(b[a[v]][a[1D]](e[a[24]],J,1O,1A)&&b[a[v]][a[1D]](e[a[Q]],M,1S,1H)){1F()}};D;z a[1V]:D;z a[1G]:b[a[x]][a[1G]](2r);D}};h 2Z=k(2Y,w){b[a[22]]=E;m(K==E){m(H==t){b[a[21]][a[20]](1M,a[18],a[19]);e[a[30]][a[1K]](X)}y{e[a[24]][a[23]]()}}y{e[a[Q]][a[23]]();X=e[a[30]][a[2V]]()[a[2Q]]}};h 2R=k(1w){h 1x=1w[a[2S]][0][a[1y]];e[a[30]][a[29]][a[28]][0][a[2U]](a[1y],1x)};h 2T=k(1C,w){1b b[a[12]][a[1v]](w,J)};h 2W=k(I,w){b[a[12]][a[1t]](e[a[10]],w,J)};h 2P=k(I,w){1b b[a[12]][a[1r]](e[a[10]],w,J)};h 2X=k(1c){b[a[12]][a[1B]](1c,e[a[10]]);1n(e[a[24]])};h 2j=k(1C,w){1b b[a[12]][a[1v]](w,M)};h 2N=k(I,w){b[a[12]][a[1t]](e[a[13]],w,M)};h 2t=k(I,w){1b b[a[12]][a[1r]](e[a[13]],w,M)};h 2s=k(1c){b[a[12]][a[1B]](1c,e[a[13]]);1k(e[a[Q]])};h 1F=k(){m(e[a[1Q]][a[2u]]()){e[a[1Q]][a[2v]]({2x:b[a[x]][a[1h]](a[2w]),2O:a[2q],2l:{2k:b[a[v]][a[1I]](e[a[24]]),2m:b[a[v]][a[1I]](e[a[Q]]),2n:e[a[30]][a[29]][a[28]][0]==S?a[18]:e[a[30]][a[29]][a[28]][0][a[1i]][a[0]],2p:e[a[30]][a[29]][a[28]][0]==S?a[18]:e[a[30]][a[29]][a[28]][0][a[1i]][a[1]],2o:e[a[30]][a[29]][a[28]][0]==S?a[18]:e[a[30]][a[29]][a[28]][0][a[1i]][a[2]]},2y:k(1m,1o){b[a[21]][a[20]](2z);b[a[17]]=t;K=t;1J(a[19])},2J:k(1m,1o){b[a[21]][a[2I]](1m,1o,E)}})}};h 2K=k(I){m(I==a[1q]){m(C==0){e[a[10]][a[1T]]();e[a[13]][a[v]][a[2L]]();1n(e[a[24]])}y{e[a[13]][a[1T]]();1k(e[a[Q]])}}};h 2M=k(){b[a[22]]=E;e[a[24]][a[23]]()};h 1n=k(s){b[a[17]]=b[a[v]][a[17]](s);H=b[a[v]][a[17]](s);b[a[x]][a[Z]](H,a[1a])};h 2H=k(s){b[a[x]][a[1d]](t);H=b[a[v]][a[17]](s);b[a[x]][a[Z]](H,a[1a]);m(b[a[22]]){m(b[a[25]]){b[a[v]][a[1P]](s,J)};b[a[22]]=t};2G(k(){e[a[30]][a[1K]](X)},2B)};h 2A=k(s){b[a[x]][a[1d]](E,b[a[x]][a[1h]](a[1u]))};h 2C=k(){b[a[22]]=E};h 1k=k(s){K=E;b[a[17]]=b[a[v]][a[17]](s);b[a[x]][a[Z]](b[a[17]],a[1a])};h 2D=k(s){b[a[x]][a[1d]](t);b[a[17]]=b[a[v]][a[17]](s);K=b[a[v]][a[17]](s);b[a[x]][a[Z]](b[a[17]],a[1a]);m(b[a[22]]){m(b[a[25]]){b[a[v]][a[1P]](s,M)};b[a[22]]=t}};h 2F=k(s){b[a[x]][a[1d]](E,b[a[x]][a[1h]](a[1u]))};k 2E(I){m(I==a[1q]){b[a[17]]=t;H=t;K=t;b[a[22]]=E;e[a[24]][a[23]]();e[a[Q]][a[23]]()}}', 62, 191, '||||||||||_0xd403|HQ|x65|x74|App|x73|x61|var|x6F|x69|function|x72|if|x6C|x64|x6E|x63|x67|_0x695ex26|false|x70|37|_0x695ex11|42|else|case|x6D|x68|_focusNo|break|true|x44|x53|_topChange|_0x695ex18|keysTop|_botChange|x75|keysBot|x30|x42|x6B|38|x77|undefined|x76|x54|x79|x49|_index|x41|66|||||||||||65|return|_0x695ex1b|67|x66|x52|x45|56|59|_0x695exc|stoChangedBot|x4C|_0x695ex21|stoChangedTop|_0x695ex22|x56|62|51|x47|50|69|49|_0x695ex13|_0x695ex14|46|_0x695exe|fieldsLangCheckRequireTop|52|_0x695ex16|36|x46|save|41|fieldsLangCheckRequireBot|58|menuClick|43|x32|20150303|x50|fieldsCheckRequireTop|68|54|x39|fieldsCheckRequireBot|63|x43|40|x48|x78|x55|x6A|||||||||||x62|x2F|x4D|x4B|x71|39|switch|pnl_render|35|grdBot_BeforeEdit|lstTopGrid|params|lstBotGrid|AppFolID|Status|RoleID|57|this|grdBot_Reject|grdBot_ValidateEdit|53|61|55|waitMsg|success|201405071|stoBeforeLoadTop|300|firstLoadBot|stoLoadBot|refresh|stoBeforeLoadBot|setTimeout|stoLoadTop|60|failure|deleteData|64|firstLoadTop|grdBot_Edit|url|grdTop_ValidateEdit|44|cboAppFolID_Change|47|grdTop_BeforeEdit|48|45|grdTop_Edit|grdTop_Reject|_0x695ex10|GridTop_Change|||||'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+var _index = 0;
+var keysTop = ['AppFolID', 'RoleID', 'Status'];
+var fieldsCheckRequireTop = ["AppFolID", "RoleID", "Status", "LangStatus"];
+var fieldsLangCheckRequireTop = ["AppFolID", "RoleID", "Status", "LangStatus"];
+
+var keysBot = ['Handle'];
+var fieldsCheckRequireBot = ["Handle"];
+var fieldsLangCheckRequireBot = ["Handle"];
+
+//var _listFilter = [];
+//var _totalCount = 0;
+
+// Declare
+var _Source = 0;
+var _maxSource = 10;
+var _isLoadMaster = false;
+
+var _Status = '';
+var _AppFolID = '';
+var _RoleID = '';
+
+var _focusNo = 0;
+var _topChange = false;
+var _botChange = false;
+var pnl_render = function (cmd) {
+    cmd.getEl().on('mousedown', function () {
+        if (cmd.id == 'pnlTop') {
+            _focusNo = 0; //pnlTop
+        }
+        else {
+            _focusNo = 1; //pnlBot
+        }
+    });
+};
+////////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoTop.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+//first load
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // Kiem tra quyen Insert Update Delete de disable button tren top bar
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid(); // Require cac field yeu cau tren from
+
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+
+    App.cboAppFolID.getStore().addListener('load', checkLoad);
+    App.cboRoleID.getStore().addListener('load', checkLoad);
+    App.cboMailTo.getStore().addListener('load', checkLoad);
+    App.cboMailCC.getStore().addListener('load', checkLoad);
+    App.cboParam00.getStore().addListener('load', checkLoad);
+    App.cboParam01.getStore().addListener('load', checkLoad);
+    App.cboParam02.getStore().addListener('load', checkLoad);
+    App.cboParam03.getStore().addListener('load', checkLoad);
+    App.cboParam04.getStore().addListener('load', checkLoad);
+    App.cboParam05.getStore().addListener('load', checkLoad);
+};
+
+////////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            if (_focusNo == 0) {
+                HQ.grid.first(App.grdTop);
+            }
+            else {
+                HQ.grid.first(App.grdBot);
+            }
+            break;
+        case "prev":
+            if (_focusNo == 0) {
+                HQ.grid.prev(App.grdTop);
+            }
+            else {
+                HQ.grid.prev(App.grdBot);
+            }
+            break;
+        case "next":
+            if (_focusNo == 0) {
+                HQ.grid.next(App.grdTop);
+            }
+            else {
+                HQ.grid.next(App.grdBot);
+            }
+            break;
+        case "last":
+            if (_focusNo == 0) {
+                HQ.grid.last(App.grdTop);
+            }
+            else {
+                HQ.grid.last(App.grdBot);
+            }
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+
+                refresh("yes");
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (_focusNo == 0) {
+                    HQ.grid.insert(App.grdTop, keysTop);
+                }
+                else {
+                    HQ.grid.insert(App.grdBot, keysBot);
+                }
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                if (_focusNo == 0) {
+                    if (App.slmTopGrid.selected.items[0] != undefined) {
+                        if (HQ.isDelete) {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdTop)], 'deleteData', true);
+                        }
+                    }
+                }
+                else {
+                    if (App.slmBotGrid.selected.items[0] != undefined) {
+                        if (HQ.isDelete) {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdBot)], 'deleteData', true);
+                        }
+                    }
+                }
+            }
+
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoTop, keysTop, fieldsCheckRequireTop, fieldsLangCheckRequireTop)
+                    && HQ.store.checkRequirePass(App.stoBot, keysBot, fieldsCheckRequireBot, fieldsLangCheckRequireBot)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            //HQ.common.close(this);
+            break;
+    }
+};
+
+var frmChange = function () {
+
+    HQ.isChange = HQ.store.isChange(App.stoTop) == false ? (HQ.isChange = HQ.store.isChange(App.stoBot)) : true;
+
+    HQ.common.changeData(HQ.isChange, 'SA02900');
+
+    _topChange = HQ.store.isChange(App.stoTop);
+    _botChange = HQ.store.isChange(App.stoBot);
+};
+
+var stoChangedBot = function (sto) {
+    _botChange = true;
+    HQ.isChange = HQ.store.isChange(sto);
+    //HQ.common.changeData(HQ.isChange, 'SA02900');
+
+};
+
+var stoLoad = function (sto) {
+    HQ.isNew = false;
+
+    HQ.common.lockItem(App.frmMain, false);
+
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            if (sto.allData.items[sto.allData.items.length - 1].data.AppFolID != '' ||
+                sto.allData.items[sto.allData.items.length - 1].data.RoleID != '' ||
+                sto.allData.items[sto.allData.items.length - 1].data.Status != '') {
+                HQ.store.insertBlank(sto, keysTop);
+            }
+        }
+        //HQ.isFirstLoad = false;
+    }
+
+    App.stoBot.reload()
+
+
+    if (!HQ.isInsert && HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+
+
+};
+
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+
+var stoLoadBot = function (sto) {
+
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keysBot);
+        }
+        HQ.isFirstLoad = false;
+    }
+
+    frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+        //setTimeout(function () {
+        //    App.grdTop.getSelectionModel().select(_index);
+        //    HQ.common.showBusy(false);
+        //}, 100);
+        App.grdTop.getSelectionModel().select(_index);
+        //HQ.isFirstLoad = false;
+    }
+    
+};
+
+var GridTop_Change = function (sender, e) {
+    HQ.isFirstLoad = true;
+    filterBot();
+    _index = App.slmTopGrid.getCurrentPosition().row;
+    
+};
+
+function filterBot() {
+    _AppFolID = App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.AppFolID;
+    _RoleID = App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.RoleID;
+    _Status = App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.Status;
+    var grid = App.grdBot;
+    grid.getFilterPlugin().clearFilters();
+    grid.getFilterPlugin().getFilter('AppFolID').setValue([_AppFolID, '']);
+    grid.getFilterPlugin().getFilter('AppFolID').setActive(true);
+    grid.getFilterPlugin().getFilter('RoleID').setValue([_RoleID, '']);
+    grid.getFilterPlugin().getFilter('RoleID').setActive(true);
+    grid.getFilterPlugin().getFilter('Status').setValue([_Status, '']);
+    grid.getFilterPlugin().getFilter('Status').setActive(true);
+    
+    //var store = App.stoBot;
+    //store.clearFilter();
+    //if (store.getCount() < _totalCount) {
+    //    HQ.store.insertBlank(store, keysBot);
+    //}
+    //var listFilter = [];
+    //store.filter(function (record) {
+    //    if (record) {
+    //        if (record.data['AppFolID'] == _AppFolID && record.data['RoleID'] == _RoleID && record.data['Status'] == _Status) {
+    //            listFilter.push(record);
+    //            return record;
+    //        }
+    //        else if (record.data['Handle'] == '' && record.data['AppFolID'] == '' && record.data['RoleID'] == '') {
+    //            listFilter.push(record);
+    //            return record;
+    //        }
+    //    }
+    //});
+
+};
+
+var cboAppFolID_Change = function (value) {
+    var k = value.displayTplData[0].DescrScreen;
+    App.slmTopGrid.selected.items[0].set('DescrScreen', k);
+};
+
+//Top Grid
+var grdTop_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keysTop);
+};
+var grdTop_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdTop, e, keysTop);
+    frmChange();
+};
+var grdTop_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdTop, e, keysTop);
+};
+var grdTop_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdTop);
+    frmChange();
+    //stoChangedTop(App.stoTop);
+};
+
+//Bot Grid
+var grdBot_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keysBot);
+};
+var grdBot_Edit = function (item, e) {
+
+    //var store = App.stoBot;
+    ////store.clearFilter();
+    ////var data = Ext.data.Record();
+    HQ.grid.checkInsertKey(App.grdBot, e, keysBot);
+    if (e.record.data.AppFolID == '') {
+        e.record.data.AppFolID = _AppFolID;
+    }
+    if (e.record.data.RoleID == '') {
+        e.record.data.RoleID = _RoleID;
+    }
+    if (e.record.data.Status == '') {
+        e.record.data.Status = _Status;
+    }
+    //var grid = App.grdBot;
+    //grid.getStore().data
+    ////var count = e.store.snapshot.items.length - 1;
+    //var count = e.store.allData.items.length - 2;
+    //var count2 = store.snapshot.items.length - 2;
+    //if (e.record.index == undefined) {
+    //    if (e.store.allData.items[count].data.AppFolID == '') {
+    //        e.store.allData.items[count].data.AppFolID = _AppFolID;
+    //        //store.data.items[store.getCount() - 2].data.AppFolID = _AppFolID;
+    //        store.snapshot.items[count2].data.AppFolID = _AppFolID;
+    //    }
+    //    if (e.store.allData.items[count].data.RoleID == '') {
+    //        e.store.allData.items[count].data.RoleID = _RoleID;
+    //        //store.data.items[store.getCount() - 2].data.RoleID = _RoleID;
+    //        store.snapshot.items[count2].data.RoleID = _RoleID;
+    //    }
+    //    if (e.store.allData.items[count].data.Status == '') {
+    //        e.store.allData.items[count].data.Status = _Status;
+    //        //store.data.items[store.getCount() - 2].data.Status = _Status;
+    //        store.snapshot.items[count2].data.Status = _Status;
+    //    }
+
+    //}
+    frmChange();
+};
+var grdBot_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdBot, e, keysBot);
+};
+var grdBot_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdBot);
+    frmChange();
+    //stoChangedBot(App.stoBot);
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        var store = App.stoBot;
+        store.allData = store.snapshot || store.allData || store.data;
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SA02900/Save',
+            params: {
+                lstTopGrid: HQ.store.getData(App.stoTop),
+                lstBotGrid: HQ.store.getData(App.stoBot),
+                AppFolID: App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.AppFolID,
+                RoleID: App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.RoleID,
+                Status: App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.Status
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isFirstLoad = true;
+                App.stoTop.reload();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+//var saveBOT = function () {
+//    if (App.frmMain.isValid()) {
+//        if (_AppFolID != '' && _RoleID != '' && _Status != '')
+//            App.frmMain.submit({
+//                //waitMsg: HQ.common.getLang("SavingData"),
+//                url: 'SA02900/SaveBot',
+//                params: {
+//                    lstTopGrid: HQ.store.getData(App.stoTop),
+//                    lstBotGrid: HQ.store.getData(App.stoBot),
+//                    AppFolID: _AppFolID,
+//                    RoleID: _RoleID,
+//                    Status: _Status
+//                },
+//                success: function (msg, data) {
+//                    //HQ.message.show(201405071);
+//                    HQ.isFirstLoad = true;
+//                    //App.stoTop.reload();
+//                    App.stoBot.reload();
+//                    //menuClick("refresh");
+//                },
+//                failure: function (msg, data) {
+//                    HQ.message.process(msg, data, true);
+//                }
+//            });
+//    }
+//};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        if (_focusNo == 0) {
+            App.grdTop.deleteSelected();
+            App.grdBot.store.removeAll();
+            frmChange();
+        }
+        else {
+            App.grdBot.deleteSelected();
+            frmChange();
+        }
+    }
+};
+// Submit the deleted data into server side
+//function deleteData(item) {
+//    if (item == 'yes') {
+//        if (_focusNo == 0) {
+//            //App.grdTop.deleteSelected();
+//            //stoChangedTop(App.stoTop);
+//            App.frmMain.submit({
+//                waitMsg: HQ.common.getLang('DeletingData'),
+//                url: 'SA02900/DeleteAll',
+//                timeout: 1800000,
+//                params:{
+//                    AppFolID : App.slmTopGrid.selected.items[0].data.AppFolID,
+//                    RoleID: App.slmTopGrid.selected.items[0].data.RoleID,
+//                    Status: App.slmTopGrid.selected.items[0].data.Status
+//                },
+//                success: function (action, data) {
+
+//                    stoChangedTop(App.stoTop);
+
+//                },
+//                failure: function (action, data) {
+//                    if (data.result.msgCode) {
+//                        HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+//                    }
+//                }
+//            });
+//        }
+//        else {
+//            App.grdBot.deleteSelected();
+//            stoChangedBot(App.stoBot);
+//        }
+
+//    }
+//};
+
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+//var firstLoadTop = function () {
+//    HQ.isFirstLoad = true;
+//    App.stoTop.reload();
+//}
+////khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+//var stoChangedTop = function (sto) {
+//    HQ.isChange = HQ.store.isChange(sto);
+//    _topChange = HQ.store.isChange(sto);
+//    HQ.common.changeData(_topChange, 'SA02900');
+//};
+
+
+////load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+//var stoLoadTop = function (sto) {
+//    HQ.common.showBusy(false);
+//    //HQ.isChange = HQ.store.isChange(sto);
+//    _topChange = HQ.store.isChange(sto);
+//    HQ.common.changeData(_topChange, 'SA02900');
+//    if (HQ.isFirstLoad) {
+//        if (HQ.isInsert) {
+//            HQ.store.insertBlank(sto, keysTop);
+//        }
+//        HQ.isFirstLoad = false;
+//    }
+
+//    setTimeout(function () { App.slmTopGrid.select(_index) }, 300);
+//};
+//trước khi load trang busy la dang load data
+//var stoBeforeLoadTop = function (sto) {
+//    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+//};
+
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+//var firstLoadBot = function () {
+//    HQ.isFirstLoad = true;
+//    //App.stoBot.reload();
+//}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+//var stoChangedBot = function (sto) {
+//    _botChange = true;
+//    HQ.isChange = HQ.store.isChange(sto);
+//    HQ.common.changeData(HQ.isChange, 'SA02900');
+//};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+
+////trước khi load trang busy la dang load data
+//var stoBeforeLoadBot = function (sto) {
+//    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+//};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        _topChange = false;
+        _botChange = false;
+        HQ.isFirstLoad = true;
+        App.stoTop.reload();
+
+    }
+};
+///////////////////////////////////
+
+//var filters = Ext.create('Ext.ux.grid.GridFilters', {
+//    filters: [{
+//        type: 'list',
+//        dataIndex: 'AppFolID',
+
+//    }]
+//});
+
+//_index = App.slmTopGrid.getCurrentPosition().row;
+
+
+//var filtersAux = [];
+
+//keysTop.forEach(function (item) {
+//    if (item == 'AppFolID') {
+//        //store.filter(item, _AppFolID);
+//        var s = [{property : item, value : _AppFolID}];
+//        filtersAux.push(s);
+//    }
+//    else if (item == 'RoleID') {
+//        var s = [{ property: item, value: _RoleID }];
+//        filtersAux.push(s);
+
+//    }
+//    else if (item == 'Status') {
+//        var s = [{ property: item, value: _Status }];
+//        filtersAux.push(s);
+//    }      
+//});
+
+//store.filterBy(function (record) {
+//    return filtersAux.
+//});
+
+//HQ.grid.filterStore(store, 'AppFolID', _AppFolID);
+//HQ.grid.filterStore(store, 'RoleID', _RoleID);
+//HQ.grid.filterStore(store, 'Status', _Status);
+//HQ.store.insertBlank(store, keysBot);
+//var i = 0;
+
+//store.filter(filtersAux[0]);
+//if (_botChange == true) {
+//    if (_topChange == false) {
+//        //HQ.message.show(20150303, '', 'refresh');
+//        App.slmTopGrid.select(_index);
+//    }
+//    else {
+//        App.stoTop.reload();
+//        App.slmTopGrid.select(_index);
+//    }
+//}
+//else {
+
+//    _index = App.slmTopGrid.getCurrentPosition().row;
+//}
+//grid.filters.filters.items[0].inputItem.value = _AppFolID;
+//grid.filters.filters.items[1].inputItem.value = _RoleID;
+//grid.filters.filters.items[2].inputItem.value = _Status;
+//var gridFilter = grid.filters.getFilter();
+//grid.filters.forEach(function (filter) {
+//    filter.setActive(true);
+//});
+//grid.filters.filters.items.forEach(function (item) {
+//    if (item) {
+//    }
+//});
+
+//grid.filters.applyState(grid, listFilter);
+
+//listFilter;
+
+//var filtersState = grid.filters.saveState(grid, {});
+//grid.filters.applyState(grid, filtersState);
+//store.filters.add(i, new Ext.util.Filter({
+//    property: 'AppFolID',
+//                value: _AppFolID
+//}));
+//store.filters.add(i, new Ext.util.Filter({
+//    property: 'RoleID',
+//                value: _RoleID
+//            }));
+//    store.filters.add(i, new Ext.util.Filter({
+//        property: 'Status',
+//                    value: _Status
+//    }));
+//keysTop.forEach(function (item) {
+//    i++;
+//    if (item == 'AppFolID') {
+//        store.filter(item, _AppFolID);
+//        store.filters.add(i, new Ext.util.Filter({
+//            property: item,
+//            value: _AppFolID
+//        }));
+//        listFilter.push(new Ext.util.Filter({
+//            property: item,
+//            value: _AppFolID
+//        }));
+//    }
+//    else if (item == 'RoleID') {
+//        store.filter(item, _RoleID);
+//        store.filters.add(i, new Ext.util.Filter({
+//            property: item,
+//            value: _RoleID
+//        }));
+//        listFilter.push(new Ext.util.Filter({
+//            property: item,
+//            value: _RoleID
+//        }));
+//    }
+//    else if (item == 'Status') {
+//        store.filter(item, _Status);
+//        store.filters.add(i, new Ext.util.Filter({
+//            property: item,
+//            value: _Status
+//        }));
+//        listFilter.push(new Ext.util.Filter({
+//            property: item,
+//            value: _Status
+//        }));
+//    }
+//    if (i == keysTop.length) {
+//        HQ.store.insertBlank(store, keysBot);
+//    }
+//});
+//store.filters.addAll(listFilter);

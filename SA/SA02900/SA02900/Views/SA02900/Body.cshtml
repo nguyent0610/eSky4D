@@ -22,6 +22,11 @@
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("print", true, ""))
     .Layout(LayoutType.Border)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        //l.FieldChange.Fn = "frmChange";
+    })
     .Items(
         X.Panel().ID("pnlTop")
         .Region(Region.North).Flex(1)
@@ -45,16 +50,16 @@
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetTopGrid"))).AutoLoad(false)
                 .Listeners(l =>
                 {
-                    l.BeforeLoad.Fn = "stoBeforeLoadTop";
-                    l.Load.Fn = "stoLoadTop";
-                    l.Update.Fn = "stoChangedTop";
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";
+                    l.Update.Fn = "frmChange";
 
                 })
             )
-            .Listeners(p =>
-            {
-                p.BoxReady.Handler = "firstLoadTop();";
-            })
+            //.Listeners(p =>
+            //{
+            //    p.BoxReady.Handler = "firstLoadTop();";
+            //})
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40),
@@ -118,6 +123,7 @@
             .Listeners(lst =>
             {
                 lst.Select.Fn = "GridTop_Change";
+                //lst.SelectionChange.Fn = "GridTop_Change";
             })
             .BottomBar(
                 X.PagingToolbar()
@@ -151,12 +157,15 @@
                 
                 .Local(true)
                 .Filters(
-                    X.StringFilter().DataIndex("AppFolID"),
-                    X.StringFilter().DataIndex("DescrScreen"),
-                    X.StringFilter().DataIndex("RoleID"),
-                    X.StringFilter().DataIndex("Status"),
-                    X.StringFilter().DataIndex("Descr"),
-                    X.StringFilter().DataIndex("LangStatus")
+                        X.StringFilter().DataIndex("AppFolID"),
+                        X.StringFilter().DataIndex("DescrScreen"),
+                        X.StringFilter().DataIndex("RoleID"),
+                        X.StringFilter().DataIndex("Status"),
+                        X.StringFilter().DataIndex("Descr"),
+                        X.StringFilter().DataIndex("LangStatus")
+                    //X.ListFilter().DataIndex("AppFolID"),
+                    //X.ListFilter().DataIndex("RoleID"),
+                    //X.ListFilter().DataIndex("Status")
                 )
            ) // grdTop
         ).Listeners(lss =>
@@ -178,23 +187,34 @@
                 .ID("stoBot")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(SA02900_pgSI_ApprovalFlowHandle_Result), "mdlSA02900_pgSI_ApprovalFlowHandle", "Handle"))
-                .Parameters(ps =>
-                {
-                    ps.Add(new StoreParameter("AppFolID", "App.slmTopGrid.selected.items[0].data.AppFolID", ParameterMode.Raw));
-                    ps.Add(new StoreParameter("RoleID", "App.slmTopGrid.selected.items[0].data.RoleID", ParameterMode.Raw));
-                    ps.Add(new StoreParameter("Status", "App.slmTopGrid.selected.items[0].data.Status", ParameterMode.Raw));
-                })
+                    //.Parameters(ps =>
+                    //{
+                    //    ps.Add(new StoreParameter("AppFolID", "App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.AppFolID", ParameterMode.Raw));
+                    //    ps.Add(new StoreParameter("RoleID", "App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.RoleID", ParameterMode.Raw));
+                    //    ps.Add(new StoreParameter("Status", "App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.Status", ParameterMode.Raw));
+                    //})
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetBotGrid"))).AutoLoad(false)
                 .Listeners(l =>
                 {
-                    l.BeforeLoad.Fn = "stoBeforeLoadBot";
+                    //l.BeforeLoad.Fn = "stoBeforeLoad";
                     l.Load.Fn = "stoLoadBot";
-                    l.Update.Fn = "stoChangedBot";
+                    l.Update.Fn = "frmChange";
                 })
             )
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40),
+                
+                    X.Column().Hidden(true).DataIndex("AppFolID").Width(70)
+                    .Editor(X.TextField()).ID("txtAppFolID"),
+                    
+                    X.Column().Hidden(true).DataIndex("RoleID").Width(70)
+                    .Editor(X.TextField()).ID("txtRoleID"),
+                    
+                    X.Column().Hidden(true).DataIndex("Status").Width(70)
+                    .Editor(X.TextField()).ID("txtStatus"),
+                    
+                    
                     X.Column().Text(Util.GetLang("Handle")).DataIndex("Handle").Width(70)
                     .Editor(X.TextField().MaxLength(5).EnforceMaxLength(true)).ID("txtHandle"),
 
@@ -384,6 +404,9 @@
                 X.GridFilters()
                     .Local(true)
                     .Filters(
+                        X.ListFilter().DataIndex("AppFolID"),
+                        X.ListFilter().DataIndex("RoleID"),
+                        X.ListFilter().DataIndex("Status"),
                         X.StringFilter().DataIndex("Handle"),
                         X.StringFilter().DataIndex("LangHandle"),
                         X.StringFilter().DataIndex("ToStatus"),
@@ -392,14 +415,14 @@
                         X.StringFilter().DataIndex("MailApprove"),
                         X.StringFilter().DataIndex("ProcContent"),
                         X.StringFilter().DataIndex("MailTo"),
-                        X.NumericFilter().DataIndex("MailCC"),
-                        X.NumericFilter().DataIndex("ProcName"),
-                        X.NumericFilter().DataIndex("Param00"),
-                        X.NumericFilter().DataIndex("Param01"),
-                        X.BooleanFilter().DataIndex("Param02"),
-                        X.BooleanFilter().DataIndex("Param03"),
-                        X.BooleanFilter().DataIndex("Param04"),
-                        X.BooleanFilter().DataIndex("Param05")
+                        X.StringFilter().DataIndex("MailCC"),
+                        X.StringFilter().DataIndex("ProcName"),
+                        X.StringFilter().DataIndex("Param00"),
+                        X.StringFilter().DataIndex("Param01"),
+                        X.StringFilter().DataIndex("Param02"),
+                        X.StringFilter().DataIndex("Param03"),
+                        X.StringFilter().DataIndex("Param04"),
+                        X.StringFilter().DataIndex("Param05")
                     )
             ) // grdBot
         ).Listeners(lss =>

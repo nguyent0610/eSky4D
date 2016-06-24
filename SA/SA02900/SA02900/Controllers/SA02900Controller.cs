@@ -27,7 +27,7 @@ namespace SA02900.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -38,9 +38,9 @@ namespace SA02900.Controllers
             return this.Store(_db.SA02900_pgSI_ApprovalFlowStatus(Current.LangID).ToList());
         }
 
-        public ActionResult GetBotGrid(string AppFolID, string RoleID, string Status)
+        public ActionResult GetBotGrid()
         {
-            return this.Store(_db.SA02900_pgSI_ApprovalFlowHandle(AppFolID, RoleID, Status).ToList());
+            return this.Store(_db.SA02900_pgSI_ApprovalFlowHandle().ToList());
         }
 
         [HttpPost]
@@ -101,11 +101,19 @@ namespace SA02900.Controllers
                 #region Save Bot Grid SI_ApprovalFlowHandle
                 foreach (SA02900_pgSI_ApprovalFlowHandle_Result deleted in lstBotGrid.Deleted)
                 {
-                    var del = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle == deleted.Handle && p.AppFolID == AppFolID && p.RoleID == RoleID && p.Status ==Status);
-                    if (del != null)
+                    if (lstBotGrid.Created.Where(p => p.Handle == deleted.Handle && p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status).Count() > 0)
                     {
-                        _db.SI_ApprovalFlowHandle.DeleteObject(del);
+                        lstBotGrid.Created.Where(p => p.Handle == deleted.Handle && p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status).FirstOrDefault().tstamp = deleted.tstamp;
                     }
+                    else
+                    {
+                        var del = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle == deleted.Handle && p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status);
+                        if (del != null)
+                        {
+                            _db.SI_ApprovalFlowHandle.DeleteObject(del);
+                        }
+                    }
+                    
                 }
 
                 lstBotGrid.Created.AddRange(lstBotGrid.Updated);
@@ -130,9 +138,7 @@ namespace SA02900.Controllers
                     else
                     {
                         lang1 = new SI_ApprovalFlowHandle();
-                        lang1.AppFolID = AppFolID;
-                        lang1.RoleID = RoleID;
-                        lang1.Status = Status;
+                        
                         Update_BotGrid(lang1, curLang1, true);
                         _db.SI_ApprovalFlowHandle.AddObject(lang1);
                     }
@@ -172,6 +178,9 @@ namespace SA02900.Controllers
         {
             if (isNew)
             {
+                t.AppFolID = s.AppFolID;
+                t.RoleID = s.RoleID;
+                t.Status = s.Status;
                 t.Handle = s.Handle;
                 t.Crtd_Datetime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
@@ -197,6 +206,67 @@ namespace SA02900.Controllers
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
+        }
+
+        public ActionResult SaveBot(FormCollection data, string AppFolID, string RoleID, string Status)
+        {
+            try
+            {
+                //StoreDataHandler dataHandler = new StoreDataHandler(data["lstTopGrid"]);
+                //ChangeRecords<SA02900_pgSI_ApprovalFlowStatus_Result> lstTopGrid = dataHandler.BatchObjectData<SA02900_pgSI_ApprovalFlowStatus_Result>();
+
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstBotGrid"]);
+                ChangeRecords<SA02900_pgSI_ApprovalFlowHandle_Result> lstBotGrid = dataHandler1.BatchObjectData<SA02900_pgSI_ApprovalFlowHandle_Result>();
+
+                #region Save Bot Grid SI_ApprovalFlowHandle
+                foreach (SA02900_pgSI_ApprovalFlowHandle_Result deleted in lstBotGrid.Deleted)
+                {
+                    var del = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle == deleted.Handle && p.AppFolID == AppFolID && p.RoleID == RoleID && p.Status == Status);
+                    if (del != null)
+                    {
+                        _db.SI_ApprovalFlowHandle.DeleteObject(del);
+                    }
+                }
+
+                lstBotGrid.Created.AddRange(lstBotGrid.Updated);
+
+                foreach (SA02900_pgSI_ApprovalFlowHandle_Result curLang1 in lstBotGrid.Created)
+                {
+                    if (curLang1.Handle.PassNull() == "") continue;
+
+                    var lang1 = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle == curLang1.Handle && p.AppFolID == AppFolID && p.RoleID == RoleID && p.Status == Status);
+
+                    if (lang1 != null)
+                    {
+                        if (lang1.tstamp.ToHex() == curLang1.tstamp.ToHex())
+                        {
+                            Update_BotGrid(lang1, curLang1, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        lang1 = new SI_ApprovalFlowHandle();
+                        lang1.AppFolID = AppFolID;
+                        lang1.RoleID = RoleID;
+                        lang1.Status = Status;
+                        Update_BotGrid(lang1, curLang1, true);
+                        _db.SI_ApprovalFlowHandle.AddObject(lang1);
+                    }
+                }
+                #endregion
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
         }
 
         ////[HttpPost]

@@ -124,47 +124,6 @@ namespace SA02900
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="appFolID">No Metadata Documentation available.</param>
-        /// <param name="roleID">No Metadata Documentation available.</param>
-        /// <param name="status">No Metadata Documentation available.</param>
-        public ObjectResult<SA02900_pgSI_ApprovalFlowHandle_Result> SA02900_pgSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status)
-        {
-            ObjectParameter appFolIDParameter;
-            if (appFolID != null)
-            {
-                appFolIDParameter = new ObjectParameter("AppFolID", appFolID);
-            }
-            else
-            {
-                appFolIDParameter = new ObjectParameter("AppFolID", typeof(global::System.String));
-            }
-    
-            ObjectParameter roleIDParameter;
-            if (roleID != null)
-            {
-                roleIDParameter = new ObjectParameter("RoleID", roleID);
-            }
-            else
-            {
-                roleIDParameter = new ObjectParameter("RoleID", typeof(global::System.String));
-            }
-    
-            ObjectParameter statusParameter;
-            if (status != null)
-            {
-                statusParameter = new ObjectParameter("Status", status);
-            }
-            else
-            {
-                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<SA02900_pgSI_ApprovalFlowHandle_Result>("SA02900_pgSI_ApprovalFlowHandle", appFolIDParameter, roleIDParameter, statusParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="langid">No Metadata Documentation available.</param>
         public ObjectResult<SA02900_pgSI_ApprovalFlowStatus_Result> SA02900_pgSI_ApprovalFlowStatus(Nullable<global::System.Int16> langid)
         {
@@ -179,6 +138,14 @@ namespace SA02900
             }
     
             return base.ExecuteFunction<SA02900_pgSI_ApprovalFlowStatus_Result>("SA02900_pgSI_ApprovalFlowStatus", langidParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SA02900_pgSI_ApprovalFlowHandle_Result> SA02900_pgSI_ApprovalFlowHandle()
+        {
+            return base.ExecuteFunction<SA02900_pgSI_ApprovalFlowHandle_Result>("SA02900_pgSI_ApprovalFlowHandle");
         }
 
         #endregion
