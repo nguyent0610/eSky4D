@@ -302,7 +302,7 @@ var HQ = {
             }
             return found;
         },
-        //TrungHT dùng cho phân trang
+        //TrungHT dï¿½ng cho phï¿½n trang
         checkDuplicateAll: function (grd, row, keys) {
             var found = false;
             var store = grd.getStore();
@@ -326,7 +326,7 @@ var HQ = {
             }
             return found;
         },
-        //Dùng trong ham before edit cua grid
+        //Dï¿½ng trong ham before edit cua grid
         //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
         //Cot nao la key thi khoa lai khi da co du lieu
         checkInput: function (row, keys) {

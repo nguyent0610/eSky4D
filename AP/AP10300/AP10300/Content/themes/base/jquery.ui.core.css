@@ -21,13 +21,13 @@
 
 /* Interaction Cues
 ----------------------------------*/
-.ui-state-disabled { cursor: default !important; }
+.ui-AR_Det-disabled { cursor: default !important; }
 
 
 /* Icons
 ----------------------------------*/
 
-/* states and images */
+/* AR_Dets and images */
 .ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
 
 

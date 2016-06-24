@@ -194,7 +194,7 @@ ko.utils = new (function () {
             }
         },
 
-        setOptionNodeSelectionState: function (optionNode, isSelected) {
+        setOptionNodeSelectionAR_Det: function (optionNode, isSelected) {
             // IE6 sometimes throws "unknown error" if you try to write to .selected directly, whereas Firefox struggles with setAttribute. Pick one based on browser.
             if (navigator.userAgent.indexOf("MSIE 6") >= 0)
                 optionNode.setAttribute("selected", isSelected);
@@ -262,16 +262,16 @@ ko.utils = new (function () {
             if (!mustUseAttachEvent && typeof jQuery != "undefined") {
                 if (isClickOnCheckableElement(element, eventType)) {
                     // For click events on checkboxes, jQuery interferes with the event handling in an awkward way:
-                    // it toggles the element checked state *after* the click event handlers run, whereas native
-                    // click events toggle the checked state *before* the event handler.
+                    // it toggles the element checked AR_Det *after* the click event handlers run, whereas native
+                    // click events toggle the checked AR_Det *before* the event handler.
                     // Fix this by intecepting the handler and applying the correct checkedness before it runs.
                     var originalHandler = handler;
                     handler = function(event, eventData) {
-                        var jQuerySuppliedCheckedState = this.checked;
+                        var jQuerySuppliedCheckedAR_Det = this.checked;
                         if (eventData)
-                            this.checked = eventData.checkedStateBeforeEvent !== true;
+                            this.checked = eventData.checkedAR_DetBeforeEvent !== true;
                         originalHandler.call(this, event);
-                        this.checked = jQuerySuppliedCheckedState; // Restore the state jQuery applied
+                        this.checked = jQuerySuppliedCheckedAR_Det; // Restore the AR_Det jQuery applied
                     };
                 }
                 jQuery(element)['bind'](eventType, handler);
@@ -292,8 +292,8 @@ ko.utils = new (function () {
             if (typeof jQuery != "undefined") {
                 var eventData = [];
                 if (isClickOnCheckableElement(element, eventType)) {
-                    // Work around the jQuery "click events on checkboxes" issue described above by storing the original checked state before triggering the handler
-                    eventData.push({ checkedStateBeforeEvent: element.checked });
+                    // Work around the jQuery "click events on checkboxes" issue described above by storing the original checked AR_Det before triggering the handler
+                    eventData.push({ checkedAR_DetBeforeEvent: element.checked });
                 }
                 jQuery(element)['trigger'](eventType, eventData);
             } else if (typeof document.createEvent == "function") {
@@ -306,7 +306,7 @@ ko.utils = new (function () {
                 else
                     throw new Error("The supplied element doesn't support dispatchEvent");
             } else if (typeof element.fireEvent != "undefined") {
-                // Unlike other browsers, IE doesn't change the checked state of checkboxes/radiobuttons when you trigger their "click" event
+                // Unlike other browsers, IE doesn't change the checked AR_Det of checkboxes/radiobuttons when you trigger their "click" event
                 // so to make it consistent, we'll do it manually here
                 if (isClickOnCheckableElement(element, eventType))
                     element.checked = element.checked !== true;
@@ -1613,7 +1613,7 @@ ko.exportSymbol('jsonExpressionRewriting.insertPropertyAccessorsIntoJson', ko.js
 (function() {
     // "Virtual elements" is an abstraction on top of the usual DOM API which understands the notion that comment nodes
     // may be used to represent hierarchy (in addition to the DOM's natural hierarchy).
-    // If you call the DOM-manipulating functions on ko.virtualElements, you will be able to read and write the state
+    // If you call the DOM-manipulating functions on ko.virtualElements, you will be able to read and write the AR_Det
     // of that virtual hierarchy
     //
     // The point of all this is to support containerless templates (e.g., <!-- ko foreach:someCollection -->blah<!-- /ko -->)
@@ -2318,7 +2318,7 @@ ko.bindingHandlers['options'] = {
             var countSelectionsRetained = 0;
             for (var i = 0, j = newOptions.length; i < j; i++) {
                 if (ko.utils.arrayIndexOf(previousSelectedValues, ko.selectExtensions.readValue(newOptions[i])) >= 0) {
-                    ko.utils.setOptionNodeSelectionState(newOptions[i], true);
+                    ko.utils.setOptionNodeSelectionAR_Det(newOptions[i], true);
                     countSelectionsRetained++;
                 }
             }
@@ -2328,7 +2328,7 @@ ko.bindingHandlers['options'] = {
             if (selectWasPreviouslyEmpty && ('value' in allBindings)) {
                 // Ensure consistency between model value and selected option.
                 // If the dropdown is being populated for the first time here (or was otherwise previously empty),
-                // the dropdown selection state is meaningless, so we preserve the model value.
+                // the dropdown selection AR_Det is meaningless, so we preserve the model value.
                 ensureDropdownSelectionIsConsistentWithModelValue(element, ko.utils.unwrapObservable(allBindings['value']), /* preferModelValue */ true);
             }
 
@@ -2371,7 +2371,7 @@ ko.bindingHandlers['selectedOptions'] = {
             for (var i = 0, j = nodes.length; i < j; i++) {
                 var node = nodes[i];
                 if (ko.utils.tagNameLower(node) === "option")
-                    ko.utils.setOptionNodeSelectionState(node, ko.utils.arrayIndexOf(newValue, ko.selectExtensions.readValue(node)) >= 0);
+                    ko.utils.setOptionNodeSelectionAR_Det(node, ko.utils.arrayIndexOf(newValue, ko.selectExtensions.readValue(node)) >= 0);
             }
         }
     }
@@ -2626,7 +2626,7 @@ ko.virtualElements.allowedBindings['foreach'] = true;
 // [3] Override 'createJavaScriptEvaluatorBlock', supplying a function with this signature:
 //
 //        function (script) {
-//            // Return value: Whatever syntax means "Evaluate the JavaScript statement 'script' and output the result"
+//            // Return value: Whatever syntax means "Evaluate the JavaScript AR_Detment 'script' and output the result"
 //            //               For example, the jquery.tmpl template engine converts 'someScript' to '${ someScript }'
 //        }
 //

@@ -1,7 +1,6 @@
 using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +8,15 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
+using Aspose.Cells;
+using HQFramework.DAL;
+using HQFramework.Common;
+using HQ.eSkyFramework.HQControl;
+using System.Drawing;
+using HQ.eSkySys;
+
 namespace AP10300.Controllers
 {
     [DirectController]
@@ -16,403 +24,376 @@ namespace AP10300.Controllers
     [CheckSessionOut]
     public class AP10300Controller : Controller
     {
-        string screenNbr = "AP10300";
+        private string _screenNbr = "AP10300";
+        private string _userName = Current.UserName;
+        private string _branchID = "";
         AP10300Entities _db = Util.CreateObjectContext<AP10300Entities>(false);
-        
+        private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
 
-        public ActionResult Index()
+        private FormCollection _form;
+        private Batch _objBatch;
+        private AP_Adjust _objAPAdjust;
+        private List<AP10300_pgLoadGridAdjg_Result> _lstAdjusting;
+        private List<AP10300_pgLoadGridAdjd_Result> _lstAdjusted;
+        private JsonResult _logMessage;
+        private string _handle;
+        private AP_Setup _objAP;
+        public ActionResult Index(string branchID)
         {
+            Util.InitRight(_screenNbr);
+
+            var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
+
+            if (branchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
+            {
+                return View("Popup");
+            }
+
+            //var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID && p.UserID == Current.UserName);
+            //if (branchID == null) branchID = Current.CpnyID;
+            //ViewBag.INSite = userDft == null ? "" : userDft.INSite;
+            ViewBag.BranchID = branchID;
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+       
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
-        public ActionResult GetDataFormTop(String branchID, String batNbr)
+        #region GetData
+        public ActionResult GetBatch(String branchID, String batNbr)
         {
             var rptCtrl = _db.Batches.FirstOrDefault(p => p.BranchID == branchID && p.Module == "AP" && p.BatNbr == batNbr);
             return this.Store(rptCtrl);
         }
-        public ActionResult GetDataFormBot(String branchID, String batNbr, String refNbr)
+
+        public ActionResult GetAP_Adjust(String branchID, String batNbr, String refNbr)
         {
+            //var lst = _db.AP_Doc.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
             var lst = _db.AP_Adjust.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
             return this.Store(lst);
         }
 
-        public ActionResult GetDataGrid1(String batNbr,String branchID, String vendID,String docType)
+        public ActionResult GetAdjusting(String batNbr, String branchID, String vendID, String docType)
         {
             var lst = _db.AP10300_pgLoadGridAdjg(batNbr, branchID, vendID, docType);
 
             return this.Store(lst);
         }
 
-        public ActionResult GetDataGrid2(String batNbr, String branchID, String vendID)
+        public ActionResult GetAdjusted(String batNbr, String branchID, String vendID)
         {
             var lst = _db.AP10300_pgLoadGridAdjd(batNbr, branchID, vendID);
 
             return this.Store(lst);
         }
+        #endregion
 
-        [DirectMethod]
         [HttpPost]
-        public ActionResult Save(FormCollection data, string branchID, string handle, string batNbr,string docType, string vendID)
+        public ActionResult Save(FormCollection data)
         {
-            StoreDataHandler dataHandlerTop = new StoreDataHandler(data["lstheaderTop"]);
-            ChangeRecords<Batch> lstheaderTop = dataHandlerTop.BatchObjectData<Batch>();
-
-            StoreDataHandler dataHandlerGrid1 = new StoreDataHandler(data["lstgrd1"]);
-            ChangeRecords<AP10300_pgLoadGridAdjg_Result> lstgrd1 = dataHandlerGrid1.BatchObjectData<AP10300_pgLoadGridAdjg_Result>();
-            StoreDataHandler dataHandlerGrid2 = new StoreDataHandler(data["lstgrd2"]);
-            ChangeRecords<AP10300_pgLoadGridAdjd_Result> lstgrd2 = dataHandlerGrid2.BatchObjectData<AP10300_pgLoadGridAdjd_Result>();
-
-
-            var docDate = data["txtDocDate"];
-            var toAmt = data["txtCuryCrTot"];
-            //var tmpGridChangeOrNot = 0;
-            ////var invcDate = data["txtInvcDate"];
-
-
-            //var batNbrIfNull = 0;
-            var tmpBatNbr = "";
-
-
-
-            var tmpcatchHandle = "";
-            double tmpAdjAmt = 0;
-            double tmpAdgAmt = 0;
-            bool tmpUsed = false;
-            var tmpAdjdRefNbr = "";
-            var tmpAdjgRefNbr = "";
-            var tmpStatus = "";
-
-            if (lstgrd1.Updated.Count != 0 && lstgrd2.Updated.Count != 0)
+            try
             {
-                var recordDelete = _db.AP_Adjust.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
-                for (int i = 0; i < recordDelete.Count; i++)
+                _form = data;
+                SaveData(data);
+
+                if (_logMessage != null)
                 {
-                    _db.AP_Adjust.DeleteObject(recordDelete[i]);
-                    _db.SaveChanges();
+                    return _logMessage;
                 }
+                return Util.CreateMessage(MessageProcess.Save, new { batNbr = _objBatch.BatNbr });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Util.CreateError(ex.ToString());
+            }
+        }
+
+        #region Save
+        private void SaveData(FormCollection data)
+        {
+
+            string batNbr = data["cboBatNbr"];
+            string branchID = data["txtBranchID"];
+
+            var access = Session["AP10300"] as AccessRight;
+          
+            var batchHander = new StoreDataHandler(data["batch"]);
+            _objBatch = batchHander.ObjectData<Batch>().FirstOrDefault();
+
+            _handle = data["cboHandle"];
+            _objBatch.Status = _objBatch.Status == string.Empty ? "H" : _objBatch.Status;
+
+            var docHander = new StoreDataHandler(data["adjust"]);
+            _objAPAdjust = docHander.ObjectData<AP_Adjust>().FirstOrDefault();
+
+            if (_lstAdjusting == null)
+            {
+                var transHandler2 = new StoreDataHandler(data["lstAdjusting"]);
+                _lstAdjusting = transHandler2.ObjectData<AP10300_pgLoadGridAdjg_Result>().ToList();
+
             }
 
-            foreach (Batch createdForm in lstheaderTop.Created)
+            if (_lstAdjusted == null)
             {
-                
-                var objHeaderBatNbr = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AP" && p.BatNbr == batNbr).FirstOrDefault();
-                if (objHeaderBatNbr == null)
+                var transHandler = new StoreDataHandler(data["lstAdjusted"]);
+                _lstAdjusted = transHandler.ObjectData<AP10300_pgLoadGridAdjd_Result>().ToList();
+            }
+
+             SaveBatch(batNbr, branchID);
+             SaveAdjust(batNbr, branchID);
+
+            _db.SaveChanges();
+
+            if (_handle != "N")
+            {
+                DataAccess dal = Util.Dal();
+                APProcess.AP ap = new APProcess.AP(_userName, _screenNbr, dal);
+                try
                 {
-                    objHeaderBatNbr = new Batch();
-                    objHeaderBatNbr.BranchID = branchID;
-                    objHeaderBatNbr.Module = "AP";
-                    objHeaderBatNbr.BatNbr = functionBatNbrIfNull(branchID); //ham tu dong tao ra BatNbr
-                    objHeaderBatNbr.Descr = createdForm.Descr;
-
-
-                    tmpBatNbr = objHeaderBatNbr.BatNbr;
-
-                    objHeaderBatNbr.TotAmt = Convert.ToDouble(toAmt);
-                    objHeaderBatNbr.DateEnt = Convert.ToDateTime(docDate);
-                    objHeaderBatNbr.EditScrnNbr = "AP10300";
-                    objHeaderBatNbr.JrnlType = "AP";
-                    objHeaderBatNbr.OrigBranchID = "";
-                    if (handle == "R")
+                    if (_handle == "R" )
                     {
-                        objHeaderBatNbr.Rlsed = 1;
-                        objHeaderBatNbr.Status = "C"; // sua lai sau
-                        tmpStatus = "C";
+                        if (!access.Release) // not realse
+                             throw new MessageException(MessageType.Message, "725");
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+
+                        ap.AP10300_Release(_objBatch.BranchID, _objBatch.BatNbr);
+
+                        dal.CommitTrans();
+
+                        Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
                     }
-                    else if (handle == "N")
+                    else if (_handle == "C" || _handle == "V")
                     {
-                        objHeaderBatNbr.Rlsed = 0;
-                        objHeaderBatNbr.Status = "H";
-                        tmpStatus = "H";
-                    }
-                    objHeaderBatNbr.NoteID = 0;
-                    objHeaderBatNbr.IntRefNbr = "";
-                    objHeaderBatNbr.ReasonCD = "";
-
-                    objHeaderBatNbr.LUpd_DateTime = DateTime.Now;
-                    objHeaderBatNbr.LUpd_Prog = screenNbr;
-                    objHeaderBatNbr.LUpd_User = Current.UserName;
-                    objHeaderBatNbr.Crtd_DateTime = DateTime.Now;
-                    objHeaderBatNbr.Crtd_Prog = screenNbr;
-                    objHeaderBatNbr.Crtd_User = Current.UserName;
-                    objHeaderBatNbr.tstamp = new byte[0];
-
-                    _db.Batches.AddObject(objHeaderBatNbr);
-                    //_db.SaveChanges();
-                }
-            }
-
-            foreach (Batch updatedForm in lstheaderTop.Updated)
-            {
-                var objHeaderBatNbr = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AP" && p.BatNbr == batNbr).FirstOrDefault();
-                if (objHeaderBatNbr != null)
-                {
-                    objHeaderBatNbr.Descr = updatedForm.Descr;
-                    objHeaderBatNbr.TotAmt = Convert.ToDouble(toAmt);
-
-                }
-
-            }
-
-
-
-            foreach (AP10300_pgLoadGridAdjg_Result updatedGrid1 in lstgrd1.Updated)
-            {
-                //if (branchID != "")
-                //{
-                    tmpAdjAmt = Convert.ToDouble(updatedGrid1.Payment);
-                    foreach (AP10300_pgLoadGridAdjd_Result updatedGrid2 in lstgrd2.Updated)
-                    {
-
-                        if (tmpAdjAmt > 0)
+                        if (!access.Release)
+                            throw new MessageException(MessageType.Message,"725");
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                        if (!ap.AP10300_Cancel(_objBatch.BranchID, _objBatch.BatNbr))
                         {
-                            if (tmpAdgAmt == 0)
-                            {
-                                if (tmpUsed == false)
-                                {
-                                    tmpAdgAmt = Convert.ToDouble(updatedGrid2.Payment);
-                                    if (tmpAdjAmt >= tmpAdgAmt)
-                                    {
-                                        var record = new AP_Adjust();
-                                        record.BranchID = branchID;
-                                        if(batNbr == ""){
-                                           record.BatNbr = tmpBatNbr;
-                                        }else{
-                                            record.BatNbr = batNbr;
-                                        }
-                                        record.AdjdRefNbr = updatedGrid2.RefNbr;
-                                        record.AdjdBatNbr = updatedGrid2.BatNbr;
-
-
-                                        record.AdjAmt = tmpAdgAmt;
-                                        tmpAdjAmt = tmpAdjAmt - tmpAdgAmt;
-                                        tmpAdgAmt = 0;
-                                        tmpUsed = false;
-
-                                        record.AdjdDocType = updatedGrid2.DocType;
-                                        record.AdjDiscAmt = 0;
-                                        record.AdjgDocDate = Convert.ToDateTime(docDate);
-                                        record.AdjgDocType = docType;
-                                        record.AdjgBatNbr = updatedGrid1.BatNbr;
-                                        record.AdjgRefNbr = updatedGrid1.RefNbr;
-                                        record.VendID = vendID;
-                                        record.LUpd_DateTime = DateTime.Now;
-                                        record.LUpd_Prog = screenNbr;
-                                        record.LUpd_User = Current.UserName;
-                                        record.Crtd_DateTime = DateTime.Now;
-                                        record.Crtd_Prog = screenNbr;
-                                        record.Crtd_User = Current.UserName;
-                                        _db.AP_Adjust.AddObject(record);
-                                        _db.SaveChanges();
-                                    }
-                                    else if (tmpAdjAmt < tmpAdgAmt)
-                                    {
-                                        var record = new AP_Adjust();
-                                        record.BranchID = branchID;
-                                        if(batNbr == ""){
-                                           record.BatNbr = tmpBatNbr;
-                                        }else{
-                                            record.BatNbr = batNbr;
-                                        }
-                                        record.AdjdRefNbr = updatedGrid2.RefNbr;
-                                        record.AdjdBatNbr = updatedGrid2.BatNbr;
-
-
-                                        record.AdjAmt = tmpAdjAmt;
-                                        tmpAdjAmt = 0;
-                                        tmpAdgAmt = tmpAdgAmt - tmpAdjAmt;
-                                        tmpUsed = true;
-                                        tmpAdjdRefNbr = record.AdjdRefNbr;
-                                        tmpAdjgRefNbr = updatedGrid1.RefNbr;
-
-
-                                        record.AdjdDocType = updatedGrid2.DocType;
-                                        record.AdjDiscAmt = 0;
-                                        record.AdjgDocDate = Convert.ToDateTime(docDate);
-                                        record.AdjgDocType = docType;
-                                        record.AdjgBatNbr = updatedGrid1.BatNbr;
-                                        record.AdjgRefNbr = updatedGrid1.RefNbr;
-                                        record.VendID = vendID;
-                                        record.LUpd_DateTime = DateTime.Now;
-                                        record.LUpd_Prog = screenNbr;
-                                        record.LUpd_User = Current.UserName;
-                                        record.Crtd_DateTime = DateTime.Now;
-                                        record.Crtd_Prog = screenNbr;
-                                        record.Crtd_User = Current.UserName;
-                                        _db.AP_Adjust.AddObject(record);
-                                        _db.SaveChanges();
-                                    }
-                                }
-
-                                // ngoac dong vong if tmpAdgAmt = 0
-                            }
-                            else if (tmpAdgAmt > 0)
-                            {
-                                if (tmpUsed == true)
-                                {
-                                    var recordContain = _db.AP_Adjust.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.AdjdRefNbr == tmpAdjdRefNbr && p.AdjgRefNbr == tmpAdjgRefNbr).FirstOrDefault();
-                                    if (recordContain != null)
-                                    {
-                                        if (tmpAdjAmt >= tmpAdgAmt)
-                                        {
-                                            var record = new AP_Adjust();
-                                            record.BranchID = branchID;
-                                            if(batNbr == ""){
-                                               record.BatNbr = tmpBatNbr;
-                                            }else{
-                                                record.BatNbr = batNbr;
-                                            }
-                                            record.AdjdRefNbr = updatedGrid2.RefNbr;
-                                            record.AdjdBatNbr = updatedGrid2.BatNbr;
-
-
-                                            record.AdjAmt = tmpAdgAmt - recordContain.AdjAmt;
-                                            tmpAdjAmt = tmpAdjAmt - record.AdjAmt;
-                                            tmpAdgAmt = 0;
-                                            tmpUsed = false;
-
-
-                                            record.AdjdDocType = updatedGrid2.DocType;
-                                            record.AdjDiscAmt = 0;
-                                            record.AdjgDocDate = Convert.ToDateTime(docDate);
-                                            record.AdjgDocType = docType;
-                                            record.AdjgBatNbr = updatedGrid1.BatNbr;
-                                            record.AdjgRefNbr = updatedGrid1.RefNbr;
-                                            record.VendID = vendID;
-                                            record.LUpd_DateTime = DateTime.Now;
-                                            record.LUpd_Prog = screenNbr;
-                                            record.LUpd_User = Current.UserName;
-                                            record.Crtd_DateTime = DateTime.Now;
-                                            record.Crtd_Prog = screenNbr;
-                                            record.Crtd_User = Current.UserName;
-                                            _db.AP_Adjust.AddObject(record);
-                                            _db.SaveChanges();
-                                        }
-                                        else if (tmpAdjAmt < tmpAdgAmt)
-                                        {
-                                            var record = new AP_Adjust();
-                                            record.BranchID = branchID;
-                                            if(batNbr == ""){
-                                               record.BatNbr = tmpBatNbr;
-                                            }else{
-                                                record.BatNbr = batNbr;
-                                            }
-                                            record.AdjdRefNbr = updatedGrid2.RefNbr;
-                                            record.AdjdBatNbr = updatedGrid2.BatNbr;
-
-
-                                            record.AdjAmt = tmpAdjAmt;
-                                            tmpAdjAmt = 0;
-                                            tmpAdgAmt = tmpAdgAmt - tmpAdjAmt;
-                                            tmpUsed = true;
-                                            tmpAdjdRefNbr = record.AdjdRefNbr;
-                                            tmpAdjgRefNbr = updatedGrid1.RefNbr;
-
-
-                                            record.AdjdDocType = updatedGrid2.DocType;
-                                            record.AdjDiscAmt = 0;
-                                            record.AdjgDocDate = Convert.ToDateTime(docDate);
-                                            record.AdjgDocType = docType;
-                                            record.AdjgBatNbr = updatedGrid1.BatNbr;
-                                            record.AdjgRefNbr = updatedGrid1.RefNbr;
-                                            record.VendID = vendID;
-                                            record.LUpd_DateTime = DateTime.Now;
-                                            record.LUpd_Prog = screenNbr;
-                                            record.LUpd_User = Current.UserName;
-                                            record.Crtd_DateTime = DateTime.Now;
-                                            record.Crtd_Prog = screenNbr;
-                                            record.Crtd_User = Current.UserName;
-                                            _db.AP_Adjust.AddObject(record);
-                                            _db.SaveChanges();
-                                        }
-                                    }
-                                }
-                            }
-                            //dong ngoac vong if tmpAdjAmt > 0
+                            dal.RollbackTrans();
                         }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
+                        Util.AppendLog(ref _logMessage, "9999", data: new { success = true, batNbr = _objBatch.BatNbr });
                     }
-               ////ngoac dong dk branchID != null
-               // }
-               // else  // branchID == null tuc tao moi
-               // {
-
-
-               // }
-
-            }
-
-
-
-
-
-
-
-
-            if (handle == "R")
-            {
-                var recordBatNbrUpdate = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AP" && p.EditScrnNbr == "AP10300" && p.BatNbr == batNbr).FirstOrDefault();
-                recordBatNbrUpdate.Rlsed = 1;
-                recordBatNbrUpdate.Status = "C";
-                tmpcatchHandle = "1";
-                tmpStatus = "C";
-            }
-
-            _db.SaveChanges();
-
-            return Json(new { success = true, value1 = tmpBatNbr ,value2 = tmpStatus}, JsonRequestBehavior.AllowGet);
-
-
-        }
-
-        [DirectMethod]
-        public ActionResult DeleteFormTopBatch(string batNbr, string branchID)
-        {
-            var recordTopBatch = _db.Batches.FirstOrDefault(p => p.BranchID == branchID && p.BatNbr == batNbr && p.Module == "AP");
-            if (recordTopBatch != null)
-            {
-
-                _db.Batches.DeleteObject(recordTopBatch);
-                var recordDelete = _db.AP_Adjust.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
-                for (int i = 0; i < recordDelete.Count; i++)
+                }
+                catch (Exception)
                 {
-                    _db.AP_Adjust.DeleteObject(recordDelete[i]);
-                    _db.SaveChanges();
+                    dal.RollbackTrans();
+                    throw;
+                }
+                finally
+                {
+                    ap = null;
+                    dal = null;
                 }
             }
-
-            _db.SaveChanges();
-            return this.Direct();
         }
 
-        //[DirectMethod]
-        //public ActionResult DeleteFormBotAP_Doc(string refNbr, string batNbr, string branchID)
-        //{
-        //    var recordBotAP_Doc = _db.AP_Doc.FirstOrDefault(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr);
+        private void SaveBatch(string batNbr, string branchID)
+        {
+            var batch = _db.Batches.FirstOrDefault(p => p.BatNbr == batNbr && p.BranchID == branchID);
+            if (batch != null)
+            {
+                if (batch.tstamp.ToHex() != _objBatch.tstamp.ToHex())
+                {
+                    throw new MessageException(MessageType.Message, "19");
+                }
+                UpdateBatch(batch, false);
+            }
+            else
+            {
+                _objBatch.BatNbr = functionBatNbrIfNull(branchID);
+               _objBatch.RefNbr = functionRefNbrIfNull(branchID);
+                _objBatch.BranchID = branchID;
+                batch = new Batch();
+                UpdateBatch(batch, true);
+                _db.Batches.AddObject(batch);
+            }
+        }
 
-        //    if (recordBotAP_Doc != null)
-        //    {
-        //        _db.AP_Doc.DeleteObject(recordBotAP_Doc);
-        //        var recordGridTrans = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
-        //        if (recordGridTrans != null)
-        //        {
-        //            for (int i = 0; i < recordGridTrans.Count; i++)
-        //            {
-        //                _db.AP_Trans.DeleteObject(recordGridTrans[i]);
-        //            }
-        //        }
-        //    }
-        //    _db.SaveChanges();
-        //    return this.Direct();
-        //}
+        private void SaveAdjust(string batNbr, string branchID)
+        {
+            _objAP = _db.AP_Setup.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
+            if (_objAP == null) 
+                _objAP = new AP_Setup();
+            int n = 0;
+            int lenAdjusted = _lstAdjusted.Count();
+            int lenAdjusting = _lstAdjusting.Count();
+            while (true)
+            {
+                string dRefNbr = "";
+                string gRefNbr = "";
+                if (n < lenAdjusted)
+                {
+                    dRefNbr = _lstAdjusted[n].RefNbr;
+                }
+
+                if (n < lenAdjusting)
+                {
+                    gRefNbr = _lstAdjusting[n].RefNbr;
+                }
+                if (string.IsNullOrEmpty(dRefNbr) )
+                    break;
+                var objAdjust = new AP_Adjust();
+                if (!string.IsNullOrEmpty(gRefNbr))
+                    objAdjust = _db.AP_Adjust.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.AdjdRefNbr == dRefNbr && p.AdjgRefNbr == gRefNbr);
+                else 
+                    objAdjust = _db.AP_Adjust.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.AdjdRefNbr == dRefNbr && p.AdjgRefNbr == _objBatch.RefNbr);
+
+                
+                if (objAdjust == null) // null  // isNew 
+                {
+                    objAdjust = new AP_Adjust();
+                    objAdjust.ResetET();
+                    if (string.IsNullOrEmpty(gRefNbr))
+                    {
+                        UpdateAdjust(objAdjust, _lstAdjusted[n], null, true);
+                    }
+                    else
+                    {
+                        UpdateAdjust(objAdjust, _lstAdjusted[n], _lstAdjusting[n], true);
+                    }
+                    _db.AP_Adjust.AddObject(objAdjust);
+                }
+                else {
+                    if (string.IsNullOrEmpty(gRefNbr))
+                    {
+                        UpdateAdjust(objAdjust, _lstAdjusted[n], null, true);
+                    }
+                    else
+                    {
+                        UpdateAdjust(objAdjust, _lstAdjusted[n], _lstAdjusting[n], false);
+                    }
+                }
+                n++;
+            } 
+          
+        }
+        #endregion
+
+        #region Delete
+        [HttpPost]
+        public ActionResult Delete(FormCollection data, string batNbr, string branchID)
+        {
+            try
+            {
+                var access = Session["AP10300"] as AccessRight;
+                if (data["cboStatus"] != "H")
+                {
+                    throw new MessageException(MessageType.Message, "2015020805", "", new string[] { batNbr });
+                }
+                if (batNbr.PassNull() != string.Empty && !access.Delete)
+                {
+                    throw new MessageException(MessageType.Message, "728");
+                }
+
+                var recordTopBatch = _db.Batches.FirstOrDefault(p => p.BranchID == branchID && p.BatNbr == batNbr && p.Module == "AP");
+                if (recordTopBatch != null)
+                {
+                    var recordAP_Adjust = _db.AP_Adjust.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
+                    foreach (var item in recordAP_Adjust)
+                    {
+                        _db.AP_Adjust.DeleteObject(item);
+                    }
+                    _db.Batches.DeleteObject(recordTopBatch);
+                }
+
+                _db.SaveChanges();
+                return Util.CreateMessage(MessageProcess.Delete, new { batNbr = "" });
+
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+
+        }
+        #endregion
+
+        #region Orther Function
+
+        private void UpdateBatch(Batch batch, bool isNew)
+        {
+            if (isNew)
+            {
+                batch.BatNbr = _objBatch.BatNbr;
+                batch.BranchID = _objBatch.BranchID;
+                batch.RefNbr = _objBatch.RefNbr;
+                batch.Module = "AP";
+                batch.EditScrnNbr = "AP10300";
+                batch.JrnlType = "AP";
+               
+                batch.Crtd_DateTime = DateTime.Now;
+                batch.Crtd_Prog = _screenNbr;
+                batch.Crtd_User = Current.UserName;
+                batch.OrigBranchID = "";
+            }
+
+            batch.Status = _objBatch.Status;
+            batch.TotAmt = Convert.ToDouble(_form["dteCuryCrTot"]); // 
+            batch.DateEnt = Convert.ToDateTime(_form["txtDocDate"]);
+           
+            batch.EditScrnNbr = _screenNbr;
+            batch.NoteID = 0;
+            batch.Descr = _form["txtDescr"];
+            batch.LUpd_DateTime = DateTime.Now;
+            batch.LUpd_Prog = _screenNbr;
+            batch.LUpd_User = Current.UserName;
 
 
+        }
 
+        private void UpdateAdjust(AP_Adjust d, AP10300_pgLoadGridAdjd_Result adjusted, AP10300_pgLoadGridAdjg_Result adjusting, bool isNew)
+        {
+            if (isNew)
+            {
+                d.BranchID = _objBatch.BranchID;
+                d.BatNbr = _objBatch.BatNbr;
 
+                d.AdjdRefNbr = adjusted.RefNbr;
+                d.AdjdBatNbr = adjusted.BatNbr;
+                d.AdjdDocType = adjusted.DocType;
+
+                 d.AdjgDocType = _objAPAdjust.AdjgDocType;
+                if (adjusting != null)
+                {
+                    d.AdjgRefNbr = adjusting.RefNbr;
+                    d.AdjgBatNbr = adjusting.BatNbr;
+                }
+                else
+                {
+                    d.AdjgRefNbr = _objBatch.RefNbr;
+                }
+
+                d.VendID = _objAPAdjust.VendID;
+
+                d.Crtd_DateTime = DateTime.Now;
+                d.Crtd_Prog = _screenNbr;
+                d.Crtd_User = Current.UserName;
+            }
+
+            d.AdjAmt = adjusted.Payment.ToDouble();
+            d.AdjDiscAmt = 0;
+            d.AdjgDocDate = _objAPAdjust.AdjgDocDate;
+            d.LUpd_DateTime = DateTime.Now;
+            d.LUpd_Prog = _screenNbr;
+            d.LUpd_User = Current.UserName;
+        }
+
+       
 
         private string functionBatNbrIfNull(string branchID)
         {
@@ -420,16 +401,11 @@ namespace AP10300.Controllers
             return recordLastBatNbr;
         }
 
-
+        private string functionRefNbrIfNull(string branchID)
+        {
+            var recordLastBatNbr = _db.APNumbering(branchID, "RefNbr").FirstOrDefault();
+            return recordLastBatNbr;
+        }
+        #endregion
     }
 }
-
-
-
-
-
-
-
-
-
-
