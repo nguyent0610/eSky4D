@@ -18,6 +18,10 @@
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Fit)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad()";
+    })
     .Items(
         ////Thiet ke giao dien o day
 
@@ -36,13 +40,10 @@
             {
                 l.BeforeLoad.Fn = "stoBeforeLoad";
                 l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";
+                l.Update.Fn = "frmChange";
             })
         )
-        .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
+        
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40)
@@ -50,7 +51,9 @@
             , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true))
             , X.CheckColumn().Text(Util.GetLang("Active")).DataIndex("Active").Width(150).Editable(true)
             , HQ.DateColumn().ID("txtFromDate").DataIndex("FromDate").Text("FromDate").Editor(HQ.DateField())
+                //.Listeners(lst => { lst.Blur.Fn = "checkFromDate"; })
             , HQ.DateColumn().ID("txtToDate").DataIndex("ToDate").Text("ToDate").Editor(HQ.DateField())
+                //.Listeners(lst => { lst.Blur.Fn = "checkToDate"; })
             
             
             , X.CommandColumn().Width(150)

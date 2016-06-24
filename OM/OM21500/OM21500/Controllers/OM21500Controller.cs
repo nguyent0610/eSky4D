@@ -26,7 +26,7 @@ namespace OM21500.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -46,11 +46,19 @@ namespace OM21500.Controllers
                 ChangeRecords<OM21500_pgLoadGrid_Result> lstLang = dataHandler.BatchObjectData<OM21500_pgLoadGrid_Result>();
                 foreach (OM21500_pgLoadGrid_Result deleted in lstLang.Deleted)
                 {
-                    var del = _db.OM_DiscDescr.Where(p => p.DiscCode == deleted.DiscCode).FirstOrDefault();
-                    if (del != null)
+                    if (lstLang.Created.Where(p => p.DiscCode == deleted.DiscCode).Count() > 0)
                     {
-                        _db.OM_DiscDescr.DeleteObject(del);
+                        lstLang.Created.Where(p => p.DiscCode == deleted.DiscCode).FirstOrDefault().tstamp = deleted.tstamp;
                     }
+                    else
+                    {
+                        var del = _db.OM_DiscDescr.Where(p => p.DiscCode == deleted.DiscCode).FirstOrDefault();
+                        if (del != null)
+                        {
+                            _db.OM_DiscDescr.DeleteObject(del);
+                        }
+                    }
+                    
                 }
 
                 lstLang.Created.AddRange(lstLang.Updated);
