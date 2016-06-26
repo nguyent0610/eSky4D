@@ -499,7 +499,7 @@ namespace OM23800.Controllers
                                             _db.SaveChanges();
                                         else
                                         {
-                                            throw new MessageException(MessageType.Message, "201302071", "", new string[] { obj.CustID });
+                                            throw new MessageException(MessageType.Message, "20131224", "", new string[] { obj.CustID });
                                         }
 
                                         return Json(new
@@ -742,7 +742,7 @@ namespace OM23800.Controllers
                         }
                         else
                         {
-                            throw new MessageException(MessageType.Message, "201302071", "", new string[] { objImport.CustID });
+                            throw new MessageException(MessageType.Message, "20131224", "", new string[] { objImport.CustID });
                             //strtmpError += "   STT: " + strESTT + "Error: Dữ liệu không hợp lệ" + "\r";
                         }
 
@@ -1290,7 +1290,7 @@ namespace OM23800.Controllers
         }
 
         [DirectMethod]
-        public ActionResult ExportMCL(string channel, string channelDescr, 
+        public ActionResult ExportMCL(string routeID,string pjpID, string channel, string channelDescr, 
             string territory, string territoryDescr,
             string province, string provinceDescr,
             string distributor, string distributorDescr, 
@@ -1376,6 +1376,8 @@ namespace OM23800.Controllers
 
                 #region export data
                 ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pjpID), ParameterDirection.Input, 30));            
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@Channel", DbType.String, clsCommon.GetValueDBNull(channel), ParameterDirection.Input, int.MaxValue));

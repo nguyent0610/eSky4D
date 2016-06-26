@@ -217,6 +217,10 @@ var Event = {
                     cleanRequest: true,
                     timeout: 1000000,
                     params: {
+                        
+                        
+                        routeID: App.cboRouteIDMCL.getValue(),
+                        pjpID: App.cboPJPIDMCL.getValue(),
                         channel: Process.passNullValue(App.cboChannelMCL),
                         channelDescr: Process.passNullRawValue(App.cboChannelMCL),
                         territory: Process.passNullValue(App.cboAreaMCL),
