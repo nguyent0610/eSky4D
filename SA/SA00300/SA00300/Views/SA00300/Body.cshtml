@@ -38,11 +38,10 @@
                     .LoadData()
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst => {
-                            lst.TriggerClick.Fn = "cboUserID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
+                            lst.TriggerClick.Fn = "cboUserID_TriggerClick";
                             lst.Change.Fn = "cboUserID_Change";
-                            lst.Expand.Fn = "cboUserID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
+                            lst.Expand.Fn = "cboUserID_Expand"; 
                             lst.Select.Fn = "cboUserID_Select";
-                            //lst.Focus.Handler = "this.forceSelection = true;";
                         })
                         , HQ.Checkbox().ID("chkAuto").LabelWidth(500)
                         .Name("chkAuto").HQLangCode("CHECKAUTOUSERID").MarginSpec("5 0 0 10")
@@ -59,119 +58,129 @@
 
         , X.TabPanel().ID("tabDetail")
         .Region(Region.Center)
+        .Layout(LayoutType.Border)
         //.Listeners(p => p.AfterRender.Fn = "tabDetail_AfterRender")
         .Items(
-        
             X.Panel().ID("pnlUser")
             .Title(Util.GetLang("USER"))
-            .Layout(LayoutType.HBox)               
-            .AutoScroll(true)
+            .Layout(LayoutType.HBox).AutoScroll(true)
             .Items(
-                X.Container().Width(500).MinWidth(500)
-                        .Items(                                                                  
-                            HQ.TextBox().ID("FirstName").Name("FirstName").HQLangCode("FirstName").MarginSpec("3 0 0 0").HQControlFocus("").Width(500).AllowBlank(false).MaxLength(250).EnforceMaxLength(true)
-                            ,HQ.TextBox().ID("LastName").Name("LastName").HQLangCode("LastName").MarginSpec("3 0 0 0").HQControlFocus("").Width(500).AllowBlank(false).MaxLength(250).EnforceMaxLength(true)
-                            ,HQ.TextBox().ID("Address").Name("Address").HQLangCode("Address").MarginSpec("3 0 0 0").HQControlFocus("").Width(500).AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
-                            ,HQ.TextBox().InputType(Ext.Net.InputType.Email).ID("Email").Name("Email").HQLangCode("Email").MarginSpec("3 0 0 0").HQControlFocus("").Width(500).AllowBlank(false).MaxLength(250).EnforceMaxLength(true)
-                            ,HQ.TextBox().ID("Tel").Name("Tel").HQLangCode("Tel").MarginSpec("3 0 0 0").HQControlFocus("").Width(500).AllowBlank(false).MaxLength(15).EnforceMaxLength(true).MaskRe(@"/[0-9-,.*#()+/ ]/")
-                            ,HQ.TextBox().InputType(Ext.Net.InputType.Password).ID("Password").Name("Password").HQLangCode("Password").MarginSpec("3 0 0 0").HQControlFocus("").Width(500).AllowBlank(false)
-                            ,HQ.TextBox().ID("PasswordQuestion").Name("PasswordQuestion").HQLangCode("PasswordQuestion").MarginSpec("3 0 0 0").HQControlFocus("").Width(500).AllowBlank(false).MaxLength(200).EnforceMaxLength(true)
-                            ,HQ.TextBox().InputType(Ext.Net.InputType.Password).ID("PasswordAnswer").Name("PasswordAnswer").HQLangCode("PasswordAnswer").MarginSpec("3 0 0 0").HQControlFocus("").Width(500).AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
-                            ,HQ.TextBox().ID("ComputerID").Name("ComputerID").HQLangCode("ComputerID").MarginSpec("3 0 0 0").HQControlFocus("").Width(500)                               
-                            ,HQ.Combo().ID("CpnyID").Name("CpnyID").MarginSpec("3 0 0 0").AllowBlank(false)
-                                                    .HQLangCode("CpnyID").HQDBSys(true).HQProcedure("SA00300_pcCompany")
-                                                    .HQColumnShow("CpnyID,CpnyName")
-                                                    .DisplayField("CpnyID")
-                                                    .ValueField("CpnyID")
-                                                    .MultiSelect(true)
-                                                    .HQHeightWidth(400, 300)
-                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; lst.Focus.Handler = "this.forceSelection = true;"; })
-                                                    .LoadData().Width(500)
-                            ,HQ.Combo().ID("UserTypes").Name("UserTypes").MarginSpec("3 0 0 0").AllowBlank(false)
-                                                    .HQLangCode("UserTypes").HQDBSys(true).HQProcedure("SA00300_pcSYS_Role")
-                                                    .HQColumnShow("Code,Descr")
-                                                    .DisplayField("Code")
-                                                    .ValueField("Code")
-                                                    .MultiSelect(true)
-                                                    .HQHeightWidth(400, 300)
-                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; lst.Focus.Handler = "this.forceSelection = true;"; })
-                                                    .LoadData().Width(500)      
-                            ,HQ.Combo().ID("Channel").Name("Channel").MarginSpec("3 0 0 0").AllowBlank(false)
-                                                    .HQLangCode("Channel").HQDBSys(false).HQProcedure("SA00300_pcSalesChannel")
-                                                    .HQColumnShow("Code,Descr")
-                                                    .DisplayField("Code")
-                                                    .ValueField("Code")
-                                                    .HQHeightWidth(400, 300)
-                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
-                                                    .LoadData().Width(500)        
-                            ,HQ.Checkbox().ID("Blocked").Name("Blocked").HQLangCode("Blocked").MarginSpec("3 0 0 205").Width(500)
-                            ,HQ.DateField().ID("BlockedTime").Name("BlockedTime").HQLangCode("BlockedTime").MarginSpec("3 0 0 0").Width(500)
-                            ,HQ.Checkbox().ID("LoggedIn").Name("LoggedIn").HQLangCode("LoggedIn").MarginSpec("3 0 0 205").Width(500)
-                            ,HQ.DateField().ID("LastLoggedIn").Name("LastLoggedIn").HQLangCode("LastLoggedIn").MarginSpec("3 0 0 0").Width(500)
-                            ,HQ.DateField().ID("BeginDay").Name("BeginDay").HQLangCode("BeginDay").MarginSpec("3 0 0 0").Width(500)
-                            ,HQ.NumberField().ID("CrtLmt").Name("CrtLmt").HQLangCode("CrtLmt").MarginSpec("3 0 0 0").Width(500).MinValue(0).DecimalPrecision(0)
-                                .Listeners(lst => { lst.Blur.Fn = "checkCrtLmt"; })
-                            ,HQ.NumberField().ID("CrtLmtInvoice").Name("CrtLmtInvoice").HQLangCode("CrtLmtInvoice").MarginSpec("3 0 0 0").Width(500).MinValue(0).DecimalPrecision(0)
-                                .Listeners(lst => { lst.Blur.Fn = "checkCrtLmtInvoice"; })
-                            ,HQ.NumberField().ID("ExpireDay").Name("ExpireDay").HQLangCode("ExpireDay").DecimalPrecision(0).MarginSpec("3 0 0 0").Width(500).AllowBlank(false).MinValue(1)
-                                .Listeners(lst => { lst.Blur.Fn = "checkExpireDay"; })
-                            ,HQ.NumberField().ID("FailedLoginCount").Name("FailedLoginCount").DecimalPrecision(0).HQLangCode("FailedLoginCount").MarginSpec("3 0 0 0").Width(500).MinValue(0)
-                                .Listeners(lst => { lst.Blur.Fn = "checkFailedLoginCount"; })
-                            ,HQ.TextBox().ID("JobTitle").Name("JobTitle").HQLangCode("JobTitle").MarginSpec("3 0 0 0").Width(500)
-                            ,HQ.Combo().ID("Manager").Name("Manager").MarginSpec("3 0 0 0")
-                                                    .HQLangCode("Manager").HQDBSys(true).HQProcedure("SA00300_pcManager")
-                                                    .HQColumnShow("UserName,FirstName,LastName,Address,Email")
-                                                    .DisplayField("UserName")
-                                                    .ValueField("UserName")
-                                                    .HQHeightWidth(400, 300)
-                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
-                                                    .LoadData().Width(500)
-                            ,HQ.Combo().ID("Department").Name("Department").MarginSpec("3 0 0 0")
-                                                    .HQLangCode("Department").HQDBSys(false).HQProcedure("SA00300_pcDepartment")
-                                                    .HQColumnShow("Department,Name")
-                                                    .DisplayField("Name")
-                                                    .ValueField("Department")
-                                                    .HQHeightWidth(400, 300)
-                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
-                                                    .LoadData().Width(500)
-                            ,HQ.Checkbox().ID("CheckFirstLogin").Name("CheckFirstLogin").HQLangCode("CheckFirstLogin").MarginSpec("3 0 0 205")                                            
-                            ,HQ.Combo().ID("HomeScreenNbr").Name("HomeScreenNbr").MarginSpec("3 0 5 0")
-                                                    .HQLangCode("HomeScreenNbr").HQDBSys(true).HQProcedure("SA00300_pcSYS_Screen")
-                                                    .HQColumnShow("Code,Descr")
-                                                    .DisplayField("Descr")
-                                                    .ValueField("Code")
-                                                    .HQHeightWidth(400, 300)
-                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
-                                                    .LoadData().Width(500)
+                X.Container().Layout(LayoutType.VBox).MinWidth(500).Width(525)
+                    .Items(                                                                  
+                        HQ.TextBox().ID("FirstName").Name("FirstName").HQLangCode("FirstName").MarginSpec("3 0 0 0").Width(500).AllowBlank(false).MaxLength(250).EnforceMaxLength(true)
+                        , HQ.TextBox().ID("LastName").Name("LastName").HQLangCode("LastName").MarginSpec("3 0 0 0").Width(500).AllowBlank(false).MaxLength(250).EnforceMaxLength(true)
+                        , HQ.TextBox().ID("Address").Name("Address").HQLangCode("Address").MarginSpec("3 0 0 0").Width(500).AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
+                        , HQ.TextBox().InputType(Ext.Net.InputType.Email).ID("Email").Name("Email").HQLangCode("Email").MarginSpec("3 0 0 0").Width(500).AllowBlank(false).MaxLength(250).EnforceMaxLength(true)
+                        , HQ.TextBox().ID("Tel").Name("Tel").HQLangCode("Tel").MarginSpec("3 0 0 0").Width(500).AllowBlank(false).MaxLength(15).EnforceMaxLength(true).MaskRe(@"/[0-9-,.*#()+/ ]/")
+                        , HQ.TextBox().InputType(Ext.Net.InputType.Password).ID("Password").Name("Password").HQLangCode("Password").MarginSpec("3 0 0 0").Width(500).AllowBlank(false)
+                        , HQ.TextBox().ID("PasswordQuestion").Name("PasswordQuestion").HQLangCode("PasswordQuestion").MarginSpec("3 0 0 0").Width(500).AllowBlank(false).MaxLength(200).EnforceMaxLength(true)
+                        , HQ.TextBox().InputType(Ext.Net.InputType.Password).ID("PasswordAnswer").Name("PasswordAnswer").HQLangCode("PasswordAnswer").MarginSpec("3 0 0 0").Width(500).AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
+                        , HQ.TextBox().ID("ComputerID").Name("ComputerID").HQLangCode("ComputerID").MarginSpec("3 0 0 0").Width(500).MaxLength(100).EnforceMaxLength(true)                         
+                        , HQ.Combo().ID("CpnyIDHand").Name("CpnyIDHand").MarginSpec("3 0 0 0")
+                            .HQLangCode("CpnyID").HQDBSys(true).HQProcedure("SA00300_pcCompany")
+                            .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID").MultiSelect(true)
+                            .HQHeightWidth(400, 300)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst => 
+                            {
+                                lst.Change.Fn = "CpnyIDHand_Change";
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue(); GetAllCompany();}";
+                                lst.Expand.Handler = "HQ.combo.expand(this,',');";
+                                lst.Focus.Handler = "this.forceSelection = true;"; 
+                            })
+                            .LoadData().Width(500)
+                                
+                        , HQ.TextBox().ID("CpnyID").Name("CpnyID").HQLangCode("CpnyIDHand").Width(500).MarginSpec("3 0 0 0").Tag("X").ReadOnly(true).Hidden(true)
+                        , HQ.Combo().ID("UserTypes").Name("UserTypes").MarginSpec("3 0 0 0").AllowBlank(false)
+                            .HQLangCode("UserTypes").HQDBSys(true).HQProcedure("SA00300_pcSYS_Role")
+                            .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code").MultiSelect(true)
+                            .HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() 
+                            {
+                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst => { 
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                lst.Expand.Handler = "HQ.combo.expand(this,',');"; 
+                                lst.Focus.Handler = "this.forceSelection = true;"; 
+                            })
+                            .LoadData().Width(500)      
+                        , HQ.Combo().ID("Channel").Name("Channel").MarginSpec("3 0 0 0").AllowBlank(false)
+                            .HQLangCode("Channel").HQDBSys(false).HQProcedure("SA00300_pcSalesChannel")
+                            .HQColumnShow("Code,Descr")
+                            .DisplayField("Code")
+                            .ValueField("Code")
+                            .HQHeightWidth(400, 300)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst => { 
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; 
+                                lst.Focus.Handler = "this.forceSelection = true;"; 
+                            })
+                            .LoadData().Width(500)        
+                        , HQ.Checkbox().ID("Blocked").Name("Blocked").HQLangCode("Blocked").MarginSpec("3 0 0 205").Width(500)
+                        , HQ.DateField().ID("BlockedTime").Name("BlockedTime").HQLangCode("BlockedTime").MarginSpec("3 0 0 0").Width(500)
+                        , HQ.Checkbox().ID("LoggedIn").Name("LoggedIn").HQLangCode("LoggedIn").MarginSpec("3 0 0 205").Width(500)
+                        , HQ.DateField().ID("LastLoggedIn").Name("LastLoggedIn").HQLangCode("LastLoggedIn").MarginSpec("3 0 0 0").Width(500)
+                        , HQ.DateField().ID("BeginDay").Name("BeginDay").HQLangCode("BeginDay").MarginSpec("3 0 0 0").Width(500)
+                        , HQ.NumberField().ID("CrtLmt").Name("CrtLmt").HQLangCode("CrtLmt").MarginSpec("3 0 0 0").Width(500).MinValue(0).DecimalPrecision(0)
+                            .Listeners(lst => { lst.Blur.Fn = "checkCrtLmt"; })
+                        , HQ.NumberField().ID("CrtLmtInvoice").Name("CrtLmtInvoice").HQLangCode("CrtLmtInvoice").MarginSpec("3 0 0 0").Width(500).MinValue(0).DecimalPrecision(0)
+                            .Listeners(lst => { lst.Blur.Fn = "checkCrtLmtInvoice"; })
+                        , HQ.NumberField().ID("ExpireDay").Name("ExpireDay").HQLangCode("ExpireDay").DecimalPrecision(0).MarginSpec("3 0 0 0").Width(500).AllowBlank(false).MinValue(1)
+                            .Listeners(lst => { lst.Blur.Fn = "checkExpireDay"; })
+                        , HQ.NumberField().ID("FailedLoginCount").Name("FailedLoginCount").DecimalPrecision(0).HQLangCode("FailedLoginCount").MarginSpec("3 0 0 0").Width(500).MinValue(0)
+                            .Listeners(lst => { lst.Blur.Fn = "checkFailedLoginCount"; })
+                        , HQ.TextBox().ID("JobTitle").Name("JobTitle").HQLangCode("JobTitle").MarginSpec("3 0 0 0").Width(500)
+                        , HQ.Combo().ID("Manager").Name("Manager").MarginSpec("3 0 0 0")
+                            .HQLangCode("Manager").HQDBSys(true).HQProcedure("SA00300_pcManager")
+                            .HQColumnShow("UserName,FirstName,LastName,Address,Email")
+                            .DisplayField("UserName")
+                            .ValueField("UserName")
+                            .HQHeightWidth(400, 300)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
+                            .LoadData().Width(500)
+                        , HQ.Combo().ID("Department").Name("Department").MarginSpec("3 0 0 0")
+                            .HQLangCode("Department").HQDBSys(false).HQProcedure("SA00300_pcDepartment")
+                            .HQColumnShow("Department,Name")
+                            .DisplayField("Name")
+                            .ValueField("Department")
+                            .HQHeightWidth(400, 300)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
+                            .LoadData().Width(500)
+                        , HQ.Checkbox().ID("CheckFirstLogin").Name("CheckFirstLogin").HQLangCode("CheckFirstLogin").MarginSpec("3 0 0 205")                                            
+                        , HQ.Combo().ID("HomeScreenNbr").Name("HomeScreenNbr").MarginSpec("3 0 5 0")
+                            .HQLangCode("HomeScreenNbr").HQDBSys(true).HQProcedure("SA00300_pcSYS_Screen")
+                            .HQColumnShow("Code,Descr")
+                            .DisplayField("Descr")
+                            .ValueField("Code")
+                            .HQHeightWidth(400, 300)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
+                            .LoadData().Width(500)
                                    
-                                    //,HQ.TextBox().ID("AutoID").Name("AutoID").HQLangCode("AutoID").MarginSpec("3 0 0 0").HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})                                                                                                                                                
-                                    //,HQ.TextBox().ID("Images").Name("Images").HQLangCode("Images").MarginSpec("3 0 0 0").HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})
-                                    //,HQ.TextBox().ID("CpnyIDHand").Name("CpnyIDHand").HQLangCode("CpnyIDHand").MarginSpec("3 0 0 0").HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})
-                            )
-                            , X.Container().MinWidth(200).MarginSpec("0 0 0 25")
-                            .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
-                            .Items(
-                            
-                                X.Hidden().ID("hdnImages").DataIndex("Images")
-                                , X.Image().ID("imgImages").Weight(200).Height(200).MarginSpec("10 10 10 10")
+                                //,HQ.TextBox().ID("AutoID").Name("AutoID").HQLangCode("AutoID").MarginSpec("3 0 0 0").HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})                                                                                                                                                
+                                //,HQ.TextBox().ID("Images").Name("Images").HQLangCode("Images").MarginSpec("3 0 0 0").HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})
+                                //.HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})
+                        )
+                        
+                    , X.Container().Layout(LayoutType.VBox).MinWidth(210).Width(210)
+                    .Items(
+                        X.Hidden().ID("hdnImages").DataIndex("Images")
+                        , X.Image().ID("imgImages").Width(200).Height(200).MarginSpec("10 10 10 10")
 
-                                , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
-                                .Items(
-                                    X.FileUploadField().ID("fupImages").Icon(Icon.ImageAdd).ButtonText(Util.GetLang("ChooseImage"))
-                                    .ButtonOnly(true).MarginSpec("0 5 5 5")
-                                    .Listeners(lst=>lst.Change.Fn="fupImages_change")
+                        , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
+                        .Items(
+                            X.FileUploadField().ID("fupImages").Icon(Icon.ImageAdd).ButtonText(Util.GetLang("ChooseImage"))
+                            .ButtonOnly(true).MarginSpec("0 5 5 10")
+                            .Listeners(lst=>lst.Change.Fn="fupImages_change")
 
-                                    , X.Button().ID("btnClearImage").Icon(Icon.ImageDelete).Text(Util.GetLang("ClearImage")).MarginSpec("0 5 5 5")
-                                    .Handler("btnClearImage_click")
-                                  
-                                )
-                            )
+                            , X.Button().ID("btnClearImage").Icon(Icon.ImageDelete).Text(Util.GetLang("ClearImage")).MarginSpec("0 5 5 9")
+                            .Handler("btnClearImage_click").Width(90)     
+                        )
+                    )
             
             
             )//pnlUser
@@ -192,7 +201,7 @@
                          X.Store()
                         .ID("stoSYS_UserGroup")
                         .PageSize(50).AutoLoad(false)
-                        .Model(Util.GenerateModel(typeof(SA00300_pgLoadSYS_UserGroup_Result), "mdlSYS_UserGroup", "GroupID"))
+                        .Model(Util.GenerateModel(typeof(SA00300_pgLoadSYS_UserGroup_Result), "mdlSYS_UserGroup", ""))
                         .Parameters(ps =>
                         {
                             ps.Add(new StoreParameter("UserID", "App.cboUserID.getValue()", ParameterMode.Raw));
@@ -210,12 +219,9 @@
                         
                         , X.Column().Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(120)
                         .Editor(
-                            HQ.Combo().ID("cboGroupIDGroup").Name("cboGroupIDGroup")
-                            .HideLabel(true).LabelWidth(0)
+                            HQ.Combo().ID("cboGroupIDGroup").Name("cboGroupIDGroup").HideLabel(true)
                             .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA00300_pcUserGroup")
-                            .HQColumnShow("GroupID,Descr")
-                            .DisplayField("GroupID")
-                            .ValueField("GroupID")
+                            .HQColumnShow("GroupID,Descr").DisplayField("GroupID").ValueField("GroupID")
                             .HQHeightWidth(400, 300)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst => 
@@ -246,8 +252,10 @@
                             l.Command.Handler = "grdSYS_UserGroup_Reject(record);";
                         })
                 )
-                .SelectionModel(X.RowSelectionModel().ID("slmSYS_UserGroup")
-                .Mode(SelectionMode.Multi))
+                .SelectionModel(
+                    X.RowSelectionModel().ID("slmSYS_UserGroup").Mode(SelectionMode.Multi)
+                        .Listeners(p=>p.Select.Handler = "_focusNo == 1")
+                )
                 .BottomBar(
                     X.PagingToolbar()
                     .Items(
@@ -300,7 +308,7 @@
                          X.Store()
                         .ID("stoSYS_UserCompany")
                         .PageSize(50).AutoLoad(false)
-                        .Model(Util.GenerateModel(typeof(SA00300_pgLoadSYS_UserCompany_Result), "mdlSYS_UserCompany", "GroupID"))
+                        .Model(Util.GenerateModel(typeof(SA00300_pgLoadSYS_UserCompany_Result), "mdlSYS_UserCompany", ""))
                         .Parameters(ps =>
                         {
                             ps.Add(new StoreParameter("UserID", "App.cboUserID.getValue()", ParameterMode.Raw));
@@ -318,12 +326,9 @@
                         
                         , X.Column().Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(120)
                             .Editor(
-                                HQ.Combo().ID("cboGroupIDCompany").Name("cboGroupIDCompany")
-                                .HideLabel(true).LabelWidth(0)
-                                .HQLangCode("GroupID").HQDBSys(true).HQProcedure("ppv_SA00300CompanyGroup")
-                                .HQColumnShow("GroupID,Descr,ListCpny")
-                                .DisplayField("GroupID")
-                                .ValueField("GroupID")
+                                HQ.Combo().ID("cboGroupIDCompany").Name("cboGroupIDCompany").HideLabel(true)
+                                .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA00300_pcCompanyGroup")
+                                .HQColumnShow("GroupID,Descr,ListCpny").DisplayField("GroupID").ValueField("GroupID")
                                 .HQHeightWidth(400, 300)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst => 
@@ -355,7 +360,10 @@
                             l.Command.Handler = "grdSYS_UserCompany_Reject(record);";
                         })
                     )
-                    .SelectionModel(X.RowSelectionModel().ID("slmSYS_UserCompany").Mode(SelectionMode.Multi))
+                    .SelectionModel(
+                        X.RowSelectionModel().ID("slmSYS_UserCompany").Mode(SelectionMode.Multi)
+                            .Listeners(p=>p.Select.Handler = "_focusNo == 2")
+                    )
                     .BottomBar(
                         X.PagingToolbar()
                         .Items(

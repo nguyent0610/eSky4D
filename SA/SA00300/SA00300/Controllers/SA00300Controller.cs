@@ -92,7 +92,7 @@ namespace SA00300.Controllers
         {
             try
             {
-                string UserID = data["cboUserID"];
+                string UserID = data["cboUserID"].PassNull();
                 if (Auto.PassNull().ToUpper() == "true".ToUpper())
                 {
                     bool b = true;
@@ -106,8 +106,11 @@ namespace SA00300.Controllers
                         if (obj == null) b = false;
                     }
                 }
+                //StoreDataHandler dataHandler = new StoreDataHandler(data["lstUser"]);
+                //ChangeRecords<User> lstUser = dataHandler.BatchObjectData<User>();
+
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstUser"]);
-                ChangeRecords<User> lstUser = dataHandler.BatchObjectData<User>();
+                var curHeader = dataHandler.ObjectData<User>().FirstOrDefault();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSYS_UserCompany"]);
                 ChangeRecords<SA00300_pgLoadSYS_UserCompany_Result> lstSYS_UserCompany = dataHandler1.BatchObjectData<SA00300_pgLoadSYS_UserCompany_Result>();
@@ -116,82 +119,93 @@ namespace SA00300.Controllers
                 ChangeRecords<SA00300_pgLoadSYS_UserGroup_Result> lstSYS_UserGroup = dataHandler2.BatchObjectData<SA00300_pgLoadSYS_UserGroup_Result>();
                
                 #region Save Header Users
-                lstUser.Created.AddRange(lstUser.Updated);
-                foreach (User curHeader in lstUser.Created)
-                {
-                   if (UserID.PassNull() == "") continue;
-                   var header = _db.Users.FirstOrDefault(p => p.UserName == UserID);
+
+                var header = _db.Users.FirstOrDefault(p => p.UserName == UserID);
                    
-                    if (header != null)
+                if (header != null)
+                {
+                    if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
-                        {
-                            UpdatingHeader(header, curHeader, false);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
+                        UpdatingHeader(header, curHeader, false);
                     }
                     else
                     {
-                        header = new User();
-                        header.UserName = UserID;
-                        UpdatingHeader(header, curHeader, true);
-                        _db.Users.AddObject(header);
+                        throw new MessageException(MessageType.Message, "19");
                     }
+                }
+                else
+                {
+                    header = new User();
+                    header.UserName = UserID;
+                    UpdatingHeader(header, curHeader, true);
+                    _db.Users.AddObject(header);
+                }
 
-                    var files = Request.Files;
-                    if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
+                var files = Request.Files;
+                if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
+                {
+                    // Xoa file cu di
+                        
+                        var oldPath = string.Format("{0}\\{1}", FilePath, header.Images);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    // Upload file moi
+                    //string newFileName = string.Format("{0}_{1}{2}", UserID, header.CpnyID, Path.GetExtension(files[0].FileName));
+                    string newFileName = string.Format("{0}_{1}", UserID, Path.GetExtension(files[0].FileName));
+                    files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
+                    header.Images = newFileName;
+                }
+
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(header.Images) && string.IsNullOrWhiteSpace(curHeader.Images))
                     {
                         // Xoa file cu di
-                        
-                            var oldPath = string.Format("{0}\\{1}", FilePath, header.Images);
+                        var oldPath = string.Format("{0}\\{1}", FilePath, header.Images);
+                        if (header.Images != "")
+                        {
                             if (System.IO.File.Exists(oldPath))
                             {
                                 System.IO.File.Delete(oldPath);
                             }
-                        // Upload file moi
-                        //string newFileName = string.Format("{0}_{1}{2}", UserID, header.CpnyID, Path.GetExtension(files[0].FileName));
-                        string newFileName = string.Format("{0}_{1}", UserID, Path.GetExtension(files[0].FileName));
-                        files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
-                        header.Images = newFileName;
-                    }
-
-                    else
-                    {
-                        if (!string.IsNullOrWhiteSpace(header.Images) && string.IsNullOrWhiteSpace(curHeader.Images))
-                        {
-                            // Xoa file cu di
-                            var oldPath = string.Format("{0}\\{1}", FilePath, header.Images);
-                            if (header.Images != "")
-                            {
-                                if (System.IO.File.Exists(oldPath))
-                                {
-                                    System.IO.File.Delete(oldPath);
-                                }
-                                header.Images = string.Empty;
-                            }
+                            header.Images = string.Empty;
                         }
                     }
-
-
                 }
+
+
+                
                 #endregion
 
-               
-
                 #region Save SYS_UserGroup
-                foreach (SA00300_pgLoadSYS_UserGroup_Result deleted in lstSYS_UserGroup.Deleted)
-                {
-                    var del = _db.SYS_UserGroup.Where(p => p.UserID == UserID && p.GroupID == deleted.GroupID).FirstOrDefault();
-                    if (del != null)
-                    {
-                        _db.SYS_UserGroup.DeleteObject(del);
-                    }
-                }
+                //foreach (SA00300_pgLoadSYS_UserGroup_Result deleted in lstSYS_UserGroup.Deleted)
+                //{
+                //    var del = _db.SYS_UserGroup.Where(p => p.UserID == UserID && p.GroupID == deleted.GroupID).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.SYS_UserGroup.DeleteObject(del);
+                //    }
+                //}
 
                 lstSYS_UserGroup.Created.AddRange(lstSYS_UserGroup.Updated);
+
+                foreach (SA00300_pgLoadSYS_UserGroup_Result deleted in lstSYS_UserGroup.Deleted)
+                {
+                    if (lstSYS_UserGroup.Created.Where(p => p.GroupID == deleted.GroupID).Count() > 0)
+                    {
+                        lstSYS_UserGroup.Created.Where(p => p.GroupID == deleted.GroupID).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var del = _db.SYS_UserGroup.Where(p => p.GroupID == deleted.GroupID && p.UserID == UserID).FirstOrDefault();
+                        if (del != null)
+                        {
+                            _db.SYS_UserGroup.DeleteObject(del);
+                        }
+                    }
+                }
 
                 foreach (SA00300_pgLoadSYS_UserGroup_Result curLang in lstSYS_UserGroup.Created)
                 {
@@ -221,16 +235,32 @@ namespace SA00300.Controllers
                 #endregion
 
                 #region Save SYS_UserCompany
-                foreach (SA00300_pgLoadSYS_UserCompany_Result deleted in lstSYS_UserCompany.Deleted)
-                {
-                    var objDelete = _db.SYS_UserCompany.Where(p => p.UserName == UserID && p.GroupID == deleted.GroupID).FirstOrDefault();
-                    if (objDelete != null)
-                    {
-                        _db.SYS_UserCompany.DeleteObject(objDelete);
-                    }
-                }
+                //foreach (SA00300_pgLoadSYS_UserCompany_Result deleted in lstSYS_UserCompany.Deleted)
+                //{
+                //    var objDelete = _db.SYS_UserCompany.Where(p => p.UserName == UserID && p.GroupID == deleted.GroupID).FirstOrDefault();
+                //    if (objDelete != null)
+                //    {
+                //        _db.SYS_UserCompany.DeleteObject(objDelete);
+                //    }
+                //}
 
                 lstSYS_UserCompany.Created.AddRange(lstSYS_UserCompany.Updated);
+
+                foreach (SA00300_pgLoadSYS_UserCompany_Result deleted in lstSYS_UserCompany.Deleted)
+                {
+                    if (lstSYS_UserCompany.Created.Where(p => p.GroupID == deleted.GroupID).Count() > 0)
+                    {
+                        lstSYS_UserCompany.Created.Where(p => p.GroupID == deleted.GroupID).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var del = _db.SYS_UserCompany.Where(p => p.GroupID == deleted.GroupID && p.UserName == UserID).FirstOrDefault();
+                        if (del != null)
+                        {
+                            _db.SYS_UserCompany.DeleteObject(del);
+                        }
+                    }
+                }
 
                 foreach (SA00300_pgLoadSYS_UserCompany_Result curLang in lstSYS_UserCompany.Created)
                 {
@@ -260,7 +290,7 @@ namespace SA00300.Controllers
                 #endregion
 
                 _db.SaveChanges();
-                return Json(new { success = true, UserID=UserID });
+                return Json(new { success = true, UserID = UserID });
             }
             catch (Exception ex)
             {
@@ -277,7 +307,7 @@ namespace SA00300.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
-
+            t.CpnyIDHand = s.CpnyIDHand;
             t.CpnyID = s.CpnyID;
             t.Address = s.Address;
             t.FirstName = s.FirstName;
@@ -321,7 +351,6 @@ namespace SA00300.Controllers
             t.FailedLoginCount = s.FailedLoginCount;
             t.BeginDay = s.BeginDay == null ? DateTime.Now.ToDateShort() : (s.BeginDay.Year == 1 ? DateTime.Now.ToDateShort() : s.BeginDay.ToDateShort());
             t.CheckFirstLogin = s.CheckFirstLogin;
-            t.CpnyIDHand = s.CpnyIDHand;
             t.CrtLmt = s.CrtLmt;
             t.CrtLmtInvoice = s.CrtLmtInvoice;
 
@@ -368,7 +397,7 @@ namespace SA00300.Controllers
         public ActionResult DeleteAll(FormCollection data)
         {
             try{
-            string UserID = data["cboUserID"];
+            string UserID = data["cboUserID"].PassNull();
             var cpny = _db.Users.FirstOrDefault(p => p.UserName == UserID);
             if (cpny != null)
             {
