@@ -24,6 +24,21 @@ var keys5 = ['BranchID', 'SlsperId', 'InvtID'];
 var fieldsCheckRequire5 = ["BranchID", "SlsperId", "InvtID", "Target"];
 var fieldsLangCheckRequire5 = ["BranchID", "SlsperId", "InvtID", "Target"];
 
+
+var keys6 = ['BranchID', 'SlsperId', 'CustID'];
+var fieldsCheckRequire6 = ["BranchID", "SlsperId", 'CustID', "Target"];
+var fieldsLangCheckRequire6 = ["BranchID", "SlsperId", 'CustID', "Target"];
+
+
+var keys7 = ['BranchID','CustID', 'SlsperId', 'ClassID'];
+var fieldsCheckRequire7 = ["BranchID",'CustID', "SlsperId", "ClassID", "Target"];
+var fieldsLangCheckRequire7 = ["BranchID", 'CustID',"SlsperId", "ClassID", "Target"];
+
+var keys8 = ['BranchID','CustID', 'SlsperId', 'InvtID'];
+var fieldsCheckRequire8 = ["BranchID", "CustID", "SlsperId", "InvtID", "Target"];
+var fieldsLangCheckRequire8 = ["BranchID", "CustID", "SlsperId", "InvtID", "Target"];
+
+
 //// Declare ///////////////////////////////////////////////////////////
 var _beginStatus = 'H';
 
@@ -384,6 +399,31 @@ var menuClick = function (command) {
                                                     HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdOM_KPISales_Invt), ''], 'deleteData_Grid5', true)
                                             }
                                         }
+                                        else
+                                            if (HQ.focus == 'grdOM_KPICustomer_All') {
+                                                if (App.slmgrdOMKPICustomer_All.selected.items[0] != undefined) {
+                                                    var rowindex = HQ.grid.indexSelect(App.grdOM_KPICustomer_All);
+                                                    if (rowindex != '')
+                                                        HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdOM_KPICustomer_All), ''], 'deleteData_Grid6', true)
+                                                }
+                                            }
+                                            else
+                                                if (HQ.focus == 'grdOM_KPICustomer_Class') {
+                                                    if (App.slmgrdOMKPICustomer_Class.selected.items[0] != undefined) {
+                                                        var rowindex = HQ.grid.indexSelect(App.grdOM_KPICustomer_Class);
+                                                        if (rowindex != '')
+                                                            HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdOM_KPICustomer_Class), ''], 'deleteData_Grid7', true)
+                                                    }
+                                                }
+                                                else
+                                                    if (HQ.focus == 'grdOM_KPICustomer_Invt') {
+                                                        if (App.slmgrdOMKPICustomer_Invt.selected.items[0] != undefined) {
+                                                            var rowindex = HQ.grid.indexSelect(App.grdOM_KPICustomer_Invt);
+                                                            if (rowindex != '')
+                                                                HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdOM_KPICustomer_Invt), ''], 'deleteData_Grid8', true)
+                                                        }
+                                                    }
+                                       
             }
             break;
         case "save":
@@ -393,7 +433,10 @@ var menuClick = function (command) {
                     && HQ.store.checkRequirePass(App.stoOM_KPICpny_Invt, keys2, fieldsCheckRequire2, fieldsLangCheckRequire2)
                     && HQ.store.checkRequirePass(App.stoOM_KPISales_All, keys3, fieldsCheckRequire3, fieldsLangCheckRequire3)
                     && HQ.store.checkRequirePass(App.stoOM_KPISales_Class, keys4, fieldsCheckRequire4, fieldsLangCheckRequire4)
-                    && HQ.store.checkRequirePass(App.stoOM_KPISales_Invt, keys5, fieldsCheckRequire5, fieldsLangCheckRequire5)) {
+                    && HQ.store.checkRequirePass(App.stoOM_KPISales_Invt, keys5, fieldsCheckRequire5, fieldsLangCheckRequire5)
+                    && HQ.store.checkRequirePass(App.stoOM_KPICustomer_All, keys6, fieldsCheckRequire6, fieldsLangCheckRequire6)
+                     && HQ.store.checkRequirePass(App.stoOM_KPICustomer_Class, keys7, fieldsCheckRequire7, fieldsLangCheckRequire7)
+                     && HQ.store.checkRequirePass(App.stoOM_KPICustomer_Invt, keys8, fieldsCheckRequire8, fieldsLangCheckRequire8)) {
                     save();
                 }
                
@@ -478,6 +521,7 @@ var stoLoad = function (sto) {
         HQ.store.insertBlank(sto, keys3);
         HQ.store.insertBlank(sto, keys4);
         HQ.store.insertBlank(sto, keys5);
+        HQ.store.insertBlank(sto, keys6);
     }
     else if (!HQ.isUpdate && !HQ.isNew) {
         HQ.common.lockItem(App.frmMain, true);
@@ -508,10 +552,21 @@ var stoLoad = function (sto) {
                     }
                     else
                     {
+                        if (App.cboApplyFor.value == 'CUS' && App.cboApplyTo.value == 'A') {
+                            App.stoOM_KPICustomer_All.reload();
+                        }
+                        else if (App.cboApplyFor.value == 'CUS' ){
+                            if (App.cboApplyFor.value == 'CUS' && App.cboApplyTo.value == 'G') {
+                                App.stoOM_KPICustomer_Class.reload();
+                            }
+                            else {
+                                App.stoOM_KPICustomer_Invt.reload();
+                            }
+                        }
                         if (App.cboApplyFor.value == 'S' && App.cboApplyTo.value == 'G') {
                             App.stoOM_KPISales_Class.reload();
                         }
-                        else
+                        else if (App.cboApplyFor.value == 'S')
                         {
                             App.stoOM_KPISales_Invt.reload();
                         }
@@ -519,7 +574,7 @@ var stoLoad = function (sto) {
                 }
             }
         }
-     
+      
 };
 
 /////Store///////////////////////////////////////////////////////////////////
@@ -669,6 +724,111 @@ var stoKPISalesAllLoad = function (sto) {
     
 };
 
+var stoKPICustomerAllLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isGridChange(sto, keys6);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys6);
+        }
+
+    }
+    var value = App.cboStatus.getValue();
+    if (!HQ.isNew) {
+        if (value != null) {
+            if (value == 'C' || value == 'W' || value == 'D') {
+                App.dtefromday.setReadOnly(true);
+                App.dtetoday.setReadOnly(true);
+                App.cboStatus.setReadOnly(true);
+                App.cboType.setReadOnly(true);
+                App.cboApplyFor.setReadOnly(true);
+                App.cboApplyTo.setReadOnly(true);
+            }
+            if (value == 'H') {
+                App.dtefromday.setReadOnly(true);
+                App.dtetoday.setReadOnly(true);
+                App.cboApplyFor.setReadOnly(true);
+                App.cboApplyTo.setReadOnly(true);
+                App.cboType.setReadOnly(true);
+                App.cboStatus.setReadOnly(true);
+                App.menuClickbtnDelete.enable(true);
+            }
+        }
+    }
+
+};
+
+
+var stoKPICustomerClassLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isGridChange(sto, keys7);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys7);
+        }
+
+    }
+    var value = App.cboStatus.getValue();
+    if (!HQ.isNew) {
+        if (value != null) {
+            if (value == 'C' || value == 'W' || value == 'D') {
+                App.dtefromday.setReadOnly(true);
+                App.dtetoday.setReadOnly(true);
+                App.cboStatus.setReadOnly(true);
+                App.cboType.setReadOnly(true);
+                App.cboApplyFor.setReadOnly(true);
+                App.cboApplyTo.setReadOnly(true);
+            }
+            if (value == 'H') {
+                App.dtefromday.setReadOnly(true);
+                App.dtetoday.setReadOnly(true);
+                App.cboApplyFor.setReadOnly(true);
+                App.cboApplyTo.setReadOnly(true);
+                App.cboType.setReadOnly(true);
+                App.cboStatus.setReadOnly(true);
+                App.menuClickbtnDelete.enable(true);
+            }
+        }
+    }
+
+};
+
+var stoKPICustomerInvtLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isGridChange(sto, keys8);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys8);
+        }
+    }
+    var value = App.cboStatus.getValue();
+    if (!HQ.isNew) {
+        if (value != null) {
+            if (value == 'C' || value == 'W' || value == 'D') {
+                App.dtefromday.setReadOnly(true);
+                App.dtetoday.setReadOnly(true);
+                App.cboStatus.setReadOnly(true);
+                App.cboType.setReadOnly(true);
+                App.cboApplyFor.setReadOnly(true);
+                App.cboApplyTo.setReadOnly(true);
+            }
+            if (value == 'H') {
+                App.dtefromday.setReadOnly(true);
+                App.dtetoday.setReadOnly(true);
+                App.cboApplyFor.setReadOnly(true);
+                App.cboApplyTo.setReadOnly(true);
+                App.cboType.setReadOnly(true);
+                App.cboStatus.setReadOnly(true);
+                App.menuClickbtnDelete.enable(true);
+            }
+        }
+    }
+
+};
+
 var stoKPISalesClassLoad = function (sto) {
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isGridChange(sto, keys4);
@@ -806,6 +966,40 @@ var stoKPISalesAllChanged = function (sto) {
         App.cboTerritory.setReadOnly(false);
     }
 };
+
+var stoKPICustomerAllChanged = function (sto) {
+    HQ.isChange = HQ.store.isGridChange(sto, keys3);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+    if (HQ.isChange) {
+        App.cboCycleNbr.setReadOnly(true);
+        App.cboKPI.setReadOnly(true);
+        App.cboZone.setReadOnly(true);
+        App.cboTerritory.setReadOnly(true);
+    }
+    else {
+        App.cboCycleNbr.setReadOnly(false);
+        App.cboKPI.setReadOnly(false);
+        App.cboZone.setReadOnly(false);
+        App.cboTerritory.setReadOnly(false);
+    }
+};
+
+var stoKPICustomerClassChanged = function (sto) {
+    HQ.isChange = HQ.store.isGridChange(sto, keys7);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+    if (HQ.isChange) {
+        App.cboCycleNbr.setReadOnly(true);
+        App.cboKPI.setReadOnly(true);
+        App.cboZone.setReadOnly(true);
+        App.cboTerritory.setReadOnly(true);
+    }
+    else {
+        App.cboCycleNbr.setReadOnly(false);
+        App.cboKPI.setReadOnly(false);
+        App.cboZone.setReadOnly(false);
+        App.cboTerritory.setReadOnly(false);
+    }
+};
 var stoKPISalesClassChanged = function (sto) {
     HQ.isChange = HQ.store.isGridChange(sto, keys4);
     HQ.common.changeData(HQ.isChange, 'OM25100');
@@ -822,6 +1016,24 @@ var stoKPISalesClassChanged = function (sto) {
         App.cboTerritory.setReadOnly(false);
     }
 };
+var stoKPICustomerInvtChanged = function (sto) {
+    HQ.isChange = HQ.store.isGridChange(sto, keys8);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+    if (HQ.isChange) {
+        App.cboCycleNbr.setReadOnly(true);
+        App.cboKPI.setReadOnly(true);
+        App.cboZone.setReadOnly(true);
+        App.cboTerritory.setReadOnly(true);
+    }
+    else {
+        App.cboCycleNbr.setReadOnly(false);
+        App.cboKPI.setReadOnly(false);
+        App.cboZone.setReadOnly(false);
+        App.cboTerritory.setReadOnly(false);
+    }
+};
+
+
 var stoKPISalesInvtChanged = function (sto) {
     HQ.isChange = HQ.store.isGridChange(sto, keys5);
     HQ.common.changeData(HQ.isChange, 'OM25100');
@@ -908,6 +1120,9 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPISales_Invt.hide();
                 App.grdOM_KPISales_All.hide();
                 App.grdOM_KPISales_Class.hide();
+                App.grdOM_KPICustomer_Invt.hide();
+                App.grdOM_KPICustomer_Class.hide();
+                App.grdOM_KPICustomer_All.hide();
                 
             }else if (obj.data.ApplyFor == 'C'
                 && obj.data.ApplyTo == 'G') {
@@ -916,6 +1131,9 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPISales_Invt.hide();
                 App.grdOM_KPISales_All.hide();
                 App.grdOM_KPISales_Class.hide();
+                App.grdOM_KPICustomer_Invt.hide();
+                App.grdOM_KPICustomer_Class.hide();
+                App.grdOM_KPICustomer_All.hide();
                 App.grdOM_KPICpny_Class.show();
             }
             else if (obj.data.ApplyFor == 'C'
@@ -925,6 +1143,9 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPISales_All.hide();
                 App.grdOM_KPISales_Class.hide();
                 App.grdOM_KPISales_Invt.hide();
+                App.grdOM_KPICustomer_Invt.hide();
+                App.grdOM_KPICustomer_Class.hide();
+                App.grdOM_KPICustomer_All.hide();
                 App.grdOM_KPICpny_Invt.show();
             }
             else if (obj.data.ApplyFor == 'S'
@@ -934,6 +1155,9 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPICpny_Invt.hide();
                 App.grdOM_KPISales_Invt.hide();
                 App.grdOM_KPISales_Class.hide();
+                App.grdOM_KPICustomer_Invt.hide();
+                App.grdOM_KPICustomer_Class.hide();
+                App.grdOM_KPICustomer_All.hide();
                 App.grdOM_KPISales_All.show();
             }
             else if (obj.data.ApplyFor == 'S'
@@ -943,6 +1167,9 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPICpny_Invt.hide();
                 App.grdOM_KPISales_All.hide();
                 App.grdOM_KPISales_Invt.hide();
+                App.grdOM_KPICustomer_Invt.hide();
+                App.grdOM_KPICustomer_Class.hide();
+                App.grdOM_KPICustomer_All.hide();
                 App.grdOM_KPISales_Class.show();
             }
             else if (obj.data.ApplyFor == 'S'
@@ -952,7 +1179,46 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPICpny_Invt.hide();
                 App.grdOM_KPISales_Class.hide();
                 App.grdOM_KPISales_All.hide();
-                App.grdOM_KPISales_Invt.show();
+                App.grdOM_KPICustomer_Invt.hide();
+                App.grdOM_KPICustomer_Class.hide();
+                App.grdOM_KPICustomer_All.hide();
+               App.grdOM_KPISales_Invt.show();
+            }
+            else if (obj.data.ApplyFor == 'CUS'
+               && obj.data.ApplyTo == 'A') {
+                App.grdOM_KPICpny_Class.hide();
+                App.grdOM_KPICpny_All.hide();
+                App.grdOM_KPICpny_Invt.hide();
+                App.grdOM_KPISales_Class.hide();
+                App.grdOM_KPISales_All.hide();
+                App.grdOM_KPISales_Invt.hide();
+                App.grdOM_KPICustomer_Invt.hide();
+                App.grdOM_KPICustomer_Class.hide();
+                App.grdOM_KPICustomer_All.show();
+            }
+            else if (obj.data.ApplyFor == 'CUS'
+                && obj.data.ApplyTo == 'G') {
+                App.grdOM_KPICpny_Class.hide();
+                App.grdOM_KPICpny_All.hide();
+                App.grdOM_KPICpny_Invt.hide();
+                App.grdOM_KPISales_Class.hide();
+                App.grdOM_KPISales_All.hide();
+                App.grdOM_KPISales_Invt.hide();
+                App.grdOM_KPICustomer_All.hide();
+                App.grdOM_KPICustomer_Invt.hide();
+                App.grdOM_KPICustomer_Class.show();
+            }
+            else if (obj.data.ApplyFor == 'CUS'
+                && obj.data.ApplyTo == 'I') {
+                App.grdOM_KPICpny_Class.hide();
+                App.grdOM_KPICpny_All.hide();
+                App.grdOM_KPICpny_Invt.hide();
+                App.grdOM_KPISales_Class.hide();
+                App.grdOM_KPISales_All.hide();
+               App.grdOM_KPISales_Invt.hide();
+                App.grdOM_KPICustomer_Class.hide();
+                App.grdOM_KPICustomer_All.hide();
+                App.grdOM_KPICustomer_Invt.show();
             }
 
         }
@@ -963,6 +1229,9 @@ var cboKPI_Change = function (sender, value) {
         App.stoOM_KPISales_All.addListener('load', checkStoLoad);
         App.stoOM_KPISales_Class.addListener('load', checkStoLoad);
         App.stoOM_KPISales_Invt.addListener('load', checkStoLoad);
+        App.stoOM_KPICustomer_All.addListener('load', checkStoLoad);
+        App.stoOM_KPICustomer_Class.addListener('load', checkStoLoad);
+        App.stoOM_KPICustomer_Invt.addListener('load', checkStoLoad);
     }
 };
 var cboStatus_Change = function (sender, newValue, oldValue) {
@@ -1005,6 +1274,30 @@ var cboBranchIDAll_Select = function (sender, value) {
     }
 };
 
+var cboBranchIDCustAll_Change = function (sender, value) {
+    if (sender.valueModels && sender.valueModels[0]) {
+        _branchID = value;
+        App.cboSlsperIdCust.getStore().reload();
+        App.cboCustId.getStore().reload();
+    } else {
+        _branchID = '';
+        App.cboSlsperIdCust.getStore().reload();
+        App.cboCustId.getStore().reload();
+    }
+};
+var cboBranchIDCustAll_Select = function (sender, value) {
+    if (!App.cboSlsperIdCust.getStore().loading) {
+        if (sender.valueModels && sender.valueModels[0]) {
+            _branchID = sender.valueModels[0].data.BranchID;
+        } else {
+            _branchID = '';
+        }
+        App.cboSlsperIdCust.getStore().reload();
+        App.cboCustId.getStore().reload();
+    }
+};
+
+
 var cboBranchIDClass_Change = function (sender, value) {
     if (sender.valueModels && sender.valueModels[0]) {
         _branchID = value;
@@ -1022,6 +1315,52 @@ var cboBranchIDClass_Select = function (sender, value) {
             _branchID = '';
         }
         App.cboSlsperIdClass.getStore().reload();
+    }
+};
+
+var cboBranchIDClassCust_Change = function (sender, value) {
+    if (sender.valueModels && sender.valueModels[0]) {
+        _branchID = value;
+        App.cboSlsperIdClassCust.getStore().reload();
+        App.cboCustIdClass.getStore().reload();
+    } else {
+        _branchID = '';
+        App.cboSlsperIdClassCust.getStore().reload();
+        App.cboCustIdClass.getStore().reload();
+    }
+};
+var cboBranchIDClassCust_Select = function (sender, value) {
+    if (!App.cboSlsperIdClassCust.getStore().loading) {
+        if (sender.valueModels && sender.valueModels[0]) {
+            _branchID = sender.valueModels[0].data.BranchID;
+        } else {
+            _branchID = '';
+        }
+        App.cboSlsperIdClassCust.getStore().reload();
+        App.cboCustIdClass.getStore().reload();
+    }
+};
+
+var cboBranchIDInvtCust_Change = function (sender, value) {
+    if (sender.valueModels && sender.valueModels[0]) {
+        _branchID = value;
+        App.cboSlsperIdInvtCust.getStore().reload();
+        App.cboCustIdInvt.getStore().reload();
+    } else {
+        _branchID = '';
+        App.cboSlsperIdInvtCust.getStore().reload();
+        App.cboCustIdInvt.getStore().reload();
+    }
+};
+var cboBranchIDInvtCust_Select = function (sender, value) {
+    if (!App.cboSlsperIdInvtCust.getStore().loading) {
+        if (sender.valueModels && sender.valueModels[0]) {
+            _branchID = sender.valueModels[0].data.BranchID;
+        } else {
+            _branchID = '';
+        }
+        App.cboSlsperIdInvtCust.getStore().reload();
+        App.cboCustIdInvt.getStore().reload();
     }
 };
 
@@ -1062,7 +1401,10 @@ var save = function () {
                 stoOM_KPICpny_Invt: HQ.store.getData(App.stoOM_KPICpny_Invt),
                 stoOM_KPISales_All: HQ.store.getData(App.stoOM_KPISales_All),
                 stoOM_KPISales_Class: HQ.store.getData(App.stoOM_KPISales_Class),
-                stoOM_KPISales_Invt: HQ.store.getData(App.stoOM_KPISales_Invt)
+                stoOM_KPISales_Invt: HQ.store.getData(App.stoOM_KPISales_Invt),
+                stoOM_KPICustomer_All: HQ.store.getData(App.stoOM_KPICustomer_All),
+                stoOM_KPICustomer_Class: HQ.store.getData(App.stoOM_KPICustomer_Class),
+                 stoOM_KPICustomer_Invt: HQ.store.getData(App.stoOM_KPICustomer_Invt)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
@@ -1176,6 +1518,31 @@ var deleteData_Grid5 = function (item) {
         HQ.common.changeData(HQ.isChange, 'OM25100');
     }
 };
+var deleteData_Grid6 = function (item) {
+    if (item == "yes") {
+        //HQ.isChange = true;
+        App.grdOM_KPICustomer_All.deleteSelected();
+        HQ.isChange = HQ.store.isGridChange(App.grdOM_KPICustomer_All.store, keys6);
+        HQ.common.changeData(HQ.isChange, 'OM25100');
+    }
+};
+var deleteData_Grid7 = function (item) {
+    if (item == "yes") {
+        //HQ.isChange = true;
+        App.grdOM_KPICustomer_Class.deleteSelected();
+        HQ.isChange = HQ.store.isGridChange(App.grdOM_KPICustomer_Class.store, keys7);
+        HQ.common.changeData(HQ.isChange, 'OM25100');
+    }
+};
+var deleteData_Grid8 = function (item) {
+    if (item == "yes") {
+        //HQ.isChange = true;
+        App.grdOM_KPICustomer_Invt.deleteSelected();
+        HQ.isChange = HQ.store.isGridChange(App.grdOM_KPICustomer_Invt.store, keys8);
+        HQ.common.changeData(HQ.isChange, 'OM25100');
+    }
+};
+
 //grd OM_KPICpny_All/////////////////////////////////////
 var grdKPICpnyAll_BeforeEdit = function (editor, e) {
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
@@ -1371,6 +1738,85 @@ var grdKPISalesAll_ValidateEdit = function (item, e) {
 var grdKPISalesAll_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdOM_KPISales_All);
 };
+
+var grdKPISalesAll_BeforeEdit = function (editor, e) {
+    if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
+        return false;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys3);
+    }
+    if (App.cboStatus.getValue() == 'C' || App.cboStatus.getValue() == 'E') {
+        return false;
+    }
+    if (HQ.isUpdate == false && HQ.isInsert == false) {
+        return false;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys3);
+    }
+    //return HQ.grid.checkBeforeEdit(e, keys3);
+
+};
+
+var grdOM_KPICustomer_All_Edit = function (item, e) {
+    HQ.isChange = true;
+    if (e.field == 'BranchID') {
+        //Ten combo + ten proceduce --> lay duoc data cua combo do-->hien Descr khi chon combo
+        var obj = HQ.store.findRecord(App.cboCpnyIDCustomerAll.store, ["CpnyID"], [e.value]);  //  App.cboCpnyIDOM25100_pcBranchID.findRecord('CpnyID', e.value);
+        if (obj) {
+            e.record.set('CpnyName', obj.data.CpnyName);
+        }
+    }
+    if (e.field == 'SlsperId') {
+        //Ten combo + ten proceduce --> lay duoc data cua combo do-->hien Descr khi chon combo
+        var obj = HQ.store.findRecord(App.cboSlsperIdCust.store, ["SlsperId"], [e.value]);  //App.cboSlsperIdOM25100_pcSlsperId.findRecord('SlsperId', e.value);
+        if (obj) {
+            e.record.set('SlsperName', obj.data.Name);
+        }
+    }
+    if (e.field == 'CustID') {
+        //Ten combo + ten proceduce --> lay duoc data cua combo do-->hien Descr khi chon combo
+        var obj = HQ.store.findRecord(App.cboCustId.store, ["CustId"], [e.value]);  //App.cboCustIdOM25100_pcCustId.findRecord('CustId', e.value);
+        if (obj) {
+            e.record.set('CustName', obj.data.CustName);
+        }
+    }
+    HQ.grid.checkInsertKey(App.grdOM_KPISales_All, e, keys6);
+    HQ.isChange = HQ.store.isGridChange(App.grdOM_KPISales_All.store, keys6);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+};
+
+var grdOM_KPICustomer_All_ValidateEdit = function (item, e) {
+    if (e.record.data.BranchID && e.record.data.BranchID != "") {
+        return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_All, e, keys6);
+    }
+    
+};
+
+
+var grdOM_KPICustomer_All_BeforeEdit = function (editor, e) {
+    if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
+        return false;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys6);
+    }
+    if (App.cboStatus.getValue() == 'C' || App.cboStatus.getValue() == 'E') {
+        return false;
+    }
+    if (HQ.isUpdate == false && HQ.isInsert == false) {
+        return false;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys6);
+    }
+   
+
+};
+var grdKPICustomerAll_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_KPICustomer_All);
+};
 //grd OM_KPISales_Class/////////////////////////////////////
 var grdKPISalesClass_BeforeEdit = function (editor, e) {
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
@@ -1422,9 +1868,125 @@ var grdKPISalesClass_ValidateEdit = function (item, e) {
     }
     //return HQ.grid.checkValidateEdit(App.grdOM_KPISales_Class, e, keys4);
 };
+//grd OM_KPICustomer_Class/////////////////////////////////////
+var grdKPICustomerClass_BeforeEdit = function (editor, e) {
+    if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
+        return false;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys7);
+    }
+    if (App.cboStatus.getValue() == 'C' || App.cboStatus.getValue() == 'E') {
+        return false;
+    }
+    if (HQ.isUpdate == false && HQ.isInsert == false) {
+        return false;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys7);
+    }
+};
+
+var grdKPICustomerClass_Edit = function (item, e) {
+    HQ.isChange = true;
+    if (e.field == 'BranchID') {
+        //Ten combo + ten proceduce --> lay duoc data cua combo do-->hien Descr khi chon combo
+        var obj = HQ.store.findRecord(App.cboCpnyIDCustomerClass.store, ["CpnyID"], [e.value]);  //  App.cboCpnyIDOM25100_pcBranchID.findRecord('CpnyID', e.value);
+        if (obj) {
+            e.record.set('CpnyName', obj.data.CpnyName);
+        }
+    }
+    if (e.field == 'SlsperId') {
+        //Ten combo + ten proceduce --> lay duoc data cua combo do-->hien Descr khi chon combo
+        var obj = HQ.store.findRecord(App.cboSlsperIdClassCust.store, ["SlsperId"], [e.value]);  //App.cboSlsperIdOM25100_pcSlsperId.findRecord('SlsperId', e.value);
+        if (obj) {
+            e.record.set('SlsperName', obj.data.Name);
+        }
+    }
+    if (e.field == 'CustID') {
+        //Ten combo + ten proceduce --> lay duoc data cua combo do-->hien Descr khi chon combo
+        var obj = HQ.store.findRecord(App.cboCustIdClass.store, ["CustId"], [e.value]);  //App.cboCustIdOM25100_pcCustId.findRecord('CustId', e.value);
+        if (obj) {
+            e.record.set('CustName', obj.data.CustName);
+        }
+    }
+    HQ.grid.checkInsertKey(App.grdOM_KPICustomer_Class, e, keys7);
+    HQ.isChange = HQ.store.isGridChange(App.grdOM_KPICustomer_Class.store, keys7);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+};
+
+var grdKPICustomerClass_ValidateEdit = function (item, e) {
+    if (e.record.data.BranchID && e.record.data.BranchID != "") {
+        return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Class, e, keys7);
+    }
+    //return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Class, e, keys7);
+};
 
 var grdKPISalesClass_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdOM_KPISales_Class);
+};
+var grdKPICustomerClass_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_KPICustomer_Class);
+};
+
+//grd OM_KPICustomer_Invt/////////////////////////////////////
+var grdKPICustomerInvt_BeforeEdit = function (editor, e) {
+    if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
+        return false;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys8);
+    }
+    if (App.cboStatus.getValue() == 'C' || App.cboStatus.getValue() == 'E') {
+        return false;
+    }
+    if (HQ.isUpdate == false && HQ.isInsert == false) {
+        return false;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys8);
+    }
+    //return HQ.grid.checkBeforeEdit(e, keys5);
+
+};
+
+var grdKPICustomerInvt_Edit = function (item, e) {
+    HQ.isChange = true;
+    if (e.field == 'BranchID') {
+        //Ten combo + ten proceduce --> lay duoc data cua combo do-->hien Descr khi chon combo
+        var obj = HQ.store.findRecord(App.cboCpnyIDCustomerinvt.store, ["CpnyID"], [e.value]);  //  App.cboCpnyIDOM25100_pcBranchID.findRecord('CpnyID', e.value);
+        if (obj) {
+            e.record.set('CpnyName', obj.data.CpnyName);
+        }
+    }
+    if (e.field == 'SlsperId') {
+        //Ten combo + ten proceduce --> lay duoc data cua combo do-->hien Descr khi chon combo
+        var obj = HQ.store.findRecord(App.cboSlsperIdInvtCust.store, ["SlsperId"], [e.value]);  //App.cboSlsperIdOM25100_pcSlsperId.findRecord('SlsperId', e.value);
+        if (obj) {
+            e.record.set('SlsperName', obj.data.Name);
+        }
+    }
+    if (e.field == 'CustID') {
+        //Ten combo + ten proceduce --> lay duoc data cua combo do-->hien Descr khi chon combo
+        var obj = HQ.store.findRecord(App.cboCustIdInvt.store, ["CustId"], [e.value]);  //App.cboCustIdOM25100_pcCustId.findRecord('CustId', e.value);
+        if (obj) {
+            e.record.set('CustName', obj.data.CustName);
+        }
+    }
+    HQ.grid.checkInsertKey(App.grdOM_KPICustomer_Invt, e, keys5);
+    HQ.isChange = HQ.store.isGridChange(App.grdOM_KPICustomer_Invt.store, keys5);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+};
+
+var grdKPICustomerinvt_ValidateEdit = function (item, e) {
+    if (e.record.data.BranchID && e.record.data.BranchID != "") {
+        return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Invt, e, keys5);
+    }
+    //return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Invt, e, keys5);
+};
+
+var grdKPICustomerInvt_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_KPICustomer_Invt);
 };
 //grd OM_KPISales_Invt/////////////////////////////////////
 var grdKPISalesInvt_BeforeEdit = function (editor, e) {
@@ -1494,6 +2056,9 @@ var btnLoad_click = function (btn, e, eOpts) {
     App.cboCpnyIDSalesAll.store.reload();
     App.cboCpnyIDSalesClass.store.reload();
     App.cboCpnyIDSalesinvt.store.reload();
+    App.cboCpnyIDCustomerAll.store.reload();
+    App.cboCpnyIDCustomerClass.store.reload();
+    App.cboCpnyIDCustomerinvt.store.reload();
    
     if (App.cboStatus.value == 'H')
     {
@@ -1503,6 +2068,9 @@ var btnLoad_click = function (btn, e, eOpts) {
         App.stoOM_KPISales_All.addListener('load', checkStoLoad);
         App.stoOM_KPISales_Class.addListener('load', checkStoLoad);
         App.stoOM_KPISales_Invt.addListener('load', checkStoLoad);
+        App.stoOM_KPICustomer_All.addListener('load', checkStoLoad);
+        App.stoOM_KPICustomer_Class.addListener('load', checkStoLoad);
+        App.stoOM_KPICustomer_Invt.addListener('load', checkStoLoad);
     }
 }
 var renderClassName = function (value, metaData, record, row, col, store, gridView)

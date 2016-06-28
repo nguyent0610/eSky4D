@@ -729,7 +729,7 @@
                                     lst.Activate.Handler = "HQ.focus = 'grdOM_KPISales_All';";
                                 })
  ////////////////////////////////////////////////////////////////Tab grd OM_KPISales_Class///////////////////////////////////////  
-                    , X.GridPanel().ID("grdOM_KPISales_Class")
+                      , X.GridPanel().ID("grdOM_KPISales_Class")
                             .Region(Region.Center)
                             .Scroll(ScrollMode.Both).Hidden(true)
                             .View(X.GridView().TrackOver(false))
@@ -892,7 +892,7 @@
                                     lst.Activate.Handler = "HQ.focus = 'grdOM_KPISales_Class';";
                                 })
 ////////////////////////////////////////////////////////////////Tab grd OM_KPISales_Invt/////////////////////////////////////// 
-             , X.GridPanel().ID("grdOM_KPISales_Invt")
+                                , X.GridPanel().ID("grdOM_KPISales_Invt")
                                 .Region(Region.Center)
                                 .Scroll(ScrollMode.Both).Hidden(true)
                                 .View(X.GridView().TrackOver(false))
@@ -1054,6 +1054,551 @@
                                     {
                                         lst.Render.Handler = "HQ.common.control_render(this,'grdOM_KPISales_Invt')";
                                         lst.Activate.Handler = "HQ.focus = 'grdOM_KPISales_Invt';";
+                                    })                     
+//end                
+
+                    , X.GridPanel().ID("grdOM_KPICustomer_All")
+                            .Region(Region.Center)
+                            .Scroll(ScrollMode.Both).Hidden(true)
+                            .View(X.GridView().TrackOver(false))
+                            .Height(300)
+                            .Weight(900)
+                            .Store(
+                                X.Store()
+                                .ID("stoOM_KPICustomer_All")
+                                .PageSize(50)
+                                .Model(Util.GenerateModel(typeof(OM25100_pgKPICustomer_All_Result), "mdlOM25100_pgKPICustomer_All", ""))
+                                .Parameters(ps =>
+                                {
+                                    ps.Add(new StoreParameter("CycleNbr", "App.cboCycleNbr.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+
+                                })
+                                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPICustomer_All"))).AutoLoad(false)
+                                .Listeners(l =>
+                                {
+                                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                                    l.Load.Fn = "stoKPICustomerAllLoad";
+                                    l.Update.Fn = "stoKPICustomerAllChanged";
+                                })
+                                )
+                                .SortableColumns(false)
+                                .ColumnModel(
+                                X.RowNumbererColumn().Width(40)
+                                    , X.Column().ID("CpnyIDCustomerAll").Text(Util.GetLang("BranchID")).DataIndex("BranchID")
+                                    .Editor(
+                                        HQ.Combo().ID("cboCpnyIDCustomerAll").Name("cboCpnyIDCustomerAll").HQProcedure("OM25100_pcBranchID").HQAutoLoad(true)
+                                        .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
+                                        .Width(500).HQHeightWidth(500, 400)
+                                        .HQParam(new StoreParameterCollection() 
+                                        {
+                                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                        })
+                                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                        .LoadData()
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .Listeners(lst =>
+                                        {
+                                            lst.Change.Fn = "cboBranchIDCustAll_Change";
+                                            lst.Select.Fn = "cboBranchIDCustAll_Select";
+                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        })
+                                        )
+
+                                      
+                               , X.Column().ID("SlsperIdCust").Text(Util.GetLang("SlsperId")).DataIndex("SlsperId")
+                                    .Editor(
+                                            HQ.Combo().ID("cboSlsperIdCust").Name("cboSlsperIdCust").HQProcedure("OM25100_pcSlsperId").HQAutoLoad(true)
+                                            .HQColumnShow("SlsperId,Name,Position").DisplayField("SlsperId").ValueField("SlsperId")
+                                            .Width(500).HQHeightWidth(500, 400)
+                                            .HQParam(new StoreParameterCollection() 
+                                        {
+                                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                        })
+                                            .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                            .LoadData()
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .Listeners(lst =>
+                                            {
+                                               
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            })
+                                        )
+
+                                , X.Column().Text(Util.GetLang("Name")).DataIndex("SlsperName").Width(300).AutoFocus(true)
+
+                               // , X.Column().Text(Util.GetLang("Position")).DataIndex("PosDesc").Width(200).AutoFocus(true)
+                               , X.Column().ID("CustID").Text(Util.GetLang("CustID")).DataIndex("CustID")
+                                    .Editor(
+                                            HQ.Combo().ID("cboCustId").Name("cboCustId").HQProcedure("OM25100_pcCustId").HQAutoLoad(true)
+                                            .HQColumnShow("CustId,CustName").DisplayField("CustId").ValueField("CustId")
+                                            .Width(500).HQHeightWidth(500, 400)
+                                            .HQParam(new StoreParameterCollection() 
+                                        {
+                                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                        })
+                                            .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                            .LoadData()
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .Listeners(lst =>
+                                            {
+                                               
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            })
+                                        )
+                                        
+                                , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(300).AutoFocus(true)
+                                
+                               
+                                , X.NumberColumn().ID("TargetSalesAllCust").Text(Util.GetLang("Target")).DataIndex("Target").Width(100)
+                                .Align(Alignment.Right)
+                                .Editor(X.NumberField().DecimalPrecision(2).MinValue(0))
+
+                                , X.CommandColumn()
+                                .Width(150)
+                                .Commands(
+                                    X.GridCommand()
+                                    .Text(Util.GetLang("Reject"))
+                                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                    .CommandName("reject")
+                                    .Icon(Icon.ArrowUndo)
+                                )
+                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                .Listeners(l => l.Command.Handler = "grdKPICustomerAll_Reject(record);")
+                                                    )
+                                .SelectionModel(X.RowSelectionModel().ID("slmgrdOMKPICustomer_All").Mode(SelectionMode.Multi))
+                                .BottomBar(
+                                    X.PagingToolbar()
+                                    .Items(
+                                        X.Label("Page size:"),
+                                        X.ToolbarSpacer(10),
+                                        X.ComboBox()
+                                        .Width(80)
+                                        .Items("1", "2", "10", "20", "30", "50")
+                                        .SelectedItems("50")
+                                        .Listeners(l =>
+                                            {
+                                                l.Select.Fn = "HQ.grid.onPageSelect";
+                                            })
+                                    )
+                                    .Plugins(X.ProgressBarPager())
+                                )
+                                .Plugins(
+                                    X.CellEditing()
+                                    .ClicksToEdit(1)
+                                    .Listeners(ls =>
+                                    {
+                                        ls.BeforeEdit.Fn = "grdOM_KPICustomer_All_BeforeEdit";
+                                        ls.Edit.Fn = "grdOM_KPICustomer_All_Edit";
+                                        ls.ValidateEdit.Fn = "grdOM_KPICustomer_All_ValidateEdit";
+                                    })
+                                )
+                                .Features(
+                                    X.GridFilters()
+                                        .Local(true)
+                                        .Filters(
+
+                                            X.StringFilter().DataIndex("BranchID"),
+                                            X.StringFilter().DataIndex("CpnyName"),
+                                            X.StringFilter().DataIndex("SlsperId"),
+                                            X.StringFilter().DataIndex("SlsperName"),
+                                            X.StringFilter().DataIndex("PosDesc"),
+                                            X.NumericFilter().DataIndex("Target")
+                                        )
+                                )
+                                .Listeners(lst =>
+                                {
+                                    lst.Render.Handler = "HQ.common.control_render(this,'grdOM_KPICustomer_All')";
+                                    lst.Activate.Handler = "HQ.focus = 'grdOM_KPICustomer_All';";
+                                })
+                                //end grdOM_KPICustomer_All
+
+ ////////////////////////////////////////////////////////////////Tab grd OM_KPICustomer_Class///////////////////////////////////////  
+                      , X.GridPanel().ID("grdOM_KPICustomer_Class")
+                            .Region(Region.Center)
+                            .Scroll(ScrollMode.Both).Hidden(true)
+                            .View(X.GridView().TrackOver(false))
+                            .Height(300)
+                            .Weight(900)
+                            .Store(
+                                    X.Store()
+                                    .ID("stoOM_KPICustomer_Class")
+                                    .PageSize(50)
+                                    .Model(Util.GenerateModel(typeof(OM25100_pgKPICustomer_Class_Result), "mdlOM25100_pgKPICustomer_Class", ""))
+                                    .Parameters(ps =>
+                                    {
+                                        ps.Add(new StoreParameter("CycleNbr", "App.cboCycleNbr.getValue()", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+
+                                    })
+                                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPICustomer_Class"))).AutoLoad(false)
+                                    .Listeners(l =>
+                                    {
+                                        l.BeforeLoad.Fn = "stoBeforeLoad";
+                                        l.Load.Fn = "stoKPICustomerClassLoad";
+                                        l.Update.Fn = "stoKPICustomerClassChanged";
+                                    })
+                                )
+                                .SortableColumns(false)
+                                .ColumnModel(
+                                X.RowNumbererColumn().Width(40)
+                                , X.Column().ID("CpnyIDCustomerClass").Text(Util.GetLang("BranchID")).DataIndex("BranchID")
+                                    .Editor(
+                                            HQ.Combo().ID("cboCpnyIDCustomerClass").Name("cboCpnyIDCustomerClass").HQProcedure("OM25100_pcBranchID").HQAutoLoad(true)
+                                            .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
+                                            .Width(500).HQHeightWidth(500, 400)
+                                            .HQParam(new StoreParameterCollection() 
+                                        {
+                                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                        })
+                                            .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                            .LoadData()
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .Listeners(lst =>
+                                            {
+                                                lst.Change.Fn = "cboBranchIDClassCust_Change";
+                                                lst.Select.Fn = "cboBranchIDClassCust_Select";
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            })
+                                        )
+
+                                , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(200).AutoFocus(true)
+                                
+                                 
+
+                                , X.Column().ID("SlsperIdClassCust").Text(Util.GetLang("SlsperId")).DataIndex("SlsperId")
+                                    .Editor(
+                                            HQ.Combo().ID("cboSlsperIdClassCust").Name("cboSlsperIdClassCust").HQProcedure("OM25100_pcSlsperId").HQAutoLoad(true)
+                                            .HQColumnShow("SlsperId,Name,Position").DisplayField("SlsperId").ValueField("SlsperId")
+                                            .Width(500).HQHeightWidth(500, 400)
+                                            .HQParam(new StoreParameterCollection() 
+                                        {
+                                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                        })
+                                            .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                            .LoadData()
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .Listeners(lst =>
+                                            {
+                                                
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            })
+                                        )
+
+                                , X.Column().Text(Util.GetLang("Name")).DataIndex("SlsperName").Width(200).AutoFocus(true)
+
+                             //   , X.Column().Text(Util.GetLang("Position")).DataIndex("PosDesc").Width(200).AutoFocus(true)
+
+                                 , X.Column().ID("CustIDClass").Text(Util.GetLang("CustID")).DataIndex("CustID")
+                                    .Editor(
+                                            HQ.Combo().ID("cboCustIdClass").Name("cboCustIdClass").HQProcedure("OM25100_pcCustId").HQAutoLoad(true)
+                                            .HQColumnShow("CustId,CustName").DisplayField("CustId").ValueField("CustId")
+                                            .Width(500).HQHeightWidth(500, 400)
+                                            .HQParam(new StoreParameterCollection() 
+                                        {
+                                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                        })
+                                            .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                            .LoadData()
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .Listeners(lst =>
+                                            {
+                                               
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            })
+                                        )
+                                        
+                                , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(300).AutoFocus(true)
+                                    
+                             
+                                , X.Column().ID("SalesClassIDCust").Text(Util.GetLang("ListProdType")).DataIndex("ClassID").Renderer("renderClassName")
+                                    .Editor(
+                                            HQ.Combo().ID("cboSalesClassIDCust").Name("cboSalesClassIDCust").HQProcedure("OM25100_pcClassID").HQAutoLoad(true)
+                                            .HQColumnShow("ClassID,Descr").DisplayField("Descr").ValueField("ClassID").DataIndex("ClassID")
+                                            .Width(500).HQHeightWidth(500, 400)
+                                            .HQParam(new StoreParameterCollection() 
+                                        {
+                                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                        })
+                                            .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                            .LoadData()
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .Listeners(lst =>
+                                            {
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            })
+                                        )
+
+                                , X.NumberColumn().ID("TargetSalesClassCust").Text(Util.GetLang("Target")).DataIndex("Target").Width(100)
+                                .Align(Alignment.Right)
+                                .Editor(X.NumberField().DecimalPrecision(2).MinValue(0))
+
+                                , X.CommandColumn()
+                                .Width(150)
+                                .Commands(
+                                    X.GridCommand()
+                                    .Text(Util.GetLang("Reject"))
+                                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                    .CommandName("reject")
+                                    .Icon(Icon.ArrowUndo)
+                                )
+                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                .Listeners(l => l.Command.Handler = "grdKPICustomerClass_Reject(record);")
+                                                    )
+                                .SelectionModel(X.RowSelectionModel().ID("slmgrdOMKPICustomer_Class").Mode(SelectionMode.Multi))
+                                .BottomBar(
+                                    X.PagingToolbar()
+                                    .Items(
+                                        X.Label("Page size:"),
+                                        X.ToolbarSpacer(10),
+                                        X.ComboBox()
+                                        .Width(80)
+                                        .Items("1", "2", "10", "20", "30", "50")
+                                        .SelectedItems("50")
+                                        .Listeners(l =>
+                                            {
+                                                l.Select.Fn = "HQ.grid.onPageSelect";
+                                            })
+                                    )
+                                    .Plugins(X.ProgressBarPager())
+                                )
+                                .Plugins(
+                                    X.CellEditing()
+                                    .ClicksToEdit(1)
+                                    .Listeners(ls =>
+                                    {
+                                        ls.BeforeEdit.Fn = "grdKPICustomerClass_BeforeEdit";
+                                        ls.Edit.Fn = "grdKPICustomerClass_Edit";                                       
+                                        ls.ValidateEdit.Fn = "grdKPICustomerClass_ValidateEdit";                                       
+                                    })
+                                )
+                                .Features(
+                                    X.GridFilters()
+                                        .Local(true)
+                                        .Filters(
+
+                                            X.StringFilter().DataIndex("BranchID"),
+                                            X.StringFilter().DataIndex("CpnyName"),
+                                            X.StringFilter().DataIndex("SlsperId"),
+                                            X.StringFilter().DataIndex("SlsperName"),
+                                            X.StringFilter().DataIndex("PosDesc"),
+                                            X.StringFilter().DataIndex("ClassID"),
+                                            X.NumericFilter().DataIndex("Target")
+                                        )
+                                )
+                                .Listeners(lst =>
+                                {
+                                    lst.Render.Handler = "HQ.common.control_render(this,'grdOM_KPICustomer_Class')";
+                                    lst.Activate.Handler = "HQ.focus = 'grdOM_KPICustomer_Class';";
+                                })
+////////////////////////////////////////////////////////////////Tab grd OM_KPICustomer_Invt/////////////////////////////////////// 
+                                , X.GridPanel().ID("grdOM_KPICustomer_Invt")
+                                .Region(Region.Center)
+                                .Scroll(ScrollMode.Both).Hidden(true)
+                                .View(X.GridView().TrackOver(false))
+                                .Height(300)
+                                .Weight(900)
+                                .Store(
+                                    X.Store()
+                                    .ID("stoOM_KPICustomer_Invt")
+                                    .PageSize(50)
+                                    .Model(Util.GenerateModel(typeof(OM25100_pgKPICustomer_Invt_Result), "mdlOM25100_pgKPICustomer_Invt_Class", ""))
+                                    .Parameters(ps =>
+                                    {
+                                        ps.Add(new StoreParameter("CycleNbr", "App.cboCycleNbr.getValue()", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+
+                                    })
+                                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPICustomer_Invt"))).AutoLoad(false)
+                                    .Listeners(l =>
+                                    {
+                                        l.BeforeLoad.Fn = "stoBeforeLoad";
+                                        l.Load.Fn = "stoKPICustomerInvtLoad";
+                                        l.Update.Fn = "stoKPICustomerInvtChanged";
+                                    })
+                                    )
+                                    .SortableColumns(false)
+                                    .ColumnModel(
+                                    X.RowNumbererColumn().Width(40)
+                                        , X.Column().ID("CpnyIDCustomerInvt").Text(Util.GetLang("BranchID")).DataIndex("BranchID")
+                                        .Editor(
+                                                HQ.Combo().ID("cboCpnyIDCustomerinvt").Name("cboCpnyIDCustomerinvt").HQProcedure("OM25100_pcBranchID").HQAutoLoad(true)
+                                                .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
+                                                .Width(500).HQHeightWidth(500, 400)
+                                                .HQParam(new StoreParameterCollection() 
+                                            {
+                                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                            })
+                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                                .LoadData()
+                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                .Listeners(lst =>
+                                                {
+                                                    lst.Change.Fn = "cboBranchIDInvtCust_Change";
+                                                    lst.Select.Fn = "cboBranchIDInvtCust_Select";
+                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                })
+                                            )
+
+                                    , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(200).AutoFocus(true)
+                                    
+                                    , X.Column().ID("SlsperIdInvtCust").Text(Util.GetLang("SlsperId")).DataIndex("SlsperId")
+                                        .Editor(
+                                                HQ.Combo().ID("cboSlsperIdInvtCust").Name("cboSlsperIdInvtCust").HQProcedure("OM25100_pcSlsperId").HQAutoLoad(true)
+                                                .HQColumnShow("SlsperId,Name,Position").DisplayField("SlsperId").ValueField("SlsperId")
+                                                .Width(500).HQHeightWidth(500, 400)
+                                                .HQParam(new StoreParameterCollection() 
+                                            {
+                                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                            })
+                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                                .LoadData()
+                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                .Listeners(lst =>
+                                                {
+                                                   
+                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                })
+                                            )
+
+                                    , X.Column().Text(Util.GetLang("Name")).DataIndex("SlsperName").Width(200).AutoFocus(true)
+
+                                    
+                                    //, X.Column().Text(Util.GetLang("Position")).DataIndex("PosDesc").Width(200).AutoFocus(true) 
+                                        
+                                             , X.Column().ID("CustIDInvt").Text(Util.GetLang("CustID")).DataIndex("CustID")
+                                    .Editor(
+                                            HQ.Combo().ID("cboCustIdInvt").Name("cboCustIdInvt").HQProcedure("OM25100_pcCustId").HQAutoLoad(true)
+                                            .HQColumnShow("CustId,CustName").DisplayField("CustId").ValueField("CustId")
+                                            .Width(500).HQHeightWidth(500, 400)
+                                            .HQParam(new StoreParameterCollection() 
+                                        {
+                                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                        })
+                                            .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                            .LoadData()
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                            .Listeners(lst =>
+                                            {
+                                               
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            })
+                                        )
+                                        
+                                , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(300).AutoFocus(true)
+                                        
+                          
+
+                                    , X.Column().ID("CustomerInvtID").Text(Util.GetLang("PRODUCT")).DataIndex("InvtID").Renderer("renderInvtName")
+                                        .Editor(
+                                                HQ.Combo().ID("cboCustomerInvtID").Name("cboCustomerInvtID").HQProcedure("OM25100_pcInvtID").HQAutoLoad(true)
+                                                .HQColumnShow("InvtID,Descr").DisplayField("Descr").ValueField("InvtID")
+                                                .Width(500).HQHeightWidth(500, 400)
+                                                .HQParam(new StoreParameterCollection() 
+                                                {
+                                                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                })
+                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                                .LoadData()
+                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                .Listeners(lst =>
+                                                {
+                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                })
+                                            )
+
+                                    , X.NumberColumn().ID("TargetCustomerInvt").Text(Util.GetLang("Target")).DataIndex("Target").Width(100)
+                                    .Align(Alignment.Right)
+                                    .Editor(X.NumberField().DecimalPrecision(2).MinValue(0))
+
+                                    , X.CommandColumn()
+                                    .Width(150)
+                                    .Commands(
+                                        X.GridCommand()
+                                        .Text(Util.GetLang("Reject"))
+                                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                        .CommandName("reject")
+                                        .Icon(Icon.ArrowUndo)
+                                    )
+                                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                    .Listeners(l => l.Command.Handler = " (record);")
+                                                        )
+                                    .SelectionModel(X.RowSelectionModel().ID("slmgrdOMKPICustomer_Invt").Mode(SelectionMode.Multi))
+                                    .BottomBar(
+                                        X.PagingToolbar()
+                                        .Items(
+                                            X.Label("Page size:"),
+                                            X.ToolbarSpacer(10),
+                                            X.ComboBox()
+                                            .Width(80)
+                                            .Items("1", "2", "10", "20", "30", "50")
+                                            .SelectedItems("50")
+                                            .Listeners(l =>
+                                                {
+                                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                                })
+                                        )
+                                        .Plugins(X.ProgressBarPager())
+                                    )
+                                    .Plugins(
+                                        X.CellEditing()
+                                        .ClicksToEdit(1)
+                                        .Listeners(ls =>
+                                        {
+                                            ls.BeforeEdit.Fn = "grdKPICustomerInvt_BeforeEdit";
+                                            ls.Edit.Fn = "grdKPICustomerInvt_Edit";
+                                            ls.ValidateEdit.Fn = "grdKPICustomerinvt_ValidateEdit";
+                                        })
+                                    )
+                                    .Features(
+                                        X.GridFilters()
+                                            .Local(true)
+                                            .Filters(
+
+                                                X.StringFilter().DataIndex("BranchID"),
+                                                X.StringFilter().DataIndex("CpnyName"),
+                                                X.StringFilter().DataIndex("SlsperId"),
+                                                X.StringFilter().DataIndex("SlsperName"),
+                                                X.StringFilter().DataIndex("PosDesc"),
+                                                X.StringFilter().DataIndex("InvtID"),
+                                                X.NumericFilter().DataIndex("Target")
+                                            )
+                                    )
+                                    .Listeners(lst =>
+                                    {
+                                        lst.Render.Handler = "HQ.common.control_render(this,'grdOM_KPICustomer_Invt')";
+                                        lst.Activate.Handler = "HQ.focus = 'grdOM_KPICustomer_Invt';";
                                     })                     
 //end                
      )

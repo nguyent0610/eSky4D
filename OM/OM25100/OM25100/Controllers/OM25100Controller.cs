@@ -64,6 +64,23 @@ namespace OM25100.Controllers
             return this.Store(lstKPISales_All);
             //return this.Store(_db.OM25100_pgKPISales_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList());
         }
+		public ActionResult GetKPICustomer_All(string CycleNbr, string KPI, string Zone, string Territory)
+		{
+			var lstKPISales_All = _db.OM25100_pgKPICustomer_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
+			return this.Store(lstKPISales_All);
+			//return this.Store(_db.OM25100_pgKPISales_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList());
+		}
+		public ActionResult GetKPICustomer_Class(string CycleNbr, string KPI, string Zone, string Territory)
+		{
+			var lstKPISales_Class = _db.OM25100_pgKPICustomer_Class(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
+			return this.Store(lstKPISales_Class);
+			//return this.Store(_db.OM25100_pgKPISales_Class(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList());
+		}
+		public ActionResult GetKPICustomer_Invt(string CycleNbr, string KPI, string Zone, string Territory)
+		{
+			var lstKPISales_Invt = _db.OM25100_pgKPICustomer_Invt(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
+			return this.Store(lstKPISales_Invt);
+		}
         public ActionResult GetKPISales_Class(string CycleNbr, string KPI, string Zone, string Territory)
         {
             var lstKPISales_Class = _db.OM25100_pgKPISales_Class(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
@@ -112,6 +129,19 @@ namespace OM25100.Controllers
                 StoreDataHandler dataHander_grid5 = new StoreDataHandler(data["stoOM_KPISales_Invt"]);
                 ChangeRecords<OM25100_pgKPISales_Invt_Result> stoOM_KPISales_Invt = dataHander_grid5.BatchObjectData<OM25100_pgKPISales_Invt_Result>();
                 stoOM_KPISales_Invt.Created.AddRange(stoOM_KPISales_Invt.Updated);
+
+				StoreDataHandler dataHander_grid6 = new StoreDataHandler(data["stoOM_KPICustomer_All"]);
+				ChangeRecords<OM25100_pgKPICustomer_All_Result> stoOM_KPICustomer_All = dataHander_grid6.BatchObjectData<OM25100_pgKPICustomer_All_Result>();
+				stoOM_KPICustomer_All.Created.AddRange(stoOM_KPICustomer_All.Updated);
+
+				StoreDataHandler dataHander_grid7 = new StoreDataHandler(data["stoOM_KPICustomer_Class"]);
+				ChangeRecords<OM25100_pgKPICustomer_Class_Result> stoOM_KPICustomer_Class = dataHander_grid7.BatchObjectData<OM25100_pgKPICustomer_Class_Result>();
+				stoOM_KPICustomer_Class.Created.AddRange(stoOM_KPICustomer_Class.Updated);
+
+
+				StoreDataHandler dataHander_grid8 = new StoreDataHandler(data["stoOM_KPICustomer_Invt"]);
+				ChangeRecords<OM25100_pgKPICustomer_Invt_Result> stoOM_KPICustomer_Invt = dataHander_grid8.BatchObjectData<OM25100_pgKPICustomer_Invt_Result>();
+				stoOM_KPICustomer_Invt.Created.AddRange(stoOM_KPICustomer_Invt.Updated);
 
                 #region OM_KPIHeader
                 var header = _db.OM_KPIHeader.FirstOrDefault(p => p.CycleNbr == CycleNbr && p.KPI == KPI);
@@ -476,6 +506,161 @@ namespace OM25100.Controllers
                 }
                 #endregion
 
+				#region OM_KPICustomer_All
+				foreach (OM25100_pgKPICustomer_All_Result del in stoOM_KPICustomer_All.Deleted)
+				{
+					if (stoOM_KPICustomer_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+						&& p.KPI.ToUpper() == del.KPI.ToUpper()&&p.CustID.ToUpper()==del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+					{
+						stoOM_KPICustomer_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
+					}
+					else
+					{
+						var objDel = _db.OM_KPICustomer_All.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
+						if (objDel != null)
+						{
+							_db.OM_KPICustomer_All.DeleteObject(objDel);
+						}
+					}
+				}
+
+
+
+				foreach (OM25100_pgKPICustomer_All_Result curItem in stoOM_KPICustomer_All.Created)
+				{
+					if (curItem.BranchID.PassNull() == "") continue;
+
+					var objCountry = _db.OM_KPICustomer_All.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
+						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
+
+					if (objCountry != null)
+					{
+						if (objCountry.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
+						{
+							Update_OM_KPICustomer_All(objCountry, curItem, false);
+						}
+						else
+						{
+							throw new MessageException(MessageType.Message, "19");
+						}
+					}
+					else
+					{
+						objCountry = new OM_KPICustomer_All();
+						Update_OM_KPICustomer_All(objCountry, curItem, true);
+						objCountry.CycleNbr = CycleNbr;
+						objCountry.KPI = KPI;
+
+						_db.OM_KPICustomer_All.AddObject(objCountry);
+					}
+				}
+				#endregion
+
+				#region OM_KPICustomer_Class
+				foreach (OM25100_pgKPICustomer_Class_Result del in stoOM_KPICustomer_Class.Deleted)
+				{
+					if (stoOM_KPICustomer_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+						&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+					{
+						stoOM_KPICustomer_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
+					}
+					else
+					{
+						var objDel = _db.OM_KPICustomer_Class.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).FirstOrDefault();
+						if (objDel != null)
+						{
+							_db.OM_KPICustomer_Class.DeleteObject(objDel);
+						}
+					}
+				}
+
+
+
+				foreach (OM25100_pgKPICustomer_Class_Result curItem in stoOM_KPICustomer_Class.Created)
+				{
+					if (curItem.BranchID.PassNull() == "") continue;
+
+					var objCountry = _db.OM_KPICustomer_Class.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
+						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper() && p.ClassID.ToUpper() == curItem.ClassID.ToUpper()).FirstOrDefault();
+
+					if (objCountry != null)
+					{
+						if (objCountry.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
+						{
+							Update_OM_KPICustomer_Class(objCountry, curItem, false);
+						}
+						else
+						{
+							throw new MessageException(MessageType.Message, "19");
+						}
+					}
+					else
+					{
+						objCountry = new OM_KPICustomer_Class();
+						Update_OM_KPICustomer_Class(objCountry, curItem, true);
+						objCountry.CycleNbr = CycleNbr;
+						objCountry.KPI = KPI;
+
+						_db.OM_KPICustomer_Class.AddObject(objCountry);
+					}
+				}
+				#endregion
+
+				#region OM_KPICustomer_Invt
+				foreach (OM25100_pgKPICustomer_Invt_Result del in stoOM_KPICustomer_Invt.Deleted)
+				{
+					if (stoOM_KPICustomer_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+						&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+					{
+						stoOM_KPICustomer_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
+					}
+					else
+					{
+						var objDel = _db.OM_KPICustomer_Invt.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).FirstOrDefault();
+						if (objDel != null)
+						{
+							_db.OM_KPICustomer_Invt.DeleteObject(objDel);
+						}
+					}
+				}
+
+
+
+				foreach (OM25100_pgKPICustomer_Invt_Result curItem in stoOM_KPICustomer_Invt.Created)
+				{
+					if (curItem.BranchID.PassNull() == "") continue;
+
+					var objCountry = _db.OM_KPICustomer_Invt.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
+						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper() && p.InvtID.ToUpper() == curItem.InvtID.ToUpper()).FirstOrDefault();
+
+					if (objCountry != null)
+					{
+						if (objCountry.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
+						{
+							Update_OM_KPICustomer_Invt(objCountry, curItem, false);
+						}
+						else
+						{
+							throw new MessageException(MessageType.Message, "19");
+						}
+					}
+					else
+					{
+						objCountry = new OM_KPICustomer_Invt();
+						Update_OM_KPICustomer_Invt(objCountry, curItem, true);
+						objCountry.CycleNbr = CycleNbr;
+						objCountry.KPI = KPI;
+
+						_db.OM_KPICustomer_Invt.AddObject(objCountry);
+					}
+				}
+				#endregion
                 _db.SaveChanges();
                 return Json(new { success = true, CycleNbr = CycleNbr }, "text/html");
             }
@@ -632,6 +817,28 @@ namespace OM25100.Controllers
             t.LUpd_User = _userName;
         }
 
+		private void Update_OM_KPICustomer_All(OM_KPICustomer_All t, OM25100_pgKPICustomer_All_Result s, bool isNew)
+		{
+			if (isNew)
+			{
+				t.CycleNbr = s.CycleNbr;
+				t.KPI = s.KPI;
+				t.BranchID = s.BranchID;
+				t.SlsperId = s.SlsperId;
+				t.CustID = s.CustID;
+				t.Crtd_DateTime = DateTime.Now;
+				t.Crtd_Prog = _screenNbr;
+				t.Crtd_User = _userName;
+			}
+			t.CpnyName = s.CpnyName;
+			t.SlsperName = s.SlsperName;
+			t.CustName = s.CustName;
+			t.Target = s.Target;
+			t.LUpd_DateTime = DateTime.Now;
+			t.LUpd_Prog = _screenNbr;
+			t.LUpd_User = _userName;
+		}
+
         private void Update_OM_KPISales_Class(OM_KPISales_Class t, OM25100_pgKPISales_Class_Result s, bool isNew)
         {
             if (isNew)
@@ -675,5 +882,51 @@ namespace OM25100.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
+
+		private void Update_OM_KPICustomer_Class(OM_KPICustomer_Class t, OM25100_pgKPICustomer_Class_Result s, bool isNew)
+		{
+			if (isNew)
+			{
+				t.CycleNbr = s.CycleNbr;
+				t.KPI = s.KPI;
+				t.BranchID = s.BranchID;
+				t.CustID = s.CustID;
+				t.SlsperId = s.SlsperId;
+				t.ClassID = s.ClassID;
+				t.Crtd_DateTime = DateTime.Now;
+				t.Crtd_Prog = _screenNbr;
+				t.Crtd_User = _userName;
+			}
+			t.CpnyName = s.CpnyName;
+			t.SlsperName = s.SlsperName;
+			t.CustName = s.CustName;
+			t.Target = s.Target;
+			t.LUpd_DateTime = DateTime.Now;
+			t.LUpd_Prog = _screenNbr;
+			t.LUpd_User = _userName;
+		}
+
+		private void Update_OM_KPICustomer_Invt(OM_KPICustomer_Invt t, OM25100_pgKPICustomer_Invt_Result s, bool isNew)
+		{
+			if (isNew)
+			{
+				t.CycleNbr = s.CycleNbr;
+				t.KPI = s.KPI;
+				t.BranchID = s.BranchID;
+				t.CustID = s.CustID;
+				t.SlsperId = s.SlsperId;
+				t.InvtID = s.InvtID;
+				t.Crtd_DateTime = DateTime.Now;
+				t.Crtd_Prog = _screenNbr;
+				t.Crtd_User = _userName;
+			}
+			t.CpnyName = s.CpnyName;
+			t.SlsperName = s.SlsperName;
+			t.CustName = s.CustName;
+			t.Target = s.Target;
+			t.LUpd_DateTime = DateTime.Now;
+			t.LUpd_Prog = _screenNbr;
+			t.LUpd_User = _userName;
+		}
     }
 }
