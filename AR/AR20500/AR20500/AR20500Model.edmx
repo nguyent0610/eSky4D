@@ -339,6 +339,12 @@
           <Parameter Name="SlsperID" Type="varchar(max)" Mode="In" />
           <Parameter Name="Status" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="AR20500_ppCheckApprove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Phone" Type="varchar" Mode="In" />
+          <Parameter Name="Addr" Type="nvarchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="AR20500_ppCheckCustomerApprove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="CustID" Type="varchar(max)" Mode="In" />
@@ -403,6 +409,12 @@
             <Parameter Name="ClassID" Mode="In" Type="String" />
             <Parameter Name="State" Mode="In" Type="String" />
             <Parameter Name="CustName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20500_ppCheckApprove" ReturnType="Collection(AR20500Model.AR20500_ppCheckApprove_Result)">
+            <Parameter Name="CustName" Mode="In" Type="String" />
+            <Parameter Name="Phone" Mode="In" Type="String" />
+            <Parameter Name="Addr" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="AR20500_pgDetail_Result">
@@ -752,6 +764,10 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="District" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="AR20500_ppCheckApprove_Result">
+          <Property Type="Boolean" Name="Result" Nullable="true" />
+          <Property Type="String" Name="Lang" Nullable="true" MaxLength="100" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1107,6 +1123,14 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AR20500_pdIsShowCustHT" FunctionName="eBiz4DWebSysModel.Store.AR20500_pdIsShowCustHT" />
           <FunctionImportMapping FunctionImportName="AR20500_CustID" FunctionName="eBiz4DWebSysModel.Store.AR20500_CustID" />
+          <FunctionImportMapping FunctionImportName="AR20500_ppCheckApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckApprove">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20500Model.AR20500_ppCheckApprove_Result">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="Lang" ColumnName="Lang" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

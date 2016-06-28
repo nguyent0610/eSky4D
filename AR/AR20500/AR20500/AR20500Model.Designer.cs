@@ -661,6 +661,58 @@ namespace AR20500
     
             return base.ExecuteFunction<global::System.String>("AR20500_CustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter, stateParameter, custNameParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="custName">No Metadata Documentation available.</param>
+        /// <param name="phone">No Metadata Documentation available.</param>
+        /// <param name="addr">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20500_ppCheckApprove_Result> AR20500_ppCheckApprove(global::System.String custName, global::System.String phone, global::System.String addr, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter custNameParameter;
+            if (custName != null)
+            {
+                custNameParameter = new ObjectParameter("CustName", custName);
+            }
+            else
+            {
+                custNameParameter = new ObjectParameter("CustName", typeof(global::System.String));
+            }
+    
+            ObjectParameter phoneParameter;
+            if (phone != null)
+            {
+                phoneParameter = new ObjectParameter("Phone", phone);
+            }
+            else
+            {
+                phoneParameter = new ObjectParameter("Phone", typeof(global::System.String));
+            }
+    
+            ObjectParameter addrParameter;
+            if (addr != null)
+            {
+                addrParameter = new ObjectParameter("Addr", addr);
+            }
+            else
+            {
+                addrParameter = new ObjectParameter("Addr", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20500_ppCheckApprove_Result>("AR20500_ppCheckApprove", custNameParameter, phoneParameter, addrParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -8179,6 +8231,68 @@ namespace AR20500
         private global::System.String _CustHT;
         partial void OnCustHTChanging(global::System.String value);
         partial void OnCustHTChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR20500Model", Name="AR20500_ppCheckApprove_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR20500_ppCheckApprove_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Result
+        {
+            get
+            {
+                return _Result;
+            }
+            set
+            {
+                OnResultChanging(value);
+                ReportPropertyChanging("Result");
+                _Result = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Result");
+                OnResultChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Result;
+        partial void OnResultChanging(Nullable<global::System.Boolean> value);
+        partial void OnResultChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Lang
+        {
+            get
+            {
+                return _Lang;
+            }
+            set
+            {
+                OnLangChanging(value);
+                ReportPropertyChanging("Lang");
+                _Lang = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Lang");
+                OnLangChanged();
+            }
+        }
+        private global::System.String _Lang;
+        partial void OnLangChanging(global::System.String value);
+        partial void OnLangChanged();
 
         #endregion
 

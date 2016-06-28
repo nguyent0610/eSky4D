@@ -318,11 +318,11 @@
                 .Width(300)
                 .Modal(true)
                 .Buttons(
-                        X.Button().ID("btnOK").Text(Util.GetLang("Ok"))
-                            .Listeners(p => p.Click.Fn = "btnOKMCP_Click")
-                        , X.Button().ID("btnExit").Text(Util.GetLang("Exit"))
-                            .Listeners(p => p.Click.Fn = "btnExit_Click")
-                    )
+                    X.Button().ID("btnOK").Text(Util.GetLang("Ok"))
+                        .Listeners(p => p.Click.Fn = "btnOKMCP_Click")
+                    , X.Button().ID("btnExit").Text(Util.GetLang("Exit"))
+                        .Listeners(p => p.Click.Fn = "btnExit_Click")
+                )
                 .Items(
                      X.FormPanel().ID("frmProcess")
                         .Layout(LayoutType.VBox)

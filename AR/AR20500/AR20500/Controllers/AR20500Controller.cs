@@ -35,14 +35,25 @@ namespace AR20500.Controllers
             {
                 var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadAR20500");
                 if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
-                {
                     _filePath = config.TextVal;
-                }
                 else
-                {
-                    _filePath = Server.MapPath("\\Images\\AR20500");
-                }
+                    _filePath = Server.MapPath("~\\Images\\AR20500");
                 return _filePath;
+            }
+        }
+
+        private int _checkApprove;
+        internal int checkApprove
+        {
+            get
+            {
+                // IntVal = 0 khong check dieu kien - IntVal = 1 co check dieu kien (Name/Addr/Phone)
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "AR20500CheckApprove");
+                if (config != null && (config.IntVal == 0 || config.IntVal == 1))
+                    _checkApprove = config.IntVal;
+                else
+                    _checkApprove = 0;
+                return _checkApprove;
             }
         }
 
@@ -73,7 +84,7 @@ namespace AR20500.Controllers
         }
 
         [HttpPost]
-        public ActionResult Process(FormCollection data, DateTime fromDate, DateTime toDate)
+        public ActionResult Process(FormCollection data, DateTime fromDate, DateTime toDate, int askApprove)
         {
             try
             {
@@ -103,6 +114,17 @@ namespace AR20500.Controllers
                             if (objNew == null || objNew.Status == "A" || objNew.Status == "D") continue;
                             if (handle == "A")
                             {
+                                if (_checkApprove == 1 && askApprove == 0)
+                                {
+                                    //Check dieu kien Name/Addr/Phone
+                                    var objCheck = _db.AR20500_ppCheckApprove(item.OutletName, item.Phone, item.Addr1, Current.LangID).FirstOrDefault();
+                                    if (objCheck != null)
+                                    {
+                                        if(objCheck.Result == true)
+                                            throw new MessageException(MessageType.Message, "2016062801", "askApprove", parm: new string[] { objCheck.Lang.PassNull() });
+                                    }
+                                }
+                                askApprove = 0; // set lai ask Approve = 0
                                 objNew.WeekofVisit = item.WeekofVisit;
                                 objNew.Mon = item.Mon.Value ? int.Parse("1") : int.Parse("0");
                                 objNew.Tue = item.Tue.Value ? int.Parse("1") : int.Parse("0");
