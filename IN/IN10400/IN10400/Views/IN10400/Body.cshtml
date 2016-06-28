@@ -157,16 +157,15 @@
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 lst.Focus.Handler = "HQ.focus='batch';";
-
                             })         
                     )
                 ,X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 3 0")
                     .Items(
-                       HQ.NumberField().ID("txtTotQty").Name("TotQ").HQLangCode("TotQ").DecimalPrecision(0).Width(300).Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                       HQ.NumberField().ID("txtTotQty").Name("TotQty").HQLangCode("TotQ").DecimalPrecision(0).Width(300).Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                        
-                      ,HQ.NumberField().ID("txtTotAmt").Name("TotQ").HQLangCode("TotQ").DecimalPrecision(0).Width(300).Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                      ,HQ.NumberField().ID("txtTotAmt").Name("TotAmt").HQLangCode("TotAmt").DecimalPrecision(0).Width(300).Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                         
-                      ,HQ.Combo().ID("cboSiteID").Name("TotQ").HQLangCode("TotQ").AllowBlank(false)
+                      ,HQ.Combo().ID("cboSiteID").Name("SiteID").HQLangCode("SiteID").AllowBlank(false)
                             .HQProcedure("IN10400_pcSiteAll")
                             .HQColumnShow("SiteID,Name").DisplayField("Name").ValueField("SiteID")
                             .Width(300).HQHeightWidth(400, 200).HQAutoLoad(true)
@@ -316,14 +315,13 @@
              X.GridFilters()
                     .Local(true)
                     .Filters(
-                        X.StringFilter().DataIndex("BranchID")
-                       ,X.StringFilter().DataIndex("CustID")
-                       ,X.StringFilter().DataIndex("CustName")
-                       ,X.NumericFilter().DataIndex("Target")
-                       ,X.NumericFilter().DataIndex("Monthly")
-                       ,X.NumericFilter().DataIndex("Monthly")
-                       ,X.NumericFilter().DataIndex("Quaterly")
-                       ,X.StringFilter().DataIndex("NodeID")
+                        X.StringFilter().DataIndex("InvtID")
+                       ,X.StringFilter().DataIndex("TranDesc")
+                       ,X.StringFilter().DataIndex("UnitDesc")
+                       ,X.NumericFilter().DataIndex("Qty")   
+                       ,X.NumericFilter().DataIndex("UnitPrice")  
+                       ,X.NumericFilter().DataIndex("TranAmt") 
+                       ,X.StringFilter().DataIndex("RefNbr")                  
                     )
             )         
                 
@@ -397,7 +395,7 @@
                                     </tpl>
                                     <tr class='x-boundlist-item'>
                                         <td style='width:100px;'>{LotSerNbr}</td>
-                                        <td>{ExpDate:date(""m-d-Y"")}</td>
+                                        <td>{ExpDate:date("""+ Current.FormatDateJS+@""")}</td>
                                         <td>{QtyAvail}</td>
                                     </tr>
                                     <tpl if='[xcount-xindex] == 0'>
@@ -438,7 +436,7 @@
             .Renderer("renderQtyAmt") 
                 
               
-            , X.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(Html.X().DateField())
+            , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(Html.X().DateField())
         )
         .Listeners(lst =>
         {

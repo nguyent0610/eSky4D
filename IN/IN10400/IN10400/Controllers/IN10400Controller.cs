@@ -545,6 +545,7 @@ namespace IN10400.Controllers
             }
             _app.SaveChanges();
 
+            var access = Session[_screenNbr] as AccessRight;
             if (_handle != "N")
             {
                 DataAccess dal = Util.Dal();
@@ -553,6 +554,8 @@ namespace IN10400.Controllers
                 {
                     if (_handle == "R")
                     {
+                        if (!access.Release)
+                            throw new MessageException(MessageType.Message, "728");
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
 
                         inventory.IN10400_Release(_objBatch.BranchID, _objBatch.BatNbr);

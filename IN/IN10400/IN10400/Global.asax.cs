@@ -36,7 +36,8 @@ namespace IN10400
             //Session["CpnyID"] = Current.CpnyID = "HQH00000";
             //Session["Language"] = Current.Language = "vi";
             //Session["LangID"] = 1;
-
+            Current.FormatDate = "dd-MM-yyyy";
+            Current.FormatDateJS = "d-m-Y";
             Current.Authorize = false;
             Current.Server = "EARTHSVR\\SQL2012";
             Current.DBSys = "ND_eSky4DSys";
