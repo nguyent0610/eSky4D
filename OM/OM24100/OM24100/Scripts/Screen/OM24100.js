@@ -752,10 +752,13 @@ var Process = {
                 }
                 var rec = HQ.store.findRecord(App.grdMCP.store, ["CustId"], [record.data.CustId]);
                 if (rec) {
-                    rec.data.Lat = newLat;
-                    rec.data.Lng = newLng;
+                    rec.set('Lat', newLat);
+                    rec.set('Lng', newLng);
+                    //rec.data.Lat = newLat;
+                    //rec.data.Lng = newLng;
                     if (data.result.tstamp) {
-                        rec.data.tstamp = data.result.tstamp;
+                        //rec.data.tstamp = data.result.tstamp;
+                        rec.set('tstamp', data.result.tstamp);
                     }
                     var markerId = rec.data.CustId;
                     var marker;
@@ -795,13 +798,14 @@ var Process = {
                         Gmap.Process.makeMarker(markerData, rec.index);
                     }
                 }
-                App.grdMCP.store.commitChanges();
-                App.grdMCP.view.refresh();
+                //App.grdMCP.store.commitChanges();
+                //App.grdMCP.view.refresh();
                 App.winSuggest.close();
                 if (suggestMarker) {
                     suggestMarker.setMap(null);
                     suggestMarker = null;
                 }
+                //App.slmMCP.select(rec);
             },
 
             failure: function (errorMsg, data) {
@@ -851,7 +855,7 @@ var Process = {
                             App.grdMCP.store.each(function (record) {
                                 listCustDone.forEach(function (custDone) {
                                     if (record.data.Selected && record.data.CustId == custDone.CustId) {
-                                        record.data.Addr = custDone.Addr;
+                                        record.data.Addr = custDone.Addr1;
                                         record.data.SuggestAddr = "";
                                         record.data.Selected = false;
                                         record.data.ctstamp = custDone.tstamp;

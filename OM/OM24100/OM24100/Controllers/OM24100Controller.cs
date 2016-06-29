@@ -261,7 +261,7 @@ namespace OM24100.Controllers
                             custLoc.LUpd_User = Current.UserName;
 
                             _db.SaveChanges();
-                            return Json(new { success = true, msgCode = 201405071, tstamp = custLoc.tstamp });
+                            return Json(new { success = true, msgCode = 201405071, tstamp = custLoc.tstamp});
                         }
                         else
                         {

@@ -42,14 +42,14 @@
                         X.Menu()
                         .Items(
                             X.MenuItem().ID("btnSuggest")
-                            .Icon(Icon.FlagGreen).Text(Util.GetLang("SuggestLocation"))
-                            .ToolTip(Util.GetLang("SuggestLocation"))
-                            .Handler("Event.Form.btnSuggest_click")
+                                .Icon(Icon.FlagGreen).Text(Util.GetLang("SuggestLocation"))
+                                .ToolTip(Util.GetLang("SuggestLocation"))
+                                .Handler("Event.Form.btnSuggest_click")
                     
-                            ,X.MenuItem().ID("btnSuggestAddr")
-                            .Icon(Icon.FlagBlue).Text(Util.GetLang("SuggestAddress"))
-                            .ToolTip(Util.GetLang("SuggestAddress"))
-                            .Handler("Event.Form.btnSuggestAddr_click")
+                            , X.MenuItem().ID("btnSuggestAddr")
+                                .Icon(Icon.FlagBlue).Text(Util.GetLang("SuggestAddress"))
+                                .ToolTip(Util.GetLang("SuggestAddress"))
+                                .Handler("Event.Form.btnSuggestAddr_click")
                         )
                     )
 
@@ -59,27 +59,27 @@
                         X.Menu()
                         .Items(
                             X.MenuItem().ID("btnUpdateAddr")
-                            .Icon(Icon.Accept).Text(Util.GetLang("UpdateAddress"))
-                            .ToolTip(Util.GetLang("UpdateAddress"))
-                            .Handler("Event.Form.btnUpdateAddr_click")
+                                .Icon(Icon.Accept).Text(Util.GetLang("UpdateAddress"))
+                                .ToolTip(Util.GetLang("UpdateAddress"))
+                                .Handler("Event.Form.btnUpdateAddr_click")
                             
                             , X.MenuItem().ID("btnResetGeo").Text(Util.GetLang("ResetGEO"))
-                            .Icon(Icon.MapDelete)
-                            .Handler("Event.Form.btnResetGeo_click")
+                                .Icon(Icon.MapDelete)
+                                .Handler("Event.Form.btnResetGeo_click")
                             
                             ,X.MenuSeparator()
                     
                             , X.MenuItem().ID("btnExportToExcel")
-                            .Icon(Icon.PageExcel).Text(Util.GetLang("ExportToExcel"))
-                            .ToolTip(Util.GetLang("ExportToExcel"))
-                            .Handler("Event.Form.btnExportToExcel_click")
+                                .Icon(Icon.PageExcel).Text(Util.GetLang("ExportToExcel"))
+                                .ToolTip(Util.GetLang("ExportToExcel"))
+                                .Handler("Event.Form.btnExportToExcel_click")
                         )
                     )
                     
                     , X.ToolbarFill()
-                    
-                    , HQ.Checkbox().ID("chkNumber")
-                    .HQLangCode("Numbered")
+                    , HQ.Checkbox().ID("chkNumber").HQLangCode("Numbered")
+		              
+
                 )
             )
             .Items(
