@@ -45,7 +45,7 @@
                             .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                            
                         ,X.ComboBox()
-                            .ID("cboBatNbr")
+                            .ID("cboBatNbr").Tag("X")
                             .Name("BatNbr")
                             .DataIndex("BatNbr")
                             .MinChars(1)
@@ -142,7 +142,7 @@
                         ,HQ.DateField().ID("txtDateEnt").Name("DateEnt").HQLangCode("TranDate").Width(300).DataIndex("DateEnt")
                             
                        
-                        ,HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").Width(300)
+                        ,HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").Width(300).Tag("X")
                             .HQProcedure("IN10400_pcHandle")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                             .Width(300).HQHeightWidth(400, 200).HQAutoLoad(true)
@@ -218,7 +218,7 @@
                     .Listeners(l =>    
                     {
                         l.Load.Fn = "stoDetail_Load";
-                        l.BeforeLoad.Fn = "stoTrans_BeforeLoad";
+                       // l.BeforeLoad.Fn = "stoTrans_BeforeLoad";
                     })
                 )
             .ColumnModel(

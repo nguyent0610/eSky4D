@@ -225,7 +225,6 @@ var origEditorTab = function (instance, self) {
         content = view.walkCells(content, presence_h_tag, self, evt.preventWrap);
     } while (content && (!content.columnHeader.getEditor(cell) || !instance.startEditByPosition(content)));
 }
-
 var btnPopupOk_Click = function () {
     if (!Ext.isEmpty(App.cboPopupCpny.getValue())) {
         App.winPopup.hide();
@@ -234,13 +233,11 @@ var btnPopupOk_Click = function () {
         HQ.message.show(1000, [HQ.common.getLang('branchid')], '', true);
     }
 }
-
 var grdTrans_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdTrans);
     stoChanged(App.stoTrans);
     App.txtTotal.setValue(setValue(App.stoTrans))
-};
-
+}
 var grdTrans_BeforeEdit = function (editor, e) {
     if (App.grdTrans.isLock) {
         return false;
@@ -307,7 +304,6 @@ var grdTrans_SelectionChange = function (item, selected) {
         }
     }
 };
-
 var grdTrans_Edit = function (item, e) {
     HQ.focus = 'trans';
     var key = e.field;
@@ -387,7 +383,6 @@ var grdTrans_Edit = function (item, e) {
         if (key != 'InvtID') handleTab(key);
     }
 };
-
 var grdTrans_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdTrans, e, keys, false);
 };
@@ -454,6 +449,10 @@ var stoBatch_Load = function () {
     var record = App.stoBatch.getById(App.cboBatNbr.getValue());
     if (record) {
         bindBatch(record);
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    {
+        HQ.common.lockItem(App.frmMain, false);
     }
 }
 
@@ -919,8 +918,6 @@ var save = function () {
 
                     setChange(false);
                     HQ.message.process(msg, data, true);
-
-
                 },
                 failure: function (msg, data) {
                     HQ.message.process(msg, data, true);
