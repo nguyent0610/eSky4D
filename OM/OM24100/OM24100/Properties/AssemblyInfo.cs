@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Han Quang Software Solution")]
 [assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]
 [assembly: AssemblyCopyright("Copy right 2006-2015 Han Quang Software Solution. All rights Reserved")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("OM24100")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

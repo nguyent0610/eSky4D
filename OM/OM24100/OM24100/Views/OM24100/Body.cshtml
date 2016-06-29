@@ -243,6 +243,16 @@
                         .Listeners(l => {
                             l.Edit.Fn = "Event.Grid.grdMCP_edit"; 
                         })
+                    )
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("CustId"),
+                                X.StringFilter().DataIndex("CustName"),
+                                X.StringFilter().DataIndex("Addr"),
+                                X.StringFilter().DataIndex("SuggestAddr")
+                            )
                     )// GridPanel: grdMCP
                 ) // Container: pnlGridPlan
             ) // FormPanel: pnlMCP
