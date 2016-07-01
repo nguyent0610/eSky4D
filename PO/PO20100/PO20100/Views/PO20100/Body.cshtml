@@ -48,6 +48,7 @@
 
                 , HQ.TextBox().ID("Descr").Name("Descr").HQLangCode("Descr").Width(300).MaxLength(200).EnforceMaxLength(true).AllowBlank(false).MarginSpec("0 0 0 20").HQControlFocus("LastPONbr").HideLabel(true).Listeners(lst => { })
                 , HQ.Checkbox().ID("Status").Name("Status").HQLangCode("ACTIVE").MarginSpec("0 0 0 5")
+                  
             ),
             X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
             .Items(
@@ -58,7 +59,7 @@
                     lst.Click.Handler = "btnFill_Click()";
                 })
                 , HQ.DateField().ID("EffDate").Name("EffDate").HQLangCode("EffDate").Width(320).AllowBlank(false).LabelWidth(120)
-                .Format("dd/MM/yyyy")
+                .Format("dd-MM-yyyy")
                 , HQ.Checkbox().ID("Public").Name("Public").HQLangCode("Public").MarginSpec("0 0 0 5")
                 .Listeners(lst =>
                 {

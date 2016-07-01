@@ -200,6 +200,7 @@ function btnFill_Click() {
 var chkPublic_Change = function (checkbox, checked) {
     if (checked) {
         App.tabBot.closeTab(App.pnlPO_PriceCpny);
+       
     }
     else {
         App.tabBot.addTab(App.pnlPO_PriceCpny);
@@ -275,10 +276,12 @@ var stoLoad = function (sto) {
         if (!HQ.isUpdate) {
             HQ.common.lockItem(App.frmMain, true);
         }
-        else {
+        else{
+            //HQ.isFirstLoad = false;
             HQ.common.lockItem(App.frmMain, false);
         }
-    }
+        }
+    
     else {
         if (!HQ.isInsert) {
             HQ.common.lockItem(App.frmMain, true);
@@ -288,14 +291,18 @@ var stoLoad = function (sto) {
 
         }
     }
-    loadComboGrid();
+   loadComboGrid();
 };
 
 // =====================Grd PO_Price =======================//
 var stoPO_Price_Load = function (sto) {
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
+            
+               // HQ.common.lockItem(App.frmMain, true);
+                HQ.store.insertBlank(sto, keys);
+            
+
         }
         //HQ.isFirstLoad = false;
     }
@@ -304,6 +311,15 @@ var stoPO_Price_Load = function (sto) {
 };
 
 var grdPO_Price_BeforeEdit = function (editor, e) {
+
+    if (!Ext.isEmpty(App.stoPOPriceHeader.data.items[0].data.PriceID))
+    {
+        if (!HQ.isUpdate)
+        {
+            return false;
+        }
+    }
+
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
 };
 
@@ -347,7 +363,10 @@ var grdPO_Price_Reject = function (record) {
 var stoPO_PriceCpny_Load = function (sto) {
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys1);
+           
+                // HQ.common.lockItem(App.frmMain, true);
+                HQ.store.insertBlank(sto, keys);
+            
         }
       //  HQ.isFirstLoad = false;
     }
