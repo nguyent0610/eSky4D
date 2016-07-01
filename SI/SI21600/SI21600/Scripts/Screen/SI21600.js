@@ -10,6 +10,7 @@ var parentRecordIDAll = "";
 var parentRecordID = "";
 var _recordID = "";
 var selectNode;
+
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
@@ -20,7 +21,11 @@ var checkLoad = function (sto) {
         _isLoadMaster = true;
         _Source = 0;
         App.cboType.setValue('I');
-        App.stoSI_Hierarchy.reload();
+        //App.cboNodeID.getStore().load(function () {
+        //    //App.stoSI_Hierarchy.reload();
+        //    ReloadTree();
+        //});
+        //App.stoSI_Hierarchy.reload();
         HQ.common.showBusy(false);
     }
 };
@@ -60,11 +65,11 @@ var menuClick = function (command) {
                 HQ.message.show(20150303, '', 'refresh');
             }
             else {
-                HQ.isChange = false;
-                
-                App.cboNodeID.getStore().load(function () {
-                    App.stoSI_Hierarchy.reload();
-                });
+                //HQ.isChange = false;
+                refresh('yes');
+                //App.cboNodeID.getStore().load(function () {
+                //    App.stoSI_Hierarchy.reload();
+                //});
             }
             break;
         case "new":
@@ -73,6 +78,7 @@ var menuClick = function (command) {
                     HQ.message.show(150, '', '');
                 }
                 else {
+                    
                     App.cboNodeID.setValue('');
                     App.txtDescr.setValue('');
                     if (_nodeID != 'root') {
@@ -84,6 +90,7 @@ var menuClick = function (command) {
                         App.txtNodeLevel.setValue(1);
                         App.txtParentRecordID.setValue(0);
                     }
+                    
                 }
             }
             break;
@@ -114,15 +121,15 @@ var menuClick = function (command) {
     }
 };
 
-function ReloadTree() {
+var ReloadTree = function () {
     try {
         App.direct.ReloadTreeSI21600(App.cboType.getValue(), {
             success: function (data) {
-                App.cboNodeID.getStore().load(function () {
-                    //App.cboNodeID.setValue(NodeID);
-                    App.stoSI_Hierarchy.reload();
-                });
-                // App.stoSI_Hierarchy.reload();
+                //App.cboNodeID.getStore().load(function () {
+                    
+                //    App.stoSI_Hierarchy.reload();
+                //});
+                 App.stoSI_Hierarchy.reload();
             },
             failure: function () {
                 alert("fail");
@@ -140,51 +147,71 @@ var cboType_Change = function (sender, value) {
     App.txtDescr.setValue('');
     App.txtNodeLevel.setValue(0);
     App.txtParentRecordID.setValue(0);
-
+    App.cboNodeID.getStore().reload();
     ReloadTree();
 };
 
 var NodeSelected_Change = function (store, operation, options) {
-    if (HQ.isNew == false || Ext.isEmpty(App.cboNodeID.getValue())) {
-        parentRecordIDAll = operation.data.id.split("-");
-        _nodeID = parentRecordIDAll[0];
-        _nodeLevel = parentRecordIDAll[1];
-        _parentRecordID = parentRecordIDAll[2];
-        _recordID = parentRecordIDAll[3];
-
-        App.cboNodeID.setValue(_nodeID);
-        if (_nodeID == 'root') {
-            App.cboNodeID.setValue('');
-            App.txtNodeLevel.setValue(1);
-            App.txtParentRecordID.setValue(0);
-        }
-        else {
-            App.txtNodeLevel.setValue(_nodeLevel);
-            App.txtParentRecordID.setValue(_parentRecordID);
+    var dataCount = App.cboNodeID.getStore().data.getCount();
+    if (App.cboNodeID.getStore().snapshot != undefined) {
+        var snapshotCount = App.cboNodeID.getStore().snapshot.getCount();
+        if (dataCount < snapshotCount) {
+            App.cboNodeID.getStore().clearFilter();
         }
     }
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
     else {
-        App.cboNodeID.setValue("");
-        App.txtDescr.setValue("");
-        parentRecordIDAll = operation.data.id.split("-");
-        App.txtNodeLevel.setValue(parentRecordIDAll[1]);
-        App.txtParentRecordID.setValue(parentRecordIDAll[2]);
+        if (HQ.isNew == false || Ext.isEmpty(App.cboNodeID.getValue())) {
+            parentRecordIDAll = operation.data.id.split("-");
+            _nodeID = parentRecordIDAll[0];
+            _nodeLevel = parentRecordIDAll[1];
+            _parentRecordID = parentRecordIDAll[2];
+            _recordID = parentRecordIDAll[3];
+
+            App.cboNodeID.setValue(_nodeID);
+            var rec = App.cboNodeID.findRecordByValue(_nodeID);
+            if (_nodeID == 'root') {
+                App.cboNodeID.setValue('');
+                App.txtNodeLevel.setValue(1);
+                App.txtParentRecordID.setValue(0);
+            }
+            else {
+                //App.txtDescr.setValue(rec.data.Descr);
+                App.txtNodeLevel.setValue(_nodeLevel);
+                App.txtParentRecordID.setValue(_parentRecordID);
+            }
+        }
+        else {
+            App.cboNodeID.setValue("");
+            App.txtDescr.setValue("");
+            parentRecordIDAll = operation.data.id.split("-");
+            App.txtNodeLevel.setValue(parentRecordIDAll[1]);
+            App.txtParentRecordID.setValue(parentRecordIDAll[2]);
+        }
     }
 
 };
 
 var cboNodeID_Change = function (sender, value) {
-    if ((!HQ.isNew || sender.valueModels != null) && !App.stoSI_Hierarchy.loading) {
+    if ((sender.valueModels != null) && !App.stoSI_Hierarchy.loading) {
         _recordID = Ext.isEmpty(sender.valueModels[0]) ? '' : sender.valueModels[0].data.RecordID;
         App.stoSI_Hierarchy.reload();
+        //ReloadTree();
     }
+
+    //var store = sender.getStore();
+    //if (store.getCount() < App.cboNodeID.getStore().snapshot.length) {
+    //    App.cboNodeID.getStore().clearFilter();
+    //}
 };
 
 var cboNodeID_Select = function (sender, value) {
     if (sender.valueModels != null && !App.stoSI_Hierarchy.loading) {
         _recordID = Ext.isEmpty(sender.valueModels[0]) ? '' : sender.valueModels[0].data.RecordID;
 
-
+        //ReloadTree();
         App.stoSI_Hierarchy.reload();
     }
 
@@ -225,11 +252,12 @@ var cboType_TriggerClick = function (sender, value) {
 //};
 
 var frmChange = function () {
-    if (App.stoSI_Hierarchy.getCount() > 0) {
+    if (App.stoSI_Hierarchy.getCount() > 0) 
         App.frmMain.getForm().updateRecord();
-        HQ.isChange = HQ.store.isChange(App.stoSI_Hierarchy);
-        HQ.common.changeData(HQ.isChange, 'SI21600');
-    }
+
+    HQ.isChange = HQ.store.isChange(App.stoSI_Hierarchy);
+    HQ.common.changeData(HQ.isChange, 'SI21600');
+    
     if (App.cboNodeID.valueModels == null || HQ.isNew == true)
         App.cboNodeID.setReadOnly(false);
     else
@@ -237,32 +265,39 @@ var frmChange = function () {
 };
 
 var stoLoadHeader = function (sto) {
-    HQ.common.showBusy(false);
+    //HQ.common.showBusy(false);
     HQ.isFirstLoad = true;
     HQ.isNew = false;
+    HQ.common.lockItem(App.frmMain, false);
+    App.cboType.forceSelection = true;
     App.cboNodeID.forceSelection = true;
     if (sto.data.length == 0) {
         App.cboNodeID.forceSelection = false;
         HQ.store.insertBlank(sto, "NodeID");
         record = sto.getAt(0);
         HQ.isNew = true;//record la new    
+        HQ.common.setRequire(App.frmMain);
         App.cboNodeID.focus(true);//focus ma khi tao moi
+        App.cboNodeID.forceSelection = false;
         sto.commitChanges();
     }
-    record = sto.getAt(0);
+    var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
-    HQ.common.setRequire(App.frmMain);  //to do cac o la require  
+    
 
     if (!HQ.isInsert && HQ.isNew) {
         App.cboNodeID.forceSelection = true;
         HQ.common.lockItem(App.frmMain, true);
     }
     else if (!HQ.isUpdate && !HQ.isNew) {
+        App.cboNodeID.forceSelection = true;
         HQ.common.lockItem(App.frmMain, true);
-    }
-
-    frmChange();
+    } 
+    
     if (!HQ.isNew) searchNode();
+    
+    App.cboType.setReadOnly(false);
+    frmChange();
     if (_isLoadMaster) {
         HQ.common.showBusy(false);
     }
@@ -278,12 +313,19 @@ var storeBeforeLoad = function (sto) {
 var save = function () {
     App.frmMain.getForm().updateRecord();
     if (App.frmMain.isValid()) {
+        if (!HQ.util.checkSpecialChar(App.cboNodeID.getValue())) {
+            HQ.message.show(20140811, App.cboNodeID.fieldLabel);
+            App.cboNodeID.focus();
+            App.cboNodeID.selectText();
+            return;
+        }
         App.frmMain.submit({
             timeout: 1800000,
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'SI21600/Save',
             params: {
-                lstSI_Hierarchy: Ext.encode(App.stoSI_Hierarchy.getChangedData({ skipIdForPhantomRecords: false })),
+                //lstSI_Hierarchy: Ext.encode(App.stoSI_Hierarchy.getChangedData({ skipIdForPhantomRecords: false })),
+                lstSI_Hierarchy: Ext.encode(App.stoSI_Hierarchy.getRecordsValues()),
                 NodeID: App.cboNodeID.getValue(),
                 NodeLevel: App.txtNodeLevel.getValue(),
                 ParentRecordID: App.txtParentRecordID.getValue(),
@@ -293,16 +335,20 @@ var save = function () {
             success: function (result, data) {
                 HQ.isNew = false;
                 HQ.message.show(201405071, '', '');
-
+                //refresh('yes');
                 var NodeID = data.result.NodeID;
                 _recordID = data.result.RecordID;
+                App.cboNodeID.getStore().load({
+                    callback: function () {
+                        if (Ext.isEmpty(App.cboNodeID.getValue())) {      
+                            App.cboNodeID.setValue(NodeID);
+                        }
+                        else {
+                            App.cboNodeID.setValue(NodeID);
+                        }
+                    }
+                });
                 ReloadTree();
-                App.cboNodeID.setValue(NodeID);
-                //App.cboNodeID.getStore().load(function () {
-
-
-                //    //App.stoSI_Hierarchy.reload();
-                //});
 
             },
             failure: function (msg, data) {
@@ -319,9 +365,13 @@ function deleteData(item) {
             waitMsg: HQ.common.getLang('DeletingData'),
             url: 'SI21600/DeleteAll',
             success: function (action, data) {
-                App.stoSI_Hierarchy.reload();
+                App.cboNodeID.getStore().load(function () {
+                    ReloadTree();
+                });
+                
+                //App.cboType.getStore().load();
                 menuClick("new");
-                ReloadTree();
+                //ReloadTree();
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -336,10 +386,15 @@ function deleteData(item) {
 
 function refresh(item) {
     if (item == 'yes') {
+        HQ.isFirstLoad = true;
         HQ.isChange = false;
-        App.cboType.setValue('I');
-        if (App.cboNodeID.valueModels == null) App.cboNodeID.setValue('');
-        App.stoSI_Hierarchy.reload();
+        if (HQ.isNew) {
+            App.cboType.setValue('I');
+            App.cboNodeID.setValue('');
+        }
+        //
+        //if (App.cboNodeID.valueModels == null) App.cboNodeID.setValue('');
+        ReloadTree();
     }
 };
 

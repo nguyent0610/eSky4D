@@ -62,7 +62,7 @@
         .Items(
             HQ.Combo().ID("cboNodeID").Name("cboNodeID").HQLangCode("ID").HQProcedure("SI21600_pcHierarchyAll")
             .HQColumnShow("NodeID,Descr").DisplayField("NodeID").ValueField("NodeID").HQAutoLoad(false)
-            .HQHeightWidth(400, 300).MarginSpec("5 0 5 0").AllowBlank(false)
+            .HQHeightWidth(400, 300).MarginSpec("5 0 5 0").AllowBlank(false).EnforceMaxLength(true).MaxLength(30)
             .HQParam(new StoreParameterCollection() 
             { 
                 new StoreParameter() { Name = "@Type", Value = "App.cboType.getValue()", Mode = ParameterMode.Raw }

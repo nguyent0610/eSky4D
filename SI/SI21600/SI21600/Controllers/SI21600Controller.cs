@@ -22,7 +22,7 @@ namespace SI21600.Controllers
         SI21600Entities _sys = Util.CreateObjectContext<SI21600Entities>(false);
 
         public ActionResult Index()
-        {  
+        {
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -51,8 +51,8 @@ namespace SI21600.Controllers
             else
             {
                 node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
-                node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString()+"-"+inactiveHierachy.RecordID;   
-                
+                node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
+
             }
 
             var childrenInactiveHierachies = _sys.SI_Hierarchy
@@ -106,72 +106,53 @@ namespace SI21600.Controllers
             return this.Direct();
         }
 
-    
-      
+
+
         [HttpPost]
-        public ActionResult Save(FormCollection data, string NodeID,short NodeLevel,int ParentRecordID,bool isNew)
+        public ActionResult Save(FormCollection data, string NodeID, short NodeLevel, int ParentRecordID, bool isNew)
         {
             try
             {
-                string Type = data["cboType"];
+                string Type = data["cboType"].PassNull();
+                
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_Hierarchy"]);
-                ChangeRecords<SI_Hierarchy> lstSI_Hierarchy = dataHandler.BatchObjectData<SI_Hierarchy>();
-                var header = new SI_Hierarchy();
-              
-                lstSI_Hierarchy.Created.AddRange(lstSI_Hierarchy.Updated);
-                foreach (SI_Hierarchy curHeader in lstSI_Hierarchy.Created)
+                var curHeader = dataHandler.ObjectData<SI_Hierarchy>().FirstOrDefault();
+                //ChangeRecords<SI_Hierarchy> lstSI_Hierarchy = dataHandler.BatchObjectData<SI_Hierarchy>();
+                //var header = new SI_Hierarchy();
+
+                #region Save SI_Hierarchy
+                var header = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.NodeLevel == NodeLevel && p.ParentRecordID == ParentRecordID && p.Type == Type);
+                if (header != null)
                 {
-                    if (NodeID.PassNull() == "") continue;
-
-                    header = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.NodeLevel==NodeLevel && p.ParentRecordID==ParentRecordID && p.Type==Type );
-                    if (header != null && isNew == true)
+                    if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        //throw new MessageException(MessageType.Message, "19");
-                        throw new MessageException(MessageType.Message, "1112", parm: new[] { NodeID });
-                    }
-
-                    if (header != null)
-                    {
-                        
-                            if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
-                            {
-                                UpdatingHeader(ref header, curHeader);
-                            }
-                            else
-                            {
-                                throw new MessageException(MessageType.Message, "19");
-                            }
-                        
+                        UpdatingHeader(ref header, curHeader);
                     }
                     else
                     {
-                        //var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type == Type);
-
-                        //if (obj==null)
-                        //{
-                            header = new SI_Hierarchy();
-                            header.NodeID = NodeID;
-                            header.NodeLevel = NodeLevel;
-                            header.ParentRecordID = ParentRecordID;
-                            header.Type = Type;
-                            header.RecordID = _sys.SI21600_ppMaxRC(Type).FirstOrDefault().Value;
-                            header.Crtd_Datetime = DateTime.Now;
-                            header.Crtd_Prog = _screenNbr;
-                            header.Crtd_User = _userName;
-                    
-                            UpdatingHeader(ref header, curHeader);
-                            _sys.SI_Hierarchy.AddObject(header);
-                        //}
-                        //else
-                        //{
-                        //    throw new MessageException(MessageType.Message, "1112", parm: new[] { NodeID });
-                        //}
+                        throw new MessageException(MessageType.Message, "19");
                     }
                 }
-             
+                else
+                {
+                    header = new SI_Hierarchy();
+                    header.NodeID = NodeID;
+                    header.NodeLevel = NodeLevel;
+                    header.ParentRecordID = ParentRecordID;
+                    header.Type = Type;
+                    header.RecordID = _sys.SI21600_ppMaxRC(Type).FirstOrDefault().Value;
+                    header.Crtd_Datetime = DateTime.Now;
+                    header.Crtd_Prog = _screenNbr;
+                    header.Crtd_User = _userName;
+
+                    UpdatingHeader(ref header, curHeader);
+                    _sys.SI_Hierarchy.AddObject(header);
+                }
+                #endregion
+
 
                 _sys.SaveChanges();
-                return Json(new { success = true, NodeID = NodeID, RecordID = header.RecordID});
+                return Json(new { success = true, NodeID = NodeID, RecordID = header.RecordID }, "text/html");
             }
             catch (Exception ex)
             {
@@ -200,24 +181,30 @@ namespace SI21600.Controllers
             {
                 string Type = data["cboType"].PassNull();
                 string NodeID = data["cboNodeID"].PassNull();
+                short NodeLevel = short.Parse(data["txtNodeLevel"]);
 
-                var check_AR_Customer = _sys.AR_Customer.FirstOrDefault(p => p.NodeID == NodeID && p.CustType == Type);
-                var check_IN_Inventory = _sys.IN_Inventory.FirstOrDefault(p => p.NodeID == NodeID && p.InvtType == Type);
-                if (check_AR_Customer == null && check_IN_Inventory == null)
+                var check_AR_Customer = _sys.AR_Customer.Where(p => p.NodeID == NodeID && p.NodeLevel == NodeLevel).FirstOrDefault();
+                var check_IN_Inventory = _sys.IN_Inventory.Where(p => p.NodeID == NodeID && p.NodeLevel == NodeLevel).FirstOrDefault();
+                bool cus = (Type == "C") ? (check_AR_Customer == null) : false;
+                bool inv = (Type == "I") ? (check_IN_Inventory == null) : false;
+                if (!cus)
                 {
-                    var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type == Type);
-                    if (obj != null)
+                    if (!inv)
                     {
-                        _sys.SI_Hierarchy.DeleteObject(obj);
+                        throw new MessageException(MessageType.Message, "18");
                     }
+                }
 
-                    _sys.SaveChanges();
-                    return Json(new { success = true });
-                }
-                else
+                var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type == Type);
+                if (obj != null)
                 {
-                    throw new MessageException(MessageType.Message, "18");
+                    _sys.SI_Hierarchy.DeleteObject(obj);
                 }
+
+                _sys.SaveChanges();
+                return Json(new { success = true });
+
+
             }
             catch (Exception ex)
             {
@@ -227,3 +214,53 @@ namespace SI21600.Controllers
         }
     }
 }
+//lstSI_Hierarchy.Created.AddRange(lstSI_Hierarchy.Updated);
+//foreach (SI_Hierarchy curHeader in lstSI_Hierarchy.Created)
+//{
+//    if (NodeID.PassNull() == "") continue;
+
+//    header = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.NodeLevel == NodeLevel && p.ParentRecordID == ParentRecordID && p.Type == Type);
+//    if (header != null && isNew == true)
+//    {
+//        //throw new MessageException(MessageType.Message, "19");
+//        throw new MessageException(MessageType.Message, "1112", parm: new[] { NodeID });
+//    }
+
+//    if (header != null)
+//    {
+
+//        if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
+//        {
+//            UpdatingHeader(ref header, curHeader);
+//        }
+//        else
+//        {
+//            throw new MessageException(MessageType.Message, "19");
+//        }
+
+//    }
+//    else
+//    {
+//        //var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type == Type);
+
+//        //if (obj==null)
+//        //{
+//        header = new SI_Hierarchy();
+//        header.NodeID = NodeID;
+//        header.NodeLevel = NodeLevel;
+//        header.ParentRecordID = ParentRecordID;
+//        header.Type = Type;
+//        header.RecordID = _sys.SI21600_ppMaxRC(Type).FirstOrDefault().Value;
+//        header.Crtd_Datetime = DateTime.Now;
+//        header.Crtd_Prog = _screenNbr;
+//        header.Crtd_User = _userName;
+
+//        UpdatingHeader(ref header, curHeader);
+//        _sys.SI_Hierarchy.AddObject(header);
+//        //}
+//        //else
+//        //{
+//        //    throw new MessageException(MessageType.Message, "1112", parm: new[] { NodeID });
+//        //}
+//    }
+//}
