@@ -63,7 +63,7 @@
                             
                         , HQ.Combo().ID("cboInvtID").Name("cboInvtID").Width(250)
                             .HQLangCode("InvtID").HQDBSys(false).HQProcedure("IN40300_pcInventoryActiveByBranch")
-                            .HQColumnShow("InvtID,Descr").ForceSelection(true).AllowBlank(false)
+                            .HQColumnShow("InvtID,Descr").ForceSelection(true)//.AllowBlank(false)
                             .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
                             .HQParam(new StoreParameterCollection() {
                                 new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
@@ -92,7 +92,7 @@
                     X.Container().Layout(LayoutType.VBox)
                     .Items(
                         HQ.TextBox().ID("txtBatNbr").Name("txtBatNbr").HQLangCode("BatNbr").Width(250)
-                        , HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BranchID").Width(250)
+                        , HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BranchID").Width(250).ReadOnly(true)
                         , HQ.Combo().ID("cboStatus").Name("cboStatus").Width(250)
                             .HQLangCode("Status").HQDBSys(false).HQProcedure("IN40300_pcStatus")
                             .HQColumnShow("Descr").ForceSelection(true).AllowBlank(false)
@@ -120,7 +120,7 @@
              .Region(Region.Center)
             .Layout(LayoutType.Fit)
             .Items(
-                HQ.TextArea().ID("txtRes")
+                HQ.TextArea().ID("txtRes").ReadOnly(true)
             )
         )//frm Main
 )//View port
