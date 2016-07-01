@@ -119,7 +119,7 @@
                         })
 
                     , HQ.Combo().ID("cboDfltLotSerTrack").Name("cboDfltLotSerTrack").HQLangCode("LotSerTrack").HQProcedure("IN20200_pcDfltLotSerTrack")
-                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("DfltLotSerTrack")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("DfltLotSerTrack")
                     .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .HQDBSys(false).ForceSelection(true).HQAutoLoad(true).AllowBlank(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -244,7 +244,7 @@
                 X.Container().Layout(LayoutType.VBox)
                 .Items(
                     HQ.Combo().ID("cboDfltLotSerAssign").Name("cboDfltLotSerAssign").HQLangCode("Assignment").HQProcedure("IN20200_pcDfltLotSerAssign")
-                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("DfltLotSerAssign").AllowBlank(false)
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("DfltLotSerAssign")
                     .LabelWidth(160).Width(410).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .HQDBSys(false).ForceSelection(true).HQAutoLoad(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -259,7 +259,7 @@
                     })
 
                     , HQ.Combo().ID("cboDfltLotSerMthd").Name("cboDfltLotSerMthd").HQLangCode("IssMthd").HQProcedure("IN20200_pcDfltLotSerMthd")
-                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("DfltLotSerMthd").AllowBlank(false)
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("DfltLotSerMthd")
                     .LabelWidth(160).Width(410).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .HQDBSys(false).ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -289,7 +289,7 @@
                 , X.FieldSet().Layout(LayoutType.VBox).Title(Util.GetLang("Prefix")).MarginSpec("0 0 0 48")
                 .Items(
                     HQ.Combo().ID("cboDfltLotSerFxdTyp").Name("cboDfltLotSerFxdTyp").HQLangCode("Type").HQProcedure("IN20200_pcDfltLotSerFxdTyp")
-                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("DfltLotSerFxdTyp").AllowBlank(false)
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("DfltLotSerFxdTyp")
                     .Width(350).HQHeightWidth(400, 300).MarginSpec("0 0 0 0").LabelWidth(101)
                     .HQDBSys(false).ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -313,7 +313,7 @@
                         })
 
                      , HQ.TextBox().ID("txtDfltLotSerFxdVal").Name("txtDfltLotSerFxdVal").HQLangCode("Value").DataIndex("DfltLotSerFxdVal")
-                                     .Width(350).MarginSpec("5 0 10 0").MaxLength(12).EnforceMaxLength(true).LabelWidth(101).EnableKeyEvents(true).Tag("X")
+                      .Width(350).MarginSpec("5 0 10 0").MaxLength(12).EnforceMaxLength(true).LabelWidth(101).EnableKeyEvents(true).Tag("X")
                      .Listeners(lst =>
                         {
                             lst.KeyDown.Fn = "txtDfltLotSerFxdVal_KeyDown";
@@ -343,12 +343,10 @@
 
                 , X.Container().Layout(LayoutType.VBox)
                 .Items(
-                    HQ.TextBox().ID("lblShowNextLotSerial").Name("lblShowNextLotSerial").HQLangCode("NextLotSer")
-                    .LabelWidth(160).Width(410).MarginSpec("5 0 0 0").ReadOnly(true).EnableKeyEvents(true)
-                    .Listeners(lst =>
-                    {
-                        lst.KeyDown.Fn = "txtDfltLotSerFxdVal_KeyDown";
-                    })
+                    HQ.TextBox().ID("lblShowNextLotSerial").Name("lblShowNextLotSerial").HQLangCode("NextLotSer")//.Width(410).ReadOnly(true)
+                   .LabelWidth(160).Width(410).MarginSpec("5 0 0 0").ReadOnly(true).EnableKeyEvents(true).ReadOnly(true).Tag("X")
+                     // .EnableKeyEvents(true)
+                   
                 )
             )//Tab LotSerial
 

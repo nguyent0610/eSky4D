@@ -1,5 +1,5 @@
 ﻿var keys = ['CpnyID'];
-var fieldsCheckRequire = ["CpnyID"];
+var fieldsCheckRequire = ["CpnyID", "DfltLotSerAssign"];
 var fieldsLangCheckRequire = ["CpnyID"];
 
 var prefixvalue = "";
@@ -230,13 +230,20 @@ var chkPublic_Change = function (item, value, oldValue) {
 var cboDfltLotSerTrack_Change = function (a, value) {
     if (value) {
         if ((value == "L" || value == "S")) {
+          //  App.lblShowNextLotSerial.setReadOnly(true);
             App.tabDetail.child('#pnlLotSerial').tab.setDisabled(false);
             prefixvalue = App.txtDfltLotSerFxdVal.getValue();
             lastfixvalue = App.txtDfltLotSerNumVal.getValue();
             shownextlotserial = prefixvalue + lastfixvalue;
             App.lblShowNextLotSerial.setValue(shownextlotserial);
+            App.cboDfltLotSerAssign.allowBlank = false;
+            App.cboDfltLotSerMthd.allowBlank = false;
+            App.cboDfltLotSerFxdTyp.allowBlank = false;
         } else {
             App.tabDetail.child('#pnlLotSerial').tab.setDisabled(true);
+            App.cboDfltLotSerAssign.allowBlank = true;
+            App.cboDfltLotSerMthd.allowBlank = true;
+            App.cboDfltLotSerFxdTyp.allowBlank = true;
         }
     }
 };
@@ -313,6 +320,11 @@ var stoCpny_Load = function (sto) {
 };
 
 var grdCpny_BeforeEdit = function (editor, e) {
+    if (!Ext.isEmpty(App.stoCpny.data.items[0].data.CpnyID)) {
+        if (!HQ.isUpdate) {
+            return false;
+        }
+    }
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
 };
 
@@ -330,28 +342,6 @@ var grdCpny_Reject = function (record) {
     frmChange();
 };
 
-var cboDfltLotSerFxdTyp_Change =function (sender, value) {
-    //if (e) {
-    //    App.txtDfltLotSerFxdVal.setValue('');
-    //    if (e == "D") {
-    //        App.txtDfltLotSerFxdLen.setValue('8');
-    //        App.txtDfltLotSerFxdVal.setValue(HQ.IN20200Date);
-    //        HQ.common.lockItem(App.pnlLotSerial, true);
-    //        //HQ.common.lockItem(App.pnlLotSerial, true); // Kiểm Tra Lại
-    //    }
-        
-    //}
-    if (value) {
-        //if (sender.hasFocus) {
-        checkLotSerial(value);
-        //}
-        App.txtDfltLotSerFxdVal.setValue('');
-        if (value == "D") {
-            App.txtDfltLotSerFxdLen.setValue('8');
-            App.txtDfltLotSerFxdVal.setValue(HQ.IN20200Date);
-        }
-    }
-};
 
 var cboDfltStkUnit_Change = function (sender, e) {
     App.cboDfltPOUnit.getStore().reload();
@@ -391,54 +381,72 @@ var focusControl = function (invalidField) {
 
 var save = function () {
     
-    if (!App.chkPublic.getValue()) {
-        if (App.stoCpny.getCount() == 1) {
-            HQ.message.show(1000, App.txtCpny.text, '');
-            App.tabDetail.setActiveTab(App.pnlCpnyID);
-            return;
-        }
+   
+        if (App.cboDfltLotSerTrack.getValue() != 'N') {
+            if (!App.cboDfltLotSerAssign.getValue()) {
+                invalidField = App.cboDfltLotSerAssign.id;
+                HQ.message.show(1000, App.cboDfltLotSerAssign.fieldLabel, 'HQ.util.focusControl');
+                return;
+            } else if (!App.cboDfltLotSerMthd.getValue()) {
+                invalidField = App.cboDfltLotSerMthd.id;
+                HQ.message.show(1000, App.cboDfltLotSerMthd.fieldLabel, 'HQ.util.focusControl');
+                return;
+            } else if (App.txtDfltLotSerShelfLife.getValue()<1) {
+                invalidField = App.txtDfltLotSerShelfLife.id;
+                HQ.message.show(1000, App.txtDfltLotSerShelfLife.fieldLabel, 'HQ.util.focusControl');
+               return; 
+            } else if (!App.txtDfltWarrantyDays.getValue()) {
+                invalidField = App.txtDfltWarrantyDays.id;
+                HQ.message.show(1000, App.txtDfltWarrantyDays.fieldLabel, 'HQ.util.focusControl');
+                return;
+            } else if (!App.txtDfltLotSerFxdLen.getValue()) {
+                invalidField = App.txtDfltLotSerFxdLen.id;
+                HQ.message.show(1000, App.txtDfltLotSerFxdLen.fieldLabel, 'HQ.util.focusControl');
+                return;
+            } else if (!App.txtDfltLotSerFxdVal.getValue()) {
+                invalidField = App.txtDfltLotSerFxdVal.id;
+                HQ.message.show(1000, App.txtDfltLotSerFxdVal.fieldLabel, 'HQ.util.focusControl');
+                return;
+            } else if (!App.txtDfltLotSerNumLen.getValue()) {
+                invalidField = App.txtDfltLotSerNumLen.id;
+                HQ.message.show(1000, App.txtDfltLotSerNumLen.fieldLabel, 'HQ.util.focusControl');
+                return;
+            } else if (!App.txtDfltLotSerNumVal.getValue()) {
+                invalidField = App.txtDfltLotSerNumVal.id;
+                HQ.message.show(1000, App.txtDfltLotSerNumVal.fieldLabel, 'HQ.util.focusControl');
+                return;
+            } else if (App.txtDfltLotSerFxdVal.getValue().length != App.txtDfltLotSerFxdLen.getValue()) {
+                HQ.message.show(2016061401, App.txtDfltLotSerFxdLen.getValue());
+                App.tabDetail.setActiveTab(App.pnlLotSerial);
+                App.txtDfltLotSerFxdVal.focus();
+                return;
+            } else if (App.txtDfltLotSerNumVal.getValue().length != App.txtDfltLotSerFxdLen.getValue()) {
+                HQ.message.show(2016061401, App.txtDfltLotSerFxdLen.getValue());
+                App.tabDetail.setActiveTab(App.pnlLotSerial);
+                App.txtDfltLotSerNumVal.focus();
+                return;
+            
+            } else if (!App.txtDfltLotSerNumLen.getValue()) {
+               invalidField = App.txtDfltLotSerNumLen.id;
+               HQ.message.show(1000, App.txtDfltLotSerNumLen.fieldLabel, 'HQ.util.focusControl');
+               return;
+           } else if (!App.txtDfltLotSerNumVal.getValue()) {
+              invalidField = App.txtDfltLotSerNumVal.id;
+              HQ.message.show(1000, App.txtDfltLotSerNumVal.fieldLabel, 'HQ.util.focusControl');
+              return;
+           } else if (!App.cboDfltLotSerFxdTyp.getValue()) {
+               invalidField = App.cboDfltLotSerFxdTyp.id;
+               HQ.message.show(1000, App.cboDfltLotSerFxdTyp.fieldLabel, 'HQ.util.focusControl');
+               return;
+           }
     }
-  
-
-    if (App.cboDfltLotSerTrack.getValue() != 'N') {
-        if (!App.cboDfltLotSerAssign.getValue()) {
-            invalidField = App.cboDfltLotSerAssign.id;
-            HQ.message.show(1000, App.cboDfltLotSerAssign.fieldLabel, 'HQ.util.focusControl');
-            return;
-        } else if (!App.cboDfltLotSerMthd.getValue()) {
-            invalidField = App.cboDfltLotSerMthd.id;
-            HQ.message.show(1000, App.cboDfltLotSerMthd.fieldLabel, 'HQ.util.focusControl');
-            return;
-        } else if (App.txtDfltLotSerShelfLife.getValue() < 1) {
-            invalidField = App.txtDfltLotSerShelfLife.id;
-            HQ.message.show(2015110901, App.txtDfltLotSerShelfLife.fieldLabel, 'HQ.util.focusControl');
-            return;
-        } else if (!App.txtDfltLotSerNumLen.getValue()) {
-            invalidField = App.txtDfltLotSerNumLen.id;
-            HQ.message.show(1000, App.txtDfltLotSerNumLen.fieldLabel, 'HQ.util.focusControl');
-            return;
-        } else if (!App.txtDfltLotSerNumVal.getValue()) {
-            invalidField = App.txtDfltLotSerNumVal.id;
-            HQ.message.show(1000, App.txtDfltLotSerNumVal.fieldLabel, 'HQ.util.focusControl');
-            return;
-        } else if (!App.cboDfltLotSerFxdTyp.getValue()) {
-            invalidField = App.cboDfltLotSerFxdTyp.id;
-            HQ.message.show(1000, App.cboDfltLotSerFxdTyp.fieldLabel, 'HQ.util.focusControl');
-            return;
-        } else if (!App.txtDfltWarrantyDays.getValue()) {
-            invalidField = App.txtDfltWarrantyDays.id;
-            HQ.message.show(1000, App.txtDfltWarrantyDays.fieldLabel, 'HQ.util.focusControl');
-            return;
-        } else if (!App.txtDfltLotSerFxdVal.getValue()) {
-            invalidField = App.txtDfltLotSerFxdVal.id;
-            HQ.message.show(1000, App.txtDfltLotSerFxdVal.fieldLabel, 'HQ.util.focusControl');
-            return;
-        } else if (!App.lblShowNextLotSerial.getValue()) {
-            invalidField = App.lblShowNextLotSerial.id;
-            HQ.message.show(1000, App.lblShowNextLotSerial.fieldLabel, 'HQ.util.focusControl');
-            return;
+        if (!App.chkPublic.getValue()) {
+            if (App.stoCpny.getCount() == 1) {
+                HQ.message.show(1000, App.txtCpny.text, '');
+                App.tabDetail.setActiveTab(App.pnlCpnyID);
+                return;
+            }
         }
-    }
     var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/;
     var value = App.cboClassID.getValue();
     if (!HQ.util.passNull(value.toString()).match(regex)) {
@@ -471,7 +479,28 @@ var save = function () {
     }
     
 };
+var cboDfltLotSerFxdTyp_Change = function (sender, value) {
+    //if (e) {
+    //    App.txtDfltLotSerFxdVal.setValue('');
+    //    if (e == "D") {
+    //        App.txtDfltLotSerFxdLen.setValue('8');
+    //        App.txtDfltLotSerFxdVal.setValue(HQ.IN20200Date);
+    //        HQ.common.lockItem(App.pnlLotSerial, true);
+    //        //HQ.common.lockItem(App.pnlLotSerial, true); // Kiểm Tra Lại
+    //    }
 
+    //}
+    if (value) {
+        //if (sender.hasFocus) {
+        checkLotSerial(value);
+        //}
+        App.txtDfltLotSerFxdVal.setValue('');
+        if (value == "D") {
+            App.txtDfltLotSerFxdLen.setValue('8');
+            App.txtDfltLotSerFxdVal.setValue(HQ.IN20200Date);
+        }
+    }
+};
 var deleteData = function (item) {
     if (item == "yes") {
         if (_focusNo == 0) {
@@ -564,6 +593,7 @@ var checkLotSerial = function (type) {
     }
     else {
         App.txtDfltLotSerFxdVal.setReadOnly(false);
+        App.txtDfltLotSerFxdLen.setReadOnly(false);
     }
 
 };
@@ -592,3 +622,6 @@ var txtDfltLotSerShelfLife_KeyDown = function (sender, e) {
         if (((e.ctrlKey == true && e.keyCode == 86) || ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105))) && (e.keyCode != 8 && e.keyCode != 46))
             e.stopEvent();
 };
+
+
+
