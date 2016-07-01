@@ -118,6 +118,7 @@ function refresh(item) {
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
+   
     HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
@@ -129,6 +130,10 @@ var stoLoad = function (sto) {
     if (_isLoadMaster) {
         HQ.common.showBusy(false);
     }
+    //App.frmMain.suspendLayouts();
+    //store.reload();
+    //App.frmMain.resumeLayouts(true);
+   // App.frmMain.doLayout();
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
@@ -148,86 +153,86 @@ var grdSYS_AccessDetRights_Reject = function (record) {
     frmChange();
 };
 
-var InitRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("InitRights", value.checked);
-        });
-        App.stoSYS_AccessDetRights.resumeEvents();
-        App.grdSYS_AccessDetRights.view.refresh();
-    }
+//var InitRightsCheckAll_Change = function (value) {
+//    if (value) {
+//        App.stoSYS_AccessDetRights.suspendEvents();
+//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+//            item.set("InitRights", value.checked);
+//        });
+//        App.stoSYS_AccessDetRights.resumeEvents();
+//        App.grdSYS_AccessDetRights.view.refresh();
+//    }
 
-};
+//};
 
-var InsertRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("InsertRights", value.checked);
-        });
-        App.stoSYS_AccessDetRights.resumeEvents();
-        App.grdSYS_AccessDetRights.view.refresh();
-    }
-};
+//var InsertRightsCheckAll_Change = function (value) {
+//    if (value) {
+//        App.stoSYS_AccessDetRights.suspendEvents();
+//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+//            item.set("InsertRights", value.checked);
+//        });
+//        App.stoSYS_AccessDetRights.resumeEvents();
+//        App.grdSYS_AccessDetRights.view.refresh();
+//    }
+//};
 
-var UpdateRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("UpdateRights", value.checked);
-        });
-        App.stoSYS_AccessDetRights.resumeEvents();
-        App.grdSYS_AccessDetRights.view.refresh();
-    }
-};
+//var UpdateRightsCheckAll_Change = function (value) {
+//    if (value) {
+//        App.stoSYS_AccessDetRights.suspendEvents();
+//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+//            item.set("UpdateRights", value.checked);
+//        });
+//        App.stoSYS_AccessDetRights.resumeEvents();
+//        App.grdSYS_AccessDetRights.view.refresh();
+//    }
+//};
 
-var DeleteRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("DeleteRights", value.checked);
-        });
-        App.stoSYS_AccessDetRights.resumeEvents();
-        App.grdSYS_AccessDetRights.view.refresh();
-    }
-};
+//var DeleteRightsCheckAll_Change = function (value) {
+//    if (value) {
+//        App.stoSYS_AccessDetRights.suspendEvents();
+//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+//            item.set("DeleteRights", value.checked);
+//        });
+//        App.stoSYS_AccessDetRights.resumeEvents();
+//        App.grdSYS_AccessDetRights.view.refresh();
+//    }
+//};
 
-var ViewRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("ViewRights", value.checked);
-        });
-        App.stoSYS_AccessDetRights.resumeEvents();
-        App.grdSYS_AccessDetRights.view.refresh();
-    }
-};
+//var ViewRightsCheckAll_Change = function (value) {
+//    if (value) {
+//        App.stoSYS_AccessDetRights.suspendEvents();
+//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+//            item.set("ViewRights", value.checked);
+//        });
+//        App.stoSYS_AccessDetRights.resumeEvents();
+//        App.grdSYS_AccessDetRights.view.refresh();
+//    }
+//};
 
-var ReleaseRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("ReleaseRights", value.checked);
-        });
-        App.stoSYS_AccessDetRights.resumeEvents();
-        App.grdSYS_AccessDetRights.view.refresh();
-    }
-};
+//var ReleaseRightsCheckAll_Change = function (value) {
+//    if (value) {
+//        App.stoSYS_AccessDetRights.suspendEvents();
+//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+//            item.set("ReleaseRights", value.checked);
+//        });
+//        App.stoSYS_AccessDetRights.resumeEvents();
+//        App.grdSYS_AccessDetRights.view.refresh();
+//    }
+//};
 
 var LoadGrid = function (sender, e) {
     App.grdSYS_AccessDetRights.show();
     App.stoSYS_AccessDetRights.reload();
-    if (App.InitRightsCheckAll.value == true || App.InsertRightsCheckAll.value == true ||
-        App.UpdateRightsCheckAll.value == true || App.DeleteRightsCheckAll.value == true ||
-        App.ViewRightsCheckAll.value == true || App.ReleaseRightsCheckAll.value == true) {
-        App.InitRightsCheckAll.setValue(false);
-        App.InsertRightsCheckAll.setValue(false);
-        App.UpdateRightsCheckAll.setValue(false);
-        App.DeleteRightsCheckAll.setValue(false);
-        App.ViewRightsCheckAll.setValue(false);
-        App.ReleaseRightsCheckAll.setValue(false);
-    }
+    //if (App.InitRightsCheckAll.value == true || App.InsertRightsCheckAll.value == true ||
+    //    App.UpdateRightsCheckAll.value == true || App.DeleteRightsCheckAll.value == true ||
+    //    App.ViewRightsCheckAll.value == true || App.ReleaseRightsCheckAll.value == true) {
+    //    App.InitRightsCheckAll.setValue(false);
+    //    App.InsertRightsCheckAll.setValue(false);
+    //    App.UpdateRightsCheckAll.setValue(false);
+    //    App.DeleteRightsCheckAll.setValue(false);
+    //    App.ViewRightsCheckAll.setValue(false);
+    //    App.ReleaseRightsCheckAll.setValue(false);
+    //}
 };
 
 var cboRecType_Change = function (sender, e) {
@@ -241,6 +246,12 @@ var cboScreenNumber_Change = function (value) {
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
 var save = function () {
+    if (App.cboRecType.getValue() != '') {
+        if (!App.cboUsr_GrByType.getValue()) {
+            HQ.message.show(15, App.cboUsr_GrByType.fieldLabel, '');
+            return;
+        }
+    }
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("SavingData"),
@@ -271,7 +282,19 @@ var deleteData = function (item) {
     }
 };
 
-
+var isAllValidKey = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var j = 0; j < keys.length; j++) {
+                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
+                    return false;
+            }
+        }
+        return true;
+    } else {
+        return true;
+    }
+};
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 function refresh(item) {

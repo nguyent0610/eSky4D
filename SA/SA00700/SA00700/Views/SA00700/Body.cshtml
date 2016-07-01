@@ -47,8 +47,8 @@
                         lst.Change.Fn = "cboRecType_Change";
                     })
 
-                , HQ.Combo().ID("cboUsr_GrByType")
-                    .Name("cboUsr_GrByType").HQLangCode("USERID").HQProcedure("SA00700_pcUserOrGroupByTypeMVC")
+                    , HQ.Combo().ID("cboUsr_GrByType").Text(Util.GetLang("UserID"))
+                    .Name("cboUsr_GrByType").HQLangCode("UserID").HQProcedure("SA00700_pcUserOrGroupByTypeMVC")
                     .HQColumnShow("ID,Descr").DisplayField("ID").ValueField("ID").HQAutoLoad(false)
                     .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
@@ -137,69 +137,69 @@
 
                     //Colum Init
                     , X.CheckColumn().ID("txtInitRights")
-                    .DataIndex("InitRights").Text(Util.GetLang("InitRights")).Width(150).Editable(true).HideTitleEl(true)
-                    .HeaderItems(
-                        HQ.Checkbox().ID("InitRightsCheckAll").HQLangCode("InitRights").MarginSpec("0 0 0 50")
-                            .Listeners(l =>
-                            {
-                                l.Change.Fn = "InitRightsCheckAll_Change";
-                            })
-                    )
+                     .DataIndex("InitRights").Text(Util.GetLang("InitRights")).Width(150).Editable(true)//.HideTitleEl(true)
+                    //.HeaderItems(
+                    //    HQ.Checkbox().ID("InitRightsCheckAll").HQLangCode("InitRights")//.MarginSpec("2 0 0 0")
+                    //        .Listeners(l =>
+                    //        {
+                    //            l.Change.Fn = "InitRightsCheckAll_Change";
+                    //        })
+                    //)
 
                     //Colum Insert
                     , X.CheckColumn().ID("txtInsertRights")
-                    .DataIndex("InsertRights").Text(Util.GetLang("InsertRights")).Width(150).Editable(true).HideTitleEl(true)
-                    .HeaderItems(
-                        HQ.Checkbox().ID("InsertRightsCheckAll").HQLangCode("InsertRights").MarginSpec("0 0 0 50")
-                            .Listeners(l =>
-                            {
-                                l.Change.Fn = "InsertRightsCheckAll_Change";
-                            })
-                    )
+                    .DataIndex("InsertRights").Text(Util.GetLang("InsertRights")).Width(150).Editable(true)//.HideTitleEl(true)
+                    //.HeaderItems(
+                    //    HQ.Checkbox().ID("InsertRightsCheckAll").HQLangCode("InsertRights").MarginSpec("0 0 0 50")
+                    //        .Listeners(l =>
+                    //        {
+                    //            l.Change.Fn = "InsertRightsCheckAll_Change";
+                    //        })
+                    //)
 
                     //Colum Update
                     , X.CheckColumn().ID("txtUpdateRights")
-                    .DataIndex("UpdateRights").Text(Util.GetLang("UpdateRights")).Width(150).Editable(true).HideTitleEl(true)
-                    .HeaderItems(
-                        HQ.Checkbox().ID("UpdateRightsCheckAll").HQLangCode("UpdateRights").MarginSpec("0 0 0 50")
-                            .Listeners(l =>
-                            {
-                                l.Change.Fn = "UpdateRightsCheckAll_Change";
-                            })
-                    )
+                    .DataIndex("UpdateRights").Text(Util.GetLang("UpdateRights")).Width(150).Editable(true)//.HideTitleEl(true)
+                    //.HeaderItems(
+                    //    HQ.Checkbox().ID("UpdateRightsCheckAll").HQLangCode("UpdateRights").MarginSpec("0 0 0 50")
+                    //        .Listeners(l =>
+                    //        {
+                    //            l.Change.Fn = "UpdateRightsCheckAll_Change";
+                    //        })
+                    //)
 
                     //Colum Delete
                     , X.CheckColumn().ID("txtDeleteRights")
-                    .DataIndex("DeleteRights").Text(Util.GetLang("DeleteRights")).Width(150).Editable(true).HideTitleEl(true)
-                    .HeaderItems(
-                        HQ.Checkbox().ID("DeleteRightsCheckAll").HQLangCode("DeleteRights").MarginSpec("0 0 0 50")
-                            .Listeners(l =>
-                            {
-                                l.Change.Fn = "DeleteRightsCheckAll_Change";
-                            })
-                    )
+                    .DataIndex("DeleteRights").Text(Util.GetLang("DeleteRights")).Width(150).Editable(true)//.HideTitleEl(true)
+                    //.HeaderItems(
+                    //    HQ.Checkbox().ID("DeleteRightsCheckAll").HQLangCode("DeleteRights").MarginSpec("0 0 0 50")
+                    //        .Listeners(l =>
+                    //        {
+                    //            l.Change.Fn = "DeleteRightsCheckAll_Change";
+                    //        })
+                    //)
 
                     //Colum View
                     , X.CheckColumn().ID("txtViewRights")
-                    .DataIndex("ViewRights").Text(Util.GetLang("ViewRights")).Width(150).Editable(true).HideTitleEl(true)
-                    .HeaderItems(
-                        HQ.Checkbox().ID("ViewRightsCheckAll").HQLangCode("ViewRights").MarginSpec("0 0 0 50")
-                            .Listeners(l =>
-                            {
-                                l.Change.Fn = "ViewRightsCheckAll_Change";
-                            })
-                    )
+                    .DataIndex("ViewRights").Text(Util.GetLang("ViewRights")).Width(150).Editable(true)//.HideTitleEl(true)
+                    //.HeaderItems(
+                    //    HQ.Checkbox().ID("ViewRightsCheckAll").HQLangCode("ViewRights").MarginSpec("0 0 0 50")
+                    //        .Listeners(l =>
+                    //        {
+                    //            l.Change.Fn = "ViewRightsCheckAll_Change";
+                    //        })
+                    //)
 
                     //Colum Release
                     , X.CheckColumn().ID("txtReleaseRights")
-                    .DataIndex("ReleaseRights").Text(Util.GetLang("ReleaseRights")).Width(150).Editable(true).HideTitleEl(true)
-                    .HeaderItems(
-                        HQ.Checkbox().ID("ReleaseRightsCheckAll").HQLangCode("ReleaseRights").MarginSpec("0 0 0 50")
-                            .Listeners(l =>
-                            {
-                                l.Change.Fn = "ReleaseRightsCheckAll_Change";
-                            })
-                    )
+                    .DataIndex("ReleaseRights").Text(Util.GetLang("ReleaseRights")).Width(150).Editable(true)//.HideTitleEl(true)
+                    //.HeaderItems(
+                    //    HQ.Checkbox().ID("ReleaseRightsCheckAll").HQLangCode("ReleaseRights").MarginSpec("0 0 0 50")
+                    //        .Listeners(l =>
+                    //        {
+                    //            l.Change.Fn = "ReleaseRightsCheckAll_Change";
+                    //        })
+                    //)
                     , X.CommandColumn().Width(150)
                     .Commands(
                         X.GridCommand()
@@ -212,41 +212,47 @@
                     .Listeners(l => l.Command.Handler = "grdSYS_AccessDetRights_Reject(record);")
                 )
                 .SelectionModel(X.RowSelectionModel().ID("slmSYS_AccessDetRights").Mode(SelectionMode.Multi))
-        //.BottomBar(
-        //    X.PagingToolbar()
-        //    .Items(
-        //        X.Label("Page size:"),
-        //        X.ToolbarSpacer(10),
-        //        X.ComboBox()
-        //        .Width(80)
-        //        .Items("1", "2", "10", "20", "30", "50")
-        //        .SelectedItems("50")
-        //        .Listeners(l =>
-        //            {
-        //                l.Select.Fn = "HQ.grid.onPageSelect";
-        //            })
-        //    )
-        //    .Plugins(X.ProgressBarPager())
-        //)
-                .Plugins(
-                    X.CellEditing()
-                    .ClicksToEdit(1)
-                    .Listeners(ls =>
-                    {
-                        ls.BeforeEdit.Fn = "grdSYS_AccessDetRights_BeforeEdit";
-                        ls.Edit.Fn = "grdSYS_AccessDetRights_Edit";
-                        ls.ValidateEdit.Fn = "grdSYS_AccessDetRights_ValidateEdit";
-
-                    })
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
                 )
+                .Plugins(X.ProgressBarPager())
+            )
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.BeforeEdit.Fn = "grdSYS_AccessDetRights_BeforeEdit";
+                            ls.Edit.Fn = "grdSYS_AccessDetRights_Edit";
+                            ls.ValidateEdit.Fn = "grdSYS_AccessDetRights_ValidateEdit";
+
+                        })
+                    )
 
                 .Features(
                     X.GridFilters()
                         .Local(true)
                         .Filters(
                             X.StringFilter().DataIndex("ScreenNumber"),
-                            X.StringFilter().DataIndex("Descr")
-                        )
+                            X.StringFilter().DataIndex("Descr"),                         
+                            X.BooleanFilter().DataIndex("InitRights"),
+                            X.BooleanFilter().DataIndex("InsertRights"),
+                            X.BooleanFilter().DataIndex("UpdateRights"),
+                            X.BooleanFilter().DataIndex("DeleteRights"),
+                            X.BooleanFilter().DataIndex("ViewRights"),
+                            X.BooleanFilter().DataIndex("ReleaseRights")
+                    )
                 )
 
             )// pnl Grid
