@@ -44,18 +44,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ext.Net">
-      <HintPath>..\..\EbizWebMvc\SA40000_Language\SA40000\bin\Ext.Net.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\esky-dll\Ext.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net.Utilities">
-      <HintPath>..\..\EbizWebMvc\SA40000_Language\SA40000\bin\Ext.Net.Utilities.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\esky-dll\Ext.Net.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="HQ.eSkyFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\PCHQ\Desktop\SA_Grid\SA00900\SA00900\bin\HQ.eSkyFramework.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\esky-dll\HQ.eSkyFramework.dll</HintPath>
     </Reference>
     <Reference Include="HQ.eSkySys, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\eBiz4DSky\Dll\HQ.eSkySys.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\esky-dll\HQ.eSkySys.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -84,7 +84,7 @@
       <HintPath>..\..\SA00900\SA00900\SA00900\bin\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\esky-dll\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
       <Private>True</Private>
@@ -135,7 +135,7 @@
     </Reference>
     <Reference Include="Antlr3.Runtime">
       <Private>True</Private>
-      <HintPath>..\packages\WebGrease.1.1.0\lib\Antlr3.Runtime.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\esky-dll\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -294,7 +294,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

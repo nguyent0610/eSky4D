@@ -116,9 +116,9 @@
                     .Items(
                         X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                         .Items(
-                            HQ.DateField().ID("lblWrkAdjDate").MarginSpec("5 0 0 0").HQLangCode("WRKADJDATE").Width(250).Value(DateTime.Now.ToString())
+                            HQ.DateField().ID("lblWrkAdjDate").MarginSpec("5 0 0 0").HQLangCode("WRKADJDATE").Width(250).Value(DateTime.Now)
                           //  .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
-                            , HQ.DateField().ID("lblWrkOpenDate").MarginSpec("5 0 10 0").HQLangCode("WRKOPENDATE").Width(250).Value(DateTime.Now.ToString())
+                            , HQ.DateField().ID("lblWrkOpenDate").MarginSpec("5 0 10 0").HQLangCode("WRKOPENDATE").Width(250).Value(DateTime.Now)
                            // .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
                         )
                         , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
@@ -194,12 +194,13 @@
 
                     , X.CheckColumn().ID("WrkDateChk").Text(Util.GetLang("WrkDateChk")).DataIndex("WrkDateChk").Width(150).Editable(true)
 
-                    , X.DateColumn().Text(Util.GetLang("WrkAdjDate")).DataIndex("WrkAdjDate")
-                    .Width(150).ID("txtWrkAdjDate").Editor(X.DateField())//.Format("MM/dd/yyyy"))
+                    , HQ.DateColumn().Text(Util.GetLang("WrkAdjDate")).DataIndex("WrkAdjDate")
+                    .Width(150).ID("txtWrkAdjDate").Editor(HQ.DateField())
+                  //   ,HQ.DateColumn().DataIndex("WrkAdjDate").Width(150).ID("txtWrkAdjDate").Editor(HQ.DateField())
 
-                    , X.DateColumn().Text(Util.GetLang("WrkOpenDate")).DataIndex("WrkOpenDate")
-                    .Width(150).ID("txtWrkOpenDate").Editor(X.DateField())//.Format("MM/dd/yyyy"))
-
+                    , HQ.DateColumn().Text(Util.GetLang("WrkOpenDate")).DataIndex("WrkOpenDate")
+                    .Width(150).ID("txtWrkOpenDate").Editor(HQ.DateField())
+                   
                     , X.NumberColumn().ID("WrkLowerDays").Text(Util.GetLang("WrkLowerDays")).DataIndex("WrkLowerDays").Format("0,000")
                     .Width(150).Align(Alignment.Right)
                     .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
