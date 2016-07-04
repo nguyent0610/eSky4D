@@ -41,7 +41,7 @@ namespace OM40200.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+       // [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

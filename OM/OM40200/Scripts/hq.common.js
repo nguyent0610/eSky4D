@@ -23,7 +23,11 @@ if (typeof String.prototype.trim !== 'function') {
         return this.replace(/^\s+|\s+$/g, '');
     }
 }
-
+if (typeof String.prototype.unsign !== 'function') {
+    String.prototype.unsign = function () {
+        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ĩ/g, "e").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
+    }
+}
 if (!('forEach' in Array.prototype)) {
     Array.prototype.forEach = function (action, that /*opt*/) {
         for (var i = 0, n = this.length; i < n; i++)
@@ -31,6 +35,36 @@ if (!('forEach' in Array.prototype)) {
                 action.call(that, this[i], i, this);
     };
 }
+
+Date.prototype.addDays = function (days) {
+    this.setDate(this.getDate() + days);
+    return this;
+};
+Date.prototype.getFromFormat = function (format) {
+    var yyyy = this.getFullYear().toString();
+    format = format.replace(/yyyy/g, yyyy)
+    var mm = (this.getMonth() + 1).toString();
+    format = format.replace(/MM/g, (mm[1] ? mm : "0" + mm[0]));
+    var dd = this.getDate().toString();
+    format = format.replace(/dd/g, (dd[1] ? dd : "0" + dd[0]));
+    var hh = this.getHours().toString();
+    format = format.replace(/hh/g, (hh[1] ? hh : "0" + hh[0]));
+    var ii = this.getMinutes().toString();
+    format = format.replace(/mm/g, (ii[1] ? ii : "0" + ii[0]));
+    var ss = this.getSeconds().toString();
+    format = format.replace(/ss/g, (ss[1] ? ss : "0" + ss[0]));
+    return format;
+};
+Number.prototype.format = function (n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
+///vi du 
+//12345678.9.format(2, 3, '.', ',');  // "12.345.678,90"
+//123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
+//12345678.9.format(0, 3, '-');       // "12-345-679"
 var HQ = {
     store: {
         isChange: function (store) {
@@ -38,6 +72,33 @@ var HQ = {
                 || store.getChangedData().Updated != undefined
                 || store.getChangedData().Deleted != undefined) {
                 return true;
+            } else {
+                return false;
+            }
+        },
+        isGridChange: function (store, keys) { // Kiểm tra dòng thêm mới đã đủ key thì đánh dấu là đã thay đổi
+            if (store.getChangedData().Updated != undefined
+                || store.getChangedData().Deleted != undefined) {
+                return true;
+            }
+            else if (store.getChangedData().Created != undefined) {
+                if (store.getChangedData().Created.length > 1) {
+                    return true;
+                }
+                else {
+                    var itmCount = keys.length;
+                    var match = 0;
+                    for (var idx = 0; idx < itmCount; idx++) {
+                        if (store.getChangedData().Created[0][keys[idx]]) {
+                            match++;
+                        }
+                    }
+                    if (match == itmCount) {
+                        return true;
+                    }
+                    return false;
+                }
+
             } else {
                 return false;
             }
@@ -93,36 +154,84 @@ var HQ = {
             }
             return Ext.encode(store.getChangedData({ skipIdForPhantomRecords: skip }));
         },
+        getAllData: function (store, fields, values, isEqual) {
+            var lstData = [];
+            if (isEqual == undefined || isEqual == true) {
+                var allData = store.snapshot || store.allData || store.data;
+                allData.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
+            } else {
+                var allData = store.snapshot || store.allData || store.data;
+                allData.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] == values[i]) {
+                                isb = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
+            }
+        },
         findInStore: function (store, fields, values) {
             var data;
-            store.data.each(function (item) {
-                var intT = 0;
-                for (var i = 0; i < fields.length; i++) {
-                    if (item.get(fields[i]) == values[i]) {
-                        intT++;
+            var allData = store.snapshot || store.allData || store.data;
+            if (allData) {
+                allData.each(function (item) {
+                    var intT = 0;
+                    for (var i = 0; i < fields.length; i++) {
+                        var tmp1 = item.get(fields[i]);
+                        var tmp2 = values[i];
+                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
+                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
+                        if (val1.toString() == val2.toString()) {
+                            intT++;
+                        }
                     }
-                }
-                if (intT == fields.length) {
-                    data = item.data;
-                    return false;
-                }
-            });
+                    if (intT == fields.length) {
+                        data = item.data;
+                        return false;
+                    }
+                });
+            }
             return data;
         },
         findRecord: function (store, fields, values) {
             var data;
-            store.data.each(function (item) {
-                var intT = 0;
-                for (var i = 0; i < fields.length; i++) {
-                    if (item.get(fields[i]) == values[i]) {
-                        intT++;
+            var allData = store.snapshot || store.allData || store.data;
+            if (allData) {
+                allData.each(function (item) {
+                    var intT = 0;
+                    for (var i = 0; i < fields.length; i++) {
+                        var tmp1 = item.get(fields[i]);
+                        var tmp2 = values[i];
+                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
+                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
+                        if (val1.toString() == val2.toString()) {
+                            intT++;
+                        }
                     }
-                }
-                if (intT == fields.length) {
-                    data = item;
-                    return false;
-                }
-            });
+                    if (intT == fields.length) {
+                        data = item;
+                        return false;
+                    }
+                });
+            }
             return data;
         },
         // TinhHV using for auto gen the LineRef
@@ -164,7 +273,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
+                                if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -180,7 +289,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
+                                if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -190,6 +299,15 @@ var HQ = {
                 }
             }
             return true;
+        },
+        filterStore: function (store, field, value) {
+            store.filterBy(function (record) {
+                if (record) {
+                    if (record.data[field].toString().toLowerCase() == (HQ.util.passNull(value).toLowerCase())) {
+                        return record;
+                    }
+                }
+            });
         }
     },
     combo: {
@@ -250,6 +368,33 @@ var HQ = {
             if (cbo.getValue())
                 cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
         },
+        expandScrollToItem: function (combo) {
+            var val = combo.getValue();
+            if (val !== null) {
+                var rec = combo.findRecordByValue(combo.getValue()),
+                  node = combo.picker.getNode(rec);
+                if (node != null) {
+                    combo.picker.highlightItem(node);
+                    combo.picker.listEl.scrollChildIntoView(node, false);
+                }
+                //$(combo.picker.listEl.dom).scrollTop($(combo.picker.listEl.dom).scrollTop() + $(node).position().top);
+            }
+
+        },
+        selectAll: function (cbo) {
+            var value = [];
+            cbo.setValue('');
+            cbo.store.data.each(function (item) {
+                value.push(item.data[cbo.valueField]);
+            })
+            cbo.setValue(value);
+        }
+    },
+    date: {
+        expand: function (dte, eOpts) {
+            //dte.picker.setHeight(300);
+            //dte.picker.monthEl.setHeight(300);
+        }
     },
     grid: {
         showBusy: function (grd, isBusy) {
@@ -261,38 +406,90 @@ var HQ = {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
-                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                    callback: function () {
-                        //HQ.grid.last(grd);
-                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                if (store.currentPage != Math.ceil(store.totalCount / store.pageSize) && store.totalCount != 0) {
+                    store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                        callback: function () {
+                            HQ.grid.last(grd);
+                            setTimeout(function () {
+                                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                                if (grd.editingPlugin) {
+                                    grd.editingPlugin.startEditByPosition({
+                                        row: store.getCount() - 1,
+                                        column: 1
+                                    });
+                                }
+                                else {
+                                    grd.lockedGrid.editingPlugin.startEditByPosition({
+                                        row: store.getCount() - 1,
+                                        column: 1
+                                    });
+                                }
+                            }, 300);
+                        }
+                    });
+                }
+                else {
+                    HQ.grid.last(grd);
+                    if (grd.editingPlugin) {
+                        grd.editingPlugin.startEditByPosition({
+                            row: store.getCount() - 1,
+                            column: 1
+                        });
                     }
-                });
-                //}
-                //else {
-                //    HQ.grid.last(grd);
-                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-                //}
+                    else {
+                        grd.lockedGrid.editingPlugin.startEditByPosition({
+                            row: store.getCount() - 1,
+                            column: 1
+                        });
+                    }
+                }
                 return;
             }
-            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-            store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                callback: function () {
-                    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-                        HQ.store.insertBlank(store, keys);
+            if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                    callback: function () {
+                        if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                            HQ.store.insertBlank(store, keys);
+                        }
+                        HQ.grid.last(grd);
+                        setTimeout(function () {
+                            // grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                            if (grd.editingPlugin) {
+                                grd.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                            else {
+                                grd.lockedGrid.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                        }, 300);
                     }
-                    //HQ.grid.last(grd);
-                    setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                });
+            }
+            else {
+                if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                    HQ.store.insertBlank(store, keys);
                 }
-            });
-            //}
-            //else {
-            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-            //        HQ.store.insertBlank(store, keys);
-            //    }
-            //    HQ.grid.last(grd);
-            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-            //}
+                HQ.grid.last(grd);
+                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+
+                if (grd.editingPlugin) {
+                    grd.editingPlugin.startEditByPosition({
+                        row: store.getCount() - 1,
+                        column: 1
+                    });
+                }
+                else {
+                    grd.lockedGrid.editingPlugin.startEditByPosition({
+                        row: store.getCount() - 1,
+                        column: 1
+                    });
+                }
+            }
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
@@ -309,58 +506,40 @@ var HQ = {
         onPageSelect: function (combo) {
             var store = combo.up("gridpanel").getStore();
             store.pageSize = parseInt(combo.getValue(), 10);
-            store.reload();
+            store.loadPage(1);
         },
+
         indexSelect: function (grd) {
             var index = '';
-            var arr = grd.getSelectionModel().getSelection();
+            var allData = grd.store.allData || grd.store.data;
+            var arr = grd.getSelectionModel().selected.items;
             arr.forEach(function (itm) {
-                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+                index += (allData.indexOfKey(itm.internalId) + 1) + ',';
             });
-
             return index.substring(0, index.length - 1);
         },
+
         checkDuplicate: function (grd, row, keys) {
             var found = false;
             var store = grd.getStore();
             if (keys == undefined) keys = row.record.idProperty.split(',');
-            if (store.data) {
-                for (var i = 0; i < store.data.items.length; i++) {
-                    var record = store.data.items[i];
-                    var data = '';
-                    var rowdata = '';
-                    for (var jkey = 0; jkey < keys.length; jkey++) {
-                        if (record.data[keys[jkey]] != undefined) {
-                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-                            if (row.field == keys[jkey])
-                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-                            else
-                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
-                        }
+            var allData = store.snapshot || store.allData || store.data;
+            for (var i = 0; i < allData.items.length; i++) {
+                var record = allData.items[i];
+                var data = '';
+                var rowdata = '';
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (record.data[keys[jkey]] != undefined) {
+                        data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        if (row.field == keys[jkey])
+                            rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                        else
+                            rowdata += (row.record.data[keys[jkey]] ? row.record.data[keys[jkey]].toString().toLowerCase() : '') + ',';
                     }
-                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-                        break;
-                    };
                 }
-            }
-            else {
-                for (var i = 0; i < store.allData.items.length; i++) {
-                    var record = store.allData.items[i];
-                    var data = '';
-                    var rowdata = '';
-                    for (var jkey = 0; jkey < keys.length; jkey++) {
-                        if (record.data[keys[jkey]] != undefined) {
-                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-                            if (row.field == keys[jkey])
-                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-                            else
-                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
-                        }
-                    }
-                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-                        break;
-                    };
-                }
+                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                    break;
+                };
             }
             return found;
         },
@@ -375,14 +554,14 @@ var HQ = {
             if (keys.indexOf(row.field) == -1) {
 
                 for (var jkey = 0; jkey < keys.length; jkey++) {
-                    if (row.record.data[keys[jkey]] == "") {
+                    if (!row.record.data[keys[jkey]]) {
                         return false;
                     }
                 }
             }
             if (keys.indexOf(row.field) != -1) {
                 for (var jkey = 0; jkey < keys.length; jkey++) {
-                    if (row.record.data[keys[jkey]] == "") return true;
+                    if (!row.record.data[keys[jkey]]) return true;
                 }
                 return false;
             }
@@ -399,9 +578,10 @@ var HQ = {
             return true;
         },
         checkBeforeEdit: function (e, keys) {
-            if (!HQ.isUpdate) return false;
+            if (!HQ.isUpdate && e.record.data.tstamp) return false;
+            if (!HQ.isInsert && !e.record.data.tstamp) return false;
             if (keys.indexOf(e.field) != -1) {
-                if (e.record.data.tstamp != "")
+                if (e.record.data.tstamp)
                     return false;
             }
             return HQ.grid.checkInput(e, keys);
@@ -415,25 +595,96 @@ var HQ = {
                 record.reject();
             }
         },
-        checkValidateEdit: function (grd, e, keys) {
+        checkValidateEdit: function (grd, e, keys, isCheckSpecialChar) {
             if (keys.indexOf(e.field) != -1) {
                 var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value).match(regex)) {
-                    HQ.message.show(20140811, e.column.text);
-                    return false;
+                if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
+                if (isCheckSpecialChar) {
+                    if (e.value)
+                        if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+                            HQ.message.show(20140811, e.column.text);
+                            return false;
+                        }
                 }
                 if (HQ.grid.checkDuplicate(grd, e, keys)) {
-                    HQ.message.show(1112, e.value);
+                    if (e.column.xtype == "datecolumn")
+                        HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+                    else HQ.message.show(1112, e.value);
                     return false;
                 }
 
             }
         },
+
+        checkValidateEditDG: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                    if (e.column.xtype == "datecolumn")
+                        HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+                    else HQ.message.show(1112, e.value);
+                    return false;
+                }
+            }
+        },
+
         checkInsertKey: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 if (e.value != '')
                     HQ.store.insertBlank(grd.getStore(), keys);
             }
+        },
+        hide: function (grd, arrcolumnName) {
+            var columns = grd.columns;
+            arrcolumnName.forEach(function (itm) {
+                var index = HQ.grid.findColumnIndex(columns, itm);
+                if (index != -1)
+                    grd.columns[index].hide();
+
+            });
+        },
+        show: function (grd, arrcolumnName) {
+            var columns = grd.columns;
+            arrcolumnName.forEach(function (itm) {
+                var index = HQ.grid.findColumnIndex(columns, itm);
+                if (index != -1)
+                    grd.columns[index].show();
+            });
+        },
+        findColumnIndex: function (columns, dataIndex) {
+            var index;
+            for (index = 0; index < columns.length; ++index) {
+                if (columns[index].dataIndex == dataIndex) { break; }
+            }
+            return index == columns.length ? -1 : index;
+        },
+
+        filterStore: function (store, field, value) {
+            store.filterBy(function (record) {
+                if (record) {
+                    if (record.data[field].toString().toLowerCase() == (HQ.util.passNull(value).toLowerCase())) {
+                        return record;
+                    }
+                }
+            });
+        },
+        filterString: function (record, item) {
+            var val = record.get(item.dataIndex);
+            if (typeof val != 'string') {
+                return (item.getValue().length === 0);
+            }
+            return val.toLowerCase().unsign().indexOf(item.getValue().toLowerCase().unsign()) > -1;
+        },
+        filterComboDescr: function (record, item, store, code, descr) {
+            var val = record.get(item.dataIndex);
+            if (typeof val != 'string') {
+                return (item.getValue().length === 0);
+            }
+            store.clearFilter();
+            var obj = store.findRecord(code, val);
+            if (obj) {
+                return obj.data[descr].toLowerCase().unsign().indexOf(item.getValue().toLowerCase().unsign()) > -1;
+            }
+            return val.toLowerCase().unsign().indexOf(item.getValue().toLowerCase().unsign()) > -1;
         }
     },
     message: {
@@ -545,6 +796,12 @@ var HQ = {
                             itm.setReadOnly(lock)
 
                     }
+                    else if (typeof (itm.disable) != "undefined" && itm.xtype == 'button') {
+                        if (itm.getTag() != "X")
+                            if (lock)
+                                itm.disable()
+                            else itm.enable()
+                    }
                     HQ.common.lockItem(itm, lock);
                 });
             }
@@ -559,14 +816,18 @@ var HQ = {
             if (form == undefined) {
                 if (busy) {
                     App.frmMain.body.mask(waitMsg);
+                    HQ.isBusy = true;
                 } else {
                     App.frmMain.body.unmask();
+                    HQ.isBusy = false;
                 }
             } else {
                 if (busy) {
                     form.body.mask(waitMsg);
+                    HQ.isBusy = true;
                 } else {
                     form.body.unmask();
+                    HQ.isBusy = false;
                 }
             }
 
@@ -608,8 +869,39 @@ var HQ = {
             }
             return false;
         }
+        , findControlByDataIndex: function (ctr, value) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (itm.dataIndex == value) {
+                        HQ.findItem = itm;
+                        return HQ.findItem;
+                    }
+                    else HQ.common.findControlByDataIndex(itm, value);
+                });
+            }
+            return HQ.findItem;
+        }
     },
     util: {
+        checkSpecialChar: function (value) {
+            var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+            if (!HQ.util.passNull(value.toString()).match(regex))
+                return false;
+            for (var i = 0, n = value.length; i < n; i++) {
+                if (value.charCodeAt(i) > 127) {
+                    return false;
+                }
+            }
+            return true;
+        },
+        checkAccessRight: function () {
+            if (HQ.isInsert == false)
+                App.menuClickbtnNew.disable();
+            if (HQ.isDelete == false)
+                App.menuClickbtnDelete.disable();
+            if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false)
+                App.menuClickbtnSave.disable();
+        },
         toBool: function (parm) {
             if (parm.toLowerCase() == 'false') {
                 return false;
@@ -675,14 +967,33 @@ var HQ = {
             if ((HQ.util.passNull(value)).match(regex)) {
                 return true;
             } else {
-                HQ.message.show(09112014, '', null);
+                HQ.message.show(9112014, '', null);
                 return false;
             }
+        },
+        mathRound: function (value, exp) {
+            return decimalAdjust('round', value, exp);
+        },
+        mathFloor: function (value, exp) {
+            return decimalAdjust('floor', value, exp);
+        },
+        mathCeil: function (value, exp) {
+            return decimalAdjust('ceil', value, exp);
+        },
+
+        checkStrUnicode: function (str) {
+            for (var i = 0, n = str.length; i < n; i++) {
+                if (str.charCodeAt(i) > 127) {
+                    return true;
+                }
+            }
+            return false;
         }
+
     },
     form: {
         checkRequirePass: function (frm) {
-            frm.updateRecord();
+            //frm.updateRecord();
             var isValid = true;
             frm.getForm().getFields().each(
                             function (item) {
@@ -730,13 +1041,14 @@ var HQ = {
 
 HQ.waitMsg = HQ.common.getLang('waitMsg');
 var FilterCombo = function (control, stkeyFilter) {
+    var filtersAux = [];
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
         if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
         if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
-            var filtersAux = [];
+
             // get filter
             store.filters.items.forEach(function (item) {
                 if (item.id != control.id + '-query-filter') {
@@ -744,30 +1056,32 @@ var FilterCombo = function (control, stkeyFilter) {
                 }
             });
             store.clearFilter();
+            filtersAux.forEach(function (item) {
+                store.filter(item.property, item.value);
+            });
             if (control.valueModels == null || control.valueModels.length == 0) {
-                store.filterBy(function (record) {
+                store.filter(function (record, id) {
+                    var isMap = false;
                     if (record) {
-                        var isMap = false;
                         stkeyFilter.split(',').forEach(function (key) {
                             if (key) {
                                 if ((typeof HQ.util.passNull(value)) == "string") {
                                     if (record.data[key]) {
-                                        var fieldData = record.data[key].toString().toLowerCase().indexOf(HQ.util.passNull(value).toLowerCase());
+                                        var fieldData = record.data[key].toString().toLowerCase().unsign().indexOf(HQ.util.passNull(value).toLowerCase().unsign());
                                         if (fieldData > -1) {
                                             isMap = true;
-                                            return record;
+                                            return;
                                         }
                                     }
                                 }
                             }
                         });
-                        if (isMap == true) return record
+                        return isMap;
                     }
+                    else return false;
                 });
             }
-            filtersAux.forEach(function (item) {
-                store.filter(item.property, item.value);
-            });
+
         }
     }
 };
@@ -777,7 +1091,29 @@ var loadDefault = function (fileNameStore, cbo) {
 
     }
 };
-//TrungHT
+//MathRound 2015-03-24
+// Closure
+function decimalAdjust(type, value, exp) {
+    exp = exp * -1;
+    // If the exp is undefined or zero...
+    if (typeof exp === 'undefined' || +exp === 0) {
+        return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    // If the value is not a number or the exp is not an integer...
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+        return NaN;
+    }
+    // Shift
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    // Shift back
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+}
+
+//TrungHT override control ext
 Ext.define("NumbercurrencyPrecision", {
     override: "Ext.util.Format.Number",
     currencyPrecision: 0
@@ -936,7 +1272,7 @@ Ext.define("Ext.locale.vn.toolbar.Paging", {
     lastText: HQ.common.getLang("PageLast"),
     refreshText: HQ.common.getLang("PageRefresh"),
     displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
-    emptyMsg: HQ.common.getLang("DataEmty")
+    emptyMsg: HQ.common.getLang("DataEmpty")
 });
 //window.onresize = function () {
 //    if ((window.outerHeight - window.innerHeight) > 100) {

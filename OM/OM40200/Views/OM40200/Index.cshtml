@@ -41,10 +41,10 @@
 </head>
 <body>   
 @(
-    X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull()))
+    X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull()))
 )
 
-@(
+@*@(
     X.Store().ID("stoOrder")
     .AutoLoad(false)
     .Model(Util.GenerateModel(typeof(OM40200_pgOrder_Result), "mdlOrder", ""))
@@ -60,9 +60,9 @@
     .Parameters(ps =>
     {
         ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
-        ps.Add(new StoreParameter("CustID", "App.cboCustomer.getValue()", ParameterMode.Raw));
-        ps.Add(new StoreParameter("SlsperID", "App.cboSlsperID.getValue()", ParameterMode.Raw));
-        ps.Add(new StoreParameter("DeliveryID", "App.cboDeliveryID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("CustID", "App.cboCustomer.getValue().join()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("SlsperID", "App.cboSlsperID.getValue().join()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("DeliveryID", "App.cboDeliveryID.getValue().join()", ParameterMode.Raw));
         ps.Add(new StoreParameter("FromDate", "App.txtFromDate.getValue()", ParameterMode.Raw));
         ps.Add(new StoreParameter("Type", "App.cboProcessType.getValue()", ParameterMode.Raw));
         ps.Add(new StoreParameter("ToDate", "App.txtToDate.getValue()", ParameterMode.Raw));
@@ -70,7 +70,7 @@
     .Listeners(p => {
         p.Load.Fn = "stoOrder_Load";
     })
-)
+)*@
 
 
 @{ Html.RenderAction("Body", new { lang = Current.LangID.ToString() }); }

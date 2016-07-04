@@ -118,8 +118,16 @@ var btnProcess_Click = function () {
     }
 }
 var btnLoad_Click = function () {
-    if (App.chkHeader != null) App.chkHeader.checked = false;
-
+    if (App.chkHeader != null) {
+        App.chkHeader.checked = false;
+    }
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return;
+    }
+    else if (App.txtFromDate.getValue() > App.txtToDate.getValue()) {
+        HQ.message.show(2016070401, [App.txtFromDate.fieldLabel, App.txtToDate.fieldLabel], '', true);
+        return;
+    }
     App.stoOrder.reload();
 }
 

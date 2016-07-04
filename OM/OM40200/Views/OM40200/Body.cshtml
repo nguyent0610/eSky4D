@@ -1,4 +1,4 @@
-@using Ext.Net;
+﻿@using Ext.Net;
 @using Ext.Net.MVC;
 @using HQ.eSkyFramework
 @using HQ.eSkyFramework.HQControl;
@@ -20,7 +20,8 @@
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{ }))
+        .TopBar(Util.SetupToolbar("New,Save,Delete,Print,Refresh", true, ""))
+        //.TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{ }))
         .FieldDefaults(a => { a.LabelAlign = LabelAlign.Right; a.LabelWidth = 120; })
         .Listeners(p => {
             p.BoxReady.Fn = "frmMain_BoxReady";
@@ -31,6 +32,8 @@
             .Border(false)
             .Region(Region.North)
             .Layout(LayoutType.VBox)
+            .AutoScroll(true)
+            .PaddingSpec("1 5")
             .Items(
                 X.FieldContainer()
                 .MarginSpec("10 0 5 0")
@@ -61,9 +64,9 @@
                     
                     HQ.Combo().ID("cboBranchID").Name("BranchID").HQLangCode("BranchName")
                     .HQProcedure("OM40200_pcBranch").HQColumnShow("BranchID,BranchName,Addr")
-                    .DisplayField("BranchID").ValueField("BranchID")
-                    .Width(230).LabelWidth(120).HQHeightWidth(400, 300)
-                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "BranchID"))
+                    .DisplayField("BranchName").ValueField("BranchID")
+                    .Width(300).LabelWidth(120).HQHeightWidth(400, 300)
+                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "BranchID"))                    
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                     })
@@ -80,7 +83,8 @@
                     .HQColumnShow("SlsperID,Name")
                     .DisplayField("SlsperID")
                     .ValueField("SlsperID")
-                    .Width(230)
+                    .MultiSelect(true)
+                    .Width(300)
                     .LabelWidth(100)
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)   
@@ -94,7 +98,6 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
-
                 ),
 
                 X.FieldContainer()
@@ -113,9 +116,9 @@
                     .HQColumnShow("CustID,Name")
                     .DisplayField("CustID")
                     .ValueField("CustID")
-                    .Width(230)
+                    .Width(300)
                     .LabelWidth(120)
-                    .HQHeightWidth(400, 300)
+                    .HQHeightWidth(400, 300).MultiSelect(true)
                     .ForceSelection(true)   
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
                     .HQParam(new StoreParameterCollection(){
@@ -133,7 +136,7 @@
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "InvcDate"))
                     .LabelWidth(100)
-                    .Width(230)
+                    .Width(300)
                     .HQControlFocus("cboProcessType")
                 ),
 
@@ -154,7 +157,7 @@
                     .HQColumnShow("SlsperID,Name")
                     .DisplayField("SlsperID")
                     .ValueField("SlsperID")
-                    .Width(230)
+                    .Width(300).MultiSelect(true)
                     .LabelWidth(120)
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)   
@@ -173,7 +176,7 @@
                     .ID("btnLoad")
                     .Text(Util.GetLang("LoadData"))
                     .Width(90)
-                    .MarginSpec("0 0 0 45")
+                    .MarginSpec("0 0 0 115")
                     .Listeners(l=> l.Click.Fn = "btnLoad_Click"),
                     
                     X.Button()
@@ -191,7 +194,30 @@
             .RowLines(true)
             .Border(true)
             .BorderSpec("1 0 0 0")
-            .StoreID("stoOrder")
+            //.StoreID("stoOrder")
+            .SelectionMemory(false)
+            .View(X.GridView().TrackOver(false).LoadMask(true).GetRowClass(p=>p.Fn="grdOrder_RowClass"))
+            .Store(
+                X.Store()
+                .ID("stoOrder")
+                .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(OM40200_pgOrder_Result), "mdlOrder", ""))
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("CustID", "App.cboCustomer.getValue().join()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("SlsperID", "App.cboSlsperID.getValue().join()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("DeliveryID", "App.cboDeliveryID.getValue().join()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("FromDate", "App.txtFromDate.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("Type", "App.cboProcessType.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("ToDate", "App.txtToDate.getValue()", ParameterMode.Raw));
+                    })
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOrder"))).AutoLoad(false)
+                    .Listeners(l =>
+                    {
+                        l.Load.Fn = "stoOrder_Load";     
+                    })
+            )
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn(),
@@ -259,7 +285,7 @@
                 .Align(Alignment.Right)
                 .DataIndex("OrdAmt")
                 .Text(Util.GetLang("InvcAmt"))
-                .Renderer("rdrTrans_QtyAmt"),
+                .Renderer("rdrTrans_QtyAmt").StyleSpec("text-align:left"),
                 
                 X.Column()
                 .DataIndex("Terms")
@@ -267,16 +293,59 @@
                 
             )
             .ColumnModel(act => { act.Listeners.HeaderClick.Fn = "grdOrder_HeaderClick"; })
-                .Listeners(lst =>
-                {
-                    //lst.SelectionChange.Fn = "grdTrans_SelectionChange";
-                    //lst.Edit.Fn = "grdTrans_Edit";
-                    //lst.ValidateEdit.Fn = "grdTrans_ValidateEdit";
-                    lst.BeforeEdit.Fn = "grdOrder_BeforeEdit";
-                })
+                //.Listeners(lst =>
+                //{
+                //    //lst.SelectionChange.Fn = "grdTrans_SelectionChange";
+                //    //lst.Edit.Fn = "grdTrans_Edit";
+                //    //lst.ValidateEdit.Fn = "grdTrans_ValidateEdit";
+                //    lst.BeforeEdit.Fn = "grdOrder_BeforeEdit";
+                //})
             .SelectionModel(X.RowSelectionModel().ID("smlOrder").Mode(SelectionMode.Single))
-            .View(X.GridView().TrackOver(false).GetRowClass(p=>p.Fn="grdOrder_RowClass"))
-            .Plugins(X.CellEditing().ClicksToEdit(1))
+            //.View(X.GridView().TrackOver(false).GetRowClass(p=>p.Fn="grdOrder_RowClass"))
+            
+            //.Plugins(X.CellEditing().ClicksToEdit(1))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {                            
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdOrder_BeforeEdit";
+                })
+            )
+
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("OrderNbr"),
+                        X.DateFilter().DataIndex("OrderDate"),
+                        X.StringFilter().DataIndex("OrigOrderNbr"),
+                        X.DateFilter().DataIndex("ShipDate"),
+                        X.StringFilter().DataIndex("CustID"),
+                        X.StringFilter().DataIndex("CustName"),
+                        X.StringFilter().DataIndex("SlsPerID"),
+                        X.StringFilter().DataIndex("DeliveryID"),
+                        X.StringFilter().DataIndex("InvcNbr"),                        
+                        X.NumericFilter().DataIndex("OrdAmt"),
+                        X.StringFilter().DataIndex("Terms")
+                    )
+            )
         )
     )
 )
