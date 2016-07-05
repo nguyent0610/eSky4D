@@ -143,7 +143,23 @@
         .Region(Region.Center)
         .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
         .Items(
-            HQ.Combo().ID("cboBranchID_ImExCust").Name("cboBranchID_ImExCust").HQLangCode("BranchID")
+            HQ.Combo().ID("cboProvince_ImExCust").Name("cboProvince_ImExCust").HQLangCode("Province")
+            .HQProcedure("OM23800_pcProvince_ImExCust").Hidden(true)
+            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").InputWidth(200)//.AllowBlank(false)
+            .HQDBSys(false).ForceSelection(true)//.MultiSelect(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+            })
+            
+            , HQ.Combo().ID("cboBranchID_ImExCust").Name("cboBranchID_ImExCust").HQLangCode("BranchID")
             .HQProcedure("OM23800_pcBranchID_ImExMcp")
             .HQColumnShow("BranchID,BranchName").DisplayField("BranchName").ValueField("BranchID")
             .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").InputWidth(200).AllowBlank(false)
@@ -158,22 +174,6 @@
             {
                 lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                 lst.Change.Fn = "Event.Form.cboBranchID_ImExCust_change";
-            })
-
-            ,  HQ.Combo().ID("cboProvince_ImExCust").Name("cboProvince_ImExCust").HQLangCode("Province")
-            .HQProcedure("OM23800_pcProvince_ImExCust").Hidden(true)
-            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").InputWidth(200)//.AllowBlank(false)
-            .HQDBSys(false).ForceSelection(true)//.MultiSelect(true)
-            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-            .HQParam(new StoreParameterCollection()
-            {
-                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
-            })
-            .LoadData()
-            .Listeners(lst =>
-            {
-                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
             })
             
             , X.RadioGroup().ID("radgActionCust")

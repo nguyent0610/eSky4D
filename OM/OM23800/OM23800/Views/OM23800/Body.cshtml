@@ -41,9 +41,13 @@
                     .Icon(Icon.TextListBullets)
                     .Menu(
                         X.Menu().Items(
+                            
                             X.CheckMenuItem().ID("chkHightLight")
-                            .Text(Util.GetLang("HightLight"))
-                            .Handler("Event.Form.chkHightLight_change")
+                                .Text(Util.GetLang("HightLight"))
+                                .Handler("Event.Form.chkHightLight_change")
+                            
+                            , X.CheckMenuItem().ID("chkOverlays")
+                                .Text(Util.GetLang("Overlays"))
                             
                             , X.MenuSeparator()
                         
@@ -99,7 +103,7 @@
                     .Items(
                         HQ.Combo().ID("cboAreaMCL").Name("cboAreaMCL").HQLangCode("Area").HQProcedure("OM23800_pcArea")
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
-                        .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1)
+                        .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection() 
                         { 
@@ -151,7 +155,7 @@
                             lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                             lst.Change.Fn = "Event.Form.cboDistributorMCL_change";
                         })
-                   , HQ.Combo().ID("cboPJPIDMCL").HQLangCode("PJPID").HQProcedure("OM23800_pcPJPID").HQFirstDefault(true)
+                   , HQ.Combo().ID("cboPJPIDMCL").HQLangCode("PJPID").HQProcedure("OM23800_pcPJPID")//.HQFirstDefault(true)
                     .HQColumnShow("PJPID,Descr").DisplayField("PJPID").ValueField("PJPID").EmptyText(Util.GetLang("Select"))
                     .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
                      .HQParam(new StoreParameterCollection() 
@@ -165,12 +169,13 @@
                         {
                             lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";                        
                         })   
-                    , HQ.Combo().ID("cboRouteIDMCL").HQLangCode("RouteID").HQProcedure("OM23800_pcRouteID").HQFirstDefault(true)
+                    , HQ.Combo().ID("cboRouteIDMCL").HQLangCode("RouteID").HQProcedure("OM23800_pcRouteID").EmptyText(Util.GetLang("Select"))//.HQFirstDefault(true)
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
                         , new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
                         , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        , new StoreParameter("@BranchID", "App.cboDistributorMCL.getValue()", ParameterMode.Raw)
                     })
                     .LoadData()
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })                   
@@ -402,7 +407,7 @@
         //    .ToolTip(tt => tt.Text = "Edit")
         //)
         //.Listeners(ls => ls.Command.Fn = "Event.Grid.grdMCL_commandEdit")
-
+                        
                         , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustId")
                         .Renderer("Process.renderColor")
 
@@ -422,7 +427,6 @@
                         .Renderer("Process.renderColor")
                     )
                     .SelectionModel(
-        //X.RowSelectionModel().ID("slmMCP").Mode(SelectionMode.Single)
                         X.RowSelectionModel().ID("slmMCP").Mode(SelectionMode.Single)
                         .Listeners(l => l.Select.Fn = "Event.Grid.slmMCP_Select")
                     )
@@ -432,7 +436,18 @@
                         {
                             l.Edit.Fn = "Event.Grid.grdMCL_edit";
                         })
-                    )// GridPanel: grdMCL
+                    )
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("CustId"),
+                                X.StringFilter().DataIndex("CustName"),
+                                X.StringFilter().DataIndex("Addr1"),
+                                X.StringFilter().DataIndex("Name")
+                            )
+                    )
+                    // GridPanel: grdMCL
                 ) // Container: pnlGridMCL
             ) // FormPanel: pnlMCL
 

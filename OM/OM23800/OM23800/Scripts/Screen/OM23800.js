@@ -1,6 +1,9 @@
 var Declare = {
     selBranchID: '',
-    selBranchName: ''
+    selBranchName: '',
+    _overLays: '',
+    _ID: 0,
+    _zIndex: 0
 };
 
 var Process = {
@@ -87,6 +90,33 @@ var Process = {
         });
     },
 
+    deleteOverLays: function(item){
+        if (item == 'yes') {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang("Deleting") + "...",
+                url: 'OM23800/DeleteOverLays',
+                type: 'POST',
+                timeout: 1000000,
+                params: {
+                    iID: Declare._ID
+                },
+                success: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
+                    }
+                    var tmpPolygon =  Gmap.Process.find_overlays_id(Declare._ID);
+                    tmpPolygon.setMap(null);
+                    var tmpLabel = Gmap.Process.find_labels_id(Declare._ID);
+                    tmpLabel.setMap(null);
+                    //contextMenu.hide();
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    },
+
     passNullValue: function (combo) {
         if (combo.value) {
             return combo.value;
@@ -153,8 +183,31 @@ var Event = {
                     Gmap.Process.prepairDrawing();
                 }
             }
+            if (App.chkOverlays.checked == false)
+                App.frmMain.getEl().unmask();
+            else
+                App.stoOverLays.reload();
+        },
+
+        stoOverLays_load: function (store, records, successful, eOpts) {
+            if (successful) {
+                records.forEach(function (record) {
+                    var triangleCoords = [];
+                    var tmpOverLays = record.data.LatLng.split(',');
+                    var x = 0;
+                    for (var i = 0; i < (tmpOverLays.length / 2) ; i++) {
+                        triangleCoords.push({ lat: Number(tmpOverLays[x]), lng: Number(tmpOverLays[x + 1]) });
+                        x += 2;
+                    }
+                    if (triangleCoords) {
+                        Gmap.Process.prepairDrawingOverlays(triangleCoords, record.data.ID);
+                    }
+                });
+            }
             App.frmMain.getEl().unmask();
         }
+
+
     },
 
     Form: {
@@ -171,6 +224,11 @@ var Event = {
 
         btnHideTrigger_click: function (sender) {
             sender.clearValue();
+            if (sender.id == 'cboBranchID_ImExMcp') {
+                App.cboPJPID_ImExMcp.clearValue();
+                App.cboSlsPerID_ImExMcp.clearValue();
+                App.cboRouteID_ImExMcp.clearValue();
+            }
         },
 
         cboAreaMCL_change: function (cbo, newValue, oldValue, eOpts) {
@@ -499,7 +557,7 @@ var McpInfo = {
 };
 
 var McpCusts = {
-    winMcpCusts_show: function (win, eOpts) {
+    winMcpCusts_show: function (win, eOpts, tmpOverlays) {
         App.cboRouteIDMcpCusts.store.reload();
         App.cboSlsFreqMcpCusts.store.reload();
         App.dtpStartDateMcpCusts.setValue(HQ.dateNow);
@@ -547,11 +605,21 @@ var McpCusts = {
                             , sat: App.chkSatMcpCusts.value
                             , startDate: App.dtpStartDateMcpCusts.getValue()
                             , endDate: App.dtpEndDateMcpCusts.getValue()
+                            , overLays: Declare._overLays
+                            , iID: Declare._ID
+                            , cboDistributorMCL: App.cboDistributorMCL.getValue()
+                            , cboPJPIDMCL: App.cboPJPIDMCL.getValue()
                         },
                         success: function (msg, data) {
                             if (data.result.msgCode) {
                                 HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
                             }
+                            var tmpOverLays = Gmap.Process.find_overlays_index(Number(Declare._zIndex));
+                            tmpOverLays.iID = data.result.ID;
+                            Gmap.Declare.overlays.push(tmpOverLays);
+                            //var tmpLabels = Gmap.Process.find_labels_index(Number(Declare._zIndex));
+                            //tmpLabels.iID = data.result.ID;
+                            //Gmap.Declare.overlays.push(tmpLabels);
                             App.winMcpCusts.close();
                         },
                         failure: function (msg, data) {
@@ -856,7 +924,8 @@ var Gmap = {
                         strokeWeight: 5,
                         clickable: true,
                         editable: true,
-                        zIndex: 1
+                        zIndex: 1,
+                        iID: 0
                     }//,
                     //paths: triangleCoords
                 });
@@ -945,7 +1014,9 @@ var Gmap = {
                                 labelContent: custIDs.length.toString(),
                                 labelAnchor: new google.maps.Point(22, 0),
                                 labelClass: "labels", // the CSS class for the label
-                                labelStyle: { opacity: 0.75 }
+                                labelStyle: { opacity: 0.75 },
+                                zIndex: 1,
+                                iID: 0
                             });
                         }
                         Gmap.Declare.overlays.push(event.overlay);
@@ -992,6 +1063,22 @@ var Gmap = {
                 switch (eventName) {
                     case 'update_mcp':
                         if (listMcpCusts.length) {
+                            //Get Array LatLng Polygon 
+                            Declare._overLays = '';
+                            if(polygon.iID != undefined)
+                                Declare._ID = polygon.iID;
+                            if (polygon.zIndex != undefined)
+                                Declare._zIndex = polygon.zIndex;
+
+                            var vertices = polygon.getPath();
+                            for (var i = 0; i < vertices.getLength() ; i++) {
+                                var xy = vertices.getAt(i);
+                                if(Declare._overLays == '')
+                                    Declare._overLays += xy.lat() + ',' + xy.lng();
+                                else
+                                    Declare._overLays += ',' + xy.lat() + ',' + xy.lng();
+                            }
+                            
                             Process.updateMcpCusts(listMcpCusts);
                         }
                         contextMenu.hide();
@@ -1003,9 +1090,16 @@ var Gmap = {
                         contextMenu.hide();
                         break;
                     case 'clear_zone':
-                        polygon.setMap(null);
-                        label.setMap(null);
-                        contextMenu.hide();
+                        if (polygon.iID == undefined) {
+                            polygon.setMap(null);
+                            label.setMap(null);
+                            contextMenu.hide();
+                        }
+                        else {
+                            Declare._ID = polygon.iID;
+                            label.iID = polygon.iID;
+                            HQ.message.show(2016070501, '', 'Process.deleteOverLays');
+                        }
                         break;
                     case 'zoom_in_click':
                         Gmap.Declare.map.setZoom(objMap.getZoom() + 1);
@@ -1059,7 +1153,34 @@ var Gmap = {
                 }
             }
         },
-        
+        // tim overlays theo zIndex
+        find_overlays_index: function (index) {
+            for (i = 0; i < Gmap.Declare.overlays.length; i++) {
+                if (Gmap.Declare.overlays[i].zIndex == index) {
+                    return Gmap.Declare.overlays[i];
+                }
+            }
+            return null;
+        },
+
+        // tim overlays de xoa theo id
+        find_overlays_id: function(id){
+            for (i = 0; i < Gmap.Declare.overlays.length; i++) {
+                if (Gmap.Declare.overlays[i].iID == id) {
+                    return Gmap.Declare.overlays[i];
+                }
+            }
+            return null;
+        },
+        // tim label de xoa theo id
+        find_labels_id: function (id) {
+            for (i = 0; i < Gmap.Declare.labels.length; i++) {
+                if (Gmap.Declare.labels[i].iID == id) {
+                    return Gmap.Declare.labels[i];
+                }
+            }
+            return null;
+        },
         // tim diem theo id (marker)
         find_marker_id: function (id) {
             for (i = 0; i < Gmap.Declare.stopMarkers.length; i++) {
@@ -1231,5 +1352,49 @@ var Gmap = {
                 Gmap.Process.clearMap(Gmap.Declare.stopMarkers, Gmap.Declare.overlays, Gmap.Declare.labels);
             }
         },
+
+        prepairDrawingOverlays: function (triangleCoords, OverLaysID) {
+
+            var bermudaTriangle = new google.maps.Polygon({
+                paths: triangleCoords,
+                //fillColor: '#ffff00',
+                fillOpacity: 0.3,
+                strokeWeight: 3,
+                clickable: true,
+                editable: false,
+                iID: OverLaysID
+            });
+            bermudaTriangle.setMap(Gmap.Declare.map);
+            var custIDs = [];
+            var listMcpCusts = [];
+            for (var i = 0; i < Gmap.Declare.stopMarkers.length; i++) {
+                if (bermudaTriangle.containsLatLng(Gmap.Declare.stopMarkers[i].position)) {
+                    custIDs.push(Gmap.Declare.stopMarkers[i].custId);
+                    var mcpCustRec = Gmap.Declare.stopMarkers[i].record;
+                    //var mcpCustData = HQ.store.findInStore(App.stoMCPCusts, ["CustId", "SlsperId", "BranchID"], [mcpCustRec.data.CustId, mcpCustRec.data.SlsperId, mcpCustRec.data.BranchID]);
+                    //if (!mcpCustData) {
+                    listMcpCusts.push(mcpCustRec);
+                    //}
+                }
+            }
+            if (custIDs.length) {
+                var labelPoint = bermudaTriangle.getPath().getAt(0);
+                var label = new MarkerWithLabel({
+                    icon: " ",
+                    position: labelPoint,
+                    draggable: false,
+                    map: Gmap.Declare.map,
+                    labelContent: custIDs.length.toString(),
+                    labelAnchor: new google.maps.Point(22, 0),
+                    labelClass: "labels", // the CSS class for the label
+                    labelStyle: { opacity: 0.75 },
+                    iID: OverLaysID
+                });
+            }
+            Gmap.Declare.overlays.push(bermudaTriangle);
+            Gmap.Declare.labels.push(label);
+            Gmap.Process.showContextMenu(Gmap.Declare.map, bermudaTriangle, label, custIDs, listMcpCusts);
+            
+        }
     }
 };

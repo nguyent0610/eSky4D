@@ -22,7 +22,7 @@
         <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
          <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
         <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-        <script src='@Url.Content("Scripts/screen/OM23800.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/screen/OM23800.js")' type="text/javascript"></script>
 
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1KCqJiFRTtXsU2UxG3Zf7D55Gjft7JJI&sensor=false&libraries=drawing"></script>
         <script src="~/Scripts/Screen/OM30400_map_label.js"></script>
@@ -111,7 +111,6 @@
         .Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
 
         @( X.Store().ID("stoMCL")
-                //.RemotePaging(true).PageSize(50)
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM23800_pgMCL_Result), "mdlMCP", ""))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadMCP", "OM23800")).Timeout(1800000))
@@ -138,6 +137,21 @@
             .Listeners(l => {
                 l.BeforeLoad.Handler = "App.frmMain.getEl().mask(HQ.common.getLang('Loading'), 'x-mask-loading');";
                 l.Load.Fn = "Event.Store.stoMCL_load";
+            })
+        )
+
+        @( X.Store().ID("stoOverLays")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM23800_pdOverLays_Result), "mdlOM23800_pdOverLays", ""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadOverLays", "OM23800")).Timeout(1800000))
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("BranchID", "App.cboDistributorMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("PJPID", "App.cboPJPIDMCL.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l => {
+                //l.BeforeLoad.Handler = "App.frmMain.getEl().mask(HQ.common.getLang('Loading'), 'x-mask-loading');";
+                l.Load.Fn = "Event.Store.stoOverLays_load";
             })
         )
 

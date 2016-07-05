@@ -28,6 +28,7 @@ namespace OM23800
 
         protected void Session_Start(object sender, EventArgs e)
         {
+            Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
             Current.Server = "EARTHSVR\\SQL2012";////192.168.130.4//EARTHSVR
             Current.DBSys = "ND_eSky4DSys";////eBiz4DCloudSysJFV
@@ -39,8 +40,8 @@ namespace OM23800
             Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";//eBiz4DCloudAppJFV
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "NDMT";
-            Session["Language"] = Current.Language = "en";
-            Session["LangID"] = 0;
+            Session["Language"] = Current.Language = "vi";
+            Session["LangID"] = 1;
         }
     }
 }

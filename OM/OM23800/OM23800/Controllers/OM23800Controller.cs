@@ -78,8 +78,11 @@ namespace OM23800.Controllers
                 ViewBag.Error = Message.GetString("225", null);
                 return View("Error");
             }
-            var objConfig = _sys.SYS_Configurations.ToList().Where(p => p.Code.ToUpper() == "OM23800MAXCUST").FirstOrDefault();
-            ViewBag.CountCust = objConfig == null ? int.MaxValue : objConfig.IntVal;
+            var objConfig = _sys.SYS_Configurations.FirstOrDefault(p => p.Code.ToUpper() == "OM23800MAXCUST");
+            if (objConfig != null)
+                ViewBag.CountCust = objConfig.IntVal;
+            else
+                ViewBag.CountCust = int.MaxValue;
             ViewBag.Title = Util.GetLang("OM23800");
             ViewBag.AllowModifyCust = _db.OM23800_ppAllowModifyCust(Current.UserName, Current.CpnyID).FirstOrDefault();
 
@@ -397,6 +400,11 @@ namespace OM23800.Controllers
             return this.Store(slsRouteMster);
         }
 
+        public ActionResult LoadOverLays(string BranchID,string PJPID)
+        {
+            return this.Store(_db.OM23800_pdOverLays(BranchID,PJPID).ToList());
+        }
+
         public ActionResult SaveMcp(FormCollection data,
             bool custActive, string custID, string slsperID, string branchID, string pJPID,string routeID)
         {
@@ -673,7 +681,11 @@ namespace OM23800.Controllers
             {
                 var lstMcpCustsHandler = new StoreDataHandler(data["lstMcpCusts"]);
                 var lstMcpCusts = lstMcpCustsHandler.ObjectData<OM23800_pgMCL_Result>();
-
+                bool flagCust = false;
+                var overLays_LatLng = data["overLays"].PassNull();
+                int ID = data["iID"].PassNull()==""?0:int.Parse(data["iID"]);
+                var BranchID_Main = data["cboDistributorMCL"].PassNull();
+                var PJPID_Main = data["cboPJPIDMCL"].PassNull();   
                 var routeID = data["routeID"];
                 var salesFreq = data["salesFreq"];
                 var weekOfVisit = data["weekOfVisit"];
@@ -686,7 +698,7 @@ namespace OM23800.Controllers
                 var sat = data["sat"].ToLower() == "true" ? true : false;
                 DateTime startDate = DateTime.Parse(data["startDate"]);
                 DateTime endDate = DateTime.Parse(data["endDate"]);
-
+                
                 string id = Guid.NewGuid().ToString();
                 string branchID = string.Empty;
                 string custID = string.Empty;
@@ -714,7 +726,6 @@ namespace OM23800.Controllers
                         objImport.SalesRouteID = routeID;
                         objImport.CustID = custID;
                         objImport.SlsPerID = slsperID;
-                        objImport.tstamp = new byte[1];
                         objImport.StartDate = startDate;
                         objImport.EndDate = endDate; ;
                         objImport.SlsFreq = salesFreq;//  dataArray.GetValue(i, 9).ToString().Trim().ToUpper();
@@ -738,6 +749,7 @@ namespace OM23800.Controllers
                         objImport.Crtd_User = objImport.Crtd_User = Current.UserName;
                         if (isValidSelOMSalesRouteMaster(objImport, false))
                         {
+                            flagCust = true;
                             _db.OM_SalesRouteMasterImport.AddObject(objImport);
                         }
                         else
@@ -748,7 +760,29 @@ namespace OM23800.Controllers
 
                     }
                 }
+                var objOverlays = new OM_OverlaysMCP();
+                if (flagCust == true)
+                {
+                    objOverlays = _db.OM_OverlaysMCP.FirstOrDefault(p => p.ID == ID);
+                    if (objOverlays == null)
+                    {
+                        objOverlays = new OM_OverlaysMCP();
+                        objOverlays.ResetET();
+                        objOverlays.BranchID = BranchID_Main;
+                        objOverlays.PJPID = PJPID_Main;
+                        objOverlays.LatLng = overLays_LatLng;
+                        objOverlays.LUpd_DateTime = DateTime.Now;
+                        objOverlays.LUpd_Prog = _screenName;
+                        objOverlays.LUpd_User = Current.UserName;
+                        objOverlays.Crtd_DateTime = DateTime.Now;
+                        objOverlays.Crtd_Prog = _screenName;
+                        objOverlays.Crtd_User = Current.UserName;
 
+                        _db.OM_OverlaysMCP.AddObject(objOverlays);
+                    }
+                }
+                if(objOverlays == null)
+                    objOverlays.ID = 0;
                 _db.SaveChanges();
                 DataAccess dal = Util.Dal();
                 try
@@ -771,6 +805,40 @@ namespace OM23800.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
 
                 }
+
+                return Json(new
+                {
+                    success = true,
+                    msgCode = 201405071,
+                    ID = objOverlays.ID
+                });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+
+        public ActionResult DeleteOverLays(FormCollection data)
+        {
+            try
+            {
+                int ID = data["iID"].PassNull() == "" ? 0 : int.Parse(data["iID"]);
+                
+                var objDelete = _db.OM_OverlaysMCP.FirstOrDefault(p => p.ID == ID);
+                if (objDelete != null)
+                {
+                    _db.OM_OverlaysMCP.DeleteObject(objDelete);
+                }
+
+                _db.SaveChanges();
 
                 return Json(new
                 {
@@ -2014,7 +2082,6 @@ namespace OM23800.Controllers
                                     objImport.SalesRouteID = strERouteID;
                                     objImport.CustID = strECustID;
                                     objImport.SlsPerID = strESlsperID;
-                                    objImport.tstamp = new byte[1];
                                     objImport.StartDate = startDate;
                                     objImport.EndDate = endDate; ;
                                     objImport.SlsFreq = workSheet.Cells[i, 8].StringValue;//  dataArray.GetValue(i, 9).ToString().Trim().ToUpper();
