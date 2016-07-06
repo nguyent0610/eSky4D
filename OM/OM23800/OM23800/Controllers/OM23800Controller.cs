@@ -1974,8 +1974,6 @@ namespace OM23800.Controllers
                         string id = Guid.NewGuid().ToString();
                         for (int i = 5; i <= workSheet.Cells.MaxDataRow; i++)
                         {
-
-
                             strESTT = workSheet.Cells[i, 0].StringValue;//dataArray.GetValue(i, 1).PassNull();
                             strERouteID = workSheet.Cells[i, 17].StringValue;//dataArray.GetValue(i, 18).PassNull();
                             strECustID = workSheet.Cells[i, 1].StringValue;//dataArray.GetValue(i, 2).PassNull();
@@ -1997,7 +1995,11 @@ namespace OM23800.Controllers
                                 continue;
 
                             };
-                            if (strECustID == "") continue;
+                            if (strECustID == "")
+                            {
+                                messagestrECustID += (i + 1).ToString() + ",";
+                                continue;
+                            }
                             else if (strERouteID == ""
                                  || strECustID == ""
                                  || strESlsperID == ""
@@ -2554,6 +2556,11 @@ namespace OM23800.Controllers
                                             slsright = false;
                                         }
                                     }
+                                    else
+                                    {
+                                        lineBlank.Add((i - dataRowIdx + 1).ToString());
+                                        continue;
+                                    }
 
                                     if (!string.IsNullOrWhiteSpace(strDistrict))
                                     {
@@ -2605,7 +2612,7 @@ namespace OM23800.Controllers
                                                     existCust.LUpd_Datetime = DateTime.Now;
                                                     existCust.LUpd_Prog = _screenName;
                                                     existCust.LUpd_User = Current.UserName;
-                                                    existCust.SlsperId = strSlsPerID;
+                                                    existCust.SlsperId = strSlsPerID.PassNull();
 
                                                     if (lat>0 && lng>0)
                                                     {
@@ -2874,6 +2881,8 @@ namespace OM23800.Controllers
                 switch (OM.SlsFreq)
                 {
                     case "F1":
+                    case "F1/2":
+                    case "F1/3":
                     case "F2":
                     case "F4":
                     case "F4A":
@@ -2970,6 +2979,8 @@ namespace OM23800.Controllers
                 switch (OM.SlsFreq)
                 {
                     case "F1":
+                    case "F1/2":
+                    case "F1/3":
                     case "F2":
                     case "F4":
                     case "F4A":
@@ -3029,7 +3040,7 @@ namespace OM23800.Controllers
                 return false;
             }
         }
-    
+        
         private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size, bool isTitle = false)
         {
             c.PutValue(" " + lang);
