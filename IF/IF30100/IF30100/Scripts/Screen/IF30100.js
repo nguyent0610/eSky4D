@@ -10,6 +10,11 @@ var stoDet_Load = function (store, records, success) {
 var stoDet_BeforeLoad  = function (store, records, success) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 }
+var stoReport_Load = function () {
+    if (App.cboReport.store.data.items.length > 0) {
+        App.cboReport.setValue(App.cboReport.store.data.items[0].data.ReportNbr);
+    }
+}
 var menuClick = function (command) {
     switch (command) {
         case "refresh":           
@@ -19,6 +24,7 @@ var menuClick = function (command) {
 
     }
 };
+
 
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
@@ -39,6 +45,7 @@ var firstLoad = function () {
 
   
 };
+
 var getComboValue = function (val) {
     if (val == null) return '';
     return val.join(',');
@@ -94,7 +101,6 @@ var getParm = function () {
                 if (item2.data.Sel == true) {
                     value += item2.data[grid.tag] + ';';
                 }
-               
             });
             result.push({ Name: item.id, Value: value });
         }
@@ -227,6 +233,6 @@ var frmMain_BoxReady = function () {
         App.cboType.hide();
         App.grdDet.hide();
     }
-   
+    App.cboReport.store.addListener('load', stoReport_Load);
 
 }

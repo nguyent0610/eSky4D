@@ -120,7 +120,7 @@
                     })
                     .LoadData()
                             
-                    , HQ.Combo().ID("cboReport").Name("Report").HQLangCode("Report").HQProcedure("IF30100_pcReport")
+                    , HQ.Combo().ID("cboReport").Name("Report").HQLangCode("Report").HQProcedure("IF30100_pcReport").HQAutoLoad(false)
                     .HQColumnShow("ReportName").DisplayField("ReportName").ValueField("ReportNbr").AllowBlank(true)
                     .Width(400).HQHeightWidth(400, 300)
                     .HQDBSys(true).ForceSelection(true)
