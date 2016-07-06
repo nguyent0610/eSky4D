@@ -12,6 +12,8 @@ using System.IO;
 using System.Text;
 //using Aspose.Cells;
 using System.Drawing;
+using HQFramework.DAL;
+using HQFramework.Common;
 using HQ.eSkySys;
 
 namespace AR10300.Controllers
