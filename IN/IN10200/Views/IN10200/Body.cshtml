@@ -169,7 +169,7 @@
             .Icon(Icon.ArrowTurnRight)
             .Listeners(p=>{
                 p.Click.Fn = "btnExport_Click";
-            })
+            }).Hidden(true)
             
             //, X.FileUploadField().ID("upload").ButtonOnly(true).HideMode(HideMode.Visibility).Hidden(true).Width(0).Height(0)
         }))
@@ -186,6 +186,7 @@
 
             X.Panel()
             .Border(false)
+            .AutoScroll(true)
             .Region(Region.North)
             .Layout(LayoutType.VBox)
             .Items(
@@ -509,13 +510,16 @@
                 X.Hidden().ID("tstamp")
             )
             ,
-        
+        X.Panel()
+        .Border(true)
+        .Region(Region.Center)
+        .Layout(LayoutType.Fit)
+        .Items(
             X.GridPanel().ID("grdTrans")
             .Border(true)
             .RowLines(true)
             .ColumnLines(true)
             .BorderSpec("1 0 0 0")
-            .Region(Region.Center)
             .Store(
                 X.Store()
                 .ID("stoTrans")
@@ -548,7 +552,7 @@
                     .HQColumnShow("InvtID,Descr,Descr1,Color")
                     .DisplayField("InvtID")
                     .ValueField("InvtID")
-                    .Width(250)
+                    .Width(250).HQisPaging(true).PageSize(50)
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)
                     .LabelWidth(90)
@@ -658,6 +662,7 @@
                 .Plugins(X.ProgressBarPager())
             )
             .Plugins(X.CellEditing().ClicksToEdit(1))
+        )
         )
     )
 )

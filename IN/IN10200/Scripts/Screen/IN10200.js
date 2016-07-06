@@ -127,6 +127,7 @@ var frmMain_BoxReady = function () {
     App.stoSetup.load();
     App.stoUserDefault.load();
     App.stoUnitConversion.load();
+    App.cboTransInvtID.store.reload();
     App.stoInvt = App.cboTransInvtID.getStore();
 
     App.smlTrans.tab = false;
