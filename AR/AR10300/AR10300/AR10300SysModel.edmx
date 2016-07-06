@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AR10300SysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="AR10300SysModelStoreContainer">
+          <EntitySet Name="SYS_Company" EntityType="AR10300SysModel.Store.SYS_Company" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="SYS_Company">
+          <Key>
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Name="CpnyID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="CpnyName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="400" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="400" />
+          <Property Name="Tel" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="Fax" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="TaxRegNbr" Type="varchar" MaxLength="20" />
+          <Property Name="Channel" Type="varchar" MaxLength="10" />
+          <Property Name="Territory" Type="varchar" MaxLength="10" />
+          <Property Name="Country" Type="varchar" MaxLength="3" />
+          <Property Name="City" Type="varchar" MaxLength="10" />
+          <Property Name="District" Type="varchar(max)" />
+          <Property Name="CpnyType" Type="varchar" MaxLength="15" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Owner" Type="nvarchar" MaxLength="100" />
+          <Property Name="Plant" Type="varchar" MaxLength="30" />
+          <Property Name="DatabaseName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Deposit" Type="float" Nullable="false" />
+          <Property Name="CreditLimit" Type="float" Nullable="false" />
+          <Property Name="MaxValue" Type="float" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="10" />
+          <Property Name="ReturnLimit" Type="smallint" />
+          <Property Name="PartnerClass" Type="varchar" MaxLength="30" />
+          <Property Name="Zone" Type="varchar" MaxLength="30" />
+          <Property Name="ExistValue" Type="float" />
+          <Property Name="IsDMF" Type="bit" />
+          <Property Name="InputValue" Type="float" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AR10300SysModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="AR10300SysEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SYS_Company" EntityType="AR10300SysModel.SYS_Company" />
+        </EntityContainer>
+        <EntityType Name="SYS_Company">
+          <Key>
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Name="CpnyID" Type="String" Nullable="false" MaxLength="30" Unicode="true" FixedLength="false" />
+          <Property Name="CpnyName" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="Address" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="Address1" Type="String" MaxLength="400" Unicode="true" FixedLength="false" />
+          <Property Name="Address2" Type="String" MaxLength="400" Unicode="true" FixedLength="false" />
+          <Property Name="Tel" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="Fax" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="TaxRegNbr" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="Channel" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="Territory" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="Country" Type="String" MaxLength="3" Unicode="false" FixedLength="false" />
+          <Property Name="City" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="District" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="CpnyType" Type="String" MaxLength="15" Unicode="false" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Owner" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Plant" Type="String" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" Unicode="false" FixedLength="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" Unicode="false" FixedLength="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Deposit" Type="Double" Nullable="false" />
+          <Property Name="CreditLimit" Type="Double" Nullable="false" />
+          <Property Name="MaxValue" Type="Double" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="State" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ReturnLimit" Type="Int16" />
+          <Property Name="PartnerClass" Type="String" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="Zone" Type="String" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="ExistValue" Type="Double" />
+          <Property Name="IsDMF" Type="Boolean" />
+          <Property Name="InputValue" Type="Double" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AR10300SysModelStoreContainer" CdmEntityContainer="AR10300SysEntities">
+          <EntitySetMapping Name="SYS_Company">
+            <EntityTypeMapping TypeName="AR10300SysModel.SYS_Company">
+              <MappingFragment StoreEntitySet="SYS_Company">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
+                <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
+                <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="ReturnLimit" ColumnName="ReturnLimit" />
+                <ScalarProperty Name="PartnerClass" ColumnName="PartnerClass" />
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
+                <ScalarProperty Name="ExistValue" ColumnName="ExistValue" />
+                <ScalarProperty Name="IsDMF" ColumnName="IsDMF" />
+                <ScalarProperty Name="InputValue" ColumnName="InputValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="07482baeaae341938b21cf927249c8f0" Name="Diagram1" ZoomLevel="46">
+        <EntityTypeShape EntityType="AR10300SysModel.SYS_Company" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
