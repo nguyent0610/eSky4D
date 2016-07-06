@@ -1,13 +1,13 @@
 //// Declare //////////////////////////////////////////////////////////
-var keys = ['PosmID', 'BranchID', 'CustId', 'ClassID', 'SiteID', 'InvtID', 'Date'];
-var fieldsCheckRequire = ["PosmID", "BranchID", "CustId", "ClassID", "SiteID", "InvtID", "Date", "Qty"];
-var fieldsLangCheckRequire = ["ProcID", "BranchID", "CustId", "ClassID", "SiteId", "InvtID", "ExpDate", "Qty"];
+var keys = ['BranchID', 'CustId', 'ClassID', 'SiteID', 'InvtID', 'Date'];
+var fieldsCheckRequire = ["BranchID", "CustId", "ClassID", "SiteID", "InvtID", "Date"];
+var fieldsLangCheckRequire = ["BranchID", "CustId", "ClassID", "SiteId", "InvtID", "ExpDate"];
 var _posmID = '';
 var _branchID = '';
 var _classID = '';
 var _siteId = '';
 var _invtID = '';
-
+var _custID = '';
 /////////////Store/////////////////
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoData_changed = function (sto) {
@@ -25,6 +25,7 @@ var stoData_load = function (sto) {
         }
         HQ.isFirstLoad = false;
     }
+    checkReadOnlyProgType();
 };
 //trước khi load trang busy la dang load data
 var stoData_beforeLoad = function (sto) {
@@ -68,7 +69,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoData, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoData, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -93,39 +94,20 @@ var firstLoad = function () {
     }
     if (HQ.isUpdate == false && HQ.isInsert == false && HQ.isDelete == false) {
         App.menuClickbtnSave.disable();
-    }
-    App.stoData.reload();
+    }    
 };
 var grdDet_BeforeEdit = function (editor, e) {
-    //if (_posmID == e.record.data.PosmID)
-    //{     
-    //    App.cboBranchID.store.reload();           
-    //}
-    //if (_branchID == e.record.data.BranchID) {    
-    //    App.cboCustId.store.reload();      
-    //}
-    //if (_branchID == e.record.data.BranchID) {    
-    //    App.cboSiteId.store.reload();       
-    //}
-    //if (_classID == e.record.data.ClassID) {       
-    //    App.cboInvtID.store.reload();       
-    //}
-    _posmID = e.record.data.PosmID;
-    App.cboBranchID.store.reload();
-    //_classID = e.record.data.ClassID;
-    //App.cboClassID.store.reload();
     _siteId = e.record.data.SiteID;
-    App.cboExpDate.store.reload();
+    //App.cboExpDate.store.reload();
     _invtID = e.record.data.InvtID;
-    App.cboExpDate.store.reload();
+    //App.cboExpDate.store.reload();
     _branchID = e.record.data.BranchID;
-    App.cboExpDate.store.reload();
+    //App.cboExpDate.store.reload();
     _classID = e.record.data.ClassID;
-    App.cboInvtID.store.reload();
+   // App.cboInvtID.store.reload();
     if (e.field == 'SiteID') {
         if (Ext.isEmpty(e.record.data.BranchID)) {
             App.cboSiteId.getStore().removeAll();
-
         }
         else {
             App.cboSiteId.store.reload();
@@ -140,63 +122,59 @@ var grdDet_BeforeEdit = function (editor, e) {
     //return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdDet_Edit = function (item, e) {
-    if (e.field == 'PosmID')
-    {
-        if (Ext.isEmpty(e.record.data.PosmID) )
-        {
-            e.record.set('BranchID', '');
-            e.record.set('CustId', '');
-            e.record.set('CustName', '');
-            e.record.set('SiteID', '');
-        }
-    }
+    //if (e.field == 'PosmID')
+    //{
+    //    if (Ext.isEmpty(e.record.data.PosmID) )
+    //    {
+    //        e.record.set('BranchID', '');
+    //        e.record.set('CustId', '');
+    //        e.record.set('CustName', '');
+    //        e.record.set('SiteID', '');
+    //    }
+    //}
     if (e.field == 'BranchID') {
-        if (Ext.isEmpty(e.record.data.BranchID)) {
-            e.record.set('CustId', '');
-            e.record.set('CustName', '');
-            e.record.set('SiteID', '');
-           
-        }
-    }
-    if (e.field == 'ClassID') {
-        if (Ext.isEmpty(e.record.data.BranchID)) {
+        //if (Ext.isEmpty(e.record.data.BranchID)) {
+        e.record.set('CustId', '');
+        e.record.set('CustName', '');
+        e.record.set('ClassID', '');
+        e.record.set('SiteID', '');                        
+        e.record.set('InvtID', '');
+        e.record.set('Descr', '');
+        e.record.set('Date', '');
+        //  }
+    } else if (e.field == 'SiteID') {
+        e.record.set('Date', '');
+    } else if (e.field == 'ClassID') {
+        //if (Ext.isEmpty(e.record.data.BranchID)) {
             e.record.set('InvtID', '');
             e.record.set('Descr', '');
   
-        }
-    }
-    //if (e.field == 'Date') {
-    //    if (Ext.isEmpty(e.record.data.SiteID) || Ext.isEmpty(e.record.data.InvtID)) {
-    //        e.record.set('Date', '');           
-    //    }
-    //}
-   
-    if (e.field == 'CustId') {
+       // }
+    } else if (e.field == 'CustId') {
         //Ten combo + ten proceduce --> lay duoc data cua combo do
         var obj = App.cboCustIdOM23600_pcCustId.findRecord('CustId', e.value);
         if (obj) {
-            e.record.set('CustName', obj.data.CustName);
-            
+            e.record.set('CustName', obj.data.CustName);            
+        } else {
+            e.record.set('CustName', e.value);
         }
-    }
-    if (e.field == 'InvtID') {
+        e.record.set('Date', '');
+    } else if (e.field == 'InvtID') {
         //Ten combo + ten proceduce --> lay duoc data cua combo do
         var obj = App.cboInvtIDOM23600_pcInvtID.findRecord('InvtID', e.value);
         if (obj) {
             e.record.set('Descr', obj.data.Descr);
-
+        } else {
+            e.record.set('Descr', e.value);
         }
+        e.record.set('Date', '');
     }
-    //if (e.field == 'PosmID') {
-    //    if (e.record.data.CpnyID == "") {
-    //        //e.record.set('BranchID', '');
-    //        return false;
-    //    }
 
-    //}
     HQ.grid.checkInsertKey(App.grdDet, e, keys);
     stoData_changed(App.stoData);
+    checkReadOnlyProgType();
 };
+
 var grdDet_ValidateEdit = function (item, e) {
     if (e.field == 'Date'
         && e.value
@@ -204,20 +182,18 @@ var grdDet_ValidateEdit = function (item, e) {
         e.record.set('Date', Ext.Date.parse(e.value, HQ.formatDate));
         //Ze.record.data.Date = Ext.Date.parse(e.value, HQ.formatDate);
     }     
-     return HQ.grid.checkValidateEdit(App.grdDet, e, keys, false);
- 
+     return HQ.grid.checkValidateEdit(App.grdDet, e, keys, false); 
 };
 var grdDet_Reject = function (record) {
-    if (record.data.PosmID != '' && record.data.BranchID != ''
+    var progType = App.cboProgID.getValue();
+    if (record.data.BranchID != ''
         && record.data.CustId != '' && record.data.ClassID != ''
-        && record.data.SiteID != '' && record.data.InvtID != ''
-        && record.data.Date != '')
+        && record.data.SiteID != '' && (progType == 'D4' || progType == 'D3' && record.data.InvtID != '' && record.data.Date))
     {
         HQ.grid.checkReject(record, App.grdDet);
     }
     else
-    {
-        record.set('PosmID', '');
+    {        
         record.set('BranchID', '');
         record.set('CustId', '');
         record.set('CustName', '');
@@ -227,27 +203,66 @@ var grdDet_Reject = function (record) {
         record.set('Descr', '');
         record.set('Date', '');
     }
+    checkReadOnlyProgType();
 };
 // cboPosmID_Change 
 var cboPosmID_Change = function (sender, value) {
     if (sender.valueModels && sender.valueModels[0]) {
         _posmID = value;
-        App.cboBranchID.getStore().reload();
+        App.cboProgID.setValue(sender.valueModels[0].data.ProgType);
+        App.dteFromDate.setValue(sender.valueModels[0].data.FromDate);
+        App.dteToDate.setValue(sender.valueModels[0].data.ToDate);
+        App.stoData.reload();
     } else {
         _posmID = '';
-        App.cboBranchID.getStore().reload();
+        App.cboProgID.setValue('');
+        App.dteFromDate.setValue('');
+        App.dteToDate.setValue('');
+        App.stoData.clearData();
+        App.grdDet.view.refresh();
+        checkReadOnlyProgType();
+        HQ.store.insertBlank(App.stoData, keys);
     }
+    App.cboBranchID.getStore().reload();
+
 };
 // cboPosmID_Select
 var cboPosmID_Select = function (sender, value) {
+    HQ.isChange = false;
+    HQ.isFirstLoad = true;
     if (!App.cboBranchID.getStore().loading) {
         if (sender.valueModels && sender.valueModels[0]) {
             _posmID = sender.valueModels[0].data.PosmID;
+            App.cboProgID.setValue(sender.valueModels[0].data.ProgType);
+            App.dteFromDate.setValue(sender.valueModels[0].data.FromDate);
+            App.dteToDate.setValue(sender.valueModels[0].data.ToDate);
+            App.stoData.reload();            
         } else {
             _posmID = '';
-        }
-        App.cboBranchID.getStore().reload();
+            App.cboProgID.setValue('');
+            App.dteFromDate.setValue('');
+            App.dteToDate.setValue('');
+            App.stoData.clearData();
+            App.grdDet.view.refresh();
+            checkReadOnlyProgType();
+            HQ.store.insertBlank(App.stoData, keys);            
+        }        
+      //  App.cboBranchID.getStore().reload();
     }    
+};
+// cboProgID_Change change
+var cboProgID_Change = function (sender, value) {
+    if (value == "D3") {
+        HQ.grid.show(App.grdDet, ['InvtID', 'Descr', 'Date']);
+        keys = ['BranchID', 'CustId', 'ClassID', 'SiteID', 'InvtID', 'Date'];
+        fieldsCheckRequire = ["BranchID", "CustId", "ClassID", "SiteID", "InvtID", "Date"];
+        fieldsLangCheckRequire = ["BranchID", "CustId", "ClassID", "SiteId", "InvtID", "ExpDate"];        
+    } else if (value == "D4") {
+        HQ.grid.hide(App.grdDet, ['InvtID', 'Descr', 'Date']);
+        keys = ['BranchID', 'CustId', 'ClassID', 'SiteID'];
+        fieldsCheckRequire = ["BranchID", "CustId", "ClassID", "SiteID"];
+        fieldsLangCheckRequire = ["BranchID", "CustId", "ClassID", "SiteId"];        
+    }
 };
 // cboBranchID Change
 var cboBranchID_Change = function (sender, value) {
@@ -335,8 +350,61 @@ var cboInvtID_Select = function (sender, value) {
         App.cboExpDate.getStore().reload();
     }
 };
+// cboCustId Change
+var cboCustId_Change = function (sender, value) {
+    if (sender.valueModels && sender.valueModels[0]) {
+        _custID = value;
+    } else {
+        _custID = '';
+    }
+};
+// cboCustId_Select
+var cboCustId_Select = function (sender, value) {
+    if (!App.cboExpDate.getStore().loading) {
+        if (sender.valueModels && sender.valueModels[0]) {
+            _custID = sender.valueModels[0].data.CustId;
+        } else {
+            _custID = '';
+        }
+    }
+};
 
-
+// Imort data
+var btnImport_Click = function (fup, newValue, oldValue, eOpts) {
+    if (App.frmMain.isValid() && HQ.form.checkRequirePass(App.frmMain)) {
+        var fileName = fup.getValue();
+        var ext = fileName.split(".").pop().toLowerCase();
+        if (ext == "xls" || ext == "xlsx") {
+            ImportData();
+        } else {
+            alert("Please choose a Media! (.xls, .xlsx)");
+            fup.reset();
+        }
+    }
+    else {
+        fup.reset();
+        HQ.form.checkRequirePass(App.frmMain);
+    }
+}
+// Export data
+var btnExport_Click = function () {
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        App.frmMain.submit({
+            url: 'OM23600/Export',
+            type: 'POST',
+            timeout: 1000000,
+            clientValidation: false,
+            params: {               
+            },
+            success: function (msg, data) {
+                alert('No. 1');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
 ///////////////////////////////////////////////////////////////////////////
 ////// Process Data ///////////////////////////////////////////////////////
 var save = function () {
@@ -362,7 +430,7 @@ var deleteData = function (item) {
     if (item == "yes") {
         App.grdDet.deleteSelected();
         stoData_changed(App.stoData);
-      
+        checkReadOnlyProgType();
     }
 };
 var refresh = function (item) {
@@ -375,8 +443,41 @@ var refresh = function (item) {
 var dateTime_Renderer = function (value) {   
     return Ext.Date.format(value, "m/d/Y");
 };
+var checkReadOnlyProgType = function () {
+    if (App.stoData.data.getCount() > 0 && App.stoData.data.items[0].data.BranchID) {
+        App.cboProgID.setReadOnly(true);
+    } else {
+        App.cboProgID.setReadOnly(false);
+    }
+};
 
-
-
-
-
+//// Import data
+var ImportData = function () {
+    try {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("Importing"),
+            url: 'OM23600/Import',
+            timeout: 1800000,
+            clientValidation: false,
+            method: 'POST',
+            params: {
+                //lstDetails: HQ.store.getAllData(App.stoKPISalespersonCheck)
+            },
+            success: function (msg, data) {
+                if (!Ext.isEmpty(this.result.msgCode)) {
+                    HQ.message.show(this.result.msgCode, '', '', true);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+                refresh('yes');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+                App.btnImport.reset();
+            }
+        });
+    } catch (ex) {
+        alert(ex.message);
+    }
+};

@@ -25,7 +25,7 @@ if (typeof String.prototype.trim !== 'function') {
 }
 if (typeof String.prototype.unsign !== 'function') {
     String.prototype.unsign = function () {
-        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ.+/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ.+/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ĩ/g, "e").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
     }
 }
 if (!('forEach' in Array.prototype)) {
@@ -55,6 +55,16 @@ Date.prototype.getFromFormat = function (format) {
     format = format.replace(/ss/g, (ss[1] ? ss : "0" + ss[0]));
     return format;
 };
+Number.prototype.format = function (n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
+///vi du 
+//12345678.9.format(2, 3, '.', ',');  // "12.345.678,90"
+//123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
+//12345678.9.format(0, 3, '-');       // "12-345-679"
 var HQ = {
     store: {
         isChange: function (store) {
@@ -62,6 +72,33 @@ var HQ = {
                 || store.getChangedData().Updated != undefined
                 || store.getChangedData().Deleted != undefined) {
                 return true;
+            } else {
+                return false;
+            }
+        },
+        isGridChange: function (store, keys) { // Kiểm tra dòng thêm mới đã đủ key thì đánh dấu là đã thay đổi
+            if (store.getChangedData().Updated != undefined
+                || store.getChangedData().Deleted != undefined) {
+                return true;
+            }
+            else if (store.getChangedData().Created != undefined) {
+                if (store.getChangedData().Created.length > 1) {
+                    return true;
+                }
+                else {
+                    var itmCount = keys.length;
+                    var match = 0;
+                    for (var idx = 0; idx < itmCount; idx++) {
+                        if (store.getChangedData().Created[0][keys[idx]]) {
+                            match++;
+                        }
+                    }
+                    if (match == itmCount) {
+                        return true;
+                    }
+                    return false;
+                }
+
             } else {
                 return false;
             }
@@ -120,90 +157,42 @@ var HQ = {
         getAllData: function (store, fields, values, isEqual) {
             var lstData = [];
             if (isEqual == undefined || isEqual == true) {
-                if (store.snapshot != undefined) {
-                    store.snapshot.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] != values[i]) {
-                                    isb = false;
-                                    break;
-                                }
+                var allData = store.snapshot || store.allData || store.data;
+                allData.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
                             }
                         }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                } else {
-                    store.data.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] != values[i]) {
-                                    isb = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
             } else {
-                if (store.snapshot != undefined) {
-                    store.snapshot.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] == values[i]) {
-                                    isb = false;
-                                    break;
-                                }
+                var allData = store.snapshot || store.allData || store.data;
+                allData.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] == values[i]) {
+                                isb = false;
+                                break;
                             }
                         }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                } else {
-                    store.data.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] == values[i]) {
-                                    isb = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
             }
         },
         findInStore: function (store, fields, values) {
             var data;
-            if (store.allData) {
-                store.allData.each(function (item) {
-                    var intT = 0;
-                    for (var i = 0; i < fields.length; i++) {
-
-                        var tmp1 = item.get(fields[i]);
-                        var tmp2 = values[i];
-                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
-                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
-                        if (val1.toString() == val2.toString()) {
-                            intT++;
-                        }
-                    }
-                    if (intT == fields.length) {
-                        data = item.data;
-                        return false;
-                    }
-                });
-            }
-            else {
-                store.data.each(function (item) {
+            var allData = store.snapshot || store.allData || store.data;
+            if (allData) {
+                allData.each(function (item) {
                     var intT = 0;
                     for (var i = 0; i < fields.length; i++) {
                         var tmp1 = item.get(fields[i]);
@@ -243,24 +232,6 @@ var HQ = {
                     }
                 });
             }
-            //else {
-            //    store.data.each(function (item) {
-            //        var intT = 0;
-            //        for (var i = 0; i < fields.length; i++) {
-            //            var tmp1 = item.get(fields[i]);
-            //            var tmp2 = values[i];
-            //            var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
-            //            var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
-            //            if (val1.toString() == val2.toString()) {
-            //                intT++;
-            //            }
-            //        }
-            //        if (intT == fields.length) {
-            //            data = item;
-            //            return false;
-            //        }
-            //    });
-            //}
             return data;
         },
         // TinhHV using for auto gen the LineRef
@@ -540,9 +511,10 @@ var HQ = {
 
         indexSelect: function (grd) {
             var index = '';
+            var allData = grd.store.allData || grd.store.data;
             var arr = grd.getSelectionModel().selected.items;
             arr.forEach(function (itm) {
-                index += (itm.index + 1) + ',';
+                index += (allData.indexOfKey(itm.internalId) + 1) + ',';
             });
             return index.substring(0, index.length - 1);
         },
@@ -562,52 +534,13 @@ var HQ = {
                         if (row.field == keys[jkey])
                             rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
                         else
-                           // rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
-                            rowdata += row.record.data[keys[jkey]] ? row.record.data[keys[jkey]].toString().toLowerCase() : '' + ',';
+                            rowdata += (row.record.data[keys[jkey]] ? row.record.data[keys[jkey]].toString().toLowerCase() : '') + ',';
                     }
                 }
                 if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
                     break;
                 };
             }
-            //if (store.data) {
-            //    for (var i = 0; i < store.data.items.length; i++) {
-            //        var record = store.data.items[i];
-            //        var data = '';
-            //        var rowdata = '';
-            //        for (var jkey = 0; jkey < keys.length; jkey++) {
-            //            if (record.data[keys[jkey]] != undefined) {
-            //                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-            //                if (row.field == keys[jkey])
-            //                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-            //                else
-            //                    rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
-            //            }
-            //        }
-            //        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-            //            break;
-            //        };
-            //    }
-            //}
-            //else {
-            //    for (var i = 0; i < store.allData.items.length; i++) {
-            //        var record = store.allData.items[i];
-            //        var data = '';
-            //        var rowdata = '';
-            //        for (var jkey = 0; jkey < keys.length; jkey++) {
-            //            if (record.data[keys[jkey]] != undefined) {
-            //                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-            //                if (row.field == keys[jkey])
-            //                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-            //                else
-            //                    rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
-            //            }
-            //        }
-            //        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-            //            break;
-            //        };
-            //    }
-            //}
             return found;
         },
         //TrungHT d�ng cho ph�n trang
@@ -674,7 +607,9 @@ var HQ = {
                         }
                 }
                 if (HQ.grid.checkDuplicate(grd, e, keys)) {
-                    HQ.message.show(1112, e.value);
+                    if (e.column.xtype == "datecolumn")
+                        HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+                    else HQ.message.show(1112, e.value);
                     return false;
                 }
 
@@ -684,7 +619,9 @@ var HQ = {
         checkValidateEditDG: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 if (HQ.grid.checkDuplicate(grd, e, keys)) {
-                    HQ.message.show(1112, e.value);
+                    if (e.column.xtype == "datecolumn")
+                        HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+                    else HQ.message.show(1112, e.value);
                     return false;
                 }
             }
@@ -879,14 +816,18 @@ var HQ = {
             if (form == undefined) {
                 if (busy) {
                     App.frmMain.body.mask(waitMsg);
+                    HQ.isBusy = true;
                 } else {
                     App.frmMain.body.unmask();
+                    HQ.isBusy = false;
                 }
             } else {
                 if (busy) {
                     form.body.mask(waitMsg);
+                    HQ.isBusy = true;
                 } else {
                     form.body.unmask();
+                    HQ.isBusy = false;
                 }
             }
 
