@@ -365,9 +365,9 @@
             X.Panel()
             .Border(true)
             .Region(Region.Center)
-            .Layout(LayoutType.Border)
+            .Layout(LayoutType.Fit)
             .Items(
-                X.GridPanel().ID("grdTrans").Region(Region.Center).Flex(1)
+                X.GridPanel().ID("grdTrans")
                 .RowLines(true)
                 .ColumnLines(true)
                 .Border(true)
@@ -403,10 +403,10 @@
                         .HQColumnShow("InvtID,Descr,Descr1,Color")
                         .DisplayField("InvtID")
                         .ValueField("InvtID")
-                        .Width(250)
+                        .Width(250).HQisPaging(true).PageSize(50)
                         .HQHeightWidth(400, 300)
                         .ForceSelection(true)
-                        .LabelWidth(90)
+                        .LabelWidth(90).HQAutoLoad(false)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection(){
                             new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }

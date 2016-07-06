@@ -210,6 +210,7 @@ var frmMain_BoxReady = function () {
     App.cboPosmID.getStore().addListener('load', store_Load);
     App.stoSetup.addListener('load', store_Load);
 
+    App.cboTransInvtID.store.reload();
     App.stoInvt = App.cboTransInvtID.getStore();
 
     App.stoSetup.load();
