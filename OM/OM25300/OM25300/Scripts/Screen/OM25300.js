@@ -197,13 +197,26 @@ var grdDet_Reject = function (record) {
 var cboPosmID_Change = function (sender, value) {
     if (sender.valueModels && sender.valueModels[0]) {
         _posmID = value;
-        App.cboProgID.setValue(sender.valueModels[0].data.ProgTypeFCS);
+        if (!sender.valueModels[0].data.ProgTypeFCS) {
+            var progTypeFCS = '';//
+            if (App.cboProgID.store.data && App.cboProgID.store.data.items[0]) {
+                progTypeFCS = App.cboProgID.store.data.items[0].data.Code;
+            }
+            App.cboProgID.setValue(progTypeFCS);
+        } else {
+            App.cboProgID.setValue(sender.valueModels[0].data.ProgTypeFCS);
+        }
+        //App.cboProgID.setValue(sender.valueModels[0].data.ProgTypeFCS);
         App.dteFromDate.setValue(sender.valueModels[0].data.FromDate);
         App.dteToDate.setValue(sender.valueModels[0].data.ToDate);
         App.stoData.reload();
     } else {
         _posmID = '';
-        App.cboProgID.setValue('');
+        var progTypeFCS = '';//
+        if (App.cboProgID.store.data && App.cboProgID.store.data.items[0]) {
+            progTypeFCS = App.cboProgID.store.data.items[0].data.Code;
+        }        
+        App.cboProgID.setValue(progTypeFCS);
         App.dteFromDate.setValue('');
         App.dteToDate.setValue('');
         App.stoData.clearData();
@@ -227,13 +240,26 @@ var cboPosmID_Select = function (sender, value) {
     if (!App.cboBranchID.getStore().loading) {
         if (sender.valueModels && sender.valueModels[0]) {
             _posmID = sender.valueModels[0].data.PosmID;
-            App.cboProgID.setValue(sender.valueModels[0].data.ProgTypeFCS);
+            if (!sender.valueModels[0].data.ProgTypeFCS) {
+                var progTypeFCS = '';//
+                if (App.cboProgID.store.data && App.cboProgID.store.data.items[0]) {
+                    progTypeFCS = App.cboProgID.store.data.items[0].data.Code;
+                }
+                App.cboProgID.setValue(progTypeFCS);
+            } else {
+                App.cboProgID.setValue(sender.valueModels[0].data.ProgTypeFCS);
+            }
+            
             App.dteFromDate.setValue(sender.valueModels[0].data.FromDate);
             App.dteToDate.setValue(sender.valueModels[0].data.ToDate);
             App.stoData.reload();
         } else {
             _posmID = '';
-            App.cboProgID.setValue('');
+            //App.cboProgID.setValue('');
+            var progTypeFCS = '';//
+            if (App.cboProgID.store.data && App.cboProgID.store.data.items[0]) {
+                progTypeFCS = App.cboProgID.store.data.items[0].data.Code;
+            }
             App.dteFromDate.setValue('');
             App.dteToDate.setValue('');
             App.stoData.clearData();

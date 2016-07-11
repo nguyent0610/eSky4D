@@ -26,6 +26,7 @@ namespace OM25300.Controllers
         private string _screenNbr = "OM25300";
         private string _userName = Current.UserName;
         private static readonly Regex boxNumberRegex = new Regex(@"^\d{2}/\d{4}$");
+        private static readonly Regex boxNumberRegex1 = new Regex(@"^\d/\d{4}$");
         private JsonResult _logMessage;
         OM25300Entities _db = Util.CreateObjectContext<OM25300Entities>(false);
 
@@ -278,7 +279,7 @@ namespace OM25300.Controllers
                 {
                     this.SetCellValueHeader(sheetDet, "E3", Util.GetLang("InvtID"));
                     this.SetCellValueHeader(sheetDet, "F3", Util.GetLang("InvtName"));
-                    this.SetCellValueHeader(sheetDet, "G3", Util.GetLang("ExpDate"));
+                    this.SetCellValueHeader(sheetDet, "G3", Util.GetLang("ExpDate") + " (MM/yyyy)");
                     this.SetCellValueHeader(sheetDet, "H3", Util.GetLang("FCS"));
 
                     // InvtID
@@ -453,14 +454,14 @@ namespace OM25300.Controllers
 
                 sheetDet.AutoFitColumns();
                 sheetDet.Cells.SetColumnWidth(0, 15);
-                sheetDet.Cells.SetColumnWidth(1, 25);
+                sheetDet.Cells.SetColumnWidth(1, 30);
                 sheetDet.Cells.SetColumnWidth(2, 15);
                 sheetDet.Cells.SetColumnWidth(3, 15);
                 sheetDet.Cells.SetColumnWidth(4, 15);                
                 if (progType == "D3")
                 {
-                    sheetDet.Cells.SetColumnWidth(5, 25);
-                    sheetDet.Cells.SetColumnWidth(6, 15);
+                    sheetDet.Cells.SetColumnWidth(5, 30);
+                    sheetDet.Cells.SetColumnWidth(6, 25);
                     sheetDet.Cells.SetColumnWidth(7, 15);
                 }
                 sheetDet.Protect(ProtectionType.All, "HQP@ssw0rd", "HQP@ssw0rd");
@@ -575,6 +576,42 @@ namespace OM25300.Controllers
                             double FCS = 0.0;
                             string errorRows = string.Empty;
                             Worksheet workSheet = workbook.Worksheets[0];
+                            var impPosmID = workSheet.Cells[0, 3].StringValue.PassNull().Trim();
+                            if (impPosmID.ToUpper() != posmID.ToUpper())
+                            {
+                                var obj = _db.IN_POSMHeader.FirstOrDefault(x => x.PosmID.ToUpper() == impPosmID.ToUpper());
+                                if (obj != null)
+                                {
+                                    posmID = impPosmID;
+                                    if (!string.IsNullOrWhiteSpace(obj.ProgTypeFCS))
+                                    {
+                                        progType = obj.ProgTypeFCS;
+                                    }
+                                    else
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(workSheet.Cells[2, 6].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 7].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 5].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 0].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 1].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 2].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 3].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 4].StringValue)
+                                            )
+                                        {
+                                            progType = "D3";
+                                        }
+                                        else
+                                        {
+                                            progType = "D4";
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    throw new MessageException(MessageType.Message, "2016071101", parm: new[] { impPosmID });
+                                }                               
+                            }
                             int maxDataRow = workSheet.Cells.MaxDataRow;
                             var lstBranch = _db.OM25300_pcBranchID(posmID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
                             var lstClass = _db.OM25300_pcClassID(Current.UserName, Current.CpnyID, Current.LangID).ToList();
@@ -619,7 +656,11 @@ namespace OM25300.Controllers
                                     {
                                         continue;
                                     }
-                                    FCS = double.Parse(workSheet.Cells[i, 7].StringValue.PassNull());
+                                    bool isValidVal = double.TryParse(workSheet.Cells[i, 7].StringValue.PassNull(), out FCS);
+                                    if (!isValidVal) {
+                                        FCS = 0;
+                                    }
+                                    
                                     // Check exist company
                                     var objBranch = lstBranch.Where(x => x.BranchID == BranchID).FirstOrDefault();
                                     if (objBranch == null)
@@ -714,7 +755,11 @@ namespace OM25300.Controllers
                                     {
                                         continue;
                                     }
-                                    FCS = double.Parse(workSheet.Cells[i, 4].StringValue.PassNull());
+                                    bool isValidVal = double.TryParse(workSheet.Cells[i, 4].StringValue.PassNull(), out FCS);
+                                    if (!isValidVal)
+                                    {
+                                        FCS = 0;
+                                    }
                                     // Check exist company
                                     var objBranch = lstBranch.Where(x => x.BranchID == BranchID).FirstOrDefault();
                                     if (objBranch == null)
@@ -835,7 +880,7 @@ namespace OM25300.Controllers
         // Verify format
         public static bool VerifyBoxNumber(string boxNumber)
         {
-            return boxNumberRegex.IsMatch(boxNumber);
+            return (boxNumberRegex.IsMatch(boxNumber) || boxNumberRegex1.IsMatch(boxNumber));
         }
         #endregion
     }

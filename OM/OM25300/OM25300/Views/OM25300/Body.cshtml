@@ -67,7 +67,7 @@
                             
                 ,HQ.Combo().ID("cboProgID").Name("cboProgID").Width(300).AllowBlank(false).HQAutoLoad(true)
                 .HQLangCode("OM23600ProgType").HQProcedure("OM25300_pcProgramType")
-                .HQColumnShow("Descr").ForceSelection(true)
+                .HQColumnShow("Descr").ForceSelection(true).HQFirstDefault(true)
                 .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 400)
                 .HQParam(new StoreParameterCollection() 
                 { 
