@@ -831,7 +831,7 @@ namespace OM25300.Controllers
                                                 s.ColumnMappings.Add(col.ToString(), col.ToString());
                                             s.WriteToServer(dtOM_DetailsTmp);
                                             ////Gọi store insert, update từ bảng tạm vào bảng chính
-                                            SqlCommand cmd1 = new SqlCommand("ServerImportOM_FCS_POSM", dbConnection, sqlTran);
+                                            SqlCommand cmd1 = new SqlCommand("ppv_OM25300ImportOM_FCS_POSM", dbConnection, sqlTran);
                                             cmd1.CommandType = CommandType.StoredProcedure;
                                             cmd1.Parameters.AddWithValue("@UserID", Current.UserName);
                                             cmd1.Parameters.AddWithValue("@PosmID", posmID);
