@@ -16,6 +16,7 @@ using System.Drawing;
 using HQFramework.DAL;
 using HQFramework.Common;
 using System.Data.SqlClient;
+using System.Web.Configuration;
 namespace OM25300.Controllers
 {
     [DirectController]
@@ -173,8 +174,14 @@ namespace OM25300.Controllers
             try
             {
                 string posmID = data["cboPosmID"].PassNull();
-                string fromDate = DateTime.Parse(data["dteFromDate"]).ToString("dd/MM/yyyy");
-                string toDate = DateTime.Parse(data["dteFromDate"]).ToString("dd/MM/yyyy");
+
+                string format = Current.FormatDate;// WebConfigurationManager.AppSettings["FormatDate"].PassNull();
+                if (string.IsNullOrWhiteSpace(format))
+                {
+                    format = "dd-MM-yyyy";
+                }
+                string fromDate = DateTime.Parse(data["dteFromDate"]).ToString(format);
+                string toDate = DateTime.Parse(data["dteToDate"]).ToString(format);
                 string progType = data["cboProgID"].PassNull();
 
                 Stream stream = new MemoryStream();
