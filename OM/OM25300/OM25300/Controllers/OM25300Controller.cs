@@ -849,7 +849,7 @@ namespace OM25300.Controllers
                                 }
                             }
                         }
-                        return Json(new { success = true, msgCode = 20121418 });
+                        return Json(new { success = true, msgCode = 20121418, posmID = posmID , progType = progType});
                         //string isoJson = JsonConvert.SerializeObject(lstBudget, new IsoDateTimeConverter());
                         //return Json(new { success = true, type = "error", data = isoJson });
                     }

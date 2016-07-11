@@ -16,7 +16,7 @@ var stoData_changed = function (sto) {
     HQ.common.changeData(HQ.isChange, 'OM25300');
 };
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
-var stoData_load = function (sto) {  
+var stoData_load = function (sto) {        
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'OM25300');
@@ -98,6 +98,13 @@ var firstLoad = function () {
         App.menuClickbtnSave.disable();
     }
     App.stoData.reload();
+    if (!App.cboPosmID.getValue()) {
+        var progTypeFCS = '';//
+        if (App.cboProgID.store.data && App.cboProgID.store.data.items[0]) {
+            progTypeFCS = App.cboProgID.store.data.items[0].data.Code;
+        }
+        App.cboProgID.setValue(progTypeFCS);
+    }
 };
 var grdDet_BeforeEdit = function (editor, e) {
     
@@ -429,7 +436,7 @@ var save = function () {
             success: function (msg, data) {
                 HQ.message.process(msg, data, true);
                 App.cboPosmID.store.reload();
-                refresh('yes');
+                refresh('yes');                
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -479,6 +486,16 @@ var ImportData = function () {
                 }
                 else {
                     HQ.message.process(msg, data, true);
+                }
+                if (true) {
+
+                }
+                if (this.result.posmID == App.cboPosmID.getValue()) {
+                    App.cboProgID.setValue(this.result.progType);
+                }
+                var record = HQ.store.findRecord(App.cboPosmID.store, ['PosmID'], [this.result.posmID]);
+                if (record) {
+                    record.set('ProgTypeFCS', this.result.progType);
                 }
                 refresh('yes');
             },
