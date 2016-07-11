@@ -84,7 +84,7 @@
                         HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").Tag("X")
                             .HQProcedure("AR20400_pcCustomer").HQColumnShow("CustId,CustName,Addr1,Addr2")
                             .DisplayField("CustId").ValueField("CustId").MaxLength(50).EnforceMaxLength(true)
-                            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
                             .ForceSelection(true)
                             .HQParam(new StoreParameterCollection() 
                             {
@@ -96,7 +96,7 @@
                             {
                                 lst.Change.Fn = "cboCustId_Change";
                                 //lst.Select.Fn = "cboCustId_Select";
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                lst.TriggerClick.Fn = "cboCustId_TriggerClick";
                             })
                             
                         , HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQLangCode("BRANCHID").Tag("X")
@@ -925,6 +925,7 @@
                             .SelectionModel(X.RowSelectionModel().ID("slmAR_LTTContract").Mode(SelectionMode.Single))
                             .Listeners(lst =>
                             {
+                                lst.BeforeSelect.Handler = "HQ.focus = 'grdAR_LTTContract'";
                                 lst.Select.Fn = "slmAR_LTTContract_Select";
                             })
                             .BottomBar(
@@ -1047,6 +1048,7 @@
                                 .Listeners(l => l.Command.Handler = "grdAR_LTTContractDetail_Reject(record);")
                             )
                             .SelectionModel(X.RowSelectionModel().ID("slmAR_LTTContractDetail").Mode(SelectionMode.Multi))
+                            .Listeners(lst=>lst.BeforeSelect.Handler = "HQ.focus='grdAR_LTTContractDetail'")
                             .BottomBar(
                                 X.PagingToolbar()
                                 .Items(
@@ -1088,10 +1090,10 @@
                         )
 
                 )//Tab Hop Dong Dau Tu
-                .Listeners(lss =>
-                {
-                    lss.Render.Handler = "HQ.common.control_render(this,'grdAR_LTTContract')";
-                })
+                //.Listeners(lss =>
+                //{
+                //    lss.Render.Handler = "HQ.common.control_render(this,'grdAR_LTTContract')";
+                //})
 
                 , X.Panel().ID("pnlADV")     //////////////Tab Vat Dung Quang Cao Trung Bay //////////////
                 .Title(Util.GetLang("BRDADVTOOL"))

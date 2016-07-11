@@ -534,14 +534,22 @@ var HQ = {
         },
         indexSelect: function (grd) {
             var index = '';
-            var arr = grd.getSelectionModel().getSelection();
+            var arr = grd.getSelectionModel().selected.items;
             arr.forEach(function (itm) {
-                index += (grd.getStore().indexOf(itm) + 1) + ',';
-                //index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+                index += (itm.index == undefined ? (grd.getStore().indexOf(itm) + 1) : itm.index + 1) + ',';
             });
-
             return index.substring(0, index.length - 1);
         },
+        //indexSelect: function (grd) {
+        //    var index = '';
+        //    var arr = grd.getSelectionModel().getSelection();
+        //    arr.forEach(function (itm) {
+        //        index += (grd.getStore().indexOf(itm) + 1) + ',';
+        //        //index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+        //    });
+
+        //    return index.substring(0, index.length - 1);
+        //},
         checkDuplicate: function (grd, row, keys) {
             var found = false;
             var store = grd.getStore();
