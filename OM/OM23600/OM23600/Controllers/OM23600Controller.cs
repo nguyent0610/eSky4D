@@ -17,6 +17,7 @@ using System.Drawing;
 using HQFramework.DAL;
 using HQFramework.Common;
 using System.Text.RegularExpressions;
+using System.Web.Configuration;
 
 namespace OM23600.Controllers
 {
@@ -29,6 +30,7 @@ namespace OM23600.Controllers
         private string _userName = Current.UserName;
         OM23600Entities _db = Util.CreateObjectContext<OM23600Entities>(false);
         private static readonly Regex boxNumberRegex = new Regex(@"^\d{2}/\d{4}$");
+        private static readonly Regex boxNumberRegex1 = new Regex(@"^\d/\d{4}$");
         private JsonResult _logMessage;
         public ActionResult Index()
         {
@@ -45,7 +47,7 @@ namespace OM23600.Controllers
         {
             var lstPOSM = _db.OM23600_pgPosmID(posmID, progType, Current.UserName, Current.CpnyID, Current.LangID);
             return this.Store(lstPOSM);
-        }
+        }        
         public ActionResult Save(FormCollection data)
         {
             try
@@ -63,7 +65,6 @@ namespace OM23600.Controllers
                         objH.LUpd_Prog = _screenNbr;
                         objH.LUpd_User = Current.UserName;
                         objH.tstamp = new byte[1];
-                        _db.SaveChanges();
                     }                    
                 }
                 else
@@ -154,16 +155,7 @@ namespace OM23600.Controllers
                         _db.OM_POSMBranch.AddObject(objBranch);
                     }
                 }
-                try
-                {
-                    _db.SaveChanges();
-                }
-                catch (OptimisticConcurrencyException)
-                {
-                    _db.Refresh(RefreshMode.ClientWins, _db.OM_POSMBranch);
-                    _db.SaveChanges();
-                }
-                //_db.SaveChanges();
+                _db.SaveChanges();
 
                 return Util.CreateMessage(MessageProcess.Save);
             }
@@ -204,8 +196,13 @@ namespace OM23600.Controllers
             try
             {
                 string posmID = data["cboPosmID"].PassNull();
-                string fromDate = DateTime.Parse(data["dteFromDate"]).ToString("dd/MM/yyyy");
-                string toDate = DateTime.Parse(data["dteFromDate"]).ToString("dd/MM/yyyy");
+                string format = Current.FormatDate;// WebConfigurationManager.AppSettings["FormatDate"].PassNull();
+                if (string.IsNullOrWhiteSpace(format))
+                {
+                    format = "dd-MM-yyyy";
+                }
+                string fromDate = DateTime.Parse(data["dteFromDate"]).ToString(format);
+                string toDate = DateTime.Parse(data["dteToDate"]).ToString(format);
                 string progType = data["cboProgID"].PassNull();
 
                 Stream stream = new MemoryStream();
@@ -311,7 +308,7 @@ namespace OM23600.Controllers
                 {
                     this.SetCellValueHeader(sheetDet, "F3", Util.GetLang("InvtID"));
                     this.SetCellValueHeader(sheetDet, "G3", Util.GetLang("InvtName"));
-                    this.SetCellValueHeader(sheetDet, "H3", Util.GetLang("ExpDate"));
+                    this.SetCellValueHeader(sheetDet, "H3", Util.GetLang("ExpDate") + " (MM/yyyy)");
                     this.SetCellValueHeader(sheetDet, "I3", Util.GetLang("Qty"));
 
                     // InvtID
@@ -606,7 +603,7 @@ namespace OM23600.Controllers
         public ActionResult Import(FormCollection data)
         {
             try
-            {
+            {                
                 string posmID = data["cboPosmID"].PassNull();
                 string progType = data["cboProgID"].PassNull();
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
@@ -644,6 +641,42 @@ namespace OM23600.Controllers
                             double Qty = 0.0;
                             string errorRows = string.Empty;                            
                             Worksheet workSheet = workbook.Worksheets[0];
+                            var impPosmID = workSheet.Cells[0, 3].StringValue.PassNull().Trim();
+                            if (impPosmID.ToUpper() != posmID.ToUpper())
+                            {
+                                var obj = _db.IN_POSMHeader.FirstOrDefault(x => x.PosmID.ToUpper() == impPosmID.ToUpper());
+                                if (obj != null)
+                                {
+                                    posmID = impPosmID;
+                                    if (!string.IsNullOrWhiteSpace(obj.ProgType))
+                                    {
+                                        progType = obj.ProgType;
+                                    }
+                                    else
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(workSheet.Cells[2, 6].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 7].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 5].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 0].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 1].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 2].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 3].StringValue) &&
+                                            !string.IsNullOrWhiteSpace(workSheet.Cells[2, 4].StringValue)
+                                            )
+                                        {
+                                            progType = "D3";
+                                        }
+                                        else
+                                        {
+                                            progType = "D4";
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    throw new MessageException(MessageType.Message, "2016071101", parm: new[] { impPosmID });
+                                }
+                            }
                             int maxDataRow = workSheet.Cells.MaxDataRow;
                             var lstBranch = _db.OM23600_pcBranchID(posmID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
                             var lstCust = _db.OM23600_pdExpCustId(Current.UserName, Current.CpnyID, Current.LangID, posmID).ToList();
@@ -693,7 +726,12 @@ namespace OM23600.Controllers
                                     {
                                         continue;
                                     }
-                                    Qty = double.Parse(workSheet.Cells[i, 8].StringValue.PassNull());
+                                    bool isValidVal = double.TryParse(workSheet.Cells[i, 8].StringValue.PassNull(), out Qty);
+                                    if (!isValidVal)
+                                    {
+                                        Qty = 0;
+                                    }
+                                    //Qty = double.Parse(workSheet.Cells[i, 8].StringValue.PassNull());
                                     // Check exist company
                                     var objBranch = lstBranch.Where(x => x.BranchID == BranchID).FirstOrDefault();
                                     if (objBranch == null)
@@ -799,7 +837,12 @@ namespace OM23600.Controllers
                                     {
                                         continue;
                                     }
-                                    Qty = double.Parse(workSheet.Cells[i, 5].StringValue.PassNull());
+                                   // Qty = double.Parse(workSheet.Cells[i, 5].StringValue.PassNull());
+                                    bool isValidVal = double.TryParse(workSheet.Cells[i, 8].StringValue.PassNull(), out Qty);
+                                    if (!isValidVal)
+                                    {
+                                        Qty = 0;
+                                    }
                                     // Check exist company
                                     var objBranch = lstBranch.Where(x => x.BranchID == BranchID).FirstOrDefault();
                                     if (objBranch == null)
@@ -868,7 +911,7 @@ namespace OM23600.Controllers
                                                 s.ColumnMappings.Add(col.ToString(), col.ToString());
                                             s.WriteToServer(dtOM_DetailsTmp);
                                             ////Gọi store insert, update từ bảng tạm vào bảng chính
-                                            SqlCommand cmd1 = new SqlCommand("ServerImportOM_POSMBranch", dbConnection, sqlTran);
+                                            SqlCommand cmd1 = new SqlCommand("ppv_OM23600ImportOM_POSMBranch", dbConnection, sqlTran);
                                             cmd1.CommandType = CommandType.StoredProcedure;
                                             cmd1.Parameters.AddWithValue("@UserID", Current.UserName);
                                             cmd1.Parameters.AddWithValue("@PosmID", posmID);
@@ -886,7 +929,7 @@ namespace OM23600.Controllers
                                 }
                             }
                         }
-                        return Json(new { success = true, msgCode = 20121418 });
+                        return Json(new { success = true, msgCode = 20121418, posmID = posmID, progType = progType });
                         //string isoJson = JsonConvert.SerializeObject(lstBudget, new IsoDateTimeConverter());
                         //return Json(new { success = true, type = "error", data = isoJson });
                     }
@@ -920,11 +963,11 @@ namespace OM23600.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
-        }        
-
+        }
+        // Verify format
         public static bool VerifyBoxNumber(string boxNumber)
         {
-            return boxNumberRegex.IsMatch(boxNumber);
+            return (boxNumberRegex.IsMatch(boxNumber) || boxNumberRegex1.IsMatch(boxNumber));
         }
         #endregion
     }

@@ -67,7 +67,7 @@
                             
                 ,HQ.Combo().ID("cboProgID").Name("cboProgID").Width(300).AllowBlank(false).HQAutoLoad(true)
                 .HQLangCode("OM23600ProgType").HQProcedure("OM23600_pcProgramType")
-                .HQColumnShow("Descr").ForceSelection(true)
+                .HQColumnShow("Descr").ForceSelection(true).HQFirstDefault(true)
                 .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 400)
                 .HQParam(new StoreParameterCollection() 
                 { 
@@ -85,8 +85,8 @@
             )
             , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
                 .Items(
-                HQ.DateField().ID("dteFromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(300).AllowBlank(false).Value(DateTime.Now)
-                ,HQ.DateField().ID("dteToDate").MarginSpec("5 0 0 0").HQLangCode("ToDate").Width(300).AllowBlank(false).Value(DateTime.Now)
+                HQ.DateField().ID("dteFromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(300).Value(DateTime.Now).ReadOnly(true)
+                ,HQ.DateField().ID("dteToDate").MarginSpec("5 0 0 0").HQLangCode("ToDate").Width(300).Value(DateTime.Now).ReadOnly(true)
             )
         )
         .Listeners(lss =>
@@ -276,7 +276,7 @@
                                 .Editor(
                                     HQ.Combo().ID("cboExpDate").Name("cboExpDate")
                                 .HQProcedure("OM23600_pcExpDate")
-                                .Width(100).HQHeightWidth(500, 400)
+                                .Width(100)
                                 .HQColumnShow("dExpDate").DisplayField("dExpDate").ValueField("vExpDate")
                                 .AllowBlank(true).ForceSelection(false).HQDBSys(false)                     
                                 .HQParam(new StoreParameterCollection() 
