@@ -114,14 +114,14 @@ namespace AR20500.Controllers
                             if (objNew == null || objNew.Status == "A" || objNew.Status == "D") continue;
                             if (handle == "A")
                             {
-                                if (_checkApprove == 1 && askApprove == 0)
+                                if (checkApprove == 1 && askApprove == 0)
                                 {
                                     //Check dieu kien Name/Addr/Phone
                                     var objCheck = _db.AR20500_ppCheckApprove(item.OutletName, item.Phone, item.Addr1, Current.LangID).FirstOrDefault();
                                     if (objCheck != null)
                                     {
                                         if(objCheck.Result == true)
-                                            throw new MessageException(MessageType.Message, "2016062801", "askApprove", parm: new string[] { objCheck.Lang.PassNull() });
+                                            throw new MessageException(MessageType.Message, "2016062801", "askApprove", parm: new string[] {item.OutletName.PassNull(), objCheck.Lang.PassNull() });
                                     }
                                 }
                                 askApprove = 0; // set lai ask Approve = 0

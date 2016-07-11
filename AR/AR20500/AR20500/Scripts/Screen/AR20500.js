@@ -100,7 +100,10 @@ var btnProcess_Click = function () {
                     url: 'AR20500/Process',
                     timeout: 180000,
                     params: {
-                        lstCust: Ext.encode(App.grdCust.store.getRecordsValues())                        
+                        lstCust: Ext.encode(App.grdCust.store.getRecordsValues()),
+                        fromDate: HQ.bussinessDate,
+                        toDate: HQ.bussinessDate,
+                        askApprove: 0
                     },
                     success: function (msg, data) {
                         HQ.message.show(201405071);
