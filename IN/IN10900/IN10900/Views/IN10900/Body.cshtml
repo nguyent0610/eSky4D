@@ -33,7 +33,7 @@
         //.Listeners(p=>{
         //    p.Click.Fn = "btnExport_Click";
         //})
-    },"Print",true,""))
+    },"Print,New,Delete",true,""))
     .Layout(LayoutType.Border)
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
     .Items(
@@ -103,7 +103,7 @@
                     lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue();}";
                 }).LoadData() 
             
-                ,HQ.DateField().ID("dteCheckDate").MarginSpec("5 0 0 0").HQLangCode("CheckDate").Width(300).ReadOnly(false).Value(DateTime.Now)
+                ,HQ.DateField().ID("dteCheckDate").MarginSpec("5 0 0 0").HQLangCode("IN10900CheckDate").Width(300).ReadOnly(false).Value(DateTime.Now)
             )
             
             , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
@@ -177,7 +177,7 @@
 
                 ,X.Column().Text(Util.GetLang("StkOutNbr")).DataIndex("StkOutNbr").Width(150)  
                 
-                  ,X.Column().Text(Util.GetLang("StkOutDate")).DataIndex("StkOutDate").Width(150)   
+                  ,X.DateColumn().Text(Util.GetLang("StkOutDate")).DataIndex("StkOutDate").Width(150)   
                   
                     ,X.Column().Text(Util.GetLang("ReasonID")).DataIndex("ReasonID").Width(150)   
                     

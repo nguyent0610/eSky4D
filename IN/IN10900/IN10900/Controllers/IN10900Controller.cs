@@ -52,7 +52,11 @@ namespace IN10900.Controllers
 				ChangeRecords<IN10900_pgLoadGrid_Result> lstData = dataHandlerGrid.BatchObjectData<IN10900_pgLoadGrid_Result>();
 				var docDate = data["dteCheckDate"];
 				var branchID = data["cboCpnyID"];
-
+				if (_db.IN10900_ppCheckCloseDate(branchID.PassNull(), docDate.ToDateShort(), "IN10900").FirstOrDefault() == "0")
+				{
+					throw new MessageException(MessageType.Message, "301");
+					return new MessageException(MessageType.Message, "301").ToMessage();
+				}
 				lstData.Created.AddRange(lstData.Updated);
 				foreach (IN10900_pgLoadGrid_Result curItem in lstData.Created.Where(p => p.Selected == true))
 				{
@@ -65,19 +69,24 @@ namespace IN10900.Controllers
 						&& p.SlsPerID.ToLower() == curItem.SlsPerID.ToLower()
 						&& p.StkOutNbr.ToLower() == curItem.StkOutNbr.ToLower()
 					   ).FirstOrDefault();
-
 					if (objStockOutlet != null)
 					{
 						objStockOutlet.StkOutDate = docDate.ToDateShort();
-						//if (objStockOutlet.tstamp.ToHex() == curItem.tstamp.ToHex())
-						//{
+						objStockOutlet.LUpd_DateTime = DateTime.Now;
+						objStockOutlet.LUpd_Prog = _screenNbr;
+						objStockOutlet.LUpd_User = Current.UserName;
+					}
+					var objin_trans = _db.IN_Trans.Where(p => p.BranchID.ToLower() == branchID.ToLower() && p.BatNbr.ToLower() == curItem.StkOutNbr.ToLower()).ToList();
 
-						//		Update_OM_POSMBranchID(objFCS, curItem, false);
-						//}
-						//else
-						//{
-						//	throw new MessageException(MessageType.Message, "19");
-						//}
+					if (objin_trans.Count() > 0)
+					{
+						foreach (var a in objin_trans)
+						{
+							a.TranDate = docDate.ToDateShort();
+							a.LUpd_DateTime = DateTime.Now;
+							a.LUpd_Prog = _screenNbr;
+							a.LUpd_User = Current.UserName;
+						}
 					}
 
 				}

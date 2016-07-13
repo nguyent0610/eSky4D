@@ -22,7 +22,7 @@ var stoData_load = function (sto) {
     HQ.common.changeData(HQ.isChange, 'IN10900');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
+         //   HQ.store.insertBlank(sto, keys);
         }
         HQ.isFirstLoad = false;
     }
