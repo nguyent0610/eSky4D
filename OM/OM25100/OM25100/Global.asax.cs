@@ -31,14 +31,14 @@ namespace OM25100
            Current.Authorize = false;
             Current.Server = "EARTHSVR\\SQL2012";
             Current.FormatDate = "dd.MM.yyyy";
-			Current.DBSys = "eSky4DNissinSys";
+			Current.DBSys = "ND_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM25100"] = acc;
-			Session["DBApp"] = Current.DBApp = "eSky4DNissinApp";
-            Session["UserName"] = Current.UserName = "admin";
+			Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
+			Session["UserName"] = Current.UserName = "admin";
 			Session["CpnyID"] = Current.CpnyID = "Nissin";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;

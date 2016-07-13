@@ -55,12 +55,13 @@
 
                             lst.Select.Fn = "cboCycleNbr_Select";
                             lst.Expand.Fn = "cboCycleNbr_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?   
-                            lst.Focus.Handler = "this.forceSelection=false";
+                            lst.Focus.Handler = "this.forceSelection=false;";
+                            lst.Blur.Fn = "cboCycleNbr_Blur";
                         })
 
                         , HQ.Combo().ID("cboKPI").Name("cboKPI").HQLangCode("OM25100KPI")
                         .HQProcedure("OM25100_pcLoadKPI").HQAutoLoad(true).MaxLength(15).EnforceMaxLength(true).ForceSelection(false)
-                        .HQColumnShow("KPI,Name").DisplayField("KPI").ValueField("KPI")
+                        .HQColumnShow("KPI,Name,ApplyFor,ApplyTo,Type").DisplayField("KPI").ValueField("KPI")
                         .AllowBlank(false)
                         .Width(300).HQHeightWidth(500, 300).Editable(true)
                         .HQParam(new StoreParameterCollection() 
@@ -1142,6 +1143,7 @@
                                             .Width(500).HQHeightWidth(500, 400)
                                             .HQParam(new StoreParameterCollection() 
                                         {
+                                            new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperIdCust.getValue()", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -1312,6 +1314,7 @@
                                             .Width(500).HQHeightWidth(500, 400)
                                             .HQParam(new StoreParameterCollection() 
                                         {
+                                              new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperIdClassCust.getValue()", Mode = ParameterMode.Raw },   
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -1499,7 +1502,8 @@
                                             .HQColumnShow("CustId,CustName").DisplayField("CustId").ValueField("CustId")
                                             .Width(500).HQHeightWidth(500, 400)
                                             .HQParam(new StoreParameterCollection() 
-                                        {
+                                        {  
+                                            new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperIdInvtCust.getValue()", Mode = ParameterMode.Raw },                                              
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }

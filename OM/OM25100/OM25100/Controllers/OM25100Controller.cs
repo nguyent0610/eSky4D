@@ -33,7 +33,7 @@ namespace OM25100.Controllers
             return View();
         }
         
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+      //  [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -100,7 +100,7 @@ namespace OM25100.Controllers
             {
                 string CycleNbr = data["cboCycleNbr"].PassNull();
                 string KPI = data["cboKPI"].PassNull();
-                string handle = data["cboHandle"];
+				string handle = data["cboHandle"].PassNull();
 
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstMCCode"]);
@@ -158,6 +158,10 @@ namespace OM25100.Controllers
                             {
                                 header.Status = handle;
                             }
+							if (handle == "A")
+							{
+								header.Status = "C";
+							}
                             if (handle == "H")
                             {
                                 header.Status = handle;
