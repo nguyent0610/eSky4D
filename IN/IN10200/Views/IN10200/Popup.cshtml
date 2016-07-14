@@ -50,7 +50,7 @@
     .Width(350) 
     .Items(
         HQ.Combo().ID("cboPopupCpny").Name("BranchID").HQLangCode("BranchName")
-        .HQProcedure("OM10100_pcBranch").HQColumnShow("BranchID,BranchName,Addr")
+        .HQProcedure("IN10200_pcBranchID").HQColumnShow("BranchID,BranchName,Addr")
         .DisplayField("BranchName").ValueField("BranchID")
         .LabelWidth(130).Width(300).HQHeightWidth(400, 300).MarginSpec("10 0 10 0")
         .AllowBlank(false).BlankText(Util.GetLangPrefix("Input","BranchID"))

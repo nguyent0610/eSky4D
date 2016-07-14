@@ -110,17 +110,17 @@
                
                 , X.Column().ID("colLotUnitDesc").DataIndex("UnitDesc").Text(Util.GetLang("Unit"))
                 .Width(100)
-                .Editor(
-                    X.ComboBox().ID("cboLotUnitDesc")
-                    .DisplayField("FromUnit").ValueField("FromUnit")
-                    .StoreID("stoUnit")
-                    .QueryMode(DataLoadMode.Local)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst =>
-                    {
-                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                    })
-                )
+                //.Editor(
+                //    X.ComboBox().ID("cboLotUnitDesc")
+                //    .DisplayField("FromUnit").ValueField("FromUnit")
+                //    .StoreID("stoUnit")
+                //    .QueryMode(DataLoadMode.Local)
+                //    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                //    .Listeners(lst =>
+                //    {
+                //        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                //    })
+                //)
                   
                  , X.Column().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("Qty"))
                 .Width(75)
@@ -661,8 +661,26 @@
                 )
                 .Plugins(X.ProgressBarPager())
             )
-            .Plugins(X.CellEditing().ClicksToEdit(1))
-        )
+            .Plugins(
+                X.CellEditing().ClicksToEdit(1)
+            )
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("InvtID"),
+                        X.StringFilter().DataIndex("TranDesc"),
+                        X.StringFilter().DataIndex("UnitDesc"),
+                        X.NumericFilter().DataIndex("Qty"),
+                        X.NumericFilter().DataIndex("UnitPrice"),
+                        X.NumericFilter().DataIndex("TranAmt"),
+                        X.StringFilter().DataIndex("PosmID")
+                    )
+            )
+        ).Listeners(lss =>
+            {
+                lss.Render.Handler = "HQ.common.control_render(this,'trans')";
+            })
         )
     )
 )

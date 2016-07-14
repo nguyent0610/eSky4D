@@ -25,7 +25,7 @@ if (typeof String.prototype.trim !== 'function') {
 }
 if (typeof String.prototype.unsign !== 'function') {
     String.prototype.unsign = function () {
-        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ.+/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ.+/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ĩ/g, "e").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
     }
 }
 if (!('forEach' in Array.prototype)) {
@@ -55,6 +55,16 @@ Date.prototype.getFromFormat = function (format) {
     format = format.replace(/ss/g, (ss[1] ? ss : "0" + ss[0]));
     return format;
 };
+Number.prototype.format = function (n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
+///vi du 
+//12345678.9.format(2, 3, '.', ',');  // "12.345.678,90"
+//123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
+//12345678.9.format(0, 3, '-');       // "12-345-679"
 var HQ = {
     store: {
         isChange: function (store) {
@@ -62,6 +72,33 @@ var HQ = {
                 || store.getChangedData().Updated != undefined
                 || store.getChangedData().Deleted != undefined) {
                 return true;
+            } else {
+                return false;
+            }
+        },
+        isGridChange: function (store, keys) { // Kiểm tra dòng thêm mới đã đủ key thì đánh dấu là đã thay đổi
+            if (store.getChangedData().Updated != undefined
+                || store.getChangedData().Deleted != undefined) {
+                return true;
+            }
+            else if (store.getChangedData().Created != undefined) {
+                if (store.getChangedData().Created.length > 1) {
+                    return true;
+                }
+                else {
+                    var itmCount = keys.length;
+                    var match = 0;
+                    for (var idx = 0; idx < itmCount; idx++) {
+                        if (store.getChangedData().Created[0][keys[idx]]) {
+                            match++;
+                        }
+                    }
+                    if (match == itmCount) {
+                        return true;
+                    }
+                    return false;
+                }
+
             } else {
                 return false;
             }
@@ -120,65 +157,35 @@ var HQ = {
         getAllData: function (store, fields, values, isEqual) {
             var lstData = [];
             if (isEqual == undefined || isEqual == true) {
-                if (store.snapshot != undefined) {
-                    store.snapshot.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] != values[i]) {
-                                    isb = false;
-                                    break;
-                                }
+                var allData = store.snapshot || store.allData || store.data;
+                allData.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
                             }
                         }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                } else {
-                    store.data.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] != values[i]) {
-                                    isb = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
             } else {
-                if (store.snapshot != undefined) {
-                    store.snapshot.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] == values[i]) {
-                                    isb = false;
-                                    break;
-                                }
+                var allData = store.snapshot || store.allData || store.data;
+                allData.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] == values[i]) {
+                                isb = false;
+                                break;
                             }
                         }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                } else {
-                    store.data.each(function (item) {
-                        var isb = true;
-                        if (fields != null) {
-                            for (var i = 0; i < fields.length; i++) {
-                                if (item.data[fields[i]] == values[i]) {
-                                    isb = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (isb) lstData.push(item.data);
-                    });
-                    return Ext.encode(lstData);
-                }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
             }
         },
         findInStore: function (store, fields, values) {
@@ -504,9 +511,10 @@ var HQ = {
 
         indexSelect: function (grd) {
             var index = '';
+            var allData = grd.store.allData || grd.store.data;
             var arr = grd.getSelectionModel().selected.items;
             arr.forEach(function (itm) {
-                index += (itm.index + 1) + ',';
+                index += (allData.indexOfKey(itm.internalId) + 1) + ',';
             });
             return index.substring(0, index.length - 1);
         },
@@ -1036,6 +1044,7 @@ var FilterCombo = function (control, stkeyFilter) {
     var filtersAux = [];
     if (control) {
         var store = control.getStore();
+        store.suspendEvents();
         var value = HQ.util.passNull(control.getValue()).toString();
         if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
         if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
@@ -1075,6 +1084,7 @@ var FilterCombo = function (control, stkeyFilter) {
             }
 
         }
+        store.resumeEvents();
     }
 };
 var loadDefault = function (fileNameStore, cbo) {

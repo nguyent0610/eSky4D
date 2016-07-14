@@ -503,6 +503,7 @@ namespace IN10200.Controllers
                 }
             }
         }
+
         [HttpPost]
         public ActionResult Import(FormCollection data)
         {
@@ -512,9 +513,7 @@ namespace IN10200.Controllers
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
                 HttpPostedFile file = fileUploadField.PostedFile; // or: HttpPostedFileBase file = this.HttpContext.Request.Files[0];
                 FileInfo fileInfo = new FileInfo(file.FileName);
-
                 string message = string.Empty;
-
                 List<IN_Trans> lstTrans = new List<IN_Trans>();
                 List<IN_LotTrans> lstLot = new List<IN_LotTrans>();
 
@@ -566,7 +565,7 @@ namespace IN10200.Controllers
                 {
                     i++;
                     var obj = item.Split('\t');
-                    if (obj.Length == 3)
+                    if(obj[0].PassNull() != "" && obj[1].PassNull()!="" && obj[2].PassNull()!="")
                     {
                         double qty = 0;
                         if (double.TryParse(obj[2], out qty))
@@ -690,12 +689,17 @@ namespace IN10200.Controllers
                         }
                         else
                         {
-                            message += string.Format("Dòng {0} không đúng định dạng<br/>", i);
+                            if (obj[0].PassNull() == "")
+                                message += string.Format("Dòng {0} thiếu Mã Sản Phẩm<br/>", i);
+                            if (obj[1].PassNull() == "")
+                                message += string.Format("Dòng {0} thiếu Đơn Vị<br/>", i);
+                            if (obj[2].PassNull() == "")
+                                message += string.Format("Dòng {0} thiếu Số Lượng<br/>", i);
                         }
                     }
                     else
                     {
-                        message += string.Format("Dòng {0} không đúng định dạng<br/>", i);
+                        //message += string.Format("Dòng {0} không đúng định dạng<br/>", i);
                     }
                 }
                 Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans, lstLot });
@@ -900,7 +904,6 @@ namespace IN10200.Controllers
         private void SaveData(FormCollection data)
         {
 
-
             if (_lstTrans == null)
             {
                 var transHandler = new StoreDataHandler(data["lstTrans"]);
@@ -919,7 +922,6 @@ namespace IN10200.Controllers
 
             if (_app.IN10200_ppCheckCloseDate(_objBatch.BranchID, _objBatch.DateEnt.ToDateShort(), "IN10200").FirstOrDefault() == "0")
                 throw new MessageException(MessageType.Message, "301");
-
 
             Batch batch = _app.Batches.FirstOrDefault(p => p.BatNbr == _objBatch.BatNbr && p.BranchID == _objBatch.BranchID);
             if ((_objBatch.Status == "U" || _objBatch.Status == "C") && (_handle == "C" || _handle == "V"))
@@ -975,10 +977,10 @@ namespace IN10200.Controllers
                     }
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     dal.RollbackTrans();
-                    throw;
+                    throw ex;
                 }
                 finally
                 {
