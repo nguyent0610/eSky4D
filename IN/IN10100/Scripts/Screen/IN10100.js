@@ -781,10 +781,14 @@ var grdTrans_Edit = function (item, e) {
                 HQ.numTrans = 0;
                 HQ.maxTrans = 2;
                 App.stoItemSite.load({
-                    params: { siteID: App.SiteID.getValue(), invtID: e.record.data.InvtID }, callback: checkSourceEdit, row: e
+                    params: { siteID: App.SiteID.getValue(), invtID: e.record.data.InvtID },
+                    callback: checkSourceEdit,
+                    row: e
                 });
                 App.stoPrice.load({
-                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.DateEnt.getValue() }, callback: checkSourceEdit, row: e
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.DateEnt.getValue() },
+                    callback: checkSourceEdit,
+                    row: e
                 });
             } else {
                 checkExitEdit(e);
