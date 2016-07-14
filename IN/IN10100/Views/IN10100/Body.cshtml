@@ -245,8 +245,10 @@
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)
                     .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@Status", Value = "App.Status.getValue()", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        
                     })
                     .HQControlFocus("IntRefNbr")
                     .LoadData()

@@ -338,20 +338,6 @@ namespace IN10100.Controllers
             if (_app.IN10100_ppCheckCloseDate(_objBatch.BranchID, _objBatch.DateEnt.ToDateShort(), "IN10100").FirstOrDefault() == "0")
                 throw new MessageException(MessageType.Message, "301");
 
-            //var cfgWrkDateChk = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
-            //if (cfgWrkDateChk != null && cfgWrkDateChk.WrkDateChk)
-            //{
-            //    DateTime tranDate = _objBatch.DateEnt;
-            //    if (!((DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate.AddDays(-1 * cfgWrkDateChk.WrkLowerDays)) >=
-            //           0 && DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate) <= 0)
-            //          ||
-            //          (DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate.AddDays(cfgWrkDateChk.WrkUpperDays)) <=
-            //           0 && DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate) >= 0)
-            //          || DateTime.Compare(tranDate, cfgWrkDateChk.WrkAdjDate) == 0))
-            //    {
-            //        throw new MessageException(MessageType.Message, "301");
-            //    }
-            //}
             Batch batch = _app.Batches.FirstOrDefault(p => p.BatNbr == _objBatch.BatNbr && p.BranchID == _objBatch.BranchID);
             if ((_objBatch.Status == "U" || _objBatch.Status == "C") && (_handle == "C" || _handle == "V"))
             {
@@ -393,7 +379,6 @@ namespace IN10100.Controllers
                         dal.CommitTrans();
 
                         Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
-
                     }
                     else if (_handle == "C" || _handle == "V")
                     {
@@ -922,7 +907,7 @@ namespace IN10100.Controllers
 
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Position = 0;
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = data["BatNbr"].PassNull() + ".xlsx" };
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = (data["BatNbr"].PassNull() == "" ? "IN10100" : data["BatNbr"].PassNull()) + ".xlsx" };
             }
             catch (Exception ex)
             {
@@ -1086,6 +1071,7 @@ namespace IN10100.Controllers
                         foreach (var item in lstInvt)
                         {
                             var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
+                            
                             var newTrans = new IN10100_pgReceiptLoad_Result();
                             newTrans.InvtID = item.InvtID;
                             newTrans.LineRef = LastLineRef(lineRef);
@@ -1098,7 +1084,7 @@ namespace IN10100.Controllers
                             newTrans.TranType = "RC";
                             newTrans.JrnlType = "IN";
                             newTrans.TranDesc = objInvt.Descr;
-                          
+
 
                             var tmp = lstLot.Where(p => p.InvtID == item.InvtID).ToList();
                             foreach (var lot in tmp)
@@ -1110,15 +1096,15 @@ namespace IN10100.Controllers
                                     lstLot.Remove(lot);
                                 }
                             }
-                          
+
 
                             newTrans.UnitPrice = newTrans.UnitCost = item.UnitPrice;
                             newTrans.TranAmt = Math.Round(newTrans.UnitPrice * newTrans.Qty, 0);
                             newTrans.SiteID = item.SiteID;
                             lstTrans.Add(newTrans);
 
-
                             lineRef++;
+                            
                         }
 
                         Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans, lstLot });

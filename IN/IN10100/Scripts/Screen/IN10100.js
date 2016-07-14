@@ -364,18 +364,20 @@ var menuClick = function (command) {
 };
 
 var eventNew = function (sto, grd, keys) {
-    HQ.store.insertBlank(sto, keys);
-    HQ.grid.last(grd);
-    if (grd.editingPlugin) {
-        grd.editingPlugin.startEditByPosition({
-            row: sto.getCount() - 1,
-            column: 1
-        });
-    } else {
-        grd.lockedGrid.editingPlugin.startEditByPosition({
-            row: sto.getCount() - 1,
-            column: 1
-        });
+    if (HQ.isInsert) {
+        HQ.store.insertBlank(sto, keys);
+        HQ.grid.last(grd);
+        if (grd.editingPlugin) {
+            grd.editingPlugin.startEditByPosition({
+                row: sto.getCount() - 1,
+                column: 1
+            });
+        } else {
+            grd.lockedGrid.editingPlugin.startEditByPosition({
+                row: sto.getCount() - 1,
+                column: 1
+            });
+        }
     }
 };
 
@@ -384,9 +386,10 @@ var btnLot_Click = function () {
         App.cboTransInvtID.store.clearFilter();
         this.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [this.record.data.InvtID]);
     }
-
-    if (!Ext.isEmpty(this.record.invt.LotSerTrack) && this.record.invt.LotSerTrack != 'N' && !Ext.isEmpty(this.record.data.UnitDesc)) {
-        showLot(this.record, true);
+    if (!Ext.isEmpty(this.record.invt)){ 
+        if(this.record.invt.LotSerTrack != 'N' && !Ext.isEmpty(this.record.data.UnitDesc)) {
+            showLot(this.record, true);
+        }
     }
 };
 var btnImport_Click = function (c, e) {
@@ -412,53 +415,65 @@ var btnImport_Click = function (c, e) {
                 if (this.result.data.lstTrans != undefined) {
 
                     this.result.data.lstTrans.forEach(function (item) {
-                        var newTrans = Ext.create('App.mdlTrans');
-                        newTrans.data.JrnlType = item.JrnlType;
-                        newTrans.data.ReasonCD = item.ReasonCD;
-                        newTrans.data.TranAmt = item.TranAmt;
-                        newTrans.data.BranchID = HQ.cpnyID;
-                        newTrans.data.CnvFact = item.CnvFact;
-                        newTrans.data.ExtCost = item.TranAmt;
-                        newTrans.data.InvtID = item.InvtID;
-                        newTrans.data.InvtMult = item.InvtMult;
-                        newTrans.data.LineRef = item.LineRef;
-                        newTrans.data.Qty = item.Qty;
-                        newTrans.data.SiteID = item.SiteID;
-                        newTrans.data.TranDate = App.DateEnt.getValue();
-                        newTrans.data.TranDesc = item.TranDesc;
-                        newTrans.data.TranType = item.TranType;
-                        newTrans.data.UnitCost = item.UnitCost;
-                        newTrans.data.UnitDesc = item.UnitDesc;
-                        newTrans.data.UnitMultDiv = item.UnitMultDiv;
-                        newTrans.data.UnitPrice = item.UnitPrice;
-                        newTrans.commit();
-                        App.stoTrans.insert(App.stoTrans.getCount() - 1, newTrans);
+                        var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
+                        if (!objTrans) {
+                            HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
+                            var newTrans = App.stoTrans.data.items[App.stoTrans.getCount() - 1];
+                            newTrans.set('JrnlType', item.JrnlType);
+                            newTrans.set('ReasonCD', item.ReasonCD);
+                            newTrans.set('TranAmt', item.TranAmt);
+                            newTrans.set('BranchID', HQ.cpnyID);
+                            newTrans.set('CnvFact', item.CnvFact);
+                            newTrans.set('ExtCost', item.TranAmt);
+                            newTrans.set('InvtID', item.InvtID);
+                            newTrans.set('InvtMult', item.InvtMult);
+                            newTrans.set('LineRef', item.LineRef);
+                            newTrans.set('Qty', item.Qty);
+                            newTrans.set('SiteID', item.SiteID);
+                            newTrans.set('TranDate', App.DateEnt.getValue());
+                            newTrans.set('TranDesc', item.TranDesc);
+                            newTrans.set('TranType', item.TranType);
+                            newTrans.set('UnitCost', item.UnitCost);
+                            newTrans.set('UnitDesc', item.UnitDesc);
+                            newTrans.set('UnitMultDiv', item.UnitMultDiv);
+                            newTrans.set('UnitPrice', item.UnitPrice);
+                        }
+                        else {
+                            objTrans.set('Qty', (objTrans.data.Qty + item.Qty));
+                        }
                     });
+
 
                     App.stoLotTrans.clearFilter();
                     App.stoLotTrans.suspendEvents();
                     this.result.data.lstLot.forEach(function (item) {
-                        var newLot = Ext.create('App.mdlLotTrans');
-                        newLot.data.LotSerNbr = item.LotSerNbr;
-                        newLot.data.INTranLineRef = item.INTranLineRef;
-                        newLot.data.ExpDate = new Date(parseInt(item.ExpDate.substr(6)));
-                        newLot.data.InvtID = item.InvtID;
-                        newLot.data.InvtMult = item.InvtMult;
-                        newLot.data.MfgrLotSerNbr = item.MfgrLotSerNbr;
-                        newLot.data.Qty = item.Qty;
-                        newLot.data.SiteID = item.SiteID;
-                        newLot.data.SlsperID = item.SlsperID;
-                        newLot.data.TranDate = App.DateEnt.getValue();
-                        newLot.data.WarrantyDate = new Date(parseInt(item.WarrantyDate.substr(6)));
-                        newLot.data.TranType = 'RC';
-                        newLot.data.UnitCost = item.UnitCost;
-                        newLot.data.UnitDesc = item.UnitDesc;
-                        newLot.data.UnitMultDiv = item.UnitMultDiv;
-                        newLot.data.UnitPrice = item.UnitPrice;
-                        newLot.data.CnvFact = item.CnvFact;
-                        newLot.data.MfgrLotSerNbr = '';
-                        newLot.commit();
-                        App.stoLotTrans.insert(App.stoLotTrans.getCount() - 1, newLot);
+                        var objLot = HQ.store.findRecord(App.stoLotTrans, ['InvtID', 'LotSerNbr'], [item.InvtID, item.LotSerNbr]);
+                        var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
+                        if (!objLot) {
+                            HQ.store.insertRecord(App.stoLotTrans, ["InvtID", "LotSerNbr"], Ext.create('App.mdlLotTrans'), true);
+                            var newLot = App.stoLotTrans.data.items[App.stoLotTrans.getCount() - 1];
+                            newLot.set('LotSerNbr',item.LotSerNbr);
+                            newLot.set('INTranLineRef',objTrans.data.LineRef);
+                            newLot.set('ExpDate',new Date(parseInt(item.ExpDate.substr(6))));
+                            newLot.set('InvtID',item.InvtID);
+                            newLot.set('InvtMult',item.InvtMult);
+                            newLot.set('MfgrLotSerNbr',item.MfgrLotSerNbr);
+                            newLot.set('Qty',item.Qty);
+                            newLot.set('SiteID',item.SiteID);
+                            newLot.set('SlsperID',item.SlsperID);
+                            newLot.set('TranDate',App.DateEnt.getValue());
+                            newLot.set('WarrantyDate',new Date(parseInt(item.WarrantyDate.substr(6))));
+                            newLot.set('TranType','RC');
+                            newLot.set('UnitCost',item.UnitCost);
+                            newLot.set('UnitDesc',item.UnitDesc);
+                            newLot.set('UnitMultDiv',item.UnitMultDiv);
+                            newLot.set('UnitPrice',item.UnitPrice);
+                            newLot.set('CnvFact',item.CnvFact);
+                            newLot.set('MfgrLotSerNbr','');
+                        }
+                        else {
+                            objLot.set('Qty',(objLot.data.Qty + item.Qty)); 
+                        }
                     });
                     App.stoLotTrans.resumeEvents();
                     calculate();
@@ -652,9 +667,9 @@ var cboTrnsferNbr_Change = function () {
 
 var grdTrans_BeforeEdit = function (item, e) {
     if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
-    if (App.grdTrans.isLock) {
-        return false;
-    }
+    //if (App.grdTrans.isLock) {
+    //    return false;
+    //}
 
     if (!Ext.isEmpty(HQ.store.findInStore(App.TrnsferNbr.store, ['TrnsfrDocNbr'], [App.TrnsferNbr.getValue()]))) {
         return false;
@@ -882,7 +897,8 @@ var bindTran = function () {
     App.lblQtyAvail.setText('');
     App.TrnsferNbr.events['change'].resume();
 
-    HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
+    if (HQ.isInsert)
+        HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
 
     App.TrnsferNbr.setReadOnly(!Ext.isEmpty(App.BatNbr.getValue()));
     checkTransAdd();
@@ -1348,7 +1364,6 @@ var rdrTrans_QtyAmt = function (value) {
 };
 
 var setStatusForm = function () {
-
     var lock = true;
     var flag = true;
     if (!Ext.isEmpty(HQ.objBatch.data.BatNbr)) {
@@ -1381,6 +1396,7 @@ var setStatusForm = function () {
     else if (!HQ.isUpdate && !HQ.isNew) {
         lock = true;
         flag = false;
+        App.btnImport.setDisabled(true);
     }
     
     HQ.common.lockItem(App.frmMain, lock);
