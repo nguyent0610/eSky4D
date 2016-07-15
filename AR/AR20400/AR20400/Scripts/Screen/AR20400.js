@@ -825,24 +825,32 @@ var cboCustId_Change = function (sender, value) {
     }
 };
 
-//var cboCustId_Select = function (sender, value) {
-//    HQ.isFirstLoad = true;
-//    if (sender.valueModels != null && !App.stoAR_Customer.loading) {
-//        App.stoAR_Customer.reload();
-//        App.cboDfltShipToId.setValue('');
-//        App.cboDfltShipToId.store.reload();
-//        App.cboLTTContract.setValue('');
-//        App.cboLTTContract.store.reload();
-//        //if (_hiddenTree == 'false' && value)
-//        //    searchNode();
-//    }
-//};
+var cboCustId_Select = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null && !App.stoAR_Customer.loading) {
+        if (App.cboCustId.allowBlank == false && HQ.isChange == true) {
+            HQ.message.show(150, '', '');
+            sender.setValue(sender.originalValue);
+            return;
+        }
+        CustId = value;
+        App.stoAR_Customer.reload();
+        App.cboDfltShipToId.setValue('');
+        App.cboDfltShipToId.store.reload();
+        App.cboLTTContract.setValue('');
+        App.cboLTTContract.store.reload();
+        //if(_hiddenTree == 'false' && value)
+        //    searchNode();
+    }
+};
+
 var cboCustId_TriggerClick = function (sender, value) {
     if (App.cboCustId.allowBlank == false && HQ.isChange == true) {
         HQ.message.show(150, '', '');
         return;
     }
     App.cboCustId.clearValue();
+    CustId = '';
 };
 
     var cboCpnyID_Change = function (sender, value) {
