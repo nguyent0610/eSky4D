@@ -890,7 +890,7 @@ namespace IN10100.Controllers
                             sheetTrans.Cells["D" + row].PutValue(item2.Qty);
                             sheetTrans.Cells["C" + row].PutValue(item2.UnitDesc);
                             sheetTrans.Cells["G" + row].PutValue(item2.LotSerNbr);
-                            sheetTrans.Cells["H" + row].PutValue(item2.ExpDate);
+                            sheetTrans.Cells["H" + row].PutValue(item2.ExpDate.ToString("yyyy/MM/dd"));
                             row++;
                         }
                     }
