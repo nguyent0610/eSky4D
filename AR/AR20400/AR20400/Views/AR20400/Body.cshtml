@@ -186,6 +186,7 @@
                             .LoadData()
                             .Listeners(lst =>
                             {
+                                lst.Change.Fn = "cboHandle_Change";
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
 
@@ -205,12 +206,16 @@
                 .Title(Util.GetLang("CUSTOMERINFO"))
                 .Layout(LayoutType.VBox).AutoScroll(true)
                 .Items(
-                    X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
+                    X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
                     .Items(
                         HQ.TextBox().ID("txtCustName").Name("txtCustName").HQLangCode("CUSTNAME").DataIndex("CustName")
                             .AllowBlank(false).EnforceMaxLength(true).MaxLength(200)
                             .Width(600).MarginSpec("5 0 0 0")
                             .Listeners(p=>p.Change.Handler ="App.lblName.setValue(this.getValue());")
+                            
+                        , HQ.TextBox().ID("txtInActive").Name("txtInActive").HQLangCode("InActive").DataIndex("InActive")
+                            .AllowBlank(true).EnforceMaxLength(true).MaxLength(100)
+                            .Width(600).MarginSpec("5 0 0 0")
                     )
 
                     , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")

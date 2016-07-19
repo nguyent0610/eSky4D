@@ -375,6 +375,11 @@ var stoLoad = function (sto) {
     App.frmMain.getForm().loadRecord(record);
     App.stoAR_LTTContract.reload();
 
+    if (record.data.Status == 'I')
+        setAllowBank_InActive(false);
+    else
+        setAllowBank_InActive(true);
+
     if (record.data.Status == 'H')
         HQ.common.lockItem(App.frmMain, false);
     else
@@ -1081,6 +1086,18 @@ var cboCustId_TriggerClick = function (sender, value) {
                 HQ.message.show(2016030901, '', '');
             }
         }
+    };
+
+    var cboHandle_Change = function (sender, value) {
+        if (value == "I")
+            setAllowBank_InActive(false);
+        else
+            setAllowBank_InActive(true);
+    };
+
+    var setAllowBank_InActive = function (value) {
+        App.txtInActive.allowBlank = value;
+        App.txtInActive.isValid(!value);
     };
 
     ///////////////////////// Tree ///////////////////////////

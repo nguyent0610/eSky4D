@@ -4461,6 +4461,30 @@ namespace AR20400
         private Nullable<global::System.DateTime> _Birthdate;
         partial void OnBirthdateChanging(Nullable<global::System.DateTime> value);
         partial void OnBirthdateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String InActive
+        {
+            get
+            {
+                return _InActive;
+            }
+            set
+            {
+                OnInActiveChanging(value);
+                ReportPropertyChanging("InActive");
+                _InActive = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("InActive");
+                OnInActiveChanged();
+            }
+        }
+        private global::System.String _InActive;
+        partial void OnInActiveChanging(global::System.String value);
+        partial void OnInActiveChanged();
 
         #endregion
 
@@ -10491,6 +10515,30 @@ namespace AR20400
         private Nullable<global::System.DateTime> _Birthdate;
         partial void OnBirthdateChanging(Nullable<global::System.DateTime> value);
         partial void OnBirthdateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String InActive
+        {
+            get
+            {
+                return _InActive;
+            }
+            set
+            {
+                OnInActiveChanging(value);
+                ReportPropertyChanging("InActive");
+                _InActive = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("InActive");
+                OnInActiveChanged();
+            }
+        }
+        private global::System.String _InActive;
+        partial void OnInActiveChanging(global::System.String value);
+        partial void OnInActiveChanged();
 
         #endregion
 

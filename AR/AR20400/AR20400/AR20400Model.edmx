@@ -183,6 +183,7 @@
           <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
           <Property Name="EstablishDate" Type="date" />
           <Property Name="Birthdate" Type="date" />
+          <Property Name="InActive" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="AR_CustSellingProducts">
           <Key>
@@ -541,7 +542,6 @@
           <FunctionImport Name="AR20400_ppGetMaxHierarchyLevel" ReturnType="Collection(Int16)">
           <Parameter Name="Type" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
           <FunctionImport Name="AR20400_ppCheckDeleteCust" ReturnType="Collection(String)">
             <Parameter Name="CustId" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -560,6 +560,7 @@
             <Parameter Name="ClassID" Mode="In" Type="String" />
             <Parameter Name="CustName" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
         </EntityContainer>
         <EntityType Name="AR_CustAdvTool">
           <Key>
@@ -904,7 +905,7 @@
           <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
           <Property Type="String" Name="Phone" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="PriceClassID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Salut" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Salut" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="ShopType" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SiteId" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="30" />
@@ -930,6 +931,7 @@
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="DateTime" Name="EstablishDate" Nullable="true" />
           <Property Type="DateTime" Name="Birthdate" Nullable="true" />
+          <Property Type="String" Name="InActive" Nullable="true" MaxLength="100" />
         </ComplexType>
         <ComplexType Name="AR20400_pgAR_CustAdvTool_Result">
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
@@ -1065,6 +1067,7 @@
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="EstablishDate" Precision="0" />
           <Property Type="DateTime" Name="Birthdate" Precision="0" />
+          <Property Type="String" Name="InActive" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1441,6 +1444,7 @@
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="EstablishDate" ColumnName="EstablishDate" />
                 <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
+                <ScalarProperty Name="InActive" ColumnName="InActive" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1531,9 +1535,12 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AR20400_ppGetMaxHierarchyLevel" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetMaxHierarchyLevel" />
+          <FunctionImportMapping FunctionImportName="AR20400_ppCheckDeleteCust" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCheckDeleteCust" />
+          <FunctionImportMapping FunctionImportName="AR20400_ppCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCustID" />
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="InActive" ColumnName="InActive" />
                 <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
                 <ScalarProperty Name="EstablishDate" ColumnName="EstablishDate" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
@@ -1609,8 +1616,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AR20400_ppCheckDeleteCust" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCheckDeleteCust" />
-          <FunctionImportMapping FunctionImportName="AR20400_ppCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCustID" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
