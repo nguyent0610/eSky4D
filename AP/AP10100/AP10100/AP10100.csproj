@@ -277,6 +277,7 @@
     <Content Include="Views\AP10100\Index.cshtml" />
     <Content Include="Views\AP10100\Body.cshtml" />
     <Content Include="Views\Shared\_BaseLayout.cshtml" />
+    <Content Include="Views\Popup.cshtml" />
     <Content Include="Views\AP10100\Popup.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -316,7 +317,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

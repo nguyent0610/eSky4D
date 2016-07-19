@@ -437,10 +437,23 @@ namespace AP10100.Controllers
                 {
                     throw new MessageException(MessageType.Message, "220");
                 }
+				if (objAP_Trans.InvtID.PassNull() != "")
+				{
+					if (objAP_Trans.Qty.ToDouble() == 0 )
+					{
+						throw new MessageException(MessageType.Message, "15", "", new string[] { Util.GetLang("Qty") });
+					}
+					else if (objAP_Trans.UnitPrice.ToDouble() == 0)
+					{
+						throw new MessageException(MessageType.Message, "15", "", new string[] { Util.GetLang("UnitPrice") });
+				
+					}
+
+				}
             }
 
-            if (_app.AP10100_ppCheckCloseDate(_branchID, _pdHead.DocDate.ToDateShort()).FirstOrDefault() == "0")
-                throw new MessageException(MessageType.Message, "301");
+			//if (_app.AP10100_ppCheckCloseDate(_branchID, _pdHead.DocDate.ToDateShort()).FirstOrDefault() == "0")
+			//	throw new MessageException(MessageType.Message, "301");
 
             return true;
         }

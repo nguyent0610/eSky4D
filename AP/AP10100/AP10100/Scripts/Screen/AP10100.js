@@ -105,6 +105,8 @@ var menuClick = function (command) {
                     HQ.grid.insert(App.grdAP_Trans, keys);
                     App.cboLineType.setValue('N');
                 }
+                //App.cboVendID.setReadOnly(false);
+                //App.cboDocType.setReadOnly(false);
             }
             break;
         case "delete":
@@ -179,8 +181,8 @@ var stoAP10100_pdHeader_Load = function (store) {
         store.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
         HQ.common.setRequire(App.frmMain);  //to do cac o la require
-        App.cboVendID.setReadOnly(false);
-        App.cboDocType.setReadOnly(false);
+        App.cboVendID.setReadOnly(true);
+        App.cboDocType.setReadOnly(true);
 
     }
     var record = store.getAt(0);
@@ -190,7 +192,10 @@ var stoAP10100_pdHeader_Load = function (store) {
     if (HQ.isInsert == true)
         HQ.isFirstLoad = true;
     App.stoAP_Trans.reload();
-
+    if (record.data.tstamp) {
+        App.cboVendID.setReadOnly(true);
+        App.cboDocType.setReadOnly(true);
+    }
     frmChange();
     //App.stoAP10100_pgLoadTaxTrans.reload();
     //HQ.common.showBusy(false);
@@ -200,9 +205,15 @@ var stoAPTrans_Load = function (store) {
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(store, keys);
+            var record = store.getAt(App.grdAP_Trans.store.getCount() - 1);
+            if (record.LineType==null)
+                record.set('LineType','N');
         }
         HQ.isFirstLoad = false;
     }
+    //var record = store.getAt(App.grdAP_Trans.store.getCount() - 1);
+    //if (record.LineType==null)
+    //    record.set('LineType','N');
     // frmChange();
     App.stoAP10100_pgLoadTaxTrans.reload();
     App.stoAP10100_pdHeader.commitChanges();
@@ -247,7 +258,8 @@ var cboVendID_Change = function (sender, e)
                 App.cboTerms.setValue(obj.Terms);
                 var obj = HQ.store.findInStore(App.cboTerms.getStore(), ["TermsID"], [obj.Terms]);
                 if (obj != undefined) {
-                    App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(obj.DueIntrv) : App.dteDueDate.value);
+                    App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(parseInt(obj.TermsID)) : App.dteDueDate.value);
+                 //   App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(obj.DueIntrv) : App.dteDueDate.value);
                 }
             }
         }
@@ -257,7 +269,8 @@ var cboVendID_Change = function (sender, e)
 var cboTerms_Change = function (sender, e) {
     var obj = HQ.store.findInStore(App.cboTerms.getStore(), ["TermsID"], [e]);
     if (obj != undefined && App.cboTerms.hasFocus) {
-        App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(obj.DueIntrv) : App.dteDueDate.value);
+        App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(parseInt(obj.TermsID)) : App.dteDueDate.value);
+       // App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(obj.DueIntrv) : App.dteDueDate.value);
     }
 }
 var cboStatus_Change = function (item, newValue, oldValue) {
@@ -272,7 +285,7 @@ var cboStatus_Change = function (item, newValue, oldValue) {
 var dteDocDate_Change = function (sender, e) {
     var obj = HQ.store.findInStore(App.cboTerms.getStore(), ["TermsID"], [App.cboTerms.getValue()]);
     if (obj != undefined && App.dteDocDate.hasFocus) {
-        App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(obj.DueIntrv) : App.dteDueDate.value);
+        App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(parseInt(obj.TermsID)) : App.dteDueDate.value);
     }
 }
 
@@ -335,6 +348,9 @@ var grdAP_Trans_BeforeEdit = function (editor, e) {
         e.record.set('LineRef', HQ.store.lastLineRef(App.stoAP_Trans));
         //return false;
     }
+    if (Ext.isEmpty(det.LineType)) {
+        e.record.set("LineType", "N");
+    }
     //return HQ.grid.checkBeforeEdit(e, keys);
 };
 
@@ -365,6 +381,8 @@ var grdAP_Trans_Edit = function (item, e) {
    delTax(e.rowIdx);
    calcTax(e.rowIdx);
    calcTaxTotal();
+   if(e.record.data.LineType&&e.record.data.TranAmt!=0)
+       HQ.store.insertBlank(App.grdAP_Trans.store, keys);
 };
 
 var grdAP_Trans_ValidateEdit = function (item, e) {

@@ -261,7 +261,7 @@
                                 , Html.X().Column().Text(Util.GetLang("LineType")).Width(150).DataIndex("LineType").Renderer("rendererLineType")
                                     .Editor(
                                             HQ.Combo().ID("cboLineType").Name("cboLineType").HQProcedure("AP10100_pcGetLineType")
-                                                .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                                                .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                                                 .Width(300).HQHeightWidth(500, 300).ForceSelection(true).DataIndex("LineType")
                                                 .HQParam(new StoreParameterCollection() { 
                                                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -327,7 +327,7 @@
                                         .Editor(
                                             HQ.Combo().ID("cboTaxID").Name("cboTaxID").HQProcedure("AP10100_pcVendorTaxes")
                                                 .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID")
-                                                .HQHeightWidth(500, 350).MultiSelect(true).ForceSelection(true)
+                                                .HQHeightWidth(500, 350).MultiSelect(true)
                                                 .HQParam(new StoreParameterCollection() 
                                                 { 
                                                     new StoreParameter() { Name = "@VendID", Value = "App.cboVendID.getValue()", Mode = ParameterMode.Raw },
@@ -340,6 +340,7 @@
                                                 .Listeners(lst =>
                                                 {
                                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                    lst.Expand.Handler = "HQ.combo.expand(this,',');";
                                                 })
                                            )
                             , Html.X().CommandColumn().Width(150)
