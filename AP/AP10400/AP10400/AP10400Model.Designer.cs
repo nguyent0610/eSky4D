@@ -400,6 +400,36 @@ namespace AP10400
     
             return base.ExecuteFunction<global::System.String>("AP10400_IsExistAP_Adjust", branchIDParameter, batNbrParameter, refNbrParameter, payBatNbrParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="docDate">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AP10100_ppCheckCloseDate(global::System.String branchID, Nullable<global::System.DateTime> docDate)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter docDateParameter;
+            if (docDate.HasValue)
+            {
+                docDateParameter = new ObjectParameter("DocDate", docDate);
+            }
+            else
+            {
+                docDateParameter = new ObjectParameter("DocDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AP10100_ppCheckCloseDate", branchIDParameter, docDateParameter);
+        }
 
         #endregion
 

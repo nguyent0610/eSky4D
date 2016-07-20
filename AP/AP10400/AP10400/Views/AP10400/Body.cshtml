@@ -77,10 +77,13 @@
                     //    .Width(300).MaxLength(10).EnforceMaxLength(true).MarginSpec("5 0 5 0")
                         
                     //, 
-                    HQ.Combo().ID("cboHandle").Tag("X")
+                    HQ.NumberField().ID("txtCuryCrTot").Name("txtCuryCrTot").HQLangCode("TOTAMT").DataIndex("TotAmt")
+                        .Width(300).ReadOnly(true).Tag("X").MarginSpec("5 0 5 300")
+                    
+                    ,HQ.Combo().ID("cboHandle").Tag("X")
                         .Name("cboHandle").HQLangCode("Handle").HQProcedure("AP10400_pcGetHandle")
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 300")
+                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
                         .ForceSelection(true).HQAutoLoad(false)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection()
@@ -94,8 +97,7 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         }) 
                         
-                        , HQ.NumberField().ID("txtCuryCrTot").Name("txtCuryCrTot").HQLangCode("TOTAMT").DataIndex("TotAmt")
-                        .Width(300).ReadOnly(true).Tag("X").MarginSpec("5 0 5 0")
+                        
 
                   
                     
@@ -163,7 +165,7 @@
                                  ,HQ.Combo().ID("cboDateType").Name("cboDateType").HQLangCode("DATE").HQProcedure("AP10400_pcDateType").LabelWidth(80)
                                 .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Code")
                                 .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.Disabled(true)//.LabelWidth(90)//.Disabled(true)
-                                .HQDBSys(false).ForceSelection(true)//.HQValue("0",false)
+                                .HQDBSys(false).ForceSelection(true).HQValue("0",false)
                                 .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -285,7 +287,7 @@
                               , HQ.Combo().ID("cboBankAcct").Name("cboBankAcct").HQLangCode("BANKACCT").HQProcedure("AP10400_pcBankAcctCA").DataIndex("ReasonCD")
                                 .HQColumnShow("BankAcct,CashAcctName,AcctNbr").DisplayField("BankAcct").ValueField("BankAcct").AllowBlank(false)
                                 .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
-                                .HQDBSys(false).ForceSelection(true)
+                                .HQDBSys(false).ForceSelection(true).SelectedItems(new Ext.Net.ListItem { Index = 0})
                                 //.MaxLength(30).EnforceMaxLength(true)
                                 //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection()

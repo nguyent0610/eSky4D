@@ -91,6 +91,7 @@ namespace AP10400.Controllers
         {
             try
             {
+				
                 var BranchID = data["txtBranchID"].PassNull();
                 var Handle = data["cboHandle"].PassNull();
                 var BatNbr = data["cboBatNbr"].PassNull();
@@ -103,9 +104,10 @@ namespace AP10400.Controllers
                 var curHeader = dataHandler1.ObjectData<AP10400_pdHeader_Result>().FirstOrDefault();
                 StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
                 ChangeRecords<AP10400_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AP10400_pgLoadGridTrans_Result>();
-                
+				if (_db.AP10100_ppCheckCloseDate(BranchID.PassNull(), curHeader.DocDate.ToDateShort()).FirstOrDefault() == "0")
+					throw new MessageException(MessageType.Message, "301");
                 #region Save Header
-                var headerBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AR" && p.EditScrnNbr == "AP10400");
+                var headerBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AP" && p.EditScrnNbr == "AP10400");
                 var headerDoc = _db.AP_Doc.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr);
                 if (headerBatch != null)
                 {
@@ -425,7 +427,7 @@ namespace AP10400.Controllers
                 string BranchID = data["txtBranchID"].PassNull();
                 string BatNbr = data["cboBatNbr"].PassNull();
 
-                var objBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AR");
+                var objBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AP");
                 if (objBatch != null)
                 {
                     _db.Batches.DeleteObject(objBatch);
