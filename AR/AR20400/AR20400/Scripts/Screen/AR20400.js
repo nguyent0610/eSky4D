@@ -1089,10 +1089,17 @@ var cboCustId_TriggerClick = function (sender, value) {
     };
 
     var cboHandle_Change = function (sender, value) {
-        if (value == "I")
+        if (value == "I") {
             setAllowBank_InActive(false);
-        else
+            if (HQ.isUpdate) {
+                App.txtInActive.setReadOnly(false);
+            }
+        }
+        else {
             setAllowBank_InActive(true);
+            if(App.cboStatus.getValue()!='H')
+                App.txtInActive.setReadOnly(true);
+        }
     };
 
     var setAllowBank_InActive = function (value) {
