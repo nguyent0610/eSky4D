@@ -36,6 +36,7 @@ namespace APProcess
         {
             try
             {
+				
                 IList<clsAP_Doc> dtDocCheck ;//= new List<AP_Doc>();
                 clsSQL objSql = new clsSQL(Dal);
                 clsAP_Doc objAP_Doc = new clsAP_Doc(Dal);
@@ -412,15 +413,27 @@ namespace APProcess
             clsAP_Doc objAP_Doc = new clsAP_Doc(Dal);
             try
             {
-
+				
                 dtAPDoc = DataTableHelper.ConvertTo<clsAP_Doc>(objAP_Doc.GetAll(BranchID, BatNbr, RefNbr));
                 foreach (var dr in dtAPDoc)
                 {
                     if (dr.Rlsed != -1)
                     {
+						
                         ProcessAPBalance10200(dr.VendID, dr.DocDate, dr.DocType, -dr.OrigDocAmt);
                     }
+					
                 }
+				//Update Batch
+				clsBatch objBatch = new clsBatch(Dal);
+
+				objBatch.GetByKey(BranchID, "AP", BatNbr);
+				objBatch.Status = "V";
+				objBatch.Rlsed = -1;
+				objBatch.Update();
+				objAP_Doc.GetByKey(BranchID, BatNbr, RefNbr);
+				objAP_Doc.Rlsed = -1;
+				objAP_Doc.Update();
                 return true;
             }
             catch (Exception ex)
