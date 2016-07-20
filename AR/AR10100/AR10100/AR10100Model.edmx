@@ -35,7 +35,7 @@
           <Property Name="OrdNbr" Type="varchar" MaxLength="15" />
           <Property Name="OrigDocAmt" Type="float" Nullable="false" />
           <Property Name="Rlsed" Type="smallint" Nullable="false" />
-          <Property Name="SlsperId" Type="varchar" MaxLength="10" />
+          <Property Name="SlsperId" Type="varchar" MaxLength="30" />
           <Property Name="TaxId00" Type="varchar" MaxLength="10" />
           <Property Name="TaxId01" Type="varchar" MaxLength="10" />
           <Property Name="TaxId02" Type="varchar" MaxLength="10" />
@@ -56,7 +56,7 @@
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="DeliveryID" Type="varchar" MaxLength="10" />
+          <Property Name="DeliveryID" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="AR_Salesperson">
           <Key>
@@ -75,7 +75,7 @@
           <Property Name="ProductGroup" Type="varchar" MaxLength="20" />
           <Property Name="State" Type="varchar" MaxLength="10" />
           <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="DeliveryMan" Type="varchar" MaxLength="10" />
+          <Property Name="DeliveryMan" Type="varchar" MaxLength="30" />
           <Property Name="Position" Type="varchar" MaxLength="2" />
           <Property Name="LUpd_DateTime" Type="datetime" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
@@ -121,6 +121,7 @@
           <Property Name="AddressLevel" Type="varchar" MaxLength="1" />
           <Property Name="AutoSlsperID" Type="bit" />
           <Property Name="HiddenHierarchy" Type="bit" />
+          <Property Name="LastSlsID" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AR_Trans">
           <Key>
@@ -200,6 +201,12 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="AR10100_pcCustomerActive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR10100_pcterms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="AR10100_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
@@ -248,6 +255,12 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="BatNbr" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="AR10100_pcCustomerActive" ReturnType="Collection(AR10100Model.AR10100_pcCustomerActive_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="ScreenNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR10100_pcterms" ReturnType="Collection(AR10100Model.AR10100_pcterms_Result)" />
         </EntityContainer>
         <EntityType Name="Batch">
           <Key>
@@ -306,7 +319,7 @@
           <Property Type="String" Name="OrdNbr" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="OrigDocAmt" Nullable="false" />
           <Property Type="Int16" Name="Rlsed" Nullable="false" />
-          <Property Type="String" Name="SlsperId" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperId" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxId00" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxId01" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxId02" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -327,7 +340,7 @@
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="String" Name="DeliveryID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DeliveryID" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_Setup">
           <Key>
@@ -355,6 +368,7 @@
           <Property Type="String" Name="AddressLevel" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="AutoSlsperID" />
           <Property Type="Boolean" Name="HiddenHierarchy" />
+          <Property Type="String" Name="LastSlsID" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_Trans">
           <Key>
@@ -453,7 +467,7 @@
           <Property Type="String" Name="ProductGroup" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="DeliveryMan" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DeliveryMan" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Position" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
@@ -494,6 +508,24 @@
           <Property Type="Double" Name="TxblTot00" Nullable="false" />
           <Property Type="Double" Name="OrigDocAmt" Nullable="false" />
           <Property Type="Double" Name="TotAmt" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="AR10100_pcCustomerActive_Result">
+          <Property Type="String" Name="TaxID00" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxID01" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxID02" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxID03" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Terms" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="AR10100_pcterms_Result">
+          <Property Type="String" Name="TermsID" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
+          <Property Type="Int16" Name="DiscIntrv" Nullable="false" />
+          <Property Type="Int16" Name="DueIntrv" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -582,6 +614,7 @@
           <EntitySetMapping Name="AR_Setup">
             <EntityTypeMapping TypeName="AR10100Model.AR_Setup">
               <MappingFragment StoreEntitySet="AR_Setup">
+                <ScalarProperty Name="LastSlsID" ColumnName="LastSlsID" />
                 <ScalarProperty Name="HiddenHierarchy" ColumnName="HiddenHierarchy" />
                 <ScalarProperty Name="AutoSlsperID" ColumnName="AutoSlsperID" />
                 <ScalarProperty Name="AddressLevel" ColumnName="AddressLevel" />
@@ -753,6 +786,32 @@
                 <ScalarProperty Name="TxblTot00" ColumnName="TxblTot00" />
                 <ScalarProperty Name="OrigDocAmt" ColumnName="OrigDocAmt" />
                 <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR10100_pcCustomerActive" FunctionName="eBiz4DWebSysModel.Store.AR10100_pcCustomerActive">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10100Model.AR10100_pcCustomerActive_Result">
+                <ScalarProperty Name="TaxID00" ColumnName="TaxID00" />
+                <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />
+                <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
+                <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR10100_pcterms" FunctionName="eBiz4DWebSysModel.Store.AR10100_pcterms">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10100Model.AR10100_pcterms_Result">
+                <ScalarProperty Name="TermsID" ColumnName="TermsID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="DiscIntrv" ColumnName="DiscIntrv" />
+                <ScalarProperty Name="DueIntrv" ColumnName="DueIntrv" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

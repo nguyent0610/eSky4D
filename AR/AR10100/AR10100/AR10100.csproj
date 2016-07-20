@@ -47,6 +47,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Debug\ARProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Aspose.Cells, Version=8.3.2.1, Culture=neutral, PublicKeyToken=00725b1ceb58d0a9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\OM\OM24100\OM24100\bin\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Debug\eBiz4DApp.dll</HintPath>
@@ -279,6 +283,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\AR10100\Index.cshtml" />
     <Content Include="Views\AR10100\Body.cshtml" />
+    <Content Include="Views\AR10100\Popup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -316,6 +321,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

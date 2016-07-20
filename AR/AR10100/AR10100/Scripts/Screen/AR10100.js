@@ -1,6 +1,7 @@
 ﻿var keys = ['TranAmt'];
-var fieldsCheckRequire = ['TranAmt'];
-var fieldsLangCheckRequire = ['TranAmt'];
+var fieldsCheckRequire = ['LineType','TranAmt'];
+var fieldsLangCheckRequire = ['LineType','TranAmt'];
+
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -88,6 +89,7 @@ var menuClick = function (command) {
     }
 
 };
+
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
@@ -100,15 +102,14 @@ function refresh(item) {
 ////////Save////////////////
 ////////////////////////////
 function Save() {
-  
     App.frmMain.getForm().updateRecord();
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             waitMsg: 'Submiting...',
             url: 'AR10100/Save',
             params: {
-                lstheader_Batch: Ext.encode(App.stoAR10100_pdHeader.getRecordsValues()),             
-                lstgrd: HQ.store.getData(App.stoAR_Trans)              
+                lstheader_Batch: Ext.encode(App.stoAR10100_pdHeader.getRecordsValues()),
+                lstgrd: HQ.store.getData(App.stoAR_Trans)
             },
             success: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -120,11 +121,11 @@ function Save() {
                 }
                 if (BatNbr != '') {
                     App.cboBatNbr.getStore().load(function () {
-                        if(Ext.isEmpty(App.cboBatNbr.getValue()))
-                            App.cboBatNbr.setValue(BatNbr);                                                                            
+                        if (Ext.isEmpty(App.cboBatNbr.getValue()))
+                            App.cboBatNbr.setValue(BatNbr);
                         else
                             App.stoAR10100_pdHeader.reload();
-                         
+
                     });
                 }
             }
@@ -141,7 +142,7 @@ function Save() {
                 }
             );
     }
-}
+};
 
 ///////////////Delete////////////////////////////
 /////////////////////////////////////////////////
@@ -196,7 +197,6 @@ var frmChange = function () {
         HQ.isChange = HQ.store.isChange(App.stoAR10100_pdHeader) == false ? HQ.store.isChange(App.stoAR_Trans): true;
         HQ.common.changeData(HQ.isChange, 'AR10100');//co thay doi du lieu gan * tren tab title header      
         App.cboBatNbr.setReadOnly(HQ.isChange);
-       
     }
     else {
         HQ.isChange = false;
@@ -209,6 +209,7 @@ var frmChange = function () {
 var stoAR10100_pdHeader_BeforeLoad = function (store) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'), App.frmMain);
 };
+
 var stoAR10100_pdHeader_Load = function (store) {    
     HQ.isFirstLoad = true;
    
@@ -252,17 +253,20 @@ var stoAR10100_pdHeader_Load = function (store) {
 
 
 };
+
 var cboBatNbr_Change = function (sender, value) {
     if ((!HQ.isNew || sender.valueModels != null) && !App.stoAR10100_pdHeader.loading) {       
         App.stoAR10100_pdHeader.reload();
     }
 };
+
 var cboBatNbr_Select = function (sender, value) {
     if (sender.valueModels != null && !App.stoAR10100_pdHeader.loading) {
       
         App.stoAR10100_pdHeader.reload();
     }    
 };
+
 var cboStatus_Change = function (item, newValue, oldValue) {
     if (newValue == 'H' && HQ.isInsert && HQ.isUpdate) {
         HQ.common.lockItem(App.frmMain, false);
@@ -271,11 +275,11 @@ var cboStatus_Change = function (item, newValue, oldValue) {
     App.cboHandle.getStore().load(function (records, operation, success) {
         App.cboHandle.setValue("N");
     });
-}
+};
 
 var cboCustId_Change = function (sender, e) {
     App.cboTaxID.getStore().reload();
-  
+
     var obj = HQ.store.findInStore(App.cboCustId.getStore(), ["CustID"], [e]);
     if (obj != undefined && App.cboCustId.hasFocus) {
         App.cboTerms.setValue(obj.Terms);
@@ -284,25 +288,26 @@ var cboCustId_Change = function (sender, e) {
             App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(obj.DueIntrv) : App.dteDueDate.value);
         }
     }
-   
-}
+};
+
 var cboTerms_Change = function (sender, e) {
     var obj = HQ.store.findInStore(App.cboTerms.getStore(), ["TermsID"], [e]);
     if (obj != undefined && App.cboTerms.hasFocus) {
         App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(obj.DueIntrv) : App.dteDueDate.value);
-    } 
-}
+    }
+};
+
 var dteDocDate_Change = function (sender, e) {
     var obj = HQ.store.findInStore(App.cboTerms.getStore(), ["TermsID"], [App.cboTerms.getValue()]);
     if (obj != undefined && App.dteDocDate.hasFocus) {
         App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(obj.DueIntrv) : App.dteDueDate.value);
     }
-}
+};
+
 var cboHandle_Change = function (sender, e) {
     if (App.cboHandle.getValue() == "R") {
         App.txtInvcNbr.allowBlank = false;
         App.txtInvcNote.allowBlank = false;
-        
     }
     else {
         App.txtInvcNbr.allowBlank = true;
@@ -310,7 +315,8 @@ var cboHandle_Change = function (sender, e) {
     }
     App.txtInvcNbr.validate();
     App.txtInvcNote.validate();
-}
+};
+
 /////////Grid////////////////////////////////
 //////////////////////////////////////////////////
 var loadDataGrid = function (store) {
@@ -323,12 +329,12 @@ var loadDataGrid = function (store) {
     frmChange();
     calcDet();
     HQ.common.showBusy(false, '', App.frmMain);
-}
+};
+
 var loadstoAR10100_pgLoadTaxTrans = function () {
     App.stoAR10100_LoadTaxDoc.clearData();
     calcTaxTotal();
 };
-
 
 var stoChanged = function (sto) {
     if (!Ext.isEmpty(App.cboBatNbr.getValue()) || App.stoAR_Trans.data.length > 1) {
@@ -341,6 +347,7 @@ var stoChanged = function (sto) {
     }
     frmChange();
 };
+
 var grd_BeforeEdit = function (editor, e) {
     var det = e.record.data;
    
@@ -362,26 +369,30 @@ var grd_BeforeEdit = function (editor, e) {
         var obj = HQ.store.findInStore(App.cboCustId.getStore(), ["CustID"], [App.cboCustId.getValue()]);
         var tranDesc = obj == undefined ? "" : obj.CustID + ' - ' + obj.Name;
         e.record.set("TranDesc",tranDesc != "" ? tranDesc : "");
-       
-             
+         
         var valueTax = '';
-        App.cboTaxID.getStore().data.each(function (det) {
-            valueTax += det.data.TaxID + ',';
 
-        });
+        if (App.cboCustId.valueModels != null) {
+            valueTax = App.cboCustId.valueModels[0].data.TaxID00 + ',' + App.cboCustId.valueModels[0].data.TaxID01 + ',' + App.cboCustId.valueModels[0].data.TaxID02 + ',' + App.cboCustId.valueModels[0].data.TaxID03;
+        }
+        if (valueTax == '') {
+            App.cboTaxID.getStore().data.each(function (det) {
+                valueTax += det.data.TaxID + ',';
+            });
+        }
         valueTax = valueTax.length > 0 ? valueTax.substring(0, valueTax.length - 1) : '';
         e.record.set("TaxID", valueTax);
         e.record.set('LineRef', HQ.store.lastLineRef(App.stoAR_Trans));
         //return false;
     }
-   
-    
-    
-
 };
+
 var grd_Edit = function (item, e) {
-    var r = e.record.data;    
-    if (e.field == 'Qty') {
+    var r = e.record.data;
+    if (e.field == 'InvtId') {
+        var obj = App.cboInvtID.getStore().findRecord("InvtID", e.value);
+        e.record.set("TaxCat", obj == undefined ? '' : obj.data.TaxCat);
+    } else if (e.field == 'Qty') {
         var quantity = e.value;     
         e.record.set('TranAmt', quantity * r.UnitPrice);    
     } else if (e.field == 'UnitPrice') {
@@ -393,21 +404,15 @@ var grd_Edit = function (item, e) {
             e.record.set('UnitPrice', tranAmt / r.Qty);
         }       
     }
-    if (r.TranAmt >0)
-        HQ.grid.checkInsertKey(App.grdAR_Trans, e, keys);
-    if (e.field == 'InvtId') {
-        var obj = App.cboInvtID.getStore().findRecord("InvtID", e.value);
-        e.record.set("TaxCat", obj == undefined ? '' : obj.data.TaxCat);
-    }
-
-
+    if (r.TranAmt > 0)
+        HQ.store.insertBlank(App.grdAR_Trans.getStore(), keys);
 
     delTax(e.rowIdx);
     calcTax(e.rowIdx);
     calcTaxTotal();
 };
-var grd_ValidateEdit = function (item, e) {
 
+var grd_ValidateEdit = function (item, e) {
     if (e.field=='InvtId' && !Ext.isEmpty(e.value)) {
         if (HQ.grid.checkDuplicate(App.grdAR_Trans, e, ['InvtId'])) {
             HQ.message.show(85, e.value, '');          
@@ -416,6 +421,7 @@ var grd_ValidateEdit = function (item, e) {
     }
     return true;
 };
+
 var grd_Reject = function (record) {
     if (record.data.tstamp == '') {
         var index = App.stoAR_Trans.indexOf(record);
@@ -445,13 +451,15 @@ var renderLineType = function (value) {
         return value;
     }
 };
+
 var renderRowNumber = function (value, meta, record) {
     return App.stoAR_Trans.allData.indexOf(record) + 1;
-}
+};
+
 var expand = function (cbo, delimiter) {
     var value = App.slmgrdAR_Trans.selected.items[0].data;
     cbo.setValue(value.TaxID.toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
-}
+};
 
 //other
 function calcDet() {
@@ -469,7 +477,7 @@ function calcDet() {
     var TxblAmt03 = 0;
 
     var TranAmt = 0;
-    var TotAmt = 0; 
+    var TotAmt = 0;
 
     for (var j = 0; j < App.stoAR_Trans.allData.length; j++) {
         var det = App.stoAR_Trans.allData.items[j];
@@ -477,15 +485,15 @@ function calcDet() {
         taxAmt01 += det.data.TaxAmt01;
         taxAmt02 += det.data.TaxAmt02;
         taxAmt03 += det.data.TaxAmt03;
-     
+
         TxblAmt00 += det.data.TxblAmt00;
         TxblAmt01 += det.data.TxblAmt01;
         TxblAmt02 += det.data.TxblAmt02;
         TxblAmt03 += det.data.TxblAmt03;
 
         TranAmt += det.data.TranAmt;
-      
-     
+
+
     };
     //for (var j = 0; j < App.cboRefNbr.getStore().data.length; j++) {
     //    var det = App.cboRefNbr.getStore().data.items[j].data;
@@ -499,13 +507,14 @@ function calcDet() {
     //};
     //if (Ext.isEmpty(App.cboRefNbr.getValue())) TotAmt += taxAmt00 + taxAmt01 + taxAmt02 + taxAmt03 + TxblAmt00 + TxblAmt01 + TxblAmt02 + TxblAmt03;
     TotAmt = taxAmt00 + taxAmt01 + taxAmt02 + taxAmt03 + TxblAmt00 + TxblAmt01 + TxblAmt02 + TxblAmt03;
-   
+
     App.txtCuryCrTot.setValue(TotAmt);
     App.txtTxblTot.setValue(TxblAmt00 + TxblAmt01 + TxblAmt02 + TxblAmt03);
     App.txtTaxTot.setValue(taxAmt00 + taxAmt01 + taxAmt02 + taxAmt03);
     App.txtCuryOrigDocAmt.setValue(TotAmt);
     App.txtCuryDocBal.setValue(TotAmt);
-}
+};
+
 function delTaxMutil() {
 
     for (var i = App.stoAR10100_pgLoadTaxTrans.data.length - 1; i >= 0; i--) {
@@ -514,6 +523,7 @@ function delTaxMutil() {
     }
     calcTaxTotal();
 };
+
 function delTax(index) {
     //if (App.cboStatus != "H" ) return false;
     var lineRef = App.stoAR_Trans.data.items[index].data.LineRef;
@@ -527,7 +537,8 @@ function delTax(index) {
     calcDet();
     return true;
 
-}
+};
+
 function clearTax(index) {
     App.stoAR_Trans.data.items[index].set('TaxId00', '');
     App.stoAR_Trans.data.items[index].set('TaxAmt00', 0);
@@ -544,7 +555,8 @@ function clearTax(index) {
     App.stoAR_Trans.data.items[index].set('TaxId03', '');
     App.stoAR_Trans.data.items[index].set('TaxAmt03', 0);
     App.stoAR_Trans.data.items[index].set('TxblAmt03', 0);
-}
+};
+
 function calcTax(index) {
 
     var det = App.stoAR_Trans.data.items[index].data;
@@ -694,7 +706,8 @@ function calcTax(index) {
     updateTax(index);
     calcDet();
     return true;
-}
+};
+
 function insertUpdateTax(TaxID, lineRef, taxRate, taxAmt, txblAmt, taxLevel) {
     var flat = false;
     for (var i = 0; i < App.stoAR10100_pgLoadTaxTrans.data.length; i++) {
@@ -726,7 +739,8 @@ function insertUpdateTax(TaxID, lineRef, taxRate, taxAmt, txblAmt, taxLevel) {
     App.stoAR10100_pgLoadTaxTrans.sort('LineRef', "ASC");
     calcDet();
 
-}
+};
+
 function updateTax(index) {
 
     if (index < 0) return;
@@ -761,8 +775,8 @@ function updateTax(index) {
         if (j != 0 && item.data.LineRef != det.LineRef)
             return false;
     };
+};
 
-}
 function calcTaxTotal() {
     App.stoAR10100_LoadTaxDoc.clearData();
     var flat = false;
@@ -796,5 +810,57 @@ function calcTaxTotal() {
     };
     App.grdTaxTrans.getView().refresh(false);
     App.grdTaxDoc.getView().refresh(false);
+};
 
-}
+var btnImport_Click = function () {
+    App.frmMain.submit({
+        waitMsg: "Importing....",
+        url: 'AR10100/Import',
+        timeout: 18000000,
+        clientValidation: false,
+        method: 'POST',
+        params: {
+        },
+        success: function (msg, data) {
+            App.cboBatNbr.store.reload();
+            if (!Ext.isEmpty(this.result.data.message)) {
+                HQ.message.show('2013103001', [this.result.data.message], '', true);
+            }
+            else {
+                HQ.message.process(msg, data, true);
+            }
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
+};
+
+var btnPopupOk_Click = function () {
+    if (!Ext.isEmpty(App.cboPopupCpny.getValue())) {
+        App.winPopup.hide();
+        window.location.href = 'AR10100?branchID=' + App.cboPopupCpny.getValue();
+    } else {
+        HQ.message.show(1000, [HQ.common.getLang('branchid')], '', true);
+    }
+};
+
+var stringFilter = function (record) {
+    if (this.dataIndex == 'LineType') {
+        App.cboLineType.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboLineType.store, "Code", "Descr");
+    }
+    else if (this.dataIndex == 'InvtId') {
+        App.cboInvtID.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboInvtID.store, "InvtID", "Descr");
+    }
+    else if (this.dataIndex == 'TaxCat') {
+        App.cboTaxCat.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboTaxCat.store, "CatID", "Descr");
+    }
+    else if (this.dataIndex == 'TaxID') {
+        App.cboTaxID.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboTaxID.store, "TaxID", "Descr");
+    }
+    else return HQ.grid.filterString(record, this);
+};

@@ -11,7 +11,7 @@
     ViewBag.OrdFromId = "";
 }
 @(
- Html.X().Viewport().Layout(LayoutType.Fit)
+ X.Viewport().Layout(LayoutType.Fit)
 .Items(
         X.FormPanel()
         .Layout(LayoutType.Anchor)
@@ -19,7 +19,16 @@
         .TrackResetOnLoad(true)
         .Anchor("100%")
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar("Print", true, ""))
+        .TopBar(Util.SetupToolbar( new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("Import")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";              
+            })
+        },"Print",true,""))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
         .Listeners(l =>
                 {
@@ -117,10 +126,10 @@
 
                         X.Panel().ID("pnlAR_Doc").Layout(LayoutType.VBox).Border(false).AutoScroll(true)
                             .Listeners(lst =>
-                                {
-                                    lst.Render.Handler = "HQ.common.control_render(this,'header_Batch')";
-                                    lst.Resize.Handler = "App.grdAR_Trans.setAnchor(\"100% -\" + App.pnlAR_Doc.getHeight());App.grdAR_Trans.view.refresh();";
-                                })//focus header        
+                            {
+                                lst.Render.Handler = "HQ.common.control_render(this,'header_Batch')";
+                                lst.Resize.Handler = "App.grdAR_Trans.setAnchor(\"100% -\" + App.pnlAR_Doc.getHeight());App.grdAR_Trans.view.refresh();";
+                            })//focus header        
                             .Items(
                                     X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
                                     .Items(
@@ -129,16 +138,16 @@
                                             .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 500)
                                             .HQDBSys(false).ForceSelection(false)
                                             .HQParam(new StoreParameterCollection()
-                                                {
-                                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                                                })
+                                            {
+                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                            })
                                             .LoadData()
                                             .Listeners(lst =>
-                                                {
-                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                    //lst.Change.Fn = "cboStatus_Change";
-                                                    lst.Focus.Handler = "this.forceSelection = true;";
-                                                })
+                                            {
+                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                //lst.Change.Fn = "cboStatus_Change";
+                                                lst.Focus.Handler = "this.forceSelection = true;";
+                                            })
 
 
                                         //RefNbr
@@ -261,135 +270,134 @@
                                             .LabelWidth(150).InputWidth(150).ReadOnly(true).Tag("X")
                                     )//end row5
                               )//pnlAR_Doc            
-                    , Html.X().GridPanel()
-                            .ColumnLines(true)
-                            .RowLines(true)
-                            .Listeners(lst =>
+                    , X.GridPanel()
+                        .ColumnLines(true)
+                        .RowLines(true)
+                        .Listeners(lst =>
+                        {
+                            lst.Render.Handler = "HQ.common.control_render(this,'grdAR_Trans');";
+                        })//focus grid 
+                        .Layout(LayoutType.Fit)
+                        .Anchor("100% -90")// WIDTH HEIGHT                 
+                        .RenderTo("contentCenter")
+                        .View(X.GridView().TrackOver(false))
+                        .ID("grdAR_Trans")
+                        .Store(
+                            X.Store().ID("stoAR_Trans").AutoLoad(false)
+                            .Model(Util.GenerateModel(typeof(AR10100_pgLoadInvoiceMemo_Result), "AR10100_pgLoadInvoiceMemo_ResultModel",""))
+                            .ServerProxy(
+                                X.AjaxProxy()
+                                .Url(Url.Action("GetData_AR_Trans", "AR10100"))
+                                .ActionMethods(action =>
                                 {
-                                    lst.Render.Handler = "HQ.common.control_render(this,'grdAR_Trans');";
-                                })//focus grid 
-                            .Layout(LayoutType.Fit)
-                            .Anchor("100% -90")// WIDTH HEIGHT                 
-                            .RenderTo("contentCenter")
-                            .View(X.GridView().TrackOver(false))
-                            .ID("grdAR_Trans")
-                            .Store(
-                                        X.Store().ID("stoAR_Trans").AutoLoad(false)
-                                            .Model(Util.GenerateModel(typeof(AR10100_pgLoadInvoiceMemo_Result), "AR10100_pgLoadInvoiceMemo_ResultModel",""))
-                                            .ServerProxy(
-                                                X.AjaxProxy()
-                                                .Url(Url.Action("GetData_AR_Trans", "AR10100"))
-                                                .ActionMethods(action =>
-                                                {
-                                                    action.Read = HttpMethod.POST;
-                                                })
-                                                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-                                            )
-                                                .Parameters(ps =>
-                                                                {
-                                                                    ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
-                                                                    ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
-                                                                    ps.Add(new StoreParameter("RefNbr", "App.txtRefNbr.value", ParameterMode.Raw));
-                                                                })
-                                        .Listeners(p =>
-                                            {
-                                                p.Load.Fn = "loadDataGrid";
-                                                p.Update.Fn = "stoChanged";
-                                            }))
-                            .SortableColumns(false)
-                            .SetAutoScroll(true)
-                            .SelectionMemory(false)
-                            .Listeners(lst =>
+                                    action.Read = HttpMethod.POST;
+                                })
+                                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                            )
+                            .Parameters(ps =>
                             {
-                                lst.Render.Handler = "HQ.common.control_render(this,'grdAR_Trans')";
+                                ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("RefNbr", "App.txtRefNbr.value", ParameterMode.Raw));
                             })
-                            .ColumnModel(
-                                Html.X().RowNumbererColumn()
-                                     , Html.X().Column().Text(Util.GetLang("LineType")).Width(100).DataIndex("LineType").Renderer("renderLineType")
-                                        .Editor(
-                                            HQ.Combo().ID("cboLineType").Name("cboLineType").HQProcedure("AR10100_pcLineType")
-                                                .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
-                                                .HQHeightWidth(500, 400).ForceSelection(true)
-                                                .HQParam(new StoreParameterCollection() { 
-                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                                                    })
-                                                .HQDBSys(false)
-                                                .LoadData()
-                                                )
-
-
-                                     , Html.X().Column().Text(Util.GetLang("InvtID")).Width(100).DataIndex("InvtId")
-                                        .Editor(
-                                          HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQProcedure("AR10100_pcInventoryActiveByBranch")
-                                              .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
-                                              .HQHeightWidth(500, 400).ForceSelection(true)
-                                              .HQParam(new StoreParameterCollection() { 
-                                                    new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                                                    })
-                                              .HQDBSys(false)
-                                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                             .LoadData()
-                                              .Listeners(lst =>
-                                                {
-                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";                                                 
-                                                })
-                                            )
-                                     , Html.X().NumberColumn().Format("0,000").ID("txtQty").Align(Alignment.Right).Text(Util.GetLang("Qty")).DataIndex("Qty").Width(100)
-                                        .Editor(Html.X().NumberField().EnableKeyEvents(true).MinValue(0).DecimalPrecision(0))
-
-                                     , Html.X().NumberColumn().Format("0,000").ID("txtUnitPrice").Align(Alignment.Right).Text(Util.GetLang("SalesPrice")).DataIndex("UnitPrice").Width(150)
-                                        .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(0))
-
-                                     , Html.X().NumberColumn().Format("0,000").ID("txtTranAmt").Align(Alignment.Right).Text(Util.GetLang("ExtAmt")).DataIndex("TranAmt").Width(150)
-                                        .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(0))
-
-                                      , Html.X().Column().ID("txtTranDesc").Text(Util.GetLang("Descr")).DataIndex("TranDesc").Width(150)
-                                      .Editor(Html.X().TextField())
-
-                                     , Html.X().Column().Text(Util.GetLang("TaxCat")).Width(100).DataIndex("TaxCat")
-                                        .Editor(
-                                          HQ.Combo().ID("cboTaxCat").Name("cboTaxCat").HQProcedure("AR10100_pcTaxCat")
-                                             .HQColumnShow("CatID,Descr").DisplayField("CatID").ValueField("CatID")
-                                             .HQHeightWidth(500, 400).ForceSelection(true)
-                                             .HQDBSys(false)
-                                             .LoadData()
-                                             )
-
-                                    , Html.X().Column().Text(Util.GetLang("TaxID")).Width(100).DataIndex("TaxID")
-                                        .Editor(
-                                            HQ.Combo().ID("cboTaxID").Name("cboTaxID").HQProcedure("AR10100_pcCustomerTaxes")
-                                                .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID")
-                                                .HQHeightWidth(500, 400).MultiSelect(true).ForceSelection(true)
-                                                .HQParam(new StoreParameterCollection() { 
-                                                    new StoreParameter() { Name = "@CustID", Value = "App.cboCustId.getValue()", Mode = ParameterMode.Raw },
-                                                    new StoreParameter() { Name = "@ShipToID", Value = "DEFAULT" , Mode = ParameterMode.Value},
-                                                    new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                                                    })
-                                                .HQDBSys(false)//.AllowBlank(false)
-                                                .Listeners(lst =>
-                                                {
-                                                
-                                                    lst.Focus.Handler = "expand(App.cboTaxID,',');this.forceSelection=true;";
-
-                                                })
-                                                .LoadData()
-                                                )
-
-
-
-                          , Html.X().CommandColumn().MinWidth(200).Flex(1)
-                                .Commands(
-                                    Html.X().GridCommand()
-                                        .Text(Util.GetLang("Reject"))
-                                        .ToolTip(t =>
-                                        {
-                                            t.Text = Util.GetLang("Rejectrowchanges");
+                            .Listeners(p =>
+                            {
+                                p.Load.Fn = "loadDataGrid";
+                                p.Update.Fn = "stoChanged";
+                            })
+                        )
+                        .SortableColumns(false)
+                        .SetAutoScroll(true)
+                        .SelectionMemory(false)
+                        .Listeners(lst =>
+                        {
+                            lst.Render.Handler = "HQ.common.control_render(this,'grdAR_Trans')";
+                        })
+                        .ColumnModel(
+                            X.RowNumbererColumn()
+                            , X.Column().Text(Util.GetLang("LineType")).Width(100).DataIndex("LineType").Renderer("renderLineType")
+                            .Editor(
+                                HQ.Combo().ID("cboLineType").Name("cboLineType").HQProcedure("AR10100_pcLineType")
+                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
+                                    .HQHeightWidth(500, 400).ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() { 
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                         })
-                                        .CommandName("reject")
-                                        .Icon(Icon.ArrowUndo)
+                                    .HQDBSys(false)
+                                    .LoadData()
+                                    )
+                                        
+                            , X.Column().Text(Util.GetLang("InvtID")).Width(100).DataIndex("InvtId")
+                            .Editor(
+                                HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQProcedure("AR10100_pcInventoryActiveByBranch")
+                                    .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
+                                    .HQHeightWidth(500, 400).ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() { 
+                                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                                        })
+                                    .HQDBSys(false)
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";                                                 
+                                    })
                                 )
+                            , X.NumberColumn().Format("0,000").ID("txtQty").Align(Alignment.Right).Text(Util.GetLang("Qty")).DataIndex("Qty").Width(100)
+                            .Editor(X.NumberField().EnableKeyEvents(true).MinValue(0).DecimalPrecision(0))
 
+                            , X.NumberColumn().Format("0,000").ID("txtUnitPrice").Align(Alignment.Right).Text(Util.GetLang("SalesPrice")).DataIndex("UnitPrice").Width(150)
+                            .Editor(X.NumberField().MinValue(0).DecimalPrecision(0))
 
+                            , X.NumberColumn().Format("0,000").ID("txtTranAmt").Align(Alignment.Right).Text(Util.GetLang("ExtAmt")).DataIndex("TranAmt").Width(150)
+                            .Editor(X.NumberField().MinValue(0).DecimalPrecision(0))
+
+                            , X.Column().ID("txtTranDesc").Text(Util.GetLang("Descr")).DataIndex("TranDesc").Width(150)
+                            .Editor(X.TextField())
+
+                            , X.Column().Text(Util.GetLang("TaxCat")).DataIndex("TaxCat").Width(150)
+                            .Editor(
+                                HQ.Combo().ID("cboTaxCat").Name("cboTaxCat")
+                                    .HQDBSys(false).HQProcedure("AR10100_pcTaxCat").HQHeightWidth(400, 300)
+                                    .HQColumnShow("CatID,Descr").DisplayField("CatID").ValueField("CatID")
+                                    .ForceSelection(true)
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    .LoadData()
+                            )
+                                     
+                            , X.Column().Text(Util.GetLang("TaxID")).Width(100).DataIndex("TaxID")
+                                .Editor(
+                                    HQ.Combo().ID("cboTaxID").Name("cboTaxID").HQProcedure("AR10100_pcCustomerTaxes")
+                                    .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID")
+                                    .HQHeightWidth(500, 400).MultiSelect(true).HQDBSys(false)
+                                    .HQParam(new StoreParameterCollection() { 
+                                        new StoreParameter() { Name = "@CustID", Value = "App.cboCustId.getValue()", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@ShipToID", Value = "DEFAULT" , Mode = ParameterMode.Value},
+                                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                    })
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Expand.Handler = "HQ.combo.expand(this,',');";
+                                    })
+                                    .LoadData()
+                                )
+                            , X.CommandColumn().MinWidth(200).Flex(1)
+                            .Commands(
+                                X.GridCommand()
+                                    .Text(Util.GetLang("Reject"))
+                                    .ToolTip(t =>
+                                    {
+                                        t.Text = Util.GetLang("Rejectrowchanges");
+                                    })
+                                    .CommandName("reject")
+                                    .Icon(Icon.ArrowUndo)
+                            )
                             .PrepareToolbar(t =>
                             {
                                 t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
@@ -398,89 +406,118 @@
                             {
                                 l.Command.Handler = "grd_Reject(record);";
                             })
-
-                            )
-                         .SelectionModel(Html.X().RowSelectionModel().ID("slmgrdAR_Trans").Mode(SelectionMode.Multi))
-                            .Plugins(
-                                Html.X()//Cho phep edit )
-                                    .CellEditing()
-                                    .ClicksToEdit(1)
-                                    .Listeners(ls =>
+                        )
+                        .SelectionModel(X.RowSelectionModel().ID("slmgrdAR_Trans").Mode(SelectionMode.Multi))
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "grd_BeforeEdit";
+                                ls.Edit.Fn = "grd_Edit";
+                                ls.ValidateEdit.Fn = "grd_ValidateEdit";
+                            })
+                        )
+                        .BottomBar(
+                            X.PagingToolbar()
+                            .Items(
+                                X.Label("Page size:"),
+                                X.ToolbarSpacer(10),
+                                X.ComboBox()
+                                .Width(80)
+                                .Items("1", "2", "10", "20", "30", "50")
+                                .SelectedItems("50")
+                                .Listeners(l =>
                                     {
-                                        ls.BeforeEdit.Fn = "grd_BeforeEdit";
-                                        ls.Edit.Fn = "grd_Edit";
-                                        ls.ValidateEdit.Fn = "grd_ValidateEdit";
-
-
+                                        l.Select.Fn = "HQ.grid.onPageSelect";
                                     })
                             )
-                        .BottomBar(
-                                    X.PagingToolbar()
-                                    .Items(
-                                        X.Label("Page size:"),
-                                        X.ToolbarSpacer(10),
-                                        X.ComboBox()
-                                        .Width(80)
-                                        .Items("1", "2", "10", "20", "30", "50")
-                                        .SelectedItems("50")
-                                        .Listeners(l =>
-                                            {
-                                                l.Select.Fn = "HQ.grid.onPageSelect";
-                                            })
-                                    )
-                                    .Plugins(X.ProgressBarPager().ID("pagDetail"))
+                            .Plugins(X.ProgressBarPager().ID("pagDetail"))
+                        )
+                        .Features(
+                            X.GridFilters()
+                                .Local(true)
+                                .Filters(
+                                    X.StringFilter().DataIndex("LineType").ValidateRecord(p=>p.Fn="stringFilter"),
+                                    X.StringFilter().DataIndex("InvtId").ValidateRecord(p=>p.Fn="stringFilter"),
+                                    X.NumericFilter().DataIndex("Qty"),
+                                    X.NumericFilter().DataIndex("UnitPrice"),
+                                    X.NumericFilter().DataIndex("TranAmt"),
+                                    X.StringFilter().DataIndex("TranDesc"),
+                                    X.StringFilter().DataIndex("TaxCat").ValidateRecord(p=>p.Fn="stringFilter"),
+                                    X.StringFilter().DataIndex("TaxID").ValidateRecord(p=>p.Fn="stringFilter")
                                 )
+                        )
                      )//end tabDoc
 
                     , X.Panel()
-                                .ID("tabTax")
-                                .Layout(LayoutType.VBox)
-                                .LayoutConfig(config => { config.Add(new VBoxLayoutConfig() { Align = VBoxAlign.Stretch }); })
-                                .Title(Util.GetLang("TAX"))
-                                .Padding(3)
-                                .Items(
-
-                                        Html.X().GridPanel()
-                                                        .Flex(1)
-                                                        .ID("grdTaxTrans")
-                                                        .ColumnLines(true)
-                                                        .RowLines(true)
-                                                        .StoreID("stoAR10100_pgLoadTaxTrans")
-                                                        .ColumnModel(
-                                                                        Html.X().RowNumbererColumn()
-                                                                        , Html.X().Column().Text(Util.GetLang("LineRef")).DataIndex("LineRef").Width(150)
-                                                                        , Html.X().Column().Text(Util.GetLang("TaxID")).DataIndex("TaxID").Width(150)
-                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TxblAmt")).DataIndex("TxblAmt").Width(150).Format("0,000,000")
-                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxAmt")).DataIndex("TaxAmt").Width(150).Format("0,000,000.00")
-                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxRate")).DataIndex("TaxRate").Width(150).Format("0,000,000")
-                                                                        , Html.X().Column().Text(Util.GetLang("TaxLevel")).DataIndex("TaxLevel").Width(150)
-                                                                    )
-
-                                        , X.BoxSplitter()
-                                        , Html.X().GridPanel()
-                                                        .Flex(1)
-                                                        .ID("grdTaxDoc")
-                                                        .ColumnLines(true)
-                                                        .RowLines(true)
-                                                            .Store(
-                                                                        Html.X().Store()
-                                                                        .ID("stoAR10100_LoadTaxDoc")
-                                                                        .Model(
-                                                                            Util.GenerateModel(typeof(AR10100_pgLoadTaxTrans_Result), "mdlAR10100_pgLoadTaxTransDoc", "")
-                                                                        )
-                                                                    )
-                                                        .ColumnModel(
-                                                                        Html.X().RowNumbererColumn()
-                                                                        , Html.X().Column().Text(Util.GetLang("TaxID")).DataIndex("TaxID").Width(150)
-                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TxblAmt")).DataIndex("TxblAmt").Width(150).Format("0,000,000")
-                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxAmt")).DataIndex("TaxAmt").Width(150).Format("0,000,000")
-                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxRate")).DataIndex("TaxRate").Width(150).Format("0,000,000")
-
-
-                                                                    )
-
-
-                                    )//tabTax     
+                    .ID("tabTax")
+                    .Layout(LayoutType.VBox)
+                    .LayoutConfig(config => { config.Add(new VBoxLayoutConfig() { Align = VBoxAlign.Stretch }); })
+                    .Title(Util.GetLang("TAX"))
+                    .Padding(3)
+                    .Items(
+                        X.GridPanel()
+                        .Flex(1)
+                        .ID("grdTaxTrans")
+                        .ColumnLines(true)
+                        .RowLines(true)
+                        .StoreID("stoAR10100_pgLoadTaxTrans")
+                        .ColumnModel(
+                            X.RowNumbererColumn()
+                            , X.Column().Text(Util.GetLang("LineRef")).DataIndex("LineRef").Width(150)
+                            , X.Column().Text(Util.GetLang("TaxID")).DataIndex("TaxID").Width(150)
+                            , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TxblAmt")).DataIndex("TxblAmt").Width(150).Format("0,000,000")
+                            , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxAmt")).DataIndex("TaxAmt").Width(150).Format("0,000,000.00")
+                            , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxRate")).DataIndex("TaxRate").Width(150).Format("0,000,000")
+                            , X.Column().Text(Util.GetLang("TaxLevel")).DataIndex("TaxLevel").Width(150)
+                        )
+                        .Features(
+                            X.GridFilters()
+                                .Local(true)
+                                .Filters(
+                                    X.StringFilter().DataIndex("LineRef"),
+                                    X.StringFilter().DataIndex("TaxID"),
+                                    X.NumericFilter().DataIndex("TxblAmt"),
+                                    X.NumericFilter().DataIndex("TaxAmt"),
+                                    X.NumericFilter().DataIndex("TaxRate"),
+                                    X.StringFilter().DataIndex("TaxLevel")
+                                )
+                        )
+                        
+                        
+                        , X.BoxSplitter()
+                        
+                        , X.GridPanel()
+                        .Flex(1)
+                        .ID("grdTaxDoc")
+                        .ColumnLines(true)
+                        .RowLines(true)
+                        .Store(
+                            X.Store()
+                            .ID("stoAR10100_LoadTaxDoc")
+                            .Model(
+                                Util.GenerateModel(typeof(AR10100_pgLoadTaxTrans_Result), "mdlAR10100_pgLoadTaxTransDoc", "")
+                            )
+                        )
+                        .ColumnModel(
+                            X.RowNumbererColumn()
+                            , X.Column().Text(Util.GetLang("TaxID")).DataIndex("TaxID").Width(150)
+                            , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TxblAmt")).DataIndex("TxblAmt").Width(150).Format("0,000,000")
+                            , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxAmt")).DataIndex("TaxAmt").Width(150).Format("0,000,000")
+                            , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxRate")).DataIndex("TaxRate").Width(150).Format("0,000,000")
+                        )
+                        .Features(
+                            X.GridFilters()
+                                .Local(true)
+                                .Filters(
+                                    X.StringFilter().DataIndex("TaxID"),
+                                    X.NumericFilter().DataIndex("TxblAmt"),
+                                    X.NumericFilter().DataIndex("TaxAmt"),
+                                    X.NumericFilter().DataIndex("TaxRate")
+                                )
+                        )
+                    )//tabTax     
                 )
 
             )
