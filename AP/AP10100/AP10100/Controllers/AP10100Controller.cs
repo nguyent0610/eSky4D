@@ -452,8 +452,8 @@ namespace AP10100.Controllers
 				}
             }
 
-			//if (_app.AP10100_ppCheckCloseDate(_branchID, _pdHead.DocDate.ToDateShort()).FirstOrDefault() == "0")
-			//	throw new MessageException(MessageType.Message, "301");
+			if (_app.AP10100_ppCheckCloseDate(_branchID, _pdHead.DocDate.ToDateShort()).FirstOrDefault() == "0")
+				throw new MessageException(MessageType.Message, "301");
 
             return true;
         }
