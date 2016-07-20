@@ -443,6 +443,7 @@ var save = function () {
                     var batNbr = this.result.data.batNbr
                 }
                 if (!Ext.isEmpty(batNbr)) {
+                    App.cboBatNbr.store.reload();
                     App.cboBatNbr.forceSelection = false
                     App.cboBatNbr.events['change'].suspend();
                     App.cboBatNbr.setValue(batNbr);
