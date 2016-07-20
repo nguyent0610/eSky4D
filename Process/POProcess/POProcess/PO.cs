@@ -22,6 +22,8 @@ namespace POProcess
         private static readonly ILog mLogger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public string Prog { get; set; }
         public string User { get; set; }
+        public int DecimalPlaces = 0;
+        public int ItemSiteDecimalPlaces = 10;
         public DataAccess Dal { get; set; }
         public List<MessageException> LogList { get; set; }
         clsBatch m_objBatchIN;
@@ -354,7 +356,7 @@ namespace POProcess
                 m_objIN_Trans.CnvFact = rowPO_Trans.RcptConvFact;
                 m_objIN_Trans.FreeItem = (rowPO_Trans.PurchaseType == "PR" ? true : false);
                 //ExtCost
-                m_objIN_Trans.ExtCost = Math.Round(rowPO_Trans.TranAmt + rowPO_Trans.RcptFee, 0);
+                m_objIN_Trans.ExtCost = Math.Round(rowPO_Trans.TranAmt + rowPO_Trans.RcptFee, DecimalPlaces);
                 m_objIN_Trans.InvtID = rowPO_Trans.InvtID;
                 m_objIN_Trans.InvtMult = rowReceipt.RcptType == "R" ? (short)1 : (short)-1;
                 m_objIN_Trans.JrnlType = "PO";
@@ -395,7 +397,7 @@ namespace POProcess
                 m_objIN_Trans.CnvFact = rowPO_Trans.RcptConvFact;
                 m_objIN_Trans.FreeItem = (rowPO_Trans.PurchaseType == "PR" ? true : false);
                 //ExtCost
-                m_objIN_Trans.ExtCost = Math.Round(rowPO_Trans.TranAmt + rowPO_Trans.RcptFee, 0);
+                m_objIN_Trans.ExtCost = Math.Round(rowPO_Trans.TranAmt + rowPO_Trans.RcptFee, DecimalPlaces);
                 m_objIN_Trans.InvtID = rowPO_Trans.InvtID;
                 m_objIN_Trans.InvtMult = rowReceipt.RcptType == "R" ? (short)1 : (short)-1;
                 m_objIN_Trans.JrnlType = "PO";
@@ -632,7 +634,7 @@ namespace POProcess
                                 clsIN_ItemSite objItemSite = new clsIN_ItemSite(Dal);
                                 if (objItemSite.GetByKey(row.InvtID, row.SiteID))
                                 {
-                                    objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + 0 - qtyTrans, 0);
+                                    objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + 0 - qtyTrans, DecimalPlaces);
                                     objItemSite.Update();
                                 }
                             }
@@ -648,7 +650,7 @@ namespace POProcess
                                 if (objItemSite.GetByKey(row.InvtID, row.SiteID))
                                 {
                                     // var objItemSite = app.IN_ItemSite.Where(p => p.InvtID == row.InvtID") && p.SiteID == row.SiteID")).FirstOrDefault();                                                   
-                                    objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + 0 - OldQty, 0);
+                                    objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + 0 - OldQty, DecimalPlaces);
                                     objItemSite.Update();
 
                                 }
@@ -677,7 +679,7 @@ namespace POProcess
                             clsIN_ItemSite objItemSite = new clsIN_ItemSite(Dal);
                             if (objItemSite.GetByKey(row.InvtID, row.SiteID))
                             {
-                                objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + OldQty, 0);
+                                objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + OldQty, DecimalPlaces);
                                 objItemSite.Update();
 
                             }
@@ -813,13 +815,13 @@ namespace POProcess
                         //Calculate Qty by stkunit
                         if (objrowIN_Tran.UnitMultDiv == "M" | string.IsNullOrEmpty(objrowIN_Tran.UnitMultDiv))
                         {
-                            Qty = Math.Round(objrowIN_Tran.Qty * objrowIN_Tran.InvtMult * objrowIN_Tran.CnvFact, 0);
-                            UnitCost = Math.Round(objrowIN_Tran.UnitCost / objrowIN_Tran.CnvFact, 0);
+                            Qty = Math.Round(objrowIN_Tran.Qty * objrowIN_Tran.InvtMult * objrowIN_Tran.CnvFact, DecimalPlaces);
+                            UnitCost = Math.Round(objrowIN_Tran.UnitCost / objrowIN_Tran.CnvFact, DecimalPlaces);
                         }
                         else
                         {
-                            Qty = Math.Round((objrowIN_Tran.Qty * objrowIN_Tran.InvtMult) / objrowIN_Tran.CnvFact, 0);
-                            UnitCost = Math.Round(objrowIN_Tran.UnitCost * objrowIN_Tran.CnvFact, 0);
+                            Qty = Math.Round((objrowIN_Tran.Qty * objrowIN_Tran.InvtMult) / objrowIN_Tran.CnvFact, DecimalPlaces);
+                            UnitCost = Math.Round(objrowIN_Tran.UnitCost * objrowIN_Tran.CnvFact, DecimalPlaces);
                         }
                         objPO_Trans = new clsPO_Trans(Dal);
                         objIN_ItemSite.GetByKey(objrowIN_Tran.InvtID, objrowIN_Tran.SiteID);
@@ -828,12 +830,12 @@ namespace POProcess
                             if ((objPO_Trans.PurchaseType == "GN" || objPO_Trans.PurchaseType == "GI" || objPO_Trans.PurchaseType == "PR" || objPO_Trans.PurchaseType == "GP" || objPO_Trans.PurchaseType == "GS"))
                             {
                                 //Update Qty and Cost for Site
-                                objIN_ItemSite.QtyOnHand = Math.Round(objIN_ItemSite.QtyOnHand + Qty, 10);
-                                objIN_ItemSite.QtyAvail = Math.Round(objIN_ItemSite.QtyAvail + Qty, 10);
-                                objIN_ItemSite.TotCost = Math.Round(objIN_ItemSite.TotCost + objrowIN_Tran.ExtCost, 0);
+                                objIN_ItemSite.QtyOnHand = Math.Round(objIN_ItemSite.QtyOnHand + Qty, ItemSiteDecimalPlaces);
+                                objIN_ItemSite.QtyAvail = Math.Round(objIN_ItemSite.QtyAvail + Qty, ItemSiteDecimalPlaces);
+                                objIN_ItemSite.TotCost = Math.Round(objIN_ItemSite.TotCost + objrowIN_Tran.ExtCost, DecimalPlaces);
                                 //QuangNM change to fix Issues QtyUncosted
                                 //objIN_ItemSite.AvgCost = Math.Round(IIf((objIN_ItemSite.QtyOnHand) <> 0, objIN_ItemSite.TotCost / (objIN_ItemSite.QtyOnHand), objIN_ItemSite.AvgCost), m_HQSys.DecplUnitPrice, MidpointRounding.AwayFromZero)
-                                objIN_ItemSite.AvgCost = Math.Round(((objIN_ItemSite.QtyOnHand - objIN_ItemSite.QtyUncosted) != 0 ? objIN_ItemSite.TotCost / (objIN_ItemSite.QtyOnHand - objIN_ItemSite.QtyUncosted) : objIN_ItemSite.AvgCost), 0);
+                                objIN_ItemSite.AvgCost = Math.Round(((objIN_ItemSite.QtyOnHand - objIN_ItemSite.QtyUncosted) != 0 ? objIN_ItemSite.TotCost / (objIN_ItemSite.QtyOnHand - objIN_ItemSite.QtyUncosted) : objIN_ItemSite.AvgCost), DecimalPlaces);
                                 objIN_ItemSite.LUpd_DateTime = DateTime.Now;
                                 objIN_ItemSite.LUpd_Prog = Prog;
                                 objIN_ItemSite.LUpd_User = row.LUpd_User;
@@ -870,7 +872,7 @@ namespace POProcess
                             foreach (var r1 in ListdtInLotTrans)
                             {
                                 clsIN_ItemLot objIN_ItemLot = new clsIN_ItemLot(Dal);
-                                Qty = Math.Round(r1.Qty * r1.InvtMult * (r1.UnitMultDiv == "D" ? 1.0 / r1.CnvFact : r1.CnvFact), 0, MidpointRounding.AwayFromZero);
+                                Qty = Math.Round(r1.Qty * r1.InvtMult * (r1.UnitMultDiv == "D" ? 1.0 / r1.CnvFact : r1.CnvFact), DecimalPlaces, MidpointRounding.AwayFromZero);
                                 if (!objIN_ItemLot.GetByKey(objrowIN_Tran.SiteID, objrowIN_Tran.InvtID, r1.LotSerNbr))
                                 {
                                     Insert_IN_ItemLot(ref objIN_ItemLot, objrowIN_Tran.InvtID, objrowIN_Tran.SiteID, r1.LotSerNbr, r1.ExpDate, "", 0, 0);
@@ -886,9 +888,9 @@ namespace POProcess
                                 objIN_ItemLot.ExpDate = r1.ExpDate;
                                 objIN_ItemLot.MfgrLotSerNbr = r1.MfgrLotSerNbr;
                                 objIN_ItemLot.Cost = objIN_ItemLot.Cost + objrowIN_Tran.ExtCost / objrowIN_Tran.Qty * r1.Qty;
-                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + Qty, 10);
+                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + Qty, ItemSiteDecimalPlaces);
                                 //objIN_ItemLot.AvgCost = Math.Round(objIN_ItemLot.QtyOnHand != 0 ? (objIN_ItemLot.Cost / objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
-                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + Qty, 10);
+                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + Qty, ItemSiteDecimalPlaces);
                                 objIN_ItemLot.LUpd_DateTime = DateTime.Now;
                                 objIN_ItemLot.LUpd_Prog = Prog;
                                 objIN_ItemLot.LUpd_User = User;
@@ -957,21 +959,21 @@ namespace POProcess
                         if ((objPO_Trans.PurchaseType == "GN" || objPO_Trans.PurchaseType == "GI" || objPO_Trans.PurchaseType == "PR" || objPO_Trans.PurchaseType == "GP" || objPO_Trans.PurchaseType == "GS"))
                         {
                             //Update Qty and Cost for Site
-                            objIN_ItemSite.QtyAllocPORet = Math.Round(objIN_ItemSite.QtyAllocPORet + Qty, 0);
+                            objIN_ItemSite.QtyAllocPORet = Math.Round(objIN_ItemSite.QtyAllocPORet + Qty, DecimalPlaces);
                             //Reduce Allocated Qty for inventory issue
                             //objIN_ItemSite.QtyAvail = Math.Round(objIN_ItemSite.QtyAvail + Qty, 10);
-                            objIN_ItemSite.QtyOnHand = Math.Round(objIN_ItemSite.QtyOnHand + Qty, 10);
-                            objIN_ItemSite.TotCost = Math.Round(objIN_ItemSite.TotCost + dtInTrans.ExtCost * dtInTrans.InvtMult, 0);
+                            objIN_ItemSite.QtyOnHand = Math.Round(objIN_ItemSite.QtyOnHand + Qty, ItemSiteDecimalPlaces);
+                            objIN_ItemSite.TotCost = Math.Round(objIN_ItemSite.TotCost + dtInTrans.ExtCost * dtInTrans.InvtMult, DecimalPlaces);
                             //QuangNM change to fix issues QtyUncosted
                             //objIN_ItemSite.AvgCost = Math.Round(IIf((objIN_ItemSite.QtyOnHand) <> 0, objIN_ItemSite.TotCost / (objIN_ItemSite.QtyOnHand), objIN_ItemSite.AvgCost), m_HQSys.DecplUnitPrice)
-                            objIN_ItemSite.AvgCost = Math.Round(((objIN_ItemSite.QtyOnHand - objIN_ItemSite.QtyUncosted) != 0 ? objIN_ItemSite.TotCost / (objIN_ItemSite.QtyOnHand - objIN_ItemSite.QtyUncosted) : objIN_ItemSite.AvgCost), 0);
+                            objIN_ItemSite.AvgCost = Math.Round(((objIN_ItemSite.QtyOnHand - objIN_ItemSite.QtyUncosted) != 0 ? objIN_ItemSite.TotCost / (objIN_ItemSite.QtyOnHand - objIN_ItemSite.QtyUncosted) : objIN_ItemSite.AvgCost), DecimalPlaces);
                             objIN_ItemSite.LUpd_DateTime = DateTime.Now;
                             objIN_ItemSite.LUpd_Prog = objPO_Trans.LUpd_Prog;
                             objIN_ItemSite.LUpd_User = objPO_Trans.LUpd_User;
                             objIN_ItemSite.Update();
                         }
                         //Checking Qty,TotCost      
-                        if (objIN_Inventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objIN_ItemSite.QtyOnHand, 0, MidpointRounding.AwayFromZero) < 0)
+                        if (objIN_Inventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objIN_ItemSite.QtyOnHand, DecimalPlaces, MidpointRounding.AwayFromZero) < 0)
                         {
                             throw new MessageException(MessageType.Message, "608","", new[] { objIN_ItemSite.InvtID, objIN_ItemSite.SiteID });
                         }
@@ -984,7 +986,7 @@ namespace POProcess
                             foreach (var r1 in dtInLotTrans)
                             {
                                 var objIN_ItemLot = new clsIN_ItemLot(Dal);
-                                Qty = Math.Round(r1.Qty * r1.InvtMult * (r1.UnitMultDiv == "D" ? 1.0 / r1.CnvFact : r1.CnvFact), 0, MidpointRounding.AwayFromZero);
+                                Qty = Math.Round(r1.Qty * r1.InvtMult * (r1.UnitMultDiv == "D" ? 1.0 / r1.CnvFact : r1.CnvFact), DecimalPlaces, MidpointRounding.AwayFromZero);
                                 if (!objIN_ItemLot.GetByKey(dtInTrans.SiteID, dtInTrans.InvtID, r1.LotSerNbr))
                                 {
                                     //chua xu li
@@ -1005,15 +1007,15 @@ namespace POProcess
                                 objIN_ItemLot.MfgrLotSerNbr = r1.MfgrLotSerNbr;
                                 objIN_ItemLot.Cost = objIN_ItemLot.Cost + (dtInTrans.ExtCost / dtInTrans.Qty) * r1.Qty;
                                 //objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + Qty, 0);
-                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + Qty, 10);
-                                objIN_ItemLot.QtyAllocPORet = Math.Round(objIN_ItemLot.QtyAllocPORet + Qty, 0, MidpointRounding.AwayFromZero);
+                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + Qty, ItemSiteDecimalPlaces);
+                                objIN_ItemLot.QtyAllocPORet = Math.Round(objIN_ItemLot.QtyAllocPORet + Qty, DecimalPlaces, MidpointRounding.AwayFromZero);
                                 //objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
                                 objIN_ItemLot.LUpd_DateTime = DateTime.Now;
                                 objIN_ItemLot.LUpd_Prog = row.LUpd_Prog;
                                 objIN_ItemLot.LUpd_User = row.LUpd_User;
                                 objIN_ItemLot.Update();
                                 //Checking Qty
-                                if (objIN_Inventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objIN_ItemLot.QtyOnHand, 0, MidpointRounding.AwayFromZero) < 0)
+                                if (objIN_Inventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objIN_ItemLot.QtyOnHand, DecimalPlaces, MidpointRounding.AwayFromZero) < 0)
                                 {
                                     throw new MessageException("608", new[] { objIN_ItemSite.InvtID, objIN_ItemSite.SiteID });
                                 }
@@ -1320,13 +1322,13 @@ namespace POProcess
                             qty = -1 * (inTran.Qty * inTran.InvtMult) / inTran.CnvFact;
                         if (isTransfer && inTran.TranType == "TR")
                             objItemSite.QtyInTransit -= qty;
-                        objItemSite.QtyOnHand = Math.Round(objItemSite.QtyOnHand + qty, 10);
-                        objItemSite.QtyAvail = Math.Round(objItemSite.QtyAvail + qty, 10);
+                        objItemSite.QtyOnHand = Math.Round(objItemSite.QtyOnHand + qty, ItemSiteDecimalPlaces);
+                        objItemSite.QtyAvail = Math.Round(objItemSite.QtyAvail + qty, ItemSiteDecimalPlaces);
                         objItemSite.AvgCost =  Math.Round(objItemSite.QtyOnHand != 0 ? (objItemSite.TotCost - inTran.ExtCost) / objItemSite.QtyOnHand :
-                                        objItemSite.AvgCost, 0);
+                                        objItemSite.AvgCost, DecimalPlaces);
                     }
                     //Checking Qty
-                    if (objInventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objItemSite.QtyAvail, 0, MidpointRounding.AwayFromZero) < 0)
+                    if (objInventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objItemSite.QtyAvail, DecimalPlaces, MidpointRounding.AwayFromZero) < 0)
                     {
                         throw new MessageException(MessageType.Message,"608","", new[] { objItemSite.InvtID, objItemSite.SiteID });   
                       
@@ -1340,7 +1342,7 @@ namespace POProcess
                     //    return false;
                     //}
                    
-                    objItemSite.TotCost = Math.Round(objItemSite.TotCost - inTran.ExtCost, 0);
+                    objItemSite.TotCost = Math.Round(objItemSite.TotCost - inTran.ExtCost, DecimalPlaces);
                     objItemSite.LUpd_DateTime = DateTime.Now;
                     objItemSite.LUpd_Prog = inTran.LUpd_Prog;
                     objItemSite.LUpd_User = inTran.LUpd_User;
@@ -1359,8 +1361,8 @@ namespace POProcess
                         int CostIdentity = objitem.CostIdentity;
                         if (objItemCost.GetByKey(CostIdentity))
                         {
-                            objItemCost.Qty = Math.Round(objItemCost.Qty + qty, 0);
-                            objItemCost.TotCost = Math.Round(objItemCost.TotCost - inTran.ExtCost * inTran.InvtMult, 0);
+                            objItemCost.Qty = Math.Round(objItemCost.Qty + qty, DecimalPlaces);
+                            objItemCost.TotCost = Math.Round(objItemCost.TotCost - inTran.ExtCost * inTran.InvtMult, DecimalPlaces);
                             objItemCost.Update();
                         }
                     }
@@ -1415,13 +1417,13 @@ namespace POProcess
                                     qty = -1 * (r1.Qty * r1.InvtMult) / r1.CnvFact;
                                 //if (isTransfer && r1.TranType == "TR")
                                 //    objIN_ItemLot.QtyInTransit -= qty;
-                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + qty, 10);
-                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + qty, 10);
+                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + qty, ItemSiteDecimalPlaces);
+                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + qty, ItemSiteDecimalPlaces);
                                 //objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
                                 objIN_ItemLot.Update();
                             }
                             //Checking QtyLot
-                            if (objInventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objIN_ItemLot.QtyAvail, 0, MidpointRounding.AwayFromZero) < 0)
+                            if (objInventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objIN_ItemLot.QtyAvail, DecimalPlaces, MidpointRounding.AwayFromZero) < 0)
                             {
                                 throw new MessageException(MessageType.Message, "608", "", new[] { objItemSite.InvtID, objItemSite.SiteID });
 
@@ -1481,14 +1483,14 @@ namespace POProcess
                         else
                             qty = -1 * (inTran.Qty * inTran.InvtMult) / inTran.CnvFact;
 
-                        objItemSite.QtyAvail = Math.Round(objItemSite.QtyAvail + qty, 10);
-                        objItemSite.QtyOnHand = Math.Round(objItemSite.QtyOnHand + qty, 10);
+                        objItemSite.QtyAvail = Math.Round(objItemSite.QtyAvail + qty, ItemSiteDecimalPlaces);
+                        objItemSite.QtyOnHand = Math.Round(objItemSite.QtyOnHand + qty, ItemSiteDecimalPlaces);
                         objItemSite.AvgCost = Math.Round(objItemSite.QtyOnHand != 0 ?
                             (objItemSite.TotCost - inTran.ExtCost * inTran.InvtMult) / objItemSite.QtyOnHand :
-                            objItemSite.AvgCost, 0);
+                            objItemSite.AvgCost, DecimalPlaces);
 
                     }
-                    objItemSite.TotCost = Math.Round(objItemSite.TotCost - inTran.ExtCost * inTran.InvtMult, 0);
+                    objItemSite.TotCost = Math.Round(objItemSite.TotCost - inTran.ExtCost * inTran.InvtMult, DecimalPlaces);
                     objItemSite.LUpd_DateTime = DateTime.Now;
                     objItemSite.LUpd_Prog = Prog;
                     objItemSite.LUpd_User = User;
@@ -1503,8 +1505,8 @@ namespace POProcess
                       
                         if (objItemCost.GetByKey(CostIdentity))
                         {
-                            objItemCost.Qty = Math.Round(objItemCost.Qty + qty, 0);
-                            objItemCost.TotCost = Math.Round(objItemCost.TotCost - inTran.ExtCost * inTran.InvtMult, 0);
+                            objItemCost.Qty = Math.Round(objItemCost.Qty + qty, DecimalPlaces);
+                            objItemCost.TotCost = Math.Round(objItemCost.TotCost - inTran.ExtCost * inTran.InvtMult, DecimalPlaces);
                             objItemCost.Update();
                         }
 
@@ -1561,8 +1563,8 @@ namespace POProcess
                                     qty = -1 * (r1.Qty * r1.InvtMult) / r1.CnvFact;
                                 //if (isTransfer && r1.TranType == "TR")
                                 //    objIN_ItemLot.QtyInTransit -= qty;
-                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + qty, 10);
-                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + qty, 10);
+                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + qty, ItemSiteDecimalPlaces);
+                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + qty, ItemSiteDecimalPlaces);
                                 //objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
                                 objIN_ItemLot.Update();
                             }
@@ -1658,7 +1660,7 @@ namespace POProcess
 
                             if (objItemSite.GetByKey(row.InvtID,row.SiteID))
                             {
-                                objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + qtyTrans, 0);
+                                objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + qtyTrans, DecimalPlaces);
                                 objItemSite.Update();
                             }
                             //POCommon.UpdateOnPOQty(row.InvtID, row.SiteID, 0, OldQty, m_HQSys.DecplQty, m_Dal);
@@ -1690,7 +1692,7 @@ namespace POProcess
                             
                             if (objItemSite.GetByKey(row.InvtID,row.SiteID))                            
                             {
-                                objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + 0 - qtyTrans, 0);
+                                objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + 0 - qtyTrans, DecimalPlaces);
                                 objItemSite.Update();
                             }
                             //POCommon.UpdateOnPOQty(row.InvtID, row.SiteID, OldQty, 0, m_HQSys.DecplQty, m_Dal);
