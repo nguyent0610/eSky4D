@@ -162,7 +162,7 @@ var stoAP10100_pdHeader_Load = function (store) {
     HQ.isFirstLoad = true;
     HQ.isNew = false;
 
-    App.cboVendID.setReadOnly(true);
+   // App.cboVendID.setReadOnly(true);
     App.cboDocType.setReadOnly(true);
     if (store.data.length == 0) {
 
@@ -181,7 +181,7 @@ var stoAP10100_pdHeader_Load = function (store) {
         store.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
         HQ.common.setRequire(App.frmMain);  //to do cac o la require
-        App.cboVendID.setReadOnly(true);
+      //  App.cboVendID.setReadOnly(true);
         App.cboDocType.setReadOnly(true);
 
     }
@@ -195,6 +195,10 @@ var stoAP10100_pdHeader_Load = function (store) {
     if (record.data.tstamp) {
         App.cboVendID.setReadOnly(true);
         App.cboDocType.setReadOnly(true);
+    }
+    else {
+        App.cboVendID.setReadOnly(false);
+        App.cboDocType.setReadOnly(false);
     }
     frmChange();
     //App.stoAP10100_pgLoadTaxTrans.reload();
