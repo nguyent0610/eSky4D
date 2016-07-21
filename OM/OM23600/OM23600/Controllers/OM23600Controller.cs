@@ -687,7 +687,7 @@ namespace OM23600.Controllers
                             string column = " (" + Util.GetLang("Column") + ": ";
                             if (progType == "D3")
                             {
-                                var lstInvt = _db.OM23600_pdExpInvtID(Current.UserName, Current.CpnyID, Current.LangID);
+                                var lstInvt = _db.OM23600_pdExpInvtID(Current.UserName, Current.CpnyID, Current.LangID).ToList();
                                 if (string.IsNullOrWhiteSpace(workSheet.Cells[2, 6].StringValue) ||
                                     string.IsNullOrWhiteSpace(workSheet.Cells[2, 7].StringValue) ||
                                     string.IsNullOrWhiteSpace(workSheet.Cells[2, 8].StringValue) ||
@@ -838,7 +838,7 @@ namespace OM23600.Controllers
                                         continue;
                                     }
                                    // Qty = double.Parse(workSheet.Cells[i, 5].StringValue.PassNull());
-                                    bool isValidVal = double.TryParse(workSheet.Cells[i, 8].StringValue.PassNull(), out Qty);
+                                    bool isValidVal = double.TryParse(workSheet.Cells[i, 5].StringValue.PassNull(), out Qty);
                                     if (!isValidVal)
                                     {
                                         Qty = 0;
@@ -911,7 +911,7 @@ namespace OM23600.Controllers
                                                 s.ColumnMappings.Add(col.ToString(), col.ToString());
                                             s.WriteToServer(dtOM_DetailsTmp);
                                             ////Gọi store insert, update từ bảng tạm vào bảng chính
-                                            SqlCommand cmd1 = new SqlCommand("ppv_OM23600ImportOM_POSMBranch", dbConnection, sqlTran);
+                                            SqlCommand cmd1 = new SqlCommand("OM23600_ppImportOM_POSMBranch", dbConnection, sqlTran);
                                             cmd1.CommandType = CommandType.StoredProcedure;
                                             cmd1.Parameters.AddWithValue("@UserID", Current.UserName);
                                             cmd1.Parameters.AddWithValue("@PosmID", posmID);

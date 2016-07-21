@@ -28,15 +28,15 @@ namespace OM23600
         {
             Current.Authorize = false;
 
-            Current.Server = "MARSSVR\\SQL2012"; // MARSSVR EARTHSVR
+            Current.Server = "EARTHSVR\\SQL2012"; // MARSSVR EARTHSVR
             Current.FormatDate = "dd.MM.yyyy";  // MM/dd/yyyy  dd-MM-yyyy       
-            Current.DBSys = "eSky4DSys"; // ND_eSky4DSys
+            Current.DBSys = "ND_eSky4DSys"; // ND_eSky4DSys
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = false;
             Session["OM23600"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp"; // ND_eSky4DApp
+            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp"; // ND_eSky4DApp
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";

@@ -291,6 +291,19 @@ var cboProgID_Change = function (sender, value) {
         fieldsLangCheckRequire = ["BranchID", "CustId", "ClassID", "SiteId"];        
     }
 };
+var btnHideTrigger_click = function (ctr) {
+    if (!HQ.isChange) {
+        ctr.clearValue();
+    } else {
+        HQ.message.show(150);
+    }
+};
+
+var cboPosmID_Expand = function (btn, e, eOpts) {
+    if (HQ.isChange) {
+        App.cboPosmID.collapse();
+    }
+};
 // cboBranchID Change
 var cboBranchID_Change = function (sender, value) {
     if (sender.valueModels && sender.valueModels[0] ) {
