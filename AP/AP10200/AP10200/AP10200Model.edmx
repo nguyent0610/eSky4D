@@ -167,6 +167,10 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="AP10100_ppCheckCloseDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="DocDate" Type="date" Mode="In" />
+        </Function>
         <Function Name="AP10200_pgLoadGridTrans" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
@@ -193,6 +197,10 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="BatNbr" Mode="In" Type="String" />
             <Parameter Name="RefNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AP10100_ppCheckCloseDate" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="DocDate" Mode="In" Type="DateTime" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="AP_Doc">
@@ -532,6 +540,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AP10100_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.AP10100_ppCheckCloseDate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -552,7 +561,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="65" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="55" >
         <EntityTypeShape EntityType="AP10200Model.AP_Doc" Width="1.5" PointX="7.6680026462618276" PointY="15.931813456086355" />
         <EntityTypeShape EntityType="AP10200Model.AP_Setup" Width="1.5" PointX="9.6626399316185339" PointY="20.743801648143588" />
         <EntityTypeShape EntityType="AP10200Model.AP_Trans" Width="1.5" PointX="1.9237743736821109" PointY="25.316002812849359" />

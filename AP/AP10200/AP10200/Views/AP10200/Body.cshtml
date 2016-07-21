@@ -47,8 +47,9 @@
                             .LoadData()
                             .Listeners(lst =>
                             {
-                                //lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 lst.Change.Fn = "cboBatNbr_Change";
+                                lst.Select.Fn = "cboBatNbr_Select";
                                // lst.Focus.Fn = "Focus3_Change";
                                 //lst.IconClick.Fn = "Focus3_Change";
                             })
@@ -72,6 +73,8 @@
                     .Items(
                           HQ.TextBox().ID("txtOrigRefNbr").Name("txtOrigRefNbr").HQLangCode("INTREFNBR").DataIndex("IntRefNbr") .Width(300)
                             
+                       , HQ.NumberField().ID("dteCuryCrTot").Name("dteCuryCrTot").HQLangCode("TOTAMT").DataIndex("TotAmt").ReadOnly(true).Tag("X").Width(300)    
+                                                   
                        , HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("HANDLE").HQProcedure("AP10200_pcGetHandle").Width(300).Tag("X")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                             .HQHeightWidth(400, 300).ForceSelection(true).HQAutoLoad(false)
@@ -86,9 +89,7 @@
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                            })
-                            
-                       , HQ.NumberField().ID("dteCuryCrTot").Name("dteCuryCrTot").HQLangCode("TOTAMT").DataIndex("TotAmt").ReadOnly(true).Tag("X").Width(300)               
+                            })           
                     )
             )
             .Listeners(lss =>
@@ -97,7 +98,7 @@
             })
         ,X.Panel().ID("pnlDet") ////////////////Grid////////////////
         .Region(Region.Center).Border(false)
-        .Layout(LayoutType.Border)
+        .Layout(LayoutType.Border).Title(Util.GetLang("DOC"))
         .Items(
            X.Panel().ID("pnlMider")  
             .Region(Region.North)
@@ -114,7 +115,7 @@
                          HQ.Combo().ID("cboDocType").Name("cboDocType").HQLangCode("DOCTYPE").HQProcedure("AP10200_pcGetDocType")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("DocType").AllowBlank(false)
                             .Width(300).HQHeightWidth(400, 300)
-                            .HQDBSys(false).HQValue("VO", false).ForceSelection(true)
+                            .HQDBSys(false).HQValue("PP", false).ForceSelection(true)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection()
                             {
@@ -170,7 +171,7 @@
                             
                             ,HQ.Combo().ID("cboBankAcct").Name("cboBankAcct").HQLangCode("BANKACCT").HQProcedure("AP10200_pcBankAcctCA").DataIndex("ReasonCD")
                                 .HQColumnShow("BankAcct,CashAcctName,AcctNbr").DisplayField("BankAcct").ValueField("BankAcct").AllowBlank(false)
-                                .Width(300).HQHeightWidth(400, 300)
+                                .Width(300).HQHeightWidth(400, 300)//.SelectedItems(new Ext.Net.ListItem { Index = 0})
                                 .HQDBSys(false).ForceSelection(true).HQAutoLoad(true)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection()

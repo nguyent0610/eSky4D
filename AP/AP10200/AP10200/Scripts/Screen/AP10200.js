@@ -106,9 +106,14 @@ var menuClick = function (command) {
                         HQ.message.show(11, '', 'deleteHeader');
                     }
                     else if (HQ.focus == 'grdAPTrans') {
-                        if (App.grdAPTrans.hasSelection() == true) {
-                            if (App.slmAPTrans.selected.items[0] != undefined) {
-                                HQ.message.show(2015020807, [indexSelect(App.grdAPTrans), ''], 'deleteData', true);
+                        //if (App.grdAPTrans.hasSelection() == true) {
+                        //    if (App.slmAPTrans.selected.items[0] != undefined) {
+                        //        HQ.message.show(2015020807, [indexSelect(App.grdAPTrans), ''], 'deleteData', true);
+                        //    }
+                        //}
+                        if (App.slmAPTrans.selected.items[0] != undefined) {
+                            if (App.slmAPTrans.selected.items[0].data.TranAmt != "") {
+                                HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdAPTrans)], 'deleteData', true);
                             }
                         }
                     }
@@ -145,6 +150,13 @@ var firstLoad = function () {
 var cboBatNbr_Change = function (sender, newValue, oldValue) {
     if (sender.valueModels != null && !App.stoBatch.loading && !App.stoAP_Doc.loading && !App.stoAPTrans.loading)
     {
+        App.cboRefNbr.getStore().reload();
+        App.stoBatch.reload();
+    }
+};
+
+var cboBatNbr_Select = function (sender, value) {
+    if (sender.valueModels != null && !App.stoBatch.loading && !App.stoAP_Doc.loading && !App.stoAPTrans.loading) {
         App.cboRefNbr.getStore().reload();
         App.stoBatch.reload();
     }
@@ -189,6 +201,9 @@ var stoBach_load = function (sto) {
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "BatNbr");
         record = sto.getAt(0);
+        if (App.cboBankAcct.store.data.items[0] != undefined) {
+            record.set("ReasonCD", App.cboBankAcct.store.data.items[0].data.BankAcct);
+        }
         HQ.isNew = true;
         record.set('Status', 'H');
         HQ.common.setRequire(App.frmMain);
@@ -209,8 +224,10 @@ var stoAPDoc_load = function (sto) {
         HQ.store.insertBlank(sto, "DocType");
         record = sto.getAt(0);
         if (App.cboDocType.store.data.items[0] != undefined) {
-            record.set("DocType", App.cboDocType.store.data.items[0].data.Code);
+            record.set("DocType", App.cboDocType.store.data.items[1].data.Code);
         }
+      
+      //  App.cboBankAcct.setValue(record.ReasonCD);
         record.set('DocDate', new Date());
         HQ.isNew = true;     
         sto.commitChanges();
@@ -271,7 +288,7 @@ var grdAPTrans_Reject = function (record) {
 
 var grdAPTrans_BeforeEdit = function (editor, e) {
     if (App.cboStatus.getValue() != 'H')
-        return;
+        return false;
     if (Ext.isEmpty(App.cboDocType.getValue()))
     {
         HQ.message.show(15, App.cboDocType.fieldLabel);
@@ -337,33 +354,35 @@ var frmChange = function () {
 //// Process Data ///////////////////////////////////////////////////////
 var deleteData = function (item) {
     if (item == "yes") {
-        if (Ext.isEmpty(App.slmAPTrans.selected.items[0].data.tstamp)) {
-            App.grdSKU.deleteSelected();
+        var linereftselected = App.slmAPTrans.selected.items[0].data.LineRef;
+      //  if (Ext.isEmpty(App.slmAPTrans.selected.items[0].data.tstamp)) {
+            App.grdAPTrans.deleteSelected();
+            frmChange();
             setAmt();
-        }
-        else {
-            App.frmMain.submit({
-                waitMsg: HQ.waitMsg,
-                clientValidation: false,
-                method: 'POST',
-                url: 'Ap10200/DeleteTrans',
-                timeout: 180000,
-                params: {
-                    lineRef: App.slmAPTrans.selected.items[0].data.LineRef,
-                },
-                success: function (msg, data) {
-                    if (!Ext.isEmpty(data.result.data.tstamp)) {
-                        App.stoBatch.reload();
-                    }
-                   // App.grdTrans.deleteSelected();
-                   // calculate();
-                    HQ.message.process(msg, data, true);
-                },
-                failure: function (msg, data) {
-                    HQ.message.process(msg, data, true);
-                }
-            });
-        }
+        //}
+        //else {
+        //    App.frmMain.submit({
+        //        waitMsg: HQ.waitMsg,
+        //        clientValidation: false,
+        //        method: 'POST',
+        //        url: 'Ap10200/DeleteTrans',
+        //        timeout: 180000,
+        //        params: {
+        //            lineRefSel: linereftselected,//App.slmAPTrans.selected.items[0].data.LineRef,
+        //        },
+        //        success: function (msg, data) {
+        //            if (!Ext.isEmpty(data.result.data.tstamp)) {
+        //                App.stoBatch.reload();
+        //            }
+        //           // App.grdTrans.deleteSelected();
+        //           // calculate();
+        //            HQ.message.process(msg, data, true);
+        //        },
+        //        failure: function (msg, data) {
+        //            HQ.message.process(msg, data, true);
+        //        }
+        //    });
+        //}
     }
 };
 
@@ -430,10 +449,13 @@ var save = function () {
                 batch:Ext.encode(App.stoBatch.getRecordsValues()),
                 doc: Ext.encode(App.stoAP_Doc.getRecordsValues()),
                 trans: Ext.encode(App.stoAPTrans.getRecordsValues()),
+                lstgrdtrans: HQ.store.getData(App.stoAPTrans),
                 BatNbr: App.cboBatNbr.getValue(),
                 RefNbr: App.cboRefNbr.getValue(),
                 DocType: App.cboDocType.getValue(),
                 VendID: App.cboVendID.getValue(),
+                VendName: App.txtVendName.getValue(),
+                Addr: App.txtVendName.getValue(),
                 IntRefNbr: App.txtOrigRefNbr.getValue(),
                 ReasonCD: App.cboBankAcct.getValue(),
             },
@@ -452,6 +474,7 @@ var save = function () {
                         HQ.recentRecord = batNbr;
                     }
                     App.stoBatch.reload();
+                    App.stoHeader.reload();
                 }
                 HQ.message.process(msg, data, true);
 

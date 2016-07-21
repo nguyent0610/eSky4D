@@ -91,6 +91,8 @@ namespace AP10200.Controllers
             try
             {
                 _form = data;
+				if (_db.AP10100_ppCheckCloseDate(_form["txtBranchID"].PassNull(), _form["dteDocDate"].ToDateShort()).FirstOrDefault() == "0")
+					throw new MessageException(MessageType.Message, "301");
                 SaveData(data);
 
                 if (_logMessage != null)
@@ -114,7 +116,7 @@ namespace AP10200.Controllers
         {
             string batNbr = data["cboBatNbr"];
             string branchID = data["txtBranchID"];
-
+		
             var batchHander = new StoreDataHandler(data["batch"]);
             _objBatch = batchHander.ObjectData<Batch>().FirstOrDefault();
 
@@ -131,7 +133,18 @@ namespace AP10200.Controllers
 
             SaveBatch(batNbr, branchID);
             SaveDoc(batNbr, branchID);
-            SaveTrans(batNbr, branchID);
+			StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrdtrans"]);
+			ChangeRecords<AP10200_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AP10200_pgLoadGridTrans_Result>();
+			foreach (AP10200_pgLoadGridTrans_Result deleted in lstgrd.Deleted)
+			{
+				var record = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.LineRef == deleted.LineRef ).FirstOrDefault();
+				if (record != null)
+				{
+					_db.AP_Trans.DeleteObject(record);
+				}
+
+			}
+            SaveTrans(batNbr, branchID,data);
             _db.SaveChanges();
 
             if (_handle != "N")
@@ -179,6 +192,7 @@ namespace AP10200.Controllers
 
         private void SaveBatch(string batNbr, string branchID)
         {
+			 
             var batch = _db.Batches.FirstOrDefault(p => p.BatNbr == batNbr && p.BranchID == branchID);
             if (batch != null)
             {
@@ -186,14 +200,14 @@ namespace AP10200.Controllers
                 {
                     throw new MessageException(MessageType.Message, "19");
                 }
-                UpdateBatch(batch, false);
+				UpdateBatch(batch, false);
             }
             else {
                 _objBatch.BatNbr = functionBatNbrIfNull(branchID);
                 _objBatch.RefNbr = functionRefNbrIfNull(branchID);
                 _objBatch.BranchID = branchID;
                 batch = new Batch();
-                UpdateBatch(batch, true);
+				UpdateBatch(batch, true);
                 _db.Batches.AddObject(batch);
             }
         }
@@ -219,7 +233,7 @@ namespace AP10200.Controllers
             }
         }
 
-        private void SaveTrans(string batNbr, string branchID)
+		private void SaveTrans(string batNbr, string branchID, FormCollection data)
         {
             _objAP = _db.AP_Setup.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
             if (_objAP == null) _objAP = new AP_Setup();
@@ -237,12 +251,12 @@ namespace AP10200.Controllers
                     {
                         throw new MessageException(MessageType.Message, "19");
                     }
-                    UpdateTrans(transDB, trans, false);
+                    UpdateTrans(transDB, trans,data, false);
                 }
                 else
                 {
                     transDB = new AP_Trans();
-                    UpdateTrans(transDB, trans, true);
+					UpdateTrans(transDB, trans, data, true);
                     _db.AP_Trans.AddObject(transDB);
                 }
               
@@ -322,7 +336,7 @@ namespace AP10200.Controllers
                 {
                     throw new MessageException(MessageType.Message, "728");
                 }
-                string lineRef = Util.PassNull(data["LineRef"]);
+				string lineRef = Util.PassNull(data["lineRefSel"]);
 
                 var lstTrans = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
                 var trans = lstTrans.FirstOrDefault(p => p.BranchID == branchID && p.BatNbr == batNbr && p.LineRef == lineRef);
@@ -389,7 +403,7 @@ namespace AP10200.Controllers
         #endregion
 
         #region Orther Function
-        private void UpdateBatch(Batch batch, bool isNew)
+		private void UpdateBatch(Batch batch, bool isNew)
         {
             if (isNew)
             {
@@ -418,8 +432,10 @@ namespace AP10200.Controllers
                     batch.Status = "H";
                 }
             }
-            batch.TotAmt = Convert.ToDouble(_form["dteCuryCrTot"]); // 
+
+			batch.TotAmt = Convert.ToDouble(_form["dteCuryCrTot"]); // IntRefNbr
             batch.DateEnt = Convert.ToDateTime(_form["dteDocDate"]);
+			batch.IntRefNbr = (_form["IntRefNbr"]).PassNull();
             batch.ReasonCD = _form["ReasonCD"];
             batch.LUpd_DateTime = DateTime.Now;
             batch.LUpd_Prog = _screenNbr;
@@ -479,8 +495,9 @@ namespace AP10200.Controllers
             d.LUpd_User = Current.UserName;
         }
 
-        private void UpdateTrans(AP_Trans t, AP10200_pgLoadGridTrans_Result s, bool isNew)
+		private void UpdateTrans(AP_Trans t, AP10200_pgLoadGridTrans_Result s, FormCollection data, bool isNew)
         {
+			//string doctype = 
             if (isNew)
             {
                 t.BatNbr = _objBatch.BatNbr;
@@ -492,10 +509,17 @@ namespace AP10200.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = Current.UserName;
             }
+			t.JrnlType = "AP";
+			t.LineType = "N";
+			t.TranType = data["DocType"];
+			t.VendID = data["VendID"];
+			t.VendName = data["VendName"];
+			t.Addr = data["txtAddr"];
+			t.TranDate = Convert.ToDateTime(_form["dteDocDate"]).ToDateShort() ;
             t.TranAmt = s.TranAmt;
             t.TranDesc = s.TranDesc;
             t.InvcDate = DateTime.Now;
-            t.TranDate = DateTime.Now;
+          //  t.TranDate = DateTime.Now;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = Current.UserName;
