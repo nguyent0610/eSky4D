@@ -116,7 +116,7 @@
                         HQ.Combo().ID("cboStatusFilter")
                             .HQLangCode("Status").HQProcedure("PO10400_pcStatus")
                             .HQColumnShow("Descr").ValueField("Code").DisplayField("Descr")
-                            .HQHeightWidth(400, 300).MultiSelect(true)
+                            .HQHeightWidth(400, 300).MultiSelect(true)//.HQFirstDefault(true)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
@@ -157,9 +157,9 @@
                 .Title(Util.GetLang("Handle")).Width(300)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
                 .Items(
-                    HQ.Combo().ID("cboStatusApprove").AllowBlank(false)
+                    HQ.Combo().ID("cboStatusApprove").AllowBlank(false).HQAutoLoad(false)
                     .HQLangCode("Status").HQProcedure("PO10400_pcStatus").ForceSelection(true)
-                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")//.HQFirstDefault(true)
                     .HQHeightWidth(400, 300)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 

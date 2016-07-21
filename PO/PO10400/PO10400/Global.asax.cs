@@ -29,17 +29,17 @@ namespace PO10400
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";
-            Current.DBSys = "eSky4DSys";
+            Current.Server = "EARTHSVR\\SQL2012";
+            Current.DBSys = "eBiz4DCloudSysKAO"; // eSky4DSys
             Current.FormatDate = "dd.MM.yyyy";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["PO10400"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";
-            Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
+            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppKAO"; // eSky4DApp
+            Session["UserName"] = Current.UserName = "distadmin";
+            Session["CpnyID"] = Current.CpnyID = "18510594";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
 

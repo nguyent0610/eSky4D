@@ -58,6 +58,15 @@ var Event = {
             App.dtpFromDate.setValue(HQ.bussinessDate);
             App.dtpToDate.setValue(HQ.bussinessDate);
             App.frmMain.validate();
+
+            App.cboStatusApprove.getStore().load(function () {
+                if (!App.cboStatusApprove.getValue() && App.cboStatusApprove.store.data.items[0]) {
+                    App.cboStatusApprove.setValue(App.cboStatusApprove.store.data.items[0]);
+                    App.cboHandleApprove.store.reload();
+                }
+            });
+
+            
         },
 
         dtpFromDate_change: function (dtp, newValue, oldValue, eOpts) {
@@ -96,7 +105,7 @@ var Event = {
                 App.grdDet.store.each(function (record) {
                     record.set("Selected", false);
                 });
-                App.cboHandle.store.reload()
+                App.cboHandle.store.reload();
             }
         },
         chk_Click: function (ctr) {
@@ -125,8 +134,7 @@ var Event = {
                     App.cboBranchID.getStore().load({
                         scope: this,
                         callback: function (records, operation, success) {
-                            Event.Form.chk_Click(App.chkBranchID);
-                            
+                            Event.Form.chk_Click(App.chkBranchID);                            
                         }
                     });
                 }
@@ -205,12 +213,12 @@ var Event = {
                     }                                                                   
                 });
                
-            } else if (ctr.id == "cboStatusApprove" && ctr.hasFocus) {
+            } else if (ctr.id == "cboStatusApprove") { // && ctr.hasFocus
                 App.chkSelectHeader.setValue(false);                
                 App.grdDet.store.each(function (record) {
                     record.set("Selected", false);
                 });               
-                App.cboHandleApprove.store.reload()
+                App.cboHandleApprove.store.reload();
             }
         },
           
@@ -403,7 +411,9 @@ var Popup = {
         HQ.isChange = false;
         App.dtPODate.setReadOnly(!_recordEdit.IsEditPODate);
         //HQ.common.changeData(HQ.isChange, 'PO10400');
-     
+        if (!App.cboStatusApprove.getValue()) {
+            App.cboStatusApprove.setValue(App.cboStatusApprove.store.select(0));
+        }
     },
     loadDataDetail: function (sto) {
         //neu sto da co du lieu thi ko duoc sua cac combo ben duoi

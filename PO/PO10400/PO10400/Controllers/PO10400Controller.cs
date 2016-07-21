@@ -240,7 +240,10 @@ namespace PO10400.Controllers
                     _db.PO10400_ppUpdateSapStock(lstBranchID, lstPONbr, DateTime.Now.ToDateShort(), objHandle.ToStatus);
                     _db.SaveChanges();
                 }
-                
+                if (!string.IsNullOrWhiteSpace(handle) && handle != "N")
+                {
+                    SendMail(lstBranchID.TrimEnd(','), lstPONbr.TrimEnd(','), status, handle);
+                }
                
                 return Util.CreateMessage(MessageProcess.Process);
             }
@@ -257,48 +260,79 @@ namespace PO10400.Controllers
             }
         }
 
-        private string GetMail(string listBranch, string listMail)
+        private void SendMail(string branchID, string lstObj, string status, string handle)
         {
-            listMail = listMail == null ? string.Empty : listMail;
-            listBranch = listBranch == null ? string.Empty : listBranch;
-            string to = string.Empty;
-            string[] branchs = listBranch.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-            string[] roles = listMail.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var role in roles)
+            try
             {
-                if (role.ToUpper() == "DIST" || role.ToUpper() == "SUBDIST")
+                string[] roles = new string[] {};
+                var objUser = _sys.Users.FirstOrDefault(x => x.UserName.ToUpper() == Current.UserName.ToUpper());
+                if (objUser != null && !string.IsNullOrWhiteSpace(objUser.UserTypes))
                 {
-                    foreach (var branch in branchs)
-                    {
-                        var company = (from p in _sys.SYS_Company where p.CpnyID == branch select p).FirstOrDefault();
-                        if (company != null)
-                            to += ';' + company.Email;
-                    }
+                    roles = objUser.UserTypes.Split(',');
                 }
-                else if (role.ToUpper() == "SUP" || role.ToUpper() == "ADMIN")
-                {
-                    foreach (var branch in branchs)
-                    {
-                        var user = (from p in _sys.Users
-                                    where p.UserTypes != null && p.UserTypes.Split(',').Any(c => c.ToUpper() == role.ToUpper())
-                                        && p.CpnyID != null && p.CpnyID.Split(',').Any(c => c.ToUpper() == branch.ToUpper())
-                                    select p).FirstOrDefault();
-                        if (user != null)
-                            to += ';' + user.Email;
-                    }
-                }
-                else
-                {
-                    var users = (from p in _sys.Users where p.UserTypes != null && p.UserTypes.Split(',').Any(c => c.ToUpper() == role.ToUpper()) select p).ToList();
-                    foreach (var user in users)
-                    {
-                        to += ';' + user.Email;
-                    }
-                }
+                HQSendMailApprove.Approve.SendMailApprove(branchID, lstObj, _screenNbr, Current.CpnyID, status, handle, roles, Current.UserName, Current.LangID);
+
+                //_SendMail.SendMailApprove             (branch, lstObj, hqSys.ScreenNumber, hqSys.CpnyID, cboStatus.StatusToValue(), cboHandle.HandleToValue(), _roles, hqSys.UserName, hqSys.LangID).Completed += (sender6, arg6) =>
+                //{
+                //    InvokeOperation approve = (sender6 as InvokeOperation);
+                //    if (approve.HasError)
+                //    {
+                //        //approve.MarkErrorAsHandled();
+                //        //ErrorWindow.CreateNew(approve.Error);
+                //        busyIndicator.IsBusy = false;
+                //        //throw new Exception(approve.Error.ToString());
+                //    }
+                //    busyIndicator.IsBusy = false;
+                //};
             }
-            return to;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
-        
+
+        //private string GetMail(string listBranch, string listMail)
+        //{
+        //    listMail = listMail == null ? string.Empty : listMail;
+        //    listBranch = listBranch == null ? string.Empty : listBranch;
+        //    string to = string.Empty;
+        //    string[] branchs = listBranch.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+        //    string[] roles = listMail.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+        //    foreach (var role in roles)
+        //    {
+        //        if (role.ToUpper() == "DIST" || role.ToUpper() == "SUBDIST")
+        //        {
+        //            foreach (var branch in branchs)
+        //            {
+        //                var company = (from p in _sys.SYS_Company where p.CpnyID == branch select p).FirstOrDefault();
+        //                if (company != null)
+        //                    to += ';' + company.Email;
+        //            }
+        //        }
+        //        else if (role.ToUpper() == "SUP" || role.ToUpper() == "ADMIN")
+        //        {
+        //            foreach (var branch in branchs)
+        //            {
+        //                var user = (from p in _sys.Users
+        //                            where p.UserTypes != null && p.UserTypes.Split(',').Any(c => c.ToUpper() == role.ToUpper())
+        //                                && p.CpnyID != null && p.CpnyID.Split(',').Any(c => c.ToUpper() == branch.ToUpper())
+        //                            select p).FirstOrDefault();
+        //                if (user != null)
+        //                    to += ';' + user.Email;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            var users = (from p in _sys.Users where p.UserTypes != null && p.UserTypes.Split(',').Any(c => c.ToUpper() == role.ToUpper()) select p).ToList();
+        //            foreach (var user in users)
+        //            {
+        //                to += ';' + user.Email;
+        //            }
+        //        }
+        //    }
+        //    return to;
+        //}
+
         //public void SubmitApprove(string proc, Dictionary<string, string> parameter, string to, string cc, string subject, string note)
         //{
         //    var lstParams = new List<SqlParameter>();
