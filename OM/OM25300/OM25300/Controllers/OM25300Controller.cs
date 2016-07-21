@@ -104,7 +104,11 @@ namespace OM25300.Controllers
                     {
                         continue;
                     }
-
+                    if (progType == "D4")
+                    {
+                        curItem.Date = new DateTime(1900, 1, 1).ToDateTime();
+                        curItem.InvtID = "*";
+                    }
                     var objFCS = _db.OM_FCS_POSM.Where(p => p.PosmID.ToLower() == posmID.ToLower() 
                         && p.BranchID.ToLower() == curItem.BranchID.ToLower()                        
                         && p.InvtID.ToLower() == curItem.InvtID.ToLower()
@@ -126,8 +130,8 @@ namespace OM25300.Controllers
                     {
                         objFCS = new OM_FCS_POSM();
                         objFCS.PosmID = posmID;
-                        objFCS.InvtID = progType == "D3" ? curItem.InvtID : "*";
-                        objFCS.Date = progType == "D3" ? curItem.Date.ToDateTime() : new DateTime(1900, 1, 1);
+                        objFCS.InvtID = curItem.InvtID;
+                        objFCS.Date = curItem.Date.ToDateTime();
                         objFCS.ProgTypeFCS = progType;
                         Update_OM_POSMBranchID(objFCS, curItem, true);
                         _db.OM_FCS_POSM.AddObject(objFCS);
