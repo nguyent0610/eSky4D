@@ -54,9 +54,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\DLL\Aspose.Cells.dll</HintPath>
     </Reference>
-    <Reference Include="eBiz4DApp">
-      <HintPath>..\..\..\Process\POProcess\POProcess\bin\Debug\eBiz4DApp.dll</HintPath>
-    </Reference>
     <Reference Include="eBiz4DSys, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\DLL\eBiz4DSys.dll</HintPath>
@@ -91,10 +88,6 @@
     <Reference Include="HQSendMailApprove, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\HQSendMailApprove\HQSendMailApprove\bin\Debug\HQSendMailApprove.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DLL\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
