@@ -64,9 +64,7 @@ var Event = {
                     App.cboStatusApprove.setValue(App.cboStatusApprove.store.data.items[0]);
                     App.cboHandleApprove.store.reload();
                 }
-            });
-
-            
+            });            
         },
 
         dtpFromDate_change: function (dtp, newValue, oldValue, eOpts) {
