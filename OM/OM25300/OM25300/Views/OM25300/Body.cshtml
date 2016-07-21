@@ -60,7 +60,8 @@
                     {
                         l.Change.Fn = "cboPosmID_Change";
                         l.Select.Fn = "cboPosmID_Select";
-                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        l.Expand.Fn = "cboPosmID_Expand";
+                        l.TriggerClick.Fn = "btnHideTrigger_click";
                 })
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .LoadData()

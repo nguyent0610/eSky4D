@@ -25,7 +25,7 @@ var stoData_load = function (sto) {
             HQ.store.insertBlank(sto, keys);
         }
         HQ.isFirstLoad = false;
-    }
+    }    
     checkReadOnlyProgType();
 };
 //trước khi load trang busy la dang load data
@@ -298,6 +298,19 @@ var cboProgID_Change = function (sender, value) {
         keys = ['BranchID', 'ClassID', 'SiteID'];
         fieldsCheckRequire = ["BranchID", "ClassID", "SiteID"];
         fieldsLangCheckRequire = ["BranchID", "ClassID", "SiteId"];
+    }
+};
+
+var btnHideTrigger_click = function (ctr) {
+    if (!HQ.isChange) {
+        ctr.clearValue();
+    } else {
+        HQ.message.show(150);
+    }
+};
+var cboPosmID_Expand = function (btn, e, eOpts) {
+    if (HQ.isChange) {
+        App.cboPosmID.collapse();        
     }
 };
 
