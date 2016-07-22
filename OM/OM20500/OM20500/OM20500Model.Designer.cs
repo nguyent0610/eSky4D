@@ -204,288 +204,6 @@ namespace OM20500
         /// <param name="status">No Metadata Documentation available.</param>
         /// <param name="startDate">No Metadata Documentation available.</param>
         /// <param name="endDate">No Metadata Documentation available.</param>
-        public ObjectResult<OM20500_pgDet_Result> OM20500_pgDet(global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String status, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter slsperIDParameter;
-            if (slsperID != null)
-            {
-                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
-            }
-            else
-            {
-                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
-            }
-    
-            ObjectParameter custIDParameter;
-            if (custID != null)
-            {
-                custIDParameter = new ObjectParameter("CustID", custID);
-            }
-            else
-            {
-                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
-            }
-    
-            ObjectParameter statusParameter;
-            if (status != null)
-            {
-                statusParameter = new ObjectParameter("Status", status);
-            }
-            else
-            {
-                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
-            }
-    
-            ObjectParameter startDateParameter;
-            if (startDate.HasValue)
-            {
-                startDateParameter = new ObjectParameter("StartDate", startDate);
-            }
-            else
-            {
-                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.DateTime));
-            }
-    
-            ObjectParameter endDateParameter;
-            if (endDate.HasValue)
-            {
-                endDateParameter = new ObjectParameter("EndDate", endDate);
-            }
-            else
-            {
-                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.DateTime));
-            }
-    
-            return base.ExecuteFunction<OM20500_pgDet_Result>("OM20500_pgDet", branchIDParameter, slsperIDParameter, custIDParameter, statusParameter, startDateParameter, endDateParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="orderNbr">No Metadata Documentation available.</param>
-        public ObjectResult<OM20500_pgHisDet_Result> OM20500_pgHisDet(global::System.String branchID, global::System.String orderNbr)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter orderNbrParameter;
-            if (orderNbr != null)
-            {
-                orderNbrParameter = new ObjectParameter("OrderNbr", orderNbr);
-            }
-            else
-            {
-                orderNbrParameter = new ObjectParameter("OrderNbr", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<OM20500_pgHisDet_Result>("OM20500_pgHisDet", branchIDParameter, orderNbrParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="orderNbr">No Metadata Documentation available.</param>
-        public ObjectResult<OM20500_pgHistoryOrd_Result> OM20500_pgHistoryOrd(global::System.String branchID, global::System.String orderNbr)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter orderNbrParameter;
-            if (orderNbr != null)
-            {
-                orderNbrParameter = new ObjectParameter("OrderNbr", orderNbr);
-            }
-            else
-            {
-                orderNbrParameter = new ObjectParameter("OrderNbr", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<OM20500_pgHistoryOrd_Result>("OM20500_pgHistoryOrd", branchIDParameter, orderNbrParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="slsperID">No Metadata Documentation available.</param>
-        /// <param name="custID">No Metadata Documentation available.</param>
-        /// <param name="status">No Metadata Documentation available.</param>
-        /// <param name="startDate">No Metadata Documentation available.</param>
-        /// <param name="endDate">No Metadata Documentation available.</param>
-        public ObjectResult<OM20500_pgOrder_Result> OM20500_pgOrder(global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String status, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter slsperIDParameter;
-            if (slsperID != null)
-            {
-                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
-            }
-            else
-            {
-                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
-            }
-    
-            ObjectParameter custIDParameter;
-            if (custID != null)
-            {
-                custIDParameter = new ObjectParameter("CustID", custID);
-            }
-            else
-            {
-                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
-            }
-    
-            ObjectParameter statusParameter;
-            if (status != null)
-            {
-                statusParameter = new ObjectParameter("Status", status);
-            }
-            else
-            {
-                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
-            }
-    
-            ObjectParameter startDateParameter;
-            if (startDate.HasValue)
-            {
-                startDateParameter = new ObjectParameter("StartDate", startDate);
-            }
-            else
-            {
-                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.DateTime));
-            }
-    
-            ObjectParameter endDateParameter;
-            if (endDate.HasValue)
-            {
-                endDateParameter = new ObjectParameter("EndDate", endDate);
-            }
-            else
-            {
-                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.DateTime));
-            }
-    
-            return base.ExecuteFunction<OM20500_pgOrder_Result>("OM20500_pgOrder", branchIDParameter, slsperIDParameter, custIDParameter, statusParameter, startDateParameter, endDateParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="slsperID">No Metadata Documentation available.</param>
-        /// <param name="custID">No Metadata Documentation available.</param>
-        /// <param name="status">No Metadata Documentation available.</param>
-        /// <param name="startDate">No Metadata Documentation available.</param>
-        /// <param name="endDate">No Metadata Documentation available.</param>
-        public ObjectResult<OM20500_pgLotTrans_Result> OM20500_pgLotTrans(global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String status, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter slsperIDParameter;
-            if (slsperID != null)
-            {
-                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
-            }
-            else
-            {
-                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
-            }
-    
-            ObjectParameter custIDParameter;
-            if (custID != null)
-            {
-                custIDParameter = new ObjectParameter("CustID", custID);
-            }
-            else
-            {
-                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
-            }
-    
-            ObjectParameter statusParameter;
-            if (status != null)
-            {
-                statusParameter = new ObjectParameter("Status", status);
-            }
-            else
-            {
-                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
-            }
-    
-            ObjectParameter startDateParameter;
-            if (startDate.HasValue)
-            {
-                startDateParameter = new ObjectParameter("StartDate", startDate);
-            }
-            else
-            {
-                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.DateTime));
-            }
-    
-            ObjectParameter endDateParameter;
-            if (endDate.HasValue)
-            {
-                endDateParameter = new ObjectParameter("EndDate", endDate);
-            }
-            else
-            {
-                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.DateTime));
-            }
-    
-            return base.ExecuteFunction<OM20500_pgLotTrans_Result>("OM20500_pgLotTrans", branchIDParameter, slsperIDParameter, custIDParameter, statusParameter, startDateParameter, endDateParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="slsperID">No Metadata Documentation available.</param>
-        /// <param name="custID">No Metadata Documentation available.</param>
-        /// <param name="status">No Metadata Documentation available.</param>
-        /// <param name="startDate">No Metadata Documentation available.</param>
-        /// <param name="endDate">No Metadata Documentation available.</param>
         public ObjectResult<OM20500_pgCloseOrder_Result> OM20500_pgCloseOrder(global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String status, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate)
         {
             ObjectParameter branchIDParameter;
@@ -549,6 +267,453 @@ namespace OM20500
             }
     
             return base.ExecuteFunction<OM20500_pgCloseOrder_Result>("OM20500_pgCloseOrder", branchIDParameter, slsperIDParameter, custIDParameter, statusParameter, startDateParameter, endDateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="slsperID">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="status">No Metadata Documentation available.</param>
+        /// <param name="startDate">No Metadata Documentation available.</param>
+        /// <param name="endDate">No Metadata Documentation available.</param>
+        public ObjectResult<OM20500_pgDet_Result> OM20500_pgDet(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String status, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter slsperIDParameter;
+            if (slsperID != null)
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
+            }
+            else
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
+            }
+    
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter statusParameter;
+            if (status != null)
+            {
+                statusParameter = new ObjectParameter("Status", status);
+            }
+            else
+            {
+                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
+            }
+    
+            ObjectParameter startDateParameter;
+            if (startDate.HasValue)
+            {
+                startDateParameter = new ObjectParameter("StartDate", startDate);
+            }
+            else
+            {
+                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter endDateParameter;
+            if (endDate.HasValue)
+            {
+                endDateParameter = new ObjectParameter("EndDate", endDate);
+            }
+            else
+            {
+                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<OM20500_pgDet_Result>("OM20500_pgDet", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter, slsperIDParameter, custIDParameter, statusParameter, startDateParameter, endDateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="slsperID">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="status">No Metadata Documentation available.</param>
+        /// <param name="startDate">No Metadata Documentation available.</param>
+        /// <param name="endDate">No Metadata Documentation available.</param>
+        public ObjectResult<OM20500_pgLotTrans_Result> OM20500_pgLotTrans(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String status, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter slsperIDParameter;
+            if (slsperID != null)
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
+            }
+            else
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
+            }
+    
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter statusParameter;
+            if (status != null)
+            {
+                statusParameter = new ObjectParameter("Status", status);
+            }
+            else
+            {
+                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
+            }
+    
+            ObjectParameter startDateParameter;
+            if (startDate.HasValue)
+            {
+                startDateParameter = new ObjectParameter("StartDate", startDate);
+            }
+            else
+            {
+                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter endDateParameter;
+            if (endDate.HasValue)
+            {
+                endDateParameter = new ObjectParameter("EndDate", endDate);
+            }
+            else
+            {
+                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<OM20500_pgLotTrans_Result>("OM20500_pgLotTrans", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter, slsperIDParameter, custIDParameter, statusParameter, startDateParameter, endDateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="slsperID">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="status">No Metadata Documentation available.</param>
+        /// <param name="startDate">No Metadata Documentation available.</param>
+        /// <param name="endDate">No Metadata Documentation available.</param>
+        public ObjectResult<OM20500_pgOrder_Result> OM20500_pgOrder(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String status, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter slsperIDParameter;
+            if (slsperID != null)
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
+            }
+            else
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
+            }
+    
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter statusParameter;
+            if (status != null)
+            {
+                statusParameter = new ObjectParameter("Status", status);
+            }
+            else
+            {
+                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
+            }
+    
+            ObjectParameter startDateParameter;
+            if (startDate.HasValue)
+            {
+                startDateParameter = new ObjectParameter("StartDate", startDate);
+            }
+            else
+            {
+                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter endDateParameter;
+            if (endDate.HasValue)
+            {
+                endDateParameter = new ObjectParameter("EndDate", endDate);
+            }
+            else
+            {
+                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<OM20500_pgOrder_Result>("OM20500_pgOrder", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter, slsperIDParameter, custIDParameter, statusParameter, startDateParameter, endDateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="orderNbr">No Metadata Documentation available.</param>
+        public ObjectResult<OM20500_pgHisDet_Result> OM20500_pgHisDet(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String orderNbr)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter orderNbrParameter;
+            if (orderNbr != null)
+            {
+                orderNbrParameter = new ObjectParameter("OrderNbr", orderNbr);
+            }
+            else
+            {
+                orderNbrParameter = new ObjectParameter("OrderNbr", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM20500_pgHisDet_Result>("OM20500_pgHisDet", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter, orderNbrParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="orderNbr">No Metadata Documentation available.</param>
+        public ObjectResult<OM20500_pgHistoryOrd_Result> OM20500_pgHistoryOrd(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String orderNbr)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter orderNbrParameter;
+            if (orderNbr != null)
+            {
+                orderNbrParameter = new ObjectParameter("OrderNbr", orderNbr);
+            }
+            else
+            {
+                orderNbrParameter = new ObjectParameter("OrderNbr", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM20500_pgHistoryOrd_Result>("OM20500_pgHistoryOrd", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter, orderNbrParameter);
         }
 
         #endregion
@@ -4107,8 +4272,7 @@ namespace OM20500
         /// <param name="discAmt">Initial value of the DiscAmt property.</param>
         /// <param name="lineAmt">Initial value of the LineAmt property.</param>
         /// <param name="unitRate">Initial value of the UnitRate property.</param>
-        /// <param name="isEditQtyShip">Initial value of the isEditQtyShip property.</param>
-        public static OM20500_pgDet_Result CreateOM20500_pgDet_Result(global::System.String branchID, global::System.String orderNbr, global::System.String lineRef, global::System.Boolean freeItem, global::System.Double lineQty, global::System.Double qtyShip, global::System.Double qtyShipped, global::System.Double slsPrice, global::System.Double discAmt, global::System.Double lineAmt, global::System.Double unitRate, global::System.Boolean isEditQtyShip)
+        public static OM20500_pgDet_Result CreateOM20500_pgDet_Result(global::System.String branchID, global::System.String orderNbr, global::System.String lineRef, global::System.Boolean freeItem, global::System.Double lineQty, global::System.Double qtyShip, global::System.Double qtyShipped, global::System.Double slsPrice, global::System.Double discAmt, global::System.Double lineAmt, global::System.Double unitRate)
         {
             OM20500_pgDet_Result oM20500_pgDet_Result = new OM20500_pgDet_Result();
             oM20500_pgDet_Result.BranchID = branchID;
@@ -4122,7 +4286,6 @@ namespace OM20500
             oM20500_pgDet_Result.DiscAmt = discAmt;
             oM20500_pgDet_Result.LineAmt = lineAmt;
             oM20500_pgDet_Result.UnitRate = unitRate;
-            oM20500_pgDet_Result.isEditQtyShip = isEditQtyShip;
             return oM20500_pgDet_Result;
         }
 
@@ -4517,30 +4680,6 @@ namespace OM20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String TaxID
-        {
-            get
-            {
-                return _TaxID;
-            }
-            set
-            {
-                OnTaxIDChanging(value);
-                ReportPropertyChanging("TaxID");
-                _TaxID = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("TaxID");
-                OnTaxIDChanged();
-            }
-        }
-        private global::System.String _TaxID;
-        partial void OnTaxIDChanging(global::System.String value);
-        partial void OnTaxIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Double UnitRate
@@ -4589,9 +4728,33 @@ namespace OM20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Boolean isEditQtyShip
+        public global::System.String TaxID
+        {
+            get
+            {
+                return _TaxID;
+            }
+            set
+            {
+                OnTaxIDChanging(value);
+                ReportPropertyChanging("TaxID");
+                _TaxID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TaxID");
+                OnTaxIDChanged();
+            }
+        }
+        private global::System.String _TaxID;
+        partial void OnTaxIDChanging(global::System.String value);
+        partial void OnTaxIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> isEditQtyShip
         {
             get
             {
@@ -4606,8 +4769,8 @@ namespace OM20500
                 OnisEditQtyShipChanged();
             }
         }
-        private global::System.Boolean _isEditQtyShip;
-        partial void OnisEditQtyShipChanging(global::System.Boolean value);
+        private Nullable<global::System.Boolean> _isEditQtyShip;
+        partial void OnisEditQtyShipChanging(Nullable<global::System.Boolean> value);
         partial void OnisEditQtyShipChanged();
 
         #endregion
@@ -5766,27 +5929,25 @@ namespace OM20500
         /// <summary>
         /// Create a new OM20500_pgOrder_Result object.
         /// </summary>
+        /// <param name="isAddStock">Initial value of the IsAddStock property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="orderNbr">Initial value of the OrderNbr property.</param>
         /// <param name="orderDate">Initial value of the OrderDate property.</param>
         /// <param name="ordQty">Initial value of the OrdQty property.</param>
         /// <param name="ordAmt">Initial value of the OrdAmt property.</param>
-        /// <param name="taxTot">Initial value of the TaxTot property.</param>
-        /// <param name="isAddStock">Initial value of the IsAddStock property.</param>
-        /// <param name="custOrderNbr">Initial value of the CustOrderNbr property.</param>
         /// <param name="isHighlight">Initial value of the isHighlight property.</param>
-        public static OM20500_pgOrder_Result CreateOM20500_pgOrder_Result(global::System.String branchID, global::System.String orderNbr, global::System.DateTime orderDate, global::System.Double ordQty, global::System.Double ordAmt, global::System.Double taxTot, global::System.Boolean isAddStock, global::System.String custOrderNbr, global::System.String isHighlight)
+        /// <param name="taxTot">Initial value of the TaxTot property.</param>
+        public static OM20500_pgOrder_Result CreateOM20500_pgOrder_Result(global::System.Boolean isAddStock, global::System.String branchID, global::System.String orderNbr, global::System.DateTime orderDate, global::System.Double ordQty, global::System.Double ordAmt, global::System.String isHighlight, global::System.Double taxTot)
         {
             OM20500_pgOrder_Result oM20500_pgOrder_Result = new OM20500_pgOrder_Result();
+            oM20500_pgOrder_Result.IsAddStock = isAddStock;
             oM20500_pgOrder_Result.BranchID = branchID;
             oM20500_pgOrder_Result.OrderNbr = orderNbr;
             oM20500_pgOrder_Result.OrderDate = orderDate;
             oM20500_pgOrder_Result.OrdQty = ordQty;
             oM20500_pgOrder_Result.OrdAmt = ordAmt;
-            oM20500_pgOrder_Result.TaxTot = taxTot;
-            oM20500_pgOrder_Result.IsAddStock = isAddStock;
-            oM20500_pgOrder_Result.CustOrderNbr = custOrderNbr;
             oM20500_pgOrder_Result.isHighlight = isHighlight;
+            oM20500_pgOrder_Result.TaxTot = taxTot;
             return oM20500_pgOrder_Result;
         }
 
@@ -5817,6 +5978,30 @@ namespace OM20500
         private Nullable<global::System.Boolean> _Selected;
         partial void OnSelectedChanging(Nullable<global::System.Boolean> value);
         partial void OnSelectedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsAddStock
+        {
+            get
+            {
+                return _IsAddStock;
+            }
+            set
+            {
+                OnIsAddStockChanging(value);
+                ReportPropertyChanging("IsAddStock");
+                _IsAddStock = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsAddStock");
+                OnIsAddStockChanged();
+            }
+        }
+        private global::System.Boolean _IsAddStock;
+        partial void OnIsAddStockChanging(global::System.Boolean value);
+        partial void OnIsAddStockChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -6085,55 +6270,7 @@ namespace OM20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Double TaxTot
-        {
-            get
-            {
-                return _TaxTot;
-            }
-            set
-            {
-                OnTaxTotChanging(value);
-                ReportPropertyChanging("TaxTot");
-                _TaxTot = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("TaxTot");
-                OnTaxTotChanged();
-            }
-        }
-        private global::System.Double _TaxTot;
-        partial void OnTaxTotChanging(global::System.Double value);
-        partial void OnTaxTotChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean IsAddStock
-        {
-            get
-            {
-                return _IsAddStock;
-            }
-            set
-            {
-                OnIsAddStockChanging(value);
-                ReportPropertyChanging("IsAddStock");
-                _IsAddStock = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("IsAddStock");
-                OnIsAddStockChanged();
-            }
-        }
-        private global::System.Boolean _IsAddStock;
-        partial void OnIsAddStockChanging(global::System.Boolean value);
-        partial void OnIsAddStockChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String CustOrderNbr
         {
@@ -6145,7 +6282,7 @@ namespace OM20500
             {
                 OnCustOrderNbrChanging(value);
                 ReportPropertyChanging("CustOrderNbr");
-                _CustOrderNbr = StructuralObject.SetValidValue(value, false);
+                _CustOrderNbr = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("CustOrderNbr");
                 OnCustOrderNbrChanged();
             }
@@ -6177,6 +6314,30 @@ namespace OM20500
         private global::System.String _isHighlight;
         partial void OnisHighlightChanging(global::System.String value);
         partial void OnisHighlightChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double TaxTot
+        {
+            get
+            {
+                return _TaxTot;
+            }
+            set
+            {
+                OnTaxTotChanging(value);
+                ReportPropertyChanging("TaxTot");
+                _TaxTot = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TaxTot");
+                OnTaxTotChanged();
+            }
+        }
+        private global::System.Double _TaxTot;
+        partial void OnTaxTotChanging(global::System.Double value);
+        partial void OnTaxTotChanged();
 
         #endregion
 

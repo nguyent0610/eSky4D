@@ -47,13 +47,15 @@ namespace OM20500.Controllers
             string slsperID, string custID, string status,
             DateTime startDate, DateTime endDate)
         {
-            var orders = _db.OM20500_pgOrder(branchID, slsperID,custID, status, startDate,endDate).ToList();
+            _db.CommandTimeout = int.MaxValue;
+            var orders = _db.OM20500_pgOrder(Current.UserName, Current.CpnyID,Current.LangID, branchID, slsperID,custID, status, startDate,endDate).ToList();
             return this.Store(orders);
         }
         public ActionResult GetCloseOrder(string branchID,
           string slsperID, string custID, string status,
           DateTime startDate, DateTime endDate)
         {
+            _db.CommandTimeout = int.MaxValue;
             var orders = _db.OM20500_pgCloseOrder(branchID, slsperID, custID, status, startDate, endDate).ToList();
             return this.Store(orders);
         }
@@ -61,21 +63,25 @@ namespace OM20500.Controllers
             string slsperID, string custID, string status,
             DateTime startDate, DateTime endDate)
         {
-            var dets = _db.OM20500_pgDet(branchID, slsperID, custID, status, startDate, endDate).ToList();
+            _db.CommandTimeout = int.MaxValue;
+            var dets = _db.OM20500_pgDet(Current.UserName, Current.CpnyID, Current.LangID, branchID, slsperID, custID, status, startDate, endDate).ToList();
             return this.Store(dets);
         }
         public ActionResult GetHisOrd(string branchID, string orderNbr)
         {
-            var hisOrders = _db.OM20500_pgHistoryOrd(branchID, orderNbr).ToList();
+            _db.CommandTimeout = int.MaxValue;
+            var hisOrders = _db.OM20500_pgHistoryOrd(Current.UserName, Current.CpnyID, Current.LangID, branchID, orderNbr).ToList();
             return this.Store(hisOrders);
         }
         public ActionResult GetHisDet(string branchID, string orderNbr)
         {
-            var hisDets = _db.OM20500_pgHisDet(branchID, orderNbr).ToList();
+            _db.CommandTimeout = int.MaxValue;
+            var hisDets = _db.OM20500_pgHisDet(Current.UserName, Current.CpnyID, Current.LangID, branchID, orderNbr).ToList();
             return this.Store(hisDets);
         }
         public ActionResult GetItemSite(string invtID, string siteID)
         {
+            _db.CommandTimeout = int.MaxValue;
             var objSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
             return this.Store(objSite);
         }
@@ -83,7 +89,8 @@ namespace OM20500.Controllers
             string slsperID, string custID, string status,
             DateTime startDate, DateTime endDate)
         {
-            var lot = _db.OM20500_pgLotTrans(branchID, slsperID, custID, status, startDate, endDate).ToList();
+            _db.CommandTimeout = int.MaxValue;
+            var lot = _db.OM20500_pgLotTrans(Current.UserName, Current.CpnyID, Current.LangID, branchID, slsperID, custID, status, startDate, endDate).ToList();
             return this.Store(lot);
         }
         #region DataProcess
