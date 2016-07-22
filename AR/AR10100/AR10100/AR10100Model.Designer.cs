@@ -394,6 +394,47 @@ namespace AR10100
         {
             return base.ExecuteFunction<AR10100_pcterms_Result>("AR10100_pcterms");
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="date">No Metadata Documentation available.</param>
+        /// <param name="screenNbr">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR10100_ppCheckCloseDate(global::System.String branchID, Nullable<global::System.DateTime> date, global::System.String screenNbr)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter dateParameter;
+            if (date.HasValue)
+            {
+                dateParameter = new ObjectParameter("Date", date);
+            }
+            else
+            {
+                dateParameter = new ObjectParameter("Date", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter screenNbrParameter;
+            if (screenNbr != null)
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", screenNbr);
+            }
+            else
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR10100_ppCheckCloseDate", branchIDParameter, dateParameter, screenNbrParameter);
+        }
 
         #endregion
 

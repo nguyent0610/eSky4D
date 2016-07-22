@@ -88,6 +88,10 @@ namespace AR10100.Controllers
                 StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
                 ChangeRecords<AR10100_pgLoadInvoiceMemo_Result> lstgrd = dataHandlerGrid.BatchObjectData<AR10100_pgLoadInvoiceMemo_Result>();
 
+                //Kiem tra dong ngay 
+                if (_db.AR10100_ppCheckCloseDate(branchID, Convert.ToDateTime(data["dteDocDate"]).ToDateShort(), "AR10100").FirstOrDefault() == "0")
+                    throw new MessageException(MessageType.Message, "301");
+
                 var tmpBatNbr = "";
                 var tmpRefNbr = "";
                 #region save batch
@@ -521,6 +525,7 @@ namespace AR10100.Controllers
                 string errorDocDateFormat = string.Empty;
                 string errorDuplicate = string.Empty;
                 string errorDuplicateDB = string.Empty;
+                string errorCloseDate = string.Empty;
 
                 if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
                 {
@@ -609,6 +614,11 @@ namespace AR10100.Controllers
                                         errorDocDateFormat += (i + 1).ToString() + ",";
                                         FlagCheck = true;
                                     }
+                                    else
+                                    {
+                                        if (_db.AR10100_ppCheckCloseDate(CpnyID, parsed.ToDateShort(), "AR10100").FirstOrDefault() == "0")
+                                            errorCloseDate += (i + 1).ToString() + ",";
+                                    }
                                 }
                                 if (TranAmt != "")
                                 {
@@ -628,6 +638,7 @@ namespace AR10100.Controllers
                                         FlagCheck = true;
                                     }
                                 }
+
                                 if (FlagCheck == true)
                                 {
                                     continue;
@@ -750,7 +761,8 @@ namespace AR10100.Controllers
                                 #endregion
                             }
 
-                            message = errorDocType == "" ? "" : string.Format("{0} dòng: {1} không thuộc loại Phiếu Báo Nợ(DM) </br>", "Loại Chứng Từ", errorDocType);
+                            message = errorCloseDate == "" ? "" : string.Format("Dòng: {0} ngày chứng từ không nằm trong phạm vi cho phép nhập liệu của bạn</br>", errorCloseDate);
+                            message += errorDocType == "" ? "" : string.Format("{0} dòng: {1} không thuộc loại Phiếu Báo Nợ(DM) </br>", "Loại Chứng Từ", errorDocType);
                             message += errorCustID == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Mã KH", errorCustID);
                             message += errorCustIDnotExists == "" ? "" : string.Format("{0} dòng: {1} không tồn tại</br>", "Mã KH", errorCustIDnotExists);
                             message += errorDocDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Chứng Từ", errorDocDate);

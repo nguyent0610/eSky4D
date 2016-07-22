@@ -71,7 +71,7 @@ var menuClick = function (command) {
         case "save":          
             if (App.cboStatus.getValue() == "V" || ((Ext.isEmpty(App.cboHandle.getValue()) || App.cboHandle.getValue() == "N") && App.cboStatus.getValue() == "C")) return;
             if (App.txtCuryDocBal.getValue() == '0') {
-                HQ.message.show(20151111901, '', '');
+                HQ.message.show(2016072201, '', '');
                 return;
             }
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
@@ -380,8 +380,7 @@ var grd_BeforeEdit = function (editor, e) {
                 valueTax += det.data.TaxID + ',';
             });
         }
-        valueTax = valueTax.length > 0 ? valueTax.substring(0, valueTax.length - 1) : '';
-        e.record.set("TaxID", valueTax);
+        e.record.set("TaxID", valueTax.trim());
         e.record.set('LineRef', HQ.store.lastLineRef(App.stoAR_Trans));
         //return false;
     }
