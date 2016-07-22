@@ -439,7 +439,7 @@
                                 .Local(true)
                                 .Filters(
                                     X.StringFilter().DataIndex("LineType").ValidateRecord(p=>p.Fn="stringFilter"),
-                                    X.StringFilter().DataIndex("InvtId").ValidateRecord(p=>p.Fn="stringFilter"),
+                                    X.StringFilter().DataIndex("InvtId"),
                                     X.NumericFilter().DataIndex("Qty"),
                                     X.NumericFilter().DataIndex("UnitPrice"),
                                     X.NumericFilter().DataIndex("TranAmt"),

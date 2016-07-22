@@ -849,10 +849,6 @@ var stringFilter = function (record) {
         App.cboLineType.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboLineType.store, "Code", "Descr");
     }
-    else if (this.dataIndex == 'InvtId') {
-        App.cboInvtID.store.clearFilter();
-        return HQ.grid.filterComboDescr(record, this, App.cboInvtID.store, "InvtID", "Descr");
-    }
     else if (this.dataIndex == 'TaxCat') {
         App.cboTaxCat.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboTaxCat.store, "CatID", "Descr");
