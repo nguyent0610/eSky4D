@@ -750,7 +750,7 @@ namespace AR10100.Controllers
                                 objGrid.TranDate = tmpDocDate.ToDateShort();
                                 objGrid.TranDesc = CustID + " - " + objCust.Name;
                                 objGrid.TranType = DocType;
-                                objGrid.TxblAmt00 = 0;
+                                objGrid.TxblAmt00 = Convert.ToDouble(TranAmt);
                                 objGrid.TxblAmt01 = 0;
                                 objGrid.TxblAmt02 = 0;
                                 objGrid.TxblAmt03 = 0;
