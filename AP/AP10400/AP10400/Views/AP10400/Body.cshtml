@@ -289,7 +289,7 @@
                                 .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
                                 .HQDBSys(false).ForceSelection(true).SelectedItems(new Ext.Net.ListItem { Index = 0})
                                 //.MaxLength(30).EnforceMaxLength(true)
-                                //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection()
                                 {
                                    // new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
@@ -299,6 +299,7 @@
                                 .LoadData()
                                 .Listeners(lst =>
                                  {
+                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                      //lst.Change.Fn = "cboBankAcct_Change";
                                  })
                             )

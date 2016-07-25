@@ -111,9 +111,9 @@ var menuClick = function (command) {
                     }
                     else if (HQ.focus == 'pnlDetail') {
                         if (App.slmDetail.selected.items[0] != undefined) {
-                            if (App.slmDetail.selected.items[0].data.Payment != "") {
+                         //   if (App.slmDetail.selected.items[0].data.Payment != "") {
                                 HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdDetail)], 'deleteData',true);
-                            }
+                           // }
                         }
                     }
                 }
@@ -387,6 +387,9 @@ var stoLoad = function (sto) {
         record.set('Status', 'H');
         record.set('DocType', 'CC');
         record.set('DocDate', HQ.bussinessDate);
+        if (App.cboBankAcct.store.data.items[0] != undefined) {
+            record.set("ReasonCD", App.cboBankAcct.store.data.items[0].data.BankAcct);
+        }
         HQ.isNew = true;
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboBatNbr.focus(true);//focus ma khi tao moi
@@ -470,6 +473,18 @@ var grdDetail_Reject = function (record) {
 
 //Process
 var save = function () {
+    if (App.stoDetail.data.length == 0) {
+        HQ.message.show(1000, HQ.common.getLang('pnlDetail'), '');
+        return false;
+    }
+    //else {
+    //    App.stoDetail.each(function (record) {
+    //        if (record.data.Payment == 0) {
+    //            HQ.message.show(1000, HQ.common.getLang('Payment'), '');
+    //            return;
+    //        }
+    //    });//
+    //}
     if (App.frmMain.isValid() && App.stoDetail.data.length>0) {
         App.frmMain.updateRecord();
         App.frmMain.submit({
@@ -490,14 +505,19 @@ var save = function () {
                     callback: function () {
                         if (Ext.isEmpty(App.cboBatNbr.getValue())) {
                             App.cboBatNbr.setValue(BatNbr);
+                            HQ.isFirstLoad = true;
+                            App.cboBatNbr.getStore().load();
                             App.stoHeader.reload();
                         }
                         else {
                             App.cboBatNbr.setValue(BatNbr);
+                            HQ.isFirstLoad = true;
+                            App.cboBatNbr.getStore().load();
                             App.stoHeader.reload();
                         }
                     }
                 });
+                HQ.common.changeData(HQ.isChange, 'AP10400');
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);

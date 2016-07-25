@@ -104,8 +104,8 @@ namespace AP10400.Controllers
                 var curHeader = dataHandler1.ObjectData<AP10400_pdHeader_Result>().FirstOrDefault();
                 StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
                 ChangeRecords<AP10400_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AP10400_pgLoadGridTrans_Result>();
-				if (_db.AP10100_ppCheckCloseDate(BranchID.PassNull(), curHeader.DocDate.ToDateShort()).FirstOrDefault() == "0")
-					throw new MessageException(MessageType.Message, "301");
+				//if (_db.AP10100_ppCheckCloseDate(BranchID.PassNull(), curHeader.DocDate.ToDateShort()).FirstOrDefault() == "0")
+				//	throw new MessageException(MessageType.Message, "301");
                 #region Save Header
                 var headerBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AP" && p.EditScrnNbr == "AP10400");
                 var headerDoc = _db.AP_Doc.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr);
@@ -115,6 +115,7 @@ namespace AP10400.Controllers
                     {
                         headerBatch.IntRefNbr = curHeader.IntRefNbr;
                         headerBatch.ReasonCD = curHeader.ReasonCD;
+						headerBatch.Descr = data["txtDocDescr"].PassNull();//curHeader.Descr;
                         headerBatch.TotAmt = Convert.ToDouble(curHeader.TotAmt);
                         if (Handle == "R")
                         {
@@ -156,6 +157,7 @@ namespace AP10400.Controllers
                     headerBatch.TotAmt = curHeader.TotAmt;
                     headerBatch.TotAmt = curHeader.TotAmt;
                     headerBatch.TotAmt = curHeader.TotAmt;
+					headerBatch.Descr = data["txtDocDescr"].PassNull();
 
                     headerBatch.Crtd_DateTime = DateTime.Now;
                     headerBatch.Crtd_Prog = _screenNbr;
@@ -171,7 +173,7 @@ namespace AP10400.Controllers
                     headerDoc.BranchID = BranchID;
                     headerDoc.BatNbr = headerBatch.BatNbr;
                     headerDoc.RefNbr = headerBatch.RefNbr;
-                    headerDoc.DocType = curHeader.DocType;
+					headerDoc.DocType = "HC";// curHeader.DocType;
                     headerDoc.Crtd_DateTime = DateTime.Now;
                     headerDoc.Crtd_Prog = _screenNbr;
                     headerDoc.Crtd_User = Current.UserName;
@@ -244,8 +246,16 @@ namespace AP10400.Controllers
 
 				}
 				lstgrd.Created.AddRange(lstgrd.Updated);
+				if (lstgrd.Created.Count() == 0 && Handle != "R"&&headerBatch.Status!="C")
+				{
+					throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
+				}
 				foreach (AP10400_pgLoadGridTrans_Result created in lstgrd.Created)
 				{
+					if (created.Payment == 0 && Handle != "R" && headerBatch.Status != "C")
+					{
+						throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
+					}
 					var record = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.AdjdRefNbr == created.RefNbr && p.AdjgRefNbr == RefNbr).FirstOrDefault();
 					if (record == null)
 					{
@@ -367,6 +377,7 @@ namespace AP10400.Controllers
 			d.AdjAmt = Convert.ToDouble(s.Payment);
 			d.AdjgDocDate = s.DocDate;
 			d.AdjgDocType = "HC";
+			d.AdjdDocType = "VO";
 			d.VendID = s.VendID;
 			d.LUpd_DateTime = DateTime.Now;
 			d.LUpd_Prog = _screenNbr;
@@ -444,6 +455,12 @@ namespace AP10400.Controllers
                 {
                     _db.AP_Trans.DeleteObject(item);
                 }
+
+				var lstAP_Adjust = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr).ToList();
+				foreach (var item in lstAP_Adjust)
+				{
+					_db.AP_Adjust.DeleteObject(item);
+				}
 
                 _db.SaveChanges();
                 return Json(new { success = true });
