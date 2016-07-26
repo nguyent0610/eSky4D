@@ -437,6 +437,7 @@ var stoDetail_Load = function (sto) {
         HQ.isFirstLoad = false; //sto load cuoi se su dung
     }
     frmChange();
+    if(HQ.isChange)
     total();
     if (_isLoadMaster) {
         HQ.common.showBusy(false);
@@ -586,7 +587,7 @@ var total = function () {
     });
     // App.txtCuryCrTot.setValue(totalAmt);
     App.txtPaid.setValue(totalPayment);
-    App.txtOrigDocAmt.setValue(totalOrigDocBal);
+   App.txtOrigDocAmt.setValue(totalOrigDocBal);
     App.txtUnTotPayment.setValue(totaDocBal);
    // App.txtCuryDocBal.setValue(totalAmt);
 };

@@ -29,6 +29,11 @@ namespace AP10400.Controllers
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         //AP10400SysEntities _AP10400sys = Util.CreateObjectContext<AP10400SysEntities>(true,"Sys");
         private JsonResult _logMessage;
+		string _handle = "";
+		string _status = "";
+		string _batNbr = "";
+		string _refNbr = "";
+		string _branchID = "";
 
         public ActionResult Index(string branchID)
         {
@@ -91,14 +96,19 @@ namespace AP10400.Controllers
         {
             try
             {
+				var acc = Session["AP10400"] as AccessRight;
 				
                 var BranchID = data["txtBranchID"].PassNull();
-                var Handle = data["cboHandle"].PassNull();
+				var Handle = data["cboHandle"].PassNull();
                 var BatNbr = data["cboBatNbr"].PassNull();
                 var RefNbr = data["cboRefNbr"].PassNull();
 				var ReasonCD = data["cboBankAcct"].PassNull();
 				var toAmt = data["txtCuryCrTot"].PassNull();
-
+				_status = data["cboStatus"].PassNull();
+				_handle = data["cboHandle"].PassNull() == "" ? _status : data["cboHandle"].PassNull();
+				_batNbr = BatNbr;
+				_refNbr = RefNbr;
+				_branchID = BranchID;
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstHeader"]);
                 var curHeader = dataHandler1.ObjectData<AP10400_pdHeader_Result>().FirstOrDefault();
@@ -109,6 +119,38 @@ namespace AP10400.Controllers
                 #region Save Header
                 var headerBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AP" && p.EditScrnNbr == "AP10400");
                 var headerDoc = _db.AP_Doc.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr);
+
+				if ((_status == "U" || _status == "C") && (_handle == "C" || _handle == "V"))
+				{
+
+					if (_handle == "V" || _handle == "C")
+					{
+						if ((_handle == "V" || _handle == "C") && !acc.Release)
+						{
+							throw new MessageException(MessageType.Message, "725");
+						}
+						else
+						{
+							if (_handle == "V" || _handle == "C")
+							{
+								Data_Release();
+							}
+						}
+					}
+				}
+				else if (_status == "H")
+				{
+					if (_handle == "R" && !acc.Release)
+					{
+						throw new MessageException(MessageType.Message, "737");
+					}
+					else
+					{
+						//Save_Batch();
+					//	_app.SaveChanges();
+						Data_Release();
+					}
+				}
                 if (headerBatch != null)
                 {
                     if (headerBatch.tstamp.ToHex() == curHeader.tstamp.ToHex())
@@ -117,11 +159,11 @@ namespace AP10400.Controllers
                         headerBatch.ReasonCD = curHeader.ReasonCD;
 						headerBatch.Descr = data["txtDocDescr"].PassNull();//curHeader.Descr;
                         headerBatch.TotAmt = Convert.ToDouble(curHeader.TotAmt);
-                        if (Handle == "R")
-                        {
-                            headerBatch.Rlsed = 1;
-                            headerBatch.Status = "C";
-                        }
+						//if (Handle == "R")
+						//{
+						//	headerBatch.Rlsed = 1;
+						//	headerBatch.Status = "C";
+						//}
                         UpdatingFormBotAP_Doc(ref headerDoc, curHeader, Handle);
                     }
                     else
@@ -142,16 +184,17 @@ namespace AP10400.Controllers
                     headerBatch.TotAmt = curHeader.TotAmt;
                     headerBatch.DateEnt = curHeader.DocDate;
                     headerBatch.OrigBranchID = "";
-                    if (Handle == "R")
-                    {
-                        headerBatch.Rlsed = 1;
-                        headerBatch.Status = "C";
-                    }
-                    else if (Handle == "N" || Handle == "")
-                    {
-                        headerBatch.Rlsed = 0;
-                        headerBatch.Status = "H";
-                    }
+					//if (Handle == "R")
+					//{
+					//	headerBatch.Rlsed = 1;
+					//	headerBatch.Status = "C";
+					//}
+					//else 
+					if (Handle == "N" || Handle == "")
+					{
+						headerBatch.Rlsed = 0;
+						headerBatch.Status = "H";
+					}
                     headerBatch.IntRefNbr = curHeader.IntRefNbr;
                     headerBatch.ReasonCD = curHeader.ReasonCD;
                     headerBatch.TotAmt = curHeader.TotAmt;
@@ -165,6 +208,7 @@ namespace AP10400.Controllers
                     headerBatch.LUpd_DateTime = DateTime.Now;
                     headerBatch.LUpd_Prog = _screenNbr;
                     headerBatch.LUpd_User = Current.UserName;
+					
 
                     _db.Batches.AddObject(headerBatch);
 
@@ -377,7 +421,7 @@ namespace AP10400.Controllers
 			d.AdjAmt = Convert.ToDouble(s.Payment);
 			d.AdjgDocDate = s.DocDate;
 			d.AdjgDocType = "HC";
-			d.AdjdDocType = "VO";
+			d.AdjdDocType = s.DocType;// "VO";
 			d.VendID = s.VendID;
 			d.LUpd_DateTime = DateTime.Now;
 			d.LUpd_Prog = _screenNbr;
@@ -471,5 +515,52 @@ namespace AP10400.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
+
+		#region Release
+		private void Data_Release()
+		{
+			if (_handle != "N")
+			{
+				DataAccess dal = Util.Dal();
+				try
+				{
+					APProcess.AP ap = new APProcess.AP(Current.UserName, _screenNbr, dal);
+					if (_handle == "R")
+					{
+						dal.BeginTrans(IsolationLevel.ReadCommitted);
+						if (!ap.AP10400_Release(_batNbr, _branchID))
+						{
+							dal.RollbackTrans();
+						}
+						else
+						{
+							dal.CommitTrans();
+						}
+
+						Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _batNbr });
+					}
+					else if (_handle == "C" || _handle == "V")
+					{
+						dal.BeginTrans(IsolationLevel.ReadCommitted);
+						if (!ap.AP10400_Cancel(_batNbr, _branchID))
+						{
+							dal.RollbackTrans();
+						}
+						else
+						{
+							dal.CommitTrans();
+						}
+						Util.AppendLog(ref _logMessage, "9999", data: new { success = true, batNbr = _batNbr });
+					}
+					ap = null;
+				}
+				catch (Exception)
+				{
+					dal.RollbackTrans();
+					throw;
+				}
+			}
+		}
+		#endregion
     }
 }
