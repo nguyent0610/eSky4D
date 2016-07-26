@@ -150,6 +150,74 @@ namespace IN22000
     
             return base.ExecuteFunction<IN22000_pgBranch_Result>("IN22000_pgBranch", userIDParameter, posmIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        public ObjectResult<IN22000_pdBranchIDImport_Result> IN22000_pdBranchIDImport(global::System.String userID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN22000_pdBranchIDImport_Result>("IN22000_pdBranchIDImport", userIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        public ObjectResult<IN22000_pdPOSMImport_Result> IN22000_pdPOSMImport(global::System.String userID, global::System.String cpnyID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN22000_pdPOSMImport_Result>("IN22000_pdPOSMImport", userIDParameter, cpnyIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        public ObjectResult<IN22000_pdPosmProductImport_Result> IN22000_pdPosmProductImport(global::System.String userID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN22000_pdPosmProductImport_Result>("IN22000_pdPosmProductImport", userIDParameter);
+        }
 
         #endregion
 
@@ -926,6 +994,54 @@ namespace IN22000
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ProgTypeFCS
+        {
+            get
+            {
+                return _ProgTypeFCS;
+            }
+            set
+            {
+                OnProgTypeFCSChanging(value);
+                ReportPropertyChanging("ProgTypeFCS");
+                _ProgTypeFCS = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ProgTypeFCS");
+                OnProgTypeFCSChanged();
+            }
+        }
+        private global::System.String _ProgTypeFCS;
+        partial void OnProgTypeFCSChanging(global::System.String value);
+        partial void OnProgTypeFCSChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ProgType
+        {
+            get
+            {
+                return _ProgType;
+            }
+            set
+            {
+                OnProgTypeChanging(value);
+                ReportPropertyChanging("ProgType");
+                _ProgType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ProgType");
+                OnProgTypeChanged();
+            }
+        }
+        private global::System.String _ProgType;
+        partial void OnProgTypeChanging(global::System.String value);
+        partial void OnProgTypeChanged();
 
         #endregion
 
@@ -935,6 +1051,239 @@ namespace IN22000
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN22000Model", Name="IN22000_pdBranchIDImport_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN22000_pdBranchIDImport_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN22000_pdBranchIDImport_Result object.
+        /// </summary>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="pOSMID">Initial value of the POSMID property.</param>
+        public static IN22000_pdBranchIDImport_Result CreateIN22000_pdBranchIDImport_Result(global::System.String branchID, global::System.String pOSMID)
+        {
+            IN22000_pdBranchIDImport_Result iN22000_pdBranchIDImport_Result = new IN22000_pdBranchIDImport_Result();
+            iN22000_pdBranchIDImport_Result.BranchID = branchID;
+            iN22000_pdBranchIDImport_Result.POSMID = pOSMID;
+            return iN22000_pdBranchIDImport_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BranchName
+        {
+            get
+            {
+                return _BranchName;
+            }
+            set
+            {
+                OnBranchNameChanging(value);
+                ReportPropertyChanging("BranchName");
+                _BranchName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchName");
+                OnBranchNameChanged();
+            }
+        }
+        private global::System.String _BranchName;
+        partial void OnBranchNameChanging(global::System.String value);
+        partial void OnBranchNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String POSMID
+        {
+            get
+            {
+                return _POSMID;
+            }
+            set
+            {
+                OnPOSMIDChanging(value);
+                ReportPropertyChanging("POSMID");
+                _POSMID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("POSMID");
+                OnPOSMIDChanged();
+            }
+        }
+        private global::System.String _POSMID;
+        partial void OnPOSMIDChanging(global::System.String value);
+        partial void OnPOSMIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN22000Model", Name="IN22000_pdPOSMImport_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN22000_pdPOSMImport_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN22000_pdPOSMImport_Result object.
+        /// </summary>
+        /// <param name="pOSMID">Initial value of the POSMID property.</param>
+        public static IN22000_pdPOSMImport_Result CreateIN22000_pdPOSMImport_Result(global::System.String pOSMID)
+        {
+            IN22000_pdPOSMImport_Result iN22000_pdPOSMImport_Result = new IN22000_pdPOSMImport_Result();
+            iN22000_pdPOSMImport_Result.POSMID = pOSMID;
+            return iN22000_pdPOSMImport_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String POSMID
+        {
+            get
+            {
+                return _POSMID;
+            }
+            set
+            {
+                OnPOSMIDChanging(value);
+                ReportPropertyChanging("POSMID");
+                _POSMID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("POSMID");
+                OnPOSMIDChanged();
+            }
+        }
+        private global::System.String _POSMID;
+        partial void OnPOSMIDChanging(global::System.String value);
+        partial void OnPOSMIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN22000Model", Name="IN22000_pdPosmProductImport_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN22000_pdPosmProductImport_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN22000_pdPosmProductImport_Result object.
+        /// </summary>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        public static IN22000_pdPosmProductImport_Result CreateIN22000_pdPosmProductImport_Result(global::System.String invtID)
+        {
+            IN22000_pdPosmProductImport_Result iN22000_pdPosmProductImport_Result = new IN22000_pdPosmProductImport_Result();
+            iN22000_pdPosmProductImport_Result.InvtID = invtID;
+            return iN22000_pdPosmProductImport_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String InvtName
+        {
+            get
+            {
+                return _InvtName;
+            }
+            set
+            {
+                OnInvtNameChanging(value);
+                ReportPropertyChanging("InvtName");
+                _InvtName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("InvtName");
+                OnInvtNameChanged();
+            }
+        }
+        private global::System.String _InvtName;
+        partial void OnInvtNameChanging(global::System.String value);
+        partial void OnInvtNameChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -952,24 +1301,18 @@ namespace IN22000
         /// <param name="posmID">Initial value of the PosmID property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        /// <param name="custID">Initial value of the CustID property.</param>
-        /// <param name="custName">Initial value of the CustName property.</param>
         /// <param name="posmCode">Initial value of the PosmCode property.</param>
-        /// <param name="slsperID">Initial value of the SlsperID property.</param>
         /// <param name="qty">Initial value of the Qty property.</param>
         /// <param name="appQty">Initial value of the AppQty property.</param>
         /// <param name="isAgree">Initial value of the IsAgree property.</param>
         /// <param name="status">Initial value of the Status property.</param>
-        public static IN22000_pgBranch_Result CreateIN22000_pgBranch_Result(global::System.String posmID, global::System.String branchID, global::System.Byte[] tstamp, global::System.String custID, global::System.String custName, global::System.String posmCode, global::System.String slsperID, global::System.Int32 qty, global::System.Int32 appQty, global::System.Boolean isAgree, global::System.String status)
+        public static IN22000_pgBranch_Result CreateIN22000_pgBranch_Result(global::System.String posmID, global::System.String branchID, global::System.Byte[] tstamp, global::System.String posmCode, global::System.Int32 qty, global::System.Int32 appQty, global::System.Boolean isAgree, global::System.String status)
         {
             IN22000_pgBranch_Result iN22000_pgBranch_Result = new IN22000_pgBranch_Result();
             iN22000_pgBranch_Result.PosmID = posmID;
             iN22000_pgBranch_Result.BranchID = branchID;
             iN22000_pgBranch_Result.tstamp = tstamp;
-            iN22000_pgBranch_Result.CustID = custID;
-            iN22000_pgBranch_Result.CustName = custName;
             iN22000_pgBranch_Result.PosmCode = posmCode;
-            iN22000_pgBranch_Result.SlsperID = slsperID;
             iN22000_pgBranch_Result.Qty = qty;
             iN22000_pgBranch_Result.AppQty = appQty;
             iN22000_pgBranch_Result.IsAgree = isAgree;
@@ -1058,54 +1401,6 @@ namespace IN22000
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String CustID
-        {
-            get
-            {
-                return _CustID;
-            }
-            set
-            {
-                OnCustIDChanging(value);
-                ReportPropertyChanging("CustID");
-                _CustID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CustID");
-                OnCustIDChanged();
-            }
-        }
-        private global::System.String _CustID;
-        partial void OnCustIDChanging(global::System.String value);
-        partial void OnCustIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String CustName
-        {
-            get
-            {
-                return _CustName;
-            }
-            set
-            {
-                OnCustNameChanging(value);
-                ReportPropertyChanging("CustName");
-                _CustName = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CustName");
-                OnCustNameChanged();
-            }
-        }
-        private global::System.String _CustName;
-        partial void OnCustNameChanging(global::System.String value);
-        partial void OnCustNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.String PosmCode
         {
             get
@@ -1148,54 +1443,6 @@ namespace IN22000
         private global::System.String _PosmName;
         partial void OnPosmNameChanging(global::System.String value);
         partial void OnPosmNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String SlsperID
-        {
-            get
-            {
-                return _SlsperID;
-            }
-            set
-            {
-                OnSlsperIDChanging(value);
-                ReportPropertyChanging("SlsperID");
-                _SlsperID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("SlsperID");
-                OnSlsperIDChanged();
-            }
-        }
-        private global::System.String _SlsperID;
-        partial void OnSlsperIDChanging(global::System.String value);
-        partial void OnSlsperIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String SlsName
-        {
-            get
-            {
-                return _SlsName;
-            }
-            set
-            {
-                OnSlsNameChanging(value);
-                ReportPropertyChanging("SlsName");
-                _SlsName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SlsName");
-                OnSlsNameChanged();
-            }
-        }
-        private global::System.String _SlsName;
-        partial void OnSlsNameChanging(global::System.String value);
-        partial void OnSlsNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

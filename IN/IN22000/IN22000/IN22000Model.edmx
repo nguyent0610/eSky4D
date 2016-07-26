@@ -48,7 +48,19 @@
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="ProgTypeFCS" Type="varchar" MaxLength="2" />
+          <Property Name="ProgType" Type="varchar" MaxLength="2" />
         </EntityType>
+        <Function Name="IN22000_pdBranchIDImport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN22000_pdPOSMImport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN22000_pdPosmProductImport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="IN22000_pgBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="PosmID" Type="varchar" Mode="In" />
@@ -64,6 +76,16 @@
             <Parameter Name="PosmID" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="IN_POSMCust" EntityType="IN22000Model.IN_POSMCust" />
+          <FunctionImport Name="IN22000_pdBranchIDImport" ReturnType="Collection(IN22000Model.IN22000_pdBranchIDImport_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN22000_pdPOSMImport" ReturnType="Collection(IN22000Model.IN22000_pdPOSMImport_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN22000_pdPosmProductImport" ReturnType="Collection(IN22000Model.IN22000_pdPosmProductImport_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="IN_POSMHeader">
           <Key>
@@ -80,17 +102,15 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="ProgTypeFCS" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ProgType" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="IN22000_pgBranch_Result">
           <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
           <Property Type="String" Name="PosmCode" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="PosmName" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="SlsName" Nullable="true" MaxLength="30" />
           <Property Type="Int32" Name="Qty" Nullable="false" />
           <Property Type="Int32" Name="AppQty" Nullable="false" />
           <Property Type="Boolean" Name="IsAgree" Nullable="false" />
@@ -120,6 +140,18 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="IN22000_pdBranchIDImport_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="POSMID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="IN22000_pdPosmProductImport_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtName" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="IN22000_pdPOSMImport_Result">
+          <Property Type="String" Name="POSMID" Nullable="false" MaxLength="30" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -129,6 +161,8 @@
           <EntitySetMapping Name="IN_POSMHeader">
             <EntityTypeMapping TypeName="IN22000Model.IN_POSMHeader">
               <MappingFragment StoreEntitySet="IN_POSMHeader">
+                <ScalarProperty Name="ProgType" ColumnName="ProgType" />
+                <ScalarProperty Name="ProgTypeFCS" ColumnName="ProgTypeFCS" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -149,12 +183,8 @@
                 <ScalarProperty Name="PosmID" ColumnName="PosmID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="CustName" ColumnName="CustName" />
                 <ScalarProperty Name="PosmCode" ColumnName="PosmCode" />
                 <ScalarProperty Name="PosmName" ColumnName="PosmName" />
-                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
-                <ScalarProperty Name="SlsName" ColumnName="SlsName" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
                 <ScalarProperty Name="AppQty" ColumnName="AppQty" />
                 <ScalarProperty Name="IsAgree" ColumnName="IsAgree" />
@@ -184,6 +214,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN22000_pdBranchIDImport" FunctionName="eBiz4DWebAppModel.Store.IN22000_pdBranchIDImport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN22000Model.IN22000_pdBranchIDImport_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="POSMID" ColumnName="POSMID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN22000_pdPOSMImport" FunctionName="eBiz4DWebAppModel.Store.IN22000_pdPOSMImport" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN22000Model.IN22000_pdPOSMImport_Result">
+                <ScalarProperty Name="POSMID" ColumnName="POSMID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN22000_pdPosmProductImport" FunctionName="eBiz4DWebAppModel.Store.IN22000_pdPosmProductImport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN22000Model.IN22000_pdPosmProductImport_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="InvtName" ColumnName="InvtName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

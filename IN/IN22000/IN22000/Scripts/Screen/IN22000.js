@@ -253,11 +253,17 @@ var Event = {
                     break;
                 case "new":
                     if (HQ.isInsert) {
-                        if (HQ.isChange) {
-                            HQ.message.show(150, '', '');
+                        if (HQ.focus == 'posm') {
+                            if (HQ.isChange) {
+                                HQ.message.show(150, '', '');
+                            }
+                            else {
+                                App.cboPosmID.clearValue();
+                                App.cboPosmID.focus();
+                            }
                         }
-                        else {
-                            App.cboPosmID.clearValue();
+                        else if (HQ.focus == 'branch') {
+                            HQ.grid.insert(App.grdDet);
                         }
                     }
                     break;
@@ -267,8 +273,8 @@ var Event = {
                             var keys = App.grdDet.store.HQFieldKeys ? App.grdDet.store.HQFieldKeys : "";
 
                             if (HQ.store.checkRequirePass(App.grdDet.store, keys,
-                                ['BranchID', 'CustID', 'PosmCode', 'SlsperID'],
-                                ['BranchID', 'CustID', 'PosmCode', 'SlsperID'])) {
+                                ['BranchID', 'PosmCode'],
+                                ['BranchID', 'PosmCode'])) {
                                 Process.saveData();
                             }
                         }
@@ -301,6 +307,10 @@ var Event = {
                         HQ.message.show(4, '', '');
                     }
                     break;
+                case "print":
+                    break;
+                case "close":
+                    break;
             }
         }
     },
@@ -320,12 +330,12 @@ var Event = {
                         if (e.field == "BranchID") {
                             App.cboColCpny.store.reload();
                         }
-                        else if (e.field == "SlsperID") {
-                            App.cboColSlsperID.store.reload();
-                        }
-                        else if (e.field == "CustID") {
-                            App.cboColCustID.store.reload();
-                        }
+                        //else if (e.field == "SlsperID") {
+                        //    App.cboColSlsperID.store.reload();
+                        //}
+                        //else if (e.field == "CustID") {
+                        //    App.cboColCustID.store.reload();
+                        //}
 
                         return HQ.grid.checkInput(e, keys);
                     }
@@ -365,17 +375,17 @@ var Event = {
                 }
             }
 
-            if (e.field == "BranchID") {
-                if (e.value != e.originalValue) {
-                    e.record.set("SlsperID", "");
-                    e.record.set("CustID", "");
-                }
-            }
-            else if (e.field == "SlsperID") {
-                if (e.value != e.originalValue) {
-                    e.record.set("CustID", "");
-                }
-            }
+            //if (e.field == "BranchID") {
+            //    if (e.value != e.originalValue) {
+            //        e.record.set("SlsperID", "");
+            //        e.record.set("CustID", "");
+            //    }
+            //}
+            //else if (e.field == "SlsperID") {
+            //    if (e.value != e.originalValue) {
+            //        e.record.set("CustID", "");
+            //    }
+            //}
 
             //Event.Form.frmMain_fieldChange();
         },
@@ -397,4 +407,53 @@ var Event = {
             }
         }
     },
+};
+
+var btnImport_Click = function (sender, e) {
+    var fileName = sender.getValue();
+    var ext = fileName.split(".").pop().toLowerCase();
+    if (ext == "xls" || ext == "xlsx") {
+        App.frmMain.submit({
+            waitMsg: "Importing....",
+            url: 'IN22000/Import',
+            timeout: 18000000,
+            clientValidation: false,
+            method: 'POST',
+            params: {
+            },
+            success: function (msg, data) {
+                if (!Ext.isEmpty(this.result.data.message)) {
+                    HQ.message.show('2013103001', [this.result.data.message], '', true);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    } else {
+        alert("Please choose a Media! (.xls, .xlsx)");
+        sender.reset();
+    }
+};
+
+var btnExport_Click = function () {
+    App.frmMain.submit({
+        //waitMsg: HQ.common.getLang("Exporting"),
+        url: 'IN22000/Export',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        params: {
+
+        },
+        success: function (msg, data) {
+            alert('sus');
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
 };

@@ -19,7 +19,23 @@
         //.DefaultAnchor("100%")
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
-        .TopBar(Util.SetupToolbar("close,print", true, "Event.Form.menuClick"))
+        .TopBar(Util.SetupToolbar( new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("Import")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";              
+            })
+            , X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            })
+        },"Print",true,"Event.Form.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
         .Items(
             X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.North)
@@ -84,44 +100,44 @@
                     .LoadData()
                 )
                 
-                , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID")
-                .Editor(
-                    HQ.Combo().ID("cboColSlsperID")
-                    .HQProcedure("IN22000_pcSalesPerson")
-                    .HQColumnShow("SlsperId,Name").ValueField("SlsperId").DisplayField("SlsperId")
-                    .HQHeightWidth(400, 300).ForceSelection(true)
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
-                        , new StoreParameter("@BranchID", 
-                            "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.BranchID : Ext.String.empty", 
-                            ParameterMode.Raw)
-                    })
-                    .LoadData()
-                )
+                //, X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID")
+                //.Editor(
+                //    HQ.Combo().ID("cboColSlsperID")
+                //    .HQProcedure("IN22000_pcSalesPerson")
+                //    .HQColumnShow("SlsperId,Name").ValueField("SlsperId").DisplayField("SlsperId")
+                //    .HQHeightWidth(400, 300).ForceSelection(true)
+                //    .HQParam(new StoreParameterCollection() { 
+                //        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                //        , new StoreParameter("@BranchID", 
+                //            "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.BranchID : Ext.String.empty", 
+                //            ParameterMode.Raw)
+                //    })
+                //    .LoadData()
+                //)
                 
-                , X.Column().Text(Util.GetLang("SalesPerson")).DataIndex("SlsName")
-                .Renderer("Process.renderDescrByCode")
+                //, X.Column().Text(Util.GetLang("SalesPerson")).DataIndex("SlsName")
+                //.Renderer("Process.renderDescrByCode")
                 
-                , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
-                .Editor(
-                    HQ.Combo().ID("cboColCustID")
-                    .HQProcedure("IN22000_pcCustomer")
-                    .HQColumnShow("CustId,CustName").ValueField("CustId").DisplayField("CustId")
-                    .HQHeightWidth(400, 300).ForceSelection(true)
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
-                        , new StoreParameter("@SlsperID", 
-                            "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.SlsperID : Ext.String.empty", 
-                            ParameterMode.Raw)
-                        , new StoreParameter("@BranchID", 
-                            "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.BranchID : Ext.String.empty", 
-                            ParameterMode.Raw)
-                    })
-                    .LoadData()
-                )
+                //, X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
+                //.Editor(
+                //    HQ.Combo().ID("cboColCustID")
+                //    .HQProcedure("IN22000_pcCustomer")
+                //    .HQColumnShow("CustId,CustName").ValueField("CustId").DisplayField("CustId")
+                //    .HQHeightWidth(400, 300).ForceSelection(true)
+                //    .HQParam(new StoreParameterCollection() { 
+                //        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                //        , new StoreParameter("@SlsperID", 
+                //            "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.SlsperID : Ext.String.empty", 
+                //            ParameterMode.Raw)
+                //        , new StoreParameter("@BranchID", 
+                //            "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.BranchID : Ext.String.empty", 
+                //            ParameterMode.Raw)
+                //    })
+                //    .LoadData()
+                //)
                 
-                , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")
-                .Renderer("Process.renderDescrByCode")
+                //, X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")
+                //.Renderer("Process.renderDescrByCode")
 
                 , X.Column().Text(Util.GetLang("PosmCode")).DataIndex("PosmCode")
                 .Editor(
