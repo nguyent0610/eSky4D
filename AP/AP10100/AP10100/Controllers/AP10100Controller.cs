@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -15,6 +15,7 @@ using HQFramework.DAL;
 using HQFramework.Common;
 using HQ.eSkyFramework.HQControl;
 using System.Drawing;
+using System.Globalization;
 using HQ.eSkySys;
 namespace AP10100.Controllers
 {
@@ -31,7 +32,7 @@ namespace AP10100.Controllers
 
 
         private List<AP10100_pgLoadInvoiceMemo_Result> _lstAPTrans = new List<AP10100_pgLoadInvoiceMemo_Result>();
-        private List<AP10100_pgLoadTaxTrans_Result> _lstTax = new List<AP10100_pgLoadTaxTrans_Result>();
+		private List<AP10100_pgLoadTaxTrans_Result> _lstTax = new List<AP10100_pgLoadTaxTrans_Result>();
         private Batch _objBatch;
         private FormCollection _form;
         string _batNbr = "";
@@ -42,8 +43,7 @@ namespace AP10100.Controllers
         private AP10100_pcGetVendor_Result _objVendor = new AP10100_pcGetVendor_Result();
         private JsonResult _logMessage;
         private AP10100_pdHeader_Result _pdHead;
-
-
+		
         public ActionResult Index(string branchID)
         {
             Util.InitRight(_screenNbr);
@@ -97,6 +97,9 @@ namespace AP10100.Controllers
                 _lstAPTrans = dataGrid.ObjectData<AP10100_pgLoadInvoiceMemo_Result>().Where(p => p.TranAmt != 0).ToList();
                 var detHeader = new StoreDataHandler(data["lstHeader"]);
                 _pdHead = detHeader.ObjectData<AP10100_pdHeader_Result>().FirstOrDefault();
+				var detHeader1 = new StoreDataHandler(data["lsttaxdoc"]);
+				_lstTax = detHeader1.ObjectData<AP10100_pgLoadTaxTrans_Result>().ToList();
+				
 
                 _batNbr = data["cboBatNbr"];
                 _refNbr = data["RefNbr"];
@@ -258,18 +261,53 @@ namespace AP10100.Controllers
             objD.DocBal = _pdHead.DocBal;
             objD.OrigDocAmt = _pdHead.OrigDocAmt;
 
-            objD.TaxTot00 = _pdHead.TaxTot00;
-            objD.TxblTot00 = _pdHead.TxblTot00;
-            objD.TaxId00 = _pdHead.TaxId00;
-            objD.TaxTot01 = _pdHead.TaxTot01;
-            objD.TxblTot01 = _pdHead.TxblTot01;
-            objD.TaxId01 = _pdHead.TaxId01;
-            objD.TaxTot02 = _pdHead.TaxTot02;
-            objD.TxblTot02 = _pdHead.TxblTot02;
-            objD.TaxId02 = _pdHead.TaxId02;
-            objD.TaxTot03 = _pdHead.TaxTot03;
-            objD.TxblTot03 = _pdHead.TxblTot03;
-            objD.TaxId03 = _pdHead.TaxId03;
+			try
+			{
+				objD.TaxTot00 = _lstTax.Count > 0 ?  _lstTax[0].TaxAmt:0;//_pdHead.TaxTot00;
+				objD.TxblTot00 = _lstTax.Count > 0 ?  _lstTax[0].TxblAmt:0;//_pdHead.TxblTot00;
+				objD.TaxId00 = _lstTax.Count > 0 ? _lstTax[0].TaxID : "";//_pdHead.TaxId00;
+			}
+			catch { 
+				objD.TaxTot00 = 0;
+				objD.TxblTot00 = 0;
+				objD.TaxId00 = "";
+			}
+			try
+			{
+				objD.TaxTot01 = _lstTax.Count > 1 ? _lstTax[1].TaxAmt:0;//_pdHead.TaxTot01;
+				objD.TxblTot01 = _lstTax.Count > 1 ?  _lstTax[1].TxblAmt:0;//_pdHead.TxblTot01;
+				objD.TaxId01 = _lstTax.Count > 1 ?  _lstTax[1].TaxID:"";//_pdHead.TaxId01;
+			}
+			catch
+			{
+				objD.TaxTot01 = 0;
+				objD.TxblTot01 = 0;
+				objD.TaxId01 = "";
+			}
+			try
+			{
+				objD.TaxTot02 = _lstTax.Count > 2 ?  _lstTax[2].TaxAmt:0;//_pdHead.TaxTot02;
+				objD.TxblTot02 = _lstTax.Count > 2 ? _lstTax[2].TxblAmt:0;//_pdHead.TxblTot02;
+				objD.TaxId02 = _lstTax.Count > 2 ? _lstTax[2].TaxID : "";//_pdHead.TaxId02;
+			}
+			catch
+			{
+				objD.TaxTot02 = 0;
+				objD.TxblTot02 = 0;
+				objD.TaxId02 = "";
+			}
+			try
+			{
+				objD.TaxTot03 = _lstTax.Count > 2 ? 0 : _lstTax[2].TaxAmt; //_pdHead.TaxTot03;
+				objD.TxblTot03 = _lstTax.Count > 2 ? 0 : _lstTax[2].TxblAmt;//_pdHead.TxblTot03;
+				objD.TaxId03 = _lstTax.Count > 2 ? "" : _lstTax[2].TaxID;// _pdHead.TaxId03;
+			}
+			catch
+			{
+				objD.TaxTot03 = 0;
+				objD.TxblTot03 = 0;
+				objD.TaxId03 = "";
+			}
 
             //objD.CustId = this.cboCustId.SelectedItem == null ? "" : (this.cboCustId.SelectedItem as ppv_CustomerActive_Result).CustID;
             objD.DocDesc = _pdHead.DocDesc;
@@ -311,6 +349,7 @@ namespace AP10100.Controllers
                     obj.BranchID = objD.BranchID;
                     obj.BatNbr = objD.BatNbr;
                     obj.RefNbr = objD.RefNbr;
+					obj.JrnlType = "AP";
 
                     obj.Crtd_DateTime = DateTime.Now;
                     obj.Crtd_Prog = _screenNbr;
@@ -334,7 +373,7 @@ namespace AP10100.Controllers
             objAP_Trans.InvcNote = _pdHead.InvcNote;
             objAP_Trans.InvtID = objr.InvtID;
             objAP_Trans.InvcDate = _pdHead.InvcDate;
-            objAP_Trans.JrnlType = objr.JrnlType;
+            //objAP_Trans.JrnlType = objr.JrnlType;
             objAP_Trans.LineType = objr.LineType;
             objAP_Trans.POLineRef = objr.POLineRef;
             objAP_Trans.PONbr = objr.PONbr;
@@ -561,5 +600,330 @@ namespace AP10100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
+
+		[HttpPost]
+		public ActionResult Import(FormCollection data)
+		{
+			try
+			{
+				FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
+				HttpPostedFile file = fileUploadField.PostedFile;
+				FileInfo fileInfo = new FileInfo(file.FileName);
+				List<AP_Doc> lstAP_Doc = new List<AP_Doc>();
+
+				string message = string.Empty;
+				string errorDocType = string.Empty;
+				string errorCustID = string.Empty;
+				string errorCustIDnotExists = string.Empty;
+				string errorDocDate = string.Empty;
+				string errorDocDesc = string.Empty;
+				string errorDueDate = string.Empty;
+				string errorTranAmt = string.Empty;
+				string errorTranAmtNotInput = string.Empty;
+				string erorrTranAmtFormat = string.Empty;
+				string errorDocDateFormat = string.Empty;
+				string errorDueDateFormat = string.Empty;
+				string errorDuplicate = string.Empty;
+				string errorDuplicateDB = string.Empty;
+				string errorCloseDate = string.Empty;
+
+				if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
+				{
+					Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+					if (workbook.Worksheets.Count > 0)
+					{
+						Worksheet workSheet = workbook.Worksheets[0];
+
+						string CpnyID = data["txtBranchID"].PassNull();
+						string DocType = string.Empty;
+						string CustID = string.Empty;
+						string InvcNbr = string.Empty;
+						string InvcNote = string.Empty;
+						string DocDate = string.Empty; // Ngay Chung Tu 
+						string DueDate = string.Empty; // Ngay Toi Han
+						string DocDesc = string.Empty; // Dien Giai Chung Tu
+						string TranAmt = string.Empty; // Thanh Tien
+						
+						if (CpnyID != "")
+						{
+							//var lstCustomer = _app.AP10100_pcCustomerActive(CpnyID, Current.UserName, _screenNbr).ToList();
+							//var lstTerms = _app.AP10100_pcterms().ToList();
+							for (int i = 3; i <= workSheet.Cells.MaxDataRow; i++)
+							{
+								//var objCust = new AP10100_pcCustomerActive_Result();
+								bool FlagCheck = false;
+								DocType = workSheet.Cells[i, 0].StringValue.PassNull();
+								CustID = workSheet.Cells[i, 1].StringValue.PassNull();
+								InvcNbr = workSheet.Cells[i, 2].StringValue.PassNull();
+								InvcNote = workSheet.Cells[i, 3].StringValue.PassNull();
+								DocDate = workSheet.Cells[i, 4].StringValue.PassNull();
+								DueDate = workSheet.Cells[i, 5].StringValue.PassNull();
+								DocDesc = workSheet.Cells[i, 6].StringValue.PassNull();
+								TranAmt = workSheet.Cells[i, 7].StringValue.PassNull();
+
+								if (DocType == "" && CustID == ""
+									&& InvcNbr == "" && InvcNote == "" && DocDate == ""
+									&& DocDesc == "" && TranAmt == "")
+								{
+									continue;
+								}
+
+								if (DocType != "AD")
+								{
+									errorDocType += (i + 1).ToString() + ",";
+									FlagCheck = true;
+								}
+								else if (CustID == "")
+								{
+									errorCustID += (i + 1).ToString() + ",";
+									FlagCheck = true;
+								}
+								else if (DocDate == "")
+								{
+									errorDocDate += (i + 1).ToString() + ",";
+									FlagCheck = true;
+								}
+								else if (DueDate == "")
+								{
+									errorDueDate += (i + 1).ToString() + ",";
+									FlagCheck = true;
+								}
+								else if (DocDesc == "")
+								{
+									errorDocDesc += (i + 1).ToString() + ",";
+									FlagCheck = true;
+								}
+								else if (TranAmt == "")
+								{
+									errorTranAmt += (i + 1).ToString() + ",";
+									FlagCheck = true;
+								}
+								//if (CustID != "")
+								//{
+								//	if (lstCustomer.FirstOrDefault(p => p.CustID == CustID) == null)
+								//	{
+								//		errorCustIDnotExists += (i + 1).ToString() + ",";
+								//		FlagCheck = true;
+								//	}
+								//	else
+								//		objCust = lstCustomer.FirstOrDefault(p => p.CustID == CustID);
+								//}
+								if (DocDate != "")
+								{
+									DateTime parsed;
+									bool valid = DateTime.TryParseExact(DocDate, "yyyy/MM/dd",
+																		CultureInfo.InvariantCulture,
+																		DateTimeStyles.None,
+																		out parsed);
+
+									if (valid == false)
+									{
+										errorDocDateFormat += (i + 1).ToString() + ",";
+										FlagCheck = true;
+									}
+									else
+									{
+										
+										if (_app.AP10100_ppCheckCloseDate(CpnyID, parsed.ToDateShort()).FirstOrDefault() == "0")
+											errorCloseDate += (i + 1).ToString() + ",";
+									}
+								}
+								if (DueDate != "")
+								{
+									DateTime parsed;
+									bool valid = DateTime.TryParseExact(DueDate, "yyyy/MM/dd",
+																		CultureInfo.InvariantCulture,
+																		DateTimeStyles.None,
+																		out parsed);
+
+									if (valid == false)
+									{
+										errorDueDateFormat += (i + 1).ToString() + ",";
+										FlagCheck = true;
+									}
+									//else
+									//{
+
+									//	if (_app.AP10100_ppCheckCloseDate(CpnyID, parsed.ToDateShort()).FirstOrDefault() == "0")
+									//		errorCloseDate += (i + 1).ToString() + ",";
+									//}
+								}
+								if (TranAmt != "")
+								{
+									float n;
+									bool isNumeric = float.TryParse(TranAmt, out n);
+									if (isNumeric == true)
+									{
+										if (n == 0 || n < 0)
+										{
+											errorTranAmtNotInput += (i + 1).ToString() + ",";
+											FlagCheck = true;
+										}
+									}
+									else
+									{
+										erorrTranAmtFormat += (i + 1).ToString() + ",";
+										FlagCheck = true;
+									}
+								}
+
+								if (FlagCheck == true)
+								{
+									continue;
+								}
+
+								//Luu thanh tien TranAmt vao TotAmt, OrigDocAmt, DocBal, TxblTot00
+								//Han Thanh Toan lay field Terms o AP_Customer
+								//Ngay Chiet Khau  lay Ngay Chung Tu
+								//DiscDate = DocDate
+								//DueDate = DocDate + Terms.DueIntrv
+								var tmpBatNbr = "";
+								var tmpRefNbr = "";
+								string[] strDocDate = DocDate.Split('/');
+								DateTime tmpDocDate = new DateTime(int.Parse(strDocDate[0]), int.Parse(strDocDate[1]), int.Parse(strDocDate[2]));
+
+								#region Save Batch
+								var objBatch = new Batch();
+								objBatch.ResetET();
+								objBatch.BatNbr = _app.APNumbering(CpnyID, "BatNbr").FirstOrDefault();
+								tmpBatNbr = objBatch.BatNbr;
+
+								objBatch.RefNbr = _app.APNumbering(CpnyID, "RefNbr").FirstOrDefault();
+								tmpRefNbr = objBatch.RefNbr;
+
+								objBatch.BranchID = CpnyID;
+								objBatch.Module = "AP";
+								objBatch.EditScrnNbr = "AP10100";
+								objBatch.JrnlType = "AP";
+								objBatch.OrigBranchID = "";
+								objBatch.TotAmt = Convert.ToDouble(TranAmt);
+								objBatch.DateEnt = tmpDocDate;
+								objBatch.Status = "H";
+								objBatch.Crtd_DateTime = DateTime.Now;
+								objBatch.Crtd_Prog = _screenNbr;
+								objBatch.Crtd_User = Current.UserName;
+								objBatch.LUpd_DateTime = DateTime.Now;
+								objBatch.LUpd_Prog = _screenNbr;
+								objBatch.LUpd_User = Current.UserName;
+
+								if (objBatch.BatNbr != "" && objBatch.BranchID != "" && objBatch.Module != "")
+									_app.Batches.AddObject(objBatch);
+
+								#endregion
+
+								#region Save Doc
+								var objAP_Doc = new AP_Doc();
+								objAP_Doc.ResetET();
+								objAP_Doc.BranchID = CpnyID;
+								objAP_Doc.BatNbr = tmpBatNbr;
+								objAP_Doc.RefNbr = tmpRefNbr;
+								objAP_Doc.Crtd_DateTime = DateTime.Now;
+								objAP_Doc.Crtd_Prog = _screenNbr;
+								objAP_Doc.Crtd_User = Current.UserName;
+								objAP_Doc.LUpd_DateTime = DateTime.Now;
+								objAP_Doc.LUpd_Prog = _screenNbr;
+								objAP_Doc.LUpd_User = Current.UserName;
+
+								objAP_Doc.DocType = DocType;
+								objAP_Doc.DiscDate = tmpDocDate;
+								objAP_Doc.DocBal = Convert.ToDouble(TranAmt);
+								objAP_Doc.DocDate = tmpDocDate;
+								objAP_Doc.DocDesc = DocDesc;
+
+							//	objAP_Doc.DueDate = tmpDocDate.AddDays(lstTerms.FirstOrDefault(p => p.TermsID == objCust.Terms).DueIntrv);
+
+								//objAP_Doc.SlsperId = "";
+								//objAP_Doc.CustId = CustID;
+								objAP_Doc.TxblTot00 = Convert.ToDouble(TranAmt);
+								objAP_Doc.OrigDocAmt = Convert.ToDouble(TranAmt);
+								objAP_Doc.TaxTot00 = 0;
+								objAP_Doc.InvcNbr = InvcNbr;
+								objAP_Doc.InvcNote = InvcNote;
+								//objAP_Doc.Terms = objCust.Terms;
+
+								if (objAP_Doc.BatNbr != "" && objAP_Doc.BranchID != "" && objAP_Doc.RefNbr != "")
+									_app.AP_Doc.AddObject(objAP_Doc);
+								#endregion
+
+								#region Save Trans
+								var objGrid = new AP_Trans();
+								objGrid.ResetET();
+								objGrid.BranchID = CpnyID;
+								objGrid.BatNbr = tmpBatNbr;
+								objGrid.RefNbr = tmpRefNbr;
+								objGrid.LineRef = "00001";
+								objGrid.Crtd_DateTime = DateTime.Now;
+								objGrid.Crtd_Prog = _screenNbr;
+								objGrid.Crtd_User = Current.UserName;
+								objGrid.LUpd_DateTime = DateTime.Now;
+								objGrid.LUpd_Prog = _screenNbr;
+								objGrid.LUpd_User = Current.UserName;
+
+								objGrid.LineType = "N";
+								objGrid.JrnlType = "AP";
+								objGrid.InvcNbr = InvcNbr;
+								objGrid.InvcNote = InvcNote;
+								//objGrid.InvtId = "";
+								objGrid.Qty = 0;
+								objGrid.TaxAmt00 = 0;
+								objGrid.TaxAmt01 = 0;
+								objGrid.TaxAmt02 = 0;
+								objGrid.TaxAmt03 = 0;
+								objGrid.TaxCat = "";
+								objGrid.TaxId00 = "";
+								objGrid.TaxId01 = "";
+								objGrid.TaxId02 = "";
+								objGrid.TaxId03 = "";
+								objGrid.TranAmt = Convert.ToDouble(TranAmt);
+								objGrid.TranDate = tmpDocDate.ToDateShort();
+								//objGrid.TranDesc = CustID + " - " + objCust.Name;
+								objGrid.TranType = DocType;
+								objGrid.TxblAmt00 = Convert.ToDouble(TranAmt);
+								objGrid.TxblAmt01 = 0;
+								objGrid.TxblAmt02 = 0;
+								objGrid.TxblAmt03 = 0;
+								objGrid.UnitPrice = 0;
+
+								if (objGrid.BatNbr != "" && objGrid.BranchID != "" && objGrid.RefNbr != "" && objGrid.LineRef != "")
+									_app.AP_Trans.AddObject(objGrid);
+								#endregion
+							}
+
+							message = errorCloseDate == "" ? "" : string.Format("Dòng: {0} ngày chứng từ không nằm trong phạm vi cho phép nhập liệu của bạn</br>", errorCloseDate);
+							message += errorDocType == "" ? "" : string.Format("{0} dòng: {1} không thuộc loại Phiếu Báo Nợ(DM) </br>", "Loại Chứng Từ", errorDocType);
+							message += errorCustID == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Mã KH", errorCustID);
+							message += errorCustIDnotExists == "" ? "" : string.Format("{0} dòng: {1} không tồn tại</br>", "Mã KH", errorCustIDnotExists);
+							message += errorDocDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Chứng Từ", errorDocDate);
+							message += errorDueDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Tới Hạn", errorDueDate);
+							
+							message += errorDocDesc == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Diễn Giải Chứng Từ", errorDocDesc);
+							message += errorTranAmt == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Thành Tiền", errorTranAmt);
+							message += errorTranAmtNotInput == "" ? "" : string.Format("{0} dòng: {1} thành tiền phải lớn hơn 0</br>", "Thành Tiền", errorTranAmtNotInput);
+							message += erorrTranAmtFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng kiểu số</br>", "Thành Tiền", erorrTranAmtFormat);
+							message += errorDocDateFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng (yyyy/MM/dd)</br>", "Ngày Chứng Từ", errorDocDateFormat);
+							message += errorDueDateFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng (yyyy/MM/dd)</br>", "Ngày Tới Hạn", errorDocDateFormat);
+
+
+							if (message == "" || message == string.Empty)
+							{
+								_app.SaveChanges();
+							}
+							Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
+						}
+					}
+					return _logMessage;
+				}
+				else
+				{
+					Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
+				}
+			}
+			catch (Exception ex)
+			{
+				if (ex is MessageException) return (ex as MessageException).ToMessage();
+				return Json(new { success = false, messid = 9991, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+			}
+			return _logMessage;
+		}
     }
 }

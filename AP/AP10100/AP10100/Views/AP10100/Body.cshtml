@@ -17,7 +17,16 @@
         .BodyPadding(0) 
         .TrackResetOnLoad(true)
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar("Print", true, ""))
+        .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("Import")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";              
+            })
+        },"Print", true, ""))
         .Layout(LayoutType.Border)
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Listeners(l=>{

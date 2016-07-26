@@ -443,6 +443,33 @@ function calcTaxTotal() {
     App.grdTaxDoc.getView().refresh(false);
 
 };
+
+
+var btnImport_Click = function () {
+    App.frmMain.submit({
+        waitMsg: "Importing....",
+        url: 'AP10100/Import',
+        timeout: 18000000,
+        clientValidation: false,
+        method: 'POST',
+        params: {
+        },
+        success: function (msg, data) {
+            App.cboBatNbr.store.reload();
+            if (!Ext.isEmpty(this.result.data.message)) {
+                HQ.message.show('2013103001', [this.result.data.message], '', true);
+            }
+            else {
+                HQ.message.process(msg, data, true);
+            }
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
+};
+
+
 function calcDet() {
     if (App.cboStatus.getValue() != 'H') return;
     //if (App.OrderType.getValue() == null) return;
@@ -831,7 +858,8 @@ var save = function Save() {
             url: 'AP10100/Save',
             params: {
                 lstHeader: Ext.encode(App.stoAP10100_pdHeader.getRecordsValues()),
-                lstgrd: Ext.encode(App.stoAP_Trans.getRecordsValues())
+                lstgrd: Ext.encode(App.stoAP_Trans.getRecordsValues()),
+                lsttaxdoc: Ext.encode(App.stoAP10100_LoadTaxDoc.getRecordsValues()),
             },
             success: function (msg, data) {
                 var batNbr = '';
