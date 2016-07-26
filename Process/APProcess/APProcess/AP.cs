@@ -13,13 +13,13 @@ using System.Threading;
 using System.Transactions;
 using HQFramework.DAL;
 using eBiz4DApp;
-using log4net;
+//using log4net;
 using HQ.eSkyFramework;
 namespace APProcess
 {
     public class AP
     {
-        private static readonly ILog mLogger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+     //   private static readonly ILog mLogger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public string Prog { get; set; }
         public string User { get; set; }
         public DataAccess Dal { get; set; }
@@ -668,13 +668,14 @@ namespace APProcess
             }
         }
 
-        public bool AP10400_Cancel( string BatNbr, string BranchID)
+		public bool AP10400_Cancel(string BatNbr, string BranchID)
         {
             IList<clsAP_Adjust> dtAP_A = new List<clsAP_Adjust>();
             clsAP_Adjust objAP_Adjust = new clsAP_Adjust(Dal);
             try
             {
                
+
                 //Update Batch
                 clsBatch objBatch = new clsBatch(Dal);
                 //var objBatch = dal.Batches.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AP").ToList().FirstOrDefault();
