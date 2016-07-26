@@ -632,6 +632,9 @@ namespace APProcess
                 //var objBatch = dal.Batches.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AP").ToList().FirstOrDefault();
                 objBatch.Status = "C";
                 objBatch.Rlsed = 1;
+				objBatch.LUpd_DateTime = DateTime.Now;
+				objBatch.LUpd_Prog = "AP10400";
+				objBatch.LUpd_User = Current.UserName;
                 objBatch.Update();
 
                 //Update AP_Doc     
