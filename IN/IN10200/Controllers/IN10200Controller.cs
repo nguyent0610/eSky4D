@@ -539,6 +539,10 @@ namespace IN10200.Controllers
                                 {
                                     lstImport.Add(InvtID + "\t" + Unit + "\t" + Qty);
                                 }
+                                else
+                                {
+                                    lstImport.Add("@@"+ "\t" + Unit + "\t" + Qty);
+                                }
                             }
                         }                       
                     }
@@ -565,142 +569,159 @@ namespace IN10200.Controllers
                 {
                     i++;
                     var obj = item.Split('\t');
-                    if(obj[0].PassNull() != "" && obj[1].PassNull()!="" && obj[2].PassNull()!="")
+                    if(obj[0].PassNull() == "" && obj[1].PassNull() == "" && obj[2].PassNull() == "")
                     {
-                        double qty = 0;
-                        if (double.TryParse(obj[2], out qty))
+                        continue;
+                    }
+
+                    if (obj[0].PassNull() == "@@")
+                    {
+                        message += string.Format("Dòng {0} thiếu mã sản phẩm<br/>", i + 1);
+                        continue;
+                    }
+                    if (obj[1].PassNull() == "")
+                    {
+                        message += string.Format("Dòng {0} mặt hàng {1} không có đơn vị<br/>", i + 1, obj[0].PassNull());
+                        continue;
+                    }
+                    if (obj[2].PassNull() == "")
+                    {
+                        message += string.Format("Dòng {0} mặt hàng {1} không có số lượng<br/>", i + 1, obj[0].PassNull());
+                        continue;
+                    }
+                    double qty = 0;
+                    if (double.TryParse(obj[2], out qty))
+                    {
+                        string invtID = obj[0];
+                        var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                        if (objInvt != null)
                         {
-                            string invtID = obj[0];
-                            var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-                            if (objInvt != null)
+                            var uom = SetUOM(objInvt.InvtID, objInvt.ClassID, objInvt.StkUnit, obj[1]);
+                            if (uom != null)
                             {
-                                var uom = SetUOM(objInvt.InvtID, objInvt.ClassID, objInvt.StkUnit, obj[1]);
-                                if (uom != null)
+                                var newTran = new IN_Trans();
+                                newTran.CnvFact = uom.CnvFact;
+                                newTran.InvtID = objInvt.InvtID;
+                                newTran.Qty = qty;
+                                newTran.UnitDesc = obj[1];
+                                newTran.UnitMultDiv = uom.MultDiv;
+                                newTran.LineRef = LastLineRef(line);
+                                newTran.SiteID = siteID;
+                                newTran.TranDesc = objInvt.Descr;
+                                if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
                                 {
-                                    var newTran = new IN_Trans();
-                                    newTran.CnvFact = uom.CnvFact;
-                                    newTran.InvtID = objInvt.InvtID;
-                                    newTran.Qty = qty;
-                                    newTran.UnitDesc = obj[1];
-                                    newTran.UnitMultDiv = uom.MultDiv;
-                                    newTran.LineRef = LastLineRef(line);
-                                    newTran.SiteID = siteID;
-                                    newTran.TranDesc = objInvt.Descr;
-                                    if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
+                                    var itemSite = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == siteID && p.InvtID == objInvt.InvtID);
+                                    if (itemSite != null)
                                     {
-                                        var itemSite = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == siteID && p.InvtID == objInvt.InvtID);
-                                        if (itemSite != null)
-                                        {
-                                            newTran.UnitPrice = Math.Round(newTran.UnitMultDiv == "M" ? itemSite.AvgCost * newTran.CnvFact : itemSite.AvgCost / newTran.CnvFact, 0);
-                                        }
+                                        newTran.UnitPrice = Math.Round(newTran.UnitMultDiv == "M" ? itemSite.AvgCost * newTran.CnvFact : itemSite.AvgCost / newTran.CnvFact, 0);
                                     }
-                                    newTran.TranAmt = newTran.ExtCost = newTran.UnitPrice * newTran.Qty;
-                                    if (objInvt.LotSerTrack == "L")
+                                }
+                                newTran.TranAmt = newTran.ExtCost = newTran.UnitPrice * newTran.Qty;
+                                if (objInvt.LotSerTrack == "L")
+                                {
+                                    double needQty = Math.Round(newTran.UnitMultDiv == "M" ? newTran.Qty * newTran.CnvFact : newTran.Qty / newTran.CnvFact, 0);
+
+                                    List<IN_ItemLot> lstLotDB = _app.IN_ItemLot.Where(p => p.SiteID == siteID && p.InvtID == objInvt.InvtID && p.QtyAvail > 0).OrderBy(p => p.ExpDate).ThenBy(p => p.LotSerNbr).ToList();
+
+                                    foreach (var itemLot in lstLotDB)
                                     {
-                                        double needQty = Math.Round(newTran.UnitMultDiv == "M" ? newTran.Qty * newTran.CnvFact : newTran.Qty / newTran.CnvFact, 0);
-
-                                        List<IN_ItemLot> lstLotDB = _app.IN_ItemLot.Where(p => p.SiteID == siteID && p.InvtID == objInvt.InvtID && p.QtyAvail > 0).OrderBy(p => p.ExpDate).ThenBy(p => p.LotSerNbr).ToList();
-
-                                        foreach (var itemLot in lstLotDB)
+                                        double newQty = 0;
+                                        if (itemLot.QtyAvail >= needQty)
                                         {
-                                            double newQty = 0;
-                                            if (itemLot.QtyAvail >= needQty)
-                                            {
-                                                newQty = needQty;
-                                                needQty = 0;
-                                            }
-                                            else
-                                            {
-                                                newQty = itemLot.QtyAvail;
-                                                needQty -= itemLot.QtyAvail;
-                                            }
-
-                                            if (newQty != 0)
-                                            {
-                                                var newLot = new IN_LotTrans();
-                                                newLot.LotSerNbr = itemLot.LotSerNbr;
-                                                newLot.ExpDate = itemLot.ExpDate;
-                                                newLot.WarrantyDate = DateTime.Now;
-                                                newLot.INTranLineRef = LastLineRef(line);
-                                                newLot.SiteID = newTran.SiteID;
-                                                newLot.InvtID = newTran.InvtID;
-                                                newLot.InvtMult = -1;
-                                              
-                                                if ((newTran.UnitMultDiv == "M" ? newQty / newTran.CnvFact : newQty * newTran.CnvFact) % 1 > 0)
-                                                {
-                                                    newLot.CnvFact = 1;
-                                                    newLot.UnitMultDiv = "M";
-                                                    newLot.Qty = newQty;
-                                                    newLot.UnitDesc = objInvt.StkUnit;
-
-                                                    if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
-                                                    {
-                                                        newLot.UnitPrice = newLot.UnitCost = Math.Round(newTran.UnitMultDiv == "M" ? newTran.UnitPrice / newTran.CnvFact : newTran.UnitPrice * newTran.CnvFact,0);
-                                                    }
-                                                    else
-                                                    {
-                                                        newLot.UnitPrice = newLot.UnitCost = 0;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    newLot.Qty = Math.Round(newTran.UnitMultDiv == "M" ? newQty / newTran.CnvFact : newQty * newTran.CnvFact,0);
-                                                    newLot.CnvFact = newTran.CnvFact;
-                                                    newLot.UnitMultDiv = newTran.UnitMultDiv;
-                                                    newLot.UnitPrice = newTran.UnitPrice;
-                                                    newLot.UnitCost = newTran.UnitPrice;
-                                                    newLot.UnitDesc = newTran.UnitDesc;
-                                                }
-
-
-                                                lstLot.Add(newLot);
-                                            }
-
-                                            if (needQty == 0) break;
-                                        }
-
-                                        if (needQty != 0)
-                                        {
-                                            message += string.Format("Dòng {0} mặt hàng {1} không đủ số lượng LOT để xuất<br/>", i, obj[0]);
+                                            newQty = needQty;
+                                            needQty = 0;
                                         }
                                         else
                                         {
-                                            lstTrans.Add(newTran);
-                                            line++;
+                                            newQty = itemLot.QtyAvail;
+                                            needQty -= itemLot.QtyAvail;
                                         }
+
+                                        if (newQty != 0)
+                                        {
+                                            var newLot = new IN_LotTrans();
+                                            newLot.LotSerNbr = itemLot.LotSerNbr;
+                                            newLot.ExpDate = itemLot.ExpDate;
+                                            newLot.WarrantyDate = DateTime.Now;
+                                            newLot.INTranLineRef = LastLineRef(line);
+                                            newLot.SiteID = newTran.SiteID;
+                                            newLot.InvtID = newTran.InvtID;
+                                            newLot.InvtMult = -1;
+                                              
+                                            if ((newTran.UnitMultDiv == "M" ? newQty / newTran.CnvFact : newQty * newTran.CnvFact) % 1 > 0)
+                                            {
+                                                newLot.CnvFact = 1;
+                                                newLot.UnitMultDiv = "M";
+                                                newLot.Qty = newQty;
+                                                newLot.UnitDesc = objInvt.StkUnit;
+
+                                                if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
+                                                {
+                                                    newLot.UnitPrice = newLot.UnitCost = Math.Round(newTran.UnitMultDiv == "M" ? newTran.UnitPrice / newTran.CnvFact : newTran.UnitPrice * newTran.CnvFact,0);
+                                                }
+                                                else
+                                                {
+                                                    newLot.UnitPrice = newLot.UnitCost = 0;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                newLot.Qty = Math.Round(newTran.UnitMultDiv == "M" ? newQty / newTran.CnvFact : newQty * newTran.CnvFact,0);
+                                                newLot.CnvFact = newTran.CnvFact;
+                                                newLot.UnitMultDiv = newTran.UnitMultDiv;
+                                                newLot.UnitPrice = newTran.UnitPrice;
+                                                newLot.UnitCost = newTran.UnitPrice;
+                                                newLot.UnitDesc = newTran.UnitDesc;
+                                            }
+
+
+                                            lstLot.Add(newLot);
+                                        }
+
+                                        if (needQty == 0) break;
+                                    }
+
+                                    if (needQty != 0)
+                                    {
+                                        message += string.Format("Dòng {0} mặt hàng {1} không đủ số lượng LOT để xuất<br/>", i + 1, obj[0]);
                                     }
                                     else
                                     {
-
                                         lstTrans.Add(newTran);
                                         line++;
-
                                     }
                                 }
                                 else
                                 {
-                                    message += string.Format("Dòng {0} mặt hàng {1} đơn vị quy đổi {2} không đúng<br/>", i, obj[0], obj[1]);
+
+                                    lstTrans.Add(newTran);
+                                    line++;
+
                                 }
                             }
                             else
                             {
-                                message += string.Format("Dòng {0} mặt hàng {1} không tồn tại<br/>", i, obj[0]);
+                                message += string.Format("Dòng {0} mặt hàng {1} đơn vị quy đổi {2} không đúng<br/>", i + 1, obj[0], obj[1]);
                             }
                         }
                         else
                         {
-                            if (obj[0].PassNull() == "")
-                                message += string.Format("Dòng {0} thiếu Mã Sản Phẩm<br/>", i);
-                            if (obj[1].PassNull() == "")
-                                message += string.Format("Dòng {0} thiếu Đơn Vị<br/>", i);
-                            if (obj[2].PassNull() == "")
-                                message += string.Format("Dòng {0} thiếu Số Lượng<br/>", i);
+                            message += string.Format("Dòng {0} mặt hàng {1} không tồn tại<br/>", i + 1, obj[0]);
                         }
                     }
                     else
                     {
-                        //message += string.Format("Dòng {0} không đúng định dạng<br/>", i);
+                        if (obj[0].PassNull() == "")
+                            message += string.Format("Dòng {0} thiếu Mã Sản Phẩm<br/>", i + 1);
+                        if (obj[1].PassNull() == "")
+                            message += string.Format("Dòng {0} thiếu Đơn Vị<br/>", i + 1);
+                        if (obj[2].PassNull() == "")
+                            message += string.Format("Dòng {0} thiếu Số Lượng<br/>", i + 1);
+                        else
+                            message += string.Format("Dòng {0}  Số Lượng không đúng định dạng<br/>", i + 1);
+
                     }
+                    
                 }
                 Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans, lstLot });
                 return _logMessage;
