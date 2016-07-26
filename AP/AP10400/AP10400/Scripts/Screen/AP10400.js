@@ -435,9 +435,10 @@ var stoDetail_Load = function (sto) {
          //   HQ.store.insertBlank(sto, keysTab_2);
         }
         HQ.isFirstLoad = false; //sto load cuoi se su dung
+        
     }
     frmChange();
-    if(HQ.isChange)
+   // if(HQ.isChange)
     total();
     if (_isLoadMaster) {
         HQ.common.showBusy(false);
@@ -478,14 +479,30 @@ var save = function () {
         HQ.message.show(1000, HQ.common.getLang('pnlDetail'), '');
         return false;
     }
-    //else {
-    //    App.stoDetail.each(function (record) {
-    //        if (record.data.Payment == 0) {
-    //            HQ.message.show(1000, HQ.common.getLang('Payment'), '');
-    //            return;
-    //        }
-    //    });//
-    //}
+    else {
+        var store = App.stoDetail;
+        var allRecords = store.snapshot || store.allData || store.data;
+        var totalOrigDocBal = 0;
+        var totaDocBal = 0;
+        var totalPayment = 0;
+        allRecords.each(function (record) {
+            if (record.data.Selected) {
+                if (record.data.OrigDocBal) {
+                    totalOrigDocBal += record.data.OrigDocBal;
+                }
+                if (record.data.DocBal) {
+                    totaDocBal += record.data.DocBal;
+                }
+                if (record.data.Payment) {
+                    totalPayment += record.data.Payment;
+                }
+            }
+        });
+        
+        App.txtPaid.setValue(totalPayment);
+        App.txtOrigDocAmt.setValue(totalOrigDocBal);
+        App.txtUnTotPayment.setValue(totaDocBal);
+    }
     if (App.frmMain.isValid() && App.stoDetail.data.length>0) {
         App.frmMain.updateRecord();
         App.frmMain.submit({
@@ -499,7 +516,7 @@ var save = function () {
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 BatNbr = data.result.BatNbr;
-                HQ.isChange = false;
+               
                 HQ.isFirstLoad = true;
                 App.cboHandle.setValue('');
                 App.cboBatNbr.getStore().load({
@@ -518,6 +535,8 @@ var save = function () {
                         }
                     }
                 });
+                //total();
+                HQ.isChange = false;
                 HQ.common.changeData(HQ.isChange, 'AP10400');
             },
             failure: function (msg, data) {

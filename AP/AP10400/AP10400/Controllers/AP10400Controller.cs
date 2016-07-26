@@ -120,37 +120,7 @@ namespace AP10400.Controllers
                 var headerBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AP" && p.EditScrnNbr == "AP10400");
                 var headerDoc = _db.AP_Doc.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr);
 
-				if ((_status == "U" || _status == "C") && (_handle == "C" || _handle == "V"))
-				{
-
-					if (_handle == "V" || _handle == "C")
-					{
-						if ((_handle == "V" || _handle == "C") && !acc.Release)
-						{
-							throw new MessageException(MessageType.Message, "725");
-						}
-						else
-						{
-							if (_handle == "V" || _handle == "C")
-							{
-								Data_Release();
-							}
-						}
-					}
-				}
-				else if (_status == "H")
-				{
-					if (_handle == "R" && !acc.Release)
-					{
-						throw new MessageException(MessageType.Message, "737");
-					}
-					else
-					{
-						//Save_Batch();
-					//	_app.SaveChanges();
-						Data_Release();
-					}
-				}
+			
                 if (headerBatch != null)
                 {
                     if (headerBatch.tstamp.ToHex() == curHeader.tstamp.ToHex())
@@ -390,9 +360,13 @@ namespace AP10400.Controllers
 				{
 					justUpdateBatNbr.TotAmt = Convert.ToDouble(toAmt);
 					justUpdateBatNbr.ReasonCD = ReasonCD;
-					_db.SaveChanges();
+					//_db.SaveChanges();
 				}
 
+
+                #endregion
+
+                _db.SaveChanges();
 				if (Handle == "R")
 				{
 					var recordBatNbrUpdate = _db.Batches.Where(p => p.BranchID == BranchID && p.Module == "AP" && p.EditScrnNbr == "AP10400" && p.BatNbr == BatNbr).FirstOrDefault();
@@ -402,9 +376,38 @@ namespace AP10400.Controllers
 					recordRefNbrUpdate.Rlsed = 1;
 					//tmpcatchHandle = "1";
 				}
-                #endregion
+				if ((_status == "U" || _status == "C") && (_handle == "C" || _handle == "V"))
+				{
 
-                _db.SaveChanges();
+					if (_handle == "V" || _handle == "C")
+					{
+						if ((_handle == "V" || _handle == "C") && !acc.Release)
+						{
+							throw new MessageException(MessageType.Message, "725");
+						}
+						else
+						{
+							if (_handle == "V" || _handle == "C")
+							{
+								Data_Release();
+							}
+						}
+					}
+				}
+				else if (_status == "H")
+				{
+					if (_handle == "R" && !acc.Release)
+					{
+						throw new MessageException(MessageType.Message, "737");
+					}
+					else
+					{
+						//Save_Batch();
+						//	_app.SaveChanges();
+						Data_Release();
+					}
+				}
+				_db.SaveChanges();
                 return Json(new { success = true, BatNbr = BatNbr });
             }
             catch (Exception ex)
