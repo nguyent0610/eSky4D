@@ -811,28 +811,36 @@ function calcTaxTotal() {
     App.grdTaxDoc.getView().refresh(false);
 };
 
-var btnImport_Click = function () {
-    App.frmMain.submit({
-        waitMsg: "Importing....",
-        url: 'AR10100/Import',
-        timeout: 18000000,
-        clientValidation: false,
-        method: 'POST',
-        params: {
-        },
-        success: function (msg, data) {
-            App.cboBatNbr.store.reload();
-            if (!Ext.isEmpty(this.result.data.message)) {
-                HQ.message.show('2013103001', [this.result.data.message], '', true);
-            }
-            else {
+var btnImport_Click = function (sender,e) {
+    var fileName = sender.getValue();
+    var ext = fileName.split(".").pop().toLowerCase();
+    if (ext == "xls" || ext == "xlsx") {
+        App.frmMain.submit({
+            waitMsg: "Importing....",
+            url: 'AR10100/Import',
+            timeout: 18000000,
+            clientValidation: false,
+            method: 'POST',
+            params: {
+            },
+            success: function (msg, data) {
+                App.cboBatNbr.store.reload();
+                if (!Ext.isEmpty(this.result.data.message)) {
+                    HQ.message.show('2013103001', [this.result.data.message], '', true);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+            },
+            failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
             }
-        },
-        failure: function (msg, data) {
-            HQ.message.process(msg, data, true);
-        }
-    });
+        });
+    }
+    else {
+        alert("Please choose a Media! (.xls, .xlsx)");
+        sender.reset();
+    }
 };
 
 var btnPopupOk_Click = function () {
