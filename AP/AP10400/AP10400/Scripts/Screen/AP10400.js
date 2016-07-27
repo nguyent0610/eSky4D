@@ -394,6 +394,7 @@ var stoLoad = function (sto) {
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboBatNbr.focus(true);//focus ma khi tao moi
         sto.commitChanges();
+       // total();
 
     }
     // App.cboDateType.setValue('0');//.SelectedItems(new Ext.Net.ListItem { Index = 0})
@@ -606,7 +607,8 @@ var total = function () {
     });
     // App.txtCuryCrTot.setValue(totalAmt);
     App.txtPaid.setValue(totalPayment);
-   App.txtOrigDocAmt.setValue(totalOrigDocBal);
+   // App.txtOrigDocAmt.setValue(totalOrigDocBal);
+    App.txtOrigDocAmt.setValue(totaDocBal + totalPayment);
     App.txtUnTotPayment.setValue(totaDocBal);
    // App.txtCuryDocBal.setValue(totalAmt);
 };

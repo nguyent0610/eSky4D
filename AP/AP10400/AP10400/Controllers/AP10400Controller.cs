@@ -119,21 +119,21 @@ namespace AP10400.Controllers
                 #region Save Header
                 var headerBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AP" && p.EditScrnNbr == "AP10400");
                 var headerDoc = _db.AP_Doc.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr);
-
-			
                 if (headerBatch != null)
                 {
                     if (headerBatch.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
                         headerBatch.IntRefNbr = curHeader.IntRefNbr;
-                        headerBatch.ReasonCD = curHeader.ReasonCD;
+						//headerBatch.ReasonCD = curHeader.ReasonCD;
 						headerBatch.Descr = data["txtDocDescr"].PassNull();//curHeader.Descr;
-                        headerBatch.TotAmt = Convert.ToDouble(curHeader.TotAmt);
-						//if (Handle == "R")
-						//{
-						//	headerBatch.Rlsed = 1;
-						//	headerBatch.Status = "C";
-						//}
+                       // headerBatch.TotAmt = Convert.ToDouble(curHeader.TotAmt);
+						headerBatch.TotAmt = Convert.ToDouble(toAmt);
+						headerBatch.ReasonCD = ReasonCD;
+						if (Handle == "R")
+						{
+							headerBatch.Rlsed = 1;
+							headerBatch.Status = "C";
+						}
                         UpdatingFormBotAP_Doc(ref headerDoc, curHeader, Handle);
                     }
                     else
@@ -154,12 +154,12 @@ namespace AP10400.Controllers
                     headerBatch.TotAmt = curHeader.TotAmt;
                     headerBatch.DateEnt = curHeader.DocDate;
                     headerBatch.OrigBranchID = "";
-					//if (Handle == "R")
-					//{
-					//	headerBatch.Rlsed = 1;
-					//	headerBatch.Status = "C";
-					//}
-					//else 
+					if (Handle == "R")
+					{
+						headerBatch.Rlsed = 1;
+						headerBatch.Status = "C";
+					}
+					else 
 					if (Handle == "N" || Handle == "")
 					{
 						headerBatch.Rlsed = 0;
@@ -197,6 +197,7 @@ namespace AP10400.Controllers
 
                     BatNbr = headerBatch.BatNbr;
                     RefNbr = headerBatch.RefNbr;
+
                 }
                 #endregion
 
@@ -351,31 +352,32 @@ namespace AP10400.Controllers
 				//	}
 				//}
 
-				
+				#endregion
 
 				//_db.SaveChanges();
 
-				var justUpdateBatNbr = _db.Batches.Where(p => p.BranchID == BranchID && p.Module == "AP" && p.EditScrnNbr == "AP10400" && p.BatNbr == BatNbr).FirstOrDefault();
-				if (justUpdateBatNbr != null)
-				{
-					justUpdateBatNbr.TotAmt = Convert.ToDouble(toAmt);
-					justUpdateBatNbr.ReasonCD = ReasonCD;
-					//_db.SaveChanges();
-				}
+				//var justUpdateBatNbr = _db.Batches.Where(p => p.BranchID == BranchID && p.Module == "AP" && p.EditScrnNbr == "AP10400" && p.BatNbr == BatNbr).FirstOrDefault();
+				//if (justUpdateBatNbr != null)
+				//{
+				//	justUpdateBatNbr.TotAmt = Convert.ToDouble(toAmt);
+				//	justUpdateBatNbr.ReasonCD = ReasonCD;
+				//	//_db.SaveChanges();
+				//}
 
 
-                #endregion
-
+				//#endregion
+				////_db.SaveChanges();
+				//if (Handle == "R")
+				//{
+				//	var recordBatNbrUpdate = _db.Batches.Where(p => p.BranchID == BranchID && p.Module == "AP" && p.EditScrnNbr == "AP10400" && p.BatNbr == BatNbr).FirstOrDefault();
+				//	var recordRefNbrUpdate = _db.AP_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.RefNbr == RefNbr).FirstOrDefault();
+				//	recordBatNbrUpdate.Rlsed = 1;
+				//	recordBatNbrUpdate.Status = "C";
+				//	recordRefNbrUpdate.Rlsed = 1;
+				//	//tmpcatchHandle = "1";
+				//}
                 _db.SaveChanges();
-				if (Handle == "R")
-				{
-					var recordBatNbrUpdate = _db.Batches.Where(p => p.BranchID == BranchID && p.Module == "AP" && p.EditScrnNbr == "AP10400" && p.BatNbr == BatNbr).FirstOrDefault();
-					var recordRefNbrUpdate = _db.AP_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.RefNbr == RefNbr).FirstOrDefault();
-					recordBatNbrUpdate.Rlsed = 1;
-					recordBatNbrUpdate.Status = "C";
-					recordRefNbrUpdate.Rlsed = 1;
-					//tmpcatchHandle = "1";
-				}
+				_batNbr = BatNbr;
 				if ((_status == "U" || _status == "C") && (_handle == "C" || _handle == "V"))
 				{
 
