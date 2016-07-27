@@ -685,6 +685,9 @@ namespace APProcess
                 objBatch.GetByKey(BranchID,"AP",BatNbr);
                 objBatch.Status = "V";
                 objBatch.Rlsed = -1;
+				objBatch.LUpd_DateTime = DateTime.Now;
+				objBatch.LUpd_Prog = "AP10400";
+				objBatch.LUpd_User = Current.UserName;
                 objBatch.Update();
                 //Update AP_Doc
                 
