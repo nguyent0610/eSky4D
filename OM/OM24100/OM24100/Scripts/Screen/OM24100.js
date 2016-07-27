@@ -551,6 +551,7 @@ var Gmap = {
             //	create an array of ContextMenuItem objects
             var menuItems = [];
             menuItems.push({ className: 'context_menu_item', eventName: 'set_location', label: HQ.common.getLang('SetLocation') });
+            menuItems.push({ className: 'context_menu_item', eventName: 'set_coordinates', label: HQ.common.getLang('SetCoordinates') });
             //	a menuItem with no properties will be rendered as a separator
             menuItems.push({});
             menuItems.push({ className: 'context_menu_item', eventName: 'zoom_in_click', label: HQ.common.getLang('ZoomIn') });
@@ -587,6 +588,10 @@ var Gmap = {
                             HQ.message.show(718, '', '');
                         }
 
+                        contextMenu.hide();
+                        break;
+                    case 'set_coordinates':
+                        Event.Form.btnResetGeo_click();
                         contextMenu.hide();
                         break;
                     case 'zoom_in_click':
