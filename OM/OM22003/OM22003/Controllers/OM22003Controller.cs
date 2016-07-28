@@ -80,7 +80,7 @@ namespace OM22003.Controllers
             {
                 try
                 {
-                    imgs[i].ImageSrc = (FilePath + "\\" + imgs[i].ImageName).ToBase64Thumbnails(width, height, true);
+                    imgs[i].ImageSrc = FilePath.ToUpper().StartsWith("HTTP") ? (FilePath.TrimEnd('/') + "/" + imgs[i].ImageName).ImageURL(width, height) : (FilePath + "\\" + imgs[i].ImageName).ToBase64Thumbnails(width, height, true);
                 }
                 catch
                 {

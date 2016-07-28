@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Web;
 
 namespace OM22003.Models
@@ -66,7 +68,64 @@ namespace OM22003.Models
             }
             return base64Thumbnails;
         }
+        public static string ConvertImageURLToBase64(this string url, int width, int height)
+        {
+            StringBuilder _sb = new StringBuilder();
+            Byte[] _byte = GetImage(url);
+            _sb.Append(Convert.ToBase64String(_byte, 0, _byte.Length));
 
+            string imgTag = string.Empty;
+            string base64String = string.Empty;
+
+            base64String = _sb.ToString();
+            imgTag = "<img src=\"data:image/" + "png" + ";base64,";
+            imgTag += base64String + "\" ";
+            imgTag += "width=\"" + width.ToString() + "\" ";
+            imgTag += "height=\"" + height.ToString() + "\" />";
+
+            return imgTag;
+        }
+        public static string ImageURL(this string url, int width, int height)
+        {
+         
+            string imgTag = string.Empty;         
+            imgTag = "<img src=\"";
+            imgTag += url + "\" ";
+            imgTag += "width=\"" + width.ToString() + "\" ";
+            imgTag += "height=\"" + height.ToString() + "\" />";
+
+            return imgTag;
+        }
+        private static byte[] GetImage(string url)
+        {
+            Stream stream = null;
+            byte[] buf;
+
+            try
+            {
+                WebProxy myProxy = new WebProxy();
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+
+                HttpWebResponse response = (HttpWebResponse)req.GetResponse();
+                stream = response.GetResponseStream();
+
+                using (BinaryReader br = new BinaryReader(stream))
+                {
+                    int len = (int)(response.ContentLength);
+                    buf = br.ReadBytes(len);
+                    br.Close();
+                }
+
+                stream.Close();
+                response.Close();
+            }
+            catch (Exception exp)
+            {
+                buf = null;
+            }
+
+            return (buf);
+        }
         public static string ToBase64Thumbnail(this Image bmp, int width, int height, bool wrapImageTag)
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
