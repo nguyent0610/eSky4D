@@ -97,7 +97,8 @@
                                 .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw },                                               
-                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@UserID", Value =  Current.UserName.ToString(), Mode = ParameterMode.Raw }
                                 })
                                 .LoadData()
                                 .Listeners(lst =>
@@ -374,6 +375,20 @@
 
                             )
                             .SelectionModel(Html.X().RowSelectionModel().ID("slmgrdAP_Trans").Mode(SelectionMode.Multi))
+                             .Features( X.GridFilters()
+                                    .Local(true)
+                                    .Filters(
+                                     X.StringFilter().DataIndex("LineType"),
+                                      X.StringFilter().DataIndex("InvtID"),
+                                             X.NumericFilter().DataIndex("Qty"),
+                                             X.NumericFilter().DataIndex("UnitPrice"),
+                                             X.NumericFilter().DataIndex("TranAmt"),
+                                             X.StringFilter().DataIndex("TranDesc"),
+                                      X.StringFilter().DataIndex("TaxCat"),
+                                         X.StringFilter().DataIndex("TaxID")
+                                           
+                                    )
+                                 )
                             .Plugins(
                                 Html.X()//Cho phep edit )
                                     .CellEditing()

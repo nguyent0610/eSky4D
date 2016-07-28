@@ -489,6 +489,10 @@ namespace AP10100.Controllers
 					}
 
 				}
+				if (objAP_Trans.TranDesc.PassNull() == "")
+				{
+					throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("TranDesc") });
+				}
             }
 
 			if (_app.AP10100_ppCheckCloseDate(_branchID, _pdHead.DocDate.ToDateShort()).FirstOrDefault() == "0")
@@ -668,7 +672,7 @@ namespace AP10100.Controllers
 									continue;
 								}
 
-								if (DocType != "AD")
+								if (DocType != "AC" && DocType != "VO")
 								{
 									errorDocType += (i + 1).ToString() + ",";
 									FlagCheck = true;
@@ -890,7 +894,7 @@ namespace AP10100.Controllers
 							}
 
 							message = errorCloseDate == "" ? "" : string.Format("Dòng: {0} ngày chứng từ không nằm trong phạm vi cho phép nhập liệu của bạn</br>", errorCloseDate);
-							message += errorDocType == "" ? "" : string.Format("{0} dòng: {1} không thuộc loại Phiếu Báo Nợ(DM) </br>", "Loại Chứng Từ", errorDocType);
+							message += errorDocType == "" ? "" : string.Format("{0} dòng: {1} không thuộc loại Phiếu Báo Nợ(AC,VO) </br>", "Loại Chứng Từ", errorDocType);
 							message += errorCustID == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Mã KH", errorCustID);
 							message += errorCustIDnotExists == "" ? "" : string.Format("{0} dòng: {1} không tồn tại</br>", "Mã KH", errorCustIDnotExists);
 							message += errorDocDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Chứng Từ", errorDocDate);
