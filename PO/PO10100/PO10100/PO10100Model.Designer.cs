@@ -498,25 +498,6 @@ namespace PO10100
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
-        public ObjectResult<PO10100_pdOM_DiscAllByBranchPO_Result> PO10100_pdOM_DiscAllByBranchPO(global::System.String branchID)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<PO10100_pdOM_DiscAllByBranchPO_Result>("PO10100_pdOM_DiscAllByBranchPO", branchIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="date">No Metadata Documentation available.</param>
         /// <param name="screenNbr">No Metadata Documentation available.</param>
         public ObjectResult<global::System.String> PO10100_ppCheckCloseDate(global::System.String branchID, Nullable<global::System.DateTime> date, global::System.String screenNbr)
@@ -745,6 +726,36 @@ namespace PO10100
             }
     
             return base.ExecuteFunction<global::System.String>("PO10100_ppCheckingPONbr", branchIDParameter, pONbrParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="pODate">No Metadata Documentation available.</param>
+        public ObjectResult<PO10100_pdOM_DiscAllByBranchPO_Result> PO10100_pdOM_DiscAllByBranchPO(global::System.String branchID, Nullable<global::System.DateTime> pODate)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter pODateParameter;
+            if (pODate.HasValue)
+            {
+                pODateParameter = new ObjectParameter("PODate", pODate);
+            }
+            else
+            {
+                pODateParameter = new ObjectParameter("PODate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<PO10100_pdOM_DiscAllByBranchPO_Result>("PO10100_pdOM_DiscAllByBranchPO", branchIDParameter, pODateParameter);
         }
 
         #endregion
@@ -13268,31 +13279,19 @@ namespace PO10100
         /// <param name="cpnyID">Initial value of the CpnyID property.</param>
         /// <param name="autoFreeItem">Initial value of the AutoFreeItem property.</param>
         /// <param name="proAplForItem">Initial value of the ProAplForItem property.</param>
-        /// <param name="pOUse">Initial value of the POUse property.</param>
-        /// <param name="pOStartDate">Initial value of the POStartDate property.</param>
-        /// <param name="pOEndDate">Initial value of the POEndDate property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
         /// <param name="discSeq">Initial value of the DiscSeq property.</param>
         /// <param name="budgetID">Initial value of the BudgetID property.</param>
-        /// <param name="active">Initial value of the Active property.</param>
-        /// <param name="promo">Initial value of the Promo property.</param>
         /// <param name="freeItemBudgetID">Initial value of the FreeItemBudgetID property.</param>
         /// <param name="classID">Initial value of the ClassID property.</param>
-        public static PO10100_pdOM_DiscAllByBranchPO_Result CreatePO10100_pdOM_DiscAllByBranchPO_Result(global::System.String discID, global::System.String cpnyID, global::System.Boolean autoFreeItem, global::System.String proAplForItem, global::System.Boolean pOUse, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.String status, global::System.String discSeq, global::System.String budgetID, global::System.Int16 active, global::System.Int16 promo, global::System.String freeItemBudgetID, global::System.String classID)
+        public static PO10100_pdOM_DiscAllByBranchPO_Result CreatePO10100_pdOM_DiscAllByBranchPO_Result(global::System.String discID, global::System.String cpnyID, global::System.Boolean autoFreeItem, global::System.String proAplForItem, global::System.String discSeq, global::System.String budgetID, global::System.String freeItemBudgetID, global::System.String classID)
         {
             PO10100_pdOM_DiscAllByBranchPO_Result pO10100_pdOM_DiscAllByBranchPO_Result = new PO10100_pdOM_DiscAllByBranchPO_Result();
             pO10100_pdOM_DiscAllByBranchPO_Result.DiscID = discID;
             pO10100_pdOM_DiscAllByBranchPO_Result.CpnyID = cpnyID;
             pO10100_pdOM_DiscAllByBranchPO_Result.AutoFreeItem = autoFreeItem;
             pO10100_pdOM_DiscAllByBranchPO_Result.ProAplForItem = proAplForItem;
-            pO10100_pdOM_DiscAllByBranchPO_Result.POUse = pOUse;
-            pO10100_pdOM_DiscAllByBranchPO_Result.POStartDate = pOStartDate;
-            pO10100_pdOM_DiscAllByBranchPO_Result.POEndDate = pOEndDate;
-            pO10100_pdOM_DiscAllByBranchPO_Result.Status = status;
             pO10100_pdOM_DiscAllByBranchPO_Result.DiscSeq = discSeq;
             pO10100_pdOM_DiscAllByBranchPO_Result.BudgetID = budgetID;
-            pO10100_pdOM_DiscAllByBranchPO_Result.Active = active;
-            pO10100_pdOM_DiscAllByBranchPO_Result.Promo = promo;
             pO10100_pdOM_DiscAllByBranchPO_Result.FreeItemBudgetID = freeItemBudgetID;
             pO10100_pdOM_DiscAllByBranchPO_Result.ClassID = classID;
             return pO10100_pdOM_DiscAllByBranchPO_Result;
@@ -13451,102 +13450,6 @@ namespace PO10100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean POUse
-        {
-            get
-            {
-                return _POUse;
-            }
-            set
-            {
-                OnPOUseChanging(value);
-                ReportPropertyChanging("POUse");
-                _POUse = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("POUse");
-                OnPOUseChanged();
-            }
-        }
-        private global::System.Boolean _POUse;
-        partial void OnPOUseChanging(global::System.Boolean value);
-        partial void OnPOUseChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime POStartDate
-        {
-            get
-            {
-                return _POStartDate;
-            }
-            set
-            {
-                OnPOStartDateChanging(value);
-                ReportPropertyChanging("POStartDate");
-                _POStartDate = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("POStartDate");
-                OnPOStartDateChanged();
-            }
-        }
-        private global::System.DateTime _POStartDate;
-        partial void OnPOStartDateChanging(global::System.DateTime value);
-        partial void OnPOStartDateChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime POEndDate
-        {
-            get
-            {
-                return _POEndDate;
-            }
-            set
-            {
-                OnPOEndDateChanging(value);
-                ReportPropertyChanging("POEndDate");
-                _POEndDate = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("POEndDate");
-                OnPOEndDateChanged();
-            }
-        }
-        private global::System.DateTime _POEndDate;
-        partial void OnPOEndDateChanging(global::System.DateTime value);
-        partial void OnPOEndDateChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Status
-        {
-            get
-            {
-                return _Status;
-            }
-            set
-            {
-                OnStatusChanging(value);
-                ReportPropertyChanging("Status");
-                _Status = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Status");
-                OnStatusChanged();
-            }
-        }
-        private global::System.String _Status;
-        partial void OnStatusChanging(global::System.String value);
-        partial void OnStatusChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.String DiscSeq
         {
             get
@@ -13589,54 +13492,6 @@ namespace PO10100
         private global::System.String _BudgetID;
         partial void OnBudgetIDChanging(global::System.String value);
         partial void OnBudgetIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int16 Active
-        {
-            get
-            {
-                return _Active;
-            }
-            set
-            {
-                OnActiveChanging(value);
-                ReportPropertyChanging("Active");
-                _Active = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Active");
-                OnActiveChanged();
-            }
-        }
-        private global::System.Int16 _Active;
-        partial void OnActiveChanging(global::System.Int16 value);
-        partial void OnActiveChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int16 Promo
-        {
-            get
-            {
-                return _Promo;
-            }
-            set
-            {
-                OnPromoChanging(value);
-                ReportPropertyChanging("Promo");
-                _Promo = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Promo");
-                OnPromoChanged();
-            }
-        }
-        private global::System.Int16 _Promo;
-        partial void OnPromoChanging(global::System.Int16 value);
-        partial void OnPromoChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

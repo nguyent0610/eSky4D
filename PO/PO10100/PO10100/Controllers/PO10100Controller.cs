@@ -40,6 +40,8 @@ namespace PO10100.Controllers
 
         List<PO10100_pdOM_DiscAllByBranchPO_Result> _lstPO10100_pdOM_DiscAllByBranchPO;      
         List<PO10100_pdIN_UnitConversion_Result> _PO10100_pdIN_UnitConversion_Result;
+        List<PO10100_pdOM_DiscAllByBranchPO_Result> _lstPO10100_pdOM_DiscAllByBranchPO_Result = new List<PO10100_pdOM_DiscAllByBranchPO_Result>();
+        
        // List<IN_ItemSite> _lstIN_ItemSite;
         private List <PO10100_pgDetail_Result> _lstTmpPO10100_pgDetail;
         private bool _freeLineRunning = false;
@@ -361,11 +363,12 @@ namespace PO10100.Controllers
         private void Save_PO_Header(bool isDeleteGrd=false)
         {
            // _lstIN_ItemSite = new List<IN_ItemSite>();
-            _lstPO10100_pdOM_DiscAllByBranchPO = _db.PO10100_pdOM_DiscAllByBranchPO(_branchID).ToList();
+            
             _PO10100_pdIN_UnitConversion_Result = _db.PO10100_pdIN_UnitConversion().ToList();
             objOM_UserDefault = _db.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID.Trim().ToUpper() == _branchID.Trim().ToUpper() && p.UserID.Trim().ToUpper() == Current.UserName.Trim().ToUpper());
             _objPO_Setup = _db.PO_Setup.FirstOrDefault(p => p.BranchID == _branchID && p.SetupID == "PO");
             var obj = _db.PO_Header.FirstOrDefault(p => p.PONbr == _ponbr && p.BranchID == _branchID);
+            _lstPO10100_pdOM_DiscAllByBranchPO = _db.PO10100_pdOM_DiscAllByBranchPO(_branchID, _poHead.PODate).ToList();
             if (Data_Checking(isDeleteGrd))
             {
                 
@@ -811,6 +814,8 @@ namespace PO10100.Controllers
                 _lstPODetailLoad.Remove(obj1);
 
             }
+            //if(_lstPODetailLoad.Where(p=>p.PurchaseType!="PR" && p.DiscAmt==0).Count()>0)
+            //_lstPO10100_pdOM_DiscAllByBranchPO_Result = _db.PO10100_pdOM_DiscAllByBranchPO(_branchID).Where(p => p.DiscType == "L").ToList();
             for (Int16 i = 0; i <= _lstPODetailLoad.Count - 1; i++)
             {
                 var objDetail = _lstPODetailLoad[i];
@@ -1376,13 +1381,13 @@ namespace PO10100.Controllers
                                    message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
                                    continue;
                                 }
-                                var objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID.ToUpper().Trim() == invtID.ToUpper().Trim() && p.FromUnit.ToUpper().Trim() == unit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim()).FirstOrDefault();//truong hop tu From toi to
+                                var objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID == invtID && p.FromUnit == unit && p.ToUnit == objInvt.StkUnit).FirstOrDefault();//truong hop tu From toi to
                                 if (objIN_UnitConversion == null)
                                 {
-                                    objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID.ToUpper().Trim() == invtID.ToUpper().Trim() && p.FromUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == unit.ToUpper().Trim()).FirstOrDefault();
+                                    objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID == invtID && p.FromUnit == objInvt.StkUnit && p.ToUnit == unit).FirstOrDefault();
 
                                     if (objIN_UnitConversion != null) objIN_UnitConversion.MultDiv = objIN_UnitConversion.MultDiv == "D" ? "M" : "D";
-                                    else objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.FromUnit.ToUpper().Trim() == unit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim() && p.ClassID == "*" && p.InvtID == "*").FirstOrDefault();
+                                    else objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.FromUnit == unit && p.ToUnit == objInvt.StkUnit && p.ClassID == "*" && p.InvtID == "*").FirstOrDefault();
 
                                     if (objIN_UnitConversion == null)
                                     {
@@ -1543,13 +1548,13 @@ namespace PO10100.Controllers
                                 message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
                                 continue;
                             }
-                            var objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID.ToUpper().Trim() == invtID.ToUpper().Trim() && p.FromUnit.ToUpper().Trim() == unit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim()).FirstOrDefault();//truong hop tu From toi to
+                            var objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID == invtID && p.FromUnit == unit && p.ToUnit == objInvt.StkUnit).FirstOrDefault();//truong hop tu From toi to
                             if (objIN_UnitConversion == null)
                             {
-                                objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID.ToUpper().Trim() == invtID.ToUpper().Trim() && p.FromUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == unit.ToUpper().Trim()).FirstOrDefault();
+                                objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID == invtID && p.FromUnit == objInvt.StkUnit && p.ToUnit == unit).FirstOrDefault();
 
                                 if (objIN_UnitConversion != null) objIN_UnitConversion.MultDiv = objIN_UnitConversion.MultDiv == "D" ? "M" : "D";
-                                else objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.FromUnit.ToUpper().Trim() == unit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim() && p.ClassID == "*" && p.InvtID == "*").FirstOrDefault();
+                                else objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.FromUnit == unit && p.ToUnit == objInvt.StkUnit && p.ClassID == "*" && p.InvtID == "*").FirstOrDefault();
 
                                 if (objIN_UnitConversion == null)
                                 {
@@ -1756,26 +1761,26 @@ namespace PO10100.Controllers
         {
             double discItemUnitQty = 0;
             
-            var lstsetup =_db.PO10100_pdOM_DiscAllByBranchPO(_branchID).Where(p => p.DiscType == "L").ToList();
-            if (lstsetup.Count > 0)
+            //var _lstPO10100_pdOM_DiscAllByBranchPO_Result =_db.PO10100_pdOM_DiscAllByBranchPO(_branchID).Where(p => p.DiscType == "L").ToList();
+            if (_lstPO10100_pdOM_DiscAllByBranchPO_Result.Count > 0)
             {
-                foreach (var setup in lstsetup)
+                foreach (var objCpnyID in _lstPO10100_pdOM_DiscAllByBranchPO_Result)
                 {
-                    var objDisc = setup;// (from p in _PO10100Context.OM_Discounts where p.DiscType == "L" && p.Status == "C" && p.POUse == true select p).FirstOrDefault();
-                    var objCpnyID = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.CpnyID == _branchID && p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim()).FirstOrDefault();
+                    var objDisc = objCpnyID;// (from p in _PO10100Context.OM_Discounts where p.DiscType == "L" && p.Status == "C" && p.POUse == true select p).FirstOrDefault();
+                    //var objCpnyID = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.CpnyID == _branchID && p.DiscID == objDisc.DiscID).FirstOrDefault();
                     if (objCpnyID != null)
                     {
                         if (objDisc != null)
                         {
                             if (objDisc.DiscType == "L")
                             {
-                                var lstSeq = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.Status.ToUpper().Trim() == "C" && p.Active == 1 && p.POUse == true && ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0 && p.Promo == 0) || ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0) && (DateTime.Compare(_poHead.PODate.ToDateShort(), p.POEndDate) <= 0) && p.Promo == 1))).ToList();
+                                var lstSeq = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == objDisc.DiscID).ToList();
                                 if (lstSeq.Count > 0)
                                 {
                                     foreach (var seq in lstSeq)
                                     {
                                         var objItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p =>
-                                                           p.DiscID == objDisc.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() &&
+                                                           p.DiscSeq == seq.DiscSeq &&
                                                            p.InvtID == det.InvtID
                                                            ).FirstOrDefault();
                                         if (objItem == null) objItem = new PO10100_pdOM_DiscAllByBranchPO_Result();
@@ -1791,9 +1796,9 @@ namespace PO10100.Controllers
                                         else
                                             discItemUnitQty = qty * OM_GetCnvFactFromUnit(det.InvtID, det.PurchUnit, ref cnvFact, ref unitMultDiv);
 
-                                        if (seq.Active != 0 && objDisc.DiscClass == "II")
+                                        if (objDisc.DiscClass == "II")
                                         {
-                                            var objtmpItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.InvtID == det.InvtID).FirstOrDefault();
+                                            var objtmpItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == seq.DiscID && p.DiscSeq == seq.DiscSeq && p.InvtID == det.InvtID).FirstOrDefault();
                                             if (objtmpItem != null)
                                             {
                                                 discID = objDisc.DiscID;
@@ -1823,7 +1828,7 @@ namespace PO10100.Controllers
             else
                 qtyAmt = qty;
         begin:
-            var objSeq = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == discSeq.ToUpper().Trim()).FirstOrDefault();
+            var objSeq = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == discID && p.DiscSeq == discSeq).FirstOrDefault();
             if (objSeq == null) objSeq = new PO10100_pdOM_DiscAllByBranchPO_Result();
             if (objSeq.BudgetID.PassNull() != "")
             {
@@ -1862,9 +1867,9 @@ namespace PO10100.Controllers
             double qtyBreak = tmpqtyBreak;
             PO10100_pdOM_DiscAllByBranchPO_Result objBreak = new PO10100_pdOM_DiscAllByBranchPO_Result();
             if (discBreak == "A")
-                objBreak = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == discSeq.ToUpper().Trim() && p.BreakAmt <= qtyAmt && p.BreakAmt > 0).OrderByDescending(p => p.BreakAmt).FirstOrDefault();
+                objBreak = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == discID && p.DiscSeq == discSeq && p.BreakAmt <= qtyAmt && p.BreakAmt > 0).OrderByDescending(p => p.BreakAmt).FirstOrDefault();
             else
-                objBreak = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == discSeq.ToUpper().Trim() && p.BreakQty <= qtyAmt && p.BreakQty > 0).OrderByDescending(p => p.BreakQty).FirstOrDefault();
+                objBreak = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == discID && p.DiscSeq == discSeq && p.BreakQty <= qtyAmt && p.BreakQty > 0).OrderByDescending(p => p.BreakQty).FirstOrDefault();
 
             if (objBreak != null)
             {
@@ -1959,7 +1964,7 @@ namespace PO10100.Controllers
             {
 
                 var objDisc = setup;// (from p in _PO10100Context.OM_Discounts where p.DiscType == "L" && p.Status == "C" && p.POUse == true select p).FirstOrDefault();
-                //var objCpnyID = lstPO10100_pdOM_DiscAllByBranchPO_ResultALL.Where(p=>p.CpnyID == strbranchID && p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() select p).FirstOrDefault();
+                //var objCpnyID = lstPO10100_pdOM_DiscAllByBranchPO_ResultALL.Where(p=>p.CpnyID == strbranchID && p.DiscID == objDisc.DiscID select p).FirstOrDefault();
                 //if (objCpnyID != null)
                 //{
                 if (objDisc != null)
@@ -1967,19 +1972,19 @@ namespace PO10100.Controllers
                     if (objDisc.DiscType == "L")
                     {
                         _poHead.PODate = _poHead.PODate == null ? DateTime.Now.ToDateShort() : _poHead.PODate;
-                        lstDiscSeq = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.Status == "C" && p.Active == 1 && p.POUse == true && ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0 && p.Promo == 0) || ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0) && (DateTime.Compare(_poHead.PODate.ToDateShort(), p.POEndDate) <= 0) && p.Promo == 1))).ToList();
+                        lstDiscSeq = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == objDisc.DiscID ).ToList();
                         foreach (var seq in lstDiscSeq)
                         {
                             calcDisc = false;
                             var objInvt = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-                            PO10100_pdOM_DiscAllByBranchPO_Result objItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim()).FirstOrDefault();
+                            PO10100_pdOM_DiscAllByBranchPO_Result objItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == objDisc.DiscID && p.DiscSeq == seq.DiscSeq).FirstOrDefault();
 
                             if (objItem == null) objItem = new PO10100_pdOM_DiscAllByBranchPO_Result();
                             double cnvFact = 0;
                             string unitMultDiv = "";
                             discItemUntiQty = (qty * OM_GetCnvFactFromUnit(invtID, unit, ref cnvFact, ref unitMultDiv).ToInt());// objItem.UnitDesc)).ToInt();
 
-                            lstDiscFreeItem1 = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim()).ToList();
+                            lstDiscFreeItem1 = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == objDisc.DiscID && p.DiscSeq == seq.DiscSeq).ToList();
 
                             if (seq.BreakBy == "A")
                                 qtyAmt = amt;
@@ -1996,19 +2001,19 @@ namespace PO10100.Controllers
                                     qtyAmt = amt;
                             }
 
-                            if (lstDiscFreeItem1.Count > 0 && seq.Active != 0 && objDisc.DiscClass == "II")
+                            if (lstDiscFreeItem1.Count > 0 && objDisc.DiscClass == "II")
                             {
-                                var objTmpItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.InvtID == invtID).FirstOrDefault();
+                                var objTmpItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == seq.DiscID && p.DiscSeq == seq.DiscSeq && p.InvtID == invtID).FirstOrDefault();
                                 if (objTmpItem != null)
                                 {
                                     calcDisc = true;
                                     goto Calc;
                                 }
                             }
-                            else if (lstDiscFreeItem1.Count > 0 && seq.Active != 0 && objDisc.DiscClass == "PP")
+                            else if (lstDiscFreeItem1.Count > 0  && objDisc.DiscClass == "PP")
                             {
                                 objInvt = _db.IN_Inventory.Where(p => p.InvtID == invtID).FirstOrDefault();
-                                var objDiscItemClass = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.ClassID.ToUpper().Trim() == objInvt.PriceClassID.ToUpper().Trim()).FirstOrDefault();
+                                var objDiscItemClass = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == seq.DiscID && p.DiscSeq == seq.DiscSeq && p.ClassID == objInvt.PriceClassID).FirstOrDefault();
                                 if (objDiscItemClass != null)
                                 {
                                     calcDisc = true;
@@ -2029,7 +2034,7 @@ namespace PO10100.Controllers
                                 discID = objDisc.DiscID;
                                 discSeq = seq.DiscSeq;
                                 var lstDiscFreeItem1tmp = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p =>
-                                                            p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.LineRef == breakLineRef1)
+                                                            p.DiscID == seq.DiscID && p.DiscSeq == seq.DiscSeq && p.LineRef == breakLineRef1)
                                                           .ToList();
 
                                 if (lstDiscFreeItem1tmp.Count > 0)
@@ -2129,7 +2134,7 @@ namespace PO10100.Controllers
         }
         private void AddFreeItem(string discID, string discSeq, string freeItemID, double qty, string siteID, string uom, string lineRef, string disclineref, string budgetID, string boType)
         {
-            var objDisc = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim()).FirstOrDefault();
+            var objDisc = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID == discID).FirstOrDefault();
             if (objDisc.DiscType == "L")
                 _countAddItem++;
             double cnvFact = 0;
