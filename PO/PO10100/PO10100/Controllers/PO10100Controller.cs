@@ -38,11 +38,9 @@ namespace PO10100.Controllers
         string _status = "";
         private JsonResult _logMessage;
 
-        List<PO10100_pdOM_DiscAllByBranchPO_Result> _lstPO10100_pdOM_DiscAllByBranchPO;      
+        List<PO10100_pdOM_DiscAllByBranchPO_Result> _lstPO10100_pdOM_DiscAllByBranchPO=new List<PO10100_pdOM_DiscAllByBranchPO_Result>();      
         List<PO10100_pdIN_UnitConversion_Result> _PO10100_pdIN_UnitConversion_Result;
-        List<PO10100_pdOM_DiscAllByBranchPO_Result> _lstPO10100_pdOM_DiscAllByBranchPO_Result = new List<PO10100_pdOM_DiscAllByBranchPO_Result>();
-        
-       // List<IN_ItemSite> _lstIN_ItemSite;
+       
         private List <PO10100_pgDetail_Result> _lstTmpPO10100_pgDetail;
         private bool _freeLineRunning = false;
         private string _lineRef = string.Empty;
@@ -1761,10 +1759,10 @@ namespace PO10100.Controllers
         {
             double discItemUnitQty = 0;
             
-            //var _lstPO10100_pdOM_DiscAllByBranchPO_Result =_db.PO10100_pdOM_DiscAllByBranchPO(_branchID).Where(p => p.DiscType == "L").ToList();
-            if (_lstPO10100_pdOM_DiscAllByBranchPO_Result.Count > 0)
+           // var _lstPO10100_pdOM_DiscAllByBranchPO =_db.PO10100_pdOM_DiscAllByBranchPO(_branchID).Where(p => p.DiscType == "L").ToList();
+            if (_lstPO10100_pdOM_DiscAllByBranchPO.Count > 0)
             {
-                foreach (var objCpnyID in _lstPO10100_pdOM_DiscAllByBranchPO_Result)
+                foreach (var objCpnyID in _lstPO10100_pdOM_DiscAllByBranchPO)
                 {
                     var objDisc = objCpnyID;// (from p in _PO10100Context.OM_Discounts where p.DiscType == "L" && p.Status == "C" && p.POUse == true select p).FirstOrDefault();
                     //var objCpnyID = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.CpnyID == _branchID && p.DiscID == objDisc.DiscID).FirstOrDefault();
