@@ -2059,6 +2059,7 @@ namespace OM23800.Controllers
                 string errorERouteID = string.Empty;
                 string errorESlsperID = string.Empty;
 
+                bool flagCheckError = false;
                 string messagestrERouteID = string.Empty;
                 string messagestrECustID = string.Empty;
                 string messagestrESlsperID = string.Empty;
@@ -2138,75 +2139,55 @@ namespace OM23800.Controllers
                             if (strESlsperID != slsperID && slsperID != "")
                             {
                                 errorESlsperID += (i + 1).ToString() + ",";
-                                continue;
-
+                                flagCheckError = true;
                             };
                             if (strERouteID != routeID && routeID != "")
                             {
                                 errorERouteID += (i + 1).ToString() + ",";
-                                continue;
+                                flagCheckError = true;
 
                             };
+                            
+                            if (strERouteID == "")
+                            {
+                                messagestrERouteID += (i + 1).ToString() + ",";
+                                flagCheckError = true;
+                            }
                             if (strECustID == "")
                             {
                                 messagestrECustID += (i + 1).ToString() + ",";
-                                continue;
-                            }
-                            else if (strERouteID == ""
-                                 || strECustID == ""
-                                 || strESlsperID == ""
-                                 || strETS == ""
-                                || strETBH == ""
-                                || strEBeginDate == ""
-                                || strEEndDate == "")
-                            {
-                                if (strERouteID == "")
-                                {
-                                    messagestrERouteID += (i + 1).ToString() + ",";
-                                    continue;
-
-                                }
-                                if (strECustID == "")
-                                {
-                                    messagestrECustID += (i + 1).ToString() + ",";
-                                    continue;
-                                }
-
-                                if (strESlsperID == "")
-                                {
-                                    messagestrESlsperID += (i + 1).ToString() + ",";
-                                    continue;
-
-                                }
-                                if (strETS == "")
-                                {
-                                    messagestrETS += (i + 1).ToString() + ",";
-                                    continue;
-
-                                }
-                                if (strETBH == "")
-                                {
-                                    messagestrETBH += (i + 1).ToString() + ",";
-                                    continue;
-
-                                }
-                                if (strEBeginDate == "")
-                                {
-                                    messagestrEBeginDate += (i + 1).ToString() + ",";
-                                    continue;
-
-                                }
-                                if (strEEndDate == "")
-                                {
-                                    messagestrEEndDate += (i + 1).ToString() + ",";
-                                    continue;
-
-                                }
-
+                                flagCheckError = true;
                             }
 
-                            else
+                            if (strESlsperID == "")
                             {
+                                messagestrESlsperID += (i + 1).ToString() + ",";
+                                flagCheckError = true;
+                            }
+                            if (strETS == "")
+                            {
+                                messagestrETS += (i + 1).ToString() + ",";
+                                flagCheckError = true;
+                            }
+                            if (strETBH == "")
+                            {
+                                messagestrETBH += (i + 1).ToString() + ",";
+                                flagCheckError = true;
+                            }
+                            if (strEBeginDate == "")
+                            {
+                                messagestrEBeginDate += (i + 1).ToString() + ",";
+                                flagCheckError = true;
+                            }
+                            if (strEEndDate == "")
+                            {
+                                messagestrEEndDate += (i + 1).ToString() + ",";
+                                flagCheckError = true;
+                            }
+
+                            if (flagCheckError == false)
+                            {
+
                                 try
                                 {
                                     startDate = workSheet.Cells[i, 6].DateTimeValue.ToDateShort();// DateTime.FromOADate(double.Parse(workSheet.Cells[i, 6].StringValue)).Short();
