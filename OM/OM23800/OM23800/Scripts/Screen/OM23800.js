@@ -104,10 +104,10 @@ var Process = {
                     if (data.result.msgCode) {
                         HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
                     }
-                    var tmpPolygon =  Gmap.Process.find_overlays_id(Declare._ID);
-                    tmpPolygon.setMap(null);
+                    var tmpPolygon = Gmap.Process.find_overlays_id(Declare._ID);
+                    if(tmpPolygon) tmpPolygon.setMap(null);
                     var tmpLabel = Gmap.Process.find_labels_id(Declare._ID);
-                    tmpLabel.setMap(null);
+                    if (tmpLabel) tmpLabel.setMap(null);
                     //contextMenu.hide();
                 },
                 failure: function (msg, data) {
@@ -425,6 +425,14 @@ var McpInfo = {
         }
     },
 
+    dtpStartDateMcpInfo_change: function (dtp, newValue, oldValue, eOpts) {
+        if(App.dtpStartDateMcpInfo.getValue())
+            App.dtpEndDateMcpInfo.setMinValue(App.dtpStartDateMcpInfo.getValue());
+        if (App.dtpEndDateMcpInfo.getValue() < App.dtpStartDateMcpInfo.getValue()) {
+            App.dtpEndDateMcpInfo.setValue(App.dtpStartDateMcpInfo.getValue());
+        }
+    },
+
     storeMcpInfo_load: function (store, records, successful, eOpts) {
         App.cboRouteIDMcpInfo.store.reload();
         App.winMcpInfo.show();
@@ -499,7 +507,18 @@ var McpInfo = {
                     branchID: frmHeaderMcpRec.data.BranchID,
                     pJPID: frmHeaderMcpRec.data.PJPID,
                     routeID: App.cboRouteIDMcpInfo.getValue(),
-                    lstMcpInfo: Ext.encode(App.storeMcpInfo.getChangedData({ skipIdForPhantomRecords: false }))
+                    startDate: App.dtpStartDateMcpInfo.getValue(),
+                    endDate: App.dtpEndDateMcpInfo.getValue(),
+                    salesFreq: App.cboSlsFreqMcpInfo.getValue(),
+                    weekOfVisit: App.cboWeekofVisitMcpInfo.getValue(),
+                    visitSort: App.numVisitSortMcpInfo.getValue(),
+                    sun: App.chkSunMcpInfo.value,
+                    mon: App.chkMonMcpInfo.value,
+                    tue: App.chkTueMcpInfo.value,
+                    wed: App.chkWedMcpInfo.value,
+                    thu: App.chkThuMcpInfo.value,
+                    fri: App.chkFriMcpInfo.value,
+                    sat: App.chkSatMcpInfo.value
                 },
                 success: function (action, data) {
                     if (data.result.msgcode) {
@@ -1034,7 +1053,7 @@ var Gmap = {
 
             //	create an array of ContextMenuItem objects
             var menuItems = [];
-            menuItems.push({ className: 'context_menu_item', eventName: 'update_mcp', label: HQ.common.getLang('UpdateMcp') });
+            menuItems.push({ className: 'ccboDistributorMCL_changeontext_menu_item', eventName: 'update_mcp', label: HQ.common.getLang('UpdateMcp') });
             menuItems.push({ className: 'context_menu_item', eventName: 'export_excel', label: HQ.common.getLang('ExportExcel') });
             menuItems.push({ className: 'context_menu_item', eventName: 'clear_zone', label: HQ.common.getLang('ClearZone') });
             //	a menuItem with no properties will be rendered as a separator
@@ -1097,8 +1116,10 @@ var Gmap = {
                         }
                         else {
                             Declare._ID = polygon.iID;
-                            label.iID = polygon.iID;
+                            if(label!= undefined)
+                                label.iID = polygon.iID;
                             HQ.message.show(2016070501, '', 'Process.deleteOverLays');
+                            contextMenu.hide();
                         }
                         break;
                     case 'zoom_in_click':
@@ -1166,8 +1187,10 @@ var Gmap = {
         // tim overlays de xoa theo id
         find_overlays_id: function(id){
             for (i = 0; i < Gmap.Declare.overlays.length; i++) {
-                if (Gmap.Declare.overlays[i].iID == id) {
-                    return Gmap.Declare.overlays[i];
+                if (Gmap.Declare.overlays[i] != undefined) {
+                    if (Gmap.Declare.overlays[i].iID == id && Gmap.Declare.overlays[i].H != undefined) {
+                        return Gmap.Declare.overlays[i];
+                    }
                 }
             }
             return null;
@@ -1175,8 +1198,10 @@ var Gmap = {
         // tim label de xoa theo id
         find_labels_id: function (id) {
             for (i = 0; i < Gmap.Declare.labels.length; i++) {
-                if (Gmap.Declare.labels[i].iID == id) {
-                    return Gmap.Declare.labels[i];
+                if (Gmap.Declare.labels[i] != undefined) {
+                    if (Gmap.Declare.labels[i].iID == id) {
+                        return Gmap.Declare.labels[i];
+                    }
                 }
             }
             return null;

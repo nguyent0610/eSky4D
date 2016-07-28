@@ -405,16 +405,299 @@ namespace OM23800.Controllers
             return this.Store(_db.OM23800_pdOverLays(BranchID,PJPID).ToList());
         }
 
+        //public ActionResult SaveMcp1(FormCollection data,
+        //    bool custActive, string custID, string slsperID, string branchID, string pJPID, string routeID)
+        //{
+        //    try
+        //    {
+        //        if (!string.IsNullOrWhiteSpace(custID)
+        //            && !string.IsNullOrWhiteSpace(slsperID)
+        //            && !string.IsNullOrWhiteSpace(branchID))
+        //        {
+
+        //            var cust = _db.AR_Customer.FirstOrDefault(c => c.CustId == custID && c.BranchID == branchID);
+        //            if (cust != null)
+        //            {
+        //                var custActived = cust.Status.ToUpper() == "A" ? true : false;
+        //                if (custActived != custActive)
+        //                {
+        //                    cust.Status = custActive ? "A" : "I";
+        //                    cust.LUpd_Datetime = DateTime.Now;
+        //                    cust.LUpd_Prog = _screenName;
+        //                    cust.LUpd_User = Current.UserName;
+
+        //                    _db.SaveChanges();
+        //                }
+
+        //                if (custActive)
+        //                {
+        //                    #region MCP
+        //                    var dataHandler = new StoreDataHandler(data["lstMcpInfo"]);
+        //                    var lstMcpInfo = dataHandler.BatchObjectData<OM_SalesRouteMaster>();
+
+        //                    foreach (var deleted in lstMcpInfo.Deleted)
+        //                    {
+        //                        var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
+        //                            && x.SalesRouteID == routeID
+        //                            && x.BranchID == branchID
+        //                            && x.SlsPerID == slsperID
+        //                            && x.CustID == custID);
+
+        //                        if (obj != null)
+        //                        {
+        //                            // xoa cu
+        //                            _db.OM_SalesRouteMaster.DeleteObject(obj);
+        //                            _db.SaveChanges();
+
+        //                            return Json(new
+        //                            {
+        //                                success = true,
+        //                                CustID = custID,
+        //                                SlsPerID = slsperID,
+        //                                BranchID = branchID,
+        //                                RouteID = routeID,
+        //                                Color = "CCFF33",
+        //                                SlsFreq = "",
+        //                                WeekofVisit = "",
+        //                                VisitSort = "false",
+        //                                Sun = 0,
+        //                                Mon = 0,
+        //                                Tue = 0,
+        //                                Wed = 0,
+        //                                Thu = 0,
+        //                                Fri = 0,
+        //                                Sat = 0,
+        //                                Status = cust.Status
+        //                            });
+        //                        }
+        //                        else
+        //                        {
+        //                            throw new MessageException(MessageType.Message, "8");
+        //                        }
+        //                    }
+
+        //                    lstMcpInfo.Updated.AddRange(lstMcpInfo.Created);
+        //                    foreach (var updated in lstMcpInfo.Updated)
+        //                    {
+        //                        var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
+        //                            && x.SalesRouteID == routeID
+        //                            && x.BranchID == branchID
+        //                            && x.SlsPerID == slsperID
+        //                            && x.CustID == custID);
+
+        //                        if (obj != null)
+        //                        {
+        //                            //if (obj.tstamp.ToHex() == updated.tstamp.ToHex())
+        //                            //{
+        //                            // xoa cu, insert moi
+        //                            //var newObj = new OM_SalesRouteMaster()
+        //                            //{
+        //                            //    PJPID = obj.PJPID,
+        //                            //    SalesRouteID = obj.SalesRouteID,
+        //                            //    CustID = obj.CustID,
+        //                            //    SlsPerID = obj.SlsPerID,
+        //                            //    BranchID = obj.BranchID
+        //                            //};
+
+        //                            //_db.OM_SalesRouteMaster.DeleteObject(obj);
+        //                            //_db.SaveChanges();
+
+        //                            updateSaleRoutesMaster(ref obj, updated);
+        //                            if (isValidSelOMSalesRouteMaster(obj))
+        //                                _db.SaveChanges();
+        //                            else
+        //                            {
+        //                                throw new MessageException(MessageType.Message, "20131224", "", new string[] { obj.CustID });
+        //                            }
+
+        //                            return Json(new
+        //                            {
+        //                                success = true,
+        //                                CustID = custID,
+        //                                SlsPerID = slsperID,
+        //                                BranchID = branchID,
+        //                                RouteID = routeID,
+        //                                Color = "FF0000",
+        //                                SlsFreq = obj.SlsFreq,
+        //                                WeekofVisit = obj.WeekofVisit,
+        //                                VisitSort = obj.VisitSort,
+        //                                Sun = obj.Sun ? 1 : 0,
+        //                                Mon = obj.Mon ? 1 : 0,
+        //                                Tue = obj.Tue ? 1 : 0,
+        //                                Wed = obj.Wed ? 1 : 0,
+        //                                Thu = obj.Thu ? 1 : 0,
+        //                                Fri = obj.Fri ? 1 : 0,
+        //                                Sat = obj.Sat ? 1 : 0,
+        //                                Status = cust.Status
+        //                            });
+        //                            //}
+        //                            //else
+        //                            //{
+        //                            //    throw new MessageException(MessageType.Message, "19");
+        //                            //}
+        //                        }
+        //                        else
+        //                        {
+        //                            // insert moi
+        //                            var newObj = new OM_SalesRouteMaster()
+        //                            {
+        //                                PJPID = pJPID,
+        //                                SalesRouteID = routeID,
+        //                                CustID = custID,
+        //                                SlsPerID = slsperID,
+        //                                BranchID = branchID
+        //                            };
+
+        //                            updateSaleRoutesMaster(ref newObj, updated);
+        //                            if (isValidSelOMSalesRouteMaster(newObj))
+        //                                _db.SaveChanges();
+        //                            else
+        //                            {
+        //                                throw new MessageException(MessageType.Message, "22701", "", new string[] { newObj.CustID });
+        //                            }
+        //                            _db.OM_SalesRouteMaster.AddObject(newObj);
+        //                            _db.SaveChanges();
+
+        //                            return Json(new
+        //                            {
+        //                                success = true,
+        //                                CustID = custID,
+        //                                SlsPerID = slsperID,
+        //                                BranchID = branchID,
+        //                                RouteID = routeID,
+        //                                Color = "FF0000",
+        //                                SlsFreq = newObj.SlsFreq,
+        //                                WeekofVisit = newObj.WeekofVisit,
+        //                                VisitSort = newObj.VisitSort,
+        //                                Sun = newObj.Sun ? 1 : 0,
+        //                                Mon = newObj.Mon ? 1 : 0,
+        //                                Tue = newObj.Tue ? 1 : 0,
+        //                                Wed = newObj.Wed ? 1 : 0,
+        //                                Thu = newObj.Thu ? 1 : 0,
+        //                                Fri = newObj.Fri ? 1 : 0,
+        //                                Sat = newObj.Sat ? 1 : 0,
+        //                                Status = cust.Status
+        //                            });
+        //                        }
+        //                    }
+
+        //                    //foreach (var created in lstMcpInfo.Created)
+        //                    //{
+        //                    //    var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
+        //                    //        && x.SalesRouteID == routeID
+        //                    //        && x.BranchID == branchID
+        //                    //        && x.SlsPerID == slsperID
+        //                    //        && x.CustID == custID);
+
+        //                    //    if (obj == null)
+        //                    //    {
+        //                    //        // insert moi
+        //                    //        var newObj = new OM_SalesRouteMaster()
+        //                    //        {
+        //                    //            PJPID = pJPID,
+        //                    //            SalesRouteID = routeID,
+        //                    //            CustID = custID,
+        //                    //            SlsPerID = slsperID,
+        //                    //            BranchID = branchID
+        //                    //        };
+
+        //                    //        updateSaleRoutesMaster(ref newObj, created);
+        //                    //        if (isValidSelOMSalesRouteMaster(newObj))
+        //                    //            _db.SaveChanges();
+        //                    //        else
+        //                    //        {
+        //                    //            throw new MessageException(MessageType.Message, "22701", "", new string[] { newObj.CustID });
+        //                    //        }
+        //                    //        _db.OM_SalesRouteMaster.AddObject(newObj);
+        //                    //        _db.SaveChanges();
+
+        //                    //        return Json(new
+        //                    //        {
+        //                    //            success = true,
+        //                    //            CustID = custID,
+        //                    //            SlsPerID = slsperID,
+        //                    //            BranchID = branchID,
+        //                    //            RouteID = routeID,
+        //                    //            Color = "FF0000",
+        //                    //            SlsFreq = newObj.SlsFreq,
+        //                    //            WeekofVisit = newObj.WeekofVisit,
+        //                    //            VisitSort = newObj.VisitSort,
+        //                    //            Sun = newObj.Sun ? 1 : 0,
+        //                    //            Mon = newObj.Mon ? 1 : 0,
+        //                    //            Tue = newObj.Tue ? 1 : 0,
+        //                    //            Wed = newObj.Wed ? 1 : 0,
+        //                    //            Thu = newObj.Thu ? 1 : 0,
+        //                    //            Fri = newObj.Fri ? 1 : 0,
+        //                    //            Sat = newObj.Sat ? 1 : 0,
+        //                    //            Status = cust.Status
+        //                    //        });
+        //                    //    }
+        //                    //    else
+        //                    //    {
+        //                    //        //return Json(new { success = false, msgCode = 2000, msgParam = Util.GetLang("MCP") });
+        //                    //        throw new MessageException(MessageType.Message, "2000", "", new string[] { Util.GetLang("MCP"),pJPID });
+        //                    //    }
+        //                    //}
+        //                    #endregion
+        //                }
+
+        //                return Json(new
+        //                {
+        //                    success = true,
+        //                    CustID = custID,
+        //                    SlsPerID = slsperID,
+        //                    BranchID = branchID,
+        //                    RouteID = routeID,
+        //                    Status = cust.Status,
+        //                    Color = (cust.Status == "I" ? "000000" : "undefined")
+        //                });
+        //            }
+        //            else
+        //            {
+        //                throw new MessageException(MessageType.Message, "8", "", new string[] { Util.GetLang("MCP") });
+        //            }
+        //        }
+        //        else
+        //        {
+        //            throw new MessageException(MessageType.Message, "22701");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (ex is MessageException)
+        //        {
+        //            return (ex as MessageException).ToMessage();
+        //        }
+        //        else
+        //        {
+        //            return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+        //        }
+        //    }
+        //}
+
         public ActionResult SaveMcp(FormCollection data,
-            bool custActive, string custID, string slsperID, string branchID, string pJPID,string routeID)
+            bool custActive, string custID, string slsperID, string branchID, string pJPID, string routeID)
         {
             try
             {
+                var salesFreq = data["salesFreq"];
+                var weekOfVisit = data["weekOfVisit"];
+                var sun = data["sun"].ToLower() == "true" ? true : false;
+                var mon = data["mon"].ToLower() == "true" ? true : false;
+                var tue = data["tue"].ToLower() == "true" ? true : false;
+                var wed = data["wed"].ToLower() == "true" ? true : false;
+                var thu = data["thu"].ToLower() == "true" ? true : false;
+                var fri = data["fri"].ToLower() == "true" ? true : false;
+                var sat = data["sat"].ToLower() == "true" ? true : false;
+                DateTime startDate = DateTime.Parse(data["startDate"]);
+                DateTime endDate = DateTime.Parse(data["endDate"]);
+                var visitSort = data["visitSort"].PassNull() == ""? 1 : int.Parse(data["visitSort"].PassNull());
+
                 if (!string.IsNullOrWhiteSpace(custID)
                     && !string.IsNullOrWhiteSpace(slsperID)
                     && !string.IsNullOrWhiteSpace(branchID))
                 {
-                 
+
                     var cust = _db.AR_Customer.FirstOrDefault(c => c.CustId == custID && c.BranchID == branchID);
                     if (cust != null)
                     {
@@ -431,219 +714,81 @@ namespace OM23800.Controllers
 
                         if (custActive)
                         {
-                            #region MCP
-                            var dataHandler = new StoreDataHandler(data["lstMcpInfo"]);
-                            var lstMcpInfo = dataHandler.BatchObjectData<OM_SalesRouteMaster>();
+                            string id = Guid.NewGuid().ToString();
+                            OM_SalesRouteMasterImport objImport = new OM_SalesRouteMasterImport();
 
-                            foreach (var deleted in lstMcpInfo.Deleted)
+                            if (_db.OM_SalesRouteMasterImport.Where(p => p.ID == id
+                                                                            && p.BranchID == branchID
+                                                                            && p.PJPID == pJPID
+                                                                            && p.SalesRouteID == routeID
+                                                                            && p.CustID == custID
+                                                                            && p.SlsPerID == slsperID).ToList().Count == 0)
                             {
-                                var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
-                                    && x.SalesRouteID == routeID
-                                    && x.BranchID == branchID
-                                    && x.SlsPerID == slsperID
-                                    && x.CustID == custID);
+                                objImport.ID = id;
+                                objImport.BranchID = branchID;
+                                objImport.PJPID = pJPID;
+                                objImport.SalesRouteID = routeID;
+                                objImport.CustID = custID;
+                                objImport.SlsPerID = slsperID;
+                                objImport.StartDate = startDate;
+                                objImport.EndDate = endDate; ;
+                                objImport.SlsFreq = salesFreq;
+                                objImport.SlsFreqType = "R";
+                                objImport.WeekofVisit = weekOfVisit;
+                                objImport.Mon = mon;
+                                objImport.Tue = tue;
+                                objImport.Wed = wed;
+                                objImport.Thu = thu;
+                                objImport.Fri = fri;
+                                objImport.Sat = sat;
+                                objImport.Sun = sun;
 
-                                if (obj != null)
+                                objImport.VisitSort = visitSort;
+
+                                objImport.LUpd_DateTime = objImport.LUpd_DateTime = DateTime.Now;
+                                objImport.LUpd_Prog = objImport.LUpd_Prog = _screenName;
+                                objImport.LUpd_User = objImport.LUpd_User = Current.UserName;
+                                objImport.Crtd_DateTime = objImport.Crtd_DateTime = DateTime.Now;
+                                objImport.Crtd_Prog = objImport.Crtd_Prog = _screenName;
+                                objImport.Crtd_User = objImport.Crtd_User = Current.UserName;
+                                if (isValidSelOMSalesRouteMaster(objImport, false))
                                 {
-                                    // xoa cu
-                                    _db.OM_SalesRouteMaster.DeleteObject(obj);
-                                    _db.SaveChanges();
-
-                                    return Json(new
-                                    {
-                                        success = true,
-                                        CustID = custID,
-                                        SlsPerID = slsperID,
-                                        BranchID = branchID,
-                                        RouteID = routeID,
-                                        Color = "CCFF33",
-                                        SlsFreq = "",
-                                        WeekofVisit = "",
-                                        VisitSort = "false",
-                                        Sun = 0,
-                                        Mon = 0,
-                                        Tue = 0,
-                                        Wed = 0,
-                                        Thu = 0,
-                                        Fri = 0,
-                                        Sat = 0,
-                                        Status = cust.Status
-                                    });
+                                    _db.OM_SalesRouteMasterImport.AddObject(objImport);
                                 }
                                 else
                                 {
-                                    throw new MessageException(MessageType.Message, "8");
+                                    throw new MessageException(MessageType.Message, "22701", "", new string[] { objImport.CustID });
+                                    //strtmpError += "   STT: " + strESTT + "Error: Dữ liệu không hợp lệ" + "\r";
                                 }
                             }
 
-                            lstMcpInfo.Updated.AddRange(lstMcpInfo.Created);
-                            foreach (var updated in lstMcpInfo.Updated)
+                            _db.SaveChanges();
+                            DataAccess dal = Util.Dal();
+                            try
                             {
-                                var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
-                                    && x.SalesRouteID == routeID
-                                    && x.BranchID == branchID
-                                    && x.SlsPerID == slsperID
-                                    && x.CustID == custID);
 
-                                if (obj != null)
+                                PJPProcess.PJP pjp = new PJPProcess.PJP(Current.UserName, "OM23800", dal);
+                                dal.BeginTrans(IsolationLevel.ReadCommitted);
+                                if (!pjp.OM23800CreateMCP(id))
                                 {
-                                    //if (obj.tstamp.ToHex() == updated.tstamp.ToHex())
-                                    //{
-                                        // xoa cu, insert moi
-                                        //var newObj = new OM_SalesRouteMaster()
-                                        //{
-                                        //    PJPID = obj.PJPID,
-                                        //    SalesRouteID = obj.SalesRouteID,
-                                        //    CustID = obj.CustID,
-                                        //    SlsPerID = obj.SlsPerID,
-                                        //    BranchID = obj.BranchID
-                                        //};
-
-                                        //_db.OM_SalesRouteMaster.DeleteObject(obj);
-                                        //_db.SaveChanges();
-
-                                        updateSaleRoutesMaster(ref obj, updated);
-                                        if (isValidSelOMSalesRouteMaster(obj))                                        
-                                            _db.SaveChanges();
-                                        else
-                                        {
-                                            throw new MessageException(MessageType.Message, "20131224", "", new string[] { obj.CustID });
-                                        }
-
-                                        return Json(new
-                                        {
-                                            success = true,
-                                            CustID = custID,
-                                            SlsPerID = slsperID,
-                                            BranchID = branchID,
-                                            RouteID = routeID,
-                                            Color = "FF0000",
-                                            SlsFreq = obj.SlsFreq,
-                                            WeekofVisit = obj.WeekofVisit,
-                                            VisitSort = obj.VisitSort,
-                                            Sun = obj.Sun ? 1 : 0,
-                                            Mon = obj.Mon ? 1 : 0,
-                                            Tue = obj.Tue ? 1 : 0,
-                                            Wed = obj.Wed ? 1 : 0,
-                                            Thu = obj.Thu ? 1 : 0,
-                                            Fri = obj.Fri ? 1 : 0,
-                                            Sat = obj.Sat ? 1 : 0,
-                                            Status = cust.Status
-                                        });
-                                    //}
-                                    //else
-                                    //{
-                                    //    throw new MessageException(MessageType.Message, "19");
-                                    //}
+                                    dal.RollbackTrans();
                                 }
                                 else
                                 {
-                                    // insert moi
-                                    var newObj = new OM_SalesRouteMaster()
-                                    {
-                                        PJPID = pJPID,
-                                        SalesRouteID = routeID,
-                                        CustID = custID,
-                                        SlsPerID = slsperID,
-                                        BranchID = branchID
-                                    };
-
-                                    updateSaleRoutesMaster(ref newObj, updated);
-                                    if (isValidSelOMSalesRouteMaster(newObj))
-                                        _db.SaveChanges();
-                                    else
-                                    {
-                                        throw new MessageException(MessageType.Message, "22701", "", new string[] { newObj.CustID });
-                                    }
-                                    _db.OM_SalesRouteMaster.AddObject(newObj);
-                                    _db.SaveChanges();
-
-                                    return Json(new
-                                    {
-                                        success = true,
-                                        CustID = custID,
-                                        SlsPerID = slsperID,
-                                        BranchID = branchID,
-                                        RouteID = routeID,
-                                        Color = "FF0000",
-                                        SlsFreq = newObj.SlsFreq,
-                                        WeekofVisit = newObj.WeekofVisit,
-                                        VisitSort = newObj.VisitSort,
-                                        Sun = newObj.Sun ? 1 : 0,
-                                        Mon = newObj.Mon ? 1 : 0,
-                                        Tue = newObj.Tue ? 1 : 0,
-                                        Wed = newObj.Wed ? 1 : 0,
-                                        Thu = newObj.Thu ? 1 : 0,
-                                        Fri = newObj.Fri ? 1 : 0,
-                                        Sat = newObj.Sat ? 1 : 0,
-                                        Status = cust.Status
-                                    });
+                                    dal.CommitTrans();
                                 }
                             }
+                            catch (Exception ex)
+                            {
+                                dal.RollbackTrans();
+                                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
 
-                            //foreach (var created in lstMcpInfo.Created)
-                            //{
-                            //    var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
-                            //        && x.SalesRouteID == routeID
-                            //        && x.BranchID == branchID
-                            //        && x.SlsPerID == slsperID
-                            //        && x.CustID == custID);
-
-                            //    if (obj == null)
-                            //    {
-                            //        // insert moi
-                            //        var newObj = new OM_SalesRouteMaster()
-                            //        {
-                            //            PJPID = pJPID,
-                            //            SalesRouteID = routeID,
-                            //            CustID = custID,
-                            //            SlsPerID = slsperID,
-                            //            BranchID = branchID
-                            //        };
-
-                            //        updateSaleRoutesMaster(ref newObj, created);
-                            //        if (isValidSelOMSalesRouteMaster(newObj))
-                            //            _db.SaveChanges();
-                            //        else
-                            //        {
-                            //            throw new MessageException(MessageType.Message, "22701", "", new string[] { newObj.CustID });
-                            //        }
-                            //        _db.OM_SalesRouteMaster.AddObject(newObj);
-                            //        _db.SaveChanges();
-
-                            //        return Json(new
-                            //        {
-                            //            success = true,
-                            //            CustID = custID,
-                            //            SlsPerID = slsperID,
-                            //            BranchID = branchID,
-                            //            RouteID = routeID,
-                            //            Color = "FF0000",
-                            //            SlsFreq = newObj.SlsFreq,
-                            //            WeekofVisit = newObj.WeekofVisit,
-                            //            VisitSort = newObj.VisitSort,
-                            //            Sun = newObj.Sun ? 1 : 0,
-                            //            Mon = newObj.Mon ? 1 : 0,
-                            //            Tue = newObj.Tue ? 1 : 0,
-                            //            Wed = newObj.Wed ? 1 : 0,
-                            //            Thu = newObj.Thu ? 1 : 0,
-                            //            Fri = newObj.Fri ? 1 : 0,
-                            //            Sat = newObj.Sat ? 1 : 0,
-                            //            Status = cust.Status
-                            //        });
-                            //    }
-                            //    else
-                            //    {
-                            //        //return Json(new { success = false, msgCode = 2000, msgParam = Util.GetLang("MCP") });
-                            //        throw new MessageException(MessageType.Message, "2000", "", new string[] { Util.GetLang("MCP"),pJPID });
-                            //    }
-                            //}
-                            #endregion
+                            }
                         }
-
                         return Json(new
                         {
                             success = true,
+                            msgCode = 201405071,
                             CustID = custID,
                             SlsPerID = slsperID,
                             BranchID = branchID,
@@ -651,6 +796,7 @@ namespace OM23800.Controllers
                             Status = cust.Status,
                             Color = (cust.Status == "I" ? "000000" : "undefined")
                         });
+                        
                     }
                     else
                     {
@@ -670,7 +816,7 @@ namespace OM23800.Controllers
                 }
                 else
                 {
-                    return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
         }
@@ -754,7 +900,7 @@ namespace OM23800.Controllers
                         }
                         else
                         {
-                            throw new MessageException(MessageType.Message, "20131224", "", new string[] { objImport.CustID });
+                            throw new MessageException(MessageType.Message, "22701", "", new string[] { objImport.CustID });
                             //strtmpError += "   STT: " + strESTT + "Error: Dữ liệu không hợp lệ" + "\r";
                         }
 
@@ -1982,7 +2128,13 @@ namespace OM23800.Controllers
                             strEEndDate = workSheet.Cells[i, 7].StringValue;//dataArray.GetValue(i, 8).PassNull();
                             strETS = workSheet.Cells[i, 8].StringValue;//dataArray.GetValue(i, 9).PassNull();
                             strETBH = workSheet.Cells[i, 9].StringValue;//dataArray.GetValue(i, 10).PassNull();
-                            if (strESTT.PassNull().Trim() == "") break;
+                            //if (strESTT.PassNull().Trim() == "") break;
+                            if (strESTT.PassNull() == "" && strERouteID.PassNull() == "" &&
+                                strECustID.PassNull() == "" && strESlsperID.PassNull() == "" &&
+                                strEBeginDate.PassNull() == "" && strEEndDate.PassNull() == "" &&
+                                strETS.PassNull() == "" && strETBH.PassNull() == "")
+                                continue;
+
                             if (strESlsperID != slsperID && slsperID != "")
                             {
                                 errorESlsperID += (i + 1).ToString() + ",";
@@ -2160,8 +2312,8 @@ namespace OM23800.Controllers
                         message += messagestrEBeginDate == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrEBeginDate, workSheet.Cells[3, 6].StringValue);
                         message += messagestrEEndDate == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrEEndDate, workSheet.Cells[3, 7].StringValue);
                         message += messageDate == "" ? "" : string.Format("Dòng {0} dữ liệu ngày tháng không hợp lệ<br/>", messageDate.ToString());
-                        message += messagestrERouteID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrERouteID, workSheet.Cells[3, 13].StringValue);
-                        message += messageerror == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ<br/>", messageerror);
+                        message += messagestrERouteID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrERouteID, workSheet.Cells[3, 17].StringValue);
+                        message += messageerror == "" ? "" : string.Format("Dòng {0} số Thứ chọn không hợp lệ<br/>", messageerror);
                         message += messageduplicate == "" ? "" : string.Format("Dòng {0} dữ liệu bi trùng<br/>", messageduplicate);
                         message += errorESlsperID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ khác sales<br/>", errorESlsperID);
                         message += errorERouteID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ khác tuyến bán hàng<br/>", errorERouteID);
@@ -2491,6 +2643,15 @@ namespace OM23800.Controllers
                     var lineInvalidDistrict = new List<string>();
                     var lineInvalidGeo = new List<string>();
 
+                    var lineSlsPerID = new List<string>();
+                    var lineShopID = new List<string>();
+                    var lineShopName = new List<string>();
+                    var lineAttn = new List<string>();
+                    var lineAddr = new List<string>();
+                    var lineProvince = new List<string>();
+                    var lineDistrict = new List<string>();
+                    var lineCustClass = new List<string>();
+                    var flagCheckError = false;
                     if (workbook.Worksheets.Count > 0)
                     {
                         Worksheet workSheet = workbook.Worksheets[0];
@@ -2528,202 +2689,248 @@ namespace OM23800.Controllers
                                 strProvince = workSheet.Cells[i, 8].StringValue.Trim();
                                 strPhone = workSheet.Cells[i, 11].StringValue.Trim();
                                 strCustClass = workSheet.Cells[i, 12].StringValue.Trim();
-
+                                strLocation = workSheet.Cells[i, 15].StringValue.Trim();
                                 double.TryParse(workSheet.Cells[i, 13].StringValue.Trim(), out lat);
                                 double.TryParse(workSheet.Cells[i, 14].StringValue.Trim(), out lng);
 
-                                strLocation = workSheet.Cells[i, 15].StringValue.Trim();
+                                if (strSlsPerID == "" && strShopID == "" && strShopName == "" && strAttn == ""
+                                    && strAddr == "" && strProvince == "" && strDistrict == "" && strCustClass == "")
+                                    continue;
 
-                                if (!string.IsNullOrWhiteSpace(strSlsPerID)
-                                    || !string.IsNullOrWhiteSpace(strShopID)
-                                    || !string.IsNullOrWhiteSpace(strShopName)
-                                    || !string.IsNullOrWhiteSpace(strAttn)
-                                    || !string.IsNullOrWhiteSpace(strAddr)
-                                    || !string.IsNullOrWhiteSpace(strDistrict)
-                                    || !string.IsNullOrWhiteSpace(strProvince)
-                                    || !string.IsNullOrWhiteSpace(strPhone)
-                                    || !string.IsNullOrWhiteSpace(strCustClass)
-                                    || !string.IsNullOrWhiteSpace(strLocation)
-                                    || lat>0 || lng>0)
+                                if (strSlsPerID == "")
                                 {
-                                    var slsright = true;
-                                    if (!string.IsNullOrWhiteSpace(strSlsPerID))
+                                    lineSlsPerID.Add((i - dataRowIdx + 1).ToString());
+                                    flagCheckError = true;
+                                }
+                                if (strShopID == "")
+                                {
+                                    lineShopID.Add((i - dataRowIdx + 1).ToString());
+                                    flagCheckError = true;
+                                }
+                                if (strShopName == "")
+                                {
+                                    lineShopName.Add((i - dataRowIdx + 1).ToString());
+                                    flagCheckError = true;
+                                }
+                                if (strAttn == "")
+                                {
+                                    lineAttn.Add((i - dataRowIdx + 1).ToString());
+                                    flagCheckError = true;
+                                }
+                                if (strAddr == "")
+                                {
+                                    lineAddr.Add((i - dataRowIdx + 1).ToString());
+                                    flagCheckError = true;
+                                }
+                                if (strProvince == "")
+                                {
+                                    lineProvince.Add((i - dataRowIdx + 1).ToString());
+                                    flagCheckError = true;
+                                }
+                                if (strDistrict == "")
+                                {
+                                    lineDistrict.Add((i - dataRowIdx + 1).ToString());
+                                    flagCheckError = true;
+                                }
+                                if (strCustClass == "")
+                                {
+                                    lineCustClass.Add((i - dataRowIdx + 1).ToString());
+                                    flagCheckError = true;
+                                }
+                                if (flagCheckError == false)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(strSlsPerID)
+                                        || !string.IsNullOrWhiteSpace(strShopID)
+                                        || !string.IsNullOrWhiteSpace(strShopName)
+                                        || !string.IsNullOrWhiteSpace(strAttn)
+                                        || !string.IsNullOrWhiteSpace(strAddr)
+                                        || !string.IsNullOrWhiteSpace(strDistrict)
+                                        || !string.IsNullOrWhiteSpace(strProvince)
+                                        || !string.IsNullOrWhiteSpace(strPhone)
+                                        || !string.IsNullOrWhiteSpace(strCustClass)
+                                        || !string.IsNullOrWhiteSpace(strLocation)
+                                        || lat > 0 || lng > 0)
                                     {
-                                        var slsper = _db.AR_Salesperson.FirstOrDefault(s => s.SlsperId == strSlsPerID && s.BranchID == strEBranchID);
-                                        if (slsper == null)
+                                        var slsright = true;
+                                        if (!string.IsNullOrWhiteSpace(strSlsPerID))
                                         {
-                                            lineSlsNoExist.Add((i - dataRowIdx + 1).ToString());
-                                            slsright = false;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        lineBlank.Add((i - dataRowIdx + 1).ToString());
-                                        continue;
-                                    }
-
-                                    if (!string.IsNullOrWhiteSpace(strDistrict))
-                                    {
-                                        var district = _db.SI_District.FirstOrDefault(d => d.District == strDistrict && d.State == strProvince);
-                                        if (district == null)
-                                        {
-                                            lineInvalidDistrict.Add((i - dataRowIdx + 1).ToString());
-                                            slsright = false;
-                                        }
-                                        else {
-                                            strCountry = district.Country;
-                                            var state = _db.SI_State.FirstOrDefault(s => s.Country == strCountry && s.State == strProvince);
-                                            if (state != null)
+                                            var slsper = _db.AR_Salesperson.FirstOrDefault(s => s.SlsperId == strSlsPerID && s.BranchID == strEBranchID);
+                                            if (slsper == null)
                                             {
-                                                strTerritory = state.Territory;
-                                            }
-                                            var city = _db.SI_City.FirstOrDefault(c => c.Country == strCountry && c.State == strProvince);
-                                            if (city != null)
-                                            {
-                                                strCity = city.City;
-                                            }
-                                        }
-                                    }
-
-                                    if (isUpdated)
-                                    {
-                                        if (!string.IsNullOrWhiteSpace(strShopID)
-                                            && !string.IsNullOrWhiteSpace(strShopName)
-                                            && !string.IsNullOrWhiteSpace(strDistrict)
-                                            && !string.IsNullOrWhiteSpace(strProvince)
-                                            && !string.IsNullOrWhiteSpace(strCustClass))
-                                        {
-                                            if (slsright)
-                                            {
-                                                var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustId == strShopID && c.BranchID == strEBranchID);
-                                                if (existCust != null)
-                                                {
-                                                    existCust.CustName = existCust.BillName = strShopName;
-                                                    existCust.Attn = existCust.BillAttn = strAttn;
-                                                    existCust.Addr1 = existCust.BillAddr1 = strAddr;
-                                                    existCust.District = strDistrict;
-                                                    existCust.State = existCust.BillState = strProvince;
-                                                    existCust.Phone = existCust.BillPhone = strPhone;
-                                                    existCust.Country = existCust.BillCountry = strCountry;
-                                                    existCust.City = existCust.BillCity = strCity;
-                                                    existCust.Territory = strTerritory;
-                                                    existCust.ClassId = strCustClass;
-                                                    existCust.Location = strLocation;
-                                                    existCust.LUpd_Datetime = DateTime.Now;
-                                                    existCust.LUpd_Prog = _screenName;
-                                                    existCust.LUpd_User = Current.UserName;
-                                                    existCust.SlsperId = strSlsPerID.PassNull();
-
-                                                    if (lat>0 && lng>0)
-                                                    {
-                                                        updateCustomerLocation(strEBranchID, strShopID, lat, lng);
-                                                    }
-                                                    else if (lat > 0 || lng > 0) 
-                                                    {
-                                                        lineInvalidGeo.Add((i - dataRowIdx + 1).ToString());
-                                                    }
-
-                                                    lineSuccess.Add((i - dataRowIdx + 1).ToString());
-                                                }
-                                                else
-                                                {
-                                                    lineNoExist.Add((i - dataRowIdx + 1).ToString());
-                                                }
+                                                lineSlsNoExist.Add((i - dataRowIdx + 1).ToString());
+                                                slsright = false;
                                             }
                                         }
                                         else
                                         {
-                                            lineBlank.Add((i - dataRowIdx + 1).ToString());
+                                            //lineSlsPerID.Add((i - dataRowIdx + 1).ToString());
+                                            //continue;
                                         }
-                                    }
-                                    else
-                                    {
-                                        if (!string.IsNullOrWhiteSpace(strShopName)
-                                            && !string.IsNullOrWhiteSpace(strDistrict)
-                                            && !string.IsNullOrWhiteSpace(strProvince)
-                                            && !string.IsNullOrWhiteSpace(strCustClass))
+
+                                        if (!string.IsNullOrWhiteSpace(strDistrict))
                                         {
-                                            if (slsright)
+                                            var district = _db.SI_District.FirstOrDefault(d => d.District == strDistrict && d.State == strProvince);
+                                            if (district == null)
                                             {
-                                                var canInsert = true;
-                                                if (!string.IsNullOrWhiteSpace(strShopID))
+                                                lineInvalidDistrict.Add((i - dataRowIdx + 1).ToString());
+                                                slsright = false;
+                                            }
+                                            else
+                                            {
+                                                strCountry = district.Country;
+                                                var state = _db.SI_State.FirstOrDefault(s => s.Country == strCountry && s.State == strProvince);
+                                                if (state != null)
+                                                {
+                                                    strTerritory = state.Territory;
+                                                }
+                                                var city = _db.SI_City.FirstOrDefault(c => c.Country == strCountry && c.State == strProvince);
+                                                if (city != null)
+                                                {
+                                                    strCity = city.City;
+                                                }
+                                            }
+                                        }
+
+                                        if (isUpdated)
+                                        {
+                                            if (!string.IsNullOrWhiteSpace(strShopID)
+                                                && !string.IsNullOrWhiteSpace(strShopName)
+                                                && !string.IsNullOrWhiteSpace(strDistrict)
+                                                && !string.IsNullOrWhiteSpace(strProvince)
+                                                && !string.IsNullOrWhiteSpace(strCustClass))
+                                            {
+                                                if (slsright)
                                                 {
                                                     var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustId == strShopID && c.BranchID == strEBranchID);
                                                     if (existCust != null)
                                                     {
-                                                        lineExist.Add((i - dataRowIdx + 1).ToString());
-                                                        canInsert = false;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustName == strShopName && c.Addr1 == strAddr && c.BranchID == strEBranchID);
-                                                    if (existCust != null)
-                                                    {
-                                                        lineExist.Add((i - dataRowIdx + 1).ToString());
-                                                        canInsert = false;
+                                                        existCust.CustName = existCust.BillName = strShopName;
+                                                        existCust.Attn = existCust.BillAttn = strAttn;
+                                                        existCust.Addr1 = existCust.BillAddr1 = strAddr;
+                                                        existCust.District = strDistrict;
+                                                        existCust.State = existCust.BillState = strProvince;
+                                                        existCust.Phone = existCust.BillPhone = strPhone;
+                                                        existCust.Country = existCust.BillCountry = strCountry;
+                                                        existCust.City = existCust.BillCity = strCity;
+                                                        existCust.Territory = strTerritory;
+                                                        existCust.ClassId = strCustClass;
+                                                        existCust.Location = strLocation;
+                                                        existCust.LUpd_Datetime = DateTime.Now;
+                                                        existCust.LUpd_Prog = _screenName;
+                                                        existCust.LUpd_User = Current.UserName;
+                                                        existCust.SlsperId = strSlsPerID.PassNull();
+
+                                                        if (lat > 0 && lng > 0)
+                                                        {
+                                                            updateCustomerLocation(strEBranchID, strShopID, lat, lng);
+                                                        }
+                                                        else if (lat > 0 || lng > 0)
+                                                        {
+                                                            lineInvalidGeo.Add((i - dataRowIdx + 1).ToString());
+                                                        }
+
+                                                        lineSuccess.Add((i - dataRowIdx + 1).ToString());
                                                     }
                                                     else
                                                     {
-                                                        strShopID = _db.OM23800_CustID(strEBranchID, strProvince, strDistrict, strCustClass).FirstOrDefault().ToString();
+                                                        lineNoExist.Add((i - dataRowIdx + 1).ToString());
                                                     }
                                                 }
-
-                                                if (canInsert)
-                                                {
-                                                    var newCust = new AR_Customer();
-                                                    newCust.ResetET();
-                                                    newCust.CustId = strShopID;
-                                                    newCust.BranchID = strEBranchID;
-                                                    newCust.CustName = newCust.BillName = strShopName;
-                                                    newCust.Attn = newCust.BillAttn = strAttn;
-                                                    newCust.Addr1 = newCust.BillAddr1 = strAddr;
-                                                    newCust.District = strDistrict;
-                                                    newCust.State = newCust.BillState = strProvince;
-                                                    newCust.Phone = newCust.BillPhone = strPhone;
-                                                    newCust.Country = newCust.BillCountry = strCountry;
-                                                    newCust.City = newCust.BillCity = strCity;
-                                                    newCust.Territory = strTerritory;
-                                                    newCust.ClassId = strCustClass;
-                                                    newCust.Location = strLocation;
-                                                    newCust.CrRule = "N";
-                                                    newCust.CustType = "R";
-                                                    newCust.DfltShipToId = "DEFAULT";
-                                                    newCust.NodeLevel = 2;
-                                                    newCust.ParentRecordID = 4;
-                                                    newCust.Status = "A";
-                                                    newCust.SupID = "";
-                                                    newCust.TaxDflt = "C";
-                                                    newCust.TaxID00 = "OVAT10-00";
-                                                    newCust.TaxID01 = "OVAT05-00";
-                                                    newCust.TaxID02 = "VAT00";
-                                                    newCust.TaxID03 = "NONEVAT";
-                                                    newCust.TaxLocId = "";
-                                                    newCust.TaxRegNbr = "123456789";
-                                                    newCust.Terms = "07";
-                                                    newCust.LUpd_Datetime = newCust.Crtd_Datetime = DateTime.Now;
-                                                    newCust.LUpd_Prog = newCust.Crtd_Prog = _screenName;
-                                                    newCust.LUpd_User = newCust.Crtd_User = Current.UserName;
-                                                    newCust.SlsperId = strSlsPerID;
-                                                    _db.AR_Customer.AddObject(newCust);
-
-                                                    if (lat > 0 && lng > 0)
-                                                    {
-                                                        updateCustomerLocation(strEBranchID, strShopID, lat, lng);
-                                                    }
-                                                    else if (lat > 0 || lng > 0)
-                                                    {
-                                                        lineInvalidGeo.Add((i - dataRowIdx + 1).ToString());
-                                                    }
-
-                                                    _db.SaveChanges();
-                                                    lineSuccess.Add((i - dataRowIdx + 1).ToString());
-                                                }
+                                            }
+                                            else
+                                            {
+                                                //lineBlank.Add((i - dataRowIdx + 1).ToString());
                                             }
                                         }
                                         else
                                         {
-                                            lineBlank.Add((i - dataRowIdx + 1).ToString());
+                                            if (!string.IsNullOrWhiteSpace(strShopName)
+                                                && !string.IsNullOrWhiteSpace(strDistrict)
+                                                && !string.IsNullOrWhiteSpace(strProvince)
+                                                && !string.IsNullOrWhiteSpace(strCustClass))
+                                            {
+                                                if (slsright)
+                                                {
+                                                    var canInsert = true;
+                                                    if (!string.IsNullOrWhiteSpace(strShopID))
+                                                    {
+                                                        var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustId == strShopID && c.BranchID == strEBranchID);
+                                                        if (existCust != null)
+                                                        {
+                                                            lineExist.Add((i - dataRowIdx + 1).ToString());
+                                                            canInsert = false;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustName == strShopName && c.Addr1 == strAddr && c.BranchID == strEBranchID);
+                                                        if (existCust != null)
+                                                        {
+                                                            lineExist.Add((i - dataRowIdx + 1).ToString());
+                                                            canInsert = false;
+                                                        }
+                                                        else
+                                                        {
+                                                            strShopID = _db.OM23800_CustID(strEBranchID, strProvince, strDistrict, strCustClass).FirstOrDefault().ToString();
+                                                        }
+                                                    }
+
+                                                    if (canInsert)
+                                                    {
+                                                        var newCust = new AR_Customer();
+                                                        newCust.ResetET();
+                                                        newCust.CustId = strShopID;
+                                                        newCust.BranchID = strEBranchID;
+                                                        newCust.CustName = newCust.BillName = strShopName;
+                                                        newCust.Attn = newCust.BillAttn = strAttn;
+                                                        newCust.Addr1 = newCust.BillAddr1 = strAddr;
+                                                        newCust.District = strDistrict;
+                                                        newCust.State = newCust.BillState = strProvince;
+                                                        newCust.Phone = newCust.BillPhone = strPhone;
+                                                        newCust.Country = newCust.BillCountry = strCountry;
+                                                        newCust.City = newCust.BillCity = strCity;
+                                                        newCust.Territory = strTerritory;
+                                                        newCust.ClassId = strCustClass;
+                                                        newCust.Location = strLocation;
+                                                        newCust.CrRule = "N";
+                                                        newCust.CustType = "R";
+                                                        newCust.DfltShipToId = "DEFAULT";
+                                                        newCust.NodeLevel = 2;
+                                                        newCust.ParentRecordID = 4;
+                                                        newCust.Status = "A";
+                                                        newCust.SupID = "";
+                                                        newCust.TaxDflt = "C";
+                                                        newCust.TaxID00 = "OVAT10-00";
+                                                        newCust.TaxID01 = "OVAT05-00";
+                                                        newCust.TaxID02 = "VAT00";
+                                                        newCust.TaxID03 = "NONEVAT";
+                                                        newCust.TaxLocId = "";
+                                                        newCust.TaxRegNbr = "123456789";
+                                                        newCust.Terms = "07";
+                                                        newCust.LUpd_Datetime = newCust.Crtd_Datetime = DateTime.Now;
+                                                        newCust.LUpd_Prog = newCust.Crtd_Prog = _screenName;
+                                                        newCust.LUpd_User = newCust.Crtd_User = Current.UserName;
+                                                        newCust.SlsperId = strSlsPerID;
+                                                        _db.AR_Customer.AddObject(newCust);
+
+                                                        if (lat > 0 && lng > 0)
+                                                        {
+                                                            updateCustomerLocation(strEBranchID, strShopID, lat, lng);
+                                                        }
+                                                        else if (lat > 0 || lng > 0)
+                                                        {
+                                                            lineInvalidGeo.Add((i - dataRowIdx + 1).ToString());
+                                                        }
+
+                                                        _db.SaveChanges();
+                                                        lineSuccess.Add((i - dataRowIdx + 1).ToString());
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                //lineBlank.Add((i - dataRowIdx + 1).ToString());
+                                            }
                                         }
                                     }
                                 }
@@ -2737,11 +2944,47 @@ namespace OM23800.Controllers
                                 message += string.Format("Dòng khách hàng import thành công: {0}<br/>",
                                     lineSuccess.Count > 5 ? string.Join(", ", lineSuccess.Take(5)) + ", ..." : string.Join(", ", lineSuccess));
                             }
-                            if (lineBlank.Count > 0)
+                            if (lineSlsPerID.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng thiếu dữ liệu: {0}<br/>",
-                                    lineBlank.Count > 5 ? string.Join(", ", lineBlank.Take(5)) + ", ..." : string.Join(", ", lineBlank));
+                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                    lineSlsPerID.Count > 5 ? string.Join(", ", lineSlsPerID.Take(5)) + ", ..." : string.Join(", ", lineSlsPerID), workSheet.Cells[3,1].StringValue);
                             }
+                            if (lineShopID.Count > 0)
+                            {
+                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                    lineShopID.Count > 5 ? string.Join(", ", lineShopID.Take(5)) + ", ..." : string.Join(", ", lineShopID), workSheet.Cells[3, 3].StringValue);
+                            }
+                            if (lineShopName.Count > 0)
+                            {
+                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                    lineShopName.Count > 5 ? string.Join(", ", lineShopName.Take(5)) + ", ..." : string.Join(", ", lineShopName), workSheet.Cells[3, 4].StringValue);
+                            }
+                            if (lineAttn.Count > 0)
+                            {
+                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                    lineAttn.Count > 5 ? string.Join(", ", lineAttn.Take(5)) + ", ..." : string.Join(", ", lineAttn), workSheet.Cells[3, 5].StringValue);
+                            }
+                            if (lineAddr.Count > 0)
+                            {
+                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                    lineAddr.Count > 5 ? string.Join(", ", lineAddr.Take(5)) + ", ..." : string.Join(", ", lineAddr), workSheet.Cells[3, 6].StringValue);
+                            }
+                            if (lineProvince.Count > 0)
+                            {
+                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                    lineProvince.Count > 5 ? string.Join(", ", lineProvince.Take(5)) + ", ..." : string.Join(", ", lineProvince), workSheet.Cells[3, 8].StringValue);
+                            }
+                            if (lineDistrict.Count > 0)
+                            {
+                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                    lineDistrict.Count > 5 ? string.Join(", ", lineDistrict.Take(5)) + ", ..." : string.Join(", ", lineDistrict), workSheet.Cells[3, 10].StringValue);
+                            }
+                            if (lineCustClass.Count > 0)
+                            {
+                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                    lineCustClass.Count > 5 ? string.Join(", ", lineCustClass.Take(5)) + ", ..." : string.Join(", ", lineCustClass), workSheet.Cells[3, 12].StringValue);
+                            }
+
                             if (lineExist.Count > 0)
                             {
                                 message += string.Format("Dòng khách hàng đã tồn tại: {0}<br/>",
