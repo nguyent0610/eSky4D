@@ -194,6 +194,14 @@ namespace OM24100.Controllers
                                     cust.LUpd_Datetime = DateTime.Now;
                                     cust.LUpd_Prog = _screenName;
                                     cust.LUpd_User = Current.UserName;
+
+                                    var updateAR_Customer = _db.AR_Customer.FirstOrDefault(p => p.BranchID == selCust.BranchID && p.CustId == selCust.CustId);
+                                    if (updateAR_Customer != null)
+                                    {
+                                        updateAR_Customer.LUpd_Datetime = DateTime.Now;
+                                        updateAR_Customer.LUpd_Prog = _screenName;
+                                        updateAR_Customer.LUpd_User = Current.UserName;
+                                    }
                                 }
                                 listCustDone.Add(cust);
                             }

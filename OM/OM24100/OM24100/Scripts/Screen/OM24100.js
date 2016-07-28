@@ -860,16 +860,16 @@ var Process = {
                             App.grdMCP.store.each(function (record) {
                                 listCustDone.forEach(function (custDone) {
                                     if (record.data.Selected && record.data.CustId == custDone.CustId) {
-                                        record.data.Addr = custDone.Addr1;
-                                        record.data.SuggestAddr = "";
-                                        record.data.Selected = false;
-                                        record.data.ctstamp = custDone.tstamp;
+                                        record.set('Addr', custDone.Addr1);
+                                        record.set('SuggestAddr', "");
+                                        record.set('Selected', false);
+                                        record.set('ctstamp', custDone.tstamp);
                                         return false;
                                     }
                                 });
                             });
-                            App.grdMCP.store.commitChanges();
-                            App.grdMCP.view.refresh();
+                            //App.grdMCP.store.commitChanges();
+                            //App.grdMCP.view.refresh();
                         }
                     },
 
