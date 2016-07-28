@@ -642,8 +642,9 @@ namespace PO10100.Controllers
             {
                 HQSendMailApprove.Approve.SendMailApprove(objHeader.BranchID, objHeader.PONbr, ScreenNbr, Current.CpnyID, _status, _toStatus, Current.UserName, Current.LangID);
             }
-            catch
+            catch (Exception ex) 
             {
+                throw ex;
             }
         }
         private bool Data_Checking(bool isDeleteGrd=false)

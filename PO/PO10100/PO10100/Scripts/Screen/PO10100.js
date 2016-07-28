@@ -1713,7 +1713,6 @@ function oM_GetCnvFactToUnit(invtID, unitDesc) {
         else
             cnvFact = data.data.CnvFact;
     }
-
     return cnvFact;
 };
 
