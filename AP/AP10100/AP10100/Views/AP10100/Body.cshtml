@@ -96,9 +96,11 @@
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection()
                                 {
-                                    new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw },                                               
+                                     new StoreParameter() { Name = "@UserID", Value =  "HQ.userName", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                    new StoreParameter() { Name = "@UserID", Value =  Current.UserName.ToString(), Mode = ParameterMode.Raw }
+                                   
+                                    new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw },                                              
+                                    
                                 })
                                 .LoadData()
                                 .Listeners(lst =>
@@ -236,7 +238,7 @@
                         )// pnlDoc//
                         
                         ,X.GridPanel().ID("grdAP_Trans").AutoScroll(true)
-                        .SelectionMemory(false)
+                        .SelectionMemory(false).Layout(LayoutType.Fit)
                         .RowLines(true).Region(Region.Center)
                         .SortableColumns(false)
                         .View(X.GridView().TrackOver(false))
@@ -413,7 +415,7 @@
 
                                         Html.X().GridPanel()
                                                         .Flex(1)
-                                                        .ID("grdTaxTrans")
+                                                        .ID("grdTaxTrans").Layout(LayoutType.Fit)
                                                         .ColumnLines(true)
                                                         .RowLines(true)
                                                         .Listeners(lss=>lss.Render.Handler = "HQ.common.control_render(this,'TaxTrans')")

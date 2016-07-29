@@ -650,11 +650,11 @@ namespace AP10100.Controllers
 						
 						if (CpnyID != "")
 						{
-							//var lstCustomer = _app.AP10100_pcCustomerActive(CpnyID, Current.UserName, _screenNbr).ToList();
+							var lstVend = _app.AP10100_pcGetVendor(Current.UserName, CpnyID).ToList();
 							//var lstTerms = _app.AP10100_pcterms().ToList();
 							for (int i = 3; i <= workSheet.Cells.MaxDataRow; i++)
 							{
-								//var objCust = new AP10100_pcCustomerActive_Result();
+								var objVend = new AP10100_pcGetVendor_Result();
 								bool FlagCheck = false;
 								DocType = workSheet.Cells[i, 0].StringValue.PassNull();
 								CustID = workSheet.Cells[i, 1].StringValue.PassNull();
@@ -702,16 +702,16 @@ namespace AP10100.Controllers
 									errorTranAmt += (i + 1).ToString() + ",";
 									FlagCheck = true;
 								}
-								//if (CustID != "")
-								//{
-								//	if (lstCustomer.FirstOrDefault(p => p.CustID == CustID) == null)
-								//	{
-								//		errorCustIDnotExists += (i + 1).ToString() + ",";
-								//		FlagCheck = true;
-								//	}
-								//	else
-								//		objCust = lstCustomer.FirstOrDefault(p => p.CustID == CustID);
-								//}
+								if (CustID != "")
+								{
+									if (lstVend.FirstOrDefault(p => p.VendID == CustID) == null)
+									{
+										errorCustIDnotExists += (i + 1).ToString() + ",";
+										FlagCheck = true;
+									}
+									else
+										objVend = lstVend.FirstOrDefault(p => p.VendID == CustID);
+								}
 								if (DocDate != "")
 								{
 									DateTime parsed;
@@ -784,8 +784,10 @@ namespace AP10100.Controllers
 								var tmpBatNbr = "";
 								var tmpRefNbr = "";
 								string[] strDocDate = DocDate.Split('/');
-								DateTime tmpDocDate = new DateTime(int.Parse(strDocDate[0]), int.Parse(strDocDate[1]), int.Parse(strDocDate[2]));
-
+								DateTime tmpDocDate = new DateTime(int.Parse(strDocDate[0]), int.Parse(strDocDate[1]), int.Parse(strDocDate[2])).ToDateShort();
+								string[] strDueDate = DueDate.Split('/');
+								DateTime tmpDueDate = new DateTime(int.Parse(strDueDate[0]), int.Parse(strDueDate[1]), int.Parse(strDueDate[2])).ToDateShort();
+								string terms=(lstVend.FirstOrDefault(p => p.VendID == CustID)).Terms.PassNull();
 								#region Save Batch
 								var objBatch = new Batch();
 								objBatch.ResetET();
@@ -800,6 +802,7 @@ namespace AP10100.Controllers
 								objBatch.EditScrnNbr = "AP10100";
 								objBatch.JrnlType = "AP";
 								objBatch.OrigBranchID = "";
+								objBatch.Descr = DocDesc;
 								objBatch.TotAmt = Convert.ToDouble(TranAmt);
 								objBatch.DateEnt = tmpDocDate;
 								objBatch.Status = "H";
@@ -831,10 +834,11 @@ namespace AP10100.Controllers
 								objAP_Doc.DocType = DocType;
 								objAP_Doc.DiscDate = tmpDocDate;
 								objAP_Doc.DocBal = Convert.ToDouble(TranAmt);
-								objAP_Doc.DocDate = tmpDocDate;
+								objAP_Doc.DocDate = tmpDocDate.ToDateShort();
 								objAP_Doc.DocDesc = DocDesc;
+								objAP_Doc.VendID = CustID;
 
-							//	objAP_Doc.DueDate = tmpDocDate.AddDays(lstTerms.FirstOrDefault(p => p.TermsID == objCust.Terms).DueIntrv);
+								objAP_Doc.DueDate = tmpDueDate.ToDateShort();//tmpDocDate.AddDays(lstTerms.FirstOrDefault(p => p.TermsID == objCust.Terms).DueIntrv);
 
 								//objAP_Doc.SlsperId = "";
 								//objAP_Doc.CustId = CustID;
@@ -843,7 +847,9 @@ namespace AP10100.Controllers
 								objAP_Doc.TaxTot00 = 0;
 								objAP_Doc.InvcNbr = InvcNbr;
 								objAP_Doc.InvcNote = InvcNote;
-								//objAP_Doc.Terms = objCust.Terms;
+								objAP_Doc.InvcDate = DateTime.Now.ToDateShort();//tmpDocDate.ToDateShort();
+								objAP_Doc.Terms = terms;
+								
 
 								if (objAP_Doc.BatNbr != "" && objAP_Doc.BranchID != "" && objAP_Doc.RefNbr != "")
 									_app.AP_Doc.AddObject(objAP_Doc);
@@ -862,6 +868,7 @@ namespace AP10100.Controllers
 								objGrid.LUpd_DateTime = DateTime.Now;
 								objGrid.LUpd_Prog = _screenNbr;
 								objGrid.LUpd_User = Current.UserName;
+								
 
 								objGrid.LineType = "N";
 								objGrid.JrnlType = "AP";
@@ -880,7 +887,11 @@ namespace AP10100.Controllers
 								objGrid.TaxId03 = "";
 								objGrid.TranAmt = Convert.ToDouble(TranAmt);
 								objGrid.TranDate = tmpDocDate.ToDateShort();
-								//objGrid.TranDesc = CustID + " - " + objCust.Name;
+								objGrid.TranDesc = CustID + " - " + (lstVend.FirstOrDefault(p => p.VendID == CustID)).Name.PassNull();
+								objGrid.VendID = CustID;
+								objGrid.Addr = (lstVend.FirstOrDefault(p => p.VendID == CustID)).Address.PassNull();
+								objGrid.VendName = (lstVend.FirstOrDefault(p => p.VendID == CustID)).Name.PassNull();
+								objGrid.InvcDate = DateTime.Now.ToDateShort();
 								objGrid.TranType = DocType;
 								objGrid.TxblAmt00 = Convert.ToDouble(TranAmt);
 								objGrid.TxblAmt01 = 0;
@@ -894,9 +905,9 @@ namespace AP10100.Controllers
 							}
 
 							message = errorCloseDate == "" ? "" : string.Format("Dòng: {0} ngày chứng từ không nằm trong phạm vi cho phép nhập liệu của bạn</br>", errorCloseDate);
-							message += errorDocType == "" ? "" : string.Format("{0} dòng: {1} không thuộc loại Phiếu Báo Nợ(AC,VO) </br>", "Loại Chứng Từ", errorDocType);
-							message += errorCustID == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Mã KH", errorCustID);
-							message += errorCustIDnotExists == "" ? "" : string.Format("{0} dòng: {1} không tồn tại</br>", "Mã KH", errorCustIDnotExists);
+							message += errorDocType == "" ? "" : string.Format("{0} dòng: {1} không thuộc loại (AC - Phiếu Báo Có, VO - Hóa Đơn) </br>", "Loại Chứng Từ", errorDocType);
+							message += errorCustID == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Mã NCC", errorCustID);
+							message += errorCustIDnotExists == "" ? "" : string.Format("{0} dòng: {1} không tồn tại</br>", "Mã NCC", errorCustIDnotExists);
 							message += errorDocDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Chứng Từ", errorDocDate);
 							message += errorDueDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Tới Hạn", errorDueDate);
 							

@@ -12,7 +12,9 @@ var _isLoadMaster = false;
 //// Event /////////////////////////////////////////////////////////////
 var checkLoad = function () {
     _Source += 1;
+   // alert(_Source);
     if (_Source == _maxSource) {
+        HQ.isFirstLoad = true;
         App.stoAP10100_pdHeader.reload();
     }
 };
@@ -147,7 +149,7 @@ var menuClick = function (command) {
             if (isreturn)
                 return;
             if (App.txtCuryDocBal.getValue() == '0') {
-                HQ.message.show(2016072201, '', '');
+                HQ.message.show(15, HQ.common.getLang('CuryDocBal'), '');
                 return;
             }
            
@@ -181,7 +183,8 @@ var stoAP10100_pdHeader_BeforeLoad = function (store) {
 };
 var stoAP10100_pdHeader_Load = function (store) {
    // HQ.common.showBusy(true, HQ.common.getLang("loading..."));
-  //  HQ.isFirstLoad = true;
+    //  HQ.isFirstLoad = true;
+   
     HQ.isNew = false;
 
    // App.cboVendID.setReadOnly(true);
@@ -239,6 +242,7 @@ var stoAP10100_pdHeader_Load = function (store) {
     else
         HQ.common.lockItem(App.frmMain, true);
     frmChange();
+    
     //App.stoAP10100_pgLoadTaxTrans.reload();
     //HQ.common.showBusy(false);
 };
@@ -397,6 +401,10 @@ var grdAP_Trans_BeforeEdit = function (editor, e) {
             e.record.set("LineType", "N");
         }
         //return HQ.grid.checkBeforeEdit(e, keys);
+    }
+    else {
+        
+        return false;
     }
 };
 
