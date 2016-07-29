@@ -198,7 +198,7 @@ namespace OM24100.Controllers
                                     var updateAR_Customer = _db.AR_CustomerLocation.FirstOrDefault(p => p.BranchID == selCust.BranchID && p.CustID == selCust.CustId);
                                     if (updateAR_Customer != null)
                                     {
-                                        updateAR_Customer.LUpd_Datetime = DateTime.Now;
+                                        updateAR_Customer.LUpd_Datetime = cust.LUpd_Datetime;
                                         updateAR_Customer.LUpd_Prog = _screenName;
                                         updateAR_Customer.LUpd_User = Current.UserName;
                                     }
