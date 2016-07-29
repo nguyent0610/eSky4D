@@ -22,7 +22,7 @@
     .BodyBorder(0)
         //.TopBar(Util.SetupToolbar("new,save,delete,print",true,"Index.menuClick"))
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
-    .Listeners(x=>x.BoxReady.Handler="App.pnlInfo.setActiveTab(2)")
+    .Listeners(x=>x.BoxReady.Fn="dataForm_BoxReady")
     .Items(
         X.TabPanel()
         .ID("pnlInfo")
@@ -586,6 +586,22 @@
                     .Listeners(x => {
                         x.CellClick.Fn = "Index.grdVisitCustomerActual_cellClick"; 
                     })
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("CustName"),
+                                X.NumericFilter().DataIndex("Amt"),
+                                X.NumericFilter().DataIndex("Distance"),
+                                X.StringFilter().DataIndex("Checkin"),
+                                X.StringFilter().DataIndex("Checkout"),
+                                X.StringFilter().DataIndex("Addr"),
+                                X.StringFilter().DataIndex("TGCICO"),
+                                X.StringFilter().DataIndex("CustId"),
+                                X.StringFilter().DataIndex("GPSCheckin"),
+                                X.StringFilter().DataIndex("GPSCheckout")
+                            )
+                    )
         // GridPanel: grdVisitCustomerActual
 
                     , X.GridPanel().ID("grdAllCurrentSalesman").MarginSpec("5 0 0 0")
@@ -605,6 +621,16 @@
                     .SelectionModel(
                         X.RowSelectionModel().ID("SelectionModelAllCurrentSalesman").Mode(SelectionMode.Single)
                         .Listeners(l => l.Select.Fn = "Index.selectionModelVisitCustomerPlan_Select")
+                    )
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("SlsperID"),
+                                X.StringFilter().DataIndex("Name"),
+                                X.StringFilter().DataIndex("Lat"),
+                                X.StringFilter().DataIndex("Lng")
+                            )
                     )
         // GridPanel: grdAllCurrentSalesman
                 )
@@ -726,6 +752,15 @@
                     .SelectionModel(
                         X.RowSelectionModel().ID("SelectionModelCustHistory").Mode(SelectionMode.Single)
                         .Listeners(l => l.Select.Fn = "Index.selectionModelVisitCustomerPlan_Select")
+                    )
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.DateFilter().DataIndex("VisitDate"),
+                                X.StringFilter().DataIndex("Lat"),
+                                X.StringFilter().DataIndex("Lng")
+                            )
                     )
         // GridPanel: grdCustHistory
                 )

@@ -3393,11 +3393,13 @@ namespace OM30400
         /// </summary>
         /// <param name="custId">Initial value of the CustId property.</param>
         /// <param name="isNotVisited">Initial value of the IsNotVisited property.</param>
-        public static OM30400_pgGridActualVisit_Result CreateOM30400_pgGridActualVisit_Result(global::System.String custId, global::System.Int32 isNotVisited)
+        /// <param name="turnOver">Initial value of the TurnOver property.</param>
+        public static OM30400_pgGridActualVisit_Result CreateOM30400_pgGridActualVisit_Result(global::System.String custId, global::System.Int32 isNotVisited, global::System.Decimal turnOver)
         {
             OM30400_pgGridActualVisit_Result oM30400_pgGridActualVisit_Result = new OM30400_pgGridActualVisit_Result();
             oM30400_pgGridActualVisit_Result.CustId = custId;
             oM30400_pgGridActualVisit_Result.IsNotVisited = isNotVisited;
+            oM30400_pgGridActualVisit_Result.TurnOver = turnOver;
             return oM30400_pgGridActualVisit_Result;
         }
 
@@ -3860,6 +3862,30 @@ namespace OM30400
         private global::System.Int32 _IsNotVisited;
         partial void OnIsNotVisitedChanging(global::System.Int32 value);
         partial void OnIsNotVisitedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal TurnOver
+        {
+            get
+            {
+                return _TurnOver;
+            }
+            set
+            {
+                OnTurnOverChanging(value);
+                ReportPropertyChanging("TurnOver");
+                _TurnOver = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TurnOver");
+                OnTurnOverChanged();
+            }
+        }
+        private global::System.Decimal _TurnOver;
+        partial void OnTurnOverChanging(global::System.Decimal value);
+        partial void OnTurnOverChanged();
 
         #endregion
 

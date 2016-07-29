@@ -420,9 +420,10 @@
           <Property Type="Double" Name="CoLng" Nullable="true" />
           <Property Type="Double" Name="CustLat" Nullable="true" />
           <Property Type="Double" Name="CustLng" Nullable="true" />
-          <Property Type="String" Name="PicPath" Nullable="true" MaxLength="220" />
+          <Property Type="String" Name="PicPath" Nullable="true" MaxLength="300" />
           <Property Type="String" Name="Color" Nullable="true" MaxLength="6" />
           <Property Type="Int32" Name="IsNotVisited" Nullable="false" />
+          <Property Type="Decimal" Name="TurnOver" Nullable="false" Precision="1" Scale="1" />
         </ComplexType>
         <ComplexType Name="OM30400_pgVisitCustomerActual_Result">
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
@@ -638,6 +639,7 @@
                 <ScalarProperty Name="PicPath" ColumnName="PicPath" />
                 <ScalarProperty Name="Color" ColumnName="Color" />
                 <ScalarProperty Name="IsNotVisited" ColumnName="IsNotVisited" />
+                <ScalarProperty Name="TurnOver" ColumnName="TurnOver" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -675,7 +677,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="56">
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="36">
         <EntityTypeShape EntityType="OM30400Model.AR_Customer" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM30400Model.OM_SalesRouteMaster" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>

@@ -1,4 +1,12 @@
-var pointsArray = [];
+﻿var pointsArray = [];
+
+var dataForm_BoxReady = function () {
+    App.pnlInfo.setActiveTab(2);
+    if (hideButtonPosition == 'true')
+        App.btnGetCurrentLocation.hide();
+    else
+        App.btnGetCurrentLocation.show();
+};
 
 // JS Code for Index View
 var Index = {
@@ -12,13 +20,11 @@ var Index = {
                 returnValue = multiCombo.rawValue;
             }
         }
-
         return returnValue;
     },
 
     menuClick: function (cmd) {
         switch (cmd) {
-
             case "refresh":
                 {
                     if (!App.pnlMCP.hidden) {
@@ -92,9 +98,6 @@ var Index = {
                 break;
 
             case "close":
-                {
-                    HQ.common.close(this);
-                }
                 break;
         }
     },
@@ -551,7 +554,13 @@ var Index = {
                             '</h1>' +
                             '<div id="bodyContent">' +
                                 '<p>' +
-                                    record.data.Addr +
+                                    'Thời gian check in - out: '+ record.data.Checkin + ' - ' + record.data.Checkout +
+                                '</p>' +
+                                '<p>' +
+                                    'Doanh số: ' + record.data.TurnOver +
+                                '</p>' +
+                                '<p>' +
+                                    'Địa chỉ: ' + record.data.Addr +
                                 '</p>' +
                                 (!record.data.PicPath?'':('<a target="_blank" href="' + record.data.PicPath + '">' +
                                     '<img width="200px" src="' + record.data.PicPath + '" />' +
@@ -580,6 +589,9 @@ var Index = {
                                 '</h1>' +
                                 '<div id="bodyContent">' +
                                     '<p>' +
+                                        record.data.Checkin + ' - ' + record.data.Checkout +
+                                    '</p>' +
+                                    '<p>' +
                                         record.data.Addr +
                                     '</p>' +
                                     (!record.data.PicPath ? '' : ('<a target="_blank" href="' + record.data.PicPath + '">' +
@@ -607,6 +619,9 @@ var Index = {
                                     record.data.CustName +
                                 '</h1>' +
                                 '<div id="bodyContent">' +
+                                    '<p>' +
+                                        record.data.Checkin + ' - ' + record.data.Checkout +
+                                    '</p>' +
                                     '<p>' +
                                         record.data.Addr +
                                     '</p>' +
@@ -1398,13 +1413,13 @@ var PosGmap = {
             PosGmap.stopMarkers = [];
             // List of locations
             var lat_lng = new Array();
-
+            var bounds = new google.maps.LatLngBounds();
             // For each marker in list
             for (i = 0; i < markers.length; i++) {
                 var data = markers[i];
                 if (data.lat && data.lng) {
                     var myLatlng = new google.maps.LatLng(data.lat, data.lng);
-
+                    bounds.extend(myLatlng);
                     // Change color for Checkin and checkout point (for Actual Visit)
                     //var pinColor = "BDBDBD";//FE6256
                     var icon = Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', data.label, data.color ? data.color : "BDBDBD");
@@ -1437,14 +1452,14 @@ var PosGmap = {
                     }
 
                     // Maps center at the first location
-                    if (i == 0) {
-                        var myOptions = {
-                            center: myLatlng,
-                            zoom: 16,
-                            mapTypeId: google.maps.MapTypeId.ROADMAP
-                        };
-                        PosGmap.map = new google.maps.Map(PosGmap.map_canvas, myOptions);
-                    }
+                    //if (i == 0) {
+                    //    var myOptions = {
+                    //        center: myLatlng,
+                    //        zoom: 16,
+                    //        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    //    };
+                    //    PosGmap.map = new google.maps.Map(PosGmap.map_canvas, myOptions);
+                    //}
 
                     var markerLabel = data.label;
                     var marker = new google.maps.Marker({
@@ -1479,9 +1494,9 @@ var PosGmap = {
                     PosGmap.stopMarkers.push(marker);
                 }
             }
-
             PosGmap.directionsDisplay.setMap(PosGmap.map);
-
+            PosGmap.map.initialZoom = true;
+            PosGmap.map.fitBounds(bounds);
             if (showDirections) {
                 PosGmap.calcRoute(lat_lng);
             }

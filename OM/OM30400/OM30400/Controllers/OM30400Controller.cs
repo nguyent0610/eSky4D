@@ -17,6 +17,7 @@ using HQFramework.DAL;
 using System.Drawing;
 using System.Data;
 using HQFramework.Common;
+using HQ.eSkySys;
 
 namespace OM30400.Controllers
 {
@@ -27,11 +28,21 @@ namespace OM30400.Controllers
     {
         private string _screenName = "OM30400";
         OM30400Entities _db = Util.CreateObjectContext<OM30400Entities>(false);
-
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         //
         // GET: /OM30400/
         public ActionResult Index()
         {
+            var hideButtonCurrentPosition = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "OM30400btnPosition");
+            if (hideButtonCurrentPosition == null)
+                ViewBag.hideButtonPosition = "false";
+            else
+            {
+                if (hideButtonCurrentPosition.IntVal == 1)
+                    ViewBag.hideButtonPosition = "true";
+                else
+                    ViewBag.hideButtonPosition = "false";
+            }
             return View();
         }
 
