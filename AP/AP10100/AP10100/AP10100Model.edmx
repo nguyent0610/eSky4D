@@ -419,6 +419,23 @@
           <Property Type="Double" Name="TxblTot02" Nullable="false" />
           <Property Type="Double" Name="TxblTot03" Nullable="false" />
         </ComplexType>
+        <ComplexType Name="AP10100_pgLoadTaxTrans_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="TaxID" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="TxblAmt" Nullable="false" />
+          <Property Type="Double" Name="TaxAmt" Nullable="false" />
+          <Property Type="Double" Name="TaxRate" Nullable="false" />
+          <Property Type="String" Name="TaxLevel" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="AP10100_pcGetVendor_Result">
+          <Property Type="String" Name="Terms" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="VendID" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="400" />
+        </ComplexType>
         <ComplexType Name="AP10100_pgLoadInvoiceMemo_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
@@ -458,23 +475,7 @@
           <Property Type="String" Name="VendID" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="VendName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="tstamp" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="AP10100_pgLoadTaxTrans_Result">
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
-          <Property Type="String" Name="TaxID" Nullable="true" MaxLength="10" />
-          <Property Type="Double" Name="TxblAmt" Nullable="false" />
-          <Property Type="Double" Name="TaxAmt" Nullable="false" />
-          <Property Type="Double" Name="TaxRate" Nullable="false" />
-          <Property Type="String" Name="TaxLevel" Nullable="false" MaxLength="1" />
-        </ComplexType>
-        <ComplexType Name="AP10100_pcGetVendor_Result">
-          <Property Type="String" Name="Terms" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="VendID" Nullable="false" MaxLength="15" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="Address" Nullable="false" MaxLength="400" />
+          <Property Type="String" Name="LineTypeDescr" Nullable="true" MaxLength="100" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -713,6 +714,7 @@
                 <ScalarProperty Name="VendID" ColumnName="VendID" />
                 <ScalarProperty Name="VendName" ColumnName="VendName" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LineTypeDescr" ColumnName="LineTypeDescr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

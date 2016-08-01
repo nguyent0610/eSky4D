@@ -728,8 +728,8 @@ namespace AP10100.Controllers
 									else
 									{
 										
-										if (_app.AP10100_ppCheckCloseDate(CpnyID, parsed.ToDateShort()).FirstOrDefault() == "0")
-											errorCloseDate += (i + 1).ToString() + ",";
+										//if (_app.AP10100_ppCheckCloseDate(CpnyID, parsed.ToDateShort()).FirstOrDefault() == "0")
+										//	errorCloseDate += (i + 1).ToString() + ",";
 									}
 								}
 								if (DueDate != "")
@@ -903,21 +903,39 @@ namespace AP10100.Controllers
 									_app.AP_Trans.AddObject(objGrid);
 								#endregion
 							}
+							if (Current.LangID == 1)
+							{
+								message = errorCloseDate == "" ? "" : string.Format("Dòng: {0} ngày chứng từ không nằm trong phạm vi cho phép nhập liệu của bạn</br>", errorCloseDate);
+								message += errorDocType == "" ? "" : string.Format("{0} dòng: {1} không thuộc loại (AC - Phiếu Báo Có, VO - Hóa Đơn) </br>", "Loại Chứng Từ", errorDocType);
+								message += errorCustID == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Mã NCC", errorCustID);
+								message += errorCustIDnotExists == "" ? "" : string.Format("{0} dòng: {1} không tồn tại</br>", "Mã NCC", errorCustIDnotExists);
+								message += errorDocDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Chứng Từ", errorDocDate);
+								message += errorDueDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Tới Hạn", errorDueDate);
 
-							message = errorCloseDate == "" ? "" : string.Format("Dòng: {0} ngày chứng từ không nằm trong phạm vi cho phép nhập liệu của bạn</br>", errorCloseDate);
-							message += errorDocType == "" ? "" : string.Format("{0} dòng: {1} không thuộc loại (AC - Phiếu Báo Có, VO - Hóa Đơn) </br>", "Loại Chứng Từ", errorDocType);
-							message += errorCustID == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Mã NCC", errorCustID);
-							message += errorCustIDnotExists == "" ? "" : string.Format("{0} dòng: {1} không tồn tại</br>", "Mã NCC", errorCustIDnotExists);
-							message += errorDocDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Chứng Từ", errorDocDate);
-							message += errorDueDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Tới Hạn", errorDueDate);
-							
-							message += errorDocDesc == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Diễn Giải Chứng Từ", errorDocDesc);
-							message += errorTranAmt == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Thành Tiền", errorTranAmt);
-							message += errorTranAmtNotInput == "" ? "" : string.Format("{0} dòng: {1} thành tiền phải lớn hơn 0</br>", "Thành Tiền", errorTranAmtNotInput);
-							message += erorrTranAmtFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng kiểu số</br>", "Thành Tiền", erorrTranAmtFormat);
-							message += errorDocDateFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng (yyyy/MM/dd)</br>", "Ngày Chứng Từ", errorDocDateFormat);
-							message += errorDueDateFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng (yyyy/MM/dd)</br>", "Ngày Tới Hạn", errorDocDateFormat);
+								message += errorDocDesc == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Diễn Giải Chứng Từ", errorDocDesc);
+								message += errorTranAmt == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Thành Tiền", errorTranAmt);
+								message += errorTranAmtNotInput == "" ? "" : string.Format("{0} dòng: {1} thành tiền phải lớn hơn 0</br>", "Thành Tiền", errorTranAmtNotInput);
+								message += erorrTranAmtFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng kiểu số</br>", "Thành Tiền", erorrTranAmtFormat);
+								message += errorDocDateFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng (yyyy/MM/dd)</br>", "Ngày Chứng Từ", errorDocDateFormat);
+								message += errorDueDateFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng (yyyy/MM/dd)</br>", "Ngày Tới Hạn", errorDueDateFormat);
+							}
+							else
+							{
+								message = errorCloseDate == "" ? "" : string.Format("Line {0}: Workdays are not allowed your input</br>", errorCloseDate);
+								message += errorDocType == "" ? "" : string.Format("Line {1}: {0} is not Voucher (VO) and Credit Adjustment (AC)</br>", "Document Type", errorDocType);
+								message += errorCustID == "" ? "" : string.Format("Line {1}: do not have {0} </br>", "Vendor ID", errorCustID);
+								message += errorCustIDnotExists == "" ? "" : string.Format("Line {1}:{0} does not exists</br>", "Vendor ID", errorCustIDnotExists);
+								message += errorDocDate == "" ? "" : string.Format("Line {1}: do not have {0} </br>", "Doc Date", errorDocDate);
+								message += errorDueDate == "" ? "" : string.Format("Line {1}: do not have {0} </br>", "Due Date", errorDueDate);
 
+								message += errorDocDesc == "" ? "" : string.Format("Line {1}: do not have {0} </br>", "document description", errorDocDesc);
+								message += errorTranAmt == "" ? "" : string.Format("Line {1}: do not have{0}</br>", "Total Amount", errorTranAmt);
+								message += errorTranAmtNotInput == "" ? "" : string.Format("Line {1}: {0} must be more than 0</br>", "Total Amount", errorTranAmtNotInput);
+								message += erorrTranAmtFormat == "" ? "" : string.Format("Line {1}:  invalid {0}</br>", "Total Amount", erorrTranAmtFormat);
+								message += errorDocDateFormat == "" ? "" : string.Format("Line {1}: {0} format error (yyyy/MM/dd)</br>", "Doc Date", errorDocDateFormat);
+								message += errorDueDateFormat == "" ? "" : string.Format("Line {1}: {0} format error (yyyy/MM/dd)</br>", "Due Date", errorDueDateFormat);
+						
+							}
 
 							if (message == "" || message == string.Empty)
 							{
@@ -931,6 +949,7 @@ namespace AP10100.Controllers
 				else
 				{
 					Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
+					throw new MessageException( "2014070701","", new[] { fileInfo.Extension.Replace(".", "") });
 				}
 			}
 			catch (Exception ex)

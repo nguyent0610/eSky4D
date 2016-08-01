@@ -5733,6 +5733,30 @@ namespace AP10100
         private global::System.String _tstamp;
         partial void OntstampChanging(global::System.String value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LineTypeDescr
+        {
+            get
+            {
+                return _LineTypeDescr;
+            }
+            set
+            {
+                OnLineTypeDescrChanging(value);
+                ReportPropertyChanging("LineTypeDescr");
+                _LineTypeDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LineTypeDescr");
+                OnLineTypeDescrChanged();
+            }
+        }
+        private global::System.String _LineTypeDescr;
+        partial void OnLineTypeDescrChanging(global::System.String value);
+        partial void OnLineTypeDescrChanged();
 
         #endregion
 

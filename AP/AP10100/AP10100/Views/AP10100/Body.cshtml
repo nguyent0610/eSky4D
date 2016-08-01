@@ -144,6 +144,7 @@
                                             .Listeners(lst =>
                                             {
                                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                               
                                             }) 
                                             
                                        ,HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("VENDID").HQProcedure("AP10100_pcGetVendor").Width(300)
@@ -256,9 +257,11 @@
                                 )
                                 .Parameters(ps =>
                                         {
+                                            ps.Add(new StoreParameter("LangID", "HQ.langID", ParameterMode.Raw));
                                             ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
                                             ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
                                             ps.Add(new StoreParameter("RefNbr", "App.txtRefNbr.value", ParameterMode.Raw));
+                                          
                                         })
                                 .Listeners(p =>
                                     {
@@ -270,10 +273,10 @@
                         .ColumnModel(
                                 Html.X().RowNumbererColumn().ID("RowNumber")
                             //LineType Column
-                                , Html.X().Column().Text(Util.GetLang("LineType")).Width(150).DataIndex("LineType").Renderer("rendererLineType")
+                                , Html.X().Column().Text(Util.GetLang("LineType")).Width(100).DataIndex("LineType")//.Renderer("rendererLineType")
                                     .Editor(
                                             HQ.Combo().ID("cboLineType").Name("cboLineType").HQProcedure("AP10100_pcGetLineType")
-                                                .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                                                .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
                                                 .Width(300).HQHeightWidth(500, 300).ForceSelection(true).DataIndex("LineType")
                                                 .HQParam(new StoreParameterCollection() { 
                                                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -284,10 +287,13 @@
                                                 .Listeners(lst =>
                                                 {
                                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                    lst.Change.Fn = "cboLineType_Change";
                                                 })
 
                                         )
 
+                                        , Html.X().Column().Text(Util.GetLang("LineTypeDescr")).Width(100).DataIndex("LineTypeDescr").Width(150)
+                                        
                                ,Html.X().Column().Text(Util.GetLang("InvtID")).Width(100).DataIndex("InvtID")
                                         .Editor(
                                             HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQProcedure("AP10100_pcInventoryActiveByBranch")
@@ -381,6 +387,7 @@
                                     .Local(true)
                                     .Filters(
                                      X.StringFilter().DataIndex("LineType"),
+                                     X.StringFilter().DataIndex("LineTypeDescr"),
                                       X.StringFilter().DataIndex("InvtID"),
                                              X.NumericFilter().DataIndex("Qty"),
                                              X.NumericFilter().DataIndex("UnitPrice"),

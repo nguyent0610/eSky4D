@@ -106,6 +106,7 @@ var menuClick = function (command) {
                         return;
                     HQ.grid.insert(App.grdAP_Trans, keys);
                     App.cboLineType.setValue('N');
+                    
                 }
                 //App.cboVendID.setReadOnly(false);
                 //App.cboDocType.setReadOnly(false);
@@ -144,14 +145,19 @@ var menuClick = function (command) {
                     isreturn = true;
                     return;
                 }
+                else if (item.data.InvtID == "") {
+                    HQ.message.show(15, HQ.common.getLang('InvtID'), '');
+                    isreturn = true;
+                    return;
+                }
 
             });
             if (isreturn)
                 return;
-            if (App.txtCuryDocBal.getValue() == '0') {
-                HQ.message.show(15, HQ.common.getLang('CuryDocBal'), '');
-                return;
-            }
+            //if (App.txtCuryDocBal.getValue() == '0') {
+            //    HQ.message.show(15, HQ.common.getLang('CuryDocBal'), '');
+            //    return;
+            //}
            
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain) &&
@@ -217,14 +223,7 @@ var stoAP10100_pdHeader_Load = function (store) {
     //if (HQ.isInsert == true)
     //    HQ.isFirstLoad = true;
     App.stoAP_Trans.reload();
-    if (record.data.tstamp) {
-        App.cboVendID.setReadOnly(true);
-        App.cboDocType.setReadOnly(true);
-    }
-    else {
-        App.cboVendID.setReadOnly(false);
-        App.cboDocType.setReadOnly(false);
-    }
+    
     if (record.data.Status == 'H' && (HQ.isInsert && HQ.isUpdate)) {
         HQ.common.lockItem(App.frmMain, false);
     }
@@ -241,6 +240,19 @@ var stoAP10100_pdHeader_Load = function (store) {
     }
     else
         HQ.common.lockItem(App.frmMain, true);
+    if (HQ.isInsert) {
+        App.btnImport.setDisabled(false);
+    }
+    else
+        App.btnImport.setDisabled(true);
+    if (record.data.tstamp) {
+        App.cboVendID.setReadOnly(true);
+        App.cboDocType.setReadOnly(true);
+    }
+    else {
+        App.cboVendID.setReadOnly(false);
+        App.cboDocType.setReadOnly(false);
+    }
     frmChange();
     
     //App.stoAP10100_pgLoadTaxTrans.reload();
@@ -252,8 +264,14 @@ var stoAPTrans_Load = function (store) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(store, keys);
             var record = store.getAt(App.grdAP_Trans.store.getCount() - 1);
-            if (record.LineType==null)
-                record.set('LineType','N');
+            if (record.LineType == null) {
+                record.set('LineType', 'N');
+                var r = HQ.store.findRecord(App.cboLineType.store, ['Code'], 'N')
+                if (Ext.isEmpty(r)) {
+                    return value
+                }
+                record.set("LineTypeDescr", r.data.Descr)
+            }
         }
         HQ.isFirstLoad = false;
     }
@@ -309,6 +327,19 @@ var cboVendID_Change = function (sender, e)
                 }
             }
         }
+    }
+}
+
+var cboLineType_Change = function (sender, e) {
+    if (sender.valueModels != null) {
+        var selRecs = App.grdAP_Trans.selModel.selected;
+       // var obja = HQ.store.findInStore(App.grdAP_Trans.getStore(), ["LineRef"], [selRecs.items[0].data.LineRef]);
+        var r = HQ.store.findRecord(App.cboLineType.store, ['Code'], [e])
+        if (Ext.isEmpty(r)) {
+            return value
+        }
+        selRecs.items[0].set("LineTypeDescr", r.data.Descr)
+        //obja.set("LineTypeDescr", r.data.Descr);
     }
 }
 
