@@ -2660,7 +2660,7 @@ namespace OM23800.Controllers
                         {
                             for (int i = dataRowIdx; i <= workSheet.Cells.MaxDataRow; i++)
                             {
-                                if (workSheet.Cells[i,0].StringValue.PassNull().Trim() == "") break;
+                                //if (workSheet.Cells[i,0].StringValue.PassNull().Trim() == "") break;
                                 strSlsPerID = workSheet.Cells[i, 1].StringValue.Trim();
                                 strShopID = workSheet.Cells[i, 3].StringValue.Trim();
                                 strShopName = workSheet.Cells[i, 4].StringValue.Trim();
@@ -2860,6 +2860,7 @@ namespace OM23800.Controllers
                                                     {
                                                         var newCust = new AR_Customer();
                                                         newCust.ResetET();
+                                                        newCust.ExpiryDate = DateTime.Now.ToDateShort();
                                                         newCust.CustId = strShopID;
                                                         newCust.BranchID = strEBranchID;
                                                         newCust.CustName = newCust.BillName = strShopName;
