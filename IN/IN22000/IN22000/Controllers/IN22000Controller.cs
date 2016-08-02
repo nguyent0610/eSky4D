@@ -267,9 +267,9 @@ namespace IN22000.Controllers
                     cell = SheetDataMaster.Cells["B" + iRow];
                     cell.PutValue(dtBranchID.Rows[i]["POSMID"].ToString());
                     cell = SheetDataMaster.Cells["C" + iRow];
-                    cell.PutValue(dtBranchID.Rows[i]["BranchName"].ToString());
-                    cell = SheetDataMaster.Cells["D" + iRow];
                     cell.PutValue(dtBranchID.Rows[i]["BranchID"].ToString());
+                    cell = SheetDataMaster.Cells["D" + iRow];
+                    cell.PutValue(dtBranchID.Rows[i]["BranchName"].ToString());
                     iRow++;
                 }
 
@@ -309,8 +309,8 @@ namespace IN22000.Controllers
                 validation.Type = Aspose.Cells.ValidationType.List;
                 validation.Operator = OperatorType.Between;
                 validation.InCellDropDown = true;
-                validation.Formula1 = "=Master! $D$2:$D$" + (dtBranchID.Rows.Count + 1);
-                //validation.Formula1 = "=OFFSET(Master! $B$2,IFERROR(MATCH(A2,Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",0)-1," + (dtBranchID.Rows.Count + 2) + "),1,IF(COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)=0,1,COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)),1)";
+                //validation.Formula1 = "=Master! $D$2:$D$" + (dtBranchID.Rows.Count + 1);
+                validation.Formula1 = "=OFFSET(Master! $B$2,IFERROR(MATCH(A2,Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",0)-1," + (dtBranchID.Rows.Count + 2) + "),1,IF(COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)=0,1,COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)),1)";
                 validation.ShowError = true;
                 validation.AlertStyle = ValidationAlertType.Stop;
                 validation.ErrorTitle = "Error";
