@@ -2861,6 +2861,8 @@ namespace OM23800.Controllers
                                                         var newCust = new AR_Customer();
                                                         newCust.ResetET();
                                                         newCust.ExpiryDate = DateTime.Now.ToDateShort();
+                                                        newCust.Birthdate = new DateTime(1900, 1, 1).ToDateShort();
+                                                        newCust.EstablishDate = new DateTime(1900, 1, 1).ToDateShort();
                                                         newCust.CustId = strShopID;
                                                         newCust.BranchID = strEBranchID;
                                                         newCust.CustName = newCust.BillName = strShopName;
