@@ -422,6 +422,7 @@ var btnImport_Click = function (sender, e) {
             params: {
             },
             success: function (msg, data) {
+                App.stoDet.reload();
                 if (!Ext.isEmpty(this.result.data.message)) {
                     HQ.message.show('2013103001', [this.result.data.message], '', true);
                 }

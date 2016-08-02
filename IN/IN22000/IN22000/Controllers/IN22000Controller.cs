@@ -309,7 +309,8 @@ namespace IN22000.Controllers
                 validation.Type = Aspose.Cells.ValidationType.List;
                 validation.Operator = OperatorType.Between;
                 validation.InCellDropDown = true;
-                validation.Formula1 = "=OFFSET(Master! $B$2,IFERROR(MATCH(A2,Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",0)-1," + (dtBranchID.Rows.Count + 2) + "),1,IF(COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)=0,1,COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)),1)";
+                validation.Formula1 = "=Master! $D$2:$D$" + (dtBranchID.Rows.Count + 1);
+                //validation.Formula1 = "=OFFSET(Master! $B$2,IFERROR(MATCH(A2,Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",0)-1," + (dtBranchID.Rows.Count + 2) + "),1,IF(COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)=0,1,COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)),1)";
                 validation.ShowError = true;
                 validation.AlertStyle = ValidationAlertType.Stop;
                 validation.ErrorTitle = "Error";
@@ -341,9 +342,9 @@ namespace IN22000.Controllers
                 validation.AddArea(area);
 
                 //Value Branch
-                string vlkBranchID = @"VLOOKUP(B2,OFFSET(Master! $B$2,IFERROR(MATCH(A2,Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",0)-1," + (dtBranchID.Rows.Count + 1) + "),1,IF(COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)=0,1,COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)),2),2,FALSE)";
-                String formularBranchID = "=IFERROR(" + vlkBranchID + ",\"\")";
-                SheetPOSM.Cells["X2"].SetSharedFormula(formularBranchID, numRow, 1);
+                //string vlkBranchID = @"VLOOKUP(B2,OFFSET(Master! $B$2,IFERROR(MATCH(A2,Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",0)-1," + (dtBranchID.Rows.Count + 1) + "),1,IF(COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)=0,1,COUNTIF(Master! $B$2:$B$" + (dtBranchID.Rows.Count + 1) + ",A2)),2),2,FALSE)";
+                //String formularBranchID = "=IFERROR(" + vlkBranchID + ",\"\")";
+                //SheetPOSM.Cells["X2"].SetSharedFormula(formularBranchID, numRow, 1);
 
                 //Value InvtName
                 String formularInvtName = "=IF(ISERROR(VLOOKUP(C2,Master! $E$2:$F$" + (dtProduct.Rows.Count + 1) + ",2,0)),\"\",VLOOKUP(C2,Master! $E$2:$F$" + (dtProduct.Rows.Count + 1) + ",2,0))";
@@ -441,7 +442,8 @@ namespace IN22000.Controllers
                         {
                             bool FlagCheck = false;
                             POSMID = workSheet.Cells[i, 0].StringValue.PassNull();
-                            BranchID = workSheet.Cells[i, 23].StringValue.PassNull();
+                            //BranchID = workSheet.Cells[i, 23].StringValue.PassNull();
+                            BranchID = workSheet.Cells[i, 1].StringValue.PassNull();
                             InvtID = workSheet.Cells[i, 2].StringValue.PassNull();
                             Qty = workSheet.Cells[i, 4].StringValue.PassNull();
 
@@ -550,7 +552,18 @@ namespace IN22000.Controllers
                                 }
                                 else
                                 {
-                                    errorDuplicateDB += (i + 1).ToString() + ",";
+                                    if (record.Status != _beginStatus)
+                                    {
+                                        errorDuplicateDB += (i + 1).ToString() + ",";
+                                    }
+                                    else
+                                    {
+                                        record.Qty = Convert.ToInt32(Qty);
+                                        record.AppQty = Convert.ToInt32(Qty);
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = _userName;
+                                    }
                                 }
                             }
                             else
@@ -569,7 +582,7 @@ namespace IN22000.Controllers
                         message += errorQtyNotInput == "" ? "" : string.Format("{0} dòng: {1} phải lớn hơn 0</br>", Util.GetLang("Qty"), errorQtyNotInput);
                         message += errorQtyFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng kiểu số</br>", Util.GetLang("Qty"), errorQtyFormat);
                         message += errorDuplicate == "" ? "" : string.Format("Dòng: {0} đã trùng lắp trong file Import</br>", errorDuplicate);
-                        message += errorDuplicateDB == "" ? "" : string.Format("Dòng: {0} đã tồn tại trong hệ thống</br>", errorDuplicateDB);
+                        message += errorDuplicateDB == "" ? "" : string.Format("Dòng: {0} khác trạng thái chờ xét duyệt không thể import</br>", errorDuplicateDB);
                         
                         if (message == "" || message == string.Empty)
                         {
