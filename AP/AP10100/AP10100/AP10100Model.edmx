@@ -179,6 +179,7 @@
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
           <Parameter Name="RefNbr" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="AP10100_pgLoadTaxTrans" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -206,11 +207,6 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="BatNbr" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AP10100_pgLoadInvoiceMemo" ReturnType="Collection(AP10100Model.AP10100_pgLoadInvoiceMemo_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="BatNbr" Mode="In" Type="String" />
-            <Parameter Name="RefNbr" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="AP10100_pgLoadTaxTrans" ReturnType="Collection(AP10100Model.AP10100_pgLoadTaxTrans_Result)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="BatNbr" Mode="In" Type="String" />
@@ -227,6 +223,12 @@
           <FunctionImport Name="AP10100_ppCheckCloseDate" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="DocDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="AP10100_pgLoadInvoiceMemo" ReturnType="Collection(AP10100Model.AP10100_pgLoadInvoiceMemo_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="RefNbr" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="AP_Doc">
@@ -673,6 +675,33 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AP10100_pgLoadTaxTrans" FunctionName="eBiz4DWebSysModel.Store.AP10100_pgLoadTaxTrans">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AP10100Model.AP10100_pgLoadTaxTrans_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+                <ScalarProperty Name="TxblAmt" ColumnName="TxblAmt" />
+                <ScalarProperty Name="TaxAmt" ColumnName="TaxAmt" />
+                <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
+                <ScalarProperty Name="TaxLevel" ColumnName="TaxLevel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AP10100_pcGetVendor" FunctionName="eBiz4DWebSysModel.Store.AP10100_pcGetVendor">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AP10100Model.AP10100_pcGetVendor_Result">
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="APNumbering" FunctionName="eBiz4DWebSysModel.Store.APNumbering" />
+          <FunctionImportMapping FunctionImportName="AP10100_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.AP10100_ppCheckCloseDate" />
           <FunctionImportMapping FunctionImportName="AP10100_pgLoadInvoiceMemo" FunctionName="eBiz4DWebSysModel.Store.AP10100_pgLoadInvoiceMemo">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AP10100Model.AP10100_pgLoadInvoiceMemo_Result">
@@ -718,33 +747,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="AP10100_pgLoadTaxTrans" FunctionName="eBiz4DWebSysModel.Store.AP10100_pgLoadTaxTrans">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AP10100Model.AP10100_pgLoadTaxTrans_Result">
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
-                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
-                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
-                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
-                <ScalarProperty Name="TxblAmt" ColumnName="TxblAmt" />
-                <ScalarProperty Name="TaxAmt" ColumnName="TaxAmt" />
-                <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
-                <ScalarProperty Name="TaxLevel" ColumnName="TaxLevel" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="AP10100_pcGetVendor" FunctionName="eBiz4DWebSysModel.Store.AP10100_pcGetVendor">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AP10100Model.AP10100_pcGetVendor_Result">
-                <ScalarProperty Name="Terms" ColumnName="Terms" />
-                <ScalarProperty Name="VendID" ColumnName="VendID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="APNumbering" FunctionName="eBiz4DWebSysModel.Store.APNumbering" />
-          <FunctionImportMapping FunctionImportName="AP10100_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.AP10100_ppCheckCloseDate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

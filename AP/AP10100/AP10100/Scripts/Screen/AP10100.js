@@ -145,11 +145,11 @@ var menuClick = function (command) {
                     isreturn = true;
                     return;
                 }
-                else if (item.data.InvtID == "") {
-                    HQ.message.show(15, HQ.common.getLang('InvtID'), '');
-                    isreturn = true;
-                    return;
-                }
+                //else if (item.data.InvtID == "") {
+                //    HQ.message.show(15, HQ.common.getLang('InvtID'), '');
+                //    isreturn = true;
+                //    return;
+                //}
 
             });
             if (isreturn)
@@ -227,14 +227,14 @@ var stoAP10100_pdHeader_Load = function (store) {
     if (record.data.Status == 'H' && (HQ.isInsert && HQ.isUpdate)) {
         HQ.common.lockItem(App.frmMain, false);
     }
-    else if (record.data.Status == 'H' && (!HQ.isUpdate)&&App.cboBatNbr.getValue()!="")
+    else if (record.data.Status == 'H' && (!HQ.isUpdate)&&App.cboBatNbr.getValue()!=null)
     {
         HQ.common.lockItem(App.frmMain, true);
     }
-    else if (record.data.Status == 'H' && (HQ.isInsert) && App.cboBatNbr.getValue() == "") {
+    else if (record.data.Status == 'H' && (HQ.isInsert) && App.cboBatNbr.getValue() == null) {
         HQ.common.lockItem(App.frmMain, false);
     }
-    else if (record.data.Status == 'H' && (HQ.isUpdate) && App.cboBatNbr.getValue() != "")
+    else if (record.data.Status == 'H' && (HQ.isUpdate) && App.cboBatNbr.getValue() !=null)
     {
         HQ.common.lockItem(App.frmMain, false);
     }
@@ -278,7 +278,8 @@ var stoAPTrans_Load = function (store) {
     //var record = store.getAt(App.grdAP_Trans.store.getCount() - 1);
     //if (record.LineType==null)
     //    record.set('LineType','N');
-    // frmChange();
+    // frmChange();//stoAP_Trans
+  
     App.stoAP10100_pgLoadTaxTrans.reload();
     App.stoAP10100_pdHeader.commitChanges();
     frmChange();
@@ -396,7 +397,8 @@ var grdAP_Trans_Reject = function (record) {
 };
 
 var grdAP_Trans_BeforeEdit = function (editor, e) {
-    if (HQ.isUpdate) {
+   
+    if (HQ.isUpdate || (HQ.isInsert && !e.record.data.tstamp)) {
         var det = e.record.data;
         if (App.cboStatus.value != "H") {
             return false;

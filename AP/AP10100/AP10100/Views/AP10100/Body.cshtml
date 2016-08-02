@@ -243,7 +243,7 @@
                         .RowLines(true).Region(Region.Center)
                         .SortableColumns(false)
                         .View(X.GridView().TrackOver(false))
-                        .Listeners(lss=>lss.Render.Handler = "HQ.common.control_render(this,'AP_Trans')")
+                        //.Listeners(lss=>lss.Render.Handler = "HQ.common.control_render(this,'AP_Trans')")
                          .Store(Html.X().Store().ID("stoAP_Trans").AutoLoad(false)
                             .Model(Util.GenerateModel(typeof(AP10100_pgLoadInvoiceMemo_Result), "mdlAP_Trans", ""))
                             .ServerProxy(
@@ -257,10 +257,11 @@
                                 )
                                 .Parameters(ps =>
                                         {
-                                            ps.Add(new StoreParameter("LangID", "HQ.langID", ParameterMode.Raw));
+                                         
                                             ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
                                             ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
                                             ps.Add(new StoreParameter("RefNbr", "App.txtRefNbr.value", ParameterMode.Raw));
+                                            ps.Add(new StoreParameter("LangID", "HQ.langID", ParameterMode.Raw));
                                           
                                         })
                                 .Listeners(p =>

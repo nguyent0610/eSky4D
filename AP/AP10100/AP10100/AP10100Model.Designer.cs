@@ -205,47 +205,6 @@ namespace AP10100
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="batNbr">No Metadata Documentation available.</param>
         /// <param name="refNbr">No Metadata Documentation available.</param>
-        public ObjectResult<AP10100_pgLoadInvoiceMemo_Result> AP10100_pgLoadInvoiceMemo(global::System.String branchID, global::System.String batNbr, global::System.String refNbr)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter batNbrParameter;
-            if (batNbr != null)
-            {
-                batNbrParameter = new ObjectParameter("BatNbr", batNbr);
-            }
-            else
-            {
-                batNbrParameter = new ObjectParameter("BatNbr", typeof(global::System.String));
-            }
-    
-            ObjectParameter refNbrParameter;
-            if (refNbr != null)
-            {
-                refNbrParameter = new ObjectParameter("RefNbr", refNbr);
-            }
-            else
-            {
-                refNbrParameter = new ObjectParameter("RefNbr", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<AP10100_pgLoadInvoiceMemo_Result>("AP10100_pgLoadInvoiceMemo", branchIDParameter, batNbrParameter, refNbrParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="batNbr">No Metadata Documentation available.</param>
-        /// <param name="refNbr">No Metadata Documentation available.</param>
         public ObjectResult<AP10100_pgLoadTaxTrans_Result> AP10100_pgLoadTaxTrans(global::System.String branchID, global::System.String batNbr, global::System.String refNbr)
         {
             ObjectParameter branchIDParameter;
@@ -369,6 +328,58 @@ namespace AP10100
             }
     
             return base.ExecuteFunction<global::System.String>("AP10100_ppCheckCloseDate", branchIDParameter, docDateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="batNbr">No Metadata Documentation available.</param>
+        /// <param name="refNbr">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AP10100_pgLoadInvoiceMemo_Result> AP10100_pgLoadInvoiceMemo(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter batNbrParameter;
+            if (batNbr != null)
+            {
+                batNbrParameter = new ObjectParameter("BatNbr", batNbr);
+            }
+            else
+            {
+                batNbrParameter = new ObjectParameter("BatNbr", typeof(global::System.String));
+            }
+    
+            ObjectParameter refNbrParameter;
+            if (refNbr != null)
+            {
+                refNbrParameter = new ObjectParameter("RefNbr", refNbr);
+            }
+            else
+            {
+                refNbrParameter = new ObjectParameter("RefNbr", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AP10100_pgLoadInvoiceMemo_Result>("AP10100_pgLoadInvoiceMemo", branchIDParameter, batNbrParameter, refNbrParameter, langIDParameter);
         }
 
         #endregion

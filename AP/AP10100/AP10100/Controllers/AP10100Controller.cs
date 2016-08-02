@@ -74,9 +74,9 @@ namespace AP10100.Controllers
             return this.Store(obj);
         }
 
-        public ActionResult GetAPTrans(String branchID, String batNbr, String refNbr)
+		public ActionResult GetAPTrans(String branchID, String batNbr, String refNbr, string langID)
         {
-            var lst = _app.AP10100_pgLoadInvoiceMemo(branchID, batNbr, refNbr).ToList();
+            var lst = _app.AP10100_pgLoadInvoiceMemo(branchID, batNbr, refNbr,langID.ToShort()).ToList();
             return this.Store(lst);
         }
 
@@ -727,9 +727,9 @@ namespace AP10100.Controllers
 									}
 									else
 									{
-										
-										//if (_app.AP10100_ppCheckCloseDate(CpnyID, parsed.ToDateShort()).FirstOrDefault() == "0")
-										//	errorCloseDate += (i + 1).ToString() + ",";
+
+										if (_app.AP10100_ppCheckCloseDate(CpnyID, parsed.ToDateShort()).FirstOrDefault() == "0")
+											errorCloseDate += (i + 1).ToString() + ",";
 									}
 								}
 								if (DueDate != "")
