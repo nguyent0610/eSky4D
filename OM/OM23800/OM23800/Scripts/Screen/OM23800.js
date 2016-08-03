@@ -563,12 +563,14 @@ var McpInfo = {
                 },
 
                 failure: function (errorMsg, data) {
-                    if (data.result.msgCode) {
-                        HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
-                    }
-                    else {
-                        HQ.message.process(errorMsg, data, true);
-                    }
+                    HQ.message.process(msg, data, true);
+                    
+                    //if (data.result.msgCode) {
+                    //    HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
+                    //}
+                    //else {
+                    //    HQ.message.process(errorMsg, data, true);
+                    //}
                 }
             });
         }
