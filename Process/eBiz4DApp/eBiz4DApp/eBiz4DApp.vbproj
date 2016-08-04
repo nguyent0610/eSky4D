@@ -206,6 +206,7 @@
     <Compile Include="AppTables\clsOM_PDAOrdDisc.vb" />
     <Compile Include="AppTables\clsOM_PDASalesOrd.vb" />
     <Compile Include="AppTables\clsOM_PDASalesOrdDet.vb" />
+    <Compile Include="AppTables\clsOM_PDASalesOrdDisc.vb" />
     <Compile Include="AppTables\clsOM_PJP.vb" />
     <Compile Include="AppTables\clsOM_PPAlloc.vb" />
     <Compile Include="AppTables\clsOM_PPBudget.vb" />
@@ -220,6 +221,7 @@
     <Compile Include="AppTables\clsOM_SalerDis.vb" />
     <Compile Include="AppTables\clsOM_SalesOrd.vb" />
     <Compile Include="AppTables\clsOM_SalesOrdDet.vb" />
+    <Compile Include="AppTables\clsOM_SalesOrdGift.vb" />
     <Compile Include="AppTables\clsOM_SalesPrice.vb" />
     <Compile Include="AppTables\clsOM_SalesPriceCust.vb" />
     <Compile Include="AppTables\clsOM_SalesPriceHeader.vb" />
@@ -338,7 +340,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
