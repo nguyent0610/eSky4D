@@ -566,7 +566,7 @@ namespace OMProcess
                 throw ex;
             }
         }
-        public short OM_GetOrderNo(string branchID, string slsperID, DateTime orderDate)
+        public short OM_GetOrderNoKAO(string branchID, string slsperID, DateTime orderDate)
         {
             try
             {
@@ -574,6 +574,24 @@ namespace OMProcess
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@SlsPerID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@OrderDate", DbType.DateTime, clsCommon.GetValueDBNull(orderDate), ParameterDirection.Input, 30));
+                return (short)mDal.ExecDataTable("OM_GetOrderNo", CommandType.StoredProcedure, ref pc).Rows[0][0];
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        public short OM_GetOrderNo(string branchID, string slsperID, DateTime orderDate, DateTime shipDate)
+        {
+            try
+            {
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 50));
+                pc.Add(new ParamStruct("@SlsPerID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 50));
+                pc.Add(new ParamStruct("@OrderDate", DbType.DateTime, clsCommon.GetValueDBNull(orderDate), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@DeliveryDate", DbType.DateTime, clsCommon.GetValueDBNull(shipDate), ParameterDirection.Input, 30));
                 return (short)mDal.ExecDataTable("OM_GetOrderNo", CommandType.StoredProcedure, ref pc).Rows[0][0];
 
             }
