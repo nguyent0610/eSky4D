@@ -647,6 +647,7 @@ namespace APProcess
                     objAP_Doc = new clsAP_Doc(Dal);
                     objAP_Doc.GetByKey(BranchID, BatNbr, obj.RefNbr);
                     objAP_Doc.Rlsed = 1;
+					objAP_Doc.LUpd_DateTime = DateTime.Now;
                     objAP_Doc.Update();
                 }         
                 //Update AP_doc chung tu hoa don
@@ -658,6 +659,7 @@ namespace APProcess
                    
                     objAP_Doc1.GetByKey(BranchID, objAP_A.AdjdBatNbr, objAP_A.AdjdRefNbr);
                     objAP_Doc1.DocBal = objAP_Doc1.DocBal - objAP_A.AdjAmt;
+					objAP_Doc1.LUpd_DateTime = DateTime.Now;
                     objAP_Doc1.Update();
                     ProcessAPBalance10400( objAP_A.VendID, objAP_A.AdjAmt);
                 }
@@ -715,12 +717,14 @@ namespace APProcess
                     //var objAP_AD = dal.AP_Adjust.Where(p => p.BranchID == objAP_A.BranchID && p.BatNbr == objAP_A.BatNbr && p.AdjdRefNbr == objAP_A.AdjdRefNbr && p.AdjgRefNbr == objAP_A.AdjgRefNbr).ToList().FirstOrDefault();
                     objAP_AD.GetByKey(objAP_A.BranchID, objAP_A.BatNbr , objAP_A.AdjdRefNbr , objAP_A.AdjgRefNbr);
                     objAP_AD.Reversal = "NS";
+					objAP_AD.LUpd_DateTime = DateTime.Now;
                     objAP_AD.Update();
 
                     clsAP_Doc objAP_Doc1 = new clsAP_Doc(Dal);
                     //var objAP_Doc1 = dal.AP_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == objAP_A.AdjdBatNbr && p.RefNbr == objAP_A.AdjdRefNbr).ToList().FirstOrDefault();
                     objAP_Doc1.GetByKey(BranchID, objAP_A.AdjdBatNbr, objAP_A.AdjdRefNbr);
                     objAP_Doc1.DocBal = objAP_Doc1.DocBal + objAP_A.AdjAmt;
+					objAP_Doc1.LUpd_DateTime = DateTime.Now;
                     objAP_Doc1.Update();
 
                     ProcessAPBalance10400( objAP_AD.VendID, -1 * objAP_A.AdjAmt);
