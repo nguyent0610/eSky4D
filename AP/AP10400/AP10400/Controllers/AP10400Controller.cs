@@ -110,13 +110,34 @@ namespace AP10400.Controllers
 				_refNbr = RefNbr;
 				_branchID = BranchID;
 
+				if ((_status == "U" || _status == "C") && (_handle == "C" || _handle == "V"))
+				{
+
+					if (_handle == "V" || _handle == "C")
+					{
+						if ((_handle == "V" || _handle == "C") && !acc.Release)
+						{
+							throw new MessageException(MessageType.Message, "725");
+						}
+					}
+				}
+				else if (_status == "H")
+				{
+					if (_handle == "R" && !acc.Release)
+					{
+						throw new MessageException(MessageType.Message, "737");
+					}
+				}
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstHeader"]);
                 var curHeader = dataHandler1.ObjectData<AP10400_pdHeader_Result>().FirstOrDefault();
                 StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
                 ChangeRecords<AP10400_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AP10400_pgLoadGridTrans_Result>();
-				//if (_db.AP10100_ppCheckCloseDate(BranchID.PassNull(), curHeader.DocDate.ToDateShort()).FirstOrDefault() == "0")
-				//	throw new MessageException(MessageType.Message, "301");
-                #region Save Header
+
+				StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstAp_Adjust"]);
+				var lstAp_Adjust = dataHandler2.ObjectData<AP10400_pgLoadGridTrans_Result>().ToList();
+				if (_db.AP10100_ppCheckCloseDate(BranchID.PassNull(), curHeader.DocDate.ToDateShort()).FirstOrDefault() == "0")
+					throw new MessageException(MessageType.Message, "301");
+				#region Save Header
                 var headerBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AP" && p.EditScrnNbr == "AP10400");
                 var headerDoc = _db.AP_Doc.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr);
                 if (headerBatch != null)
@@ -192,7 +213,7 @@ namespace AP10400.Controllers
                     headerDoc.Crtd_Prog = _screenNbr;
                     headerDoc.Crtd_User = Current.UserName;
                     UpdatingFormBotAP_Doc(ref headerDoc, curHeader, Handle);
-
+					headerDoc.InvcDate = DateTime.Now.ToDateShort();
                     _db.AP_Doc.AddObject(headerDoc);
 
                     BatNbr = headerBatch.BatNbr;
@@ -261,7 +282,7 @@ namespace AP10400.Controllers
 
 				}
 				lstgrd.Created.AddRange(lstgrd.Updated);
-				if (lstgrd.Created.Count() == 0 && Handle != "R"&&headerBatch.Status!="C")
+				if (lstAp_Adjust.Count() == 0 && Handle != "R" && headerBatch.Status != "C")
 				{
 					throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
 				}
@@ -270,6 +291,13 @@ namespace AP10400.Controllers
 					if (created.Payment == 0 && Handle != "R" && headerBatch.Status != "C")
 					{
 						throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
+					}
+					var checkrecord = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.AdjdRefNbr == created.RefNbr).FirstOrDefault();//&& p.BatNbr == BatNbr&& p.BatNbr == BatNbr && p.AdjgRefNbr == RefNbr
+					
+					if(checkrecord!=null)
+					{
+							throw new MessageException(MessageType.Message, "20160808", "", new string[] { checkrecord.BatNbr });
+			
 					}
 					var record = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.AdjdRefNbr == created.RefNbr && p.AdjgRefNbr == RefNbr).FirstOrDefault();
 					if (record == null)
@@ -294,7 +322,7 @@ namespace AP10400.Controllers
 						{
 							record.AdjgRefNbr = RefNbr;
 						}
-
+						 
 						UpdatingGridAd_Adjust(created, ref record);
 						record.Crtd_DateTime = DateTime.Now;
 						record.Crtd_Prog = _screenNbr;

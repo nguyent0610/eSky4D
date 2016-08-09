@@ -102,7 +102,7 @@ var menuClick = function (command) {
         case "delete":
             if (HQ.isDelete) {
                 if (App.cboStatus.getValue() == 'H') {
-                    if (HQ.focus  == 'header') {
+                    if (HQ.focus == 'header') {
                         if (App.cboBatNbr.value) {
                             HQ.message.show(11, '', 'deleteData');
                         } else {
@@ -111,11 +111,14 @@ var menuClick = function (command) {
                     }
                     else if (HQ.focus == 'pnlDetail') {
                         if (App.slmDetail.selected.items[0] != undefined) {
-                         //   if (App.slmDetail.selected.items[0].data.Payment != "") {
-                                HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdDetail)], 'deleteData',true);
-                           // }
+                            //   if (App.slmDetail.selected.items[0].data.Payment != "") {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdDetail)], 'deleteData', true);
+                            // }
                         }
                     }
+                }
+                else {
+                    HQ.message.show(2016080802, App.cboBatNbr.getValue());
                 }
             }
             break;
@@ -278,18 +281,39 @@ var cboBatNbr_Select = function (sender, value) {
 
 
 var btnSearch_Click = function () {
-    App.cboInvcNbr.getStore().reload();
-    App.stoDetail.reload();
+    if (App.dteFromDate.getValue() != null && App.dteToDate.getValue() != null && App.dteFromDate.isValid() && App.dteToDate.isValid()) {
+        if (App.dteFromDate.isValid() && App.dteToDate.isValid()) {
+            App.cboInvcNbr.getStore().reload();
+            App.stoDetail.reload();
+        }
+    } else {
+        if (App.dteFromDate.getValue()==null)
+            HQ.message.show(15, HQ.common.getLang('FromDate'), '');
+        else
+            HQ.message.show(15, HQ.common.getLang('ToDate'), '');
+    }
 };
 
 var txtFromDate_Change = function () {
-    App.cboInvcNbr.getStore().reload();
-    App.stoDetail.reload();
+    if (App.dteFromDate.getValue() != null && App.dteToDate.getValue() != null) {
+        if (App.dteFromDate.isValid()) {
+            App.cboInvcNbr.getStore().reload();
+            App.stoDetail.reload();
+        }
+    } else {
+        HQ.message.show(15, HQ.common.getLang('FromDate'), '');
+    }
 }
 
 var txtToDate_Change = function () {
-    App.cboInvcNbr.getStore().reload();
-    App.stoDetail.reload();
+    if (App.dteFromDate.getValue() != null && App.dteToDate.getValue() != null) {
+        if (App.dteToDate.isValid()) {
+            App.cboInvcNbr.getStore().reload();
+            App.stoDetail.reload();
+        }
+    } else {
+        HQ.message.show(15, HQ.common.getLang('ToDate'), '');
+    }
 }
 
 var cboVendID_Change = function () {
@@ -431,6 +455,9 @@ var stoLoad = function (sto) {
 
 /////////////////////////////// GIRD AP_Trans /////////////////////////////////
 var stoDetail_Load = function (sto) {
+    if (App.dteFromDate.getValue() > App.dteToDate.getValue()) {
+        HQ.message.show(2015061501, '', '');
+    }
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
          //   HQ.store.insertBlank(sto, keysTab_2);
@@ -453,6 +480,7 @@ var grdDetail_BeforeEdit = function (editor, e) {
 
 var grdDetail_Edit = function (item, e) {
     if (e.field == 'Payment') {
+      
         if (!Ext.isEmpty(e.value)) {
             e.record.set('LineRef', HQ.store.lastLineRef(App.stoDetail));
             total();
@@ -512,7 +540,8 @@ var save = function () {
             url: 'AP10400/Save',
             params: {
                 lstHeader: Ext.encode(App.stoHeader.getRecordsValues()),
-                lstgrd: HQ.store.getData(App.stoDetail)
+                lstgrd: HQ.store.getData(App.stoDetail),
+                lstAp_Adjust:Ext.encode(App.stoDetail.getRecordsValues())
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);

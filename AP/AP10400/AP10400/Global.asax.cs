@@ -46,8 +46,8 @@ namespace AP10400
             acc.Update = true;
             Session["AP10400"] = acc;
             Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
-            Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "C000058";
+			Session["UserName"] = Current.UserName = "040100001";
+			Session["CpnyID"] = Current.CpnyID = "040100001";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }
