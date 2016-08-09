@@ -47,8 +47,9 @@
          X.RowNumbererColumn()
             , X.Column().ID("CatID").Text(Util.GetLang("CatID")).DataIndex("CatID").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))
             , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true))
-            , X.Column().Text(Util.GetLang("Sort")).DataIndex("Sort").Width(150).Editor(X.TextField().AllowBlank(false).EnforceMaxLength(true))
-                                                
+            //, X.Column().Text(Util.GetLang("Sort")).DataIndex("Sort").Width(150).Editor(X.TextField().AllowBlank(false).EnforceMaxLength(true))
+            , X.NumberColumn().Format("0,000").ID("txtSort").Text(Util.GetLang("Sort")).DataIndex("Sort").Width(100).Align(Alignment.Right)
+                .Editor(Html.X().NumberField().EnableKeyEvents(true).MinValue(0).DecimalPrecision(0).MaxLength(18))                                    
             , X.CommandColumn().Width(150)
             .Commands(
                     X.GridCommand()
@@ -101,7 +102,8 @@
                 .Filters(
                     X.StringFilter().DataIndex("CatID"),
                     X.StringFilter().DataIndex("Descr"),
-                    X.StringFilter().DataIndex("Sort")
+                    //X.StringFilter().DataIndex("Sort")
+                    X.NumericFilter().DataIndex("Sort")
                 )
         )
     )
