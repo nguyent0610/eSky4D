@@ -52,12 +52,13 @@ namespace IN10900.Controllers
 				ChangeRecords<IN10900_pgLoadGrid_Result> lstData = dataHandlerGrid.BatchObjectData<IN10900_pgLoadGrid_Result>();
 				var docDate = data["dteCheckDate"];
 				var branchID = data["cboCpnyID"];
-				if (_db.IN10900_ppCheckCloseDate(branchID.PassNull(), docDate.ToDateShort(), "IN10900").FirstOrDefault() == "0")
-				{
-					throw new MessageException(MessageType.Message, "301");
-					return new MessageException(MessageType.Message, "301").ToMessage();
-				}
+				//if (_db.IN10900_ppCheckCloseDate(branchID.PassNull(), docDate.ToDateShort(), "IN10900").FirstOrDefault() == "0")
+				//{
+				//	throw new MessageException(MessageType.Message, "301");
+				//	return new MessageException(MessageType.Message, "301").ToMessage();
+				//}
 				lstData.Created.AddRange(lstData.Updated);
+				
 				foreach (IN10900_pgLoadGrid_Result curItem in lstData.Created.Where(p => p.Selected == true))
 				{
 					if (curItem.Selected == false)
@@ -76,6 +77,23 @@ namespace IN10900.Controllers
 						objStockOutlet.LUpd_Prog = _screenNbr;
 						objStockOutlet.LUpd_User = Current.UserName;
 					}
+					if (curItem.StockType.PassNull() == "")
+					{
+						var objBatch = _db.Batches.Where(p => p.BranchID.ToLower() == branchID.ToLower() && p.BatNbr.ToLower() == curItem.StkOutNbr.ToLower() && p.Module.ToLower() == "in").FirstOrDefault();
+						objBatch.DateEnt = docDate.ToDateShort();
+						objBatch.LUpd_DateTime = DateTime.Now;
+						objBatch.LUpd_Prog = _screenNbr;
+						objBatch.LUpd_User = Current.UserName;
+					}
+					else
+					{
+						var _objStockOutlet = _db.PPC_StockOutlet.Where(p => p.BranchID.ToLower() == branchID.ToLower() && p.StkOutNbr.ToLower() == curItem.StkOutNbr.ToLower() && p.SlsPerID == curItem.SlsPerID).FirstOrDefault();
+						_objStockOutlet.StkOutDate = docDate.ToDateShort();
+						_objStockOutlet.LUpd_DateTime = DateTime.Now;
+						_objStockOutlet.LUpd_Prog = _screenNbr;
+						_objStockOutlet.LUpd_User = Current.UserName;
+					}
+
 					var objin_trans = _db.IN_Trans.Where(p => p.BranchID.ToLower() == branchID.ToLower() && p.BatNbr.ToLower() == curItem.StkOutNbr.ToLower()).ToList();
 
 					if (objin_trans.Count() > 0)
@@ -88,6 +106,7 @@ namespace IN10900.Controllers
 							a.LUpd_User = Current.UserName;
 						}
 					}
+
 
 				}
 

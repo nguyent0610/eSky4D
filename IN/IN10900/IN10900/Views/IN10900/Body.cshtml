@@ -85,7 +85,7 @@
             
              ,X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
             .Items(
-                HQ.Combo().ID("cboSlsPerID").Name("cboSlsPerID").Width(300).AllowBlank(false).HQAutoLoad(true).MarginSpec("5 0 0 0")
+                HQ.Combo().ID("cboSlsPerID").Name("cboSlsPerID").Width(300).AllowBlank(true).HQAutoLoad(true).MarginSpec("5 0 0 0")
                 .HQLangCode("SLSPERID").HQProcedure("IN10900_pcSalesPerson")
                 .HQColumnShow("SlsperId,Name").ForceSelection(true)
                 .DisplayField("SlsperId").ValueField("SlsperId").HQHeightWidth(400, 400)
@@ -177,7 +177,7 @@
 
                 ,X.Column().Text(Util.GetLang("StkOutNbr")).DataIndex("StkOutNbr").Width(150)  
                 
-                  ,X.DateColumn().Text(Util.GetLang("StkOutDate")).DataIndex("StkOutDate").Width(150)   
+                  ,HQ.DateColumn().Text(Util.GetLang("StkOutDate")).DataIndex("StkOutDate").Width(150)   
                   
                     ,X.Column().Text(Util.GetLang("ReasonID")).DataIndex("ReasonID").Width(150)   
                     

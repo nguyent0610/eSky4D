@@ -358,8 +358,10 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.process(msg, data, true);
-                App.cboPosmID.store.reload();
-                refresh('yes');
+               // App.cboPosmID.store.reload();
+                  refresh('yes');
+                
+               
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);

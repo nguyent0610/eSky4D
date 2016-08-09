@@ -28,15 +28,15 @@ namespace IN10900
         {
             Current.Authorize = false;
 
-            Current.Server = "MARSSVR\\SQL2012";
-            Current.FormatDate = "dd.MM.yyyy";            
-            Current.DBSys = "eSky4DSys";
+			Current.Server = "EARTHSVR\\SQL2012";//"EARTHSVR\\SQL2012";
+            Current.FormatDate = "dd.MM.yyyy";
+			Current.DBSys = "SUPPORT_eSky4DSys";//"ND_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = false;
             Session["IN10900"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";
+			Session["DBApp"] = Current.DBApp = "SUPPORT_eSky4DApp";//"ND_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
