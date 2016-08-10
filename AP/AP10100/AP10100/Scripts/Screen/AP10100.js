@@ -124,6 +124,9 @@ var menuClick = function (command) {
                         }
                     }
                 }
+                else {
+                    HQ.message.show(2016080802, App.cboBatNbr.getValue());
+                }
             }
             break;
         case "save":
