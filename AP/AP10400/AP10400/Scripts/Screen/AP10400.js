@@ -300,9 +300,10 @@ var txtFromDate_Change = function () {
             App.cboInvcNbr.getStore().reload();
             App.stoDetail.reload();
         }
-    } else {
-        HQ.message.show(15, HQ.common.getLang('FromDate'), '');
     }
+    //else {
+    //    HQ.message.show(15, HQ.common.getLang('FromDate'), '');
+    //}
 }
 
 var txtToDate_Change = function () {
@@ -311,9 +312,10 @@ var txtToDate_Change = function () {
             App.cboInvcNbr.getStore().reload();
             App.stoDetail.reload();
         }
-    } else {
-        HQ.message.show(15, HQ.common.getLang('ToDate'), '');
     }
+    //else {
+    //    HQ.message.show(15, HQ.common.getLang('ToDate'), '');
+    //}
 }
 
 var cboVendID_Change = function () {
