@@ -1190,11 +1190,22 @@ var cboCustId_TriggerClick = function (sender, value) {
 
     var searchNode = function () {
         Ext.suspendLayouts();
-        App.treeCust.expandAll();
-        Ext.resumeLayouts(true);
         var objRecord = App.treeCust.getRootNode().findChild('id', App.cboCustId.getValue() + '-|', true);
-        if (objRecord)
-            App.treeCust.getSelectionModel().select(objRecord);
+        if (objRecord) {
+            App.treeCust.getSelectionModel().deselectAll();
+            App.treeCust.getRootNode().expand();
+            expandParentNode(objRecord);
+            App.treeCust.getSelectionModel().select(objRecord, true);
+        }
+        Ext.resumeLayouts(true);
+    };
+
+    var expandParentNode = function (node) {
+        var parentNode = node.parentNode;
+        if (parentNode) {
+            parentNode.expand()
+            expandParentNode(parentNode);
+        }
     };
 
     var tabDetail_Change = function (tabPanel, newCard, oldCard, eOpts) {
