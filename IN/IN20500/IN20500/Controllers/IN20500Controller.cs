@@ -396,7 +396,7 @@ namespace IN20500.Controllers
         
         }
 
-        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z)
+        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z, List<SI_Hierarchy> lstSI_Hierarchy, List<IN_Inventory> lstIN_Inventory)
         {
             var node = new Node();
             var k = -1;
@@ -408,14 +408,13 @@ namespace IN20500.Controllers
                 node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
             }
 
-            var tmps = _db.IN_Inventory
+            var tmps = lstIN_Inventory
                 .Where(p => p.NodeID == inactiveHierachy.NodeID
                     && p.ParentRecordID == inactiveHierachy.ParentRecordID
                     && p.NodeLevel == level - 1).ToList();
 
-            var childrenInactiveHierachies = _db.SI_Hierarchy
+            var childrenInactiveHierachies = lstSI_Hierarchy
                 .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
-                    && p.Type == inactiveHierachy.Type
                     && p.NodeLevel == level).ToList();
 
             if (tmps != null && tmps.Count > 0)
@@ -435,7 +434,7 @@ namespace IN20500.Controllers
             {
                 foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
                 {
-                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, z++));
+                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, z++, lstSI_Hierarchy, lstIN_Inventory));
                 }
             }
             else
@@ -470,7 +469,10 @@ namespace IN20500.Controllers
                 Type = nodeType
             };
             var z = 0;
-            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z);
+
+            List<SI_Hierarchy> lstSI_Hierarchy = _db.SI_Hierarchy.Where(p => p.Type == nodeType).ToList();
+            List<IN_Inventory> lstIN_Inventory = _db.IN_Inventory.ToList();
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z, lstSI_Hierarchy, lstIN_Inventory);
 
             //quan trong dung de refresh slmTree
             this.GetCmp<TreePanel>("treeInvt").SetRootNode(node);

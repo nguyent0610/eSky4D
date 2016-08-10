@@ -29,7 +29,7 @@
         X.Panel().Region(Region.West).ID("pnlWest")
         .Layout(LayoutType.Border).Flex(1).Split(true).CollapseMode(CollapseMode.Mini)
         .Items(
-            X.TreePanel().ID("treeInvt")
+            X.TreePanel().ID("treeInvt").MultiSelect(false)
             .Width(300).Region(Region.Center).Flex(1).AutoScroll(true)
             .Title(Util.GetLang("Tree"))
             .Split(true) 
@@ -87,8 +87,8 @@
                             .Listeners(lst =>
                             {
                                 lst.Change.Fn = "cboInvtID_Change";
-                                //lst.Select.Fn = "cboInvtID_Select";
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue(); InvtID = '';}";
+                                lst.Select.Fn = "cboInvtID_Select";
+                                lst.TriggerClick.Fn = "cboInvtID_TriggerClick";
                             })
                             
                         , HQ.Button().ID("btnCopy").Width(100).MarginSpec("5 0 0 5")
@@ -451,14 +451,16 @@
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Focus.Handler = "this.forceSelection = true;";  
+                                lst.Focus.Handler = "this.forceSelection = true;";
                             })
                             
                         , HQ.NumberField().ID("txtStkVol").Name("txtStkVol").HQLangCode("StkVol").DataIndex("StkVol")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                             
                         , HQ.NumberField().ID("txtStkWt").Name("txtStkWt").HQLangCode("StkWt").DataIndex("StkWt")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                             
                         , HQ.Combo().ID("cboStkWtUnit").Name("cboStkWtUnit").HQLangCode("StkWtUnit").DataIndex("StkWtUnit")
                             .HQProcedure("IN20500_pcGetToUnit").HQColumnShow("ToUnit")
@@ -473,35 +475,36 @@
                             })
                             
                         , HQ.NumberField().ID("txtSOPrice").Name("txtSOPrice").HQLangCode("SOPrice").DataIndex("SOPrice")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-                            
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.NumberField().ID("txtPOPrice").Name("txtPOPrice").HQLangCode("POPrice").DataIndex("POPrice")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-                            
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.NumberField().ID("txtIRSftyStkDays").Name("txtIRSftyStkDays").HQLangCode("SftyStkDay").DataIndex("IRSftyStkDays")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-                            
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.NumberField().ID("txtIRSftyStkPct").Name("txtIRSftyStkPct").HQLangCode("SftyStkPct").DataIndex("IRSftyStkPct").MarginSpec("3 0 0 0")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.NumberField().ID("txtIRSftyStkQty").Name("txtIRSftyStkQty").HQLangCode("SftyStkQty").DataIndex("IRSftyStkQty").MarginSpec("3 0 0 0")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.NumberField().ID("txtIROverStkQty").Name("txtIROverStkQty").HQLangCode("OverStkQty").DataIndex("IROverStkQty").MarginSpec("3 0 0 0")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                     )
                     
                     , X.Container().Layout(LayoutType.VBox)
                     .Items(
                         HQ.NumberField().ID("txtPrePayPct").Name("txtPrePayPct").HQLangCode("PrePayPct").DataIndex("PrePayPct")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-                            
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.NumberField().ID("txtPOFee").Name("txtPOFee").HQLangCode("POFee").DataIndex("POFee")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-                            
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.NumberField().ID("txtSOFee").Name("txtSOFee").HQLangCode("SOFee").DataIndex("SOFee")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-                            
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.Combo().ID("cboVendor1").Name("cboVendor1").HQLangCode("Vendor1").DataIndex("VendID1")
                             .HQProcedure("IN20500_pcVendor").HQColumnShow("VendID,name")
                             .DisplayField("name").ValueField("VendID")
@@ -527,17 +530,17 @@
                             })
                             
                         , HQ.NumberField().ID("txtLossRate00").Name("txtLossRate00").HQLangCode("LossRate1").DataIndex("LossRate00")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-                            
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.NumberField().ID("txtLossRate01").Name("txtLossRate01").HQLangCode("LossRate2").DataIndex("LossRate01")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-                            
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.NumberField().ID("txtLossRate02").Name("txtLossRate02").HQLangCode("LossRate3").DataIndex("LossRate02")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-                            
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                         , HQ.NumberField().ID("txtLossRate03").Name("txtLossRate03").HQLangCode("LossRate4").DataIndex("LossRate03")
-                            .Width(300).MinValue(0).MarginSpec("5 0 0 0")
-
+                            .Width(300).MinValue(0).MarginSpec("5 0 0 0").EnableKeyEvents(true)
+                            .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                     )
                 )//Tab Attribute
                 .Listeners(lss =>
@@ -556,7 +559,7 @@
                                 HQ.Combo().ID("cboDfltLotSerAssign").Name("cboDfltLotSerAssign").HQLangCode("Assignment").HQProcedure("IN20500_pcSerAssign")
                                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("SerAssign")
                                     .LabelWidth(160).Width(410).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQDBSys(false).ForceSelection(true).HQAutoLoad(true)
+                                    .HQDBSys(false).ForceSelection(true).HQAutoLoad(true).AllowBlank(false)
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection() 
                                     { 
@@ -571,7 +574,7 @@
                                 , HQ.Combo().ID("cboDfltLotSerMthd").Name("cboDfltLotSerMthd").HQLangCode("IssMthd").HQProcedure("IN20500_pcLotSerIssMthd")
                                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("LotSerIssMthd")
                                     .LabelWidth(160).Width(410).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQDBSys(false).ForceSelection(true)
+                                    .HQDBSys(false).ForceSelection(true).HQAutoLoad(true).AllowBlank(false)
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection() 
                                     { 
@@ -594,6 +597,7 @@
                             .Items(
                                 HQ.Checkbox().ID("chkLotSerRcptAuto").Name("chkLotSerRcptAuto").HQLangCode("LotSerRcptAuto").DataIndex("LotSerRcptAuto")
                                     .Width(300).MarginSpec("5 0 0 10")
+                                    .Listeners(p=>p.Change.Fn = "chkLotSerRcptAuto_Change")
                             )
                     )
 
@@ -653,11 +657,11 @@
                     , X.Container().Layout(LayoutType.VBox)
                     .Items(
                         HQ.TextBox().ID("lblShowNextLotSerial").Name("lblShowNextLotSerial").HQLangCode("NextLotSer")
-                            .LabelWidth(160).Width(410).MarginSpec("5 0 0 0").ReadOnly(true)
-                            .Listeners(lst =>
-                            {
+                            .LabelWidth(160).Width(410).MarginSpec("5 0 0 0").ReadOnly(true).Tag("X")
+                            //.Listeners(lst =>
+                            //{
                                 //lst.AfterRender.Fn = "NextShowNextLotSerial_AfterRender";
-                            })
+                            //})
                     )
                 )//Tab Lot
                 .Listeners(lss =>
@@ -696,7 +700,7 @@
 
                         , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(120)
                             .Editor(
-                                HQ.Combo().ID("cboCpnyID").Name("cboCpnyID")
+                                HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").ForceSelection(true)
                                 .HQDBSys(false).HQProcedure("IN20500_pcClassCpnyID").HQHeightWidth(400, 300)
                                 .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })

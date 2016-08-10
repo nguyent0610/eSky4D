@@ -160,7 +160,7 @@ var menuClick = function (command) {
                 if (HQ.form.checkRequirePass(App.frmMain)
                     && HQ.store.checkRequirePass(App.stoCpny, keysTab, fieldsCheckRequireTab, fieldsLangCheckRequireTab)) {
                     if (HQ.util.checkSpecialChar(App.cboInvtID.getValue()) == false) {
-                        HQ.message.show(2015123111, App.cboInvtID.fieldLabel);
+                        HQ.message.show(20140811, App.cboInvtID.fieldLabel);
                         App.cboInvtID.focus();
                         App.cboInvtID.selectText();
                         return false;
@@ -345,7 +345,13 @@ var save = function () {
         }
     }
     if (App.cboLotSerTrack.getValue() != 'N') {
-        if (!App.cboDfltLotSerAssign.getValue()) {
+        if (!App.txtDfltWarrantyDays.getValue() > 0)
+        {
+            invalidField = App.txtDfltWarrantyDays.id;
+            HQ.message.show(2015110901, App.txtDfltWarrantyDays.fieldLabel, 'HQ.util.focusControl');
+            return;
+        }
+        else if (!App.cboDfltLotSerAssign.getValue()) {
             invalidField = App.cboDfltLotSerAssign.id;
             HQ.message.show(1000, App.cboDfltLotSerAssign.fieldLabel, 'HQ.util.focusControl');
             return;
@@ -361,27 +367,31 @@ var save = function () {
             invalidField = App.txtDfltLotSerFxdVal.id;
             HQ.message.show(1000, App.txtDfltLotSerFxdVal.fieldLabel, 'HQ.util.focusControl');
             return;
-        } else if (!App.txtDfltLotSerNumLen.getValue()) {
+        } else if (!App.txtDfltLotSerNumLen.getValue() && App.chkLotSerRcptAuto.checked == true) {
             invalidField = App.txtDfltLotSerNumLen.id;
             HQ.message.show(1000, App.txtDfltLotSerNumLen.fieldLabel, 'HQ.util.focusControl');
             return;
-        } else if (App.txtDfltLotSerNumLen.getValue() > 0 && !App.txtDfltLotSerNumVal.getValue()) {
+        } else if (App.txtDfltLotSerNumLen.getValue() > 0 && !App.txtDfltLotSerNumVal.getValue() ) {
             invalidField = App.txtDfltLotSerNumVal.id;
             HQ.message.show(1000, App.txtDfltLotSerNumVal.fieldLabel, 'HQ.util.focusControl');
             return;
-        }  else if (!App.lblShowNextLotSerial.getValue()) {
+        } else if (!App.lblShowNextLotSerial.getValue() && App.chkLotSerRcptAuto.checked == true) {
             invalidField = App.lblShowNextLotSerial.id;
             HQ.message.show(1000, App.lblShowNextLotSerial.fieldLabel, 'HQ.util.focusControl');
             return;
         } else if (App.txtDfltLotSerFxdVal.getValue().length != App.txtDfltLotSerFxdLen.getValue()) {
-            HQ.message.show(2016061401, App.txtDfltLotSerFxdLen.getValue());
-            App.tabDetail.setActiveTab(App.pnlLotSerial);
-            App.txtDfltLotSerFxdVal.focus();
+            //HQ.message.show(2016061401, App.txtDfltLotSerFxdLen.getValue());
+            //App.tabDetail.setActiveTab(App.pnlLotSerial);
+            //App.txtDfltLotSerFxdVal.focus();
+            invalidField = App.txtDfltLotSerFxdVal.id;
+            HQ.message.show(2016061401, App.txtDfltLotSerFxdLen.getValue(), 'HQ.util.focusControl');
             return;
         } else if (App.txtDfltLotSerNumVal.getValue().length != App.txtDfltLotSerNumLen.getValue()) {
-            HQ.message.show(2016061401, App.txtDfltLotSerNumLen.getValue());
-            App.tabDetail.setActiveTab(App.pnlLotSerial);
-            App.txtDfltLotSerNumVal.focus();
+            //HQ.message.show(2016061401, App.txtDfltLotSerNumLen.getValue());
+            //App.tabDetail.setActiveTab(App.pnlLotSerial);
+            //App.txtDfltLotSerNumVal.focus();
+            invalidField = App.txtDfltLotSerNumVal.id;
+            HQ.message.show(2016061401, App.txtDfltLotSerNumLen.getValue(), 'HQ.util.focusControl');
             return;
         }
     }
@@ -481,6 +491,26 @@ var chkPublic_Change = function (item, value, oldValue) {
     }
 };
 
+var chkLotSerRcptAuto_Change = function (sender, value, oldValue) {
+    if (value == true)
+        setAllowBlankLot(false, '0');
+    else
+        setAllowBlankLot(true, '0');
+};
+
+var setAllowBlankLot = function (value,special) {
+    App.txtDfltLotSerNumLen.allowBlank = value;
+    App.txtDfltLotSerNumLen.isValid(!value);
+    App.txtDfltLotSerNumVal.allowBlank = value;
+    App.txtDfltLotSerNumVal.isValid(!value);
+    if (special == '1') {
+        App.cboDfltLotSerAssign.allowBlank = true;
+        App.cboDfltLotSerAssign.isValid(false);
+        App.cboDfltLotSerMthd.allowBlank = true;
+        App.cboDfltLotSerMthd.isValid(false);
+    }
+};
+
 var cboLotSerTrack_Change = function (sender, value) {
     if (value) {
         if ((value == "L" || value == "S")) {
@@ -490,8 +520,14 @@ var cboLotSerTrack_Change = function (sender, value) {
             lastfixvalue = App.txtDfltLotSerNumVal.getValue();
             shownextlotserial = prefixvalue + lastfixvalue;
             App.lblShowNextLotSerial.setValue(shownextlotserial);
+            if(App.chkLotSerRcptAuto.checked == true)
+                setAllowBlankLot(false, '1');
+            else
+                setAllowBlankLot(true, '1');
         } else {
             App.tabDetail.child('#pnlLotSerial').tab.setDisabled(true);
+            setAllowBlankLot(true, '1');
+            
         }
     }
 };
@@ -524,39 +560,58 @@ var cboDfltLotSerFxdTyp_Change = function (sender, value) {
     }
 };
 
+var event_KeyDown = function (sender, e) {
+    if (
+            (((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105) && (e.keyCode < 37 || e.keyCode > 40))
+            && (e.keyCode != 8 && e.keyCode != 9 && e.keyCode != 35 && e.keyCode != 36 && e.keyCode != 46 && e.keyCode != 45 && e.keyCode != 110 && e.keyCode != 190 && e.ctrlKey == false)
+            )
+           ) {
+        e.stopEvent();
+    }
+};
+
 var txtDfltLotSerFxdVal_KeyDown = function (sender, e) {
     if (App.cboDfltLotSerFxdTyp.getValue() == 'C') {
-        if (((e.ctrlKey == true && e.keyCode == 86) || ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105))) && (e.keyCode != 8 && e.keyCode != 46))
+        //if (e.ctrlKey == true && e.keyCode == 86)
+        //    e.stopEvent();
+        if (
+            (e.ctrlKey == true && e.keyCode == 86)||
+            (((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105) && (e.keyCode < 37 || e.keyCode > 40))
+            && (e.keyCode != 8 && e.keyCode != 9 && e.keyCode != 35 && e.keyCode != 36 && e.keyCode != 46 && e.keyCode!= 45 && e.ctrlKey == false)
+            )
+           ) {
             e.stopEvent();
+        }
+            
     }
 };
 
 var txtDfltLotSerFxdVal_Blur = function (sender, e) {
-    if (sender.focus) {
-        if (sender.lastValue.length > App.txtDfltLotSerFxdLen.getValue()) {
-            HQ.message.show(22, e.value);
-            App.txtDfltLotSerFxdVal.setValue(sender.originalValue);
-            App.txtDfltLotSerFxdVal.focus();
-        }
-        else if ((sender.lastValue.length < App.txtDfltLotSerFxdLen.getValue()) && (sender.lastValue.length != App.txtDfltLotSerFxdLen.getValue())) {
-            HQ.message.show(2016061401, App.txtDfltLotSerFxdLen.getValue());
-            App.txtDfltLotSerFxdVal.focus();
-        }
-    }
+    //if (sender.focus) {
+    //    if (sender.lastValue.length > App.txtDfltLotSerFxdLen.getValue()) {
+    //        HQ.message.show(22, e.value);
+    //        App.txtDfltLotSerFxdVal.setValue(sender.originalValue);
+    //        App.txtDfltLotSerFxdVal.focus();
+    //    }
+    //    else if ((sender.lastValue.length < App.txtDfltLotSerFxdLen.getValue()) && (sender.lastValue.length != App.txtDfltLotSerFxdLen.getValue())) {
+    //        HQ.message.show(2016061401, App.txtDfltLotSerFxdLen.getValue());
+    //        App.txtDfltLotSerFxdVal.focus();
+    //    }
+    //}
 };
 
 var txtDfltLotSerNumVal_Blur = function (sender, e) {
-    if (sender.focus) {
-        if (sender.lastValue.length > App.txtDfltLotSerNumLen.getValue()) {
-            HQ.message.show(22, e.value);
-            App.txtDfltLotSerNumVal.setValue(sender.originalValue);
-            App.txtDfltLotSerNumVal.focus();
-        }
-        else if ((sender.lastValue.length < App.txtDfltLotSerNumLen.getValue()) && (sender.lastValue.length != App.txtDfltLotSerNumLen.getValue())) {
-            HQ.message.show(2016061401, App.txtDfltLotSerNumLen.getValue());
-            App.txtDfltLotSerNumVal.focus();
-        }
-    }
+    //if (sender.focus) {
+    //    if (sender.lastValue.length > App.txtDfltLotSerNumLen.getValue()) {
+    //        HQ.message.show(22, e.value);
+    //        App.txtDfltLotSerNumVal.setValue(sender.originalValue);
+    //        App.txtDfltLotSerNumVal.focus();
+    //    }
+    //    else if ((sender.lastValue.length < App.txtDfltLotSerNumLen.getValue()) && (sender.lastValue.length != App.txtDfltLotSerNumLen.getValue())) {
+    //        HQ.message.show(2016061401, App.txtDfltLotSerNumLen.getValue());
+    //        App.txtDfltLotSerNumVal.focus();
+    //    }
+    //}
 };
 
 var PrefixValue_Change = function (sender, e) {
@@ -595,6 +650,11 @@ var btnCopy_Click = function () {
 var cboInvtID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoIN_Inventory.loading && _copy == false) {
+        if(HQ.isChange == true) {
+            HQ.message.show(150, '', '');
+            sender.setValue(sender.originalValue);
+            return;
+        }
         InvtID = value;
         App.cboDfltPOUnit.store.reload();
         App.cboDfltSOUnit.store.reload();
@@ -602,6 +662,33 @@ var cboInvtID_Change = function (sender, value) {
         //if (!Ext.isEmpty(value))
         //    searchNode();
     }
+};
+
+var cboInvtID_Select = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null && !App.stoIN_Inventory.loading && _copy == false) {
+        if (HQ.isChange == true) {
+            HQ.message.show(150, '', '');
+            sender.setValue(sender.originalValue);
+            return;
+        }
+        InvtID = value;
+        App.cboDfltPOUnit.store.reload();
+        App.cboDfltSOUnit.store.reload();
+        App.stoIN_Inventory.reload();
+        //if (!Ext.isEmpty(value))
+        //    searchNode();
+    }
+};
+
+
+var cboInvtID_TriggerClick = function (sender, value) {
+    if (HQ.isChange == true) {
+        HQ.message.show(150, '', '');
+        return;
+    }
+    App.cboInvtID.clearValue();
+    InvtID = '';
 };
 
 var cboClassID_Change = function (sender, e) {
@@ -775,11 +862,22 @@ var ReloadTree = function (type) {
 
 var searchNode = function () {
     Ext.suspendLayouts();
-    App.treeInvt.expandAll();
-    Ext.resumeLayouts(true);
     var objRecord = App.treeInvt.getRootNode().findChild('id', App.cboInvtID.getValue() + '-|', true);
-    if (objRecord)
-        App.treeInvt.getSelectionModel().select(objRecord);
+    if (objRecord) {
+        App.treeInvt.getSelectionModel().deselectAll();
+        App.treeInvt.getRootNode().expand();
+        expandParentNode(objRecord);
+        App.treeInvt.getSelectionModel().select(objRecord,true);
+    }
+    Ext.resumeLayouts(true);
+};
+
+var expandParentNode = function (node) {
+    var parentNode = node.parentNode;
+    if (parentNode) {
+        parentNode.expand()
+        expandParentNode(parentNode);
+    }
 };
 
 var tabDetail_Change = function (tabPanel, newCard, oldCard, eOpts) {
@@ -851,7 +949,13 @@ var btnDeleteMedia_Click = function (sender, e) {
 var fupPPCStoreMediaReq_Change = function (fup, newValue, oldValue, eOpts) {
     if (fup.value) {
         var ext = fup.value.split(".").pop().toLowerCase();
-        if (ext == "mp4" || ext == "ppt" || ext == "pptx" || ext == "pdf" || ext == "xls" || ext == "xlsx" || ext == "docx" || ext == "wmv" || ext == "doc") {
+        if (ext == "pdf" || ext == "ppt" || ext == "pptx" ||
+            ext == "rar" || ext == "xls" || ext == "xlsx" ||
+            ext == "mp3" || ext == "mp4" || ext == "txt" ||
+            ext == "doc" || ext == "docx" || ext == "avi" ||
+            ext == "mpg" || ext == "wmv" || ext == "ogm" ||
+            ext == "mpge" || ext == "iso" || ext == "mkv" ||
+            ext == "rm" || ext == "rmvb" || ext == "mov") {
             HQ.common.showBusy(true, HQ.common.getLang('Uploading...'), App.frmMain);
             readImage(fup, App.imgPPCStoreMediaReq, App.hdnPPCStoreMediaReq);
         }
@@ -888,4 +992,6 @@ var readImage = function (fup, imgControl, ctr) {
         }
     }
 };
+
+
 
