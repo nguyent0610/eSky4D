@@ -85,7 +85,7 @@
                             .HQProcedure("AR20400_pcCustomer").HQColumnShow("CustId,CustName,Addr1,Addr2")
                             .DisplayField("CustId").ValueField("CustId").MaxLength(50).EnforceMaxLength(true)
                             .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
-                            .ForceSelection(true)
+                            .ForceSelection(true).HQisPaging(true).PageSize(20)
                             .HQParam(new StoreParameterCollection() 
                             {
                                 new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
@@ -97,6 +97,7 @@
                                 lst.Change.Fn = "cboCustId_Change";
                                 lst.Select.Fn = "cboCustId_Select";
                                 lst.TriggerClick.Fn = "cboCustId_TriggerClick";
+                                lst.Focus.Fn = "cboCustId_Focus";
                             })
                             
                         , HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQLangCode("BRANCHID").Tag("X")

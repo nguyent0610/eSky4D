@@ -35,7 +35,8 @@ var _recordID = '';
 var _root = '';
 var parentRecordIDAll = '';
 var parentRecordID = '';
-
+var _Flag;
+var _treeExpandAll = false;
 
 var checkLoad = function (sto) {
     _Source += 1;
@@ -91,7 +92,12 @@ var firstLoad = function () {
     App.cboTypeADV.getStore().addListener('load', checkLoad);
     App.cboCodeDisplay.getStore().addListener('load', checkLoad);
     App.cboSellingProd1.getStore().addListener('load', checkLoad);
+
+    //App.cboCustId.getStore().addListener('load', stoCustId_Load);
+
 };
+
+
 
 var menuClick = function (command) {
     switch (command) {
@@ -292,7 +298,6 @@ var menuClick = function (command) {
             //}
             break;
         case "close":
-            HQ.common.close(this);
             break;
     }
 };
@@ -365,7 +370,8 @@ var stoLoad = function (sto) {
         record.set('Birthdate', HQ.bussinessDate);
         HQ.isNew = true;
         App.cboCustId.forceSelection = false;
-        if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1')
+        //if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1')
+        if (_Flag == "1")
             App.cboCustId.forceSelection = true;
         HQ.common.setRequire(App.frmMain);
         sto.commitChanges();
@@ -664,13 +670,19 @@ var save = function () {
                 HQ.isFirstLoad = true;
                 HQ.message.show(201405071);
                 CustId = data.result.CustId;
-                App.cboCustId.getStore().load({
+                App.cboCustId.getStore().reload({
                     callback: function () {
                         if (Ext.isEmpty(App.cboCustId.getValue())) {
                             if (_hiddenTree == 'false' && data.result.isNew == 'true')
-                                ReloadTree('save');
+                                ReloadTree('save', data.result.CustId);
                             else
                             {
+                                App.cboCustId.forceSelection = false;
+                                var objPageCust = findRecordCombo(CustId);
+                                if (objPageCust) {
+                                    var positionCust = calcPage(objPageCust.index);
+                                    App.cboCustId.loadPage(positionCust);
+                                }
                                 App.cboCustId.setValue(CustId);
                                 App.stoAR_Customer.reload();
                             }
@@ -678,9 +690,15 @@ var save = function () {
                         }
                         else {
                             if (_hiddenTree == 'false' && data.result.isNew == 'true')
-                                ReloadTree('save');
+                                ReloadTree('save', data.result.CustId);
                             else
                             {
+                                App.cboCustId.forceSelection = false;
+                                var objPageCust = findRecordCombo(CustId);
+                                if (objPageCust) {
+                                    var positionCust = calcPage(objPageCust.index);
+                                    App.cboCustId.loadPage(positionCust);
+                                }
                                 App.cboCustId.setValue(CustId);
                                 App.stoAR_Customer.reload();
                             }
@@ -1051,15 +1069,31 @@ var cboCustId_TriggerClick = function (sender, value) {
 
     var stoCheckAutoCustID_Load = function () {
         if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1') {
+            _Flag = "1";
             App.cboCustId.allowBlank = true;
             App.cboCustId.isValid(false);
             App.cboCustId.forceSelection = true;
         }
         else {
+            _Flag = "0";
             App.cboCustId.allowBlank = false;
             App.cboCustId.isValid(true);
             App.cboCustId.forceSelection = false;
         }
+    };
+
+    var cboCustId_Focus = function () {
+        if (_Flag == "1") {
+            App.cboCustId.forceSelection = true;
+        }
+        else {
+            if (HQ.isNew == true)
+                App.cboCustId.forceSelection = false;
+            else
+                App.cboCustId.forceSelection = true;
+        }
+        if (!HQ.isInsert && HQ.isNew)
+            App.cboCustId.forceSelection = true;
     };
 
     var stoGetMaxHierarchyLevel_Load = function () {
@@ -1109,14 +1143,16 @@ var cboCustId_TriggerClick = function (sender, value) {
 
     ///////////////////////// Tree ///////////////////////////
     var btnExpand_click = function (btn, e, eOpts) {
+        //App.treeCust.expandAll();
         Ext.suspendLayouts();
-        App.treeCust.expandAll();
+        _treeExpandAll = true;
+        expandAll(App.treeCust);
         Ext.resumeLayouts(true);
-        
     };
 
     var btnCollapse_click = function (btn, e, eOpts) {
-        App.treeCust.collapseAll();
+        //App.treeCust.collapseAll();
+        collapseAll(App.treeCust);
     };
 
     var nodeSelected_Change = function (store, operation, options) {
@@ -1158,24 +1194,55 @@ var cboCustId_TriggerClick = function (sender, value) {
             }
             else {
                 CustId = CustID1;
+                App.cboCustId.forceSelection = false;
+                var objPageCust = findRecordCombo(CustId);
+                if (objPageCust)
+                {
+                    var positionCust = calcPage(objPageCust.index);
+                    App.cboCustId.loadPage(positionCust);
+                }
                 App.cboCustId.setValue(CustID1);
             }
         }
         
     };
 
-    var ReloadTree = function (type) {
+    //var stoCustId_Load = function () {
+    //    //App.cboCustId.setValue(CustId);
+    //};
+
+    var findRecordCombo = function (value) {
+        var data = null;
+        var store = App.cboCustId.store;
+        var allRecords = store.snapshot || store.allData || store.data;
+        allRecords.each(function (record) {
+            if (record.data.CustId == value) {
+                data = record;
+                return false;
+            }
+        });
+        return data;
+    };
+    
+    var ReloadTree = function (type, valueCustId) {
         try {
+            _treeExpandAll = false;
             App.direct.ReloadTreeAR20400(App.cboCpnyID.getValue(), {
                 success: function (data) {
                     if (type == 'save') {
-                        App.cboCustId.setValue(CustId);
+                        App.cboCustId.forceSelection = false;
+                        var objPageCust = findRecordCombo(valueCustId);
+                        if (objPageCust) {
+                            var positionCust = calcPage(objPageCust.index);
+                            App.cboCustId.loadPage(positionCust);
+                        }
+                        App.cboCustId.setValue(valueCustId);
                         App.stoAR_Customer.reload();
                     }
                     else if (type =='delete')
                     {
                         CustId = '';
-                        App.cboCustId.getStore().load();
+                        App.cboCustId.getStore().reload();
                     }
                 },
                 failure: function () {
@@ -1191,6 +1258,8 @@ var cboCustId_TriggerClick = function (sender, value) {
     var searchNode = function () {
         Ext.suspendLayouts();
         var objRecord = App.treeCust.getRootNode().findChild('id', App.cboCustId.getValue() + '-|', true);
+        if (_treeExpandAll == false)
+            collapseAll(App.treeCust);
         if (objRecord) {
             App.treeCust.getSelectionModel().deselectAll();
             App.treeCust.getRootNode().expand();
@@ -1211,3 +1280,41 @@ var cboCustId_TriggerClick = function (sender, value) {
     var tabDetail_Change = function (tabPanel, newCard, oldCard, eOpts) {
         HQ.focus = tabPanel.activeTab.id;
     };
+
+    var calcPage = function (value) {
+        var tmpValue = Number(value) / 20;
+        if (Number.isInteger(tmpValue))
+            return Number(tmpValue);
+        else
+            return Math.floor(Number(tmpValue)) + 1;
+    };
+
+var updateTreeView = function (tree, fn) {
+    var view = tree.getView();
+    view.getStore().loadRecords(fn(tree.getRootNode()));
+    view.refresh();
+};
+
+var collapseAll = function(tree) {
+    this.updateTreeView(tree, function(root) {
+        root.cascadeBy(function(node) {
+            if (!node.isRoot() || tree.rootVisible) {
+                node.data.expanded = false;
+            }
+        });
+        return tree.rootVisible ? [root] : root.childNodes;
+    });
+};
+
+var expandAll = function(tree) {
+    this.updateTreeView(tree, function(root) {
+        var nodes = [];
+        root.cascadeBy(function(node) {
+            if (!node.isRoot() || tree.rootVisible) {
+                node.data.expanded = true;
+                nodes.push(node);
+            }
+        });
+        return nodes;
+    });
+};
