@@ -18,6 +18,7 @@ var _root = '';
 var parentRecordIDAll = '';
 var parentRecordID = '';
 var _copy = false;
+var _treeExpandAll = false;
 
 var checkLoad = function (sto) {
     _Source += 1;
@@ -25,6 +26,7 @@ var checkLoad = function (sto) {
         _isLoadMaster = true;
         _Source = 0;
         ReloadTree();
+        App.cboInvtID.store.reload();
         App.stoIN_Inventory.reload();
         HQ.common.showBusy(false);
     }
@@ -283,8 +285,6 @@ var checkLotSerial = function (type) {
     }
 };
 
-
-
 /////////////////////////////// GIRD AR_CustDisplayMethod /////////////////////////////////
 var stoCpny_Load = function (sto) {
     //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
@@ -416,9 +416,9 @@ var save = function () {
                 HQ.isFirstLoad = true;
                 HQ.message.show(201405071);
                 InvtID = data.result.InvtID;
-                App.cboInvtID.getStore().load({
+                App.cboInvtID.getStore().reload({
                     callback: function () {
-                        ReloadTree('save');
+                        ReloadTree('save', data.result.InvtID);
                     }
                 });
             },
@@ -691,6 +691,15 @@ var cboInvtID_TriggerClick = function (sender, value) {
     InvtID = '';
 };
 
+var cboInvtID_Focus = function () {
+    if(HQ.isNew == true)
+        App.cboInvtID.forceSelection = false;
+    else
+        App.cboInvtID.forceSelection = true;
+    if (!HQ.isInsert && HQ.isNew)
+        App.cboCustId.forceSelection = true;
+};
+
 var cboClassID_Change = function (sender, e) {
     if (sender.valueModels != null && sender.hasFocus) {
         var objTmp = sender.valueModels[0];
@@ -783,14 +792,16 @@ var cboStkUnit_TriggerClick = function (sender,e) {
 };
 ///////////////////////// Tree ///////////////////////////
 var btnExpand_click = function (btn, e, eOpts) {
+    //App.treeInvt.expandAll();
     Ext.suspendLayouts();
-    App.treeInvt.expandAll();
+    _treeExpandAll = true;
+    expandAll(App.treeInvt);
     Ext.resumeLayouts(true);
-        
 };
 
 var btnCollapse_click = function (btn, e, eOpts) {
-    App.treeInvt.collapseAll();
+    //App.treeInvt.collapseAll();
+    collapseAll(App.treeInvt);
 };
 
 var nodeSelected_Change = function (store, operation, options) {
@@ -831,23 +842,52 @@ var nodeSelected_Change = function (store, operation, options) {
         }
         else {
             InvtID = InvtID1;
+            App.cboInvtID.forceSelection = false;
+            var objPage = findRecordCombo(InvtID);
+            if (objPage) {
+                var positionInvtID = calcPage(objPage.index);
+                App.cboInvtID.loadPage(positionInvtID);
+            }
             App.cboInvtID.setValue(InvtID1);
         }
     }
 };
 
-var ReloadTree = function (type) {
+var findRecordCombo = function (value) {
+    var data = null;
+    var store = App.cboInvtID.store;
+    var allRecords = store.snapshot || store.allData || store.data;
+    allRecords.each(function (record) {
+        if (record.data.InvtID == value) {
+            data = record;
+            return false;
+        }
+    });
+    return data;
+};
+
+var ReloadTree = function (type, valueInvtID) {
     try {
+        _treeExpandAll = false;
         App.direct.ReloadTreeIN20500({
             success: function (data) {
                 if (type == 'save') {
-                    App.cboInvtID.setValue(InvtID);
+
+                    App.cboInvtID.forceSelection = false;
+                    var objPage = findRecordCombo(valueInvtID);
+                    if (objPage) {
+                        var positionInvtID = calcPage(objPage.index);
+                        App.cboInvtID.loadPage(positionInvtID);
+                    }
+                    App.cboInvtID.setValue(valueInvtID);
+
+                    //App.cboInvtID.setValue(InvtID);
                     App.stoIN_Inventory.reload();
                 }
                 else if (type =='delete')
                 {
                     InvtID = '';
-                    App.cboInvtID.getStore().load();
+                    App.cboInvtID.getStore().reload();
                 }
             },
             failure: function () {
@@ -863,6 +903,8 @@ var ReloadTree = function (type) {
 var searchNode = function () {
     Ext.suspendLayouts();
     var objRecord = App.treeInvt.getRootNode().findChild('id', App.cboInvtID.getValue() + '-|', true);
+    if (_treeExpandAll == false)
+        collapseAll(App.treeInvt);
     if (objRecord) {
         App.treeInvt.getSelectionModel().deselectAll();
         App.treeInvt.getRootNode().expand();
@@ -994,4 +1036,40 @@ var readImage = function (fup, imgControl, ctr) {
 };
 
 
+var calcPage = function (value) {
+    var tmpValue = Number(value) / 20;
+    if (Number.isInteger(tmpValue))
+        return Number(tmpValue);
+    else
+        return Math.floor(Number(tmpValue)) + 1;
+};
 
+var updateTreeView = function (tree, fn) {
+    var view = tree.getView();
+    view.getStore().loadRecords(fn(tree.getRootNode()));
+    view.refresh();
+};
+
+var collapseAll = function (tree) {
+    this.updateTreeView(tree, function (root) {
+        root.cascadeBy(function (node) {
+            if (!node.isRoot() || tree.rootVisible) {
+                node.data.expanded = false;
+            }
+        });
+        return tree.rootVisible ? [root] : root.childNodes;
+    });
+};
+
+var expandAll = function (tree) {
+    this.updateTreeView(tree, function (root) {
+        var nodes = [];
+        root.cascadeBy(function (node) {
+            if (!node.isRoot() || tree.rootVisible) {
+                node.data.expanded = true;
+                nodes.push(node);
+            }
+        });
+        return nodes;
+    });
+};
