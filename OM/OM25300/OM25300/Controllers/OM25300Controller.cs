@@ -44,8 +44,10 @@ namespace OM25300.Controllers
         }
         public ActionResult GetData(string posmID, string progTypeFCS)
         {
-            return this.Store(_db.OM25300_pgPosmID(Current.UserName, Current.CpnyID, Current.LangID, posmID, progTypeFCS));
+            var lstData = _db.OM25300_pgPosmID(Current.UserName, Current.CpnyID, Current.LangID, posmID, progTypeFCS).ToList();
+            return this.Store(lstData);
         }
+
         public ActionResult Save(FormCollection data)
         {
             try
@@ -72,16 +74,14 @@ namespace OM25300.Controllers
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
                 ChangeRecords<OM25300_pgPosmID_Result> lstData = dataHandler.BatchObjectData<OM25300_pgPosmID_Result>();
-
                
                 foreach (OM25300_pgPosmID_Result del in lstData.Deleted)
                 {
-
-                    if (lstData.Created.Where(p => p.PosmID == del.PosmID && p.BranchID == del.BranchID
+                    if (lstData.Created.Where(p => p.PosmID == del.PosmID && p.BranchID == del.BranchID && p.ClassID == del.ClassID
                         && p.InvtID == del.InvtID && p.SiteID == del.SiteID && p.Date==del.Date).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        lstData.Created.Where(p => p.PosmID == del.PosmID && p.BranchID == del.BranchID
-                        && p.InvtID == del.InvtID && p.SiteID == del.SiteID && p.Date == del.Date).FirstOrDefault().tstamp = del.tstamp;
+                        lstData.Created.Where(p => p.PosmID == del.PosmID && p.BranchID == del.BranchID && p.ClassID == del.ClassID 
+                            && p.InvtID == del.InvtID && p.SiteID == del.SiteID && p.Date == del.Date).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
@@ -110,10 +110,11 @@ namespace OM25300.Controllers
                         curItem.InvtID = "*";
                     }
                     var objFCS = _db.OM_FCS_POSM.Where(p => p.PosmID.ToLower() == posmID.ToLower() 
-                        && p.BranchID.ToLower() == curItem.BranchID.ToLower()                        
-                        && p.InvtID.ToLower() == curItem.InvtID.ToLower()
-                        && p.SiteID.ToLower() == curItem.SiteID.ToLower() && p.Date == curItem.Date
-                       ).FirstOrDefault();
+                        && p.BranchID == curItem.BranchID
+                        && p.ClassID == curItem.ClassID
+                        && p.InvtID == curItem.InvtID
+                        && p.SiteID == curItem.SiteID 
+                        && p.Date == curItem.Date).FirstOrDefault();
 
                     if (objFCS != null)
                     {
@@ -168,6 +169,7 @@ namespace OM25300.Controllers
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
+         //   t.tstamp = new byte[1];
         }       
 
         #region -Export-
