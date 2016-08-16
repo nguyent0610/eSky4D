@@ -227,6 +227,7 @@ var stoLoad = function (sto) {
         record.data.ApproveStatus = 'H';
     }
     App.frmMain.getForm().loadRecord(record);
+    App.tabDetail.setActiveTab(App.pnlDfltInfo);
     checkLotSerial(record.data.LotSerFxdTyp);
     //image
     App.fupPPCStorePicReq.reset();
@@ -399,6 +400,7 @@ var save = function () {
         App.frmMain.updateRecord();
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("WaitMsg"),
+            timeout: 1800000,
             url: 'IN20500/Save',
             params: {
                 NodeID: _nodeID,
@@ -858,6 +860,7 @@ var nodeSelected_Change = function (store, operation, options) {
 var findRecordCombo = function (value) {
     var data = null;
     var store = App.cboInvtID.store;
+    store.suspendEvents();
     var allRecords = store.snapshot || store.allData || store.data;
     allRecords.each(function (record) {
         if (record.data.InvtID == value) {
@@ -865,6 +868,7 @@ var findRecordCombo = function (value) {
             return false;
         }
     });
+    store.resumeEvents();
     return data;
 };
 
