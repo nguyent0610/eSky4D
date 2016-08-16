@@ -1272,8 +1272,9 @@ var cboCustId_TriggerClick = function (sender, value) {
     var expandParentNode = function (node) {
         var parentNode = node.parentNode;
         if (parentNode) {
-            parentNode.expand()
+           
             expandParentNode(parentNode);
+            parentNode.expand();
         }
     };
 
@@ -1283,6 +1284,8 @@ var cboCustId_TriggerClick = function (sender, value) {
 
     var calcPage = function (value) {
         var tmpValue = Number(value) / 20;
+        if (Number(tmpValue) == 0)
+            return 1;
         if (Number.isInteger(tmpValue))
             return Number(tmpValue);
         else
