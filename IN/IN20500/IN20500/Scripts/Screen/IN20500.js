@@ -805,6 +805,7 @@ var btnCollapse_click = function (btn, e, eOpts) {
 };
 
 var nodeSelected_Change = function (store, operation, options) {
+    Ext.suspendLayouts();
     if (operation.internalId != 'root') {
         _root = 'false';
         var InvtID1 = '';
@@ -848,9 +849,10 @@ var nodeSelected_Change = function (store, operation, options) {
                 var positionInvtID = calcPage(objPage.index);
                 App.cboInvtID.loadPage(positionInvtID);
             }
-            App.cboInvtID.setValue(InvtID1);
+            App.cboInvtID.setValue(InvtID);
         }
     }
+    Ext.resumeLayouts(true);
 };
 
 var findRecordCombo = function (value) {
@@ -901,24 +903,26 @@ var ReloadTree = function (type, valueInvtID) {
 };
 
 var searchNode = function () {
-    Ext.suspendLayouts();
-    var objRecord = App.treeInvt.getRootNode().findChild('id', App.cboInvtID.getValue() + '-|', true);
+    App.frmMain.suspendLayouts();
+    var nodeInvt = App.treeInvt.getRootNode().findChild('id', App.cboInvtID.getValue() + '-|', true);
     if (_treeExpandAll == false)
         collapseAll(App.treeInvt);
-    if (objRecord) {
+    if (nodeInvt) {
         App.treeInvt.getSelectionModel().deselectAll();
         App.treeInvt.getRootNode().expand();
-        expandParentNode(objRecord);
-        App.treeInvt.getSelectionModel().select(objRecord,true);
+        expandParentNode(nodeInvt);
+        App.treeInvt.getSelectionModel().select(nodeInvt, true);
     }
-    Ext.resumeLayouts(true);
+    App.frmMain.resumeLayouts(true);
 };
 
 var expandParentNode = function (node) {
-    var parentNode = node.parentNode;
-    if (parentNode) {
-        parentNode.expand()
-        expandParentNode(parentNode);
+    if (node.parentNode) {
+        expandParentNode(node.parentNode);
+        node.parentNode.expand();
+
+        //node.parentNode.expand();
+        //expandParentNode(node.parentNode);
     }
 };
 
@@ -1035,9 +1039,10 @@ var readImage = function (fup, imgControl, ctr) {
     }
 };
 
-
 var calcPage = function (value) {
     var tmpValue = Number(value) / 20;
+    if (Number(tmpValue) == 0)
+        return 1;
     if (Number.isInteger(tmpValue))
         return Number(tmpValue);
     else
