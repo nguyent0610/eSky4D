@@ -124,10 +124,17 @@ namespace OM23600.Controllers
                     {
                         continue;
                     }
-
+                    if (progType == "D4")
+                    {
+                        curItem.InvtID = "*";
+                        curItem.Date = new DateTime(1900, 1, 1).ToDateTime();
+                    }
+                    
                     var objBranch = _db.OM_POSMBranch.Where(p => p.PosmID == posmID 
                         && p.BranchID == curItem.BranchID 
                         && p.CustId == curItem.CustId
+                        && p.ClassID == curItem.ClassID
+                        && p.Date == curItem.Date
                         && p.SiteID == curItem.SiteID
                         && p.InvtID == curItem.InvtID).FirstOrDefault();
 
@@ -148,8 +155,8 @@ namespace OM23600.Controllers
                         // Add new
                         objBranch = new OM_POSMBranch();
                         objBranch.PosmID = posmID;
-                        objBranch.InvtID = progType == "D3" ? curItem.InvtID : "*";
-                        objBranch.Date = progType == "D3" ? curItem.Date.ToDateTime() : new DateTime(1900, 1, 1);
+                        objBranch.InvtID = curItem.InvtID;
+                        objBranch.Date = curItem.Date.ToDateTime();
                         objBranch.ProgType = progType;
                         Update_OM_POSMBranch(objBranch, curItem, true);
                         _db.OM_POSMBranch.AddObject(objBranch);
