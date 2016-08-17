@@ -124,8 +124,8 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.form.checkRequirePass(App.frmMain)
-                    && HQ.store.checkRequirePass(App.stoDetail, keysTab_2, fieldsCheckRequireTab_2, fieldsLangCheckRequireTab_2))
+                if (HQ.form.checkRequirePass(App.frmMain))
+                //    && HQ.store.checkRequirePass(App.stoDetail, keysTab_2, fieldsCheckRequireTab_2, fieldsLangCheckRequireTab_2)
                 {
                     //if (checkGrid(App.stoDetail,'Payment')==true) {
                         save();
@@ -210,10 +210,15 @@ var ChangeWhenSelectCheckBoxGrid = function (item, newValue, oldValue) {
 var cboInvcNbr_change = function (item, newValue, oldValue) {
     for (var i = 0; i < App.cboInvcNbr.store.data.length; i++) {
         if (App.cboInvcNbr.getStore().data.items[i].data.InvcNbr == newValue) {
+            App.slmDetail.selected.items[0].set('DocDate', App.cboInvcNbr.getStore().data.items[i].data.DocDate);
             App.slmDetail.selected.items[0].set('DocBal', App.cboInvcNbr.getStore().data.items[i].data.DocBal);
             App.slmDetail.selected.items[0].set('OrigDocBal', App.cboInvcNbr.getStore().data.items[i].data.OrigDocBal);
             App.slmDetail.selected.items[0].set('VendID', App.cboInvcNbr.getStore().data.items[i].data.VendID);
             App.slmDetail.selected.items[0].set('Descr', App.cboInvcNbr.getStore().data.items[i].data.Descr);
+            App.slmDetail.selected.items[0].set('BranchID', App.cboInvcNbr.getStore().data.items[i].data.BranchID);
+            App.slmDetail.selected.items[0].set('DocType', App.cboInvcNbr.getStore().data.items[i].data.DocType);
+
+            App.slmDetail.selected.items[0].set('Name', App.cboInvcNbr.getStore().data.items[i].data.Name);
             App.slmDetail.selected.items[0].set('BatNbr', App.cboInvcNbr.getStore().data.items[i].data.BatNbr);
             App.slmDetail.selected.items[0].set('RefNbr', App.cboInvcNbr.getStore().data.items[i].data.RefNbr);
         }
@@ -245,6 +250,8 @@ var txtPaymentGrid_change = function (item, newValue, oldValue) {
         //neu dong dang chon bang voi data trong store cua hang do thi xu ly
         if (App.slmDetail.selected.items[0].data == App.stoDetail.data.items[i].data) {
             //dk neu gia tri moi edit cua payment lon hon gia tri original cua hang do thi set payment = gia tri original , set docbal = 0 va check vao checkbox hang do 
+            if (newValue < 0)
+                newValue = 0;
             if (newValue >= App.stoDetail.data.items[i].data.OrigDocBal) {
                 App.stoDetail.data.items[i].set("Payment", App.stoDetail.data.items[i].data.OrigDocBal);
                 App.stoDetail.data.items[i].set("DocBal", 0);
@@ -462,11 +469,36 @@ var stoDetail_Load = function (sto) {
     }
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-         //   HQ.store.insertBlank(sto, keysTab_2);
+          //  HQ.grid.insert(App.grdDetail);
+            HQ.store.insertBlank(sto, keysTab_2);
+            var record = App.stoDetail.getAt(App.stoDetail.getCount() - 1);
+            record.set('DocDate', HQ.bussinessDate);
+
         }
         HQ.isFirstLoad = false; //sto load cuoi se su dung
         
     }
+    else
+    {
+        if (App.stoDetail.getCount() > 0) {
+            var record = App.stoDetail.getAt(App.stoDetail.getCount() - 1);
+            if (record.data.InvcNbr != "") {
+                HQ.store.insertBlank(sto, keysTab_2);
+                record = sto.getAt(sto.getCount() - 1);
+                record.set('DocDate', HQ.bussinessDate);
+            }
+        }
+        else {
+            HQ.store.insertBlank(sto, keysTab_2);
+            var record = App.stoDetail.getAt(0);
+            if (record.data.InvcNbr != "") {
+                HQ.store.insertBlank(sto, keysTab_2);
+                record = sto.getAt(sto.getCount() - 1);
+                record.set('DocDate', HQ.bussinessDate);
+            }
+        }
+    }
+
     frmChange();
    // if(HQ.isChange)
     total();
@@ -565,6 +597,7 @@ var save = function () {
                             App.cboBatNbr.getStore().load();
                             App.stoHeader.reload();
                         }
+                        App.cboInvcNbr.store.reload();
                     }
                 });
                 //total();

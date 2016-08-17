@@ -149,6 +149,9 @@ namespace AP10400.Controllers
 						headerBatch.Descr = data["txtDocDescr"].PassNull();//curHeader.Descr;
                        // headerBatch.TotAmt = Convert.ToDouble(curHeader.TotAmt);
 						headerBatch.TotAmt = Convert.ToDouble(toAmt);
+						headerBatch.LUpd_DateTime = DateTime.Now;
+						headerBatch.LUpd_User = Current.UserName;
+						headerBatch.LUpd_Prog = _screenNbr;
 						headerBatch.ReasonCD = ReasonCD;
 						if (Handle == "R")
 						{
@@ -288,46 +291,49 @@ namespace AP10400.Controllers
 				}
 				foreach (AP10400_pgLoadGridTrans_Result created in lstgrd.Created)
 				{
-					if (created.Payment == 0 && Handle != "R" && headerBatch.Status != "C")
+					if (created.InvcNbr.PassNull() != "")
 					{
-						throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
-					}
-					var checkrecord = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.AdjdRefNbr == created.RefNbr).FirstOrDefault();//&& p.BatNbr == BatNbr&& p.BatNbr == BatNbr && p.AdjgRefNbr == RefNbr
-					
-					if(checkrecord!=null)
-					{
+						if (created.Payment == 0 && Handle != "R" && headerBatch.Status != "C")
+						{
+							throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
+						}
+						var checkrecord = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.AdjdRefNbr == created.RefNbr).FirstOrDefault();//&& p.BatNbr == BatNbr&& p.BatNbr == BatNbr && p.AdjgRefNbr == RefNbr
+
+						if (checkrecord != null)
+						{
 							throw new MessageException(MessageType.Message, "20160808", "", new string[] { checkrecord.BatNbr });
-			
-					}
-					var record = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.AdjdRefNbr == created.RefNbr && p.AdjgRefNbr == RefNbr).FirstOrDefault();
-					if (record == null)
-					{
-						record = new AP_Adjust();
-						record.BranchID = BranchID;
-						if (BatNbr == "")
-						{
-							record.AdjgBatNbr = headerBatch.BatNbr;
-							record.BatNbr = headerBatch.BatNbr;
+
 						}
-						else
+						var record = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.AdjdRefNbr == created.RefNbr && p.AdjgRefNbr == RefNbr).FirstOrDefault();
+						if (record == null)
 						{
-							record.BatNbr = BatNbr;
-							record.AdjgBatNbr = BatNbr;
+							record = new AP_Adjust();
+							record.BranchID = BranchID;
+							if (BatNbr == "")
+							{
+								record.AdjgBatNbr = headerBatch.BatNbr;
+								record.BatNbr = headerBatch.BatNbr;
+							}
+							else
+							{
+								record.BatNbr = BatNbr;
+								record.AdjgBatNbr = BatNbr;
+							}
+							if (RefNbr == "")
+							{
+								record.AdjgRefNbr = headerBatch.RefNbr;
+							}
+							else
+							{
+								record.AdjgRefNbr = RefNbr;
+							}
+
+							UpdatingGridAd_Adjust(created, ref record);
+							record.Crtd_DateTime = DateTime.Now;
+							record.Crtd_Prog = _screenNbr;
+							record.Crtd_User = Current.UserName;
+							_db.AP_Adjust.AddObject(record);
 						}
-						if (RefNbr == "")
-						{
-							record.AdjgRefNbr = headerBatch.RefNbr;
-						}
-						else
-						{
-							record.AdjgRefNbr = RefNbr;
-						}
-						 
-						UpdatingGridAd_Adjust(created, ref record);
-						record.Crtd_DateTime = DateTime.Now;
-						record.Crtd_Prog = _screenNbr;
-						record.Crtd_User = Current.UserName;
-						_db.AP_Adjust.AddObject(record);
 					}
 				}
 
