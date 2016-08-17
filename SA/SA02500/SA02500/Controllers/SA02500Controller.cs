@@ -76,6 +76,11 @@ namespace SA02500.Controllers
                                 try
                                 {
                                     objUser.Password = Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t");
+                                    objUser.BeginDay = DateTime.Now;
+                                    objUser.LUpd_Datetime = DateTime.Now;
+                                    objUser.LUpd_Prog = _screenNbr;
+                                    objUser.LUpd_User = Current.UserName;
+
                                     objHeader = new SYS_PassHistory();
                                     objHeader.ResetET();
                                     objHeader.UserName = Current.UserName.ToString();
@@ -86,7 +91,7 @@ namespace SA02500.Controllers
                                     objHeader.LUpd_Datetime = DateTime.Now;
                                     objHeader.LUpd_Prog = _screenNbr;
                                     objHeader.LUpd_User = Current.UserName;
-
+                                    objHeader.tstamp = new byte[1];
                                 }
                                 catch
                                 {
