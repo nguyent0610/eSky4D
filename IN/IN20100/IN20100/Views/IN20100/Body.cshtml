@@ -3,10 +3,24 @@
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
 @using IN20100;
+@using HQ.eSkySys;
 @{
     Layout = null;
     var X = Html.X();
     var HQ = Html.HQ();
+    eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
+    var obj = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToLower() == "in20100decimalconfig");
+    string formatNum = "0,000";
+    int decimalPlaces = 0;
+    if (obj != null && obj.IntVal > 0)
+    {
+        decimalPlaces = obj.IntVal;
+        formatNum += ".";
+        for (int i = 0; i < decimalPlaces; i++)
+        {
+            formatNum += "0";
+        }
+    }    
 }
 
 @(X.Viewport()
@@ -47,10 +61,10 @@
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
             
-            X.Column().Text(Util.GetLang("UnitType")).DataIndex("UnitType").Width(150).Renderer("UnitTypechange")
+            X.Column().Text(Util.GetLang("UnitType")).DataIndex("UnitType").Width(100).Renderer("UnitTypechange")
             .Editor(
                 HQ.Combo().ID("cboUnitType").Name("cboUnitType").HQProcedure("IN20100_pcLoadUnitType")
-                .HQColumnShow("UnitType,Code").DisplayField("Code").ValueField("UnitType")
+                .HQColumnShow("UnitType,Code").DisplayField("Code").ValueField("Code")
                 .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
@@ -59,7 +73,7 @@
                 .LoadData()
             ),
             
-            X.Column().Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(150)
+            X.Column().Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(100)
             .Editor(
                 HQ.Combo().ID("cboClassID").Name("cboClassID").HQProcedure("IN20100_pcLoadClasID")
                 .HQColumnShow("ClassID,Descr").DisplayField("ClassID").ValueField("ClassID")
@@ -68,7 +82,7 @@
                 .LoadData()
             ),
             
-            X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(150)
+            X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID")
             .Editor(
                 HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQProcedure("IN20100_pcLoadInventory")
                 .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
@@ -79,7 +93,7 @@
             
             //X.Column().ID("txtDescr").Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Renderer("getDescr"),
 
-            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Renderer("getDescr")
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200).Renderer("getDescr")
             .Editor(
                 HQ.Combo().ID("cboInvtID1").Name("cboInvtID").HQProcedure("IN20100_pcLoadInventory").ReadOnly(true)
                 .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
@@ -88,16 +102,16 @@
                 .LoadData()
                 ),
                
-            X.Column().Text(Util.GetLang("FromUnit")).DataIndex("FromUnit").Width(150)
+            X.Column().Text(Util.GetLang("FromUnit")).DataIndex("FromUnit")
                     .Editor(Html.X().TextField().MaxLength(15).EnforceMaxLength(true)),
             
-            X.Column().Text(Util.GetLang("ToUnit")).DataIndex("ToUnit").Width(150)
+            X.Column().Text(Util.GetLang("ToUnit")).DataIndex("ToUnit")
                     .Editor(Html.X().TextField().MaxLength(15).EnforceMaxLength(true)),
             
-            X.Column().Text(Util.GetLang("MultDiv")).DataIndex("MultDiv").Width(150).Renderer("MultDivchange")
+            X.Column().Text(Util.GetLang("MultDiv")).DataIndex("MultDiv")//.Renderer("MultDivchange")
             .Editor(
                 HQ.Combo().ID("cboMultDiv").Name("cboMultDiv").HQProcedure("IN20100_pcLoadMultDiv")
-                .HQColumnShow("MultDiv,Code").DisplayField("Code").ValueField("MultDiv")
+                .HQColumnShow("MultDiv,Code").DisplayField("Code").ValueField("Code")
                 .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
@@ -106,8 +120,8 @@
                 .LoadData()
             ),
             
-            X.NumberColumn().Text(Util.GetLang("CnvFact")).DataIndex("CnvFact").Width(150).Format("0,000").Align(Alignment.Right)
-               .Editor(X.NumberField().EnforceMaxLength(true).DecimalPrecision(0).MinValue( 0 )),        
+            X.NumberColumn().Text(Util.GetLang("CnvFact")).DataIndex("CnvFact").Width(140).Format(formatNum).Align(Alignment.Right).StyleSpec("text-align:left;")
+               .Editor(X.NumberField().EnforceMaxLength(true).DecimalPrecision(decimalPlaces).MinValue( 0 )),        
             X.CommandColumn()
             .Width(150)
             .Commands(

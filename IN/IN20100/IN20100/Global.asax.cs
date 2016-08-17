@@ -30,18 +30,34 @@ namespace IN20100
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";
-            Current.DBSys = "eSky4DSys";
+            Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString(); //"EARTHSVR\\SQL2012";
+            Current.DBSys = "eSky4DChevronVNSys";// "eBiz4DWebSys";// ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Theme = "Default";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
-            Session["SI20100"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";
+            acc.Release = true;
+            Session["PO10200"] = acc;
+            Session["DBApp"] = Current.DBApp = "eSky4DChevronVNApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "en";
-            Session["LangID"] = 0;
+            Session["CpnyID"] = Current.CpnyID = "NDMT";
+            Session["Language"] = Current.Language = "vi";
+            Session["LangID"] = 1;
+            //Current.Authorize = false;
+            //Current.Server = "MARSSVR\\SQL2012";
+            //Current.DBSys = "eSky4DSys";
+            //Current.FormatDate = "dd-MM-yyyy";
+            //AccessRight acc = new AccessRight();
+            //acc.Delete = true;
+            //acc.Insert = true;
+            //acc.Update = true;
+            //Session["SI20100"] = acc;
+            //Session["DBApp"] = Current.DBApp = "eSky4DApp";
+            //Session["UserName"] = Current.UserName = "admin";
+            //Session["CpnyID"] = Current.CpnyID = "HQHD3110";
+            //Session["Language"] = Current.Language = "vi";
+            //Session["LangID"] = 1;
         }
     }
 }

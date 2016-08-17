@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
+
 namespace IN20100.Controllers
 {
     [DirectController]
@@ -20,6 +21,7 @@ namespace IN20100.Controllers
         private string _screenNbr = "IN20100";
         private string _userName = Current.UserName;
         IN20100Entities _db = Util.CreateObjectContext<IN20100Entities>(false);
+
         public ActionResult Index()
         {
             
