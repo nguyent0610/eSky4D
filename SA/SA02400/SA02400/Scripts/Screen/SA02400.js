@@ -128,7 +128,7 @@ var btnSend_Click = function () {
     }
     else if (HQ.util.checkEmail(App.txtToEmail.getValue())) {
         App.frmMain.submit({
-            waitMsg: HQ.common.getLang('Submiting...'),
+            waitMsg: HQ.common.getLang('PRCING'),
             url: 'SA02400/Send',
             params: {
                 toEmail: App.txtToEmail.getValue(), 
