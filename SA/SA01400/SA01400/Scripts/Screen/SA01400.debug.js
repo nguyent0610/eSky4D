@@ -24,22 +24,19 @@ var menuClick = function (command) {
             HQ.grid.first(App.grdSYS_BuildLog);
             break;
         case "new":
-
             break;
         case "delete":
-
             break;
         case "save":
-
             break;
         case "print":
             break;
         case "close":
-            if (HQ.store.isChange(App.stoSYS_BuildLog)) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
+            //if (HQ.store.isChange(App.stoSYS_BuildLog)) {
+            //    HQ.message.show(5, '', 'askClose');
+            //} else {
                 HQ.common.close(this);
-            }
+           // }
             break;
     }
 
@@ -50,8 +47,8 @@ var menuClick = function (command) {
 
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.close(this);
-    }
-};
+//var askClose = function (item) {
+//    if (item == "no" || item == "ok") {
+//        HQ.common.close(this);
+//    }
+//};
