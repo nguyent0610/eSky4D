@@ -335,7 +335,10 @@
                                                                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
                                                                         })
                                                                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                                                                .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                                                                                                .Listeners(lst => 
+                                                                                                {
+                                                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                                                })
                                                                                                 .LoadData()
                                                                                                 )
                                                     , Html.X().Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID")
@@ -367,6 +370,8 @@
                                                                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                                                                 .Listeners(lst =>
                                                                                                 {
+                                                                                                    lst.Expand.Fn = "cboSiteID_Expand";
+                                                                                                    lst.Collapse.Fn = "cboSiteID_Collapse";
                                                                                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                                                                                     lst.Focus.Handler = "this.forceSelection=true;";
                                                                                                 })

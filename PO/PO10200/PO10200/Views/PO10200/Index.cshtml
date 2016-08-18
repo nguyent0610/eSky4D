@@ -20,8 +20,8 @@
         <meta name="viewport" content="width=device-width" />
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/screen/PO10200.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-
+    <script src='@Url.Content("Scripts/screen/PO10200.js?")' type="text/javascript"></script>
+            
         <style>
             .x-grid-row-over .x-grid-cell-inner {
                 font-weight : bold;
@@ -36,7 +36,8 @@
             HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
             HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
             HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-
+            HQ.IsConfigSiteID = HQ.util.toBool('@ViewBag.IsConfigSiteID');
+            HQ.PromoSiteChars = '@ViewBag.PromoSiteChars';
         </script>  
         <title>@ViewBag.Title</title>
     </head>
@@ -207,7 +208,9 @@
                             })  
               
         )
-
+        @*@HQ.Store().ID("stoPO10200_pdSI_Tax").HQProcedure("PO10200_pdSI_Tax").HQDBSys(false).HQParam(new StoreParameterCollection() {
+			new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+		}).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10200_pdSI_Tax()"; }).AutoLoad(true)*@
         
 
 

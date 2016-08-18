@@ -16,6 +16,7 @@ using Aspose.Cells;
 using HQFramework.DAL;
 using HQFramework.Common;
 using System.Data;
+using HQ.eSkySys;
 namespace PO10200.Controllers
 {
 
@@ -26,6 +27,7 @@ namespace PO10200.Controllers
     {
 
         PO10200Entities _db = Util.CreateObjectContext<PO10200Entities>(false);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private const string ScreenNbr = "PO10200";
         private FormCollection _form;
         private List<PO10200_pgDetail_Result> _lstPOTrans = new List<PO10200_pgDetail_Result>();
@@ -43,10 +45,20 @@ namespace PO10200.Controllers
         private List<IN_ItemSite> lstInItemsiteNew = new List<IN_ItemSite>();
         bool b235 = false;//message235
         public ActionResult Index()
-        {
+        {            
             Util.InitRight(ScreenNbr);
             ViewBag.BussinessDate = DateTime.Now.ToDateShort();
             ViewBag.BussinessTime = DateTime.Now;
+            bool isConfig = false;
+            string promoSiteChars = string.Empty;
+            var obj = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToLower() == "po10200siteidconfig");
+            if (obj != null)
+            {
+                isConfig = obj.IntVal == 1;
+                promoSiteChars = obj.TextVal;
+            }
+            ViewBag.IsConfigSiteID = isConfig;
+            ViewBag.PromoSiteChars = promoSiteChars;
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
