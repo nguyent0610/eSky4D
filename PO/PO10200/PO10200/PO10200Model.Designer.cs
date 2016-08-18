@@ -1022,6 +1022,25 @@ namespace PO10200
     
             return base.ExecuteFunction<PO10200_pgLotTrans_Result>("PO10200_pgLotTrans", branchIDParameter, batNbrParameter, rcptNbrParameter, typeParameter, pONbrParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<PO10200_pcSiteAll_Result> PO10200_pcSiteAll(global::System.String branchID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<PO10200_pcSiteAll_Result>("PO10200_pcSiteAll", branchIDParameter);
+        }
 
         #endregion
 
@@ -11001,6 +11020,109 @@ namespace PO10200
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="PO10200Model", Name="PO10200_pcSiteAll_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class PO10200_pcSiteAll_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new PO10200_pcSiteAll_Result object.
+        /// </summary>
+        /// <param name="siteID">Initial value of the SiteID property.</param>
+        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
+        public static PO10200_pcSiteAll_Result CreatePO10200_pcSiteAll_Result(global::System.String siteID, global::System.String cpnyID)
+        {
+            PO10200_pcSiteAll_Result pO10200_pcSiteAll_Result = new PO10200_pcSiteAll_Result();
+            pO10200_pcSiteAll_Result.SiteID = siteID;
+            pO10200_pcSiteAll_Result.CpnyID = cpnyID;
+            return pO10200_pcSiteAll_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SiteID
+        {
+            get
+            {
+                return _SiteID;
+            }
+            set
+            {
+                OnSiteIDChanging(value);
+                ReportPropertyChanging("SiteID");
+                _SiteID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SiteID");
+                OnSiteIDChanged();
+            }
+        }
+        private global::System.String _SiteID;
+        partial void OnSiteIDChanging(global::System.String value);
+        partial void OnSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyID
+        {
+            get
+            {
+                return _CpnyID;
+            }
+            set
+            {
+                OnCpnyIDChanging(value);
+                ReportPropertyChanging("CpnyID");
+                _CpnyID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CpnyID");
+                OnCpnyIDChanged();
+            }
+        }
+        private global::System.String _CpnyID;
+        partial void OnCpnyIDChanging(global::System.String value);
+        partial void OnCpnyIDChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

@@ -43,6 +43,7 @@ namespace PO10200.Controllers
         string _status = "";
         private JsonResult _logMessage;
         private List<IN_ItemSite> lstInItemsiteNew = new List<IN_ItemSite>();
+        private List<PO10200_pcSiteAll_Result> lstSiteAll = new List<PO10200_pcSiteAll_Result>();
         bool b235 = false;//message235
         public ActionResult Index()
         {            
@@ -142,8 +143,8 @@ namespace PO10200.Controllers
                 _lstLot = detHandlerLot.ObjectData<PO10200_pgLotTrans_Result>()
                             .Where(p => Util.PassNull(p.LotSerNbr) != string.Empty)
                             .ToList();
-              
-                
+
+                lstSiteAll = _db.PO10200_pcSiteAll(_branchID).ToList();
                 if (Data_Checking(b235))
                 {
                     if ((_status == "U" || _status == "C"  ) && (_handle == "C" || _handle == "V"))
@@ -530,6 +531,11 @@ namespace PO10200.Controllers
                 else
                 {                  
                     throw new MessageException(MessageType.Message, "201508112", parm: new[] { objPOT.InvtID});
+                }
+                var objSite = lstSiteAll.FirstOrDefault(x => x.SiteID == objPOT.SiteID);
+                if (objSite == null)
+                {
+                    throw new MessageException(MessageType.Message, "2016081801", parm: new[] { objPOT.SiteID, _branchID });                        
                 }
                 var obj = _db.PO_Trans.Where(p => p.BranchID == objPO_Receipt.BranchID && p.BatNbr == objPO_Receipt.BatNbr && p.RcptNbr == objPO_Receipt.RcptNbr && p.LineRef == objPOT.LineRef).FirstOrDefault();
                 if (obj != null)
