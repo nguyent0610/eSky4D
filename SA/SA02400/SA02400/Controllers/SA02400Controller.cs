@@ -117,7 +117,6 @@ namespace SA02400.Controllers
             {
                 d.Pass = string.Empty;
             }
-
             d.LUpd_Datetime = DateTime.Now;
             d.LUpd_Prog = _screenNbr;
             d.LUpd_User = _userName;
