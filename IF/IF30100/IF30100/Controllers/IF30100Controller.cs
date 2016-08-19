@@ -992,7 +992,14 @@ namespace IF30100.Controllers
                 }
                 else
                 {
-                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                    if (ex.ToString().Contains("0x800A03EC"))
+                    {
+                        throw new MessageException("20410", "", new string[] { "Vượt quá số lượng dòng cho phép của Microsoft Excel" });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                    }
                 }
             }
             finally
