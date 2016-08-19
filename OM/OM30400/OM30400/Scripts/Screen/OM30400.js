@@ -1,4 +1,6 @@
-﻿var pointsArray = [];
+﻿var _FlagZeroResult = false;
+
+var pointsArray = [];
 
 var dataForm_BoxReady = function () {
     App.pnlInfo.setActiveTab(2);
@@ -191,6 +193,7 @@ var Index = {
                 markers.push(marker);
             });
             PosGmap.drawMCP(markers, false);
+            _FlagZeroResult = false;
         }
         App.dataForm.getEl().unmask();
     },
@@ -1719,14 +1722,25 @@ var PosGmap = {
                 });
             }
         }
+        if (_FlagZeroResult == false) {
+            var request = {
+                origin: start,
+                destination: end,
+                waypoints: waypts,
+                optimizeWaypoints: false,
+                travelMode: google.maps.TravelMode.WALKING
+            };
+        }
+        else {
+            var request = {
+                origin: start,
+                destination: end,
+                waypoints: waypts,
+                optimizeWaypoints: false,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+        }
 
-        var request = {
-            origin: start,
-            destination: end,
-            waypoints: waypts,
-            optimizeWaypoints: false,
-            travelMode: google.maps.TravelMode.WALKING
-        };
         PosGmap.directionsService.route(request, function (response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
                 PosGmap.directionsDisplays[idx].setMap(PosGmap.map);
@@ -1747,6 +1761,9 @@ var PosGmap = {
             }
             else if (status == google.maps.DirectionsStatus.ZERO_RESULTS) {
                 //alert("ZERO_RESULTS");
+                _FlagZeroResult = true;
+                App.grdVisitCustomerActual.store.reload();
+                App.storeMapActualVisit.reload();
             }
             else if (status == google.maps.DirectionsStatus.MAX_WAYPOINTS_EXCEEDED) {
                 //alert("MAX_WAYPOINTS_EXCEEDED");
