@@ -175,6 +175,12 @@ var cboReport_Change = function (sender, newValue, oldValue) {
             HQ.common.showBusy(true, HQ.waitMsg);
             App.direct.IF30100Filter(App.cboReport.getValue(), {
                 success: function (result) {
+                    Ext.each(HQ.parm, function (item, index) {
+                        if (item.type == 'grid') {
+                            App[item.id].store.reload();
+                        }
+                    });
+
                     HQ.common.showBusy(false);
                 }
             });
