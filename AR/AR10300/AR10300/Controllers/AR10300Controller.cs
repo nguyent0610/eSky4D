@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -85,15 +85,20 @@ namespace AR10300.Controllers
             try
             {
                 var BranchID = data["txtBranchID"].PassNull();
+                var Status = data["cboStatus"].PassNull();
                 var Handle = data["cboHandle"].PassNull();
                 var BatNbr = data["cboBatNbr"].PassNull();
                 var RefNbr = data["cboRefNbr"].PassNull();
-
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstHeader"]);
                 var curHeader = dataHandler1.ObjectData<AR10300_pdHeader_Result>().FirstOrDefault();
                 StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
                 ChangeRecords<AR10300_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AR10300_pgLoadGridTrans_Result>();
-                
+                if (Status == "H")
+                {
+                    if (_db.AR10300_ppCheckCloseDate(BranchID, curHeader.DocDate.ToDateShort(), "AR10300").FirstOrDefault() == "0")
+                        throw new MessageException(MessageType.Message, "301");
+                }
+
                 #region Save Header
                 var headerBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AR" && p.EditScrnNbr == "AR10300");
                 var headerDoc = _db.AR_Doc.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr);
@@ -101,15 +106,49 @@ namespace AR10300.Controllers
                 {
                     if (headerBatch.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        headerBatch.IntRefNbr = curHeader.IntRefNbr;
-                        headerBatch.ReasonCD = curHeader.ReasonCD;
-                        headerBatch.TotAmt = Convert.ToDouble(curHeader.TotAmt);
-                        if (Handle == "R")
+                        if (Handle == "V")
                         {
-                            headerBatch.Rlsed = 1;
-                            headerBatch.Status = "C";
+                            var objCheckCancel = _db.AR10300_ppCheckForCancel(BranchID, headerBatch.BatNbr, headerBatch.RefNbr).FirstOrDefault();
+                            if (objCheckCancel != null)
+                            {
+                                if (objCheckCancel.Result == "1")
+                                    throw new MessageException(MessageType.Message, "201307313", parm: new string[] { BranchID, headerBatch.BatNbr, headerBatch.RefNbr });
+                                else
+                                {
+                                    headerBatch.Status = "V";
+                                    headerBatch.Rlsed = -1;
+                                    headerBatch.LUpd_DateTime = DateTime.Now;
+                                    headerBatch.LUpd_Prog = _screenNbr;
+                                    headerBatch.LUpd_User = _userName;
+
+                                    headerDoc.Rlsed = -1;
+                                    headerDoc.LUpd_DateTime = DateTime.Now;
+                                    headerDoc.LUpd_Prog = _screenNbr;
+                                    headerDoc.LUpd_User = _screenNbr;
+                                }
+                            }
                         }
-                        UpdatingFormBotAR_Doc(ref headerDoc, curHeader, Handle);
+                        else
+                        {
+                            headerBatch.IntRefNbr = curHeader.IntRefNbr;
+                            headerBatch.ReasonCD = curHeader.ReasonCD;
+                            headerBatch.TotAmt = Convert.ToDouble(curHeader.TotAmt);
+                            if (Handle == "R")
+                            {
+                                headerBatch.Rlsed = 1;
+                                headerBatch.Status = "C";
+
+                                var objAR_Balances = _db.AR_Balances.FirstOrDefault(p => p.CustID == curHeader.CustId && p.BranchID == BranchID);
+                                if (objAR_Balances != null)
+                                {
+                                    objAR_Balances.CurrBal = objAR_Balances.CurrBal - curHeader.TotAmt;
+                                    objAR_Balances.LUpd_DateTime = DateTime.Now;
+                                    objAR_Balances.LUpd_Prog = _screenNbr;
+                                    objAR_Balances.LUpd_User = _screenNbr;
+                                }
+                            }
+                            UpdatingFormBotAR_Doc(ref headerDoc, curHeader, Handle);
+                        }
                     }
                     else
                     {
@@ -133,6 +172,15 @@ namespace AR10300.Controllers
                     {
                         headerBatch.Rlsed = 1;
                         headerBatch.Status = "C";
+
+                        var objAR_Balances = _db.AR_Balances.FirstOrDefault(p => p.CustID == curHeader.CustId && p.BranchID == BranchID);
+                        if (objAR_Balances != null)
+                        {
+                            objAR_Balances.CurrBal = objAR_Balances.CurrBal - curHeader.TotAmt;
+                            objAR_Balances.LUpd_DateTime = DateTime.Now;
+                            objAR_Balances.LUpd_Prog = _screenNbr;
+                            objAR_Balances.LUpd_User = _screenNbr;
+                        }
                     }
                     else if (Handle == "N" || Handle == "")
                     {
@@ -147,10 +195,10 @@ namespace AR10300.Controllers
 
                     headerBatch.Crtd_DateTime = DateTime.Now;
                     headerBatch.Crtd_Prog = _screenNbr;
-                    headerBatch.Crtd_User = Current.UserName;
+                    headerBatch.Crtd_User = _userName;
                     headerBatch.LUpd_DateTime = DateTime.Now;
                     headerBatch.LUpd_Prog = _screenNbr;
-                    headerBatch.LUpd_User = Current.UserName;
+                    headerBatch.LUpd_User = _userName;
 
                     _db.Batches.AddObject(headerBatch);
 
@@ -159,10 +207,10 @@ namespace AR10300.Controllers
                     headerDoc.BranchID = BranchID;
                     headerDoc.BatNbr = headerBatch.BatNbr;
                     headerDoc.RefNbr = headerBatch.RefNbr;
-                    headerDoc.DocType = curHeader.DocType;
+                    
                     headerDoc.Crtd_DateTime = DateTime.Now;
                     headerDoc.Crtd_Prog = _screenNbr;
-                    headerDoc.Crtd_User = Current.UserName;
+                    headerDoc.Crtd_User = _userName;
                     UpdatingFormBotAR_Doc(ref headerDoc, curHeader, Handle);
 
                     _db.AR_Doc.AddObject(headerDoc);
@@ -173,19 +221,26 @@ namespace AR10300.Controllers
                 #endregion
 
                 #region Save AR_Trans
-                foreach (AR10300_pgLoadGridTrans_Result deleted in lstgrd.Deleted)
+                lstgrd.Created.AddRange(lstgrd.Updated);
+
+                foreach (AR10300_pgLoadGridTrans_Result del in lstgrd.Deleted)
                 {
-                    var objDelete = _db.AR_Trans.Where(p => p.BranchID == BranchID
+                    if (lstgrd.Created.Where(p => p.LineRef == del.LineRef).Count() > 0)
+                    {
+                        lstgrd.Created.Where(p => p.LineRef == del.LineRef).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.AR_Trans.ToList().Where(p => p.BranchID == BranchID
                                                         && p.BatNbr == BatNbr
                                                         && p.RefNbr == RefNbr
-                                                        && p.LineRef == deleted.LineRef).FirstOrDefault();
-                    if (objDelete != null)
-                    {
-                        _db.AR_Trans.DeleteObject(objDelete);
+                                                        && p.LineRef == del.LineRef).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.AR_Trans.DeleteObject(objDel);
+                        }
                     }
                 }
-
-                lstgrd.Created.AddRange(lstgrd.Updated);
 
                 foreach (AR10300_pgLoadGridTrans_Result curLang in lstgrd.Created)
                 {
@@ -240,6 +295,7 @@ namespace AR10300.Controllers
             t.DocBal = s.DocBal;
             t.DocDate = s.DocDate;
             t.DocDesc = s.DocDesc;
+            t.DocType = s.DocType;
             t.SlsperId = s.SlsperId;
             t.CustId = s.CustId;
             t.InvcNbr = s.InvcNbr;
@@ -255,7 +311,7 @@ namespace AR10300.Controllers
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
-            t.LUpd_User = Current.UserName;
+            t.LUpd_User = _userName;
         }
 
         private void UpdatingAR_Trans(AR_Trans t, AR10300_pgLoadGridTrans_Result s, bool isNew)

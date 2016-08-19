@@ -1,6 +1,6 @@
 var keysTab_2 = ['TranAmt'];
-var fieldsCheckRequireTab_2 = ['TranAmt', 'TranDesc'];
-var fieldsLangCheckRequireTab_2 = ['TranAmt', 'TranDesc'];
+var fieldsCheckRequireTab_2 = ['TranAmt'];
+var fieldsLangCheckRequireTab_2 = ['TranAmt'];
 
 var BatNbr = '';
 var _Source = 0;
@@ -91,7 +91,7 @@ var menuClick = function (command) {
         case "delete":
             if (HQ.isDelete) {
                 if (App.cboStatus.getValue() == 'H') {
-                    if (HQ.focus  == 'header') {
+                    if (HQ.focus == 'header') {
                         if (App.cboBatNbr.value) {
                             HQ.message.show(11, '', 'deleteData');
                         } else {
@@ -101,10 +101,13 @@ var menuClick = function (command) {
                     else if (HQ.focus == 'pnlDetail') {
                         if (App.slmDetail.selected.items[0] != undefined) {
                             if (App.slmDetail.selected.items[0].data.TranAmt != "") {
-                                HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdDetail)], 'deleteData',true);
+                                HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdDetail)], 'deleteData', true);
                             }
                         }
                     }
+                }
+                else {
+                    HQ.message.show(2015020805,[App.cboBatNbr.getValue()],'',true);
                 }
             }
             break;
@@ -117,7 +120,7 @@ var menuClick = function (command) {
                         save();
                     }
                     else {
-                        HQ.message.show(2015123110, HQ.common.getLang('Grid'));
+                        HQ.message.show(704, '','');
                     }
                 }
             }
@@ -172,6 +175,14 @@ var frmChange = function () {
     else {
         App.cboBatNbr.setReadOnly(HQ.isChange);
     }
+    if (checkGrid(App.stoDetail, 'TranAmt') == true) {
+        App.cboDocType.setReadOnly(true);
+        App.cboCustId.setReadOnly(true);
+    }
+    else {
+        App.cboDocType.setReadOnly(false);
+        App.cboCustId.setReadOnly(false);
+    }
 };
 
 var stoBeforeLoad = function (sto) {
@@ -185,7 +196,7 @@ var stoLoad = function (sto) {
         HQ.store.insertBlank(sto, "BatNbr");
         record = sto.getAt(0);
         record.set('Status', 'H');
-        record.set('DocType', 'CC');
+        record.set('DocType', 'PP');
         record.set('DocDate', HQ.bussinessDate);
         HQ.isNew = true;
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
@@ -234,14 +245,20 @@ var stoDetail_Load = function (sto) {
 };
 
 var grdDetail_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.getValue() != 'H') return false;
-    if (!HQ.grid.checkBeforeEdit(e, keysTab_2)) return false;
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        if (App.cboStatus.getValue() != 'H') return false;
+        if (!HQ.grid.checkBeforeEdit(e, keysTab_2)) return false;
+    }
+    else
+        return false;
 };
 
 var grdDetail_Edit = function (item, e) {
     if (e.field == 'TranAmt') {
         if (!Ext.isEmpty(e.value)) {
             e.record.set('LineRef', HQ.store.lastLineRef(App.stoDetail));
+            if (Ext.isEmpty(e.record.data.TranDesc))
+                e.record.set('TranDesc', App.cboCustId.valueModels[0].data.CustID + ' - ' + App.cboCustId.valueModels[0].data.Name);
             total();
         }
     }
@@ -252,7 +269,7 @@ var grdDetail_Edit = function (item, e) {
 
 var grdDetail_ValidateEdit = function (item, e) {
     //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
-    return HQ.grid.checkValidateEdit(App.grdDetail, e, keysTab_2);
+    //return HQ.grid.checkValidateEdit(App.grdDetail, e, keysTab_2);
 };
 
 var grdDetail_Reject = function (record) {

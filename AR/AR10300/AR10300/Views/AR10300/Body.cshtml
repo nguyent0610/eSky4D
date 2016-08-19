@@ -88,7 +88,8 @@
                         .HQParam(new StoreParameterCollection()
                         {
                             new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                         })
                         .LoadData()
                         .Listeners(lst =>
@@ -167,7 +168,7 @@
                 .Items(
                     HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").DataIndex("CustId")
                         .HQProcedure("AR10300_pcCustomerActive").HQColumnShow("CustID,Name,Addr1,Addr2")
-                        .DisplayField("CustID").ValueField("CustID").MarginSpec("5 0 0 0")
+                        .DisplayField("CustID").ValueField("CustID").MarginSpec("5 0 0 0").AllowBlank(false)
                         .Width(300).HQHeightWidth(400, 300)
                         .HQParam(new StoreParameterCollection()
                         {
@@ -203,8 +204,8 @@
                         
                     , HQ.Combo().ID("cboBankAcct").Name("cboBankAcct").HQLangCode("BANKACCT").DataIndex("ReasonCD")
                         .HQProcedure("AR10300_pcBankAcctCA").HQColumnShow("BankAcct,CashAcctName,AcctNbr")
-                        .DisplayField("BankAcct").ValueField("BankAcct").MarginSpec("5 0 0 0")
-                        .Width(300).HQHeightWidth(400, 300)
+                        .DisplayField("BankAcct").ValueField("BankAcct").MarginSpec("5 0 0 0").AllowBlank(false)
+                        .Width(300).HQHeightWidth(400, 300).SelectedItems(new Ext.Net.ListItem { Index = 0})
                         .HQParam(new StoreParameterCollection()
                         {
                             new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }

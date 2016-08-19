@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("AR10300")]
 [assembly: AssemblyDescription("AR10300")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Han Quang Software Solution")]
-[assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]
-[assembly: AssemblyCopyright("Copy right 2006-2015 Han Quang Software Solution. All rights Reserved")]
+[assembly: AssemblyCompany("HQ SOFTWARE SOLUTION")]
+[assembly: AssemblyProduct("HQ Solutions - eSales")]
+[assembly: AssemblyCopyright("HQ Software Solution Co.,ltd 2006-2016. All rights reserved.")]
 [assembly: AssemblyTrademark("AR10300")]
 [assembly: AssemblyCulture("")]
 
