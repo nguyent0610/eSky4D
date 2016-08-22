@@ -1,7 +1,7 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 var keys = ['Area'];
 var fieldsCheckRequire = ["Area", "Descr"]
-var fieldsLangCheckRequire = ["Area","Diễn Giải"];
+var fieldsLangCheckRequire = ["Area", "Descr"];
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
@@ -67,6 +67,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
+            HQ.common.close(this);
             break;
     }
 
@@ -74,10 +75,21 @@ var menuClick = function (command) {
 
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
-    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    //HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    //HQ.isFirstLoad = true;
+    //App.frmMain.isValid();
+    //checkLoad(); // Mới
     HQ.isFirstLoad = true;
-    App.frmMain.isValid();
-    checkLoad(); // Mới
+    if (HQ.isInsert == false) {
+        App.menuClickbtnNew.disable();
+    }
+    if (HQ.isDelete == false) {
+        App.menuClickbtnDelete.disable();
+    }
+    if (HQ.isUpdate == false && HQ.isInsert == false && HQ.isDelete == false) {
+        App.menuClickbtnSave.disable();
+    }
+    App.stoArea.reload();
 };
 
 var frmChange = function () {
@@ -162,6 +174,7 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                HQ.isChange = false;
                 refresh("yes");
             },
             failure: function (msg, data) {
