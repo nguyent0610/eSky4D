@@ -13,6 +13,8 @@ var Process = {
                     lstBatNbr: Ext.encode(App.stoBatNbr.getRecordsValues())
                 },
                 success: function (action, data) {
+                    HQ.isChange = false;
+                    HQ.isFirstLoad = true;
                     App.cboBatNbr.store.load(function (records, operation, success) {
                         App.cboBatNbr.clearValue();
                     });
@@ -45,6 +47,8 @@ var Process = {
                     }))
                 },
                 success: function (data) {
+                    HQ.isChange = false;
+                    HQ.isFirstLoad = true;
                     App.grdAdjust.store.reload();
                 },
 
@@ -57,6 +61,8 @@ var Process = {
                     }
                 }
             });
+
+            total();
         }
     },
 
@@ -107,6 +113,8 @@ var Process = {
                 lstAdjust: Ext.encode(App.grdAdjust.store.getRecordsValues())
             },
             success: function (action, data) {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
                 if (data.result.msgCode) {
                     HQ.message.show(data.result.msgCode, '', '');
                 }
@@ -119,7 +127,7 @@ var Process = {
                         if (data.result.refNbr) {
                             App.cboRefNbr.setValue(data.result.refNbr);
                         }
-                        App.stoRefNbr.reload();
+                        //App.stoRefNbr.reload();
                     });
                 });
             },
@@ -153,6 +161,19 @@ var Store = {
         App.cboBankAcct.setValue(frmRecord.data.ReasonCD);
         App.txtAutoPayment.setValue(0);
         App.txtOdd.setValue(0);
+        App.stoRefNbr.reload();
+
+        if (frmRecord.data.Status == 'H')
+            HQ.common.lockItem(App.frmMain, false);
+        else
+            HQ.common.lockItem(App.frmMain, true);
+
+        if (!HQ.isInsert && HQ.isNew) {
+            HQ.common.lockItem(App.frmMain, true);
+        }
+        else if (!HQ.isUpdate && !HQ.isNew) {
+            HQ.common.lockItem(App.frmMain, true);
+        }
     },
 
     stoRefNbr_load: function (sto, records, successful, eOpts) {
@@ -186,6 +207,8 @@ var Store = {
             });
             HQ.store.insertRecord(sto, _keys, adjustRec);
         }
+        total();
+        Event.Form.frmMain_fieldChange();
     },
 
     stoAdjust_dataChanged: function (sto, eOpts) {
@@ -205,11 +228,16 @@ var Store = {
 var Event = {
     Form: {
         frmMain_boxReady: function (frm, width, height, eOpts) {
+            HQ.isFirstLoad = true;
+            HQ.util.checkAccessRight();
+            App.frmMain.isValid();
+            App.dteFromDate.setValue(HQ.currentDate);
+            App.dteToDate.setValue(HQ.currentDate);
             App.cboBatNbr.store.load(function (records, operation, success) {
                 App.stoBatNbr.reload();
                 App.cboHandle.store.reload();
                 App.cboRefNbr.store.load(function (records0, operation0, success0) {
-                    App.stoRefNbr.reload();
+                    //App.stoRefNbr.reload();
                 });
             });
         },
@@ -238,18 +266,33 @@ var Event = {
             HQ.common.changeData(HQ.isChange, 'AR10200');//co thay doi du lieu gan * tren tab title header
             //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
 
-            App.cboBatNbr.setReadOnly(HQ.isChange);
-            App.cboRefNbr.setReadOnly(HQ.isChange);
+            if (App.cboBatNbr.valueModels == null || HQ.isNew == true) {
+                App.cboBatNbr.setReadOnly(false);
+            }
+            else {
+                App.cboBatNbr.setReadOnly(HQ.isChange);
+            }
+            //App.cboRefNbr.setReadOnly(HQ.isChange);
             //App.btnSearch.setReadOnly(HQ.isChange);
         },
 
         cboBatNbr_change: function (cbo, newValue, oldValue, eOpts) {
+           
+            if (Ext.isEmpty(App.dteFromDate.getValue())) {
+                HQ.message.show(1000, [HQ.common.getLang('FromDate')], '', true);
+                return;
+            }
+            if (Ext.isEmpty(App.dteToDate.getValue())) {
+                HQ.message.show(1000, [HQ.common.getLang('ToDate')], '', true);
+                return;
+            }
             App.cboRefNbr.store.load(function (records, operation, success) {
                 if (records.length) {
                     App.cboRefNbr.setValue(records[0].data.RefNbr);
                 }
                 App.stoBatNbr.reload();
             });
+            
         },
 
         cboStatus_Change: function (cbo, newValue, oldValue, eOpts) {
@@ -262,11 +305,19 @@ var Event = {
         },
 
         btnSearch_click: function (btn, e) {
+            if (Ext.isEmpty(App.dteFromDate.getValue())) {
+                HQ.message.show(1000, [HQ.common.getLang('FromDate')], '', true);
+                return;
+            }
+            if (Ext.isEmpty(App.dteToDate.getValue())) {
+                HQ.message.show(1000, [HQ.common.getLang('ToDate')], '', true);
+                return;
+            }
             App.grdAdjust.store.reload();
         },
 
         cboRefNbr_change: function (cbo, newValue, oldValue, eOpts) {
-            App.stoRefNbr.reload();
+            //App.stoRefNbr.reload();
         },
 
         btnAutoPayment_click: function (btn, e) {
@@ -356,6 +407,14 @@ var Event = {
                     }
                     break;
                 case "refresh":
+                    if (Ext.isEmpty(App.dteFromDate.getValue())) {
+                        HQ.message.show(1000, [HQ.common.getLang('FromDate')], '', true);
+                        return;
+                    }
+                    if (Ext.isEmpty(App.dteToDate.getValue())) {
+                        HQ.message.show(1000, [HQ.common.getLang('ToDate')], '', true);
+                        return;
+                    }
                     if (HQ.isChange) {
                         HQ.message.show(20150303, '', 'Process.refresh');
                     }
@@ -364,7 +423,7 @@ var Event = {
                             App.cboBatNbr.store.load(function (records, operation, success) {
                                 App.stoBatNbr.reload();
                                 App.cboRefNbr.store.load(function (records0, operation0, success0) {
-                                    App.stoRefNbr.reload();
+                                    //App.stoRefNbr.reload();
                                     App.grdAdjust.store.reload();
                                 });
                             });
@@ -379,69 +438,80 @@ var Event = {
                             App.grdAdjust.store.reload();
                         }
                     }
+                    
                     break;
                 case "new":
                     if (HQ.isInsert) {
-                        if (HQ.focus == 'batNbr') {
-                            App.cboBatNbr.clearValue();
-                        }
-                        else if (HQ.focus == 'refNbr') {
-                            App.cboRefNbr.clearValue();
+                        if (HQ.isChange) {
+                            HQ.message.show(150, '', 'refresh');
+                        } else {
+                            if (HQ.focus == 'batNbr') {
+                                App.cboBatNbr.clearValue();
+                            }
+                            else if (HQ.focus == 'refNbr') {
+                                App.cboRefNbr.clearValue();
+                            }
                         }
                     }
                     break;
                 case "delete":
                     if (HQ.isDelete) {
-                        if (HQ.focus == 'batNbr' || HQ.focus == 'refNbr') {
-                            if (App.cboBatNbr.value) {
-                                HQ.message.show(11, '', 'Process.deleteBatRef');
+                        if (App.cboStatus.getValue() == 'H') {
+                            if (HQ.focus == 'batNbr' || HQ.focus == 'refNbr') {
+                                if (App.cboBatNbr.value) {
+                                    HQ.message.show(11, '', 'Process.deleteBatRef');
+                                }
+                            }
+                            else if (HQ.focus == 'adjust') {
+                                if (App.cboBatNbr.value
+                                    && App.cboRefNbr.value
+                                    && App.slmAdjust.getCount()) {
+                                    HQ.message.show(2015020806,
+                                        HQ.common.getLang('InvcNbr') + " " + App.slmAdjust.selected.items[0].data.InvcNbr,
+                                        'Process.deleteAdjust');
+                                }
                             }
                         }
-                        else if (HQ.focus == 'adjust') {
-                            if (App.cboBatNbr.value
-                                && App.cboRefNbr.value
-                                && App.slmAdjust.getCount()) {
-                                HQ.message.show(2015020806,
-                                    HQ.common.getLang('InvcNbr') + " " + App.slmAdjust.selected.items[0].data.InvcNbr,
-                                    'Process.deleteAdjust');
-                            }
-                        }
+                    }
+                    else {
+                        HQ.message.show(2015020805, [App.cboBatNbr.getValue()], '', true);
                     }
                     break;
                 case "save":
                     if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                         if (App.frmMain.isValid()) {
-                            var handle = App.cboHandle.value;
-                            var status = App.cboStatus.value;
+                            if (checkRequirePass()) {
+                                var handle = App.cboHandle.getValue();
+                                var status = App.cboStatus.getValue();
 
-                            if ((status == "U" || status == "C" || status == "H")
-                                && (handle == "C" || handle == "V" || handle == "R")) {
+                                if ((status == "U" || status == "C" || status == "H")
+                                    && (handle == "C" || handle == "V" || handle == "R")) {
 
-                                if (handle == "R" || handle == "V" || handle == "C") {
+                                    if (handle == "R" || handle == "V" || handle == "C") {
 
-                                    if (handle == "R" && !HQ.isRelease) {
-                                        HQMessageBox.Show(737, hqSys.LangID, null, null);
-                                    }
-                                    else if ((handle == "V" || handle == "C") && !HQ.isRelease) {
-                                        HQMessageBox.Show(725, hqSys.LangID, null, null);
-                                    }
-                                    else {
-                                        if (handle == "V" || handle == "C") {
-                                            if (handle == "V") {
-                                                App.winRef.show();
-                                                App.grdRef.store.reload();
+                                        if (handle == "R" && !HQ.isRelease) {
+                                            HQ.message.show(737, '', '');
+                                        }
+                                        else if ((handle == "V" || handle == "C") && !HQ.isRelease) {
+                                            HQ.message.show(725, '', '');
+                                        }
+                                        else {
+                                            if (handle == "V" || handle == "C") {
+                                                if (handle == "V") {
+                                                    App.winRef.show();
+                                                    App.grdRef.store.reload();
+                                                }
+                                            }
+                                            else if (handle == "R") {
+                                                Process.saveBatch();
                                             }
                                         }
-                                        else if (handle == "R") {
-                                            Process.saveBatch();
-                                        }
                                     }
+                                    return;
                                 }
-
-                                return;
-                            }
-                            else {
-                                Process.saveBatch();
+                                else {
+                                    Process.saveBatch();
+                                }
                             }
                         }
                     }
@@ -449,7 +519,6 @@ var Event = {
                 case "print":
                     break;
                 case "close":
-                    HQ.common.close(this);
                     break;
             }
         },
@@ -577,6 +646,7 @@ var Event = {
                     record.set("Payment", 0);
                     record.set("Selected", false);
                 }
+                total();
             }
             else {
                 var batNbr = App.cboBatNbr.value;
@@ -604,6 +674,7 @@ var Event = {
                     record.set("DocBal", record.data.OrigDocBal - value);
                     record.set("Selected", false);
                 }
+                total();
             }
 
             if (e.field == 'InvcNbr') {
@@ -626,6 +697,7 @@ var Event = {
                     e.record.set("RefNbr", invcRec.data.RefNbr);
                     e.record.set("Selected", invcRec.data.Selected);
                     e.record.set("SlsperID", invcRec.data.SlsperID);
+                    total();
                 }
             }
 
@@ -642,4 +714,77 @@ var Event = {
             Event.Form.frmMain_fieldChange();
         }
     }
+};
+
+var btnPopupOk_Click = function () {
+    if (!Ext.isEmpty(App.cboPopupCpny.getValue())) {
+        App.winPopup.hide();
+        window.location.href = 'AR10200?branchID=' + App.cboPopupCpny.getValue();
+    } else {
+        HQ.message.show(1000, [HQ.common.getLang('branchid')], '', true);
+    }
+};
+
+var checkRequirePass = function () {
+    var store = App.stoAdjust;
+    var keys = ['Payment'];
+    var fieldsCheck = ['Payment'];
+    var fieldsLang = ['Payment'];
+
+    items = store.getChangedData().Created;
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (items[i][keys[jkey]]) {
+                    for (var k = 0; k < fieldsCheck.length; k++) {
+                        if (Number(items[i][fieldsCheck[k]]) <= 0) {
+                            HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    items = store.getChangedData().Updated;
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (items[i][keys[jkey]]) {
+                    for (var k = 0; k < fieldsCheck.length; k++) {
+                        if (Number(items[i][fieldsCheck[k]]) <= 0 ) {
+                            HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return true;
+};
+
+
+var dteFromDate_Change = function (dtp, newValue, oldValue, eOpts) {
+    App.dteToDate.setMinValue(App.dteFromDate.getValue());
+    if (App.dteToDate.getValue() < App.dteFromDate.getValue()) {
+        App.dteToDate.setValue(App.dteFromDate.getValue());
+    }
+};
+
+var total = function () {
+    var totalAmt = 0;
+    var totalDocBal = 0;
+    var store = App.stoAdjust;
+    var allRecords = store.snapshot || store.allData || store.data;
+    allRecords.each(function (record) {
+        if (record.data.Payment) {
+            totalAmt += record.data.Payment;
+            totalDocBal += record.data.DocBal;
+        }
+    });
+    App.txtCuryCrTot.setValue(totalAmt);
+    App.txtTotApply.setValue(totalAmt);
+    App.txtUnTotApply.setValue(totalDocBal);
 };

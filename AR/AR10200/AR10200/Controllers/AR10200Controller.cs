@@ -15,6 +15,7 @@ using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using HQFramework.DAL;
 using System.Data;
+using HQ.eSkySys;
 namespace AR10200.Controllers
 {
     [DirectController]
@@ -26,12 +27,26 @@ namespace AR10200.Controllers
         private string _moduleAR = "AR";
         private string _holdStatus = "H";
         AR10200Entities _db = Util.CreateObjectContext<AR10200Entities>(false);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private JsonResult _logMessage;
         //
         // GET: /AR10200/
-        public ActionResult Index()
+        public ActionResult Index(string branchID)
         {
             Util.InitRight(_screenNbr);
+            var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
+
+            if (branchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
+            {
+                return View("Popup");
+            }
+
+            if (branchID == null) branchID = Current.CpnyID;
+
+            //var userDft = _db.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID);
+
+            //ViewBag.INSite = userDft == null ? "" : userDft.INSite;
+            ViewBag.BranchID = branchID;
             return View();
         }
 
@@ -81,9 +96,9 @@ namespace AR10200.Controllers
 
         public ActionResult ReleaseAdjdRef(FormCollection data, string strAdjdRefNbr)
         {
-
+            var branchID = data["txtBranchID"];
             var cboBatNbr = data["cboBatNbr"];
-            Data_Release("V", Current.CpnyID, cboBatNbr, strAdjdRefNbr);
+            Data_Release("V", branchID, cboBatNbr, strAdjdRefNbr);
             return Util.CreateMessage(MessageProcess.Save, new { batNbr = cboBatNbr });
         }
 
@@ -91,12 +106,19 @@ namespace AR10200.Controllers
         {
             try
             {
+                var branchID = data["txtBranchID"];
                 var cboBatNbr = data["cboBatNbr"];
                 var txtDescr = data["txtDescr"];
                 var txtTotAmt = data["txtTotAmt"];
                 var cboBankAcct = data["cboBankAcct"];
+
                 var batHandler = new StoreDataHandler(data["lstBatNbr"]);
                 var inputBatNbr = batHandler.ObjectData<Batch>().FirstOrDefault();
+                var refHandler = new StoreDataHandler(data["lstRefNbr"]);
+                var inputRefNbr = refHandler.ObjectData<AR_Doc>().FirstOrDefault();
+
+                if (_db.AR10200_ppCheckCloseDate(branchID, inputRefNbr.DocDate.ToDateShort(), "AR10200").FirstOrDefault() == "0")
+                    throw new MessageException(MessageType.Message, "301");
 
                 // Check input BatNbr
                 if (inputBatNbr != null)
@@ -106,7 +128,7 @@ namespace AR10200.Controllers
 
                     // Save Batch
                     var batchObj = _db.Batches.FirstOrDefault(
-                        x => x.BranchID == Current.CpnyID
+                        x => x.BranchID == branchID
                             && x.BatNbr == cboBatNbr
                             && x.Module == _moduleAR
                             && x.Status == _holdStatus);
@@ -115,7 +137,7 @@ namespace AR10200.Controllers
                     {
                         if (batchObj.tstamp.ToHex() == inputBatNbr.tstamp.ToHex())
                         {
-                            Updating_Batch(ref batchObj, inputBatNbr, false);
+                            Updating_Batch(ref batchObj, inputBatNbr, false, branchID);
                         }
                         else
                         {
@@ -124,38 +146,37 @@ namespace AR10200.Controllers
                     }
                     else
                     {
-                        Updating_Batch(ref batchObj, inputBatNbr, true);
+                        Updating_Batch(ref batchObj, inputBatNbr, true, branchID);
 
                         _db.Batches.AddObject(batchObj);
                     }
 
                     // Input RefNbr
-                    var refHandler = new StoreDataHandler(data["lstRefNbr"]);
-                    var inputRefNbr = refHandler.ObjectData<AR_Doc>().FirstOrDefault();
-
+                    
                     if (inputRefNbr != null)
                     {
+                        inputRefNbr.RefNbr = batchObj.RefNbr;
                         inputRefNbr.BatNbr = batchObj.BatNbr;
-                        inputRefNbr.OrigDocAmt = data["txtTotAmt"] != null ? double.Parse(data["txtTotAmt"]) : 0;
-
+                        //inputRefNbr.OrigDocAmt = data["txtTotAmt"] != null ? double.Parse(data["txtTotAmt"]) : 0;
+                        inputRefNbr.OrigDocAmt = batchObj.TotAmt;
                         // Save RefNbr/AR_Doc
-                        var refObj = _db.AR_Doc.FirstOrDefault(x => x.BranchID == Current.CpnyID
+                        var refObj = _db.AR_Doc.FirstOrDefault(x => x.BranchID == branchID
                             && x.BatNbr == batchObj.BatNbr
-                            && x.RefNbr == inputRefNbr.RefNbr);
+                            && x.RefNbr == batchObj.RefNbr);
 
                         if (refObj != null)
                         {
                             if (refObj.tstamp.ToHex() == inputRefNbr.tstamp.ToHex())
                             {
 
-                                Updating_AR_Doc(ref refObj, inputRefNbr, false);
-                                SaveAR_Adjust(data, refObj);
+                                Updating_AR_Doc(ref refObj, inputRefNbr, false, branchID);
+                                SaveAR_Adjust(data, refObj, branchID);
                                 return Json(new
                                 {
                                     success = true,
                                     msgCode = 201405071,
                                     batNbr = batchObj.BatNbr,
-                                    refNbr = refObj.RefNbr
+                                    refNbr = batchObj.RefNbr
                                 });
                             }
                             else
@@ -165,15 +186,15 @@ namespace AR10200.Controllers
                         }
                         else
                         {
-                            Updating_AR_Doc(ref refObj, inputRefNbr, true);
+                            Updating_AR_Doc(ref refObj, inputRefNbr, true, branchID);
                             _db.AR_Doc.AddObject(refObj);
-                            SaveAR_Adjust(data, refObj);
+                            SaveAR_Adjust(data, refObj, branchID);
                             return Json(new
                             {
                                 success = true,
                                 msgCode = 201405071,
                                 batNbr = batchObj.BatNbr,
-                                refNbr = refObj.RefNbr
+                                refNbr = batchObj.RefNbr
                             });
                         }
                     }
@@ -203,13 +224,14 @@ namespace AR10200.Controllers
             }
         }
 
-        private void SaveAR_Adjust(FormCollection data, AR_Doc refObj)
+        private void SaveAR_Adjust(FormCollection data, AR_Doc refObj, string branchID)
         {
+            var handle = data["cboHandle"].PassNull();
             var adjHandler = new StoreDataHandler(data["lstAdjust"]);
             var lstAdjust = adjHandler.ObjectData<AR10200_pgBindingGrid_Result>()
                 .Where(x => !string.IsNullOrWhiteSpace(x.InvcNbr)).ToList();
 
-            var adjusts = _db.AR_Adjust.Where(x => x.BranchID == Current.CpnyID
+            var adjusts = _db.AR_Adjust.Where(x => x.BranchID == branchID
                 && x.AdjgBatNbr == refObj.BatNbr
                 && x.AdjgRefNbr == refObj.RefNbr).ToList();
             foreach (var adjust in adjusts)
@@ -219,7 +241,7 @@ namespace AR10200.Controllers
 
             foreach (var adjust in lstAdjust)
             {
-                var result = _db.AR_Adjust.FirstOrDefault(x => x.BranchID == Current.CpnyID
+                var result = _db.AR_Adjust.FirstOrDefault(x => x.BranchID == branchID
                     && x.BatNbr == adjust.BatNbr
                     && x.AdjgBatNbr == refObj.BatNbr
                     && x.AdjgRefNbr == refObj.RefNbr);
@@ -233,7 +255,7 @@ namespace AR10200.Controllers
                     obj.Crtd_DateTime = DateTime.Now;
                     obj.Crtd_Prog = _screenNbr;
                     obj.Crtd_User = Current.UserName;
-                    Updating_AR_Adjust(ref obj, adjust);
+                    Updating_AR_Adjust(ref obj, adjust, branchID, handle);
                     obj.BatNbr = refObj.BatNbr;
                     obj.AdjgBatNbr = refObj.BatNbr;
                     obj.AdjgRefNbr = refObj.RefNbr;
@@ -244,16 +266,16 @@ namespace AR10200.Controllers
                 }
             }
             _db.SaveChanges();
-            if (data["cboHandle"] == "R")
+            if (handle == "R")
             {
                 Data_Release("R", refObj.BranchID, refObj.BatNbr, "");
             }
 
         }
 
-        private void Updating_AR_Adjust(ref AR_Adjust objAd, AR10200_pgBindingGrid_Result adjust)
+        private void Updating_AR_Adjust(ref AR_Adjust objAd, AR10200_pgBindingGrid_Result adjust, string branchID, string handle)
         {
-            objAd.BranchID = Current.CpnyID;
+            objAd.BranchID = branchID;
             objAd.AdjAmt = adjust.Payment != null ? adjust.Payment.ToDouble() : 0;
             objAd.AdjdDocType = adjust.DocType;
             objAd.AdjdBatNbr = adjust.BatNbr;
@@ -266,6 +288,29 @@ namespace AR10200.Controllers
             objAd.LUpd_DateTime = DateTime.Now;
             objAd.LUpd_Prog = _screenNbr;
             objAd.LUpd_User = Current.UserName;
+
+            if (handle == "R")
+            {
+                var objAR_Balances = _db.AR_Balances.FirstOrDefault(p => p.CustID == adjust.CustId && p.BranchID == branchID);
+                if (objAR_Balances != null)
+                {
+                    objAR_Balances.CurrBal = objAR_Balances.CurrBal - (double) adjust.Payment;
+                    objAR_Balances.LUpd_DateTime = DateTime.Now;
+                    objAR_Balances.LUpd_Prog = _screenNbr;
+                    objAR_Balances.LUpd_User = _screenNbr;
+                }
+            }
+            else if (handle == "V")
+            {
+                var objAR_Balances = _db.AR_Balances.FirstOrDefault(p => p.CustID == adjust.CustId && p.BranchID == branchID);
+                if (objAR_Balances != null)
+                {
+                    objAR_Balances.CurrBal = objAR_Balances.CurrBal + (double) adjust.Payment;
+                    objAR_Balances.LUpd_DateTime = DateTime.Now;
+                    objAR_Balances.LUpd_Prog = _screenNbr;
+                    objAR_Balances.LUpd_User = _screenNbr;
+                }
+            }
         }
 
         [ValidateInput(false)]
@@ -273,13 +318,14 @@ namespace AR10200.Controllers
         {
             try
             {
+                var branchID = data["txtBranchID"];
                 var cboBatNbr = data["cboBatNbr"];
                 var batHandler = new StoreDataHandler(data["lstBatNbr"]);
                 var inputBatNbr = batHandler.ObjectData<Batch>()
                             .FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.BatNbr));
 
                 var batchObj = _db.Batches.FirstOrDefault(
-                    x => x.BranchID == Current.CpnyID
+                    x => x.BranchID == branchID
                         && x.BatNbr == cboBatNbr
                         && x.Module == _moduleAR
                         && x.Status == _holdStatus);
@@ -288,7 +334,7 @@ namespace AR10200.Controllers
                     if (batchObj.tstamp.ToHex() == inputBatNbr.tstamp.ToHex())
                     {
                         var docList = _db.AR_Doc.Where(
-                            x => x.BranchID == Current.CpnyID
+                            x => x.BranchID == branchID
                                 && x.BatNbr == batchObj.BatNbr).ToList();
                         foreach (var docObj in docList)
                         {
@@ -296,7 +342,7 @@ namespace AR10200.Controllers
                         }
 
                         var adjustList = _db.AR_Adjust.Where(
-                            x => x.BranchID == Current.CpnyID
+                            x => x.BranchID == branchID
                                 && x.BatNbr == batchObj.BatNbr).ToList();
                         foreach (var adjustObj in adjustList)
                         {
@@ -333,14 +379,14 @@ namespace AR10200.Controllers
             {
                 var cboBatNbr = data["cboBatNbr"];
                 var cboRefNbr = data["cboRefNbr"];
-
+                var branchID = data["txtBranchID"];
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstAdjust"]);
                 ChangeRecords<AR10200_pgBindingGrid_Result> lstAdjust = dataHandler.BatchObjectData<AR10200_pgBindingGrid_Result>();
 
                 foreach (AR10200_pgBindingGrid_Result deleted in lstAdjust.Deleted)
                 {
                     var deletedRecord = _db.AR_Adjust.FirstOrDefault(
-                        x => x.BranchID == Current.CpnyID
+                        x => x.BranchID == branchID
                             && x.BatNbr == cboBatNbr
                             && x.AdjdRefNbr == deleted.RefNbr
                             && x.AdjgRefNbr == cboRefNbr);
@@ -358,18 +404,15 @@ namespace AR10200.Controllers
             }
         }
 
-        private void Updating_Batch(ref Batch objB, Batch input, bool isNew)
+        private void Updating_Batch(ref Batch objB, Batch input, bool isNew, string branchID)
         {
             if (isNew)
             {
                 objB = new Batch();
-
-
-                objB.BranchID = Current.CpnyID;
-                objB.BatNbr = _db.ARNumbering(Current.CpnyID, "BatNbr").FirstOrDefault();
+                objB.BranchID = branchID;
+                objB.BatNbr = _db.ARNumbering(branchID, "BatNbr").FirstOrDefault();
+                objB.RefNbr = _db.ARNumbering(branchID, "RefNbr").FirstOrDefault();
                 objB.Module = _moduleAR;
-
-
                 objB.Crtd_DateTime = DateTime.Now;
                 objB.Crtd_Prog = _screenNbr;
                 objB.Crtd_User = Current.UserName;
@@ -392,23 +435,23 @@ namespace AR10200.Controllers
             objB.LUpd_User = Current.UserName;
 
         }
-        private void Updating_AR_Doc(ref AR_Doc objD, AR_Doc inputRef, bool isNew)
+        private void Updating_AR_Doc(ref AR_Doc objD, AR_Doc inputRef, bool isNew, string branchID)
         {
             if (isNew)
             {
                 objD = new AR_Doc();
 
                 objD.BatNbr = inputRef.BatNbr;
-                objD.BranchID = Current.CpnyID;
-                objD.RefNbr = _db.ARNumbering(Current.CpnyID, "RefNbr").FirstOrDefault();
-
+                objD.BranchID = branchID;
+               // objD.RefNbr = _db.ARNumbering(Current.CpnyID, "RefNbr").FirstOrDefault();
+                objD.RefNbr = inputRef.RefNbr;
                 objD.Crtd_DateTime = DateTime.Now;
                 objD.Crtd_Prog = _screenNbr;
                 objD.Crtd_User = Current.UserName;
             }
             if (string.IsNullOrWhiteSpace(inputRef.InvcNbr))
             {
-                objD.InvcNbr = _db.ARNumbering(Current.CpnyID, "ReceiptNbr").FirstOrDefault();
+                objD.InvcNbr = _db.ARNumbering(branchID, "ReceiptNbr").FirstOrDefault();
             }
             else
             {
