@@ -550,8 +550,8 @@ var Gmap = {
 
             //	create an array of ContextMenuItem objects
             var menuItems = [];
-            menuItems.push({ className: 'context_menu_item', eventName: 'set_location', label: HQ.common.getLang('SetLocation') });
-            menuItems.push({ className: 'context_menu_item', eventName: 'set_coordinates', label: HQ.common.getLang('SetCoordinates') });
+            menuItems.push({ className: 'context_menu_item', eventName: 'set_location', label: HQ.common.getLang('AdjustLocation') });
+            menuItems.push({ className: 'context_menu_item', eventName: 'set_coordinates', label: HQ.common.getLang('ResetLocation') });
             //	a menuItem with no properties will be rendered as a separator
             menuItems.push({});
             menuItems.push({ className: 'context_menu_item', eventName: 'zoom_in_click', label: HQ.common.getLang('ZoomIn') });
@@ -759,10 +759,29 @@ var Process = {
                 if (rec) {
                     rec.set('Lat', newLat);
                     rec.set('Lng', newLng);
-                    //rec.data.Lat = newLat;
-                    //rec.data.Lng = newLng;
+                    setTimeout(function () {
+                        var latlng = new google.maps.LatLng(newLat, newLng);
+                        Gmap.Declare.geocoder.geocode({
+                            'latLng': latlng
+                        }, function (results, status) {
+                            if (status === google.maps.GeocoderStatus.OK) {
+                                if (results[0]) {
+                                    var suggested = {
+                                        Lat: newLat,
+                                        Lng: newLng,
+                                        Addr: results[0].formatted_address
+                                    };
+                                    rec.set("SuggestAddr", results[0].formatted_address);
+                                } else {
+                                    console.log('No results found. CustID: ' + rec.data.CustId);
+                                }
+                            } else {
+                                console.log('Geocoder failed due to: ' + status + '. CustID: ' + rec.data.CustId);
+                            }
+                        });
+                    }, 2000);
+
                     if (data.result.tstamp) {
-                        //rec.data.tstamp = data.result.tstamp;
                         rec.set('tstamp', data.result.tstamp);
                     }
                     var markerId = rec.data.CustId;
@@ -803,14 +822,11 @@ var Process = {
                         Gmap.Process.makeMarker(markerData, rec.index);
                     }
                 }
-                //App.grdMCP.store.commitChanges();
-                //App.grdMCP.view.refresh();
                 App.winSuggest.close();
                 if (suggestMarker) {
                     suggestMarker.setMap(null);
                     suggestMarker = null;
                 }
-                //App.slmMCP.select(rec);
             },
 
             failure: function (errorMsg, data) {
