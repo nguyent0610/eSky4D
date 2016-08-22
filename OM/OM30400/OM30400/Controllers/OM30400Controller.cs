@@ -46,7 +46,7 @@ namespace OM30400.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -437,7 +437,7 @@ namespace OM30400.Controllers
                 DataAccess dal = Util.Dal();
                 Style style = workbook.GetStyleInPool(0);
                 StyleFlag flag = new StyleFlag();
-                var beforeColTexts = new string[] { "N0", "CustId", "CustName", "Checkin", "Checkout", "TGCICO", "Amt", "GPSCheckin", "GPSCheckout" };
+                var beforeColTexts = new string[] { "N0", "CustId", "CustName", "Checkin", "Checkout", "TGCICO", "Amt", "GPSCheckin", "GPSCheckout", "Distance" };
 
                 #region header info
                 // Title header
@@ -473,15 +473,30 @@ namespace OM30400.Controllers
 
                 DataTable dtDataExport = dal.ExecDataTable("OM30400_pgGridActualVisit", CommandType.StoredProcedure, ref pc);
                 //SheetMCP.Cells.ImportDataTable(dtDataExport, false, "B6");// du lieu data export
-
+                double lat1 = 0;
+                double lng1 = 0;
+                double lat2 = 0;
+                double lng2 = 0;
                 for (int i = 0; i < dtDataExport.Rows.Count; i++)
                 {
+                    if (i > 0)
+                    {
+                        lat1 = double.Parse(dtDataExport.Rows[i - 1]["CiLat"].ToString());
+                        lng1 = double.Parse(dtDataExport.Rows[i - 1]["CiLng"].ToString());
+                        lat2 = double.Parse(dtDataExport.Rows[i]["CiLat"].ToString());
+                        lng2 = double.Parse(dtDataExport.Rows[i]["CiLng"].ToString());
+                    }
+
                     for (int j = 0; j < allColumns.Count; j++)
                     {
                         var cell = SheetMCP.Cells[4 + i, j];
                         if (allColumns[j] == "N0")
                         {
                             cell.PutValue(i + 1);
+                        }
+                        else if (allColumns[j] == "Distance")
+                        {
+                            cell.PutValue(DistanceBetweenPlaces(lng1,lat1,lng2,lat2));
                         }
                         else if (dtDataExport.Columns.Contains(allColumns[j]))
                         {
@@ -491,6 +506,7 @@ namespace OM30400.Controllers
                         //Apply the border styles to the cell
                         setCellStyle(cell);
                     }
+
                 }
                 #endregion
                 SheetMCP.AutoFitColumns();
@@ -592,6 +608,24 @@ namespace OM30400.Controllers
             if (isTitle)
                 style.Font.Color = Color.Red;
             c.SetStyle(style);
+        }
+
+        const double PIx = 3.141592653589793;
+        const double RADIUS = 6378.16;
+
+        public double Radians(double x)
+        {
+            return x * PIx / 180;
+        }
+
+        public double DistanceBetweenPlaces(double lon1, double lat1, double lon2, double lat2)
+        {
+            double dlon = Radians(lon2 - lon1);
+            double dlat = Radians(lat2 - lat1);
+
+            double a = (Math.Sin(dlat / 2) * Math.Sin(dlat / 2)) + Math.Cos(Radians(lat1)) * Math.Cos(Radians(lat2)) * (Math.Sin(dlon / 2) * Math.Sin(dlon / 2));
+            double angle = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return Math.Round((angle * RADIUS) * 1000, 0);
         }
     }
 }
