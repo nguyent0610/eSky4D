@@ -180,6 +180,8 @@
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
                         {
+                            lst.Change.Handler = "if(Ext.isEmpty(App.cboBankAcct.getValue()) && this.hasFocus) App.cboBankAcct.select(App.cboBankAcct.getStore().getAt(0));";
+                            lst.Select.Handler = "if(Ext.isEmpty(App.cboBankAcct.getValue()) && this.hasFocus) App.cboBankAcct.select(App.cboBankAcct.getStore().getAt(0));";
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             lst.Focus.Handler = "this.forceSelection = true;";  
                         })
@@ -205,7 +207,7 @@
                     , HQ.Combo().ID("cboBankAcct").Name("cboBankAcct").HQLangCode("BANKACCT").DataIndex("ReasonCD")
                         .HQProcedure("AR10300_pcBankAcctCA").HQColumnShow("BankAcct,CashAcctName,AcctNbr")
                         .DisplayField("BankAcct").ValueField("BankAcct").MarginSpec("5 0 0 0").AllowBlank(false)
-                        .Width(300).HQHeightWidth(400, 300).SelectedItems(new Ext.Net.ListItem { Index = 0})
+                        .Width(300).HQHeightWidth(400, 300)
                         .HQParam(new StoreParameterCollection()
                         {
                             new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
