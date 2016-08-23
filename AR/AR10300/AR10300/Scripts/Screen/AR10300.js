@@ -81,6 +81,7 @@ var menuClick = function (command) {
                     } else {
                         BatNbr = '';
                         App.cboBatNbr.setValue('');
+                        App.stoHeader.reload();
                     }
                 }
                 else if (HQ.focus  == 'pnlDetail') {
@@ -149,7 +150,7 @@ var checkGrid = function (store, field) {
 
 var cboBatNbr_Change = function (sender, value) {
     HQ.isFirstLoad = true;
-    if (sender.valueModels != null && !App.stoHeader.loading) {
+    if (sender.valueModels != null && !App.stoHeader.loading && sender.hasFocus) {
         BatNbr = value;
         App.stoHeader.reload();
     }
@@ -157,7 +158,7 @@ var cboBatNbr_Change = function (sender, value) {
 
 var cboBatNbr_Select = function (sender, value) {
     HQ.isFirstLoad = true;
-    if (sender.valueModels != null && !App.stoHeader.loading) {
+    if (sender.valueModels != null && !App.stoHeader.loading && sender.hasFocus) {
         BatNbr = value;
         App.stoHeader.reload();
     }
@@ -288,22 +289,22 @@ var save = function () {
             url: 'AR10300/Save',
             params: {
                 lstHeader: Ext.encode(App.stoHeader.getRecordsValues()),
-                lstgrd: HQ.store.getData(App.stoDetail)
+                lstgrd: Ext.encode(App.stoDetail.getRecordsValues())
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 BatNbr = data.result.BatNbr;
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
-                App.cboHandle.setValue('');
-                App.cboBatNbr.getStore().load({
+                //App.cboHandle.setValue('');
+                App.cboBatNbr.getStore().reload({
                     callback: function () {
                         if (Ext.isEmpty(App.cboBatNbr.getValue())) {
-                            App.cboBatNbr.setValue(BatNbr);
+                            App.cboBatNbr.setValue(data.result.BatNbr);
                             App.stoHeader.reload();
                         }
                         else {
-                            App.cboBatNbr.setValue(BatNbr);
+                            App.cboBatNbr.setValue(data.result.BatNbr);
                             App.stoHeader.reload();
                         }
                     }

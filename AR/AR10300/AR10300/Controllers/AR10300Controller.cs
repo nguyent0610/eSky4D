@@ -91,8 +91,13 @@ namespace AR10300.Controllers
                 var RefNbr = data["cboRefNbr"].PassNull();
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstHeader"]);
                 var curHeader = dataHandler1.ObjectData<AR10300_pdHeader_Result>().FirstOrDefault();
+
+                //StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
+                //ChangeRecords<AR10300_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AR10300_pgLoadGridTrans_Result>();
+
                 StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
-                ChangeRecords<AR10300_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AR10300_pgLoadGridTrans_Result>();
+                var lstgrd = dataHandlerGrid.ObjectData<AR10300_pgLoadGridTrans_Result>() == null ? new List<AR10300_pgLoadGridTrans_Result>() : dataHandlerGrid.ObjectData<AR10300_pgLoadGridTrans_Result>().Where(p => p.TranAmt > 0);
+
                 if (Status == "H")
                 {
                     if (_db.AR10300_ppCheckCloseDate(BranchID, curHeader.DocDate.ToDateShort(), "AR10300").FirstOrDefault() == "0")
@@ -125,11 +130,21 @@ namespace AR10300.Controllers
                                     headerDoc.LUpd_DateTime = DateTime.Now;
                                     headerDoc.LUpd_Prog = _screenNbr;
                                     headerDoc.LUpd_User = _screenNbr;
+
+                                    var objAR_Balances = _db.AR_Balances.FirstOrDefault(p => p.CustID == curHeader.CustId && p.BranchID == BranchID);
+                                    if (objAR_Balances != null)
+                                    {
+                                        objAR_Balances.CurrBal = objAR_Balances.CurrBal + curHeader.TotAmt;
+                                        objAR_Balances.LUpd_DateTime = DateTime.Now;
+                                        objAR_Balances.LUpd_Prog = _screenNbr;
+                                        objAR_Balances.LUpd_User = _screenNbr;
+                                    }
                                 }
                             }
                         }
                         else
                         {
+                            headerBatch.Descr = curHeader.DocDesc;
                             headerBatch.IntRefNbr = curHeader.IntRefNbr;
                             headerBatch.ReasonCD = curHeader.ReasonCD;
                             headerBatch.TotAmt = Convert.ToDouble(curHeader.TotAmt);
@@ -168,6 +183,7 @@ namespace AR10300.Controllers
                     headerBatch.TotAmt = curHeader.TotAmt;
                     headerBatch.DateEnt = curHeader.DocDate;
                     headerBatch.OrigBranchID = "";
+                    headerBatch.Descr = curHeader.DocDesc;
                     if (Handle == "R")
                     {
                         headerBatch.Rlsed = 1;
@@ -189,8 +205,6 @@ namespace AR10300.Controllers
                     }
                     headerBatch.IntRefNbr = curHeader.IntRefNbr;
                     headerBatch.ReasonCD = curHeader.ReasonCD;
-                    headerBatch.TotAmt = curHeader.TotAmt;
-                    headerBatch.TotAmt = curHeader.TotAmt;
                     headerBatch.TotAmt = curHeader.TotAmt;
 
                     headerBatch.Crtd_DateTime = DateTime.Now;
@@ -221,41 +235,33 @@ namespace AR10300.Controllers
                 #endregion
 
                 #region Save AR_Trans
-                lstgrd.Created.AddRange(lstgrd.Updated);
-
-                foreach (AR10300_pgLoadGridTrans_Result del in lstgrd.Deleted)
-                {
-                    if (lstgrd.Created.Where(p => p.LineRef == del.LineRef).Count() > 0)
-                    {
-                        lstgrd.Created.Where(p => p.LineRef == del.LineRef).FirstOrDefault().tstamp = del.tstamp;
-                    }
-                    else
-                    {
-                        var objDel = _db.AR_Trans.ToList().Where(p => p.BranchID == BranchID
+                var lstOldAR_Trans = _db.AR_Trans.Where(p => p.BranchID == BranchID
                                                         && p.BatNbr == BatNbr
-                                                        && p.RefNbr == RefNbr
-                                                        && p.LineRef == del.LineRef).FirstOrDefault();
-                        if (objDel != null)
-                        {
-                            _db.AR_Trans.DeleteObject(objDel);
-                        }
+                                                        && p.RefNbr == RefNbr).ToList();
+
+                foreach (var objold in lstOldAR_Trans)
+                {
+                    if (lstgrd.Where(p => p.LineRef == objold.LineRef).FirstOrDefault() == null)
+                    {
+                        _db.AR_Trans.DeleteObject(objold);
                     }
                 }
 
-                foreach (AR10300_pgLoadGridTrans_Result curLang in lstgrd.Created)
+                foreach (var item in lstgrd)
                 {
-                    if (BranchID.PassNull() == "" || BatNbr.PassNull() == "" || RefNbr.PassNull() == "" || curLang.LineRef.PassNull() == "") continue;
+                    if (BranchID.PassNull() == "" || BatNbr.PassNull() == "" || RefNbr.PassNull() == "" || item.LineRef.PassNull() == "") continue;
 
                     var lang = _db.AR_Trans.FirstOrDefault(p => p.BranchID.ToLower() == BranchID.ToLower()
-                                                        && p.BatNbr.ToLower() == BatNbr.ToLower()
-                                                        && p.RefNbr.ToLower() == RefNbr.ToLower()
-                                                        && p.LineRef.ToLower() == curLang.LineRef.ToLower());
+                                                       && p.BatNbr.ToLower() == BatNbr.ToLower()
+                                                       && p.RefNbr.ToLower() == RefNbr.ToLower()
+                                                       && p.LineRef.ToLower() == item.LineRef.ToLower());
 
                     if (lang != null)
                     {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        if (lang.tstamp.ToHex() == item.tstamp.ToHex())
                         {
-                            UpdatingAR_Trans(lang, curLang, false);
+                            lang.TranType = headerDoc.DocType;
+                            UpdatingAR_Trans(lang, item, false);
                         }
                         else
                         {
@@ -270,7 +276,8 @@ namespace AR10300.Controllers
                         lang.BatNbr = BatNbr;
                         lang.RefNbr = RefNbr;
                         lang.JrnlType = "AR";
-                        UpdatingAR_Trans(lang, curLang, true);
+                        lang.TranType = headerDoc.DocType;
+                        UpdatingAR_Trans(lang, item, true);
                         _db.AR_Trans.AddObject(lang);
                     }
                 }
