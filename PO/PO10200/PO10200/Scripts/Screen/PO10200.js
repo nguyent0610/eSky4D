@@ -434,7 +434,8 @@ var grdPO_Trans_ValidateEdit = function (item, e) {
             return false;
         }
     }
-    if (HQ.IsConfigSiteID == true && e.field == 'PurchaseType') {
+
+    if (HQ.IsChangSiteID == true && e.field == 'PurchaseType') {
         var defaultSiteID = getSelectedSiteID(e.value);
         if (defaultSiteID != '###') {
             e.record.set('SiteID', defaultSiteID);
@@ -1108,14 +1109,13 @@ var cboStatus_Change = function (item, newValue, oldValue) {
     }
 };
 
-
+// Expand SiteID
 var cboSiteID_Expand = function (combo) {    
-    if (HQ.IsConfigSiteID == true) {
+    if (HQ.IsChangSiteID == true && HQ.IsConfigSiteID) {
         App.cboSiteID.store.clearFilter();
-        if (App.grdDetail.selModel.selected && App.grdDetail.selModel.selected.items[0]) {
+        if (App.grdDetail.selModel.selected && App.grdDetail.selModel.selected.items[0] && _objUserDflt ) {
             var purchaseType = App.grdDetail.selModel.selected.items[0].data.PurchaseType;
-            var objBranch = HQ.store.findRecord(App.cboBranchID.store, ['BranchID'], [App.cboBranchID.getValue()]);
-            if (objBranch && (purchaseType == 'PR' || purchaseType == 'GI')) {
+            if (purchaseType == 'PR' || purchaseType == 'GI') {
                 var store = App.cboSiteID.store;
                 // Filter data
                 store.filterBy(function (record) {
@@ -1124,18 +1124,18 @@ var cboSiteID_Expand = function (combo) {
                             var promoSiteChars = HQ.PromoSiteChars.split("#");
                             if (promoSiteChars.length > 0) {
                                 for (var j = 0; j < promoSiteChars.length; j++) {
-                                    var promoSiteID = objBranch.data.SiteID + promoSiteChars[j]
+                                    var promoSiteID = _objUserDflt.POSite + promoSiteChars[j];
                                     if (record.data['SiteID'].toString().toLowerCase() == (HQ.util.passNull(promoSiteID).toLowerCase())) {
                                         return record;
                                     }
                                 }
                             } else {
-                                if (record.data['SiteID'].toString().toLowerCase() == (HQ.util.passNull(objBranch.data.SiteID).toLowerCase())) {
+                                if (record.data['SiteID'].toString().toLowerCase() == (HQ.util.passNull(_objUserDflt.POSite).toLowerCase())) {
                                     return record;
                                 }
                             }
                         } else if (purchaseType == 'GI') {
-                            if (record.data['SiteID'].toString().toLowerCase() == (HQ.util.passNull(objBranch.data.SiteID).toLowerCase())) {
+                            if (record.data['SiteID'].toString().toLowerCase() == (HQ.util.passNull(_objUserDflt.POSite).toLowerCase())) {
                                 return record;
                             }
                         }
@@ -1146,7 +1146,9 @@ var cboSiteID_Expand = function (combo) {
     }
 };
 var cboSiteID_Collapse = function (cbombo) {
-    App.cboSiteID.store.clearFilter();
+    if (HQ.IsChangSiteID == true && HQ.IsConfigSiteID) {
+        App.cboSiteID.store.clearFilter();
+    }
 };
 var txtcRcptQty_Change = function (sender) {
     var record = App.slmPO_Trans.selected.items[0];
@@ -2038,35 +2040,44 @@ var renderTaxID = function (value) {
 };
 
 function getSelectedSiteID(purchaseType) {
-    var length = App.cboSiteID.store.data.length;
-    var promoSiteChars = HQ.PromoSiteChars.split("#");
-    var isBreak = false;
-    var defaultSiteID = '';
-    var objBranch = HQ.store.findRecord(App.cboBranchID.store, ['BranchID'], [App.cboBranchID.getValue()]);
-    if (purchaseType == 'PR' && objBranch) {
-        if (promoSiteChars.length > 0) {
-            for (var j = 0; j < promoSiteChars.length; j++) {
-                var promoSiteID = objBranch.data.SiteID + promoSiteChars[j]
-                for (var i = 0; i < length; i++) {
-                    if (promoSiteID.toLowerCase() != App.cboSiteID.store.data.items[i].data.SiteID.toLowerCase()) {
-                        defaultSiteID = promoSiteID;
-                        isBreak = true;
-                        break;
-                    }
-                }
-                if (isBreak) {
-                    break;
-                }
-            }
-        } else {
-            defaultSiteID = objBranch.data.SiteID;
+    var defaultSiteID = '###';
+    if (_objUserDflt) {
+        if (purchaseType == 'PR') {
+            defaultSiteID = _objUserDflt.DiscSite;
+        } else if (purchaseType == 'GI') {
+            defaultSiteID = _objUserDflt.POSite;
         }
-    } else if (purchaseType == 'GI' && objBranch) {
-        return objBranch.data.SiteID;
-    } else {
-        return '###';
     }
     return defaultSiteID;
+
+    //var length = App.cboSiteID.store.data.length;
+    //var promoSiteChars = HQ.PromoSiteChars.split("#");
+    //var isBreak = false;
+    
+    //if (purchaseType == 'PR') {
+    //    if (promoSiteChars.length > 0) {
+    //        for (var j = 0; j < promoSiteChars.length; j++) {
+    //            var promoSiteID = _objUserDflt.POSite + promoSiteChars[j]
+    //            for (var i = 0; i < length; i++) {
+    //                if (promoSiteID.toLowerCase() != App.cboSiteID.store.data.items[i].data.SiteID.toLowerCase()) {
+    //                    defaultSiteID = promoSiteID;
+    //                    isBreak = true;
+    //                    break;
+    //                }
+    //            }
+    //            if (isBreak) {
+    //                break;
+    //            }
+    //        }
+    //    } else {        
+    //        defaultSiteID = _objUserDflt.POSite;
+    //    }
+    //} else if (purchaseType == 'GI' && _objUserDflt) {
+    //    return _objUserDflt.POSite;
+    //} else {
+    //    return '###';
+    //}
+    
 }
 
 var PopupWinLot = {

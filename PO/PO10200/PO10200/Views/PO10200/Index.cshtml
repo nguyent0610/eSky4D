@@ -20,7 +20,7 @@
         <meta name="viewport" content="width=device-width" />
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/screen/PO10200.js?")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/PO10200.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
             
         <style>
             .x-grid-row-over .x-grid-cell-inner {
@@ -38,6 +38,7 @@
             HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
             HQ.IsConfigSiteID = HQ.util.toBool('@ViewBag.IsConfigSiteID');
             HQ.PromoSiteChars = '@ViewBag.PromoSiteChars';
+            HQ.IsChangSiteID = HQ.util.toBool('@ViewBag.IsChangSite');
         </script>  
         <title>@ViewBag.Title</title>
     </head>

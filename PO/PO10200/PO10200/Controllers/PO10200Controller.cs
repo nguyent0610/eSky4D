@@ -19,7 +19,6 @@ using System.Data;
 using HQ.eSkySys;
 namespace PO10200.Controllers
 {
-
     [CustomAuthorize]
     [CheckSessionOut]
     [DirectController]
@@ -35,7 +34,7 @@ namespace PO10200.Controllers
         private List<PO10200_pgLoadTaxTrans_Result> _lstTax = new List<PO10200_pgLoadTaxTrans_Result>();
         private PO10200_pdPO_Setup_Result _objPO_Setup;
         private PO10200_pdHeader_Result _poHead;
-        private Batch _objBatch;  
+        private Batch _objBatch;
         string _batNbr = "";
         string _rcptNbr = "";
         string _branchID = "";
@@ -52,14 +51,17 @@ namespace PO10200.Controllers
             ViewBag.BussinessTime = DateTime.Now;
             bool isConfig = false;
             string promoSiteChars = string.Empty;
+            bool isChangSite = false;
             var obj = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToLower() == "po10200siteidconfig");
             if (obj != null)
             {
-                isConfig = obj.IntVal == 1;
-                promoSiteChars = obj.TextVal;
+                isChangSite = obj.IntVal == 1;
+                isConfig = obj.FloatVal == 1.0;
+                promoSiteChars = obj.TextVal;                
             }
             ViewBag.IsConfigSiteID = isConfig;
             ViewBag.PromoSiteChars = promoSiteChars;
+            ViewBag.IsChangSite = isChangSite;
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]

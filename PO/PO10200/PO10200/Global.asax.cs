@@ -42,7 +42,7 @@ namespace PO10200
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "NDMT";
             Session["Language"] = Current.Language = "vi";
-            Session["LangID"] = 0;
+            Session["LangID"] = 1;
            
         }
     }
