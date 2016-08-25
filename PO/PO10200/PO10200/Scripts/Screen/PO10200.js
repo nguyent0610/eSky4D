@@ -434,16 +434,13 @@ var grdPO_Trans_ValidateEdit = function (item, e) {
             return false;
         }
     }
-
-    if (HQ.IsChangSiteID == true && e.field == 'PurchaseType') {
-        var defaultSiteID = getSelectedSiteID(e.value);
+    // Set default siteID 
+    if (HQ.IsChangeSiteID && e.field == 'PurchaseType') {
+        var defaultSiteID = getDefaultSiteID(e.value);
         if (defaultSiteID != '###') {
             e.record.set('SiteID', defaultSiteID);
         }        
     }
-
-
-
 
     if (e.field == "InvtID") {
         var r = HQ.store.findInStore(App.cboInvtID.getStore(), ["InvtID"], [e.value]);
@@ -1111,42 +1108,49 @@ var cboStatus_Change = function (item, newValue, oldValue) {
 
 // Expand SiteID
 var cboSiteID_Expand = function (combo) {    
-    if (HQ.IsChangSiteID == true && HQ.IsConfigSiteID) {
+    if (HQ.IsChangeSiteID) {
         App.cboSiteID.store.clearFilter();
         if (App.grdDetail.selModel.selected && App.grdDetail.selModel.selected.items[0] && _objUserDflt ) {
             var purchaseType = App.grdDetail.selModel.selected.items[0].data.PurchaseType;
             if (purchaseType == 'PR' || purchaseType == 'GI') {
                 var store = App.cboSiteID.store;
-                // Filter data
-                store.filterBy(function (record) {
-                    if (record) {
-                        if (purchaseType == 'PR') {
-                            var promoSiteChars = HQ.PromoSiteChars.split("#");
-                            if (promoSiteChars.length > 0) {
-                                for (var j = 0; j < promoSiteChars.length; j++) {
-                                    var promoSiteID = _objUserDflt.POSite + promoSiteChars[j];
-                                    if (record.data['SiteID'].toString().toLowerCase() == (HQ.util.passNull(promoSiteID).toLowerCase())) {
-                                        return record;
-                                    }
-                                }
-                            } else {
-                                if (record.data['SiteID'].toString().toLowerCase() == (HQ.util.passNull(_objUserDflt.POSite).toLowerCase())) {
+                if (purchaseType == 'PR') {
+                    var findPRRecord = HQ.store.findRecord(App.cboSiteID.store, ['SiteType'], [purchaseType]);
+                    if (findPRRecord && _objUserDflt.DiscSite && _objUserDflt.DiscSite != '') {
+                        // Filter data -- Promo Site
+                        store.filterBy(function (record) {
+                            if (record) {
+                                if (record.data['SiteType'].toString() == purchaseType) {
+                                    return record;
+                                }                                
+                            }
+                        });
+                    } else {
+                        // Filter data -- Main Site
+                        store.filterBy(function (record) {
+                            if (record) {
+                                if (record.data['SiteType'].toString() == 'GI') {
                                     return record;
                                 }
                             }
-                        } else if (purchaseType == 'GI') {
-                            if (record.data['SiteID'].toString().toLowerCase() == (HQ.util.passNull(_objUserDflt.POSite).toLowerCase())) {
-                                return record;
-                            }
-                        }
+                        });
                     }
-                });
+                } else {
+                    // Filter data -- Main Site
+                    store.filterBy(function (record) {
+                        if (record) {
+                            if (record.data['SiteType'].toString() == purchaseType) {
+                                return record;
+                            }                            
+                        }
+                    });
+                }               
             }
         }
     }
 };
 var cboSiteID_Collapse = function (cbombo) {
-    if (HQ.IsChangSiteID == true && HQ.IsConfigSiteID) {
+    if (HQ.IsChangeSiteID) {
         App.cboSiteID.store.clearFilter();
     }
 };
@@ -2038,46 +2042,17 @@ var renderTaxID = function (value) {
     //}
     //return value;
 };
-
-function getSelectedSiteID(purchaseType) {
+// Get default SiteID
+function getDefaultSiteID(purchaseType) {
     var defaultSiteID = '###';
     if (_objUserDflt) {
         if (purchaseType == 'PR') {
-            defaultSiteID = _objUserDflt.DiscSite;
+            defaultSiteID = _objUserDflt.DiscSite && _objUserDflt.DiscSite != '' ? _objUserDflt.DiscSite : _objUserDflt.POSite;
         } else if (purchaseType == 'GI') {
             defaultSiteID = _objUserDflt.POSite;
         }
     }
     return defaultSiteID;
-
-    //var length = App.cboSiteID.store.data.length;
-    //var promoSiteChars = HQ.PromoSiteChars.split("#");
-    //var isBreak = false;
-    
-    //if (purchaseType == 'PR') {
-    //    if (promoSiteChars.length > 0) {
-    //        for (var j = 0; j < promoSiteChars.length; j++) {
-    //            var promoSiteID = _objUserDflt.POSite + promoSiteChars[j]
-    //            for (var i = 0; i < length; i++) {
-    //                if (promoSiteID.toLowerCase() != App.cboSiteID.store.data.items[i].data.SiteID.toLowerCase()) {
-    //                    defaultSiteID = promoSiteID;
-    //                    isBreak = true;
-    //                    break;
-    //                }
-    //            }
-    //            if (isBreak) {
-    //                break;
-    //            }
-    //        }
-    //    } else {        
-    //        defaultSiteID = _objUserDflt.POSite;
-    //    }
-    //} else if (purchaseType == 'GI' && _objUserDflt) {
-    //    return _objUserDflt.POSite;
-    //} else {
-    //    return '###';
-    //}
-    
 }
 
 var PopupWinLot = {
@@ -2555,5 +2530,3 @@ var PopupWinLot = {
         HQ.store.insertRecord(App.stoLotTrans, "LotSerNbr", newRow, true);
     }
 }
-
-

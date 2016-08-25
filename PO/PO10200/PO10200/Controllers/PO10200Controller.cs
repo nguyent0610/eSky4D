@@ -49,19 +49,13 @@ namespace PO10200.Controllers
             Util.InitRight(ScreenNbr);
             ViewBag.BussinessDate = DateTime.Now.ToDateShort();
             ViewBag.BussinessTime = DateTime.Now;
-            bool isConfig = false;
-            string promoSiteChars = string.Empty;
-            bool isChangSite = false;
+            bool isChangeSiteID = false;
             var obj = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToLower() == "po10200siteidconfig");
             if (obj != null)
             {
-                isChangSite = obj.IntVal == 1;
-                isConfig = obj.FloatVal == 1.0;
-                promoSiteChars = obj.TextVal;                
+                isChangeSiteID = obj.IntVal == 1;             
             }
-            ViewBag.IsConfigSiteID = isConfig;
-            ViewBag.PromoSiteChars = promoSiteChars;
-            ViewBag.IsChangSite = isChangSite;
+            ViewBag.IsChangeSiteID = isChangeSiteID;
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
