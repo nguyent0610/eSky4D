@@ -57,6 +57,7 @@
                 ps.Add(new StoreParameter("custID", "App.cboCustID.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("stockType", "App.cboStockType.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("stkOutDate", "App.dtpStkOutDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("invtType", "App.cboInvtType.getValue()", ParameterMode.Raw));
             })      
             .Listeners(l =>
                 {

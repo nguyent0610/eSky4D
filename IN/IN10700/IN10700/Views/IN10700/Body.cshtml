@@ -23,7 +23,7 @@
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Items(
             X.Panel().ID("pnlHeader")
-            .Listeners(lst=>lst.Render.Handler = "HQ.common.control_render(this,'header')")
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'header')")
             .Layout(LayoutType.HBox).Region(Region.North).MinWidth(1005)
             .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
             .Items(
@@ -38,9 +38,9 @@
                     .HQColumnShow("BranchID,BranchName").ValueField("BranchID").DisplayField("BranchName")
                     .HQHeightWidth(400, 300).ForceSelection(true).HQAutoLoad(false).AllowBlank(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
-                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -48,16 +48,16 @@
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                         l.Change.Fn = "Event.Form.cboBranchID_change";
                     })
-                    
-                    ,HQ.Combo().ID("cboSlsperID")
+
+                    , HQ.Combo().ID("cboSlsperID")
                     .HQLangCode("Salesman").HQProcedure("IN10700_pcSlsperID")
                     .HQColumnShow("SlsperID,Name").ValueField("SlsperID").DisplayField("Name")
                     .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
-                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
-                        ,new StoreParameter("@BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw) 
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                        ,new StoreParameter("@BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw)
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -65,17 +65,17 @@
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                         l.Change.Fn = "Event.Form.cboSlsperID_change";
                     })
-                    
-                    ,HQ.Combo().ID("cboCustID")
+
+                    , HQ.Combo().ID("cboCustID")
                     .HQLangCode("Customer").HQProcedure("IN10700_pcCustID")
                     .HQColumnShow("CustID,CustName").ValueField("CustID").DisplayField("CustName")
                     .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
-                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
-                        ,new StoreParameter("@BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw) 
-                        ,new StoreParameter("@SlsperID", "App.cboSlsperID.getValue()", ParameterMode.Raw) 
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                        ,new StoreParameter("@BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw)
+                        ,new StoreParameter("@SlsperID", "App.cboSlsperID.getValue()", ParameterMode.Raw)
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -92,15 +92,15 @@
                 .Items(
                     HQ.TextBox().ID("txtStkOutNbr")
                     .HQLangCode("StkOutNbr").DataIndex("StkOutNbr")
-                    
+
                     , HQ.Combo().ID("cboStockType")
                     .HQLangCode("Type").HQProcedure("IN10700_pcType")
                     .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
                     .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
-                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -108,8 +108,8 @@
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                         l.Change.Fn = "Event.Form.cboStockType_change";
                     })
-                    
-                    ,HQ.DateField().ID("dtpStkOutDate")
+
+                    , HQ.DateField().ID("dtpStkOutDate")
                     .HQLangCode("DATE").AllowBlank(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(l =>
@@ -117,19 +117,35 @@
                         l.TriggerClick.Handler = "this.clear()";
                         l.Change.Fn = "Event.Form.dtpStkOutDate_change";
                     })
+                    , HQ.Combo().ID("cboInvtType")
+                        .HQLangCode("IN10700InvtType").HQProcedure("IN10700_pcInventoryType")
+                        .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
+                        .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@Username", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Fn = "Event.Form.cboInvtType_change";
+                    })
                 ) // Second Column
-                
+
                 // Third Column
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 0")
                 .MinWidth(250)//.Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
                 .Items(
-                    
+
                 ) // Third Column
             ) // pnlHeader
 
-            , X.GridPanel().ID("grdStockOutletDet") 
-            .Listeners(lst=>lst.Render.Handler = "HQ.common.control_render(this,'grdStockOutletDet')")
+            , X.GridPanel().ID("grdStockOutletDet")
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdStockOutletDet')")
             .Region(Region.Center)
             .Scroll(ScrollMode.Both).MinWidth(1005)
             .View(X.GridView().TrackOver(false))
@@ -151,6 +167,7 @@
                     ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
                     ps.Add(new StoreParameter("slsperID", "App.cboSlsperID.getValue()", ParameterMode.Raw));
                     ps.Add(new StoreParameter("stkOutNbr", "App.txtStkOutNbr.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("invtType", "App.cboInvtType.getValue()", ParameterMode.Raw));
                 })
                 .Listeners(l =>
                     {
@@ -163,28 +180,33 @@
             )
             .ColumnModel(
                 X.RowNumbererColumn()
-                
+
                 , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID")
                 .Editor(
                     HQ.Combo().ID("cboInvtID")
-                    .HQProcedure("IN10700_pcInvtID").HQColumnShow("InvtID,Descr")
+                    .HQProcedure("IN10700_pcInvtID").HQColumnShow("InvtID,Descr,ClassID")
                     .ValueField("InvtID").DisplayField("InvtID")
                     .HQHeightWidth(400, 300).ForceSelection(true)
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
                         ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
                         ,new StoreParameter("@BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw)
+                    }).
+                    Listeners(l =>
+                    {
+                        l.Expand.Fn = "Event.Form.cboInvtID_Expand";
+                        l.Collapse.Fn = "Event.Form.cboInvtID_Collapse";
                     })
                     .LoadData()
                 )
-                
+
                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
                 .Renderer("Process.renderDescr")
-                
+
                 , HQ.DateColumn().Text(Util.GetLang("ExpireDate")).DataIndex("ExpDate")
                 .Hidden(true).Hideable(false)
                 .Editor(HQ.DateField())
-                
+
                 , X.Column().Text(Util.GetLang("Reason")).DataIndex("ReasonID")
                 .Width(150).Renderer("Process.renderDescr")
                 .Editor(
@@ -192,16 +214,16 @@
                     .HQProcedure("IN10700_pcReason").HQColumnShow("Code,Descr")
                     .ValueField("Code").DisplayField("Descr")
                     .HQHeightWidth(400, 300).ForceSelection(true)
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
-                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
                     })
                     .LoadData()
                 )
-                
+
                 , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Qty")).DataIndex("StkQty").Format("0,000")
                 .Editor(
-                    X.NumberField().SelectOnFocus(true).DecimalPrecision(0).MinValue(0).DecimalPrecision(0).Listeners(l=>l.Change.Fn="Event.Grid.txtQty_Change")
+                    X.NumberField().SelectOnFocus(true).DecimalPrecision(0).MinValue(0).DecimalPrecision(0).Listeners(l => l.Change.Fn = "Event.Grid.txtQty_Change")
                 )
                 , Html.X().ImageCommandColumn().Text(Util.GetLang(""))
                                                     .Width(30)
@@ -211,15 +233,16 @@
                                                             .ToolTip(t =>
                                                             {
                                                                 t.Text = Util.GetLang("ShowPOSM");
-                                                            })                                                        
+                                                            })
                                                             .CommandName("Update")
                                                     )
-                                                    .Listeners(l => {
+                                                    .Listeners(l =>
+                                                    {
                                                         l.Command.Handler = "Event.Grid.showPOSM(record);";
                                                     })
-                
+
                 , X.Column().DataIndex("ClassID").Hidden(true)
-                
+
             )
             .SelectionModel(X.RowSelectionModel().ID("slmStockOutletDet").Mode(SelectionMode.Single))
             .Plugins(
@@ -236,10 +259,10 @@
                 X.GridFilters().Local(true)
                 .Filters(
                     X.StringFilter().DataIndex("ReasonID")
-                    ,X.StringFilter().DataIndex("InvtID")
-                    ,X.StringFilter().DataIndex("Descr")
-                    ,X.DateFilter().DataIndex("ExpDate")
-                    ,X.NumericFilter().DataIndex("StkQty")
+                    , X.StringFilter().DataIndex("InvtID")
+                    , X.StringFilter().DataIndex("Descr")
+                    , X.DateFilter().DataIndex("ExpDate")
+                    , X.NumericFilter().DataIndex("StkQty")
                 )
             )
             .BottomBar(
@@ -280,7 +303,7 @@
                 .Listeners(p => p.Click.Fn = "PopupwinPOSM.btnPOSMDel_Click")
             , X.Button().ID("btnPOSMOK").Text(Util.GetLang("OK"))
                 .Listeners(p => p.Click.Fn = "PopupwinPOSM.btnPOSMOK_Click")
-        )       
+        )
         .Items(
             X.GridPanel().ID("grdPOSM")
             .Border(true).BorderSpec("1 0 0 0")
@@ -305,8 +328,8 @@
                         .Editor(HQ.DateField())
                     , X.NumberColumn().ID("colPOSMQty").DataIndex("StkQty").Text(Util.GetLang("Qty")).Format("#,###")
                         .Width(75)
-                        .Align(Alignment.Right)       
-                        .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(0))              
+                        .Align(Alignment.Right)
+                        .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(0))
                     )
                     .Listeners(lst =>
                     {

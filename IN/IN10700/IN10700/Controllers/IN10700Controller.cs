@@ -38,14 +38,15 @@ namespace IN10700.Controllers
             return PartialView();
         }
 
-        public ActionResult GetStockOutlet(string branchID, string slsperID, string custID, string stockType, DateTime stkOutDate)
+        public ActionResult GetStockOutlet(string branchID, string slsperID, string custID, string stockType, DateTime stkOutDate, string invtType)
         {
-            return this.Store(_db.IN10700_phStockOutlet(Current.UserName, Current.CpnyID, branchID, slsperID, custID, stockType, stkOutDate).ToList());
+            var outlet = _db.IN10700_phStockOutlet(Current.UserName, Current.CpnyID, branchID, slsperID, custID, stockType, stkOutDate, invtType).ToList();
+            return this.Store(outlet);
         }
 
-        public ActionResult GetStockOutletDet(string branchID, string slsperID, string stkOutNbr)
+        public ActionResult GetStockOutletDet(string branchID, string slsperID, string stkOutNbr, string invtType)
         {
-            return this.Store(_db.IN10700_pgStockOutletDet(Current.UserName, Current.CpnyID, branchID, slsperID, stkOutNbr).ToList());
+            return this.Store(_db.IN10700_pgStockOutletDet(Current.UserName, Current.CpnyID, branchID, slsperID, stkOutNbr, invtType).ToList());
         }
         public ActionResult GetStockOutletPOSM(string branchID, string slsperID, string stkOutNbr)
         {
@@ -346,7 +347,7 @@ namespace IN10700.Controllers
                 outlet.StkOutNbr = inputStockOutlet.StkOutNbr;
                 outlet.StkOutDate = inputStockOutlet.StkOutDate;
                 outlet.StockType = inputStockOutlet.StockType;
-
+                outlet.InvtType = inputStockOutlet.InvtType;
                 outlet.Crtd_DateTime = DateTime.Now;
                 outlet.Crtd_Prog = _screenNbr;
                 outlet.Crtd_User = Current.UserName;

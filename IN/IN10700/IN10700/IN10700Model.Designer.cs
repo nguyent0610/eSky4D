@@ -179,7 +179,8 @@ namespace IN10700
         /// <param name="custID">No Metadata Documentation available.</param>
         /// <param name="stkType">No Metadata Documentation available.</param>
         /// <param name="stkOutDate">No Metadata Documentation available.</param>
-        public ObjectResult<IN10700_phStockOutlet_Result> IN10700_phStockOutlet(global::System.String userID, global::System.String cpnyID, global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String stkType, Nullable<global::System.DateTime> stkOutDate)
+        /// <param name="invtType">No Metadata Documentation available.</param>
+        public ObjectResult<IN10700_phStockOutlet_Result> IN10700_phStockOutlet(global::System.String userID, global::System.String cpnyID, global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String stkType, Nullable<global::System.DateTime> stkOutDate, global::System.String invtType)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -251,7 +252,17 @@ namespace IN10700
                 stkOutDateParameter = new ObjectParameter("StkOutDate", typeof(global::System.DateTime));
             }
     
-            return base.ExecuteFunction<IN10700_phStockOutlet_Result>("IN10700_phStockOutlet", userIDParameter, cpnyIDParameter, branchIDParameter, slsperIDParameter, custIDParameter, stkTypeParameter, stkOutDateParameter);
+            ObjectParameter invtTypeParameter;
+            if (invtType != null)
+            {
+                invtTypeParameter = new ObjectParameter("InvtType", invtType);
+            }
+            else
+            {
+                invtTypeParameter = new ObjectParameter("InvtType", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10700_phStockOutlet_Result>("IN10700_phStockOutlet", userIDParameter, cpnyIDParameter, branchIDParameter, slsperIDParameter, custIDParameter, stkTypeParameter, stkOutDateParameter, invtTypeParameter);
         }
     
         /// <summary>
@@ -262,7 +273,8 @@ namespace IN10700
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="slsperID">No Metadata Documentation available.</param>
         /// <param name="stkOutNbr">No Metadata Documentation available.</param>
-        public ObjectResult<IN10700_pgStockOutletDet_Result> IN10700_pgStockOutletDet(global::System.String userID, global::System.String cpnyID, global::System.String branchID, global::System.String slsperID, global::System.String stkOutNbr)
+        /// <param name="invtType">No Metadata Documentation available.</param>
+        public ObjectResult<IN10700_pgStockOutletDet_Result> IN10700_pgStockOutletDet(global::System.String userID, global::System.String cpnyID, global::System.String branchID, global::System.String slsperID, global::System.String stkOutNbr, global::System.String invtType)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -314,7 +326,17 @@ namespace IN10700
                 stkOutNbrParameter = new ObjectParameter("StkOutNbr", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<IN10700_pgStockOutletDet_Result>("IN10700_pgStockOutletDet", userIDParameter, cpnyIDParameter, branchIDParameter, slsperIDParameter, stkOutNbrParameter);
+            ObjectParameter invtTypeParameter;
+            if (invtType != null)
+            {
+                invtTypeParameter = new ObjectParameter("InvtType", invtType);
+            }
+            else
+            {
+                invtTypeParameter = new ObjectParameter("InvtType", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10700_pgStockOutletDet_Result>("IN10700_pgStockOutletDet", userIDParameter, cpnyIDParameter, branchIDParameter, slsperIDParameter, stkOutNbrParameter, invtTypeParameter);
         }
     
         /// <summary>
@@ -1481,6 +1503,30 @@ namespace IN10700
         private global::System.String _StockType;
         partial void OnStockTypeChanging(global::System.String value);
         partial void OnStockTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String InvtType
+        {
+            get
+            {
+                return _InvtType;
+            }
+            set
+            {
+                OnInvtTypeChanging(value);
+                ReportPropertyChanging("InvtType");
+                _InvtType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("InvtType");
+                OnInvtTypeChanged();
+            }
+        }
+        private global::System.String _InvtType;
+        partial void OnInvtTypeChanging(global::System.String value);
+        partial void OnInvtTypeChanged();
 
         #endregion
 
@@ -3182,6 +3228,30 @@ namespace IN10700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String InvtType
+        {
+            get
+            {
+                return _InvtType;
+            }
+            set
+            {
+                OnInvtTypeChanging(value);
+                ReportPropertyChanging("InvtType");
+                _InvtType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("InvtType");
+                OnInvtTypeChanged();
+            }
+        }
+        private global::System.String _InvtType;
+        partial void OnInvtTypeChanging(global::System.String value);
+        partial void OnInvtTypeChanged();
 
         #endregion
 

@@ -4,20 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
-          <EntitySet Name="IN_Setup" EntityType="eBiz4DWebAppModel.Store.IN_Setup" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="PPC_StockOutlet" EntityType="eBiz4DWebAppModel.Store.PPC_StockOutlet" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="PPC_StockOutletDet" EntityType="eBiz4DWebAppModel.Store.PPC_StockOutletDet" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="PPC_StockOutletPOSM" EntityType="eBiz4DWebAppModel.Store.PPC_StockOutletPOSM" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="IN_Setup">
           <Key>
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="SetupID" />
           </Key>
-          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="SetupID" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="SetupID" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="AutoRefNbr" Type="bit" Nullable="false" />
           <Property Name="CnvFactEditable" Type="bit" />
           <Property Name="NegQty" Type="bit" Nullable="false" />
@@ -31,12 +25,12 @@
           <Property Name="PreFixBat" Type="varchar" MaxLength="2" />
           <Property Name="UseBarCode" Type="bit" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CheckINVal" Type="bit" Nullable="false" />
           <Property Name="LastStkOutNbr" Type="varchar" MaxLength="10" />
         </EntityType>
@@ -46,9 +40,9 @@
             <PropertyRef Name="SlsPerID" />
             <PropertyRef Name="StkOutNbr" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="StkOutNbr" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SlsPerID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="StkOutNbr" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="CustID" Type="varchar" MaxLength="50" />
           <Property Name="StkOutDate" Type="datetime" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
@@ -57,8 +51,9 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="StockType" Type="varchar" MaxLength="10" />
+          <Property Name="InvtType" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="PPC_StockOutletDet">
           <Key>
@@ -68,10 +63,10 @@
             <PropertyRef Name="InvtID" />
             <PropertyRef Name="ExpDate" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="StkOutNbr" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SlsPerID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="StkOutNbr" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ExpDate" Type="datetime" Nullable="false" />
           <Property Name="ProdDate" Type="datetime" />
           <Property Name="StkQty" Type="float" />
@@ -83,7 +78,7 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="ReasonID" Type="varchar" MaxLength="5" />
           <Property Name="PosmID" Type="varchar" MaxLength="30" />
         </EntityType>
@@ -96,11 +91,11 @@
             <PropertyRef Name="PosmID" />
             <PropertyRef Name="ExpDate" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="StkOutNbr" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="PosmID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SlsPerID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="StkOutNbr" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="PosmID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ExpDate" Type="datetime" Nullable="false" />
           <Property Name="ProdDate" Type="datetime" />
           <Property Name="StkQty" Type="float" />
@@ -112,7 +107,7 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <Function Name="IN10700_pgStockOutletDet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -120,6 +115,7 @@
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="SlsperID" Type="varchar" Mode="In" />
           <Parameter Name="StkOutNbr" Type="varchar" Mode="In" />
+          <Parameter Name="InvtType" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN10700_pgStockOutletDetPOSM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -136,6 +132,7 @@
           <Parameter Name="CustID" Type="varchar" Mode="In" />
           <Parameter Name="StkType" Type="varchar" Mode="In" />
           <Parameter Name="StkOutDate" Type="datetime" Mode="In" />
+          <Parameter Name="InvtType" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN10700_ppCheckForUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -151,6 +148,12 @@
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
         </Function>
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="IN_Setup" EntityType="Self.IN_Setup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PPC_StockOutlet" EntityType="Self.PPC_StockOutlet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PPC_StockOutletDet" EntityType="Self.PPC_StockOutletDet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PPC_StockOutletPOSM" EntityType="Self.PPC_StockOutletPOSM" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -164,6 +167,7 @@
             <Parameter Name="CustID" Mode="In" Type="String" />
             <Parameter Name="StkType" Mode="In" Type="String" />
             <Parameter Name="StkOutDate" Mode="In" Type="DateTime" />
+            <Parameter Name="InvtType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="IN10700_pgStockOutletDet" ReturnType="Collection(IN10700Model.IN10700_pgStockOutletDet_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
@@ -171,6 +175,7 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="SlsperID" Mode="In" Type="String" />
             <Parameter Name="StkOutNbr" Mode="In" Type="String" />
+            <Parameter Name="InvtType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="IN10700_ppStkOutNbr" ReturnType="Collection(IN10700Model.IN10700_ppStkOutNbr_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -206,6 +211,7 @@
           <Property Type="DateTime" Name="StkOutDate" Nullable="true" Precision="23" />
           <Property Type="String" Name="StockType" Nullable="true" MaxLength="10" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="InvtType" Nullable="true" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="IN10700_pgStockOutletDet_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -271,6 +277,7 @@
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="StockType" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="InvtType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="IN10700_ppStkOutNbr_Result">
           <Property Type="String" Name="PrefixBat" Nullable="true" MaxLength="2" />
@@ -353,6 +360,7 @@
                 <ScalarProperty Name="StkOutDate" ColumnName="StkOutDate" />
                 <ScalarProperty Name="StockType" ColumnName="StockType" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="InvtType" ColumnName="InvtType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -416,6 +424,7 @@
           <EntitySetMapping Name="PPC_StockOutlet">
             <EntityTypeMapping TypeName="IN10700Model.PPC_StockOutlet">
               <MappingFragment StoreEntitySet="PPC_StockOutlet">
+                <ScalarProperty Name="InvtType" ColumnName="InvtType" />
                 <ScalarProperty Name="StockType" ColumnName="StockType" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
@@ -508,6 +517,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
