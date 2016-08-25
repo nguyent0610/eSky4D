@@ -586,146 +586,6 @@ namespace AR20400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="keyTree">No Metadata Documentation available.</param>
-        /// <param name="preFix1">No Metadata Documentation available.</param>
-        /// <param name="preFix2">No Metadata Documentation available.</param>
-        /// <param name="preFix3">No Metadata Documentation available.</param>
-        /// <param name="preFix4">No Metadata Documentation available.</param>
-        /// <param name="sufFix1">No Metadata Documentation available.</param>
-        /// <param name="sufFix2">No Metadata Documentation available.</param>
-        /// <param name="sufFix3">No Metadata Documentation available.</param>
-        /// <param name="sufFix4">No Metadata Documentation available.</param>
-        /// <param name="classID">No Metadata Documentation available.</param>
-        /// <param name="state">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR20400_ppGetAutoCustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID, global::System.String state)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter keyTreeParameter;
-            if (keyTree != null)
-            {
-                keyTreeParameter = new ObjectParameter("KeyTree", keyTree);
-            }
-            else
-            {
-                keyTreeParameter = new ObjectParameter("KeyTree", typeof(global::System.String));
-            }
-    
-            ObjectParameter preFix1Parameter;
-            if (preFix1 != null)
-            {
-                preFix1Parameter = new ObjectParameter("PreFix1", preFix1);
-            }
-            else
-            {
-                preFix1Parameter = new ObjectParameter("PreFix1", typeof(global::System.String));
-            }
-    
-            ObjectParameter preFix2Parameter;
-            if (preFix2 != null)
-            {
-                preFix2Parameter = new ObjectParameter("PreFix2", preFix2);
-            }
-            else
-            {
-                preFix2Parameter = new ObjectParameter("PreFix2", typeof(global::System.String));
-            }
-    
-            ObjectParameter preFix3Parameter;
-            if (preFix3 != null)
-            {
-                preFix3Parameter = new ObjectParameter("PreFix3", preFix3);
-            }
-            else
-            {
-                preFix3Parameter = new ObjectParameter("PreFix3", typeof(global::System.String));
-            }
-    
-            ObjectParameter preFix4Parameter;
-            if (preFix4 != null)
-            {
-                preFix4Parameter = new ObjectParameter("PreFix4", preFix4);
-            }
-            else
-            {
-                preFix4Parameter = new ObjectParameter("PreFix4", typeof(global::System.String));
-            }
-    
-            ObjectParameter sufFix1Parameter;
-            if (sufFix1 != null)
-            {
-                sufFix1Parameter = new ObjectParameter("SufFix1", sufFix1);
-            }
-            else
-            {
-                sufFix1Parameter = new ObjectParameter("SufFix1", typeof(global::System.String));
-            }
-    
-            ObjectParameter sufFix2Parameter;
-            if (sufFix2 != null)
-            {
-                sufFix2Parameter = new ObjectParameter("SufFix2", sufFix2);
-            }
-            else
-            {
-                sufFix2Parameter = new ObjectParameter("SufFix2", typeof(global::System.String));
-            }
-    
-            ObjectParameter sufFix3Parameter;
-            if (sufFix3 != null)
-            {
-                sufFix3Parameter = new ObjectParameter("SufFix3", sufFix3);
-            }
-            else
-            {
-                sufFix3Parameter = new ObjectParameter("SufFix3", typeof(global::System.String));
-            }
-    
-            ObjectParameter sufFix4Parameter;
-            if (sufFix4 != null)
-            {
-                sufFix4Parameter = new ObjectParameter("SufFix4", sufFix4);
-            }
-            else
-            {
-                sufFix4Parameter = new ObjectParameter("SufFix4", typeof(global::System.String));
-            }
-    
-            ObjectParameter classIDParameter;
-            if (classID != null)
-            {
-                classIDParameter = new ObjectParameter("ClassID", classID);
-            }
-            else
-            {
-                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
-            }
-    
-            ObjectParameter stateParameter;
-            if (state != null)
-            {
-                stateParameter = new ObjectParameter("State", state);
-            }
-            else
-            {
-                stateParameter = new ObjectParameter("State", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("AR20400_ppGetAutoCustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter, stateParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="custId">No Metadata Documentation available.</param>
         public ObjectResult<global::System.String> AR20400_ppGetLineRefAR_CustAdvTool(global::System.String custId)
         {
@@ -844,7 +704,9 @@ namespace AR20400
         /// <param name="sufFix4">No Metadata Documentation available.</param>
         /// <param name="classID">No Metadata Documentation available.</param>
         /// <param name="custName">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR20400_ppCustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID, global::System.String custName)
+        /// <param name="state">No Metadata Documentation available.</param>
+        /// <param name="district">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20400_ppCustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID, global::System.String custName, global::System.String state, global::System.String district)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -966,7 +828,27 @@ namespace AR20400
                 custNameParameter = new ObjectParameter("CustName", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("AR20400_ppCustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter, custNameParameter);
+            ObjectParameter stateParameter;
+            if (state != null)
+            {
+                stateParameter = new ObjectParameter("State", state);
+            }
+            else
+            {
+                stateParameter = new ObjectParameter("State", typeof(global::System.String));
+            }
+    
+            ObjectParameter districtParameter;
+            if (district != null)
+            {
+                districtParameter = new ObjectParameter("District", district);
+            }
+            else
+            {
+                districtParameter = new ObjectParameter("District", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20400_ppCustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter, custNameParameter, stateParameter, districtParameter);
         }
 
         #endregion
