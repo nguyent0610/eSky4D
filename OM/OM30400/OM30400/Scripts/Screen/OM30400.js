@@ -409,12 +409,14 @@ var Index = {
     btnLoadDataActual_click: function (btn, e, eOpts) {
         if (App.pnlActualVisit.isValid()) {
             Index.removeStoreData();
+            clearMaps();
             if (App.radSalesmanAll.value) {
                 App.grdAllCurrentSalesman.store.reload();
             }
             else {
                 App.grdVisitCustomerActual.store.reload();
                 App.storeMapActualVisit.reload();
+                
                 //App.storeVisitCustomerActual.reload();
             }
         }
@@ -524,6 +526,12 @@ var Index = {
                     HQ.message.process(msg, data, true);
                 }
             });
+        }
+    },
+
+    stoVisitPlan_load:function(store,records,successful,eOpts){
+        if (successful) {
+            PosGmap.drawMap_Visit();
         }
     },
 
@@ -638,6 +646,7 @@ var Index = {
                 }
             });
             PosGmap.drawAVC1(markers, true, App.chkRealTime.value, App.chkShowAgent.value);
+            App.stoVisitPlan.reload();
         }
         App.dataForm.getEl().unmask();
     },
@@ -950,6 +959,25 @@ var McpInfo = {
     }
 };
 
+var clearMaps = function () {
+    if (PosGmap.planMarkers != null) {
+        for (var i = 0; i < PosGmap.planMarkers.length; i++) {
+            PosGmap.planMarkers[i].setMap(null);
+        }
+    }
+    if (PosGmap.directionsDisplays != null) {
+        for (var i = 0; i < PosGmap.directionsDisplays.length; i++) {
+            PosGmap.directionsDisplays[i].setMap(null);
+        }
+    }
+    if (PosGmap.stopMarkers != null) {
+        for (var i = 0; i < PosGmap.stopMarkers.length; i++) {
+            PosGmap.stopMarkers[i].setMap(null);
+        }
+    }
+    PosGmap.planPoints = [];
+};
+
 // JS Code for POS Gmap
 var PosGmap = {
     map_canvas: {},
@@ -960,6 +988,9 @@ var PosGmap = {
     infoWindow: {},
     stopMarkers: [],
     drawingManager: {},
+    planMarkers: [],
+    planPoints: [],
+
 
     initialize: function () {
         PosGmap.map_canvas = document.getElementById("map_canvas");
@@ -974,6 +1005,29 @@ var PosGmap = {
         PosGmap.map = new google.maps.Map(PosGmap.map_canvas, myOptions);
         PosGmap.directionsService = new google.maps.DirectionsService();
         PosGmap.directionsDisplay = new google.maps.DirectionsRenderer();
+        //PosGmap.directionsDisplay = new google.maps.DirectionsRenderer({
+        //    map: PosGmap.map,
+        //    type: 'actual',
+        //    polylineOptions: {
+        //        icons: [
+        //          {
+        //              icon:
+        //              {
+        //                  path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+        //                  scale: 2,
+        //                  fillOpacity: 1,
+        //                  strokeColor: match ? '#4285F4' : '#FF3328',
+        //                  fillColor: match ? '#4285F4' : '#FF3328',
+        //                  strokeOpacity: 1
+        //              },
+        //              repeat: '300px'
+        //          }
+        //        ],
+        //        strokeColor: match ? '#4285F4' : '#FF3328',
+        //        strokeOpacity: 1
+        //    }
+        //});
+
         PosGmap.infoWindow = new google.maps.InfoWindow();
 
         //var marker = new google.maps.Marker({
@@ -1122,7 +1176,7 @@ var PosGmap = {
         //	display the ContextMenu on a Map right click
         google.maps.event.addListener(polygon, 'rightclick', function (mouseEvent) {
             //if (polygon.containsLatLng(mouseEvent.latLng)) {
-                contextMenu.show(mouseEvent.latLng);
+            contextMenu.show(mouseEvent.latLng);
             //}
         });
 
@@ -1249,7 +1303,7 @@ var PosGmap = {
         }
         PosGmap.directionsService = new google.maps.DirectionsService();
         PosGmap.directionsDisplay = new google.maps.DirectionsRenderer();
-        
+
     },
 
     clearMap: function (stopMarkers) {
@@ -1261,7 +1315,7 @@ var PosGmap = {
             }
         }
         PosGmap.directionsDisplay.setMap(PosGmap.map);
-        
+
     },
 
     drawMCP: function (markers, showDirections) {
@@ -1429,8 +1483,8 @@ var PosGmap = {
                     var visible = true;
                     if (data.type) {
                         if (data.type == "IO") { // Check in
-                        //    //pinColor = "CCFF33";
-                        //    icon = Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', data.label, data.color?data.color:"CCFF33");
+                            //    //pinColor = "CCFF33";
+                            //    icon = Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', data.label, data.color?data.color:"CCFF33");
                             // Push the location to list
                             if (!data.isNotVisited) {
                                 lat_lng.push(myLatlng);
@@ -1503,7 +1557,7 @@ var PosGmap = {
             if (showDirections) {
                 PosGmap.calcRoute(lat_lng);
             }
-            
+
         }
         else {
             PosGmap.clearMap(PosGmap.stopMarkers);
@@ -1722,33 +1776,56 @@ var PosGmap = {
                 });
             }
         }
-        if (_FlagZeroResult == false) {
-            var request = {
-                origin: start,
-                destination: end,
-                waypoints: waypts,
-                optimizeWaypoints: false,
-                travelMode: google.maps.TravelMode.WALKING
-            };
-        }
-        else {
-            var request = {
-                origin: start,
-                destination: end,
-                waypoints: waypts,
-                optimizeWaypoints: false,
-                travelMode: google.maps.TravelMode.DRIVING
-            };
-        }
+
+        //if (_FlagZeroResult == false) {
+        //    var request = {
+        //        origin: start,
+        //        destination: end,
+        //        waypoints: waypts,
+        //        optimizeWaypoints: false,
+        //        travelMode: google.maps.TravelMode.WALKING
+        //    };
+        //}
+        //else {
+        var request = {
+            origin: start,
+            destination: end,
+            waypoints: waypts,
+            optimizeWaypoints: false,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        //}
+
+        directionsDisplay = new google.maps.DirectionsRenderer({
+            map: PosGmap.map,
+            type: 'actual',
+            polylineOptions: {
+                icons: [
+                  {
+                      icon:
+                      {
+                          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                          scale: 2,
+                          fillOpacity: 1,
+                          strokeColor: '#28FF44',
+                          fillColor: '#28FF44',
+                          strokeOpacity: 1
+                      },
+                      repeat: '400px'
+                  }
+                ],
+                strokeColor: '#28FF44',
+                strokeOpacity: 1
+            }
+        });
+        directionsDisplay.setMap(PosGmap.map);
+        directionsDisplay.setOptions({ preserveViewport: true, suppressMarkers: true });
 
         PosGmap.directionsService.route(request, function (response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
-                PosGmap.directionsDisplays[idx].setMap(PosGmap.map);
-                PosGmap.directionsDisplays[idx].setOptions({ preserveViewport: true, suppressMarkers: true });
-                PosGmap.directionsDisplays[idx].setDirections(response);
-
+                directionsDisplay.setDirections(response);
+                PosGmap.directionsDisplays.push(directionsDisplay);
                 idx = idx + 1;
-
                 var lat_lngCol = lat_lngCols[idx];
                 if (lat_lngCol && lat_lngCol.length > 0) {
                     setTimeout(function () {
@@ -1756,14 +1833,12 @@ var PosGmap = {
                     }, 1000);
                 }
             }
+
             else if (status == google.maps.DirectionsStatus.NOT_FOUND) {
                 //alert("NOT_FOUND");
             }
             else if (status == google.maps.DirectionsStatus.ZERO_RESULTS) {
                 //alert("ZERO_RESULTS");
-                _FlagZeroResult = true;
-                App.grdVisitCustomerActual.store.reload();
-                App.storeMapActualVisit.reload();
             }
             else if (status == google.maps.DirectionsStatus.MAX_WAYPOINTS_EXCEEDED) {
                 //alert("MAX_WAYPOINTS_EXCEEDED");
@@ -1781,6 +1856,47 @@ var PosGmap = {
                 //alert("UNKNOWN_ERROR");
             }
         });
+
+        //PosGmap.directionsService.route(request, function (response, status) {
+        //    if (status == google.maps.DirectionsStatus.OK) {
+        //        PosGmap.directionsDisplays[idx].setMap(PosGmap.map);
+        //        PosGmap.directionsDisplays[idx].setOptions({ preserveViewport: true, suppressMarkers: true });
+        //        PosGmap.directionsDisplays[idx].setDirections(response);
+
+        //        idx = idx + 1;
+
+        //        var lat_lngCol = lat_lngCols[idx];
+        //        if (lat_lngCol && lat_lngCol.length > 0) {
+        //            setTimeout(function () {
+        //                PosGmap.requestForWaysRoute(lat_lngCols, idx);
+        //            }, 1000);
+        //        }
+        //    }
+        //    else if (status == google.maps.DirectionsStatus.NOT_FOUND) {
+        //        //alert("NOT_FOUND");
+        //    }
+        //    else if (status == google.maps.DirectionsStatus.ZERO_RESULTS) {
+        //        //alert("ZERO_RESULTS");
+        //        _FlagZeroResult = true;
+        //        App.grdVisitCustomerActual.store.reload();
+        //        App.storeMapActualVisit.reload();
+        //    }
+        //    else if (status == google.maps.DirectionsStatus.MAX_WAYPOINTS_EXCEEDED) {
+        //        //alert("MAX_WAYPOINTS_EXCEEDED");
+        //    }
+        //    else if (status == google.maps.DirectionsStatus.INVALID_REQUEST) {
+        //        //alert("INVALID_REQUEST");
+        //    }
+        //    else if (status == google.maps.DirectionsStatus.OVER_QUERY_LIMIT) {
+        //        //alert("OVER_QUERY_LIMIT");
+        //    }
+        //    else if (status == google.maps.DirectionsStatus.REQUEST_DENIED) {
+        //        //alert("REQUEST_DENIED");
+        //    }
+        //    else {
+        //        //alert("UNKNOWN_ERROR");
+        //    }
+        //});
     },
 
     drawRouteByMarkers: function (markers) {
@@ -1871,31 +1987,49 @@ var PosGmap = {
             controlItem.style.margin = '5px';
             //controlItem.style.display = "inline-block";
 
-            var controlBox = document.createElement('div');
-            controlBox.style.backgroundColor = "#" + record.data.Code;
-            controlBox.style.width = "20px";
-            controlBox.style.height = "20px";
-            controlBox.style.float = "left";
-            controlBox.style.marginRight = '5px';
-            controlItem.appendChild(controlBox);
+            if (record.data.Type == '0') {
+                var controlBox = document.createElement('div');
+                controlBox.style.backgroundColor = "#" + record.data.Code;
+                controlBox.style.width = "20px";
+                controlBox.style.height = "20px";
+                controlBox.style.float = "left";
+                controlBox.style.marginRight = '5px';
+                controlItem.appendChild(controlBox);
 
-            var controlText = document.createElement('div');
-            controlText.style.color = '#' + record.data.Code;
-            controlText.style.textShadow = '2px 1px #ffffff';
-            controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-            controlText.style.fontSize = '13px';
-            controlText.style.lineHeight = '20px';
-            //controlText.style.marginLeft = '15px';
-            //controlText.style.paddingRight = '5px';
-            controlText.style.textAlign = 'left';
-            controlText.innerHTML = record.data.Descr;
-            controlItem.appendChild(controlText);
+                var controlText = document.createElement('div');
+                controlText.style.color = '#' + record.data.Code;
+                controlText.style.textShadow = '2px 1px #ffffff';
+                controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+                controlText.style.fontSize = '13px';
+                controlText.style.lineHeight = '20px';
+                controlText.style.textAlign = 'left';
+                controlText.innerHTML = record.data.Descr;
+                controlItem.appendChild(controlText);
+            }
+            else if (record.data.Type == '1') {
+                var controlBox = document.createElement('div');
+                controlBox.style.backgroundColor = "#FFFFFF"; 
+                controlBox.style.width = "50px";
+                controlBox.style.height = "20px";
+                controlBox.style.float = "left";
+                controlBox.style.marginRight = '5px';
+                controlBox.innerHTML = "<hr size=5 color=#" + record.data.Code + " noshade>";
+                controlItem.appendChild(controlBox);
+
+                var controlText = document.createElement('div');
+                controlText.style.color = '#' + record.data.Code;
+                controlText.style.textShadow = '2px 1px #ffffff';
+                controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+                controlText.style.fontSize = '13px';
+                controlText.style.lineHeight = '20px';
+                controlText.style.textAlign = 'left';
+                controlText.innerHTML = record.data.Descr;
+                controlItem.appendChild(controlText);
+            }
 
             controlTextDiv.appendChild(controlItem);
         });
-
         controlUI.appendChild(controlTextDiv);
-        
 
         // Setup the click event listeners: simply set the map to Chicago.
         controlUI.addEventListener('mouseover', function () {
@@ -1921,6 +2055,155 @@ var PosGmap = {
             centerControlDiv.index = 1;
             PosGmap.map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
         }
+    },
+
+    drawMap_Visit : function () {
+    PosGmap.planMarkers = [];
+
+    App.stoVisitPlan.data.each(function (item) {
+        var latLng = new google.maps.LatLng(item.data.Lat, item.data.Lng);
+        var marker = new google.maps.Marker({
+            position: latLng,
+            icon: new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + item.data.VisitSort + "|" + "0CF1F9" + '|000000',
+                    new google.maps.Size(20, 35),
+                    new google.maps.Point(0, 0),
+                    new google.maps.Point(0, 0),
+                    new google.maps.Size(20, 35)
+                ),
+            map: PosGmap.map,
+            title: Ext.String.format('{0} - {1}', item.data.CustId, item.data.CustName)
+        });
+
+        if (marker != null) {
+            marker.type = 'plan';
+            marker.CustID = item.data.CustId;
+            marker.SlsPerID = item.data.SlsPerID;
+            marker.data = item.data;
+            //marker.addListener('click', function (e) {
+            //    showPopup_Visit(e, marker.data);
+            //});
+            PosGmap.planMarkers.push(marker);
+        }
+    });
+
+    planPoints = [];
+
+    var x = 0;
+    for (var i = 0 ; i < PosGmap.planMarkers.length; i++) {
+        if (i > 0 && i % 8 == 0) {
+            x++;
+        }
+        if (!planPoints[x]) {
+            planPoints[x] = [];
+        }
+        if (i > 0 && i % 8 == 0) {
+            planPoints[x].push(PosGmap.planMarkers[i - 1].position);
+            planPoints[x].push(PosGmap.planMarkers[i].position);
+        }
+        else {
+            planPoints[x].push(PosGmap.planMarkers[i].position);
+        }
     }
+
+    if (planPoints.length > 0) {
+        PosGmap.getRoute();
+    } else {
+
+    }
+},
+
+    getRoute : function () {
+    var tmp = planPoints[0];
+    var start;
+    var end;
+    var waypts = [];
+
+    for (var i = 0; i < tmp.length; i++) {
+        // Set start location
+        if (i == 0) {
+            start = tmp[0];
+        }
+
+        // Set end location
+        if (i == tmp.length - 1) {
+            end = tmp[i];
+        }
+
+        // Set waypts locations
+        if (i > 0 && i < tmp.length - 1) {
+            waypts.push({
+                location: tmp[i],
+                stopover: true
+            });
+        }
+    }
+
+    var request = {
+        origin: start,
+        destination: end,
+        waypoints: waypts,
+        optimizeWaypoints: false,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
+    directionsDisplay = new google.maps.DirectionsRenderer({
+        map: PosGmap.map,
+        type: 'plan',
+        polylineOptions: {
+            icons: [
+              {
+                  icon:
+                  {
+                      path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                      scale: 2,
+                      fillOpacity: 1,
+                      strokeColor: '#0CF1F9',
+                      fillColor: '#0CF1F9',
+                      strokeOpacity: 1
+                  },
+                  repeat: '400px'
+              }
+            ],
+            strokeColor: '#0CF1F9',
+            strokeOpacity: 1
+        }
+    });
+    directionsDisplay.setMap(PosGmap.map);
+    directionsDisplay.setOptions({ preserveViewport: true, suppressMarkers: true });
+
+    PosGmap.directionsService.route(request, function (response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+            planPoints.splice(0, 1);
+            PosGmap.directionsDisplays.push(directionsDisplay);
+
+            if (planPoints.length > 0) {
+                getRoute();
+            } else {
+            }
+        }
+
+        else if (status == google.maps.DirectionsStatus.NOT_FOUND) {
+            //alert("NOT_FOUND");
+        }
+        else if (status == google.maps.DirectionsStatus.ZERO_RESULTS) {
+            //alert("ZERO_RESULTS");
+        }
+        else if (status == google.maps.DirectionsStatus.MAX_WAYPOINTS_EXCEEDED) {
+            //alert("MAX_WAYPOINTS_EXCEEDED");
+        }
+        else if (status == google.maps.DirectionsStatus.INVALID_REQUEST) {
+            //alert("INVALID_REQUEST");
+        }
+        else if (status == google.maps.DirectionsStatus.OVER_QUERY_LIMIT) {
+            //alert("OVER_QUERY_LIMIT");
+        }
+        else if (status == google.maps.DirectionsStatus.REQUEST_DENIED) {
+            //alert("REQUEST_DENIED");
+        }
+        else {
+            //alert("UNKNOWN_ERROR");
+        }
+    });
 }
+};
 

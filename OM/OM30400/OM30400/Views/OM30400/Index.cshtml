@@ -200,6 +200,23 @@
             })
         )
 
+        @(
+            X.Store().ID("stoVisitPlan")
+            //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM30400_pdVisitPlan_Result),"mdlOM30400_pdVisitPlan",""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadGridPlanVisit")))
+            .Parameters(ps=>{
+                ps.Add(new StoreParameter("distributor", "Index.joinParams(App.cboDistributorActual)", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperId", "App.cboSalesManActual.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("visitDate", "App.dateVisit.value", ParameterMode.Raw));
+            })
+            .Listeners(l => {
+                //l.BeforeLoad.Handler = "App.dataForm.getEl().mask('Loading Maps', 'x-mask-loading');";
+                l.Load.Fn = "Index.stoVisitPlan_load"; 
+            })
+        )
+
         @*@(
             X.Store().ID("storeVisitCustomerActual")
             //.RemotePaging(true).PageSize(50)
