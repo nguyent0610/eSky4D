@@ -119,6 +119,7 @@ namespace AP10300.Controllers
         private void SaveData(FormCollection data)
         {
 
+			
             string batNbr = data["cboBatNbr"];
             string branchID = data["txtBranchID"];
 
@@ -133,6 +134,8 @@ namespace AP10300.Controllers
             var docHander = new StoreDataHandler(data["adjust"]);
             _objAPAdjust = docHander.ObjectData<AP_Adjust>().FirstOrDefault();
 
+			if (_db.AP10100_ppCheckCloseDate(branchID, Convert.ToDateTime(_form["txtDocDate"]).ToDateShort()).FirstOrDefault() == "0")
+				throw new MessageException(MessageType.Message, "301");
             if (_lstAdjusting == null)
             {
                 var transHandler2 = new StoreDataHandler(data["lstAdjusting"]);
@@ -222,62 +225,245 @@ namespace AP10300.Controllers
 
         private void SaveAdjust(string batNbr, string branchID)
         {
-            _objAP = _db.AP_Setup.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
-            if (_objAP == null) 
-                _objAP = new AP_Setup();
-            int n = 0;
-            int lenAdjusted = _lstAdjusted.Count();
-            int lenAdjusting = _lstAdjusting.Count();
-            while (true)
-            {
-                string dRefNbr = "";
-                string gRefNbr = "";
-                if (n < lenAdjusted)
-                {
-                    dRefNbr = _lstAdjusted[n].RefNbr;
-                }
+			_objAP = _db.AP_Setup.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
+			if (_objAP == null)
+				_objAP = new AP_Setup();
+			List<BuildDataTableAdjust> dt = new List<BuildDataTableAdjust>();
+			double dblPaid = 0;
+			double dblPayment = 0;
+			bool blnNewPaymentRow = false;
+			string strAdjgBatNbr = "";
+			string strAdjgRefNbr = "";
+			Int32 i = default(Int32);
+			var lst = _db.AP_Adjust.Where(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr).ToList();
+			foreach (var obj in lst)
+			{
+				_db.AP_Adjust.DeleteObject(obj);
+			}
+			//Check payment document
+			for (i = 0; i <= this._lstAdjusting.Count - 1; i++)
+			{
+				var objAP_Adjusting = _lstAdjusting[i];
+				if (objAP_Adjusting.Payment.Value > 0)
+				{
 
-                if (n < lenAdjusting)
-                {
-                    gRefNbr = _lstAdjusting[n].RefNbr;
-                }
-                if (string.IsNullOrEmpty(dRefNbr) )
-                    break;
-                var objAdjust = new AP_Adjust();
-                if (!string.IsNullOrEmpty(gRefNbr))
-                    objAdjust = _db.AP_Adjust.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.AdjdRefNbr == dRefNbr && p.AdjgRefNbr == gRefNbr);
-                else 
-                    objAdjust = _db.AP_Adjust.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.AdjdRefNbr == dRefNbr && p.AdjgRefNbr == _objBatch.RefNbr);
+					var lstAP10300_IsExistAP_Adjustg_Results = _db.AP10300_ppIsExistAP_Adjustg(_objBatch.BatNbr, _objBatch.BranchID, objAP_Adjusting.BatNbr, objAP_Adjusting.RefNbr).ToList();
+						if (lstAP10300_IsExistAP_Adjustg_Results.Count() > 0)
+						{
+							throw new MessageException(MessageType.Message, "19");
+						}
+				}
+			}
 
-                
-                if (objAdjust == null) // null  // isNew 
-                {
-                    objAdjust = new AP_Adjust();
-                    objAdjust.ResetET();
-                    if (string.IsNullOrEmpty(gRefNbr))
-                    {
-                        UpdateAdjust(objAdjust, _lstAdjusted[n], null, true);
-                    }
-                    else
-                    {
-                        UpdateAdjust(objAdjust, _lstAdjusted[n], _lstAdjusting[n], true);
-                    }
-                    _db.AP_Adjust.AddObject(objAdjust);
-                }
-                else {
-                    if (string.IsNullOrEmpty(gRefNbr))
-                    {
-                        UpdateAdjust(objAdjust, _lstAdjusted[n], null, true);
-                    }
-                    else
-                    {
-                        UpdateAdjust(objAdjust, _lstAdjusted[n], _lstAdjusting[n], false);
-                    }
-                }
-                n++;
-            } 
+			//Check paid document
+			for (i = 0; i <= this._lstAdjusted.Count - 1; i++)
+			{
+				var objAP_Adjusted = _lstAdjusted[i];
+				if (objAP_Adjusted.Payment.Value > 0)
+				{
+					
+						var lstAP10300_IsExistAP_Adjustd_Results = _db.AP10300_ppIsExistAP_Adjustd(_objBatch.BatNbr, _objBatch.BranchID, objAP_Adjusted.BatNbr, objAP_Adjusted.RefNbr).ToList();
+							
+						if (lstAP10300_IsExistAP_Adjustd_Results.Count() > 0)
+						{
+							throw new MessageException(MessageType.Message, "19");
+							
+						}
+				}
+			}
+
+			//Fill Payment to datatable
+			for (i = 0; i <= this._lstAdjusting.Count - 1; i++)
+			{
+				var objAP_Adjusting = _lstAdjusting[i];
+				if (objAP_Adjusting.Payment.Value > 0)
+				{
+					var row = new BuildDataTableAdjust();
+					row.AdjgBatNbr = objAP_Adjusting.BatNbr;
+					row.AdjgRefNbr = objAP_Adjusting.RefNbr;
+					row.AdjgAmt = objAP_Adjusting.Payment.Value;
+
+					dt.Add(row);
+				}
+			}
+
+			//Fill paid to datatable
+			for (i = 0; i <= this._lstAdjusted.Count - 1; i++)
+			{
+				var objAP_Adjusted = _lstAdjusted[i];
+				if (objAP_Adjusted.Payment.Value > 0)
+				{
+					dblPaid = objAP_Adjusted.Payment.Value;
+
+					blnNewPaymentRow = false;
+					//dv = dt.DefaultView;
+					//dv.Sort = "AdjgBatNbr, AdjgRefNbr asc";
+					foreach (BuildDataTableAdjust rowv_loopVariable in dt)
+					{
+						var rowv = rowv_loopVariable;
+						if (rowv.AdjgAmt > 0)
+						{
+							if (rowv.AdjgAmt > dblPaid)
+							{
+								rowv.AdjgAmt = rowv.AdjgAmt - dblPaid;
+								rowv.AdjAmt = dblPaid;
+								rowv.AdjdBatNbr = objAP_Adjusted.BatNbr;
+								rowv.AdjdRefNbr = objAP_Adjusted.RefNbr;
+								rowv.AdjdDocType = objAP_Adjusted.DocType;
+								dblPaid = 0;
+								blnNewPaymentRow = true;
+								dblPayment = rowv.AdjgAmt;
+								rowv.AdjgAmt = 0;
+								strAdjgBatNbr = rowv.AdjgBatNbr;
+								strAdjgRefNbr = rowv.AdjgRefNbr;
+							}
+							else
+							{
+								rowv.AdjAmt = rowv.AdjgAmt;
+								dblPaid = dblPaid - rowv.AdjgAmt;
+								rowv.AdjgAmt = 0;
+								rowv.AdjdBatNbr = objAP_Adjusted.BatNbr;
+								rowv.AdjdRefNbr = objAP_Adjusted.RefNbr;
+								rowv.AdjdDocType = objAP_Adjusted.DocType;
+							}
+						}
+
+						if (dblPaid == 0)
+						{
+							break; // TODO: might not be correct. Was : Exit For
+						}
+					}
+
+					if (blnNewPaymentRow)
+					{
+						var row = new BuildDataTableAdjust();
+						row.AdjgBatNbr = strAdjgBatNbr;
+						row.AdjgRefNbr = strAdjgRefNbr;
+						row.AdjgAmt = dblPayment;
+
+						dt.Add(row);
+					}
+				}
+			}
+
+			//Insert Adjust
+			foreach (var row_loopVariable in dt)
+			{
+				var row = row_loopVariable;
+				if (!string.IsNullOrEmpty(row.AdjgBatNbr) && !string.IsNullOrEmpty(row.AdjdBatNbr) && row.AdjAmt > 0)
+				{
+					Updating_AP_Adjust(row);
+				}
+			}
+			//  lst = (from p in _db.AP_Adjust where p.BranchID == _objBatch.BranchID && p.BatNbr == txtBatNbr.Text select p).ToList();
+			//var lst = _db.AP_Adjust.(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.AdjdRefNbr == dRefNbr && p.AdjgRefNbr == gRefNbr);
+					
+			//int n = 0;
+			//int m = 0;
+			//int count = _lstAdjusting.Where(p => p.Selected == true).Count(); ;
+			//int lenAdjusted = _lstAdjusted.Count();
+			//int lenAdjusting = _lstAdjusting.Count();
+			
+
+			//while (true)
+			//{
+			//	string dRefNbr = "";
+			//	string gRefNbr = "";
+			//	if (n < lenAdjusted)
+			//	{
+				
+			//			dRefNbr = _lstAdjusted[n].RefNbr;
+					
+			//	}
+
+			//	if (n < lenAdjusting )
+			//	{
+			//		//if (_lstAdjusting[n].Selected==true)
+			//			gRefNbr = _lstAdjusting[n].RefNbr;
+					
+			//	}
+				
+
+			//	if (string.IsNullOrEmpty(dRefNbr) )
+			//		break;
+			//	if (_lstAdjusted[n].Selected == true)
+			//	{
+			//		var objAdjust = new AP_Adjust();
+			//		if (!string.IsNullOrEmpty(gRefNbr))
+			//			objAdjust = _db.AP_Adjust.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.AdjdRefNbr == dRefNbr && p.AdjgRefNbr == gRefNbr);
+			//		else
+			//			objAdjust = _db.AP_Adjust.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.AdjdRefNbr == dRefNbr && p.AdjgRefNbr == _objBatch.RefNbr);
+
+
+			//		if (objAdjust == null) // null  // isNew 
+			//		{
+			//			objAdjust = new AP_Adjust();
+			//			objAdjust.ResetET();
+			//			if (string.IsNullOrEmpty(gRefNbr))
+			//			{
+			//				UpdateAdjust(objAdjust, _lstAdjusted[n], null, true);
+			//			}
+			//			else
+			//			{
+			//				UpdateAdjust(objAdjust, _lstAdjusted[n], _lstAdjusting[n], true);
+			//			}
+			//			if (objAdjust.AdjAmt > 0 && !string.IsNullOrEmpty(objAdjust.AdjgBatNbr) && !string.IsNullOrEmpty(objAdjust.AdjdBatNbr))
+			//				_db.AP_Adjust.AddObject(objAdjust);
+			//		}
+			//		else
+			//		{
+			//			if (string.IsNullOrEmpty(gRefNbr))
+			//			{
+			//				UpdateAdjust(objAdjust, _lstAdjusted[n], null, true);
+			//			}
+			//			else
+			//			{
+			//				UpdateAdjust(objAdjust, _lstAdjusted[n], _lstAdjusting[n], false);
+			//			}
+			//		}
+			//	}
+			//	n++;
+			//}
+			
           
         }
+		//private void Save_AP_Adjust(BuildDataTableAdjust row)
+		//{
+		//	Updating_AP_Adjust(row);
+		//}
+
+		private void Updating_AP_Adjust(BuildDataTableAdjust row)
+		{
+			try
+			{
+				//_objBatch.BatNbr, _objBatch.BranchID, objAP_Adjusting.BatNbr, objAP_Adjusting.RefNbr
+				var objAP_Ad = new AP_Adjust();//clsApp.ResetAP_Adjust();
+				objAP_Ad.BranchID = _objBatch.BranchID;
+				objAP_Ad.BatNbr = _objBatch.BatNbr;//strBatNbr;
+				objAP_Ad.AdjgBatNbr = row.AdjgBatNbr;
+				objAP_Ad.AdjgRefNbr = row.AdjgRefNbr;
+				objAP_Ad.AdjdRefNbr = row.AdjdRefNbr;
+				objAP_Ad.AdjdBatNbr = row.AdjdBatNbr;
+				objAP_Ad.AdjAmt = row.AdjAmt;
+				objAP_Ad.AdjdDocType = row.AdjdDocType;
+				objAP_Ad.AdjDiscAmt = 0;
+				objAP_Ad.AdjgDocDate = _objAPAdjust.AdjgDocDate;//((DateTime)this.cboDocDate.Value).Short();
+				objAP_Ad.AdjgDocType = _objAPAdjust.AdjgDocType;//(cboDocType.SelectedItem as psys_LoadLang_Result).Code;
+				objAP_Ad.Reversal = "";
+				objAP_Ad.VendID = _objAPAdjust.VendID;//(cboVendID.SelectedItem as ppv_vendor_active_Result).VendID;
+				objAP_Ad.LUpd_DateTime = DateTime.Now;
+				objAP_Ad.LUpd_Prog = _screenNbr;
+				objAP_Ad.LUpd_User = Current.UserName;
+				objAP_Ad.Crtd_DateTime = DateTime.Now;
+				objAP_Ad.Crtd_Prog = _screenNbr;
+				objAP_Ad.Crtd_User = Current.UserName;
+				_db.AP_Adjust.AddObject(objAP_Ad);
+			}
+			catch (Exception ex)
+			{
+				throw (ex);
+			}
+		}
         #endregion
 
         #region Delete
@@ -373,10 +559,10 @@ namespace AP10300.Controllers
                     d.AdjgRefNbr = adjusting.RefNbr;
                     d.AdjgBatNbr = adjusting.BatNbr;
                 }
-                else
-                {
-                    d.AdjgRefNbr = _objBatch.RefNbr;
-                }
+				else
+				{
+					d.AdjgRefNbr = _objBatch.RefNbr;
+				}
 
                 d.VendID = _objAPAdjust.VendID;
 
@@ -408,4 +594,14 @@ namespace AP10300.Controllers
         }
         #endregion
     }
+	public class BuildDataTableAdjust
+	{
+		public string AdjgBatNbr { get; set; }
+		public string AdjgRefNbr { get; set; }
+		public string AdjdBatNbr { get; set; }
+		public string AdjdRefNbr { get; set; }
+		public string AdjdDocType { get; set; }
+		public double AdjAmt { get; set; }
+		public double AdjgAmt { get; set; }
+	}
 }
