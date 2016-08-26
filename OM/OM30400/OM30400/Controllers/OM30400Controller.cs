@@ -75,6 +75,21 @@ namespace OM30400.Controllers
         public ActionResult LoadGridActualVisit(string distributor, string slsperId, DateTime visitDate, bool realTime)
         {
             var actualVisit = _db.OM30400_pgGridActualVisit(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, realTime).ToList();
+            double lat1 = 0;
+            double lng1 = 0;
+            double lat2 = 0;
+            double lng2 = 0;
+            for (int i = 0; i < actualVisit.Count; i++)
+            {
+                if (i > 0)
+                {
+                    lat1 = (double) actualVisit[i - 1].CiLat;
+                    lng1 = (double) actualVisit[i - 1].CiLng;
+                    lat2 = (double) actualVisit[i].CiLat;
+                    lng2 = (double) actualVisit[i].CiLng;
+                }
+                actualVisit[i].Distance = DistanceBetweenPlaces(lng1, lat1, lng2, lat2);
+            }
             return this.Store(actualVisit);
         }
 

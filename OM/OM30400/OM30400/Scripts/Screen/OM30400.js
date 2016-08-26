@@ -459,6 +459,9 @@ var Index = {
         if (metaData.column.dataIndex == "Amt") {
             return Ext.util.Format.number(value, '0,000');
         }
+        else if (metaData.column.dataIndex == "Distance") {
+            return Ext.util.Format.number(value, '0,000');
+        }
 
         return value;
     },
@@ -2063,25 +2066,22 @@ var PosGmap = {
     App.stoVisitPlan.data.each(function (item) {
         var latLng = new google.maps.LatLng(item.data.Lat, item.data.Lng);
         var marker = new google.maps.Marker({
-            position: latLng,
-            icon: new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + item.data.VisitSort + "|" + "0CF1F9" + '|000000',
-                    new google.maps.Size(20, 35),
-                    new google.maps.Point(0, 0),
-                    new google.maps.Point(0, 0),
-                    new google.maps.Size(20, 35)
-                ),
-            map: PosGmap.map,
-            title: Ext.String.format('{0} - {1}', item.data.CustId, item.data.CustName)
+            position: latLng
+            //icon: new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + item.data.VisitSort + "|" + "0CF1F9" + '|000000',
+            //        new google.maps.Size(20, 35),
+            //        new google.maps.Point(0, 0)
+            //        //new google.maps.Point(0, 0),
+            //        //new google.maps.Size(20, 35)
+            //    ),
+            //map: PosGmap.map,
+            //title: Ext.String.format('{0} - {1}', item.data.CustId, item.data.CustName)
         });
 
         if (marker != null) {
             marker.type = 'plan';
-            marker.CustID = item.data.CustId;
-            marker.SlsPerID = item.data.SlsPerID;
+            //marker.CustID = item.data.CustId;
+            //marker.SlsPerID = item.data.SlsPerID;
             marker.data = item.data;
-            //marker.addListener('click', function (e) {
-            //    showPopup_Visit(e, marker.data);
-            //});
             PosGmap.planMarkers.push(marker);
         }
     });

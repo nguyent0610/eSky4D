@@ -4204,6 +4204,30 @@ namespace OM30400
         private global::System.Decimal _TurnOver;
         partial void OnTurnOverChanging(global::System.Decimal value);
         partial void OnTurnOverChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Distance
+        {
+            get
+            {
+                return _Distance;
+            }
+            set
+            {
+                OnDistanceChanging(value);
+                ReportPropertyChanging("Distance");
+                _Distance = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Distance");
+                OnDistanceChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Distance;
+        partial void OnDistanceChanging(Nullable<global::System.Double> value);
+        partial void OnDistanceChanged();
 
         #endregion
 
