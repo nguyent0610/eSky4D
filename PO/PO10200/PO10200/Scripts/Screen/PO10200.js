@@ -1114,7 +1114,7 @@ var cboSiteID_Expand = function (combo) {
             var purchaseType = App.grdDetail.selModel.selected.items[0].data.PurchaseType;
             if (purchaseType == 'PR' || purchaseType == 'GI') {
                 var store = App.cboSiteID.store;
-                if (purchaseType == 'PR') {
+                if (purchaseType == 'PR') { // Khi ko có kho KM thì 
                     var findPRRecord = HQ.store.findRecord(App.cboSiteID.store, ['SiteType'], [purchaseType]);
                     if (findPRRecord && _objUserDflt.DiscSite && _objUserDflt.DiscSite != '') {
                         // Filter data -- Promo Site
@@ -2045,12 +2045,43 @@ var renderTaxID = function (value) {
 // Get default SiteID
 function getDefaultSiteID(purchaseType) {
     var defaultSiteID = '###';
-    if (_objUserDflt) {
+    if (_objUserDflt) {        
         if (purchaseType == 'PR') {
-            defaultSiteID = _objUserDflt.DiscSite && _objUserDflt.DiscSite != '' ? _objUserDflt.DiscSite : _objUserDflt.POSite;
-        } else if (purchaseType == 'GI') {
+            defaultSiteID = _objUserDflt.DiscSite && _objUserDflt.DiscSite != '' ? _objUserDflt.DiscSite : '';
+            var objSite = HQ.store.findRecord(App.cboSiteID.store, ['SiteID', 'SiteType'], [defaultSiteID, purchaseType]);
+            if (!objSite) {
+                var newSite = HQ.store.findRecord(App.cboSiteID.store, ['SiteType'], [purchaseType]);
+                if (newSite) {
+                    defaultSiteID = newSite.data.SiteID;
+                }
+                else {
+                    var newGISite = HQ.store.findRecord(App.cboSiteID.store, ['SiteID', 'SiteType'], [defaultSiteID, 'GI']);
+                    if (newGISite) {
+                        defaultSiteID = newGISite.data.SiteID;
+                    }
+                    else {
+                        var newFirstGISite = HQ.store.findRecord(App.cboSiteID.store, ['SiteType'], ['GI']);
+                        if (newFirstGISite) {
+                            defaultSiteID = newFirstGISite.data.SiteID;
+                        } else {
+                            defaultSiteID = '';
+                        }                        
+                    }                    
+                }
+            }
+        } else if (purchaseType == 'GI') {            
             defaultSiteID = _objUserDflt.POSite;
-        }
+            var objSite = HQ.store.findRecord(App.cboSiteID.store, ['SiteID', 'SiteType'], [defaultSiteID, purchaseType]);
+            if (!objSite) {
+                var newSite = HQ.store.findRecord(App.cboSiteID.store, ['SiteType'], [purchaseType]);
+                if (newSite) {
+                    defaultSiteID = newSite.data.SiteID;
+                }
+                else {
+                    defaultSiteID = '';
+                }
+            } 
+        }        
     }
     return defaultSiteID;
 }
