@@ -254,6 +254,10 @@ namespace AP10300.Controllers
 						}
 				}
 			}
+			if (this._lstAdjusted.Where(p => p.Payment.Value > 0).Count() == 0)
+			{
+				throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("ASSIGNEDDOC") });
+			}
 
 			//Check paid document
 			for (i = 0; i <= this._lstAdjusted.Count - 1; i++)
@@ -313,7 +317,7 @@ namespace AP10300.Controllers
 								dblPaid = 0;
 								blnNewPaymentRow = true;
 								dblPayment = rowv.AdjgAmt;
-								rowv.AdjgAmt = 0;
+								rowv.AdjgAmt = rowv.AdjgAmt - dblPaid;//0;
 								strAdjgBatNbr = rowv.AdjgBatNbr;
 								strAdjgRefNbr = rowv.AdjgRefNbr;
 							}
@@ -350,7 +354,8 @@ namespace AP10300.Controllers
 			foreach (var row_loopVariable in dt)
 			{
 				var row = row_loopVariable;
-				if (!string.IsNullOrEmpty(row.AdjgBatNbr) && !string.IsNullOrEmpty(row.AdjdBatNbr) && row.AdjAmt > 0)
+				//
+				if (!string.IsNullOrEmpty(row.AdjgBatNbr) && !string.IsNullOrEmpty(row.AdjdBatNbr) && (row.AdjAmt > 0))
 				{
 					Updating_AP_Adjust(row);
 				}

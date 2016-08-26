@@ -90,7 +90,13 @@
                     )
                   ,X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 4 0")
                     .Items(
-                        HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("DESCR").DataIndex("Descr").Width(600).MaxLength(100).EnforceMaxLength(true).AllowBlank(false)          
+                        HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("DESCR").DataIndex("Descr").Width(600).MaxLength(100).EnforceMaxLength(true).AllowBlank(false)
+                          .Listeners(lst =>
+                                {
+
+                                    lst.Change.Fn = "txtDescr_Change";
+                                  
+                                })      
                     )
             )
             .Listeners(lss =>

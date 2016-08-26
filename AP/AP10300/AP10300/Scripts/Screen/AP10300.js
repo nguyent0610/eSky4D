@@ -169,7 +169,9 @@ var firstLoad = function () {
     App.cboDocType.getStore().addListener('load', checkLoad);
     App.cboVendID.getStore().addListener('load', checkLoad);
     HQ.util.checkAccessRight();
+  
 };
+
 
 var cboBatNbr_Change = function (sender, newValue, oldValue) {
     if (sender.valueModels != null && !App.stoBatch.loading && !App.stoAP_Adjust.loading && !App.stoAdjusting.loading && !App.stoAdjusted.loading)
@@ -188,6 +190,7 @@ var cboStatus_Change = function (sender, newValue, oldValue) {
         }
         else {
             HQ.common.lockItem(App.frmMain, false);
+            if(HQ.isDelete)
             App.menuClickbtnDelete.enable();
         }
         App.cboHandle.setValue('N');
@@ -206,6 +209,14 @@ var cboDocType_Change = function (sender, newValue, oldValue) {
     if (sender.valueModels != null) {
         HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
         App.stoAdjusting.reload();
+    }
+};
+
+var txtDescr_Change = function (sender, newValue, oldValue) {
+    if (newValue != oldValue) {
+        HQ.isChange = true;
+        HQ.common.changeData(HQ.isChange, 'AP10300');//co thay doi du lieu gan * tren tab title header
+        App.cboBatNbr.setReadOnly(HQ.isChange);
     }
 };
 //////////////sto load//
@@ -336,6 +347,8 @@ var grdAPAdjusted_Edit = function (item, e) {
 
 var  grd_BeforeEdit= function (editor, e) {
     if (HQ.isUpdate) {
+        if (!HQ.isInsert && App.cboBatNbr.getValue() == null)
+            return false;
         if(App.cboStatus.value!="H") {
             return false;
         }
@@ -405,8 +418,9 @@ var grdAPTrans_ValidateEdit = function (item, e) {
 };
 
 var frmChange = function () {
-    if (App.frmMain.getRecord() != undefined ) {
+    if (App.frmMain.getRecord() != undefined) {
         App.frmMain.getForm().updateRecord();
+        if (!HQ.isChange)
         HQ.isChange = HQ.store.isChange(App.stoBatch);
         if (!HQ.isChange)
         {
@@ -422,6 +436,9 @@ var frmChange = function () {
         }
         HQ.common.changeData(HQ.isChange, 'AP10300');//co thay doi du lieu gan * tren tab title header
         App.cboBatNbr.setReadOnly(HQ.isChange);
+        if (!HQ.isUpdate)
+            App.txtDescr.setReadOnly(true);
+        
     }
 };
 
