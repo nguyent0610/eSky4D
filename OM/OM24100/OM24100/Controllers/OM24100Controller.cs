@@ -35,10 +35,9 @@ namespace OM24100.Controllers
         // GET: /OM24100/
         public ActionResult Index(string data)
         {
-
             if (data != null)//dung cho PVN lay du lieu tu silverlight goi len
             {
-                // user;company;langid => ?data=admin;LCUS-HCM-0004;1
+                // user;company;langid => ?data=admin;100024;1
                 try
                 {
                     data = data.Replace(" ", "+");
@@ -77,7 +76,7 @@ namespace OM24100.Controllers
                 return View("Error");
             }
             Util.InitRight(_screenName);
-            ViewBag.Title = Util.GetLang("OM24100");
+            ViewBag.Title = HQ.eSkyFramework.Util.GetLang("OM24100");
             return View();
         }
 
