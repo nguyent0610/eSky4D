@@ -76,6 +76,7 @@ namespace OM24100.Controllers
                 ViewBag.Error = Message.GetString("225", null);
                 return View("Error");
             }
+            Util.InitRight(_screenName);
             ViewBag.Title = Util.GetLang("OM24100");
             return View();
         }
