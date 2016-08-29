@@ -98,6 +98,80 @@ namespace AR10200.Controllers
         {
             var branchID = data["txtBranchID"];
             var cboBatNbr = data["cboBatNbr"];
+       
+            var adjHandler = new StoreDataHandler(data["lstAdjust"]);
+            var lstAdjust = adjHandler.ObjectData<AR10200_pgBindingGrid_Result>();
+
+            var batchObj = _db.Batches.FirstOrDefault(
+                       x => x.BranchID == branchID
+                           && x.BatNbr == cboBatNbr
+                           && x.Module == _moduleAR);
+            if (batchObj != null)
+            {
+                var refObj = _db.AR_Doc.FirstOrDefault(x => x.BranchID == branchID
+                            && x.BatNbr == batchObj.BatNbr
+                            && x.RefNbr == batchObj.RefNbr);
+                if (refObj != null)
+                {
+                    if (strAdjdRefNbr == "%")
+                    {
+                        foreach (var adjust in lstAdjust)
+                        {
+                            if (adjust.Payment > 0)
+                            {
+                                var objAR_Balances = _db.AR_Balances.FirstOrDefault(p => p.CustID == adjust.CustId && p.BranchID == branchID);
+                                if (objAR_Balances != null)
+                                {
+                                    objAR_Balances.CurrBal = objAR_Balances.CurrBal + (double)adjust.Payment;
+                                    objAR_Balances.LUpd_DateTime = DateTime.Now;
+                                    objAR_Balances.LUpd_Prog = _screenNbr;
+                                    objAR_Balances.LUpd_User = _screenNbr;
+                                }
+                            }
+                        }
+                        batchObj.TotAmt = 0;
+                        batchObj.LUpd_DateTime = DateTime.Now;
+                        batchObj.LUpd_Prog = _screenNbr;
+                        batchObj.LUpd_User = _screenNbr;
+
+                        refObj.OrigDocAmt = 0;
+                        refObj.LUpd_DateTime = DateTime.Now;
+                        refObj.LUpd_Prog = _screenNbr;
+                        refObj.LUpd_User = _screenNbr;
+                    }
+                    else if (strAdjdRefNbr != "")
+                    {
+                        string[] tmp = strAdjdRefNbr.Split(',');
+                        double TotCancel = 0;
+                        foreach (var adjust in lstAdjust)
+                        {
+                            if (adjust.Payment > 0 && tmp.Equals(adjust.RefNbr) == true)
+                            {
+                                var objAR_Balances = _db.AR_Balances.FirstOrDefault(p => p.CustID == adjust.CustId && p.BranchID == branchID);
+                                if (objAR_Balances != null)
+                                {
+                                    objAR_Balances.CurrBal = objAR_Balances.CurrBal + (double)adjust.Payment;
+                                    objAR_Balances.LUpd_DateTime = DateTime.Now;
+                                    objAR_Balances.LUpd_Prog = _screenNbr;
+                                    objAR_Balances.LUpd_User = _screenNbr;
+                                }
+                                TotCancel += (double)adjust.Payment;
+                            }
+                        }
+                        batchObj.TotAmt = batchObj.TotAmt - TotCancel;
+                        batchObj.LUpd_DateTime = DateTime.Now;
+                        batchObj.LUpd_Prog = _screenNbr;
+                        batchObj.LUpd_User = _screenNbr;
+
+                        refObj.OrigDocAmt = refObj.OrigDocAmt - TotCancel;
+                        refObj.LUpd_DateTime = DateTime.Now;
+                        refObj.LUpd_Prog = _screenNbr;
+                        refObj.LUpd_User = _screenNbr;
+                    }
+                }
+            }
+            _db.SaveChanges();
+
             Data_Release("V", branchID, cboBatNbr, strAdjdRefNbr);
             return Util.CreateMessage(MessageProcess.Save, new { batNbr = cboBatNbr });
         }
@@ -121,8 +195,8 @@ namespace AR10200.Controllers
                     throw new MessageException(MessageType.Message, "301");
 
                 // Check input BatNbr
-                if (inputBatNbr != null)
-                {
+                //if (inputBatNbr != null)
+                //{
                     inputBatNbr.Descr = txtDescr;
                     inputBatNbr.ReasonCD = cboBankAcct;
 
@@ -153,10 +227,11 @@ namespace AR10200.Controllers
 
                     // Input RefNbr
                     
-                    if (inputRefNbr != null)
-                    {
+                    //if (inputRefNbr != null)
+                    //{
                         inputRefNbr.RefNbr = batchObj.RefNbr;
                         inputRefNbr.BatNbr = batchObj.BatNbr;
+                        inputRefNbr.DocDesc = txtDescr;
                         //inputRefNbr.OrigDocAmt = data["txtTotAmt"] != null ? double.Parse(data["txtTotAmt"]) : 0;
                         inputRefNbr.OrigDocAmt = batchObj.TotAmt;
                         // Save RefNbr/AR_Doc
@@ -197,16 +272,16 @@ namespace AR10200.Controllers
                                 refNbr = batchObj.RefNbr
                             });
                         }
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "22701");
-                    }
-                }
-                else
-                {
-                    throw new MessageException(MessageType.Message, "22701");
-                }
+                    //}
+                    //else
+                    //{
+                    //    throw new MessageException(MessageType.Message, "22701");
+                    //}
+                //}
+                //else
+                //{
+                //    throw new MessageException(MessageType.Message, "22701");
+                //}
 
                 if (_logMessage != null)
                 {
@@ -238,6 +313,18 @@ namespace AR10200.Controllers
             {
                 _db.AR_Adjust.DeleteObject(adjust);
             }
+
+            //var lstOldAdjusts = _db.AR_Adjust.Where(p => p.BranchID == branchID
+            //                                            && p.AdjgBatNbr == refObj.BatNbr
+            //                                            && p.AdjgRefNbr == refObj.RefNbr).ToList();
+
+            //foreach (var objold in lstOldAdjusts)
+            //{
+            //    if (lstAdjust.Where(p => p.InvcNbr == objold. &&).FirstOrDefault() == null)
+            //    {
+            //        _db.AR_Adjust.DeleteObject(objold);
+            //    }
+            //}
 
             foreach (var adjust in lstAdjust)
             {
@@ -329,7 +416,7 @@ namespace AR10200.Controllers
                         && x.BatNbr == cboBatNbr
                         && x.Module == _moduleAR
                         && x.Status == _holdStatus);
-                if (null != batchObj)
+                if (batchObj != null)
                 {
                     if (batchObj.tstamp.ToHex() == inputBatNbr.tstamp.ToHex())
                     {
@@ -361,7 +448,8 @@ namespace AR10200.Controllers
                 }
                 else
                 {
-                    throw new MessageException(MessageType.Message, "22701");
+                    throw new MessageException(MessageType.Message, "19");
+                    //throw new MessageException(MessageType.Message, "22701");
                 }
             }
             catch (Exception ex)

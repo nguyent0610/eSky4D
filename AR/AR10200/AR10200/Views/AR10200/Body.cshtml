@@ -9,19 +9,20 @@
     var HQ = Html.HQ();
 }
 
-@(
- X.Viewport().Layout(LayoutType.Fit)
+@(X.Viewport()
+.Layout(LayoutType.Fit)
     .Items(
         X.FormPanel()
-        .Layout(LayoutType.Border)
-        .ID("frmMain")
+        .ID("frmMain")  
         .TrackResetOnLoad(true)
-        .DefaultAnchor("100%")
-        .BodyPadding(10)
-        .BodyBorder(0)//.AutoScroll(true)
-        .DefaultButton("btnLoad")
-        .TopBar(Util.SetupToolbar("Print",true, "Event.Form.menuClick"))
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar("Print", true, ""))
+        .Layout(LayoutType.Border)
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .Listeners(l=>{
+            l.BoxReady.Handler = "frmMain_boxReady()";
+            l.FieldChange.Fn = "frmMain_fieldChange";
+        })
         .Items(
             X.FormPanel().ID("pnlBatch")
             .Title(Util.GetLang("DOC"))
@@ -49,7 +50,7 @@
                             lst.Change.Fn = "Event.Form.cboBatNbr_change";
                         })
 
-                    , HQ.Checkbox().ID("chkAllowSort")
+                    , HQ.Checkbox().ID("chkAllowSort").Hidden(true)
                     .MarginSpec("0 0 0 155").HQLangCode("AllowSort")
                     .Handler("Event.Form.chkAllowSort_change")
                 ) // First Column
@@ -443,11 +444,6 @@
                 ls.Render.Handler = "HQ.common.control_render(this,'adjust')";
             })// grdAdjust
         )
-        .Listeners(lst =>
-        {
-            lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
-            lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
-        })// Form: frmMain
     )
 )
 
