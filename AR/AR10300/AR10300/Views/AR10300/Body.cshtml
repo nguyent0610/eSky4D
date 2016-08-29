@@ -47,7 +47,7 @@
                         {
                             lst.Change.Fn = "cboBatNbr_Change";
                             lst.Select.Fn = "cboBatNbr_Select";
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();BatNbr = '';App.cboBatNbr.setValue('');App.stoHeader.reload();}";
                         })
                         
                     , HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BRANCHID").ReadOnly(true).Tag("X").Width(300).MarginSpec("5 0 0 0")

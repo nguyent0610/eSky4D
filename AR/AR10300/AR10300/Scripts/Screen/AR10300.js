@@ -77,7 +77,7 @@ var menuClick = function (command) {
             if (HQ.isInsert) {
                 if (HQ.focus  == 'header') {
                     if (HQ.isChange) {
-                        HQ.message.show(150, '', 'refresh');
+                        HQ.message.show(150, '', '');
                     } else {
                         BatNbr = '';
                         App.cboBatNbr.setValue('');
