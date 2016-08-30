@@ -2196,7 +2196,7 @@ namespace OM23800.Controllers
                                 }
                                 catch
                                 {
-                                    messageDate += string.Format("Dòng {0} dữ liệu ngày tháng không hợp lệ<br/>", (i + 1).ToString());
+                                    messageDate += string.Format(Message.GetString("2016082906",null), (i + 1).ToString());
                                     continue;
 
                                 }
@@ -2286,18 +2286,18 @@ namespace OM23800.Controllers
                             return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
 
                         }
-                        message = messagestrECustID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrECustID, workSheet.Cells[3, 1].StringValue);
-                        message += messagestrESlsperID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrESlsperID, workSheet.Cells[3, 4].StringValue);
-                        message += messagestrETS == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrETS, workSheet.Cells[3, 8].StringValue);
-                        message += messagestrETBH == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrETBH, workSheet.Cells[3, 9].StringValue);
-                        message += messagestrEBeginDate == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrEBeginDate, workSheet.Cells[3, 6].StringValue);
-                        message += messagestrEEndDate == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrEEndDate, workSheet.Cells[3, 7].StringValue);
-                        message += messageDate == "" ? "" : string.Format("Dòng {0} dữ liệu ngày tháng không hợp lệ<br/>", messageDate.ToString());
-                        message += messagestrERouteID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrERouteID, workSheet.Cells[3, 17].StringValue);
-                        message += messageerror == "" ? "" : string.Format("Dòng {0} số Thứ chọn không hợp lệ<br/>", messageerror);
-                        message += messageduplicate == "" ? "" : string.Format("Dòng {0} dữ liệu bi trùng<br/>", messageduplicate);
-                        message += errorESlsperID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ khác sales<br/>", errorESlsperID);
-                        message += errorERouteID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ khác tuyến bán hàng<br/>", errorERouteID);
+                        message = messagestrECustID == "" ? "" : string.Format(Message.GetString("2016082912",null), messagestrECustID, workSheet.Cells[3, 1].StringValue);
+                        message += messagestrESlsperID == "" ? "" : string.Format(Message.GetString("2016082912", null), messagestrESlsperID, workSheet.Cells[3, 4].StringValue);
+                        message += messagestrETS == "" ? "" : string.Format(Message.GetString("2016082912", null), messagestrETS, workSheet.Cells[3, 8].StringValue);
+                        message += messagestrETBH == "" ? "" : string.Format(Message.GetString("2016082912", null), messagestrETBH, workSheet.Cells[3, 9].StringValue);
+                        message += messagestrEBeginDate == "" ? "" : string.Format(Message.GetString("2016082912", null), messagestrEBeginDate, workSheet.Cells[3, 6].StringValue);
+                        message += messagestrEEndDate == "" ? "" : string.Format(Message.GetString("2016082912",null), messagestrEEndDate, workSheet.Cells[3, 7].StringValue);
+                        message += messageDate == "" ? "" : string.Format(Message.GetString("2016082906", null), messageDate.ToString());
+                        message += messagestrERouteID == "" ? "" : string.Format(Message.GetString("2016082912", null), messagestrERouteID, workSheet.Cells[3, 17].StringValue);
+                        message += messageerror == "" ? "" : string.Format(Message.GetString("2016082913", null), messageerror);
+                        message += messageduplicate == "" ? "" : string.Format(Message.GetString("2016082903", null), messageduplicate);
+                        message += errorESlsperID == "" ? "" : string.Format(Message.GetString("2016082904", null), errorESlsperID);
+                        message += errorERouteID == "" ? "" : string.Format(Message.GetString("2016082905", null), errorERouteID);
                         Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
                     }
                     return _logMessage;
@@ -2683,11 +2683,11 @@ namespace OM23800.Controllers
                                     lineSlsPerID.Add((i - dataRowIdx + 1).ToString());
                                     flagCheckError = true;
                                 }
-                                if (strShopID == "")
-                                {
-                                    lineShopID.Add((i - dataRowIdx + 1).ToString());
-                                    flagCheckError = true;
-                                }
+                                //if (strShopID == "")
+                                //{
+                                //    lineShopID.Add((i - dataRowIdx + 1).ToString());
+                                //    flagCheckError = true;
+                                //}
                                 if (strShopName == "")
                                 {
                                     lineShopName.Add((i - dataRowIdx + 1).ToString());
@@ -2747,7 +2747,7 @@ namespace OM23800.Controllers
                                             //lineSlsPerID.Add((i - dataRowIdx + 1).ToString());
                                             //continue;
                                         }
-
+                                        
                                         if (!string.IsNullOrWhiteSpace(strDistrict))
                                         {
                                             var district = _db.SI_District.FirstOrDefault(d => d.District == strDistrict && d.State == strProvince);
@@ -2925,68 +2925,68 @@ namespace OM23800.Controllers
                             }
                             if (lineSuccess.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng import thành công: {0}<br/>",
+                                message += string.Format(Message.GetString("2016082907",null),
                                     lineSuccess.Count > 5 ? string.Join(", ", lineSuccess.Take(5)) + ", ..." : string.Join(", ", lineSuccess));
                             }
                             if (lineSlsPerID.Count > 0)
                             {
-                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                message += string.Format(Message.GetString("2016082912", null),
                                     lineSlsPerID.Count > 5 ? string.Join(", ", lineSlsPerID.Take(5)) + ", ..." : string.Join(", ", lineSlsPerID), workSheet.Cells[3,1].StringValue);
                             }
                             if (lineShopID.Count > 0)
                             {
-                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                message += string.Format(Message.GetString("2016082912", null),
                                     lineShopID.Count > 5 ? string.Join(", ", lineShopID.Take(5)) + ", ..." : string.Join(", ", lineShopID), workSheet.Cells[3, 3].StringValue);
                             }
                             if (lineShopName.Count > 0)
                             {
-                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                message += string.Format(Message.GetString("2016082912", null),
                                     lineShopName.Count > 5 ? string.Join(", ", lineShopName.Take(5)) + ", ..." : string.Join(", ", lineShopName), workSheet.Cells[3, 4].StringValue);
                             }
                             if (lineAttn.Count > 0)
                             {
-                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                message += string.Format(Message.GetString("2016082912", null),
                                     lineAttn.Count > 5 ? string.Join(", ", lineAttn.Take(5)) + ", ..." : string.Join(", ", lineAttn), workSheet.Cells[3, 5].StringValue);
                             }
                             if (lineAddr.Count > 0)
                             {
-                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                message += string.Format(Message.GetString("2016082912", null),
                                     lineAddr.Count > 5 ? string.Join(", ", lineAddr.Take(5)) + ", ..." : string.Join(", ", lineAddr), workSheet.Cells[3, 6].StringValue);
                             }
                             if (lineProvince.Count > 0)
                             {
-                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                message += string.Format(Message.GetString("2016082912", null),
                                     lineProvince.Count > 5 ? string.Join(", ", lineProvince.Take(5)) + ", ..." : string.Join(", ", lineProvince), workSheet.Cells[3, 8].StringValue);
                             }
                             if (lineDistrict.Count > 0)
                             {
-                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                message += string.Format(Message.GetString("2016082912", null),
                                     lineDistrict.Count > 5 ? string.Join(", ", lineDistrict.Take(5)) + ", ..." : string.Join(", ", lineDistrict), workSheet.Cells[3, 10].StringValue);
                             }
                             if (lineCustClass.Count > 0)
                             {
-                                message += string.Format("Dòng {0}  dữ liệu không hợp lệ thiếu {1} <br/>",
+                                message += string.Format(Message.GetString("2016082912", null),
                                     lineCustClass.Count > 5 ? string.Join(", ", lineCustClass.Take(5)) + ", ..." : string.Join(", ", lineCustClass), workSheet.Cells[3, 12].StringValue);
                             }
 
                             if (lineExist.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng đã tồn tại: {0}<br/>",
+                                message += string.Format(Message.GetString("2016082908", null),
                                     lineExist.Count > 5 ? string.Join(", ", lineExist.Take(5)) + ", ..." : string.Join(", ", lineExist));
                             }
                             if (lineNoExist.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng không tồn tại: {0}<br/>",
+                                message += string.Format(Message.GetString("2016082909", null),
                                     lineNoExist.Count > 5 ? string.Join(", ", lineNoExist.Take(5)) + ", ..." : string.Join(", ", lineNoExist));
                             }
                             if (lineSlsNoExist.Count > 0)
                             {
-                                message += string.Format("Dòng dữ liệu nhập nhân viên bán hàng không tồn tại: {0}<br/>",
+                                message += string.Format(Message.GetString("2016082910", null),
                                     lineSlsNoExist.Count > 5 ? string.Join(", ", lineSlsNoExist.Take(5)) + ", ..." : string.Join(", ", lineSlsNoExist));
                             }
                             if (lineInvalidDistrict.Count > 0)
                             {
-                                message += string.Format("Dòng dữ liệu nhập sai quận huyện hoặc tỉnh: {0}<br/>",
+                                message += string.Format(Message.GetString("2016082911", null),
                                     lineInvalidDistrict.Count > 5 ? string.Join(", ", lineInvalidDistrict.Take(5)) + ", ..." : string.Join(", ", lineInvalidDistrict));
                             }
                             Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });

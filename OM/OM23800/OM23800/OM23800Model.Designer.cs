@@ -68,86 +68,6 @@ namespace OM23800
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_SalesRouteMaster> OM_SalesRouteMaster
-        {
-            get
-            {
-                if ((_OM_SalesRouteMaster == null))
-                {
-                    _OM_SalesRouteMaster = base.CreateObjectSet<OM_SalesRouteMaster>("OM_SalesRouteMaster");
-                }
-                return _OM_SalesRouteMaster;
-            }
-        }
-        private ObjectSet<OM_SalesRouteMaster> _OM_SalesRouteMaster;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<AR_Customer> AR_Customer
-        {
-            get
-            {
-                if ((_AR_Customer == null))
-                {
-                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
-                }
-                return _AR_Customer;
-            }
-        }
-        private ObjectSet<AR_Customer> _AR_Customer;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<OM_PJP> OM_PJP
-        {
-            get
-            {
-                if ((_OM_PJP == null))
-                {
-                    _OM_PJP = base.CreateObjectSet<OM_PJP>("OM_PJP");
-                }
-                return _OM_PJP;
-            }
-        }
-        private ObjectSet<OM_PJP> _OM_PJP;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<OM_SalesRouteMasterImport> OM_SalesRouteMasterImport
-        {
-            get
-            {
-                if ((_OM_SalesRouteMasterImport == null))
-                {
-                    _OM_SalesRouteMasterImport = base.CreateObjectSet<OM_SalesRouteMasterImport>("OM_SalesRouteMasterImport");
-                }
-                return _OM_SalesRouteMasterImport;
-            }
-        }
-        private ObjectSet<OM_SalesRouteMasterImport> _OM_SalesRouteMasterImport;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<AR_Salesperson> AR_Salesperson
-        {
-            get
-            {
-                if ((_AR_Salesperson == null))
-                {
-                    _AR_Salesperson = base.CreateObjectSet<AR_Salesperson>("AR_Salesperson");
-                }
-                return _AR_Salesperson;
-            }
-        }
-        private ObjectSet<AR_Salesperson> _AR_Salesperson;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SI_District> SI_District
         {
             get
@@ -196,6 +116,22 @@ namespace OM23800
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<AR_Customer> AR_Customer
+        {
+            get
+            {
+                if ((_AR_Customer == null))
+                {
+                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
+                }
+                return _AR_Customer;
+            }
+        }
+        private ObjectSet<AR_Customer> _AR_Customer;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<AR_CustomerLocation> AR_CustomerLocation
         {
             get
@@ -212,6 +148,22 @@ namespace OM23800
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<AR_Salesperson> AR_Salesperson
+        {
+            get
+            {
+                if ((_AR_Salesperson == null))
+                {
+                    _AR_Salesperson = base.CreateObjectSet<AR_Salesperson>("AR_Salesperson");
+                }
+                return _AR_Salesperson;
+            }
+        }
+        private ObjectSet<AR_Salesperson> _AR_Salesperson;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<OM_OverlaysMCP> OM_OverlaysMCP
         {
             get
@@ -224,50 +176,58 @@ namespace OM23800
             }
         }
         private ObjectSet<OM_OverlaysMCP> _OM_OverlaysMCP;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_PJP> OM_PJP
+        {
+            get
+            {
+                if ((_OM_PJP == null))
+                {
+                    _OM_PJP = base.CreateObjectSet<OM_PJP>("OM_PJP");
+                }
+                return _OM_PJP;
+            }
+        }
+        private ObjectSet<OM_PJP> _OM_PJP;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_SalesRouteMaster> OM_SalesRouteMaster
+        {
+            get
+            {
+                if ((_OM_SalesRouteMaster == null))
+                {
+                    _OM_SalesRouteMaster = base.CreateObjectSet<OM_SalesRouteMaster>("OM_SalesRouteMaster");
+                }
+                return _OM_SalesRouteMaster;
+            }
+        }
+        private ObjectSet<OM_SalesRouteMaster> _OM_SalesRouteMaster;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_SalesRouteMasterImport> OM_SalesRouteMasterImport
+        {
+            get
+            {
+                if ((_OM_SalesRouteMasterImport == null))
+                {
+                    _OM_SalesRouteMasterImport = base.CreateObjectSet<OM_SalesRouteMasterImport>("OM_SalesRouteMasterImport");
+                }
+                return _OM_SalesRouteMasterImport;
+            }
+        }
+        private ObjectSet<OM_SalesRouteMasterImport> _OM_SalesRouteMasterImport;
 
         #endregion
 
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_SalesRouteMaster EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_SalesRouteMaster(OM_SalesRouteMaster oM_SalesRouteMaster)
-        {
-            base.AddObject("OM_SalesRouteMaster", oM_SalesRouteMaster);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Customer(AR_Customer aR_Customer)
-        {
-            base.AddObject("AR_Customer", aR_Customer);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_PJP EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_PJP(OM_PJP oM_PJP)
-        {
-            base.AddObject("OM_PJP", oM_PJP);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_SalesRouteMasterImport EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_SalesRouteMasterImport(OM_SalesRouteMasterImport oM_SalesRouteMasterImport)
-        {
-            base.AddObject("OM_SalesRouteMasterImport", oM_SalesRouteMasterImport);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Salesperson EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Salesperson(AR_Salesperson aR_Salesperson)
-        {
-            base.AddObject("AR_Salesperson", aR_Salesperson);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the SI_District EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -294,6 +254,14 @@ namespace OM23800
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Customer(AR_Customer aR_Customer)
+        {
+            base.AddObject("AR_Customer", aR_Customer);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the AR_CustomerLocation EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToAR_CustomerLocation(AR_CustomerLocation aR_CustomerLocation)
@@ -302,11 +270,43 @@ namespace OM23800
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Salesperson EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Salesperson(AR_Salesperson aR_Salesperson)
+        {
+            base.AddObject("AR_Salesperson", aR_Salesperson);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the OM_OverlaysMCP EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_OverlaysMCP(OM_OverlaysMCP oM_OverlaysMCP)
         {
             base.AddObject("OM_OverlaysMCP", oM_OverlaysMCP);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_PJP EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_PJP(OM_PJP oM_PJP)
+        {
+            base.AddObject("OM_PJP", oM_PJP);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_SalesRouteMaster EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_SalesRouteMaster(OM_SalesRouteMaster oM_SalesRouteMaster)
+        {
+            base.AddObject("OM_SalesRouteMaster", oM_SalesRouteMaster);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_SalesRouteMasterImport EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_SalesRouteMasterImport(OM_SalesRouteMasterImport oM_SalesRouteMasterImport)
+        {
+            base.AddObject("OM_SalesRouteMasterImport", oM_SalesRouteMasterImport);
         }
 
         #endregion
@@ -2445,6 +2445,30 @@ namespace OM23800
         private Nullable<global::System.DateTime> _Birthdate;
         partial void OnBirthdateChanging(Nullable<global::System.DateTime> value);
         partial void OnBirthdateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String RefCustID
+        {
+            get
+            {
+                return _RefCustID;
+            }
+            set
+            {
+                OnRefCustIDChanging(value);
+                ReportPropertyChanging("RefCustID");
+                _RefCustID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("RefCustID");
+                OnRefCustIDChanged();
+            }
+        }
+        private global::System.String _RefCustID;
+        partial void OnRefCustIDChanging(global::System.String value);
+        partial void OnRefCustIDChanged();
 
         #endregion
 
@@ -6597,6 +6621,30 @@ namespace OM23800
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
 
         #endregion
 
