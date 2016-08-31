@@ -87,7 +87,7 @@ namespace OM30400.Controllers
                     VisitDate = DateTime.Now,
                     Checkin = new TimeSpan(0, 0, 0),
                     Checkout = new TimeSpan(0, 0, 0),
-                    TGCICO = "",
+                    TGCICO = "0",
                     Amt = 0,
                     GPSCheckin = "",
                     GPSCheckout = "",
