@@ -207,23 +207,29 @@ var Index = {
     grdVisitCustomerActual_cellClick: function (gridview, td, cellIndex, record, tr, rowIndex, e, eOpts) {
         var clickCol = gridview.up('grid').columns[cellIndex];
         if (clickCol) {
-            if (clickCol.dataIndex === "Checkout") {
-                var id = record.data.Checkout + "_" + record.data.CoLat + "_" + record.data.CoLng;
-                PosGmap.navMapCenterByLocation(record.data.CoLat, record.data.CoLng, id);
-            }
-            else if (clickCol.dataIndex === "Checkin") {
-                var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
-                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
-            }
-            else {
-                if (record.data.CustId && App.chkShowAgent.value) {
-                    var id = record.data.CustId + "_" + record.data.CustLat + "_" + record.data.CustLng;
-                    PosGmap.navMapCenterByLocation(record.data.CustLat, record.data.CustLng, id);
+            if (record.data.TypeMapPlan == '0') {
+                if (clickCol.dataIndex === "Checkout") {
+                    var id = record.data.Checkout + "_" + record.data.CoLat + "_" + record.data.CoLng;
+                    PosGmap.navMapCenterByLocation(record.data.CoLat, record.data.CoLng, id);
                 }
-                else {
+                else if (clickCol.dataIndex === "Checkin") {
                     var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
                     PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
                 }
+                else {
+                    if (record.data.CustId && App.chkShowAgent.value) {
+                        var id = record.data.CustId + "_" + record.data.CustLat + "_" + record.data.CustLng;
+                        PosGmap.navMapCenterByLocation(record.data.CustLat, record.data.CustLng, id);
+                    }
+                    else {
+                        var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
+                        PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
+                    }
+                }
+            }
+            else {
+                var id = '1_' + record.data.CustId + '_' + record.data.CustLat + '_' + record.data.CustLng;
+                PosGmap.navMapCenterByLocation(record.data.CustLat, record.data.CustLng, id);
             }
         }
     },
@@ -389,6 +395,7 @@ var Index = {
             App.btnGetCurrentLocation.disable();
             App.chkRealTime.disable();
             App.chkShowAgent.disable();
+            App.chkMapPlan.disable();
             App.btnExportExcelActual.disable();
 
             App.grdVisitCustomerActual.hide();
@@ -399,6 +406,7 @@ var Index = {
             App.btnGetCurrentLocation.enable();
             App.chkRealTime.enable();
             App.chkShowAgent.enable();
+            App.chkMapPlan.enable();
             App.btnExportExcelActual.enable();
 
             App.grdVisitCustomerActual.show();
@@ -408,6 +416,7 @@ var Index = {
 
     btnLoadDataActual_click: function (btn, e, eOpts) {
         if (App.pnlActualVisit.isValid()) {
+            App.chkMapPlan.setValue(false);
             Index.removeStoreData();
             clearMaps();
             if (App.radSalesmanAll.value) {
@@ -499,6 +508,35 @@ var Index = {
         }
     },
 
+    chkMapPlan_change: function (chk, newValue, oldValue, eOpts) {
+        if (chk.hasFocus) {
+            if (newValue) {
+                for (i = 0; i < PosGmap.planMarkers.length; i++) {
+                    if (PosGmap.planMarkers[i].type == 'plan') {
+                        PosGmap.planMarkers[i].setMap(true ? PosGmap.map : null);
+                    }
+                }
+                for (i = 0; i < PosGmap.directionsDisplays.length; i++) {
+                    if (PosGmap.directionsDisplays[i].type == 'plan') {
+                        PosGmap.directionsDisplays[i].setMap(true ? PosGmap.map : null);
+                    }
+                }
+            }
+            else {
+                for (i = 0; i < PosGmap.planMarkers.length; i++) {
+                    if (PosGmap.planMarkers[i].type == 'plan') {
+                        PosGmap.planMarkers[i].setMap(false ? PosGmap.map : null);
+                    }
+                }
+                for (i = 0; i < PosGmap.directionsDisplays.length; i++) {
+                    if (PosGmap.directionsDisplays[i].type == 'plan') {
+                        PosGmap.directionsDisplays[i].setMap(false ? PosGmap.map : null);
+                    }
+                }
+            }
+        }
+    },
+
     chkRealTime_change: function (chk, newValue, oldValue, eOpts) {
         Index.btnLoadDataActual_click();
     },
@@ -543,56 +581,23 @@ var Index = {
             var index = 0;
             var markers = [];
             records.forEach(function (record) {
-                if (record.data.CustId) {
-                    index = index + 1;
-                }
-                else if(App.chkRealTime.value){
-                    index = index + 1;
-                }
+                // chi ve nhung TypeMapPlan = 0 , = 1 la cua plan
+                if (record.data.TypeMapPlan == '0') {
+                    if (record.data.CustId) {
+                        index = index + 1;
+                    }
+                    else if (App.chkRealTime.value) {
+                        index = index + 1;
+                    }
 
-                var markeri = {
-                    "id": record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng,
-                    "title": record.data.CustId? (record.data.CustId + ": " + record.data.CustName) : "",
-                    "lat": record.data.CiLat,
-                    "lng": record.data.CiLng,
-                    "label": record.data.CustId ? index : (App.chkRealTime.value?index:""),
-                    "type": record.data.CustId ? "IO" : "",
-                    "color": record.data.Color,
-                    "isNotVisited": record.data.IsNotVisited,
-                    "description":
-                        '<div id="content">' +
-                            '<div id="siteNotice">' +
-                            '</div>' +
-                            '<h1 id="firstHeading" class="firstHeading">' +
-                                record.data.CustName +
-                            '</h1>' +
-                            '<div id="bodyContent">' +
-                                '<p>' +
-                                    'Thời gian check in - out: '+ record.data.Checkin + ' - ' + record.data.Checkout +
-                                '</p>' +
-                                '<p>' +
-                                    'Doanh số: ' + record.data.TurnOver +
-                                '</p>' +
-                                '<p>' +
-                                    'Địa chỉ: ' + record.data.Addr +
-                                '</p>' +
-                                (!record.data.PicPath?'':('<a target="_blank" href="' + record.data.PicPath + '">' +
-                                    '<img width="200px" src="' + record.data.PicPath + '" />' +
-                                '</a>')) +
-                            '</div>' +
-                        '</div>'
-                }
-                markers.push(markeri);
-
-                if (record.data.CustId) {
-                    var markero = {
-                        "id": record.data.Checkout + "_" + record.data.CoLat + "_" + record.data.CoLng,
-                        "title": record.data.CustId + ": " + record.data.CustName,
-                        "lat": record.data.CoLat,
-                        "lng": record.data.CoLng,
-                        "label": index,
-                        "type": "OO",
-                        "color": "C60BBF",
+                    var markeri = {
+                        "id": record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng,
+                        "title": record.data.CustId ? (record.data.CustId + ": " + record.data.CustName) : "",
+                        "lat": record.data.CiLat,
+                        "lng": record.data.CiLng,
+                        "label": record.data.CustId ? index : (App.chkRealTime.value ? index : ""),
+                        "type": record.data.CustId ? "IO" : "",
+                        "color": record.data.Color,
                         "isNotVisited": record.data.IsNotVisited,
                         "description":
                             '<div id="content">' +
@@ -603,49 +608,85 @@ var Index = {
                                 '</h1>' +
                                 '<div id="bodyContent">' +
                                     '<p>' +
-                                        record.data.Checkin + ' - ' + record.data.Checkout +
+                                        'Thời gian check in - out: ' + record.data.Checkin + ' - ' + record.data.Checkout +
                                     '</p>' +
                                     '<p>' +
-                                        record.data.Addr +
+                                        'Doanh số: ' + record.data.TurnOver +
+                                    '</p>' +
+                                    '<p>' +
+                                        'Địa chỉ: ' + record.data.Addr +
                                     '</p>' +
                                     (!record.data.PicPath ? '' : ('<a target="_blank" href="' + record.data.PicPath + '">' +
-                                    '<img width="200px" src="' + record.data.PicPath + '" />' +
-                                '</a>')) +
+                                        '<img width="200px" src="' + record.data.PicPath + '" />' +
+                                    '</a>')) +
                                 '</div>' +
                             '</div>'
                     }
-                    markers.push(markero);
+                    markers.push(markeri);
 
-                    var markerc = {
-                        "id": record.data.CustId + "_" + record.data.CustLat + "_" + record.data.CustLng,
-                        "title": record.data.CustId + ": " + record.data.CustName,
-                        "lat": record.data.CustLat,
-                        "lng": record.data.CustLng,
-                        "label": index,
-                        "type": "CC",
-                        "color": "01DFD7",
-                        "isNotVisited": record.data.IsNotVisited,
-                        "description":
-                            '<div id="content">' +
-                                '<div id="siteNotice">' +
-                                '</div>' +
-                                '<h1 id="firstHeading" class="firstHeading">' +
-                                    record.data.CustName +
-                                '</h1>' +
-                                '<div id="bodyContent">' +
-                                    '<p>' +
-                                        record.data.Checkin + ' - ' + record.data.Checkout +
-                                    '</p>' +
-                                    '<p>' +
-                                        record.data.Addr +
-                                    '</p>' +
-                                    (!record.data.PicPath ? '' : ('<a target="_blank" href="' + record.data.PicPath + '">' +
-                                    '<img width="200px" src="' + record.data.PicPath + '" />' +
-                                '</a>')) +
-                                '</div>' +
-                            '</div>'
+                    if (record.data.CustId) {
+                        var markero = {
+                            "id": record.data.Checkout + "_" + record.data.CoLat + "_" + record.data.CoLng,
+                            "title": record.data.CustId + ": " + record.data.CustName,
+                            "lat": record.data.CoLat,
+                            "lng": record.data.CoLng,
+                            "label": index,
+                            "type": "OO",
+                            "color": "C60BBF",
+                            "isNotVisited": record.data.IsNotVisited,
+                            "description":
+                                '<div id="content">' +
+                                    '<div id="siteNotice">' +
+                                    '</div>' +
+                                    '<h1 id="firstHeading" class="firstHeading">' +
+                                        record.data.CustName +
+                                    '</h1>' +
+                                    '<div id="bodyContent">' +
+                                        '<p>' +
+                                            record.data.Checkin + ' - ' + record.data.Checkout +
+                                        '</p>' +
+                                        '<p>' +
+                                            record.data.Addr +
+                                        '</p>' +
+                                        (!record.data.PicPath ? '' : ('<a target="_blank" href="' + record.data.PicPath + '">' +
+                                        '<img width="200px" src="' + record.data.PicPath + '" />' +
+                                    '</a>')) +
+                                    '</div>' +
+                                '</div>'
+                        }
+                        markers.push(markero);
+
+                        var markerc = {
+                            "id": record.data.CustId + "_" + record.data.CustLat + "_" + record.data.CustLng,
+                            "title": record.data.CustId + ": " + record.data.CustName,
+                            "lat": record.data.CustLat,
+                            "lng": record.data.CustLng,
+                            "label": index,
+                            "type": "CC",
+                            "color": "01DFD7",
+                            "isNotVisited": record.data.IsNotVisited,
+                            "description":
+                                '<div id="content">' +
+                                    '<div id="siteNotice">' +
+                                    '</div>' +
+                                    '<h1 id="firstHeading" class="firstHeading">' +
+                                        record.data.CustName +
+                                    '</h1>' +
+                                    '<div id="bodyContent">' +
+                                        '<p>' +
+                                            record.data.Checkin + ' - ' + record.data.Checkout +
+                                        '</p>' +
+                                        '<p>' +
+                                            record.data.Addr +
+                                        '</p>' +
+                                        (!record.data.PicPath ? '' : ('<a target="_blank" href="' + record.data.PicPath + '">' +
+                                        '<img width="200px" src="' + record.data.PicPath + '" />' +
+                                    '</a>')) +
+                                    '</div>' +
+                                '</div>'
+                        }
+                        markers.push(markerc);
                     }
-                    markers.push(markerc);
                 }
             });
             PosGmap.drawAVC1(markers, true, App.chkRealTime.value, App.chkShowAgent.value);
@@ -1252,6 +1293,12 @@ var PosGmap = {
     },
 
     find_marker_id: function (id) {
+        for (i = 0; i < PosGmap.planMarkers.length; i++) {
+            if (PosGmap.planMarkers[i].data.id == id) {
+                return PosGmap.planMarkers[i];
+            }
+        }
+
         for (i = 0; i < PosGmap.stopMarkers.length; i++) {
             if (PosGmap.stopMarkers[i].id == id) {
                 return PosGmap.stopMarkers[i];
@@ -2064,18 +2111,61 @@ var PosGmap = {
     PosGmap.planMarkers = [];
 
     App.stoVisitPlan.data.each(function (item) {
+        var data = item.data;
         var latLng = new google.maps.LatLng(item.data.Lat, item.data.Lng);
         var marker = new google.maps.Marker({
-            position: latLng
-            //icon: new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + item.data.VisitSort + "|" + "0CF1F9" + '|000000',
-            //        new google.maps.Size(20, 35),
-            //        new google.maps.Point(0, 0)
-            //        //new google.maps.Point(0, 0),
-            //        //new google.maps.Size(20, 35)
-            //    ),
+            position: latLng,
+            icon: new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + item.data.VisitSort + "|" + "0CF1F9" + '|000000',
+                    new google.maps.Size(21, 34),
+                    new google.maps.Point(0, 0)
+                    //new google.maps.Point(0, 0),
+                    //new google.maps.Size(20, 35)
+                ),
             //map: PosGmap.map,
-            //title: Ext.String.format('{0} - {1}', item.data.CustId, item.data.CustName)
+            title: Ext.String.format('{0} - {1}', item.data.CustId, item.data.CustName)
         });
+
+        // Set info display of the marker
+        (function (marker, data) {
+            data.id = '1_' + data.CustId + '_' + data.Lat + '_' + data.Lng;
+            data.description =
+            '<div id="content">' +
+                '<div id="siteNotice">' +
+                '</div>' +
+                '<h1 id="firstHeading" class="firstHeading">' +
+                    data.CustName +
+                '</h1>' +
+                '<div id="bodyContent">' +
+                    '<p>' +
+                        'Địa chỉ: ' + data.Addr +
+                    '</p>' +
+                    '<p>' +
+                        'Thứ tự viếng thăm: ' + data.VisitSort +
+                    '</p>' +
+                    '<p>' +
+                        'Tọa độ: ' + data.Lat + ',' + data.Lng +
+                    '</p>' +
+            //(!record.data.PicPath ? '' : ('<a target="_blank" href="' + record.data.PicPath + '">' +
+            //    '<img width="200px" src="' + record.data.PicPath + '" />' +
+            //'</a>')) +
+                '</div>' +
+            '</div>';
+
+            google.maps.event.addListener(marker, "click", function (e) {
+                PosGmap.infoWindow.setContent(data.description);
+                PosGmap.infoWindow.open(PosGmap.map, marker);
+
+                // Set animation of marker
+                if (marker.getAnimation() != null) {
+                    marker.setAnimation(null);
+                } else {
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                    setTimeout(function () {
+                        marker.setAnimation(null);
+                    }, 1400);
+                }
+            });
+        })(marker, data);
 
         if (marker != null) {
             marker.type = 'plan';
@@ -2146,7 +2236,7 @@ var PosGmap = {
         travelMode: google.maps.TravelMode.DRIVING
     };
     directionsDisplay = new google.maps.DirectionsRenderer({
-        map: PosGmap.map,
+        //map: PosGmap.map,
         type: 'plan',
         polylineOptions: {
             icons: [
@@ -2167,7 +2257,7 @@ var PosGmap = {
             strokeOpacity: 1
         }
     });
-    directionsDisplay.setMap(PosGmap.map);
+    //directionsDisplay.setMap(PosGmap.map);
     directionsDisplay.setOptions({ preserveViewport: true, suppressMarkers: true });
 
     PosGmap.directionsService.route(request, function (response, status) {

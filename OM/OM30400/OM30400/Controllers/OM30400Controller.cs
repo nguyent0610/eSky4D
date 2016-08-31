@@ -75,21 +75,63 @@ namespace OM30400.Controllers
         public ActionResult LoadGridActualVisit(string distributor, string slsperId, DateTime visitDate, bool realTime)
         {
             var actualVisit = _db.OM30400_pgGridActualVisit(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, realTime).ToList();
+
+            var planVisit = _db.OM30400_pdVisitPlan(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate).ToList();
+            for (int i = 0; i < planVisit.Count; i++)
+            {
+                actualVisit.Add(new OM30400_pgGridActualVisit_Result()
+                {
+                    CustId = planVisit[i].CustId,
+                    CustName = planVisit[i].CustName,
+                    Addr = planVisit[i].Addr,
+                    VisitDate = DateTime.Now,
+                    Checkin = new TimeSpan(0, 0, 0),
+                    Checkout = new TimeSpan(0, 0, 0),
+                    TGCICO = "",
+                    Amt = 0,
+                    GPSCheckin = "",
+                    GPSCheckout = "",
+                    CiLat = planVisit[i].Lat,
+                    CiLng = planVisit[i].Lng,
+                    CoLat = 0,
+                    CoLng = 0,
+                    CustLat = planVisit[i].Lat,
+                    CustLng = planVisit[i].Lng,
+                    PicPath = "",
+                    Color = "3B5998",
+                    IsNotVisited = 0,
+                    TurnOver = 0,
+                    Distance = 0,
+                    TypeMapPlan = "1"
+                });
+            }
+
             double lat1 = 0;
             double lng1 = 0;
             double lat2 = 0;
             double lng2 = 0;
+            string colorTmp = "";
             for (int i = 0; i < actualVisit.Count; i++)
-            {
+            { 
                 if (i > 0)
                 {
-                    lat1 = (double) actualVisit[i - 1].CiLat;
-                    lng1 = (double) actualVisit[i - 1].CiLng;
+                    lat1 = (double)actualVisit[i - 1].CiLat;
+                    lng1 = (double)actualVisit[i - 1].CiLng;
                     lat2 = (double) actualVisit[i].CiLat;
                     lng2 = (double) actualVisit[i].CiLng;
                 }
+                if (actualVisit[i].Color != colorTmp)
+                {
+                    lat1 = 0;
+                    lng1 = 0;
+                    lat2 = 0;
+                    lng2 = 0;
+                }
                 actualVisit[i].Distance = DistanceBetweenPlaces(lng1, lat1, lng2, lat2);
+                colorTmp = actualVisit[i].Color;
             }
+
+            
             return this.Store(actualVisit);
         }
 
@@ -102,6 +144,7 @@ namespace OM30400.Controllers
         public ActionResult LoadMapActualVisit(string distributor, string slsperId, DateTime visitDate, bool realTime)
         {
             var actualVisit = _db.OM30400_pgGridActualVisit(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, true).ToList();
+
             return this.Store(actualVisit);
         }
 
@@ -494,10 +537,51 @@ namespace OM30400.Controllers
 
                 DataTable dtDataExport = dal.ExecDataTable("OM30400_pgGridActualVisit", CommandType.StoredProcedure, ref pc);
                 //SheetMCP.Cells.ImportDataTable(dtDataExport, false, "B6");// du lieu data export
+
+                pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@Distributor", DbType.String, clsCommon.GetValueDBNull(distributor), ParameterDirection.Input, int.MaxValue));
+                pc.Add(new ParamStruct("@SlsperId", DbType.String, clsCommon.GetValueDBNull(slsperId), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@VisitDate", DbType.DateTime, clsCommon.GetValueDBNull(DateTime.Parse(visitDate)), ParameterDirection.Input, int.MaxValue));
+              
+                DataTable dtDataExportMapPlan = dal.ExecDataTable("OM30400_pdVisitPlan", CommandType.StoredProcedure, ref pc);
+
+                for (int i = 0; i < dtDataExportMapPlan.Rows.Count; i++)
+                {
+                    DataRow row = dtDataExport.NewRow();
+                    row["CustId"] = dtDataExportMapPlan.Rows[i]["CustId"].PassNull();
+                    row["CustName"] = dtDataExportMapPlan.Rows[i]["CustName"].PassNull();
+                    row["Addr"] = dtDataExportMapPlan.Rows[i]["Addr"].PassNull();
+                    row["VisitDate"] = DateTime.Now.ToString();
+                    row["Checkin"] = new TimeSpan(0, 0, 0).ToString();
+                    row["Checkout"] = new TimeSpan(0, 0, 0).ToString();
+                    row["TGCICO"] = "0";
+                    row["Amt"] = "0";
+                    row["GPSCheckin"] = "";
+                    row["GPSCheckout"] = "";
+                    row["CiLat"] = dtDataExportMapPlan.Rows[i]["Lat"].PassNull();
+                    row["CiLng"] = dtDataExportMapPlan.Rows[i]["Lng"].PassNull();
+                    row["CoLat"] = "0";
+                    row["CoLng"] = "0";
+                    row["CustLat"] = dtDataExportMapPlan.Rows[i]["Lat"].PassNull();
+                    row["CustLng"] = dtDataExportMapPlan.Rows[i]["Lng"].PassNull();
+                    row["PicPath"] = "";
+                    row["Color"] = "3B5998";
+                    row["IsNotVisited"] = "0";
+                    row["TurnOver"] = "0";
+                    row["Distance"] = "0";
+                    row["TypeMapPlan"] = "1";
+
+                    dtDataExport.Rows.Add(row);
+                }
+
+
                 double lat1 = 0;
                 double lng1 = 0;
                 double lat2 = 0;
                 double lng2 = 0;
+                string colorTmp = "";
                 for (int i = 0; i < dtDataExport.Rows.Count; i++)
                 {
                     if (i > 0)
@@ -507,7 +591,13 @@ namespace OM30400.Controllers
                         lat2 = double.Parse(dtDataExport.Rows[i]["CiLat"].ToString());
                         lng2 = double.Parse(dtDataExport.Rows[i]["CiLng"].ToString());
                     }
-
+                    if (colorTmp != dtDataExport.Rows[i]["Color"].ToString())
+                    {
+                        lat1 = 0;
+                        lng1 = 0;
+                        lat2 = 0;
+                        lng2 = 0;
+                    }
                     for (int j = 0; j < allColumns.Count; j++)
                     {
                         var cell = SheetMCP.Cells[4 + i, j];
@@ -527,6 +617,7 @@ namespace OM30400.Controllers
                         //Apply the border styles to the cell
                         setCellStyle(cell);
                     }
+                    colorTmp = dtDataExport.Rows[i]["Color"].ToString();
 
                 }
                 #endregion

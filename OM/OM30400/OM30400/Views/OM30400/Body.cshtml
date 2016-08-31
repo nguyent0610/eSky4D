@@ -524,24 +524,34 @@
                         .Listeners(l => l.Click.Fn = "Index.btnGetCurrentLocation_click")
                     )
                     
-                    , X.Container().Layout(LayoutType.HBox).Flex(1)
+                    , X.Container().Layout(LayoutType.VBox)
                     .Items(
-                         X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
-                        .StyleSpec("background-color:#01DFD7;").Hidden(true)
-                        , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("Profile")).Width(60).Hidden(true)
+                        X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 100")
+                        .Items(
+                             X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
+                            .StyleSpec("background-color:#01DFD7;").Hidden(true)
+                            , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("Profile")).Width(60).Hidden(true)
                         
-                        , HQ.Checkbox().ID("chkRealTime").HQLangCode("RealTime")
-                        .MarginSpec("5 5 0 105").Disabled(true).Flex(1)
-                        .Handler("Index.chkRealTime_change")
+                            , HQ.Checkbox().ID("chkRealTime").HQLangCode("RealTime")
+                            .MarginSpec("5 5 0 5").Disabled(true)
+                            .Handler("Index.chkRealTime_change")
                         
-                        , HQ.Checkbox().ID("chkShowAgent").HQLangCode("ShowProfile")
-                        .MarginSpec("5 5 0 5").Disabled(true).Flex(1)
-                        .Handler("Index.chkShowAgent_change")
+                            , HQ.Checkbox().ID("chkShowAgent").HQLangCode("ShowProfile")
+                            .MarginSpec("5 5 0 5").Disabled(true)
+                            .Handler("Index.chkShowAgent_change")
                         
-                        ,HQ.Button().ID("btnExportExcelActual")
-                        .Icon(Icon.PageExcel).ToolTip(Util.GetLang("ExportExcel"))
-                        .MarginSpec("5 5 0 5").Disabled(true)
-                        .Handler("Index.btnExportExcelActual_click")
+                            ,HQ.Button().ID("btnExportExcelActual")
+                            .Icon(Icon.PageExcel).ToolTip(Util.GetLang("ExportExcel"))
+                            .MarginSpec("5 5 0 5").Disabled(true)
+                            .Handler("Index.btnExportExcelActual_click")
+                        )
+                        
+                        , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 100")
+                        .Items(
+                            HQ.Checkbox().ID("chkMapPlan").HQLangCode("MapPlan")
+                            .MarginSpec("0 5 0 5").Disabled(true)
+                            .Handler("Index.chkMapPlan_change")
+                        )
                     )
                 )
         // Container

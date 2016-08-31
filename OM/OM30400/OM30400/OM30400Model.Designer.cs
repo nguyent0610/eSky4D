@@ -3712,12 +3712,14 @@ namespace OM30400
         /// <param name="custId">Initial value of the CustId property.</param>
         /// <param name="isNotVisited">Initial value of the IsNotVisited property.</param>
         /// <param name="turnOver">Initial value of the TurnOver property.</param>
-        public static OM30400_pgGridActualVisit_Result CreateOM30400_pgGridActualVisit_Result(global::System.String custId, global::System.Int32 isNotVisited, global::System.Decimal turnOver)
+        /// <param name="typeMapPlan">Initial value of the TypeMapPlan property.</param>
+        public static OM30400_pgGridActualVisit_Result CreateOM30400_pgGridActualVisit_Result(global::System.String custId, global::System.Int32 isNotVisited, global::System.Decimal turnOver, global::System.String typeMapPlan)
         {
             OM30400_pgGridActualVisit_Result oM30400_pgGridActualVisit_Result = new OM30400_pgGridActualVisit_Result();
             oM30400_pgGridActualVisit_Result.CustId = custId;
             oM30400_pgGridActualVisit_Result.IsNotVisited = isNotVisited;
             oM30400_pgGridActualVisit_Result.TurnOver = turnOver;
+            oM30400_pgGridActualVisit_Result.TypeMapPlan = typeMapPlan;
             return oM30400_pgGridActualVisit_Result;
         }
 
@@ -4228,6 +4230,30 @@ namespace OM30400
         private Nullable<global::System.Double> _Distance;
         partial void OnDistanceChanging(Nullable<global::System.Double> value);
         partial void OnDistanceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String TypeMapPlan
+        {
+            get
+            {
+                return _TypeMapPlan;
+            }
+            set
+            {
+                OnTypeMapPlanChanging(value);
+                ReportPropertyChanging("TypeMapPlan");
+                _TypeMapPlan = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("TypeMapPlan");
+                OnTypeMapPlanChanged();
+            }
+        }
+        private global::System.String _TypeMapPlan;
+        partial void OnTypeMapPlanChanging(global::System.String value);
+        partial void OnTypeMapPlanChanged();
 
         #endregion
 

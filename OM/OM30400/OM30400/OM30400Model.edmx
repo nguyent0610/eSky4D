@@ -441,6 +441,7 @@
           <Property Type="Int32" Name="IsNotVisited" Nullable="false" />
           <Property Type="Decimal" Name="TurnOver" Nullable="false" Precision="1" Scale="1" />
           <Property Type="Double" Name="Distance" Nullable="true" />
+          <Property Type="String" Name="TypeMapPlan" Nullable="false" MaxLength="1" />
         </ComplexType>
         <ComplexType Name="OM30400_pgVisitCustomerActual_Result">
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
@@ -669,6 +670,7 @@
                 <ScalarProperty Name="IsNotVisited" ColumnName="IsNotVisited" />
                 <ScalarProperty Name="TurnOver" ColumnName="TurnOver" />
                 <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="TypeMapPlan" ColumnName="TypeMapPlan" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
