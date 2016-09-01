@@ -113,7 +113,7 @@ namespace AP10100.Controllers
                     _objVendor.ResetET();
 
                 }
-                if (Data_Checking())
+				if (Data_Checking(_status,handle))
                 {
 
                     if ((_status == "U" || _status == "C") && (_handle == "C" || _handle == "V"))
@@ -457,7 +457,7 @@ namespace AP10100.Controllers
         }
         #endregion
         #region Orther
-        private bool Data_Checking()
+        private bool Data_Checking(string status,string handle)
         {
 
 
@@ -494,8 +494,8 @@ namespace AP10100.Controllers
 					throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("TranDesc") });
 				}
             }
-
-			if (_app.AP10100_ppCheckCloseDate(_branchID, _pdHead.DocDate.ToDateShort()).FirstOrDefault() == "0")
+			
+			if (_app.AP10100_ppCheckCloseDate(_branchID, _pdHead.DocDate.ToDateShort()).FirstOrDefault() == "0"&&status!="C"&&handle!="V")
 				throw new MessageException(MessageType.Message, "301");
 
             return true;
@@ -728,7 +728,7 @@ namespace AP10100.Controllers
 									else
 									{
 
-										if (_app.AP10100_ppCheckCloseDate(CpnyID, parsed.ToDateShort()).FirstOrDefault() == "0")
+										if (_app.AP10100_ppCheckCloseDate(CpnyID, parsed.ToDateShort()).FirstOrDefault() == "0"&&_status!="C"&&_handle!="V")
 											errorCloseDate += (i + 1).ToString() + ",";
 									}
 								}

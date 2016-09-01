@@ -56,7 +56,7 @@
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst =>
                                 {
-                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.TriggerClick.Handler = "if (index == 0) { HQ.isFirstLoad=true;this.clearValue();}";
                                     lst.Change.Fn = "cboBatNbr_Change";
                                     lst.Select.Fn = "cboBatNbr_Select";
                                 })
