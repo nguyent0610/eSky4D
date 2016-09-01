@@ -575,13 +575,16 @@ var Index = {
 
     stoVisitPlan_load:function(store,records,successful,eOpts){
         if (successful) {
-            HQ.common.showBusy(true, HQ.common.getLang('Loading Maps'));
+            if (store.totalCount > 0)
+                HQ.common.showBusy(true, HQ.common.getLang('Loading Maps'));
             PosGmap.drawMap_Visit();
         }
     },
 
     storeGridActualVisit_load: function (store, records, successful, eOpts) {
         if (successful) {
+            if (store.totalCount < 1)
+                HQ.common.showBusy(false);
             var index = 0;
             var markers = [];
             records.forEach(function (record) {
