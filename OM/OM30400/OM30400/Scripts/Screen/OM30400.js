@@ -2196,6 +2196,7 @@ var PosGmap = {
         })(marker, data);
 
         if (marker != null) {
+            marker.setZIndex(1000);
             marker.type = 'plan';
             //marker.CustID = item.data.CustId;
             //marker.SlsPerID = item.data.SlsPerID;
