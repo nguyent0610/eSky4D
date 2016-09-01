@@ -115,8 +115,8 @@ namespace OM30400.Controllers
             { 
                 if (i > 0)
                 {
-                    lat1 = (double)actualVisit[i - 1].CiLat;
-                    lng1 = (double)actualVisit[i - 1].CiLng;
+                    lat1 = (double) actualVisit[i - 1].CiLat;
+                    lng1 = (double) actualVisit[i - 1].CiLng;
                     lat2 = (double) actualVisit[i].CiLat;
                     lng2 = (double) actualVisit[i].CiLng;
                 }

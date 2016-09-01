@@ -194,7 +194,7 @@ var Index = {
                 markers.push(marker);
             });
             PosGmap.drawMCP(markers, false);
-            _FlagZeroResult = false;
+           
         }
         App.frmMain.getEl().unmask();
     },
@@ -575,16 +575,25 @@ var Index = {
 
     stoVisitPlan_load:function(store,records,successful,eOpts){
         if (successful) {
-            if (store.totalCount > 0)
+            if (store.totalCount > 0) {
                 HQ.common.showBusy(true, HQ.common.getLang('Loading Maps'));
-            PosGmap.drawMap_Visit();
+                PosGmap.drawMap_Visit();
+            }
+            else {
+                App.grdVisitCustomerActual.store.reload();
+                App.storeMapActualVisit.reload();
+            }
         }
     },
 
     storeGridActualVisit_load: function (store, records, successful, eOpts) {
         if (successful) {
-            if (store.totalCount < 1)
+            if (store.totalCount == 0) {
                 HQ.common.showBusy(false);
+                _FlagZeroResult = false;
+            }
+            else if (store.totalCount > 0 && App.stoVisitPlan.totalCount == 0)
+                HQ.common.showBusy(true, HQ.common.getLang('Loading Maps'));
             var index = 0;
             var markers = [];
             records.forEach(function (record) {
@@ -697,7 +706,6 @@ var Index = {
                 }
             });
             PosGmap.drawAVC1(markers, true, App.chkRealTime.value, App.chkShowAgent.value);
-            
         }
         App.frmMain.getEl().unmask();
     },
@@ -903,7 +911,6 @@ var McpInfo = {
         App.winMcpInfo.show();
         var record;
         if (store.getCount() > 0) {
-
             App.btnDeleteMcpInfo.enable();
         }
         else {
@@ -1807,6 +1814,8 @@ var PosGmap = {
             var idx = 0;
             PosGmap.requestForWaysRoute(lat_lngCols, idx);
         }
+        else
+            HQ.common.showBusy(false);
     },
 
     requestForWaysRoute: function (lat_lngCols, idx) {
@@ -1834,24 +1843,24 @@ var PosGmap = {
             }
         }
 
-        //if (_FlagZeroResult == false) {
-        //    var request = {
-        //        origin: start,
-        //        destination: end,
-        //        waypoints: waypts,
-        //        optimizeWaypoints: false,
-        //        travelMode: google.maps.TravelMode.WALKING
-        //    };
-        //}
-        //else {
-        var request = {
-            origin: start,
-            destination: end,
-            waypoints: waypts,
-            optimizeWaypoints: false,
-            travelMode: google.maps.TravelMode.DRIVING
-        };
-        //}
+        if (_FlagZeroResult == false) {
+            var request = {
+                origin: start,
+                destination: end,
+                waypoints: waypts,
+                optimizeWaypoints: false,
+                travelMode: google.maps.TravelMode.WALKING
+            };
+        }
+        else {
+            var request = {
+                origin: start,
+                destination: end,
+                waypoints: waypts,
+                optimizeWaypoints: false,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+        }
 
         directionsDisplay = new google.maps.DirectionsRenderer({
             map: PosGmap.map,
@@ -1891,6 +1900,7 @@ var PosGmap = {
                 }
                 else {
                     HQ.common.showBusy(false);
+                    _FlagZeroResult = false;
                 }
             }
 
@@ -1899,6 +1909,14 @@ var PosGmap = {
             }
             else if (status == google.maps.DirectionsStatus.ZERO_RESULTS) {
                 //alert("ZERO_RESULTS");
+                if (_FlagZeroResult == true) {
+                    HQ.common.showBusy(false);
+                    _FlagZeroResult = false;
+                } else {
+                    _FlagZeroResult = true;
+                    App.grdVisitCustomerActual.store.reload();
+                    App.storeMapActualVisit.reload();
+                }
             }
             else if (status == google.maps.DirectionsStatus.MAX_WAYPOINTS_EXCEEDED) {
                 //alert("MAX_WAYPOINTS_EXCEEDED");
