@@ -2,7 +2,7 @@
 
 var pointsArray = [];
 
-var dataForm_BoxReady = function () {
+var frmMain_BoxReady = function () {
     App.pnlInfo.setActiveTab(2);
     if (hideButtonPosition == 'true')
         App.btnGetCurrentLocation.hide();
@@ -65,8 +65,9 @@ var Index = {
                                 App.grdAllCurrentSalesman.store.reload();
                             }
                             else {
-                                App.grdVisitCustomerActual.store.reload();
-                                App.storeMapActualVisit.reload();
+                                App.stoVisitPlan.reload();
+                                //App.grdVisitCustomerActual.store.reload();
+                                //App.storeMapActualVisit.reload();
                                 //App.storeVisitCustomerActual.reload();
                             }
                         }
@@ -195,7 +196,7 @@ var Index = {
             PosGmap.drawMCP(markers, false);
             _FlagZeroResult = false;
         }
-        App.dataForm.getEl().unmask();
+        App.frmMain.getEl().unmask();
     },
 
     selectionModelVisitCustomerPlan_Select: function (rowModel, record, index, eOpts) {
@@ -346,7 +347,7 @@ var Index = {
                 PosGmap.prepairDrawing();
             }
         }
-        App.dataForm.getEl().unmask();
+        App.frmMain.getEl().unmask();
 
         //drawingManager.setOptions({
         //    drawingControl: true
@@ -423,8 +424,10 @@ var Index = {
                 App.grdAllCurrentSalesman.store.reload();
             }
             else {
-                App.grdVisitCustomerActual.store.reload();
-                App.storeMapActualVisit.reload();
+                App.stoVisitPlan.reload();
+
+                //App.grdVisitCustomerActual.store.reload();
+                //App.storeMapActualVisit.reload();
                 
                 //App.storeVisitCustomerActual.reload();
             }
@@ -572,6 +575,7 @@ var Index = {
 
     stoVisitPlan_load:function(store,records,successful,eOpts){
         if (successful) {
+            HQ.common.showBusy(true, HQ.common.getLang('Loading Maps'));
             PosGmap.drawMap_Visit();
         }
     },
@@ -690,9 +694,9 @@ var Index = {
                 }
             });
             PosGmap.drawAVC1(markers, true, App.chkRealTime.value, App.chkShowAgent.value);
-            App.stoVisitPlan.reload();
+            
         }
-        App.dataForm.getEl().unmask();
+        App.frmMain.getEl().unmask();
     },
 
     // Store nay tam thoi ko dung toi nua
@@ -728,7 +732,7 @@ var Index = {
 
         // pretend to change chkRealTime check
         // Index.chkRealTime_change(App.chkRealTime);
-        App.dataForm.getEl().unmask();
+        App.frmMain.getEl().unmask();
     },
 
     storeAllCurrentSalesman_load: function (store, records, successful, eOpts) {
@@ -759,7 +763,7 @@ var Index = {
             });
             PosGmap.drawRoutes(markers, false);
         }
-        App.dataForm.getEl().unmask();
+        App.frmMain.getEl().unmask();
     },
 
     // tab history
@@ -816,7 +820,7 @@ var Index = {
             });
             PosGmap.drawRoutes(markers, false);
         }
-        App.dataForm.getEl().unmask();
+        App.frmMain.getEl().unmask();
     },
 
     //
@@ -867,7 +871,7 @@ var Index = {
         Ext.net.DirectMethod.request({
             url: "OM30400/ExportCustomer",
             isUpload: true,
-            formProxyArg: "dataForm",
+            formProxyArg: "frmMain",
             cleanRequest: true,
             timeout: 1000000,
             params: {
@@ -1882,6 +1886,9 @@ var PosGmap = {
                         PosGmap.requestForWaysRoute(lat_lngCols, idx);
                     }, 1000);
                 }
+                else {
+                    HQ.common.showBusy(false);
+                }
             }
 
             else if (status == google.maps.DirectionsStatus.NOT_FOUND) {
@@ -2269,6 +2276,8 @@ var PosGmap = {
             if (planPoints.length > 0) {
                 getRoute();
             } else {
+                App.grdVisitCustomerActual.store.reload();
+                App.storeMapActualVisit.reload();
             }
         }
 

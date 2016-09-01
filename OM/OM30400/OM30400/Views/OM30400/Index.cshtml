@@ -137,7 +137,7 @@
                 ps.Add(new StoreParameter("weekOfVisit", "App.cboWeekOfVisit.value", ParameterMode.Raw));
             })
             .Listeners(l => {
-                l.BeforeLoad.Handler = "App.dataForm.getEl().mask('Loading Maps', 'x-mask-loading');";
+                l.BeforeLoad.Handler = "App.frmMain.getEl().mask('Loading Maps', 'x-mask-loading');";
                 l.Load.Fn = "Index.storeVisitCustomerPlan_load"; 
             })
         )
@@ -158,8 +158,8 @@
                 ps.Add(new StoreParameter("daysOfWeek", "App.cboDayOfWeekMCL.value", ParameterMode.Raw));
                 ps.Add(new StoreParameter("weekOfVisit", "App.cboWeekOfVisitMCL.value", ParameterMode.Raw));
             })
-                .Listeners(l => { 
-                    l.BeforeLoad.Handler = "App.dataForm.getEl().mask('Loading Maps', 'x-mask-loading');";
+                .Listeners(l => {
+                    l.BeforeLoad.Handler = "App.frmMain.getEl().mask('Loading Maps', 'x-mask-loading');";
                     l.Load.Fn = "Index.storeMCL_load";
                 })
         )
@@ -177,7 +177,7 @@
                 ps.Add(new StoreParameter("realTime", "App.chkRealTime.value", ParameterMode.Raw));
             })
             .Listeners(l => {
-                l.BeforeLoad.Handler = "App.dataForm.getEl().mask('Loading Maps', 'x-mask-loading');";
+                //l.BeforeLoad.Handler = "App.frmMain.getEl().mask('Loading Maps', 'x-mask-loading');";
                 l.Load.Fn = "Index.storeGridActualVisit_load"; 
             })
         )
@@ -244,7 +244,7 @@
                 ps.Add(new StoreParameter("visitDate", "App.dateVisit.value", ParameterMode.Raw));
             })
             .Listeners(l => {
-                l.BeforeLoad.Handler = "App.dataForm.getEl().mask('Loading Maps', 'x-mask-loading');";
+                l.BeforeLoad.Handler = "App.frmMain.getEl().mask('Loading Maps', 'x-mask-loading');";
                 l.Load.Fn = "Index.storeAllCurrentSalesman_load"; 
             })
         )
@@ -264,7 +264,7 @@
                 ps.Add(new StoreParameter("endDate", "App.dateTo.value", ParameterMode.Raw));
             })
             .Listeners(l => {
-                l.BeforeLoad.Handler = "App.dataForm.getEl().mask('Loading Maps', 'x-mask-loading');"; 
+                l.BeforeLoad.Handler = "App.frmMain.getEl().mask('Loading Maps', 'x-mask-loading');"; 
                 l.Load.Fn = "Index.storeCustHistory_load"; 
             })
         )
