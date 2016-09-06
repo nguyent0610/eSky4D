@@ -483,7 +483,12 @@ namespace IN20500.Controllers
         {
             try
             {
-                if (fileName.ToLower().Contains("mp4") || fileName.ToLower().Contains("wmv")) fileName = "anh1.png";
+                if (fileName.ToLower().Contains("mp4") || fileName.ToLower().Contains("wmv")||
+                    fileName.ToLower().Contains("mp3") || fileName.ToLower().Contains("pdf")||
+                    fileName.ToLower().Contains("docx") || fileName.ToLower().Contains("doc")||
+                    fileName.ToLower().Contains("pptx ") || fileName.ToLower().Contains("ppt")||
+                    fileName.ToLower().Contains("txt")
+                    ) fileName = "Media.png";
                 string filename = FilePath + "\\" + fileName;
                 if (System.IO.File.Exists(filename))
                 {
@@ -520,7 +525,7 @@ namespace IN20500.Controllers
         public ActionResult PlayMedia(string fileVideo)
         {
             //var pathMedia = PathVideo + "\\" + fileVideo;
-            var pathMedia = string.Format(@"{0}/{1}", PathVideo, fileVideo);
+            var pathMedia = string.Format(@"{0}{1}", PathVideo, fileVideo);
             //var pathMedia = ".mp4";
             string typeMedia = pathMedia.ToLower().Contains("mp4") ? "type='video/mp4'" : "type='video/wmv'";
             Ext.Net.Window win = new Window

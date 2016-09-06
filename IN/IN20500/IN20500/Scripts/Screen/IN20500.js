@@ -982,18 +982,32 @@ var fupPPCStorePicReq_Change = function (fup, newValue, oldValue, eOpts) {
 //    }
 //};
 
+var deleteImage = function (item) {
+    if (item == "yes") {
+        App.fupPPCStorePicReq.reset();
+        App.imgPPCStorePicReq.setImageUrl('');
+        App.hdnPPCStorePicReq.setValue('');
+    }
+};
+
+var deleteMedia = function (item) {
+    if (item == "yes") {
+        App.fupPPCStoreMediaReq.reset();
+        App.imgPPCStoreMediaReq.setImageUrl('');
+        App.hdnPPCStoreMediaReq.setValue('');
+    }
+};
+
 var btnClearImage_click = function (btn, eOpts) {
-    App.fupPPCStorePicReq.reset();
-    App.imgPPCStorePicReq.setImageUrl('');
-    App.hdnPPCStorePicReq.setValue('');
+    if (App.hdnPPCStorePicReq.getValue())
+        HQ.message.show(2016090601, '', 'deleteImage');
 };
 
 //Video
 // Event when uplPPCStorePicReq is change a file
 var btnDeleteMedia_Click = function (sender, e) {
-    App.fupPPCStoreMediaReq.reset();
-    App.imgPPCStoreMediaReq.setImageUrl('');
-    App.hdnPPCStoreMediaReq.setValue('');
+    if (App.hdnPPCStoreMediaReq.getValue())
+        HQ.message.show(2016090601, '', 'deleteMedia');
 };
 
 var fupPPCStoreMediaReq_Change = function (fup, newValue, oldValue, eOpts) {
@@ -1005,7 +1019,7 @@ var fupPPCStoreMediaReq_Change = function (fup, newValue, oldValue, eOpts) {
             ext == "doc" || ext == "docx" || ext == "avi" ||
             ext == "mpg" || ext == "wmv" || ext == "ogm" ||
             ext == "mpge" || ext == "iso" || ext == "mkv" ||
-            ext == "rm" || ext == "rmvb" || ext == "mov") {
+            ext == "rm" || ext == "rmvb" || ext == "mov" ) {
             HQ.common.showBusy(true, HQ.common.getLang('Uploading...'), App.frmMain);
             readImage(fup, App.imgPPCStoreMediaReq, App.hdnPPCStoreMediaReq);
         }
@@ -1039,6 +1053,11 @@ var readImage = function (fup, imgControl, ctr) {
                 HQ.common.showBusy(false);
             };
             FR.readAsDataURL(files[0]);
+
+            var ext = fup.value.split(".").pop().toLowerCase();
+            if (ext != "jpg" || ext != "png" || ext != "gif") {
+                displayImage(App.imgPPCStoreMediaReq, fup.value);
+            }
         }
     }
 };
