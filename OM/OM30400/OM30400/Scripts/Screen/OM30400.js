@@ -1034,6 +1034,16 @@ var clearMaps = function () {
         }
     }
     PosGmap.planPoints = [];
+    PosGmap.stopMarkers = [];
+    PosGmap.directionsDisplays = [];
+    //for (i = 0; i < stopMarkers.length; i++) {
+    //    stopMarkers[i].setMap(null);
+
+    //    if (i == stopMarkers.length - 1) {
+    //        stopMarkers = [];
+    //    }
+    //}
+    //PosGmap.directionsDisplay.setMap(PosGmap.map);
 };
 
 // JS Code for POS Gmap
@@ -2296,7 +2306,7 @@ var PosGmap = {
             PosGmap.directionsDisplays.push(directionsDisplay);
 
             if (planPoints.length > 0) {
-                getRoute();
+                PosGmap.getRoute();
             } else {
                 App.grdVisitCustomerActual.store.reload();
                 App.storeMapActualVisit.reload();
