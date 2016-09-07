@@ -4367,6 +4367,30 @@ namespace AR20400
         private global::System.String _InActive;
         partial void OnInActiveChanging(global::System.String value);
         partial void OnInActiveChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SellProduct
+        {
+            get
+            {
+                return _SellProduct;
+            }
+            set
+            {
+                OnSellProductChanging(value);
+                ReportPropertyChanging("SellProduct");
+                _SellProduct = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SellProduct");
+                OnSellProductChanged();
+            }
+        }
+        private global::System.String _SellProduct;
+        partial void OnSellProductChanging(global::System.String value);
+        partial void OnSellProductChanged();
 
         #endregion
 
@@ -10421,6 +10445,30 @@ namespace AR20400
         private global::System.String _InActive;
         partial void OnInActiveChanging(global::System.String value);
         partial void OnInActiveChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SellProduct
+        {
+            get
+            {
+                return _SellProduct;
+            }
+            set
+            {
+                OnSellProductChanging(value);
+                ReportPropertyChanging("SellProduct");
+                _SellProduct = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SellProduct");
+                OnSellProductChanged();
+            }
+        }
+        private global::System.String _SellProduct;
+        partial void OnSellProductChanging(global::System.String value);
+        partial void OnSellProductChanged();
 
         #endregion
 

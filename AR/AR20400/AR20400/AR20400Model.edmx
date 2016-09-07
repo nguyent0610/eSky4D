@@ -175,15 +175,16 @@
           <Property Name="HasPG" Type="bit" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
           <Property Name="EstablishDate" Type="date" />
           <Property Name="Birthdate" Type="date" />
           <Property Name="InActive" Type="nvarchar" MaxLength="100" />
+          <Property Name="SellProduct" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="AR_CustSellingProducts">
           <Key>
@@ -520,7 +521,6 @@
             <Parameter Name="CustId" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
           <FunctionImport Name="AR20400_ppCustID" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="KeyTree" Mode="In" Type="String" />
@@ -537,6 +537,7 @@
             <Parameter Name="State" Mode="In" Type="String" />
             <Parameter Name="District" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
         </EntityContainer>
         <EntityType Name="AR_CustAdvTool">
           <Key>
@@ -908,6 +909,7 @@
           <Property Type="DateTime" Name="EstablishDate" Nullable="true" />
           <Property Type="DateTime" Name="Birthdate" Nullable="true" />
           <Property Type="String" Name="InActive" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="SellProduct" Nullable="true" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="AR20400_pgAR_CustAdvTool_Result">
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
@@ -1035,15 +1037,16 @@
           <Property Type="Boolean" Name="HasPG" Nullable="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="EstablishDate" Precision="0" />
           <Property Type="DateTime" Name="Birthdate" Precision="0" />
           <Property Type="String" Name="InActive" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SellProduct" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1421,6 +1424,7 @@
                 <ScalarProperty Name="EstablishDate" ColumnName="EstablishDate" />
                 <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
                 <ScalarProperty Name="InActive" ColumnName="InActive" />
+                <ScalarProperty Name="SellProduct" ColumnName="SellProduct" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1511,9 +1515,11 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AR20400_ppGetMaxHierarchyLevel" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetMaxHierarchyLevel" />
           <FunctionImportMapping FunctionImportName="AR20400_ppCheckDeleteCust" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCheckDeleteCust" />
+          <FunctionImportMapping FunctionImportName="AR20400_ppCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCustID" />
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="SellProduct" ColumnName="SellProduct" />
                 <ScalarProperty Name="InActive" ColumnName="InActive" />
                 <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
                 <ScalarProperty Name="EstablishDate" ColumnName="EstablishDate" />
@@ -1590,7 +1596,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AR20400_ppCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCustID" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
