@@ -92,8 +92,8 @@
                     
                     , HQ.Combo().ID("cboHandle").Tag("X")
                     .Name("cboHandle").HQLangCode("HANDLE").HQProcedure("AR10200_pcGetHandle")
-                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                    .HQHeightWidth(400, 300).ForceSelection(true)//.AllowBlank(false)
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQValue("N",false)
+                    .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
                     {
@@ -279,7 +279,7 @@
                             HQ.Combo().ID("cboDebtCollector")
                             .HQLangCode("DebtCollector").HQProcedure("AR10200_pcPaymentSalesPerson")
                             .ForceSelection(true).DataIndex("SlsperId")
-                            .AllowBlank(false).HQHeightWidth(400, 300)
+                            .HQHeightWidth(400, 300)//.AllowBlank(false)
                             .HQColumnShow("Slsperid,Name").ValueField("Slsperid").DisplayField("Slsperid")
                             .Flex(1).MarginSpec("5 0 0 5")
                             .HQParam(new StoreParameterCollection() 
