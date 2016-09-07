@@ -2696,7 +2696,7 @@ namespace OM23800.Controllers
                     var lineSlsNoExist = new List<string>();
                     var lineInvalidDistrict = new List<string>();
                     var lineInvalidGeo = new List<string>();
-
+                    var lineCustID = new List<string>();
                     var lineShopType = new List<string>();
                     var lineSlsPerID = new List<string>();
                     var lineShopID = new List<string>();
@@ -2729,12 +2729,16 @@ namespace OM23800.Controllers
                         string strCity = string.Empty;
                         string strTerritory = string.Empty;
                         string strInActive = string.Empty;
-
+                        bool autoCustID = true;
                         double lat = 0;
                         double lng = 0;
 
                         if (strEBranchID == BranchID)
                         {
+                            var objAR_Setup = _db.AR_Setup.FirstOrDefault(p => p.BranchID == BranchID && p.SetupId == "AR");
+                            if (objAR_Setup != null)
+                                autoCustID = objAR_Setup.AutoCustID;
+
                             for (int i = dataRowIdx; i <= workSheet.Cells.MaxDataRow; i++)
                             {
                                 //if (workSheet.Cells[i,0].StringValue.PassNull().Trim() == "") break;
@@ -2883,8 +2887,50 @@ namespace OM23800.Controllers
                                                     var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustId == strShopID && c.BranchID == strEBranchID);
                                                     if (existCust != null)
                                                     {
-                                                        var existRefCustID = _db.AR_Customer.FirstOrDefault(p => p.BranchID == strEBranchID && p.RefCustID == strRefCustID);
-                                                        if (existRefCustID == null)
+                                                        if (existCust.RefCustID != strRefCustID)
+                                                        {
+                                                            var existRefCustID = _db.AR_Customer.FirstOrDefault(p => p.BranchID == strEBranchID && p.RefCustID == strRefCustID);
+                                                            if (existRefCustID == null)
+                                                            {
+                                                                existCust.CustName = existCust.BillName = strShopName;
+                                                                existCust.Attn = existCust.BillAttn = strAttn;
+                                                                existCust.Addr1 = existCust.BillAddr1 = strAddr;
+                                                                existCust.District = strDistrict;
+                                                                existCust.State = existCust.BillState = strProvince;
+                                                                existCust.Phone = existCust.BillPhone = strPhone;
+                                                                existCust.Country = existCust.BillCountry = strCountry;
+                                                                existCust.City = existCust.BillCity = strCity;
+                                                                existCust.Territory = strTerritory;
+                                                                existCust.ClassId = strCustClass;
+                                                                existCust.Location = strLocation;
+                                                                existCust.LUpd_Datetime = DateTime.Now;
+                                                                existCust.LUpd_Prog = _screenName;
+                                                                existCust.LUpd_User = Current.UserName;
+                                                                existCust.SlsperId = strSlsPerID.PassNull();
+                                                                existCust.ShopType = strShopType;
+                                                                existCust.SellProduct = strSellProduct;
+                                                                existCust.RefCustID = strRefCustID;
+                                                                if (strInActive == "X")
+                                                                    existCust.Status = "H";
+                                                                else
+                                                                    existCust.Status = "A";
+                                                                if (lat > 0 && lng > 0)
+                                                                {
+                                                                    updateCustomerLocation(strEBranchID, strShopID, lat, lng);
+                                                                }
+                                                                else if (lat > 0 || lng > 0)
+                                                                {
+                                                                    lineInvalidGeo.Add((i - dataRowIdx + 1).ToString());
+                                                                }
+
+                                                                lineSuccess.Add((i - dataRowIdx + 1).ToString());
+                                                            }
+                                                            else
+                                                            {
+                                                                lineExistRefCustID.Add((i - dataRowIdx + 1).ToString());
+                                                            }
+                                                        }
+                                                        else
                                                         {
                                                             existCust.CustName = existCust.BillName = strShopName;
                                                             existCust.Attn = existCust.BillAttn = strAttn;
@@ -2919,10 +2965,6 @@ namespace OM23800.Controllers
 
                                                             lineSuccess.Add((i - dataRowIdx + 1).ToString());
                                                         }
-                                                        else
-                                                        {
-                                                            lineExistRefCustID.Add((i - dataRowIdx + 1).ToString());
-                                                        }
                                                     }
                                                     else
                                                     {
@@ -2955,6 +2997,11 @@ namespace OM23800.Controllers
                                                             lineExist.Add((i - dataRowIdx + 1).ToString());
                                                             canInsert = false;
                                                         }
+                                                        else
+                                                        {
+                                                            if(autoCustID == true)
+                                                                strShopID = _db.OM23800_CustID(strEBranchID, strProvince, strDistrict, strCustClass).FirstOrDefault().ToString();
+                                                        }
                                                     }
                                                     else
                                                     {
@@ -2966,7 +3013,12 @@ namespace OM23800.Controllers
                                                         }
                                                         else
                                                         {
-                                                            strShopID = _db.OM23800_CustID(strEBranchID, strProvince, strDistrict, strCustClass).FirstOrDefault().ToString();
+                                                            if(autoCustID == true)
+                                                                strShopID = _db.OM23800_CustID(strEBranchID, strProvince, strDistrict, strCustClass).FirstOrDefault().ToString();
+                                                            else
+                                                                lineCustID.Add((i - dataRowIdx + 1).ToString());
+                                                                // bao loi thieu custid
+
                                                         }
                                                     }
 
@@ -3055,6 +3107,11 @@ namespace OM23800.Controllers
                             {
                                 message += string.Format(Message.GetString("2016082907",null),
                                     lineSuccess.Count > 5 ? string.Join(", ", lineSuccess.Take(5)) + ", ..." : string.Join(", ", lineSuccess));
+                            }
+                            if (lineCustID.Count > 0)
+                            {
+                                message += string.Format(Message.GetString("2016082912", null),
+                                    lineCustID.Count > 5 ? string.Join(", ", lineCustID.Take(5)) + ", ..." : string.Join(", ", lineCustID), workSheet.Cells[3, 3].StringValue);
                             }
                             if (lineSlsPerID.Count > 0)
                             {
