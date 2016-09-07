@@ -1607,7 +1607,7 @@ namespace OM23800.Controllers
                 pc.Add(new ParamStruct("@DaysOfWeek", DbType.String, clsCommon.GetValueDBNull(daysOfWeek), ParameterDirection.Input, 3));
                 pc.Add(new ParamStruct("@WeekEO", DbType.String, clsCommon.GetValueDBNull(weekOfVisit), ParameterDirection.Input, 2));
 
-                DataTable dtDataExport = dal.ExecDataTable("OM23800_pgMCL", CommandType.StoredProcedure, ref pc);
+                DataTable dtDataExport = dal.ExecDataTable("OM23800_peMCL", CommandType.StoredProcedure, ref pc);
                 //SheetMCP.Cells.ImportDataTable(dtDataExport, false, "B6");// du lieu data export
 
                 for (int i = 0; i < dtDataExport.Rows.Count; i++)
@@ -3013,10 +3013,13 @@ namespace OM23800.Controllers
                                                         }
                                                         else
                                                         {
-                                                            if(autoCustID == true)
+                                                            if (autoCustID == true)
                                                                 strShopID = _db.OM23800_CustID(strEBranchID, strProvince, strDistrict, strCustClass).FirstOrDefault().ToString();
                                                             else
+                                                            {
                                                                 lineCustID.Add((i - dataRowIdx + 1).ToString());
+                                                                canInsert = false;
+                                                            }
                                                                 // bao loi thieu custid
 
                                                         }
