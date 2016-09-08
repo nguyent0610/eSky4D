@@ -24,7 +24,7 @@ namespace AR20500.Controllers
         private string _userName = Current.UserName;
         AR20500Entities _db = Util.CreateObjectContext<AR20500Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-
+        private bool _AR20500Anova = false;
         private JsonResult mLogMessage;
         private FormCollection mForm;
 
@@ -62,6 +62,11 @@ namespace AR20500.Controllers
             Util.InitRight(_screenNbr);
             ViewBag.ImagePath = FilePath;
             ViewBag.IsShowCustHT = _db.AR20500_pdIsShowCustHT().FirstOrDefault();
+            var objRequire = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "AR20500Anova");
+            if (objRequire != null)
+                if (objRequire.IntVal == 1)
+                    _AR20500Anova = true;
+
             return View();
         }
 
@@ -203,7 +208,10 @@ namespace AR20500.Controllers
                                 objCust.Phone = objCust.BillPhone = item.Phone.PassNull(); ;
                                 objCust.Channel = objCust.Channel.PassNull();
                                 objCust.Area = objCust.Area.PassNull();
-                                objCust.ShopType = item.ShopType.PassNull();
+                                if (_AR20500Anova == true)
+                                    objCust.ShopType = "RS";
+                                else
+                                    objCust.ShopType = item.ShopType.PassNull();
                                 objCust.State = item.State.PassNull();
                                 objCust.Status = "A";// item.IsActive == 1 ? "A" : "I";
                                 objCust.TaxDflt = "C";
