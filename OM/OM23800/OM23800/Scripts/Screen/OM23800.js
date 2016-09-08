@@ -563,7 +563,7 @@ var McpInfo = {
                 },
 
                 failure: function (errorMsg, data) {
-                    HQ.message.process(msg, data, true);
+                    HQ.message.process(errorMsg, data, true);
                     
                     //if (data.result.msgCode) {
                     //    HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
