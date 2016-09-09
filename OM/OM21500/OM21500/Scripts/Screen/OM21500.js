@@ -141,13 +141,7 @@ var stoDescCpny_Load = function (sto) {
     if (_isLoadMaster) {        
         HQ.common.showBusy(false);
     }
-    App.stoDescCpny.suspendEvents();
-    App.grdCompany.getFilterPlugin().clearFilters();
-    App.grdCompany.getFilterPlugin().getFilter('DiscCode').setValue([_crrDiscCode, '']);
-    App.grdCompany.getFilterPlugin().getFilter('DiscCode').setActive(true);    
-    sortGrdCompany();
-    App.stoDescCpny.resumeEvents();
-    App.grdCompany.view.refresh();
+    filterGridByDiscCode();
 }
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
@@ -190,13 +184,7 @@ var grdOM_DiscDescr_Reject = function (record) {
 };
 var slmOM_DiscDescr_Select = function (sender, e) {
     _crrDiscCode = e.data.DiscCode;
-    App.stoDescCpny.suspendEvents();
-    App.grdCompany.getFilterPlugin().clearFilters();
-    App.grdCompany.getFilterPlugin().getFilter('DiscCode').setValue([e.data.DiscCode, '']);
-    App.grdCompany.getFilterPlugin().getFilter('DiscCode').setActive(true);
-    sortGrdCompany();
-    App.stoDescCpny.resumeEvents();
-    App.grdCompany.view.refresh();
+    filterGridByDiscCode();
     frmChange();
     setTitle();
 };
@@ -215,6 +203,22 @@ var grdCompany_BeforeEdit = function (editor, e) {
 var save = function () {
     var lstCpny = App.stoDescCpny;
     lstCpny.clearFilter();
+    var isBreak = false;
+    for (var i = 0; i < App.stoOM_DiscDescr.data.length; i++) {
+        var objH = App.stoOM_DiscDescr.data.items[i].data;
+        if (objH.DiscCode != '') {
+            var obj = HQ.store.findRecord(lstCpny, ['DiscCode'], [objH.DiscCode]);
+            if (!obj) {
+                HQ.message.show(2016090901, [objH.DiscCode], '', true);
+                isBreak = true;
+                break;
+            }
+        }        
+    }
+    if (isBreak) {
+        filterGridByDiscCode();
+        return false;
+    }
     if (App.frmMain.isValid()) {
         App.tabDetail.setActiveTab(0);
         HQ.focus = 'header';
@@ -303,6 +307,15 @@ var stringFilter = function (record) {
     return HQ.grid.filterString(record, this);
 }
 
+var filterGridByDiscCode = function () {
+    App.stoDescCpny.suspendEvents();
+    App.grdCompany.getFilterPlugin().clearFilters();
+    App.grdCompany.getFilterPlugin().getFilter('DiscCode').setValue([_crrDiscCode, '']);
+    App.grdCompany.getFilterPlugin().getFilter('DiscCode').setActive(true);
+    sortGrdCompany();
+    App.stoDescCpny.resumeEvents();
+    App.grdCompany.view.refresh();
+}
 var checkFromDate = function () {
 };
 var checkToDate = function () {
@@ -327,6 +340,9 @@ var showFieldInvalid = function (form) {
 
 // Tree Event /////////////////////////////////////////////////////////////////////////////
 var btnAddAll_click = function (btn, e, eOpts) {
+    if (_crrDiscCode == '') {
+        return false;
+    }
     if (HQ.isUpdate) {
         if (App.frmMain.isValid()) {
             var allNodes = getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
@@ -360,6 +376,9 @@ var btnAddAll_click = function (btn, e, eOpts) {
 };
 
 var btnAdd_click = function (btn, e, eOpts) {
+    if (_crrDiscCode == '') {
+        return false;
+    }
     if (HQ.isUpdate) {
         if (App.frmMain.isValid()) {
             var allNodes = App.treePanelBranch.getCheckedNodes();
@@ -417,7 +436,7 @@ var btnDel_click = function (btn, e, eOpts) {
 
 var btnDelAll_click = function (btn, e, eOpts) {
     if (HQ.isUpdate) {
-        if (App.frmMain.isValid()) {
+        if (App.frmMain.isValid() && App.grdCompany.store.data.length > 0) {
             HQ.message.show(11, '', 'deleteAllCompanies');
         }
         else {
