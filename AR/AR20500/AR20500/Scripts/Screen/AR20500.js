@@ -22,13 +22,15 @@ var loadSourceCombo = function () {
     });
 };
 
-var cboCpnyID_Change = function (value) {
+var cboCpnyID_Change = function (sender,e) {
     if (_Change == true) {
         HQ.message.show(20150303, '', 'refresh');
     } else {
-        App.grdCust.store.removeAll();
-        App.cboSlsperId.store.reload();
-        App.cboColSalesRouteID.store.reload();
+        if (sender.valueModels != null) {
+            App.grdCust.store.removeAll();
+            App.cboSlsperId.store.reload();
+            App.cboColSalesRouteID.store.reload();
+        }
         //App.grdCust.removeAll();
     }
 };
@@ -432,7 +434,7 @@ var renderSalesRouteID = function (value) {
 var slmCust_Select = function (rowModel, record, index, eOpts) {
     if (record && record[0].data.Lat && record[0].data.Lng) {
         Gmap.Process.navMapCenterByLocation(record[0].data.Lat, record[0].data.Lng, record.index + 1);
-        App.imgImages.setImageUrl(HQ.imagePath + '\\' + record[0].data.ImageFileName)// get image theo url
+        App.imgImages.setImageUrl(HQ.imagePath + record[0].data.ImageFileName)// get image theo url
         //displayImage(App.imgImages, record.data.ImageFileName);// get image theo binary
     }
 };
@@ -646,9 +648,9 @@ var Gmap = {
                         (function (marker, data) {
                             google.maps.event.addListener(marker, "click", function (e) {
                                 App.slmCust.select(data.index);
-                                displayImage(App.imgImages, data.ImageFileName);
-                                infoWindow.setContent(data.description);
-                                infoWindow.open(Gmap.Declare.map, marker);
+                                //displayImage(App.imgImages, data.ImageFileName);
+                                Gmap.Declare.infoWindow.setContent(data.description);
+                                Gmap.Declare.infoWindow.open(Gmap.Declare.map, marker);
 
                                 // Set animation of marker
                                 if (marker.getAnimation() != null) {
