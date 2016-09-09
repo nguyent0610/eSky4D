@@ -60,7 +60,7 @@ var cboStatus_Change = function (value) {
 
 
 var btnLoad_Click = function () {
-    if (HQ.form.checkRequirePass(App.frmMain)) {
+    if (App.frmMain.isValid()) {
         App.stoCust.reload();
     }
 };
@@ -448,7 +448,7 @@ var renderSalesRouteID = function (value) {
 };
 
 var slmCust_Select = function (rowModel, record, index, eOpts) {
-    if (record) {
+    if (record[0]) {
         if (record[0].data.Lat && record[0].data.Lng) {
             Gmap.Process.navMapCenterByLocation(record[0].data.Lat, record[0].data.Lng, record.index + 1);
             App.imgImages.setImageUrl(HQ.imagePath + record[0].data.ImageFileName)// get image theo url
