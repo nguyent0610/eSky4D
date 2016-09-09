@@ -2394,6 +2394,7 @@ namespace OM23800.Controllers
                 SheetMCP.Cells.ImportDataTable(dtSellProduct, true, 0, 156, false);// du lieu SellProduct
 
 
+                SheetMCP.Cells["GA1"].PutValue("X");
                 #endregion
 
                 #region header info
@@ -2503,6 +2504,25 @@ namespace OM23800.Controllers
                 area.EndRow = dtDataExport.Rows.Count + maxRow + headerRowIdx + 2;
                 area.StartColumn = ColTexts.IndexOf("SellProduct");
                 area.EndColumn = ColTexts.IndexOf("SellProduct");
+                validation.AddArea(area);
+
+                // InActive
+                string formulaInActive = "=$GA$1:$GA$1";
+                validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
+                validation.IgnoreBlank = true;
+                validation.Type = Aspose.Cells.ValidationType.List;
+                validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                validation.Operator = OperatorType.Between;
+                validation.Formula1 = formulaInActive;
+                validation.InputTitle = "";
+                validation.InputMessage = "Chọn giá trị";
+                validation.ErrorMessage = "Giá trị này không tồn tại";
+
+                area = new CellArea();
+                area.StartRow = headerRowIdx + 2;
+                area.EndRow = dtDataExport.Rows.Count + maxRow + headerRowIdx + 2;
+                area.StartColumn = ColTexts.IndexOf("InActive");
+                area.EndColumn = ColTexts.IndexOf("InActive");
                 validation.AddArea(area);
 
                 // State
@@ -2887,7 +2907,7 @@ namespace OM23800.Controllers
                                                     var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustId == strShopID && c.BranchID == strEBranchID);
                                                     if (existCust != null)
                                                     {
-                                                        if (existCust.RefCustID != strRefCustID)
+                                                        if (existCust.RefCustID != strRefCustID && strRefCustID.PassNull()!="")
                                                         {
                                                             var existRefCustID = _db.AR_Customer.FirstOrDefault(p => p.BranchID == strEBranchID && p.RefCustID == strRefCustID);
                                                             if (existRefCustID == null)
@@ -3024,73 +3044,76 @@ namespace OM23800.Controllers
 
                                                         }
                                                     }
-
                                                     if (canInsert)
                                                     {
-                                                        var existRefCustID = _db.AR_Customer.FirstOrDefault(p => p.BranchID == strEBranchID && p.RefCustID == strRefCustID);
-                                                        if (existRefCustID == null)
+                                                        if (strRefCustID.PassNull() != "")
                                                         {
-                                                            var newCust = new AR_Customer();
-                                                            newCust.ResetET();
-                                                            newCust.ExpiryDate = DateTime.Now.ToDateShort();
-                                                            newCust.Birthdate = new DateTime(1900, 1, 1).ToDateShort();
-                                                            newCust.EstablishDate = new DateTime(1900, 1, 1).ToDateShort();
-                                                            newCust.CustId = strShopID;
-                                                            newCust.BranchID = strEBranchID;
-                                                            newCust.CustName = newCust.BillName = strShopName;
-                                                            newCust.Attn = newCust.BillAttn = strAttn;
-                                                            newCust.Addr1 = newCust.BillAddr1 = strAddr;
-                                                            newCust.District = strDistrict;
-                                                            newCust.State = newCust.BillState = strProvince;
-                                                            newCust.Phone = newCust.BillPhone = strPhone;
-                                                            newCust.Country = newCust.BillCountry = strCountry;
-                                                            newCust.City = newCust.BillCity = strCity;
-                                                            newCust.Territory = strTerritory;
-                                                            newCust.ClassId = strCustClass;
-                                                            newCust.Location = strLocation;
-                                                            newCust.CrRule = "N";
-                                                            newCust.CustType = "R";
-                                                            newCust.DfltShipToId = "DEFAULT";
-                                                            newCust.NodeLevel = 2;
-                                                            newCust.ParentRecordID = 4;
-                                                            if (strInActive == "X")
-                                                                newCust.Status = "H";
-                                                            else
-                                                                newCust.Status = "A";
-                                                            newCust.SupID = "";
-                                                            newCust.TaxDflt = "C";
-                                                            newCust.TaxID00 = "OVAT10-00";
-                                                            newCust.TaxID01 = "OVAT05-00";
-                                                            newCust.TaxID02 = "VAT00";
-                                                            newCust.TaxID03 = "NONEVAT";
-                                                            newCust.TaxLocId = "";
-                                                            newCust.TaxRegNbr = "123456789";
-                                                            newCust.Terms = "07";
-                                                            newCust.LUpd_Datetime = newCust.Crtd_Datetime = DateTime.Now;
-                                                            newCust.LUpd_Prog = newCust.Crtd_Prog = _screenName;
-                                                            newCust.LUpd_User = newCust.Crtd_User = Current.UserName;
-                                                            newCust.SlsperId = strSlsPerID;
-                                                            newCust.ShopType = strShopType;
-                                                            newCust.SellProduct = strSellProduct;
-                                                            newCust.RefCustID = strRefCustID;
-                                                            _db.AR_Customer.AddObject(newCust);
-
-                                                            if (lat > 0 && lng > 0)
+                                                            var existRefCustID = _db.AR_Customer.FirstOrDefault(p => p.BranchID == strEBranchID && p.RefCustID == strRefCustID);
+                                                            if (existRefCustID != null)
                                                             {
-                                                                updateCustomerLocation(strEBranchID, strShopID, lat, lng);
+                                                                lineExistRefCustID.Add((i - dataRowIdx + 1).ToString());
+                                                                canInsert = false;
                                                             }
-                                                            else if (lat > 0 || lng > 0)
-                                                            {
-                                                                lineInvalidGeo.Add((i - dataRowIdx + 1).ToString());
-                                                            }
-
-                                                            _db.SaveChanges();
-                                                            lineSuccess.Add((i - dataRowIdx + 1).ToString());
                                                         }
+                                                    }
+                                                    if (canInsert)
+                                                    {
+                                                        var newCust = new AR_Customer();
+                                                        newCust.ResetET();
+                                                        newCust.ExpiryDate = DateTime.Now.ToDateShort();
+                                                        newCust.Birthdate = new DateTime(1900, 1, 1).ToDateShort();
+                                                        newCust.EstablishDate = new DateTime(1900, 1, 1).ToDateShort();
+                                                        newCust.CustId = strShopID;
+                                                        newCust.BranchID = strEBranchID;
+                                                        newCust.CustName = newCust.BillName = strShopName;
+                                                        newCust.Attn = newCust.BillAttn = strAttn;
+                                                        newCust.Addr1 = newCust.BillAddr1 = strAddr;
+                                                        newCust.District = strDistrict;
+                                                        newCust.State = newCust.BillState = strProvince;
+                                                        newCust.Phone = newCust.BillPhone = strPhone;
+                                                        newCust.Country = newCust.BillCountry = strCountry;
+                                                        newCust.City = newCust.BillCity = strCity;
+                                                        newCust.Territory = strTerritory;
+                                                        newCust.ClassId = strCustClass;
+                                                        newCust.Location = strLocation;
+                                                        newCust.CrRule = "N";
+                                                        newCust.CustType = "R";
+                                                        newCust.DfltShipToId = "DEFAULT";
+                                                        newCust.NodeLevel = 2;
+                                                        newCust.ParentRecordID = 4;
+                                                        if (strInActive == "X")
+                                                            newCust.Status = "H";
                                                         else
+                                                            newCust.Status = "A";
+                                                        newCust.SupID = "";
+                                                        newCust.TaxDflt = "C";
+                                                        newCust.TaxID00 = "OVAT10-00";
+                                                        newCust.TaxID01 = "OVAT05-00";
+                                                        newCust.TaxID02 = "VAT00";
+                                                        newCust.TaxID03 = "NONEVAT";
+                                                        newCust.TaxLocId = "";
+                                                        newCust.TaxRegNbr = "123456789";
+                                                        newCust.Terms = "07";
+                                                        newCust.LUpd_Datetime = newCust.Crtd_Datetime = DateTime.Now;
+                                                        newCust.LUpd_Prog = newCust.Crtd_Prog = _screenName;
+                                                        newCust.LUpd_User = newCust.Crtd_User = Current.UserName;
+                                                        newCust.SlsperId = strSlsPerID;
+                                                        newCust.ShopType = strShopType;
+                                                        newCust.SellProduct = strSellProduct;
+                                                        newCust.RefCustID = strRefCustID;
+                                                        _db.AR_Customer.AddObject(newCust);
+
+                                                        if (lat > 0 && lng > 0)
                                                         {
-                                                            lineExistRefCustID.Add((i - dataRowIdx + 1).ToString());
+                                                            updateCustomerLocation(strEBranchID, strShopID, lat, lng);
                                                         }
+                                                        else if (lat > 0 || lng > 0)
+                                                        {
+                                                            lineInvalidGeo.Add((i - dataRowIdx + 1).ToString());
+                                                        }
+
+                                                        _db.SaveChanges();
+                                                        lineSuccess.Add((i - dataRowIdx + 1).ToString());
                                                     }
                                                 }
                                             }
