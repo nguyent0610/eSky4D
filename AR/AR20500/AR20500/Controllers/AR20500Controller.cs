@@ -24,7 +24,6 @@ namespace AR20500.Controllers
         private string _userName = Current.UserName;
         AR20500Entities _db = Util.CreateObjectContext<AR20500Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-        private bool _AR20500Anova = false;
         private JsonResult mLogMessage;
         private FormCollection mForm;
 
@@ -39,6 +38,26 @@ namespace AR20500.Controllers
                 else
                     _filePath = Server.MapPath("~\\Images\\AR20500");
                 return _filePath;
+            }
+        }
+        
+        private bool _AR20500Anova;
+        internal bool AR20500Anova
+        {
+            get
+            {
+                // IntVal = 0 khong check dieu kien - IntVal = 1 co check dieu kien (Name/Addr/Phone)
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "AR20500Anova");
+                if (config != null)
+                {
+                    if (config.IntVal == 1)
+                        _AR20500Anova = true;
+                    else
+                        _AR20500Anova = false;
+                }
+                else
+                    _AR20500Anova = false;
+                return _AR20500Anova;
             }
         }
 
@@ -57,16 +76,13 @@ namespace AR20500.Controllers
             }
         }
 
+
+
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
             ViewBag.ImagePath = FilePath;
             ViewBag.IsShowCustHT = _db.AR20500_pdIsShowCustHT().FirstOrDefault();
-            var objRequire = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "AR20500Anova");
-            if (objRequire != null)
-                if (objRequire.IntVal == 1)
-                    _AR20500Anova = true;
-
             return View();
         }
 
@@ -208,7 +224,7 @@ namespace AR20500.Controllers
                                 objCust.Phone = objCust.BillPhone = item.Phone.PassNull(); ;
                                 objCust.Channel = objCust.Channel.PassNull();
                                 objCust.Area = objCust.Area.PassNull();
-                                if (_AR20500Anova == true)
+                                if (AR20500Anova == true)
                                     objCust.ShopType = "RS";
                                 else
                                     objCust.ShopType = item.ShopType.PassNull();

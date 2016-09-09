@@ -272,7 +272,7 @@
                                 l.Command.Handler = "grdCust_Reject(record);"; 
                             })
                     )
-                    .SelectionModel(X.RowSelectionModel().ID("slmCust").Mode(SelectionMode.Multi).Listeners(l => l.Select.Fn = "slmCust_Select"))
+                    .SelectionModel(X.RowSelectionModel().ID("slmCust").Mode(SelectionMode.Multi).Listeners(l => l.SelectionChange.Fn = "slmCust_Select"))
 
                     .Plugins(
                         X.CellEditing()
