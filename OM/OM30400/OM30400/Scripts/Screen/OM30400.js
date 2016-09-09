@@ -524,6 +524,9 @@ var Index = {
                         PosGmap.directionsDisplays[i].setMap(true ? PosGmap.map : null);
                     }
                 }
+                App.grdVisitCustomerActual.getFilterPlugin().clearFilters();
+                App.grdVisitCustomerActual.getFilterPlugin().getFilter('TypeMapPlan').setValue(['0','1']);
+                App.grdVisitCustomerActual.getFilterPlugin().getFilter('TypeMapPlan').setActive(true);
             }
             else {
                 for (i = 0; i < PosGmap.planMarkers.length; i++) {
@@ -536,6 +539,9 @@ var Index = {
                         PosGmap.directionsDisplays[i].setMap(false ? PosGmap.map : null);
                     }
                 }
+                App.grdVisitCustomerActual.getFilterPlugin().clearFilters();
+                App.grdVisitCustomerActual.getFilterPlugin().getFilter('TypeMapPlan').setValue('0');
+                App.grdVisitCustomerActual.getFilterPlugin().getFilter('TypeMapPlan').setActive(true);
             }
         }
     },
@@ -578,6 +584,9 @@ var Index = {
             if (store.totalCount > 0) {
                 HQ.common.showBusy(true, HQ.common.getLang('Loading Maps'));
                 PosGmap.drawMap_Visit();
+                App.grdVisitCustomerActual.getFilterPlugin().clearFilters();
+                App.grdVisitCustomerActual.getFilterPlugin().getFilter('TypeMapPlan').setValue('0');
+                App.grdVisitCustomerActual.getFilterPlugin().getFilter('TypeMapPlan').setActive(true);
             }
             else {
                 App.grdVisitCustomerActual.store.reload();
