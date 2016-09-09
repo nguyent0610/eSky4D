@@ -499,6 +499,11 @@
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="PONbr" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="PO10200_pdRight4Invc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="PO10200_pdSI_Tax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
@@ -665,7 +670,12 @@
           <EntitySet Name="RPTRunnings" EntityType="PO10200Model.RPTRunning" />
           <EntitySet Name="PO_Trans" EntityType="PO10200Model.PO_Trans" />
           <FunctionImport Name="PO10200_pcSiteAll" ReturnType="Collection(PO10200Model.PO10200_pcSiteAll_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
+          <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PO10200_pdRight4Invc" ReturnType="Collection(Boolean)">
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="PO10200_pdHeader_Result">
@@ -2552,6 +2562,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO10200_pdRight4Invc" FunctionName="SA00300Model.Store.PO10200_pdRight4Invc" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -80,7 +80,7 @@
                         , X.Container().Layout(LayoutType.HBox).Items(
                                 HQ.Combo().ID("cboBatNbr").Name("cboBatNbr").MarginSpec("3 0 0 0").LabelWidth(110).InputWidth(150).HQAutoLoad(false)
                                                 .HQLangCode("BatNbr").HQDBSys(false).HQProcedure("PO10200_pcReceipt_Batch")
-                                                .HQColumnShow("BatNbr,RefNbr,TotAmt,RcptDate,PONbr,Status,Name,invcnbr")
+                                                .HQColumnShow("BatNbr,RefNbr,TotAmt,RcptDate,PONbr,Status,Name")// ,invcnbr
                                                 .DisplayField("BatNbr")
                                                 .ValueField("BatNbr")
                                                 .HQHeightWidth(400, 700)
@@ -232,8 +232,11 @@
                                                                 lst.Focus.Handler = "this.forceSelection=true;";
                                                             })
 
-                                                    , HQ.TextBox().ID("txtInvcNote").Name("InvcNote").MaxLength(20).HQLangCode("INVCNBR").LabelWidth(100).InputWidth(55).AllowBlank(false)
-                                                    , HQ.TextBox().ID("txtInvcNbr").Name("InvcNbr").MaxLength(20).HideLabel(true).InputWidth(55).AllowBlank(false)
+                                                            , HQ.TextBox().ID("txtInputInvcNote").MaxLength(20).HQLangCode("INVCNBR").LabelWidth(100).InputWidth(55).AllowBlank(false).Tag("X")
+                                                            , HQ.TextBox().ID("txtInputInvcNbr").MaxLength(20).HideLabel(true).InputWidth(55).AllowBlank(false).Tag("X")
+                                                        
+                                                    , HQ.TextBox().ID("txtInvcNote").Name("InvcNote").MaxLength(20).HQLangCode("INVCNBR").LabelWidth(100).InputWidth(55).Hidden(true)
+                                                    , HQ.TextBox().ID("txtInvcNbr").Name("InvcNbr").MaxLength(20).HideLabel(true).InputWidth(55).Hidden(true)
 
                                                     , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("txtRcptTot").Name("RcptTot").HQLangCode("LINETOT").LabelWidth(100).InputWidth(105).AllowBlank(false).Tag("X")
                                                     , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("txtTaxAmt").Name("TaxAmt").HQLangCode("TAX").LabelWidth(110).InputWidth(120).AllowBlank(false).Tag("X")

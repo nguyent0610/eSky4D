@@ -46,16 +46,28 @@ namespace PO10200.Controllers
         bool b235 = false;//message235
         public ActionResult Index()
         {            
-            Util.InitRight(ScreenNbr);
-            ViewBag.BussinessDate = DateTime.Now.ToDateShort();
-            ViewBag.BussinessTime = DateTime.Now;
+            Util.InitRight(ScreenNbr);            
             bool isChangeSiteID = false;
+            bool isInvcConfig = false;
+            bool invcRight = false;
+            // Kiểm tra có cấu hình SiteID
             var obj = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToLower() == "po10200siteidconfig");
             if (obj != null)
             {
                 isChangeSiteID = obj.IntVal == 1;             
             }
-            ViewBag.IsChangeSiteID = isChangeSiteID;
+            // Kiểm tra có cấu hình ẩn hiện Số Hoá Đơn (Dùng cho Anova Milk)
+            var objInvc = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToLower() == "po10200invcconfig");
+            if (objInvc != null)
+            {
+                isInvcConfig = objInvc.IntVal == 1;
+                invcRight = _db.PO10200_pdRight4Invc(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().Value;
+            }            
+            ViewBag.InvcRight = invcRight;
+            ViewBag.IsInvcConfig = isInvcConfig;
+            ViewBag.IsChangeSiteID = isChangeSiteID;            
+            ViewBag.BussinessDate = DateTime.Now.ToDateShort();
+            ViewBag.BussinessTime = DateTime.Now;
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
@@ -68,7 +80,6 @@ namespace PO10200.Controllers
         {
             var obj = _db.PO10200_pdHeader(branchID, batNbr).FirstOrDefault();
             return this.Store(obj);
-
         }
         public ActionResult GetAP_VendorTax(string vendID, string ordFromId)
         {

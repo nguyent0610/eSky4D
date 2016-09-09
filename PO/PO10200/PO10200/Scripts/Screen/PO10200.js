@@ -15,7 +15,7 @@ var _stkUnit = "";
 var _purUnit = "";
 var _siteID = "";
 var _lineRef = "";
-
+var _beginStatus = 'H';
 var _objIN_ItemSite = null;
 var _stoSiteTmp;
 //////////////////////////////////////////////////////////////////
@@ -174,6 +174,13 @@ var menuClick = function (command) {
 
                 //checkRequire để kiếm tra các field yêu cầu có rỗng hay ko
                 if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoPO10200_pgDetail, _keys, _fieldsCheckRequire, _fieldsLangCheckRequire)) {
+                    if (!App.txtInvcNbr.isVisible()) {
+                        if (App.txtInvcNote.getValue() != App.txtInputInvcNote.getValue() ||
+                            App.txtInvcNbr.getValue() != App.txtInputInvcNbr.getValue()) {
+                            HQ.message.show(2016090801, '', '', false);
+                            return;
+                        }
+                    }
                     save();
                 }
             }
@@ -255,6 +262,7 @@ var menuClick = function (command) {
 };
 //load lần đầu khi mở
 var firstLoad = function () {
+    setVisibleInvc();
     HQ.numSource = 0;
     App.cboPosmID.getStore().addListener('load', store_Load);
     App.cboDocType.getStore().addListener('load', store_Load);
@@ -885,12 +893,15 @@ var cboBranchID_Select = function (item, newValue, oldValue) {
 var cboBatNbr_Change = function (item, newValue, oldValue) {   
     if ((!HQ.isNew || item.valueModels != null) && !App.stoHeader.loading) {
         App.stoHeader.reload();
+        App.txtInputInvcNote.setValue('');
+        App.txtInputInvcNbr.setValue('');
     }
-
 };
 var cboBatNbr_Select = function (item) {
     if (item.valueModels != null && !App.stoHeader.loading) {
         App.stoHeader.reload();
+        App.txtInputInvcNote.setValue('');
+        App.txtInputInvcNbr.setValue('');
     }
 };
 var cboPONbr_Change = function (item, newValue, oldValue) {
@@ -1104,6 +1115,7 @@ var cboStatus_Change = function (item, newValue, oldValue) {
         App.cboHandle.setReadOnly(false);
         App.cboBatNbr.setReadOnly(false);
     }
+    setVisibleInvc();
 };
 
 // Expand SiteID
@@ -1195,8 +1207,7 @@ function save(b714, b235) {//mess714 khi huy
     if (errorMessage) {
         HQ.message.show(2016033001, [errorMessage], '', true);
         return;
-    }
-
+    }    
     App.frmMain.getForm().updateRecord();
     App.stoLotTrans.clearFilter();
     if (App.frmMain.isValid()) {
@@ -2086,6 +2097,18 @@ function getDefaultSiteID(purchaseType) {
     return defaultSiteID;
 }
 
+var setVisibleInvc = function () {
+    var isShow = true;
+    if (HQ.IsInvcConfig == false) {
+        isShow = true;
+    } else {
+        isShow = HQ.InvcRight || App.cboStatus.getValue() != _beginStatus;
+    }    
+    App.txtInputInvcNote.setVisible(!isShow);
+    App.txtInputInvcNbr.setVisible(!isShow);
+    App.txtInvcNote.setVisible(isShow);
+    App.txtInvcNbr.setVisible(isShow);    
+}
 var PopupWinLot = {
     showLot: function (record) {
         App.lblLotQtyAvail.setText('');// xet lai so luong co the xuat =''
