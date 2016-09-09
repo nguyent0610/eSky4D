@@ -60,7 +60,9 @@ var cboStatus_Change = function (value) {
 
 
 var btnLoad_Click = function () {
-    App.stoCust.reload();
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        App.stoCust.reload();
+    }
 };
 
 var ColCheck_Header_Change = function (value) {
