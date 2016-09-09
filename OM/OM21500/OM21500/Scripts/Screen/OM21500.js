@@ -341,12 +341,15 @@ var showFieldInvalid = function (form) {
 // Tree Event /////////////////////////////////////////////////////////////////////////////
 var btnAddAll_click = function (btn, e, eOpts) {
     if (_crrDiscCode == '') {
+        App.tabDetail.setActiveTab(0);
+        HQ.message.show(2016090911);
         return false;
     }
     if (HQ.isUpdate) {
         if (App.frmMain.isValid()) {
             var allNodes = getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
             if (allNodes && allNodes.length > 0) {
+                App.stoDescCpny.suspendEvents();
                 allNodes.forEach(function (node) {
                     if (node.data.Type == "Company") {
                         var idx = App.grdCompany.store.getCount();
@@ -362,6 +365,9 @@ var btnAddAll_click = function (btn, e, eOpts) {
                         }
                     }
                 });
+                App.stoDescCpny.resumeEvents();
+                App.stoDescCpny.loadPage(1);
+                App.grdCompany.view.refresh();
                 frmChange();
                 App.treePanelBranch.clearChecked();
             }
@@ -377,12 +383,15 @@ var btnAddAll_click = function (btn, e, eOpts) {
 
 var btnAdd_click = function (btn, e, eOpts) {
     if (_crrDiscCode == '') {
+        App.tabDetail.setActiveTab(0);
+        HQ.message.show(2016090911);
         return false;
     }
     if (HQ.isUpdate) {
         if (App.frmMain.isValid()) {
             var allNodes = App.treePanelBranch.getCheckedNodes();
             if (allNodes && allNodes.length > 0) {
+                App.stoDescCpny.suspendEvents();
                 allNodes.forEach(function (node) {
                     if (node.attributes.Type == "Company") {
                         var idx = App.grdCompany.store.getCount();
@@ -398,6 +407,9 @@ var btnAdd_click = function (btn, e, eOpts) {
                         }
                     }
                 });
+                App.stoDescCpny.resumeEvents();
+                App.stoDescCpny.loadPage(1);
+                App.grdCompany.view.refresh();
                 frmChange();
                 App.treePanelBranch.clearChecked();
             }            
