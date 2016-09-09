@@ -48,6 +48,7 @@
                         .Listeners(lst =>
                         {
                             lst.Change.Fn = "cboCpnyID_Change";
+                            lst.Select.Fn = "cboCpnyID_Select";
                             lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
 
                         })

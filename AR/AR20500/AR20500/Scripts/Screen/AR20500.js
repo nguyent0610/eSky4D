@@ -26,7 +26,20 @@ var cboCpnyID_Change = function (sender,e) {
     if (_Change == true) {
         HQ.message.show(20150303, '', 'refresh');
     } else {
-        if (sender.valueModels != null) {
+        if (sender.valueModels != null && (!App.cboSlsperId.store.loading || !App.cboColSalesRouteID.store.loading)) {
+            App.grdCust.store.removeAll();
+            App.cboSlsperId.store.reload();
+            App.cboColSalesRouteID.store.reload();
+        }
+        //App.grdCust.removeAll();
+    }
+};
+
+var cboCpnyID_Select = function (sender, e) {
+    if (_Change == true) {
+        HQ.message.show(20150303, '', 'refresh');
+    } else {
+        if (sender.valueModels != null && (!App.cboSlsperId.store.loading || !App.cboColSalesRouteID.store.loading)) {
             App.grdCust.store.removeAll();
             App.cboSlsperId.store.reload();
             App.cboColSalesRouteID.store.reload();
@@ -44,6 +57,7 @@ var cboStatus_Change = function (value) {
         //App.grdCust.removeAll();
     }
 };
+
 
 var btnLoad_Click = function () {
     App.stoCust.reload();
@@ -432,10 +446,12 @@ var renderSalesRouteID = function (value) {
 };
 
 var slmCust_Select = function (rowModel, record, index, eOpts) {
-    if (record && record[0].data.Lat && record[0].data.Lng) {
-        Gmap.Process.navMapCenterByLocation(record[0].data.Lat, record[0].data.Lng, record.index + 1);
-        App.imgImages.setImageUrl(HQ.imagePath + record[0].data.ImageFileName)// get image theo url
-        //displayImage(App.imgImages, record.data.ImageFileName);// get image theo binary
+    if (record) {
+        if (record[0].data.Lat && record[0].data.Lng) {
+            Gmap.Process.navMapCenterByLocation(record[0].data.Lat, record[0].data.Lng, record.index + 1);
+            App.imgImages.setImageUrl(HQ.imagePath + record[0].data.ImageFileName)// get image theo url
+            //displayImage(App.imgImages, record.data.ImageFileName);// get image theo binary
+        }
     }
 };
 
