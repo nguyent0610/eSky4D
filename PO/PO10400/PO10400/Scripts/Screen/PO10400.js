@@ -325,7 +325,7 @@ var Other = {
 //// Declare //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 // Cac ham cho xu li Popup
-var _keys = ['InvtID'];
+var _keys = ['InvtID', 'PurchaseType']; // , ""
 var _fieldsCheckRequire = ["InvtID", "PurchaseType", "SiteID", "PurchUnit"];
 var _fieldsLangCheckRequire = ["InvtID", "PurchaseType", "SiteID", "PurchUnit"];
 
@@ -561,9 +561,30 @@ var Popup = {
 
     },
     grdPO_Detail_ValidateEdit: function (item, e) {      
-        if (_keys.indexOf(e.field) != -1) {
+        if (_keys.indexOf(e.field) != -1) {            
             if (HQ.grid.checkDuplicate(App.grdDetail, e, _keys)) {
-                HQ.message.show(1112, e.value, '');
+                var objdet = e.record;
+                var strmess = '';
+                var purType = '';
+                if (e.field == "InvtID") {
+                    purType = objdet.data.PurchaseType;
+                    var objPur = HQ.store.findRecord(App.PurchaseType.store, ['Code'], [objdet.data.PurchaseType]);
+                    if (objPur) {
+                        purType = objPur.data.Descr;
+                    }
+                    strmess = App.grdDetail.columns[1].text + ': ' + purType + ", " + App.grdDetail.columns[2].text + ': ' + e.value;
+                }
+                else {
+                    purType = e.value;
+                    var objPur = HQ.store.findRecord(App.PurchaseType.store, ['Code'], [e.value]);
+                    if (objPur) {
+                        purType = objPur.data.Descr;
+                    }
+                    strmess = App.grdDetail.columns[1].text + ': ' + purType + ", " + App.grdDetail.columns[2].text + ': ' + objdet.data.InvtID;
+                }
+                HQ.message.show(1112, [strmess], '', true);
+
+                //HQ.message.show(1112, e.value, '');
                 return false;
             }
         }
@@ -602,7 +623,7 @@ var Popup = {
         }
     },
     grdPO_Detail_Edit: function (item, e) {
-        HQ.common.showBusy(true,'',App.frmDetail);
+      //  HQ.common.showBusy(true,'',App.frmDetail);
         var objDetail = e.record.data;
         var objIN_Inventory = HQ.store.findInStore(App.stoPO10400_pdIN_Inventory, ["InvtID"], [objDetail.InvtID]);
         objIN_Inventory = objIN_Inventory == null ? "" : objIN_Inventory;
@@ -738,7 +759,7 @@ var Popup = {
             Popup.calcTaxTotal();
             HQ.common.showBusy(false, '', App.frmDetail);
         }
-       
+    
         //calcDet();
 
     },

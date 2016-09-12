@@ -29,8 +29,8 @@ namespace PO10400
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";
-            Current.DBSys = "eBiz4DCloudSysKAO"; // eSky4DSys
+            Current.Server = "EARTHSVR\\SQL2014";
+            Current.DBSys = "eBiz4DCloudSysKAO"; // eSky4DSys  ANVM_eSky4DSys
             Current.FormatDate = "dd.MM.yyyy";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
@@ -38,7 +38,7 @@ namespace PO10400
             acc.Update = true;
             Session["PO10400"] = acc;
             Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppKAO"; // eSky4DApp
-            Session["UserName"] = Current.UserName = "distadmin";
+            Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "18510594";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
