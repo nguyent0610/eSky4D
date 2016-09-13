@@ -44,7 +44,10 @@ namespace IN20500.Controllers
                 else
                 {
                     _filePath = Server.MapPath("~\\Images\\IN20500");
-                    
+                }
+                if (!Directory.Exists(_filePath))
+                {
+                    Directory.CreateDirectory(_filePath);
                 }
                 return _filePath;
             }
