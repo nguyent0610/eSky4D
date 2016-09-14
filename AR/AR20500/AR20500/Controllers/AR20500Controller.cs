@@ -234,6 +234,7 @@ namespace AR20500.Controllers
                                 objCust.NodeLevel = 2;
                                 objCust.SlsperId = item.SlsperID;
                                 objCust.ExpiryDate = DateTime.Now.ToDateShort();
+                                objCust.CustType = "R";
                                 objCust.EstablishDate = new DateTime(1900, 1, 1);
                                 objCust.Birthdate = new DateTime(1900, 1, 1);
                                 objCust.RefCustID = "";
