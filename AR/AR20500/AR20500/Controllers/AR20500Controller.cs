@@ -165,8 +165,8 @@ namespace AR20500.Controllers
                                 objNew.Phone = item.Phone;
                                 objNew.Addr1 = item.Addr1;
 
-                               
                                 _db.SaveChanges();
+
                                 string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID).FirstOrDefault();
                                 if (cust.PassNull() != "")
                                 {
@@ -175,8 +175,6 @@ namespace AR20500.Controllers
                                     continue;
                                     //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
                                 }
-                               
-                               
 
                                 var objCust = new AR_Customer();
                                 objCust.ResetET();
@@ -192,9 +190,7 @@ namespace AR20500.Controllers
 
                                 objCust.Channel = item.Channel.PassNull();
                                 objCust.Area = item.Area.PassNull();
-
                                 objCust.EMailAddr = item.Email.PassNull();
-
                                 objCust.CrRule = "N";
                                 objCust.Crtd_Datetime = DateTime.Now;
                                 objCust.Crtd_Prog = "AR20500";
@@ -216,8 +212,6 @@ namespace AR20500.Controllers
                                 objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();
                                 objCust.DfltShipToId = "DEFAULT";
                                 objCust.LTTContractNbr = item.CustHT;
-
-                               
                                 objCust.LUpd_Datetime = DateTime.Now;
                                 objCust.LUpd_Prog = "AR20500";
                                 objCust.LUpd_User = Current.UserName;
@@ -236,14 +230,13 @@ namespace AR20500.Controllers
                                 objCust.TaxID02 = "VAT00";
                                 objCust.TaxID03 = "NONEVAT";
                                 objCust.Terms = "07";
-
-
-                                //objCust.Territory = "Z3";
-
                                 objCust.ParentRecordID = 4;
                                 objCust.NodeLevel = 2;
                                 objCust.SlsperId = item.SlsperID;
                                 objCust.ExpiryDate = DateTime.Now.ToDateShort();
+                                objCust.EstablishDate = new DateTime(1900, 1, 1);
+                                objCust.Birthdate = new DateTime(1900, 1, 1);
+                                objCust.RefCustID = "";
                                 _db.AR_Customer.AddObject(objCust);
 
                                 AR_CustomerLocation loc = new AR_CustomerLocation();
@@ -259,7 +252,6 @@ namespace AR20500.Controllers
 
                                 AR_SOAddress objAR_SOAddress = new AR_SOAddress();
                                 objAR_SOAddress.ResetET();
-
                                 objAR_SOAddress.Addr1 = objCust.Addr1.PassNull();// item.Addr2.PassNull() + (item.Addr1.PassNull() != "" ? "," + item.Addr1.PassNull() : "");
                                 objAR_SOAddress.Addr2 = objCust.Addr2.PassNull();//
                                 objAR_SOAddress.Attn = objCust.Attn.PassNull();
@@ -283,26 +275,17 @@ namespace AR20500.Controllers
                                 objAR_SOAddress.ShipToId = "DEFAULT";// objCust.CustId.Length > 10 ? objCust.CustId.Substring(objCust.CustId.Length - 10, 10) : objCust.CustId;
                                 objAR_SOAddress.ShipViaID = "";
                                 objAR_SOAddress.SiteId = objCust.SiteId;
-
                                 objAR_SOAddress.SOName = objCust.CustName;
                                 objAR_SOAddress.State = objCust.State;
                                 objAR_SOAddress.TaxId00 = objCust.TaxID00;
                                 objAR_SOAddress.TaxId01 = objCust.TaxID01;
                                 objAR_SOAddress.TaxId02 = objCust.TaxID02;
-
                                 objAR_SOAddress.TaxId01 = objCust.TaxID01;
                                 objAR_SOAddress.TaxLocId = objCust.TaxLocId;
                                 objAR_SOAddress.TaxRegNbr = objCust.TaxRegNbr;
-
                                 objAR_SOAddress.Zip = objCust.Zip;
-
-
                                 _db.AR_SOAddress.AddObject(objAR_SOAddress);  
                              
-
-
-                            
-
                                 OM_SalesRouteMaster master = new OM_SalesRouteMaster();
                                 master.ResetET();
                                 master.PJPID = item.BranchID;
@@ -329,9 +312,9 @@ namespace AR20500.Controllers
                                 master.Fri = item.Fri.ToBool();
                                 master.Sat = item.Sat.ToBool();
                                 master.Sun = item.Sun.ToBool();
-
                                 _db.OM_SalesRouteMaster.AddObject(master);
                                 CreateRoute(master);
+
                                 var custID = item.CustID.PassNull().ToLower();
                                 if (objNew != null)
                                 {
@@ -377,7 +360,6 @@ namespace AR20500.Controllers
         }
         public void CreateRoute(OM_SalesRouteMaster master)//(clsOM_SalesRouteMaster objSaleMaster)
         {
-
             Int32 weekStart = default(Int32);
             Int32 weekEnd = default(Int32);
             var fromdate = master.StartDate.Value;
@@ -707,7 +689,6 @@ namespace AR20500.Controllers
                                 det1.LUpd_Datetime = DateTime.Now;
                                 det1.LUpd_Prog = _screenNbr;
                                 det1.LUpd_User = _userName;
-
                                 det1.VisitDate = dThu;
                                 det1.DayofWeek = "Thu";
                                 det1.WeekNbr = i;

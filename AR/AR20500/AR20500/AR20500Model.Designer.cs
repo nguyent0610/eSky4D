@@ -68,22 +68,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_Customer> AR_Customer
-        {
-            get
-            {
-                if ((_AR_Customer == null))
-                {
-                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
-                }
-                return _AR_Customer;
-            }
-        }
-        private ObjectSet<AR_Customer> _AR_Customer;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<AR_CustomerLocation> AR_CustomerLocation
         {
             get
@@ -192,18 +176,26 @@ namespace AR20500
             }
         }
         private ObjectSet<AR_SOAddress> _AR_SOAddress;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_Customer> AR_Customer
+        {
+            get
+            {
+                if ((_AR_Customer == null))
+                {
+                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
+                }
+                return _AR_Customer;
+            }
+        }
+        private ObjectSet<AR_Customer> _AR_Customer;
 
         #endregion
 
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Customer(AR_Customer aR_Customer)
-        {
-            base.AddObject("AR_Customer", aR_Customer);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the AR_CustomerLocation EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -259,6 +251,14 @@ namespace AR20500
         public void AddToAR_SOAddress(AR_SOAddress aR_SOAddress)
         {
             base.AddObject("AR_SOAddress", aR_SOAddress);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Customer(AR_Customer aR_Customer)
+        {
+            base.AddObject("AR_Customer", aR_Customer);
         }
 
         #endregion
@@ -2520,6 +2520,78 @@ namespace AR20500
         private Nullable<global::System.DateTime> _Birthdate;
         partial void OnBirthdateChanging(Nullable<global::System.DateTime> value);
         partial void OnBirthdateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String InActive
+        {
+            get
+            {
+                return _InActive;
+            }
+            set
+            {
+                OnInActiveChanging(value);
+                ReportPropertyChanging("InActive");
+                _InActive = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("InActive");
+                OnInActiveChanged();
+            }
+        }
+        private global::System.String _InActive;
+        partial void OnInActiveChanging(global::System.String value);
+        partial void OnInActiveChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SellProduct
+        {
+            get
+            {
+                return _SellProduct;
+            }
+            set
+            {
+                OnSellProductChanging(value);
+                ReportPropertyChanging("SellProduct");
+                _SellProduct = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SellProduct");
+                OnSellProductChanged();
+            }
+        }
+        private global::System.String _SellProduct;
+        partial void OnSellProductChanging(global::System.String value);
+        partial void OnSellProductChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String RefCustID
+        {
+            get
+            {
+                return _RefCustID;
+            }
+            set
+            {
+                OnRefCustIDChanging(value);
+                ReportPropertyChanging("RefCustID");
+                _RefCustID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("RefCustID");
+                OnRefCustIDChanged();
+            }
+        }
+        private global::System.String _RefCustID;
+        partial void OnRefCustIDChanging(global::System.String value);
+        partial void OnRefCustIDChanged();
 
         #endregion
 
