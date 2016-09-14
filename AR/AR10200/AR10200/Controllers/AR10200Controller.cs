@@ -446,11 +446,12 @@ namespace AR10200.Controllers
                         throw new MessageException(MessageType.Message, "19");
                     }
                 }
-                else
-                {
-                    throw new MessageException(MessageType.Message, "19");
-                    //throw new MessageException(MessageType.Message, "22701");
-                }
+                return Json(new { success = true });
+                //else
+                //{
+                //    throw new MessageException(MessageType.Message, "19");
+                //    //throw new MessageException(MessageType.Message, "22701");
+                //}
             }
             catch (Exception ex)
             {
