@@ -761,16 +761,16 @@ namespace AR10100.Controllers
                                 #endregion
                             }
 
-                            message = errorCloseDate == "" ? "" : string.Format("Dòng: {0} ngày chứng từ không nằm trong phạm vi cho phép nhập liệu của bạn</br>", errorCloseDate);
-                            message += errorDocType == "" ? "" : string.Format("{0} dòng: {1} không thuộc loại Phiếu Báo Nợ(DM) </br>", "Loại Chứng Từ", errorDocType);
-                            message += errorCustID == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Mã KH", errorCustID);
-                            message += errorCustIDnotExists == "" ? "" : string.Format("{0} dòng: {1} không tồn tại</br>", "Mã KH", errorCustIDnotExists);
-                            message += errorDocDate == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Ngày Chứng Từ", errorDocDate);
-                            message += errorDocDesc == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Diễn Giải Chứng Từ", errorDocDesc);
-                            message += errorTranAmt == "" ? "" : string.Format("{0} dòng: {1} chưa điền</br>", "Thành Tiền", errorTranAmt);
-                            message += errorTranAmtNotInput == "" ? "" : string.Format("{0} dòng: {1} thành tiền phải lớn hơn 0</br>", "Thành Tiền", errorTranAmtNotInput);
-                            message += erorrTranAmtFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng kiểu số</br>", "Thành Tiền", erorrTranAmtFormat);
-                            message += errorDocDateFormat == "" ? "" : string.Format("{0} dòng: {1} không đúng định dạng (yyyy/MM/dd)</br>", "Ngày Chứng Từ", errorDocDateFormat);
+                            message = errorCloseDate == "" ? "" : string.Format(Message.GetString("2016091410",null), errorCloseDate);
+                            message += errorDocType == "" ? "" : string.Format(Message.GetString("2016091411",null), Util.GetLang("DOCTYPE"), errorDocType);
+                            message += errorCustID == "" ? "" : string.Format(Message.GetString("2016091412", null), Util.GetLang("CUSTID"), errorCustID);
+                            message += errorCustIDnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), Util.GetLang("CUSTID"), errorCustIDnotExists);
+                            message += errorDocDate == "" ? "" : string.Format(Message.GetString("2016091412", null), Util.GetLang("DOCDATE"), errorDocDate);
+                            message += errorDocDesc == "" ? "" : string.Format(Message.GetString("2016091412", null), Util.GetLang("DOCDESC"), errorDocDesc);
+                            message += errorTranAmt == "" ? "" : string.Format(Message.GetString("2016091412", null), Util.GetLang("ExtAmt"), errorTranAmt);
+                            message += errorTranAmtNotInput == "" ? "" : string.Format(Message.GetString("2016091414", null), Util.GetLang("ExtAmt"), errorTranAmtNotInput);
+                            message += erorrTranAmtFormat == "" ? "" : string.Format(Message.GetString("2016091415", null), Util.GetLang("ExtAmt"), erorrTranAmtFormat);
+                            message += errorDocDateFormat == "" ? "" : string.Format(Message.GetString("2016091416", null), Util.GetLang("DOCDATE"), errorDocDateFormat);
 
                             if (message == "" || message == string.Empty)
                             {
