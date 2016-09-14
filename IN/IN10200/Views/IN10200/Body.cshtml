@@ -352,7 +352,7 @@
                     .HQColumnShow("SiteID,Name")
                     .DisplayField("SiteID")
                     .ValueField("SiteID")
-                    .Width(250)
+                    .Width(250).Hidden(true)
                     .LabelWidth(90)
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)
@@ -369,6 +369,8 @@
                         lst.Focus.Handler = "HQ.focus='batch';";
                     })
                     ,
+                    
+                    HQ.Label().ID("hideLabel").Width(250),
                     
                     HQ.Combo().ID("cboHandle")
                     .Name("Handle")
