@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -27,7 +27,7 @@ namespace SA03200.Controllers
             return View();
         }
         
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -43,16 +43,25 @@ namespace SA03200.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstPPC_License"]);
                 ChangeRecords<SA03200_pgPPC_License_Result> lstPPC_License = dataHandler.BatchObjectData<SA03200_pgPPC_License_Result>();
-                foreach (SA03200_pgPPC_License_Result deleted in lstPPC_License.Deleted)
-                {
-                    var del = _db.PPC_License.Where(p => p.PDAID == deleted.PDAID && p.BranchID == deleted.BranchID && p.SlsperId == deleted.SlsperId).FirstOrDefault();
-                    if (del != null)
-                    {
-                        _db.PPC_License.DeleteObject(del);
-                    }
-                }
 
                 lstPPC_License.Created.AddRange(lstPPC_License.Updated);
+
+                foreach (SA03200_pgPPC_License_Result deleted in lstPPC_License.Deleted)
+                {
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstPPC_License.Created.Where(p => p.PDAID == deleted.PDAID && p.BranchID == deleted.BranchID && p.SlsperId == deleted.SlsperId).Count() > 0)
+                    {
+                        lstPPC_License.Created.Where(p => p.PDAID == deleted.PDAID && p.BranchID == deleted.BranchID && p.SlsperId == deleted.SlsperId).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.PPC_License.ToList().Where(p => p.PDAID == deleted.PDAID && p.BranchID == deleted.BranchID && p.SlsperId == deleted.SlsperId).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.PPC_License.DeleteObject(objDel);
+                        }
+                    }
+                }
 
                 foreach (SA03200_pgPPC_License_Result curLang in lstPPC_License.Created)
                 {
@@ -74,6 +83,7 @@ namespace SA03200.Controllers
                     else
                     {
                         lang = new PPC_License();
+                        lang.ResetET();
                         Update(lang, curLang, true);
                         _db.PPC_License.AddObject(lang);
                     }

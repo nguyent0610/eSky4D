@@ -1,1 +1,166 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('m a=["\\y\\x\\Z\\G\\x","\\S\\j\\f\\l\\g\\q\\G\\x","\\v\\o\\d\\I\\b\\j\\G\\k","\\E\\h\\g\\b\\l\\d\\b\\1j\\b\\Q","\\s\\j\\k\\y\\y\\M\\U\\E\\h\\g\\b\\l\\d\\b","\\P\\h\\j\\d\\e","\\s\\j\\h\\k","\\I\\j\\b\\O","\\l\\b\\1h\\e","\\o\\f\\d\\e","\\h\\d\\M\\q\\f\\l\\s\\b","","\\j\\b\\P\\j\\b\\d\\q","\\d\\q\\p\\T","\\A\\b\\d\\d\\f\\s\\b","\\h\\d\\1x\\h\\j\\d\\e\\E\\p\\f\\k","\\j\\b\\o\\p\\f\\k","\\d\\e\\p\\y\\y\\M\\U\\E\\h\\g\\b\\l\\d\\b","\\h\\d\\G\\l\\d\\b\\j\\e","\\h\\l\\d\\b\\j\\e","\\l\\b\\T","\\h\\e\\b\\A\\d","\\d\\b\\o\\b\\g\\e\\b\\k","\\d\\o\\A\\y\\y\\M\\U\\E\\h\\g\\b\\l\\d\\b","\\h\\l\\k\\b\\1h\\v\\b\\o\\b\\g\\e","\\k\\b\\o\\b\\e\\b\\x\\f\\e\\f","\\k\\b\\o\\b\\e\\b","\\h\\d\\1C\\I\\k\\f\\e\\b","\\h\\d\\x\\b\\o\\b\\e\\b","\\g\\q\\b\\g\\H\\R\\b\\1B\\N\\h\\j\\b\\y\\f\\d\\d","\\d\\e\\p\\j\\b","\\d\\f\\O\\b","\\I\\j\\h\\l\\e","\\g\\o\\p\\d\\b","\\g\\p\\A\\A\\p\\l","\\v\\e\\f\\e\\N\\d","\\g\\q\\b\\g\\H\\b\\k","\\d\\b\\e","\\b\\f\\g\\q","\\s\\b\\e\\v\\e\\p\\j\\b","\\g\\1m\\p\\v\\o\\d\\I\\b\\j\\G\\k","\\g\\q\\b\\g\\H\\S\\b\\P\\p\\j\\b\\1u\\k\\h\\e","\\g\\q\\b\\g\\H\\G\\l\\d\\b\\j\\e\\1j\\b\\Q","\\g\\q\\b\\g\\H\\1p\\f\\o\\h\\k\\f\\e\\b\\1u\\k\\h\\e","\\g\\q\\b\\g\\H\\R\\b\\1y\\b\\g\\e","\\h\\d\\1p\\f\\o\\h\\k","\\P\\j\\A\\1E\\f\\h\\l","\\v\\f\\O\\h\\l\\s\\x\\f\\e\\f","\\s\\b\\e\\E\\f\\l\\s","\\v\\Z\\F\\1q\\1r\\F\\F\\1D\\v\\f\\O\\b","\\s\\b\\e\\x\\f\\e\\f","\\I\\j\\p\\g\\b\\d\\d","\\d\\N\\1m\\A\\h\\e","\\Q\\b\\d","\\k\\b\\o\\b\\e\\b\\v\\b\\o\\b\\g\\e\\b\\k","\\v\\Z\\F\\1q\\1r\\F\\F","\\g\\q\\f\\l\\s\\b\\x\\f\\e\\f","\\d\\q\\p\\T\\S\\N\\d\\Q","\\h\\l\\d\\b\\j\\e\\R\\b\\g\\p\\j\\k","\\o\\p\\f\\k\\h\\l\\s\\k\\f\\e\\f"];m B=[a[0],a[1],a[2]];m 1a=[a[0],a[1],a[2],a[3]];m 1k=[a[0],a[1],a[2],a[3]];m 1l=n(1e){1A(1e){t a[5]:c[a[6]][a[5]](i[a[4]]);u;t a[7]:c[a[6]][a[7]](i[a[4]]);u;t a[8]:c[a[6]][a[8]](i[a[4]]);u;t a[9]:c[a[6]][a[9]](i[a[4]]);u;t a[12]:r(c[a[10]]){c[a[14]][a[13]](1G,a[11],a[12])}1F{c[a[10]]=L;c[a[15]]=J;i[a[17]][a[16]]()};u;t a[20]:r(c[a[18]]){c[a[6]][a[19]](i[a[4]],B)};u;t a[26]:r(i[a[23]][a[22]][a[21]][0]!=1H){m 1i=c[a[6]][a[24]](i[a[4]]);r(1i!=a[11]){c[a[14]][a[13]](1w,[c[a[6]][a[24]](i[a[4]]),a[11]],a[25],J)}};u;t a[1z]:r(c[a[27]]||c[a[18]]||c[a[28]]){r(c[a[K]][a[29]](i[a[17]],B,1a,1k)){1s()}};u;t a[1U]:u;t a[1c]:c[a[C]][a[1c]](2s);u}};m 1I=n(V){r(V){i[a[4]][a[2v]]()[a[2A]](n(w){w[a[2u]](a[2t],V[a[2q]])})}};m 2r=n(2y,z){i[a[2x]][a[K]][a[16]]()};m 2z=n(2w,z){1d c[a[6]][a[2o]](z,B)};m 1T=n(w,z){c[a[6]][a[1S]](i[a[4]],z,B)};m 2p=n(w,z){1d c[a[6]][a[1V]](i[a[4]],z,B)};m 1X=n(1v){c[a[6]][a[1W]](1v,i[a[4]]);W(i[a[17]])};m 1s=n(){r(i[a[1t]][a[1R]]()){i[a[1t]][a[1Q]]({1L:c[a[C]][a[1g]](a[1K]),1J:a[1M],1N:{1P:c[a[K]][a[1O]](i[a[17]])},1Y:n(Y,X){c[a[14]][a[13]](1Z);c[a[10]]=L;1l(a[12])},2j:n(Y,X){c[a[14]][a[2i]](Y,X,J)}})}};m 2k=n(w){r(w==a[1f]){i[a[4]][a[2l]]();W(i[a[17]])}};m 2n=n(){c[a[15]]=J;i[a[17]][a[16]]()};m W=n(D){c[a[10]]=c[a[K]][a[10]](D);c[a[C]][a[1o]](c[a[10]],a[1n])};m 2m=n(D){c[a[C]][a[1b]](L);c[a[10]]=c[a[K]][a[10]](D);c[a[C]][a[1o]](c[a[10]],a[1n]);r(c[a[15]]){r(c[a[18]]){c[a[K]][a[2h]](D,B,{2g:2b 2a(2c)})};c[a[15]]=L}};m 2d=n(D){c[a[C]][a[1b]](J,c[a[C]][a[1g]](a[2f]))};n 2e(w){r(w==a[1f]){c[a[10]]=L;c[a[15]]=J;i[a[17]][a[16]]()}}', 62, 161, '||||||||||_0xcc79|x65|HQ|x73|x74|x61|x63|x69|App|x72|x64|x6E|var|function|x6C|x6F|x68|if|x67|case|break|x53|_0x4a74x9|x44|x50|_0x4a74xc|x6D|keys|34|_0x4a74x19|x4C|x30|x49|x6B|x70|true|30|false|x43|x75|x76|x66|x79|x52|x42|x77|x5F|_0x4a74x8|stoChanged|_0x4a74x15|_0x4a74x14|x41|||||||||||fieldsCheckRequire|57|33|return|_0x4a74x5|53|48|x78|_0x4a74x6|x4B|fieldsLangCheckRequire|menuClick|x62|55|56|x56|x33|x32|save|46|x45|_0x4a74x12|2015020807|x46|x6A|31|switch|x71|x55|x2F|x4D|else|20150303|undefined|StatusCheckAll_Change|url|47|waitMsg|49|params|50|lstPPC_License|52|45|42|grdPPC_License_Edit|32|43|44|grdPPC_License_Reject|success|201405071|||||||||||Date|new|_dateServer|stoBeforeLoad|refresh|59|LastSyncDate|58|51|failure|deleteData|54|stoLoad|firstLoad|41|grdPPC_License_ValidateEdit|36|cboBranchID_Change|this|35|37|39|_0x4a74xe|40|_0x4a74xb|grdPPC_License_BeforeEdit|38'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['PDAID', 'BranchID', 'SlsperId'];
+var fieldsCheckRequire = ["PDAID", "BranchID", "SlsperId", "LicenseKey"];
+var fieldsLangCheckRequire = ["PDAID", "BranchID", "SlsperId", "LicenseKey"];
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdPPC_License);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdPPC_License);
+            break;
+        case "next":
+            HQ.grid.next(App.grdPPC_License);
+            break;
+        case "last":
+            HQ.grid.last(App.grdPPC_License);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoPPC_License.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdPPC_License, keys);
+                //App.txtLastSyncDate.value(_dateServer);
+                //App.txtLastSyncDate.set('LastSyncDate', _dateServer);
+                //item.set("LastSyncDate", new Date(_dateServer));
+            }
+            break;
+        case "delete":
+            if (App.slmPPC_License.selected.items[0] != undefined) {
+                var rowindex = HQ.grid.indexSelect(App.grdPPC_License);
+                if (rowindex != '')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdPPC_License), ''], 'deleteData', true)
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoPPC_License, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+};
+
+var StatusCheckAll_Change = function (sender, value) {
+    if (sender.hasFocus) {
+        HQ.isChange = true;
+        var store = App.stoPPC_License;
+        var allRecords = store.snapshot || store.allData || store.data;
+        store.suspendEvents();
+        allRecords.each(function (record) {
+            if (record.data.PDAID && record.data.BranchID && record.data.SlsperId)
+                record.set('Status', value);
+        });
+        store.resumeEvents();
+        App.grdPPC_License.view.refresh();
+    }
+};
+
+var grdPPC_License_BeforeEdit = function (editor, e) {
+    if (e.field == 'SlsperId') {
+        if (e.record.data.BranchID) {
+            App.cboSlsperId.store.reload();
+        }
+        else {
+            return false;
+        }
+    }
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdPPC_License_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdPPC_License, e, keys);
+};
+var grdPPC_License_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdPPC_License, e, keys, false);
+};
+var grdPPC_License_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdPPC_License);
+    stoChanged(App.stoPPC_License);
+};
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SA03200/Save',
+            params: {
+                lstPPC_License: HQ.store.getData(App.stoPPC_License)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdPPC_License.deleteSelected();
+        stoChanged(App.stoPPC_License);
+    }
+};
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoPPC_License.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA03200');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    App.StatusCheckAll.setValue(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA03200');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            //HQ.store.insertBlank(sto, keys);
+            HQ.store.insertRecord(sto, keys, { LastSyncDate: new Date(HQ.bussinessDate) });
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoPPC_License.reload();
+    }
+};
+///////////////////////////////////
