@@ -42,7 +42,6 @@ namespace SI21100.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-
             try
             {
                 string TermsID = data["cboTermsID"].PassNull();
@@ -50,6 +49,7 @@ namespace SI21100.Controllers
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_Terms"]);
                 
                 var curHeader = dataHandler.ObjectData<SI_Terms>().FirstOrDefault();
+
                 #region Save Terms
                 var header = _db.SI_Terms.FirstOrDefault(p => p.TermsID == TermsID);
                 if (header != null)

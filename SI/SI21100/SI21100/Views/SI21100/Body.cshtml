@@ -41,10 +41,9 @@
                     .LoadData()
                     .Listeners(lst =>
                     {
-                        lst.TriggerClick.Fn = "cboTermsID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
-                        //lst.Change.Fn = "cboVendID_Change";//khi thay doi du lieu
+                        lst.TriggerClick.Fn = "cboTermsID_TriggerClick";
                         lst.Select.Fn = "cboTermsID_Select";
-                        lst.Expand.Fn = "cboTermsID_Expand";//khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
+                        lst.Expand.Fn = "cboTermsID_Expand";
                         lst.Change.Fn = "cboTermsID_Change";
                     }),
 
@@ -97,11 +96,19 @@
                                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
                                     .LoadData().Width(600)
 
-                                , HQ.NumberField().ID("DiscIntrv").Name("DiscIntrv").HQLangCode("LotDay").MarginSpec("5 0 5 0").HQControlFocus("").Width(600).MinValue(0)
-                                    .Listeners(lst => { lst.Blur.Fn = "checkNumberDiscIntrv"; })
+                                , HQ.NumberField().ID("DiscIntrv").Name("DiscIntrv").HQLangCode("LotDay")
+                                .MarginSpec("5 0 5 0").HQControlFocus("").Width(600).MinValue(0).EnableKeyEvents(true)
+                                    .Listeners(lst => { 
+                                        //lst.Blur.Fn = "checkNumberDiscIntrv"; 
+                                        lst.KeyDown.Fn = "event_KeyDown";
+                                    })
 
-                                , HQ.NumberField().ID("DiscPct").Name("DiscPct").HQLangCode("Percent").MarginSpec("5 0 5 0").HQControlFocus("").Width(600).MinValue(0)
-                                    .Listeners(lst => { lst.Blur.Fn = "checkNumberDiscPct"; })
+                                , HQ.NumberField().ID("DiscPct").Name("DiscPct").HQLangCode("Percent")
+                                .MarginSpec("5 0 5 0").HQControlFocus("").Width(600).MinValue(0).EnableKeyEvents(true)
+                                    .Listeners(lst => { 
+                                        //lst.Blur.Fn = "checkNumberDiscPct";
+                                        lst.KeyDown.Fn = "event_KeyDown";
+                                    })
                                 )//Panel Discount
 
                                 , X.Panel().Title(Util.GetLang("UntilDue")).Items(
@@ -121,8 +128,14 @@
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
                                     .LoadData().Width(600)
-                                    , HQ.NumberField().ID("DueIntrv").Name("DueIntrv").HQLangCode("LotDay").MarginSpec("5 0 5 0").HQControlFocus("").Width(600).MinValue(0)
-                                    .Listeners(lst => { lst.Blur.Fn = "checkNumberDueIntrv"; })
+                                    
+                                    , HQ.NumberField().ID("DueIntrv").Name("DueIntrv").HQLangCode("LotDay")
+                                    .MarginSpec("5 0 5 0").HQControlFocus("").Width(600).MinValue(0).EnableKeyEvents(true)
+                                    .Listeners(lst => { 
+                                        
+                                        //lst.Blur.Fn = "checkNumberDueIntrv";
+                                        lst.KeyDown.Fn = "event_KeyDown";
+                                    })
                             )
                         )
             )//pnlUser

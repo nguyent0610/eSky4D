@@ -88,7 +88,6 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            HQ.common.close(this);
             break;
     }
 };
@@ -214,7 +213,7 @@ var save = function () {
         else {
             HQ.message.show(20140811, App.cboTermsID.fieldLabel);
             App.cboTermsID.focus();
-            //App.cboTermsID.selectText();
+            App.cboTermsID.selectText();
         }
     }
 };
@@ -253,22 +252,32 @@ function refresh(item) {
     }
 };
 
-var checkNumberDueIntrv = function () {
-    if (App.DueIntrv.value < 0) {
-        App.DueIntrv.setValue(0)
-    }
-};
+//var checkNumberDueIntrv = function () {
+//    if (App.DueIntrv.value < 0) {
+//        App.DueIntrv.setValue(0)
+//    }
+//};
 
-var checkNumberDiscPct = function () {
-    if (App.DiscPct.value < 0) {
-        App.DiscPct.setValue(0)
-    }
-};
+//var checkNumberDiscPct = function () {
+//    if (App.DiscPct.value < 0) {
+//        App.DiscPct.setValue(0)
+//    }
+//};
 
-var checkNumberDiscIntrv = function () {
-    if (App.DiscIntrv.value < 0) {
-        App.DiscIntrv.setValue(0)
-    }
-};
+//var checkNumberDiscIntrv = function () {
+//    if (App.DiscIntrv.value < 0) {
+//        App.DiscIntrv.setValue(0)
+//    }
+//};
 
 ///////////////////////////////////
+
+var event_KeyDown = function (sender, e) {
+    if ((e.ctrlKey == true && e.keyCode == 86) ||
+            (((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105) && (e.keyCode < 37 || e.keyCode > 40))
+            && (e.keyCode != 8 && e.keyCode != 9 && e.keyCode != 35 && e.keyCode != 36 && e.keyCode != 46 && e.keyCode != 45 && e.keyCode != 110 && e.keyCode != 190 && e.ctrlKey == false)
+            )
+           ) {
+        e.stopEvent();
+    }
+};
