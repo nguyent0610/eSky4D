@@ -208,7 +208,8 @@
                     .ForceSelection(true)
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
                     })
                     .HQControlFocus("cboBatNbr")
                     .LoadData()
