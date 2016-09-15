@@ -152,9 +152,9 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <ComplexType Name="SA00000_pgSubCompany_Result">
-          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="SubCpnyID" Nullable="false" MaxLength="30" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="SubCpnyName" Nullable="false" MaxLength="200" />
         </ComplexType>
         <EntityType Name="Sys_CompanyAddr">
           <Key>
@@ -274,9 +274,9 @@
           <FunctionImportMapping FunctionImportName="SA00000_pgSubCompany" FunctionName="eBiz4DWebSysModel.Store.SA00000_pgSubCompany">
             <ResultMapping>
               <ComplexTypeMapping TypeName="SA00000Model.SA00000_pgSubCompany_Result">
-                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
                 <ScalarProperty Name="SubCpnyID" ColumnName="SubCpnyID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="SubCpnyName" ColumnName="SubCpnyName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

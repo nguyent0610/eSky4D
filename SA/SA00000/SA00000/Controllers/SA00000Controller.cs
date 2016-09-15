@@ -150,11 +150,9 @@ namespace SA00000.Controllers
                 #region Save SYS_SubCompany
                 foreach (SA00000_pgSubCompany_Result deleted in lstSYS_SubCompany.Deleted)
                 {
-                    if (lstSYS_SubCompany.Created.Where(p => p.CpnyID.ToLower() == deleted.CpnyID.ToLower()
-                                                        && p.SubCpnyID.ToLower() == deleted.SubCpnyID.ToLower()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstSYS_SubCompany.Created.Where(p => p.SubCpnyID.ToLower() == deleted.SubCpnyID.ToLower()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        lstSYS_SubCompany.Created.Where(p => p.CpnyID.ToLower() == deleted.CpnyID.ToLower()
-                                                        && p.SubCpnyID.ToLower() == deleted.SubCpnyID.ToLower()).FirstOrDefault().tstamp = deleted.tstamp;
+                        lstSYS_SubCompany.Created.Where(p => p.SubCpnyID.ToLower() == deleted.SubCpnyID.ToLower()).FirstOrDefault().tstamp = deleted.tstamp;
                     }
                     else
                     {

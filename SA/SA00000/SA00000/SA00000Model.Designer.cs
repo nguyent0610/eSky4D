@@ -2456,45 +2456,21 @@ namespace SA00000
         /// <summary>
         /// Create a new SA00000_pgSubCompany_Result object.
         /// </summary>
-        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
         /// <param name="subCpnyID">Initial value of the SubCpnyID property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SA00000_pgSubCompany_Result CreateSA00000_pgSubCompany_Result(global::System.String cpnyID, global::System.String subCpnyID, global::System.Byte[] tstamp)
+        /// <param name="subCpnyName">Initial value of the SubCpnyName property.</param>
+        public static SA00000_pgSubCompany_Result CreateSA00000_pgSubCompany_Result(global::System.String subCpnyID, global::System.Byte[] tstamp, global::System.String subCpnyName)
         {
             SA00000_pgSubCompany_Result sA00000_pgSubCompany_Result = new SA00000_pgSubCompany_Result();
-            sA00000_pgSubCompany_Result.CpnyID = cpnyID;
             sA00000_pgSubCompany_Result.SubCpnyID = subCpnyID;
             sA00000_pgSubCompany_Result.tstamp = tstamp;
+            sA00000_pgSubCompany_Result.SubCpnyName = subCpnyName;
             return sA00000_pgSubCompany_Result;
         }
 
         #endregion
 
         #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyID
-        {
-            get
-            {
-                return _CpnyID;
-            }
-            set
-            {
-                OnCpnyIDChanging(value);
-                ReportPropertyChanging("CpnyID");
-                _CpnyID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CpnyID");
-                OnCpnyIDChanged();
-            }
-        }
-        private global::System.String _CpnyID;
-        partial void OnCpnyIDChanging(global::System.String value);
-        partial void OnCpnyIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2543,6 +2519,30 @@ namespace SA00000
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SubCpnyName
+        {
+            get
+            {
+                return _SubCpnyName;
+            }
+            set
+            {
+                OnSubCpnyNameChanging(value);
+                ReportPropertyChanging("SubCpnyName");
+                _SubCpnyName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SubCpnyName");
+                OnSubCpnyNameChanged();
+            }
+        }
+        private global::System.String _SubCpnyName;
+        partial void OnSubCpnyNameChanging(global::System.String value);
+        partial void OnSubCpnyNameChanged();
 
         #endregion
 

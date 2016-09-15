@@ -34,7 +34,7 @@
             HQ.Combo().ID("cboCpnyID").Name("cboCpnyID")
                 .HQLangCode("CPNYID").HQDBSys(true).AllowBlank(false).MarginSpec("5 0 0 0")
                 .HQProcedure("SA00000_pcCompanyAll").HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
-                .HQHeightWidth(400, 400).Width(600).MaxLength(30).EnforceMaxLength(true)
+                .HQHeightWidth(400, 400).Width(600).MaxLength(9).EnforceMaxLength(true)
                 .LoadData()
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst =>
@@ -445,7 +445,7 @@
                             .Editor(
                                 HQ.Combo().ID("cboSubCpnyID").Name("cboSubCpnyID").HQProcedure("SA00000_pcCompanyAll")
                                 .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyName").ValueField("CpnyID")
-                                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true).HQDBSys(true)
+                                .Width(300).HQHeightWidth(500, 400).ForceSelection(true).HQDBSys(true)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>
                                 {
@@ -454,7 +454,7 @@
                                 .LoadData()
                             )
                             
-                        , X.Column().Text(Util.GetLang("Sub_BranchName")).Width(250).DataIndex("SubCpnyID").Renderer("renderBranchName")
+                        , X.Column().Text(Util.GetLang("Sub_BranchName")).Width(250).DataIndex("SubCpnyName")//.Renderer("renderBranchName")
 
                         , X.CommandColumn().Width(150)
                         .Commands(
@@ -505,7 +505,8 @@
                             X.GridFilters()
                                 .Local(true)
                                 .Filters(
-                                    X.StringFilter().DataIndex("SubCpnyID")
+                                    X.StringFilter().DataIndex("SubCpnyID"),
+                                    X.StringFilter().DataIndex("SubCpnyName")
                                 )
                         )
                 )

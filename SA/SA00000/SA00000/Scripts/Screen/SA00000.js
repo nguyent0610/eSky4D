@@ -415,7 +415,14 @@ var grdSYS_SubCompany_BeforeEdit = function (editor, e) {
 };
 
 var grdSYS_SubCompany_Edit = function (item, e) {
-    //Kiem tra cac key da duoc nhap se insert them dong moi
+    if (e.field == "SubCpnyID") {
+        if (e.value) {
+            var objCpny = App.cboSubCpnyIDSA00000_pcCompanyAll.findRecord(['CpnyID'], [e.value]);
+            if (objCpny) {
+                e.record.set('SubCpnyName', objCpny.data.CpnyName);
+            }
+        }
+    }
     HQ.grid.checkInsertKey(App.grdSYS_SubCompany, e, keys1);
     frmChange();
 };
