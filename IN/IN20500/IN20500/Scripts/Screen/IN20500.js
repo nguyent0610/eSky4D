@@ -562,8 +562,14 @@ var cboDfltLotSerFxdTyp_Change = function (sender, value) {
     }
 };
 
+var txtDfltLotSerNumLen_Change = function (sender, value) {
+    App.txtDfltLotSerNumVal.setValue('');
+    //if(value)
+    //    sender.setValue(value.replaceAll('-', ''));
+};
+
 var event_KeyDown = function (sender, e) {
-    if (
+    if ((e.ctrlKey == true && e.keyCode == 86) ||
             (((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105) && (e.keyCode < 37 || e.keyCode > 40))
             && (e.keyCode != 8 && e.keyCode != 9 && e.keyCode != 35 && e.keyCode != 36 && e.keyCode != 46 && e.keyCode != 45 && e.keyCode != 110 && e.keyCode != 190 && e.ctrlKey == false)
             )

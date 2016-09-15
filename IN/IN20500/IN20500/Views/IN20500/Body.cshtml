@@ -589,10 +589,12 @@
                                     })
 
                                 , HQ.NumberField().ID("txtDfltLotSerShelfLife").Name("txtDfltLotSerShelfLife").HQLangCode("ShelfLife").DataIndex("ShelfLife")
-                                    .LabelWidth(160).Width(410).MarginSpec("5 0 0 0").DecimalPrecision(0)
+                                    .LabelWidth(160).Width(410).MarginSpec("5 0 0 0").DecimalPrecision(0).EnableKeyEvents(true)
+                                    .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
 
                                 , HQ.NumberField().ID("txtDfltWarrantyDays").Name("txtDfltWarrantyDays").HQLangCode("WarrantyDays").DataIndex("WarrantyDays")
-                                    .LabelWidth(160).Width(410).MarginSpec("5 0 0 0").DecimalPrecision(0)
+                                    .LabelWidth(160).Width(410).MarginSpec("5 0 0 0").DecimalPrecision(0).EnableKeyEvents(true)
+                                    .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
                             )
                         
                         , X.Container().Layout(LayoutType.VBox)
@@ -622,9 +624,10 @@
                             })
 
                         , HQ.NumberField().ID("txtDfltLotSerFxdLen").Name("txtDfltLotSerFxdLen").HQLangCode("Length").DataIndex("LotSerFxdLen")
-                            .Width(350).MarginSpec("5 0 0 0").DecimalPrecision(0).LabelWidth(101).MinValue(0).MaxValue(12)
+                            .Width(350).MarginSpec("5 0 0 0").DecimalPrecision(0).LabelWidth(101).MinValue(0).MaxValue(12).EnableKeyEvents(true)
                             .Listeners(lst =>
                             {
+                                lst.KeyDown.Fn = "event_KeyDown";
                                 lst.Change.Handler = "App.txtDfltLotSerFxdVal.setValue('')";
                             })
 
@@ -641,10 +644,11 @@
                     , X.FieldSet().Layout(LayoutType.VBox).Title(Util.GetLang("Numeric")).MarginSpec("0 0 0 48")
                     .Items(
                         HQ.NumberField().ID("txtDfltLotSerNumLen").Name("txtDfltLotSerNumLen").HQLangCode("Length").DataIndex("LotSerNumLen")
-                            .Width(350).MarginSpec("5 0 0 0").DecimalPrecision(0).LabelWidth(101)
+                            .Width(350).MarginSpec("5 0 0 0").DecimalPrecision(0).LabelWidth(101).EnableKeyEvents(true)
                             .Listeners(lst =>
                             {
-                                lst.Change.Handler = "App.txtDfltLotSerNumVal.setValue('')";
+                                lst.Change.Fn = "txtDfltLotSerNumLen_Change";
+                                lst.KeyDown.Fn = "event_KeyDown";
                             })
                         
                         , HQ.TextBox().ID("txtDfltLotSerNumVal").Name("txtDfltLotSerNumVal").HQLangCode("Value").DataIndex("LotSerNumVal")
