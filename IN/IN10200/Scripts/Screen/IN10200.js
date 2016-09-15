@@ -103,9 +103,13 @@ var checkSelectLot = function (records, options, success) {
 
 var frmMain_BoxReady = function () {
     HQ.util.checkAccessRight();
-    if (showFromSite == true) {
+    if (showFromSite == 'true') {
         App.cboFromToSiteID.show();
         App.hideLabel.hide();
+    }
+    else {
+        App.cboFromToSiteID.hide();
+        App.hideLabel.show();
     }
     HQ.numDetail = 0;
     HQ.maxDetail = 2;

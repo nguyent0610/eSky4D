@@ -43,6 +43,16 @@ namespace IN10200.Controllers
         public ActionResult Index(string branchID)
         {
             Util.InitRight(_screenNbr);
+            var showFromSite = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "IN10200ShowFromSite");
+            if (showFromSite == null)
+                ViewBag.showFromSite = "false";
+            else
+            {
+                if (showFromSite.IntVal == 1)
+                    ViewBag.showFromSite = "true";
+                else
+                    ViewBag.showFromSite = "false";
+            }
 
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
 
@@ -58,16 +68,7 @@ namespace IN10200.Controllers
             ViewBag.INSite = userDft == null ? "" : userDft.INSite;
             ViewBag.BranchID = branchID;
 
-            var showFromSite = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "IN10200ShowFromSite");
-            if (showFromSite == null)
-                ViewBag.showFromSite = "false";
-            else
-            {
-                if (showFromSite.IntVal == 1)
-                    ViewBag.showFromSite = "true";
-                else
-                    ViewBag.showFromSite = "false";
-            }
+            
 
             return View();
         }
