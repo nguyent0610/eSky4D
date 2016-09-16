@@ -1067,6 +1067,8 @@ var PosGmap = {
     drawingManager: {},
     planMarkers: [],
     planPoints: [],
+    //timeoutRequest: [500,900,700,900],
+    //y: 0,
 
 
     initialize: function () {
@@ -1831,6 +1833,7 @@ var PosGmap = {
 
         if (lat_lngCols.length > 0) {
             var idx = 0;
+            //PosGmap.y = 0;
             PosGmap.requestForWaysRoute(lat_lngCols, idx);
         }
         else
@@ -1915,7 +1918,11 @@ var PosGmap = {
                 if (lat_lngCol && lat_lngCol.length > 0) {
                     setTimeout(function () {
                         PosGmap.requestForWaysRoute(lat_lngCols, idx);
-                    }, 1000);
+                   }, 300); //PosGmap.timeoutRequest[PosGmap.y]);
+                    //if (PosGmap.y == 3)
+                    //    PosGmap.y = 0;
+                    //else
+                    //    PosGmap.y += 1;
                 }
                 else {
                     HQ.common.showBusy(false);
@@ -1938,19 +1945,22 @@ var PosGmap = {
                 }
             }
             else if (status == google.maps.DirectionsStatus.MAX_WAYPOINTS_EXCEEDED) {
-                //alert("MAX_WAYPOINTS_EXCEEDED");
+                alert("MAX_WAYPOINTS_EXCEEDED");
             }
             else if (status == google.maps.DirectionsStatus.INVALID_REQUEST) {
-                //alert("INVALID_REQUEST");
+                alert("INVALID_REQUEST");
             }
             else if (status == google.maps.DirectionsStatus.OVER_QUERY_LIMIT) {
                 //alert("OVER_QUERY_LIMIT");
+                //setTimeout(function () {
+                    PosGmap.requestForWaysRoute(lat_lngCols, idx);
+                //}, 500);
             }
             else if (status == google.maps.DirectionsStatus.REQUEST_DENIED) {
-                //alert("REQUEST_DENIED");
+                alert("REQUEST_DENIED");
             }
             else {
-                //alert("UNKNOWN_ERROR");
+                alert("UNKNOWN_ERROR");
             }
         });
 

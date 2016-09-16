@@ -56,6 +56,7 @@ namespace OM30400.Controllers
             string province, string distributor, string shopType,
             string slsperId, string daysOfWeek, string weekOfVisit)
         {
+            _db.CommandTimeout = int.MaxValue;
             var planVisit = _db.OM30400_pgVisitCustomerPlan(Current.CpnyID, Current.UserName,
                 channel, territory, province, distributor,
                 shopType, slsperId, daysOfWeek, weekOfVisit).ToList();
@@ -66,6 +67,7 @@ namespace OM30400.Controllers
             string province, string distributor, string shopType,
             string slsperId, string daysOfWeek, string weekOfVisit)
         {
+            _db.CommandTimeout = int.MaxValue;
             var mcl = _db.OM30400_pgLoadMCL(Current.CpnyID, Current.UserName, territory,
                 province, distributor, channel, shopType,
                 slsperId, daysOfWeek, weekOfVisit).ToList();
@@ -74,6 +76,7 @@ namespace OM30400.Controllers
 
         public ActionResult LoadGridActualVisit(string distributor, string slsperId, DateTime visitDate, bool realTime)
         {
+            _db.CommandTimeout = int.MaxValue;
             var actualVisit = _db.OM30400_pgGridActualVisit(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, realTime).ToList();
 
             var planVisit = _db.OM30400_pdVisitPlan(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate).ToList();
@@ -137,12 +140,14 @@ namespace OM30400.Controllers
 
         public ActionResult LoadGridPlanVisit(string distributor, string slsperId, DateTime visitDate)
         {
+            _db.CommandTimeout = int.MaxValue;
             var planVisit = _db.OM30400_pdVisitPlan(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate).ToList();
             return this.Store(planVisit);
         }
 
         public ActionResult LoadMapActualVisit(string distributor, string slsperId, DateTime visitDate, bool realTime)
         {
+            _db.CommandTimeout = int.MaxValue;
             var actualVisit = _db.OM30400_pgGridActualVisit(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, true).ToList();
 
             return this.Store(actualVisit);
@@ -150,24 +155,28 @@ namespace OM30400.Controllers
 
         public ActionResult LoadVisitCustomerActual(string distributor, string slsperId, DateTime visitDate, bool realTime)
         {
+            _db.CommandTimeout = int.MaxValue;
             var actualVisit = _db.OM30400_pgVisitCustomerActual(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, realTime).ToList();
             return this.Store(actualVisit);
         }
 
         public ActionResult LoadAllCurrentSalesman(string distributor, DateTime visitDate)
         {
+            _db.CommandTimeout = int.MaxValue;
             var allSlspers = _db.OM30400_pgAllCurrentSalesman(Current.CpnyID, Current.UserName, distributor, visitDate).ToList();
             return this.Store(allSlspers);
         }
 
         public ActionResult LoadCustHistory(string distributor, string slsperId, string customer, DateTime startDate, DateTime endDate)
         {
+            _db.CommandTimeout = int.MaxValue;
             var cusHistory = _db.OM30400_pgHistory(Current.CpnyID, Current.UserName, distributor, slsperId, customer, startDate, endDate).ToList();
             return this.Store(cusHistory);
         }
 
         public ActionResult LoadSalesRouteMaster(string branchID, string custID, string slsPerID)
         {
+            _db.CommandTimeout = int.MaxValue;
             var slsRouteMster = _db.OM_SalesRouteMaster.FirstOrDefault(
                                     x => x.BranchID == branchID
                                     && x.CustID == custID
