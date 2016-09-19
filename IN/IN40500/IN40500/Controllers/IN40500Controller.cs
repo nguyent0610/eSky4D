@@ -27,7 +27,7 @@ namespace IN40500.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -44,27 +44,29 @@ namespace IN40500.Controllers
                 string Descr = data["txtDescr"].PassNull();
                 string SiteID = data["cboSiteID"].PassNull();
                 string ClassID=data["cboProductClass"].PassNull();
-                var CheckCreateIN_Tag = _db.IN40500_ppCheckCreateIN_Tag(BranchID, SiteID).FirstOrDefault().Value;
-
-                if (CheckCreateIN_Tag == 0)
+                var CheckCreateIN_Tag = _db.IN40500_ppCheckCreateIN_Tag(BranchID, SiteID).FirstOrDefault();
+                if (CheckCreateIN_Tag != null)
                 {
-                    var result=_db.IN40500_ppGetInsertIN_TagDetail(_userName,BranchID,Descr,DateTime.Parse(Date_tmp),SiteID,ClassID);
-                    if (result.PassNull() != "")
+                    if (CheckCreateIN_Tag.Result == 0)
                     {
-                        throw new MessageException(MessageType.Message, "20403");
+                        var result = _db.IN40500_ppGetInsertIN_TagDetail(_userName, BranchID, Descr, DateTime.Parse(Date_tmp), SiteID, ClassID).FirstOrDefault();
+                        if (result != null)
+                        {
+                            return Json(new { success = true, TAGID = result.Result });
+                            //throw new MessageException(MessageType.Message, "20403", "afterCreate" ,new string [] {result.Result},"", TAGID = );
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "201405301");
+                        }
                     }
                     else
                     {
-                        throw new MessageException(MessageType.Message, "201405301");
+                        throw new MessageException(MessageType.Message, "1001");
                     }
-                }
-                else
-                {
-                    throw new MessageException(MessageType.Message, "1001");
-                }
                     //throw new MessageException(MessageType.Message, "19");
-                
-                return Json(new { success = true });
+                }
+                return Json(new { success = true , TAGID = "" });
             }
             catch (Exception ex)
             {

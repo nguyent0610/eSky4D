@@ -24,11 +24,11 @@
     <edmx:ConceptualModels>
       <Schema Namespace="IN40500Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="IN40500Entities" annotation:LazyLoadingEnabled="true">
-          <FunctionImport Name="IN40500_ppCheckCreateIN_Tag" ReturnType="Collection(Int32)">
+          <FunctionImport Name="IN40500_ppCheckCreateIN_Tag" ReturnType="Collection(IN40500Model.IN40500_ppCheckCreateIN_Tag_Result)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="SiteID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="IN40500_ppGetInsertIN_TagDetail" ReturnType="Collection(String)">
+          <FunctionImport Name="IN40500_ppGetInsertIN_TagDetail" ReturnType="Collection(IN40500Model.IN40500_ppGetInsertIN_TagDetail_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="Descr" Mode="In" Type="String" />
@@ -37,14 +37,32 @@
             <Parameter Name="ClassID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="IN40500_ppCheckCreateIN_Tag_Result">
+          <Property Type="Int32" Name="Result" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN40500_ppGetInsertIN_TagDetail_Result">
+          <Property Type="String" Name="Result" Nullable="true" MaxLength="10" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="IN40500ModelStoreContainer" CdmEntityContainer="IN40500Entities">
-          <FunctionImportMapping FunctionImportName="IN40500_ppCheckCreateIN_Tag" FunctionName="IN40500Model.Store.IN40500_ppCheckCreateIN_Tag" />
-          <FunctionImportMapping FunctionImportName="IN40500_ppGetInsertIN_TagDetail" FunctionName="IN40500Model.Store.IN40500_ppGetInsertIN_TagDetail" />
+          <FunctionImportMapping FunctionImportName="IN40500_ppCheckCreateIN_Tag" FunctionName="IN40500Model.Store.IN40500_ppCheckCreateIN_Tag" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN40500Model.IN40500_ppCheckCreateIN_Tag_Result">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN40500_ppGetInsertIN_TagDetail" FunctionName="IN40500Model.Store.IN40500_ppGetInsertIN_TagDetail" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN40500Model.IN40500_ppGetInsertIN_TagDetail_Result">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

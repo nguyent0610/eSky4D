@@ -70,7 +70,7 @@ namespace IN40500
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="siteID">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Int32>> IN40500_ppCheckCreateIN_Tag(global::System.String branchID, global::System.String siteID)
+        public ObjectResult<IN40500_ppCheckCreateIN_Tag_Result> IN40500_ppCheckCreateIN_Tag(global::System.String branchID, global::System.String siteID)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -92,7 +92,7 @@ namespace IN40500
                 siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<Nullable<global::System.Int32>>("IN40500_ppCheckCreateIN_Tag", branchIDParameter, siteIDParameter);
+            return base.ExecuteFunction<IN40500_ppCheckCreateIN_Tag_Result>("IN40500_ppCheckCreateIN_Tag", branchIDParameter, siteIDParameter);
         }
     
         /// <summary>
@@ -104,7 +104,7 @@ namespace IN40500
         /// <param name="transDate">No Metadata Documentation available.</param>
         /// <param name="siteID">No Metadata Documentation available.</param>
         /// <param name="classID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> IN40500_ppGetInsertIN_TagDetail(global::System.String userID, global::System.String branchID, global::System.String descr, Nullable<global::System.DateTime> transDate, global::System.String siteID, global::System.String classID)
+        public ObjectResult<IN40500_ppGetInsertIN_TagDetail_Result> IN40500_ppGetInsertIN_TagDetail(global::System.String userID, global::System.String branchID, global::System.String descr, Nullable<global::System.DateTime> transDate, global::System.String siteID, global::System.String classID)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -166,8 +166,88 @@ namespace IN40500
                 classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("IN40500_ppGetInsertIN_TagDetail", userIDParameter, branchIDParameter, descrParameter, transDateParameter, siteIDParameter, classIDParameter);
+            return base.ExecuteFunction<IN40500_ppGetInsertIN_TagDetail_Result>("IN40500_ppGetInsertIN_TagDetail", userIDParameter, branchIDParameter, descrParameter, transDateParameter, siteIDParameter, classIDParameter);
         }
+
+        #endregion
+
+    }
+
+    #endregion
+
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN40500Model", Name="IN40500_ppCheckCreateIN_Tag_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN40500_ppCheckCreateIN_Tag_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> Result
+        {
+            get
+            {
+                return _Result;
+            }
+            set
+            {
+                OnResultChanging(value);
+                ReportPropertyChanging("Result");
+                _Result = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Result");
+                OnResultChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _Result;
+        partial void OnResultChanging(Nullable<global::System.Int32> value);
+        partial void OnResultChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN40500Model", Name="IN40500_ppGetInsertIN_TagDetail_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN40500_ppGetInsertIN_TagDetail_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Result
+        {
+            get
+            {
+                return _Result;
+            }
+            set
+            {
+                OnResultChanging(value);
+                ReportPropertyChanging("Result");
+                _Result = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Result");
+                OnResultChanged();
+            }
+        }
+        private global::System.String _Result;
+        partial void OnResultChanging(global::System.String value);
+        partial void OnResultChanged();
 
         #endregion
 
