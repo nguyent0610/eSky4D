@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -27,15 +27,18 @@ namespace SA01100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
+
         public ActionResult GetSYS_Message()
         {
+            _db.CommandTimeout = int.MaxValue;
             return this.Store(_db.SA01100_pgSYS_Message().ToList());
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
@@ -43,16 +46,26 @@ namespace SA01100.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Message"]);
                 ChangeRecords<SA01100_pgSYS_Message_Result> lstSYS_Message = dataHandler.BatchObjectData<SA01100_pgSYS_Message_Result>();
+      
+                lstSYS_Message.Created.AddRange(lstSYS_Message.Updated);
+
                 foreach (SA01100_pgSYS_Message_Result deleted in lstSYS_Message.Deleted)
                 {
-                    var del = _db.SYS_Message.Where(p => p.Code == deleted.Code).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstSYS_Message.Created.Where(p => p.Code == deleted.Code).Count() > 0)
                     {
-                        _db.SYS_Message.DeleteObject(del);
+                        lstSYS_Message.Created.Where(p => p.Code == deleted.Code).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.SYS_Message.FirstOrDefault(p => p.Code == deleted.Code);
+                        if (objDel != null)
+                        {
+                            _db.SYS_Message.DeleteObject(objDel);
+                        }
                     }
                 }
 
-                lstSYS_Message.Created.AddRange(lstSYS_Message.Updated);
 
                 foreach (SA01100_pgSYS_Message_Result curLang in lstSYS_Message.Created)
                 {
@@ -74,6 +87,7 @@ namespace SA01100.Controllers
                     else
                     {
                         lang = new SYS_Message();
+                        lang.ResetET();
                         UpdateSYS_Message(lang, curLang, true);
                         _db.SYS_Message.AddObject(lang);
                     }

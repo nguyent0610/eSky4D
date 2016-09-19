@@ -41,6 +41,11 @@ var menuClick = function (command) {
                     HQ.message.show(11, '', 'deleteData');
                 }
             }
+            if (App.slmSYS_Message.selected.items[0] != undefined) {
+                if (App.slmSYS_Message.selected.items[0].data.Code != "") {
+                    HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_Message)], 'deleteData', true);
+                }
+            }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
@@ -52,7 +57,6 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            HQ.common.close(this);
             break;
     }
 
@@ -72,15 +76,15 @@ var stoChanged = function (sto) {
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
-    HQ.common.showBusy(false);
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SA01100');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keys);
+            //HQ.store.insertRecord(sto, keys, { Code: 0 });
         }
         HQ.isFirstLoad = false;
     }
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
 };
 
 //trước khi load trang busy la dang load data

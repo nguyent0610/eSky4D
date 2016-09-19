@@ -1,1 +1,151 @@
-﻿var _0x249b = ["\x43\x6F\x64\x65", "\x54\x79\x70\x65", "\x54\x69\x74\x6C\x65\x30\x30", "\x54\x69\x74\x6C\x65\x30\x31", "\x4D\x73\x67\x30\x30", "\x4D\x73\x67\x30\x31", "\x67\x72\x64\x53\x59\x53\x5F\x4D\x65\x73\x73\x61\x67\x65", "\x66\x69\x72\x73\x74", "\x67\x72\x69\x64", "\x70\x72\x65\x76", "\x6E\x65\x78\x74", "\x6C\x61\x73\x74", "\x69\x73\x43\x68\x61\x6E\x67\x65", "", "\x72\x65\x66\x72\x65\x73\x68", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x69\x73\x46\x69\x72\x73\x74\x4C\x6F\x61\x64", "\x72\x65\x6C\x6F\x61\x64", "\x73\x74\x6F\x53\x59\x53\x5F\x4D\x65\x73\x73\x61\x67\x65", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x69\x6E\x73\x65\x72\x74", "\x6E\x65\x77", "\x69\x74\x65\x6D\x73", "\x73\x65\x6C\x65\x63\x74\x65\x64", "\x73\x6C\x6D\x53\x59\x53\x5F\x4D\x65\x73\x73\x61\x67\x65", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x64\x65\x6C\x65\x74\x65\x44\x61\x74\x61", "\x64\x65\x6C\x65\x74\x65", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x63\x68\x65\x63\x6B\x52\x65\x71\x75\x69\x72\x65\x50\x61\x73\x73", "\x73\x74\x6F\x72\x65", "\x73\x61\x76\x65", "\x70\x72\x69\x6E\x74", "\x63\x6C\x6F\x73\x65", "\x63\x6F\x6D\x6D\x6F\x6E", "\x53\x41\x30\x31\x31\x30\x30", "\x63\x68\x61\x6E\x67\x65\x44\x61\x74\x61", "\x73\x68\x6F\x77\x42\x75\x73\x79", "\x69\x6E\x73\x65\x72\x74\x42\x6C\x61\x6E\x6B", "\x6C\x6F\x61\x64\x69\x6E\x67\x64\x61\x74\x61", "\x67\x65\x74\x4C\x61\x6E\x67", "\x63\x68\x65\x63\x6B\x42\x65\x66\x6F\x72\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x49\x6E\x73\x65\x72\x74\x4B\x65\x79", "\x63\x68\x65\x63\x6B\x56\x61\x6C\x69\x64\x61\x74\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x52\x65\x6A\x65\x63\x74", "\x69\x73\x56\x61\x6C\x69\x64", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x53\x61\x76\x69\x6E\x67\x44\x61\x74\x61", "\x53\x41\x30\x31\x31\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x44\x61\x74\x61", "\x70\x72\x6F\x63\x65\x73\x73", "\x73\x75\x62\x6D\x69\x74", "\x79\x65\x73", "\x64\x65\x6C\x65\x74\x65\x53\x65\x6C\x65\x63\x74\x65\x64"]; var keys = [_0x249b[0]]; var fieldsCheckRequire = [_0x249b[0], _0x249b[1], _0x249b[2], _0x249b[3], _0x249b[4], _0x249b[5]]; var fieldsLangCheckRequire = [_0x249b[0], _0x249b[1], _0x249b[2], _0x249b[3], _0x249b[4], _0x249b[5]]; var menuClick = function (_0x1880x5) { switch (_0x1880x5) { case _0x249b[7]: HQ[_0x249b[8]][_0x249b[7]](App[_0x249b[6]]); break;; case _0x249b[9]: HQ[_0x249b[8]][_0x249b[9]](App[_0x249b[6]]); break;; case _0x249b[10]: HQ[_0x249b[8]][_0x249b[10]](App[_0x249b[6]]); break;; case _0x249b[11]: HQ[_0x249b[8]][_0x249b[11]](App[_0x249b[6]]); break;; case _0x249b[14]: if (HQ[_0x249b[12]]) { HQ[_0x249b[16]][_0x249b[15]](20150303, _0x249b[13], _0x249b[14]) } else { HQ[_0x249b[12]] = false; HQ[_0x249b[17]] = true; App[_0x249b[19]][_0x249b[18]](); }; break;; case _0x249b[22]: if (HQ[_0x249b[20]]) { HQ[_0x249b[8]][_0x249b[21]](App[_0x249b[6]], keys) }; break;; case _0x249b[28]: if (App[_0x249b[25]][_0x249b[24]][_0x249b[23]][0] != undefined) { if (HQ[_0x249b[26]]) { HQ[_0x249b[16]][_0x249b[15]](11, _0x249b[13], _0x249b[27]) } }; break;; case _0x249b[32]: if (HQ[_0x249b[29]] || HQ[_0x249b[20]] || HQ[_0x249b[26]]) { if (HQ[_0x249b[31]][_0x249b[30]](App[_0x249b[19]], keys, fieldsCheckRequire, fieldsLangCheckRequire)) { save() } }; break;; case _0x249b[33]: break;; case _0x249b[34]: HQ[_0x249b[35]][_0x249b[34]](this); break;; } }; var firstLoad = function () { HQ[_0x249b[17]] = true; App[_0x249b[19]][_0x249b[18]](); }; var stoChanged = function (_0x1880x8) { HQ[_0x249b[12]] = HQ[_0x249b[31]][_0x249b[12]](_0x1880x8); HQ[_0x249b[35]][_0x249b[37]](HQ[_0x249b[12]], _0x249b[36]); }; var stoLoad = function (_0x1880x8) { HQ[_0x249b[35]][_0x249b[38]](false); HQ[_0x249b[12]] = HQ[_0x249b[31]][_0x249b[12]](_0x1880x8); HQ[_0x249b[35]][_0x249b[37]](HQ[_0x249b[12]], _0x249b[36]); if (HQ[_0x249b[17]]) { if (HQ[_0x249b[20]]) { HQ[_0x249b[31]][_0x249b[39]](_0x1880x8, keys) }; HQ[_0x249b[17]] = false; }; }; var stoBeforeLoad = function (_0x1880x8) { HQ[_0x249b[35]][_0x249b[38]](true, HQ[_0x249b[35]][_0x249b[41]](_0x249b[40])) }; var grdSYS_Message_BeforeEdit = function (_0x1880xc, _0x1880xd) { return HQ[_0x249b[8]][_0x249b[42]](_0x1880xd, keys) }; var grdSYS_Message_Edit = function (_0x1880xf, _0x1880xd) { HQ[_0x249b[8]][_0x249b[43]](App[_0x249b[6]], _0x1880xd, keys) }; var grdSYS_Message_ValidateEdit = function (_0x1880xf, _0x1880xd) { return HQ[_0x249b[8]][_0x249b[44]](App[_0x249b[6]], _0x1880xd, keys) }; var grdSYS_Message_Reject = function (_0x1880x12) { HQ[_0x249b[8]][_0x249b[45]](_0x1880x12, App[_0x249b[6]]); stoChanged(App[_0x249b[19]]); }; var save = function () { if (App[_0x249b[47]][_0x249b[46]]()) { App[_0x249b[47]][_0x249b[52]]({ timeout: 1800000, waitMsg: HQ[_0x249b[35]][_0x249b[41]](_0x249b[48]), url: _0x249b[49], params: { lstSYS_Message: HQ[_0x249b[31]][_0x249b[50]](App[_0x249b[19]]) }, success: function (_0x1880x14, _0x1880x15) { HQ[_0x249b[16]][_0x249b[15]](201405071); HQ[_0x249b[12]] = false; menuClick(_0x249b[14]); }, failure: function (_0x1880x14, _0x1880x15) { HQ[_0x249b[16]][_0x249b[51]](_0x1880x14, _0x1880x15, true) } }) } }; var deleteData = function (_0x1880xf) { if (_0x1880xf == _0x249b[53]) { App[_0x249b[6]][_0x249b[54]](); stoChanged(App[_0x249b[19]]); } }; function refresh(_0x1880xf) { if (_0x1880xf == _0x249b[53]) { HQ[_0x249b[12]] = false; HQ[_0x249b[17]] = true; App[_0x249b[19]][_0x249b[18]](); } }
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['Code'];
+var fieldsCheckRequire = ["Code", "Type", "Title00", "Title01", "Msg00", "Msg01"];
+var fieldsLangCheckRequire = ["Code", "Type", "Title00", "Title01", "Msg00", "Msg01"];
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdSYS_Message);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdSYS_Message);
+            break;
+        case "next":
+            HQ.grid.next(App.grdSYS_Message);
+            break;
+        case "last":
+            HQ.grid.last(App.grdSYS_Message);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSYS_Message.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdSYS_Message, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmSYS_Message.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            if (App.slmSYS_Message.selected.items[0] != undefined) {
+                if (App.slmSYS_Message.selected.items[0].data.Code != "") {
+                    HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_Message)], 'deleteData', true);
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoSYS_Message, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+
+};
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSYS_Message.reload();
+};
+
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA01100');
+};
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+            //HQ.store.insertRecord(sto, keys, { Code: 0 });
+        }
+        HQ.isFirstLoad = false;
+    }
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var grdSYS_Message_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdSYS_Message_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSYS_Message, e, keys);
+};
+
+var grdSYS_Message_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_Message, e, keys);
+};
+
+var grdSYS_Message_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_Message);
+    stoChanged(App.stoSYS_Message);
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SA01100/Save',
+            params: {
+                lstSYS_Message: HQ.store.getData(App.stoSYS_Message)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdSYS_Message.deleteSelected();
+        stoChanged(App.stoSYS_Message);
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_Message.reload();
+    }
+};
+////////////////////////////////////////////////////////////////////////

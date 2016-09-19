@@ -29,7 +29,7 @@
             X.Store()
             .ID("stoSYS_Message")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(SA01100_pgSYS_Message_Result), "mdlSA01100_pgSYS_Message", "Code"))
+            .Model(Util.GenerateModel(typeof(SA01100_pgSYS_Message_Result), "mdlSA01100_pgSYS_Message", ""))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Message"))).AutoLoad(false)
             .Listeners(l =>
             {
@@ -39,24 +39,36 @@
             })
         )
         .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
         .SortableColumns(false)
         .ColumnModel(
-            X.RowNumbererColumn().Width(40),
-            X.NumberColumn().Text(Util.GetLang("Code")).DataIndex("Code").Format("###").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxValue(2147483647).MinValue(1)),
-            X.NumberColumn().Text(Util.GetLang("Type")).DataIndex("Type").Format("###").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxValue(32767).MinValue(0)),
-            X.Column().Text(Util.GetLang("Title00")).DataIndex("Title00").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Msg00")).DataIndex("Msg00").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Title01")).DataIndex("Title01").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Msg01")).DataIndex("Msg01").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Title02")).DataIndex("Title02").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Msg02")).DataIndex("Msg02").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Title03")).DataIndex("Title03").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Msg03")).DataIndex("Msg03").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Title04")).DataIndex("Title04").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Msg04")).DataIndex("Msg04").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
+            X.NumberColumn().Text(Util.GetLang("Code")).DataIndex("Code").Format("###").Width(150).Align(Alignment.Right)
+                .Editor(X.NumberField().DecimalPrecision(0).MaxValue(2147483647).MinValue(1)),
+            X.NumberColumn().Text(Util.GetLang("Type")).DataIndex("Type").Format("###").Width(150).Align(Alignment.Right)
+                .Editor(X.NumberField().DecimalPrecision(0).MaxValue(32767).MinValue(0)),
+            X.Column().Text(Util.GetLang("Title00")).DataIndex("Title00").Width(150)
+                .Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Msg00")).DataIndex("Msg00").Width(150)
+                .Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Title01")).DataIndex("Title01").Width(150)
+                .Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Msg01")).DataIndex("Msg01").Width(150)
+                .Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Title02")).DataIndex("Title02").Width(150)
+                .Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Msg02")).DataIndex("Msg02").Width(150)
+                .Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Title03")).DataIndex("Title03").Width(150)
+                .Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Msg03")).DataIndex("Msg03").Width(150)
+                .Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Title04")).DataIndex("Title04").Width(150)
+                .Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Msg04")).DataIndex("Msg04").Width(150)
+                .Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
            X.CommandColumn()
             .Width(150)
             .Commands(
