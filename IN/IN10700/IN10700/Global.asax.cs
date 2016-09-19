@@ -40,7 +40,7 @@ namespace IN10700
             Session["IN10700"] = acc;
             Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "040100066";
+            Session["CpnyID"] = Current.CpnyID = "040100001";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
 

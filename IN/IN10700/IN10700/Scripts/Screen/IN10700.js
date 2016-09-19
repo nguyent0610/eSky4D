@@ -199,6 +199,7 @@ var Process = {
                     url: 'IN10700/DeleteHeader',
                     timeout: 180000,
                     params: {
+                        isPOSM: App.cboInvtType.getValue() == _POSM,
                         lstStockOutlet: Ext.encode(App.stoStockOutlet.getRecordsValues())
                     },
                     success: function (msg, data) {
@@ -227,7 +228,6 @@ var Store = {
                 CustID: App.cboCustID.getValue(),
                 StockType: App.cboStockType.getValue(),
                 StkOutDate: App.dtpStkOutDate.getValue(),
-                InvtType: App.cboInvtType.getValue(),
                 StkOutNbr: ''
             });
             sto.insert(0, newRec);

@@ -347,7 +347,6 @@ namespace IN10700.Controllers
                 outlet.StkOutNbr = inputStockOutlet.StkOutNbr;
                 outlet.StkOutDate = inputStockOutlet.StkOutDate;
                 outlet.StockType = inputStockOutlet.StockType;
-                outlet.InvtType = inputStockOutlet.InvtType;
                 outlet.Crtd_DateTime = DateTime.Now;
                 outlet.Crtd_Prog = _screenNbr;
                 outlet.Crtd_User = Current.UserName;
@@ -360,28 +359,38 @@ namespace IN10700.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteHeader(FormCollection data)
+        public ActionResult DeleteHeader(FormCollection data, bool isPOSM)
         {
             try
             {
+                var lstInvtID = _db.IN10700_pdInvtAll(Current.UserName, Current.CpnyID, Current.LangID).Where(x => x.IsPOSM == isPOSM).ToList();
                 var lstStockOutletHandler = new StoreDataHandler(data["lstStockOutlet"]);
                 var inputStockOutlet = lstStockOutletHandler.ObjectData<IN10700_phStockOutlet_Result>().FirstOrDefault();
                 var objHeader = _db.PPC_StockOutlet.Where(p => p.BranchID == inputStockOutlet.BranchID && p.SlsPerID == inputStockOutlet.SlsPerID && p.StkOutNbr == inputStockOutlet.StkOutNbr).FirstOrDefault();
-                if (objHeader == null)
+                if (objHeader != null)
                 {
-                }
-                else
-                {
-
-
-                    _db.PPC_StockOutlet.DeleteObject(objHeader);
                     var lstdel = _db.PPC_StockOutletDet.Where(p => p.BranchID == inputStockOutlet.BranchID && p.SlsPerID == inputStockOutlet.SlsPerID && p.StkOutNbr == inputStockOutlet.StkOutNbr).ToList();
-                    while (lstdel.FirstOrDefault() != null)
+                    var numDelItem = 0;
+                    for (int i = 0; i < lstdel.Count; i++)
                     {
-
-                        _db.PPC_StockOutletDet.DeleteObject(lstdel.FirstOrDefault());
-                        lstdel.Remove(lstdel.FirstOrDefault());
+                        string delInvtID = lstdel[i].InvtID;
+                        var objDel = lstInvtID.FirstOrDefault(x => x.InvtID == delInvtID);
+                        if (objDel != null)
+                        {
+                            _db.PPC_StockOutletDet.DeleteObject(lstdel[i]);
+                            numDelItem++;
+                        }
                     }
+                    if (numDelItem == lstdel.Count)
+                    {
+                        _db.PPC_StockOutlet.DeleteObject(objHeader);
+                    }
+                    //while (lstdel.FirstOrDefault() != null)
+                    //{
+
+                    //    _db.PPC_StockOutletDet.DeleteObject(lstdel.FirstOrDefault());
+                    //    lstdel.Remove(lstdel.FirstOrDefault());
+                    //}
 
                     var lstdelPOSM = _db.PPC_StockOutletPOSM.Where(p => p.BranchID == inputStockOutlet.BranchID && p.SlsPerID == inputStockOutlet.SlsPerID && p.StkOutNbr == inputStockOutlet.StkOutNbr).ToList();
                     while (lstdelPOSM.FirstOrDefault() != null)

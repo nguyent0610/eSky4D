@@ -84,22 +84,6 @@ namespace IN10700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<PPC_StockOutlet> PPC_StockOutlet
-        {
-            get
-            {
-                if ((_PPC_StockOutlet == null))
-                {
-                    _PPC_StockOutlet = base.CreateObjectSet<PPC_StockOutlet>("PPC_StockOutlet");
-                }
-                return _PPC_StockOutlet;
-            }
-        }
-        private ObjectSet<PPC_StockOutlet> _PPC_StockOutlet;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<PPC_StockOutletDet> PPC_StockOutletDet
         {
             get
@@ -128,6 +112,22 @@ namespace IN10700
             }
         }
         private ObjectSet<PPC_StockOutletPOSM> _PPC_StockOutletPOSM;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<PPC_StockOutlet> PPC_StockOutlet
+        {
+            get
+            {
+                if ((_PPC_StockOutlet == null))
+                {
+                    _PPC_StockOutlet = base.CreateObjectSet<PPC_StockOutlet>("PPC_StockOutlet");
+                }
+                return _PPC_StockOutlet;
+            }
+        }
+        private ObjectSet<PPC_StockOutlet> _PPC_StockOutlet;
 
         #endregion
 
@@ -139,14 +139,6 @@ namespace IN10700
         public void AddToIN_Setup(IN_Setup iN_Setup)
         {
             base.AddObject("IN_Setup", iN_Setup);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the PPC_StockOutlet EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToPPC_StockOutlet(PPC_StockOutlet pPC_StockOutlet)
-        {
-            base.AddObject("PPC_StockOutlet", pPC_StockOutlet);
         }
     
         /// <summary>
@@ -163,6 +155,14 @@ namespace IN10700
         public void AddToPPC_StockOutletPOSM(PPC_StockOutletPOSM pPC_StockOutletPOSM)
         {
             base.AddObject("PPC_StockOutletPOSM", pPC_StockOutletPOSM);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the PPC_StockOutlet EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPPC_StockOutlet(PPC_StockOutlet pPC_StockOutlet)
+        {
+            base.AddObject("PPC_StockOutlet", pPC_StockOutlet);
         }
 
         #endregion
@@ -526,6 +526,47 @@ namespace IN10700
             }
     
             return base.ExecuteFunction<IN10700_pgStockOutletDetPOSM_Result>("IN10700_pgStockOutletDetPOSM", userIDParameter, cpnyIDParameter, branchIDParameter, slsperIDParameter, stkOutNbrParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10700_pdInvtAll_Result> IN10700_pdInvtAll(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<IN10700_pdInvtAll_Result>("IN10700_pdInvtAll", userIDParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -1503,30 +1544,6 @@ namespace IN10700
         private global::System.String _StockType;
         partial void OnStockTypeChanging(global::System.String value);
         partial void OnStockTypeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String InvtType
-        {
-            get
-            {
-                return _InvtType;
-            }
-            set
-            {
-                OnInvtTypeChanging(value);
-                ReportPropertyChanging("InvtType");
-                _InvtType = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("InvtType");
-                OnInvtTypeChanged();
-            }
-        }
-        private global::System.String _InvtType;
-        partial void OnInvtTypeChanging(global::System.String value);
-        partial void OnInvtTypeChanged();
 
         #endregion
 
@@ -2503,6 +2520,83 @@ namespace IN10700
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10700Model", Name="IN10700_pdInvtAll_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10700_pdInvtAll_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN10700_pdInvtAll_Result object.
+        /// </summary>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        public static IN10700_pdInvtAll_Result CreateIN10700_pdInvtAll_Result(global::System.String invtID)
+        {
+            IN10700_pdInvtAll_Result iN10700_pdInvtAll_Result = new IN10700_pdInvtAll_Result();
+            iN10700_pdInvtAll_Result.InvtID = invtID;
+            return iN10700_pdInvtAll_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsPOSM
+        {
+            get
+            {
+                return _IsPOSM;
+            }
+            set
+            {
+                OnIsPOSMChanging(value);
+                ReportPropertyChanging("IsPOSM");
+                _IsPOSM = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsPOSM");
+                OnIsPOSMChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsPOSM;
+        partial void OnIsPOSMChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsPOSMChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="IN10700Model", Name="IN10700_pgStockOutletDet_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -3228,30 +3322,6 @@ namespace IN10700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String InvtType
-        {
-            get
-            {
-                return _InvtType;
-            }
-            set
-            {
-                OnInvtTypeChanging(value);
-                ReportPropertyChanging("InvtType");
-                _InvtType = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("InvtType");
-                OnInvtTypeChanged();
-            }
-        }
-        private global::System.String _InvtType;
-        partial void OnInvtTypeChanging(global::System.String value);
-        partial void OnInvtTypeChanged();
 
         #endregion
 
