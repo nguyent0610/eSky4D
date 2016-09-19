@@ -376,6 +376,13 @@ var grdPO_Trans_BeforeEdit = function (editor, e) {
         e.record.set("TaxID", valueTax);
         e.record.set("ReqdDate", HQ.bussinessDate);
         e.record.set("PromDate", HQ.bussinessDate);
+        // Set default siteID 
+        if (HQ.IsChangeSiteID && e.field == 'PurchaseType') {
+            var defaultSiteID = getDefaultSiteID(det.PurchaseType);
+            if (defaultSiteID != '###') {
+                e.record.set('SiteID', defaultSiteID);
+            }
+        }
         return false;
     }
     if (e.field != "InvtID" && e.field != "PurchaseType" && Ext.isEmpty(det.InvtID)) {
@@ -434,10 +441,28 @@ var grdPO_Trans_ValidateEdit = function (item, e) {
     var objdet = e.record;// App.slmPO_Trans.getSelection()[0];
     if (_keys.indexOf(e.field) != -1) {
         if (HQ.grid.checkDuplicate(App.grdDetail, e, _keys)) {
+            //if (e.field == "InvtID") {
+            //    var strmess = objdet.data.PurchaseType + "," + e.value;
+            //}
+            //else var strmess = e.value + "," + objdet.data.InvtID;
+            var strmess = '';
+            var purType = '';
             if (e.field == "InvtID") {
-                var strmess = objdet.data.PurchaseType + "," + e.value;
+                purType = objdet.data.PurchaseType;
+                var objPur = HQ.store.findRecord(App.PurchaseType.store, ['Code'], [objdet.data.PurchaseType]);
+                if (objPur) {
+                    purType = objPur.data.Descr;
+                }
+                strmess = App.grdDetail.columns[3].text + ': ' + purType + ", " + App.grdDetail.columns[4].text + ': ' + e.value;
             }
-            else var strmess = e.value + "," + objdet.data.InvtID;
+            else {
+                purType = e.value;
+                var objPur = HQ.store.findRecord(App.PurchaseType.store, ['Code'], [e.value]);
+                if (objPur) {
+                    purType = objPur.data.Descr;
+                }
+                strmess = App.grdDetail.columns[3].text + ': ' + purType + ", " + App.grdDetail.columns[4].text + ': ' + objdet.data.InvtID;
+            }
             HQ.message.show(1112, [strmess], '',true);
             return false;
         }
