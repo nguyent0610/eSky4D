@@ -361,7 +361,10 @@ var stoLoad = function (sto) {
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, ['BranchID', 'CustId']);
         record = sto.getAt(0);
-        record.set('CustType', 'L');
+        if(App.cboCustTypeAR20400_pcCustType.data.items[0])
+            record.set('CustType', App.cboCustTypeAR20400_pcCustType.data.items[0].data.Code);
+        else
+            record.set('CustType', 'L');
         record.set('TaxDflt', 'C');
         record.set('CrRule', 'A');
         record.set('Status', 'H');
