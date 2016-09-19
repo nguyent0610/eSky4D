@@ -55,7 +55,7 @@ namespace SA03200.Controllers
                     }
                     else
                     {
-                        var objDel = _db.PPC_License.ToList().Where(p => p.PDAID == deleted.PDAID && p.BranchID == deleted.BranchID && p.SlsperId == deleted.SlsperId).FirstOrDefault();
+                        var objDel = _db.PPC_License.FirstOrDefault(p => p.PDAID == deleted.PDAID && p.BranchID == deleted.BranchID && p.SlsperId == deleted.SlsperId);
                         if (objDel != null)
                         {
                             _db.PPC_License.DeleteObject(objDel);
