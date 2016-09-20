@@ -2667,7 +2667,7 @@ namespace OM23800.Controllers
                 range = SheetMCP.Cells.CreateRange("Z1", "ZZ" + (dtSlsperMaster.Rows.Count + dtDistrict.Rows.Count + dtCustClass.Rows.Count + 100));
                 range.ApplyStyle(style, flag);
                 
-                SheetMCP.Protect(ProtectionType.All);
+                //SheetMCP.Protect(ProtectionType.All);
                 #endregion
                 SheetMCP.AutoFitColumns();
 
