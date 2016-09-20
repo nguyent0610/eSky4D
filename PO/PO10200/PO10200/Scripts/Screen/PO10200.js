@@ -373,7 +373,7 @@ var grdPO_Trans_BeforeEdit = function (editor, e) {
         e.record.set("ReqdDate", HQ.bussinessDate);
         e.record.set("PromDate", HQ.bussinessDate);
         // Set default siteID 
-        if (HQ.IsChangeSiteID && e.field == 'PurchaseType') {
+        if (HQ.IsChangeSiteID && !e.record.data.SiteID) {
             var defaultSiteID = getDefaultSiteID(det.PurchaseType);
             if (defaultSiteID != '###') {
                 e.record.set('SiteID', defaultSiteID);
