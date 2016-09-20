@@ -359,7 +359,7 @@
                                                                                                     })
                                                                                                 .LoadData()
                                                                                                 )
-                                                    , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("TranDesc").Width(150).Editor(Html.X().TextField().MaxLength(100100))
+                                                    , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("TranDesc").Width(150)//.Editor(Html.X().TextField().MaxLength(100100))
                                                     , Html.X().Column().Text(Util.GetLang("SiteID")).DataIndex("SiteID").Renderer("renderSiteID")
                                                                                         .Editor(HQ.Combo().ID("cboSiteID").Name("SiteID").HideLabel(true).LabelWidth(0)
                                                                                                 .HQDBSys(false).HQProcedure("PO10200_pcSiteAll").ForceSelection(true)

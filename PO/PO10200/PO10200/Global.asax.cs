@@ -40,7 +40,7 @@ namespace PO10200
             Session["PO10200"] = acc;
             Session["DBApp"] = Current.DBApp = "JFV_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "NDMT";
+            Session["CpnyID"] = Current.CpnyID = "JFV";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
            
