@@ -50,8 +50,12 @@
             .Editor(
                 HQ.Combo().ID("cboUserID").Name("cboUserID").HQProcedure("OM21200_pcLoadUser")
                 .HQColumnShow("UserName,FirstName,LastName").DisplayField("UserName").ValueField("UserName")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
                 .LoadData()
             ),
                 
@@ -59,8 +63,12 @@
             .Editor(
                 HQ.Combo().ID("cboDfltBranchID").Name("cboDfltBranchID").HQProcedure("OM21200_pcLoadBranchAll")
                 .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
                 .LoadData()
             ),
                 
@@ -68,10 +76,14 @@
             .Editor(
                 HQ.Combo().ID("cboOMSite").Name("cboOMSite").HQProcedure("OM21200_pcLoadSiteAll")
                 .HQColumnShow("SiteID,Name").DisplayField("SiteID").ValueField("SiteID")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
                     new StoreParameter() { Name = "@BranchID", Value = "App.slmUserDefault.selected.items[0]==undefined?'':App.slmUserDefault.selected.items[0].data.DfltBranchID" , Mode = ParameterMode.Raw }
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                 })
                 .LoadData()
             ),
@@ -80,10 +92,14 @@
             .Editor(
                 HQ.Combo().ID("cboINSite").Name("cboINSite").HQProcedure("OM21200_pcLoadSiteAll")
                 .HQColumnShow("SiteID,Name").DisplayField("SiteID").ValueField("SiteID")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter() { Name = "@BranchID", Value = "App.slmUserDefault.selected.items[0]==undefined?'':App.slmUserDefault.selected.items[0].data.DfltBranchID" , Mode = ParameterMode.Raw }
+                    new StoreParameter() { Name = "@BranchID", Value = "App.slmUserDefault.selected.items[0]==undefined?'':App.slmUserDefault.selected.items[0].data.DfltBranchID" , Mode = ParameterMode.Raw }
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                 })
                 .LoadData()
             ),
@@ -92,10 +108,14 @@
             .Editor(
                 HQ.Combo().ID("cboPOSite").Name("cboPOSite").HQProcedure("OM21200_pcLoadSiteAll")
                 .HQColumnShow("SiteID,Name").DisplayField("SiteID").ValueField("SiteID")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
                     new StoreParameter() { Name = "@BranchID", Value = "App.slmUserDefault.selected.items[0]==undefined?'':App.slmUserDefault.selected.items[0].data.DfltBranchID" , Mode = ParameterMode.Raw }
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                 })
                 .LoadData()
             ),
@@ -104,10 +124,14 @@
             .Editor(
                 HQ.Combo().ID("cboDiscSite").Name("cboDiscSite").HQProcedure("OM21200_pcLoadSiteAll")
                 .HQColumnShow("SiteID,Name").DisplayField("SiteID").ValueField("SiteID")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
                         new StoreParameter() { Name = "@BranchID", Value = "App.slmUserDefault.selected.items[0]==undefined?'':App.slmUserDefault.selected.items[0].data.DfltBranchID" , Mode = ParameterMode.Raw }
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                 })
                 .LoadData()
             ),
@@ -116,8 +140,12 @@
             .Editor(
                 HQ.Combo().ID("cboDfltOrderType").Name("cboDfltOrderType").HQProcedure("OM21200_pcLoadOrderTypeActive")
                 .HQColumnShow("OrderType,Descr").DisplayField("OrderType").ValueField("OrderType")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
                 .LoadData()
             ),
                 
@@ -125,12 +153,16 @@
             .Editor(
                 HQ.Combo().ID("cboDfltSlsPerID").Name("cboDfltSlsPerID").HQProcedure("OM21200_pcLoadSalesPerson")
                 .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
                     new StoreParameter() { Name = "@BranchID", Value = "App.slmUserDefault.selected.items[0]==undefined?'':App.slmUserDefault.selected.items[0].data.DfltBranchID" , Mode = ParameterMode.Raw },
                     new StoreParameter() { Name = "@ScreenNbr", Value = "OM21200" , Mode = ParameterMode.Value },
                     new StoreParameter() { Name = "@Username", Value = "App.slmUserDefault.selected.items[0]==undefined?'':App.slmUserDefault.selected.items[0].data.UserID" , Mode = ParameterMode.Raw }
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                 })
                 .LoadData()
             ),
@@ -139,10 +171,14 @@
             .Editor(
                 HQ.Combo().ID("cboDfltSupID").Name("cboDfltSupID").HQProcedure("OM21200_pcLoadSalesSup")
                 .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
                         new StoreParameter() { Name = "@BranchID", Value = "App.slmUserDefault.selected.items[0]==undefined?'':App.slmUserDefault.selected.items[0].data.DfltBranchID" , Mode = ParameterMode.Raw }
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                 })
                 .LoadData()
             ),
@@ -153,8 +189,8 @@
             X.Column().Text(Util.GetLang("InvcNote")).DataIndex("InvcNote").Width(150)
             .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true)),
                 
-            X.DateColumn().Text(Util.GetLang("WorkingDate")).DataIndex("WorkingDate").Width(150).Format("dd/MM/yyyy")
-            .Editor(X.DateField().MaxLength(30).EnforceMaxLength(true).Format("dd/MM/yyyy")),
+            HQ.DateColumn().Text(Util.GetLang("WorkingDate")).DataIndex("WorkingDate").Width(150)
+            .Editor(HQ.DateField()),
             
             X.CommandColumn()
             .Width(150)

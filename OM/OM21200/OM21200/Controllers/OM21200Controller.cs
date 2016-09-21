@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -26,11 +26,13 @@ namespace OM21200.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
+
         public ActionResult GetUserDefault()
         {
             var UserDefaults = _db.OM21200_pgLoadUserDefault().ToList();
@@ -44,16 +46,37 @@ namespace OM21200.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstUserDefault"]);
                 ChangeRecords<OM21200_pgLoadUserDefault_Result> lstUserDefault = dataHandler.BatchObjectData<OM21200_pgLoadUserDefault_Result>();
+                
+                //foreach (OM21200_pgLoadUserDefault_Result deleted in lstUserDefault.Deleted)
+                //{
+                //    var del = _db.OM_UserDefault.Where(p => p.UserID == deleted.UserID && p.DfltBranchID == deleted.DfltBranchID).FirstOrDefault();
+                //    if (del != null)
+                //    {
+                //        _db.OM_UserDefault.DeleteObject(del);
+                //    }
+                //}
+
+                //lstUserDefault.Created.AddRange(lstUserDefault.Updated);
+
+                lstUserDefault.Created.AddRange(lstUserDefault.Updated);
+
                 foreach (OM21200_pgLoadUserDefault_Result deleted in lstUserDefault.Deleted)
                 {
-                    var del = _db.OM_UserDefault.Where(p => p.UserID == deleted.UserID && p.DfltBranchID == deleted.DfltBranchID).FirstOrDefault();
-                    if (del != null)
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstUserDefault.Created.Where(p => p.UserID == deleted.UserID && p.DfltBranchID == deleted.DfltBranchID).Count() > 0)
                     {
-                        _db.OM_UserDefault.DeleteObject(del);
+                        lstUserDefault.Created.Where(p => p.UserID == deleted.UserID && p.DfltBranchID == deleted.DfltBranchID).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.OM_UserDefault.FirstOrDefault(p => p.UserID == deleted.UserID && p.DfltBranchID == deleted.DfltBranchID);
+                        if (objDel != null)
+                        {
+                            _db.OM_UserDefault.DeleteObject(objDel);
+                        }
                     }
                 }
 
-                lstUserDefault.Created.AddRange(lstUserDefault.Updated);
 
                 foreach (OM21200_pgLoadUserDefault_Result curUserDefault in lstUserDefault.Created)
                 {
@@ -75,6 +98,7 @@ namespace OM21200.Controllers
                     else
                     {
                         UserDefault = new OM_UserDefault();
+                        UserDefault.ResetET();
                         Update_OM_UserDefault(UserDefault, curUserDefault, true);
                         _db.OM_UserDefault.AddObject(UserDefault);
                     }
