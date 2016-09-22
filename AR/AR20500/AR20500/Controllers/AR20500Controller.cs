@@ -109,6 +109,7 @@ namespace AR20500.Controllers
         {
             try
             {
+                string errorCustID = string.Empty;
                 mForm = data;
                 StoreDataHandler custHandler = new StoreDataHandler(data["lstCust"]);
 
@@ -123,7 +124,26 @@ namespace AR20500.Controllers
                 string custlist = "";
 
                 if (handle != "N" && handle != string.Empty)
-                {                                     
+                {
+                    if (checkApprove == 1 && askApprove == 0)
+                    {
+                        foreach (var item in lstCust)
+                        {
+                            if (item.ColCheck == true)
+                            {
+                                //Check dieu kien Name/Addr/Phone
+                                var objCheck = _db.AR20500_ppCheckApprove(item.OutletName, item.Phone, item.Addr1, Current.LangID).FirstOrDefault();
+                                if (objCheck != null)
+                                {
+                                    if (objCheck.Result == true)
+                                        errorCustID += item.CustID + ",";
+                                }
+                            }
+                        }
+                    }
+                    if (errorCustID != string.Empty)
+                        throw new MessageException(MessageType.Message, "2016062801", "askApprove", parm: new string[] { errorCustID });
+
                     foreach (var item in lstCust)
                     {
                         if (item.ColCheck == true)
@@ -135,17 +155,6 @@ namespace AR20500.Controllers
                             if (objNew == null || objNew.Status == "A" || objNew.Status == "D") continue;
                             if (handle == "A")
                             {
-                                if (checkApprove == 1 && askApprove == 0)
-                                {
-                                    //Check dieu kien Name/Addr/Phone
-                                    var objCheck = _db.AR20500_ppCheckApprove(item.OutletName, item.Phone, item.Addr1, Current.LangID).FirstOrDefault();
-                                    if (objCheck != null)
-                                    {
-                                        if(objCheck.Result == true)
-                                            throw new MessageException(MessageType.Message, "2016062801", "askApprove", parm: new string[] {item.OutletName.PassNull(), objCheck.Lang.PassNull() });
-                                    }
-                                }
-                                askApprove = 0; // set lai ask Approve = 0
                                 objNew.WeekofVisit = item.WeekofVisit;
                                 objNew.Mon = item.Mon.Value ? int.Parse("1") : int.Parse("0");
                                 objNew.Tue = item.Tue.Value ? int.Parse("1") : int.Parse("0");
