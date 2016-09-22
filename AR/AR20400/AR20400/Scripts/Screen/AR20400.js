@@ -681,12 +681,12 @@ var save = function () {
                             else
                             {
                                 App.cboCustId.forceSelection = false;
-                                var objPageCust = findRecordCombo(CustId);
+                                var objPageCust = findRecordCombo(data.result.CustId);
                                 if (objPageCust) {
                                     var positionCust = calcPage(objPageCust.index);
                                     App.cboCustId.loadPage(positionCust);
                                 }
-                                App.cboCustId.setValue(CustId);
+                                App.cboCustId.setValue(data.result.CustId);
                                 App.stoAR_Customer.reload();
                             }
                            
@@ -697,12 +697,12 @@ var save = function () {
                             else
                             {
                                 App.cboCustId.forceSelection = false;
-                                var objPageCust = findRecordCombo(CustId);
+                                var objPageCust = findRecordCombo(data.result.CustId);
                                 if (objPageCust) {
                                     var positionCust = calcPage(objPageCust.index);
                                     App.cboCustId.loadPage(positionCust);
                                 }
-                                App.cboCustId.setValue(CustId);
+                                App.cboCustId.setValue(data.result.CustId);
                                 App.stoAR_Customer.reload();
                             }
                         }
