@@ -39,7 +39,7 @@ namespace IN40500.Controllers
 
             try
             {
-                string BranchID = data["txtBranchID"].PassNull();
+                string BranchID = data["cboBranchID"].PassNull();
                 string Date_tmp = data["dtpTranDate"].PassNull();
                 string Descr = data["txtDescr"].PassNull();
                 string SiteID = data["cboSiteID"].PassNull();
@@ -47,7 +47,7 @@ namespace IN40500.Controllers
                 var CheckCreateIN_Tag = _db.IN40500_ppCheckCreateIN_Tag(BranchID, SiteID).FirstOrDefault();
                 if (CheckCreateIN_Tag != null)
                 {
-                    if (CheckCreateIN_Tag.Result == 0)
+                    if (CheckCreateIN_Tag.Result == "")
                     {
                         var result = _db.IN40500_ppGetInsertIN_TagDetail(_userName, BranchID, Descr, DateTime.Parse(Date_tmp), SiteID, ClassID).FirstOrDefault();
                         if (result != null)
@@ -62,7 +62,8 @@ namespace IN40500.Controllers
                     }
                     else
                     {
-                        throw new MessageException(MessageType.Message, "1001");
+                        throw new MessageException(MessageType.Message, "2016092910", "", parm: new string[] { CheckCreateIN_Tag.Result.TrimEnd(',') });
+                        //throw new MessageException(MessageType.Message, "1001");
                     }
                     //throw new MessageException(MessageType.Message, "19");
                 }

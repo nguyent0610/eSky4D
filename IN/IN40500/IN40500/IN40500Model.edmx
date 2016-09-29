@@ -38,7 +38,7 @@
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN40500_ppCheckCreateIN_Tag_Result">
-          <Property Type="Int32" Name="Result" Nullable="true" />
+          <Property Type="String" Name="Result" Nullable="true" />
         </ComplexType>
         <ComplexType Name="IN40500_ppGetInsertIN_TagDetail_Result">
           <Property Type="String" Name="Result" Nullable="true" MaxLength="10" />

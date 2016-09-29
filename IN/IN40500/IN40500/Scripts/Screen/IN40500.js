@@ -15,6 +15,7 @@ var menuClick = function (command) {
             break;
         case "new":
             HQ.common.lockItem(App.frmMain, false);
+            App.cboBranchID.select(App.cboBranchID.getStore().getAt(0));
             App.txtTAGID.hide();
             App.txtTAGID.setValue('');
             App.txtDescr.setValue('');
@@ -28,8 +29,24 @@ var menuClick = function (command) {
     }
 };
 
+var cboBranchID_Change = function (sender, value) {
+    if (sender.valueModels != null) {
+        App.cboSiteID.clearValue();
+        App.cboSiteID.store.reload();
+    }
+};
+
+var cboBranchID_Select = function (sender, value) {
+    if (sender.valueModels != null) {
+        App.cboSiteID.clearValue();
+        App.cboSiteID.store.reload();
+    }
+};
+
 var btnCreat_Click = function () {
-    if (!App.txtDescr.isValid())
+    if(!App.cboBranchID.isValid())
+        HQ.message.show(1000, App.cboBranchID.fieldLabel, '');
+    else if (!App.txtDescr.isValid())
         HQ.message.show(1000, App.txtDescr.fieldLabel, '');
     else if (!App.cboSiteID.isValid())
         HQ.message.show(1000, App.cboSiteID.fieldLabel, '');
@@ -38,9 +55,8 @@ var btnCreat_Click = function () {
 };
 
 var firstLoad = function () {
-    //loadSourceCombo();
     App.dtpTranDate.setValue(HQ.bussinessDate);
-    App.txtBranchID.setValue(HQ.cpnyID);
+    App.cboBranchID.isValid();
     App.txtDescr.isValid();
     App.cboSiteID.isValid();
 };

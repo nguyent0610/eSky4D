@@ -192,7 +192,7 @@ namespace IN40500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> Result
+        public global::System.String Result
         {
             get
             {
@@ -202,13 +202,13 @@ namespace IN40500
             {
                 OnResultChanging(value);
                 ReportPropertyChanging("Result");
-                _Result = StructuralObject.SetValidValue(value);
+                _Result = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Result");
                 OnResultChanged();
             }
         }
-        private Nullable<global::System.Int32> _Result;
-        partial void OnResultChanging(Nullable<global::System.Int32> value);
+        private global::System.String _Result;
+        partial void OnResultChanging(global::System.String value);
         partial void OnResultChanged();
 
         #endregion
