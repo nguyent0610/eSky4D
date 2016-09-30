@@ -233,11 +233,12 @@
         )*@
 
         @(
- X.Store().ID("storeAllCurrentSalesman")
+            X.Store().ID("storeAllCurrentSalesman")
                 //.RemotePaging(true).PageSize(50)
+             
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM30400_pgAllCurrentSalesman_Result), "OM30400AllCurrentSalesman_ResultModel", ""))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadAllCurrentSalesman")))
+            .ServerProxy(X.AjaxProxy().Timeout(1000 * 60 * 5).Url(Url.Action("LoadAllCurrentSalesman")))
             .Parameters(ps =>
             {
                 ps.Add(new StoreParameter("distributor", "Index.joinParams(App.cboDistributorActual)", ParameterMode.Raw));
