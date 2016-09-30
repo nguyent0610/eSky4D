@@ -22,8 +22,8 @@
           </Key>
           <Property Name="CustId" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="CustName" Type="nvarchar" Nullable="false" MaxLength="200" />
-          <Property Name="Addr1" Type="nvarchar" MaxLength="200" />
-          <Property Name="Addr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Addr1" Type="nvarchar(max)" />
+          <Property Name="Addr2" Type="nvarchar" MaxLength="100" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
           <Property Name="BillAddr1" Type="nvarchar" MaxLength="200" />
           <Property Name="BillAddr2" Type="nvarchar" MaxLength="50" />
@@ -351,6 +351,10 @@
         <Function Name="AR20500_ppCheckCustomerApprove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="CustID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="OutletName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Phone" Type="varchar" Mode="In" />
+          <Parameter Name="Addr1" Type="nvarchar(max)" Mode="In" />
         </Function>
         <Function Name="AR20500_ppCheckCustomerReject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -391,10 +395,6 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="CustID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AR20500_ppCheckCustomerApprove" ReturnType="Collection(String)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="CustID" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="AR_SOAddress" EntityType="AR20500Model.AR_SOAddress" />
           <FunctionImport Name="AR20500_pdIsShowCustHT" ReturnType="Collection(Boolean)" />
           <FunctionImport Name="AR20500_CustID" ReturnType="Collection(String)">
@@ -417,6 +417,14 @@
             <Parameter Name="Phone" Mode="In" Type="String" />
             <Parameter Name="Addr" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR20500_ppCheckCustomerApprove" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="OutletName" Mode="In" Type="String" />
+            <Parameter Name="Phone" Mode="In" Type="String" />
+            <Parameter Name="Addr1" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="AR_Customer" EntityType="AR20500Model.AR_Customer" />
         </EntityContainer>
@@ -700,8 +708,8 @@
           </Key>
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr1" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr1" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Attn" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillAddr1" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillAddr2" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1012,7 +1020,6 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AR20500_AfterApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_AfterApprove" />
           <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerReject" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerReject" />
-          <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerApprove" />
           <EntitySetMapping Name="AR_SOAddress">
             <EntityTypeMapping TypeName="AR20500Model.AR_SOAddress">
               <MappingFragment StoreEntitySet="AR_SOAddress">
@@ -1059,6 +1066,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerApprove" />
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20500Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
@@ -1161,14 +1169,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="63" >
-        <EntityTypeShape EntityType="AR20500Model.AR_CustomerLocation" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20500Model.OM_PJP" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteMaster" Width="3.25" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20500Model.SI_State" Width="1.5" PointX="0.75" PointY="5.75" />
-        <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteDet" Width="1.5" PointX="2.75" PointY="7.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_CustomerLocation" Width="1.75" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.OM_PJP" Width="1.5" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteMaster" Width="3.25" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.SI_State" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteDet" Width="1.5" PointX="2.75" PointY="5.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="4.75" PointY="7.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.5" PointX="6.75" PointY="7.75" />
-        <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="8.75" PointY="7.75" />
       </Diagram>
     </Diagrams>
   </Designer>

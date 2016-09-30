@@ -476,36 +476,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="custID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR20500_ppCheckCustomerApprove(global::System.String branchID, global::System.String custID)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter custIDParameter;
-            if (custID != null)
-            {
-                custIDParameter = new ObjectParameter("CustID", custID);
-            }
-            else
-            {
-                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("AR20500_ppCheckCustomerApprove", branchIDParameter, custIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectResult<Nullable<global::System.Boolean>> AR20500_pdIsShowCustHT()
         {
             return base.ExecuteFunction<Nullable<global::System.Boolean>>("AR20500_pdIsShowCustHT");
@@ -712,6 +682,80 @@ namespace AR20500
             }
     
             return base.ExecuteFunction<AR20500_ppCheckApprove_Result>("AR20500_ppCheckApprove", custNameParameter, phoneParameter, addrParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="iD">No Metadata Documentation available.</param>
+        /// <param name="outletName">No Metadata Documentation available.</param>
+        /// <param name="phone">No Metadata Documentation available.</param>
+        /// <param name="addr1">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20500_ppCheckCustomerApprove(global::System.String branchID, global::System.String custID, Nullable<global::System.Int32> iD, global::System.String outletName, global::System.String phone, global::System.String addr1)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter iDParameter;
+            if (iD.HasValue)
+            {
+                iDParameter = new ObjectParameter("ID", iD);
+            }
+            else
+            {
+                iDParameter = new ObjectParameter("ID", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter outletNameParameter;
+            if (outletName != null)
+            {
+                outletNameParameter = new ObjectParameter("OutletName", outletName);
+            }
+            else
+            {
+                outletNameParameter = new ObjectParameter("OutletName", typeof(global::System.String));
+            }
+    
+            ObjectParameter phoneParameter;
+            if (phone != null)
+            {
+                phoneParameter = new ObjectParameter("Phone", phone);
+            }
+            else
+            {
+                phoneParameter = new ObjectParameter("Phone", typeof(global::System.String));
+            }
+    
+            ObjectParameter addr1Parameter;
+            if (addr1 != null)
+            {
+                addr1Parameter = new ObjectParameter("Addr1", addr1);
+            }
+            else
+            {
+                addr1Parameter = new ObjectParameter("Addr1", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20500_ppCheckCustomerApprove", branchIDParameter, custIDParameter, iDParameter, outletNameParameter, phoneParameter, addr1Parameter);
         }
 
         #endregion
