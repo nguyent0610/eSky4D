@@ -38,17 +38,17 @@ namespace OM10100
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "HQDBDG";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = "eBiz4DCloudSysJFV";//ConfigurationManager.AppSettings["DBSys"].ToString();
             Current.FormatDate = "dd.MM.yyyy";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM10100"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";// "eBiz4DWebApp";
-            Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "040100071";
+            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppJFV";// "eBiz4DWebApp";
+            Session["UserName"] = Current.UserName = "101112TLN3";
+            Session["CpnyID"] = Current.CpnyID = "101112TLN3";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }
