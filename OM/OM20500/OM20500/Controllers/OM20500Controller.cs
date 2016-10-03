@@ -115,9 +115,27 @@ namespace OM20500.Controllers
                 DateTime dteARDocDate = data["aRDocDate"].ToDateShort();
                 //bool isAddStock = data["isAddStock"].ToBool();
                 string message = "";
+                string errorDate = string.Empty;
+                string errorAmt = string.Empty;
+                var isCheck = false;
+                var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM20500CheckApprove");
+                if (objConfig != null && objConfig.IntVal == 1)
+                {
+                    isCheck = true;
+                }
                 foreach (var objHeader in lstOrd)
                 {
+                    if (isCheck && (objHeader.OrderDate.ToDateShort() > dteShipDate || objHeader.OrderDate.ToDateShort() > dteARDocDate))
+                    {
+                        errorDate += objHeader.OrderNbr + ", ";                        
+                        continue;
+                    }
                     var lstDetOrNbr = lstDet.Where(p => p.OrderNbr == objHeader.OrderNbr).ToList();
+                    if (lstDetOrNbr.Sum(x => x.LineAmt) == 0)
+                    {
+                        errorAmt += objHeader.OrderNbr + ", ";
+                        continue;
+                    }
                     var lstLotOrNbr = lstLot.Where(p => p.OrderNbr == objHeader.OrderNbr).ToList();
 
                     Dictionary<string, double> dicRef = new Dictionary<string, double>();
@@ -135,6 +153,7 @@ namespace OM20500.Controllers
                     try
                     {
                         OM om = new OM(Current.UserName, _screenNbr, dal);
+                        
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
                         if (!om.OM20500_Release(objHeader.BranchID, objHeader.OrderNbr, dicRef, Delivery, dteShipDate, dteARDocDate, objHeader.IsAddStock, dicRefLot))
                         {
@@ -160,8 +179,26 @@ namespace OM20500.Controllers
                         }
                     }
                 }
-                if (message != string.Empty)
+                errorAmt = errorAmt.Trim().TrimEnd(',');
+                errorDate = errorDate.Trim().TrimEnd(',');
+                if (message != string.Empty || errorDate != string.Empty || errorAmt != string.Empty)
                 {
+                    if (errorDate != string.Empty)
+                    {
+                        if (message != string.Empty)
+                        {
+                            message += "<br>";
+                        }
+                        message += GetMess(2016100301, new string[] { errorDate });
+                    }
+                    if (errorAmt != string.Empty)
+                    {
+                        if (message != string.Empty)
+                        {
+                            message += "<br>";
+                        }
+                        message += GetMess(2016100302, new string[] { errorAmt });
+                    }
                     throw new MessageException("20410", parm: new[] { message });
                 }
                 return Util.CreateMessage(MessageProcess.Process);
@@ -174,6 +211,22 @@ namespace OM20500.Controllers
                 }
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
+        }
+        // Get mess desc
+        private string GetMess(int code, string[] parm = null)
+        {
+            var msg = _sys.psys_LoadMessage(Current.LangID, code).FirstOrDefault();
+            if (msg != null)
+            {
+                if (parm != null)
+                {
+                    for (int i = 0; i < parm.Length; i++)
+                    {
+                        msg.Message = msg.Message.Replace("@p" + (i + 1).ToString(), parm[i]);
+                    }
+                }
+            }
+            return msg.Message;
         }
         [ValidateInput(false)]
         public ActionResult ClosePO(FormCollection data)
