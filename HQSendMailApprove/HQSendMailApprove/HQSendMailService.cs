@@ -33,13 +33,13 @@ namespace HQSendMailApprove
 
         #region Trunght
       
-        public static void SendMail(string mailTo, string mailCC, string subject, string content,string[] fullPathAttach =null)
+        public static void SendMail(string mailTo, string mailCC, string subject, string content,string[] fullPathAttach =null,string emailID="")
         {
             HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             try
             {
                 if (mailTo == string.Empty && mailCC == string.Empty) return;
-                var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == "Approve".ToUpper()).FirstOrDefault();
+                var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == (emailID == "" ? "Approve".ToUpper() : emailID.ToUpper())).FirstOrDefault();
                 if (email != null)
                     SendMailEnd(email.SMTPServer, email.Port, email.SSL, email.UserName, email.Pass, email.MailBox, email.Name, mailTo, mailCC, subject, content, fullPathAttach);
                 else
@@ -325,13 +325,13 @@ namespace HQSendMailApprove
 
         }
 
-        public static void SendMailFile(string mailTo, string mailCC, string subject, string content, string EmailID, string[] FileAttach)
+        public static void SendMailFile(string mailTo, string mailCC, string subject, string content, string EmailID, string[] FileAttach,string emailID="")
         {
             HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             try
             {
                 if (mailTo == string.Empty && mailCC == string.Empty) return;
-                var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == "Approve".ToUpper()).FirstOrDefault();
+                var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == (emailID == "" ? "Approve".ToUpper() : emailID.PassNull().ToUpper())).FirstOrDefault();
                 if (email != null)
                     SendMailEndFile(email.SMTPServer, email.Port, email.SSL, email.UserName, email.Pass, email.MailBox, email.Name, mailTo, mailCC, subject, content, FileAttach);
                 else
@@ -343,14 +343,14 @@ namespace HQSendMailApprove
             }
         }
 
-        public static void SendMailFileProc(string procName, Dictionary<string, string> parameter, string subject, string EmailID, string[] FileAttach)
+        public static void SendMailFileProc(string procName, Dictionary<string, string> parameter, string subject, string EmailID, string[] FileAttach,string emailID="")
         {
 
             try
             {
                 List<GetMailResult> lst = GetMail(procName, parameter);
                 HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
-                var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == "Approve".ToUpper()).FirstOrDefault();
+                var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == (emailID == "" ? "Approve".ToUpper() : emailID.PassNull().ToUpper())).FirstOrDefault();
                 if (email != null)
                     foreach (var obj in lst)
                     {

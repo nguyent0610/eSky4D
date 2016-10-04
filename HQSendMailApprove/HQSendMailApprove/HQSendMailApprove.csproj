@@ -36,10 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HQ.eSkyFramework">
-      <HintPath>..\..\OM\OM10100\bin\HQ.eSkyFramework.dll</HintPath>
+      <HintPath>..\..\DLL\HQ.eSkyFramework.dll</HintPath>
     </Reference>
     <Reference Include="HQ.eSkySys">
-      <HintPath>..\..\OM\OM10100\bin\HQ.eSkySys.dll</HintPath>
+      <HintPath>..\..\DLL\HQ.eSkySys.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
