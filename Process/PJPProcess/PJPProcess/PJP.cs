@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.EntityClient;
@@ -152,7 +152,9 @@ namespace PJPProcess
                 {
                  
                     System.Data.DataTable dt = objSql.GetListNewOM_SalesRouteMaster(id);//, "%", "%", "%", "%", "%");
-
+                    //TRAN TRUNG HO: PJP sửa lại comit cho AR_Customer với OM_SalesRouteMaster trước,
+                    //trước khi sinh OM_SalesRouteDet nếu sinh OM_SalesRouteDet có lỗi thi ko có rollback lại được OM_SalesRouteMaster với AR_Customer đã thay đổi trước đó
+                    Dal.CommitTrans();
                     foreach (DataRow r in dt.Rows)
                     {
                         Fromdate = Convert.ToDateTime(r["StartDate"], CultureInfo.InvariantCulture);
