@@ -868,7 +868,7 @@ namespace INProcess
                 throw ex;
             }
         }
-        public bool IN10500_Release(string tagID, string branchID, string siteID)
+        public bool IN10500_Release(string tagID, string branchID)
         {
             try
             {
@@ -877,23 +877,23 @@ namespace INProcess
                 clsSQL objSql = new clsSQL(Dal);
                 var batNbr = objSql.INNumbering(branchID, "BatNbr");
                 var refNbr = objSql.INNumbering(branchID, "RefNbr");
-
+                string siteID = string.Empty;
                 clsIN_Setup objSetup = new clsIN_Setup(Dal);
                 objSetup.GetByKey(branchID, "IN");
 
                 clsIN_TagDetail objTagDetail = new clsIN_TagDetail(Dal);
-                DataTable lstTagDetail = objTagDetail.GetAll(tagID, branchID, siteID, "%"); //objTagDetail.GetAll(tagID, siteID, "%"); 
+                DataTable lstTagDetail = objTagDetail.GetAll(tagID, "%"); //objTagDetail.GetAll(tagID, siteID, "%"); 
 
 
                 clsIN_TagHeader objTagHeader = new clsIN_TagHeader(Dal);
-                objTagHeader.GetByKey(tagID, branchID, siteID);
+                objTagHeader.GetByKey(tagID);
                 //objTagHeader.GetByKey(tagID);
                 objTagHeader.INBatNbr = batNbr;
                 objTagHeader.Status = "C";
                 objTagHeader.Update();
+                siteID = objTagHeader.SiteID;
                 clsBatch newBatch = new clsBatch(Dal)
                 {
-
                     BatNbr = batNbr,
                     Descr = objTagHeader.Descr,
                     Module1 = "IN",
@@ -947,7 +947,7 @@ namespace INProcess
                         ReasonCD = tagDetail.String("ReasonCD"),
                         RefNbr = refNbr,
                         Rlsed = 1,
-                        SiteID = tagDetail.String("SiteID"),
+                        SiteID = siteID,// tagDetail.String("SiteID"),
                         LineRef = lineRef
                     };
                     newTran.UnitDesc = objInvt.StkUnit;
@@ -959,7 +959,7 @@ namespace INProcess
 
                     newTran.Add();
 
-                    if (objItem.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID")))
+                    if (objItem.GetByKey(tagDetail.String("InvtID"), siteID)) // tagDetail.String("SiteID")
                     {
                         objItem.QtyOnHand = objItem.QtyOnHand + tagDetail.Double("OffsetEAQty");
                         objItem.QtyAvail = objItem.QtyAvail + tagDetail.Double("OffsetEAQty");
@@ -978,7 +978,6 @@ namespace INProcess
             {
                 throw ex;
             }
-
         }
         public bool IN40100_Release(string perPost, string[] lstSite, string[] lstInvtID, string type)
         {
