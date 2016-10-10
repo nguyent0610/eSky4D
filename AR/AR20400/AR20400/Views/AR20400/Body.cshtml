@@ -213,7 +213,7 @@
                         HQ.TextBox().ID("txtCustName").Name("txtCustName").HQLangCode("CUSTNAME").DataIndex("CustName")
                             .AllowBlank(false).EnforceMaxLength(true).MaxLength(200)
                             .Width(600).MarginSpec("5 0 0 0")
-                            .Listeners(p=>p.Change.Handler ="App.lblName.setValue(this.getValue());")
+                            .Listeners(p=>p.Change.Fn ="txtCustName_Change")
                             
                         , HQ.TextBox().ID("txtInActive").Name("txtInActive").HQLangCode("InActiveAR20400").DataIndex("InActive")
                             .AllowBlank(true).EnforceMaxLength(true).MaxLength(100)

@@ -1003,6 +1003,17 @@ var HQ = {
                                     isValid = false;
                                     return false;
                                 }
+                                else {
+                                    if (item.value) {
+                                        var regex = /<[/a-zA-Z][\s\S]*>/
+                                        if (HQ.util.passNull(item.value.toString()).match(regex)) {
+                                            invalidField = item.id;
+                                            HQ.message.show(2016101010, item.fieldLabel, 'HQ.util.focusControl');
+                                            isValid = false;
+                                            return false;
+                                        }
+                                    }
+                                }
                             })
             return isValid;
         },

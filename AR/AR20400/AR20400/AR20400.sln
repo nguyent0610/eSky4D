@@ -8,8 +8,8 @@ Global
 		SccNumberOfProjects = 2
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.130.4:8088/tfs/hqsoft
-		SccProjectUniqueName0 = AR20400.csproj
 		SccLocalPath0 = .
+		SccProjectUniqueName1 = AR20400.csproj
 		SccLocalPath1 = .
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

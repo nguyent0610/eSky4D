@@ -832,6 +832,14 @@ var filterCate = function () {
 };
 
 ////////////////////////// Event Change & Select Control//////////////////////
+var txtCustName_Change = function (sender, value) {
+    App.lblName.setValue(this.getValue());
+    //var regex = /</[a-zA-Z][\s\S]*>/
+    //if (value.match(regex)) {
+    //    alert("Error");
+    //}
+};
+
 var cboCustId_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoAR_Customer.loading) {
