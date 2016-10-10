@@ -125,7 +125,7 @@ namespace AR20500.Controllers
 
                 if (handle != "N" && handle != string.Empty)
                 {
-                    if (checkApprove == 1 && askApprove == 0)
+                    if (checkApprove == 1 && askApprove == 0 && handle == "A")
                     {
                         foreach (var item in lstCust)
                         {
