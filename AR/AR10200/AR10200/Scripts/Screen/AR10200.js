@@ -351,23 +351,44 @@ var Event = {
 
     Grid: {
         chkSelectHeader_change: function (chk, newValue, oldValue, eOpts) {
-            if (App.cboStatus.value == _hold) {
-                var store = chk.up("grid").store;
-                store.each(function (record) {
-                    if (record.data.InvcNbr) {
-                        if (chk.checked) {
-                            record.set("Selected", true);
-                            record.set("DocBal", 0);
-                            record.set("Payment", record.data.OrigDocBal);
-                        }
-                        else {
-                            record.set("Selected", false);
-                            record.set("DocBal", record.data.OrigDocBal);
-                            record.set("Payment", 0);
-                        }
+            //if (App.cboStatus.value == _hold) {
+            //    var store = chk.up("grid").store;
+            //    store.each(function (record) {
+            //        if (record.data.InvcNbr) {
+            //            if (chk.checked) {
+            //                record.set("Selected", true);
+            //                record.set("DocBal", 0);
+            //                record.set("Payment", record.data.OrigDocBal);
+            //            }
+            //            else {
+            //                record.set("Selected", false);
+            //                record.set("DocBal", record.data.OrigDocBal);
+            //                record.set("Payment", 0);
+            //            }
+            //        }
+            //    });
+            //}
+
+            var store = App.stoAdjust;
+            var allRecords = store.snapshot || store.allData || store.data;
+            store.suspendEvents();
+            allRecords.each(function (record) {
+                if (record.data.InvcNbr) {
+                    if (chk.checked) {
+                        record.set("Selected", true);
+                        record.set("DocBal", 0);
+                        record.set("Payment", record.data.OrigDocBal);
                     }
-                });
-            }
+                    else {
+                        record.set("Selected", false);
+                        record.set("DocBal", record.data.OrigDocBal);
+                        record.set("Payment", 0);
+                    }
+                }
+            });
+            store.resumeEvents();
+            App.grdAdjust.view.refresh();
+
             frmMain_fieldChange();
         },
 
