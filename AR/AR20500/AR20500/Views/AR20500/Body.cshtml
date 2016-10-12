@@ -53,7 +53,7 @@
 
                         })
                         , HQ.DateField().ID("FromDate").HQLangCode("FromDate").Width(250)
-                             .Value(DateTime.Now.ToShortDateString())
+                           
 
                         , HQ.Combo().ID("cboStatus")
                             .Name("cboStatus").HQLangCode("Status").HQProcedure("AR20500_pcStatus")
@@ -102,7 +102,6 @@
                                     lst.Expand.Handler = "HQ.combo.expand(this,',');";
                                 })
                             , HQ.DateField().ID("ToDate").HQLangCode("ToDate").Width(250)
-                                   .Value(DateTime.Now.ToShortDateString())
 
                             , HQ.Combo().ID("cboHandle")
                                     .Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20500_pcHandle")

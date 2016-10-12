@@ -14,6 +14,8 @@ var loadSourceCombo = function () {
                             App.cboStatus.setValue("H");
                             App.cboHandle.setValue("N");
                             _firstLoad = false;
+                            App.FromDate.setValue(HQ.bussinessDate);
+                            App.ToDate.setValue(HQ.bussinessDate);
                         }
                     })
                 })
