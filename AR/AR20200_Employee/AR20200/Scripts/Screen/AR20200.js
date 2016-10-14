@@ -332,8 +332,32 @@ var cboBranchID_Select = function (sender, value) {
 var cboSlsperid_change = function (sender, e) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoSalesPerson.loading) {
+        if (App.cboSlsperid.allowBlank == false && HQ.isChange == true) {
+            HQ.message.show(150, '', '');
+            sender.setValue(sender.originalValue);
+            return;
+        }
         App.stoSalesPerson.reload();
     }
+};
+var cboSlsperid_select = function (sender, e) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null && !App.stoSalesPerson.loading) {
+        if (App.cboSlsperid.allowBlank == false && HQ.isChange == true) {
+            HQ.message.show(150, '', '');
+            sender.setValue(sender.originalValue);
+            return;
+        }
+        App.stoSalesPerson.reload();
+    }
+};
+
+var cboSlsperid_TriggerClick = function (sender, value) {
+    if (App.cboSlsperid.allowBlank == false && HQ.isChange == true) {
+        HQ.message.show(150, '', '');
+        return;
+    }
+    App.cboSlsperid.clearValue();
 };
 
 /////////////////////////////////

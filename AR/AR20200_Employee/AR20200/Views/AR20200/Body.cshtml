@@ -35,7 +35,7 @@
             .Items(
 
                 // First Column
-                X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
+                X.Container().Layout(LayoutType.VBox)
                 .Flex(1).MinWidth(250)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
@@ -57,8 +57,7 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
 
-                    , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
-                    .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle })
+                    , X.Container().Layout(LayoutType.HBox)
                     .Items(
                         HQ.Combo().ID("cboSlsperid").Name("cboSlsperid").HQLangCode("Slsperid").Tag("X")
                             .HQProcedure("AR20200_pcSalesPersonMaster").HQColumnShow("SlsperId,Name")
@@ -74,11 +73,12 @@
                             .Listeners(lst =>
                             {
                                 lst.Change.Fn = "cboSlsperid_change";
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                lst.Select.Fn = "cboSlsperid_select";
+                                lst.TriggerClick.Fn = "cboSlsperid_TriggerClick";
                             })
 
                         , HQ.Checkbox().ID("chkActive").Name("chkActive").HQLangCode("ACTIVE")
-                        .MarginSpec("0 0 0 5").DataIndex("Active")//.Flex(1)
+                        .MarginSpec("5 0 0 10").DataIndex("Active")//.Flex(1)
                     )
 
                     , HQ.Combo().ID("cboPosition").Name("cboPosition").HQLangCode("Position").HQProcedure("AR20200_pcPosition")
@@ -158,7 +158,7 @@
 
                     , HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("SiteID").HQProcedure("AR20200_pcVend")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("VendID").HQAutoLoad(false)
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0").ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
@@ -173,7 +173,7 @@
                 )
 
                 // Second Column
-                , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
+                , X.Container().Layout(LayoutType.VBox)
                 .Flex(1).MinWidth(250)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
