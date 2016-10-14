@@ -56,9 +56,11 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
-            if (App.slmSYS_FavouriteGroupUser.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
+            if (HQ.isDelete) {
+                if (App.slmSYS_FavouriteGroupUser.selected.items[0] != undefined) {
+                    if (App.slmSYS_FavouriteGroupUser.selected.items[0].data.ScreenNumber != "") {
+                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_FavouriteGroupUser)], 'deleteData', true);
+                    }
                 }
             }
             break;

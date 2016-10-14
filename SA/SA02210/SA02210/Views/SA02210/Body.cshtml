@@ -48,7 +48,7 @@
                     X.Store()
                     .ID("stoSYS_FavouriteGroupUser")
                     .PageSize(50)//.AutoLoad(true)
-                    .Model(Util.GenerateModel(typeof(SA02210_pgSYS_FavouriteGroupUser_Result), "mdlSYS_FavouriteGroupUser", "ScreenNumber"))
+                    .Model(Util.GenerateModel(typeof(SA02210_pgSYS_FavouriteGroupUser_Result), "mdlSYS_FavouriteGroupUser", ""))
                     .Parameters(ps =>
                     {
                         ps.Add(new StoreParameter("UserGroupID", "App.cboUserGroupID.getValue()", ParameterMode.Raw));
