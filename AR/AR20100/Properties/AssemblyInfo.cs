@@ -8,10 +8,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("AR20100")]
 [assembly: AssemblyDescription("Customer Class")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Han Quang Software Solution")]
+[assembly: AssemblyCompany("HQ Software Solution")]
 [assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
-[assembly: AssemblyTrademark("Han Quang Software Solution. All rights Reserved.")]
+[assembly: AssemblyCopyright("Copy right 2006-2016 HQ Software Solution. All rights Reserved")]
+[assembly: AssemblyTrademark("OM25000")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

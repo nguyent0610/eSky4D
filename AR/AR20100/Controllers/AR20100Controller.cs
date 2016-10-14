@@ -49,12 +49,7 @@ namespace AR20100.Controllers
                 string ClassId = data["cboClassId"].PassNull();
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstAR_CustClass"]);
-                //ChangeRecords<AR_CustClass> lstAR_CustClass = dataHandler.BatchObjectData<AR_CustClass>();
-
-                //lstAR_CustClass.Created.AddRange(lstAR_CustClass.Updated);
-
                 var curHeader = dataHandler.ObjectData<AR_CustClass>().FirstOrDefault();
-
 
                 var header = _db.AR_CustClass.FirstOrDefault(p => p.ClassId == ClassId);
                 if (header != null)
@@ -72,6 +67,7 @@ namespace AR20100.Controllers
                 {
                     //string images = getPathThenUploadImage(curHeader, UserID);
                     header = new AR_CustClass();
+                    header.ResetET();
                     header.ClassId = ClassId;
                     header.Crtd_DateTime = DateTime.Now;
                     header.Crtd_Prog = _screenNbr;
