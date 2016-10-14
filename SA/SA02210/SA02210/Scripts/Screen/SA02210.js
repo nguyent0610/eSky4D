@@ -1,1 +1,189 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('n a=["\\u\\k\\e\\b\\b\\m\\1n\\s\\z\\M\\b\\e","\\1b\\i\\j\\b\\L\\e\\i\\s\\x","\\p\\e\\j\\u\\U\\u\\T\\N\\g\\D\\i\\s\\e\\h\\c\\b\\L\\e\\i\\s\\x\\K\\f\\b\\e","\\H\\h\\e\\f\\c","\\p\\e\\h\\j","\\x\\e\\b\\D","\\m\\b\\2u\\c","\\q\\g\\f\\c","\\h\\f\\1b\\t\\g\\m\\p\\b","","\\e\\b\\H\\e\\b\\f\\t","\\f\\t\\i\\Q","\\z\\b\\f\\f\\g\\p\\b","\\h\\f\\N\\h\\e\\f\\c\\1a\\i\\g\\j","\\e\\b\\q\\i\\g\\j","\\f\\c\\i\\u\\U\\u\\T\\N\\g\\D\\i\\s\\e\\h\\c\\b\\L\\e\\i\\s\\x\\K\\f\\b\\e","\\h\\f\\1f\\m\\f\\b\\e\\c","\\h\\m\\f\\b\\e\\c","\\m\\b\\Q","\\h\\c\\b\\z\\f","\\f\\b\\q\\b\\k\\c\\b\\j","\\f\\q\\z\\u\\U\\u\\T\\N\\g\\D\\i\\s\\e\\h\\c\\b\\L\\e\\i\\s\\x\\K\\f\\b\\e","\\h\\f\\I\\b\\q\\b\\c\\b","\\j\\b\\q\\b\\c\\b\\I\\g\\c\\g","\\j\\b\\q\\b\\c\\b","\\h\\f\\K\\x\\j\\g\\c\\b","\\k\\t\\b\\k\\J\\1e\\b\\2F\\s\\h\\e\\b\\2G\\g\\f\\f","\\f\\c\\i\\e\\b","\\f\\g\\D\\b","\\x\\e\\h\\m\\c","\\k\\q\\i\\f\\b","\\k\\i\\z\\z\\i\\m","\\x\\g\\e\\b\\m\\c\\1d\\s\\c\\i\\1a\\i\\g\\j\\1b\\i\\m\\c\\e\\i\\q","\\p\\b\\c\\1o\\b\\h\\p\\t\\c","\\f\\b\\c\\1o\\b\\h\\p\\t\\c","\\t\\b\\h\\p\\t\\c","\\p\\b\\c\\1c\\h\\b\\Q\\u\\h\\2H\\b","\\p\\b\\c\\R\\i\\j\\O","\\k\\t\\b\\k\\J\\R\\b\\H\\i\\e\\b\\1q\\j\\h\\c","\\k\\t\\b\\k\\J\\1f\\m\\f\\b\\e\\c\\2k\\b\\O","\\H\\h\\b\\q\\j","\\D\\g\\q\\s\\b","\\H\\h\\m\\j\\1e\\b\\k\\i\\e\\j","\\k\\M\\i\\u\\k\\e\\b\\b\\m\\1n\\s\\z\\M\\b\\e","\\I\\b\\f\\k\\e","\\j\\g\\c\\g","\\f\\b\\c","\\e\\b\\k\\i\\e\\j","\\k\\t\\b\\k\\J\\1c\\g\\q\\h\\j\\g\\c\\b\\1q\\j\\h\\c","\\k\\t\\b\\k\\J\\1e\\b\\1K\\b\\k\\c","\\h\\f\\1c\\g\\q\\h\\j","\\H\\e\\z\\1r\\g\\h\\m","\\1Q\\g\\h\\c\\1r\\f\\p","\\p\\b\\c\\1a\\g\\m\\p","\\u\\1d\\S\\P\\P\\1k\\S\\1R\\u\\g\\D\\b","\\p\\b\\c\\I\\g\\c\\g","\\p\\b\\c\\u\\c\\i\\e\\b","\\k\\M\\i\\K\\f\\b\\e\\L\\e\\i\\s\\x\\1f\\I","\\x\\e\\i\\k\\b\\f\\f","\\f\\s\\M\\z\\h\\c","\\O\\b\\f","\\j\\b\\q\\b\\c\\b\\u\\b\\q\\b\\k\\c\\b\\j","\\u\\1d\\S\\P\\P\\1k\\S","\\k\\t\\g\\m\\p\\b\\I\\g\\c\\g","\\f\\t\\i\\Q\\R\\s\\f\\O","\\h\\m\\f\\b\\e\\c\\R\\q\\g\\m\\J","\\q\\i\\g\\j\\h\\m\\p\\j\\g\\c\\g"];n B=[a[0]];n 1s=[a[0],a[1]];n 1m=[a[0],a[1]];n 1F=o(1p){1N(1p){y a[3]:d[a[4]][a[3]](l[a[2]]);w;y a[5]:d[a[4]][a[5]](l[a[2]]);w;y a[6]:d[a[4]][a[6]](l[a[2]]);w;y a[7]:d[a[4]][a[7]](l[a[2]]);w;y a[10]:r(d[a[8]]){d[a[12]][a[11]](1L,a[9],a[10])}Y{d[a[8]]=F;d[a[13]]=G;l[a[15]][a[14]]()};w;y a[18]:r(d[a[16]]){d[a[4]][a[17]](l[a[2]],B)};w;y a[24]:r(l[a[21]][a[20]][a[19]][0]!=2J){r(d[a[22]]){d[a[12]][a[11]](11,a[9],a[23])}};w;y a[28]:r(d[a[25]]||d[a[16]]||d[a[22]]){r(d[a[27]][a[26]](l[a[15]],B,1s,1m)){1y()}};w;y a[29]:w;y a[1t]:d[a[C]][a[1t]](Z);w}};n 2O=o(X){r(Z[a[1i]]!=2M){X[a[1j]](Z[a[1i]][a[2K]]()-1u)}Y{X[a[1j]](2B[a[2q]]()[a[2r]]()[a[2p]]-1u)}};n 2o=o(A,2l,2m){d[a[13]]=G;l[a[2]][a[27]][a[14]]()};n 2n=o(2s){};n 2t=o(2z,v){r(!d[a[4]][a[2A]](v,B)){1x F}};n 2y=o(A,v){d[a[4]][a[2x]](l[a[2]],v,B);r(v[a[1l]]==a[0]){n W=l[a[2v]][a[27]][a[2w]](v[a[1l]],v[a[1P]]);r(W){v[a[1B]][a[1A]](a[1v],W[a[2C]].2L)}Y{v[a[1B]][a[1A]](a[1v],a[9])}}};n 2I=o(A,v){1x d[a[4]][a[2D]](l[a[2]],v,B)};n 1S=o(1w){d[a[4]][a[1M]](1w,l[a[2]]);V(l[a[15]])};n 1y=o(){r(l[a[1C]][a[1O]]()){l[a[1C]][a[1T]]({2j:d[a[C]][a[1H]](a[2e]),2d:a[2f],2g:{2i:d[a[27]][a[2h]](l[a[15]])},2c:o(1h,1g){d[a[12]][a[11]](2b);d[a[8]]=F;l[a[1W]][a[1V]]()[a[14]]();1F(a[10])},1U:o(1h,1g){d[a[12]][a[1Y]](1h,1g,G)}})}};n 2a=o(A){r(A==a[1D]){l[a[2]][a[2N]]();V(l[a[15]])}};n 1Z=o(){d[a[13]]=G;l[a[15]][a[14]]()};n V=o(E){d[a[8]]=d[a[27]][a[8]](E);d[a[C]][a[1G]](d[a[8]],a[1E])};n 1X=o(E){d[a[C]][a[1z]](F);d[a[8]]=d[a[27]][a[8]](E);d[a[C]][a[1G]](d[a[8]],a[1E]);r(d[a[13]]){r(d[a[16]]){d[a[27]][a[1I]](E,B)};d[a[13]]=F}};n 1J=o(E){d[a[C]][a[1z]](G,d[a[C]][a[1H]](a[2E]))};o 2P(A){r(A==a[1D]){d[a[8]]=F;d[a[13]]=G;l[a[15]][a[14]]()}}', 62, 176, '||||||||||_0x22d5|x65|x74|HQ|x72|x73|x61|x69|x6F|x64|x63|App|x6E|var|function|x67|x6C|if|x75|x68|x53|_0x4d72x10|break|x70|case|x6D|_0x4d72x9|keys|31|x76|_0x4d72x1c|false|true|x66|x44|x6B|x55|x47|x62|x46|x79|x32|x77|x42|x30|x5F|x59|stoChanged|_0x4d72x12|_0x4d72x7|else|this|||||||||||x4C|x43|x56|x41|x52|x49|_0x4d72x18|_0x4d72x17|32|34|x31|40|fieldsLangCheckRequire|x4E|x48|_0x4d72x5|x45|x4D|fieldsCheckRequire|30|100|44|_0x4d72x15|return|save|64|46|47|51|60|62|menuClick|63|53|65|stoBeforeLoad|x6A|20150303|49|switch|50|41|x57|x2F|grdSYS_FavouriteGroupUser_Reject|59|failure|56|57|stoLoad|58|firstLoad|||||||||||deleteData|201405071|success|url|52|54|params|55|lstSYS_FavouriteGroupUser|waitMsg|x4B|_0x4d72xa|_0x4d72xb|cboScreenNumber_Change|cboUserGroupID_Change|35|37|36|_0x4d72xd|grdSYS_FavouriteGroupUser_BeforeEdit|x78|43|42|39|grdSYS_FavouriteGroupUser_Edit|_0x4d72xf|38|Ext|45|48|66|x71|x50|x7A|grdSYS_FavouriteGroupUser_ValidateEdit|undefined|33|Descr|null|61|tabSA02210_AfterRender|refresh'.split('|'), 0, {}))
+﻿var keys = ['ScreenNumber'];
+var fieldsCheckRequire = ["ScreenNumber", "CodeGroup"];
+var fieldsLangCheckRequire = ["ScreenNumber", "CodeGroup"];
+
+var _Source = 0;
+var _maxSource = 3;
+var _isLoadMaster = false;
+
+var firstLoad = function () {
+    HQ.util.checkAccessRight();
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboUserGroupID.getStore().addListener('load', checkLoad);
+    App.cboScreenNumber.getStore().addListener('load', checkLoad);
+    App.cboCodeGroup.getStore().addListener('load', checkLoad);
+};
+
+var checkLoad = function () {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoSYS_FavouriteGroupUser.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdSYS_FavouriteGroupUser);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdSYS_FavouriteGroupUser);
+            break;
+        case "next":
+            HQ.grid.next(App.grdSYS_FavouriteGroupUser);
+            break;
+        case "last":
+            HQ.grid.last(App.grdSYS_FavouriteGroupUser);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSYS_FavouriteGroupUser.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdSYS_FavouriteGroupUser, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmSYS_FavouriteGroupUser.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoSYS_FavouriteGroupUser, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+
+};
+
+var tabSA02210_AfterRender = function (obj) {
+    if (this.parentAutoLoadControl != null)
+        obj.setHeight(this.parentAutoLoadControl.getHeight() - 100);
+    else {
+        obj.setHeight(Ext.getBody().getViewSize().height - 100);
+    }
+};
+
+var cboUserGroupID_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if(sender.valueModels != null && !App.stoSYS_FavouriteGroupUser.loading)
+        App.grdSYS_FavouriteGroupUser.store.reload();
+};
+
+var cboUserGroupID_Select = function (sender,value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null && !App.stoSYS_FavouriteGroupUser.loading)
+        App.grdSYS_FavouriteGroupUser.store.reload();
+};
+
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA02210');
+    App.cboUserGroupID.setReadOnly(HQ.isChange);
+};
+
+var stoLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA02210');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+    stoChanged(App.stoSYS_FavouriteGroupUser);
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+var grdSYS_FavouriteGroupUser_BeforeEdit = function (editor, e) {
+    if (HQ.form.checkRequirePass(App.frmMain))
+        return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdSYS_FavouriteGroupUser_Edit = function (item, e) {
+    
+    if (e.field == "ScreenNumber") {
+        var selectedRecord = App.cboScreenNumber.store.findRecord(e.field, e.value);
+        if (selectedRecord) {
+            e.record.set("Descr", selectedRecord.data.Descr);
+        }
+        else {
+            e.record.set("Descr", "");
+        }
+    }
+    HQ.grid.checkInsertKey(App.grdSYS_FavouriteGroupUser, e, keys);
+};
+
+var grdSYS_FavouriteGroupUser_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_FavouriteGroupUser, e, keys, true);
+};
+
+var grdSYS_FavouriteGroupUser_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_FavouriteGroupUser);
+    stoChanged(App.stoSYS_FavouriteGroupUser);
+};
+
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            timeout: 1000000,
+            url: 'SA02210/Save',
+            params: {
+                lstSYS_FavouriteGroupUser: HQ.store.getData(App.stoSYS_FavouriteGroupUser)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                App.cboUserGroupID.getStore().reload();
+                refresh('yes');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdSYS_FavouriteGroupUser.deleteSelected();
+        stoChanged(App.stoSYS_FavouriteGroupUser);
+    }
+};
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_FavouriteGroupUser.reload();
+    }
+};
+///////////////////////////////////

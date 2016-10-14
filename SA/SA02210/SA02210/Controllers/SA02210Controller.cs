@@ -28,7 +28,8 @@ namespace SA02210.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -45,24 +46,31 @@ namespace SA02210.Controllers
         {
             try
             {
-                string UserGroupID = data["cboUserGroupID"];
+                string UserGroupID = data["cboUserGroupID"].PassNull();
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_FavouriteGroupUser"]);
                 ChangeRecords<SA02210_pgSYS_FavouriteGroupUser_Result> lstSYS_FavouriteGroupUser = dataHandler.BatchObjectData<SA02210_pgSYS_FavouriteGroupUser_Result>();
 
+                lstSYS_FavouriteGroupUser.Created.AddRange(lstSYS_FavouriteGroupUser.Updated);
+
                 foreach (SA02210_pgSYS_FavouriteGroupUser_Result deleted in lstSYS_FavouriteGroupUser.Deleted)
                 {
-                    var del = _db.SYS_FavouriteGroupUser.Where(p => p.UserGroupID == UserGroupID && p.ScreenNumber == deleted.ScreenNumber).FirstOrDefault();
-                    if (del != null)
+                    if (lstSYS_FavouriteGroupUser.Created.Where(p => p.ScreenNumber == deleted.ScreenNumber).Count() > 0)
                     {
-                        _db.SYS_FavouriteGroupUser.DeleteObject(del);
+                        lstSYS_FavouriteGroupUser.Created.Where(p => p.ScreenNumber == deleted.ScreenNumber).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.SYS_FavouriteGroupUser.FirstOrDefault(p => p.ScreenNumber == deleted.ScreenNumber && p.UserGroupID == UserGroupID);
+                        if (objDel != null)
+                        {
+                            _db.SYS_FavouriteGroupUser.DeleteObject(objDel);
+                        }
                     }
                 }
 
-                lstSYS_FavouriteGroupUser.Created.AddRange(lstSYS_FavouriteGroupUser.Updated);
-
                 foreach (SA02210_pgSYS_FavouriteGroupUser_Result curLang in lstSYS_FavouriteGroupUser.Created)
                 {
-                    if (curLang.ScreenNumber.PassNull() == "") continue;
+                    if (curLang.ScreenNumber.PassNull() == "" || UserGroupID == "") continue;
 
                     var lang = _db.SYS_FavouriteGroupUser.FirstOrDefault(p => p.UserGroupID.ToLower() == UserGroupID.ToLower() && p.ScreenNumber.ToLower() == curLang.ScreenNumber.ToLower());
 
@@ -80,6 +88,7 @@ namespace SA02210.Controllers
                     else
                     {
                         lang = new SYS_FavouriteGroupUser();
+                        lang.ResetET();
                         lang.UserGroupID = UserGroupID;
                         UpdatingSYS_FavouriteGroupUser(lang, curLang, true);
                         _db.SYS_FavouriteGroupUser.AddObject(lang);
@@ -102,11 +111,13 @@ namespace SA02210.Controllers
             if (isNew)
             {
                 t.ScreenNumber = s.ScreenNumber;
+
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
             t.CodeGroup = s.CodeGroup;
+
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
