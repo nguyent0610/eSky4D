@@ -22,15 +22,16 @@ namespace SA02100.Controllers
         SA02100Entities _db = Util.CreateObjectContext<SA02100Entities>(true);
         public ActionResult Index()
         {
-            
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
+
         public ActionResult GetSYS_RibbonScreen()
         {
             return this.Store(_db.SA02100_pgSYS_RibbonScreen().ToList());
@@ -43,22 +44,38 @@ namespace SA02100.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_RibbonScreen"]);
                 ChangeRecords<SA02100_pgSYS_RibbonScreen_Result> lstSYS_RibbonScreen = dataHandler.BatchObjectData<SA02100_pgSYS_RibbonScreen_Result>();
-                foreach (SA02100_pgSYS_RibbonScreen_Result deleted in lstSYS_RibbonScreen.Deleted)
-                {
-                    var del = _db.SYS_RibbonScreen.FirstOrDefault(p => p.ScreenNumber == deleted.ScreenNumber && p.TabID == deleted.TabID && p.GroupID == deleted.GroupID);
-                    if (del != null)
-                    {
-                        _db.SYS_RibbonScreen.DeleteObject(del);
-                    }
-                }
 
                 lstSYS_RibbonScreen.Created.AddRange(lstSYS_RibbonScreen.Updated);
 
+                foreach (SA02100_pgSYS_RibbonScreen_Result deleted in lstSYS_RibbonScreen.Deleted)
+                {
+                    if (lstSYS_RibbonScreen.Created.Where(p => p.ScreenNumber == deleted.ScreenNumber
+                                                            && p.TabID == deleted.TabID
+                                                            && p.GroupID == deleted.GroupID).Count() > 0)
+                    {
+                        lstSYS_RibbonScreen.Created.Where(p => p.ScreenNumber == deleted.ScreenNumber
+                                                            && p.TabID == deleted.TabID
+                                                            && p.GroupID == deleted.GroupID).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.SYS_RibbonScreen.FirstOrDefault(p => p.ScreenNumber == deleted.ScreenNumber
+                                                            && p.TabID == deleted.TabID
+                                                            && p.GroupID == deleted.GroupID);
+                        if (objDel != null)
+                        {
+                            _db.SYS_RibbonScreen.DeleteObject(objDel);
+                        }
+                    }
+                }
+
                 foreach (SA02100_pgSYS_RibbonScreen_Result curLang in lstSYS_RibbonScreen.Created)
                 {
-                    if (curLang.ScreenNumber.PassNull() == "" || curLang.GroupID.PassNull()=="" || curLang.TabID.PassNull()=="") continue;
+                    if (curLang.ScreenNumber.PassNull() == "" || curLang.GroupID.PassNull() == "" || curLang.TabID.PassNull() == "") continue;
 
-                    var lang = _db.SYS_RibbonScreen.Where(p => p.ScreenNumber.ToLower() == curLang.ScreenNumber.ToLower() && p.TabID.ToLower() == curLang.TabID.ToLower() && p.GroupID.ToLower()==curLang.GroupID.ToLower()).FirstOrDefault();
+                    var lang = _db.SYS_RibbonScreen.Where(p => p.ScreenNumber == curLang.ScreenNumber
+                                                            && p.TabID== curLang.TabID 
+                                                            && p.GroupID==curLang.GroupID).FirstOrDefault();
 
                     if (lang != null)
                     {
@@ -74,6 +91,7 @@ namespace SA02100.Controllers
                     else
                     {
                         lang = new SYS_RibbonScreen();
+                        lang.ResetET();
                         Update_Language(lang, curLang, true);
                         _db.SYS_RibbonScreen.AddObject(lang);
                     }
@@ -102,6 +120,7 @@ namespace SA02100.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
+
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;

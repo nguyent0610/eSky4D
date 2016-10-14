@@ -29,7 +29,7 @@
             X.Store()
             .ID("stoSYS_RibbonScreen")
             .PageSize(50).AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(SA02100_pgSYS_RibbonScreen_Result), "mdlSA02100_pgSYS_RibbonScreen", "ScreenNumber,TabID,GroupID"))
+            .Model(Util.GenerateModel(typeof(SA02100_pgSYS_RibbonScreen_Result), "mdlSA02100_pgSYS_RibbonScreen", ""))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_RibbonScreen")))
             .Listeners(l =>
             {
@@ -44,17 +44,13 @@
         })
         .SortableColumns(false)
         .ColumnModel(
-            X.RowNumbererColumn().Width(40),
+            X.RowNumbererColumn().Width(40)
 
-            X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(120)
+            , X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(200)
                 .Editor(
                     HQ.Combo().ID("cboScreenNumber").Name("cboScreenNumber")
-                    .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
-                    .HQLangCode("ScreenNumber").HQDBSys(true).HQProcedure("SA02100_pcSYS_Screen")
-                    .HQColumnShow("ScreenNumber,Descr")
-                    .DisplayField("ScreenNumber")
-                    .ValueField("ScreenNumber")
-                    .HQHeightWidth(400, 300)
+                    .HQDBSys(true).HQProcedure("SA02100_pcSYS_Screen").ForceSelection(true)
+                    .HQColumnShow("ScreenNumber,Descr").DisplayField("ScreenNumber").ValueField("ScreenNumber").HQHeightWidth(400, 300)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
                     {
@@ -63,38 +59,27 @@
                     .LoadData()
                 )
 
-            ,X.Column().Text(Util.GetLang("TabID")).DataIndex("TabID").Width(120)
+            , X.Column().Text(Util.GetLang("TabID")).DataIndex("TabID").Width(200)
                 .Editor(
                     HQ.Combo().ID("cboTabID").Name("cboTabID")
-                    .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
-                    .HQLangCode("TabID").HQDBSys(true).HQProcedure("SA02100_pcSYS_RibbonTab")
-                    .HQColumnShow("TabID,Descr")
-                    .DisplayField("TabID")
-                    .ValueField("TabID")
-                    .HQHeightWidth(400, 300)
+                    .HQDBSys(true).HQProcedure("SA02100_pcSYS_RibbonTab").ForceSelection(true)
+                    .HQColumnShow("TabID,Descr").DisplayField("TabID").ValueField("TabID").HQHeightWidth(400, 300)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
                     {
-                        lst.Change.Fn = "cboTabID_Change";
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
                     .LoadData()
                 )
-
-            ,X.Column().Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(120)
+                
+            , X.Column().Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(200)
                 .Editor(
                     HQ.Combo().ID("cboGroupID").Name("cboGroupID")
-                    .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
-                    .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA02100_pcSYS_RibbonGroup")
-                    .HQColumnShow("GroupID,Descr")
-                    .DisplayField("GroupID")
-                    .ValueField("GroupID")
-                    .HQParam(new StoreParameterCollection() { 
-                            //new StoreParameter("@TabID","App.slmSYS_RibbonScreen.selected.items[0].data.TabID",ParameterMode.Value)
-                        //new StoreParameter("@TabID","App.slmSYS_RibbonScreen.selected.items[0] == undefined ? '':  App.slmSYS_RibbonScreen.selected.items[0].data.TabID",ParameterMode.Raw
-                        new StoreParameter("@TabID","App.cboTabID.getValue()",ParameterMode.Raw)
+                    .HQDBSys(true).HQProcedure("SA02100_pcSYS_RibbonGroup").ForceSelection(true)
+                    .HQColumnShow("GroupID,Descr").DisplayField("GroupID").ValueField("GroupID").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@TabID", Value ="App.slmSYS_RibbonScreen.selected.items[0] == undefined ? '':  App.slmSYS_RibbonScreen.selected.items[0].data.TabID", Mode = ParameterMode.Raw}
                     })
-                    .HQHeightWidth(400, 300)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
                     {
@@ -103,7 +88,7 @@
                     .LoadData()
                 )
 
-            ,X.CommandColumn()
+            , X.CommandColumn()
             .Width(150)
             .Commands(
                 X.GridCommand()
@@ -125,7 +110,10 @@
                 .Width(80)
                 .Items("1", "2", "10", "20", "30", "50")
                 .SelectedItems("50")
-                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
             )
             .Plugins(X.ProgressBarPager())
         )

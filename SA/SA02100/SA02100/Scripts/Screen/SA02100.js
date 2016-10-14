@@ -1,1 +1,162 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('n a=["\\o\\i\\h\\b\\b\\j\\1N\\F\\x\\s\\b\\h","\\1O\\f\\s\\J\\y","\\1d\\h\\l\\F\\C\\J\\y","\\t\\h\\m\\o\\R\\o\\S\\K\\g\\s\\s\\l\\j\\o\\i\\h\\b\\b\\j","\\L\\g\\h\\d\\e","\\t\\h\\g\\m","\\C\\h\\b\\M","\\j\\b\\1e\\e","\\p\\f\\d\\e","\\g\\d\\1P\\u\\f\\j\\t\\b","","\\h\\b\\L\\h\\b\\d\\u","\\d\\u\\l\\Q","\\x\\b\\d\\d\\f\\t\\b","\\g\\d\\1M\\g\\h\\d\\e\\1c\\l\\f\\m","\\h\\b\\p\\l\\f\\m","\\d\\e\\l\\o\\R\\o\\S\\K\\g\\s\\s\\l\\j\\o\\i\\h\\b\\b\\j","\\g\\d\\J\\j\\d\\b\\h\\e","\\g\\j\\d\\b\\h\\e","\\j\\b\\Q","\\g\\e\\b\\x\\d","\\d\\b\\p\\b\\i\\e\\b\\m","\\d\\p\\x\\o\\R\\o\\S\\K\\g\\s\\s\\l\\j\\o\\i\\h\\b\\b\\j","\\g\\j\\m\\b\\1e\\o\\b\\p\\b\\i\\e","\\m\\b\\p\\b\\e\\b\\y\\f\\e\\f","\\m\\b\\p\\b\\e\\b","\\g\\d\\1L\\C\\m\\f\\e\\b","\\g\\d\\y\\b\\p\\b\\e\\b","\\i\\u\\b\\i\\G\\K\\b\\1I\\F\\g\\h\\b\\1J\\f\\d\\d","\\d\\e\\l\\h\\b","\\d\\f\\M\\b","\\C\\h\\g\\j\\e","\\i\\p\\l\\d\\b","\\i\\l\\x\\x\\l\\j","\\i\\s\\l\\1d\\h\\l\\F\\C\\J\\y","\\o\\1i\\E\\1h\\1b\\E\\E","\\i\\u\\f\\j\\t\\b\\y\\f\\e\\f","\\d\\u\\l\\Q\\O\\F\\d\\U","\\g\\j\\d\\b\\h\\e\\O\\p\\f\\j\\G","\\p\\l\\f\\m\\g\\j\\t\\m\\f\\e\\f","\\t\\b\\e\\1c\\f\\j\\t","\\i\\u\\b\\i\\G\\O\\b\\L\\l\\h\\b\\1f\\m\\g\\e","\\i\\u\\b\\i\\G\\J\\j\\d\\b\\h\\e\\1X\\b\\U","\\i\\u\\b\\i\\G\\1g\\f\\p\\g\\m\\f\\e\\b\\1f\\m\\g\\e","\\i\\u\\b\\i\\G\\K\\b\\1V\\b\\i\\e","\\g\\d\\1g\\f\\p\\g\\m","\\L\\h\\x\\1T\\f\\g\\j","\\o\\f\\M\\g\\j\\t\\y\\f\\e\\f","\\o\\1i\\E\\1h\\1b\\E\\E\\1t\\o\\f\\M\\b","\\t\\b\\e\\y\\f\\e\\f","\\C\\h\\l\\i\\b\\d\\d","\\d\\F\\s\\x\\g\\e","\\U\\b\\d","\\m\\b\\p\\b\\e\\b\\o\\b\\p\\b\\i\\e\\b\\m"];n A=[a[0],a[1],a[2]];n 1a=[a[0],a[1],a[2]];n 1k=[a[0],a[1],a[2]];n 1o=q(X){2p(X){v a[4]:c[a[5]][a[4]](k[a[3]]);w;v a[6]:c[a[5]][a[6]](k[a[3]]);w;v a[7]:c[a[5]][a[7]](k[a[3]]);w;v a[8]:c[a[5]][a[8]](k[a[3]]);w;v a[11]:r(c[a[9]]){c[a[13]][a[12]](2s,a[10],a[11])}2t{c[a[9]]=N;c[a[14]]=D;k[a[16]][a[15]]()};w;v a[19]:r(c[a[17]]){c[a[5]][a[18]](k[a[3]],A)};w;v a[25]:r(k[a[22]][a[21]][a[20]][0]!=2f){n W=c[a[5]][a[23]](k[a[3]]);r(W!=a[10]){c[a[13]][a[12]](2k,[c[a[5]][a[23]](k[a[3]]),a[10]],a[24],D)}};w;v a[2h]:r(c[a[26]]||c[a[17]]||c[a[27]]){r(c[a[29]][a[28]](k[a[16]],A,1a,1k)){1l()}};w;v a[2j]:w;v a[Z]:c[a[z]][a[Z]](2d);w}};n 2m=q(){k[a[2l]][a[29]][a[15]]()};n 2q=q(){c[a[14]]=D;k[a[16]][a[15]]()};n P=q(H){c[a[9]]=c[a[29]][a[9]](H);c[a[z]][a[Y]](c[a[9]],a[1j])};n 2r=q(H){c[a[z]][a[1s]](N);c[a[9]]=c[a[29]][a[9]](H);c[a[z]][a[Y]](c[a[9]],a[1j]);r(c[a[14]]){r(c[a[17]]){c[a[29]][a[1B]](H,A)};c[a[14]]=N}};n 2n=q(H){c[a[z]][a[1s]](D,c[a[z]][a[1n]](a[2e]))};n 2c=q(2b,B){1r c[a[5]][a[2i]](B,A)};n 2g=q(I,B){c[a[5]][a[2o]](k[a[3]],B,A)};n 1U=q(I,B){1r c[a[5]][a[1x]](k[a[3]],B,A)};n 2a=q(1p){c[a[5]][a[1E]](1p,k[a[3]]);P(k[a[16]])};n 1l=q(){r(k[a[1q]][a[1A]]()){k[a[1q]][a[1D]]({1F:1z,1G:c[a[z]][a[1n]](a[1u]),1v:a[1w],1y:{1C:c[a[29]][a[1Z]](k[a[16]])},1H:q(V,T){c[a[13]][a[12]](1S);1o(a[11])},1W:q(V,T){c[a[13]][a[1Y]](V,T,D)}})}};n 1R=q(I){r(I==a[1m]){k[a[3]][a[1Q]]();P(k[a[16]])}};q 1K(I){r(I==a[1m]){c[a[9]]=N;c[a[14]]=D;k[a[16]][a[15]]()}}', 62, 154, '||||||||||_0xf5f8|x65|HQ|x73|x74|x61|x69|x72|x63|x6E|App|x6F|x64|var|x53|x6C|function|if|x62|x67|x68|case|break|x6D|x44|33|keys|_0x5f1dxf|x70|true|x30|x75|x6B|_0x5f1dxa|_0x5f1dx11|x49|x52|x66|x76|false|x42|stoChanged|x77|x59|x5F|_0x5f1dx17|x79|_0x5f1dx16|_0x5f1dx6|_0x5f1dx5|36|32|||||||||||fieldsCheckRequire|x31|x4C|x47|x78|x45|x56|x32|x41|35|fieldsLangCheckRequire|save|52|40|menuClick|_0x5f1dx14|46|return|37|x2F|47|url|48|43|params|1800000|45|38|lstSYS_RibbonScreen|51|44|timeout|waitMsg|success|x71|x50|refresh|x55|x46|x4E|x54|x43|53|deleteData|201405071|x4D|grdSYS_RibbonScreen_ValidateEdit|x6A|failure|x4B|50|49|||||||||||grdSYS_RibbonScreen_Reject|_0x5f1dxe|grdSYS_RibbonScreen_BeforeEdit|this|39|undefined|grdSYS_RibbonScreen_Edit|30|41|31|2015020807|34|cboTabID_Change|stoBeforeLoad|42|switch|firstLoad|stoLoad|20150303|else'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['ScreenNumber', 'TabID', 'GroupID'];
+var fieldsCheckRequire = ["ScreenNumber", "TabID", "GroupID"];
+var fieldsLangCheckRequire = ["ScreenNumber", "TabID", "GroupID"];
+
+var _Source = 0;
+var _maxSource = 2;
+var _isLoadMaster = false;
+
+var checkLoad = function () {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoSYS_RibbonScreen.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+var firstLoad = function () {
+    HQ.util.checkAccessRight();
+    HQ.isFirstLoad = true;
+    App.frmMain.isValid();
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboScreenNumber.getStore().addListener('load', checkLoad);
+    App.cboTabID.getStore().addListener('load', checkLoad);
+};
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdSYS_RibbonScreen);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdSYS_RibbonScreen);
+            break;
+        case "next":
+            HQ.grid.next(App.grdSYS_RibbonScreen);
+            break;
+        case "last":
+            HQ.grid.last(App.grdSYS_RibbonScreen);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh('yes');
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdSYS_RibbonScreen, keys);
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                if (App.slmSYS_RibbonScreen.selected.items[0] != undefined) {
+                    if (App.slmSYS_RibbonScreen.selected.items[0].data.ScreenNumber != ""
+                        && App.slmSYS_RibbonScreen.selected.items[0].data.TabID != ""
+                        && App.slmSYS_RibbonScreen.selected.items[0].data.GroupID != "") {
+                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_RibbonScreen)], 'deleteData', true);
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoSYS_RibbonScreen, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+};
+
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA02100');
+};
+
+var stoLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA02100');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var grdSYS_RibbonScreen_BeforeEdit = function (editor, e) {
+    if (e.field == 'GroupID') {
+        App.cboGroupID.store.reload();
+    }
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdSYS_RibbonScreen_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSYS_RibbonScreen, e, keys);
+};
+
+var grdSYS_RibbonScreen_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_RibbonScreen, e, keys);
+};
+
+var grdSYS_RibbonScreen_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_RibbonScreen);
+    stoChanged(App.stoSYS_RibbonScreen);
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SA02100/Save',
+            params: {
+                lstSYS_RibbonScreen: HQ.store.getData(App.stoSYS_RibbonScreen)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                refresh('yes');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdSYS_RibbonScreen.deleteSelected();
+        stoChanged(App.stoSYS_RibbonScreen);
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_RibbonScreen.reload();
+    }
+};

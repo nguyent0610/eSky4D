@@ -16,23 +16,21 @@
  <!--Không thay đổi phần head Đổi mã màn hình SA02100.js tùy theo màn hình đổi lại-->
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src='@Url.Content("Scripts/hq.Language"+Current.LangID+".js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/SA02100.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/SA02100.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
         }
     </style>
     <script>
-       
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-
     </script>  
     <title>@ViewBag.Title</title>
 </head>
