@@ -44,7 +44,7 @@ namespace SA02900.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(FormCollection data,string AppFolID, string RoleID, string Status)
+        public ActionResult Save(FormCollection data)
         {
             try
             {
@@ -92,6 +92,7 @@ namespace SA02900.Controllers
                     else
                     {
                         lang = new SI_ApprovalFlowStatus();
+                        lang.ResetET();
                         Update_TopGrid(lang, curLang, true);
                         _db.SI_ApprovalFlowStatus.AddObject(lang);
                     }
@@ -122,7 +123,7 @@ namespace SA02900.Controllers
                 {
                     if (curLang1.Handle.PassNull() == "") continue;
 
-                    var lang1 = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle == curLang1.Handle&&p.AppFolID == AppFolID && p.RoleID == RoleID && p.Status == Status);
+                    var lang1 = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle == curLang1.Handle && p.AppFolID == curLang1.AppFolID && p.RoleID == curLang1.RoleID && p.Status == curLang1.Status);
 
                     if (lang1 != null)
                     {
@@ -138,7 +139,7 @@ namespace SA02900.Controllers
                     else
                     {
                         lang1 = new SI_ApprovalFlowHandle();
-                        
+                        lang1.ResetET();
                         Update_BotGrid(lang1, curLang1, true);
                         _db.SI_ApprovalFlowHandle.AddObject(lang1);
                     }

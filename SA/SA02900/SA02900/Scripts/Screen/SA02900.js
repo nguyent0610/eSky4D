@@ -358,10 +358,7 @@ var save = function () {
             url: 'SA02900/Save',
             params: {
                 lstTopGrid: HQ.store.getData(App.stoTop),
-                lstBotGrid: HQ.store.getData(App.stoBot),
-                AppFolID: App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.AppFolID,
-                RoleID: App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.RoleID,
-                Status: App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.Status
+                lstBotGrid: HQ.store.getData(App.stoBot)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
