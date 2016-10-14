@@ -31,10 +31,12 @@ namespace SA00700.Controllers
         {
             return PartialView();
         }
+
         public ActionResult GetSYS_AccessDetRights(string cpnyID, string userID, string type, string module)
         {
             return this.Store(_db.SA00700_pgAccessRightsScreen(cpnyID, userID, type, module, Current.UserName, Current.LangID).ToList());
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data, String recType, String userID, String cpnyID)
         {
@@ -42,6 +44,7 @@ namespace SA00700.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_AccessDetRights"]);
                 ChangeRecords<SA00700_pgAccessRightsScreen_Result> lstSYS_AccessDetRights = dataHandler.BatchObjectData<SA00700_pgAccessRightsScreen_Result>();
+                
                 foreach (SA00700_pgAccessRightsScreen_Result deleted in lstSYS_AccessDetRights.Deleted)
                 {
                     var del = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber == deleted.ScreenNumber 
@@ -79,6 +82,7 @@ namespace SA00700.Controllers
                     else
                     {
                         lang = new SYS_AccessDetRights();
+                        lang.ResetET();
                         lang.ScreenNumber = curLang.ScreenNumber;
                         lang.CpnyID = cpnyID;
                         lang.UserID = userID;

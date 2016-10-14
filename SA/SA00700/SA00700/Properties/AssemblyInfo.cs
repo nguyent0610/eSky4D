@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SA00700")]
 [assembly: AssemblyDescription("Access Rights")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Han Quang Software Solution")]
+[assembly: AssemblyCompany("HQ Software Solution")]
 [assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]
-[assembly: AssemblyCopyright("Copy right 2006-2015 Han Quang Software Solution. All rights Reserved")]
+[assembly: AssemblyCopyright("Copy right 2006-2016 HQ Software Solution. All rights Reserved")]
 [assembly: AssemblyTrademark("SA00700")]
 [assembly: AssemblyCulture("")]
 
