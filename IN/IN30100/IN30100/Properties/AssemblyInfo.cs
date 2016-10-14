@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("IN30100")]
 [assembly: AssemblyDescription("Inventory Transaction Inquiry")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Han Quang Software Solution")]
+[assembly: AssemblyCompany("HQ Software Solution")]
 [assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]
-[assembly: AssemblyCopyright("Copy right 2006-2015 Han Quang Software Solution. All rights Reserved")]
+[assembly: AssemblyCopyright("Copy right 2006-2016 HQ Software Solution. All rights Reserved")]
 [assembly: AssemblyTrademark("IN30100")]
 [assembly: AssemblyCulture("")]
 
