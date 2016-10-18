@@ -148,22 +148,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_NewCustomerInfor> AR_NewCustomerInfor
-        {
-            get
-            {
-                if ((_AR_NewCustomerInfor == null))
-                {
-                    _AR_NewCustomerInfor = base.CreateObjectSet<AR_NewCustomerInfor>("AR_NewCustomerInfor");
-                }
-                return _AR_NewCustomerInfor;
-            }
-        }
-        private ObjectSet<AR_NewCustomerInfor> _AR_NewCustomerInfor;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<AR_SOAddress> AR_SOAddress
         {
             get
@@ -192,6 +176,22 @@ namespace AR20500
             }
         }
         private ObjectSet<AR_Customer> _AR_Customer;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_NewCustomerInfor> AR_NewCustomerInfor
+        {
+            get
+            {
+                if ((_AR_NewCustomerInfor == null))
+                {
+                    _AR_NewCustomerInfor = base.CreateObjectSet<AR_NewCustomerInfor>("AR_NewCustomerInfor");
+                }
+                return _AR_NewCustomerInfor;
+            }
+        }
+        private ObjectSet<AR_NewCustomerInfor> _AR_NewCustomerInfor;
 
         #endregion
 
@@ -238,14 +238,6 @@ namespace AR20500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the AR_NewCustomerInfor EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_NewCustomerInfor(AR_NewCustomerInfor aR_NewCustomerInfor)
-        {
-            base.AddObject("AR_NewCustomerInfor", aR_NewCustomerInfor);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the AR_SOAddress EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToAR_SOAddress(AR_SOAddress aR_SOAddress)
@@ -259,6 +251,14 @@ namespace AR20500
         public void AddToAR_Customer(AR_Customer aR_Customer)
         {
             base.AddObject("AR_Customer", aR_Customer);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_NewCustomerInfor EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_NewCustomerInfor(AR_NewCustomerInfor aR_NewCustomerInfor)
+        {
+            base.AddObject("AR_NewCustomerInfor", aR_NewCustomerInfor);
         }
 
         #endregion
@@ -4270,6 +4270,30 @@ namespace AR20500
         private Nullable<global::System.Int32> _VisitSort;
         partial void OnVisitSortChanging(Nullable<global::System.Int32> value);
         partial void OnVisitSortChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Salut
+        {
+            get
+            {
+                return _Salut;
+            }
+            set
+            {
+                OnSalutChanging(value);
+                ReportPropertyChanging("Salut");
+                _Salut = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Salut");
+                OnSalutChanged();
+            }
+        }
+        private global::System.String _Salut;
+        partial void OnSalutChanging(global::System.String value);
+        partial void OnSalutChanged();
 
         #endregion
 
@@ -6965,7 +6989,8 @@ namespace AR20500
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="color">Initial value of the Color property.</param>
-        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color)
+        /// <param name="custHT">Initial value of the CustHT property.</param>
+        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT)
         {
             AR20500_pgDetail_Result aR20500_pgDetail_Result = new AR20500_pgDetail_Result();
             aR20500_pgDetail_Result.ID = id;
@@ -6973,6 +6998,7 @@ namespace AR20500
             aR20500_pgDetail_Result.CustID = custID;
             aR20500_pgDetail_Result.Checked = @checked;
             aR20500_pgDetail_Result.Color = color;
+            aR20500_pgDetail_Result.CustHT = custHT;
             return aR20500_pgDetail_Result;
         }
 
@@ -8327,7 +8353,7 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String CustHT
         {
@@ -8339,7 +8365,7 @@ namespace AR20500
             {
                 OnCustHTChanging(value);
                 ReportPropertyChanging("CustHT");
-                _CustHT = StructuralObject.SetValidValue(value, true);
+                _CustHT = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("CustHT");
                 OnCustHTChanged();
             }
@@ -8347,6 +8373,30 @@ namespace AR20500
         private global::System.String _CustHT;
         partial void OnCustHTChanging(global::System.String value);
         partial void OnCustHTChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Salut
+        {
+            get
+            {
+                return _Salut;
+            }
+            set
+            {
+                OnSalutChanging(value);
+                ReportPropertyChanging("Salut");
+                _Salut = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Salut");
+                OnSalutChanged();
+            }
+        }
+        private global::System.String _Salut;
+        partial void OnSalutChanging(global::System.String value);
+        partial void OnSalutChanged();
 
         #endregion
 

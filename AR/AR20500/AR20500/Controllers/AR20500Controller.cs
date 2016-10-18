@@ -177,7 +177,7 @@ namespace AR20500.Controllers
                                 objNew.Startday = fromDate;
                                 objNew.Endday = toDate;
                                 objNew.VisitSort = item.VisitSort.Value;
-
+                                objNew.Salut = item.Salut;
                                 objNew.OutletName = item.OutletName;
                                 objNew.Phone = item.Phone;
                                 objNew.Addr1 = item.Addr1;
@@ -191,7 +191,7 @@ namespace AR20500.Controllers
                                 objCust.City = objCust.BillCity = item.City.PassNull();
                                 objCust.State = objCust.BillState = item.State.PassNull();
                                 objCust.ClassId = item.ClassId.PassNull();
-
+                                objCust.Salut = item.Salut.PassNull();
                                 objCust.Phone = item.Phone.PassNull();
 
                                 objCust.Channel = item.Channel.PassNull();
