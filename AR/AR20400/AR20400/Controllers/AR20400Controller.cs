@@ -801,13 +801,11 @@ namespace AR20400.Controllers
             if (inactiveHierachy.Descr == "root")
             {
                 node.Text = inactiveHierachy.Descr;
-        
             }
             else
             {
                 node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
                 node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
-   
             }
 
             var tmps = _db.AR20400_ptCustomer(CpnyID)
