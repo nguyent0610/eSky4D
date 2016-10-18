@@ -17,7 +17,6 @@
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
-    .Region(Region.Center)
     .Layout(LayoutType.Border)
     .Listeners(l =>
     {
@@ -28,23 +27,23 @@
     .Items(
         X.Panel().Region(Region.North)
         .Items(
-        HQ.Combo().ID("cboType").Name("cboType").HQLangCode("SI21600_Type").HQProcedure("SI21600_pcType").HQAutoLoad(true)
-        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-        .Width(300).HQHeightWidth(300, 300).MarginSpec("5 5 5 0")
-        .LoadData()
-        .Listeners(lst =>
-        {
-            lst.TriggerClick.Fn = "cboType_TriggerClick";
-            lst.Change.Fn = "cboType_Change";
-            lst.Expand.Fn = "cboType_Expand"; 
-        })
-    )
+            HQ.Combo().ID("cboType").Name("cboType").HQLangCode("SI21600_Type").HQProcedure("SI21600_pcType").HQAutoLoad(true)
+            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+            .Width(300).HQHeightWidth(300, 300).MarginSpec("5 5 5 0")
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "cboType_TriggerClick";
+                lst.Change.Fn = "cboType_Change";
+                lst.Expand.Fn = "cboType_Expand"; 
+            })
+        )
         , X.Panel()
         .Split(true)
-        .Region(Region.West).AutoScroll(true).MinWidth(310)
+        .Region(Region.West).AutoScroll(true)
         .Items(
-            X.TreePanel().ID("IDTree").Width(300)
-            .MarginSpec("5 5 5 5")
+            X.TreePanel().ID("IDTree")
+            .Width(300).Region(Region.Center).Flex(1)
             .Title(Util.GetLang("Tree"))
             .UseArrows(true)
             .Border(false)
@@ -52,13 +51,25 @@
             .SelectionModel(X.TreeSelectionModel().ID("slmTree").Mode(SelectionMode.Multi))
             .Listeners(lst =>
             {
-                lst.ItemClick.Fn = "NodeSelected_Change";
+                lst.Select.Fn = "NodeSelected_Change";
+                lst.BeforeItemExpand.Handler = "this.el.mask('Loading...', 'x-mask-loading'); Ext.suspendLayouts();";
+                lst.AfterItemExpand.Handler = "Ext.resumeLayouts(true); this.el.unmask();";
             })
+            //X.TreePanel().ID("IDTree").Width(300)
+            //.MarginSpec("5 5 5 5")
+            //.Title(Util.GetLang("Tree"))
+            //.UseArrows(true)
+            //.Border(false)
+            //.Animate(true)
+            //.SelectionModel(X.TreeSelectionModel().ID("slmTree").Mode(SelectionMode.Multi))
+            //.Listeners(lst =>
+            //{
+            //    lst.ItemClick.Fn = "NodeSelected_Change";
+            //})
         )//TreeView
         
         , X.Panel()
         .Region(Region.Center)
-      
         .Items(
             HQ.Combo().ID("cboNodeID").Name("cboNodeID").HQLangCode("ID").HQProcedure("SI21600_pcHierarchyAll")
             .HQColumnShow("NodeID,Descr").DisplayField("NodeID").ValueField("NodeID").HQAutoLoad(false)

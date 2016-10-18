@@ -40,7 +40,7 @@ namespace SI21600.Controllers
             return this.Store(obj);
         }
 
-        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, string nodeType)
+        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z)
         {
             var node = new Node();
             var k = -1;
@@ -52,23 +52,23 @@ namespace SI21600.Controllers
             {
                 node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
                 node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
-
             }
 
             var childrenInactiveHierachies = _sys.SI_Hierarchy
                 .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
-                    && p.Type == nodeType
+                    && p.Type == inactiveHierachy.Type
                     && p.NodeLevel == level).ToList();
 
             if (childrenInactiveHierachies != null && childrenInactiveHierachies.Count > 0)
             {
                 foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
                 {
-                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, nodeType));
+                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, z++));
                 }
             }
             else
             {
+                node.Leaf = false;
                 if (childrenInactiveHierachies.Count == 0)
                 {
                     node.Leaf = true;
@@ -98,7 +98,7 @@ namespace SI21600.Controllers
                 Type = nodeType
             };
             var z = 0;
-            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, nodeType);
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z);
 
             //quan trong dung de refresh slmTree
             this.GetCmp<TreePanel>("IDTree").SetRootNode(node);
