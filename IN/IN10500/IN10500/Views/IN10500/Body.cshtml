@@ -1,0 +1,315 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN10500;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    string format = "0,000";
+    int numDecimal = 0;
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+
+    X.FormPanel()
+    .ID("frmMain")  
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar(new AbstractComponent[]{            
+            X.Button().Hidden(true)
+            .ID("btnImport")
+            .Text(Util.GetLang("Import"))
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{               
+            })},"Print", true, ""))
+    .Layout(LayoutType.Border)
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 110; })
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        l.FieldChange.Fn = "frmChange";
+    })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+        .Region(Region.North)
+        .Layout(LayoutType.VBox)
+        .AutoScroll(true)
+        .Items(
+            X.Container().Layout(LayoutType.HBox)
+            .Items(
+                HQ.TextBox().ID("cboBranchID").MarginSpec("5 0 0 0").Width(300).HQLangCode("BRANCHID").Tag("X").ReadOnly(true)
+                
+                //HQ.Combo().ID("cboBranchID").Name("cboBranchID").MarginSpec("5 0 0 0").Width(300).AllowBlank(false)
+                //    .HQLangCode("BranchID").HQDBSys(false).HQProcedure("IN10500_pcBranchID")
+                //    .HQColumnShow("CpnyID,CpnyName").ForceSelection(false).ReadOnly(true)
+                //    .DisplayField("CpnyID").ValueField("CpnyID").HQHeightWidth(400, 300)
+                //    .HQParam(new StoreParameterCollection() {
+                //        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                //    })
+                //    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                //    .Listeners(lst =>
+                //    {
+                //        lst.Change.Fn = "cboBranchID_Change";
+                //        lst.Select.Fn = "cboBranchID_Select";
+                //        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                //    })
+                    //.LoadData()
+                ,    HQ.Combo().ID("cboTagID")
+                .Name("cboTagID").HQLangCode("TAGID").HQDBSys(false).AllowBlank(true).MarginSpec("5 0 0 0").ForceSelection(true)
+                .HQProcedure("IN10500_pcINTagAll").HQColumnShow("TagID,Descr,SiteID,Status").DisplayField("TagID").ValueField("TagID")
+                .HQHeightWidth(400, 400).Width(300).MaxLength(20).EnforceMaxLength(true).HQAutoLoad(false)
+                .HQParam(new StoreParameterCollection() {
+                    new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw},
+                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }   
+                })
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => {
+                    lst.TriggerClick.Fn = "cboTagID_TriggerClick";
+                    lst.Change.Fn = "cboTagID_Change";
+                    lst.Select.Fn = "cboTagID_Select";
+                    //lst.Expand.Fn = "cboTagID_Expand";
+                })
+                    , HQ.Combo().ID("cboStatus").ReadOnly(true).Tag("X").DataIndex("Status")
+                        .Name("cboStatus").HQLangCode("Status").HQProcedure("IN10500_pcStatus")
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")//.HQValue("H",false)
+                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .ForceSelection(true).HQAutoLoad(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection() 
+                    {
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }   
+                    })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.Change.Handler = "App.cboHandle.store.reload();";
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                
+                
+                //, HQ.TextBox().ID("txtBranchID").MarginSpec("5 0 0 0").Width(300).HQLangCode("BRANCHID").DataIndex("BranchID").ReadOnly(true)
+             //   , HQ.TextBox().ID("txtNote").MarginSpec("5 0 0 0").Width(300).HQLangCode("Noted").DataIndex("Note").ReadOnly(true)
+                     
+            )
+                
+            , X.Container().Layout(LayoutType.HBox)
+            .Items(
+                    HQ.Combo().ID("cboReasonCD").Name("cboReasonCD").MarginSpec("5 0 0 0").Width(300)
+                    .HQLangCode("REASONCD").HQDBSys(false).HQProcedure("IN10500_pcReasonCode")
+                    .HQColumnShow("ReasonCD,Descr").ForceSelection(true).AllowBlank(false)//.HQAutoLoad(false)
+                    .DisplayField("Descr").ValueField("ReasonCD").HQHeightWidth(400, 300).DataIndex("ReasonCD")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                        lst.Change.Fn = "cboReasonCD_Change";
+                        lst.Focus.Handler = "this.forceSelection=true;";
+                    })
+                    .HQParam(new StoreParameterCollection(){                      
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw } 
+                    })
+                    .LoadData()
+
+                    , HQ.DateField().ID("dtpTranDate").MarginSpec("5 0 0 0").HQLangCode("TRANDATE").Width(300).DataIndex("TranDate").AllowBlank(false).ReadOnly(true)
+
+                    , HQ.Combo().ID("cboHandle")
+                        .Name("cboHandle").HQLangCode("Handle").HQProcedure("IN10500_pcHandle")
+                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Status")
+                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                            .ForceSelection(true).HQAutoLoad(false).Tag("X")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }  
+                    })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })                                        
+                    
+            )
+            , X.Container().Layout(LayoutType.HBox)
+            .Items(
+            
+                HQ.TextBox().ID("txtINBatNbr").MarginSpec("5 0 0 0").Width(300).HQLangCode("INBATNBR").DataIndex("INBatNbr").ReadOnly(true)
+                    , HQ.NumberField().ID("txtTotQty").HQLangCode("TotQty").Width(300).EmptyNumber(0).Tag("X").DecimalPrecision(numDecimal).ReadOnly(true).MarginSpec("5 0 0 0")               
+                ,HQ.Combo().ID("cboSiteID").Name("cboSiteID").MarginSpec("5 0 0 0").Width(300).AllowBlank(false)
+                    .HQLangCode("SiteID").HQDBSys(false).HQProcedure("IN10500_pcSiteCpny").DataIndex("SiteID")
+                    .HQColumnShow("SiteID,Name").ForceSelection(false)
+                    .DisplayField("SiteID").ValueField("SiteID").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                        lst.Change.Fn = "cboSiteID_Change";
+                    })
+                .LoadData()
+          
+            )
+           , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
+            .Items(
+                HQ.TextBox().ID("txtDescr").MarginSpec("5 0 0 0").Width(600).HQLangCode("DESCR").DataIndex("Descr").AllowBlank(false)                          
+                    , X.Button().ID("btnLoad").Text(Util.GetLang("LoadData")).MarginSpec("5 0 0 115").Width(185).Icon(Icon.ArrowRefresh)
+                                                                .Listeners(p => p.Click.Fn = "btnLoad_Click")
+            )           
+        )
+        
+        .Listeners(lss =>
+        {
+            lss.Render.Fn = "pnl_render";
+        })
+  
+        , X.Panel().ID("pnlGrid")
+        .Region(Region.Center)
+        .Layout(LayoutType.Fit)
+        .Items(
+            X.GridPanel().ID("grdIN_TagDetail")
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false).LoadMask(true))
+            .Region(Region.Center).Flex(1)
+            .SelectionMemory(false)
+            .Store(
+                X.Store()
+                .ID("stoIN_TagDetail")
+                .PageSize(50).AutoLoad(false)
+                .Model(Util.GenerateModel(typeof(IN10500_pgLoadGrid_Result), "mdlIN10500_pgLoadGrid", ""))
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("TagID", "App.cboTagID.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("SiteID", "App.cboTagID.valueModels[0] == undefined ? App.cboSiteID.getValue() : App.cboTagID.valueModels[0].data.SiteID", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("ReasonCD", "App.cboReasonCD.getValue()", ParameterMode.Raw));
+                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetIN_TagDetail")))
+                .Listeners(p => p.Load.Fn = "stoLoadIN_TagDetail")
+            )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdIN_TagDetail');")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")//.Renderer("renderRowNumber")
+                
+                , X.Column().Text(Util.GetLang("InvtID")).Width(100).DataIndex("InvtID")                
+                , X.Column().Text(Util.GetLang("Descr")).Width(200).DataIndex("InvtName")
+                , X.Column().DataIndex("SiteID").Text(Util.GetLang("SiteID")).Width(90)
+                , X.Column().DataIndex("CaseUnit").Text(Util.GetLang("UOM")).Width(70)
+
+                , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500Inventory")).DataIndex("BookCaseQty").Width(120).Align(Alignment.Right).StyleSpec("text-align:left")
+                , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500ActInventory")).DataIndex("ActualCaseQty").Width(120).Align(Alignment.Right)
+                        .Editor(X.NumberField().DecimalPrecision(numDecimal)).StyleSpec("text-align:left")
+
+                , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500Inventory1M")).DataIndex("StkQtyUnder1Month").Width(130).Align(Alignment.Right)
+                    .Editor(X.NumberField().DecimalPrecision(numDecimal)).StyleSpec("text-align:left")
+                , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500DiffAmt")).DataIndex("OffetCaseQty").Width(130).Align(Alignment.Right).StyleSpec("text-align:left")
+
+
+
+                , X.Column().DataIndex("ReasonCD").Text(Util.GetLang("ReasonCD")).Width(130).Renderer("rendererReasonCD")
+                .Editor(
+                        HQ.Combo().ID("cboReason").Name("cboReason")
+                        .HQDBSys(false).HQProcedure("IN10500_pcReasonCode")
+                        .HQColumnShow("ReasonCD,Descr").ForceSelection(true).AllowBlank(true)
+                            .DisplayField("Descr").ValueField("ReasonCD").HQHeightWidth(400, 300)//.DataIndex("ReasonCD")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";                            
+                            lst.Focus.Handler = "this.forceSelection=true;";
+                        })
+                        .HQParam(new StoreParameterCollection(){                      
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw } 
+                    })
+                        .LoadData()
+                )
+                , X.CommandColumn().Width(130)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t =>
+                    {
+                        t.Text = Util.GetLang("Rejectrowchanges");
+                    })
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t =>
+                {
+                    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                })
+                .Listeners(l =>
+                {
+                    l.Command.Handler = "grdIN_TagDetail_Reject(record);";
+                })
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmIN_TagDetail")
+        .Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50").ForceSelection(true)
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdIN_TagDetail_BeforeEdit";
+                ls.Edit.Fn = "grdIN_TagDetail_Edit";
+                ls.ValidateEdit.Fn = "grdIN_TagDetail_ValidateEdit";
+            })
+        )
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("InvtID"),
+                    X.StringFilter().DataIndex("InvtName"),
+                    X.StringFilter().DataIndex("SiteID"),
+                    X.StringFilter().DataIndex("CaseUnit"),
+                    X.NumericFilter().DataIndex("BookCaseQty"),
+                    X.NumericFilter().DataIndex("ActualCaseQty"),
+                    X.NumericFilter().DataIndex("StkQtyUnder1Month"),
+                    X.NumericFilter().DataIndex("OffetCaseQty"),
+                    X.StringFilter().DataIndex("ReasonCD").ValidateRecord(p => p.Fn = "stringFilter")
+                )
+        )
+        )
+        .Listeners(lss =>
+        {
+            lss.Render.Fn = "pnl_render";
+        })
+    )// frmMain
+)
+)

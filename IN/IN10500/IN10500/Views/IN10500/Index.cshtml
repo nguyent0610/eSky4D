@@ -1,0 +1,94 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN10500;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "IN10500";
+    var acc = Session["IN10500"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình IN10500.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/IN10500.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+        .row-pink .x-grid-cell{
+            background-color: pink !important;
+        }
+        .row-orange .x-grid-cell{
+            background-color: orange !important;
+        }
+        .row-red .x-grid-cell{
+            background-color: red !important;
+        }
+        .row-yellow .x-grid-cell{
+            background-color: yellow !important;
+        }
+        .row-none .x-grid-cell{
+            background-color: none !important;
+        }
+        .validated-row .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+	        background-color: #BBFFA9 !important;
+        }
+        .validated-rowScan .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+	        background-color: #FFCC99 !important;
+        }
+    </style>
+
+    <script>
+    HQ.cpnyID = '@ViewBag.BranchID';
+    HQ.langID = '@Current.LangID';
+    HQ.userName = '@Current.UserName';
+    HQ.bussinessDate = new Date('@DateTime.Now.Date');
+    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+    @*HQ.miniute = '@ViewBag.Miniute';*@
+    @*HQ.right = '@ViewBag.Right';*@
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        @(
+            X.Store().ID("stoIN_TagHeader").AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(IN_TagHeader), "mdlIN_TagHeader", "ID",false))       
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetIN_TagHeader", "IN10500"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("TAGID", "App.cboTagID.getValue()", ParameterMode.Raw));                
+            })      
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoIN_TagHeader_Load";                   
+                }
+            )
+        )
+        <!-- Gọi hàm Body trong IN10500Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
+        @{Html.RenderAction("Body", new {lang=Current.LangID});}
+</body>
+</html>
+ 
