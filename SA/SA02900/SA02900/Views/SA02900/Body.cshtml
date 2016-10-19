@@ -42,7 +42,7 @@
                 X.Store()
                 .ID("stoTop")
                 .PageSize(50)
-                .Model(Util.GenerateModel(typeof(SA02900_pgSI_ApprovalFlowStatus_Result), "mdlSA02900_pgSI_ApprovalFlowStatus", "AppFolID,RoleID,Status"))
+                .Model(Util.GenerateModel(typeof(SA02900_pgSI_ApprovalFlowStatus_Result), "mdlSA02900_pgSI_ApprovalFlowStatus", ""))
         //.Parameters(ps =>
         //{
         //    ps.Add(new StoreParameter("langid", "HQ.langID", ParameterMode.Raw));
@@ -186,7 +186,7 @@
                 X.Store()
                 .ID("stoBot")
                 .PageSize(50)
-                .Model(Util.GenerateModel(typeof(SA02900_pgSI_ApprovalFlowHandle_Result), "mdlSA02900_pgSI_ApprovalFlowHandle", "Handle"))
+                .Model(Util.GenerateModel(typeof(SA02900_pgSI_ApprovalFlowHandle_Result), "mdlSA02900_pgSI_ApprovalFlowHandle", ""))
                     //.Parameters(ps =>
                     //{
                     //    ps.Add(new StoreParameter("AppFolID", "App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.AppFolID", ParameterMode.Raw));

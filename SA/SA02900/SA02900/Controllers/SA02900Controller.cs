@@ -49,99 +49,82 @@ namespace SA02900.Controllers
             try
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstTopGrid"]);
-                ChangeRecords<SA02900_pgSI_ApprovalFlowStatus_Result> lstTopGrid = dataHandler.BatchObjectData<SA02900_pgSI_ApprovalFlowStatus_Result>();
+                var lstTopGrid = dataHandler.ObjectData<SA02900_pgSI_ApprovalFlowStatus_Result>() == null ? new List<SA02900_pgSI_ApprovalFlowStatus_Result>() : dataHandler.ObjectData<SA02900_pgSI_ApprovalFlowStatus_Result>();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstBotGrid"]);
-                ChangeRecords<SA02900_pgSI_ApprovalFlowHandle_Result> lstBotGrid = dataHandler1.BatchObjectData<SA02900_pgSI_ApprovalFlowHandle_Result>();
-                
-                #region Save Top Grid SI_ApprovalFlowStatus
-                foreach (SA02900_pgSI_ApprovalFlowStatus_Result deleted in lstTopGrid.Deleted)
+                var lstBotGrid = dataHandler1.ObjectData<SA02900_pgSI_ApprovalFlowHandle_Result>() == null ? new List<SA02900_pgSI_ApprovalFlowHandle_Result>() : dataHandler1.ObjectData<SA02900_pgSI_ApprovalFlowHandle_Result>();
+
+                #region Save SI_ApprovalFlowStatus
+                var lstOld_SI_ApprovalFlowStatus = _db.SI_ApprovalFlowStatus.ToList();
+
+                foreach (var objold in lstOld_SI_ApprovalFlowStatus)
                 {
-                    var deltop = _db.SI_ApprovalFlowStatus.FirstOrDefault(p => p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status);
-                    if (deltop != null)
+                    if (lstTopGrid.Where(p => p.AppFolID.ToLower() == objold.AppFolID.ToLower()
+                                        && p.RoleID.ToLower() == objold.RoleID.ToLower()
+                                        && p.Status.ToLower() == objold.Status.ToLower()).FirstOrDefault() == null)
                     {
-                        _db.SI_ApprovalFlowStatus.DeleteObject(deltop);
-                    }
-                    //
-                    var delbot = _db.SI_ApprovalFlowHandle.Where(p => p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status).ToList();
-                    foreach (var item in delbot)
-                    {
-                        _db.SI_ApprovalFlowHandle.DeleteObject(item);
+                        _db.SI_ApprovalFlowStatus.DeleteObject(objold);
                     }
                 }
 
-                lstTopGrid.Created.AddRange(lstTopGrid.Updated);
-
-                foreach (SA02900_pgSI_ApprovalFlowStatus_Result curLang in lstTopGrid.Created)
+                foreach (var item in lstTopGrid)
                 {
-                    if (curLang.AppFolID.PassNull() == "" && curLang.RoleID.PassNull() == "" && curLang.Status.PassNull() == "") continue;
-
-                    var lang = _db.SI_ApprovalFlowStatus.Where(p => p.AppFolID == curLang.AppFolID && p.RoleID == curLang.RoleID && p.Status == curLang.Status).FirstOrDefault();
-
-                    if (lang != null)
+                    if (item.AppFolID.PassNull() == "" 
+                        || item.RoleID.PassNull() == "" 
+                        || item.Status.PassNull() == "") continue;
+                    var obj = _db.SI_ApprovalFlowStatus.FirstOrDefault(p => p.AppFolID.ToLower() == item.AppFolID.ToLower()
+                                                                        && p.RoleID.ToLower() == item.RoleID.ToLower()
+                                                                        && p.Status.ToLower() == item.Status.ToLower());
+                    if (obj != null)
                     {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
-                        {
-                            Update_TopGrid(lang, curLang, false);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
+                        Update_TopGrid(obj, item, false);
                     }
                     else
                     {
-                        lang = new SI_ApprovalFlowStatus();
-                        lang.ResetET();
-                        Update_TopGrid(lang, curLang, true);
-                        _db.SI_ApprovalFlowStatus.AddObject(lang);
+                        obj = new SI_ApprovalFlowStatus();
+                        obj.ResetET();
+                        Update_TopGrid(obj, item, true);
+                        _db.SI_ApprovalFlowStatus.AddObject(obj);
                     }
                 }
                 #endregion
 
-                #region Save Bot Grid SI_ApprovalFlowHandle
-                foreach (SA02900_pgSI_ApprovalFlowHandle_Result deleted in lstBotGrid.Deleted)
+                #region Save SI_ApprovalFlowHandle
+
+                var lstOld_SI_ApprovalFlowHandle = _db.SI_ApprovalFlowHandle.ToList();
+
+                foreach (var objold in lstOld_SI_ApprovalFlowHandle)
                 {
-                    if (lstBotGrid.Created.Where(p => p.Handle == deleted.Handle && p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status).Count() > 0)
+                    if (lstBotGrid.Where(p => p.Handle.ToLower() == objold.Handle.ToLower()
+                                            && p.Status.ToLower() == objold.Status.ToLower()
+                                            && p.RoleID.ToLower() == objold.RoleID.ToLower()
+                                            && p.AppFolID.ToLower() == objold.AppFolID.ToLower()).FirstOrDefault() == null)
                     {
-                        lstBotGrid.Created.Where(p => p.Handle == deleted.Handle && p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status).FirstOrDefault().tstamp = deleted.tstamp;
+                        _db.SI_ApprovalFlowHandle.DeleteObject(objold);
                     }
-                    else
-                    {
-                        var del = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle == deleted.Handle && p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status);
-                        if (del != null)
-                        {
-                            _db.SI_ApprovalFlowHandle.DeleteObject(del);
-                        }
-                    }
-                    
                 }
 
-                lstBotGrid.Created.AddRange(lstBotGrid.Updated);
-
-                foreach (SA02900_pgSI_ApprovalFlowHandle_Result curLang1 in lstBotGrid.Created)
+                foreach (var item in lstBotGrid)
                 {
-                    if (curLang1.Handle.PassNull() == "") continue;
+                    if (item.Handle.PassNull() == ""
+                        || item.Status.PassNull() == ""
+                        || item.RoleID.PassNull() == ""
+                        || item.AppFolID.PassNull() == "") continue;
 
-                    var lang1 = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle == curLang1.Handle && p.AppFolID == curLang1.AppFolID && p.RoleID == curLang1.RoleID && p.Status == curLang1.Status);
-
-                    if (lang1 != null)
+                    var obj = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle.ToLower() == item.Handle.ToLower()
+                                                                    && p.Status.ToLower() == item.Status.ToLower()
+                                                                    && p.RoleID.ToLower() == item.RoleID.ToLower()
+                                                                    && p.AppFolID.ToLower() == item.AppFolID.ToLower());
+                    if (obj != null)
                     {
-                        if (lang1.tstamp.ToHex() == curLang1.tstamp.ToHex())
-                        {
-                            Update_BotGrid(lang1, curLang1, false);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
+                        Update_BotGrid(obj, item, false);
                     }
                     else
                     {
-                        lang1 = new SI_ApprovalFlowHandle();
-                        lang1.ResetET();
-                        Update_BotGrid(lang1, curLang1, true);
-                        _db.SI_ApprovalFlowHandle.AddObject(lang1);
+                        obj = new SI_ApprovalFlowHandle();
+                        obj.ResetET();
+                        Update_BotGrid(obj, item, true);
+                        _db.SI_ApprovalFlowHandle.AddObject(obj);
                     }
                 }
                 #endregion

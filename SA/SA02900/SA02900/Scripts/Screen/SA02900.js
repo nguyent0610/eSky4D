@@ -10,7 +10,8 @@ var fieldsLangCheckRequireBot = ["Handle"];
 
 //var _listFilter = [];
 //var _totalCount = 0;
-
+var _lstTopGrid;
+var _lstBotGrid;
 // Declare
 var _Source = 0;
 var _maxSource = 10;
@@ -303,16 +304,15 @@ var grdBot_Edit = function (item, e) {
     //var store = App.stoBot;
     ////store.clearFilter();
     ////var data = Ext.data.Record();
+    if (e.field == 'Handle') {
+        if (e.value) {
+            e.record.set('AppFolID',_AppFolID);
+            e.record.set('RoleID', _RoleID);
+            e.record.set('Status', _Status);
+        }
+    }
     HQ.grid.checkInsertKey(App.grdBot, e, keysBot);
-    if (e.record.data.AppFolID == '') {
-        e.record.data.AppFolID = _AppFolID;
-    }
-    if (e.record.data.RoleID == '') {
-        e.record.data.RoleID = _RoleID;
-    }
-    if (e.record.data.Status == '') {
-        e.record.data.Status = _Status;
-    }
+    
     //var grid = App.grdBot;
     //grid.getStore().data
     ////var count = e.store.snapshot.items.length - 1;
@@ -339,7 +339,7 @@ var grdBot_Edit = function (item, e) {
     frmChange();
 };
 var grdBot_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdBot, e, keysBot);
+    return HQ.grid.checkValidateEdit(App.grdBot, e, ['Handle','AppFolID', 'RoleID', 'Status']);
 };
 var grdBot_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdBot);
@@ -349,21 +349,27 @@ var grdBot_Reject = function (record) {
 
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
+
+var _
+
 var save = function () {
     if (App.frmMain.isValid()) {
-        var store = App.stoBot;
-        store.allData = store.snapshot || store.allData || store.data;
+        App.stoTop.clearFilter();
+        _lstTopGrid = App.stoTop.getRecordsValues();
+        App.stoBot.clearFilter();
+        _lstBotGrid = App.stoBot.getRecordsValues();
+
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("SavingData"),
+            timeout: 10000000,
             url: 'SA02900/Save',
             params: {
-                lstTopGrid: HQ.store.getData(App.stoTop),
-                lstBotGrid: HQ.store.getData(App.stoBot)
+                lstTopGrid: Ext.encode(_lstTopGrid),
+                lstBotGrid: Ext.encode(_lstBotGrid)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
-                HQ.isFirstLoad = true;
-                App.stoTop.reload();
+                refresh('yes');
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
