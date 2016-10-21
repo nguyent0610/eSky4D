@@ -822,8 +822,8 @@ var grdLot_BeforeEdit = function (item, e) {
             return false;
         else {
             if (e.record.data.LotSerNbr) {
-                var objCust = App.stoCalcLot.findRecord(['LotSerNbr'], [e.record.data.LotSerNbr]);
-                if (objCust)
+                var objFind = App.stoCalcLot.findRecord(['LotSerNbr'], [e.record.data.LotSerNbr]);
+                if (objFind)
                     return false;
                 else
                     return true;
