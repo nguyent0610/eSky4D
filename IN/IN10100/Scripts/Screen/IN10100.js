@@ -820,6 +820,16 @@ var grdLot_BeforeEdit = function (item, e) {
     if (key == 'ExpDate') {
         if (record.data.tstamp)
             return false;
+        else {
+            if (e.record.data.LotSerNbr) {
+                var objCust = App.stoCalcLot.findRecord(['LotSerNbr'], [e.record.data.LotSerNbr]);
+                if (objCust)
+                    return false;
+                else
+                    return true;
+            }
+
+        }
     }
 };
 var grdLot_SelectionChange = function (item, selected) {
