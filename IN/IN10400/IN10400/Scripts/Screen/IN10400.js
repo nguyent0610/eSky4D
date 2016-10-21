@@ -406,6 +406,10 @@ var grdLot_BeforeEdit = function (item, e) {
     record.commit();
 
     App.cboLotUnitDesc.setValue('');
+    if (key == 'ExpDate') {
+        if (record.data.tstamp)
+            return false;
+    }
 }
 var grdLot_SelectionChange = function (item, selected) {
     if (selected.length > 0) {
