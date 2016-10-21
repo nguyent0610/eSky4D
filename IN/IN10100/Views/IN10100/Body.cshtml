@@ -635,7 +635,7 @@
             .Renderer("renderQtyAmt") 
                 
               
-            , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(Html.X().DateField())
+            , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(HQ.DateField())
         )
         .Listeners(lst =>
         {

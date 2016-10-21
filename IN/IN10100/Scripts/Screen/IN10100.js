@@ -817,7 +817,10 @@ var grdLot_BeforeEdit = function (item, e) {
     }
 
     record.commit();
-
+    if (key == 'ExpDate') {
+        if (record.data.tstamp)
+            return false;
+    }
 };
 var grdLot_SelectionChange = function (item, selected) {
     HQ.focus = 'lot';
