@@ -12,7 +12,7 @@ using System.IO;
 using System.Text;
 using HQFramework.DAL;
 using HQ.eSkySys;
-
+using HQSendMailApprove;
 
 namespace IN10500.Controllers
 {
@@ -36,26 +36,10 @@ namespace IN10500.Controllers
             {
                 return View("Popup");
             }
-            //var obj = _sys.SYS_Configurations.Where(p => p.Code.ToUpper() == "IN10500MINUTE").FirstOrDefault();
-            //if (obj != null)
-            //{
-            //    ViewBag.Miniute = obj.IntVal;
-            //}
-            //else
-            //{
-            //    ViewBag.Miniute = 0;
-            //}
-            //var objRight = _sys.SYS_Configurations.Where(p => p.Code.ToUpper() == "IN10500RIGHT").FirstOrDefault();
-            //if (objRight != null)
-            //{
-            //    ViewBag.Right = objRight.IntVal;
-            //}
-            //else
-            //{
-            //    ViewBag.Right = 0;
-            //}
             if (branchID == null) branchID = Current.CpnyID;
+            var dftSiteID = _db.IN10500_pdDefaultSite(Current.UserName, branchID, Current.LangID).FirstOrDefault().PassNull();
             ViewBag.BranchID = branchID;
+            ViewBag.DftSiteID = dftSiteID;
             return View();
         }
 
@@ -65,30 +49,15 @@ namespace IN10500.Controllers
             return PartialView();
         }
 
-        public ActionResult GetIN_TagHeader(string TagID)
+        public ActionResult GetIN_TagHeader(string tagID, string branchID, string siteID)
         {
-            var data = _db.IN_TagHeader.FirstOrDefault(x => x.TAGID == TagID);
+            var data = _db.IN_TagHeader.FirstOrDefault(x => x.TAGID == tagID && x.BranchID == branchID && x.SiteID == siteID);
             return this.Store(data);
         }
 
         public ActionResult GetIN_TagDetail(string TagID, string BranchID, string SiteID, string ReasonCD)
         {
-            var data = _db.IN10500_pgLoadGrid(TagID, BranchID, SiteID, ReasonCD, Current.UserName, Current.CpnyID, Current.LangID)
-                                //.Select(p => new IN10500_pgLoadGrid_Result()
-                                //{
-                                //    TAGID = p.TAGID,
-                                //    SiteID = p.SiteID,
-                                //    InvtID = p.InvtID,
-                                //    CaseUnit = p.CaseUnit,
-                                //    InvtName = p.InvtName,
-                                //    BookCaseQty = p.BookCaseQty,
-                                //    ActualCaseQty = p.ActualCaseQty, 
-                                //    StkQtyUnder1Month = p.StkQtyUnder1Month,
-                                //    OffetCaseQty = p.OffetCaseQty != 0 ? p.OffetCaseQty : p.ActualCaseQty - p.BookCaseQty,
-                                //    ReasonCD = p.ReasonCD,
-                                //    tstamp = p.tstamp
-                                //})
-                                .ToList();
+            var data = _db.IN10500_pgLoadGrid(TagID, BranchID, SiteID, ReasonCD, Current.UserName, Current.CpnyID, Current.LangID);
             return this.Store(data);
         }
 
@@ -96,26 +65,40 @@ namespace IN10500.Controllers
         #region Save & Update information Company
         //Save information Company
         [HttpPost]
-        public ActionResult Save(FormCollection data)
+        public ActionResult Save(FormCollection data, string siteName)
         {
             try
-            {               
+            {
+                _db.CommandTimeout = int.MaxValue;                
                 string ReasonCD = data["cboReasonCD"].PassNull();
                 string Status = data["cboStatus"].PassNull();
                 string Handle = data["cboHandle"].PassNull();
                 string BranchID = data["cboBranchID"].PassNull();
                 string descr = data["txtDescr"].PassNull();
-
                 StoreDataHandler detHeader = new StoreDataHandler(data["lstIN_TagHeader"]);
                 IN_TagHeader curHeader = detHeader.ObjectData<IN_TagHeader>().FirstOrDefault();
                 curHeader.BranchID = BranchID;
                 curHeader.Descr = descr;
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstIN_TagDetail"]);
                 List<IN10500_pgLoadGrid_Result> lstIN_TagDetail = dataHandler1.ObjectData<IN10500_pgLoadGrid_Result>();
+                if (lstIN_TagDetail == null)
+                {
+                    lstIN_TagDetail = new List<IN10500_pgLoadGrid_Result>();
+                }
+                StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstDel"]);
+                List<IN10500_pgLoadGrid_Result> lstDel = dataHandler2.ObjectData<IN10500_pgLoadGrid_Result>();
+                if (lstDel == null)
+                {
+                    lstDel = new List<IN10500_pgLoadGrid_Result>();
+                }
 
+                if (lstIN_TagDetail.Count == 0)
+                {
+                    throw new MessageException(MessageType.Message, "20405");
+                }
                 #region Save Header
 
-                var header = _db.IN_TagHeader.FirstOrDefault(p => p.TAGID == curHeader.TAGID);
+                var header = _db.IN_TagHeader.FirstOrDefault(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID);
                 if (header != null)
                 {
                     if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
@@ -129,14 +112,16 @@ namespace IN10500.Controllers
                 }
                 else
                 {
-                    var chkINTag = _db.IN10500_pdCheckCreateIN_Tag(curHeader.BranchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-                    if (chkINTag.HasValue && chkINTag != 0) // KHi không đc tạo thẻ kho
+                    var chkINTag = _db.IN10500_pdCheckCreateIN_Tag(curHeader.BranchID, curHeader.SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                    if (!string.IsNullOrWhiteSpace(chkINTag)) // KHi không đc tạo thẻ kho
                     {
-                        throw new MessageException(MessageType.Message, "1001", "", parm: new string[] { "" });
+                        throw new MessageException(MessageType.Message, "2015070801", "", parm: new string[] { chkINTag });
                     }
                     var tagID = _db.IN10500_ppGetLastTagHeader(curHeader.BranchID, curHeader.SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                     header = new IN_TagHeader();
                     header.TAGID = tagID;
+                    header.BranchID = curHeader.BranchID;
+                    header.SiteID = curHeader.SiteID;
                     header.Crtd_DateTime = DateTime.Now;
                     header.Crtd_Prog = _screenNbr;
                     header.Crtd_User = Current.UserName;
@@ -149,13 +134,31 @@ namespace IN10500.Controllers
                 #endregion
 
                 #region Save IN_TagDetail
-
-
+                // Delete item
+                for (var i = 0; i < lstDel.Count; i++)
+                {
+                    var item = lstDel[i];
+                    if (lstIN_TagDetail.Any(x => x.InvtID == item.InvtID))
+                    {
+                        lstIN_TagDetail.FirstOrDefault(x => x.InvtID == item.InvtID).tstamp = item.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.IN_TagDetail.FirstOrDefault(x => x.TAGID == item.TAGID && x.BranchID == item.BranchID && x.SiteID == item.SiteID && x.InvtID == item.InvtID);
+                        if (objDel != null)
+                        {
+                            _db.IN_TagDetail.DeleteObject(objDel);
+                        }
+                    }
+                }
+                
                 foreach (IN10500_pgLoadGrid_Result currDet in lstIN_TagDetail)
                 {
                     if (currDet.InvtID.PassNull() == "") continue;
 
                     var tagDet = _db.IN_TagDetail.FirstOrDefault(p => p.TAGID == header.TAGID
+                                                                    && p.BranchID == header.BranchID
+                                                                    && p.SiteID == header.SiteID
                                                                     && p.InvtID == currDet.InvtID);
 
                     if (tagDet != null)
@@ -173,8 +176,9 @@ namespace IN10500.Controllers
                     {
                         tagDet = new IN_TagDetail();
                         tagDet.ResetET();
-
                         tagDet.TAGID = header.TAGID;
+                        tagDet.BranchID = header.BranchID;
+                        tagDet.SiteID = header.SiteID;
                         tagDet.InvtID = currDet.InvtID;
                         UpdatingIN_TagDetail(tagDet, currDet);
                         tagDet.Crtd_DateTime = DateTime.Now;
@@ -183,11 +187,12 @@ namespace IN10500.Controllers
                         _db.IN_TagDetail.AddObject(tagDet);                        
                     }
                 }
+                curHeader.TAGID = header.TAGID;
                 #endregion
 
                 _db.SaveChanges();
-                var lstIN_Tag = _db.IN_TagDetail.Where(p => p.TAGID == curHeader.TAGID).ToList();
-                if (Handle == "C" && lstIN_Tag.Where(p => p.OffetCaseQty != 0).Count() > 0)
+                var lstIN_Tag = _db.IN_TagDetail.Where(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID).ToList();
+                if (Handle == "C" && lstIN_Tag.Where(p => p.OffsetEAQty != 0).Count() > 0)
                 {
                     DataAccess dal = Util.Dal();
                     try
@@ -195,7 +200,7 @@ namespace IN10500.Controllers
                         INProcess.IN inpr = new INProcess.IN(Current.UserName, _screenNbr, dal);
 
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!inpr.IN10500_Release(curHeader.TAGID, curHeader.BranchID))
+                        if (!inpr.IN10500_Release(curHeader.TAGID, curHeader.BranchID, header.SiteID))
                         {
                             dal.RollbackTrans();
                         }
@@ -216,11 +221,31 @@ namespace IN10500.Controllers
                 }
                 else if (Handle == "C")
                 {
-                    header = _db.IN_TagHeader.FirstOrDefault(p => p.TAGID == curHeader.TAGID);
+                    header = _db.IN_TagHeader.FirstOrDefault(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID);
                     header.Status = "C";
                     _db.SaveChanges();
                 }
-
+                #region -Send mail approve-
+                string userID = Current.UserName.ToUpper();
+                var user = _sys.Users.FirstOrDefault(x => x.UserName.ToUpper() == userID);
+                string userTypes = string.Empty;
+                if (user != null)
+                {
+                    userTypes = user.UserTypes.PassNull();
+                    string branchName = string.Empty;
+                    var objBranch = _sys.SYS_Company.FirstOrDefault(x => x.CpnyID == header.BranchID);
+                    if (objBranch != null)
+                    {
+                        branchName = objBranch.CpnyName.PassNull();
+                    }
+                    string[] lstRole = userTypes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var role in lstRole)
+                    {
+                        Mail_Approve(header.TAGID, role, Status, Handle, Current.LangID.PassNull(), Current.UserName, header.BranchID, Current.CpnyID, header.TAGID, header.BranchID, header.SiteID,
+                            header.BranchID, branchName, header.SiteID, siteName);
+                    }
+                } 
+                #endregion
                 return Json(new { success = true, TagID = header.TAGID });
             }
             catch (Exception ex)
@@ -240,9 +265,7 @@ namespace IN10500.Controllers
                 t.Status = Handle == "C" ? Status : Handle;
             t.Descr = s.Descr;
             t.ReasonCD = s.ReasonCD;
-            t.INBatNbr = s.INBatNbr;
-            t.BranchID = s.BranchID;
-            t.SiteID = s.SiteID;
+            t.INBatNbr = s.INBatNbr;            
             t.TranDate = s.TranDate;
             t.Note = s.Note;
             t.LUpd_DateTime = DateTime.Now;
@@ -254,11 +277,11 @@ namespace IN10500.Controllers
         #region Update IN_TagDetail
         private void UpdatingIN_TagDetail(IN_TagDetail t, IN10500_pgLoadGrid_Result s)
         {
-            t.InvtName = s.InvtName;
-            t.CaseUnit = s.CaseUnit;            
-            t.ActualCaseQty = s.ActualCaseQty;
-            t.BookCaseQty = s.BookCaseQty;
-            t.OffetCaseQty = s.OffetCaseQty;
+            t.InvtName = s.InvtName;            
+            t.EAUnit = s.EAUnit;            
+            t.ActualEAQty = s.ActualEAQty;
+            t.BookEAQty = s.BookEAQty;
+            t.OffsetEAQty = s.OffsetEAQty;
             t.StkQtyUnder1Month = s.StkQtyUnder1Month;
             t.ReasonCD = s.ReasonCD;            
             t.Notes = s.Notes;
@@ -299,5 +322,41 @@ namespace IN10500.Controllers
             }
         }
         #endregion     
+
+        public void Mail_Approve(string objID, string role, string status, string handle, string langID, string userName, string lstBranch, string currentBranch, string parm00, string parm01, string parm02,
+          string branchID,  string branchName, string siteID, string siteName)
+        {
+            var approvehandle = _db.SI_ApprovalFlowHandle.Where(p => p.AppFolID == _screenNbr && p.RoleID == role && p.Status == status && p.Handle == handle).FirstOrDefault();
+            if (approvehandle != null && approvehandle.MailSubject.PassNull() != string.Empty)
+            {
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                dic.Add("@CurrentBranchID", lstBranch);
+                dic.Add("@BranchID", lstBranch);
+                dic.Add("@ObjID", objID);
+                dic.Add("@ScreenNbr", approvehandle.AppFolID);
+                dic.Add("@FromStatus", approvehandle.Status);
+                dic.Add("@ToStatus", approvehandle.ToStatus);
+                dic.Add("@Action", "2");
+                dic.Add("@RoleID", approvehandle.RoleID);
+                dic.Add("@Handle", approvehandle.Handle);
+                dic.Add("@LangID", langID);
+                dic.Add("@User", userName);
+                dic.Add("@Parm00", parm00);
+                dic.Add("@Parm01", parm01);
+                dic.Add("@Parm02", parm02);
+                string mailSubject = approvehandle.MailSubject.PassNull()
+                        .Replace("@p1", branchID)
+                        .Replace("@p2", branchName)
+                        .Replace("@p3", siteID)
+                        .Replace("@p4", siteName);
+                var mail = Approve.GetMail(approvehandle.MailApprove.PassNull() == string.Empty ? "MailSend" : approvehandle.MailApprove, dic);
+               foreach (var item in mail)
+                {
+                    string content = string.Format("<html><body><p>{0}</p></body></html>", item.Content.PassNull());
+                    Approve.SendMail(item.To.PassNull(), item.CC.PassNull(), mailSubject, content);
+                }
+            }
+        }
+
     }
 }

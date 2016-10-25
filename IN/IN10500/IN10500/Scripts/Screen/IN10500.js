@@ -5,13 +5,12 @@ HQ.barCode = '';
 var _focusNo = 0;
 HQ.isChange = false;
 HQ.isSaving = false;
-HQ.NumberSoure = 0;
 var _beginStatus = 'H';
 var _isFirstTime = true;
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboStatus.getStore().load(function () {
-        HQ.common.showBusy(false, HQ.common.getLang("loadingData"));      
+        HQ.common.showBusy(false);      
     });
     App.cboBranchID.setValue(HQ.cpnyID);
     App.cboTagID.store.reload();
@@ -76,7 +75,7 @@ var menuClick = function (command) {
                 HQ.isChange = false;
                 if (App.cboTagID.valueModels == null) App.cboTagID.setValue('');
                 App.cboTagID.getStore().load(function () {
-                    if (App.frmMain.isValid()) {
+                    if (HQ.form.checkRequirePass(App.frmMain)) {
 
                         App.stoIN_TagHeader.reload();
                     }                    
@@ -85,15 +84,21 @@ var menuClick = function (command) {
             break;
         case "new":
             if (HQ.isInsert) {
-                if (HQ.isChange) {
-                    HQ.message.show(150, '', '');
+                if (_focusNo == 0) {
+                    if (HQ.isChange) {
+                        HQ.message.show(150, '', '');
+                    }
+                    else {
+                        HQ.isChange = false;
+                        App.cboTagID.setValue('');
+                        App.cboSiteID.setValue('');
+                        App.stoIN_TagHeader.reload();
+                    }
+                } else {
+                    if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
+                        HQ.store.insertBlank(App.stoIN_TagDetail, keys);
+                    }
                 }
-                else {
-                    HQ.isChange = false;                    
-                    App.cboTagID.setValue('');                    
-                    App.cboSiteID.setValue('');
-                    App.stoIN_TagHeader.reload();                    
-                }                                
             }
             break;
         case "delete":
@@ -106,22 +111,27 @@ var menuClick = function (command) {
                         }
                     }
                     else {
-                        //if (App.slmgrdInvt.selected.items[0] != undefined) {
-                        //    var s = HQ.grid.indexSelect(App.grdInvt);
-                        //    if (s != '')
-                        //        HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdInvt), ''], 'deleteData', true)
-                        //}
+                        if (App.slmIN_TagDetail.selected.items[0] != undefined) {
+                            if (HQ.grid.indexSelect(App.grdIN_TagDetail) != '')
+                                HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdIN_TagDetail), ''], 'deleteData', true)
+                        }
                     }
                 }
             }
             else {
-                HQ.message.show(2015061202, '', '');
+                HQ.message.show(1002, '', '');
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain)
                     && HQ.store.checkRequirePass(App.stoIN_TagDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    if (App.stoIN_TagDetail.data.length > 0) {
+                        if (App.stoIN_TagDetail.data.items[0].data.SiteID != App.cboSiteID.getValue()) {
+                            HQ.message.show(2016102101);
+                            return false;
+                        }
+                    }
                     save();
                 }
             }
@@ -132,6 +142,82 @@ var menuClick = function (command) {
             HQ.common.close(this);
             break;
     }
+};
+
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'IN10500');
+};
+
+//load store khi co su thay doi TagID
+var stoIN_TagHeader_Load = function (sto) {
+    HQ.isFirstLoad = true;
+    HQ.isNew = false;
+    //App.cboTagID.forceSelection = false;
+    //App.cboHandle.setValue('N');
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "TagID");
+        record = sto.getAt(0);
+        record.data.Status = _beginStatus;
+        record.data.TranDate = HQ.bussinessDate;
+        record.data.SiteID = HQ.dftSiteID;
+        HQ.isNew = true;//record la new    
+        App.cboSiteID.store.clearFilter();
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboTagID.focus(true);//focus ma khi tao moi
+        sto.commitChanges();
+    }    
+    var record = sto.getAt(0);
+    if (record.data.Status != _beginStatus) {
+        lockControl(true);
+    } else {
+        lockControl(false);
+    }
+    App.frmMain.getForm().loadRecord(record);    
+    if (!_isFirstTime) {
+        if (App.frmMain.isValid()) {
+            App.stoIN_TagDetail.reload();
+        } else {
+            App.stoIN_TagDetail.removeAll();
+            App.grdIN_TagDetail.view.refresh();
+            HQ.common.showBusy(false);
+        }
+       
+    } else {
+        _isFirstTime = false;
+        HQ.common.showBusy(false);
+    }
+    App.cboSiteID.setReadOnly(!HQ.isNew);
+};
+
+var lockControl = function (value) {
+    setTimeout(function () {
+        App.cboReasonCD.setReadOnly(value);
+        App.dtpTranDate.setReadOnly(value);
+        App.txtDescr.setReadOnly(value);
+    }, 300);
+};
+
+var stoLoadIN_TagDetail = function (sto) {
+
+    if (HQ.isFirstLoad) {
+        //if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
+        //    HQ.store.insertBlank(sto, keys);
+        //}
+        HQ.isFirstLoad = false;
+    }
+    if (App.cboStatus.getValue() == _beginStatus) {
+        HQ.store.insertBlank(sto, keys);
+    }
+    // Calc Total Actual Qty
+    calcTotQty();
+    HQ.common.showBusy(false);
+    frmChange();
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 
 var btnPopupOk_Click = function () {
@@ -162,13 +248,17 @@ var cboBranchID_Select = function (sender, value) {
 var cboTagID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null) {
+        var siteID = sender.valueModels[0] ? sender.valueModels[0].data.SiteID : '';
+        App.cboSiteID.setValue(siteID);
         App.stoIN_TagHeader.reload();       
-    }
+    } 
 };
 
 var cboTagID_Select = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoIN_TagHeader.loading) {
+        var siteID = sender.valueModels[0] ? sender.valueModels[0].data.SiteID : '';
+        App.cboSiteID.setValue(siteID);
         App.stoIN_TagHeader.reload();      
     }
 };
@@ -180,14 +270,19 @@ var cboReasonCD_Change = function (sender, value) {
     App.stoIN_TagDetail.resumeEvents();
     App.grdIN_TagDetail.view.refresh();
 };
+
 var cboSiteID_Change = function (sender, value) {
-    if (App.frmMain.isValid()) {
-        App.stoIN_TagDetail.reload();
-    }
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+   // App.cboInvtID.store.reload();    
+    App.cboInvtID.getStore().load(function () {
+        HQ.common.showBusy(false);
+    });
 };
+
 //load lần đầu khi mở
 var firstLoad = function () {   
     HQ.isFirstLoad = true;
+    HQ.util.checkAccessRight();
     loadSourceCombo();
 };
 
@@ -207,13 +302,11 @@ var frmChange = function () {
         }
         else {
             App.cboTagID.setReadOnly(HQ.isChange);
-            //App.cboSiteID.setReadOnly(HQ.isChange);
         }
     }
     if (!isSetSite) {
         App.cboSiteID.setReadOnly(!HQ.isNew);
     }    
-    App.dtpTranDate.setReadOnly(!HQ.isNew);
 };
 
 //xu li su kiem tren luoi giong nhu luoi binh thuong
@@ -223,13 +316,36 @@ var grdIN_TagDetail_BeforeEdit = function (editor, e) {
         return false;
     }
     else {
+        if (App.stoIN_TagDetail.data.length > 1) {
+            if (App.stoIN_TagDetail.data.items[0].data.SiteID != App.cboSiteID.getValue()) {
+                HQ.message.show(2016102101);
+                return false;
+            }
+        } else {
+            if (e.record.data.InvtID != '' && e.record.data.SiteID != App.cboSiteID.getValue()) {
+                HQ.message.show(2016102101);
+                return false;
+            }
+        }
+        
         return HQ.grid.checkBeforeEdit(e, keys);
     }
 };
 
 var grdIN_TagDetail_Edit = function (item, e) {
-    if (e.field == "ActualCaseQty") {
-        e.record.set("OffetCaseQty", e.record.data.ActualCaseQty - e.record.data.BookCaseQty);
+    if (e.field == "ActualEAQty") {
+        e.record.set("OffsetEAQty", e.record.data.ActualEAQty - e.record.data.BookEAQty);
+    }
+    if (e.field == 'InvtID') {
+        var record = HQ.store.findInStore(App.cboInvtID.store, ['InvtID'], [e.value]);
+        if (record) {
+            e.record.set('InvtName', record.InvtName);
+            e.record.set('SiteID', App.cboSiteID.getValue());
+            e.record.set('EAUnit', record.EAUnit);
+            e.record.set('BookEAQty', record.BookEAQty);
+            e.record.set("OffsetEAQty", e.record.data.ActualEAQty - e.record.data.BookEAQty);
+            e.record.set('ReasonCD', App.cboReasonCD.getValue());
+        }
     }
     // Calc Total Actual Qty
     calcTotQty();
@@ -243,113 +359,52 @@ var grdIN_TagDetail_ValidateEdit = function (item, e) {
 
 var grdIN_TagDetail_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdIN_TagDetail);
+    calcTotQty();
     //stoChanged(App.stoIN_TagDetail);
     frmChange();
 };
 
-var stoChanged = function (sto) {
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'IN10500');
-};
-
-//load store khi co su thay doi TagID
-var stoIN_TagHeader_Load = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
-    HQ.isFirstLoad = true;  
-    HQ.isNew = false;
-    //App.cboTagID.forceSelection = false;
-    //App.cboHandle.setValue('N');
-    if (sto.data.length == 0) {
-        HQ.store.insertBlank(sto, "TagID");
-        record = sto.getAt(0);
-        record.data.Status = _beginStatus;
-        record.data.TranDate = HQ.bussinessDate;
-        HQ.isNew = true;//record la new    
-
-        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
-        App.cboTagID.focus(true);//focus ma khi tao moi
-        sto.commitChanges();
-    }
-    var record = sto.getAt(0);
-    if (record.data.Status != _beginStatus) {
-        lockControl(true);
-    } else {
-        lockControl(false);
-    }
-    App.frmMain.getForm().loadRecord(record);
-    HQ.NumberSoure = 0;
-    if (!_isFirstTime) {        
-        App.stoIN_TagDetail.reload();
-    } else {
-        _isFirstTime = false;
-        HQ.common.showBusy(false);
-    }
-    App.cboSiteID.setReadOnly(!HQ.isNew);
-    //App.stoInvt.reload();
-};
-stoInvt_Load = function (sto) {
-    HQ.NumberSoure += 1;
-    if (HQ.NumberSoure == 2)
-        HQ.common.showBusy(false);
-};
-var lockControl = function (value) {
-    setTimeout(function () {
-        App.cboReasonCD.setReadOnly(value);
-       // App.dtpTranDate.setReadOnly(value);
-       // App.cboHandle.setReadOnly(value);
-        App.txtDescr.setReadOnly(value);
-    }, 300);
-};
-
-var stoLoadIN_TagDetail = function (sto) {
-  
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            //HQ.store.insertBlank(sto, keys);
-        }
-        //HQ.isFirstLoad = false;
-    }
-    // Calc Total Actual Qty
-    calcTotQty();
-    HQ.NumberSoure += 1;
-    if (HQ.NumberSoure == 1) HQ.common.showBusy(false);
-    frmChange();
-};
-
-//trước khi load trang busy la dang load data
-var stoBeforeLoad = function (sto) {
-
-};
 
 //khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
 var cboTagID_TriggerClick = function (sender, value) {
-    if (HQ.isChange) {
-        HQ.message.show(150, '', '');
-    }
-    else {
-        this.clearValue();
-        menuClick('new');
-    }
+    this.clearValue();
+    //menuClick('new');
 };
 
 // Load data
 var btnLoad_Click = function () {
-    if (App.frmMain.isValid()) {
-        App.stoIN_TagDetail.reload();
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        var isChange = HQ.store.isChange(App.stoIN_TagDetail);
+        if (isChange && App.stoIN_TagDetail.data.length > 0) {
+            HQ.message.show(20150303, '', 'refreshDet');
+        }
+        else {
+            HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+            App.stoIN_TagDetail.reload();
+            
+        }
     }
 };
 function save() {
     //dòng này để bắt các thay đổi của form 
     App.frmMain.getForm().updateRecord();
-    if (App.frmMain.isValid()) {
+    var isSave = !(App.cboStatus.getValue() == 'C' && (!App.cboHandle.getValue() || App.cboHandle.getValue() == '' || App.cboHandle.getValue() == 'N'));
+    if (HQ.form.checkRequirePass(App.frmMain) && isSave) {
         HQ.isSaving = true;
+        var siteName = '';
+        var objSite = HQ.store.findInStore(App.cboSiteID.store, ['SiteID'], [App.cboSiteID.getValue()]);
+        if (objSite) {
+            siteName = objSite.Name;
+        }
         App.frmMain.submit({
             waitMsg: 'Submiting...',
             timeOut: 7200,
             url: 'IN10500/Save',
             params: {
                 lstIN_TagHeader: Ext.encode(App.stoIN_TagHeader.getRecordsValues()),
-                lstIN_TagDetail: Ext.encode(App.stoIN_TagDetail.getRecordsValues()),//Ext.encode(App.stoIN_TagDetail.getChangedData({ skipIdForPhantomRecords: false })),
+                lstIN_TagDetail: Ext.encode(App.stoIN_TagDetail.getRecordsValues()),//Ext.encode(App.stoIN_TagDetail.getChangedData({ skipIdForPhantomRecords: false })), 
+                lstDel: Ext.encode(App.stoIN_TagDetail.getChangedData().Deleted),
+                siteName: siteName
             },
             success: function (result, data) {
                 HQ.message.show(201405071, '', '');
@@ -358,11 +413,13 @@ function save() {
                     App.cboTagID.setValue(ID);
                     App.stoIN_TagHeader.reload();
                 });
+                App.cboHandle.setValue('N');
                 HQ.isSaving = false;
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
                 HQ.isSaving = false;
+                App.cboHandle.setValue('N');
             }
         });
     }
@@ -390,8 +447,8 @@ function deleteData(item) {
             });
         }
         else {
-            //App.grdIN_TagDetail.deleteSelected();
-            //frmChange();
+            App.grdIN_TagDetail.deleteSelected();
+            frmChange();
         }
     }
 };
@@ -406,6 +463,13 @@ function refresh(item) {
         App.cboTagID.getStore().load(function () { App.cboTagID.setValue(ID); App.stoIN_TagHeader.reload(); });
     }
 };
+function refreshDet(item) {
+    if (item == 'yes') {
+        HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+        App.stoIN_TagDetail.reload();
+    }
+};
+
 // Render Rownumber
 var renderRowNumber= function (value, meta, record) {
     return App.stoIN_TagDetail.data.indexOf(record) + 1;
@@ -428,7 +492,7 @@ var stringFilter = function (record) {
 var calcTotQty = function () {
     var totQty = 0;
     for (var i = 0; i < App.stoIN_TagDetail.data.length; i++) {
-        totQty += App.stoIN_TagDetail.data.items[i].data.ActualCaseQty;
+        totQty += App.stoIN_TagDetail.data.items[i].data.ActualEAQty;
     }
     App.txtTotQty.setValue(totQty);
 };
