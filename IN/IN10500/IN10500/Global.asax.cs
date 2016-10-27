@@ -39,14 +39,14 @@ namespace IN10500
 
             Current.Authorize = false;
             Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eBiz4DCloudSysJFV";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "eBiz4DCloudSysJFV";//ConfigurationManager.AppSettings["DBSys"].ToString(); ND_eSky4DSys
             Current.FormatDate = "MM-dd-yyyy";
-            AccessRight acc = new AccessRight();
+            AccessRight acc = new AccessRight() ;
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN10500"] = acc;
-            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppJFV";// "eBiz4DWebApp";Kowil_eSky4DApp
+            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppJFV";// "eBiz4DWebApp";Kowil_eSky4DApp ND_eSky4DApp
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "10106TMT1";
             Session["Language"] = Current.Language = "vi";

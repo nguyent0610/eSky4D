@@ -96,7 +96,10 @@ var menuClick = function (command) {
                     }
                 } else {
                     if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
-                        HQ.store.insertBlank(App.stoIN_TagDetail, keys);
+                        var obj = HQ.store.findInStore(App.stoIN_TagDetail, [keys], ['']);
+                        if (!obj) {
+                            HQ.store.insertBlank(App.stoIN_TagDetail, keys);
+                        }                        
                     }
                 }
             }
@@ -176,7 +179,21 @@ var stoIN_TagHeader_Load = function (sto) {
     App.frmMain.getForm().loadRecord(record);    
     if (!_isFirstTime) {
         if (App.frmMain.isValid()) {
-            App.stoIN_TagDetail.reload();
+            App.cboBranchID.getValue(), App.cboSiteID.getValue(),
+            {
+                success: function (result) {
+                    if (result == '') {
+                        App.stoIN_TagDetail.reload();
+                    }
+                    else {
+                        HQ.message.show(2015070801, result, '', false);
+                        HQ.common.showBusy(false);
+                    }
+                },
+                failure: function (result) {
+                    HQ.common.showBusy(false);
+                }
+            };
         } else {
             App.stoIN_TagDetail.removeAll();
             App.grdIN_TagDetail.view.refresh();
@@ -198,7 +215,7 @@ var lockControl = function (value) {
     }, 300);
 };
 
-var stoLoadIN_TagDetail = function (sto) {
+var stoLoadIN_TagDetail = function (sto) {save
 
     if (HQ.isFirstLoad) {
         //if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
@@ -207,7 +224,10 @@ var stoLoadIN_TagDetail = function (sto) {
         HQ.isFirstLoad = false;
     }
     if (App.cboStatus.getValue() == _beginStatus) {
-        HQ.store.insertBlank(sto, keys);
+        var obj = HQ.store.findInStore(App.stoIN_TagDetail, [keys], ['']);
+        if (!obj) {
+            HQ.store.insertBlank(App.stoIN_TagDetail, keys);
+        }
     }
     // Calc Total Actual Qty
     calcTotQty();
@@ -297,7 +317,7 @@ var frmChange = function () {
         //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
         if (App.cboTagID.valueModels == null || HQ.isNew == true) {
             App.cboTagID.setReadOnly(false);
-            App.cboSiteID.setReadOnly(HQ.store.isChange(App.stoIN_TagDetail));
+            App.cboSiteID.setReadOnly(App.stoIN_TagDetail.data.length > 0 && HQ.store.isChange(App.stoIN_TagDetail));
             isSetSite = true;
         }
         else {
@@ -345,6 +365,7 @@ var grdIN_TagDetail_Edit = function (item, e) {
             e.record.set('BookEAQty', record.BookEAQty);
             e.record.set("OffsetEAQty", e.record.data.ActualEAQty - e.record.data.BookEAQty);
             e.record.set('ReasonCD', App.cboReasonCD.getValue());
+            e.record.set('StkItem', record.StkItem);
         }
     }
     // Calc Total Actual Qty
@@ -380,8 +401,22 @@ var btnLoad_Click = function () {
         }
         else {
             HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
-            App.stoIN_TagDetail.reload();
-            
+            App.direct.IN10500_pdCheckCreateIN_Tag(
+            App.cboBranchID.getValue(), App.cboSiteID.getValue(),
+            {
+                success: function (result) {
+                    if (result == '') {
+                        App.stoIN_TagDetail.reload();                        
+                    }
+                    else {
+                        HQ.message.show(2015070801, result, '', false);
+                        HQ.common.showBusy(false);
+                    }
+                },
+                failure: function (result) {
+                    HQ.common.showBusy(false);
+                }
+            });            
         }
     }
 };
@@ -398,7 +433,7 @@ function save() {
         }
         App.frmMain.submit({
             waitMsg: 'Submiting...',
-            timeOut: 7200,
+            timeOut: 180000,
             url: 'IN10500/Save',
             params: {
                 lstIN_TagHeader: Ext.encode(App.stoIN_TagHeader.getRecordsValues()),

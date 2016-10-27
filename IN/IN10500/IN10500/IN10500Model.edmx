@@ -5,6 +5,39 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="IN_ItemSite">
+          <Key>
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="SiteID" />
+          </Key>
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="AvgCost" Type="float" Nullable="false" />
+          <Property Name="QtyAlloc" Type="float" Nullable="false" />
+          <Property Name="QtyAllocIN" Type="float" Nullable="false" />
+          <Property Name="QtyAllocPORet" Type="float" Nullable="false" />
+          <Property Name="QtyAllocSO" Type="float" Nullable="false" />
+          <Property Name="QtyAvail" Type="float" Nullable="false" />
+          <Property Name="QtyInTransit" Type="float" Nullable="false" />
+          <Property Name="QtyOnBO" Type="float" Nullable="false" />
+          <Property Name="QtyOnHand" Type="float" Nullable="false" />
+          <Property Name="QtyOnPO" Type="float" Nullable="false" />
+          <Property Name="QtyOnTransferOrders" Type="float" Nullable="false" />
+          <Property Name="QtyOnSO" Type="float" Nullable="false" />
+          <Property Name="QtyShipNotInv" Type="float" Nullable="false" />
+          <Property Name="StkItem" Type="smallint" Nullable="false" />
+          <Property Name="TotCost" Type="float" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="QtyUncosted" Type="float" Nullable="false" />
+          <Property Name="LastPurchaseDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="LastPurchasePrice" Type="float" Nullable="false" />
+        </EntityType>
         <EntityType Name="IN_TagDetail">
           <Key>
             <PropertyRef Name="TAGID" />
@@ -123,6 +156,7 @@
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="IN_ItemSite" EntityType="Self.IN_ItemSite" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IN_TagDetail" EntityType="Self.IN_TagDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IN_TagHeader" EntityType="Self.IN_TagHeader" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="Self.SI_ApprovalFlowHandle" Schema="dbo" store:Type="Tables" />
@@ -163,6 +197,7 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="IN_ItemSite" EntityType="IN10500Model.IN_ItemSite" />
         </EntityContainer>
         <ComplexType Name="IN10500_pgLoadGrid_Result">
           <Property Type="String" Name="TAGID" Nullable="false" MaxLength="10" />
@@ -178,6 +213,7 @@
           <Property Type="Double" Name="BookEAQty" Nullable="false" />
           <Property Type="Double" Name="ActualEAQty" Nullable="false" />
           <Property Type="Double" Name="OffsetEAQty" Nullable="false" />
+          <Property Type="Int16" Name="StkItem" Nullable="false" />
           </ComplexType>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -268,6 +304,39 @@
           <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="IN_ItemSite">
+          <Key>
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="SiteID" />
+          </Key>
+          <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SiteID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="AvgCost" Type="Double" Nullable="false" />
+          <Property Name="QtyAlloc" Type="Double" Nullable="false" />
+          <Property Name="QtyAllocIN" Type="Double" Nullable="false" />
+          <Property Name="QtyAllocPORet" Type="Double" Nullable="false" />
+          <Property Name="QtyAllocSO" Type="Double" Nullable="false" />
+          <Property Name="QtyAvail" Type="Double" Nullable="false" />
+          <Property Name="QtyInTransit" Type="Double" Nullable="false" />
+          <Property Name="QtyOnBO" Type="Double" Nullable="false" />
+          <Property Name="QtyOnHand" Type="Double" Nullable="false" />
+          <Property Name="QtyOnPO" Type="Double" Nullable="false" />
+          <Property Name="QtyOnTransferOrders" Type="Double" Nullable="false" />
+          <Property Name="QtyOnSO" Type="Double" Nullable="false" />
+          <Property Name="QtyShipNotInv" Type="Double" Nullable="false" />
+          <Property Name="StkItem" Type="Int16" Nullable="false" />
+          <Property Name="TotCost" Type="Double" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="QtyUncosted" Type="Double" Nullable="false" />
+          <Property Name="LastPurchaseDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="LastPurchasePrice" Type="Double" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -290,6 +359,7 @@
                 <ScalarProperty Name="BookEAQty" ColumnName="BookEAQty" />
                 <ScalarProperty Name="ActualEAQty" ColumnName="ActualEAQty" />
                 <ScalarProperty Name="OffsetEAQty" ColumnName="OffsetEAQty" />
+                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -380,6 +450,39 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="IN10500_pdCheckCreateIN_Tag" FunctionName="eBiz4DWebSysModel.Store.IN10500_pdCheckCreateIN_Tag" />
           <FunctionImportMapping FunctionImportName="IN10500_pdDefaultSite" FunctionName="eBiz4DWebSysModel.Store.IN10500_pdDefaultSite" />
+          <EntitySetMapping Name="IN_ItemSite">
+            <EntityTypeMapping TypeName="IN10500Model.IN_ItemSite">
+              <MappingFragment StoreEntitySet="IN_ItemSite">
+                <ScalarProperty Name="LastPurchasePrice" ColumnName="LastPurchasePrice" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LastPurchaseDate" ColumnName="LastPurchaseDate" />
+                <ScalarProperty Name="QtyUncosted" ColumnName="QtyUncosted" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="TotCost" ColumnName="TotCost" />
+                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
+                <ScalarProperty Name="QtyShipNotInv" ColumnName="QtyShipNotInv" />
+                <ScalarProperty Name="QtyOnSO" ColumnName="QtyOnSO" />
+                <ScalarProperty Name="QtyOnTransferOrders" ColumnName="QtyOnTransferOrders" />
+                <ScalarProperty Name="QtyOnPO" ColumnName="QtyOnPO" />
+                <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
+                <ScalarProperty Name="QtyOnBO" ColumnName="QtyOnBO" />
+                <ScalarProperty Name="QtyInTransit" ColumnName="QtyInTransit" />
+                <ScalarProperty Name="QtyAvail" ColumnName="QtyAvail" />
+                <ScalarProperty Name="QtyAllocSO" ColumnName="QtyAllocSO" />
+                <ScalarProperty Name="QtyAllocPORet" ColumnName="QtyAllocPORet" />
+                <ScalarProperty Name="QtyAllocIN" ColumnName="QtyAllocIN" />
+                <ScalarProperty Name="QtyAlloc" ColumnName="QtyAlloc" />
+                <ScalarProperty Name="AvgCost" ColumnName="AvgCost" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -405,6 +508,7 @@
         <EntityTypeShape EntityType="IN10500Model.SI_ApprovalFlowHandle" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="IN10500Model.IN_TagDetail" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN10500Model.IN_TagHeader" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN10500Model.IN_ItemSite" Width="1.5" PointX="7.375" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

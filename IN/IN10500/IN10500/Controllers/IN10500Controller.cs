@@ -60,7 +60,16 @@ namespace IN10500.Controllers
             var data = _db.IN10500_pgLoadGrid(TagID, BranchID, SiteID, ReasonCD, Current.UserName, Current.CpnyID, Current.LangID);
             return this.Store(data);
         }
-
+        [DirectMethod]
+        public ActionResult IN10500_pdCheckCreateIN_Tag(string BranchID, string SiteID)
+        {
+            var chkINTag = _db.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();
+            if (!string.IsNullOrWhiteSpace(chkINTag))
+            {
+                chkINTag = "<div style =' overflow: auto;'> " + chkINTag + " </div>"; 
+            }
+            return this.Direct(chkINTag);
+        }
 
         #region Save & Update information Company
         //Save information Company
@@ -96,9 +105,11 @@ namespace IN10500.Controllers
                 {
                     throw new MessageException(MessageType.Message, "20405");
                 }
+                
                 #region Save Header
 
                 var header = _db.IN_TagHeader.FirstOrDefault(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID);
+                
                 if (header != null)
                 {
                     if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
@@ -127,11 +138,11 @@ namespace IN10500.Controllers
                     header.Crtd_User = Current.UserName;
                     header.tstamp = new byte[1];
                     UpdatingHeader(ref header, curHeader, Status, Handle);
-                    
+
                     _db.IN_TagHeader.AddObject(header);
                 }
 
-                #endregion
+            #endregion
 
                 #region Save IN_TagDetail
                 // Delete item
@@ -151,7 +162,7 @@ namespace IN10500.Controllers
                         }
                     }
                 }
-                
+
                 foreach (IN10500_pgLoadGrid_Result currDet in lstIN_TagDetail)
                 {
                     if (currDet.InvtID.PassNull() == "") continue;
@@ -184,13 +195,19 @@ namespace IN10500.Controllers
                         tagDet.Crtd_DateTime = DateTime.Now;
                         tagDet.Crtd_Prog = _screenNbr;
                         tagDet.Crtd_User = _userName;
-                        _db.IN_TagDetail.AddObject(tagDet);                        
+                        _db.IN_TagDetail.AddObject(tagDet);
+                    }
+                    if (!_db.IN_ItemSite.Any(x => x.SiteID == header.SiteID && x.InvtID == tagDet.InvtID))
+                    {
+                        var objItemSite = new IN_ItemSite();
+                        Insert_IN_ItemSite(ref objItemSite, header.SiteID, tagDet.InvtID, currDet.StkItem);
                     }
                 }
                 curHeader.TAGID = header.TAGID;
                 #endregion
 
                 _db.SaveChanges();
+             
                 var lstIN_Tag = _db.IN_TagDetail.Where(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID).ToList();
                 if (Handle == "C" && lstIN_Tag.Where(p => p.OffsetEAQty != 0).Count() > 0)
                 {
@@ -358,5 +375,46 @@ namespace IN10500.Controllers
             }
         }
 
+        public void Insert_IN_ItemSite(ref IN_ItemSite objIN_ItemSite, string SiteID, string invtID, short stkItem)
+        {
+            try
+            {
+                objIN_ItemSite = new IN_ItemSite();
+                objIN_ItemSite.InvtID = invtID;
+                objIN_ItemSite.SiteID = SiteID;
+                objIN_ItemSite.AvgCost = 0;
+                objIN_ItemSite.QtyAlloc = 0;
+                objIN_ItemSite.QtyAllocIN = 0;
+                objIN_ItemSite.QtyAllocPORet = 0;
+                objIN_ItemSite.QtyAllocSO = 0;
+                objIN_ItemSite.QtyAvail = 0;
+                objIN_ItemSite.QtyInTransit = 0;
+                objIN_ItemSite.QtyOnBO = 0;
+                objIN_ItemSite.QtyOnHand = 0;
+                objIN_ItemSite.QtyOnPO = 0;
+                objIN_ItemSite.QtyOnTransferOrders = 0;
+                objIN_ItemSite.QtyOnSO = 0;
+                objIN_ItemSite.QtyShipNotInv = 0;
+                objIN_ItemSite.StkItem = stkItem;
+                objIN_ItemSite.TotCost = 0;
+                objIN_ItemSite.LastPurchaseDate = DateTime.Now;
+
+                objIN_ItemSite.Crtd_DateTime = DateTime.Now;
+                objIN_ItemSite.Crtd_Prog = _screenNbr;
+                objIN_ItemSite.Crtd_User = Current.UserName;
+
+                objIN_ItemSite.LUpd_DateTime = DateTime.Now;
+                objIN_ItemSite.LUpd_Prog = _screenNbr;
+                objIN_ItemSite.LUpd_User = Current.UserName;
+                objIN_ItemSite.tstamp = new byte[0];
+
+                _db.IN_ItemSite.AddObject(objIN_ItemSite);
+
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
     }
 }

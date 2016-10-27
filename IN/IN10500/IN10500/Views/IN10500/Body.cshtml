@@ -170,7 +170,7 @@
             )
            , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
             .Items(
-                HQ.TextBox().ID("txtDescr").MarginSpec("5 0 0 0").Width(600).HQLangCode("DESCR").DataIndex("Descr").AllowBlank(false).MaxLength(250)                          
+                HQ.TextBox().ID("txtDescr").MarginSpec("5 0 0 0").Width(600).HQLangCode("DESCR").DataIndex("Descr").AllowBlank(false).MaxLength(250).EnforceMaxLength(true)                          
                     , X.Button().ID("btnLoad").Text(Util.GetLang("LoadData")).MarginSpec("5 0 0 115").Width(185).Icon(Icon.ArrowRefresh)
                                                                 .Listeners(p => p.Click.Fn = "btnLoad_Click")
             )           
@@ -209,7 +209,7 @@
             .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdIN_TagDetail');")
             .SortableColumns(false)
             .ColumnModel(
-                X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")//.Renderer("renderRowNumber")
+                X.RowNumbererColumn().MinWidth(20).Width(40).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")//.Renderer("renderRowNumber")
                 
                 , X.Column().Text(Util.GetLang("InvtID")).Width(100).DataIndex("InvtID")
                 .Editor(
