@@ -179,21 +179,27 @@ var stoIN_TagHeader_Load = function (sto) {
     App.frmMain.getForm().loadRecord(record);    
     if (!_isFirstTime) {
         if (App.frmMain.isValid()) {
-            App.cboBranchID.getValue(), App.cboSiteID.getValue(),
-            {
-                success: function (result) {
-                    if (result == '') {
-                        App.stoIN_TagDetail.reload();
-                    }
-                    else {
-                        HQ.message.show(2015070801, result, '', false);
+            if (!App.cboTagID.getValue()) {
+                App.direct.IN10500_pdCheckCreateIN_Tag(
+                App.cboBranchID.getValue(), App.cboSiteID.getValue(),
+                {
+                    success: function (result) {
+                        if (result == '') {
+                            App.stoIN_TagDetail.reload();
+                        }
+                        else {
+                            result = "<div style ='overflow: auto !important; max-height:400px !important'> " + result + " </div>";
+                            HQ.message.show(2015070801, result, '', false);
+                            HQ.common.showBusy(false);
+                        }
+                    },
+                    failure: function (result) {
                         HQ.common.showBusy(false);
                     }
-                },
-                failure: function (result) {
-                    HQ.common.showBusy(false);
-                }
-            };
+                });
+            } else {
+                App.stoIN_TagDetail.reload();
+            }
         } else {
             App.stoIN_TagDetail.removeAll();
             App.grdIN_TagDetail.view.refresh();
@@ -401,22 +407,27 @@ var btnLoad_Click = function () {
         }
         else {
             HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
-            App.direct.IN10500_pdCheckCreateIN_Tag(
-            App.cboBranchID.getValue(), App.cboSiteID.getValue(),
-            {
-                success: function (result) {
-                    if (result == '') {
-                        App.stoIN_TagDetail.reload();                        
-                    }
-                    else {
-                        HQ.message.show(2015070801, result, '', false);
-                        HQ.common.showBusy(false);
-                    }
-                },
-                failure: function (result) {
-                    HQ.common.showBusy(false);
-                }
-            });            
+            if (!App.cboTagID.getValue()) {
+                App.direct.IN10500_pdCheckCreateIN_Tag(
+                    App.cboBranchID.getValue(), App.cboSiteID.getValue(),
+                    {
+                        success: function (result) {
+                            if (result == '') {
+                                App.stoIN_TagDetail.reload();
+                            }
+                            else {
+                                result = "<div style ='overflow: auto !important; max-height:400px !important'> " + result + " </div>";                                
+                                HQ.message.show(2015070801, result, '', false);
+                                HQ.common.showBusy(false);
+                            }
+                        },
+                        failure: function (result) {
+                            HQ.common.showBusy(false);
+                        }
+                    });
+            } else {
+                App.stoIN_TagDetail.reload();
+            }
         }
     }
 };

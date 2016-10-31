@@ -63,11 +63,7 @@ namespace IN10500.Controllers
         [DirectMethod]
         public ActionResult IN10500_pdCheckCreateIN_Tag(string BranchID, string SiteID)
         {
-            var chkINTag = _db.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();
-            if (!string.IsNullOrWhiteSpace(chkINTag))
-            {
-                chkINTag = "<div style =' overflow: auto;'> " + chkINTag + " </div>"; 
-            }
+            var chkINTag = _db.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();            
             return this.Direct(chkINTag);
         }
 
