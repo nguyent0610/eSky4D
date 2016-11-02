@@ -1665,6 +1665,7 @@ namespace OM23800.Controllers
                 string routeID = data["RouteID"].PassNull();
                 string slsperID = data["SlsperID"].PassNull();
                 var headerRowIdx = 3;
+                int numberRow = 5000;
 
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
@@ -1792,7 +1793,7 @@ namespace OM23800.Controllers
 
                 CellArea area;
                 area.StartRow = 5;
-                area.EndRow = dtCustomer.Rows.Count + 5;
+                area.EndRow = numberRow;// dtCustomer.Rows.Count + 5;
                 area.StartColumn = allColumns.IndexOf("StartDate");
                 area.EndColumn = allColumns.IndexOf("StartDate");
                 validation.AddArea(area);
@@ -1810,7 +1811,7 @@ namespace OM23800.Controllers
 
                 area = new CellArea();
                 area.StartRow = 5;
-                area.EndRow = dtCustomer.Rows.Count + 5;
+                area.EndRow = numberRow;//  dtCustomer.Rows.Count + 5;
                 area.StartColumn = allColumns.IndexOf("EndDate");
                 area.EndColumn = allColumns.IndexOf("EndDate");
                 validation.AddArea(area);
@@ -1829,7 +1830,7 @@ namespace OM23800.Controllers
 
                 area = new CellArea();
                 area.StartRow = 5;
-                area.EndRow = dtCustomer.Rows.Count + 5;
+                area.EndRow = numberRow;//  dtCustomer.Rows.Count + 5;
                 area.StartColumn = allColumns.IndexOf("CustID");
                 area.EndColumn = allColumns.IndexOf("CustID");
                 validation.AddArea(area);
@@ -1848,7 +1849,7 @@ namespace OM23800.Controllers
 
                 area = new CellArea();
                 area.StartRow = 5;
-                area.EndRow = dtCustomer.Rows.Count + 5;
+                area.EndRow = numberRow;//  dtCustomer.Rows.Count + 5;
                 area.StartColumn = allColumns.IndexOf("SlsperID");
                 area.EndColumn = allColumns.IndexOf("SlsperID");
                 validation.AddArea(area);
@@ -1867,7 +1868,7 @@ namespace OM23800.Controllers
 
                 area = new CellArea();
                 area.StartRow = 5;
-                area.EndRow = dtCustomer.Rows.Count + 5;
+                area.EndRow = numberRow;//  dtCustomer.Rows.Count + 5;
                 area.StartColumn = allColumns.IndexOf("SalesRouteID");
                 area.EndColumn = allColumns.IndexOf("SalesRouteID");
                 validation.AddArea(area);
@@ -1885,7 +1886,7 @@ namespace OM23800.Controllers
 
                 area = new CellArea();
                 area.StartRow = 5;
-                area.EndRow = dtCustomer.Rows.Count + 5;
+                area.EndRow = numberRow;//  dtCustomer.Rows.Count + 5;
                 area.StartColumn = allColumns.IndexOf("SlsFreq");
                 area.EndColumn = allColumns.IndexOf("SlsFreq");
                 validation.AddArea(area);
@@ -1904,7 +1905,7 @@ namespace OM23800.Controllers
 
                 area = new CellArea();
                 area.StartRow = 5;
-                area.EndRow = dtCustomer.Rows.Count + 5;
+                area.EndRow = numberRow;// dtCustomer.Rows.Count + 5;
                 area.StartColumn = allColumns.IndexOf("WeekofVisit");
                 area.EndColumn = allColumns.IndexOf("WeekofVisit");
                 validation.AddArea(area);
@@ -1918,37 +1919,37 @@ namespace OM23800.Controllers
                 validation.Formula1 = formulaCheck;
                 area = new CellArea();
                 area.StartRow = 5;
-                area.EndRow = dtCustomer.Rows.Count + 5;
+                area.EndRow = numberRow;// dtCustomer.Rows.Count + 5;
                 area.StartColumn = allColumns.IndexOf("Mon");
                 area.EndColumn = allColumns.IndexOf("Sun");
                 validation.AddArea(area);
 
                 area = new CellArea();
                 area.StartRow = 5;
-                area.EndRow = dtCustomer.Rows.Count + 5;
+                area.EndRow = numberRow;//  dtCustomer.Rows.Count + 5;
                 area.StartColumn = allColumns.IndexOf("CustCancel");
                 area.EndColumn = allColumns.IndexOf("CustCancel");
                 validation.AddArea(area);
 
 
                 string formulaCustName = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AC,2,0)),\"\",VLOOKUP({0},AA:AC,2,0))", "B6");
-                SheetMCP.Cells[Getcell(allColumns.IndexOf("CustName")) + "6"].SetSharedFormula(formulaCustName, (dtCustomer.Rows.Count + 6), 1);
+                SheetMCP.Cells[Getcell(allColumns.IndexOf("CustName")) + "6"].SetSharedFormula(formulaCustName, numberRow, 1); // (dtCustomer.Rows.Count + 6)
 
 
                 string formulaCustAddr = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AC,3,0)),\"\",VLOOKUP({0},AA:AC,3,0))", "B6");
-                SheetMCP.Cells[Getcell(allColumns.IndexOf("Address")) + "6"].SetSharedFormula(formulaCustAddr, (dtCustomer.Rows.Count + 6), 1);
+                SheetMCP.Cells[Getcell(allColumns.IndexOf("Address")) + "6"].SetSharedFormula(formulaCustAddr, numberRow, 1);// (dtCustomer.Rows.Count + 6)
 
 
                 string formulaSalesName = string.Format("=IF(ISERROR(VLOOKUP({0},BA:BC,2,0)),\"\",VLOOKUP({0},BA:BC,2,0))", "E6");
-                SheetMCP.Cells[Getcell(allColumns.IndexOf("SlsName")) + "6"].SetSharedFormula(formulaSalesName, (dtCustomer.Rows.Count + 6), 1);
+                SheetMCP.Cells[Getcell(allColumns.IndexOf("SlsName")) + "6"].SetSharedFormula(formulaSalesName, numberRow, 1);// (dtCustomer.Rows.Count + 6)
 
 
                 string formulaRoute = string.Format("=IF(ISERROR(VLOOKUP({0},CA:CC,2,0)),\"\",VLOOKUP({0},CA:CC,2,0))", "R6");
-                SheetMCP.Cells[Getcell(allColumns.IndexOf("RouteName")) + "6"].SetSharedFormula(formulaRoute, (dtCustomer.Rows.Count + 6), 1);
+                SheetMCP.Cells[Getcell(allColumns.IndexOf("RouteName")) + "6"].SetSharedFormula(formulaRoute, numberRow, 1);// (dtCustomer.Rows.Count + 6)
 
 
                 string formulaSTT = "=IFERROR( IF(B6<>\"\",A5+1 & \"\",\"\"),1)";
-                SheetMCP.Cells["A6"].SetSharedFormula(formulaSTT, (dtCustomer.Rows.Count + 6), 1);
+                SheetMCP.Cells["A6"].SetSharedFormula(formulaSTT, numberRow, 1);// (dtCustomer.Rows.Count + 6)
 
 
 
@@ -1988,10 +1989,10 @@ namespace OM23800.Controllers
                 style.Font.Color = Color.Black;
                 style.HorizontalAlignment = TextAlignmentType.Left;
 
-                range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("StartDate")) + "5", Getcell(allColumns.IndexOf("StartDate")) + dtCustomer.Rows.Count + 5);
+                range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("StartDate")) + "5", Getcell(allColumns.IndexOf("StartDate")) + numberRow); //dtCustomer.Rows.Count + 5
                 range.SetStyle(style);
 
-                range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("EndDate")) + "5", Getcell(allColumns.IndexOf("EndDate")) + dtCustomer.Rows.Count + 5);
+                range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("EndDate")) + "5", Getcell(allColumns.IndexOf("EndDate")) + numberRow);//dtCustomer.Rows.Count + 5
                 range.SetStyle(style);
 
 
@@ -2000,7 +2001,7 @@ namespace OM23800.Controllers
                 style.Font.Color = Color.Black;
                 style.HorizontalAlignment = TextAlignmentType.Right;
 
-                range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("VisitSort")) + "5", Getcell(allColumns.IndexOf("VisitSort")) + dtCustomer.Rows.Count + 5);
+                range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("VisitSort")) + "5", Getcell(allColumns.IndexOf("VisitSort")) + numberRow);//dtCustomer.Rows.Count + 5
                 range.SetStyle(style);
 
 
@@ -2017,7 +2018,7 @@ namespace OM23800.Controllers
 
                 style = SheetMCP.Cells["B6"].GetStyle();
                 style.Number = 49;
-                range = SheetMCP.Cells.CreateRange("B6", "B1000000");
+                range = SheetMCP.Cells.CreateRange("B6", "B"+ numberRow);
                 range.SetStyle(style);
 
 
@@ -2693,6 +2694,7 @@ namespace OM23800.Controllers
                 range.ApplyStyle(style, flag);
                 
                 SheetMCP.Protect(ProtectionType.All);
+
                 #endregion
                 SheetMCP.AutoFitColumns();
 
