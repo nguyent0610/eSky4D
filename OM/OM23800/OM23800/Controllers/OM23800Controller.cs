@@ -1778,7 +1778,6 @@ namespace OM23800.Controllers
 
                 #endregion
 
-
                 #region formular
 
                 Validation validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
@@ -1954,6 +1953,7 @@ namespace OM23800.Controllers
 
 
                 #endregion
+
                 #region export data
                 pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
@@ -1980,6 +1980,7 @@ namespace OM23800.Controllers
                     }
                 }
                 #endregion
+
                 #region Fomat cell
 
                 style = SheetMCP.Cells[allColumns.IndexOf("StartDate")].GetStyle();
@@ -2011,6 +2012,14 @@ namespace OM23800.Controllers
 
                 range = SheetMCP.Cells.CreateRange("Z1", "ZZ" + (dtCustomer.Rows.Count + dtSales.Rows.Count + dtRoute.Rows.Count + 100));
                 range.ApplyStyle(style, flag);
+
+         
+
+                style = SheetMCP.Cells["B6"].GetStyle();
+                style.Number = 49;
+                range = SheetMCP.Cells.CreateRange("B6", "B1000000");
+                range.SetStyle(style);
+
 
 
                 #endregion
@@ -2075,6 +2084,8 @@ namespace OM23800.Controllers
                 string messageerror = string.Empty;
                 string messageduplicate = string.Empty;
                 string message = string.Empty;
+                string messageduplicatefile = string.Empty;
+
                 if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
                 {
 
@@ -2095,7 +2106,8 @@ namespace OM23800.Controllers
                         string strESTT = "";
                         DateTime startDate = DateTime.Now;
                         DateTime endDate = DateTime.Now;
-                       
+                        var lstOM_SalesRouteMasterImport = new List<OM_SalesRouteMasterImport>();
+
                         if (strEPJP.ToUpper().Trim() != pJPID.ToUpper().Trim() || BranchID != strEBanchID.ToUpper().Trim())
                         {
                             throw new MessageException(MessageType.Message, "201401221", "", new string[] { strEPJP, strEBanchID, pJPID, BranchID });
@@ -2200,70 +2212,82 @@ namespace OM23800.Controllers
                                 }
                                 catch
                                 {
-                                    messageDate += string.Format(Message.GetString("2016082906",null), (i + 1).ToString());
+                                    messageDate += string.Format(Message.GetString("2016082906", null), (i + 1).ToString());
                                     continue;
 
                                 }
+
                                 OM_SalesRouteMasterImport objImport = new OM_SalesRouteMasterImport();
                                 bool isNew = false;
-
-                                lstCustomer += strECustID + ";";
-                                if (_db.OM_SalesRouteMasterImport.Where(p => p.ID == id
-                                                                                    && p.BranchID == BranchID
-                                                                                     && p.PJPID == pJPID
-                                                                                      && p.SalesRouteID == strERouteID
-                                                                                      && p.CustID == strECustID
-                                                                                       && p.SlsPerID == strESlsperID).ToList().Count == 0)
+                                var recordExists = lstOM_SalesRouteMasterImport.FirstOrDefault(p => p.ID == id
+                                                                                                && p.BranchID == BranchID
+                                                                                                && p.PJPID == pJPID
+                                                                                                && p.SalesRouteID == strERouteID
+                                                                                                && p.CustID == strECustID
+                                                                                                && p.SlsPerID == strESlsperID);
+                                if (recordExists == null)
                                 {
-                                    objImport.ID = id;
-                                    objImport.BranchID = BranchID;
-                                    objImport.PJPID = pJPID;
-                                    objImport.SalesRouteID = strERouteID;
-                                    objImport.CustID = strECustID;
-                                    objImport.SlsPerID = strESlsperID;
-                                    objImport.StartDate = startDate;
-                                    objImport.EndDate = endDate; ;
-                                    objImport.SlsFreq = workSheet.Cells[i, 8].StringValue;//  dataArray.GetValue(i, 9).ToString().Trim().ToUpper();
-                                    objImport.SlsFreqType = "R";
-                                    objImport.WeekofVisit = workSheet.Cells[i, 9].StringValue;// dataArray.GetValue(i, 10).ToString().Trim().ToUpper();
-                                    objImport.Mon = workSheet.Cells[i, 10].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 11) == null ? false : dataArray.GetValue(i, 11).ToString().Trim().ToUpper() == "X" ? true : false;
-                                    objImport.Tue = workSheet.Cells[i, 11].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 12) == null ? false : dataArray.GetValue(i, 12).ToString().Trim().ToUpper() == "X" ? true : false;
-                                    objImport.Wed = workSheet.Cells[i, 12].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 13) == null ? false : dataArray.GetValue(i, 13).ToString().Trim().ToUpper() == "X" ? true : false;
-                                    objImport.Thu = workSheet.Cells[i, 13].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 14) == null ? false : dataArray.GetValue(i, 14).ToString().Trim().ToUpper() == "X" ? true : false;
-                                    objImport.Fri = workSheet.Cells[i, 14].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 15) == null ? false : dataArray.GetValue(i, 15).ToString().Trim().ToUpper() == "X" ? true : false;
-                                    objImport.Sat = workSheet.Cells[i, 15].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 16) == null ? false : dataArray.GetValue(i, 16).ToString().Trim().ToUpper() == "X" ? true : false;
-                                    objImport.Sun = workSheet.Cells[i, 16].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 17) == null ? false : dataArray.GetValue(i, 17).ToString().Trim().ToUpper() == "X" ? true : false;
-                                    try
+                                    lstCustomer += strECustID + ";";
+                                    if (_db.OM_SalesRouteMasterImport.Where(p => p.ID == id
+                                                                            && p.BranchID == BranchID
+                                                                            && p.PJPID == pJPID
+                                                                            && p.SalesRouteID == strERouteID
+                                                                            && p.CustID == strECustID
+                                                                            && p.SlsPerID == strESlsperID).ToList().Count == 0)
                                     {
-                                        objImport.VisitSort = workSheet.Cells[i, 19].IntValue;// dataArray.GetValue(i, 20) == null ? 0 : dataArray.GetValue(i, 20).ToString().Trim().ToUpper() == "" ? 0 : int.Parse(dataArray.GetValue(i, 20).ToString().Trim().ToUpper());
-                                    }
-                                    catch
-                                    {
-                                        objImport.VisitSort = 0;
-                                    }
-                                    objImport.LUpd_DateTime = objImport.LUpd_DateTime = DateTime.Now;
-                                    objImport.LUpd_Prog = objImport.LUpd_Prog = _screenName;
-                                    objImport.LUpd_User = objImport.LUpd_User = Current.UserName;
-                                    objImport.Crtd_DateTime = objImport.Crtd_DateTime = DateTime.Now;
-                                    objImport.Crtd_Prog = objImport.Crtd_Prog = _screenName;
-                                    objImport.Crtd_User = objImport.Crtd_User = Current.UserName;
-                                    if (isValidSelOMSalesRouteMaster(objImport, false))
-                                    {
-                                        if (workSheet.Cells[i, 20].StringValue != null && workSheet.Cells[i, 20].StringValue == "X")
+                                        objImport.ID = id;
+                                        objImport.BranchID = BranchID;
+                                        objImport.PJPID = pJPID;
+                                        objImport.SalesRouteID = strERouteID;
+                                        objImport.CustID = strECustID;
+                                        objImport.SlsPerID = strESlsperID;
+                                        objImport.StartDate = startDate;
+                                        objImport.EndDate = endDate; ;
+                                        objImport.SlsFreq = workSheet.Cells[i, 8].StringValue;//  dataArray.GetValue(i, 9).ToString().Trim().ToUpper();
+                                        objImport.SlsFreqType = "R";
+                                        objImport.WeekofVisit = workSheet.Cells[i, 9].StringValue;// dataArray.GetValue(i, 10).ToString().Trim().ToUpper();
+                                        objImport.Mon = workSheet.Cells[i, 10].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 11) == null ? false : dataArray.GetValue(i, 11).ToString().Trim().ToUpper() == "X" ? true : false;
+                                        objImport.Tue = workSheet.Cells[i, 11].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 12) == null ? false : dataArray.GetValue(i, 12).ToString().Trim().ToUpper() == "X" ? true : false;
+                                        objImport.Wed = workSheet.Cells[i, 12].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 13) == null ? false : dataArray.GetValue(i, 13).ToString().Trim().ToUpper() == "X" ? true : false;
+                                        objImport.Thu = workSheet.Cells[i, 13].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 14) == null ? false : dataArray.GetValue(i, 14).ToString().Trim().ToUpper() == "X" ? true : false;
+                                        objImport.Fri = workSheet.Cells[i, 14].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 15) == null ? false : dataArray.GetValue(i, 15).ToString().Trim().ToUpper() == "X" ? true : false;
+                                        objImport.Sat = workSheet.Cells[i, 15].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 16) == null ? false : dataArray.GetValue(i, 16).ToString().Trim().ToUpper() == "X" ? true : false;
+                                        objImport.Sun = workSheet.Cells[i, 16].StringValue.ToUpper() == "X" ? true : false; ;// dataArray.GetValue(i, 17) == null ? false : dataArray.GetValue(i, 17).ToString().Trim().ToUpper() == "X" ? true : false;
+                                        try
                                         {
-                                            objImport.Del = true;
-
+                                            objImport.VisitSort = workSheet.Cells[i, 19].IntValue;// dataArray.GetValue(i, 20) == null ? 0 : dataArray.GetValue(i, 20).ToString().Trim().ToUpper() == "" ? 0 : int.Parse(dataArray.GetValue(i, 20).ToString().Trim().ToUpper());
                                         }
-                                        _db.OM_SalesRouteMasterImport.AddObject(objImport);
-                                    }
-                                    else
-                                    {
-                                        messageerror += (i + 1).ToString() + ",";
-                                        //strtmpError += "   STT: " + strESTT + "Error: Dữ liệu không hợp lệ" + "\r";
-                                    }
+                                        catch
+                                        {
+                                            objImport.VisitSort = 0;
+                                        }
+                                        objImport.LUpd_DateTime = objImport.LUpd_DateTime = DateTime.Now;
+                                        objImport.LUpd_Prog = objImport.LUpd_Prog = _screenName;
+                                        objImport.LUpd_User = objImport.LUpd_User = Current.UserName;
+                                        objImport.Crtd_DateTime = objImport.Crtd_DateTime = DateTime.Now;
+                                        objImport.Crtd_Prog = objImport.Crtd_Prog = _screenName;
+                                        objImport.Crtd_User = objImport.Crtd_User = Current.UserName;
+                                        if (isValidSelOMSalesRouteMaster(objImport, false))
+                                        {
+                                            if (workSheet.Cells[i, 20].StringValue != null && workSheet.Cells[i, 20].StringValue == "X")
+                                            {
+                                                objImport.Del = true;
 
+                                            }
+                                            _db.OM_SalesRouteMasterImport.AddObject(objImport);
+                                            lstOM_SalesRouteMasterImport.Add(objImport);
+                                        }
+                                        else
+                                        {
+                                            messageerror += (i + 1).ToString() + ",";
+                                            //strtmpError += "   STT: " + strESTT + "Error: Dữ liệu không hợp lệ" + "\r";
+                                        }
+
+                                    }
+                                    else messageduplicate += (i + 1).ToString() + ",";  //strtmpError += "   STT: " + strESTT + "Error: Dữ liệu bi trùng" + "\r";
                                 }
-                                else messageduplicate += (i + 1).ToString() + ",";  //strtmpError += "   STT: " + strESTT + "Error: Dữ liệu bi trùng" + "\r";
+                                else
+                                    messageduplicatefile += (i + 1).ToString() + ",";
                             }
                         }
 
@@ -2300,6 +2324,7 @@ namespace OM23800.Controllers
                         message += messagestrERouteID == "" ? "" : string.Format(Message.GetString("2016082912", null), messagestrERouteID, workSheet.Cells[3, 17].StringValue);
                         message += messageerror == "" ? "" : string.Format(Message.GetString("2016082913", null), messageerror);
                         message += messageduplicate == "" ? "" : string.Format(Message.GetString("2016082903", null), messageduplicate);
+                        message += messageduplicatefile == "" ? "" : string.Format(Message.GetString("2016082903", null), messageduplicatefile);
                         message += errorESlsperID == "" ? "" : string.Format(Message.GetString("2016082904", null), errorESlsperID);
                         message += errorERouteID == "" ? "" : string.Format(Message.GetString("2016082905", null), errorERouteID);
                         Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
