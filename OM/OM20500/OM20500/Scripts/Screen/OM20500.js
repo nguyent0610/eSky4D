@@ -378,8 +378,6 @@ var Event = {
     }
 };
 
-
-
 var save = function () {
     App.stoLotTrans.clearFilter();
     if (App.frmMain.isValid()) {
@@ -398,13 +396,28 @@ var save = function () {
                 //isAddStock: App.chkAddStock.getValue()
             },
             success: function (msg, data) {
-                HQ.message.process(msg, data, true);
-                Event.Form.btnLoad_click();
                 App.winOrder.hide();
+                HQ.message.process(msg, data, true);
+                Event.Form.btnLoad_click();                
             },
             failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
                 App.winOrder.hide();
+                HQ.message.process(msg, data, true);
+                if (this.result.parm && this.result.parm[1] != '') {
+                    var orders = this.result.parm[1].split(',');
+                    for (var i = 0; i < orders.length; i++) {
+                        var orderNbr = orders[i];
+                        var record = HQ.store.findRecord(App.stoOrder, ['OrderNbr'], [orderNbr]);
+                        if (record) {
+                            App.stoOrder.remove(record);
+                        }
+                        var recordDet = HQ.store.findRecord(App.stoDet, ['OrderNbr'], [orderNbr]);
+                        if (recordDet) {
+                            App.stoDet.clearData();
+                            App.grdDet.view.refresh();
+                        }
+                    }                    
+                }                
             }
         });
     }

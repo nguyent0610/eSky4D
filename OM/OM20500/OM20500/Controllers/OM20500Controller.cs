@@ -48,7 +48,7 @@ namespace OM20500.Controllers
             DateTime startDate, DateTime endDate)
         {
             _db.CommandTimeout = int.MaxValue;
-            var orders = _db.OM20500_pgOrder(Current.UserName, Current.CpnyID,Current.LangID, branchID, slsperID,custID, status, startDate,endDate).ToList();
+            var orders = _db.OM20500_pgOrder(branchID, slsperID,custID, status, startDate,endDate, Current.UserName, Current.CpnyID,Current.LangID).ToList();
             return this.Store(orders);
         }
         public ActionResult GetCloseOrder(string branchID,
@@ -64,19 +64,19 @@ namespace OM20500.Controllers
             DateTime startDate, DateTime endDate)
         {
             _db.CommandTimeout = int.MaxValue;
-            var dets = _db.OM20500_pgDet(Current.UserName, Current.CpnyID, Current.LangID, branchID, slsperID, custID, status, startDate, endDate).ToList();
+            var dets = _db.OM20500_pgDet(branchID, slsperID, custID, status, startDate, endDate, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(dets);
         }
         public ActionResult GetHisOrd(string branchID, string orderNbr)
         {
             _db.CommandTimeout = int.MaxValue;
-            var hisOrders = _db.OM20500_pgHistoryOrd(Current.UserName, Current.CpnyID, Current.LangID, branchID, orderNbr).ToList();
+            var hisOrders = _db.OM20500_pgHistoryOrd(branchID, orderNbr, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(hisOrders);
         }
         public ActionResult GetHisDet(string branchID, string orderNbr)
         {
             _db.CommandTimeout = int.MaxValue;
-            var hisDets = _db.OM20500_pgHisDet(Current.UserName, Current.CpnyID, Current.LangID, branchID, orderNbr).ToList();
+            var hisDets = _db.OM20500_pgHisDet(branchID, orderNbr, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(hisDets);
         }
         public ActionResult GetItemSite(string invtID, string siteID)
@@ -90,7 +90,7 @@ namespace OM20500.Controllers
             DateTime startDate, DateTime endDate)
         {
             _db.CommandTimeout = int.MaxValue;
-            var lot = _db.OM20500_pgLotTrans(Current.UserName, Current.CpnyID, Current.LangID, branchID, slsperID, custID, status, startDate, endDate).ToList();
+            var lot = _db.OM20500_pgLotTrans(branchID, slsperID, custID, status, startDate, endDate, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lot);
         }
         #region DataProcess
@@ -117,21 +117,32 @@ namespace OM20500.Controllers
                 string message = "";
                 string errorDate = string.Empty;
                 string errorAmt = string.Empty;
-                var isCheck = false;
-                var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM20500CheckApprove");
-                if (objConfig != null && objConfig.IntVal == 1)
+                var isCheckShipDate = false;
+                var isCheckARDocDate = false;
+                var orderSuccess = string.Empty;
+                var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM20500CHECKAPPROVE");
+                if (objConfig != null)
                 {
-                    isCheck = true;
+                    isCheckShipDate =  objConfig.IntVal == 1 ? true : false;
+                    isCheckARDocDate = objConfig.FloatVal == 1.0 ? true : false;
                 }
+                bool isCheckTotAmt = false;
+                var objConfigTotAmt = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM20500CHECKTOTAMT");
+                if (objConfigTotAmt != null && objConfigTotAmt.IntVal == 1)
+                {
+                    isCheckTotAmt = true;
+                }
+                
                 foreach (var objHeader in lstOrd)
                 {
-                    if (isCheck && (objHeader.OrderDate.ToDateShort() > dteShipDate || objHeader.OrderDate.ToDateShort() > dteARDocDate))
+                    // Check ShipDate & DocDate vs OrderDate
+                    if ((isCheckShipDate && objHeader.OrderDate.ToDateShort() > dteShipDate) || (isCheckARDocDate && objHeader.OrderDate.ToDateShort() > dteARDocDate))
                     {
                         errorDate += objHeader.OrderNbr + ", ";                        
                         continue;
                     }
                     var lstDetOrNbr = lstDet.Where(p => p.OrderNbr == objHeader.OrderNbr).ToList();
-                    if (lstDetOrNbr.Sum(x => x.LineAmt) == 0)
+                    if (isCheckTotAmt && lstDetOrNbr.Sum(x => x.LineAmt) == 0)
                     {
                         errorAmt += objHeader.OrderNbr + ", ";
                         continue;
@@ -156,13 +167,28 @@ namespace OM20500.Controllers
                         
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
                         if (!om.OM20500_Release(objHeader.BranchID, objHeader.OrderNbr, dicRef, Delivery, dteShipDate, dteARDocDate, objHeader.IsAddStock, dicRefLot))
-                        {
-                            
+                        {                            
                             dal.RollbackTrans();
                         }
                         else
-                        {
+                        {                            
                             dal.CommitTrans();
+                            var obj = _db.OM_PDASalesOrd.Where(x => x.BranchID == objHeader.BranchID && x.OrderNbr == objHeader.OrderNbr).FirstOrDefault();
+                            if (obj != null)
+                            {
+                                obj.LUpd_DateTime = DateTime.Now;
+                                obj.LUpd_Prog = _screenNbr;
+                                obj.LUpd_User = Current.UserName;
+                                var lstPDADet = _db.OM_PDASalesOrdDet.Where(x => x.BranchID == objHeader.BranchID && x.OrderNbr == objHeader.OrderNbr).ToList();
+                                for (int k = 0; k < lstPDADet.Count; k++)
+                                {
+                                    lstPDADet[k].LUpd_Datetime = DateTime.Now;
+                                    lstPDADet[k].LUpd_Prog = _screenNbr;
+                                    lstPDADet[k].LUpd_User = Current.UserName;
+                                }
+                                _db.SaveChanges();
+                            }
+                            orderSuccess += objHeader.OrderNbr + ",";
                         }
                     }
                     catch (Exception ex)
@@ -199,7 +225,9 @@ namespace OM20500.Controllers
                         }
                         message += GetMess(2016100302, new string[] { errorAmt });
                     }
-                    throw new MessageException("20410", parm: new[] { message });
+                    orderSuccess = orderSuccess.TrimEnd(',');
+                    throw new MessageException("20410", parm: new[] { message, orderSuccess });
+                    //return Json(new { success = false, type = "error", msgCode = "20410", param = message, OrderSuccess = orderSuccess }); //
                 }
                 return Util.CreateMessage(MessageProcess.Process);
             }
@@ -245,6 +273,9 @@ namespace OM20500.Controllers
                     if (order != null)
                     {
                         order.Status = _closePOStatus;
+                        order.LUpd_DateTime = DateTime.Now;
+                        order.LUpd_Prog = _screenNbr;
+                        order.LUpd_User = Current.UserName;
                     }
                     else
                     {
