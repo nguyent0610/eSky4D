@@ -956,9 +956,8 @@ namespace INProcess
                     {
                         lineRef = "0" + lineRef;
                     }
-                    if (objItem.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID")))
+                    if (!objItem.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID")))
                     {
-                        
                         objItem.QtyOnHand = objItem.QtyOnHand + tagDetail.Double("OffsetEAQty");
                         objItem.QtyAvail = objItem.QtyAvail + tagDetail.Double("OffsetEAQty");
                         //objItem.QtyOnHand += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
@@ -968,7 +967,10 @@ namespace INProcess
                         objItem.LUpd_Prog = tagDetail.String("LUpd_Prog");
                         objItem.LUpd_User = tagDetail.String("LUpd_User");
                         objItem.Update();
+                        
                     }
+                   
+
                     newTran.UnitDesc = objInvt.StkUnit;
                     // newTran.Qty += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;                    
                     newTran.CnvFact = 1;
@@ -1064,29 +1066,39 @@ namespace INProcess
                             {
                                 var qty = Math.Abs(tagDetail.Double("OffsetEAQty"));
                                 DataView dv = objItemLot.GetAll(siteID, objItem.InvtID, "%").DefaultView;
-                                dv.Sort = "ExpDate DESC";
+                                dv.Sort = "ExpDate ASC";
                                 DataTable lstLotTran = dv.ToTable();
+                                var valTran = 0.0;
                                 foreach (DataRow itmLot in lstLotTran.Rows)
                                 {
-                                    var qtyOnhand = itmLot.Double("QtyOnHand");
 
+                                }
+                                foreach (DataRow itmLot in lstLotTran.Rows)
+                                {
+                                    var qtyAvail = itmLot.Double("QtyAvail");
+                                    if (qtyAvail <= 0)
+                                    {
+                                        continue;
+                                    }
                                     objItemLot.GetByKey(itmLot.String("SiteID"), itmLot.String("InvtID"), itmLot.String("LotSerNbr"));
                                     objItemLot.LUpd_DateTime = DateTime.Now;
                                     objItemLot.LUpd_Prog = Prog;
                                     objItemLot.LUpd_User = User;
-                                    if (Math.Abs(qty) > itmLot.Double("QtyOnHand"))
+                                    if (Math.Abs(qty) > qtyAvail)
                                     {
-                                        objItemLot.QtyOnHand = 0;
-                                        objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail - qtyOnhand, 0);                                        
+                                        valTran = qtyAvail;
+                                        objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand - valTran, 0);
+                                        objItemLot.QtyAvail = 0;
                                         objItemLot.Cost = 0;
                                         objItemLot.Update();
 
-                                        qty = qty - qtyOnhand;
+                                        qty = qty - qtyAvail;
                                     }
                                     else
                                     {
-                                        objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + tagDetail.Double("OffsetEAQty"), 0);
-                                        objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + tagDetail.Double("OffsetEAQty"), 0);
+                                        valTran = qty;
+                                        objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand - valTran, 0);
+                                        objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail - valTran, 0);
                                         
                                         objItemLot.Cost = objItem.TotCost * Math.Abs(objItemLot.QtyOnHand);
                                         objItemLot.Update();
@@ -1106,7 +1118,7 @@ namespace INProcess
                                         InvtMult = newTran.InvtMult,
                                         KitID = "", // ko bit
                                         MfgrLotSerNbr = "",
-                                        Qty = qtyOnhand < tagDetail.Double("OffsetEAQty") ? qtyOnhand : tagDetail.Double("OffsetEAQty"),
+                                        Qty = -valTran,
                                         SiteID = newTran.SiteID,
                                         ToSiteID = newTran.ToSiteID,
                                         TranDate = newTran.TranDate,
