@@ -17,6 +17,7 @@ using HQ.eSkyFramework.HQControl;
 using System.Drawing;
 using Microsoft.Office.Interop.Excel;
 using Aspose.Cells;
+using System.Runtime.InteropServices;
 namespace IF30100.Controllers
 {
     [DirectController]
@@ -394,14 +395,15 @@ namespace IF30100.Controllers
 
                 SheetData.AutoFitColumns();
 
-                
-
+                string fileName = Guid.NewGuid().ToString() + ".xlsx";
+                string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
+             
                 //SheetPOSuggest.Protect(ProtectionType.Objects);
-                workbook.Save(stream, SaveFormat.Xlsx);
-                stream.Flush();
-                stream.Position = 0;
+                workbook.Save(fileName, SaveFormat.Xlsx);
 
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsx" };
+                return Json(new { success = true, id = fileName, name = name + ".xlsx" }, JsonRequestBehavior.AllowGet);
+
+                //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsx" };
 
             }
             catch (Exception ex)
@@ -424,9 +426,9 @@ namespace IF30100.Controllers
             Microsoft.Office.Interop.Excel.Workbook excelWorkBook = null;
             Microsoft.Office.Interop.Excel.Worksheet targetSheet = null;
             Microsoft.Office.Interop.Excel.Worksheet dataSheet = null;
-            PivotTable pivotTable;
-            Microsoft.Office.Interop.Excel.Range pivotData;
-            Microsoft.Office.Interop.Excel.Range pivotDestination;
+            PivotTable pivotTable = null;
+            Microsoft.Office.Interop.Excel.Range pivotData = null;
+            Microsoft.Office.Interop.Excel.Range pivotDestination = null;
             string fileName = "";
            
             try
@@ -568,6 +570,11 @@ namespace IF30100.Controllers
                 if (dt.Rows.Count == 0)
                 {
                     Util.AppendLog(ref _logMessage, "20100101", "");
+                    return _logMessage;
+                }
+                if (dt.Rows.Count > 999999)
+                {
+                    Util.AppendLog(ref _logMessage, "201610061", "");
                     return _logMessage;
                 }
 
@@ -952,35 +959,26 @@ namespace IF30100.Controllers
                         start++;
                     }
                 }
-                
+
+                fileName =  Guid.NewGuid().ToString() + ".xlsb";
                 string path = Server.MapPath("~/ExportPivot");
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
-
-                fileName = path + @"\" + Guid.NewGuid().ToString() + ".xlsb";
+                string fullName =   path + @"\" + fileName;
+             
 
                 targetSheet.Protect("Hqs0ft20062099", true, false, true, true, true, true, true, true, true, true, true, true, true, true, true);
                 excelApplication.DisplayAlerts = false;
 
 
-                excelWorkBook.SaveAs(fileName, XlFileFormat.xlExcel12, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange);
-                excelWorkBook.Close(true, Type.Missing, Type.Missing);
-                excelApplication.Quit();
-                excelApplication = null;
+                excelWorkBook.SaveAs(fullName, XlFileFormat.xlExcel12, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange);
+              
+                //Stream stream = new MemoryStream(buffer);
+                //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsb" };
 
-                byte[] buffer = new byte[1];
-                using (FileStream fs = new FileStream(fileName, FileMode.Open,
-                                   FileAccess.Read, FileShare.Read))
-                {
-                    buffer = new byte[fs.Length];
-                    fs.Read(buffer, 0, (int)fs.Length);
-
-                }
-
-                Stream stream = new MemoryStream(buffer);
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsb" };
+                return Json(new { success = true, id = fileName, name = name + ".xlsb" }, JsonRequestBehavior.AllowGet);
 
             }
             catch (Exception ex)
@@ -1004,22 +1002,66 @@ namespace IF30100.Controllers
             }
             finally
             {
+                if (excelWorkBook != null)
+                {
+                    excelWorkBook.Close(Type.Missing, Type.Missing, Type.Missing);
+                    Marshal.FinalReleaseComObject(excelWorkBook);
+                }
 
-                if (System.IO.File.Exists(fileName))
-                    System.IO.File.Delete(fileName);
+                if (excelApplication != null)
+                {
+                    excelApplication.Application.Quit();
+                    excelApplication.Quit();
+                    Marshal.FinalReleaseComObject(excelApplication);
 
+                }
                 pivotDestination = null;
                 pivotData = null;
                 pivotTable = null;
                 targetSheet = null;
-                if (excelWorkBook != null)
-                    excelWorkBook = null;
-                if (excelApplication != null)
-                {
-                    excelApplication.Quit();
-                    excelApplication = null;
-                }
+                dataSheet = null;
+                excelWorkBook = null;
+                excelApplication = null;
+
+                  GC.Collect();
+                GC.WaitForPendingFinalizers();
+
             }
+        }
+        public ActionResult DownloadFile(string name, string id)
+        {
+            string path = Server.MapPath("~/ExportPivot");
+            string fullName = path + @"\" + id;
+            if (System.IO.File.Exists(fullName))
+            {
+                try
+                {
+                    byte[] buffer = new byte[1];
+                    using (FileStream fs = new FileStream(fullName, FileMode.Open,
+                                       FileAccess.Read, FileShare.Read))
+                    {
+                        buffer = new byte[fs.Length];
+                        fs.Read(buffer, 0, (int)fs.Length);
+
+                    }
+
+                    Stream stream = new MemoryStream(buffer);
+                    return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name };
+
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+                finally
+                {
+                    System.IO.File.Delete(fullName);
+                }
+               
+            }
+            return new HttpNotFoundResult();
+           
         }
         //public ActionResult ExportPivot(FormCollection data, string view, string name)
         //{

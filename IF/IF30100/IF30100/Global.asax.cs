@@ -38,18 +38,18 @@ namespace IF30100
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";
-            Current.DBSys = "eBiz4DCloudPVNSys";
+            Current.Server = "EARTHSVR\\SQL2014";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = "JFV_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IF30100"] = acc;
-            Session["DBApp"] = Current.DBApp = "eBiz4DCloudPVNApp";
+            Session["DBApp"] = Current.DBApp = "JFV_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "en";
-            Session["LangID"] = 0;
+            Session["Language"] = Current.Language = "vi";
+            Session["LangID"] = 1;
         }
     }
 }

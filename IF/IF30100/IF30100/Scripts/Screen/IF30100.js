@@ -196,10 +196,10 @@ var btnExport_Click = function () {
     if (HQ.form.checkRequirePass(App.frmMain)) {
        
         App.frmMain.submit({
-            //waitMsg: HQ.common.getLang("Exporting"),
+            waitMsg: HQ.common.getLang("Exporting"),
             url: App.cboType.getValue()=='E' ? 'IF30100/Export':'IF30100/ExportPivot',
             type: 'POST',
-            timeout: 1000000,
+            timeout: 2000000,
             clientValidation: false,
             params: {
                 lstDet: Ext.encode(App.stoDet.getRecordsValues()),
@@ -208,6 +208,10 @@ var btnExport_Click = function () {
                 data:getParm()
             },
             success: function (msg, data) {
+            	if(!Ext.isEmpty(data.result.name)){
+        		  	window.location = 'IF30100/DownloadFile?name=' + data.result.name + '&id=' + data.result.id;
+            	}
+              
                 HQ.message.process(msg, data, true);
             },
             failure: function (msg, data) {
