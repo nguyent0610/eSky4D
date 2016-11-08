@@ -39,13 +39,13 @@ namespace SA02400
             Current.FormatDate = "DD-MM-yyyy";
             Current.Authorize = false;
             Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eBiz4DCloudSysKAO";//ConfigurationManager.AppSettings["DBSys"].ToString(); eSky4DSys
+            Current.DBSys = "ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString(); eSky4DSys
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["SA00900"] = acc;
-            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppKAO";// "eBiz4DWebApp"; eSky4DApp
+            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";// "eBiz4DWebApp"; eSky4DApp
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "18510580";
             Session["Language"] = Current.Language = "vi";
