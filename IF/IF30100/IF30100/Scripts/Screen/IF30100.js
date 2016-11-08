@@ -8,7 +8,7 @@ var stoDet_Load = function (store, records, success) {
     HQ.isChange = HQ.store.isChange(store);
 }
 var stoDet_BeforeLoad  = function (store, records, success) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
 }
 var stoReport_Load = function () {
     if (App.cboReport.store.data.items.length > 0) {
@@ -18,8 +18,9 @@ var stoReport_Load = function () {
 var menuClick = function (command) {
     switch (command) {
         case "refresh":           
-            HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+            HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
             App.grdDet.getStore().reload();
+            App.lblResult.setText('');
             break;
 
     }
@@ -141,7 +142,7 @@ var cboType_Change = function (sender, newValue, oldValue) {
         } else {
             App.grdDet.hide();
             App.pnlFilter.show();
-          
+
         }
         //App.btnTemplate.show();
         App.pnlFilterHeader.hide();
@@ -153,8 +154,9 @@ var cboType_Change = function (sender, newValue, oldValue) {
         App.cboReport.events['change'].resume();
         App.cboReport.store.reload();
     }
-   
-}
+
+};
+
 var cboReport_Change = function (sender, newValue, oldValue) {
     HQ.parm = [];
     if (sender.valueModels != null ) {
@@ -192,57 +194,118 @@ var cboReport_Change = function (sender, newValue, oldValue) {
 var btnImport_Click = function (c, e) {
     
 };
+
+var checkGrid = function (store, field) {
+    var count = 0;
+    var allRecords = store.snapshot || store.allData || store.data;
+    allRecords.each(function (record) {
+        if (record.data[field]) {
+            count++;
+            return false;
+        }
+    });
+    if (count > 0)
+        return true;
+    else
+        return false;
+};
+
+
 var btnExport_Click = function () {
-    if (HQ.form.checkRequirePass(App.frmMain)) {
-       
-        App.frmMain.submit({
-            waitMsg: HQ.common.getLang("Exporting"),
-            url: App.cboType.getValue()=='E' ? 'IF30100/Export':'IF30100/ExportPivot',
-            type: 'POST',
-            timeout: 2000000,
-            clientValidation: false,
-            params: {
-                lstDet: Ext.encode(App.stoDet.getRecordsValues()),
-                view: App.cboReport.valueModels[0].data.ReportView,
-                name: App.cboReport.valueModels[0].data.ReportName,
-                data:getParm()
-            },
-            success: function (msg, data) {
-            	if(!Ext.isEmpty(data.result.name)){
-        		  	window.location = 'IF30100/DownloadFile?name=' + data.result.name + '&id=' + data.result.id;
-            	}
-              
-                HQ.message.process(msg, data, true);
-            },
-            failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
-            }
-        });
+    if (checkGrid(App.stoDet, 'Checked') == false) {
+        HQ.message.show(2016110710);
+    } else {
+        if (HQ.form.checkRequirePass(App.frmMain)) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang("Exporting"),
+                url: App.cboType.getValue() == 'E' ? 'IF30100/Export' : 'IF30100/ExportPivot',
+                type: 'POST',
+                timeout: 2000000,
+                clientValidation: false,
+                params: {
+                    lstDet: Ext.encode(App.stoDet.getRecordsValues()),
+                    view: App.cboReport.valueModels[0].data.ReportView,
+                    name: App.cboReport.valueModels[0].data.ReportName,
+                    proc: App.lblResult.getText(),
+                    data: getParm()
+                },
+                success: function (msg, data) {
+                    if (!Ext.isEmpty(data.result.name)) {
+                        window.location = 'IF30100/DownloadFile?name=' + data.result.name + '&id=' + data.result.id;
+                    }
+
+                    HQ.message.process(msg, data, true);
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
     }
 };
 
 var btnTemplate_Click = function () {
     App.winTemplate.show();
-}
+};
+
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
     //HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
+
 var colCheck_Header_Change = function (value) {
     if (value) {
         App.stoDet.suspendEvents();
-        App.stoDet.each(function (item) {              
-            item.set("Checked", value.checked);           
+        App.stoDet.each(function (item) {
+            item.set("Checked", value.checked);
         });
         App.stoDet.resumeEvents();
         App.grdDet.view.refresh();
     }
-}
+};
+
 var frmMain_BoxReady = function () {
     if (HQ.screenNbr != 'IF30100') {
         App.cboType.hide();
         App.grdDet.hide();
     }
     App.cboReport.store.addListener('load', stoReport_Load);
+};
 
-}
+
+var grdDet_Edit = function (item, e) {
+    if (App.cboReport.valueModels != null && App.cboReport.valueModels.length > 0) {
+        getWhere(App.cboReport.valueModels[0].data.ReportView);
+    }
+};
+
+var getWhere = function (view) {
+    var select = '';
+    var param = '';
+    var proc = '';
+    var store = App.stoDet;
+    var allRecords = store.snapshot || store.allData || store.data;
+    store.suspendEvents();
+    allRecords.each(function (record) {
+        if (record.data.Checked == true) {
+            select += record.data.Column_Name + ",";
+            if (record.data.Operator.toUpperCase().trim() == "BETWEEN") {
+                param += record.data.Column_Name + " BETWEEN " + (record.data.Data_Type.toUpperCase() == "NVARCHAR" ? "N'" : "'") + record.data.Value1 + "' AND " + (record.data.Data_Type.toUpperCase() == "NVARCHAR" ? "N'" : "'") + record.data.Value2 + "' AND ";
+            }
+            else if (record.data.Operator.toUpperCase().trim() == "AND") {
+                param += record.data.Column_Name + " = " + (record.data.Data_Type.toUpperCase() == "NVARCHAR" ? "N'" : "'") + record.data.Value1 + "' AND " + record.data.Column_Name + " = " + (record.data.Data_Type.toUpperCase() == "NVARCHAR" ? "N'" : "'") + record.data.Value2 + "' AND ";
+            }
+            else if (record.data.Operator.toUpperCase().trim() == "OR") {
+                param += record.data.Column_Name + " = " + (record.data.Data_Type.toUpperCase() == "NVARCHAR" ? "N'" : "'") + record.data.Value1 + "' OR " + record.data.Column_Name + " = " + (record.data.Data_Type.toUpperCase() == "NVARCHAR" ? "N'" : "'") + record.data.Value2 + "' AND ";
+            }
+            else if (record.data.Operator.toUpperCase().trim() == "IN") {
+                param += record.data.Column_Name + " IN('" + record.data.Value1.replace(",", "','") + "') AND ";
+            }
+            else if(record.data.Operator) param += record.data.Column_Name + " " + record.data.Operator + " " + (record.data.Data_Type.toUpperCase() == "NVARCHAR" ? "N'" : "'") + record.data.Value1 + "' AND ";
+        }
+    });
+    store.resumeEvents();
+    param = param.length > 3 ? " WHERE " + param.substring(0, param.length - 4) : param;
+    proc = "SELECT " + select.replace(/(^,)|(,$)/g, "") + " FROM " + view + param;
+    App.lblResult.setText(proc);
+};

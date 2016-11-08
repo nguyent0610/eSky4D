@@ -143,16 +143,18 @@
 
             )
             
-            , X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Fit).Items(
+            , X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Border)
+            .Items(
                 X.Panel().ID("pnlFilter").Hidden(true).Layout(LayoutType.Border).Title(Util.GetLang("Parameter"))
                 .Items(
                     X.Panel().ID("pnlFilterHeader").BodyStyle("padding:20px 10px 10px 50px;").Border(false).Region(Region.North).Layout(LayoutType.VBox)
                     , X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Fit)
                     .Items(X.TabPanel().ID("tabFilterGrid"))
                 )
-                
-                , X.GridPanel().ID("grdDet")
-                .MarginSpec("3 0 0 0")
+                , X.Panel().Region(Region.Center).Layout(LayoutType.Border).Flex(6)
+                .Items(
+                X.GridPanel().ID("grdDet")
+                .MarginSpec("3 0 0 0").Region(Region.Center).Flex(1)
                 .Border(true).BorderSpec("1 0 0 0")
                 .RowLines(true)
                 .ColumnLines(true)
@@ -201,10 +203,14 @@
                 )
                 .SelectionModel(X.RowSelectionModel().ID("smlPlanDetail").Mode(SelectionMode.Single))
                 .View(X.GridView().TrackOver(false))
-                .Plugins(X.CellEditing().ClicksToEdit(1))
-                .Listeners(ls =>{
-                            //ls.ValidateEdit.Fn = "grdDet_ValidateEdit";
-                })
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.Edit.Fn = "grdDet_Edit";
+                        })
+                )
                 .Features(
                     X.GridFilters()
                     .Local(true)
@@ -216,6 +222,11 @@
                         X.StringFilter().DataIndex("Value2")
 
                     )
+                )
+               )
+                , X.Panel().Region(Region.South).Layout(LayoutType.Border).Flex(1)
+                .Items(
+                    HQ.Label().ID("lblResult").Flex(1)
                 )
             )
         )

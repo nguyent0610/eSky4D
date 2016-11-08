@@ -18,6 +18,7 @@ using System.Drawing;
 using Microsoft.Office.Interop.Excel;
 using Aspose.Cells;
 using System.Runtime.InteropServices;
+using System.Globalization;
 namespace IF30100.Controllers
 {
     [DirectController]
@@ -36,6 +37,7 @@ namespace IF30100.Controllers
         private string _branchID = "";
         IF30100Entities _db = Util.CreateObjectContext<IF30100Entities>(false);
         private JsonResult _logMessage;
+
         public ActionResult Index(string screenNbr)
         {
             if (screenNbr.PassNull() != string.Empty)
@@ -46,11 +48,13 @@ namespace IF30100.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
+
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
@@ -81,6 +85,7 @@ namespace IF30100.Controllers
         {
             return this.Store(_db.IF30100_pgData(view).ToList());
         }
+
         [DirectMethod]
         public ActionResult IF30100Filter(string reportNbr)
         {
@@ -341,55 +346,97 @@ namespace IF30100.Controllers
             }
             return this.Direct();
         }
+
+        private void SetCellValueGrid(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
+        {
+            c.PutValue(" " + lang);
+            var style = c.GetStyle();
+            style.Number = 49;
+            style.Font.IsBold = true;
+            style.Font.Size = 10;
+            style.Font.Color = Color.Black;
+            style.HorizontalAlignment = alignH;
+            style.VerticalAlignment = alignV;
+            c.SetStyle(style);
+            
+        }
+
         [HttpPost]
-        public ActionResult Export(FormCollection data, string view, string name)
+        public ActionResult Export(FormCollection data, string view, string name, string proc)
         {
             try
             {
-                string select = "";
-                string param = "";
-                string proc="";
-                var detHandler = new StoreDataHandler(data["lstDet"]);
-                var lstDet = detHandler.ObjectData<IF30100_pgData_Result>().ToList();
-                foreach(var obj in lstDet)
-                {
-                    select += obj.Checked == true ? obj.Column_Name + "," : "";
-                    if (obj.Operator.PassNull() != "")
-                    {
-                        if (obj.Operator.ToUpper().Trim() == "Between".ToUpper())
-                        {
-                            param += obj.Column_Name + " Between " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' AND " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value2 + "' AND ";
-                        }
-                        else if (obj.Operator.ToUpper().Trim() == "AND".ToUpper())
-                        {
-                            param += obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' AND " + obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value2 + "' AND ";
-                        }
-                        else if (obj.Operator.ToUpper().Trim() == "OR".ToUpper())
-                        {
-                            param += obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' OR " + obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value2 + "' AND ";
-                        }
-                        else if (obj.Operator.ToUpper().Trim() == "IN".ToUpper())
-                        {
+                //string select = "";
+                //string param = "";
+                //string proc="";
+                //var detHandler = new StoreDataHandler(data["lstDet"]);
+                //var lstDet = detHandler.ObjectData<IF30100_pgData_Result>().ToList();
+                //foreach(var obj in lstDet)
+                //{
 
-                            param += obj.Column_Name + " IN('"+ obj.Value1.Replace(",","','")+ "') AND ";
-                        }
-                        else param += obj.Column_Name + " " + obj.Operator + " " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' AND ";
+                //    select += obj.Checked == true ? obj.Column_Name + "," : "";
+                //    if (obj.Operator.PassNull() != "")
+                //    {
+                //        if (obj.Operator.ToUpper().Trim() == "Between".ToUpper())
+                //        {
+                //            param += obj.Column_Name + " Between " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' AND " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value2 + "' AND ";
+                //        }
+                //        else if (obj.Operator.ToUpper().Trim() == "AND".ToUpper())
+                //        {
+                //            param += obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' AND " + obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value2 + "' AND ";
+                //        }
+                //        else if (obj.Operator.ToUpper().Trim() == "OR".ToUpper())
+                //        {
+                //            param += obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' OR " + obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value2 + "' AND ";
+                //        }
+                //        else if (obj.Operator.ToUpper().Trim() == "IN".ToUpper())
+                //        {
+
+                //            param += obj.Column_Name + " IN('"+ obj.Value1.Replace(",","','")+ "') AND ";
+                //        }
+                //        else param += obj.Column_Name + " " + obj.Operator + " " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' AND ";
                         
-                    }
+                //    }
 
-                }
-                param = param.Length > 3 ?  " Where " + param.Substring(0, param.Length - 4) : param;
-                proc="select "+select.TrimEnd(',')+" from " + view +param;
+                //}
+                //param = param.Length > 3 ?  " Where " + param.Substring(0, param.Length - 4) : param;
+                //proc="select "+select.TrimEnd(',')+" from " + view +param;
+
                 Stream stream = new MemoryStream();
                 Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook();
                 Aspose.Cells.Worksheet SheetData = workbook.Worksheets[0];
-                SheetData.Name = name;
+                SheetData.Name = "Data";
 
-
+                var detHandler = new StoreDataHandler(data["lstDet"]);
+                var lstDet = detHandler.ObjectData<IF30100_pgData_Result>().ToList();
+                int i = 0;
+                foreach (var obj in lstDet)
+                {
+                    SetCellValueGrid(SheetData.Cells.Rows[0][i], Util.GetLang(obj.Column_Name), TextAlignmentType.Center, TextAlignmentType.Left);
+                    i++;
+                }
                 DataAccess dal = Util.Dal();
                 ParamCollection pc = new ParamCollection();
                 System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.Text, ref pc);
-                SheetData.Cells.ImportDataTable(dtInvtID, true, "A1");// du lieu Inventory
+
+                Cell cell;
+                for (int j = 1; j < dtInvtID.Rows.Count; j++)
+                {
+                    for(int x = 0; x < dtInvtID.Columns.Count; x++){
+                        cell = SheetData.Cells[j, x];
+                        if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("DATE"))
+                        {
+                            DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][x].ToString());
+                            cell.PutValue(tmpValue.ToString(Current.FormatDate));
+                        }
+                        else
+                        {
+                            cell.PutValue(dtInvtID.Rows[j][x].ToString());
+                        }
+                    }
+                }
+
+                //SheetData.Cells.ImportDataTable(dtCloned, false, "A2");// du lieu Inventory
 
                            
 
@@ -397,14 +444,11 @@ namespace IF30100.Controllers
 
                 string fileName = Guid.NewGuid().ToString() + ".xlsx";
                 string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
-             
-                //SheetPOSuggest.Protect(ProtectionType.Objects);
-                workbook.Save(fileName, SaveFormat.Xlsx);
+              
+        
+                workbook.Save(path, SaveFormat.Xlsx);
 
                 return Json(new { success = true, id = fileName, name = name + ".xlsx" }, JsonRequestBehavior.AllowGet);
-
-                //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsx" };
-
             }
             catch (Exception ex)
             {
@@ -419,6 +463,41 @@ namespace IF30100.Controllers
                 }
             }
         }
+
+        public bool ChangeColumnDataType(System.Data.DataTable table, string columnname, Type newtype)
+        {
+            if (table.Columns.Contains(columnname) == false)
+                return false;
+
+            DataColumn column = table.Columns[columnname];
+            if (column.DataType == newtype)
+                return true;
+
+            try
+            {
+                DataColumn newcolumn = new DataColumn("temporary", newtype);
+                table.Columns.Add(newcolumn);
+                foreach (DataRow row in table.Rows)
+                {
+                    try
+                    {
+                        row["temporary"] = Convert.ChangeType(row[columnname], newtype);
+                    }
+                    catch
+                    {
+                    }
+                }
+                table.Columns.Remove(columnname);
+                newcolumn.ColumnName = columnname;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         [HttpPost]
         public ActionResult ExportPivot(FormCollection data, string view, string name)
         {
