@@ -1,5 +1,5 @@
 ﻿var keys = ['CpnyID'];
-var fieldsCheckRequire = ["CpnyID", "DfltLotSerAssign"];
+var fieldsCheckRequire = ["CpnyID"];
 var fieldsLangCheckRequire = ["CpnyID"];
 
 var prefixvalue = "";
@@ -7,7 +7,7 @@ var lastfixvalue = "";
 var shownextlotserial = "";
 var _focusNo = 0;
 var _Source = 0;
-var _maxSource = 13;
+var _maxSource = 12;
 var _isLoadMaster = false;
 var ClassID = '';
 var pnl_render = function (cmd) {
@@ -20,6 +20,7 @@ var pnl_render = function (cmd) {
         }
     });
 };
+
 var checkLoad = function () {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -29,6 +30,32 @@ var checkLoad = function () {
         _Source = 0;
     }
 };
+
+var firstLoad = function () {
+    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
+    HQ.isFirstLoad = true;
+    ClassID = '';
+    App.frmMain.isValid();
+    App.tabDetail.child('#pnlLotSerial').tab.setDisabled(true);
+
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    //App.cboClassID.getStore().addListener('load', checkLoad);
+    App.cboDfltInvtType.getStore().addListener('load', checkLoad);
+    App.cboDfltSource.getStore().addListener('load', checkLoad);
+    App.cboDfltValMthd.getStore().addListener('load', checkLoad);
+    App.cboDfltLotSerTrack.getStore().addListener('load', checkLoad);
+    App.cboBuyer.getStore().addListener('load', checkLoad);
+    App.cboMaterialType.getStore().addListener('load', checkLoad);
+    App.cboDfltSite.getStore().addListener('load', checkLoad);
+    App.cboDfltSlsTaxCat.getStore().addListener('load', checkLoad);
+    App.cboDfltLotSerAssign.getStore().addListener('load', checkLoad);
+    App.cboDfltLotSerMthd.getStore().addListener('load', checkLoad);
+    App.cboDfltLotSerFxdTyp.getStore().addListener('load', checkLoad);
+    App.cboCpnyID.getStore().addListener('load', checkLoad);
+
+    App.cboDfltStkUnit.getStore().addListener('load', checkLoad_cboDfltStkUnit);
+};
+
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -72,7 +99,6 @@ var menuClick = function (command) {
             }
             break;
         case "new":
-         
             if (HQ.isInsert) {
                 if (_focusNo == 0) {
                     if (HQ.isChange) {
@@ -85,10 +111,9 @@ var menuClick = function (command) {
                 }
                 else 
                     if (HQ.isInsert)
-                    {
-                    HQ.grid.insert(App.grdCpny);
-                    }
-                }
+                        HQ.grid.insert(App.grdCpny);
+            }
+            break;
         case "delete":
             if (_focusNo == 0) {
                 if (App.cboClassID.getValue()) {
@@ -120,50 +145,8 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            HQ.common.close(this);
             break;
     }
-};
-
-var firstLoad = function () {
-    HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
-    HQ.isFirstLoad = true;
-    ClassID = '';
-    App.frmMain.isValid();
-    checkLoad();
-    App.tabDetail.child('#pnlLotSerial').tab.setDisabled(true);
-
-    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.cboClassID.getStore().addListener('load', checkLoad);
-    App.cboDfltInvtType.getStore().addListener('load', checkLoad);
-    App.cboDfltSource.getStore().addListener('load', checkLoad);
-    App.cboDfltValMthd.getStore().addListener('load', checkLoad);
-    App.cboDfltLotSerTrack.getStore().addListener('load', checkLoad);
-    App.cboBuyer.getStore().addListener('load', checkLoad);
-    App.cboMaterialType.getStore().addListener('load', checkLoad);
-    App.cboDfltSite.getStore().addListener('load', checkLoad);
-    App.cboDfltSlsTaxCat.getStore().addListener('load', checkLoad);
-    App.cboDfltLotSerAssign.getStore().addListener('load', checkLoad);
-    App.cboDfltLotSerMthd.getStore().addListener('load', checkLoad);
-    App.cboDfltLotSerFxdTyp.getStore().addListener('load', checkLoad);
-    App.cboCpnyID.getStore().addListener('load', checkLoad);
-
-    App.cboDfltStkUnit.getStore().addListener('load', checkLoad_cboDfltStkUnit);
-
-    //App.cboClassID.getStore().reload();
-    //App.cboDfltInvtType.getStore().reload();
-    //App.cboDfltSource.getStore().reload();
-    //App.cboDfltValMthd.getStore().reload();
-    //App.cboDfltLotSerTrack.getStore().reload();
-    //App.cboBuyer.getStore().reload();
-    //App.cboDfltStkUnit.getStore().reload();
-    //App.cboMaterialType.getStore().reload();
-    //App.cboDfltSite.getStore().reload();
-    //App.cboDfltSlsTaxCat.getStore().reload();
-    //App.cboDfltLotSerAssign.getStore().reload();
-    //App.cboDfltLotSerMthd.getStore().reload();
-    //App.cboDfltLotSerFxdTyp.getStore().reload();
-    //App.cboCpnyID.getStore().reload();
 };
 
 var checkLoad_cboDfltStkUnit = function () {
@@ -215,6 +198,7 @@ var cboDfltStkUnit_Select = function (sender, value) {
         App.cboDfltSOUnit.store.reload();
     }
 };
+
 var chkPublic_Change = function (item, value, oldValue) {
     HQ.isFirstLoad = true;
     if (value) {
@@ -342,12 +326,10 @@ var grdCpny_Reject = function (record) {
     frmChange();
 };
 
-
 var cboDfltStkUnit_Change = function (sender, e) {
     App.cboDfltPOUnit.getStore().reload();
     App.cboDfltSOUnit.getStore().reload();
 };
-
 
 var LastFixValue_Change = function (sender, e) {
     if (App.txtDfltLotSerNumVal.value.length > App.txtDfltLotSerNumLen.value) {
@@ -380,8 +362,6 @@ var focusControl = function (invalidField) {
 };
 
 var save = function () {
-    
-   
         if (App.cboDfltLotSerTrack.getValue() != 'N') {
             if (!App.cboDfltLotSerAssign.getValue()) {
                 invalidField = App.cboDfltLotSerAssign.id;
@@ -461,16 +441,24 @@ var save = function () {
             params: {
                 lstIN_ProductClass: Ext.encode(App.stoIN_ProductClass.getRecordsValues()),
                 lstCpny: HQ.store.getData(App.stoCpny)
-
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 ClassID = data.result.ClassID;
-                App.cboClassID.getStore().load(function () {
-                    App.cboClassID.setValue(ClassID);
-                });
+                HQ.isChange = false;
                 HQ.isFirstLoad = true;
-                App.stoIN_ProductClass.reload();
+                App.cboClassID.getStore().reload({
+                    callback: function () {
+                        if (Ext.isEmpty(App.cboClassID.getValue())) {
+                            App.cboClassID.setValue(data.result.ClassID);
+                            App.stoIN_ProductClass.reload();
+                        }
+                        else {
+                            App.cboClassID.setValue(data.result.ClassID);
+                            App.stoIN_ProductClass.reload();
+                        }
+                    }
+                });
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -479,6 +467,7 @@ var save = function () {
     }
     
 };
+
 var cboDfltLotSerFxdTyp_Change = function (sender, value) {
     //if (e) {
     //    App.txtDfltLotSerFxdVal.setValue('');
@@ -501,6 +490,7 @@ var cboDfltLotSerFxdTyp_Change = function (sender, value) {
         }
     }
 };
+
 var deleteData = function (item) {
     if (item == "yes") {
         if (_focusNo == 0) {
@@ -511,7 +501,7 @@ var deleteData = function (item) {
                     url: 'IN20200/DeleteAll',
                     timeout: 7200,
                     success: function (msg, data) {
-                        App.cboClassID.getStore().load();
+                        App.cboClassID.getStore().reload();
                         menuClick("new");
                     },
                     failure: function (msg, data) {
@@ -545,8 +535,6 @@ var renderCpnyID = function (value, metaData, rec, rowIndex, colIndex, store) {
         return value;
     }
 };
-
-
 //var PrefixValue_Change = function (sender, newValue, oldValue) {
 //    if (App.cboDfltLotSerFxdTyp.getValue() == 'C') {
 //        App.txtDfltLotSerFxdVal.setValue(Ext.util.Format.number(App.txtDfltLotSerFxdVal.getValue().replace(/[\$]/g, ''), '0,000'))
@@ -559,9 +547,7 @@ var renderCpnyID = function (value, metaData, rec, rowIndex, colIndex, store) {
 //        App.lblShowNextLotSerial.setValue(shownextlotserial);
 //        App.lblShowNextLotSerial.show();
 //    }
-
 //}
-
 var PrefixValue_Change = function (sender, e) {
     if (App.txtDfltLotSerFxdVal.value.length > App.txtDfltLotSerFxdLen.value) {
         HQ.message.show(22, e.value);
@@ -618,6 +604,7 @@ var txtDfltLotSerFxdVal_KeyDown = function (sender, e) {
             e.stopEvent();
     }
 };
+
 var txtDfltLotSerShelfLife_KeyDown = function (sender, e) {
         if (((e.ctrlKey == true && e.keyCode == 86) || ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105))) && (e.keyCode != 8 && e.keyCode != 46))
             e.stopEvent();
