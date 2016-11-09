@@ -64,7 +64,7 @@ namespace HQSendMailApprove
                 {
                     Regex regex = new Regex(regexEmail);
                     if (!regex.IsMatch(fromMail) || !regex.IsMatch(toMail)) throw new Exception("Wrong email address");
-
+                    smtpClient.UseDefaultCredentials = false;
                     NetworkCredential auth = new NetworkCredential(userName, Encryption.Decrypt(password, "1210Hq10s081f359t"));
                     smtpClient.Credentials = auth;
                     smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
