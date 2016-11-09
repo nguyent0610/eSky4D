@@ -630,15 +630,15 @@
 
                             , HQ.TextBox().ID("txtZip").Name("txtZip").DataIndex("Zip")
                                 .EnforceMaxLength(true).MaxLength(10)
-                                .Width(200).MarginSpec("5 0 0 0")
+                                .Width(200).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
 
                             , HQ.TextBox().ID("txtPhone").Name("txtPhone").DataIndex("Phone")
                                 .EnforceMaxLength(true).MaxLength(30)
-                                .Width(200).MarginSpec("5 0 0 0")
+                                .Width(200).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
 
                             , HQ.TextBox().ID("txtFax").Name("txtFax").DataIndex("Fax")
                                 .EnforceMaxLength(true).MaxLength(30)
-                                .Width(200).MarginSpec("5 0 0 0")
+                                .Width(200).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
 
                             , HQ.TextBox().ID("txtEMailAddr").Name("txtEMailAddr").DataIndex("EMailAddr")
                                 .EnforceMaxLength(true).MaxLength(30)
@@ -728,15 +728,15 @@
 
                             , HQ.TextBox().ID("txtBillZip").Name("txtBillZip").DataIndex("BillZip")
                                 .EnforceMaxLength(true).MaxLength(10)
-                                .Width(200).MarginSpec("32 0 0 0")
+                                .Width(200).MarginSpec("32 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
 
                             , HQ.TextBox().ID("txtBillPhone").Name("txtBillPhone").DataIndex("BillPhone")
                                 .EnforceMaxLength(true).MaxLength(30)
-                                .Width(200).MarginSpec("5 0 0 0")
+                                .Width(200).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
 
                             , HQ.TextBox().ID("txtBillFax").Name("txtBillFax").DataIndex("BillFax")
                                 .EnforceMaxLength(true).MaxLength(30)
-                                .Width(200).MarginSpec("5 0 59 0")
+                                .Width(200).MarginSpec("5 0 59 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
                         )
 
                 )//Tab dia chi

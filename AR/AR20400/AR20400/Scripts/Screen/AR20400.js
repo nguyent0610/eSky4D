@@ -688,7 +688,7 @@ var save = function () {
                     callback: function () {
                         if (Ext.isEmpty(App.cboCustId.getValue())) {
                             if (_hiddenTree == 'false' && data.result.isNew == 'true')
-                                ReloadTree('save', data.result.CustId);
+                                ReloadTree('save', CustId);
                             else
                             {
                                 App.cboCustId.forceSelection = false;
@@ -704,7 +704,7 @@ var save = function () {
                         }
                         else {
                             if (_hiddenTree == 'false' && data.result.isNew == 'true')
-                                ReloadTree('save', data.result.CustId);
+                                ReloadTree('save', CustId);
                             else
                             {
                                 App.cboCustId.forceSelection = false;
