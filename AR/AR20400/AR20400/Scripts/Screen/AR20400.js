@@ -287,7 +287,6 @@ var menuClick = function (command) {
                     }
                     else
                         save();
-
                 }
             }
             break;
@@ -432,6 +431,18 @@ var stoAR_LTTContract_Load = function (sto) {
 
 var grdAR_LTTContract_BeforeEdit = function (editor, e) {
     if (App.cboStatus.getValue() != 'H') return false;
+    if (e.field == 'FromDate') {
+        if (e.record.data.ToDate) {
+            App.dtpFromDate.setMaxValue(e.record.data.ToDate);
+        }
+    }
+    else if (e.field == 'ToDate') {
+        if (e.record.data.FromDate) {
+            App.dtpToDate.setMinValue(e.record.data.FromDate);
+        }
+        else return false;
+    }
+
     if (!HQ.grid.checkBeforeEdit(e, keysTab_4)) return false;
 };
 
@@ -686,7 +697,7 @@ var save = function () {
                                     var positionCust = calcPage(objPageCust.index);
                                     App.cboCustId.loadPage(positionCust);
                                 }
-                                App.cboCustId.setValue(data.result.CustId);
+                                App.cboCustId.setValue(CustId);
                                 App.stoAR_Customer.reload();
                             }
                            
@@ -702,7 +713,7 @@ var save = function () {
                                     var positionCust = calcPage(objPageCust.index);
                                     App.cboCustId.loadPage(positionCust);
                                 }
-                                App.cboCustId.setValue(data.result.CustId);
+                                App.cboCustId.setValue(CustId);
                                 App.stoAR_Customer.reload();
                             }
                         }
