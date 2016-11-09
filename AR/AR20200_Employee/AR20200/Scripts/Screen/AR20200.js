@@ -355,6 +355,7 @@ var cboSlsperid_select = function (sender, e) {
 var cboSlsperid_TriggerClick = function (sender, value) {
     if (App.cboSlsperid.allowBlank == false && HQ.isChange == true) {
         HQ.message.show(150, '', '');
+        sender.setValue(sender.originalValue);
         return;
     }
     App.cboSlsperid.clearValue();
