@@ -62,7 +62,6 @@
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst => { 
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        lst.Change.Fn = "cboScreenNumber_Change";
                     })
                     .LoadData()
                 )
