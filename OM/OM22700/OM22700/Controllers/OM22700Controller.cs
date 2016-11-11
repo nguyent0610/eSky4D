@@ -26,15 +26,17 @@ namespace OM22700.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
+
         public ActionResult GetOM_WeekOfVisit()
         {
             return this.Store(_db.OM22700_pgOM_WeekOfVisit().ToList());
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
@@ -42,20 +44,31 @@ namespace OM22700.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_WeekOfVisit"]);
                 ChangeRecords<OM22700_pgOM_WeekOfVisit_Result> lstLang = dataHandler.BatchObjectData<OM22700_pgOM_WeekOfVisit_Result>();
-                foreach (OM22700_pgOM_WeekOfVisit_Result deleted in lstLang.Deleted)
-                {
-                    var del = _db.OM_WeekOfVisit.Where(p => p.SlsFreqID == deleted.SlsFreqID && p.WeekofVisit==deleted.WeekofVisit).FirstOrDefault();
-                    if (del != null)
-                    {
-                        _db.OM_WeekOfVisit.DeleteObject(del);
-                    }
-                }
 
                 lstLang.Created.AddRange(lstLang.Updated);
 
+                foreach (OM22700_pgOM_WeekOfVisit_Result deleted in lstLang.Deleted)
+                {
+                    if (lstLang.Created.Where(p => p.SlsFreqID == deleted.SlsFreqID
+                                                && p.WeekofVisit == deleted.WeekofVisit).Count() > 0)
+                    {
+                        lstLang.Created.Where(p => p.SlsFreqID == deleted.SlsFreqID
+                                                && p.WeekofVisit == deleted.WeekofVisit).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.OM_WeekOfVisit.FirstOrDefault(p => p.SlsFreqID == deleted.SlsFreqID
+                                                                        && p.WeekofVisit == deleted.WeekofVisit);
+                        if (objDel != null)
+                        {
+                            _db.OM_WeekOfVisit.DeleteObject(objDel);
+                        }
+                    }
+                }
+
                 foreach (OM22700_pgOM_WeekOfVisit_Result curLang in lstLang.Created)
                 {
-                    if (curLang.SlsFreqID.PassNull() == ""||curLang.WeekofVisit.PassNull()=="") continue;
+                    if (curLang.SlsFreqID.PassNull() == "" || curLang.WeekofVisit.PassNull() == "") continue;
 
                     var lang = _db.OM_WeekOfVisit.Where(p => p.SlsFreqID.ToLower() == curLang.SlsFreqID.ToLower() && p.WeekofVisit.ToLower() == curLang.WeekofVisit.ToLower()).FirstOrDefault();
 
@@ -73,6 +86,7 @@ namespace OM22700.Controllers
                     else
                     {
                         lang = new OM_WeekOfVisit();
+                        lang.ResetET();
                         Update_Language(lang, curLang, true);
                         _db.OM_WeekOfVisit.AddObject(lang);
                     }

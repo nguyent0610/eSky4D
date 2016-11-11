@@ -1,1 +1,207 @@
-﻿var _0x5bcb = ["", "\x53\x6C\x73\x46\x72\x65\x71\x49\x44", "\x57\x65\x65\x6B\x6F\x66\x56\x69\x73\x69\x74", "\x67\x72\x64\x4F\x4D\x5F\x57\x65\x65\x6B\x4F\x66\x56\x69\x73\x69\x74", "\x66\x69\x72\x73\x74", "\x67\x72\x69\x64", "\x70\x72\x65\x76", "\x6E\x65\x78\x74", "\x6C\x61\x73\x74", "\x69\x73\x43\x68\x61\x6E\x67\x65", "\x72\x65\x66\x72\x65\x73\x68", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x69\x73\x46\x69\x72\x73\x74\x4C\x6F\x61\x64", "\x72\x65\x6C\x6F\x61\x64", "\x73\x74\x6F\x4F\x4D\x5F\x57\x65\x65\x6B\x4F\x66\x56\x69\x73\x69\x74", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x69\x6E\x73\x65\x72\x74", "\x6E\x65\x77", "\x69\x74\x65\x6D\x73", "\x73\x65\x6C\x65\x63\x74\x65\x64", "\x73\x6C\x6D\x4F\x4D\x5F\x57\x65\x65\x6B\x4F\x66\x56\x69\x73\x69\x74", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x64\x65\x6C\x65\x74\x65\x44\x61\x74\x61", "\x64\x65\x6C\x65\x74\x65", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x63\x68\x65\x63\x6B\x52\x65\x71\x75\x69\x72\x65\x50\x61\x73\x73", "\x73\x74\x6F\x72\x65", "\x73\x61\x76\x65", "\x70\x72\x69\x6E\x74", "\x63\x6C\x6F\x73\x65", "\x63\x6F\x6D\x6D\x6F\x6E", "\x4F\x4D\x32\x32\x37\x30\x30", "\x63\x68\x61\x6E\x67\x65\x44\x61\x74\x61", "\x73\x68\x6F\x77\x42\x75\x73\x79", "\x69\x6E\x73\x65\x72\x74\x42\x6C\x61\x6E\x6B", "\x6C\x6F\x61\x64\x69\x6E\x67\x64\x61\x74\x61", "\x67\x65\x74\x4C\x61\x6E\x67", "\x63\x68\x65\x63\x6B\x42\x65\x66\x6F\x72\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x49\x6E\x73\x65\x72\x74\x4B\x65\x79", "\x63\x68\x65\x63\x6B\x56\x61\x6C\x69\x64\x61\x74\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x52\x65\x6A\x65\x63\x74", "\x73\x6C\x69\x63\x65", "\x69\x73\x56\x61\x6C\x69\x64", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x53\x61\x76\x69\x6E\x67\x44\x61\x74\x61", "\x4F\x4D\x32\x32\x37\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x44\x61\x74\x61", "\x70\x72\x6F\x63\x65\x73\x73", "\x73\x75\x62\x6D\x69\x74", "\x64\x61\x74\x61", "\x46\x38", "\x4D\x6F\x6E", "\x54\x75\x65", "\x57\x65\x64", "\x54\x68\x75", "\x46\x72\x69", "\x53\x61\x74", "\x53\x75\x6E", "\x24\x69\x64", "\x72\x61\x77", "\x2C\x20", "\x65\x61\x63\x68", "\x67\x65\x74\x53\x74\x6F\x72\x65", "\x79\x65\x73", "\x64\x65\x6C\x65\x74\x65\x53\x65\x6C\x65\x63\x74\x65\x64"]; var msgError = _0x5bcb[0]; var keys = [_0x5bcb[1], _0x5bcb[2]]; var fieldsCheckRequire = [_0x5bcb[1], _0x5bcb[2]]; var fieldsLangCheckRequire = [_0x5bcb[1], _0x5bcb[2]]; var menuClick = function (_0x9bcfx6) { switch (_0x9bcfx6) { case _0x5bcb[4]: HQ[_0x5bcb[5]][_0x5bcb[4]](App[_0x5bcb[3]]); break;; case _0x5bcb[6]: HQ[_0x5bcb[5]][_0x5bcb[6]](App[_0x5bcb[3]]); break;; case _0x5bcb[7]: HQ[_0x5bcb[5]][_0x5bcb[7]](App[_0x5bcb[3]]); break;; case _0x5bcb[8]: HQ[_0x5bcb[5]][_0x5bcb[8]](App[_0x5bcb[3]]); break;; case _0x5bcb[10]: if (HQ[_0x5bcb[9]]) { HQ[_0x5bcb[12]][_0x5bcb[11]](20150303, _0x5bcb[0], _0x5bcb[10]) } else { HQ[_0x5bcb[9]] = false; HQ[_0x5bcb[13]] = true; App[_0x5bcb[15]][_0x5bcb[14]](); }; break;; case _0x5bcb[18]: if (HQ[_0x5bcb[16]]) { HQ[_0x5bcb[5]][_0x5bcb[17]](App[_0x5bcb[3]], keys) }; break;; case _0x5bcb[24]: if (App[_0x5bcb[21]][_0x5bcb[20]][_0x5bcb[19]][0] != undefined) { if (HQ[_0x5bcb[22]]) { HQ[_0x5bcb[12]][_0x5bcb[11]](11, _0x5bcb[0], _0x5bcb[23]) } }; break;; case _0x5bcb[28]: if (HQ[_0x5bcb[25]] || HQ[_0x5bcb[16]] || HQ[_0x5bcb[22]]) { if (HQ[_0x5bcb[27]][_0x5bcb[26]](App[_0x5bcb[15]], keys, fieldsCheckRequire, fieldsLangCheckRequire)) { save() } }; break;; case _0x5bcb[29]: break;; case _0x5bcb[30]: HQ[_0x5bcb[31]][_0x5bcb[30]](this); break;; } }; var firstLoad = function () { HQ[_0x5bcb[13]] = true; App[_0x5bcb[15]][_0x5bcb[14]](); }; var stoChanged = function (_0x9bcfx9) { HQ[_0x5bcb[9]] = HQ[_0x5bcb[27]][_0x5bcb[9]](_0x9bcfx9); HQ[_0x5bcb[31]][_0x5bcb[33]](HQ[_0x5bcb[9]], _0x5bcb[32]); }; var stoLoad = function (_0x9bcfx9) { HQ[_0x5bcb[31]][_0x5bcb[34]](false); HQ[_0x5bcb[9]] = HQ[_0x5bcb[27]][_0x5bcb[9]](_0x9bcfx9); HQ[_0x5bcb[31]][_0x5bcb[33]](HQ[_0x5bcb[9]], _0x5bcb[32]); if (HQ[_0x5bcb[13]]) { if (HQ[_0x5bcb[16]]) { HQ[_0x5bcb[27]][_0x5bcb[35]](_0x9bcfx9, keys) }; HQ[_0x5bcb[13]] = false; }; }; var stoBeforeLoad = function (_0x9bcfx9) { HQ[_0x5bcb[31]][_0x5bcb[34]](true, HQ[_0x5bcb[31]][_0x5bcb[37]](_0x5bcb[36])) }; var grdOM_WeekOfVisit_BeforeEdit = function (_0x9bcfxd, _0x9bcfxe) { return HQ[_0x5bcb[5]][_0x5bcb[38]](_0x9bcfxe, keys) }; var grdOM_WeekOfVisit_Edit = function (_0x9bcfx10, _0x9bcfxe) { HQ[_0x5bcb[5]][_0x5bcb[39]](App[_0x5bcb[3]], _0x9bcfxe, keys); stoChanged(App[_0x5bcb[15]]); }; var grdOM_WeekOfVisit_ValidateEdit = function (_0x9bcfx10, _0x9bcfxe) { return HQ[_0x5bcb[5]][_0x5bcb[40]](App[_0x5bcb[3]], _0x9bcfxe, keys) }; var grdOM_WeekOfVisit_Reject = function (_0x9bcfx13) { HQ[_0x5bcb[5]][_0x5bcb[41]](_0x9bcfx13, App[_0x5bcb[3]]); stoChanged(App[_0x5bcb[15]]); }; var save = function () { if (CheckData()) { HQ[_0x5bcb[12]][_0x5bcb[11]](201302071, [msgError[_0x5bcb[42]](0, -2)], _0x5bcb[0], true) } else { if (App[_0x5bcb[44]][_0x5bcb[43]]()) { App[_0x5bcb[44]][_0x5bcb[49]]({ timeout: 1800000, waitMsg: HQ[_0x5bcb[31]][_0x5bcb[37]](_0x5bcb[45]), url: _0x5bcb[46], params: { lstOM_WeekOfVisit: HQ[_0x5bcb[27]][_0x5bcb[47]](App[_0x5bcb[15]]) }, success: function (_0x9bcfx15, _0x9bcfx16) { HQ[_0x5bcb[12]][_0x5bcb[11]](201405071); HQ[_0x5bcb[9]] = false; menuClick(_0x5bcb[10]); }, failure: function (_0x9bcfx15, _0x9bcfx16) { HQ[_0x5bcb[12]][_0x5bcb[48]](_0x9bcfx15, _0x9bcfx16, true) } }) } } }; var CheckData = function () { msgError = _0x5bcb[0]; App[_0x5bcb[3]][_0x5bcb[63]]()[_0x5bcb[62]](function (_0x9bcfx10) { var _0x9bcfx18 = _0x9bcfx10[_0x5bcb[50]][_0x5bcb[1]] == _0x5bcb[51] ? 2 : 3; var _0x9bcfx19 = 0; if (_0x9bcfx10[_0x5bcb[50]][_0x5bcb[1]] != _0x5bcb[0] && _0x9bcfx10[_0x5bcb[50]][_0x5bcb[2]] != _0x5bcb[0]) { if (_0x9bcfx10[_0x5bcb[50]][_0x5bcb[52]]) { _0x9bcfx19++ }; if (_0x9bcfx10[_0x5bcb[50]][_0x5bcb[53]]) { _0x9bcfx19++ }; if (_0x9bcfx10[_0x5bcb[50]][_0x5bcb[54]]) { _0x9bcfx19++ }; if (_0x9bcfx10[_0x5bcb[50]][_0x5bcb[55]]) { _0x9bcfx19++ }; if (_0x9bcfx10[_0x5bcb[50]][_0x5bcb[56]]) { _0x9bcfx19++ }; if (_0x9bcfx10[_0x5bcb[50]][_0x5bcb[57]]) { _0x9bcfx19++ }; if (_0x9bcfx10[_0x5bcb[50]][_0x5bcb[58]]) { _0x9bcfx19++ }; if (_0x9bcfx19 != _0x9bcfx18) { msgError += _0x9bcfx10[_0x5bcb[60]][_0x5bcb[59]] + _0x5bcb[61] }; }; }); if (msgError) { return true } else { return false }; }; var deleteData = function (_0x9bcfx10) { if (_0x9bcfx10 == _0x5bcb[64]) { App[_0x5bcb[3]][_0x5bcb[65]](); stoChanged(App[_0x5bcb[15]]); } }; function refresh(_0x9bcfx10) { if (_0x9bcfx10 == _0x5bcb[64]) { HQ[_0x5bcb[9]] = false; HQ[_0x5bcb[13]] = true; App[_0x5bcb[15]][_0x5bcb[14]](); } }
+﻿//// Declare //////////////////////////////////////////////////////////
+var msgError = '';
+var keys = ['SlsFreqID', 'WeekofVisit'];
+var fieldsCheckRequire = ["SlsFreqID", "WeekofVisit","Descr"];
+var fieldsLangCheckRequire = ["SlsFreqID", "WeekofVisit", "Descr"];
+
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+var checkLoad = function () {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoOM_WeekOfVisit.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+var firstLoad = function () {
+    HQ.util.checkAccessRight();
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboFreq.getStore().addListener('load', checkLoad);
+};
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdOM_WeekOfVisit);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdOM_WeekOfVisit);
+            break;
+        case "next":
+            HQ.grid.next(App.grdOM_WeekOfVisit);
+            break;
+        case "last":
+            HQ.grid.last(App.grdOM_WeekOfVisit);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh('yes');
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdOM_WeekOfVisit, keys);
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                if (App.slmOM_WeekOfVisit.selected.items[0] != undefined) {
+                    if (App.slmOM_WeekOfVisit.selected.items[0].data.SlsFreqID != "" &&
+                        App.slmOM_WeekOfVisit.selected.items[0].data.WeekofVisit != ""
+                        ) {
+                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdOM_WeekOfVisit)], 'deleteData', true);
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoOM_WeekOfVisit, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+
+};
+
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM22700');
+};
+
+var stoLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM22700');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+
+var grdOM_WeekOfVisit_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdOM_WeekOfVisit_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdOM_WeekOfVisit, e, keys);
+    stoChanged(App.stoOM_WeekOfVisit);
+};
+
+var grdOM_WeekOfVisit_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdOM_WeekOfVisit, e, keys);
+};
+
+var grdOM_WeekOfVisit_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_WeekOfVisit);
+    stoChanged(App.stoOM_WeekOfVisit);
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (CheckData()) {
+        HQ.message.show(201302071, [msgError.slice(0, -2)], '', true);
+    }
+    else {
+        if (App.frmMain.isValid()) {
+            App.frmMain.submit({
+                timeout: 1800000,
+                waitMsg: HQ.common.getLang("SavingData"),
+                url: 'OM22700/Save',
+                params: {
+                    lstOM_WeekOfVisit: HQ.store.getData(App.stoOM_WeekOfVisit)
+                },
+                success: function (msg, data) {
+                    HQ.message.show(201405071);
+                    refresh('yes');
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+};
+
+var CheckData = function () {
+    msgError = '';
+
+    var store = App.stoOM_WeekOfVisit;
+    var allRecords = store.snapshot || store.allData || store.data;
+    store.suspendEvents();
+    allRecords.each(function (item) {
+        var total = item.data.SlsFreqID == 'F8' ? 2 : 3;
+        var count = 0;
+        if (item.data.SlsFreqID != '' && item.data.WeekofVisit != '') {
+            if (item.data.Mon)
+                count++;
+            if (item.data.Tue)
+                count++;
+            if (item.data.Wed)
+                count++;
+            if (item.data.Thu)
+                count++;
+            if (item.data.Fri)
+                count++;
+            if (item.data.Sat)
+                count++;
+            if (item.data.Sun)
+                count++;
+
+            if (count != total)
+                msgError += item.raw.$id + ', ';
+        }
+    });
+    store.resumeEvents();
+
+    if (msgError)
+        return true;
+    else
+        return false;
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdOM_WeekOfVisit.deleteSelected();
+        stoChanged(App.stoOM_WeekOfVisit);
+    }
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoOM_WeekOfVisit.reload();
+    }
+};
+///////////////////////////////////

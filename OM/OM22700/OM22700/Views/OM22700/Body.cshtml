@@ -30,7 +30,7 @@
             X.Store()
             .ID("stoOM_WeekOfVisit")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(OM22700_pgOM_WeekOfVisit_Result), "mdlOM22700_pgOM_WeekOfVisit", "Code"))
+            .Model(Util.GenerateModel(typeof(OM22700_pgOM_WeekOfVisit_Result), "mdlOM22700_pgOM_WeekOfVisit", ""))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_WeekOfVisit"))).AutoLoad(false)
             .Listeners(l =>
             {
@@ -45,7 +45,7 @@
         })
         .SortableColumns(false)
         .ColumnModel(
-            X.RowNumbererColumn().Width(40),
+            X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
             
             X.Column().DataIndex("SlsFreqID").Text(Util.GetLang("SlsFreqID")).Width(150)
                 .Editor(
@@ -53,26 +53,25 @@
                     .Name("cboFreq").HQProcedure("OM22700_pcGetFrequence")
                     .HQColumnShow("SlsFreqID,Descr").DisplayField("SlsFreqID").ValueField("SlsFreqID")
                     .Width(300).HQHeightWidth(400, 300).ForceSelection(true)
-                    .HQDBSys(false).AllowBlank(false)
+                    .HQDBSys(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
-                        //lst.Change.Fn = "cboScreenNumber_Change";
                     })
                     .LoadData()
                 )
             
-            , X.Column().Text(Util.GetLang("WeekofVisit")).DataIndex("WeekofVisit").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))
-            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(250).EnforceMaxLength(true))
+            , X.Column().Text(Util.GetLang("WeekofVisit")).DataIndex("WeekofVisit").Width(150).Editor(X.TextField().MaxLength(10).EnforceMaxLength(true))
+            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(250).EnforceMaxLength(true))
             
-            , X.CheckColumn().Text(Util.GetLang("Mon")).DataIndex("Mon").Width(150).Editable(true)
-            , X.CheckColumn().Text(Util.GetLang("Tue")).DataIndex("Tue").Width(150).Editable(true)
-            , X.CheckColumn().Text(Util.GetLang("Wed")).DataIndex("Wed").Width(150).Editable(true)
-            , X.CheckColumn().Text(Util.GetLang("Thu")).DataIndex("Thu").Width(150).Editable(true)
-            , X.CheckColumn().Text(Util.GetLang("Fri")).DataIndex("Fri").Width(150).Editable(true)
-            , X.CheckColumn().Text(Util.GetLang("Sat")).DataIndex("Sat").Width(150).Editable(true)
-            , X.CheckColumn().Text(Util.GetLang("Sun")).DataIndex("Sun").Width(150).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Mon")).DataIndex("Mon").Width(80).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Tue")).DataIndex("Tue").Width(80).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Wed")).DataIndex("Wed").Width(80).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Thu")).DataIndex("Thu").Width(80).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Fri")).DataIndex("Fri").Width(80).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Sat")).DataIndex("Sat").Width(80).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Sun")).DataIndex("Sun").Width(80).Editable(true)
             
             , X.CommandColumn().Width(150)
             .Commands(
@@ -121,7 +120,6 @@
                     X.StringFilter().DataIndex("SlsFreqID"),
                     X.StringFilter().DataIndex("WeekofVisit"),
                     X.StringFilter().DataIndex("Descr"),
-
                     X.BooleanFilter().DataIndex("Mon"),
                     X.BooleanFilter().DataIndex("Tue"),
                     X.BooleanFilter().DataIndex("Wed"),
@@ -129,8 +127,6 @@
                     X.BooleanFilter().DataIndex("Fri"),
                     X.BooleanFilter().DataIndex("Sat"),
                     X.BooleanFilter().DataIndex("Sun")
-                    
-    
                 )
         )
     )
