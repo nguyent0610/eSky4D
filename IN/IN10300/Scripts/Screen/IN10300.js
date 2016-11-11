@@ -46,7 +46,7 @@ var store_Load = function () {
     checkSetDefault();
 }
 var stoBatch_Load = function () {
-    HQ.isNew = false;
+    
     var record = App.stoBatch.getById(App.cboBatNbr.getValue());
     if (record) {
         bindBatch(record);
@@ -408,6 +408,7 @@ var btnPopupOk_Click = function () {
 var cboBatNbr_Change = function (item, newValue, oldValue) {
     var record = App.stoBatch.getById(newValue);
     if (record) {
+        HQ.isNew = false;
         bindBatch(record);
     } else {
         if (HQ.recentRecord != record) {
@@ -1212,7 +1213,7 @@ var setStatusForm = function () {
     App.txtTotAmt.setReadOnly(true);
     App.txtTrnsfrDocNbr.setReadOnly(true);
     App.cboTransferStatus.setReadOnly(true);
-
+    
     //App.cboSiteID.setReadOnly(true);
     //App.cboToSiteID.setReadOnly(true);
     //App.cboToCpnyID.setReadOnly(true);
@@ -1461,24 +1462,17 @@ var checkTransAdd = function () {
             return false;
         }
     });
-
+    if (!HQ.isInsert && HQ.isNew) {
+        flat = true;
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        flat = true;
+    }
     App.cboSiteID.setReadOnly(flat);
     App.cboToSiteID.setReadOnly(flat);
     App.cboToCpnyID.setReadOnly(flat);
     App.cboTransferType.setReadOnly(flat);
-    if (!HQ.isInsert && HQ.isNew) {
-        App.cboSiteID.setReadOnly(true);
-        App.cboToSiteID.setReadOnly(true);
-        App.cboToCpnyID.setReadOnly(true);
-        App.cboTransferType.setReadOnly(true);
-        
-    }
-    else if (!HQ.isUpdate && !HQ.isNew) {
-        App.cboSiteID.setReadOnly(true);
-        App.cboToSiteID.setReadOnly(true);
-        App.cboToCpnyID.setReadOnly(true);
-        App.cboTransferType.setReadOnly(true);
-    }
+    
 }
 var getQtyAvail = function (row) {
 
