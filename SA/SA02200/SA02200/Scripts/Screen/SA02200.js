@@ -4,7 +4,7 @@ var fieldsCheckRequire = ["ScreenNumber", "CodeGroup"];
 var fieldsLangCheckRequire = ["ScreenNumber", "CodeGroup"];
 
 var _Source = 0;
-var _maxSource = 2;
+var _maxSource = 1;
 var _isLoadMaster = false;
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
@@ -22,8 +22,7 @@ var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.cboScreenNumber.getStore().addListener('load', checkLoad);
-    App.cboCodeGroup.getStore().addListener('load', checkLoad);
+    checkLoad();
 };
 
 var menuClick = function (command) {
@@ -54,12 +53,6 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
-            if (App.slmSYS_Favourite.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
-                }
-            }
-            break;
             if (HQ.isDelete) {
                 if (App.slmSYS_Favourite.selected.items[0] != undefined) {
                     if (App.slmSYS_Favourite.selected.items[0].data.ScreenNumber != "") {
