@@ -4,7 +4,7 @@ var fieldsCheckRequire = ["ScreenNumber", "CodeGroup"];
 var fieldsLangCheckRequire = ["ScreenNumber", "CodeGroup"];
 
 var _Source = 0;
-var _maxSource = 1;
+var _maxSource = 2;
 var _isLoadMaster = false;
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
@@ -22,7 +22,8 @@ var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    checkLoad();
+    App.cboScreenNumber.getStore().addListener('load', checkLoad);
+    App.cboCodeGroup.getStore().addListener('load', checkLoad);
 };
 
 var menuClick = function (command) {
