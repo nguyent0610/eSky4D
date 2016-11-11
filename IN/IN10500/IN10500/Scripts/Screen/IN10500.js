@@ -1,6 +1,6 @@
 ﻿var keys = ['InvtID'];
-var fieldsCheckRequire = ["InvtID"];
-var fieldsLangCheckRequire = ["InvtID"];
+var fieldsCheckRequire = ["InvtID", 'Notes'];
+var fieldsLangCheckRequire = ["InvtID", 'Notes'];
 HQ.barCode = '';
 var _focusNo = 0;
 HQ.isChange = false;
@@ -128,7 +128,7 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain)
-                    && HQ.store.checkRequirePass(App.stoIN_TagDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    && checkRequirePass(App.stoIN_TagDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     if (App.stoIN_TagDetail.data.length > 0) {
                         if (App.stoIN_TagDetail.data.items[0].data.SiteID != App.cboSiteID.getValue()) {
                             HQ.message.show(2016102101);
@@ -221,7 +221,7 @@ var lockControl = function (value) {
     }, 300);
 };
 
-var stoLoadIN_TagDetail = function (sto) {save
+var stoLoadIN_TagDetail = function (sto) {
 
     if (HQ.isFirstLoad) {
         //if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
@@ -543,4 +543,16 @@ var calcTotQty = function () {
     App.txtTotQty.setValue(totQty);
 };
 
+var checkRequirePass = function (store, keys, fieldsCheck, fieldsLang) {    
+    for (var i = 0; i < store.data.length; i++) {
+        if (store.data.items[i].data.InvtID != ''
+            && store.data.items[i].data.ReasonCD == 'OT'
+            && HQ.util.passNull(store.data.items[i].data.Notes).toString().trim() == "") {
+            var param = i + 1;
+            HQ.message.show(2016111101, param, '', false);
+            return false;                            
+        }
+    }
+    return true;
+}
 ///////////////////////////////////

@@ -104,7 +104,7 @@
             , X.Container().Layout(LayoutType.HBox)
             .Items(
                     HQ.Combo().ID("cboReasonCD").Name("cboReasonCD").MarginSpec("5 0 0 0").Width(300)
-                    .HQLangCode("REASONCD").HQDBSys(false).HQProcedure("IN10500_pcReasonCode")
+                    .HQLangCode("IN10500Reason").HQDBSys(false).HQProcedure("IN10500_pcReasonCode")
                     .HQColumnShow("ReasonCD,Descr").ForceSelection(true).AllowBlank(false)//.HQAutoLoad(false)
                     .DisplayField("Descr").ValueField("ReasonCD").HQHeightWidth(400, 300).DataIndex("ReasonCD")
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -215,7 +215,7 @@
                 .Editor(
                         HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQDBSys(false).HQProcedure("IN10500_pcInventory")
                         .HQColumnShow("InvtID,InvtName").ForceSelection(true).AllowBlank(true).HQAutoLoad(false)
-                            .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)//.DataIndex("ReasonCD")
+                            .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 320)//.DataIndex("ReasonCD")
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
                         {
@@ -229,8 +229,8 @@
                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw } 
                 })
                         .LoadData()
-                )              
-                , X.Column().Text(Util.GetLang("Descr")).Width(200).DataIndex("InvtName")
+                )
+                , X.Column().Text(Util.GetLang("InvtName")).Width(200).DataIndex("InvtName")
                 , X.Column().DataIndex("SiteID").Text(Util.GetLang("SiteID")).Width(90)//.Hidden(true)
                 , X.Column().DataIndex("EAUnit").Text(Util.GetLang("UOM")).Width(70)
 
@@ -244,7 +244,7 @@
 
 
 
-                , X.Column().DataIndex("ReasonCD").Text(Util.GetLang("ReasonCD")).Width(130).Renderer("rendererReasonCD")
+                , X.Column().DataIndex("ReasonCD").Text(Util.GetLang("IN10500Reason")).Width(130).Renderer("rendererReasonCD")
                 .Editor(
                         HQ.Combo().ID("cboReason").Name("cboReason")
                         .HQDBSys(false).HQProcedure("IN10500_pcReasonCode")
@@ -264,6 +264,8 @@
                     })
                         .LoadData()
                 )
+                , X.Column().DataIndex("Notes").Text(Util.GetLang("Note")).Width(160)
+                    .Editor(HQ.TextBox().MaxLength(500).EnforceMaxLength(true))
                 , X.CommandColumn().Width(130)
                 .Commands(
                     X.GridCommand()
@@ -321,7 +323,8 @@
                     X.NumericFilter().DataIndex("ActualEAQty"),
                     X.NumericFilter().DataIndex("StkQtyUnder1Month"),
                     X.NumericFilter().DataIndex("OffsetEAQty"),
-                    X.StringFilter().DataIndex("ReasonCD").ValidateRecord(p => p.Fn = "stringFilter")
+                    X.StringFilter().DataIndex("ReasonCD").ValidateRecord(p => p.Fn = "stringFilter"),
+                    X.StringFilter().DataIndex("Notes")
                 )
         )
         )
