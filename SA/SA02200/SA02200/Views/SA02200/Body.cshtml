@@ -48,11 +48,11 @@
                  })
         .SortableColumns(false)
         .ColumnModel(
-            X.RowNumbererColumn().Width(40),
+            X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
             X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(120)
                 .Editor(
                     HQ.Combo().ID("cboScreenNumber").Name("cboScreenNumber")
-                    .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
+                    .HideLabel(true).LabelWidth(0)
                     .HQLangCode("ScreenNumber").HQDBSys(true).HQProcedure("SA02200_pcSYS_Screen")
                     .HQColumnShow("ScreenNumber,Descr")
                     .DisplayField("ScreenNumber")
@@ -71,7 +71,7 @@
             ,X.Column().Text(Util.GetLang("CodeGroup")).DataIndex("CodeGroup").Width(120)
                     .Editor(
                         HQ.Combo().ID("cboCodeGroup").Name("cboCodeGroup")
-                        .MarginSpec("5 0 0 0").HideLabel(true).LabelWidth(0)
+                        .HideLabel(true).LabelWidth(0)
                         .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA02200_pcSYS_FavouriteGroup")
                         .HQColumnShow("Code,Descr")
                         .DisplayField("Code")
