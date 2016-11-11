@@ -83,6 +83,7 @@ namespace SA02200.Controllers
                     else
                     {
                         lang = new SYS_Favourite();
+                        lang.ResetET();
                         Update_Language(lang, curLang, true);
                         _db.SYS_Favourite.AddObject(lang);
                     }
