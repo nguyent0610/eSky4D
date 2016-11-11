@@ -25,15 +25,18 @@ namespace OM22500.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
+
         public ActionResult GetOM_ReasonCode()
         {           
             return this.Store(_db.OM22500_pgOM_ReasonCode().ToList());
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
@@ -42,16 +45,24 @@ namespace OM22500.Controllers
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_ReasonCode"]);
                 ChangeRecords<OM22500_pgOM_ReasonCode_Result> lstOM_ReasonCode = dataHandler.BatchObjectData<OM22500_pgOM_ReasonCode_Result>();
-                foreach (OM22500_pgOM_ReasonCode_Result deleted in lstOM_ReasonCode.Deleted)
-                {
-                    var del = _db.OM_ReasonCode.Where(p => p.Code == deleted.Code).FirstOrDefault();
-                    if (del != null)
-                    {
-                        _db.OM_ReasonCode.DeleteObject(del);
-                    }
-                }
 
                 lstOM_ReasonCode.Created.AddRange(lstOM_ReasonCode.Updated);
+
+                foreach (OM22500_pgOM_ReasonCode_Result deleted in lstOM_ReasonCode.Deleted)
+                {
+                    if (lstOM_ReasonCode.Created.Where(p => p.Code == deleted.Code).Count() > 0)
+                    {
+                        lstOM_ReasonCode.Created.Where(p => p.Code == deleted.Code).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.OM_ReasonCode.FirstOrDefault(p => p.Code == deleted.Code);
+                        if (objDel != null)
+                        {
+                            _db.OM_ReasonCode.DeleteObject(objDel);
+                        }
+                    }
+                }
 
                 foreach (OM22500_pgOM_ReasonCode_Result curLang in lstOM_ReasonCode.Created)
                 {
@@ -73,13 +84,13 @@ namespace OM22500.Controllers
                     else
                     {
                         lang = new OM_ReasonCode();
+                        lang.ResetET();
                         Update_Language(lang, curLang, true);
                         _db.OM_ReasonCode.AddObject(lang);
                     }
                 }
 
                 _db.SaveChanges();
-
 
                 return Json(new { success = true });
             }

@@ -1,1 +1,160 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('n a=["\\G\\i\\h\\b","\\D\\b\\d\\m\\k","\\s\\k\\h\\F\\A\\W\\H\\b\\e\\d\\i\\l\\G\\i\\h\\b","\\L\\g\\k\\d\\f","\\s\\k\\g\\h","\\K\\k\\b\\J","\\l\\b\\1z\\f","\\o\\e\\d\\f","\\g\\d\\G\\r\\e\\l\\s\\b","","\\k\\b\\L\\k\\b\\d\\r","\\d\\r\\i\\O","\\w\\b\\d\\d\\e\\s\\b","\\g\\d\\1y\\g\\k\\d\\f\\1d\\i\\e\\h","\\k\\b\\o\\i\\e\\h","\\d\\f\\i\\F\\A\\W\\H\\b\\e\\d\\i\\l\\G\\i\\h\\b","\\g\\d\\1b\\l\\d\\b\\k\\f","\\g\\l\\d\\b\\k\\f","\\l\\b\\O","\\g\\f\\b\\w\\d","\\d\\b\\o\\b\\m\\f\\b\\h","\\d\\o\\w\\F\\A\\W\\H\\b\\e\\d\\i\\l\\G\\i\\h\\b","\\g\\d\\D\\b\\o\\b\\f\\b","\\h\\b\\o\\b\\f\\b\\D\\e\\f\\e","\\h\\b\\o\\b\\f\\b","\\g\\d\\1N\\K\\h\\e\\f\\b","\\m\\r\\b\\m\\z\\H\\b\\1W\\R\\g\\k\\b\\2g\\e\\d\\d","\\d\\f\\i\\k\\b","\\d\\e\\J\\b","\\K\\k\\g\\l\\f","\\m\\o\\i\\d\\b","\\m\\i\\w\\w\\i\\l","\\F\\A\\N\\N\\1g\\M\\M","\\m\\r\\e\\l\\s\\b\\D\\e\\f\\e","\\d\\r\\i\\O\\P\\R\\d\\S","\\g\\l\\d\\b\\k\\f\\P\\o\\e\\l\\z","\\o\\i\\e\\h\\g\\l\\s\\h\\e\\f\\e","\\s\\b\\f\\1d\\e\\l\\s","\\m\\r\\b\\m\\z\\P\\b\\L\\i\\k\\b\\Z\\h\\g\\f","\\m\\r\\b\\m\\z\\1b\\l\\d\\b\\k\\f\\2c\\b\\S","\\m\\r\\b\\m\\z\\1i\\e\\o\\g\\h\\e\\f\\b\\Z\\h\\g\\f","\\m\\r\\b\\m\\z\\H\\b\\2b\\b\\m\\f","\\g\\d\\1i\\e\\o\\g\\h","\\L\\k\\w\\A\\e\\g\\l","\\T\\e\\J\\g\\l\\s\\D\\e\\f\\e","\\F\\A\\N\\N\\1g\\M\\M\\1u\\T\\e\\J\\b","\\s\\b\\f\\D\\e\\f\\e","\\K\\k\\i\\m\\b\\d\\d","\\d\\R\\1v\\w\\g\\f","\\S\\b\\d","\\h\\b\\o\\b\\f\\b\\T\\b\\o\\b\\m\\f\\b\\h"];n v=[a[0]];n 1c=[a[0],a[1]];n 1n=[a[0],a[1]];n 1l=p(1a){1r(1a){u a[3]:c[a[4]][a[3]](j[a[2]]);t;u a[5]:c[a[4]][a[5]](j[a[2]]);t;u a[6]:c[a[4]][a[6]](j[a[2]]);t;u a[7]:c[a[4]][a[7]](j[a[2]]);t;u a[10]:q(c[a[8]]){c[a[12]][a[11]](1q,a[9],a[10])}1F{c[a[8]]=I;c[a[13]]=E;j[a[15]][a[14]]()};t;u a[18]:q(c[a[16]]){c[a[4]][a[17]](j[a[2]],v)};t;u a[24]:q(j[a[21]][a[20]][a[19]][0]!=1K){q(c[a[22]]){c[a[12]][a[11]](11,a[9],a[23])}};t;u a[28]:q(c[a[25]]||c[a[16]]||c[a[22]]){q(c[a[27]][a[26]](j[a[15]],v,1c,1n)){1h()}};t;u a[29]:t;u a[1e]:c[a[x]][a[1e]](2f);t}};n 2e=p(){c[a[13]]=E;j[a[15]][a[14]]()};n U=p(y){c[a[8]]=c[a[27]][a[8]](y);c[a[x]][a[X]](c[a[8]],a[Y])};n 1X=p(y){c[a[x]][a[1o]](I);c[a[8]]=c[a[27]][a[8]](y);c[a[x]][a[X]](c[a[8]],a[Y]);q(c[a[13]]){q(c[a[16]]){c[a[27]][a[1P]](y,v)};c[a[13]]=I}};n 1O=p(y){c[a[x]][a[1o]](E,c[a[x]][a[1p]](a[1L]))};n 1M=p(1Q,C){1k c[a[4]][a[1R]](C,v)};n 1V=p(B,C){c[a[4]][a[1U]](j[a[2]],C,v)};n 1T=p(B,C){1k c[a[4]][a[1S]](j[a[2]],C,v)};n 1Y=p(1f){c[a[4]][a[2d]](1f,j[a[2]]);U(j[a[15]])};n 1h=p(){q(j[a[1j]][a[2a]]()){j[a[1j]][a[2h]]({1s:c[a[x]][a[1p]](a[1t]),1J:a[1E],1I:{1H:c[a[27]][a[1B]](j[a[15]])},1w:p(V,Q){c[a[12]][a[11]](1x);c[a[8]]=I;1l(a[10])},1A:p(V,Q){c[a[12]][a[1Z]](V,Q,E)}})}};n 1D=p(B){q(B==a[1m]){j[a[2]][a[1G]]();U(j[a[15]])}};p 1C(B){q(B==a[1m]){c[a[8]]=I;c[a[13]]=E;j[a[15]][a[14]]()}}', 62, 142, '||||||||||_0x14bb|x65|HQ|x73|x61|x74|x69|x64|x6F|App|x72|x6E|x63|var|x6C|function|if|x68|x67|break|case|keys|x6D|31|_0x7696x8|x6B|x4D|_0x7696xf|_0x7696xd|x44|true|x4F|x43|x52|false|x76|x70|x66|x30|x32|x77|x42|_0x7696x15|x75|x79|x53|stoChanged|_0x7696x14|x5F|33|32|x45|||||||||||_0x7696x5|x49|fieldsCheckRequire|x4C|30|_0x7696x12|x35|save|x56|43|return|menuClick|49|fieldsLangCheckRequire|34|37|20150303|switch|waitMsg|44|x2F|x62|success|201405071|x46|x78|failure|46|refresh|deleteData|45|else|50|lstOM_ReasonCode|params|url|undefined|36|grdOM_ReasonCode_BeforeEdit|x55|stoBeforeLoad|35|_0x7696xc|38|40|grdOM_ReasonCode_ValidateEdit|39|grdOM_ReasonCode_Edit|x71|stoLoad|grdOM_ReasonCode_Reject|47|||||||||||42|x6A|x4B|41|firstLoad|this|x50|48'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['Code'];
+var fieldsCheckRequire = ["Code", "Descr"];
+var fieldsLangCheckRequire = ["Code", "Descr"];
+
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+var checkLoad = function () {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoOM_ReasonCode.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+var firstLoad = function () {
+    HQ.util.checkAccessRight();
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    checkLoad();
+};
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdOM_ReasonCode);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdOM_ReasonCode);
+            break;
+        case "next":
+            HQ.grid.next(App.grdOM_ReasonCode);
+            break;
+        case "last":
+            HQ.grid.last(App.grdOM_ReasonCode);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh('yes');
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdOM_ReasonCode, keys);
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                if (App.slmOM_ReasonCode.selected.items[0] != undefined) {
+                    if (App.slmOM_ReasonCode.selected.items[0].data.Code != "") {
+                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdOM_ReasonCode)], 'deleteData', true);
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoOM_ReasonCode, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+
+};
+
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM22500');
+};
+
+var stoLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM22500');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+
+var grdOM_ReasonCode_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdOM_ReasonCode_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdOM_ReasonCode, e, keys);
+};
+
+var grdOM_ReasonCode_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdOM_ReasonCode, e, keys, true);
+};
+
+var grdOM_ReasonCode_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_ReasonCode);
+    stoChanged(App.stoOM_ReasonCode);
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            timeout: 180000,
+            url: 'OM22500/Save',
+            params: {
+                lstOM_ReasonCode: HQ.store.getData(App.stoOM_ReasonCode)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                refresh('yes');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdOM_ReasonCode.deleteSelected();
+        stoChanged(App.stoOM_ReasonCode);
+    }
+};
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoOM_ReasonCode.reload();
+    }
+};
+///////////////////////////////////

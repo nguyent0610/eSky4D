@@ -39,14 +39,14 @@
             })
         )
         .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
         .SortableColumns(false)
         .ColumnModel(
-            X.RowNumbererColumn().Width(40),
-            X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(200).EnforceMaxLength(true)),
+            X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
+            X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true)),
 
             X.CommandColumn()
             .Width(150)
