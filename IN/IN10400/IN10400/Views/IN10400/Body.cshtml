@@ -142,7 +142,7 @@
                         ,HQ.DateField().ID("txtDateEnt").Name("DateEnt").HQLangCode("TranDate").Width(300).DataIndex("DateEnt")
                             
                        
-                        ,HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").Width(300).Tag("X")
+                        ,HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").Width(300)//.Tag("X")
                             .HQProcedure("IN10400_pcHandle")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                             .Width(300).HQHeightWidth(400, 200).HQAutoLoad(true)
@@ -166,7 +166,7 @@
                       ,HQ.NumberField().ID("txtTotAmt").Name("TotAmt").HQLangCode("TotAmt").DecimalPrecision(0).Width(300).Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                         
                       ,HQ.Combo().ID("cboSiteID").Name("SiteID").HQLangCode("SiteID").AllowBlank(false)
-                            .HQProcedure("IN10400_pcSiteAll")
+                            .HQProcedure("IN10400_pcSiteAll")//.DataIndex("SiteID")
                             .HQColumnShow("SiteID,Name").DisplayField("Name").ValueField("SiteID")
                             .Width(300).HQHeightWidth(400, 200).HQAutoLoad(true)
                             .HQDBSys(false).ForceSelection(true)
@@ -197,7 +197,7 @@
             })
         ,X.Panel().ID("pnlDet") ////////////////Grid////////////////
         .Region(Region.Center).Border(false)
-        .Layout(LayoutType.Border)
+        .Layout(LayoutType.Fit)
         .Items(
              X.GridPanel().ID("grdTrans").AutoScroll(true)
             .SelectionMemory(false)
