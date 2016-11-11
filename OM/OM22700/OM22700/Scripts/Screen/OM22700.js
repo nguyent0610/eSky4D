@@ -152,7 +152,7 @@ var save = function () {
 
 var CheckData = function () {
     msgError = '';
-
+    var stt = 0;
     var store = App.stoOM_WeekOfVisit;
     var allRecords = store.snapshot || store.allData || store.data;
     store.suspendEvents();
@@ -160,6 +160,7 @@ var CheckData = function () {
         var total = item.data.SlsFreqID == 'F8' ? 2 : 3;
         var count = 0;
         if (item.data.SlsFreqID != '' && item.data.WeekofVisit != '') {
+            stt++;
             if (item.data.Mon)
                 count++;
             if (item.data.Tue)
@@ -176,7 +177,7 @@ var CheckData = function () {
                 count++;
 
             if (count != total)
-                msgError += item.raw.$id + ', ';
+                msgError += stt + ', ';
         }
     });
     store.resumeEvents();
