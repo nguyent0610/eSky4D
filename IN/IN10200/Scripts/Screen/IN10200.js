@@ -40,7 +40,7 @@ var store_Load = function () {
     checkSetDefault();
 }
 var stoBatch_Load = function () {
-    HQ.isNew = false;
+    
     var record = App.stoBatch.getById(App.cboBatNbr.getValue());
     if (record) {
         bindBatch(record);
@@ -328,6 +328,7 @@ var eventNew = function (sto, grd, keys) {
 var cboBatNbr_Change = function (item, newValue, oldValue) {
     var record = App.stoBatch.getById(newValue);
     if (record) {
+        HQ.isNew = false;
         bindBatch(record);
     } else {
         if (HQ.recentRecord != record) {
@@ -1795,19 +1796,20 @@ var checkTransAdd = function () {
             return false;
         }
     });
+
+    if (!HQ.isInsert && HQ.isNew) {
+        flat = true;
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        flat = true;
+    }
+
     App.cboSlsperID.setReadOnly(App.cboStatus.getValue() != 'H');
     App.cboFromToSiteID.setReadOnly(App.cboStatus.getValue() != 'H');
     App.cboSiteID.setReadOnly(flat);
     App.cboFromToSiteID.setReadOnly(flat);
 
-    if (!HQ.isInsert && HQ.isNew) {
-        App.cboSlsperID.setReadOnly(true);
-        App.cboFromToSiteID.setReadOnly(true);
-    }
-    else if (!HQ.isUpdate && !HQ.isNew) {
-        App.cboSlsperID.setReadOnly(true);
-        App.cboFromToSiteID.setReadOnly(true);
-    }
+    
 };
 
 var getQtyAvail = function (row) {
