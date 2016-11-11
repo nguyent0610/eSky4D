@@ -29,7 +29,7 @@
             X.Store()
             .ID("stoSYS_Favourite")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(SA02200_pgSYS_Favourite_Result), "mdlSA02200_pgSYS_Favourite", "ScreenNumber"))
+            .Model(Util.GenerateModel(typeof(SA02200_pgSYS_Favourite_Result), "mdlSA02200_pgSYS_Favourite", ""))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Favourite"))).AutoLoad(false)
             .Parameters(ps =>
             {

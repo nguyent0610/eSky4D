@@ -22,19 +22,21 @@ namespace SA02200.Controllers
         SA02200Entities _db = Util.CreateObjectContext<SA02200Entities>(true);
         public ActionResult Index()
         {
-            
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
+
         public ActionResult GetSYS_Favourite(string UserName)
         {
             return this.Store(_db.SA02200_pgSYS_Favourite(UserName).ToList());
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
@@ -42,16 +44,24 @@ namespace SA02200.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Favourite"]);
                 ChangeRecords<SA02200_pgSYS_Favourite_Result> lstSYS_Favourite = dataHandler.BatchObjectData<SA02200_pgSYS_Favourite_Result>();
-                foreach (SA02200_pgSYS_Favourite_Result deleted in lstSYS_Favourite.Deleted)
-                {
-                    var del = _db.SYS_Favourite.Where(p => p.ScreenNumber == deleted.ScreenNumber).FirstOrDefault();
-                    if (del != null)
-                    {
-                        _db.SYS_Favourite.DeleteObject(del);
-                    }
-                }
 
                 lstSYS_Favourite.Created.AddRange(lstSYS_Favourite.Updated);
+
+                foreach (SA02200_pgSYS_Favourite_Result deleted in lstSYS_Favourite.Deleted)
+                {
+                    if (lstSYS_Favourite.Created.Where(p => p.ScreenNumber == deleted.ScreenNumber).Count() > 0)
+                    {
+                        lstSYS_Favourite.Created.Where(p => p.ScreenNumber == deleted.ScreenNumber).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.SYS_Favourite.FirstOrDefault(p => p.ScreenNumber == deleted.ScreenNumber);
+                        if (objDel != null)
+                        {
+                            _db.SYS_Favourite.DeleteObject(objDel);  
+                        }
+                    }
+                }
 
                 foreach (SA02200_pgSYS_Favourite_Result curLang in lstSYS_Favourite.Created)
                 {
