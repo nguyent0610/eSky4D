@@ -29,7 +29,7 @@
             X.Store()
             .ID("stoOM_ReasonCode")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(OM22500_pgOM_ReasonCode_Result), "mdlOM22500_pgOM_ReasonCode", "Code"))
+            .Model(Util.GenerateModel(typeof(OM22500_pgOM_ReasonCode_Result), "mdlOM22500_pgOM_ReasonCode", ""))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_ReasonCode"))).AutoLoad(false)
             .Listeners(l =>
             {
