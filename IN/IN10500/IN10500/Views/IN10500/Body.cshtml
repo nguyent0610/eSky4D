@@ -85,7 +85,7 @@
                         .HQParam(new StoreParameterCollection() 
                     {
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.branchID", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }   
                     })
                         .LoadData()
@@ -225,7 +225,7 @@
                         .HQParam(new StoreParameterCollection(){                      
                         new StoreParameter() { Name = "@SiteID", Value = "App.cboSiteID.getValue()", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.branchID", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw } 
                 })
                         .LoadData()

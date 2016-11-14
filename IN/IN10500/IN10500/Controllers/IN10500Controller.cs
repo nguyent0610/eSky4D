@@ -28,18 +28,20 @@ namespace IN10500.Controllers
         private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);    
         private JsonResult _logMessage;
 
-        public ActionResult Index(string branchID)
+        public ActionResult Index(string BranchID,string TagID,string SiteID)
         {
             Util.InitRight(_screenNbr);
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
-            if (branchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
+            if (BranchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
             {
                 return View("Popup");
             }
-            if (branchID == null) branchID = Current.CpnyID;
-            var dftSiteID = _db.IN10500_pdDefaultSite(Current.UserName, branchID, Current.LangID).FirstOrDefault().PassNull();
-            ViewBag.BranchID = branchID;
+            if (BranchID == null) BranchID = Current.CpnyID;
+            var dftSiteID = _db.IN10500_pdDefaultSite(Current.UserName, BranchID, Current.LangID).FirstOrDefault().PassNull();
+            ViewBag.BranchID = BranchID;
             ViewBag.DftSiteID = dftSiteID;
+            ViewBag.TagID = TagID.PassNull();
+            ViewBag.SiteID = SiteID.PassNull();
             return View();
         }
 

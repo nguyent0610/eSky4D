@@ -6,13 +6,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IN10500", "IN10500\IN10500.
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
+		SccNumberOfProjects = 1
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.130.4:8088/tfs/hqsoft
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = IN10500\\IN10500.csproj
-		SccProjectName1 = IN10500
-		SccLocalPath1 = IN10500
+		SccProjectUniqueName0 = IN10500\\IN10500.csproj
+		SccProjectName0 = IN10500
+		SccAuxPath0 = http://192.168.130.4:8088/tfs/hqsoft
+		SccLocalPath0 = IN10500
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
