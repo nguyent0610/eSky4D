@@ -1,11 +1,32 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 var keys = ['Code'];
-var fieldsCheckRequire = ["Code", "Type", "Title00", "Title01", "Msg00", "Msg01"];
-var fieldsLangCheckRequire = ["Code", "Type", "Title00", "Title01", "Msg00", "Msg01"];
+var fieldsCheckRequire = ["Code", "Type", "Msg00", "Msg01"];
+var fieldsLangCheckRequire = ["Code", "Type", "Msg00", "Msg01"];
+
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
+var checkLoad = function () {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoSYS_Message.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+var firstLoad = function () {
+    HQ.util.checkAccessRight();
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    checkLoad();
+};
+
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -25,9 +46,7 @@ var menuClick = function (command) {
                 HQ.message.show(20150303, '', 'refresh');
             }
             else {
-                HQ.isChange = false;
-                HQ.isFirstLoad = true;
-                App.stoSYS_Message.reload();
+                refresh('yes');
             }
             break;
         case "new":
@@ -36,14 +55,11 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
-            if (App.slmSYS_Message.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
-                }
-            }
-            if (App.slmSYS_Message.selected.items[0] != undefined) {
-                if (App.slmSYS_Message.selected.items[0].data.Code != "") {
-                    HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_Message)], 'deleteData', true);
+            if (HQ.isDelete) {
+                if (App.slmSYS_Message.selected.items[0] != undefined) {
+                    if (App.slmSYS_Message.selected.items[0].data.Code != "") {
+                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_Message)], 'deleteData', true);
+                    }
                 }
             }
             break;
@@ -62,34 +78,30 @@ var menuClick = function (command) {
 
 };
 
-//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
-var firstLoad = function () {
-    HQ.isFirstLoad = true;
-    App.stoSYS_Message.reload();
-};
-
-//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'SA01100');
 };
 
-//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA01100');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keys);
-            //HQ.store.insertRecord(sto, keys, { Code: 0 });
         }
         HQ.isFirstLoad = false;
     }
-    HQ.common.showBusy(false);
-    HQ.isChange = HQ.store.isChange(sto);
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
 };
+
 
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
 };
 
 var grdSYS_Message_BeforeEdit = function (editor, e) {
@@ -122,8 +134,7 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
-                HQ.isChange = false;
-                menuClick("refresh");
+                refresh('yes');
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
