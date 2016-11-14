@@ -22,15 +22,16 @@ namespace SA01400.Controllers
         SA01400Entities _db = Util.CreateObjectContext<SA01400Entities>(true);
         public ActionResult Index()
         {
-            
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
+
         public ActionResult GetSYS_BuildLog()
         {
             return this.Store(_db.SA01400_pgSYS_BuildLog().ToList());

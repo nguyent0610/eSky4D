@@ -19,8 +19,6 @@
     .TopBar(Util.SetupToolbar("Print,New,Delete,Save", true, ""))
     .Layout(LayoutType.Fit) 
     .Items(
-        ////Thiet ke giao dien o day
-
         X.GridPanel()
         .Scroll(ScrollMode.Both)
         .View(X.GridView().TrackOver(false))
@@ -29,21 +27,21 @@
             X.Store()
             .ID("stoSYS_BuildLog")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(SA01400_pgSYS_BuildLog_Result), "mdlSA01400_pgSYS_BuildLog", "Code"))
+            .Model(Util.GenerateModel(typeof(SA01400_pgSYS_BuildLog_Result), "mdlSA01400_pgSYS_BuildLog", ""))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_BuildLog")))
             .Listeners(l => { 
-                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
+                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingData\"));";
                 l.Load.Handler = "HQ.common.showBusy(false);"; 
             })
         )
         .Listeners(p => p.BoxReady.Handler = "App.stoSYS_BuildLog.reload();")
         .SortableColumns(false)
         .ColumnModel(
-            X.RowNumbererColumn().Width(40),
-            X.Column().Text(Util.GetLang("Version")).DataIndex("Version").Width(150),
-            X.Column().Text(Util.GetLang("BuildID")).DataIndex("BuildID").Width(150),
-            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150),
-            X.DateColumn().Text(Util.GetLang("AppliedDate")).DataIndex("AppliedDate").Width(150).Format("dd/MM/yyyy"),
+            X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
+            X.Column().Text(Util.GetLang("Version")).DataIndex("Version").Width(100),
+            X.Column().Text(Util.GetLang("BuildID")).DataIndex("BuildID").Width(100),
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(300),
+            HQ.DateColumn().Text(Util.GetLang("AppliedDate")).DataIndex("AppliedDate").Width(100),
            X.CommandColumn()
             .Width(150)
             .Commands(
