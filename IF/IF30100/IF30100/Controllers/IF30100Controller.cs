@@ -36,6 +36,7 @@ namespace IF30100.Controllers
         private string _userName = Current.UserName;
         private string _branchID = "";
         IF30100Entities _db = Util.CreateObjectContext<IF30100Entities>(false);
+        IF30100SysEntities _eBiz4DSys = Util.CreateObjectContext<IF30100SysEntities>(true,"Sys");
         private JsonResult _logMessage;
 
         public ActionResult Index(string screenNbr)
@@ -366,42 +367,6 @@ namespace IF30100.Controllers
         {
             try
             {
-                //string select = "";
-                //string param = "";
-                //string proc="";
-                //var detHandler = new StoreDataHandler(data["lstDet"]);
-                //var lstDet = detHandler.ObjectData<IF30100_pgData_Result>().ToList();
-                //foreach(var obj in lstDet)
-                //{
-
-                //    select += obj.Checked == true ? obj.Column_Name + "," : "";
-                //    if (obj.Operator.PassNull() != "")
-                //    {
-                //        if (obj.Operator.ToUpper().Trim() == "Between".ToUpper())
-                //        {
-                //            param += obj.Column_Name + " Between " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' AND " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value2 + "' AND ";
-                //        }
-                //        else if (obj.Operator.ToUpper().Trim() == "AND".ToUpper())
-                //        {
-                //            param += obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' AND " + obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value2 + "' AND ";
-                //        }
-                //        else if (obj.Operator.ToUpper().Trim() == "OR".ToUpper())
-                //        {
-                //            param += obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' OR " + obj.Column_Name + " = " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value2 + "' AND ";
-                //        }
-                //        else if (obj.Operator.ToUpper().Trim() == "IN".ToUpper())
-                //        {
-
-                //            param += obj.Column_Name + " IN('"+ obj.Value1.Replace(",","','")+ "') AND ";
-                //        }
-                //        else param += obj.Column_Name + " " + obj.Operator + " " + (obj.Data_Type.ToUpper() == "NVARCHAR" ? "N'" : "'") + obj.Value1 + "' AND ";
-                        
-                //    }
-
-                //}
-                //param = param.Length > 3 ?  " Where " + param.Substring(0, param.Length - 4) : param;
-                //proc="select "+select.TrimEnd(',')+" from " + view +param;
-
                 Stream stream = new MemoryStream();
                 Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook();
                 Aspose.Cells.Worksheet SheetData = workbook.Worksheets[0];
@@ -1385,5 +1350,761 @@ namespace IF30100.Controllers
                 default: return XlConsolidationFunction.xlSum;
             }
         }
+
+        [DirectMethod]
+        public ActionResult IF30100LoadRPTParm(string ReportNbr, string ReportName)
+        {
+
+            var obj = _eBiz4DSys.SYS_Configurations.Where(p => p.Code == "isRPTDefault").FirstOrDefault();// (ConfigurationManager.AppSettings["isRPTDefault"].PassNull() == "1") ? true : false;
+            bool isRPTDefault = obj == null ? false : (obj.IntVal == 1 ? true : false);
+            StoreParameterCollection lstp = new StoreParameterCollection();
+            lstp = getStoreParameterCollection(ReportNbr);
+
+            SYS_ReportExportParm objRPTParm = _eBiz4DSys.SYS_ReportExportParm.FirstOrDefault(p => p.ReportNbr.Equals(ReportNbr));
+
+           
+            HQCombo StringParm00 = new HQCombo() { HQFirstDefault = isRPTDefault, Name = "StringParm00", ID = "StringParm00", Hidden = true, MarginSpec = "5,0,0,0", LabelWidth = 120, AnchorHorizontal = "100%", HQColumnShow = "*", MultiSelect = true };// this.GetCmp<ComboBox>("cboStringParm00");
+            HQCombo StringParm01 = new HQCombo() { HQFirstDefault = isRPTDefault, Name = "StringParm01", ID = "StringParm01", Hidden = true, MarginSpec = "5,0,0,0", LabelWidth = 120, AnchorHorizontal = "100%", HQColumnShow = "*", MultiSelect = true };// this.GetCmp<ComboBox>("cboStringParm01");
+            HQCombo StringParm02 = new HQCombo() { HQFirstDefault = isRPTDefault, Name = "StringParm02", ID = "StringParm02", Hidden = true, MarginSpec = "5,0,0,0", LabelWidth = 120, AnchorHorizontal = "100%", HQColumnShow = "*", MultiSelect = true };// this.GetCmp<ComboBox>("cboStringParm02");
+            HQCombo StringParm03 = new HQCombo() { HQFirstDefault = isRPTDefault, Name = "StringParm03", ID = "StringParm03", Hidden = true, MarginSpec = "5,0,0,0", LabelWidth = 120, AnchorHorizontal = "100%", HQColumnShow = "*", MultiSelect = true };// this.GetCmp<ComboBox>("cboStringParm03");
+
+            HQDateField cboDate00 = new HQDateField() { Name = "cboDate00", ID = "cboDate00", Hidden = true, Value = DateTime.Now, Width = 230, LabelWidth = 120 };// this.GetCmp<DateField>("cboDate00");
+            HQDateField cboDate01 = new HQDateField() { Name = "cboDate01", ID = "cboDate01", Hidden = true, Value = DateTime.Now, Width = 230, LabelWidth = 120 };// this.GetCmp<DateField>("cboDate01");
+            HQDateField cboDate02 = new HQDateField() { Name = "cboDate02", ID = "cboDate02", Hidden = true, Value = DateTime.Now, Width = 230, LabelWidth = 120 };//this.GetCmp<DateField>("cboDate02");
+            HQDateField cboDate03 = new HQDateField() { Name = "cboDate03", ID = "cboDate03", Hidden = true, Value = DateTime.Now, Width = 230, LabelWidth = 120 };//this.GetCmp<DateField>("cboDate03");
+
+
+            HQCheckbox chk00 = new HQCheckbox() { Name = "chk00", ID = "chk00", Hidden = true, Checked = false };// this.GetCmp<Checkbox>("chk00");
+            HQCheckbox chk01 = new HQCheckbox() { Name = "chk01", ID = "chk01", Hidden = true, Checked = false };// this.GetCmp<Checkbox>("chk01");
+            HQCheckbox chk02 = new HQCheckbox() { Name = "chk02", ID = "chk02", Hidden = true, Checked = false };// this.GetCmp<Checkbox>("chk02");
+            HQCheckbox chk03 = new HQCheckbox() { Name = "chk03", ID = "chk03", Hidden = true, Checked = false };// this.GetCmp<Checkbox>("chk03");
+
+            var pnlDate = this.GetCmp<Panel>("pnlDate");
+            var pnlStringParm = this.GetCmp<Panel>("pnlStringParm");
+            var pnlBoaleanParm = this.GetCmp<Panel>("pnlBoaleanParm");
+            var tabList = this.GetCmp<TabPanel>("tabList");
+            var pnlButton = this.GetCmp<TabPanel>("pnlButton");
+          
+            Component component = new Component() { ID = "component", Flex = 1 };
+            Ext.Net.Button btnLoadParamList = new Ext.Net.Button() { ID = "btnLoadParamList", Text = Util.GetLang("reloadfilterlist"), MarginSpec = "3 0 0 0", Hidden = true };
+        
+
+            HQGridPanel List00 = new HQGridPanel() { ID = "List0", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true };
+            HQGridPanel List01 = new HQGridPanel() { ID = "List1", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true };
+            HQGridPanel List02 = new HQGridPanel() { ID = "List2", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true };
+            HQGridPanel List03 = new HQGridPanel() { ID = "List3", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true };
+
+            HQGridPanel List0 = new HQGridPanel()
+            {
+                ID = "List0",
+                Hidden = true,
+                MultiSelect = true,
+                HQisPaging = true,
+                HQPageSize = 50,
+                HQAutoLoad = false,
+                HQColumnSelect = true
+                    ,
+                BottomBar ={
+                    new Ext.Net.PagingToolbar(){
+                         ID="PagingTool0"
+                        ,Items = {
+                            new Ext.Net.Label("Page size:"),
+                            new Ext.Net.ToolbarSpacer(10),
+                            new Ext.Net.ComboBox(){
+                                Width = 80,
+                                Items = {
+                                    new Ext.Net.ListItem("1"),
+                                    new Ext.Net.ListItem("2"),
+                                    new Ext.Net.ListItem("10"),
+                                    new Ext.Net.ListItem("30"),
+                                    new Ext.Net.ListItem("50")
+                                },
+                                SelectedItems = {new Ext.Net.ListItem("50")},
+                                Listeners = {
+                                    Select = {
+                                        Fn = "HQ.grid.onPageSelect"
+                                    }
+                                }
+                            }
+                        },
+                        Plugins = { new Ext.Net.ProgressBarPager()}
+                    }
+                },
+            };//  this.GetCmp<Panel>("List0");
+
+            HQGridPanel List1 = new HQGridPanel()
+            {
+                ID = "List1",
+                Hidden = true,
+                MultiSelect = true,
+                HQisPaging = true,
+                HQPageSize = 50,
+                HQAutoLoad = false,
+                HQColumnSelect = true,
+                BottomBar ={
+                    new Ext.Net.PagingToolbar(){
+                         ID="PagingTool1"
+                        ,Items = {
+                            new Ext.Net.Label("Page size:"),
+                            new Ext.Net.ToolbarSpacer(10),
+                            new Ext.Net.ComboBox(){
+                                Width = 80,
+                                Items = {
+                                    new Ext.Net.ListItem("1"),
+                                    new Ext.Net.ListItem("2"),
+                                    new Ext.Net.ListItem("10"),
+                                    new Ext.Net.ListItem("30"),
+                                    new Ext.Net.ListItem("50")
+                                },
+                                SelectedItems = {new Ext.Net.ListItem("50")},
+                                Listeners = {
+                                    Select = {
+                                        Fn = "HQ.grid.onPageSelect"
+                                    }
+                                }
+                            }
+                        },
+                        Plugins = { new Ext.Net.ProgressBarPager()}
+                    }
+                },
+            };//  this.GetCmp<Panel>("List0");
+            HQGridPanel List2 = new HQGridPanel()
+            {
+                ID = "List2",
+                Hidden = true,
+                MultiSelect = true,
+                HQisPaging = true,
+                HQPageSize = 50,
+                HQAutoLoad = false,
+                HQColumnSelect = true
+                ,
+                BottomBar ={
+                    new Ext.Net.PagingToolbar(){
+                        Items = {
+                            new Ext.Net.Label("Page size:"),
+                            new Ext.Net.ToolbarSpacer(10),
+                            new Ext.Net.ComboBox(){
+                                Width = 80,
+                                Items = {
+                                    new Ext.Net.ListItem("1"),
+                                    new Ext.Net.ListItem("2"),
+                                    new Ext.Net.ListItem("10"),
+                                    new Ext.Net.ListItem("30"),
+                                    new Ext.Net.ListItem("50")
+                                },
+                                SelectedItems = {new Ext.Net.ListItem("50")},
+                                Listeners = {
+                                    Select = {
+                                        Fn = "HQ.grid.onPageSelect"
+                                    }
+                                }
+                            }
+                        },
+                        Plugins = { new Ext.Net.ProgressBarPager()}
+                    }
+                },
+            };//  this.GetCmp<Panel>("List2");
+            HQGridPanel List3 = new HQGridPanel()
+            {
+                ID = "List3",
+                Hidden = true,
+                MultiSelect = true,
+                HQisPaging = true,
+                HQPageSize = 50,
+                HQAutoLoad = false,
+                HQColumnSelect = true
+                ,
+                BottomBar ={
+                    new Ext.Net.PagingToolbar(){
+                        Items = {
+                            new Ext.Net.Label("Page size:"),
+                            new Ext.Net.ToolbarSpacer(10),
+                            new Ext.Net.ComboBox(){
+                                Width = 80,
+                                Items = {
+                                    new Ext.Net.ListItem("1"),
+                                    new Ext.Net.ListItem("2"),
+                                    new Ext.Net.ListItem("10"),
+                                    new Ext.Net.ListItem("30"),
+                                    new Ext.Net.ListItem("50")
+                                },
+                                SelectedItems = {new Ext.Net.ListItem("50")},
+                                Listeners = {
+                                    Select = {
+                                        Fn = "HQ.grid.onPageSelect"
+                                    }
+                                }
+                            }
+                        },
+                        Plugins = { new Ext.Net.ProgressBarPager()}
+                    }
+                },
+            };//  this.GetCmp<Panel>("List3");
+
+
+            if (objRPTParm != null)
+            {
+
+                //List Parameter
+                List0.Title = Util.GetLang(objRPTParm.ListCap00);
+                List1.Title = Util.GetLang(objRPTParm.ListCap01);
+                List2.Title = Util.GetLang(objRPTParm.ListCap02);
+                List3.Title = Util.GetLang(objRPTParm.ListCap03);
+                //Date parameter
+                cboDate00.HQLangCode = objRPTParm.DateCap00.Split(';').Length > 0 ? objRPTParm.DateCap00.Split(';')[0] : objRPTParm.DateCap00;
+                cboDate01.HQLangCode = objRPTParm.DateCap01.Split(';').Length > 0 ? objRPTParm.DateCap01.Split(';')[0] : objRPTParm.DateCap01;
+                cboDate02.HQLangCode = objRPTParm.DateCap02.Split(';').Length > 0 ? objRPTParm.DateCap02.Split(';')[0] : objRPTParm.DateCap02;
+                cboDate03.HQLangCode = objRPTParm.DateCap03.Split(';').Length > 0 ? objRPTParm.DateCap03.Split(';')[0] : objRPTParm.DateCap03;
+                //String parameter
+                StringParm00.HQLangCode = objRPTParm.StringCap00;
+                StringParm01.HQLangCode = objRPTParm.StringCap01;
+                StringParm02.HQLangCode = objRPTParm.StringCap02;
+                StringParm03.HQLangCode = objRPTParm.StringCap03;
+                //Boolean Parameter                    
+                chk00.HQLangCode = objRPTParm.BooleanCap00;
+                chk01.HQLangCode = objRPTParm.BooleanCap01;
+                chk02.HQLangCode = objRPTParm.BooleanCap02;
+                chk03.HQLangCode = objRPTParm.BooleanCap03;
+
+                #region List Param
+                if (!objRPTParm.ListCap00.ToString().Trim().Equals(""))
+                {
+                    List0.Hidden = false;
+                    string handler = "";
+                    handler = "App.List0.getStore().reload();";
+                    //List0.Tag = objRPTParm.ListProc00.Trim();
+                    List0.HQProcedure = objRPTParm.ListProc00.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
+                    List0.HQDBSys = false;
+                    //List0.SelectionModel.Add(new CheckboxSelectionModel() { Mode = SelectionMode.Multi,});
+                    List0.HQParam = lstp;// (new StoreParameterCollection { new StoreParameter() { Name = "@ReportNbr", Value = "App.cboRptList.getValue()", Mode = ParameterMode.Raw } });
+                    List0.LoadData();
+
+                    //this.List0.Header = objRPTParm.ListCap00;
+                    if (!objRPTParm.ListCap01.ToString().Trim().Equals(""))
+                    {
+                        List1.Hidden = false;
+                        handler += "App.List1.getStore().reload();";
+                        //List1.Tag = objRPTParm.ListProc01.Trim();
+                        List1.HQProcedure = objRPTParm.ListProc01.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
+                        List1.HQDBSys = false;
+                        //List1.SelectionModel.Add(new CheckboxSelectionModel() { Mode = SelectionMode.Multi });
+                        List1.HQParam = lstp;// (new StoreParameterCollection { new StoreParameter() { Name = "@ReportNbr", Value = "App.cboRptList.getValue()", Mode = ParameterMode.Raw } });
+                        List1.LoadData();
+                        //this.List1.Header = objRPTParm.ListCap01;
+                        if (!objRPTParm.ListCap02.ToString().Trim().Equals(""))
+                        {
+                            List2.Hidden = false;
+                            handler += "App.List2.getStore().reload();";
+                            //List2.Tag = objRPTParm.ListProc02.Trim();
+                            List2.HQProcedure = objRPTParm.ListProc02.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
+                            List2.HQDBSys = false;
+                            //List2.SelectionModel.Add(new CheckboxSelectionModel() { Mode = SelectionMode.Multi });
+                            List2.HQParam = lstp;// (new StoreParameterCollection { new StoreParameter() { Name = "@ReportNbr", Value = "App.cboRptList.getValue()", Mode = ParameterMode.Raw } });
+                            List2.LoadData();
+                            //this.List2.Header = objRPTParm.ListCap02;
+                            if (!objRPTParm.ListCap03.ToString().Trim().Equals(""))
+                            {
+                                List3.Hidden = false;
+                                handler += "App.List3.getStore().reload();";
+                                //List3.Tag = objRPTParm.ListProc03.Trim();
+                                List3.HQProcedure = objRPTParm.ListProc03.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
+                                List3.HQDBSys = false;
+                                //List3.SelectionModel.Add(new CheckboxSelectionModel() { Mode = SelectionMode.Multi });
+                                List3.HQParam = lstp;// (new StoreParameterCollection { new StoreParameter() { Name = "@ReportNbr", Value = "App.cboRptList.getValue()", Mode = ParameterMode.Raw } });
+                                List3.LoadData();
+                            }
+                        }
+                    }
+                    btnLoadParamList.Listeners.Click.Handler = handler;
+                   
+                    
+                   
+                }
+                #endregion
+                #region//Date parameter
+                if (!objRPTParm.DateCap00.ToString().Trim().Equals(""))
+                {
+                    if (objRPTParm.DateCap00.Split(';').Length > 1 && objRPTParm.DateCap00.Split(';')[1].ToLower() == "p")
+                    {
+                        cboDate00.Type = DatePickerType.Month;
+                    }
+
+                    cboDate00.Hidden = false;
+                    string handler = "";
+                    if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@DateParm00"))
+                    {
+                        handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                    }
+                    if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@DateParm00"))
+                    {
+                        handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                    }
+                    if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@DateParm00"))
+                    {
+                        handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                    }
+                    if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@DateParm00"))
+                    {
+                        handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                    }
+
+
+                    cboDate00.Listeners.Change.Handler = handler;
+                    if (!objRPTParm.DateCap01.ToString().Trim().Equals(""))
+                    {
+                        if (objRPTParm.DateCap01.Split(';').Length > 1 && objRPTParm.DateCap01.Split(';')[1].ToLower() == "p")
+                        {
+
+                            cboDate01.Type = DatePickerType.Month;
+                        }
+
+                        cboDate01.Hidden = false;
+                        handler = "";
+                        if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@DateParm01"))
+                        {
+                            handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                        }
+                        if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@DateParm01"))
+                        {
+                            handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                        }
+                        if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@DateParm01"))
+                        {
+                            handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                        }
+                        if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@DateParm01"))
+                        {
+                            handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                        }
+
+
+                        cboDate01.Listeners.Change.Handler = handler;
+                        if (!objRPTParm.DateCap02.ToString().Trim().Equals(""))
+                        {
+                            if (objRPTParm.DateCap02.Split(';').Length > 1 && objRPTParm.DateCap02.Split(';')[1].ToLower() == "p")
+                            {
+                                cboDate02.Type = DatePickerType.Month;
+                            }
+
+                            cboDate02.Hidden = false;
+                            handler = "";
+                            if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@DateParm02"))
+                            {
+                                handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                            }
+                            if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@DateParm02"))
+                            {
+                                handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                            }
+                            if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@DateParm02"))
+                            {
+                                handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                            }
+                            if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@DateParm02"))
+                            {
+                                handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                            }
+
+
+
+                            cboDate02.Listeners.Change.Handler = handler;
+                            if (!objRPTParm.DateCap03.ToString().Trim().Equals(""))
+                            {
+
+                                if (objRPTParm.DateCap03.Split(';').Length > 1 && objRPTParm.DateCap03.Split(';')[1].ToLower() == "p")
+                                {
+                                    cboDate03.Type = DatePickerType.Month;
+                                }
+
+                                cboDate03.Hidden = false;
+                                handler = "";
+                                if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@DateParm03"))
+                                {
+                                    handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                                }
+                                if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@DateParm03"))
+                                {
+                                    handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                                }
+                                if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@DateParm03"))
+                                {
+                                    handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                                }
+                                if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@DateParm03"))
+                                {
+                                    handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                                }
+
+
+                                cboDate03.Listeners.Change.Handler = handler;
+                            }
+                        }
+                    }
+                }
+                #endregion
+                #region//String parameter
+                if (!objRPTParm.StringCap00.Trim().Equals(""))
+                {
+
+
+
+                    StringParm00.Hidden = false;
+                    if (!objRPTParm.PPV_Proc00.Trim().Equals(""))
+                    {
+                        StringParm00.Tag = objRPTParm.PPV_Proc00.Trim();
+                        StringParm00.HQProcedure = objRPTParm.PPV_Proc00.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
+                        StringParm00.HQDBSys = false;
+                        StringParm00.HQParam = lstp;// (new StoreParameterCollection { new StoreParameter() { Name = "@ReportNbr", Value = "App.cboRptList.getValue()", Mode = ParameterMode.Raw } });
+                        StringParm00.DisplayField = objRPTParm.PPV_Proc00.Trim().Split(';').Length > 1 ? objRPTParm.PPV_Proc00.Trim().Split(';')[1] : "";
+                        StringParm00.LoadData();
+                        string handler = "";
+                        if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@StringParm00"))
+                        {
+                            handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                        }
+                        if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@StringParm00"))
+                        {
+                            handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                        }
+                        if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@StringParm00"))
+                        {
+                            handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                        }
+                        if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@StringParm00"))
+                        {
+                            handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                        }
+                        StringParm00.Listeners.Change.Handler = handler;
+
+                    }
+                    if (!objRPTParm.StringCap01.Trim().Equals(""))
+                    {
+                        StringParm01.Hidden = false;
+                        if (!objRPTParm.PPV_Proc01.Trim().Equals(""))
+                        {
+                            StringParm01.Tag = objRPTParm.PPV_Proc01.Trim();
+                            StringParm01.HQProcedure = objRPTParm.PPV_Proc01.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
+                            StringParm01.HQDBSys = false;
+                            StringParm01.HQParam = lstp;// (new StoreParameterCollection { new StoreParameter() { Name = "@ReportNbr", Value = "App.cboRptList.getValue()", Mode = ParameterMode.Raw } });
+                            StringParm01.DisplayField = objRPTParm.PPV_Proc01.Trim().Split(';').Length > 1 ? objRPTParm.PPV_Proc01.Trim().Split(';')[1] : "";
+                            StringParm01.LoadData();
+                            string handler = "";
+                            if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@StringParm01"))
+                            {
+                                handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                            }
+                            if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@StringParm01"))
+                            {
+                                handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                            }
+                            if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@StringParm01"))
+                            {
+                                handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                            }
+                            if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@StringParm01"))
+                            {
+                                handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                            }
+                            StringParm01.Listeners.Change.Handler = handler;
+                        }
+
+                        if (!objRPTParm.StringCap02.Trim().Equals(""))
+                        {
+                            StringParm02.Hidden = false;
+                            if (!objRPTParm.PPV_Proc02.Trim().Equals(""))
+                            {
+                                StringParm02.Tag = objRPTParm.PPV_Proc02.Trim();
+                                StringParm02.HQProcedure = objRPTParm.PPV_Proc02.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
+                                StringParm02.HQDBSys = false;
+                                StringParm02.HQParam = lstp;// (new StoreParameterCollection { new StoreParameter() { Name = "@ReportNbr", Value = "App.cboRptList.getValue()", Mode = ParameterMode.Raw } });
+                                StringParm02.DisplayField = objRPTParm.PPV_Proc02.Trim().Split(';').Length > 1 ? objRPTParm.PPV_Proc02.Trim().Split(';')[1] : "";
+                                StringParm02.LoadData();
+                                string handler = "";
+                                if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@StringParm02"))
+                                {
+                                    handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                                }
+                                if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@StringParm02"))
+                                {
+                                    handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                                }
+                                if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@StringParm02"))
+                                {
+                                    handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                                }
+                                if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@StringParm02"))
+                                {
+                                    handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                                }
+                                StringParm02.Listeners.Change.Handler = handler;
+                            }
+
+                            if (!objRPTParm.StringCap03.Trim().Equals(""))
+                            {
+
+                                StringParm03.Hidden = false;
+                                if (!objRPTParm.PPV_Proc03.Trim().Equals(""))
+                                {
+                                    StringParm03.Tag = objRPTParm.PPV_Proc03.Trim();
+                                    StringParm03.HQProcedure = objRPTParm.PPV_Proc03.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
+                                    StringParm03.HQDBSys = false;
+                                    StringParm03.HQParam = lstp;// (new StoreParameterCollection { new StoreParameter() { Name = "@ReportNbr", Value = "App.cboRptList.getValue()", Mode = ParameterMode.Raw } });
+                                    StringParm03.DisplayField = objRPTParm.PPV_Proc03.Trim().Split(';').Length > 1 ? objRPTParm.PPV_Proc03.Trim().Split(';')[1] : "";
+                                    //StringParm03.ValueField = "";
+                                    StringParm03.LoadData();
+                                    string handler = "";
+                                    if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@StringParm03"))
+                                    {
+                                        handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                                    }
+                                    if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@StringParm03"))
+                                    {
+                                        handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                                    }
+                                    if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@StringParm03"))
+                                    {
+                                        handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                                    }
+                                    if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@StringParm03"))
+                                    {
+                                        handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                                    }
+                                    StringParm03.Listeners.Change.Handler = handler;
+                                }
+                            }
+                        }
+                    }
+                }
+                #endregion
+                #region//Boolean Parameter
+                if (!objRPTParm.BooleanCap00.ToString().Trim().Equals(""))
+                {
+
+                    chk00.Hidden = false;
+                    chk00.Checked = false;
+                    string handler = "";
+                    if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@BooleanParm00"))
+                    {
+                        handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                    }
+                    if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@BooleanParm00"))
+                    {
+                        handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                    }
+                    if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@BooleanParm00"))
+                    {
+                        handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                    }
+                    if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@BooleanParm00"))
+                    {
+                        handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                    }
+
+
+
+                    chk00.Listeners.Change.Handler = handler;
+                    if (!objRPTParm.BooleanCap01.ToString().Trim().Equals(""))
+                    {
+                        chk01.Hidden = false;
+                        chk01.Checked = false;
+                        handler = "";
+                        if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@BooleanParm01"))
+                        {
+                            handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                        }
+                        if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@BooleanParm01"))
+                        {
+                            handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                        }
+                        if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@BooleanParm01"))
+                        {
+                            handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                        }
+                        if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@BooleanParm01"))
+                        {
+                            handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                        }
+
+
+
+                        chk01.Listeners.Change.Handler = handler;
+                        if (!objRPTParm.BooleanCap02.ToString().Trim().Equals(""))
+                        {
+
+                            chk02.Hidden = false;
+                            chk02.Checked = false;
+                            handler = "";
+                            if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@BooleanParm02"))
+                            {
+                                handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                            }
+                            if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@BooleanParm02"))
+                            {
+                                handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                            }
+                            if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@BooleanParm02"))
+                            {
+                                handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                            }
+                            if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@BooleanParm02"))
+                            {
+                                handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                            }
+
+
+
+                            chk02.Listeners.Change.Handler = handler;
+                            if (!objRPTParm.BooleanCap03.ToString().Trim().Equals(""))
+                            {
+
+                                chk03.Hidden = false;
+                                chk03.Checked = false;
+                                handler = "";
+                                if (objRPTParm.PPV_Proc00.PassNull().ToString().Contains("@BooleanParm03"))
+                                {
+                                    handler = "App.StringParm00.clearValue();App.StringParm00.getStore().reload();";
+                                }
+                                if (objRPTParm.PPV_Proc01.PassNull().ToString().Contains("@BooleanParm03"))
+                                {
+                                    handler += "App.StringParm01.clearValue();App.StringParm01.getStore().reload();";
+                                }
+                                if (objRPTParm.PPV_Proc02.PassNull().ToString().Contains("@BooleanParm03"))
+                                {
+                                    handler += "App.StringParm02.clearValue();App.StringParm02.getStore().reload();";
+                                }
+                                if (objRPTParm.PPV_Proc03.PassNull().ToString().Contains("@BooleanParm03"))
+                                {
+                                    handler += "App.StringParm03.clearValue();App.StringParm03.getStore().reload();";
+                                }
+
+                                chk03.Listeners.Change.Handler = handler;
+                            }
+                        }
+                    }
+                }
+                #endregion
+            }
+
+            cboDate00.AddTo(pnlDate);
+            cboDate01.AddTo(pnlDate);
+            cboDate02.AddTo(pnlDate);
+            cboDate03.AddTo(pnlDate);
+
+
+            StringParm00.AddTo(pnlStringParm);
+            StringParm01.AddTo(pnlStringParm);
+            StringParm02.AddTo(pnlStringParm);
+            StringParm03.AddTo(pnlStringParm);
+
+            chk00.AddTo(pnlBoaleanParm);
+            chk01.AddTo(pnlBoaleanParm);
+            chk02.AddTo(pnlBoaleanParm);
+            chk03.AddTo(pnlBoaleanParm);
+            if (objRPTParm != null)
+            {
+
+                if (!objRPTParm.ListCap00.ToString().Trim().Equals(""))
+                {
+                    List0.AddTo(tabList);
+                }
+                else
+                {
+                    List00.AddTo(tabList);
+                }
+
+                if (!objRPTParm.ListCap01.ToString().Trim().Equals(""))
+                {
+                    List1.AddTo(tabList);
+                }
+                else
+                {
+                    List01.AddTo(tabList);
+                }
+                if (!objRPTParm.ListCap02.ToString().Trim().Equals(""))
+                {
+                    List2.AddTo(tabList);
+                }
+                else
+                {
+                    List02.AddTo(tabList);
+                }
+                if (!objRPTParm.ListCap03.ToString().Trim().Equals(""))
+                {
+                    List3.AddTo(tabList);
+                }
+                else
+                {
+                    List03.AddTo(tabList);
+                }
+
+            }
+            else
+            {
+                List00.AddTo(tabList);
+                List01.AddTo(tabList);
+                List02.AddTo(tabList);
+                List03.AddTo(tabList);
+            }
+
+            tabList.Hidden = true;
+            pnlDate.Hidden = true;
+            pnlStringParm.Hidden = true;
+            pnlBoaleanParm.Hidden = true;
+
+            if (!List0.Hidden || !List1.Hidden || !List2.Hidden || !List3.Hidden)//ẩn nút load danh sách tham số
+            {
+                btnLoadParamList.Hidden = false;
+                tabList.Hidden = false;
+            }
+
+            if (!cboDate00.Hidden || !cboDate01.Hidden || !cboDate02.Hidden || !cboDate03.Hidden)//ẩn nút load danh sách tham số
+            {
+                pnlDate.Hidden = false;
+               
+            }
+            if (!StringParm00.Hidden || !StringParm01.Hidden || !StringParm02.Hidden || !StringParm03.Hidden)//ẩn nút load danh sách tham số
+            {
+
+                pnlStringParm.Hidden = false;
+            }
+            if (!chk00.Hidden || !chk01.Hidden || !chk02.Hidden || !chk03.Hidden)//ẩn nút load danh sách tham số
+            {
+
+                pnlBoaleanParm.Hidden = false;
+            }
+
+            component.AddTo(pnlButton);
+            btnLoadParamList.AddTo(pnlButton);
+            return this.Direct();
+        }
+
+        private StoreParameterCollection getStoreParameterCollection(string ReportNbr)
+        {
+            StoreParameterCollection lstp = new StoreParameterCollection();
+
+            lstp.Add(new StoreParameter() { Name = "@ReportNbr", Value = ReportNbr, Mode = ParameterMode.Value });
+            lstp.Add(new StoreParameter() { Name = "@ReportDate", Value = DateTime.Now.ToString("yyyyMMdd"), Mode = ParameterMode.Value });
+
+            lstp.Add(new StoreParameter() { Name = "@DateParm00", Value = "App.cboDate00.getValue()", Mode = ParameterMode.Raw });
+            lstp.Add(new StoreParameter() { Name = "@DateParm01", Value = "App.cboDate01.getValue()", Mode = ParameterMode.Raw });
+            lstp.Add(new StoreParameter() { Name = "@DateParm02", Value = "App.cboDate02.getValue()", Mode = ParameterMode.Raw });
+            lstp.Add(new StoreParameter() { Name = "@DateParm03", Value = "App.cboDate03.getValue()", Mode = ParameterMode.Raw });
+
+            lstp.Add(new StoreParameter() { Name = "@BooleanParm00", Value = "App.chk00.getValue()==false?0:1", Mode = ParameterMode.Raw });
+            lstp.Add(new StoreParameter() { Name = "@BooleanParm01", Value = "App.chk01.getValue()==false?0:1", Mode = ParameterMode.Raw });
+            lstp.Add(new StoreParameter() { Name = "@BooleanParm02", Value = "App.chk02.getValue()==false?0:1", Mode = ParameterMode.Raw });
+            lstp.Add(new StoreParameter() { Name = "@BooleanParm03", Value = "App.chk03.getValue()==false?0:1", Mode = ParameterMode.Raw });
+
+            lstp.Add(new StoreParameter() { Name = "@StringParm00", Value = "App.StringParm00.valueModels?App.StringParm00.getValue().join(','):''", Mode = ParameterMode.Raw });
+            lstp.Add(new StoreParameter() { Name = "@StringParm01", Value = "App.StringParm01.valueModels?App.StringParm01.getValue().join(','):''", Mode = ParameterMode.Raw });
+            lstp.Add(new StoreParameter() { Name = "@StringParm02", Value = "App.StringParm02.valueModels?App.StringParm02.getValue().join(','):''", Mode = ParameterMode.Raw });
+            lstp.Add(new StoreParameter() { Name = "@StringParm03", Value = "App.StringParm03.valueModels?App.StringParm03.getValue().join(','):''", Mode = ParameterMode.Raw });
+
+
+            lstp.Add(new StoreParameter() { Name = "@UserID", Value = Current.UserName, Mode = ParameterMode.Value });
+
+            return lstp;
+        }
+
     }
 }

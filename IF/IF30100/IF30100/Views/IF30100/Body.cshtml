@@ -142,93 +142,189 @@
                 )
 
             )
-            
+           
             , X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Border)
             .Items(
-                X.Panel().ID("pnlFilter").Hidden(true).Layout(LayoutType.Border).Title(Util.GetLang("Parameter"))
+                X.Panel().ID("pnlFilter").Hidden(true).Layout(LayoutType.Border).Title(Util.GetLang("Parameter")).Flex(10000)
                 .Items(
                     X.Panel().ID("pnlFilterHeader").BodyStyle("padding:20px 10px 10px 50px;").Border(false).Region(Region.North).Layout(LayoutType.VBox)
                     , X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Fit)
                     .Items(X.TabPanel().ID("tabFilterGrid"))
                 )
-                , X.Panel().Region(Region.Center).Layout(LayoutType.Border).Flex(6)
+                
+                , X.Panel().ID("pnlView").Region(Region.Center).Layout(LayoutType.Fit).Flex(10000)
                 .Items(
-                X.GridPanel().ID("grdDet")
-                .MarginSpec("3 0 0 0").Region(Region.Center).Flex(1)
-                .Border(true).BorderSpec("1 0 0 0")
-                .RowLines(true)
-                .ColumnLines(true)
-                .Store(
-                    X.Store().ID("stoDet").AutoLoad(false)
-                    .PageSize(50)
-                    .Model(Util.GenerateModel(typeof(IF30100_pgData_Result), "mdlIF30100_pgDataModel", "InvtID", true))
-                    .Listeners(l =>{
-                        l.Load.Fn = "stoDet_Load";
-                        l.BeforeLoad.Fn = "stoDet_BeforeLoad";
-                    })
-                    .ServerProxy( X.AjaxProxy().Url(Url.Action("GetIF30100_pgData", "IF30100")))
-                    .Parameters(ps =>{
-                            ps.Add(new StoreParameter("view", "getView()", ParameterMode.Raw));
-                    })
-                )
-                .ColumnModel(
-                    X.RowNumbererColumn()//.Renderer("renderRowNumber")
-                    , X.Column().Text(Util.GetLang("Column_Name")).DataIndex("Column_Name")
-                    , X.CheckColumn().ID("ColCheck").DataIndex("Checked").Editable(true).HideTitleEl(true)
-                    .HeaderItems(
-                        HQ.Checkbox().ID("ColCheck_Header").HQLangCode("IF30100Check")
-                        .Listeners(l =>
-                        {
-                            l.Change.Fn = "colCheck_Header_Change";
+                    X.GridPanel().ID("grdDet")
+                    .MarginSpec("3 0 0 0").Region(Region.Center).Flex(1)
+                    .Border(true).BorderSpec("1 0 0 0")
+                    .RowLines(true)
+                    .ColumnLines(true)
+                    .Store(
+                        X.Store().ID("stoDet").AutoLoad(false)
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(IF30100_pgData_Result), "mdlIF30100_pgDataModel", "InvtID", true))
+                        .Listeners(l =>{
+                            l.Load.Fn = "stoDet_Load";
+                            l.BeforeLoad.Fn = "stoDet_BeforeLoad";
+                        })
+                        .ServerProxy( X.AjaxProxy().Url(Url.Action("GetIF30100_pgData", "IF30100")))
+                        .Parameters(ps =>{
+                                ps.Add(new StoreParameter("view", "getView()", ParameterMode.Raw));
                         })
                     )
-                    , X.Column().Width(150).Text(Util.GetLang("Operator")).DataIndex("Operator")
-                    .Editor(
-                        HQ.Combo().ID("cboOperator").Name("cboOperator").HideLabel(true).LabelWidth(0).ForceSelection(true)
-                        .HQDBSys(true).HQProcedure("IF30100_pcOperator")
-                        .HQColumnShow("Code")
-                        .DisplayField("Code")
-                        .ValueField("Code")
-                        .HQHeightWidth(400, 300).Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        .Listeners(lst =>
-                            {                                           
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Expand.Handler = "HQ.combo.expandScrollToItem(this);";                                                                                                                                                              
-                            })                                    
-                        .LoadData()
-                    )
+                    .ColumnModel(
+                        X.RowNumbererColumn()//.Renderer("renderRowNumber")
+                        , X.Column().Text(Util.GetLang("Column_Name")).DataIndex("Column_Name")
+                        , X.CheckColumn().ID("ColCheck").DataIndex("Checked").Editable(true).HideTitleEl(true)
+                        .HeaderItems(
+                            HQ.Checkbox().ID("ColCheck_Header").HQLangCode("IF30100Check")
+                            .Listeners(l =>
+                            {
+                                l.Change.Fn = "colCheck_Header_Change";
+                            })
+                        )
+                        , X.Column().Width(150).Text(Util.GetLang("Operator")).DataIndex("Operator")
+                        .Editor(
+                            HQ.Combo().ID("cboOperator").Name("cboOperator").HideLabel(true).LabelWidth(0).ForceSelection(true)
+                            .HQDBSys(true).HQProcedure("IF30100_pcOperator")
+                            .HQColumnShow("Code")
+                            .DisplayField("Code")
+                            .ValueField("Code")
+                            .HQHeightWidth(400, 300).Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                                {                                           
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.Expand.Handler = "HQ.combo.expandScrollToItem(this);";                                                                                                                                                              
+                                })                                    
+                            .LoadData()
+                        )
                     
-                    , X.Column().Text(Util.GetLang("Value1")).DataIndex("Value1").Editor(X.TextField().MaxLength(int.MaxValue)).Flex(1)
-                    , X.Column().Text(Util.GetLang("Value2")).DataIndex("Value2").Editor(X.TextField().MaxLength(int.MaxValue)).Flex(1)
-                )
-                .SelectionModel(X.RowSelectionModel().ID("smlPlanDetail").Mode(SelectionMode.Single))
-                .View(X.GridView().TrackOver(false))
-                .Plugins(
-                    X.CellEditing()
-                    .ClicksToEdit(1)
-                        .Listeners(ls =>
-                        {
-                            ls.Edit.Fn = "grdDet_Edit";
-                        })
-                )
-                .Features(
-                    X.GridFilters()
-                    .Local(true)
-                    .Filters(
-                        X.StringFilter().DataIndex("Column_Name"),
-                        X.BooleanFilter().DataIndex("Checked"),
-                        X.StringFilter().DataIndex("Operator"),
-                        X.StringFilter().DataIndex("Value1"),
-                        X.StringFilter().DataIndex("Value2")
-
+                        , X.Column().Text(Util.GetLang("Value1")).DataIndex("Value1").Editor(X.TextField().MaxLength(int.MaxValue)).Flex(1)
+                        , X.Column().Text(Util.GetLang("Value2")).DataIndex("Value2").Editor(X.TextField().MaxLength(int.MaxValue)).Flex(1)
                     )
-                )
-               )
+                    .SelectionModel(X.RowSelectionModel().ID("smlPlanDetail").Mode(SelectionMode.Single))
+                    .View(X.GridView().TrackOver(false))
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.Edit.Fn = "grdDet_Edit";
+                            })
+                    )
+                    .Features(
+                        X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("Column_Name"),
+                            X.BooleanFilter().DataIndex("Checked"),
+                            X.StringFilter().DataIndex("Operator"),
+                            X.StringFilter().DataIndex("Value1"),
+                            X.StringFilter().DataIndex("Value2")
+
+                        )
+                    )
                 , X.Panel().Region(Region.South).Layout(LayoutType.Border).Flex(1)
                 .Items(
                     HQ.Label().ID("lblResult").Flex(1)
-                )
+                )                               
             )
+            ,X.Panel().ID("pnlProc").Region(Region.Center).Layout(LayoutType.Border).Title(Util.GetLang("Parameter")).Hidden(true)
+                .Items(
+                    X.Panel().Border(false).Region(Region.North).Layout(LayoutType.Fit)
+                    .Items(
+                        X.Panel()
+                        .Border(false)                             
+                        .Layout(LayoutType.Column)
+                        .Items(
+                            X.Panel()
+                            .Width(250)
+                            .Margin(5)
+                            .Border(false)
+                            .Header(false)
+                            .Layout(LayoutType.VBox)
+                            .Items(
+                                               
+                                X.Panel()
+                                .ID("pnlDate")
+                                .Title(Util.GetLang("dateparm"))
+                                .BodyPadding(5)
+                                .Layout(LayoutType.VBox)
+                                //.Collapsible(false)
+                                .MinHeight(150)
+                                .Width(250)
+                                .Items(
+                                )
+                            ),
+
+                            X.Panel()
+                            .ColumnWidth(0.8)
+                            .MinWidth(300)
+                            .Layout(LayoutType.Anchor)
+                            .Margin(5)
+                            .Border(false)
+                            .Header(false)                                 
+                            .Items(
+
+                                X.Panel()
+                                .ID("pnlStringParm")
+                                .Title(Util.GetLang("stringparm"))
+                                .Layout(LayoutType.Anchor)
+                                .BodyPadding(5)
+                                .AnchorHorizontal("100%")
+                                .AnchorVertical("100%")
+                                .ColumnWidth(1)
+                                //.Collapsible(false)
+                                .MinHeight(150)
+                                .Items(
+
+
+                                )
+                            ),
+                            X.Panel()
+                            .Margin(5)
+                            .Width(200)                           
+                            .Border(false)
+                            .Header(false)
+                            .Title(Util.GetLang("booleanparm"))
+                            .Items(
+                                X.Panel()
+                                .ID("pnlBoaleanParm")
+                                .Title(Util.GetLang("booleanparm"))
+                                .BodyPadding(5)
+                                .Layout(LayoutType.VBox)
+                                //.Collapsible(false)
+                                .MinHeight(150)
+                                .Items(
+
+                                )
+                            )
+                        )
+                        
+                    )
+                    ,X.TabPanel()
+                        .Layout(LayoutType.Fit)
+                        .Region(Region.Center)                                                          
+                        .ID("tabList")                                                                           
+                        .Items(
+                                                
+                            )
+                            ,
+                                        
+                X.Panel()
+                        .Region(Region.South)
+                        .Layout(LayoutType.HBox)
+                        .ID("pnlButton")
+                        .Height(30)
+                        .Border(false)
+                        .ButtonAlign(Alignment.Right)
+                        .Items(
+                              
+
+                                )
+
+                        )
+                )
         )
     )
 )

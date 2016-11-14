@@ -137,10 +137,11 @@ var btnAdd_Click = function () {
 var cboType_Change = function (sender, newValue, oldValue) {
     if (sender.valueModels != null) {
         if (newValue == 'E') {
-            App.grdDet.show();
+            App.grdDet.hide();
             App.pnlFilter.hide();
         } else {
             App.grdDet.hide();
+            App.pnlProc.hide();
             App.pnlFilter.show();
 
         }
@@ -162,7 +163,20 @@ var cboReport_Change = function (sender, newValue, oldValue) {
     if (sender.valueModels != null ) {
         if (App.cboType.getValue() == 'E') {
             App.btnTemplate.hide();
-            App.stoDet.reload();
+            if(sender.valueModels[0].data.ReportView.startsWith('vs'))
+            {
+                App.grdDet.show();
+                App.pnlProc.hide();
+                App.stoDet.reload();
+            }
+            else if (sender.valueModels[0].data.ReportView.startsWith('pr'))
+            {
+                App.grdDet.hide();
+                App.pnlProc.show();
+                HQ.common.showBusy(true, HQ.waitMsg);
+                var i = 0;
+                loadParam(i,sender.valueModels[0].data.ReportNbr, sender.valueModels[0].data.ReportView);
+            }
         } else {
             //App.btnTemplate.show();
             App.pnlFilterHeader.items.each(function (item) {
@@ -309,3 +323,60 @@ var getWhere = function (view) {
     proc = "SELECT " + select.replace(/(^,)|(,$)/g, "") + " FROM " + view + param;
     App.lblResult.setText(proc);
 };
+
+var loadParam = function (i, reportNbr, reportView) {
+    //if (i < 2) {
+    //    App.direct.IF30100LoadRPTParm(reportNbr, reportView, {
+    //        success: function (result) {
+    //            HQ.common.showBusy(false);
+    //            setTimeout(function () {
+    //                if (i == 1) {
+    //                    App.tabList.setActiveTab("List0");
+    //                    App.btnLoadParamList.fireEvent("click");
+    //                }
+    //                i++;
+    //                loadParam(i, reportNbr, reportView);
+    //            }, 300);
+    //        }
+    //    });
+    //}
+}
+
+var chkList0_change = function (value) {
+    App.List0.store.suspendEvents();
+    var allData = App.List0.store.allData || App.List0.store.data;
+    allData.each(function (record) {
+        record.set("Selected", value.checked);
+    });
+    App.List0.store.resumeEvents();
+    App.List0.view.refresh();
+}
+
+var chkList1_change = function (value) {
+    App.List1.store.suspendEvents();
+    var allData = App.List1.store.allData || App.List1.store.data;
+    allData.each(function (record) {
+        record.set("Selected", value.checked);
+    });
+    App.List1.store.resumeEvents();
+    App.List1.view.refresh();
+}
+
+var chkList2_change = function (value) {
+    App.List2.store.suspendEvents();
+    var allData = App.List2.store.allData || App.List2.store.data;
+    allData.each(function (record) {
+        record.set("Selected", value.checked);
+    });
+    App.List2.store.resumeEvents();
+    App.List2.view.refresh();
+}
+var chkList3_change = function (value) {
+    App.List3.store.suspendEvents();
+    var allData = App.List3.store.allData || App.List3.store.data;
+    allData.each(function (record) {
+        record.set("Selected", value.checked);
+    });
+    App.List3.store.resumeEvents();
+    App.List3.view.refresh();
+}
