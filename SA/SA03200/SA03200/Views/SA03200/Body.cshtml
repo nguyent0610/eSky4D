@@ -47,7 +47,7 @@
             X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
             
             X.Column().Text(Util.GetLang("PDAID")).DataIndex("PDAID").Width(150)
-            .Editor(X.TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true)),
+            .Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
             
             X.Column().Text(Util.GetLang("BranchID")).Width(100).DataIndex("BranchID")
             .Editor(
@@ -60,7 +60,6 @@
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst => { 
                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                    //lst.Change.Fn = "cboBranchID_Change";
                 })
                 .LoadData()
             ),
@@ -77,19 +76,18 @@
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst => { 
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        //lst.Expand.Handler = "if(this.collapse()";
                     })
                     .LoadData()
                 ),
             
             X.Column().Text(Util.GetLang("LicenseKey")).DataIndex("LicenseKey").Width(150)
-            .Editor(X.TextField().AllowBlank(false).MaxLength(250).EnforceMaxLength(true)),
+            .Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
             
-            X.NumberColumn().Text(Util.GetLang("ActivitionDay")).DataIndex("ActivitionDay").Format("0,000").Width(150).Align(Alignment.Right)
-            .Editor(X.NumberField().DecimalPrecision(0)).ID("txtActivitionDay"),
+            X.NumberColumn().ID("txtActivitionDay").Text(Util.GetLang("ActivitionDay")).DataIndex("ActivitionDay").Format("0,000").Width(150).Align(Alignment.Right)
+            .Editor(X.NumberField().DecimalPrecision(0).MinValue(0)),
                                                 
-            X.DateColumn().Text(Util.GetLang("LastSyncDate")).DataIndex("LastSyncDate").Width(150).ID("txtLastSyncDate")
-            .Editor(X.DateField()),
+            HQ.DateColumn().Text(Util.GetLang("LastSyncDate")).DataIndex("LastSyncDate").Width(150).ID("txtLastSyncDate")
+                .Editor(HQ.DateField()),
             
             X.CheckColumn().DataIndex("Status").Width(85).Editable(true).HideTitleEl(true).Align(Alignment.Center)
             .HeaderItems(

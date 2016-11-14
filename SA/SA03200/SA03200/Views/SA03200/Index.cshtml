@@ -19,14 +19,12 @@
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/screen/SA03200.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
         }
     </style>
     <script>
-       
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HQ Software Solution")]
 [assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]
-[assembly: AssemblyCopyright("Copy right 2006-2016 Han Quang Software Solution. All rights Reserved")]
+[assembly: AssemblyCopyright("Copy right 2006-2016 HQ Software Solution. All rights Reserved")]
 [assembly: AssemblyTrademark("SA03200")]
 [assembly: AssemblyCulture("")]
 

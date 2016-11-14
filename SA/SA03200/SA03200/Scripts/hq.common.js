@@ -23,11 +23,13 @@ if (typeof String.prototype.trim !== 'function') {
         return this.replace(/^\s+|\s+$/g, '');
     }
 }
+
 if (typeof String.prototype.unsign !== 'function') {
     String.prototype.unsign = function () {
-        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ĩ/g, "e").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
+        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/ý|ỳ|ỷ|ỹ|ỵ/g, "y").replace(/ú|ù|ủ|ũ|ụ|ứ|ừ|ử|ữ|ự/g, "u").replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/g, "o")
     }
 }
+
 if (!('forEach' in Array.prototype)) {
     Array.prototype.forEach = function (action, that /*opt*/) {
         for (var i = 0, n = this.length; i < n; i++)
@@ -40,6 +42,7 @@ Date.prototype.addDays = function (days) {
     this.setDate(this.getDate() + days);
     return this;
 };
+
 Date.prototype.getFromFormat = function (format) {
     var yyyy = this.getFullYear().toString();
     format = format.replace(/yyyy/g, yyyy)
@@ -55,6 +58,7 @@ Date.prototype.getFromFormat = function (format) {
     format = format.replace(/ss/g, (ss[1] ? ss : "0" + ss[0]));
     return format;
 };
+
 Number.prototype.format = function (n, x, s, c) {
     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
         num = this.toFixed(Math.max(0, ~~n));
@@ -278,6 +282,7 @@ var HQ = {
                                     return false;
                                 }
                             }
+                            break; // Check data one time
                         }
                     }
                 }
@@ -294,6 +299,7 @@ var HQ = {
                                     return false;
                                 }
                             }
+                            break; // Check data one time
                         }
                     }
                 }
@@ -895,11 +901,11 @@ var HQ = {
             return true;
         },
         checkAccessRight: function () {
-            if (HQ.isInsert == false)
+            if (HQ.isInsert == false && App.menuClickbtnNew)
                 App.menuClickbtnNew.disable();
-            if (HQ.isDelete == false)
+            if (HQ.isDelete == false && App.menuClickbtnDelete)
                 App.menuClickbtnDelete.disable();
-            if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false)
+            if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false && App.menuClickbtnSave)
                 App.menuClickbtnSave.disable();
         },
         toBool: function (parm) {
@@ -1002,6 +1008,17 @@ var HQ = {
                                     HQ.message.show(1000, item.fieldLabel, 'HQ.util.focusControl');
                                     isValid = false;
                                     return false;
+                                }
+                                else {//PhucHD check value có chứa mã HTML
+                                    if (item.value) {
+                                        var regex = /<[/a-zA-Z][\s\S]*>/
+                                        if (HQ.util.passNull(item.value.toString()).match(regex)) {
+                                            invalidField = item.id;
+                                            HQ.message.show(2016101010, item.fieldLabel, 'HQ.util.focusControl');
+                                            isValid = false;
+                                            return false;
+                                        }
+                                    }
                                 }
                             })
             return isValid;
