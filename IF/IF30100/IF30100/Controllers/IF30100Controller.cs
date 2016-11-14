@@ -1570,8 +1570,7 @@ namespace IF30100.Controllers
                 if (!objRPTParm.ListCap00.ToString().Trim().Equals(""))
                 {
                     List0.Hidden = false;
-                    string handler = "";
-                    handler = "App.List0.getStore().reload();";
+                 
                     //List0.Tag = objRPTParm.ListProc00.Trim();
                     List0.HQProcedure = objRPTParm.ListProc00.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
                     List0.HQDBSys = false;
@@ -1583,7 +1582,7 @@ namespace IF30100.Controllers
                     if (!objRPTParm.ListCap01.ToString().Trim().Equals(""))
                     {
                         List1.Hidden = false;
-                        handler += "App.List1.getStore().reload();";
+                      
                         //List1.Tag = objRPTParm.ListProc01.Trim();
                         List1.HQProcedure = objRPTParm.ListProc01.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
                         List1.HQDBSys = false;
@@ -1594,7 +1593,7 @@ namespace IF30100.Controllers
                         if (!objRPTParm.ListCap02.ToString().Trim().Equals(""))
                         {
                             List2.Hidden = false;
-                            handler += "App.List2.getStore().reload();";
+                         
                             //List2.Tag = objRPTParm.ListProc02.Trim();
                             List2.HQProcedure = objRPTParm.ListProc02.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
                             List2.HQDBSys = false;
@@ -1605,7 +1604,7 @@ namespace IF30100.Controllers
                             if (!objRPTParm.ListCap03.ToString().Trim().Equals(""))
                             {
                                 List3.Hidden = false;
-                                handler += "App.List3.getStore().reload();";
+                              
                                 //List3.Tag = objRPTParm.ListProc03.Trim();
                                 List3.HQProcedure = objRPTParm.ListProc03.Trim().Split(';').FirstOrDefault().Split(',').FirstOrDefault();
                                 List3.HQDBSys = false;
@@ -1615,9 +1614,7 @@ namespace IF30100.Controllers
                             }
                         }
                     }
-                    btnLoadParamList.Listeners.Click.Handler = handler;
                    
-                    
                    
                 }
                 #endregion
@@ -2053,6 +2050,43 @@ namespace IF30100.Controllers
 
             if (!List0.Hidden || !List1.Hidden || !List2.Hidden || !List3.Hidden)//ẩn nút load danh sách tham số
             {
+
+                string handler = "HQ.SourceList=0;HQ.common.showBusy(true, HQ.waitMsg);";
+                if (!List3.Hidden)
+                {
+                    handler += "App.List0.getStore().addListener('load', List_Load(4));";
+                    handler += "App.List1.getStore().addListener('load', List_Load(4));";
+                    handler += "App.List2.getStore().addListener('load', List_Load(4));";
+                    handler += "App.List3.getStore().addListener('load', List_Load(4));";
+
+                    handler += "App.List0.getStore().reload();";
+                    handler += "App.List1.getStore().reload();";
+                    handler += "App.List2.getStore().reload();";
+                    handler += "App.List3.getStore().reload();";                  
+                }
+                else if (!List2.Hidden)
+                {
+                    handler += "App.List0.getStore().addListener('load', List_Load(3));";
+                    handler += "App.List1.getStore().addListener('load', List_Load(3));";
+                    handler += "App.List2.getStore().addListener('load', List_Load(3));";
+
+                    handler += "App.List0.getStore().reload();";
+                    handler += "App.List1.getStore().reload();";
+                    handler += "App.List2.getStore().reload();";                   
+                }
+                else if (!List1.Hidden)
+                {
+                    handler += "App.List0.getStore().addListener('load', List_Load(2));";
+                    handler += "App.List1.getStore().addListener('load', List_Load(2));";                    
+                    handler += "App.List0.getStore().reload();";
+                    handler += "App.List1.getStore().reload();";                 
+                }
+                else if (!List0.Hidden)
+                {
+                    handler += "App.List0.getStore().addListener('load', List_Load(1));";
+                    handler += "App.List0.getStore().reload();";                   
+                }
+                btnLoadParamList.Listeners.Click.Handler = handler;                                       
                 btnLoadParamList.Hidden = false;
                 tabList.Hidden = false;
             }
@@ -2060,7 +2094,7 @@ namespace IF30100.Controllers
             if (!cboDate00.Hidden || !cboDate01.Hidden || !cboDate02.Hidden || !cboDate03.Hidden)//ẩn nút load danh sách tham số
             {
                 pnlDate.Hidden = false;
-               
+
             }
             if (!StringParm00.Hidden || !StringParm01.Hidden || !StringParm02.Hidden || !StringParm03.Hidden)//ẩn nút load danh sách tham số
             {

@@ -163,13 +163,13 @@ var cboReport_Change = function (sender, newValue, oldValue) {
     if (sender.valueModels != null ) {
         if (App.cboType.getValue() == 'E') {
             App.btnTemplate.hide();
-            if(sender.valueModels[0].data.ReportView.startsWith('vs'))
+            if (sender.valueModels[0].data.SourceType.toUpperCase().startsWith('V'))
             {
                 App.grdDet.show();
                 App.pnlProc.hide();
                 App.stoDet.reload();
             }
-            else if (sender.valueModels[0].data.ReportView.startsWith('pr'))
+            else if (sender.valueModels[0].data.SourceType.toUpperCase().startsWith('P'))
             {
                 App.grdDet.hide();
                 App.pnlProc.show();
@@ -326,19 +326,18 @@ var getWhere = function (view) {
 
 var loadParam = function (i, reportNbr, reportView) {
     //if (i < 2) {
-    //    App.direct.IF30100LoadRPTParm(reportNbr, reportView, {
-    //        success: function (result) {
-    //            HQ.common.showBusy(false);
-    //            setTimeout(function () {
-    //                if (i == 1) {
-    //                    App.tabList.setActiveTab("List0");
-    //                    App.btnLoadParamList.fireEvent("click");
-    //                }
-    //                i++;
-    //                loadParam(i, reportNbr, reportView);
-    //            }, 300);
-    //        }
-    //    });
+        App.direct.IF30100LoadRPTParm(reportNbr, reportView, {
+            success: function (result) {
+               
+                setTimeout(function () {
+                    
+                        //App.tabList.setActiveTab("List0");
+                        App.btnLoadParamList.fireEvent("click");                      
+                    //i++;
+                    //loadParam(i, reportNbr, reportView);
+                }, 500);
+            }
+        });
     //}
 }
 
@@ -379,4 +378,14 @@ var chkList3_change = function (value) {
     });
     App.List3.store.resumeEvents();
     App.List3.view.refresh();
+}
+var List_Load = function (countStore) {
+    HQ.SourceList++;
+    if (HQ.SourceList == countStore) {
+        HQ.common.showBusy(false);
+        App.List0.view.refresh();
+        App.List1.view.refresh();
+        App.List2.view.refresh();
+        App.List3.view.refresh();
+    }
 }
