@@ -39,7 +39,7 @@
         .ColumnModel(
             X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
             X.Column().Text(Util.GetLang("Version")).DataIndex("Version").Width(100),
-            X.Column().Text(Util.GetLang("BuildID")).DataIndex("BuildID").Width(100),
+            X.NumberColumn().Text(Util.GetLang("BuildID")).DataIndex("BuildID").Width(100).Format("0,000"),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(300),
             HQ.DateColumn().Text(Util.GetLang("AppliedDate")).DataIndex("AppliedDate").Width(100),
            X.CommandColumn()
@@ -81,9 +81,9 @@
                 .Local(true)
                 .Filters(
                     X.StringFilter().DataIndex("Version"),
-                    X.StringFilter().DataIndex("BuildID"),
+                    X.NumericFilter().DataIndex("BuildID"),
                     X.StringFilter().DataIndex("Descr"),
-                    X.StringFilter().DataIndex("AppliedDate")
+                    X.DateFilter().DataIndex("AppliedDate")
                 )
         )
     )
