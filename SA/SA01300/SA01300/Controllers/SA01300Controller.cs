@@ -28,7 +28,7 @@ namespace SA01300.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -44,19 +44,26 @@ namespace SA01300.Controllers
         {
             try
             {
-
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Configurations"]);
                 ChangeRecords<SYS_Configurations> lstSYS_Configurations = dataHandler.BatchObjectData<SYS_Configurations>();
-                foreach (SYS_Configurations deleted in lstSYS_Configurations.Deleted)
-                {
-                    var del = _db.SYS_Configurations.Where(p => p.Code == deleted.Code).FirstOrDefault();
-                    if (del != null)
-                    {
-                        _db.SYS_Configurations.DeleteObject(del);
-                    }
-                }
 
                 lstSYS_Configurations.Created.AddRange(lstSYS_Configurations.Updated);
+
+                foreach (SYS_Configurations deleted in lstSYS_Configurations.Deleted)
+                {
+                    if (lstSYS_Configurations.Created.Where(p => p.Code == deleted.Code).Count() > 0)
+                    {
+                        lstSYS_Configurations.Created.Where(p => p.Code == deleted.Code).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.SYS_Configurations.FirstOrDefault(p => p.Code == deleted.Code);
+                        if (objDel != null)
+                        {
+                            _db.SYS_Configurations.DeleteObject(objDel);
+                        }
+                    }
+                }
 
                 foreach (SYS_Configurations curLang in lstSYS_Configurations.Created)
                 {
@@ -78,6 +85,7 @@ namespace SA01300.Controllers
                     else
                     {
                         lang = new SYS_Configurations();
+                        lang.ResetET();
                         Update_Language(lang, curLang, true);
                         _db.SYS_Configurations.AddObject(lang);
                     }

@@ -1,1 +1,157 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('n a=["\\L\\l\\k\\b","\\q\\h\\k\\v\\1i\\v\\1d\\L\\l\\i\\D\\g\\q\\I\\h\\f\\d\\g\\l\\i\\e","\\D\\g\\h\\e\\d","\\q\\h\\g\\k","\\J\\h\\b\\K","\\i\\b\\1J\\d","\\o\\f\\e\\d","\\g\\e\\L\\t\\f\\i\\q\\b","","\\h\\b\\D\\h\\b\\e\\t","\\e\\t\\l\\N","\\y\\b\\e\\e\\f\\q\\b","\\g\\e\\1I\\g\\h\\e\\d\\1a\\l\\f\\k","\\h\\b\\o\\l\\f\\k","\\e\\d\\l\\v\\1i\\v\\1d\\L\\l\\i\\D\\g\\q\\I\\h\\f\\d\\g\\l\\i\\e","\\g\\e\\Z\\i\\e\\b\\h\\d","\\g\\i\\e\\b\\h\\d","\\i\\b\\N","\\g\\d\\b\\y\\e","\\e\\b\\o\\b\\m\\d\\b\\k","\\e\\o\\y\\F\\f\\d\\f","\\g\\e\\F\\b\\o\\b\\d\\b","\\k\\b\\o\\b\\d\\b\\F\\f\\d\\f","\\k\\b\\o\\b\\d\\b","\\g\\e\\1A\\J\\k\\f\\d\\b","\\m\\t\\b\\m\\E\\W\\b\\2e\\I\\g\\h\\b\\1X\\f\\e\\e","\\e\\d\\l\\h\\b","\\e\\f\\K\\b","\\J\\h\\g\\i\\d","\\m\\o\\l\\e\\b","\\m\\l\\y\\y\\l\\i","\\m\\t\\b\\m\\E\\R\\b\\D\\l\\h\\b\\V\\k\\g\\d","\\m\\t\\b\\m\\E\\Z\\i\\e\\b\\h\\d\\1W\\b\\O","\\m\\t\\b\\m\\E\\1j\\f\\o\\g\\k\\f\\d\\b\\V\\k\\g\\d","\\m\\t\\b\\m\\E\\W\\b\\2d\\b\\m\\d","\\g\\e\\1j\\f\\o\\g\\k","\\D\\h\\y\\1p\\f\\g\\i","\\v\\f\\K\\g\\i\\q\\F\\f\\d\\f","\\q\\b\\d\\1a\\f\\i\\q","\\v\\1e\\z\\1n\\1o\\z\\z\\1q\\v\\f\\K\\b","\\q\\b\\d\\F\\f\\d\\f","\\J\\h\\l\\m\\b\\e\\e","\\e\\I\\1t\\y\\g\\d","\\O\\b\\e","\\k\\b\\o\\b\\d\\b\\v\\b\\o\\b\\m\\d\\b\\k","\\v\\1e\\z\\1n\\1o\\z\\z","\\m\\t\\f\\i\\q\\b\\F\\f\\d\\f","\\e\\t\\l\\N\\R\\I\\e\\O","\\g\\i\\e\\b\\h\\d\\R\\o\\f\\i\\E","\\o\\l\\f\\k\\g\\i\\q\\k\\f\\d\\f"];n x=[a[0]];n X=[];n U=[];n 1g=p(1b){1u(1b){u a[2]:c[a[3]][a[2]](j[a[1]]);s;u a[4]:c[a[3]][a[4]](j[a[1]]);s;u a[5]:c[a[3]][a[5]](j[a[1]]);s;u a[6]:c[a[3]][a[6]](j[a[1]]);s;u a[9]:r(c[a[7]]){c[a[11]][a[10]](1s,a[8],a[9])}1r{c[a[7]]=G;c[a[12]]=H;j[a[14]][a[13]]()};s;u a[17]:r(c[a[15]]){c[a[3]][a[16]](j[a[1]],x)};s;u a[23]:r(j[a[20]][a[19]][a[18]][0]!=1x){r(c[a[21]]){c[a[11]][a[10]](11,a[8],a[22])}};s;u a[27]:r(c[a[24]]||c[a[15]]||c[a[21]]){r(c[a[26]][a[25]](j[a[14]],x,X,U)){Y()}};s;u a[28]:s;u a[29]:c[a[w]][a[29]](1V);s}};n 1y=p(1R,A){S c[a[3]][a[1S]](A,x)};n 1T=p(C,A){c[a[3]][a[1Y]](j[a[1]],A,x)};n 1Z=p(C,A){S c[a[3]][a[2f]](j[a[1]],A,x)};n 2g=p(T){c[a[3]][a[2a]](T,j[a[1]]);P(j[a[14]])};n Y=p(){r(j[a[1l]][a[2b]]()){j[a[1l]][a[2c]]({2h:c[a[w]][a[1f]](a[1Q]),1P:a[1E],1F:{1D:c[a[26]][a[1C]](j[a[14]])},1z:p(Q,M){c[a[11]][a[10]](1B);c[a[7]]=G;1g(a[9])},1G:p(Q,M){c[a[11]][a[1H]](Q,M,H)}})}};n 1N=p(C){r(C==a[1h]){j[a[1]][a[1O]]();P(j[a[14]])}};n 1M=p(){c[a[12]]=H;j[a[14]][a[13]]()};n P=p(B){c[a[7]]=c[a[26]][a[7]](B);c[a[w]][a[1m]](c[a[7]],a[1k])};n 1L=p(B){c[a[w]][a[1c]](G);c[a[7]]=c[a[26]][a[7]](B);c[a[w]][a[1m]](c[a[7]],a[1k]);r(c[a[12]]){r(c[a[15]]){c[a[26]][a[1K]](B,x)};c[a[12]]=G}};n 1U=p(B){c[a[w]][a[1c]](H,c[a[w]][a[1f]](a[1w]))};p 1v(C){r(C==a[1h]){c[a[7]]=G;c[a[12]]=H;j[a[14]][a[13]]()}}', 62, 142, '||||||||||_0x5af0|x65|HQ|x74|x73|x61|x69|x72|x6E|App|x64|x6F|x63|var|x6C|function|x67|if|break|x68|case|x53|30|keys|x6D|x30|_0x4f72x8|_0x4f72x14|_0x4f72xa|x66|x6B|x44|false|true|x75|x70|x76|x43|_0x4f72x10|x77|x79|stoChanged|_0x4f72xf|x42|return|_0x4f72xd|fieldsLangCheckRequire|x45|x52|fieldsCheckRequire|save|x49|||||||||||x4C|_0x4f72x5|47|x5F|x41|38|menuClick|43|x59|x56|45|36|46|x31|x33|x4D|x2F|else|20150303|x62|switch|refresh|49|undefined|grdSYS_Configurations_BeforeEdit|success|x55|201405071|40|lstSYS_Configurations|39|params|failure|41|x46|x78|48|stoLoad|firstLoad|deleteData|44|url|37|_0x4f72x7|31|grdSYS_Configurations_Edit|stoBeforeLoad|this|x4B|x50|32|grdSYS_Configurations_ValidateEdit|||||||||||34|35|42|x6A|x71|33|grdSYS_Configurations_Reject|waitMsg'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['Code'];
+var fieldsCheckRequire = [];
+var fieldsLangCheckRequire = [];
+
+var _Source = 0;
+var _maxSource = 1;
+var _isLoadMaster = false;
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+var checkLoad = function () {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoSYS_Configurations.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+var firstLoad = function () {
+    HQ.util.checkAccessRight();
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    checkLoad();
+};
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdSYS_Configurations);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdSYS_Configurations);
+            break;
+        case "next":
+            HQ.grid.next(App.grdSYS_Configurations);
+            break;
+        case "last":
+            HQ.grid.last(App.grdSYS_Configurations);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh('yes');
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdSYS_Configurations, keys);
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                if (App.slmData.selected.items[0] != undefined) {
+                    if (App.slmData.selected.items[0].data.Code != ""
+                        ) {
+                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_Configurations)], 'deleteData', true);
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoSYS_Configurations, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            break;
+    }
+};
+
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA01300');
+};
+
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA01300');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var grdSYS_Configurations_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdSYS_Configurations_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSYS_Configurations, e, keys);
+};
+
+var grdSYS_Configurations_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_Configurations, e, keys);
+};
+
+var grdSYS_Configurations_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_Configurations);
+    stoChanged(App.stoSYS_Configurations);
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            timeout: 1800000,
+            url: 'SA01300/Save',
+            params: {
+                lstSYS_Configurations: HQ.store.getData(App.stoSYS_Configurations)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                refresh('yes');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdSYS_Configurations.deleteSelected();
+        stoChanged(App.stoSYS_Configurations);
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_Configurations.reload();
+    }
+};
+///////////////////////////////////
