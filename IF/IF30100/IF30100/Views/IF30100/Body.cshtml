@@ -152,7 +152,81 @@
                     .Items(X.TabPanel().ID("tabFilterGrid"))
                 )
                 
+                ,X.Panel().ID("pnlProc").Region(Region.Center).Layout(LayoutType.Border).Title(Util.GetLang("Parameter")).Hidden(true)
+                .Items(
+                    X.Panel().Border(false).Region(Region.North).Layout(LayoutType.Fit)
+                    .Items(
+                        X.Panel()
+                        .Border(false)                             
+                        .Layout(LayoutType.Column)
+                        .Items(                                                                          
+                            X.Panel()
+                            .ID("pnlDate").Margin(5)
+                            .Title(Util.GetLang("dateparm"))
+                            .BodyPadding(5).Hidden(true)
+                            .Layout(LayoutType.VBox)
+                            //.Collapsible(false)
+                            .MinHeight(150)
+                            .Width(250)
+                            .Items(
+                            ),
+                           
+                            X.Panel().ColumnWidth(0.8).Margin(5)
+                            .ID("pnlStringParm").Hidden(true)
+                            .Title(Util.GetLang("stringparm"))
+                            .Layout(LayoutType.Anchor)
+                            .BodyPadding(5)
+                            .AnchorHorizontal("100%")
+                            .AnchorVertical("100%")
+                            .ColumnWidth(1)
+                            //.Collapsible(false)
+                            .MinHeight(150)
+                            .Items(
 
+
+                            )
+                            ,
+                            X.Panel().Margin(5)
+                            .ID("pnlBoaleanParm").Hidden(true)
+                            .Title(Util.GetLang("booleanparm"))
+                            .BodyPadding(5)
+                            .Layout(LayoutType.VBox)
+                            //.Collapsible(false)
+                            .MinHeight(150)
+                            .Width(200)
+                            .Items(
+
+                            )
+                            
+                        )
+                        
+                    )
+                    ,X.TabPanel()
+                        .Layout(LayoutType.Anchor)
+                        .Region(Region.Center)
+                        .AnchorHorizontal("100%")
+                        .AnchorVertical("100%")                                                          
+                        .ID("tabList")  
+                        .Listeners(lst=>lst.TabChange.Fn="tabList_TabChange")                                                                         
+                        .Items(
+                                                
+                            )
+                            ,
+                                        
+                X.Panel()
+                        .Region(Region.South)
+                        .Layout(LayoutType.HBox)
+                        .ID("pnlButton")
+                        .Height(30)
+                        .Border(false)
+                        .ButtonAlign(Alignment.Right)
+                        .Items(
+                              
+
+                                )
+
+                        )
+                        
                 ,X.GridPanel().ID("grdDet")
                 .MarginSpec("3 0 0 0")
                 .BottomBar(X.Toolbar().Items(
@@ -227,101 +301,7 @@
                     )
                 )                            
             )
-            ,X.Panel().ID("pnlProc").Region(Region.Center).Layout(LayoutType.Border).Title(Util.GetLang("Parameter")).Hidden(true)
-                .Items(
-                    X.Panel().Border(false).Region(Region.North).Layout(LayoutType.Fit)
-                    .Items(
-                        X.Panel()
-                        .Border(false)                             
-                        .Layout(LayoutType.Column)
-                        .Items(
-                            X.Panel()
-                            .Width(250)
-                            .Margin(5)
-                            .Border(false)
-                            .Header(false)
-                            .Layout(LayoutType.VBox)
-                            .Items(
-                                               
-                                X.Panel()
-                                .ID("pnlDate")
-                                .Title(Util.GetLang("dateparm"))
-                                .BodyPadding(5)
-                                .Layout(LayoutType.VBox)
-                                //.Collapsible(false)
-                                .MinHeight(150)
-                                .Width(250)
-                                .Items(
-                                )
-                            ),
-
-                            X.Panel()
-                            .ColumnWidth(0.8)
-                            .MinWidth(300)
-                            .Layout(LayoutType.Anchor)
-                            .Margin(5)
-                            .Border(false)
-                            .Header(false)                                 
-                            .Items(
-
-                                X.Panel()
-                                .ID("pnlStringParm")
-                                .Title(Util.GetLang("stringparm"))
-                                .Layout(LayoutType.Anchor)
-                                .BodyPadding(5)
-                                .AnchorHorizontal("100%")
-                                .AnchorVertical("100%")
-                                .ColumnWidth(1)
-                                //.Collapsible(false)
-                                .MinHeight(150)
-                                .Items(
-
-
-                                )
-                            ),
-                            X.Panel()
-                            .Margin(5)
-                            .Width(200)                           
-                            .Border(false)
-                            .Header(false)
-                            .Title(Util.GetLang("booleanparm"))
-                            .Items(
-                                X.Panel()
-                                .ID("pnlBoaleanParm")
-                                .Title(Util.GetLang("booleanparm"))
-                                .BodyPadding(5)
-                                .Layout(LayoutType.VBox)
-                                //.Collapsible(false)
-                                .MinHeight(150)
-                                .Items(
-
-                                )
-                            )
-                        )
-                        
-                    )
-                    ,X.TabPanel()
-                        .Layout(LayoutType.Fit)
-                        .Region(Region.Center)                                                          
-                        .ID("tabList")                                                                           
-                        .Items(
-                                                
-                            )
-                            ,
-                                        
-                X.Panel()
-                        .Region(Region.South)
-                        .Layout(LayoutType.HBox)
-                        .ID("pnlButton")
-                        .Height(30)
-                        .Border(false)
-                        .ButtonAlign(Alignment.Right)
-                        .Items(
-                              
-
-                                )
-
-                        )
+            
                 
         )
     )

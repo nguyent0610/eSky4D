@@ -226,18 +226,17 @@ var checkGrid = function (store, field) {
 
 
 var btnExport_Click = function () {
-    if (checkGrid(App.stoDet, 'Checked') == false) {
-        HQ.message.show(2016110710);
-    } else {
+    if(App.cboType.getValue() != 'E')
+    {   
         if (HQ.form.checkRequirePass(App.frmMain)) {
             App.frmMain.submit({
                 waitMsg: HQ.common.getLang("Exporting"),
-                url: App.cboType.getValue() == 'E' ? 'IF30100/Export' : 'IF30100/ExportPivot',
+                url: 'IF30100/ExportPivot',
                 type: 'POST',
                 timeout: 2000000,
                 clientValidation: false,
                 params: {
-                    lstDet: Ext.encode(App.stoDet.getRecordsValues()),
+                    lstDet: Ext.encode(App.stoDet.getRecordsValues()),                                       
                     view: App.cboReport.valueModels[0].data.ReportView,
                     name: App.cboReport.valueModels[0].data.ReportName,
                     proc: App.lblResult.getText(),
@@ -256,7 +255,13 @@ var btnExport_Click = function () {
             });
         }
     }
-};
+    else if (App.cboReport.valueModels[0].data.SourceType.toUpperCase().startsWith('V')) {
+        exportExcelView();
+    }
+    else if (App.cboReport.valueModels[0].data.SourceType.toUpperCase().startsWith('P')) {
+        exportExcelProc();
+    }
+}
 
 var btnTemplate_Click = function () {
     App.winTemplate.show();
@@ -325,22 +330,114 @@ var getWhere = function (view) {
 };
 
 var loadParam = function (i, reportNbr, reportView) {
-    //if (i < 2) {
-        App.direct.IF30100LoadRPTParm(reportNbr, reportView, {
-            success: function (result) {
-               
-                setTimeout(function () {
-                    
-                        //App.tabList.setActiveTab("List0");
-                        App.btnLoadParamList.fireEvent("click");                      
-                    //i++;
-                    //loadParam(i, reportNbr, reportView);
-                }, 500);
+
+    App.direct.IF30100LoadRPTParm(reportNbr, reportView, {
+        success: function (result) {
+
+            setTimeout(function () {
+                App.btnLoadParamList.fireEvent("click");
+            }, 200);
+        }
+    });
+
+}
+function exportExcelProc() {
+    var List0 = '';
+    var List1 = '';
+    var List2 = '';
+    var List3 = '';
+    App.List0.store.suspendEvents();
+    var allData0 = App.List0.store.snapshot || App.List0.store.allData || App.List0.store.data;
+    allData0.each(function (record) {
+        if (record.data.Selected)
+            List0 += record.data[App.List0.tag] + ',';
+    });
+    App.List0.store.resumeEvents();
+
+    App.List1.store.suspendEvents();
+    var allData1 = App.List1.store.snapshot || App.List1.store.allData || App.List1.store.data;
+    allData1.each(function (record) {
+        if (record.data.Selected)
+            List1 += record.data[App.List1.tag] + ',';
+    });
+    App.List1.store.resumeEvents();
+
+    App.List2.store.suspendEvents();
+    var allData2 = App.List2.store.snapshot || App.List2.store.allData || App.List2.store.data;
+    allData2.each(function (record) {
+        if (record.data.Selected)
+            List2 += record.data[App.List2.tag] + ',';
+    });
+    App.List2.store.resumeEvents();
+
+    App.List3.store.suspendEvents();
+    var allData3 = App.List3.store.snapshot || App.List3.store.allData || App.List3.store.data;
+    allData3.each(function (record) {
+        if (record.data.Selected)
+            List3 += record.data[App.List3.tag] + ',';
+    });
+    App.List3.store.resumeEvents();
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("Exporting"),
+            method: 'POST',
+            timeout: 180000,
+            url: 'IF30100/ExportProc',
+            params: {
+                list0: List0,//App.List0.getSelectionSubmit().getSelectionModelField().getValue(),
+                list1: List1,//App.List1.getSelectionSubmit().getSelectionModelField().getValue(),
+                list2: List2,//App.List2.getSelectionSubmit().getSelectionModelField().getValue(),
+                list3: List3,//App.List3.getSelectionSubmit().getSelectionModelField().getValue(),
+                proc: App.cboReport.valueModels[0].data.ReportView,
+                name: App.cboReport.valueModels[0].data.ReportName,
+                reportNbr: App.cboReport.valueModels[0].data.ReportNbr,
+
+            },
+            success: function (msg, data) {
+                if (!Ext.isEmpty(data.result.name)) {
+                    window.location = 'IF30100/DownloadFile?name=' + data.result.name + '&id=' + data.result.id;
+                }
+                HQ.message.process(msg, data, true);
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
             }
         });
-    //}
-}
+    }
+};
+function exportExcelView()
+{
+    if (checkGrid(App.stoDet, 'Checked') == false) {
+        HQ.message.show(2016110710);
+    } else {
+        if (HQ.form.checkRequirePass(App.frmMain)) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang("Exporting"),
+                url:  'IF30100/ExportView' ,
+                type: 'POST',
+                timeout: 2000000,
+                clientValidation: false,
+                params: {
+                    lstDet: Ext.encode(App.stoDet.getRecordsValues()),
+                    view: App.cboReport.valueModels[0].data.ReportView,
+                    name: App.cboReport.valueModels[0].data.ReportName,
+                    proc: App.lblResult.getText(),
+                    data: getParm()
+                },
+                success: function (msg, data) {
+                    if (!Ext.isEmpty(data.result.name)) {
+                        window.location = 'IF30100/DownloadFile?name=' + data.result.name + '&id=' + data.result.id;
+                    }
 
+                    HQ.message.process(msg, data, true);
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+}
 var chkList0_change = function (value) {
     App.List0.store.suspendEvents();
     var allData = App.List0.store.allData || App.List0.store.data;
@@ -382,10 +479,11 @@ var chkList3_change = function (value) {
 var List_Load = function (countStore) {
     HQ.SourceList++;
     if (HQ.SourceList == countStore) {
-        HQ.common.showBusy(false);
-        App.List0.view.refresh();
-        App.List1.view.refresh();
-        App.List2.view.refresh();
-        App.List3.view.refresh();
+        setTimeout(function () {        
+            HQ.common.showBusy(false);           
+        }, 100);
     }
+}
+var tabList_TabChange = function (sender, item, active) {
+    item.view.refresh();
 }

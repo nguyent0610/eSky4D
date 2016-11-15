@@ -5,7 +5,137 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer" />
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="RPTRunning" EntityType="eBiz4DWebSysModel.Store.RPTRunning" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="RPTRunningParm0" EntityType="eBiz4DWebSysModel.Store.RPTRunningParm0" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="RPTRunningParm1" EntityType="eBiz4DWebSysModel.Store.RPTRunningParm1" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="RPTRunningParm2" EntityType="eBiz4DWebSysModel.Store.RPTRunningParm2" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="RPTRunningParm3" EntityType="eBiz4DWebSysModel.Store.RPTRunningParm3" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="RPTRunning">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="ReportID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="MachineName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="ReportName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ReportCap" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ReportDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="StringParm00" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StringParm01" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StringParm02" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StringParm03" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="DateParm00" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateParm01" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateParm02" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateParm03" Type="smalldatetime" Nullable="false" />
+          <Property Name="BooleanParm00" Type="smallint" Nullable="false" />
+          <Property Name="BooleanParm01" Type="smallint" Nullable="false" />
+          <Property Name="BooleanParm02" Type="smallint" Nullable="false" />
+          <Property Name="BooleanParm03" Type="smallint" Nullable="false" />
+          <Property Name="SelectionFormular" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="AppPath" Type="varchar" Nullable="false" MaxLength="400" />
+          <Property Name="ClientName" Type="varchar" Nullable="false" MaxLength="40" />
+          <Property Name="LoggedCpnyID" Type="varchar" MaxLength="30" />
+          <Property Name="CpnyID" Type="varchar(max)" />
+          <Property Name="LangID" Type="smallint" />
+          <Property Name="ListParm00" Type="nvarchar(max)" />
+          <Property Name="ListParm01" Type="nvarchar(max)" />
+          <Property Name="ListParm02" Type="nvarchar(max)" />
+          <Property Name="ListParm03" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="RPTRunningParm0">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="ReportID" Type="int" Nullable="false" />
+          <Property Name="MachineName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="StringParm" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="DateParm" Type="smalldatetime" Nullable="false" />
+          <Property Name="NumericParm" Type="float" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="RPTRunningParm1">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="ReportID" Type="int" Nullable="false" />
+          <Property Name="MachineName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="StringParm" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="DateParm" Type="smalldatetime" Nullable="false" />
+          <Property Name="NumericParm" Type="float" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="RPTRunningParm2">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="ReportID" Type="int" Nullable="false" />
+          <Property Name="MachineName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="StringParm" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="DateParm" Type="smalldatetime" Nullable="false" />
+          <Property Name="NumericParm" Type="float" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="RPTRunningParm3">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="ReportID" Type="int" Nullable="false" />
+          <Property Name="MachineName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="StringParm" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="DateParm" Type="smalldatetime" Nullable="false" />
+          <Property Name="NumericParm" Type="float" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <Function Name="IF30100_pgData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="View" Type="varchar" Mode="In" />
         </Function>
@@ -17,6 +147,11 @@
           <FunctionImport Name="IF30100_pgData" ReturnType="Collection(IF30100Model.IF30100_pgData_Result)">
           <Parameter Name="View" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="RPTRunnings" EntityType="IF30100Model.RPTRunning" />
+          <EntitySet Name="RPTRunningParm0" EntityType="IF30100Model.RPTRunningParm0" />
+          <EntitySet Name="RPTRunningParm1" EntityType="IF30100Model.RPTRunningParm1" />
+          <EntitySet Name="RPTRunningParm2" EntityType="IF30100Model.RPTRunningParm2" />
+          <EntitySet Name="RPTRunningParm3" EntityType="IF30100Model.RPTRunningParm3" />
         </EntityContainer>
         <ComplexType Name="IF30100_pcReportType_Result">
           <Property Type="String" Name="ReportName" Nullable="true" MaxLength="100" />
@@ -31,6 +166,130 @@
           <Property Type="String" Name="Data_Type" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="MaxLenght" Nullable="true" />
         </ComplexType>
+        <EntityType Name="RPTRunning">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ReportID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="MachineName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="ReportDate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="StringParm00" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringParm01" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringParm02" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringParm03" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DateParm00" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="DateParm01" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="DateParm02" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="DateParm03" Nullable="false" Precision="0" />
+          <Property Type="Int16" Name="BooleanParm00" Nullable="false" />
+          <Property Type="Int16" Name="BooleanParm01" Nullable="false" />
+          <Property Type="Int16" Name="BooleanParm02" Nullable="false" />
+          <Property Type="Int16" Name="BooleanParm03" Nullable="false" />
+          <Property Type="String" Name="SelectionFormular" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AppPath" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClientName" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LoggedCpnyID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CpnyID" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="LangID" />
+          <Property Type="String" Name="ListParm00" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListParm01" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListParm02" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListParm03" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="RPTRunningParm0">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ReportID" Nullable="false" />
+          <Property Type="String" Name="MachineName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StringParm" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DateParm" Nullable="false" Precision="0" />
+          <Property Type="Double" Name="NumericParm" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="RPTRunningParm1">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ReportID" Nullable="false" />
+          <Property Type="String" Name="MachineName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StringParm" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DateParm" Nullable="false" Precision="0" />
+          <Property Type="Double" Name="NumericParm" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="RPTRunningParm2">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ReportID" Nullable="false" />
+          <Property Type="String" Name="MachineName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StringParm" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DateParm" Nullable="false" Precision="0" />
+          <Property Type="Double" Name="NumericParm" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="RPTRunningParm3">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ReportID" Nullable="false" />
+          <Property Type="String" Name="MachineName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StringParm" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DateParm" Nullable="false" Precision="0" />
+          <Property Type="Double" Name="NumericParm" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -50,6 +309,121 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="RPTRunnings">
+            <EntityTypeMapping TypeName="IF30100Model.RPTRunning">
+              <MappingFragment StoreEntitySet="RPTRunning">
+                <ScalarProperty Name="ListParm03" ColumnName="ListParm03" />
+                <ScalarProperty Name="ListParm02" ColumnName="ListParm02" />
+                <ScalarProperty Name="ListParm01" ColumnName="ListParm01" />
+                <ScalarProperty Name="ListParm00" ColumnName="ListParm00" />
+                <ScalarProperty Name="LangID" ColumnName="LangID" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="LoggedCpnyID" ColumnName="LoggedCpnyID" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="AppPath" ColumnName="AppPath" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="SelectionFormular" ColumnName="SelectionFormular" />
+                <ScalarProperty Name="BooleanParm03" ColumnName="BooleanParm03" />
+                <ScalarProperty Name="BooleanParm02" ColumnName="BooleanParm02" />
+                <ScalarProperty Name="BooleanParm01" ColumnName="BooleanParm01" />
+                <ScalarProperty Name="BooleanParm00" ColumnName="BooleanParm00" />
+                <ScalarProperty Name="DateParm03" ColumnName="DateParm03" />
+                <ScalarProperty Name="DateParm02" ColumnName="DateParm02" />
+                <ScalarProperty Name="DateParm01" ColumnName="DateParm01" />
+                <ScalarProperty Name="DateParm00" ColumnName="DateParm00" />
+                <ScalarProperty Name="StringParm03" ColumnName="StringParm03" />
+                <ScalarProperty Name="StringParm02" ColumnName="StringParm02" />
+                <ScalarProperty Name="StringParm01" ColumnName="StringParm01" />
+                <ScalarProperty Name="StringParm00" ColumnName="StringParm00" />
+                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
+                <ScalarProperty Name="ReportCap" ColumnName="ReportCap" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RPTRunningParm0">
+            <EntityTypeMapping TypeName="IF30100Model.RPTRunningParm0">
+              <MappingFragment StoreEntitySet="RPTRunningParm0">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="NumericParm" ColumnName="NumericParm" />
+                <ScalarProperty Name="DateParm" ColumnName="DateParm" />
+                <ScalarProperty Name="StringParm" ColumnName="StringParm" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RPTRunningParm1">
+            <EntityTypeMapping TypeName="IF30100Model.RPTRunningParm1">
+              <MappingFragment StoreEntitySet="RPTRunningParm1">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="NumericParm" ColumnName="NumericParm" />
+                <ScalarProperty Name="DateParm" ColumnName="DateParm" />
+                <ScalarProperty Name="StringParm" ColumnName="StringParm" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RPTRunningParm2">
+            <EntityTypeMapping TypeName="IF30100Model.RPTRunningParm2">
+              <MappingFragment StoreEntitySet="RPTRunningParm2">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="NumericParm" ColumnName="NumericParm" />
+                <ScalarProperty Name="DateParm" ColumnName="DateParm" />
+                <ScalarProperty Name="StringParm" ColumnName="StringParm" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RPTRunningParm3">
+            <EntityTypeMapping TypeName="IF30100Model.RPTRunningParm3">
+              <MappingFragment StoreEntitySet="RPTRunningParm3">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="NumericParm" ColumnName="NumericParm" />
+                <ScalarProperty Name="DateParm" ColumnName="DateParm" />
+                <ScalarProperty Name="StringParm" ColumnName="StringParm" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -71,6 +445,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="82" >
+        <EntityTypeShape EntityType="IF30100Model.RPTRunning" Width="1.5" PointX="5.2322682930306854" PointY="8.698883358714582" />
+        <EntityTypeShape EntityType="IF30100Model.RPTRunningParm0" Width="1.5" PointX="7.7274335025471794" PointY="24.556784089913958" />
+        <EntityTypeShape EntityType="IF30100Model.RPTRunningParm1" Width="1.5" PointX="10.612477998534441" PointY="27.382139293189226" />
+        <EntityTypeShape EntityType="IF30100Model.RPTRunningParm2" Width="1.5" PointX="8.3552996406123512" PointY="20.38284269924408" />
+        <EntityTypeShape EntityType="IF30100Model.RPTRunningParm3" Width="1.5" PointX="0.35707063989577381" PointY="20.292989784988105" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -363,7 +363,7 @@ namespace IF30100.Controllers
         }
 
         [HttpPost]
-        public ActionResult Export(FormCollection data, string view, string name, string proc)
+        public ActionResult ExportView(FormCollection data, string view, string name, string proc)
         {
             try
             {
@@ -1387,12 +1387,12 @@ namespace IF30100.Controllers
           
             Component component = new Component() { ID = "component", Flex = 1 };
             Ext.Net.Button btnLoadParamList = new Ext.Net.Button() { ID = "btnLoadParamList", Text = Util.GetLang("reloadfilterlist"), MarginSpec = "3 0 0 0", Hidden = true };
-        
 
-            HQGridPanel List00 = new HQGridPanel() { ID = "List0", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true };
-            HQGridPanel List01 = new HQGridPanel() { ID = "List1", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true };
-            HQGridPanel List02 = new HQGridPanel() { ID = "List2", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true };
-            HQGridPanel List03 = new HQGridPanel() { ID = "List3", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true };
+
+            HQGridPanel List00 = new HQGridPanel() { ID = "List0", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true, RowLines = true, ColumnLines = true };
+            HQGridPanel List01 = new HQGridPanel() { ID = "List1", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true, RowLines = true, ColumnLines = true };
+            HQGridPanel List02 = new HQGridPanel() { ID = "List2", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true, RowLines = true, ColumnLines = true };
+            HQGridPanel List03 = new HQGridPanel() { ID = "List3", Hidden = true, MultiSelect = true, HQAutoLoad = false, HQColumnSelect = true, RowLines = true, ColumnLines = true };
 
             HQGridPanel List0 = new HQGridPanel()
             {
@@ -2140,5 +2140,229 @@ namespace IF30100.Controllers
             return lstp;
         }
 
+        [HttpPost]
+        public ActionResult ExportProc(FormCollection data, string reportNbr, string name, string proc)
+        {
+            try
+            {
+                //SelectedRowCollection List0 = JSON.Deserialize<SelectedRowCollection>(data["list0"]);
+                //SelectedRowCollection List1 = JSON.Deserialize<SelectedRowCollection>(data["list1"]);
+                //SelectedRowCollection List2 = JSON.Deserialize<SelectedRowCollection>(data["list2"]);
+                //SelectedRowCollection List3 = JSON.Deserialize<SelectedRowCollection>(data["list3"]);
+
+                var created = new RPTRunning();
+                short bit1 = 1;
+                short bit0 = 0;
+                created.AppPath = "Reports\\";
+                created.BooleanParm00 = data["chk00"].PassNull() != "" ? bit1 : bit0;
+                created.BooleanParm01 = data["chk01"].PassNull() != "" ? bit1 : bit0;
+                created.BooleanParm02 = data["chk02"].PassNull() != "" ? bit1 : bit0;
+                created.BooleanParm03 = data["chk03"].PassNull() != "" ? bit1 : bit0;
+                created.ClientName = Current.UserName;
+                created.CpnyID = Current.CpnyID;
+                created.DateParm00 = Convert.ToDateTime(data["cboDate00"]);
+                created.DateParm01 = Convert.ToDateTime(data["cboDate01"]);
+                created.DateParm02 = Convert.ToDateTime(data["cboDate02"]);
+                created.DateParm03 = Convert.ToDateTime(data["cboDate03"]);
+                created.LangID = Current.LangID;
+                created.LoggedCpnyID = Current.CpnyID;
+                created.MachineName = "Web";
+                created.ReportCap = reportNbr;
+                created.ReportDate = DateTime.Now.ToDateShort();
+                created.ReportID = 0;
+                created.ReportName = reportNbr;
+                created.ReportNbr = reportNbr;
+                created.SelectionFormular = "";
+                created.StringParm00 = data["StringParm00"];
+                created.StringParm01 = data["StringParm01"];
+                created.StringParm02 = data["StringParm02"];
+                created.StringParm03 = data["StringParm03"];
+                created.UserID = Current.UserName;
+
+                _db.RPTRunnings.AddObject(created);
+                _db.SaveChanges();
+
+
+
+                #region//Insert RptParm0 RPTRunningParm0 parm0;
+                int i = 0;
+                if (data["list0"] != null)
+                    foreach (var ID in data["list0"].PassNull().TrimEnd(',').Split(','))
+                    {
+                        if (ID.PassNull() != "")
+                        {
+                            i++;
+                            var parm0 = new RPTRunningParm0();
+                            parm0.ReportNbr = created.ReportNbr;
+                            parm0.ReportID = created.ReportID;
+                            parm0.MachineName = "Web";
+                            parm0.LineRef = i.ToString();
+                            parm0.StringParm = ID;
+                            parm0.DateParm = DateTime.Now;
+                            parm0.NumericParm = 0;
+                            parm0.Crtd_DateTime = DateTime.Now;
+                            parm0.Crtd_Prog = created.ReportNbr;
+                            parm0.Crtd_User = Current.UserName;
+                            parm0.LUpd_DateTime = DateTime.Now;
+                            parm0.LUpd_Prog = created.ReportNbr;
+                            parm0.LUpd_User = Current.UserName;
+                            parm0.tstamp = new byte[1];
+                            _db.RPTRunningParm0.AddObject(parm0);
+                        }
+
+                    }
+                #endregion
+                #region//Insert RptParm1 RPTRunningParm1 parm1;
+                i = 0;
+                if (data["list1"] != null)
+                    foreach (var ID in data["list1"].PassNull().TrimEnd(',').Split(','))
+                    {
+                        if (ID.PassNull() != "")
+                        {
+                            i++;
+                            var parm1 = new RPTRunningParm1();
+                            parm1.ReportNbr = created.ReportNbr;
+                            parm1.ReportID = created.ReportID;
+                            parm1.MachineName = "Web";
+                            parm1.LineRef = i.ToString();
+                            parm1.StringParm = ID;
+                            parm1.DateParm = DateTime.Now;
+                            parm1.NumericParm = 0;
+                            parm1.Crtd_DateTime = DateTime.Now;
+                            parm1.Crtd_Prog = created.ReportNbr;
+                            parm1.Crtd_User = Current.UserName;
+                            parm1.LUpd_DateTime = DateTime.Now;
+                            parm1.LUpd_Prog = created.ReportNbr;
+                            parm1.LUpd_User = Current.UserName;
+                            parm1.tstamp = new byte[1];
+                            _db.RPTRunningParm1.AddObject(parm1);
+                        }
+                    }
+                #endregion
+                #region//Insert RptParm2 RPTRunningParm2 parm2;
+                i = 0;
+                if (data["list2"] != null)
+                    foreach (var ID in data["list2"].PassNull().TrimEnd(',').Split(','))
+                    {
+                        if (ID.PassNull() != "")
+                        {
+                            i++;
+                            var parm2 = new RPTRunningParm2();
+                            parm2.ReportNbr = created.ReportNbr;
+                            parm2.ReportID = created.ReportID;
+                            parm2.MachineName = "Web";
+                            parm2.LineRef = i.ToString();
+                            parm2.StringParm = ID;
+                            parm2.DateParm = DateTime.Now;
+                            parm2.NumericParm = 0;
+                            parm2.Crtd_DateTime = DateTime.Now;
+                            parm2.Crtd_Prog = created.ReportNbr;
+                            parm2.Crtd_User = Current.UserName;
+                            parm2.LUpd_DateTime = DateTime.Now;
+                            parm2.LUpd_Prog = created.ReportNbr;
+                            parm2.LUpd_User = Current.UserName;
+                            parm2.tstamp = new byte[2];
+                            _db.RPTRunningParm2.AddObject(parm2);
+                        }
+                    }
+                #endregion
+                #region//Insert RptParm3 RPTRunningParm3 parm3;
+                i = 0;
+                if (data["list3"] != null)
+                    foreach (var ID in data["list3"].PassNull().TrimEnd(',').Split(','))
+                    {
+                        if (ID.PassNull() != "")
+                        {
+                            i++;
+                            var parm3 = new RPTRunningParm3();
+                            parm3.ReportNbr = created.ReportNbr;
+                            parm3.ReportID = created.ReportID;
+                            parm3.MachineName = "Web";
+                            parm3.LineRef = i.ToString();
+                            parm3.StringParm = ID;
+                            parm3.DateParm = DateTime.Now;
+                            parm3.NumericParm = 0;
+                            parm3.Crtd_DateTime = DateTime.Now;
+                            parm3.Crtd_Prog = created.ReportNbr;
+                            parm3.Crtd_User = Current.UserName;
+                            parm3.LUpd_DateTime = DateTime.Now;
+                            parm3.LUpd_Prog = created.ReportNbr;
+                            parm3.LUpd_User = Current.UserName;
+                            parm3.tstamp = new byte[3];
+                            _db.RPTRunningParm3.AddObject(parm3);
+                        }
+                    }
+                #endregion
+                _db.SaveChanges();
+
+                try
+                {
+                    Stream stream = new MemoryStream();
+                    Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook();
+                    Aspose.Cells.Worksheet SheetData = workbook.Worksheets[0];
+                    SheetData.Name = "Data";
+                   
+                    DataAccess dal = Util.Dal();
+                    ParamCollection pc = new ParamCollection();
+                    pc.Add(new ParamStruct("@RPTID", DbType.Int16, clsCommon.GetValueDBNull(created.ReportID), ParameterDirection.Input, 50));
+                    System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.StoredProcedure, ref pc);
+
+                    Cell cell;
+                    for (int j = 1; j < dtInvtID.Rows.Count; j++)
+                    {
+                        for (int x = 0; x < dtInvtID.Columns.Count; x++)
+                        {
+                            if(j==1)
+                                SetCellValueGrid(SheetData.Cells.Rows[0][x], Util.GetLang(dtInvtID.Columns[x].ColumnName), TextAlignmentType.Center, TextAlignmentType.Left);
+                            cell = SheetData.Cells[j, x];
+                            if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("DATE"))
+                            {
+                               
+                                DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][x].ToString());
+                                cell.PutValue(tmpValue.ToString(Current.FormatDate));
+                            }
+                            else
+                            {
+                                cell.PutValue(dtInvtID.Rows[j][x].ToString());
+                            }
+                        }
+                    }
+
+                    //SheetData.Cells.ImportDataTable(dtCloned, false, "A2");// du lieu Inventory
+
+
+
+                    SheetData.AutoFitColumns();
+
+                    string fileName = Guid.NewGuid().ToString() + ".xlsx";
+                    string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
+
+
+                    workbook.Save(path, SaveFormat.Xlsx);
+
+                    return Json(new { success = true, id = fileName, name = name + ".xlsx" }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+
+                    if (ex is MessageException)
+                    {
+                        return (ex as MessageException).ToMessage();
+                    }
+                    else
+                    {
+                        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+
+            //return Json(created.ReportName + created.ReportID + ".xls");
+        }
     }
 }
