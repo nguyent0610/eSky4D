@@ -1,0 +1,360 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using AR30300;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    //.KeyMap(Util.SetupKeyMap())
+    //.TopBar(Util.SetupToolbar("Print,New,Delete,Save,Refresh", false, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad()";
+    })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+        .Region(Region.North)
+        .Layout(LayoutType.VBox)
+        .AutoScroll(true)
+        .Items(
+            X.Container().Layout(LayoutType.HBox)
+            .Items(
+                HQ.Combo().ID("cboZone").Name("cboZone").MarginSpec("5 0 0 0").Width(300)
+                    .HQLangCode("Zone").HQDBSys(false).HQProcedure("AR30300_pcZone")
+                    .HQColumnShow("Code,Descr").ForceSelection(true).AllowBlank(false)
+                    .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.Select.Fn = "cboZone_Select";
+                        lst.Change.Fn = "cboZone_Change";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue(); }";
+                    })
+                    .LoadData()
+
+                , HQ.Combo().ID("cboBranchID").Name("cboBranchID").MarginSpec("5 0 0 0").Width(300)
+                    .HQLangCode("BranchID").HQDBSys(false).HQProcedure("AR30300_pcBranchID")
+                    .HQColumnShow("CpnyID,CpnyName").ForceSelection(true).AllowBlank(false).HQAutoLoad(false)
+                    .DisplayField("CpnyName").ValueField("CpnyID").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@Territory", Value ="App.cboTerritory.getValue()", Mode = ParameterMode.Raw}
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.Select.Fn = "cboBranchID_Select";
+                        lst.Change.Fn = "cboBranchID_Change";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue(); }";
+                    })
+                    .LoadData()
+
+                , HQ.Combo().ID("cboClassID").Name("cboClassID").MarginSpec("5 0 0 0").Width(300)
+                    .HQLangCode("ClassID").HQDBSys(false).HQProcedure("AR30300_pcClassID")
+                    .HQColumnShow("Code,Descr").ForceSelection(true)//.AllowBlank(false)
+                    .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue(); }";
+                    })
+                    .LoadData()
+                    
+            )
+            
+            , X.Container().Layout(LayoutType.HBox)
+            .Items(
+                HQ.Combo().ID("cboTerritory").Name("cboTerritory").MarginSpec("5 0 0 0").Width(300)
+                    .HQLangCode("Territory").HQDBSys(false).HQProcedure("AR30300_pcTerritory")
+                    .HQColumnShow("Code,Descr").ForceSelection(true).AllowBlank(false).HQAutoLoad(false)
+                    .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@Zone", Value ="App.cboZone.getValue()", Mode = ParameterMode.Raw}
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.Select.Fn = "cboTerritory_Select";
+                        lst.Change.Fn = "cboTerritory_Change";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue(); }";
+                    })
+                    .LoadData()
+
+                , HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").MarginSpec("5 0 0 0").Width(300)
+                    .HQLangCode("SlsperId").HQDBSys(false).HQProcedure("AR30300_pcSalesperson")
+                    .HQColumnShow("Slsperid,Name").ForceSelection(true).HQAutoLoad(false)//.AllowBlank(false)
+                    .DisplayField("Name").ValueField("Slsperid").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.Select.Fn = "cboSlsperId_Select";
+                        lst.Change.Fn = "cboSlsperId_Change";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue(); }";
+                    })
+                    .LoadData()
+
+                , HQ.Combo().ID("cboCustID").Name("cboCustID").MarginSpec("5 0 0 0").Width(300)
+                    .HQLangCode("CustID").HQDBSys(false).HQProcedure("AR30300_pcCustomer")
+                    .HQColumnShow("CustID,CustName").ForceSelection(true).HQAutoLoad(false).MultiSelect(true)//.AllowBlank(false)
+                    .DisplayField("CustName").ValueField("CustID").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@SlsperID", Value ="App.cboSlsperId.getValue()", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@ClassID", Value ="App.cboClassID.getValue()", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@Territory", Value ="App.cboTerritory.getValue()", Mode = ParameterMode.Raw}
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue(); }";
+                    })
+                    .LoadData()
+                    
+                
+            )
+            
+            , X.Container().Layout(LayoutType.HBox)
+            .Items(
+                HQ.DateField().ID("dtpFromDate").MarginSpec("5 0 5 0").HQLangCode("FromDate").Width(300).AllowBlank(false)
+                    .Listeners(p => p.Change.Fn = "dtpFromDate_Change")
+
+                , HQ.DateField().ID("dtpToDate").MarginSpec("5 0 5 0").HQLangCode("ToDate").Width(300).AllowBlank(false)
+
+
+                , HQ.Button().ID("btnSearch").HQLangCode("Search").MarginSpec("5 0 5 105").Width(95)
+                    .Listeners(p => p.Click.Fn = "btnSearch_Click")
+
+                , HQ.Button().ID("btnDownloadAlbum").HQLangCode("DownloadAlbum").MarginSpec("5 0 5 5").Width(95)
+                    .Listeners(p => p.Click.Fn = "btnDownloadAlbum_Click")
+            )
+            
+        )
+
+        , X.Panel().ID("pnlGrid")
+        .Layout(LayoutType.Border)
+        .Region(Region.Center)
+        .Items(
+            X.Panel()
+                .Region(Region.West).Layout(LayoutType.Fit).MaxWidth(215).MinWidth(215).Width(215)
+                .Title(Util.GetLang("ListCustomer"))
+                .Items(
+                    X.GridPanel().Width(210)
+                    .Scroll(ScrollMode.Both)
+                    .View(X.GridView().TrackOver(false))
+                    .ID("grdAR_Customer")
+                    .Region(Region.Center).Flex(1)
+                    .Store(
+                        X.Store()
+                        .ID("stoAR_Customer").AutoLoad(false)
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(AR30300_pgCustomer_Result), "mdlAR30300_pgCustomer", ""))
+                        .Parameters(ps =>
+                        {
+                            ps.Add(new StoreParameter("Zone", "App.cboZone.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("ClassID", "App.cboClassID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("SlsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("CustID", "App.cboCustID.getValue().join(',')", ParameterMode.Raw));
+                        })
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetAR_Customer")))
+                        .Listeners(l =>
+                        {
+                            l.Load.Fn = "stoAR_Customer_Load";
+                        })
+                    )
+                    .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdAR_Customer');")
+                    .SortableColumns(false)
+                    .ColumnModel(
+                        X.Column().Text(Util.GetLang("ListCust")).DataIndex("Code").Width(210)
+                    )
+                    .SelectionModel(X.RowSelectionModel().ID("slmAR_Customer").Mode(SelectionMode.Single))
+                    .Listeners(p => p.Select.Fn = "slmAR_Customer_Change")
+                    .BottomBar(
+                        X.PagingToolbar()
+                        .Items(
+                            X.Label("Page size:"),
+                            X.ToolbarSpacer(10),
+                            X.ComboBox()
+                            .Width(80)
+                            .Items("1", "2", "10", "20", "30", "50")
+                            .SelectedItems("50")
+                            .Listeners(l =>
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                })
+                        )
+                        .Plugins(X.ProgressBarPager())
+                    )
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            //ls.BeforeEdit.Fn = "grdAR_Customer_BeforeEdit";
+                            //ls.Edit.Fn = "grdAR_Customer_Edit";
+                            //ls.ValidateEdit.Fn = "grdAR_Customer_ValidateEdit";
+                        })
+                    )
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("Code")
+                            )
+                    )
+                )
+                
+            , X.Container()
+                .Region(Region.Center).Layout(LayoutType.Border)
+                .Items(
+                    X.Panel()
+                        .Cls("images-view")
+                        .Region(Region.West).Layout(LayoutType.Fit)
+                        .Title(Util.GetLang("ListAlbum")).MaxWidth(215).MinWidth(215).Width(215)
+                        .Items(
+                            X.DataView()
+                            .ID("dtvAlbum")
+                            .StoreID("stoAlbum")
+                            .MultiSelect(false)
+                            .OverItemCls("x-item-over")
+                            .ItemSelector("div.thumb-wrap")
+                            .EmptyText("No albums to display")
+                            .TrackOver(true)
+                            .AutoScroll(true)
+                            .Tpl(
+                                Html.X().XTemplate()
+                                    .Html(
+                                        @<text>
+                                            <tpl for=".">
+								                <div class="thumb-wrap" id="{AlbumName}" style="text-align: center;">
+									                <div class="thumb"><img width="172" height="126" src="{Pic}" title="{AlbumName}"></div>
+                                                    <span class="x-editable" style="color:#17365D; font-weight: bold">{AlbumName}</span>
+								                </div>
+							                </tpl>
+							                <div class="x-clear"></div>
+                                        </text>
+                                    )
+                            )
+                            .PrepareData("prepareDataAlbum")
+                            .Listeners(l =>
+                            {
+                                l.SelectionChange.Fn = "dtvAlbum_SelectionChange";
+                            })
+                        )
+                
+                    , X.Panel()
+                        .Cls("images-view")
+                        .Region(Region.Center).Layout(LayoutType.Fit).MinWidth(215).Width(215)
+                        .Title(Util.GetLang("ListImages"))
+                        .TopBar(
+                            X.Toolbar()
+                                .Items(
+                                    HQ.Button().ID("btnUnselect").HQLangCode("UnSelectAll").Width(150).Icon(Icon.PictureDelete)
+                                        .Listeners(p => p.Click.Fn = "btnUnselect_Click")
+                                    
+                                    , HQ.Button().ID("btnDownloadImageSelect").HQLangCode("DownloadImageSelect").Width(150).Icon(Icon.PictureSave)
+                                        .Listeners(p => p.Click.Fn = "btnDownloadImageSelect_Click")
+                                )
+                        )
+                        .Items(
+                            X.DataView()
+                            .ID("dtvImage")
+                            .StoreID("stoImage")
+                            .MultiSelect(false)
+                            .OverItemCls("x-item-over")
+                            .ItemSelector("div.thumb-wrap")
+                            .EmptyText("No images to display")
+                            .TrackOver(true)
+                            .AutoScroll(true)
+                            .Tpl(
+                                Html.X().XTemplate()
+                                    .Html(
+                                        @<text>
+                                            <tpl for=".">
+								                <div class="thumb-wrap" id="{ImageName}" style="text-align: center;">
+									                <div class="thumb">
+                                                        <img class ="img" src="{Pic}" title="{ImageName}">
+                                                        <div class ="checkbox">
+                                                            <input type="checkbox" id ="chkDownload" name="{Pic}">
+                                                        </div>
+
+									                </div>
+                                                    <div><span class="x-editable" style="color:#0094ff">{ImageName}</span></div>
+                                                    <div><span class="x-editable" style="color:#808080">{LastMod}</span></div>
+								                </div>
+							                </tpl>
+							                <div class="x-clear"></div>
+                                        </text>
+                                    )
+                            )
+                            .PrepareData("prepareDataImage")
+                            .Listeners(l =>
+                            {
+                                l.ItemDblClick.Fn = "dtvImage_ItemDblClick";
+                            })
+                        )
+                )
+            
+        )
+
+
+    )
+))
+
+@(X.Window()
+    .ID("winView")
+    .Hidden(true)
+    .Title(Util.GetLang("AR30300ViewImage"))
+    .Layout(LayoutType.Border)
+    .Height(500)
+    .Width(600)
+    .Modal(true)
+    .Closable(true)
+    .Items(
+        X.Container().Region(Region.West).Width(30).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center, Pack = BoxPack.Center })
+        .Items(
+
+            HQ.Button().ID("btnPrevImage").Icon(Icon.PreviousGreen).Listeners(p => p.Click.Fn = "btnPrevImage_Click")
+        )
+
+        , X.Container().Region(Region.Center).Layout(LayoutType.Fit).Width(540)
+        .Items(
+            X.Image().ID("imgView")
+        )
+
+        , X.Container().Region(Region.East).Width(30).LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center, Pack = BoxPack.Center })
+        .Items(
+            HQ.Button().ID("btnNextImage").Icon(Icon.NextGreen).Listeners(p => p.Click.Fn = "btnNextImage_Click")
+        )
+
+    )
+)
