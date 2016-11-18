@@ -29,16 +29,16 @@ namespace OM30400
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";////192.168.130.4 MARSSVR
-            Current.DBSys = "ND_eSky4DSys";//eBiz4DCloudSysJFV
+            Current.Server = "EARTHSVR\\SQL2014";//"HQDBDG";//"EARTHSVR\\SQL2012";////192.168.130.4 MARSSVR
+            Current.DBSys = "Nissin_eSky4DSys";// "ND_eSky4DSys";//eBiz4DCloudSysJFV
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM30400"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "Nissin_eSky4DApp";// "ND_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "505630";
+            Session["CpnyID"] = Current.CpnyID = "C000065";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }

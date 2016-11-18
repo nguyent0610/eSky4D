@@ -113,7 +113,8 @@ var Index = {
                 App.grdVisitCustomerActual.store,
                 App.storeMapActualVisit,
                 //App.storeVisitCustomerActual,
-                App.grdCustHistory.store
+                App.grdCustHistory.store,
+                App.stoVisitPlan
         ]
 
         for (var i = 0; i < stores.length; i++) {
@@ -1918,7 +1919,7 @@ var PosGmap = {
                 if (lat_lngCol && lat_lngCol.length > 0) {
                     setTimeout(function () {
                         PosGmap.requestForWaysRoute(lat_lngCols, idx);
-                   }, 300); //PosGmap.timeoutRequest[PosGmap.y]);
+                   }, 400); //PosGmap.timeoutRequest[PosGmap.y]);
                     //if (PosGmap.y == 3)
                     //    PosGmap.y = 0;
                     //else
@@ -1952,9 +1953,9 @@ var PosGmap = {
             }
             else if (status == google.maps.DirectionsStatus.OVER_QUERY_LIMIT) {
                 //alert("OVER_QUERY_LIMIT");
-                //setTimeout(function () {
+                setTimeout(function () {
                     PosGmap.requestForWaysRoute(lat_lngCols, idx);
-                //}, 500);
+                }, 400);
             }
             else if (status == google.maps.DirectionsStatus.REQUEST_DENIED) {
                 alert("REQUEST_DENIED");
@@ -2164,7 +2165,8 @@ var PosGmap = {
         }
     },
 
-    drawMap_Visit : function () {
+    drawMap_Visit: function () {
+    PosGmap.clearMap(PosGmap.planMarkers);
     PosGmap.planMarkers = [];
 
     App.stoVisitPlan.data.each(function (item) {
@@ -2254,33 +2256,33 @@ var PosGmap = {
     }
 
     if (planPoints.length > 0) {
-        PosGmap.getRoute();
+        var idxPlan = 0;
+        PosGmap.getRoute(planPoints, idxPlan);
     } else {
 
     }
 },
 
-    getRoute : function () {
-    var tmp = planPoints[0];
+    getRoute: function (planPoints, idxPlan) {
     var start;
     var end;
     var waypts = [];
 
-    for (var i = 0; i < tmp.length; i++) {
+    for (var i = 0; i < planPoints[idxPlan].length; i++) {
         // Set start location
         if (i == 0) {
-            start = tmp[0];
+            start = planPoints[idxPlan][i];
         }
 
         // Set end location
-        if (i == tmp.length - 1) {
-            end = tmp[i];
+        if (i == planPoints[idxPlan].length - 1) {
+            end = planPoints[idxPlan][i];
         }
 
         // Set waypts locations
-        if (i > 0 && i < tmp.length - 1) {
+        if (i > 0 && i < planPoints[idxPlan].length - 1) {
             waypts.push({
-                location: tmp[i],
+                location: planPoints[idxPlan][i],
                 stopover: true
             });
         }
@@ -2321,11 +2323,15 @@ var PosGmap = {
     PosGmap.directionsService.route(request, function (response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
-            planPoints.splice(0, 1);
+            //planPoints.splice(0, 1);
             PosGmap.directionsDisplays.push(directionsDisplay);
-
-            if (planPoints.length > 0) {
-                PosGmap.getRoute();
+            idxPlan = idxPlan + 1;
+            var planPoint = planPoints[idxPlan];
+            if (planPoint && planPoint.length > 0) {
+                //PosGmap.getRoute();
+                setTimeout(function () {
+                    PosGmap.getRoute(planPoints, idxPlan);
+                }, 400);
             } else {
                 App.grdVisitCustomerActual.store.reload();
                 App.storeMapActualVisit.reload();
@@ -2333,25 +2339,28 @@ var PosGmap = {
         }
 
         else if (status == google.maps.DirectionsStatus.NOT_FOUND) {
-            //alert("NOT_FOUND");
+            alert("NOT_FOUND");
         }
         else if (status == google.maps.DirectionsStatus.ZERO_RESULTS) {
-            //alert("ZERO_RESULTS");
+            alert("ZERO_RESULTS");
         }
         else if (status == google.maps.DirectionsStatus.MAX_WAYPOINTS_EXCEEDED) {
-            //alert("MAX_WAYPOINTS_EXCEEDED");
+            alert("MAX_WAYPOINTS_EXCEEDED");
         }
         else if (status == google.maps.DirectionsStatus.INVALID_REQUEST) {
-            //alert("INVALID_REQUEST");
+            alert("INVALID_REQUEST");
         }
         else if (status == google.maps.DirectionsStatus.OVER_QUERY_LIMIT) {
             //alert("OVER_QUERY_LIMIT");
+            setTimeout(function () {
+                PosGmap.getRoute(planPoints, idxPlan);
+            }, 400);
         }
         else if (status == google.maps.DirectionsStatus.REQUEST_DENIED) {
-            //alert("REQUEST_DENIED");
+            alert("REQUEST_DENIED");
         }
         else {
-            //alert("UNKNOWN_ERROR");
+            alert("UNKNOWN_ERROR");
         }
     });
 }
