@@ -38,9 +38,14 @@ namespace IN10500.Controllers
             }
             if (BranchID == null) BranchID = Current.CpnyID;
             var dftSiteID = _db.IN10500_pdDefaultSite(Current.UserName, BranchID, Current.LangID).FirstOrDefault().PassNull();
-
-            var right = _db.IN10500_pdAddNewInvtRight(Current.UserName, BranchID, Current.LangID).FirstOrDefault();
-            bool allowAddNewInvtID = right.HasValue ? right.Value : false;
+            bool allowAddNewInvtID = false;
+            var right = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "ALLOWADDNEWINVTID");
+            if (right != null)
+            {
+                allowAddNewInvtID = right.IntVal == 1 ? true : false;
+            }
+           // var right = _db.IN10500_pdAddNewInvtRight(Current.UserName, BranchID, Current.LangID).FirstOrDefault();
+            
             ViewBag.BranchID = BranchID;
             ViewBag.DftSiteID = dftSiteID;
             ViewBag.TagID = TagID.PassNull();
