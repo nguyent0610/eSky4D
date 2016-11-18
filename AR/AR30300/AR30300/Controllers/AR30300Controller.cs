@@ -17,6 +17,7 @@ using System.Drawing;
 using System.Globalization;
 using HQ.eSkySys;
 using System.Net;
+using System.IO;
 
 namespace AR30300.Controllers
 {
@@ -31,23 +32,23 @@ namespace AR30300.Controllers
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private JsonResult _logMessage;
 
-        private string _Path;
-        internal string PathImage
-        {
-            get
-            {
-                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "PublicAR30300");
-                if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
-                {
-                    _Path = config.TextVal;
-                }
-                else
-                {
-                    throw new MessageException(MessageType.Message, "2016111510");
-                }
-                return _Path;
-            }
-        }
+        //private string _Path;
+        //internal string PathImage
+        //{
+        //    get
+        //    {
+        //        var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "PublicAR30300");
+        //        if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
+        //        {
+        //            _Path = config.TextVal;
+        //        }
+        //        else
+        //        {
+        //            throw new MessageException(MessageType.Message, "2016111510");
+        //        }
+        //        return _Path;
+        //    }
+        //}
 
         public ActionResult Index()
         {
@@ -66,60 +67,66 @@ namespace AR30300.Controllers
             return this.Store(_db.AR30300_pgCustomer(_userName, Zone, Territory, BranchID, ClassID, SlsperID, CustID).ToList());
         }
 
-        //[HttpPost]
-        //public ActionResult Save(FormCollection data)
-        //{
-        //    try
-        //    {
-        //        StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstAR_Customer"]);
-        //        var lstAR_Customer = dataHandler1.ObjectData<AR30300_pgAR_Customer_Result>() == null ? new List<AR30300_pgAR_Customer_Result>() : dataHandler1.ObjectData<AR30300_pgAR_Customer_Result>();
+        public ActionResult AR30300DownloadAlbum(string[] urls)
+        {
+            try
+            {
+                string resultAlbum = "";
+                string path = Server.MapPath("~") + @"Images\AR30300\Album\";
+                if (!Directory.Exists(path))
+                {
+                    throw new MessageException(MessageType.Message, "2016111510");
+                }
+                else
+                {
+                    System.IO.DirectoryInfo di = new DirectoryInfo(path);
 
-        //        foreach (var item in lstAR_Customer)
-        //        {
-        //            if (item.colCheck == false) continue;
-        //            var obj = _db.AR_Customer.FirstOrDefault(p => p.BranchID == item.BranchID && p.CustId == item.CustId);
-        //            if (obj != null)
-        //            {
-        //                bool flag = false;
-        //                if (item.ClassId2_S != "")
-        //                {
-        //                    obj.ClassId2 = item.ClassId2_S;
-        //                    flag = true;
-        //                }
-        //                if (item.Status_S != "")
-        //                {
-        //                    obj.GiftExchange = item.Status_S == "I" ? true : false;
-        //                    flag = true;
-        //                }
-        //                if (flag)
-        //                {
-        //                    obj.LUpd_Datetime = DateTime.Now;
-        //                    obj.LUpd_Prog = _screenNbr;
-        //                    obj.LUpd_User = _userName;
-        //                }
-        //            }
-        //        }
+                    foreach (FileInfo file in di.GetFiles())
+                    {
+                        file.Delete();
+                    }
+                    foreach (DirectoryInfo dir in di.GetDirectories())
+                    {
+                        dir.Delete(true);
+                    }
 
-        //        _db.SaveChanges();
-        //        return Json(new { success = true });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is MessageException) return (ex as MessageException).ToMessage();
-        //        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-        //    }
-        //}
+                    for (int i = 0; i < urls.Length; i++)
+                    {
+                        string remoteFilePath = urls[i];
+                        Uri remoteFilePathUri = new Uri(remoteFilePath);
+                        string remoteFilePathWithoutQuery = remoteFilePathUri.GetLeftPart(UriPartial.Path);
+                        string fileName = Path.GetFileName(remoteFilePathWithoutQuery);
+                        string localPath = path + fileName;
+                        resultAlbum += fileName + ";";
+                        WebClient webClient = new WebClient();
+                        webClient.DownloadFile(remoteFilePath, localPath);
+                        webClient.Dispose();
+                    }
+                    if (resultAlbum != "")
+                        resultAlbum = resultAlbum.TrimEnd(';');
+                }
+                return Json(new { success = true, strResult = resultAlbum });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+
 
         //[DirectMethod]
-        //public ActionResult AR30300DownloadImageSelect(string files)
+        //public ActionResult AR30300DownloadAlbum(string files)
         //{
-        //    string[] strFiles = files.Split(';');
-        //    for(int i = 0; i < strFiles.Length; i++){
-        //        using (WebClient webClient = new WebClient())
-        //        {
-        //            webClient.DownloadFile(PathImage + strFiles[i], strFiles[i]);
-        //        }
-        //    }
+        //    string remoteFilePath = "http://mvc2.ext.net/Areas/DataView_Basic/Content/images/thumbs/gangster_zack.jpg";
+        //    Uri remoteFilePathUri = new Uri(remoteFilePath);
+        //    string remoteFilePathWithoutQuery = remoteFilePathUri.GetLeftPart(UriPartial.Path);
+        //    string fileName = Path.GetFileName(remoteFilePathWithoutQuery);
+        //    string localPath = Server.MapPath("~") + @"Images\AR30300\Album\" + fileName;
+        //    WebClient webClient = new WebClient();
+        //    webClient.DownloadFile(remoteFilePath, localPath);
+        //    webClient.Dispose();
+
         //    return this.Direct();
         //}
     }

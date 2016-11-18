@@ -182,53 +182,35 @@ var save = function () {
 };
 
 var btnSearch_Click = function () {
-    //if (HQ.form.checkRequirePass(App.frmMain)) {
+    if (HQ.form.checkRequirePass(App.frmMain)) {
         HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
         App.stoAR_Customer.reload();
-    //}
+    }
 };
 
-//var images = [];
-//var count = 0;
+var convertImgToBase64URL = function (url, filename, callback) {
+    var img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = function () {
+        var canvas = document.createElement('CANVAS'),
+        ctx = canvas.getContext('2d'), dataURL;
+        canvas.height = this.height;
+        canvas.width = this.width;
+        ctx.drawImage(this, 0, 0);
+        dataURL = canvas.toDataURL();
 
-//function convertImgToBase64URL(url, callback) {
-//    var img = new Image();
-//    img.crossOrigin = 'Anonymous';
-//    img.onload = function () {
-//        var canvas = document.createElement('CANVAS'),
-//        ctx = canvas.getContext('2d'), dataURL;
-//        canvas.height = this.height;
-//        canvas.width = this.width;
-//        ctx.drawImage(this, 0, 0);
-//        dataURL = canvas.toDataURL();
-
-//        callback(dataURL, url);
-//        canvas = null;
-//    };
-//    img.src = url;
-//}
-
-//function createArchive(images) {
-//    // Use jszip
-//    var zip = new JSZip();
-//    var img = zip.folder("images");
-
-//    for (var i = 0; i < images.length; i++) {
-//        img.file(i + ".jpg", images[i].data, { base64: true });
-//    }
-//    zip.generateAsync({ type: "blob" }).then(function (file) {
-//        saveAs(file, "images.zip");
-
-//    })
-//}
+        callback(dataURL, filename, url);
+        canvas = null;
+    };
+    img.src = url;
+};
 
 var btnDownloadAlbum_Click = function () {
     if (App.dtvAlbum.selModel.selected.items[0]) {
-        var zip = new JSZip();
-        count = 0;
         var zipFilename = App.dtvAlbum.selModel.selected.items[0].data.TypeAlbum + '_' + App.dtvAlbum.selModel.selected.items[0].data.CustID + '.zip';
+        var zip = new JSZip();
+        var count = 0;
         var urls = [];
-
         var store = App.stoImage;
         var allRecords = store.snapshot || store.allData || store.data;
         store.suspendEvents();
@@ -239,36 +221,44 @@ var btnDownloadAlbum_Click = function () {
         store.resumeEvents();
 
         if (urls.length > 0) {
-            urls.forEach(function (url) {
-                var filename = "filename";
-                // loading a file and add it in a zip file
-                JSZipUtils.getBinaryContent(url, function (err, data) {
-                    if (err) {
-                        throw err; // or handle the error
-                    }
-                    zip.file(filename, data, { binary: true });
-                    count++;
-                    if (count == urls.length) {
-                        zip.generateAsync({ type: 'blob' }).then(function (content) {
-                            saveAs(content, zipFilename);
+            HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+            Ext.Ajax.request({
+                url: 'AR30300/AR30300DownloadAlbum',
+                timeout: 180000000,
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                params: JSON.stringify({
+                    urls: urls
+                }),
+                success: function (result) {
+                    var images = [];
+                    var urlsResult = JSON.parse(result.responseText).strResult.split(';');
+                    for (var i = 0 ; i < urlsResult.length ; i++) {
+                        var filename = urlsResult[i];
+                        convertImgToBase64URL(window.location.href + 'Images/AR30300/Album/' + filename, filename , function (base64Img, name, url) {
+                            images.push({
+                                url: url,
+                                data: base64Img,
+                                name: name
+                            });
+                            count++;
+                            if (count == urlsResult.length) {
+                                for (var i = 0; i < images.length; i++) {
+                                    var commaIdx = images[i].data.indexOf(",");
+                                    zip.file(images[i].name, images[i].data.slice(commaIdx + 1), { base64: true });
+                                }
+                                zip.generateAsync({ type: 'blob' }).then(function (content) {
+                                    saveAs(content, zipFilename);
+                                    HQ.common.showBusy(false);
+                                });
+                            }
                         });
                     }
-                });
+                },
+                failure: function (errorMsg, data) {
+                    HQ.message.process(errorMsg, data, true);
+                }
             });
-            //for (var i = 0; i < urls.length; i++) {
-            //    convertImgToBase64URL(urls[i], function (base64Img, url) {
-            //        images.push({
-            //            url: url,
-            //            data: base64Img
-            //        });
-            //        count++;
-
-            //        if (count == urls.length) {
-            //            createArchive(images);
-            //        }
-            //    });
-            //}
-
         }
         else {
             HQ.message.show('2016111611');
@@ -278,8 +268,6 @@ var btnDownloadAlbum_Click = function () {
         HQ.message.show('2016111610');
     }
 };
-
-
 
 var btnDownloadImageSelect_Click = function () {
     var flag = false;
@@ -297,9 +285,8 @@ var btnDownloadImageSelect_Click = function () {
 };
 
 
-function downloadAll(urls) {
+var downloadAll = function (urls) {
     var link = document.createElement('a');
-
     link.setAttribute('download', null);
     link.style.display = 'none';
 
@@ -310,7 +297,7 @@ function downloadAll(urls) {
         link.click();
     }
     document.body.removeChild(link);
-}
+};
 
 var btnUnselect_Click = function () {
     var elements = Ext.DomQuery.select('#chkDownload');
@@ -319,7 +306,6 @@ var btnUnselect_Click = function () {
             el.checked = false;
     });
 };
-
 
 var prepareDataAlbum = function (data) {
     data.shortName = Ext.util.Format.ellipsis(data.AlbumName, 15);
