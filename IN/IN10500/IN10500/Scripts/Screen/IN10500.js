@@ -81,13 +81,16 @@ var menuClick = function (command) {
             }
             else {
                 HQ.isChange = false;
-                if (App.cboTagID.valueModels == null) App.cboTagID.setValue('');
-                App.cboTagID.getStore().load(function () {
+                var ID = '';
+                if (App.cboTagID.valueModels == null || App.cboTagID.valueModels[0] == null) {
+                    App.cboTagID.setValue(ID);
+                }
+                //App.cboTagID.getStore().load(function () {
                     if (HQ.form.checkRequirePass(App.frmMain)) {
 
                         App.stoIN_TagHeader.reload();
                     }                    
-                });
+                //});
             }
             break;
         case "new":
@@ -520,8 +523,14 @@ function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         var ID = '';
-        if (App.cboTagID.valueModels != null) ID = App.cboTagID.getValue();
-        App.cboTagID.getStore().load(function () { App.cboTagID.setValue(ID); App.stoIN_TagHeader.reload(); });
+        if (App.cboTagID.valueModels == null || App.cboTagID.valueModels[0] == null)
+        {
+            App.cboTagID.setValue(ID);
+        }
+        //App.cboTagID.getStore().load(function () {
+          //  App.cboTagID.setValue(ID);
+            App.stoIN_TagHeader.reload();
+       // });
     }
 };
 function refreshDet(item) {
