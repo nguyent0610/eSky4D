@@ -231,14 +231,14 @@
                         .LoadData()
                 )
                 , X.Column().Text(Util.GetLang("InvtName")).Width(200).DataIndex("InvtName")
-                , X.Column().DataIndex("SiteID").Text(Util.GetLang("SiteID")).Width(90)//.Hidden(true)
-                , X.Column().DataIndex("EAUnit").Text(Util.GetLang("UOM")).Width(70)
+                , X.Column().DataIndex("SiteID").Text(Util.GetLang("SiteID")).Width(80)//.Hidden(true)
+                , X.Column().DataIndex("EAUnit").Text(Util.GetLang("UOM")).Width(60)
 
-                , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500Inventory")).DataIndex("BookEAQty").Width(120).Align(Alignment.Right).StyleSpec("text-align:left")
-                , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500ActInventory")).DataIndex("ActualEAQty").Width(120).Align(Alignment.Right)
+                , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500Inventory")).DataIndex("BookEAQty").Width(110).Align(Alignment.Right).StyleSpec("text-align:left")
+                , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500ActInventory")).DataIndex("ActualEAQty").Width(110).Align(Alignment.Right)
                         .Editor(X.NumberField().DecimalPrecision(numDecimal)).StyleSpec("text-align:left")
 
-                , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500Inventory1M")).DataIndex("StkQtyUnder1Month").Width(130).Align(Alignment.Right)
+                , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500Inventory1M")).DataIndex("StkQtyUnder1Month").Width(120).Align(Alignment.Right)
                     .Editor(X.NumberField().DecimalPrecision(numDecimal)).StyleSpec("text-align:left")
                 , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500DiffAmt")).DataIndex("OffsetEAQty").Width(130).Align(Alignment.Right).StyleSpec("text-align:left")
 
@@ -264,23 +264,23 @@
                     })
                         .LoadData()
                 )
-                , X.Column().DataIndex("Notes").Text(Util.GetLang("Note")).Width(160)
+                , X.Column().DataIndex("Notes").Text(Util.GetLang("Note")).Width(200)
                     .Editor(HQ.TextBox().MaxLength(500).EnforceMaxLength(true))
-                , X.CommandColumn().Width(130)
-                .Commands(
-                    X.GridCommand()
-                    .Text(Util.GetLang("Reject"))
-                    .ToolTip(t =>
-                    {
-                        t.Text = Util.GetLang("Rejectrowchanges");
-                    })
-                    .CommandName("reject")
-                    .Icon(Icon.ArrowUndo)
-                )
-                .PrepareToolbar(t =>
-                {
-                    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                })
+                //, X.CommandColumn().Width(130)
+                //.Commands(
+                //    X.GridCommand()
+                //    .Text(Util.GetLang("Reject"))
+                //    .ToolTip(t =>
+                //    {
+                //        t.Text = Util.GetLang("Rejectrowchanges");
+                //    })
+                //    .CommandName("reject")
+                //    .Icon(Icon.ArrowUndo)
+                //)
+                //.PrepareToolbar(t =>
+                //{
+                //    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                //})
                 .Listeners(l =>
                 {
                     l.Command.Handler = "grdIN_TagDetail_Reject(record);";

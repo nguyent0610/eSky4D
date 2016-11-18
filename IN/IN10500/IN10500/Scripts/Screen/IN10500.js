@@ -103,7 +103,7 @@ var menuClick = function (command) {
                         App.stoIN_TagHeader.reload();
                     }
                 } else {
-                    if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
+                    if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus && HQ.allowAddNewInvtID) {
                         var obj = HQ.store.findInStore(App.stoIN_TagDetail, [keys], ['']);
                         if (!obj) {
                             HQ.store.insertBlank(App.stoIN_TagDetail, keys);
@@ -240,7 +240,7 @@ var stoLoadIN_TagDetail = function (sto) {
         //}
         HQ.isFirstLoad = false;
     }
-    if (App.cboStatus.getValue() == _beginStatus) {
+    if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus && HQ.allowAddNewInvtID) {
         var obj = HQ.store.findInStore(App.stoIN_TagDetail, [keys], ['']);
         if (!obj) {
             HQ.store.insertBlank(App.stoIN_TagDetail, keys);
@@ -318,11 +318,11 @@ var cboSiteID_Change = function (sender, value) {
 
 //load lần đầu khi mở
 var firstLoad = function () {   
-    HQ.isFirstLoad = true;
-    HQ.util.checkAccessRight();
+    HQ.isFirstLoad = true;    
     App.cboTagID.getStore().addListener('load', cboTagStoreLoad);
   //  App.stoIN_TagHeader.getStore().addListener('load', cboTagStoreLoad);
     loadSourceCombo();
+    HQ.util.checkAccessRight();
 };
 
 ////////////Kiem tra combo chinh CpnyID
