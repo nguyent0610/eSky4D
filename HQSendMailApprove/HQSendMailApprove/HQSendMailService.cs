@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 using System.Data.EntityClient;
+using System.IO;
 
 namespace HQSendMailApprove
 {
@@ -42,6 +43,23 @@ namespace HQSendMailApprove
                 var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == (emailID == "" ? "Approve".ToUpper() : emailID.ToUpper())).FirstOrDefault();
                 if (email != null)
                     SendMailEnd(email.SMTPServer, email.Port, email.SSL, email.UserName, email.Pass, email.MailBox, email.Name, mailTo, mailCC, subject, content, fullPathAttach);
+                else
+                    throw new Exception("No email config");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static void SendMailByte(string mailTo, string mailCC, string subject, string content, List<byte[]> byteMemory = null, string[] fullPathAttach = null, string emailID = "")
+        {
+            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
+            try
+            {
+                if (mailTo == string.Empty && mailCC == string.Empty) return;
+                var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == (emailID == "" ? "Approve".ToUpper() : emailID.ToUpper())).FirstOrDefault();
+                if (email != null)
+                    SendMailEnd(email.SMTPServer, email.Port, email.SSL, email.UserName, email.Pass, email.MailBox, email.Name, mailTo, mailCC, subject, content,byteMemory, fullPathAttach);
                 else
                     throw new Exception("No email config");
             }
@@ -107,6 +125,64 @@ namespace HQSendMailApprove
                 throw ex;
             }
         }
+        private static void SendMailEnd(string smtp, int port, bool ssl, string userName, string password, string fromMail, string fromName, string toMail, string ccMail, string subject, string content, List<byte[]> byteMemory = null,string[] FileAttach =null)
+        {
+            try
+            {
+
+
+                if (toMail == string.Empty && ccMail == string.Empty) return;
+
+                string regexEmail = @"\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b";
+
+                using (SmtpClient smtpClient = new SmtpClient(smtp, port))
+                {
+                    Regex regex = new Regex(regexEmail);
+                    if (!regex.IsMatch(fromMail) || !regex.IsMatch(toMail)) throw new Exception("Wrong email address");
+                    // smtpClient.UseDefaultCredentials = true;
+                    NetworkCredential auth = new NetworkCredential(userName, Encryption.Decrypt(password, "1210Hq10s081f359t"));
+                    smtpClient.Credentials = auth;
+
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+                    if (ssl) smtpClient.EnableSsl = true;
+
+                    MailAddress from = new MailAddress(fromMail, fromName);
+                    using (MailMessage mail = new MailMessage())
+                    {
+                        string[] cc = ccMail.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var item in cc)
+                            mail.CC.Add(item);
+
+                        string[] to = toMail.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var item in to)
+                            mail.To.Add(item);
+
+                        mail.From = from;
+                        mail.Subject = subject;
+                        mail.SubjectEncoding = Encoding.UTF8;
+
+                        mail.Body = content;
+                        mail.BodyEncoding = Encoding.UTF8;
+                        mail.IsBodyHtml = true;
+                        if (FileAttach != null)
+                        {
+                            for (var i = 0; i < byteMemory.Count; i++)
+                            {
+                                mail.Attachments.Add(new Attachment(new MemoryStream(byteMemory[i]), FileAttach[i]));
+                            }
+                        }
+
+                        smtpClient.Send(mail);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+       
         public static List<GetMailResult> GetMail(string procName, Dictionary<string, string> parameter)
         {
 
