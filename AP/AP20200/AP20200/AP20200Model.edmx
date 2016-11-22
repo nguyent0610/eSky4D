@@ -397,7 +397,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="38">
-        <EntityTypeShape EntityType="AP20200Model.AP_Vendor" Width="1.5" PointX="7.0360241844486566" PointY="5.1538535529532723" />
+        <EntityTypeShape EntityType="AP20200Model.AP_Vendor" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
