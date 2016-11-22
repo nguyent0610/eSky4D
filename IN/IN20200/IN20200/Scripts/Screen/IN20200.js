@@ -400,7 +400,7 @@ var save = function () {
                 App.tabDetail.setActiveTab(App.pnlLotSerial);
                 App.txtDfltLotSerFxdVal.focus();
                 return;
-            } else if (App.txtDfltLotSerNumVal.getValue().length != App.txtDfltLotSerFxdLen.getValue()) {
+            } else if (App.txtDfltLotSerNumVal.getValue().length != App.txtDfltLotSerNumLen.getValue()) {
                 HQ.message.show(2016061401, App.txtDfltLotSerFxdLen.getValue());
                 App.tabDetail.setActiveTab(App.pnlLotSerial);
                 App.txtDfltLotSerNumVal.focus();
