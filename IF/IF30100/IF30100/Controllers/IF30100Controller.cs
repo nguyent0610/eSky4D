@@ -1018,7 +1018,6 @@ namespace IF30100.Controllers
 
 
                 excelWorkBook.SaveAs(fullName, XlFileFormat.xlExcel12, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange);
-              
                 //Stream stream = new MemoryStream(buffer);
                 //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsb" };
 
@@ -1048,7 +1047,7 @@ namespace IF30100.Controllers
             {
                 if (excelWorkBook != null)
                 {
-                    excelWorkBook.Close(Type.Missing, Type.Missing, Type.Missing);
+                    excelWorkBook.Close(false, Type.Missing, Type.Missing);  
                     Marshal.FinalReleaseComObject(excelWorkBook);
                 }
 
