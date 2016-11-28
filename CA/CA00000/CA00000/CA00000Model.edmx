@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="CA_Setup" EntityType="eBiz4DWebSysModel.Store.CA_Setup" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="CA_Setup">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SetUpID" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="SetUpID" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="LastBatNbr" Type="varchar" MaxLength="10" />
+          <Property Name="LastPaymentNbr" Type="varchar" MaxLength="10" />
+          <Property Name="LastReceiptNbr" Type="varchar" MaxLength="10" />
+          <Property Name="PreFixBat" Type="varchar" MaxLength="2" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="CA00000_pdLoadSetup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CA00000Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="CA00000Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="CA_Setup" EntityType="CA00000Model.CA_Setup" />
+          <FunctionImport Name="CA00000_pdLoadSetup" ReturnType="Collection(CA00000Model.CA00000_pdLoadSetup_Result)" />
+        </EntityContainer>
+        <EntityType Name="CA_Setup">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SetUpID" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SetUpID" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastBatNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastPaymentNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastReceiptNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PreFixBat" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="CA00000_pdLoadSetup_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SetUpID" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="LastBatNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LastPaymentNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LastReceiptNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PreFixBat" Nullable="true" MaxLength="2" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="CA00000Entities" >
+          <EntitySetMapping Name="CA_Setup">
+            <EntityTypeMapping TypeName="CA00000Model.CA_Setup">
+              <MappingFragment StoreEntitySet="CA_Setup">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="PreFixBat" ColumnName="PreFixBat" />
+                <ScalarProperty Name="LastReceiptNbr" ColumnName="LastReceiptNbr" />
+                <ScalarProperty Name="LastPaymentNbr" ColumnName="LastPaymentNbr" />
+                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
+                <ScalarProperty Name="SetUpID" ColumnName="SetUpID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CA00000_pdLoadSetup" FunctionName="eBiz4DWebSysModel.Store.CA00000_pdLoadSetup">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CA00000Model.CA00000_pdLoadSetup_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="SetUpID" ColumnName="SetUpID" />
+                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
+                <ScalarProperty Name="LastPaymentNbr" ColumnName="LastPaymentNbr" />
+                <ScalarProperty Name="LastReceiptNbr" ColumnName="LastReceiptNbr" />
+                <ScalarProperty Name="PreFixBat" ColumnName="PreFixBat" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="60" >
+        <EntityTypeShape EntityType="CA00000Model.CA_Setup" Width="1.5" PointX="9.7425534938194573" PointY="29.053089930234986" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

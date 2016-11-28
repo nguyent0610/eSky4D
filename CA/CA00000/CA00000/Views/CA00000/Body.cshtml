@@ -1,0 +1,46 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using CA00000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", false, ""))
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+    .Layout(LayoutType.Fit)
+    .Listeners(p=>p.BoxReady.Fn="frmloadAfterRender")
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("Header").Layout(LayoutType.HBox)
+        
+        .Items(
+            X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
+            .Items(
+                HQ.TextBox().ID("txtPreFixBat").Name("txtPreFixBat").HQLangCode("Prefix")
+                    .DataIndex("PreFixBat").Width(400).MarginSpec("5 0 0 0").MaxLength(2).EnforceMaxLength(true)
+               
+                , HQ.TextBox().ID("txtLastBatNbr").Name("txtLastBatNbr").HQLangCode("LastBatNbr")
+                    .DataIndex("LastBatNbr").Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                
+                , HQ.TextBox().ID("txtLastPaymentNbr").Name("txtLastPaymentNbr").HQLangCode("LastPaymentNbr")
+                    .DataIndex("LastPaymentNbr").Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                    
+                ,HQ.TextBox().ID("txtLastReceiptNbr").Name("txtLastReceiptNbr").HQLangCode("LastReceiptNbr")
+                    .DataIndex("LastReceiptNbr").Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                
+            )
+        )
+    )//giao dien
+))
