@@ -172,13 +172,13 @@ var stoOM_POSMStructure_Load = function (sto) {
 };
 
 var grdOM_POSMStructure_BeforeEdit = function (editor, e) {
-    if (e.field == 'Structure') {
-        if (HQ.isUpdate == true)
-            return true;
-        else if (HQ.isInsert == true && Ext.isEmpty(e.record.data.tstamp))
-            return true;
-    }
-    if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
+    //if (e.field == 'Structure') {
+    //    if (HQ.isUpdate == true)
+    //        return true;
+    //    else if (HQ.isInsert == true && Ext.isEmpty(e.record.data.tstamp))
+    //        return true;
+    //}
+    if (!HQ.grid.checkBeforeEdit(e,keys)) return false;
 };
 
 var grdOM_POSMStructure_Edit = function (item, e) {
@@ -199,7 +199,7 @@ var grdOM_POSMStructure_Edit = function (item, e) {
             HQ.message.show(2015110901, [HQ.common.getLang('CnvFact')], '', true);
         }
     }
-    HQ.grid.checkInsertKey(App.grdOM_POSMStructure, e, ['InvtID']);
+    HQ.grid.checkInsertKey(App.grdOM_POSMStructure, e, keys);
     frmChange();
 };
 

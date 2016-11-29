@@ -58,13 +58,13 @@ namespace OM23300.Controllers
                 foreach (OM23300_pgOM_POSMStructure_Result del in lstOM_POSMStructure.Deleted)
                 {
                     // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
-                    if (lstOM_POSMStructure.Created.Where(p => p.PosmID == PosmID && p.InvtID == del.InvtID).Count() > 0)
+                    if (lstOM_POSMStructure.Created.Where(p => p.PosmID == PosmID && p.InvtID == del.InvtID && p.Structure == del.Structure).Count() > 0)
                     {
-                        lstOM_POSMStructure.Created.Where(p => p.PosmID == PosmID && p.InvtID == del.InvtID).FirstOrDefault().tstamp = del.tstamp;
+                        lstOM_POSMStructure.Created.Where(p => p.PosmID == PosmID && p.InvtID == del.InvtID && p.Structure == del.Structure).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.OM_POSMStructure.ToList().Where(p => p.PosmID == PosmID && p.InvtID == del.InvtID).FirstOrDefault();
+                        var objDel = _db.OM_POSMStructure.ToList().Where(p => p.PosmID == PosmID && p.InvtID == del.InvtID && p.Structure == del.Structure).FirstOrDefault();
                         if (objDel != null)
                         {
                             _db.OM_POSMStructure.DeleteObject(objDel);
@@ -74,10 +74,10 @@ namespace OM23300.Controllers
 
                 foreach (OM23300_pgOM_POSMStructure_Result curLang in lstOM_POSMStructure.Created)
                 {
-                    if (PosmID.PassNull() == "" || curLang.InvtID.PassNull() == "") continue;
+                    if (PosmID.PassNull() == "" || curLang.Structure.PassNull() == "" || curLang.InvtID.PassNull() == "") continue;
 
                     var lang = _db.OM_POSMStructure.Where(p => p.PosmID.ToLower() == PosmID.ToLower()
-                                                            && p.InvtID.ToLower() == curLang.InvtID.ToLower()).FirstOrDefault();
+                                                            && p.InvtID.ToLower() == curLang.InvtID.ToLower() && p.Structure.ToLower() == curLang.Structure.ToLower()).FirstOrDefault();
 
                     if (lang != null)
                     {
@@ -115,7 +115,7 @@ namespace OM23300.Controllers
             if (isNew)
             {
                 t.InvtID = s.InvtID;
-
+                t.Structure = s.Structure;
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;

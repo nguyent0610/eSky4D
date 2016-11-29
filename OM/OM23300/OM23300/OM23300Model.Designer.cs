@@ -138,6 +138,7 @@ namespace OM23300
         /// Create a new OM_POSMStructure object.
         /// </summary>
         /// <param name="posmID">Initial value of the PosmID property.</param>
+        /// <param name="structure">Initial value of the Structure property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="slsPrice">Initial value of the SlsPrice property.</param>
         /// <param name="unitCost">Initial value of the UnitCost property.</param>
@@ -149,10 +150,11 @@ namespace OM23300
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_POSMStructure CreateOM_POSMStructure(global::System.String posmID, global::System.String invtID, global::System.Double slsPrice, global::System.Double unitCost, global::System.Double cnvFact, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static OM_POSMStructure CreateOM_POSMStructure(global::System.String posmID, global::System.String structure, global::System.String invtID, global::System.Double slsPrice, global::System.Double unitCost, global::System.Double cnvFact, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_POSMStructure oM_POSMStructure = new OM_POSMStructure();
             oM_POSMStructure.PosmID = posmID;
+            oM_POSMStructure.Structure = structure;
             oM_POSMStructure.InvtID = invtID;
             oM_POSMStructure.SlsPrice = slsPrice;
             oM_POSMStructure.UnitCost = unitCost;
@@ -201,7 +203,7 @@ namespace OM23300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Structure
         {
@@ -211,11 +213,14 @@ namespace OM23300
             }
             set
             {
-                OnStructureChanging(value);
-                ReportPropertyChanging("Structure");
-                _Structure = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Structure");
-                OnStructureChanged();
+                if (_Structure != value)
+                {
+                    OnStructureChanging(value);
+                    ReportPropertyChanging("Structure");
+                    _Structure = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("Structure");
+                    OnStructureChanged();
+                }
             }
         }
         private global::System.String _Structure;

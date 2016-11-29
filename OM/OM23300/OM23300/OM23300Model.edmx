@@ -11,10 +11,11 @@
         <EntityType Name="OM_POSMStructure">
           <Key>
             <PropertyRef Name="PosmID" />
+            <PropertyRef Name="Structure" />
             <PropertyRef Name="InvtID" />
           </Key>
           <Property Name="PosmID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="Structure" Type="nvarchar" MaxLength="30" />
+          <Property Name="Structure" Type="nvarchar" Nullable="false" MaxLength="30" />
           <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Descr" Type="nvarchar" MaxLength="100" />
           <Property Name="SlsPrice" Type="float" Nullable="false" />
@@ -36,18 +37,29 @@
     <edmx:ConceptualModels>
       <Schema Namespace="OM23300Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="OM23300Entities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="OM_POSMStructure" EntityType="OM23300Model.OM_POSMStructure" />
           <FunctionImport Name="OM23300_pgOM_POSMStructure" ReturnType="Collection(OM23300Model.OM23300_pgOM_POSMStructure_Result)">
-            <Parameter Name="PosmID" Mode="In" Type="String" />
+          <Parameter Name="PosmID" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="OM_POSMStructure" EntityType="OM23300Model.OM_POSMStructure" />
         </EntityContainer>
+        <ComplexType Name="OM23300_pgOM_POSMStructure_Result">
+          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Structure" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="SlsPrice" Nullable="false" />
+          <Property Type="Double" Name="UnitCost" Nullable="false" />
+          <Property Type="Double" Name="CnvFact" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
         <EntityType Name="OM_POSMStructure">
           <Key>
             <PropertyRef Name="PosmID" />
+            <PropertyRef Name="Structure" />
             <PropertyRef Name="InvtID" />
           </Key>
           <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Structure" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Structure" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Descr" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Double" Name="SlsPrice" Nullable="false" />
@@ -61,22 +73,26 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="OM23300_pgOM_POSMStructure_Result">
-          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Structure" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
-          <Property Type="Double" Name="SlsPrice" Nullable="false" />
-          <Property Type="Double" Name="UnitCost" Nullable="false" />
-          <Property Type="Double" Name="CnvFact" Nullable="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="OM23300Entities" >
+          <FunctionImportMapping FunctionImportName="OM23300_pgOM_POSMStructure" FunctionName="eBiz4DWebSysModel.Store.OM23300_pgOM_POSMStructure">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23300Model.OM23300_pgOM_POSMStructure_Result">
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+                <ScalarProperty Name="Structure" ColumnName="Structure" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="SlsPrice" ColumnName="SlsPrice" />
+                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="OM_POSMStructure">
             <EntityTypeMapping TypeName="OM23300Model.OM_POSMStructure">
               <MappingFragment StoreEntitySet="OM_POSMStructure">
@@ -97,20 +113,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="OM23300_pgOM_POSMStructure" FunctionName="eBiz4DWebSysModel.Store.OM23300_pgOM_POSMStructure">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM23300Model.OM23300_pgOM_POSMStructure_Result">
-                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
-                <ScalarProperty Name="Structure" ColumnName="Structure" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="SlsPrice" ColumnName="SlsPrice" />
-                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
-                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -132,7 +134,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="OM23300Model.OM_POSMStructure" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM23300Model.OM_POSMStructure" Width="1.5" PointX="2.375" PointY="1.25" />
       </Diagram>
     </Diagrams>
   </Designer>
