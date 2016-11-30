@@ -139,15 +139,18 @@
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .LoadData()
 
-                    , HQ.TextBox().ID("txtRefNbr").HQLangCode("RCTPPAIDNBR").Name("RefNbr").Tag("X")
+                    , HQ.TextBox().ID("txtRefNbr").HQLangCode("RCTPPAIDNBR").Name("RefNbr").MaxLength(10).MaxLength(10).EnforceMaxLength(true).Tag("X")
 
                 )
                 , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
                 .Items(
-                   HQ.TextBox().ID("txtDescr").HQLangCode("Name").Name("Descr").Width(553)
-                   , HQ.NumberField().ID("txtTotal").HQLangCode("Total").Name("TotAmt").DecimalPrecision(0).ReadOnly(true).Tag("X")
+                   HQ.TextBox().ID("txtDescr").HQLangCode("Name").Name("Descr").Width(553).MaxLength(100).EnforceMaxLength(true)
+                   , HQ.NumberField().ID("txtTotal").HQLangCode("Total").Name("TotAmt").DecimalPrecision(0).ReadOnly(true).Tag("X").SelectOnFocus(true)
                )
-               , HQ.TextBox().ID("txtAddress").HQLangCode("Address").Name("Address").Width(553)
+
+               ,HQ.TextBox().ID("txtAddress").HQLangCode("Address").Name("Address").Width(553).MaxLength(100).EnforceMaxLength(true)
+                 
+                  
             )
             , X.GridPanel().Region(Region.Center).Layout(LayoutType.Fit)
             .Listeners(lst =>
@@ -195,10 +198,10 @@
                         .LoadData()
                     )
                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("TranDesc").Width(150)
-                    .Editor(X.TextField().MaxLength(100).EnforceMaxLength(true).SelectOnFocus(true))
+                    .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true).SelectOnFocus(true))
 
                 , X.NumberColumn().Text(Util.GetLang("CrTot")).DataIndex("TranAmt").Width(150).Align(Alignment.Right).Format("#,###")
-                    .Editor(X.NumberField().DecimalPrecision(0).SelectOnFocus(true))
+                    .Editor(X.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0))
                 , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150)
                     .Editor(
                         HQ.Combo().ID("cboCustID")

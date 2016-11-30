@@ -21,6 +21,7 @@ var checkLoadMaster = function (sto) {//các combobox có HQComboType= master th
         _isLoadMaster = true;
         App.cboBranchID.setValue(HQ.cpnyID);
         //App.cboBatNbr.getStore().reload();//sau khi load source master xong load den source combo cua store chinh
+        checkLoadDatacboBatNbr_Change();
     }
 };
 var checkLoadDatacboBatNbr_Change = function (sto) {//load cac master phụ thuộc vào combo là key của màn hình rồi mới bind dữ liệu lên
@@ -71,8 +72,7 @@ var firstLoad = function () {
     App.cboStatus.getStore().addListener('load', checkLoadMaster);
     App.cboHandle.getStore().addListener('load', checkLoadMaster);
     App.cboBankAcct.getStore().addListener('load', checkLoadMaster);
-    _SourceData = 0;
-    App.stoDetail.reload();
+   
 };
 var frmChange = function () {
     if (App.stoHeader.getCount() > 0)
@@ -141,7 +141,11 @@ var menuClick = function (command) {
                 if (HQ.form.checkRequirePass(App.frmMain)
                     && HQ.store.checkRequirePass(App.stoDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)
                    ) {
-                    save();
+                    if (HQ.store.getAllData(App.stoDetail, ['EntryID'], [''],false).length == 2) {
+                        HQ.message.show(2015020804, '', '');
+                        
+                    }
+                    else save();
                 }
             }
             break;
@@ -356,6 +360,7 @@ var save = function () {
         else if (HQ.focus == 'grdDetail') {
             App.grdDetail.deleteSelected();
             frmChange();
+            totalAmt();
         }
        
     }
