@@ -1,0 +1,389 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="Batch" EntityType="eBiz4DWebSysModel.Store.Batch" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CA_Trans" EntityType="eBiz4DWebSysModel.Store.CA_Trans" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="Batch">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="Module" />
+            <PropertyRef Name="BatNbr" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="Module" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="TotAmt" Type="float" Nullable="false" />
+          <Property Name="DateEnt" Type="smalldatetime" Nullable="false" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="100" />
+          <Property Name="EditScrnNbr" Type="varchar" MaxLength="8" />
+          <Property Name="FromToSiteID" Type="varchar" MaxLength="10" />
+          <Property Name="ImpExp" Type="varchar" MaxLength="1" />
+          <Property Name="IntRefNbr" Type="varchar" MaxLength="10" />
+          <Property Name="JrnlType" Type="varchar" MaxLength="2" />
+          <Property Name="NoteID" Type="int" Nullable="false" />
+          <Property Name="OrigBatNbr" Type="varchar" MaxLength="10" />
+          <Property Name="OrigBranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="OrigScrnNbr" Type="varchar" MaxLength="5" />
+          <Property Name="ReasonCD" Type="varchar" MaxLength="10" />
+          <Property Name="RefNbr" Type="varchar" MaxLength="10" />
+          <Property Name="RvdBatNbr" Type="varchar" MaxLength="10" />
+          <Property Name="Rlsed" Type="smallint" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="1" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="CA_Trans">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="RefNbr" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="RefNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="BankAcct" Type="varchar" MaxLength="10" />
+          <Property Name="CustID" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="varchar" MaxLength="10" />
+          <Property Name="EntryID" Type="varchar" MaxLength="10" />
+          <Property Name="TranType" Type="varchar" MaxLength="3" />
+          <Property Name="Rlsed" Type="smallint" />
+          <Property Name="TranAmt" Type="float" />
+          <Property Name="TranDate" Type="smalldatetime" />
+          <Property Name="TranDesc" Type="nvarchar" MaxLength="200" />
+          <Property Name="VendID" Type="varchar" MaxLength="15" />
+          <Property Name="VendName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Addr" Type="nvarchar" MaxLength="200" />
+          <Property Name="InvcDate" Type="smalldatetime" />
+          <Property Name="InvcNbr" Type="varchar" MaxLength="10" />
+          <Property Name="InvcNote" Type="varchar" MaxLength="10" />
+          <Property Name="TaxRegNbr" Type="varchar" MaxLength="20" />
+          <Property Name="TaxID" Type="varchar" MaxLength="10" />
+          <Property Name="PayerReceiver" Type="nvarchar" MaxLength="100" />
+          <Property Name="PayerReceiverAddr" Type="nvarchar" MaxLength="100" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Transportation" Type="varchar" MaxLength="10" />
+          <Property Name="TrsfToBranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="TrsfToBankAcct" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <Function Name="CA_CancelBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
+          <Parameter Name="ProgID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CA_ReleaseBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
+          <Parameter Name="ProgID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CA10200_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CA10200_pgDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CANumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="GetType" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CA10200Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="CA10200Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="CA10200_pdLoadSetup" ReturnType="Collection(CA10200Model.CA10200_pdLoadSetup_Result)" />
+          <EntitySet Name="Batches" EntityType="CA10200Model.Batch" />
+          <EntitySet Name="CA_Trans" EntityType="CA10200Model.CA_Trans" />
+          <FunctionImport Name="CA10200_pdHeader" ReturnType="Collection(CA10200Model.CA10200_pdHeader_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CA10200_pgDetail" ReturnType="Collection(CA10200Model.CA10200_pgDetail_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CANumbering" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="GetType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CA_CancelBatch">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="ProgID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CA_ReleaseBatch">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="ProgID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="CA10200_pdLoadSetup_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SetUpID" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="LastBatNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LastPaymentNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LastReceiptNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PreFixBat" Nullable="true" MaxLength="2" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <EntityType Name="Batch">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="Module" />
+            <PropertyRef Name="BatNbr" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Module" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="TotAmt" Nullable="false" />
+          <Property Type="DateTime" Name="DateEnt" Nullable="false" Precision="0" />
+          <Property Type="String" Name="Descr" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EditScrnNbr" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="FromToSiteID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ImpExp" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IntRefNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="JrnlType" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="NoteID" Nullable="false" />
+          <Property Type="String" Name="OrigBatNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OrigBranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OrigScrnNbr" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ReasonCD" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RefNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RvdBatNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="Rlsed" Nullable="false" />
+          <Property Type="String" Name="Status" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="CA_Trans">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="RefNbr" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BankAcct" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="EmployeeID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="EntryID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TranType" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="Rlsed" />
+          <Property Type="Double" Name="TranAmt" />
+          <Property Type="DateTime" Name="TranDate" Precision="0" />
+          <Property Type="String" Name="TranDesc" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="VendID" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="InvcDate" Precision="0" />
+          <Property Type="String" Name="InvcNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvcNote" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxRegNbr" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PayerReceiver" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PayerReceiverAddr" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="Transportation" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TrsfToBranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TrsfToBankAcct" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="CA10200_pdHeader_Result">
+          <Property Type="Double" Name="TotAmt" Nullable="false" />
+          <Property Type="DateTime" Name="DateEnt" Nullable="false" Precision="16" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="RvdBatNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="CA10200_pgDetail_Result">
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="BankAcct" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="TranAmt" Nullable="true" />
+          <Property Type="String" Name="TranDesc" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="TrsfToBranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="TrsfToBankAcct" Nullable="true" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="CA10200Entities" >
+        <EntitySetMapping Name="Batches">
+            <EntityTypeMapping TypeName="CA10200Model.Batch">
+              <MappingFragment StoreEntitySet="Batch">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Rlsed" ColumnName="Rlsed" />
+                <ScalarProperty Name="RvdBatNbr" ColumnName="RvdBatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
+                <ScalarProperty Name="OrigScrnNbr" ColumnName="OrigScrnNbr" />
+                <ScalarProperty Name="OrigBranchID" ColumnName="OrigBranchID" />
+                <ScalarProperty Name="OrigBatNbr" ColumnName="OrigBatNbr" />
+                <ScalarProperty Name="NoteID" ColumnName="NoteID" />
+                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
+                <ScalarProperty Name="IntRefNbr" ColumnName="IntRefNbr" />
+                <ScalarProperty Name="ImpExp" ColumnName="ImpExp" />
+                <ScalarProperty Name="FromToSiteID" ColumnName="FromToSiteID" />
+                <ScalarProperty Name="EditScrnNbr" ColumnName="EditScrnNbr" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="DateEnt" ColumnName="DateEnt" />
+                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CA_Trans">
+            <EntityTypeMapping TypeName="CA10200Model.CA_Trans">
+              <MappingFragment StoreEntitySet="CA_Trans">
+                <ScalarProperty Name="TrsfToBankAcct" ColumnName="TrsfToBankAcct" />
+                <ScalarProperty Name="TrsfToBranchID" ColumnName="TrsfToBranchID" />
+                <ScalarProperty Name="Transportation" ColumnName="Transportation" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="PayerReceiverAddr" ColumnName="PayerReceiverAddr" />
+                <ScalarProperty Name="PayerReceiver" ColumnName="PayerReceiver" />
+                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
+                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
+                <ScalarProperty Name="InvcDate" ColumnName="InvcDate" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+                <ScalarProperty Name="VendName" ColumnName="VendName" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
+                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
+                <ScalarProperty Name="TranAmt" ColumnName="TranAmt" />
+                <ScalarProperty Name="Rlsed" ColumnName="Rlsed" />
+                <ScalarProperty Name="TranType" ColumnName="TranType" />
+                <ScalarProperty Name="EntryID" ColumnName="EntryID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="BankAcct" ColumnName="BankAcct" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CA10200_pdHeader" FunctionName="eBiz4DWebSysModel.Store.CA10200_pdHeader">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CA10200Model.CA10200_pdHeader_Result">
+                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+                <ScalarProperty Name="DateEnt" ColumnName="DateEnt" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="RvdBatNbr" ColumnName="RvdBatNbr" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CA10200_pgDetail" FunctionName="eBiz4DWebSysModel.Store.CA10200_pgDetail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CA10200Model.CA10200_pgDetail_Result">
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="BankAcct" ColumnName="BankAcct" />
+                <ScalarProperty Name="TranAmt" ColumnName="TranAmt" />
+                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
+                <ScalarProperty Name="TrsfToBranchID" ColumnName="TrsfToBranchID" />
+                <ScalarProperty Name="TrsfToBankAcct" ColumnName="TrsfToBankAcct" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CANumbering" FunctionName="eBiz4DWebSysModel.Store.CANumbering" />
+          <FunctionImportMapping FunctionImportName="CA_CancelBatch" FunctionName="eBiz4DWebSysModel.Store.CA_CancelBatch" />
+          <FunctionImportMapping FunctionImportName="CA_ReleaseBatch" FunctionName="eBiz4DWebSysModel.Store.CA_ReleaseBatch" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="60" >
+        <EntityTypeShape EntityType="CA10200Model.Batch" Width="1.5" PointX="9.6149708468536712" PointY="4.7407594941280591" />
+        <EntityTypeShape EntityType="CA10200Model.CA_Trans" Width="1.5" PointX="4.3079292943272414" PointY="0.21361993263178503" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
