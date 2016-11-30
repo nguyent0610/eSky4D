@@ -288,7 +288,7 @@ namespace CA10100.Controllers
  
             t.LineRef =s.LineRef;
             t.TranAmt = s.TranAmt;
-            t.TranType = s.TranType;
+            t.TranType = "C";
             t.BankAcct = s.BankAcct;
             t.CustID = s.CustID;
             t.EmployeeID = s.EmployeeID;
@@ -299,7 +299,7 @@ namespace CA10100.Controllers
             t.VendID = s.VendID;
             t.VendName = s.VendName;
             t.Addr = s.Addr;
-            t.InvcDate = s.InvcDate;
+            t.InvcDate = s.TranDate;
             t.InvcNbr = s.InvcNbr;
             t.InvcNote = s.InvcNote;
             t.TaxRegNbr = s.TaxRegNbr;
