@@ -129,6 +129,9 @@ namespace CA10200.Controllers
                         if (RowDB.tstamp.ToHex() == curRow.tstamp.ToHex())
                         {
                             UpdatingDetail(RowDB, curRow, false);
+                            RowDB.TranDate = curHeader.DateEnt;
+                            RowDB.InvcDate = curHeader.DateEnt;
+                            RowDB.EntryID = "TR";
                         }
                         else
                         {
@@ -145,6 +148,7 @@ namespace CA10200.Controllers
                         RowDB.LineRef = curRow.LineRef;
                         UpdatingDetail(RowDB, curRow, true);
                         RowDB.TranDate = curHeader.DateEnt;
+                        RowDB.InvcDate = curHeader.DateEnt;
                         RowDB.EntryID = "TR";
 
                         _db.CA_Trans.AddObject(RowDB);
@@ -286,6 +290,7 @@ namespace CA10200.Controllers
             t.TranDesc = s.TranDesc;
             t.TrsfToBankAcct = s.TrsfToBankAcct;
             t.TrsfToBranchID = s.TrsfToBranchID;
+         
           
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

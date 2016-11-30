@@ -226,20 +226,31 @@ var grdDetail_BeforeEdit = function (editor, e) {
     }
     if (e.field == 'BankAcct') {
         App.cboBankAcct.store.clearFilter();
-        if (e.record.data.TrsfToBranchID == App.cboBranchID.getValue())           
+        if (e.record.data.TrsfToBranchID == App.cboBranchID.getValue()) {
             App.cboBankAcct.store.loadData(filterStore(App.cboBankAcct.store, 'BankAcct', e.record.data.TrsfToBankAcct, false).data.items);
-        else App.cboBankAcct.loadPage();                 
+            App.cboBankAcct.store.filter('BranchID', App.cboBranchID.getValue());
+        }
+        else {
+            App.cboBankAcct.loadPage();
+            App.cboBankAcct.store.filter('BranchID', App.cboBranchID.getValue());
+        }
     }
     else if (e.field == 'TrsfToBankAcct') {
         App.cboTrsfToBankAcct.store.clearFilter();
-        if (e.record.data.TrsfToBranchID == App.cboBranchID.getValue())
+        if (e.record.data.TrsfToBranchID == App.cboBranchID.getValue()) {
             App.cboTrsfToBankAcct.store.loadData(filterStore(App.cboTrsfToBankAcct.store, 'BankAcct', e.record.data.BankAcct, false).data.items);
-        else App.cboTrsfToBankAcct.loadPage();                 
+            App.cboTrsfToBankAcct.store.filter('BranchID', e.record.data.TrsfToBranchID);
+        }
+        else {
+            App.cboTrsfToBankAcct.loadPage();
+            App.cboTrsfToBankAcct.store.filter('BranchID', e.record.data.TrsfToBranchID);
+        }
     }
     else if (e.field == 'TrsfToBranchID') {
         App.cboTrsfToBranchID.store.clearFilter();
         if (e.record.data.TrsfToBankAcct == e.record.data.BankAcct) {
             App.cboTrsfToBranchID.store.loadData(filterStore(App.cboTrsfToBranchID.store, 'BranchID', App.cboBranchID.getValue(), false).data.items);
+           
         }
         else App.cboTrsfToBranchID.loadPage();
     }
