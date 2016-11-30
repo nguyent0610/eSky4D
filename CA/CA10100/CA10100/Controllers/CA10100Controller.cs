@@ -125,6 +125,7 @@ namespace CA10100.Controllers
                     curRow.PayerReceiver = curHeader.Descr;
                     curRow.PayerReceiverAddr = curHeader.Address;
                     curRow.TranDate = curHeader.DateEnt;
+                    curRow.BankAcct = curHeader.BankAcct;
                     var RowDB = _db.CA_Trans.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.RefNbr == header.RefNbr && p.LineRef == curRow.LineRef.ToUpper());
 
                     if (RowDB != null)
@@ -149,6 +150,15 @@ namespace CA10100.Controllers
                         UpdatingDetail(RowDB, curRow, true);
                         _db.CA_Trans.AddObject(RowDB);
                     }
+                }
+
+                var lstDB = _db.CA_Trans.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr).ToList();
+                foreach (CA_Trans curRow in lstDB)
+                {
+                    curRow.PayerReceiver = curHeader.Descr;
+                    curRow.PayerReceiverAddr = curHeader.Address;
+                    curRow.TranDate = curHeader.DateEnt;
+                    curRow.BankAcct = curHeader.BankAcct;
                 }
                 #endregion
 
@@ -209,7 +219,7 @@ namespace CA10100.Controllers
                             objDetail.CustID = obj.CustID;
                             objDetail.EmployeeID = obj.EmployeeID;
                             objDetail.EntryID = obj.EntryID;
-                            objDetail.Rlsed = obj.Rlsed;
+                            objDetail.Rlsed = 0;
                             objDetail.TranDate = obj.TranDate;
                             objDetail.TranDesc = obj.TranDesc;
                             objDetail.VendID = obj.VendID;

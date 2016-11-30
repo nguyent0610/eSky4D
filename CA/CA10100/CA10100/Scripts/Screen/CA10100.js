@@ -150,7 +150,7 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
-            if (HQ.isDelete) {
+            if (HQ.isDelete && App.cboStatus.getValue()=="H") {
                 if (HQ.focus == 'header') {
                     if (App.cboBatNbr.valueModels.length > 0) {
                         HQ.message.show(11, '', 'deleteData');
@@ -177,7 +177,7 @@ var menuClick = function (command) {
                         App.cboBatNbr.setValue('');
                     }
                 }
-                else if (HQ.focus == 'grdDetail') {
+                else if (HQ.focus == 'grdDetail'&& App.cboStatus.getValue()=="H") {
                     HQ.grid.insert(App.grdDetail, keys);
                 }
                
@@ -224,6 +224,7 @@ function cboBatNbr_Select(items, newValue, oldValue) {
 
 
 var grdDetail_BeforeEdit = function (editor, e) {
+    if (App.cboStatus.getValue() != "H") return false;
     if (!e.record.data.LineRef) {
         e.record.data.LineRef = HQ.store.lastLineRef(App.stoDetail);
     }

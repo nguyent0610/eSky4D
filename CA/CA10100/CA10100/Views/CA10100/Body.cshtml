@@ -86,6 +86,10 @@
                                           new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
                                 })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                })
                         .LoadData()
                 )
                 , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
@@ -124,6 +128,10 @@
                                           new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
                                 })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                })
                         .LoadData()
                     , HQ.Combo().ID("cboType").HQLangCode("Type").Name("Type").AllowBlank(false)
                         .HQProcedure("CA10100_pcType").HQAutoLoad(true)
@@ -137,6 +145,10 @@
                                           new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
                                 })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                })
                         .LoadData()
 
                     , HQ.TextBox().ID("txtRefNbr").HQLangCode("RCTPPAIDNBR").Name("RefNbr").MaxLength(10).MaxLength(10).EnforceMaxLength(true).Tag("X")
@@ -195,6 +207,10 @@
                                           new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
                                 })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                })
                         .LoadData()
                     )
                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("TranDesc").Width(150)
@@ -217,6 +233,10 @@
                                           new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
                                 })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                         .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                })
                         .LoadData()
                     )
                 , X.Column().Text(Util.GetLang("VendID")).DataIndex("VendID").Width(150)
@@ -233,6 +253,10 @@
                                           new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
                                 })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                         .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                })
                         .LoadData()
                     )
                 , X.Column().Text(Util.GetLang("EmployeeID")).DataIndex("EmployeeID").Width(150)
@@ -250,6 +274,10 @@
                                           new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
                                 })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                         .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                })
                         .LoadData()
                     )
 
@@ -267,6 +295,10 @@
                                           new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
                                 })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                         .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                })
                         .LoadData()
                     )
 
