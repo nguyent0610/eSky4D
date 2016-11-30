@@ -221,7 +221,7 @@
                 , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150)
                     .Editor(
                         HQ.Combo().ID("cboCustID")
-                        .HQProcedure("CA10100_pcCustomer").HQAutoLoad(true)
+                        .HQProcedure("CA10100_pcCustomer").HQAutoLoad(false)
                         .HQColumnShow("CustID,CustName,Addr").ForceSelection(true)
                         .DisplayField("CustID")
                         .ValueField("CustID")
@@ -262,7 +262,7 @@
                 , X.Column().Text(Util.GetLang("EmployeeID")).DataIndex("EmployeeID").Width(150)
                     .Editor(
                         HQ.Combo().ID("cboEmployeeID")
-                        .HQProcedure("CA10100_pcSales").HQAutoLoad(true)
+                        .HQProcedure("CA10100_pcSales").HQAutoLoad(false)
                         .HQColumnShow("SlsperID,Name").ForceSelection(true)
                         .DisplayField("SlsperID")
                         .ValueField("SlsperID")

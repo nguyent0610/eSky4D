@@ -12,7 +12,8 @@ var _SourceData = 2;//dem soure du lieu chinh cua chuong trinh, o man hinh nay l
 var _maxSourceData = 2;
 var _isLoadMaster = false;
 
-
+var _SourceBranchID = 0;
+var _maxSourceBranchID = 3;
 ////////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 var checkLoadMaster = function (sto) {//các combobox có HQComboType= master thì sẽ nhảy vào hàm này để đếm source
@@ -24,6 +25,7 @@ var checkLoadMaster = function (sto) {//các combobox có HQComboType= master th
         checkLoadDatacboBatNbr_Change();
     }
 };
+
 var checkLoadDatacboBatNbr_Change = function (sto) {//load cac master phụ thuộc vào combo là key của màn hình rồi mới bind dữ liệu lên
     if (App.cboBatNbr.rawValue == "")//truong hop new moi
     {
@@ -33,15 +35,18 @@ var checkLoadDatacboBatNbr_Change = function (sto) {//load cac master phụ thu�
     }
 };
 var cboBatNbr_LoadStore = function (sto) {
-    App.cboBatNbr.suspendEvents();//tat su kien cho combobox
-    App.cboBatNbr.setValue('');   //set giá trị '' để chút bắt sự kiện change cho combo     
-    App.cboBatNbr.resumeEvents();
-    App.cboBatNbr.store.loadData(App.cboBatNbr.store.data.items);
-    if (HQ.BatNbr) {
-        App.cboBatNbr.setValue(HQ.BatNbr);
-    }
-    else {
-        bindHeader(true);
+    _SourceBranchID++;
+    if (_SourceBranchID == _maxSourceBranchID) {
+        App.cboBatNbr.suspendEvents();//tat su kien cho combobox
+        App.cboBatNbr.setValue('');   //set giá trị '' để chút bắt sự kiện change cho combo     
+        App.cboBatNbr.resumeEvents();
+        App.cboBatNbr.store.loadData(App.cboBatNbr.store.data.items);
+        if (HQ.BatNbr) {
+            App.cboBatNbr.setValue(HQ.BatNbr);
+        }
+        else {
+            bindHeader(true);
+        }
     }
 }
 var stoData_Load = function (sto) {
@@ -72,6 +77,9 @@ var firstLoad = function () {
     App.cboStatus.getStore().addListener('load', checkLoadMaster);
     App.cboHandle.getStore().addListener('load', checkLoadMaster);
     App.cboBankAcct.getStore().addListener('load', checkLoadMaster);
+
+    App.cboCustID.getStore().addListener('load', cboBatNbr_LoadStore);
+    App.cboEmployeeID.getStore().addListener('load', cboBatNbr_LoadStore);
    
 };
 var frmChange = function () {
@@ -196,6 +204,8 @@ var menuClick = function (command) {
 };
 var cboBranchID_Change = function (item, newValue, oldValue) {
     if (item.valueModels != null && App.cboBranchID.getValue() != null && !item.hasFocus) {//truong hop co chon branchid
+        HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+        _SourceBranchID = 0;
         App.cboBatNbr.store.reload();
         App.cboCustID.store.reload();
         App.cboEmployeeID.store.reload();
@@ -207,6 +217,8 @@ var cboBranchID_Change = function (item, newValue, oldValue) {
 };
 var cboBranchID_Select = function (item, newValue, oldValue) {
     if (item.hasFocus) {
+        HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+        _SourceBranchID = 0;
         App.cboBatNbr.store.reload();
         App.cboCustID.store.reload();
         App.cboEmployeeID.store.reload();
@@ -224,7 +236,7 @@ function cboBatNbr_Select(items, newValue, oldValue) {
 
 
 var grdDetail_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.getValue() != "H") return false;
+    if (App.cboStatus.getValue() != "H" || !App.frmMain.isValid()) return false;
     if (!e.record.data.LineRef) {
         e.record.data.LineRef = HQ.store.lastLineRef(App.stoDetail);
     }
@@ -326,6 +338,7 @@ var save = function () {
                 HQ.message.process(msg, data, true);
                 if (HQ.isNew || App.cboHandle.getValue() == "R" || App.cboHandle.getValue() == "C" || App.cboHandle.getValue() == "V") {
                     HQ.BatNbr = data.result.data;
+                    _SourceBranchID = 2;
                     App.cboBatNbr.store.reload();//load lai combo de co du lieu;
                 } else {
                     _SourceData = 2;
