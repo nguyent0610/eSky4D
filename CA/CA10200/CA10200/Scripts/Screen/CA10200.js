@@ -346,7 +346,7 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.process(msg, data, true);
-                if (HQ.isNew || App.cboHandle.getValue() == "C") {
+                if (HQ.isNew || App.cboHandle.getValue() == "R" || App.cboHandle.getValue() == "C" || App.cboHandle.getValue() == "V") {
                     HQ.BatNbr = data.result.data;
                     App.cboBatNbr.store.reload();//load lai combo de co du lieu;
                 } else {
