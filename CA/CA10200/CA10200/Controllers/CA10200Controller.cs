@@ -89,7 +89,7 @@ namespace CA10200.Controllers
                     header.BranchID = BranchID;
                     header.BatNbr = BatNbr;                    
                     header.JrnlType = "CA";
-
+                    header.Rlsed = 0;
                     header.Crtd_DateTime = DateTime.Now;
                     header.Crtd_Prog = _screenNbr;
                     header.Crtd_User = Current.UserName;
@@ -279,6 +279,7 @@ namespace CA10200.Controllers
         {
             if (isNew)
             {
+                t.Rlsed = 0;
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
@@ -290,6 +291,7 @@ namespace CA10200.Controllers
             t.TranDesc = s.TranDesc;
             t.TrsfToBankAcct = s.TrsfToBankAcct;
             t.TrsfToBranchID = s.TrsfToBranchID;
+            t.TranType = "C";
          
           
             t.LUpd_DateTime = DateTime.Now;
