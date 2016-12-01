@@ -1115,6 +1115,7 @@ var FilterCombo = function (control, stkeyFilter) {
         store.resumeEvents();
     }
 };
+
 var loadDefault = function (fileNameStore, cbo) {
     if (fileNameStore.data.items.length > 0) {
         cbo.setValue(fileNameStore.getAt(0).get(cbo.valueField));

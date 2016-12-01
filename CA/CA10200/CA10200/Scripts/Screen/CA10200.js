@@ -227,32 +227,35 @@ var grdDetail_BeforeEdit = function (editor, e) {
     if (e.field == 'BankAcct') {
         App.cboBankAcct.store.clearFilter();
         if (e.record.data.TrsfToBranchID == App.cboBranchID.getValue()) {
-            App.cboBankAcct.store.loadData(filterStore(App.cboBankAcct.store, 'BankAcct', e.record.data.TrsfToBankAcct, false).data.items);
+            //App.cboBankAcct.store.loadData(filterStore(App.cboBankAcct.store, 'BankAcct', e.record.data.TrsfToBankAcct, false).data.items);
+            var regexp = new RegExp("^((?!\\b" + e.record.data.TrsfToBankAcct + "\\b).)*$", "")
+            App.cboBankAcct.store.filter('BankAcct', regexp);
             App.cboBankAcct.store.filter('BranchID', App.cboBranchID.getValue());
         }
-        else {
-            App.cboBankAcct.loadPage();
+        else {          
             App.cboBankAcct.store.filter('BranchID', App.cboBranchID.getValue());
         }
     }
     else if (e.field == 'TrsfToBankAcct') {
         App.cboTrsfToBankAcct.store.clearFilter();
         if (e.record.data.TrsfToBranchID == App.cboBranchID.getValue()) {
-            App.cboTrsfToBankAcct.store.loadData(filterStore(App.cboTrsfToBankAcct.store, 'BankAcct', e.record.data.BankAcct, false).data.items);
-            App.cboTrsfToBankAcct.store.filter('BranchID', e.record.data.TrsfToBranchID);
+            var regexp = new RegExp("^((?!\\b" + e.record.data.BankAcct + "\\b).)*$", "")
+            App.cboTrsfToBankAcct.store.filter('BankAcct', regexp);
+            App.cboTrsfToBankAcct.store.filter('BranchID', e.record.data.TrsfToBranchID ? e.record.data.TrsfToBranchID : "@");
+           
         }
         else {
-            App.cboTrsfToBankAcct.loadPage();
-            App.cboTrsfToBankAcct.store.filter('BranchID', e.record.data.TrsfToBranchID);
+            App.cboTrsfToBankAcct.store.filter('BranchID', e.record.data.TrsfToBranchID ? e.record.data.TrsfToBranchID : "@");
         }
     }
     else if (e.field == 'TrsfToBranchID') {
         App.cboTrsfToBranchID.store.clearFilter();
         if (e.record.data.TrsfToBankAcct == e.record.data.BankAcct) {
-            App.cboTrsfToBranchID.store.loadData(filterStore(App.cboTrsfToBranchID.store, 'BranchID', App.cboBranchID.getValue(), false).data.items);
-           
+            var regexp = new RegExp("^((?!\\b" + App.cboBranchID.getValue() + "\\b).)*$", "")
+            App.cboTrsfToBranchID.store.filter('BranchID', regexp);
         }
-        else App.cboTrsfToBranchID.loadPage();
+       
+       
     }
     return HQ.grid.checkBeforeEdit(e, ["LineRef"]);
 };
@@ -263,9 +266,11 @@ var grdDetail_Edit = function (item, e) {
             e.record.set('TranDesc', obj.Descr);
         }
     }
-    if (e.field == 'TranAmt')
+    else if (e.field == 'TranAmt')
         totalAmt();
-
+    else if (e.field == 'TrsfToBranchID' && e.value != e.originalValue) {
+        e.record.set('TrsfToBankAcct','');
+    }
     HQ.grid.checkInsertKey(App.grdDetail, e, keys);
     frmChange();
 };
@@ -411,26 +416,7 @@ var totalAmt = function () {
     });
     App.txtTotal.setValue(amt);
 }
-var filterStore = function (store, field, value, isEqual) {
-    if (isEqual == undefined || isEqual == true) {
-        store.filterBy(function (record) {
-            if (record) {
-                if (record.data[field].toString().toLowerCase() == (HQ.util.passNull(value).toLowerCase())) {
-                    return record;
-                }
-            }
-        });
-    } else {
-        store.filterBy(function (record) {
-            if (record) {
-                if (record.data[field].toString().toLowerCase() != (HQ.util.passNull(value).toLowerCase())) {
-                    return record;
-                }
-            }
-        });
-    }
-    return store;
-}
+
 /////////////////////////////////////////////////////////////////////////
 
 
