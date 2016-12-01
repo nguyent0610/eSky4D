@@ -62,9 +62,9 @@ namespace AR30300.Controllers
             return PartialView();
         }
 
-        public ActionResult GetAR_Customer(string Zone, string Territory, string BranchID, string ClassID, string SlsperID, string CustID)
+        public ActionResult GetAR_Customer(string Zone, string Territory, string BranchID, string ClassID, string SlsperID, string CustID, DateTime StartDate, DateTime EndDate)
         {
-            return this.Store(_db.AR30300_pgCustomer(_userName, Zone, Territory, BranchID, ClassID, SlsperID, CustID).ToList());
+            return this.Store(_db.AR30300_pgCustomer(_userName, Zone, Territory, BranchID, ClassID, SlsperID, CustID, StartDate, EndDate).ToList());
         }
 
         public ActionResult AR30300DownloadAlbum(string[] urls)
@@ -92,15 +92,24 @@ namespace AR30300.Controllers
 
                     for (int i = 0; i < urls.Length; i++)
                     {
-                        string remoteFilePath = urls[i];
-                        Uri remoteFilePathUri = new Uri(remoteFilePath);
-                        string remoteFilePathWithoutQuery = remoteFilePathUri.GetLeftPart(UriPartial.Path);
-                        string fileName = Path.GetFileName(remoteFilePathWithoutQuery);
-                        string localPath = path + fileName;
-                        resultAlbum += fileName + ";";
-                        WebClient webClient = new WebClient();
-                        webClient.DownloadFile(remoteFilePath, localPath);
-                        webClient.Dispose();
+                        try
+                        {
+                            string remoteFilePath = urls[i];
+                            Uri remoteFilePathUri = new Uri(remoteFilePath);
+                            string remoteFilePathWithoutQuery = remoteFilePathUri.GetLeftPart(UriPartial.Path);
+                            string fileName = Path.GetFileName(remoteFilePathWithoutQuery);
+                            if (fileName.PassNull() == "") 
+                                continue;
+                            string localPath = path + fileName;
+                            WebClient webClient = new WebClient();
+                            webClient.DownloadFile(remoteFilePath, localPath);
+                            webClient.Dispose();
+                            resultAlbum += fileName + ";";
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                       
                     }
                     if (resultAlbum != "")
                         resultAlbum = resultAlbum.TrimEnd(';');

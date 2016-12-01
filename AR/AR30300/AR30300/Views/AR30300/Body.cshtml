@@ -77,6 +77,8 @@
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
                     {
+                        lst.Select.Fn = "cboClassID_Select";
+                        lst.Change.Fn = "cboClassID_Change";
                         lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue(); }";
                     })
                     .LoadData()
@@ -149,7 +151,7 @@
                 , HQ.DateField().ID("dtpToDate").MarginSpec("5 0 5 0").HQLangCode("ToDate").Width(300).AllowBlank(false)
 
 
-                , HQ.Button().ID("btnSearch").HQLangCode("Search").MarginSpec("5 0 5 105").Width(95)
+                , HQ.Button().ID("btnSearch").HQLangCode("AR30300Search").MarginSpec("5 0 5 105").Width(95)
                     .Listeners(p => p.Click.Fn = "btnSearch_Click")
 
                 , HQ.Button().ID("btnDownloadAlbum").HQLangCode("DownloadAlbum").MarginSpec("5 0 5 5").Width(95)
@@ -184,6 +186,8 @@
                             ps.Add(new StoreParameter("ClassID", "App.cboClassID.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("SlsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("CustID", "App.cboCustID.getValue().join(',')", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("StartDate", "App.dtpFromDate.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("EndDate", "App.dtpToDate.getValue()", ParameterMode.Raw));
                         })
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetAR_Customer")))
                         .Listeners(l =>
@@ -191,6 +195,7 @@
                             l.Load.Fn = "stoAR_Customer_Load";
                         })
                     )
+                    .ViewConfig(X.GridView().Plugins(X.GridDragDrop().ID("gddAR_Customer").EnableDrop(false).EnableDrag(true)))
                     .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdAR_Customer');")
                     .SortableColumns(false)
                     .ColumnModel(
@@ -241,23 +246,23 @@
                         .Region(Region.West).Layout(LayoutType.Fit)
                         .Title(Util.GetLang("ListAlbum")).MaxWidth(215).MinWidth(215).Width(215)
                         .Items(
-                            X.DataView()
+                            X.DataView().MarginSpec("0 0 0 25")
                             .ID("dtvAlbum")
                             .StoreID("stoAlbum")
                             .MultiSelect(false)
                             .OverItemCls("x-item-over")
                             .ItemSelector("div.thumb-wrap")
-                            .EmptyText("No albums to display")
+                            .EmptyText(Util.GetLang("NoAlbumToDisplay"))
                             .TrackOver(true)
                             .AutoScroll(true)
                             .Tpl(
-                                Html.X().XTemplate()
+                                X.XTemplate()
                                     .Html(
                                         @<text>
                                             <tpl for=".">
 								                <div class="thumb-wrap" id="{AlbumName}" style="text-align: center;">
-									                <div class="thumb"><img width="172" height="126" src="{Pic}" title="{AlbumName}"></div>
-                                                    <span class="x-editable" style="color:#17365D; font-weight: bold">{AlbumName}</span>
+									                <div class="thumb"><img width="128" height="128" src="{Pic}" title="{AlbumName}"></div>
+                                                    <span style="color:#17365D; font-weight: bold">{AlbumName}</span>
 								                </div>
 							                </tpl>
 							                <div class="x-clear"></div>
@@ -292,24 +297,24 @@
                             .MultiSelect(false)
                             .OverItemCls("x-item-over")
                             .ItemSelector("div.thumb-wrap")
-                            .EmptyText("No images to display")
+                            .EmptyText(Util.GetLang("NoImageToDisplay"))
                             .TrackOver(true)
                             .AutoScroll(true)
                             .Tpl(
-                                Html.X().XTemplate()
+                                X.XTemplate()
                                     .Html(
                                         @<text>
                                             <tpl for=".">
 								                <div class="thumb-wrap" id="{ImageName}" style="text-align: center;">
 									                <div class="thumb">
-                                                        <img class ="img" src="{Pic}" title="{ImageName}">
+                                                        <img class ="img" src="{Pic}" title="{ImageName}" onerror ="onerror_Image(this)" ondblclick ="ondblclick_Image()">
                                                         <div class ="checkbox">
                                                             <input type="checkbox" id ="chkDownload" name="{Pic}">
                                                         </div>
 
 									                </div>
-                                                    <div><span class="x-editable" style="color:#0094ff">{ImageName}</span></div>
-                                                    <div><span class="x-editable" style="color:#808080">{LastMod}</span></div>
+                                                    <div><span class="span" style="color:#0094ff;">{ImageName}</span></div>
+                                                    <div><span class="span" style="color:#808080;">{LastMod}</span></div>
 								                </div>
 							                </tpl>
 							                <div class="x-clear"></div>
@@ -323,10 +328,7 @@
                             })
                         )
                 )
-            
         )
-
-
     )
 ))
 

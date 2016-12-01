@@ -110,6 +110,22 @@ var cboTerritory_Change = function (sender, value) {
     }
 };
 
+var cboClassID_Select = function (sender, value) {
+    if (sender.valueModels != null){
+        if (!App.cboCustID.store.loading) {
+            App.cboCustID.store.reload();
+        }
+    }
+};
+
+var cboClassID_Change = function (sender, value) {
+    if (sender.valueModels != null) {
+        if (!App.cboCustID.store.loading) {
+            App.cboCustID.store.reload();
+        }
+    }
+};
+
 var cboBranchID_Change = function (sender, value) {
     if (sender.valueModels != null){
         if (!App.cboSlsperId.store.loading) {
@@ -231,28 +247,34 @@ var btnDownloadAlbum_Click = function () {
                     urls: urls
                 }),
                 success: function (result) {
-                    var images = [];
-                    var urlsResult = JSON.parse(result.responseText).strResult.split(';');
-                    for (var i = 0 ; i < urlsResult.length ; i++) {
-                        var filename = urlsResult[i];
-                        convertImgToBase64URL(window.location.href + 'Images/AR30300/Album/' + filename, filename , function (base64Img, name, url) {
-                            images.push({
-                                url: url,
-                                data: base64Img,
-                                name: name
-                            });
-                            count++;
-                            if (count == urlsResult.length) {
-                                for (var i = 0; i < images.length; i++) {
-                                    var commaIdx = images[i].data.indexOf(",");
-                                    zip.file(images[i].name, images[i].data.slice(commaIdx + 1), { base64: true });
-                                }
-                                zip.generateAsync({ type: 'blob' }).then(function (content) {
-                                    saveAs(content, zipFilename);
-                                    HQ.common.showBusy(false);
+                    if (!Ext.isEmpty(JSON.parse(result.responseText).strResult)) {
+                        var images = [];
+                        var urlsResult = JSON.parse(result.responseText).strResult.split(';');
+                        for (var i = 0 ; i < urlsResult.length ; i++) {
+                            var filename = urlsResult[i];
+                            convertImgToBase64URL(window.location.href + 'Images/AR30300/Album/' + filename, filename, function (base64Img, name, url) {
+                                images.push({
+                                    url: url,
+                                    data: base64Img,
+                                    name: name
                                 });
-                            }
-                        });
+                                count++;
+                                if (count == urlsResult.length) {
+                                    for (var i = 0; i < images.length; i++) {
+                                        var commaIdx = images[i].data.indexOf(",");
+                                        zip.file(images[i].name, images[i].data.slice(commaIdx + 1), { base64: true });
+                                    }
+                                    zip.generateAsync({ type: 'blob' }).then(function (content) {
+                                        saveAs(content, zipFilename);
+                                        HQ.common.showBusy(false);
+                                    });
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        HQ.message.show(2016111611);
+                        HQ.common.showBusy(false);
                     }
                 },
                 failure: function (errorMsg, data) {
@@ -323,11 +345,25 @@ var dtvAlbum_SelectionChange = function (selModel, selected) {
 };
 
 var dtvImage_ItemDblClick = function (sender, selected) {
+    //App.imgView.setImageUrl('');
+    //if (selected) {
+    //    App.winView.show();
+    //    App.winView.selModel = sender.selModel;
+    //    App.imgView.setImageUrl(selected.data.Pic);
+    //}
+};
+
+var onerror_Image = function (eImage) {
+    var divParent = eImage.parentElement.parentElement;
+    divParent.hidden = true;
+};
+
+var ondblclick_Image = function () {
     App.imgView.setImageUrl('');
-    if (selected) {
+    if (App.dtvImage.selModel.selected) {
         App.winView.show();
-        App.winView.selModel = sender.selModel;
-        App.imgView.setImageUrl(selected.data.Pic);
+        App.winView.selModel = App.dtvImage.selModel;
+        App.imgView.setImageUrl(App.dtvImage.selModel.selected.items[0].data.Pic);
     }
 };
 

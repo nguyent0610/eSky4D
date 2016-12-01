@@ -19,15 +19,23 @@
     <meta name="viewport" content="width=device-width" />
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/screen/AR30300.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>s
+    <script src='@Url.Content("Scripts/screen/AR30300.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/jszip.js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/FileSaver.js")' type="text/javascript"></script>s
+    <script src='@Url.Content("Scripts/FileSaver.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/jquery-1.7.1.js")' type="text/javascript"></script>
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
         }
+        .images-view .span {
+            display: inline-block;
+            width: 128px;
+            white-space: nowrap; 
+            width: 120px; 
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         .images-view .thumb {
-            background: #dddddd;
             padding: 3px;
             padding-bottom: 0;
         }
@@ -40,19 +48,21 @@
         .images-view .x-item-selected .thumb{
             background: transparent;
         }
-        .images-view .x-item-selected{
-            background: #eff5fb url('@Url.Content("~/Images/AR30300/AR30300_Selected.gif")') no-repeat right bottom;
+        .images-view .x-item-selected {
+            background: #eff5fb url('@Url.Content("~/Images/AR30300/AR30300_Selected.gif")') repeat-x right bottom;
             border: 1px solid #99bbe8;
             padding: 4px;
+            z-index: -1
         }
         .images-view .img {
-            width:172px;
-            height:126px;
+            width:128px;
+            height:128px;
         }
         .images-view .checkbox {
             position: absolute;
             margin-top: -127px;
             color: red;
+            z-index: 1;
         }
 
 
@@ -83,7 +93,10 @@
                 new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
                 new StoreParameter() { Name = "@ClassID", Value = "App.cboClassID.getValue()", Mode = ParameterMode.Raw },
                 new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperId.getValue()", Mode = ParameterMode.Raw },
-                new StoreParameter() { Name = "@CustID", Value = "App.slmAR_Customer.selected.items[0] == undefined ? '' : App.slmAR_Customer.selected.items[0].data.CustId", Mode = ParameterMode.Raw } 
+                new StoreParameter() { Name = "@CustID", Value = "App.slmAR_Customer.selected.items[0] == undefined ? '' : App.slmAR_Customer.selected.items[0].data.CustId", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@StartDate", Value = "App.dtpFromDate.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@EndDate", Value = "App.dtpToDate.getValue()", Mode = ParameterMode.Raw }
+               
 		    })
             .LoadData()
             .Listeners(p=> p.Load.Handler = "HQ.common.showBusy(false);")
@@ -99,7 +112,10 @@
                     new StoreParameter() { Name = "@ClassID", Value = "App.cboClassID.getValue()", Mode = ParameterMode.Raw },
                     new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperId.getValue()", Mode = ParameterMode.Raw },
                     new StoreParameter() { Name = "@CustID", Value = "App.slmAR_Customer.selected.items[0] == undefined ? '' : App.slmAR_Customer.selected.items[0].data.CustId", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@TypeAlbum", Value = "App.dtvAlbum.selModel.selected.items[0] == undefined ? '': App.dtvAlbum.selModel.selected.items[0].data.TypeAlbum", Mode = ParameterMode.Raw }
+                    new StoreParameter() { Name = "@TypeAlbum", Value = "App.dtvAlbum.selModel.selected.items[0] == undefined ? '': App.dtvAlbum.selModel.selected.items[0].data.TypeAlbum", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@StartDate", Value = "App.dtpFromDate.getValue()", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@EndDate", Value = "App.dtpToDate.getValue()", Mode = ParameterMode.Raw }
+               
 		        })
                 .LoadData()
                 .Listeners(p=> p.Load.Handler = "HQ.common.showBusy(false);")

@@ -75,7 +75,9 @@ namespace AR30300
         /// <param name="classID">No Metadata Documentation available.</param>
         /// <param name="slsperID">No Metadata Documentation available.</param>
         /// <param name="custID">No Metadata Documentation available.</param>
-        public ObjectResult<AR30300_pgCustomer_Result> AR30300_pgCustomer(global::System.String userID, global::System.String zone, global::System.String territory, global::System.String branchID, global::System.String classID, global::System.String slsperID, global::System.String custID)
+        /// <param name="startDate">No Metadata Documentation available.</param>
+        /// <param name="endDate">No Metadata Documentation available.</param>
+        public ObjectResult<AR30300_pgCustomer_Result> AR30300_pgCustomer(global::System.String userID, global::System.String zone, global::System.String territory, global::System.String branchID, global::System.String classID, global::System.String slsperID, global::System.String custID, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -147,7 +149,27 @@ namespace AR30300
                 custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR30300_pgCustomer_Result>("AR30300_pgCustomer", userIDParameter, zoneParameter, territoryParameter, branchIDParameter, classIDParameter, slsperIDParameter, custIDParameter);
+            ObjectParameter startDateParameter;
+            if (startDate.HasValue)
+            {
+                startDateParameter = new ObjectParameter("StartDate", startDate);
+            }
+            else
+            {
+                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter endDateParameter;
+            if (endDate.HasValue)
+            {
+                endDateParameter = new ObjectParameter("EndDate", endDate);
+            }
+            else
+            {
+                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<AR30300_pgCustomer_Result>("AR30300_pgCustomer", userIDParameter, zoneParameter, territoryParameter, branchIDParameter, classIDParameter, slsperIDParameter, custIDParameter, startDateParameter, endDateParameter);
         }
 
         #endregion

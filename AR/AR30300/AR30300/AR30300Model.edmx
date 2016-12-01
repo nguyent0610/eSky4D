@@ -14,6 +14,8 @@
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
           <Parameter Name="SlsperID" Type="varchar" Mode="In" />
           <Parameter Name="CustID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -28,6 +30,8 @@
             <Parameter Name="ClassID" Mode="In" Type="String" />
             <Parameter Name="SlsperID" Mode="In" Type="String" />
             <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="AR30300_pgCustomer_Result">
@@ -40,7 +44,7 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="AR30300Entities" >
-          <FunctionImportMapping FunctionImportName="AR30300_pgCustomer" FunctionName="eBiz4DWebSysModel.Store.AR30300_pgCustomer" >
+          <FunctionImportMapping FunctionImportName="AR30300_pgCustomer" FunctionName="eBiz4DWebSysModel.Store.AR30300_pgCustomer">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AR30300Model.AR30300_pgCustomer_Result">
                 <ScalarProperty Name="Code" ColumnName="Code" />
