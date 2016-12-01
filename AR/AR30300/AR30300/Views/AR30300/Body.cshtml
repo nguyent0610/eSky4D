@@ -195,7 +195,6 @@
                             l.Load.Fn = "stoAR_Customer_Load";
                         })
                     )
-                    .ViewConfig(X.GridView().Plugins(X.GridDragDrop().ID("gddAR_Customer").EnableDrop(false).EnableDrag(true)))
                     .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdAR_Customer');")
                     .SortableColumns(false)
                     .ColumnModel(
@@ -283,11 +282,13 @@
                         .TopBar(
                             X.Toolbar()
                                 .Items(
-                                    HQ.Button().ID("btnUnselect").HQLangCode("UnSelectAll").Width(150).Icon(Icon.PictureDelete)
+                                    HQ.Button().ID("btnUnselect").HQLangCode("UnSelectAll").Width(125).Icon(Icon.PictureDelete)
                                         .Listeners(p => p.Click.Fn = "btnUnselect_Click")
                                     
-                                    , HQ.Button().ID("btnDownloadImageSelect").HQLangCode("DownloadImageSelect").Width(150).Icon(Icon.PictureSave)
+                                    , HQ.Button().ID("btnDownloadImageSelect").HQLangCode("DownloadImageSelect").Width(125).Icon(Icon.PictureSave)
                                         .Listeners(p => p.Click.Fn = "btnDownloadImageSelect_Click")
+                                    
+                                    , HQ.Label().Icon(Icon.Error).Text(Util.GetLang("BestBrowser"))
                                 )
                         )
                         .Items(
