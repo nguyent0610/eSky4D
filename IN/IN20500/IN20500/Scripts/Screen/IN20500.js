@@ -459,6 +459,10 @@ var deleteData = function (item) {
 
 function refresh(item) {
     if (item == 'yes') {
+        if (HQ.isNew) {
+            InvtID = '';
+            App.cboInvtID.setValue('');
+        }
         App.txtInvtIDCopy.setValue('');
         _copy = false;
         HQ.isChange = false;
@@ -658,11 +662,11 @@ var btnCopy_Click = function () {
 var cboInvtID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoIN_Inventory.loading && _copy == false) {
-        if(HQ.isChange == true) {
-            HQ.message.show(150, '', '');
-            sender.setValue(sender.originalValue);
-            return;
-        }
+        //if(HQ.isChange == true) {
+        //    HQ.message.show(150, '', '');
+        //    sender.setValue(sender.originalValue);
+        //    return;
+        //}
         InvtID = value;
         App.cboDfltPOUnit.store.reload();
         App.cboDfltSOUnit.store.reload();
@@ -675,11 +679,11 @@ var cboInvtID_Change = function (sender, value) {
 var cboInvtID_Select = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoIN_Inventory.loading && _copy == false) {
-        if (HQ.isChange == true) {
-            HQ.message.show(150, '', '');
-            sender.setValue(sender.originalValue);
-            return;
-        }
+        //if (HQ.isChange == true) {
+        //    HQ.message.show(150, '', '');
+        //    sender.setValue(sender.originalValue);
+        //    return;
+        //}
         InvtID = value;
         App.cboDfltPOUnit.store.reload();
         App.cboDfltSOUnit.store.reload();
@@ -689,7 +693,6 @@ var cboInvtID_Select = function (sender, value) {
     }
 };
 
-
 var cboInvtID_TriggerClick = function (sender, value) {
     if (HQ.isChange == true) {
         HQ.message.show(150, '', '');
@@ -697,6 +700,12 @@ var cboInvtID_TriggerClick = function (sender, value) {
     }
     App.cboInvtID.clearValue();
     InvtID = '';
+};
+
+var cboInvtID_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboInvtID.collapse();
+    }
 };
 
 var cboInvtID_Focus = function () {
