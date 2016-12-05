@@ -72,10 +72,15 @@ namespace AR30300.Controllers
             try
             {
                 string resultAlbum = "";
-                string path = Server.MapPath("~") + @"Images\AR30300\Album\";
+                string pathServer = Server.MapPath("~");
+                string path = "";
+                if (pathServer[pathServer.Length - 1] == '\\')
+                    path = pathServer + @"Images\AR30300\Album\";
+                else
+                    path = pathServer  + @"\Images\AR30300\Album\";
                 if (!Directory.Exists(path))
                 {
-                    throw new MessageException(MessageType.Message, "2016111510");
+                    throw new MessageException(MessageType.Message, "2016111510", "",null,"",path);
                 }
                 else
                 {

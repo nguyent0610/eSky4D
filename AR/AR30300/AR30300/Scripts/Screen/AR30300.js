@@ -173,6 +173,8 @@ var stoBeforeLoad = function (sto) {
 var stoAR_Customer_Load = function (sto) {
     if (_isLoadMaster) {
         HQ.common.showBusy(false);
+        if (sto.data.length > 0)
+            App.slmAR_Customer.select(0);
     }
 };
 
@@ -250,9 +252,12 @@ var btnDownloadAlbum_Click = function () {
                     if (!Ext.isEmpty(JSON.parse(result.responseText).strResult)) {
                         var images = [];
                         var urlsResult = JSON.parse(result.responseText).strResult.split(';');
+                        var localUrl = window.location.origin + window.location.pathname.slice(0, -7);
+                        if(localUrl.slice(-1) != '/')
+                            localUrl += '/';
                         for (var i = 0 ; i < urlsResult.length ; i++) {
                             var filename = urlsResult[i];
-                            convertImgToBase64URL(window.location.href + 'Images/AR30300/Album/' + filename, filename, function (base64Img, name, url) {
+                            convertImgToBase64URL(localUrl + 'Images/AR30300/Album/' + filename, filename, function (base64Img, name, url) {
                                 images.push({
                                     url: url,
                                     data: base64Img,
@@ -273,17 +278,21 @@ var btnDownloadAlbum_Click = function () {
                         }
                     }
                     else {
-                        HQ.message.show(2016111611);
+                        if (JSON.parse(result.responseText).success == false)
+                            HQ.message.show(JSON.parse(result.responseText).code);
+                        else
+                            HQ.message.show(2016111611);
                         HQ.common.showBusy(false);
                     }
                 },
-                failure: function (errorMsg, data) {
-                    HQ.message.process(errorMsg, data, true);
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
                 }
             });
         }
         else {
             HQ.message.show('2016111611');
+            HQ.common.showBusy(false);
         }
     }
     else {
