@@ -423,5 +423,66 @@ namespace IN10500.Controllers
                 throw (ex);
             }
         }
+
+        [HttpPost]
+        public ActionResult Report(FormCollection data)
+        {
+            try
+            {
+                string BranchID = data["cboBranchID"].PassNull();             
+                StoreDataHandler detHeader = new StoreDataHandler(data["lstIN_TagHeader"]);
+                IN_TagHeader curHeader = detHeader.ObjectData<IN_TagHeader>().FirstOrDefault();
+                curHeader.BranchID = BranchID;
+               
+
+               
+                User user = _sys.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
+                string reportName = "";
+                string reportNbr = "";
+
+                var rpt = new RPTRunning();
+                rpt.ResetET();
+
+                reportName = data["reportName"];
+                reportNbr = data["reportNbr"];
+
+                rpt.ReportNbr = reportNbr;
+                rpt.MachineName = "Web";
+                rpt.ReportCap = "ReportName";
+                rpt.ReportName = reportName;
+
+                rpt.ReportDate = DateTime.Now;
+                rpt.DateParm00 = DateTime.Now;
+                rpt.DateParm01 = DateTime.Now;
+                rpt.DateParm02 = DateTime.Now;
+                rpt.DateParm03 = DateTime.Now;
+                rpt.StringParm00 = curHeader.BranchID;
+                rpt.StringParm01 = curHeader.INBatNbr;
+                rpt.StringParm02 = curHeader.TAGID;
+                rpt.UserID = Current.UserName;
+                rpt.AppPath = "Reports\\";
+                rpt.ClientName = Current.UserName;
+                rpt.LoggedCpnyID = curHeader.BranchID;
+                rpt.CpnyID = user.CpnyID;
+                rpt.LangID = Current.LangID;
+
+                _db.RPTRunnings.AddObject(rpt);
+                _db.SaveChanges();
+
+                if (_logMessage != null)
+                {
+                    return _logMessage;
+                }
+                return Json(new { success = true, reportID = rpt.ReportID, reportName = rpt.ReportName });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
     }
 }

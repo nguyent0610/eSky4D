@@ -4,14 +4,21 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="IN_ItemSite" EntityType="eBiz4DWebSysModel.Store.IN_ItemSite" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="IN_TagDetail" EntityType="eBiz4DWebSysModel.Store.IN_TagDetail" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="IN_TagHeader" EntityType="eBiz4DWebSysModel.Store.IN_TagHeader" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="RPTRunning" EntityType="eBiz4DWebSysModel.Store.RPTRunning" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SI_ApprovalFlowHandle" EntityType="eBiz4DWebSysModel.Store.SI_ApprovalFlowHandle" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
         <EntityType Name="IN_ItemSite">
           <Key>
             <PropertyRef Name="InvtID" />
             <PropertyRef Name="SiteID" />
           </Key>
-          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SiteID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="AvgCost" Type="float" Nullable="false" />
           <Property Name="QtyAlloc" Type="float" Nullable="false" />
           <Property Name="QtyAllocIN" Type="float" Nullable="false" />
@@ -30,11 +37,11 @@
           <Property Name="LastPurchaseDate" Type="smalldatetime" Nullable="false" />
           <Property Name="LastPurchasePrice" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="QtyUncosted" Type="float" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
@@ -45,8 +52,8 @@
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="SiteID" />
           </Key>
-          <Property Name="TAGID" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="TAGID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="InvtName" Type="nvarchar" MaxLength="100" />
           <Property Name="CaseUnit" Type="varchar" MaxLength="50" />
           <Property Name="EAUnit" Type="varchar" MaxLength="50" />
@@ -61,14 +68,14 @@
           <Property Name="ReasonCD" Type="varchar" MaxLength="6" />
           <Property Name="Notes" Type="nvarchar" MaxLength="500" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SiteID" Type="varchar" Nullable="false" MaxLength="30" />
         </EntityType>
         <EntityType Name="IN_TagHeader">
           <Key>
@@ -76,9 +83,9 @@
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="SiteID" />
           </Key>
-          <Property Name="TAGID" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="TAGID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SiteID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Descr" Type="nvarchar" MaxLength="250" />
           <Property Name="TranDate" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="varchar" MaxLength="1" />
@@ -86,12 +93,48 @@
           <Property Name="ReasonCD" Type="varchar" MaxLength="6" />
           <Property Name="Note" Type="nvarchar(max)" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="RPTRunning">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="ReportID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="MachineName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="ReportName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ReportCap" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ReportDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="StringParm00" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StringParm01" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StringParm02" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StringParm03" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="DateParm00" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateParm01" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateParm02" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateParm03" Type="smalldatetime" Nullable="false" />
+          <Property Name="BooleanParm00" Type="smallint" Nullable="false" />
+          <Property Name="BooleanParm01" Type="smallint" Nullable="false" />
+          <Property Name="BooleanParm02" Type="smallint" Nullable="false" />
+          <Property Name="BooleanParm03" Type="smallint" Nullable="false" />
+          <Property Name="SelectionFormular" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="AppPath" Type="varchar" Nullable="false" MaxLength="400" />
+          <Property Name="ClientName" Type="varchar" Nullable="false" MaxLength="40" />
+          <Property Name="LoggedCpnyID" Type="varchar" MaxLength="30" />
+          <Property Name="CpnyID" Type="varchar(max)" />
+          <Property Name="LangID" Type="smallint" />
+          <Property Name="ListParm00" Type="nvarchar(max)" />
+          <Property Name="ListParm01" Type="nvarchar(max)" />
+          <Property Name="ListParm02" Type="nvarchar(max)" />
+          <Property Name="ListParm03" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -100,10 +143,10 @@
             <PropertyRef Name="Status" />
             <PropertyRef Name="Handle" />
           </Key>
-          <Property Name="AppFolID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="RoleID" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Handle" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="AppFolID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="RoleID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Handle" Type="varchar" Nullable="false" MaxLength="5" />
           <Property Name="LangHandle" Type="varchar" MaxLength="50" />
           <Property Name="ToStatus" Type="varchar" MaxLength="10" />
           <Property Name="ProcName" Type="nvarchar" MaxLength="250" />
@@ -118,20 +161,15 @@
           <Property Name="Param04" Type="nvarchar" MaxLength="500" />
           <Property Name="Param05" Type="nvarchar" MaxLength="500" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="MailApprove" Type="varchar" MaxLength="100" />
           <Property Name="ProcContent" Type="varchar" MaxLength="100" />
         </EntityType>
-        <Function Name="IN10500_pdAddNewInvtRight" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UserID" Type="varchar" Mode="In" />
-          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
-          <Parameter Name="LangID" Type="smallint" Mode="In" />
-        </Function>
         <Function Name="IN10500_pdCheckCreateIN_Tag" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
@@ -160,12 +198,6 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="IN_ItemSite" EntityType="Self.IN_ItemSite" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="IN_TagDetail" EntityType="Self.IN_TagDetail" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="IN_TagHeader" EntityType="Self.IN_TagHeader" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SI_ApprovalFlowHandle" EntityType="Self.SI_ApprovalFlowHandle" Schema="dbo" store:Type="Tables" />
-        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -208,6 +240,7 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="RPTRunnings" EntityType="IN10500Model.RPTRunning" />
         </EntityContainer>
         <ComplexType Name="IN10500_pgLoadGrid_Result">
           <Property Type="String" Name="TAGID" Nullable="false" MaxLength="10" />
@@ -346,6 +379,42 @@
           <Property Name="LastPurchaseDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="LastPurchasePrice" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RPTRunning">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ReportID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="MachineName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="ReportDate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="StringParm00" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringParm01" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringParm02" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringParm03" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DateParm00" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="DateParm01" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="DateParm02" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="DateParm03" Nullable="false" Precision="0" />
+          <Property Type="Int16" Name="BooleanParm00" Nullable="false" />
+          <Property Type="Int16" Name="BooleanParm01" Nullable="false" />
+          <Property Type="Int16" Name="BooleanParm02" Nullable="false" />
+          <Property Type="Int16" Name="BooleanParm03" Nullable="false" />
+          <Property Type="String" Name="SelectionFormular" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AppPath" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClientName" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LoggedCpnyID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CpnyID" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="LangID" />
+          <Property Type="String" Name="ListParm00" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListParm01" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListParm02" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListParm03" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -493,7 +562,41 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN10500_pdAddNewInvtRight" FunctionName="eBiz4DWebSysModel.Store.IN10500_pdAddNewInvtRight" />
+          <EntitySetMapping Name="RPTRunnings">
+            <EntityTypeMapping TypeName="IN10500Model.RPTRunning">
+              <MappingFragment StoreEntitySet="RPTRunning">
+                <ScalarProperty Name="ListParm03" ColumnName="ListParm03" />
+                <ScalarProperty Name="ListParm02" ColumnName="ListParm02" />
+                <ScalarProperty Name="ListParm01" ColumnName="ListParm01" />
+                <ScalarProperty Name="ListParm00" ColumnName="ListParm00" />
+                <ScalarProperty Name="LangID" ColumnName="LangID" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="LoggedCpnyID" ColumnName="LoggedCpnyID" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="AppPath" ColumnName="AppPath" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="SelectionFormular" ColumnName="SelectionFormular" />
+                <ScalarProperty Name="BooleanParm03" ColumnName="BooleanParm03" />
+                <ScalarProperty Name="BooleanParm02" ColumnName="BooleanParm02" />
+                <ScalarProperty Name="BooleanParm01" ColumnName="BooleanParm01" />
+                <ScalarProperty Name="BooleanParm00" ColumnName="BooleanParm00" />
+                <ScalarProperty Name="DateParm03" ColumnName="DateParm03" />
+                <ScalarProperty Name="DateParm02" ColumnName="DateParm02" />
+                <ScalarProperty Name="DateParm01" ColumnName="DateParm01" />
+                <ScalarProperty Name="DateParm00" ColumnName="DateParm00" />
+                <ScalarProperty Name="StringParm03" ColumnName="StringParm03" />
+                <ScalarProperty Name="StringParm02" ColumnName="StringParm02" />
+                <ScalarProperty Name="StringParm01" ColumnName="StringParm01" />
+                <ScalarProperty Name="StringParm00" ColumnName="StringParm00" />
+                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
+                <ScalarProperty Name="ReportCap" ColumnName="ReportCap" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -520,6 +623,7 @@
         <EntityTypeShape EntityType="IN10500Model.IN_TagDetail" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN10500Model.IN_TagHeader" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN10500Model.IN_ItemSite" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="IN10500Model.RPTRunning" Width="1.5" PointX="11.027514058643726" PointY="22.892224650314184" />
       </Diagram>
     </Diagrams>
   </Designer>

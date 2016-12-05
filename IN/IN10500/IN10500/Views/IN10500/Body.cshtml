@@ -24,7 +24,7 @@
             .Text(Util.GetLang("Import"))
             .Icon(Icon.BookAdd)
             .Listeners(p=>{               
-            })},"Print", true, ""))
+            })},"", true, ""))
     .Layout(LayoutType.Border)
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 110; })
     .Listeners(l =>
@@ -334,4 +334,35 @@
         })
     )// frmMain
 )
+)
+
+@(X.Window().ID("winReport").Title("Report")
+        .Hidden(true)
+        .Resizable(false)
+        .Width(350)
+        .Items(
+
+                HQ.Combo().ID("cboReport")
+                .MarginSpec("10 0 10 20").LabelWidth(70).AllowBlank(false)
+                .Width(300).ForceSelection(true)
+                .Value("D").HQLangCode("Report")
+                .HQColumnShow("Descr")
+                .ValueField("ReportNbr")
+                .DisplayField("Descr")
+                .HQProcedure("IN10500_pcReport").HQFirstDefault(true)
+                .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+                            ,new StoreParameter() { Name = "@UserID",  Value ="HQ.userName", Mode = ParameterMode.Raw}
+                            ,new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw}											                                                                                										                                                                                
+                })
+                .LoadData()
+            )
+            .Buttons(
+
+                X.Button().ID("btnShowReport").Text(Util.GetLang("Preview"))
+                .Listeners(p => p.Click.Fn = "btnShowReport_Click")
+
+                , X.Button().ID("btnCloseReport").Text(Util.GetLang("Closed"))
+                .Listeners(p => p.Click.Handler = "App.winReport.close()")
+        )
 )

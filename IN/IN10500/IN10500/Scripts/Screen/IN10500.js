@@ -151,6 +151,12 @@ var menuClick = function (command) {
             }
             break;
         case "print":                       
+            if (!Ext.isEmpty(App.txtINBatNbr.getValue())) {// && App.Status.value == 'C') {
+                if (App.cboReport.store.data.items.length == 1) {
+                    btnShowReport_Click();
+                }
+                else  App.winReport.show();
+            }
             break;
         case "close":
             HQ.common.close(this);
@@ -578,5 +584,32 @@ var checkRequirePass = function (store, keys, fieldsCheck, fieldsLang) {
         }
     }
     return true;
+}
+
+var btnShowReport_Click = function () {
+    if (App.cboReport.validate()) {
+        App.frmMain.submit({
+            waitMsg: HQ.waitMsg,
+            method: 'POST',
+            url: 'IN10500/Report',
+            timeout: 180000,
+            params: {
+                lstIN_TagHeader: Ext.encode(App.stoIN_TagHeader.getRecordsValues()),
+                reportNbr: App.cboReport.valueModels[0].data.ReportNbr,
+                reportName: App.cboReport.valueModels[0].data.ReportName
+            },
+            success: function (msg, data) {
+                if (this.result.reportID != null) {
+                    window.open('Report?ReportName=' + this.result.reportName + '&_RPTID=' + this.result.reportID, '_blank');
+                }
+                App.winReport.close();
+                HQ.message.process(msg, data, true);
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+
 }
 ///////////////////////////////////
