@@ -47,6 +47,13 @@
         <Function Name="IN20300_pcCpnybySite" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="siteId" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="IN20300_ppCheckForDeleteSiteID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="IN20300_ppIN_Site" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
@@ -65,6 +72,13 @@
           </FunctionImport>
           <EntitySet Name="IN_Site" EntityType="IN20300Model.IN_Site" />
           <EntitySet Name="IN_SiteCpny" EntityType="IN20300Model.IN_SiteCpny" />
+          <FunctionImport Name="IN20300_ppCheckForDeleteSiteID" ReturnType="Collection(String)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN20300_pcCpnybySite_Result">
           <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" />
@@ -195,6 +209,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN20300_ppCheckForDeleteSiteID" FunctionName="eBiz4DWebSysModel.Store.IN20300_ppCheckForDeleteSiteID" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
