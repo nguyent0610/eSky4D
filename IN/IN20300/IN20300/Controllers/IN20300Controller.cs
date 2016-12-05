@@ -172,9 +172,15 @@ namespace IN20300.Controllers
             try
             {
                 string SiteId = data["cboSiteId"];
+                string BranchID = data["cboBranchID"];
+
                 var cpny = _db.IN_Site.FirstOrDefault(p => p.SiteId == SiteId);
                 if (cpny != null)
                 {
+                    var result = _db.IN20300_ppCheckForDeleteSiteID(Current.CpnyID, Current.UserName, Current.LangID, BranchID, SiteId).FirstOrDefault();
+                    if (result != "")
+                        throw new MessageException(MessageType.Message, "20410", "", new string[] { result });
+
                     _db.IN_Site.DeleteObject(cpny);
                 }
 
