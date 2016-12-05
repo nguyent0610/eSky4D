@@ -280,10 +280,11 @@ function deleteData(item) {
                 App.cboSiteId.getStore().load(function () { cboSiteId_Change(App.cboSiteId); });
 
             },
-            failure: function (action, data) {
+            failure: function (msg, data) {
                 if (data.result.msgCode) {
                     HQ.message.show(data.result.msgCode, data.result.msgParam, '');
                 }
+                else HQ.message.process(msg, data, true);
             }
         });
     }
