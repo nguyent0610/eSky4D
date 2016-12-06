@@ -3,7 +3,7 @@
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
 @using OM10100;
-
+@using HQ.eSkySys;
 @model System.Collections.IEnumerable
 @{
     Layout = null;
@@ -11,6 +11,12 @@
     var HQ = Html.HQ();
     ViewBag.Title = "OM10100";
     var acc = Session["OM10100"] as AccessRight;
+    var _sys = Util.CreateObjectContext<eSkySysEntities>(true);
+    var conFig = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "OM101CHECKSALES");
+
+
+    ViewBag.checkSales = conFig == null ? false : (conFig.IntVal == 1 ? true : false);
+    
 }
 <!DOCTYPE html>
 <html>
@@ -35,6 +41,7 @@
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.checkSales = HQ.util.toBool('@ViewBag.checkSales');;
 
     </script>  
     <title>@ViewBag.Title</title>

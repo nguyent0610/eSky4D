@@ -1051,7 +1051,7 @@
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.BeforeQuery.Handler = "FilterCombo(App.cboDetInvtID,'InvtID')";
+                                lst.BeforeQuery.Handler = "FilterCombo(App.cboDetInvtID,'InvtID,Descr')";
                             })
                         )
                                         

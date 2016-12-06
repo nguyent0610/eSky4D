@@ -267,6 +267,7 @@ var frmMain_BoxReady = function () {
     App.cboDetUnitDesc.lastQuery = '';
     App.cboLotUnitDesc.lastQuery = '';
 
+    if (HQ.checkSales) App.cboSlsPerID.setReadOnly(true);
     HQ.common.showBusy(true, HQ.waitMsg);
 }
 var frmMain_FieldChange = function (item, field, newValue, oldValue) {
@@ -844,7 +845,10 @@ var grdOrdDet_BeforeEdit = function (item, e) {
     }
 
     if (Ext.isEmpty(App.cboSlsPerID.getValue())) {
-        HQ.message.show(1000, [HQ.common.getLang('SlsperID')], '', true);
+        if (HQ.checkSales) {
+            HQ.message.show(20404, [HQ.common.getLang('SlsperID')], '', true);
+        }
+        else  HQ.message.show(1000, [HQ.common.getLang('SlsperID')], '', true);
         return false;
     }
 
@@ -1426,7 +1430,7 @@ var save = function () {
             success: function (msg, data) {
 
                 var orderNbr = '';
-
+                
                 if (this.result.data != undefined && this.result.data.orderNbr != null) {
                     orderNbr = this.result.data.orderNbr
                 }
@@ -1441,7 +1445,7 @@ var save = function () {
                 }
 
                 HQ.message.process(msg, data, true);
-
+                
                 menuClick('refresh');
             },
             failure: function (msg, data) {
@@ -2776,6 +2780,7 @@ var setStatusForm = function () {
         App.cboSlsPerID.setReadOnly(true);
         App.cboCustID.setReadOnly(true);
     }
+    if (HQ.checkSales) App.cboSlsPerID.setReadOnly(true);
 }
 
 var checkDetAdd = function () {
@@ -2788,8 +2793,9 @@ var checkDetAdd = function () {
     });
     App.cboCustID.setReadOnly(true);//fix loi combo CustID khong the chon du set readonly = false
     App.cboCustID.setReadOnly(App.cboStatus.getValue() != 'N' || flat);
-    App.cboSlsPerID.setReadOnly(App.cboStatus.getValue() != 'N' || flat);
+    App.cboSlsPerID.setReadOnly(App.cboStatus.getValue() != 'N' || flat || HQ.checkSales);
     App.txtOrderDate.setReadOnly(App.cboStatus.getValue() != 'N' || flat);
+    //if (HQ.checkSales) App.cboSlsPerID.setReadOnly(true);
 }
 
 var calculateInvtTotal = function (invtID, siteID, lineRef) {
