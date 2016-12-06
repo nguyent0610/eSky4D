@@ -1739,7 +1739,8 @@ namespace SA00800
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SYS_ReportParm CreateSYS_ReportParm(global::System.String reportNbr, global::System.String reportFormat, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp)
+        /// <param name="isReadOnly">Initial value of the IsReadOnly property.</param>
+        public static SYS_ReportParm CreateSYS_ReportParm(global::System.String reportNbr, global::System.String reportFormat, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.Boolean isReadOnly)
         {
             SYS_ReportParm sYS_ReportParm = new SYS_ReportParm();
             sYS_ReportParm.ReportNbr = reportNbr;
@@ -1751,6 +1752,7 @@ namespace SA00800
             sYS_ReportParm.LUpd_User = lUpd_User;
             sYS_ReportParm.LUpd_DateTime = lUpd_DateTime;
             sYS_ReportParm.tstamp = tstamp;
+            sYS_ReportParm.IsReadOnly = isReadOnly;
             return sYS_ReportParm;
         }
 
@@ -2555,6 +2557,30 @@ namespace SA00800
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsReadOnly
+        {
+            get
+            {
+                return _IsReadOnly;
+            }
+            set
+            {
+                OnIsReadOnlyChanging(value);
+                ReportPropertyChanging("IsReadOnly");
+                _IsReadOnly = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsReadOnly");
+                OnIsReadOnlyChanged();
+            }
+        }
+        private global::System.Boolean _IsReadOnly;
+        partial void OnIsReadOnlyChanging(global::System.Boolean value);
+        partial void OnIsReadOnlyChanged();
 
         #endregion
 
@@ -2581,12 +2607,14 @@ namespace SA00800
         /// <param name="reportNbr">Initial value of the ReportNbr property.</param>
         /// <param name="reportFormat">Initial value of the ReportFormat property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SA00800_pgSYS_ReportParm_Result CreateSA00800_pgSYS_ReportParm_Result(global::System.String reportNbr, global::System.String reportFormat, global::System.Byte[] tstamp)
+        /// <param name="isReadOnly">Initial value of the IsReadOnly property.</param>
+        public static SA00800_pgSYS_ReportParm_Result CreateSA00800_pgSYS_ReportParm_Result(global::System.String reportNbr, global::System.String reportFormat, global::System.Byte[] tstamp, global::System.Boolean isReadOnly)
         {
             SA00800_pgSYS_ReportParm_Result sA00800_pgSYS_ReportParm_Result = new SA00800_pgSYS_ReportParm_Result();
             sA00800_pgSYS_ReportParm_Result.ReportNbr = reportNbr;
             sA00800_pgSYS_ReportParm_Result.ReportFormat = reportFormat;
             sA00800_pgSYS_ReportParm_Result.tstamp = tstamp;
+            sA00800_pgSYS_ReportParm_Result.IsReadOnly = isReadOnly;
             return sA00800_pgSYS_ReportParm_Result;
         }
 
@@ -3241,6 +3269,30 @@ namespace SA00800
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsReadOnly
+        {
+            get
+            {
+                return _IsReadOnly;
+            }
+            set
+            {
+                OnIsReadOnlyChanging(value);
+                ReportPropertyChanging("IsReadOnly");
+                _IsReadOnly = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsReadOnly");
+                OnIsReadOnlyChanged();
+            }
+        }
+        private global::System.Boolean _IsReadOnly;
+        partial void OnIsReadOnlyChanging(global::System.Boolean value);
+        partial void OnIsReadOnlyChanged();
 
         #endregion
 

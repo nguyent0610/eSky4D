@@ -220,6 +220,7 @@ namespace SA00800.Controllers
             t.ListProc01 = s.ListProc01;
             t.ListProc02 = s.ListProc02;
             t.ListProc03 = s.ListProc03;
+            t.IsReadOnly = s.IsReadOnly;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

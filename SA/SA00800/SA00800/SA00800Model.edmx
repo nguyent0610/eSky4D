@@ -4,13 +4,17 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SYS_ReportControl" EntityType="eBiz4DWebSysModel.Store.SYS_ReportControl" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SYS_ReportParm" EntityType="eBiz4DWebSysModel.Store.SYS_ReportParm" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
         <EntityType Name="SYS_ReportControl">
           <Key>
             <PropertyRef Name="ReportNbr" />
           </Key>
-          <Property Name="ReportNbr" Type="varchar" MaxLength="7" Nullable="false" />
-          <Property Name="Descr" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="Descr" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="ReportCap00" Type="nvarchar" MaxLength="50" />
           <Property Name="ReportName00" Type="nvarchar" MaxLength="50" />
           <Property Name="ReportCap01" Type="nvarchar" MaxLength="50" />
@@ -30,12 +34,12 @@
           <Property Name="RunBefore" Type="varchar" MaxLength="50" />
           <Property Name="RunAfter" Type="varchar" MaxLength="50" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="OLapReport" Type="bit" Nullable="false" />
           <Property Name="OLapStringCap00" Type="nvarchar" MaxLength="100" />
           <Property Name="OLapStringCap01" Type="nvarchar" MaxLength="100" />
@@ -78,8 +82,8 @@
             <PropertyRef Name="ReportNbr" />
             <PropertyRef Name="ReportFormat" />
           </Key>
-          <Property Name="ReportNbr" Type="varchar" MaxLength="7" Nullable="false" />
-          <Property Name="ReportFormat" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="ReportFormat" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="StringCap00" Type="nvarchar" MaxLength="50" />
           <Property Name="StringCap01" Type="nvarchar" MaxLength="50" />
           <Property Name="StringCap02" Type="nvarchar" MaxLength="50" />
@@ -104,32 +108,59 @@
           <Property Name="ListProc01" Type="varchar(max)" />
           <Property Name="ListProc02" Type="varchar(max)" />
           <Property Name="ListProc03" Type="varchar(max)" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="IsReadOnly" Type="bit" Nullable="false" />
         </EntityType>
         <Function Name="SA00800_pgSYS_ReportParm" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ReportNbr" Type="varchar" Mode="In" />
         </Function>
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="SYS_ReportControl" EntityType="Self.SYS_ReportControl" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SYS_ReportParm" EntityType="Self.SYS_ReportParm" Schema="dbo" store:Type="Tables" />
-        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SA00800Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SA00800Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="SA00800_pgSYS_ReportParm" ReturnType="Collection(SA00800Model.SA00800_pgSYS_ReportParm_Result)">
+          <Parameter Name="ReportNbr" Mode="In" Type="String" />
+          </FunctionImport>
           <EntitySet Name="SYS_ReportControl" EntityType="SA00800Model.SYS_ReportControl" />
           <EntitySet Name="SYS_ReportParm" EntityType="SA00800Model.SYS_ReportParm" />
-          <FunctionImport Name="SA00800_pgSYS_ReportParm" ReturnType="Collection(SA00800Model.SA00800_pgSYS_ReportParm_Result)">
-            <Parameter Name="ReportNbr" Mode="In" Type="String" />
-          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="SA00800_pgSYS_ReportParm_Result">
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" />
+          <Property Type="String" Name="ReportFormat" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="StringCap00" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StringCap01" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StringCap02" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StringCap03" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DateCap00" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DateCap01" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DateCap02" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DateCap03" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BooleanCap00" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BooleanCap01" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BooleanCap02" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BooleanCap03" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PPV_Proc00" Nullable="true" />
+          <Property Type="String" Name="PPV_Proc01" Nullable="true" />
+          <Property Type="String" Name="PPV_Proc02" Nullable="true" />
+          <Property Type="String" Name="PPV_Proc03" Nullable="true" />
+          <Property Type="String" Name="ListCap00" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ListCap01" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ListCap02" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ListCap03" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ListProc00" Nullable="true" />
+          <Property Type="String" Name="ListProc01" Nullable="true" />
+          <Property Type="String" Name="ListProc02" Nullable="true" />
+          <Property Type="String" Name="ListProc03" Nullable="true" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Boolean" Name="IsReadOnly" Nullable="false" />
+        </ComplexType>
         <EntityType Name="SYS_ReportControl">
           <Key>
             <PropertyRef Name="ReportNbr" />
@@ -156,10 +187,10 @@
           <Property Type="String" Name="RunAfter" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Boolean" Name="OLapReport" Nullable="false" />
           <Property Type="String" Name="OLapStringCap00" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -230,48 +261,54 @@
           <Property Type="String" Name="ListProc02" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ListProc03" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="Boolean" Name="IsReadOnly" Nullable="false" />
         </EntityType>
-        <ComplexType Name="SA00800_pgSYS_ReportParm_Result">
-          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" />
-          <Property Type="String" Name="ReportFormat" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="StringCap00" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="StringCap01" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="StringCap02" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="StringCap03" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="DateCap00" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="DateCap01" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="DateCap02" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="DateCap03" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="BooleanCap00" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="BooleanCap01" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="BooleanCap02" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="BooleanCap03" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="PPV_Proc00" Nullable="true" />
-          <Property Type="String" Name="PPV_Proc01" Nullable="true" />
-          <Property Type="String" Name="PPV_Proc02" Nullable="true" />
-          <Property Type="String" Name="PPV_Proc03" Nullable="true" />
-          <Property Type="String" Name="ListCap00" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="ListCap01" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="ListCap02" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="ListCap03" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="ListProc00" Nullable="true" />
-          <Property Type="String" Name="ListProc01" Nullable="true" />
-          <Property Type="String" Name="ListProc02" Nullable="true" />
-          <Property Type="String" Name="ListProc03" Nullable="true" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SA00800Entities" >
+          <FunctionImportMapping FunctionImportName="SA00800_pgSYS_ReportParm" FunctionName="eBiz4DWebSysModel.Store.SA00800_pgSYS_ReportParm">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00800Model.SA00800_pgSYS_ReportParm_Result">
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+                <ScalarProperty Name="ReportFormat" ColumnName="ReportFormat" />
+                <ScalarProperty Name="StringCap00" ColumnName="StringCap00" />
+                <ScalarProperty Name="StringCap01" ColumnName="StringCap01" />
+                <ScalarProperty Name="StringCap02" ColumnName="StringCap02" />
+                <ScalarProperty Name="StringCap03" ColumnName="StringCap03" />
+                <ScalarProperty Name="DateCap00" ColumnName="DateCap00" />
+                <ScalarProperty Name="DateCap01" ColumnName="DateCap01" />
+                <ScalarProperty Name="DateCap02" ColumnName="DateCap02" />
+                <ScalarProperty Name="DateCap03" ColumnName="DateCap03" />
+                <ScalarProperty Name="BooleanCap00" ColumnName="BooleanCap00" />
+                <ScalarProperty Name="BooleanCap01" ColumnName="BooleanCap01" />
+                <ScalarProperty Name="BooleanCap02" ColumnName="BooleanCap02" />
+                <ScalarProperty Name="BooleanCap03" ColumnName="BooleanCap03" />
+                <ScalarProperty Name="PPV_Proc00" ColumnName="PPV_Proc00" />
+                <ScalarProperty Name="PPV_Proc01" ColumnName="PPV_Proc01" />
+                <ScalarProperty Name="PPV_Proc02" ColumnName="PPV_Proc02" />
+                <ScalarProperty Name="PPV_Proc03" ColumnName="PPV_Proc03" />
+                <ScalarProperty Name="ListCap00" ColumnName="ListCap00" />
+                <ScalarProperty Name="ListCap01" ColumnName="ListCap01" />
+                <ScalarProperty Name="ListCap02" ColumnName="ListCap02" />
+                <ScalarProperty Name="ListCap03" ColumnName="ListCap03" />
+                <ScalarProperty Name="ListProc00" ColumnName="ListProc00" />
+                <ScalarProperty Name="ListProc01" ColumnName="ListProc01" />
+                <ScalarProperty Name="ListProc02" ColumnName="ListProc02" />
+                <ScalarProperty Name="ListProc03" ColumnName="ListProc03" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="IsReadOnly" ColumnName="IsReadOnly" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="SYS_ReportControl">
             <EntityTypeMapping TypeName="SA00800Model.SYS_ReportControl">
               <MappingFragment StoreEntitySet="SYS_ReportControl">
@@ -344,6 +381,7 @@
           <EntitySetMapping Name="SYS_ReportParm">
             <EntityTypeMapping TypeName="SA00800Model.SYS_ReportParm">
               <MappingFragment StoreEntitySet="SYS_ReportParm">
+                <ScalarProperty Name="IsReadOnly" ColumnName="IsReadOnly" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
@@ -380,39 +418,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA00800_pgSYS_ReportParm" FunctionName="eBiz4DWebSysModel.Store.SA00800_pgSYS_ReportParm">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA00800Model.SA00800_pgSYS_ReportParm_Result">
-                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
-                <ScalarProperty Name="ReportFormat" ColumnName="ReportFormat" />
-                <ScalarProperty Name="StringCap00" ColumnName="StringCap00" />
-                <ScalarProperty Name="StringCap01" ColumnName="StringCap01" />
-                <ScalarProperty Name="StringCap02" ColumnName="StringCap02" />
-                <ScalarProperty Name="StringCap03" ColumnName="StringCap03" />
-                <ScalarProperty Name="DateCap00" ColumnName="DateCap00" />
-                <ScalarProperty Name="DateCap01" ColumnName="DateCap01" />
-                <ScalarProperty Name="DateCap02" ColumnName="DateCap02" />
-                <ScalarProperty Name="DateCap03" ColumnName="DateCap03" />
-                <ScalarProperty Name="BooleanCap00" ColumnName="BooleanCap00" />
-                <ScalarProperty Name="BooleanCap01" ColumnName="BooleanCap01" />
-                <ScalarProperty Name="BooleanCap02" ColumnName="BooleanCap02" />
-                <ScalarProperty Name="BooleanCap03" ColumnName="BooleanCap03" />
-                <ScalarProperty Name="PPV_Proc00" ColumnName="PPV_Proc00" />
-                <ScalarProperty Name="PPV_Proc01" ColumnName="PPV_Proc01" />
-                <ScalarProperty Name="PPV_Proc02" ColumnName="PPV_Proc02" />
-                <ScalarProperty Name="PPV_Proc03" ColumnName="PPV_Proc03" />
-                <ScalarProperty Name="ListCap00" ColumnName="ListCap00" />
-                <ScalarProperty Name="ListCap01" ColumnName="ListCap01" />
-                <ScalarProperty Name="ListCap02" ColumnName="ListCap02" />
-                <ScalarProperty Name="ListCap03" ColumnName="ListCap03" />
-                <ScalarProperty Name="ListProc00" ColumnName="ListProc00" />
-                <ScalarProperty Name="ListProc01" ColumnName="ListProc01" />
-                <ScalarProperty Name="ListProc02" ColumnName="ListProc02" />
-                <ScalarProperty Name="ListProc03" ColumnName="ListProc03" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -434,9 +439,9 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="33" >
-        <EntityTypeShape EntityType="SA00800Model.SYS_ReportControl" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SA00800Model.SYS_ReportParm" Width="1.5" PointX="2.75" PointY="0.75" />
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="94" >
+        <EntityTypeShape EntityType="SA00800Model.SYS_ReportControl" Width="1.5" PointX="3.233785334617731" PointY="4.5254305622193174" />
+        <EntityTypeShape EntityType="SA00800Model.SYS_ReportParm" Width="1.5" PointX="9.2466827506416855" PointY="6.7106656165377538" />
       </Diagram>
     </Diagrams>
   </Designer>

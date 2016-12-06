@@ -162,7 +162,8 @@
                          })
                         .LoadData()
                         )
-
+                            , X.CheckColumn().Text(Util.GetLang("IsReadOnly")).DataIndex("IsReadOnly").Width(150).Editable(true)
+                                         
                           , X.Column().Text(Util.GetLang("StringParm00")).DataIndex("StringCap00").Width(150)
                           .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
