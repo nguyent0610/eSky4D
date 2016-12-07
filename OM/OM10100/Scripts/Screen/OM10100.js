@@ -1159,12 +1159,12 @@ var bindDetail = function () {
     App.cboShiptoID.events['change'].resume();
 
 
-    if (Ext.isEmpty(HQ.objCust.data.BillAddr1)) {
-        App.txtCustAddr.setValue(HQ.objCust.data.BillAddr2)
-    } else {
-        App.txtCustAddr.setValue(HQ.objCust.data.BillAddr1 + (Ext.isEmpty(HQ.objCust.data.BillAddr2) ? "" : " - " + HQ.objCust.data.BillAddr2));
-    }
-
+    //if (Ext.isEmpty(HQ.objCust.data.BillAddr1)) {
+    //    App.txtCustAddr.setValue(HQ.objCust.data.BillAddr2)
+    //} else {
+    //    App.txtCustAddr.setValue(HQ.objCust.data.BillAddr1 + (Ext.isEmpty(HQ.objCust.data.BillAddr2) ? "" : " - " + HQ.objCust.data.BillAddr2));
+    //}
+    App.txtCustAddr.setValue(HQ.objCust.data.CustAddr)
     App.txtCustName.setValue(HQ.objCust.data.BillName);
 
     App.txtBillName.setValue(addr.data.BillName);
@@ -1246,12 +1246,12 @@ var bindAddress = function () {
         addr = Ext.create('App.mdlSOAddress');
     }
 
-    if (Ext.isEmpty(HQ.objCust.data.BillAddr1)) {
-        App.txtCustAddr.setValue(HQ.objCust.data.BillAddr2)
-    } else {
-        App.txtCustAddr.setValue(HQ.objCust.data.BillAddr1 + (Ext.isEmpty(HQ.objCust.data.BillAddr2) ? "" : " - " + HQ.objCust.data.BillAddr2));
-    }
-
+    //if (Ext.isEmpty(HQ.objCust.data.BillAddr1)) {
+    //    App.txtCustAddr.setValue(HQ.objCust.data.BillAddr2)
+    //} else {
+    //    App.txtCustAddr.setValue(HQ.objCust.data.BillAddr1 + (Ext.isEmpty(HQ.objCust.data.BillAddr2) ? "" : " - " + HQ.objCust.data.BillAddr2));
+    //}
+    App.txtCustAddr.setValue(HQ.objCust.data.CustAddr)
     App.txtCustName.setValue(HQ.objCust.data.BillName);
 
     App.txtShipName.setValue(addr.data.SOName);

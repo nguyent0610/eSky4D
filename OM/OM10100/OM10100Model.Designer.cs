@@ -29236,10 +29236,12 @@ namespace OM10100
         /// Create a new OM10100_pdCustomer_Result object.
         /// </summary>
         /// <param name="custName">Initial value of the CustName property.</param>
-        public static OM10100_pdCustomer_Result CreateOM10100_pdCustomer_Result(global::System.String custName)
+        /// <param name="custAddr">Initial value of the CustAddr property.</param>
+        public static OM10100_pdCustomer_Result CreateOM10100_pdCustomer_Result(global::System.String custName, global::System.String custAddr)
         {
             OM10100_pdCustomer_Result oM10100_pdCustomer_Result = new OM10100_pdCustomer_Result();
             oM10100_pdCustomer_Result.CustName = custName;
+            oM10100_pdCustomer_Result.CustAddr = custAddr;
             return oM10100_pdCustomer_Result;
         }
 
@@ -29630,6 +29632,30 @@ namespace OM10100
         private global::System.String _DfltShipToId;
         partial void OnDfltShipToIdChanging(global::System.String value);
         partial void OnDfltShipToIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CustAddr
+        {
+            get
+            {
+                return _CustAddr;
+            }
+            set
+            {
+                OnCustAddrChanging(value);
+                ReportPropertyChanging("CustAddr");
+                _CustAddr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CustAddr");
+                OnCustAddrChanged();
+            }
+        }
+        private global::System.String _CustAddr;
+        partial void OnCustAddrChanging(global::System.String value);
+        partial void OnCustAddrChanged();
 
         #endregion
 

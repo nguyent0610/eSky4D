@@ -2768,6 +2768,7 @@
           <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="TaxRegNbr" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="DfltShipToId" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="CustAddr" Nullable="false" MaxLength="1" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4276,6 +4277,7 @@
                 <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
                 <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
                 <ScalarProperty Name="DfltShipToId" ColumnName="DfltShipToId" />
+                <ScalarProperty Name="CustAddr" ColumnName="CustAddr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
