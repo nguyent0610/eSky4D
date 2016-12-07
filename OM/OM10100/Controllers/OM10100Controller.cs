@@ -6250,7 +6250,7 @@ namespace OM10100.Controllers
         }
         public ActionResult GetCustomer(string branchID, string custID)
         {
-            List<AR_Customer> lstCust = _app.AR_Customer.Where(p => p.BranchID == branchID && p.CustId == custID).ToList();
+            List<OM10100_pdCustomer_Result> lstCust = _app.OM10100_pdCustomer(branchID,custID).ToList();
             return this.Store(lstCust, lstCust.Count);
         }
         public ActionResult GetShipToID(string branchID, string custID)

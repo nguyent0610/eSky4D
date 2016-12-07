@@ -107,7 +107,7 @@
 @(
     X.Store().ID("stoCustomer")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof(AR_Customer),"mdlCustomer","CustId"))
+    .Model(Util.GenerateModel(typeof(OM10100_pdCustomer_Result),"mdlCustomer",""))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetCustomer", "OM10100"))
