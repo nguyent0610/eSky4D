@@ -151,7 +151,7 @@ var menuClick = function (command) {
             }
             break;
         case "print":                       
-            if (!Ext.isEmpty(App.txtINBatNbr.getValue())) {// && App.Status.value == 'C') {
+            if (!Ext.isEmpty(App.cboTagID.getValue())) {// && App.Status.value == 'C') {
                 if (App.cboReport.store.data.items.length == 1) {
                     btnShowReport_Click();
                 }

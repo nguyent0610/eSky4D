@@ -459,6 +459,7 @@ namespace IN10500.Controllers
                 rpt.StringParm00 = curHeader.BranchID;
                 rpt.StringParm01 = curHeader.INBatNbr;
                 rpt.StringParm02 = curHeader.TAGID;
+                rpt.StringParm03 = curHeader.SiteID;
                 rpt.UserID = Current.UserName;
                 rpt.AppPath = "Reports\\";
                 rpt.ClientName = Current.UserName;
