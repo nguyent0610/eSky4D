@@ -78,7 +78,7 @@ namespace OM30400.Controllers
         {
             _db.CommandTimeout = int.MaxValue;
             var actualVisit = _db.OM30400_pgGridActualVisit(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, realTime).ToList();
-
+            
             var planVisit = _db.OM30400_pdVisitPlan(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate).ToList();
             for (int i = 0; i < planVisit.Count; i++)
             {
@@ -122,6 +122,7 @@ namespace OM30400.Controllers
                     lng1 = (double) actualVisit[i - 1].CiLng;
                     lat2 = (double) actualVisit[i].CiLat;
                     lng2 = (double) actualVisit[i].CiLng;
+                   
                 }
                 if (actualVisit[i].Color != colorTmp)
                 {
@@ -131,7 +132,7 @@ namespace OM30400.Controllers
                     lng2 = 0;
                 }
                 actualVisit[i].Distance = DistanceBetweenPlaces(lng1, lat1, lng2, lat2);
-                colorTmp = actualVisit[i].Color;
+                colorTmp = actualVisit[i].Color;      
             }
 
             
@@ -149,7 +150,14 @@ namespace OM30400.Controllers
         {
             _db.CommandTimeout = int.MaxValue;
             var actualVisit = _db.OM30400_pgGridActualVisit(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, true).ToList();
-
+            for (int i = 0; i < actualVisit.Count; i++)
+            {
+                if (actualVisit[i].PicPath.PassNull() != "")
+                {
+                    var file = actualVisit[i].PicPath.PassNull().Replace("/", "\\").Replace("//", "\\").Split('\\');
+                    actualVisit[i].PicPath = Util.ImageToBin(actualVisit[i].PicPath.PassNull().Replace(file[file.Length - 1], ""), file[file.Length - 1]);
+                }
+            }
             return this.Store(actualVisit);
         }
 
