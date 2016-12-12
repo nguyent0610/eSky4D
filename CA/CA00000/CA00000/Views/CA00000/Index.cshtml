@@ -44,7 +44,7 @@
     @X.GridFilters()<!--Khi cache cho grid-->
     @X.ProgressBarPager()<!--Khi cache cho grid -->  
     @(X.Store().ID("storeCA_Setup").AutoLoad(false)   
-        .Model(Util.GenerateModel(typeof(CA00000_pdLoadSetup_Result), "CA_SetupModel", "BranchID")) 
+        .Model(Util.GenerateModel(typeof(CA00000_pdLoadSetup_Result), "CA_SetupModel", "")) 
         .Proxy(
                 X.AjaxProxy()                
                 .Url(Url.Action("GetCA_Setup", "CA00000"))
@@ -56,13 +56,13 @@
             )
          .Parameters(ps =>
                             {
-                                ps.Add(new StoreParameter("branchId", Current.CpnyID, ParameterMode.Value));
+                                ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
                                 ps.Add(new StoreParameter("setupID", "CA", ParameterMode.Value));
                             })      
-        .Listeners(l=>
-                {
-                    l.Load.Handler = "HQ.common.showBusy(false); loadData();";
-                 
+        .Listeners(l =>
+        {
+            l.BeforeLoad.Fn = "stoBeforeLoad";
+            l.Load.Fn = "stoLoad";                   
         })        
   )   
              

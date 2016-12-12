@@ -152,7 +152,7 @@ namespace CA00000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -171,7 +171,7 @@ namespace CA00000
                 {
                     OnBranchIDChanging(value);
                     ReportPropertyChanging("BranchID");
-                    _BranchID = StructuralObject.SetValidValue(value, false);
+                    _BranchID = StructuralObject.SetValidValue(value, false, "BranchID");
                     ReportPropertyChanged("BranchID");
                     OnBranchIDChanged();
                 }
@@ -198,7 +198,7 @@ namespace CA00000
                 {
                     OnSetUpIDChanging(value);
                     ReportPropertyChanging("SetUpID");
-                    _SetUpID = StructuralObject.SetValidValue(value, false);
+                    _SetUpID = StructuralObject.SetValidValue(value, false, "SetUpID");
                     ReportPropertyChanged("SetUpID");
                     OnSetUpIDChanged();
                 }
@@ -223,7 +223,7 @@ namespace CA00000
             {
                 OnLastBatNbrChanging(value);
                 ReportPropertyChanging("LastBatNbr");
-                _LastBatNbr = StructuralObject.SetValidValue(value, true);
+                _LastBatNbr = StructuralObject.SetValidValue(value, true, "LastBatNbr");
                 ReportPropertyChanged("LastBatNbr");
                 OnLastBatNbrChanged();
             }
@@ -247,7 +247,7 @@ namespace CA00000
             {
                 OnLastPaymentNbrChanging(value);
                 ReportPropertyChanging("LastPaymentNbr");
-                _LastPaymentNbr = StructuralObject.SetValidValue(value, true);
+                _LastPaymentNbr = StructuralObject.SetValidValue(value, true, "LastPaymentNbr");
                 ReportPropertyChanged("LastPaymentNbr");
                 OnLastPaymentNbrChanged();
             }
@@ -271,7 +271,7 @@ namespace CA00000
             {
                 OnLastReceiptNbrChanging(value);
                 ReportPropertyChanging("LastReceiptNbr");
-                _LastReceiptNbr = StructuralObject.SetValidValue(value, true);
+                _LastReceiptNbr = StructuralObject.SetValidValue(value, true, "LastReceiptNbr");
                 ReportPropertyChanged("LastReceiptNbr");
                 OnLastReceiptNbrChanged();
             }
@@ -295,7 +295,7 @@ namespace CA00000
             {
                 OnPreFixBatChanging(value);
                 ReportPropertyChanging("PreFixBat");
-                _PreFixBat = StructuralObject.SetValidValue(value, true);
+                _PreFixBat = StructuralObject.SetValidValue(value, true, "PreFixBat");
                 ReportPropertyChanged("PreFixBat");
                 OnPreFixBatChanged();
             }
@@ -319,7 +319,7 @@ namespace CA00000
             {
                 OnCrtd_DateTimeChanging(value);
                 ReportPropertyChanging("Crtd_DateTime");
-                _Crtd_DateTime = StructuralObject.SetValidValue(value);
+                _Crtd_DateTime = StructuralObject.SetValidValue(value, "Crtd_DateTime");
                 ReportPropertyChanged("Crtd_DateTime");
                 OnCrtd_DateTimeChanged();
             }
@@ -343,7 +343,7 @@ namespace CA00000
             {
                 OnCrtd_ProgChanging(value);
                 ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false, "Crtd_Prog");
                 ReportPropertyChanged("Crtd_Prog");
                 OnCrtd_ProgChanged();
             }
@@ -367,7 +367,7 @@ namespace CA00000
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, false, "Crtd_User");
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -391,7 +391,7 @@ namespace CA00000
             {
                 OnLUpd_DateTimeChanging(value);
                 ReportPropertyChanging("LUpd_DateTime");
-                _LUpd_DateTime = StructuralObject.SetValidValue(value);
+                _LUpd_DateTime = StructuralObject.SetValidValue(value, "LUpd_DateTime");
                 ReportPropertyChanged("LUpd_DateTime");
                 OnLUpd_DateTimeChanged();
             }
@@ -415,7 +415,7 @@ namespace CA00000
             {
                 OnLUpd_ProgChanging(value);
                 ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false, "LUpd_Prog");
                 ReportPropertyChanged("LUpd_Prog");
                 OnLUpd_ProgChanged();
             }
@@ -439,7 +439,7 @@ namespace CA00000
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, false, "LUpd_User");
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -463,7 +463,7 @@ namespace CA00000
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, true);
+                _tstamp = StructuralObject.SetValidValue(value, true, "tstamp");
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
@@ -474,7 +474,6 @@ namespace CA00000
 
         #endregion
 
-    
     }
 
     #endregion
@@ -508,7 +507,7 @@ namespace CA00000
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -525,7 +524,7 @@ namespace CA00000
             {
                 OnBranchIDChanging(value);
                 ReportPropertyChanging("BranchID");
-                _BranchID = StructuralObject.SetValidValue(value, false);
+                _BranchID = StructuralObject.SetValidValue(value, false, "BranchID");
                 ReportPropertyChanged("BranchID");
                 OnBranchIDChanged();
             }
@@ -549,7 +548,7 @@ namespace CA00000
             {
                 OnSetUpIDChanging(value);
                 ReportPropertyChanging("SetUpID");
-                _SetUpID = StructuralObject.SetValidValue(value, false);
+                _SetUpID = StructuralObject.SetValidValue(value, false, "SetUpID");
                 ReportPropertyChanged("SetUpID");
                 OnSetUpIDChanged();
             }
@@ -573,7 +572,7 @@ namespace CA00000
             {
                 OnLastBatNbrChanging(value);
                 ReportPropertyChanging("LastBatNbr");
-                _LastBatNbr = StructuralObject.SetValidValue(value, true);
+                _LastBatNbr = StructuralObject.SetValidValue(value, true, "LastBatNbr");
                 ReportPropertyChanged("LastBatNbr");
                 OnLastBatNbrChanged();
             }
@@ -597,7 +596,7 @@ namespace CA00000
             {
                 OnLastPaymentNbrChanging(value);
                 ReportPropertyChanging("LastPaymentNbr");
-                _LastPaymentNbr = StructuralObject.SetValidValue(value, true);
+                _LastPaymentNbr = StructuralObject.SetValidValue(value, true, "LastPaymentNbr");
                 ReportPropertyChanged("LastPaymentNbr");
                 OnLastPaymentNbrChanged();
             }
@@ -621,7 +620,7 @@ namespace CA00000
             {
                 OnLastReceiptNbrChanging(value);
                 ReportPropertyChanging("LastReceiptNbr");
-                _LastReceiptNbr = StructuralObject.SetValidValue(value, true);
+                _LastReceiptNbr = StructuralObject.SetValidValue(value, true, "LastReceiptNbr");
                 ReportPropertyChanged("LastReceiptNbr");
                 OnLastReceiptNbrChanged();
             }
@@ -645,7 +644,7 @@ namespace CA00000
             {
                 OnPreFixBatChanging(value);
                 ReportPropertyChanging("PreFixBat");
-                _PreFixBat = StructuralObject.SetValidValue(value, true);
+                _PreFixBat = StructuralObject.SetValidValue(value, true, "PreFixBat");
                 ReportPropertyChanged("PreFixBat");
                 OnPreFixBatChanged();
             }
@@ -669,7 +668,7 @@ namespace CA00000
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, false);
+                _tstamp = StructuralObject.SetValidValue(value, false, "tstamp");
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
@@ -684,5 +683,4 @@ namespace CA00000
 
     #endregion
 
-    
 }

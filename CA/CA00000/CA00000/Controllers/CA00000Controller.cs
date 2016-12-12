@@ -29,7 +29,7 @@ namespace CA00000.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -46,32 +46,37 @@ namespace CA00000.Controllers
         {
             try
             {
+
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstCA_Setup"]);
-                ChangeRecords<CA_Setup> lstLang = dataHandler.BatchObjectData<CA_Setup>();
+                var curHeader = dataHandler.ObjectData<CA_Setup>().FirstOrDefault();
 
+                curHeader.BranchID = data["cboBranchID"];
+                curHeader.SetUpID = "CA";
+                #region Save AP_Setup
 
-                foreach (CA_Setup currecord in lstLang.Updated)
+                var header = _db.CA_Setup.FirstOrDefault(p => p.BranchID == curHeader.BranchID && p.SetUpID == curHeader.SetUpID);
+
+                if (header != null)
                 {
-                    var record = _db.CA_Setup.Where(p => p.BranchID == currecord.BranchID).FirstOrDefault();
-
-                    if (record != null)
+                    if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        if (record.tstamp.ToHex() == record.tstamp.ToHex())
-                        {
-                            UpdatingPOSetup(record, currecord, false);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
+                        UpdatingCASetup(ref header, curHeader, false);
                     }
-                    else {
-                        record = new CA_Setup();
-                        UpdatingPOSetup(record, currecord, true);
-                        _db.CA_Setup.AddObject(record);
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");
                     }
-                   
                 }
+                else
+                {
+                    header = new CA_Setup();
+                    header.ResetET();
+                    curHeader.BranchID = curHeader.BranchID;
+                    UpdatingCASetup(ref header, curHeader, true);
+                    _db.CA_Setup.AddObject(header);
+                }
+                #endregion
+
                 _db.SaveChanges();
 
                 return Json(new { success = true });
@@ -82,14 +87,14 @@ namespace CA00000.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        private void UpdatingPOSetup(CA_Setup t,  CA_Setup s, bool isNew)
+        private void UpdatingCASetup(ref CA_Setup t,  CA_Setup s, bool isNew)
         {
             if (isNew) {
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
-                t.BranchID = Current.CpnyID;
-                t.SetUpID = "CA";
+                t.BranchID = s.BranchID;
+                t.SetUpID = s.SetUpID;
             }
             t.LastBatNbr = s.LastBatNbr;
             t.LastPaymentNbr = s.LastPaymentNbr;
