@@ -45,35 +45,38 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue();}";
                     })
                     .LoadData()
-
-                    , HQ.Combo().ID("cboSiteId").Name("cboSiteId").HQLangCode("SiteId").HQProcedure("IN20300_pcSitebyBranch")
-                    .HQColumnShow("SiteId,Name").DisplayField("SiteId").ValueField("SiteId").MarginSpec("5 0 5 0")
-                    .Width(350).HQHeightWidth(400, 500).AllowBlank(false)
-                    .HQDBSys(false).MaxLength(10).EnforceMaxLength(true).HQAutoLoad(false)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection()
-                    {
-                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
-                    })
-                    .LoadData()
-                        .Listeners(lst =>
-                            {
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Change.Fn = "cboSiteId_Change";
-                                lst.Select.Fn = "cboSiteId_Select";        
-                            })
-                            
+                    ,X.Container().Layout(LayoutType.HBox)
+                    .Items(
+                         HQ.Combo().ID("cboSiteId").Name("cboSiteId").HQLangCode("SiteId").HQProcedure("IN20300_pcSitebyBranch")
+                        .HQColumnShow("SiteId,Name").DisplayField("SiteId").ValueField("SiteId").MarginSpec("5 0 5 0")
+                        .Width(350).HQHeightWidth(400, 500).AllowBlank(false)
+                        .HQDBSys(false).MaxLength(10).EnforceMaxLength(true).HQAutoLoad(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                            .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.Change.Fn = "cboSiteId_Change";
+                                    lst.Select.Fn = "cboSiteId_Select";        
+                                })
+                        ,HQ.Checkbox().Name("Public").HQLangCode("IN20300Active").MarginSpec("5 0 0 5")        
+                                
+                     )       
                     , HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("Name").AllowBlank(false)
                             .Width(500).MarginSpec("0 0 5 0").MaxLength(200).EnforceMaxLength(true).DataIndex("Name")
         // cboSiteId                    
-                    , X.Container().Layout(LayoutType.HBox).Items(
+                    //, X.Container().Layout(LayoutType.HBox).Items(
                         
-                        HQ.Checkbox().ID("chkPublic").Name("chkPublic").HQLangCode("Public").DataIndex("Public").Hidden(true)
-                        .Listeners(lst =>
-                        {
-                            lst.Change.Handler = "chkAutoChange()";
-                        })
-                    )
+                    //    HQ.Checkbox().ID("chkPublic").Name("Public").HQLangCode("Public").DataIndex("Public").Hidden(true)
+                    //    .Listeners(lst =>
+                    //    {
+                    //        lst.Change.Handler = "chkAutoChange()";
+                    //    })
+                    //)
             )
         , X.TabPanel()
         .Region(Region.Center)

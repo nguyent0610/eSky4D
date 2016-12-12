@@ -226,8 +226,9 @@ var frmChange = function () {
     HQ.isChange = HQ.store.isChange(App.stoIN_Site);
     HQ.common.changeData(HQ.isChange, 'IN20300');//co thay doi du lieu gan * tren tab title header
     //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
-    if (App.cboSiteId.valueModels == null || HQ.isNew == true)
+    if (App.cboSiteId.valueModels == null || HQ.isNew == true) {
         App.cboSiteId.setReadOnly(false);
+    }
     else App.cboSiteId.setReadOnly(HQ.isChange);
 };
 
