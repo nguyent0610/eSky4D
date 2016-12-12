@@ -81,7 +81,6 @@ namespace AR20500.Controllers
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
-            ViewBag.ImagePath = FilePath;
             ViewBag.IsShowCustHT = _db.AR20500_pdIsShowCustHT().FirstOrDefault();
             return View();
         }
@@ -1264,24 +1263,10 @@ namespace AR20500.Controllers
         {
             try
             {
-                string filename = FilePath + "\\" + fileName;
-                if (System.IO.File.Exists(filename))
-                {
-                    FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
-                    BinaryReader reader = new BinaryReader(fileStream);
-                    byte[] imageBytes = reader.ReadBytes((int)fileStream.Length);
-                    reader.Close();
-
-                    var imgString64 = Convert.ToBase64String(imageBytes, 0, imageBytes.Length);
-
-                    var jsonResult = Json(new { success = true, imgSrc = @"data:image/jpg;base64," + imgString64 }, JsonRequestBehavior.AllowGet);
-                    jsonResult.MaxJsonLength = int.MaxValue;
-                    return jsonResult;
-                }
-                else
-                {
-                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-                }
+                var imgString64 = Util.ImageToBin(FilePath, fileName);
+                var jsonResult = Json(new { success = true, imgSrc = imgString64 }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
             }
             catch (Exception ex)
             {

@@ -453,8 +453,7 @@ var slmCust_Select = function (rowModel, record, index, eOpts) {
     if (record[0]) {
         if (record[0].data.Lat && record[0].data.Lng) {
             Gmap.Process.navMapCenterByLocation(record[0].data.Lat, record[0].data.Lng, record.index + 1);
-            App.imgImages.setImageUrl(HQ.imagePath + record[0].data.ImageFileName)// get image theo url
-            //displayImage(App.imgImages, record.data.ImageFileName);// get image theo binary
+            displayImage(App.imgImages, record[0].data.ImageFileName);// get image theo binary
         }
     }
 };
