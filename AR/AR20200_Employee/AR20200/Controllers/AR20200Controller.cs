@@ -160,21 +160,16 @@ namespace AR20200.Controllers
                     var inputSlsper = dataHandler1.ObjectData<AR_Salesperson>().FirstOrDefault();
                     //if (inputSlsper != null)
                     //{
-                        #region Slsperson info
-                        var slsper = _db.AR_Salesperson.FirstOrDefault(x => x.BranchID == branchID && x.SlsperId == slsperID);
-                        if (slsper != null)
+                    #region Slsperson info
+                    var slsper = _db.AR_Salesperson.FirstOrDefault(x => x.BranchID == branchID && x.SlsperId == slsperID);
+                    if (slsper != null)
+                    {
+                        if (!isNew)
                         {
-                            if (!isNew)
+                            // update
+                            if (slsper.tstamp.ToHex() == inputSlsper.tstamp.ToHex())
                             {
-                                // update
-                                if (slsper.tstamp.ToHex() == inputSlsper.tstamp.ToHex())
-                                {
-                                    updateSlsper(ref slsper, inputSlsper, Status, Handle, slsperID, branchID, HandleCombo);
-                                }
-                                else
-                                {
-                                    throw new MessageException(MessageType.Message, "19");
-                                }
+                                updateSlsper(ref slsper, inputSlsper, Status, Handle, slsperID, branchID, HandleCombo);
                             }
                             else
                             {
@@ -183,119 +178,128 @@ namespace AR20200.Controllers
                         }
                         else
                         {
-
-                            slsperID = slsperID.PassNull() == "" ? _db.AR20200_pdAutoSlsperID(branchID, Current.UserName, inputSlsper.State, inputSlsper.District).FirstOrDefault().PassNull() : slsperID;
-                            // Create slsper
-                            slsper = new AR_Salesperson();
-                            slsper.ResetET();
-                            slsper.BranchID = branchID;
-                            slsper.SlsperId = slsperID;
-                            slsper.Crtd_DateTime = DateTime.Now;
-                            slsper.Crtd_Prog = _screenNbr;
-                            slsper.Crtd_User = Current.UserName;
-                            updateSlsper(ref slsper, inputSlsper, Status, Handle, slsperID, branchID, HandleCombo);
-                            _db.AR_Salesperson.AddObject(slsper);
-                            AddSalesPerHist(slsper);
+                            throw new MessageException(MessageType.Message, "19");
                         }
-                        #endregion
+                    }
+                    else
+                    {
 
-                        #region Slsperson Cpny Addr
-                        if (channel == _mt)
+                        slsperID = slsperID.PassNull() == "" ? _db.AR20200_pdAutoSlsperID(branchID, Current.UserName, inputSlsper.State, inputSlsper.District).FirstOrDefault().PassNull() : slsperID;
+                        // Create slsper
+                        slsper = new AR_Salesperson();
+                        slsper.ResetET();
+                        slsper.BranchID = branchID;
+                        slsper.SlsperId = slsperID;
+                        slsper.Crtd_DateTime = DateTime.Now;
+                        slsper.Crtd_Prog = _screenNbr;
+                        slsper.Crtd_User = Current.UserName;
+                        updateSlsper(ref slsper, inputSlsper, Status, Handle, slsperID, branchID, HandleCombo);
+                        _db.AR_Salesperson.AddObject(slsper);
+                        AddSalesPerHist(slsper);
+                    }
+                    #endregion
+
+                    #region Slsperson Cpny Addr
+                    if (channel == _mt)
+                    {
+                        var cpnyAddrHandler = new StoreDataHandler(data["lstSlsperCpnyAddr"]);
+                        var lstSlsperCpnyAddr = cpnyAddrHandler.BatchObjectData<AR20200_pgSlsperCpnyAddr_Result>();
+
+                        foreach (var created in lstSlsperCpnyAddr.Created)
                         {
-                            var cpnyAddrHandler = new StoreDataHandler(data["lstSlsperCpnyAddr"]);
-                            var lstSlsperCpnyAddr = cpnyAddrHandler.BatchObjectData<AR20200_pgSlsperCpnyAddr_Result>();
-
-                            foreach (var created in lstSlsperCpnyAddr.Created)
+                            if (!string.IsNullOrWhiteSpace(created.CpnyAddrID))
                             {
-                                if (!string.IsNullOrWhiteSpace(created.CpnyAddrID))
+                                created.BranchID = branchID;
+                                created.SlsperID = slsperID;
+
+                                var createdCpnyAddr = _db.AR_SalespersonCpnyAddr.FirstOrDefault(
+                                    x => x.CpnyAddrID == created.CpnyAddrID
+                                        && x.BranchID == created.BranchID
+                                        && x.SlsperID == created.SlsperID);
+                                if (createdCpnyAddr == null)
                                 {
-                                    created.BranchID = branchID;
-                                    created.SlsperID = slsperID;
-
-                                    var createdCpnyAddr = _db.AR_SalespersonCpnyAddr.FirstOrDefault(
-                                        x => x.CpnyAddrID == created.CpnyAddrID
-                                            && x.BranchID == created.BranchID
-                                            && x.SlsperID == created.SlsperID);
-                                    if (createdCpnyAddr == null)
-                                    {
-                                        updateSlsperCpnyAddr(ref createdCpnyAddr, created, true);
-                                        _db.AR_SalespersonCpnyAddr.AddObject(createdCpnyAddr);
-                                    }
-                                }
-                            }
-
-                            foreach (var updated in lstSlsperCpnyAddr.Updated)
-                            {
-                                if (!string.IsNullOrWhiteSpace(updated.CpnyAddrID))
-                                {
-                                    updated.BranchID = branchID;
-                                    updated.SlsperID = slsperID;
-
-                                    var updatedCpnyAddr = _db.AR_SalespersonCpnyAddr.FirstOrDefault(
-                                        x => x.CpnyAddrID == updated.CpnyAddrID
-                                            && x.BranchID == updated.BranchID
-                                            && x.SlsperID == updated.SlsperID);
-                                    if (updatedCpnyAddr != null)
-                                    {
-                                        updateSlsperCpnyAddr(ref updatedCpnyAddr, updated, false);
-                                    }
-                                }
-                            }
-
-                            foreach (var deleted in lstSlsperCpnyAddr.Deleted)
-                            {
-                                if (!string.IsNullOrWhiteSpace(deleted.CpnyAddrID))
-                                {
-                                    deleted.BranchID = branchID;
-                                    deleted.SlsperID = slsperID;
-
-                                    var deletedCpnyAddr = _db.AR_SalespersonCpnyAddr.FirstOrDefault(
-                                        x => x.CpnyAddrID == deleted.CpnyAddrID
-                                            && x.BranchID == deleted.BranchID
-                                            && x.SlsperID == deleted.SlsperID);
-                                    if (deletedCpnyAddr != null)
-                                    {
-                                        _db.AR_SalespersonCpnyAddr.DeleteObject(deletedCpnyAddr);
-                                    }
+                                    updateSlsperCpnyAddr(ref createdCpnyAddr, created, true);
+                                    _db.AR_SalespersonCpnyAddr.AddObject(createdCpnyAddr);
                                 }
                             }
                         }
-                        #endregion
 
-                        #region Upload files
-                        var files = Request.Files;
-                        if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
+                        foreach (var updated in lstSlsperCpnyAddr.Updated)
                         {
-                            // Xoa file cu di
-                            var oldPath = string.Format("{0}\\{1}", FilePath, slsper.Images);
-                            if (System.IO.File.Exists(oldPath))
+                            if (!string.IsNullOrWhiteSpace(updated.CpnyAddrID))
                             {
-                                System.IO.File.Delete(oldPath);
-                            }
+                                updated.BranchID = branchID;
+                                updated.SlsperID = slsperID;
 
-                            // Upload file moi
-                            string newFileName = string.Format("{0}_{1}{2}", branchID, slsperID, Path.GetExtension(files[0].FileName));
-                            files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
-                            slsper.Images = newFileName;
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrWhiteSpace(slsper.Images) && string.IsNullOrWhiteSpace(inputSlsper.Images))
-                            {
-                                // Xoa file cu di
-                                var oldPath = string.Format("{0}\\{1}", FilePath, slsper.Images);
-                                if (System.IO.File.Exists(oldPath))
+                                var updatedCpnyAddr = _db.AR_SalespersonCpnyAddr.FirstOrDefault(
+                                    x => x.CpnyAddrID == updated.CpnyAddrID
+                                        && x.BranchID == updated.BranchID
+                                        && x.SlsperID == updated.SlsperID);
+                                if (updatedCpnyAddr != null)
                                 {
-                                    System.IO.File.Delete(oldPath);
+                                    updateSlsperCpnyAddr(ref updatedCpnyAddr, updated, false);
                                 }
-                                slsper.Images = string.Empty;
                             }
                         }
-                        #endregion
 
-                        _db.SaveChanges();
+                        foreach (var deleted in lstSlsperCpnyAddr.Deleted)
+                        {
+                            if (!string.IsNullOrWhiteSpace(deleted.CpnyAddrID))
+                            {
+                                deleted.BranchID = branchID;
+                                deleted.SlsperID = slsperID;
 
-                        return Json(new { success = true, msgCode = 201405071, slsperID = slsperID });
+                                var deletedCpnyAddr = _db.AR_SalespersonCpnyAddr.FirstOrDefault(
+                                    x => x.CpnyAddrID == deleted.CpnyAddrID
+                                        && x.BranchID == deleted.BranchID
+                                        && x.SlsperID == deleted.SlsperID);
+                                if (deletedCpnyAddr != null)
+                                {
+                                    _db.AR_SalespersonCpnyAddr.DeleteObject(deletedCpnyAddr);
+                                }
+                            }
+                        }
+                    }
+                    #endregion
+
+                    #region Upload files
+                    var files = Request.Files;
+                    if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
+                    {
+                     
+                        //// Xoa file cu di
+                        //var oldPath = string.Format("{0}\\{1}", FilePath, slsper.Images);
+                        //if (System.IO.File.Exists(oldPath))
+                        //{
+                        //    System.IO.File.Delete(oldPath);
+                        //}
+                       
+                        //// Upload file moi
+                        //string newFileName = string.Format("{0}_{1}{2}", branchID, slsperID, Path.GetExtension(files[0].FileName));
+                        //files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
+                        string newFileName = string.Format("{0}_{1}{2}", branchID, slsperID, Path.GetExtension(files[0].FileName));
+                        Util.UploadFile(FilePath, newFileName, files[0]);
+                        slsper.Images = newFileName;
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(slsper.Images) && string.IsNullOrWhiteSpace(inputSlsper.Images))
+                        {
+                            //// Xoa file cu di
+                            //var oldPath = string.Format("{0}\\{1}", FilePath, slsper.Images);
+                            //if (System.IO.File.Exists(oldPath))
+                            //{
+                            //    System.IO.File.Delete(oldPath);
+                            //}
+                            Util.UploadFile(FilePath, slsper.Images, null);
+                            slsper.Images = string.Empty;
+                        }
+                    }
+                    #endregion
+
+                    _db.SaveChanges();
+
+                    return Json(new { success = true, msgCode = 201405071, slsperID = slsperID });
                     //}
                     //else
                     //{
@@ -544,24 +548,10 @@ namespace AR20200.Controllers
         {
             try
             {
-                string filename = FilePath + "\\" + fileName;
-                if (System.IO.File.Exists(filename))
-                {
-                    FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
-                    BinaryReader reader = new BinaryReader(fileStream);
-                    byte[] imageBytes = reader.ReadBytes((int)fileStream.Length);
-                    reader.Close();
-
-                    var imgString64 = Convert.ToBase64String(imageBytes, 0, imageBytes.Length);
-
-                    var jsonResult = Json(new { success = true, imgSrc = @"data:image/jpg;base64," + imgString64 }, JsonRequestBehavior.AllowGet);
-                    jsonResult.MaxJsonLength = int.MaxValue;
-                    return jsonResult;
-                }
-                else
-                {
-                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-                }
+                var imgString64 = Util.ImageToBin(FilePath, fileName);
+                var jsonResult = Json(new { success = true, imgSrc = imgString64 }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
             }
             catch (Exception ex)
             {
