@@ -32,23 +32,23 @@ namespace AR30300.Controllers
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private JsonResult _logMessage;
 
-        //private string _Path;
-        //internal string PathImage
-        //{
-        //    get
-        //    {
-        //        var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "PublicAR30300");
-        //        if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
-        //        {
-        //            _Path = config.TextVal;
-        //        }
-        //        else
-        //        {
-        //            throw new MessageException(MessageType.Message, "2016111510");
-        //        }
-        //        return _Path;
-        //    }
-        //}
+        private string _Path;
+        internal string PathImage
+        {
+            get
+            {
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "LocalAR30300");
+                if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
+                {
+                    _Path = config.TextVal; //
+                }
+                else
+                {
+                    throw new MessageException(MessageType.Message, "2016111510");
+                }
+                return _Path;
+            }
+        }
 
         public ActionResult Index()
         {
@@ -128,7 +128,15 @@ namespace AR30300.Controllers
             }
         }
 
-
+        public ActionResult GetAR30300_pdImage(string zone,string territory,string branchID,string classID,string slsperID,string custID,string typeAlbum,DateTime startDate,DateTime endDate)
+        {
+            var lst = _db.AR30300_pdImage(Current.UserName, zone, territory, branchID, classID, slsperID, custID, typeAlbum, startDate, endDate).ToList();
+            foreach (var obj in lst)
+            {
+                obj.Pic = Util.ImageToBin(PathImage, obj.Pic,true);
+            }
+            return this.Store(lst);
+        }
         //[DirectMethod]
         //public ActionResult AR30300DownloadAlbum(string files)
         //{

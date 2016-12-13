@@ -229,66 +229,29 @@ var btnDownloadAlbum_Click = function () {
         var zip = new JSZip();
         var count = 0;
         var urls = [];
+        var urlsName = [];
         var store = App.stoImage;
         var allRecords = store.snapshot || store.allData || store.data;
+
+        
         store.suspendEvents();
         allRecords.each(function (record) {
-            if (!Ext.isEmpty(record.data.Pic))
+            if (!Ext.isEmpty(record.data.Pic)) {
                 urls.push(record.data.Pic);
+                urlsName.push(record.data.ImageName);
+            }
         });
         store.resumeEvents();
 
         if (urls.length > 0) {
-            HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-            Ext.Ajax.request({
-                url: 'AR30300/AR30300DownloadAlbum',
-                timeout: 180000000,
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                params: JSON.stringify({
-                    urls: urls
-                }),
-                success: function (result) {
-                    if (!Ext.isEmpty(JSON.parse(result.responseText).strResult)) {
-                        var images = [];
-                        var urlsResult = JSON.parse(result.responseText).strResult.split(';');
-                        var localUrl = window.location.origin + window.location.pathname.slice(0, -7);
-                        if(localUrl.slice(-1) != '/')
-                            localUrl += '/';
-                        for (var i = 0 ; i < urlsResult.length ; i++) {
-                            var filename = urlsResult[i];
-                            convertImgToBase64URL(localUrl + 'Images/AR30300/Album/' + filename, filename, function (base64Img, name, url) {
-                                images.push({
-                                    url: url,
-                                    data: base64Img,
-                                    name: name
-                                });
-                                count++;
-                                if (count == urlsResult.length) {
-                                    for (var i = 0; i < images.length; i++) {
-                                        var commaIdx = images[i].data.indexOf(",");
-                                        zip.file(images[i].name, images[i].data.slice(commaIdx + 1), { base64: true });
-                                    }
-                                    zip.generateAsync({ type: 'blob' }).then(function (content) {
-                                        saveAs(content, zipFilename);
-                                        HQ.common.showBusy(false);
-                                    });
-                                }
-                            });
-                        }
-                    }
-                    else {
-                        if (JSON.parse(result.responseText).success == false)
-                            HQ.message.show(JSON.parse(result.responseText).code);
-                        else
-                            HQ.message.show(2016111611);
-                        HQ.common.showBusy(false);
-                    }
-                },
-                failure: function (msg, data) {
-                    HQ.message.process(msg, data, true);
-                }
+            for (var i = 0; i < urls.length; i++) {
+                zip.file(urlsName[i], urls[i].split(',')[1], { base64: true });
+            }
+            zip.generateAsync({ type: 'blob' }).then(function (content) {
+                saveAs(content, zipFilename);
+                HQ.common.showBusy(false);
             });
+
         }
         else {
             HQ.message.show('2016111611');
@@ -303,28 +266,31 @@ var btnDownloadAlbum_Click = function () {
 var btnDownloadImageSelect_Click = function () {
     var flag = false;
     var links = [];
+    var linksName = [];
     var elements = Ext.DomQuery.select('#chkDownload');
     Ext.each(elements, function (el) {
         if (el.checked) {
             links.push(el.name);
+            linksName.push(el.alt);
         }
     });
     if (links.length > 0)
-        downloadAll(links);
+        downloadAll(links, linksName);
     else
         HQ.message.show('2016111511');
 };
 
 
-var downloadAll = function (urls) {
+var downloadAll = function (urls, linksName) {
     var link = document.createElement('a');
-    link.setAttribute('download', null);
+    
     link.style.display = 'none';
 
     document.body.appendChild(link);
 
     for (var i = 0; i < urls.length; i++) {
         link.setAttribute('href', urls[i]);
+        link.setAttribute('download', linksName[i]);
         link.click();
     }
     document.body.removeChild(link);

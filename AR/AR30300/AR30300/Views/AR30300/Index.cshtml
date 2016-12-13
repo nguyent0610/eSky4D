@@ -102,25 +102,33 @@
             .Listeners(p=> p.Load.Handler = "HQ.common.showBusy(false);")
 
         )
-
-        @(HQ.Store().HQDBSys(false).HQProcedure("AR30300_pdImage").ID("stoImage").AutoLoad(false)
-                .HQParam(new StoreParameterCollection()
-		        {
-			        new StoreParameter() { Name = "@Zone", Value = "App.cboZone.getValue()", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue()", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@ClassID", Value = "App.cboClassID.getValue()", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperId.getValue()", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@CustID", Value = "App.slmAR_Customer.selected.items[0] == undefined ? '' : App.slmAR_Customer.selected.items[0].data.CustId", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@TypeAlbum", Value = "App.dtvAlbum.selModel.selected.items[0] == undefined ? '': App.dtvAlbum.selModel.selected.items[0].data.TypeAlbum", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@StartDate", Value = "App.dtpFromDate.getValue()", Mode = ParameterMode.Raw },
-                    new StoreParameter() { Name = "@EndDate", Value = "App.dtpToDate.getValue()", Mode = ParameterMode.Raw }
-               
-		        })
-                .LoadData()
-                .Listeners(p=> p.Load.Handler = "HQ.common.showBusy(false);")
-        )
         
+        @(X.Store().ID("stoImage").AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR30300_pdImage_Result), "mdlIN20500_pdHeader", ""))       
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetAR30300_pdImage", "AR30300"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("Zone", "App.cboZone.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("ClassID", "App.cboClassID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("SlsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("CustID", "App.slmAR_Customer.selected.items[0] == undefined ? '' : App.slmAR_Customer.selected.items[0].data.CustId", ParameterMode.Raw));
+                ps.Add(new StoreParameter("TypeAlbum", "App.dtvAlbum.selModel.selected.items[0] == undefined ? '': App.dtvAlbum.selModel.selected.items[0].data.TypeAlbum", ParameterMode.Raw));
+                ps.Add(new StoreParameter("StartDate", "App.dtpFromDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("EndDate", "App.dtpToDate.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(p=> p.Load.Handler = "HQ.common.showBusy(false);")
+        )
+
         @{Html.RenderAction("Body", new { lang= @Current.LangID});}   
     
 </body>
