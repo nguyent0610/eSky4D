@@ -14,7 +14,6 @@ using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using HQSendMailApprove;
-using OM22003.Models;
 namespace OM22003.Controllers
 {
     [DirectController]
@@ -68,19 +67,12 @@ namespace OM22003.Controllers
 
         public ActionResult GetImage(string branchID, string custID, string displayID, string slsperID, DateTime? fromDate,DateTime? toDate, int width = 150, int height = 100)
         {
-            var imgs = _db.OM22003_pgImage(branchID, custID, displayID, slsperID, fromDate,toDate).ToList();
-            //var imgs = new List<OM22003_pgImage_Result>();
-            //imgs.Add(new OM22003_pgImage_Result()
-            //{
-            //    CreateDate = DateTime.Now,
-            //    ImageName = "Penguins.jpg",
-            //    //ImageSrc = (FilePath + "\\" + "Penguins.jpg").ToBase64Thumbnails(200, 100, true)
-            //});
+            var imgs = _db.OM22003_pgImage(branchID, custID, displayID, slsperID, fromDate,toDate).ToList();         
             for (int i = 0; i < imgs.Count; i++)
             {
                 try
                 {
-                    imgs[i].ImageSrc = Util.GetImage(FilePath.TrimEnd('/'), imgs[i].ImageName, width, height);//FilePath.ToUpper().StartsWith("HTTP") ? (FilePath.TrimEnd('/') + "/" + imgs[i].ImageName).ImageURL(width, height) : (FilePath + "\\" + imgs[i].ImageName).ToBase64Thumbnails(width, height, true);
+                    imgs[i].ImageSrc = Util.GetImage(FilePath.TrimEnd('/'), imgs[i].ImageName, width, height);
                 }
                 catch
                 {
@@ -170,11 +162,6 @@ namespace OM22003.Controllers
         {
             int num = 0;
 
-            //foreach (var item in mImageList)
-            //{
-            //    if (item.LineRef.PassNull() != string.Empty && item.LineRef.ToInt() > num)
-            //        num = item.LineRef.ToInt();
-            //}
             num++;
             string lineRef = num.ToString();
             int len = lineRef.Length;
@@ -201,25 +188,6 @@ namespace OM22003.Controllers
         }
 
 
-
-        //private string imageToBin(string fileName)
-        //{
-        //    string bin = string.Empty;
-        //    string filename = FilePath + "\\" + fileName;
-        //    if (System.IO.File.Exists(filename))
-        //    {
-        //        FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
-        //        BinaryReader reader = new BinaryReader(fileStream);
-        //        byte[] imageBytes = reader.ReadBytes((int)fileStream.Length);
-        //        reader.Close();
-
-        //        var imgString64 = Convert.ToBase64String(imageBytes, 0, imageBytes.Length);
-
-        //        bin = @"data:image/jpg;base64," + imgString64;
-        //    }
-
-        //    return bin;
-        //} 
 
         private string imageToBin(string fileName)
         {
