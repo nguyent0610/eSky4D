@@ -80,11 +80,11 @@ namespace OM22003.Controllers
             {
                 try
                 {
-                    imgs[i].ImageSrc = FilePath.ToUpper().StartsWith("HTTP") ? (FilePath.TrimEnd('/') + "/" + imgs[i].ImageName).ImageURL(width, height) : (FilePath + "\\" + imgs[i].ImageName).ToBase64Thumbnails(width, height, true);
+                    imgs[i].ImageSrc = Util.GetImage(FilePath.TrimEnd('/'), imgs[i].ImageName, width, height);//FilePath.ToUpper().StartsWith("HTTP") ? (FilePath.TrimEnd('/') + "/" + imgs[i].ImageName).ImageURL(width, height) : (FilePath + "\\" + imgs[i].ImageName).ToBase64Thumbnails(width, height, true);
                 }
                 catch
                 {
-                    imgs[i].ImageSrc = "A";
+                    imgs[i].ImageSrc = "";
                 }
             }
             return this.Store(imgs);
