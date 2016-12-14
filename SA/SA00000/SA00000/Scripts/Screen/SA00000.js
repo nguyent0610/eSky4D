@@ -205,8 +205,31 @@ var cboCpnyID_TriggerClick = function (sender, value) {
 };
 var cboType_Change = function (sender, e) {
     App.cboTerritory.store.clearFilter();
+    if(App.cboType.getValue())
     App.cboTerritory.store.filter('Zone', App.cboType.getValue());
 }
+
+
+var cboTerritory_Change = function (sender, e) {
+    App.cboState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.State) {
+                App.cboState.setValue(curRecord.data.State);
+            }
+        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+        if (!dt) {
+            if (sender.hasfocus) {
+                curRecord.data.State = '';
+                App.cboState.setValue("");
+            }
+        }
+        if (App.cboState.value == curRecord.data.State) {
+            cboState_Change(App.cboState, curRecord.data.State);
+        }
+    });
+};
+
 var cboCountry_Change = function (sender, e) {
     App.cboState.getStore().load(function () {
         var curRecord = App.frmMain.getRecord();

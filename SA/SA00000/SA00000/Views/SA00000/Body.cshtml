@@ -90,7 +90,12 @@
                     .HQColumnShow("Territory,Descr").DataIndex("Territory").DisplayField("Descr").ValueField("Territory")
                     .HQHeightWidth(400, 400).Width(600).ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboTerritory_Change";
+                        lst.Focus.Handler = "this.forceSelection = true;";
+                    })
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
@@ -114,7 +119,8 @@
                     .HQHeightWidth(300, 400).Width(600).MarginSpec("5 0 0 0").AllowBlank(false)
                     .HQParam(new StoreParameterCollection() 
                     { 
-                        new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw }
+                        new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue()", Mode = ParameterMode.Raw }
                     })
                     .LoadData().ForceSelection(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -249,7 +255,8 @@
                                 .Width(300).HQHeightWidth(500, 400).ForceSelection(true)
                                 .HQParam(new StoreParameterCollection() 
                                 { 
-                                    new StoreParameter() { Name = "@Country", Value = "App.cboCountry_grd.getValue()", Mode = ParameterMode.Raw }
+                                    new StoreParameter() { Name = "@Country", Value = "App.cboCountry_grd.getValue()", Mode = ParameterMode.Raw },
+                                   new StoreParameter() { Name = "@Territory", Value = "%", Mode = ParameterMode.Value }
                                 })
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>
