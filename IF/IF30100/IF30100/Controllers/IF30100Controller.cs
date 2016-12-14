@@ -363,7 +363,7 @@ namespace IF30100.Controllers
         }
 
         [HttpPost]
-        public ActionResult ExportView(FormCollection data, string view, string name, string proc)
+        public ActionResult ExportView(FormCollection data, string view, string name, string proc,bool isReadOnly)
         {
             try
             {
@@ -380,7 +380,7 @@ namespace IF30100.Controllers
                     SetCellValueGrid(SheetData.Cells.Rows[0][i], Util.GetLang(obj.Column_Name), TextAlignmentType.Center, TextAlignmentType.Left);
                     i++;
                 }
-                DataAccess dal = Util.Dal();
+                DataAccess dal = Util.Dal(false, isReadOnly);
                 ParamCollection pc = new ParamCollection();
                 System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.Text, ref pc);
 
@@ -486,7 +486,7 @@ namespace IF30100.Controllers
 
                 IF30100SysEntities sys = new IF30100SysEntities(EntityConnectionStringHelper.Build(Current.Server, Current.DBSys, "IF30100SysModel"));
                 var report = sys.SYS_ReportExport.FirstOrDefault(p => p.ReportNbr == reportNbr);
-                DataAccess dal = Util.Dal();
+                DataAccess dal = Util.Dal(false, report.IsReadOnly);
                 ParamCollection pc = new ParamCollection();
 
                 var lstColumn = sys.SYS_ReportOLAPTemplate.Where(p => p.ReportNbr == reportNbr && p.PivotType != "P").ToList();
@@ -2140,7 +2140,7 @@ namespace IF30100.Controllers
         }
 
         [HttpPost]
-        public ActionResult ExportProc(FormCollection data, string reportNbr, string name, string proc)
+        public ActionResult ExportProc(FormCollection data, string reportNbr, string name, string proc,bool isReadOnly)
         {
             try
             {
@@ -2300,8 +2300,8 @@ namespace IF30100.Controllers
                     Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook();
                     Aspose.Cells.Worksheet SheetData = workbook.Worksheets[0];
                     SheetData.Name = "Data";
-                   
-                    DataAccess dal = Util.Dal();
+
+                    DataAccess dal = Util.Dal(false,isReadOnly);
                     ParamCollection pc = new ParamCollection();
                     pc.Add(new ParamStruct("@RPTID", DbType.Int16, clsCommon.GetValueDBNull(created.ReportID), ParameterDirection.Input, 50));
                     System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.StoredProcedure, ref pc);

@@ -333,9 +333,9 @@ var loadParam = function (i, reportNbr, reportView) {
 
     App.direct.IF30100LoadRPTParm(reportNbr, reportView, {
         success: function (result) {
-
             setTimeout(function () {
                 App.btnLoadParamList.fireEvent("click");
+                HQ.common.showBusy(false);
             }, 200);
         }
     });
@@ -391,6 +391,7 @@ function exportExcelProc() {
                 proc: App.cboReport.valueModels[0].data.ReportView,
                 name: App.cboReport.valueModels[0].data.ReportName,
                 reportNbr: App.cboReport.valueModels[0].data.ReportNbr,
+                IsReadOnly: App.cboReport.valueModels[0].data.IsReadOnly
 
             },
             success: function (msg, data) {
@@ -420,8 +421,9 @@ function exportExcelView()
                 params: {
                     lstDet: Ext.encode(App.stoDet.getRecordsValues()),
                     view: App.cboReport.valueModels[0].data.ReportView,
-                    name: App.cboReport.valueModels[0].data.ReportName,
+                    name: App.cboReport.valueModels[0].data.ReportName,                   
                     proc: App.lblResult.getText(),
+                    IsReadOnly: App.cboReport.valueModels[0].data.IsReadOnly,
                     data: getParm()
                 },
                 success: function (msg, data) {

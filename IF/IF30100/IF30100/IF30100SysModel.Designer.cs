@@ -84,22 +84,6 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<SYS_ReportExport> SYS_ReportExport
-        {
-            get
-            {
-                if ((_SYS_ReportExport == null))
-                {
-                    _SYS_ReportExport = base.CreateObjectSet<SYS_ReportExport>("SYS_ReportExport");
-                }
-                return _SYS_ReportExport;
-            }
-        }
-        private ObjectSet<SYS_ReportExport> _SYS_ReportExport;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SYS_ReportOLAPTemplate> SYS_ReportOLAPTemplate
         {
             get
@@ -144,6 +128,22 @@ namespace IF30100
             }
         }
         private ObjectSet<SYS_ReportExportParm> _SYS_ReportExportParm;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SYS_ReportExport> SYS_ReportExport
+        {
+            get
+            {
+                if ((_SYS_ReportExport == null))
+                {
+                    _SYS_ReportExport = base.CreateObjectSet<SYS_ReportExport>("SYS_ReportExport");
+                }
+                return _SYS_ReportExport;
+            }
+        }
+        private ObjectSet<SYS_ReportExport> _SYS_ReportExport;
 
         #endregion
 
@@ -155,14 +155,6 @@ namespace IF30100
         public void AddToSYS_ReportOLAPFilter(SYS_ReportOLAPFilter sYS_ReportOLAPFilter)
         {
             base.AddObject("SYS_ReportOLAPFilter", sYS_ReportOLAPFilter);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the SYS_ReportExport EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSYS_ReportExport(SYS_ReportExport sYS_ReportExport)
-        {
-            base.AddObject("SYS_ReportExport", sYS_ReportExport);
         }
     
         /// <summary>
@@ -187,6 +179,14 @@ namespace IF30100
         public void AddToSYS_ReportExportParm(SYS_ReportExportParm sYS_ReportExportParm)
         {
             base.AddObject("SYS_ReportExportParm", sYS_ReportExportParm);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SYS_ReportExport EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSYS_ReportExport(SYS_ReportExport sYS_ReportExport)
+        {
+            base.AddObject("SYS_ReportExport", sYS_ReportExport);
         }
 
         #endregion
@@ -568,7 +568,8 @@ namespace IF30100
         /// <param name="sourceType">Initial value of the SourceType property.</param>
         /// <param name="screenNbr">Initial value of the ScreenNbr property.</param>
         /// <param name="exportImage">Initial value of the ExportImage property.</param>
-        public static SYS_ReportExport CreateSYS_ReportExport(global::System.String reportNbr, global::System.String name, global::System.String tableView, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String type, global::System.String proc, global::System.String sourceType, global::System.String screenNbr, global::System.Boolean exportImage)
+        /// <param name="isReadOnly">Initial value of the IsReadOnly property.</param>
+        public static SYS_ReportExport CreateSYS_ReportExport(global::System.String reportNbr, global::System.String name, global::System.String tableView, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String type, global::System.String proc, global::System.String sourceType, global::System.String screenNbr, global::System.Boolean exportImage, global::System.Boolean isReadOnly)
         {
             SYS_ReportExport sYS_ReportExport = new SYS_ReportExport();
             sYS_ReportExport.ReportNbr = reportNbr;
@@ -586,6 +587,7 @@ namespace IF30100
             sYS_ReportExport.SourceType = sourceType;
             sYS_ReportExport.ScreenNbr = screenNbr;
             sYS_ReportExport.ExportImage = exportImage;
+            sYS_ReportExport.IsReadOnly = isReadOnly;
             return sYS_ReportExport;
         }
 
@@ -955,6 +957,30 @@ namespace IF30100
         private global::System.Boolean _ExportImage;
         partial void OnExportImageChanging(global::System.Boolean value);
         partial void OnExportImageChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsReadOnly
+        {
+            get
+            {
+                return _IsReadOnly;
+            }
+            set
+            {
+                OnIsReadOnlyChanging(value);
+                ReportPropertyChanging("IsReadOnly");
+                _IsReadOnly = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsReadOnly");
+                OnIsReadOnlyChanged();
+            }
+        }
+        private global::System.Boolean _IsReadOnly;
+        partial void OnIsReadOnlyChanging(global::System.Boolean value);
+        partial void OnIsReadOnlyChanged();
 
         #endregion
 

@@ -6,10 +6,10 @@
     <edmx:Diagrams>
       <Diagram DiagramId="f5dd6ad166ca44c29fecb93ad69bc74c" Name="Diagram1">
         <EntityTypeShape EntityType="IF30100SysModel.SYS_ReportOLAPFilter" Width="2" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="IF30100SysModel.SYS_ReportExport" Width="2.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="IF30100SysModel.SYS_ReportOLAPTemplate" Width="4" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="IF30100SysModel.SYS_Configurations" Width="1.5" PointX="11.152607855923757" PointY="25.202304583602725" />
-        <EntityTypeShape EntityType="IF30100SysModel.SYS_ReportExportParm" Width="1.5" PointX="6.5249184549436521" PointY="9.7959758982974918" />
+        <EntityTypeShape EntityType="IF30100SysModel.SYS_ReportOLAPTemplate" Width="4" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IF30100SysModel.SYS_Configurations" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="IF30100SysModel.SYS_ReportExportParm" Width="1.5" PointX="2.75" PointY="6.75" />
+        <EntityTypeShape EntityType="IF30100SysModel.SYS_ReportExport" Width="1.5" PointX="2.6182735406878748" PointY="7.7416158801604134" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
