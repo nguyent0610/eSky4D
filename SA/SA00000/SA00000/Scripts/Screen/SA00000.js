@@ -18,6 +18,7 @@ var checkLoad = function (sto) {
         _Source = 0;
         App.stoSYS_Company.reload();
         HQ.common.showBusy(false);
+        App.cboBranchOld.store.loadData(App.cboCpnyID.store.data.items);
     }
 };
 
@@ -39,6 +40,10 @@ var firstLoad = function () {
     App.cboTaxId02.getStore().addListener('load', checkLoad);
     App.cboTaxId03.getStore().addListener('load', checkLoad);
     App.cboSubCpnyID.getStore().addListener('load', checkLoad);
+
+    if (HQ.SA00000PP != '1') {
+        App.tabDetail.child('#pnlHandle').tab.hide();      
+    }
 };
 
 var menuClick = function (command) {
@@ -198,7 +203,10 @@ var cboCpnyID_TriggerClick = function (sender, value) {
         menuClick('new');
     }
 };
-
+var cboType_Change = function (sender, e) {
+    App.cboTerritory.store.clearFilter();
+    App.cboTerritory.store.filter('Zone', App.cboType.getValue());
+}
 var cboCountry_Change = function (sender, e) {
     App.cboState.getStore().load(function () {
         var curRecord = App.frmMain.getRecord();

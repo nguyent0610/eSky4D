@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
+using HQ.eSkySys;
 namespace SA00000.Controllers
 {
     [DirectController]
@@ -20,9 +21,18 @@ namespace SA00000.Controllers
         private string _screenNbr = "SA00000";
         private string _userName = Current.UserName;
         SA00000Entities _db = Util.CreateObjectContext<SA00000Entities>(true);
-
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         public ActionResult Index()
-        {  
+        {
+            var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "SA00000PP");
+            if (config != null )
+            {
+                 ViewBag.SA00000PP = config.IntVal;
+            }
+            else
+            {
+                ViewBag.SA00000PP = 0;
+            }
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -196,6 +206,14 @@ namespace SA00000.Controllers
                 #endregion
 
                 _db.SaveChanges();
+                // sau khi save xong gọi tới hàm tạo user hoặc chuyển save, truyền xuống danh sách
+                Dictionary<string, string> dicData = new Dictionary<string, string>();
+                dicData.Add("@BranchID",header.CpnyID);
+                dicData.Add("@UserManger",data["cboManager"]);
+                dicData.Add("@BranchOld",data["cboBranchOld"]);
+                dicData.Add("@SlsperID",data["cboSlsperID"]);
+
+                Util.getDataTableFromProc("SA00000_ppUserSales", dicData, true);
                 return Json(new { success = true, CpnyID = CpnyID }, "text/html");
             }
             catch (Exception ex)

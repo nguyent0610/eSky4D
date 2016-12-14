@@ -75,7 +75,16 @@
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
                     .LoadData()
-
+                , HQ.Combo().ID("cboType").Name("cboType").HQProcedure("SA00000_pcType").HQLangCode("SA00000TYPE")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Type")
+                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")
+                    .LoadData().ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboType_Change";
+                    })
                 , HQ.Combo().ID("cboTerritory").Name("cboTerritory").MarginSpec("5 0 0 0").AllowBlank(false)
                     .HQLangCode("TERRITORY").HQProcedure("SA00000_pcTerritory")
                     .HQColumnShow("Territory,Descr").DataIndex("Territory").DisplayField("Descr").ValueField("Territory")
@@ -164,15 +173,7 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
 
-                , HQ.Combo().ID("cboType").Name("cboType").HQProcedure("SA00000_pcType").HQLangCode("SA00000TYPE")
-                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Type")
-                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")
-                    .LoadData().ForceSelection(true)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst =>
-                    {
-                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                    })
+                
 
                 , HQ.TextBox().ID("Email").Name("Email").HQLangCode("EMAIL").MarginSpec("5 0 0 0").Width(600).AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
                 , HQ.TextBox().ID("Owner").Name("Owner").HQLangCode("OWNER").MarginSpec("5 0 0 0").Width(600).MaxLength(100).EnforceMaxLength(true)
@@ -514,7 +515,46 @@
                 {
                     lss.Render.Handler = "HQ.common.control_render(this,'grdSYS_SubCompany')";
                 })//tabpnlUserCompany
-        )//xtab
-    )// frmMain
-)
+                , X.Panel().ID("pnlHandle")        //////////////Tab thong tin cty/////////////
+                .Title(Util.GetLang("SA00000Process"))
+                .Layout(LayoutType.VBox).AutoScroll(true)
+                .Items(
+                    HQ.Combo().ID("cboManager").Name("cboManager").HQProcedure("SA00000_pcUser").HQLangCode("SA00000Manager").HQDBSys(true)
+                    .HQColumnShow("UserName,Name").DisplayField("UserName").ValueField("UserName").MultiSelect(true)
+                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")
+                    .LoadData().ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";                      
+                    })
+                    ,HQ.Combo().ID("cboBranchOld").Name("cboBranchOld").HQProcedure("SA00000_pcCompanyAll").HQDBSys(true).HQLangCode("SA00000BranchOld").HQAutoLoad(false)
+                    .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
+                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")                    
+                    .LoadData().ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Handler = "App.cboSlsperID.store.reload();";                 
+                    })
+                    
+                                
+                    ,HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").HQProcedure("SA00000_pcSlsperID").HQLangCode("SA00000SlsperID")
+                    .HQColumnShow("SlsperID,Name").DisplayField("SlsperID").ValueField("SlsperID").MultiSelect(true)
+                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                       new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchOld.getValue()", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData().ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";                      
+                    })
+                 )                
+            )//xtab
+        )// frmMain
+    )
 )
