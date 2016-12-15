@@ -386,6 +386,10 @@ var stoLoad = function (sto) {
     else if (!HQ.isUpdate && !HQ.isNew) {
         HQ.common.lockItem(App.frmMain, true);
     }
+
+    App.cboBranchOld.setValue('');
+    App.cboSlsperID.setValue('');
+    App.cboManager.setValue('');
 };
 
 /////////////////////////////// GIRD Sys_CompanyAddr /////////////////////////////////
