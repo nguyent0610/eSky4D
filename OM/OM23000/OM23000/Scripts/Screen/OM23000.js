@@ -215,9 +215,15 @@ var fupPPCStorePicReq_Change = function (fup, newValue, oldValue, eOpts, record)
                 HQ.message.process(msg, data, true);
                 if (data.result.Exist) {
                     if(_flagPosition == 1)
+                    {
                         _row.set('Video', data.result.Exist);
-                    else if (_flagPosition == 2)
+                        _row.set('tstamp', data.result.newTstamp);
+                    }
+                        
+                    else if (_flagPosition == 2) {
                         _row.set('Profile', data.result.Exist);
+                        _row.set('tstamp', data.result.newTstamp);
+                    }
                 }
             },
             failure: function (errorMsg, data) {
