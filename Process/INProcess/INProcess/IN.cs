@@ -271,8 +271,8 @@ namespace INProcess
                 try
                 {
                     lineRef  = (Convert.ToInt32(lstTrans.Compute("Max(LineRef)", "").ToString())+1).ToString();
-                    for(int l=lineRef.Length;l<5;l++)
-                            lineRef+="0"+lineRef;
+                    for (int l = lineRef.Length; l < 5; l++)
+                        lineRef = "0" + lineRef;
                 }
                 catch (Exception)
                 {
