@@ -156,15 +156,15 @@
                 )
                 .ColumnModel(
                     X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
-                    ////Colum Check
-                    //X.CheckColumn().DataIndex("Selected").Width(30).Editable(true).HideTitleEl(true)
-                    //    .HeaderItems(
-                    //        HQ.Checkbox().ID("ColCheckPDA")
-                    //            .Listeners(l =>
-                    //            {
-                    //                l.Change.Fn = "ColCheck_Header_Change";
-                    //            })
-                    //),
+                    //Colum Check
+                    X.CheckColumn().DataIndex("Selected").Width(30).Editable(true).HideTitleEl(true)
+                        .HeaderItems(
+                            HQ.Checkbox()
+                                .Listeners(l =>
+                                {
+                                    l.Change.Fn = "ColCheck_Header_Change";
+                                })
+                    ),
                     X.Column()
                     .DataIndex("OrderNbr")
                     .Width(100)
@@ -213,7 +213,7 @@
                     .Width(100)
                     .Text(Util.GetLang("UpdateDate"))
                     .Editor(
-                        X.DateField()
+                        X.DateField().DataIndex("UpdateDate")
                     )
 
 
