@@ -51,6 +51,7 @@ var ColCheck_Header_Change = function (value) {
                 item.set("Selected", value.checked);
             });
             App.stoPDA.resumeEvents();
+            App.grdPDA.view.refresh();
         }
         else if (App.cboType.getValue() == '2') {
             App.stoOrder.suspendEvents();
@@ -59,6 +60,7 @@ var ColCheck_Header_Change = function (value) {
                 item.set("Selected", value.checked);
             });
             App.stoOrder.resumeEvents();
+            App.grdOrder.view.refresh();
         }
     }
 };
@@ -70,6 +72,7 @@ var ColAddShop_Header_Change = function (value) {
             item.set("IsAddStock", value.checked);
         });
         App.stoOrder.resumeEvents();
+        App.grdOrder.view.refresh();
     }
 }
 
@@ -138,13 +141,36 @@ var menuClick = function (command) {
 };
 //// Process Data Menu click function///////////////////////////////////////////////////////
 var save = function () {
-    if (App.frmMain.isValid()) {
+    if (App.cboHandle.getValue() != 'C') {
+        return false;
+    }
+    if (App.cboType.getValue() == '1') {
+        var obj1 = HQ.store.findRecord(App.stoPDA, ['Selected'], [true]);
+        if (obj1) {
+            var obj = HQ.store.findRecord(App.stoPDA, ['Selected', 'UpdateDate'], [true, null]);
+            if (obj) {
+                HQ.message.show(201612250, '', '', true);
+                return false;
+            }
+        } else {
+            HQ.message.show(201612251, '', '', true);
+            return false;
+        }
+    }
+    else if (App.cboType.getValue() == '2') {
+        var obj1 = HQ.store.findRecord(App.stoOrder, ['Selected'], [true]);
+        if (!obj1) {
+            HQ.message.show(201612251, '', '', true);
+            return false;
+        }
+    }
+    if (App.frmMain.isValid()) {       
         App.frmMain.submit({
             timeout: 1800000,
             waitMsg: HQ.common.getLang("SavingData"),
-            url: 'SA02800/Save',
+            url: 'OM42700/Save',
             params: {
-                lstSYS_Role: HQ.store.getData(App.stoSYS_Role)
+                lstData: App.cboType.getValue() == '1' ? HQ.store.getData(App.stoPDA) : HQ.store.getData(App.stoOrder)
             },
             success: function (msg, data) {
                 HQ.message.process(msg, data, true);

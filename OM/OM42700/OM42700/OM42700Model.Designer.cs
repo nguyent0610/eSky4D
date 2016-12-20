@@ -4916,9 +4916,8 @@ namespace OM42700
         /// <param name="custName">Initial value of the CustName property.</param>
         /// <param name="orderDate">Initial value of the OrderDate property.</param>
         /// <param name="addr">Initial value of the Addr property.</param>
-        /// <param name="updateDate">Initial value of the UpdateDate property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM42700_pgPDA_Result CreateOM42700_pgPDA_Result(global::System.String branchID, global::System.String orderNbr, global::System.String custName, global::System.DateTime orderDate, global::System.String addr, global::System.DateTime updateDate, global::System.Byte[] tstamp)
+        public static OM42700_pgPDA_Result CreateOM42700_pgPDA_Result(global::System.String branchID, global::System.String orderNbr, global::System.String custName, global::System.DateTime orderDate, global::System.String addr, global::System.Byte[] tstamp)
         {
             OM42700_pgPDA_Result oM42700_pgPDA_Result = new OM42700_pgPDA_Result();
             oM42700_pgPDA_Result.BranchID = branchID;
@@ -4926,7 +4925,6 @@ namespace OM42700
             oM42700_pgPDA_Result.CustName = custName;
             oM42700_pgPDA_Result.OrderDate = orderDate;
             oM42700_pgPDA_Result.Addr = addr;
-            oM42700_pgPDA_Result.UpdateDate = updateDate;
             oM42700_pgPDA_Result.tstamp = tstamp;
             return oM42700_pgPDA_Result;
         }
@@ -5154,9 +5152,9 @@ namespace OM42700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.DateTime UpdateDate
+        public Nullable<global::System.DateTime> UpdateDate
         {
             get
             {
@@ -5171,8 +5169,8 @@ namespace OM42700
                 OnUpdateDateChanged();
             }
         }
-        private global::System.DateTime _UpdateDate;
-        partial void OnUpdateDateChanging(global::System.DateTime value);
+        private Nullable<global::System.DateTime> _UpdateDate;
+        partial void OnUpdateDateChanging(Nullable<global::System.DateTime> value);
         partial void OnUpdateDateChanged();
     
         /// <summary>

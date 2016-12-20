@@ -257,7 +257,7 @@
           <Property Type="String" Name="ClassID" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Addr" Nullable="false" MaxLength="4" />
           <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
-          <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="16" />
+          <Property Type="DateTime" Name="UpdateDate" Nullable="true" Precision="16" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
         <EntityType Name="OM_PDASalesOrd">

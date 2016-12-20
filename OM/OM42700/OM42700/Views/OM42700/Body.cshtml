@@ -39,7 +39,7 @@
                         .HQProcedure("OM42700_pcBranchAllByUser").HQColumnShow("BranchID,BranchName,Addr")
                         .DisplayField("BranchID").ValueField("BranchID")
                         .LabelWidth(130).Width(300).HQHeightWidth(400, 300)
-                        .AllowBlank(false).ForceSelection(true)
+                        .AllowBlank(true).ForceSelection(true)
                         .HQParam(new StoreParameterCollection(){
                             new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
@@ -121,7 +121,7 @@
 
                 )
             )
-         , X.TabPanel()
+         , X.Panel()
             .Border(true)
             .Region(Region.Center)
             .Layout(LayoutType.Fit)
@@ -151,7 +151,7 @@
                     {
                         l.Load.Fn = "sto_Load";
                         l.BeforeLoad.Fn = "sto_BeforeLoad";
-                        l.Update.Fn = "frmChange()";
+                        l.Update.Handler = "frmChange();";
                     })
                 )
                 .ColumnModel(
@@ -219,7 +219,7 @@
 
 
                 )
-              
+                .SelectionModel(X.RowSelectionModel().ID("slmSYS_Language").Mode(SelectionMode.Multi))
                 .BottomBar(
                         X.PagingToolbar()
                         .Items(
@@ -267,7 +267,7 @@
                     X.Store()
                     .ID("stoOrder")
                     .PageSize(50).AutoLoad(false)
-                    .Model(Util.GenerateModel(typeof(OM42700_pgPDA_Result), "mdlOrder", ""))
+                    .Model(Util.GenerateModel(typeof(OM42700_pgOrder_Result), "mdlOrder", ""))
                     .Parameters(ps =>
                     {
                         ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
@@ -280,7 +280,7 @@
                     {
                         l.Load.Fn = "sto_Load";
                         l.BeforeLoad.Fn = "sto_BeforeLoad";
-                        l.Update.Fn = "frmChange()";
+                        l.Update.Handler = "frmChange();";
                     })
                     )
                     .ColumnModel(
