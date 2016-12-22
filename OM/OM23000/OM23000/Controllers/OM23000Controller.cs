@@ -38,8 +38,8 @@ namespace OM23000.Controllers
                 var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadOM23000");
                 if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
                 {
-                    //_filePath = config.TextVal;
-                    _filePath = Server.MapPath("~\\Images\\OM23000");
+                    _filePath = config.TextVal;
+                    //_filePath = Server.MapPath("~\\Images\\OM23000");
                 }
                 else
                 {
@@ -60,7 +60,7 @@ namespace OM23000.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
