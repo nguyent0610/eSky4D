@@ -56,6 +56,11 @@ namespace OM23000.Controllers
 
         public ActionResult Index()
         {
+            if (!Directory.Exists(@"\\192.168.130.4\DevProjects\eSky4D"))
+            {
+                throw new MessageException(MessageType.Message, "2016111510", "", null, "", "");
+                //Directory.CreateDirectory(_filePath);
+            }
             Util.InitRight(_screenNbr);
             return View();
         }
