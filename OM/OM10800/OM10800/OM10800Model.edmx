@@ -1,0 +1,413 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="Batch" EntityType="eBiz4DWebSysModel.Store.Batch" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_ShipDelivery" EntityType="eBiz4DWebSysModel.Store.OM_ShipDelivery" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_ShipLine" EntityType="eBiz4DWebSysModel.Store.OM_ShipLine" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="Batch">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="Module" />
+            <PropertyRef Name="BatNbr" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="Module" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="TotAmt" Type="float" Nullable="false" />
+          <Property Name="DateEnt" Type="smalldatetime" Nullable="false" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="100" />
+          <Property Name="EditScrnNbr" Type="varchar" MaxLength="8" />
+          <Property Name="FromToSiteID" Type="varchar" MaxLength="10" />
+          <Property Name="ImpExp" Type="varchar" MaxLength="1" />
+          <Property Name="IntRefNbr" Type="varchar" MaxLength="10" />
+          <Property Name="JrnlType" Type="varchar" MaxLength="2" />
+          <Property Name="NoteID" Type="int" Nullable="false" />
+          <Property Name="OrigBatNbr" Type="varchar" MaxLength="10" />
+          <Property Name="OrigBranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="OrigScrnNbr" Type="varchar" MaxLength="5" />
+          <Property Name="ReasonCD" Type="varchar" MaxLength="10" />
+          <Property Name="RefNbr" Type="varchar" MaxLength="10" />
+          <Property Name="RvdBatNbr" Type="varchar" MaxLength="10" />
+          <Property Name="Rlsed" Type="smallint" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="1" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_ShipDelivery">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="SlsperID" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="SlsperID" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_ShipLine">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="OrdNbr" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="OrdNbr" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="OM10800_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM10800_pgDelivery" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="BatNbr" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="OM10800_pgDet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="BatNbr" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="OM10800_pgOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="BatNbr" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="OMNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="GetType" Type="varchar" Mode="In" />
+          <Parameter Name="OrderType" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM10800Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="OM10800Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="OM10800_pgDet" ReturnType="Collection(OM10800Model.OM10800_pgDet_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="OM10800_pgOrder" ReturnType="Collection(OM10800Model.OM10800_pgOrder_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="OM10800_pgDelivery" ReturnType="Collection(OM10800Model.OM10800_pgDelivery_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Batches" EntityType="OM10800Model.Batch" />
+          <EntitySet Name="OM_ShipDelivery" EntityType="OM10800Model.OM_ShipDelivery" />
+          <EntitySet Name="OM_ShipLine" EntityType="OM10800Model.OM_ShipLine" />
+          <FunctionImport Name="OM10800_pdHeader" ReturnType="Collection(OM10800Model.OM10800_pdHeader_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OMNumbering" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="GetType" Mode="In" Type="String" />
+            <Parameter Name="OrderType" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="OM10800_pgDet_Result">
+          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="InvtID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="LineQty" Nullable="false" />
+          <Property Type="String" Name="SlsUnit" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="OM10800_pgOrder_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="SlsPerID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="InvcNote" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="InvcNbr" Nullable="true" MaxLength="15" />
+          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="OM10800_pgDelivery_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+        </ComplexType>
+        <EntityType Name="Batch">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="Module" />
+            <PropertyRef Name="BatNbr" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Module" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="TotAmt" Nullable="false" />
+          <Property Type="DateTime" Name="DateEnt" Nullable="false" Precision="0" />
+          <Property Type="String" Name="Descr" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EditScrnNbr" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="FromToSiteID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ImpExp" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IntRefNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="JrnlType" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="NoteID" Nullable="false" />
+          <Property Type="String" Name="OrigBatNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OrigBranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OrigScrnNbr" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ReasonCD" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RefNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RvdBatNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="Rlsed" Nullable="false" />
+          <Property Type="String" Name="Status" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_ShipDelivery">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="SlsperID" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_ShipLine">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="OrdNbr" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OrdNbr" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="0" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="OM10800_pdHeader_Result">
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="DateEnt" Nullable="false" Precision="16" />
+          <Property Type="String" Name="RefNbr" Nullable="true" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="OM10800Entities" >
+          <FunctionImportMapping FunctionImportName="OM10800_pgDet" FunctionName="eBiz4DWebSysModel.Store.OM10800_pgDet">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM10800Model.OM10800_pgDet_Result">
+                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="LineQty" ColumnName="LineQty" />
+                <ScalarProperty Name="SlsUnit" ColumnName="SlsUnit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM10800_pgOrder" FunctionName="eBiz4DWebSysModel.Store.OM10800_pgOrder">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM10800Model.OM10800_pgOrder_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
+                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM10800_pgDelivery" FunctionName="eBiz4DWebSysModel.Store.OM10800_pgDelivery">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM10800Model.OM10800_pgDelivery_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Batches">
+            <EntityTypeMapping TypeName="OM10800Model.Batch">
+              <MappingFragment StoreEntitySet="Batch">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Rlsed" ColumnName="Rlsed" />
+                <ScalarProperty Name="RvdBatNbr" ColumnName="RvdBatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
+                <ScalarProperty Name="OrigScrnNbr" ColumnName="OrigScrnNbr" />
+                <ScalarProperty Name="OrigBranchID" ColumnName="OrigBranchID" />
+                <ScalarProperty Name="OrigBatNbr" ColumnName="OrigBatNbr" />
+                <ScalarProperty Name="NoteID" ColumnName="NoteID" />
+                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
+                <ScalarProperty Name="IntRefNbr" ColumnName="IntRefNbr" />
+                <ScalarProperty Name="ImpExp" ColumnName="ImpExp" />
+                <ScalarProperty Name="FromToSiteID" ColumnName="FromToSiteID" />
+                <ScalarProperty Name="EditScrnNbr" ColumnName="EditScrnNbr" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="DateEnt" ColumnName="DateEnt" />
+                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_ShipDelivery">
+            <EntityTypeMapping TypeName="OM10800Model.OM_ShipDelivery">
+              <MappingFragment StoreEntitySet="OM_ShipDelivery">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_ShipLine">
+            <EntityTypeMapping TypeName="OM10800Model.OM_ShipLine">
+              <MappingFragment StoreEntitySet="OM_ShipLine">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="OrdNbr" ColumnName="OrdNbr" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM10800_pdHeader" FunctionName="eBiz4DWebSysModel.Store.OM10800_pdHeader">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM10800Model.OM10800_pdHeader_Result">
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="DateEnt" ColumnName="DateEnt" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OMNumbering" FunctionName="eBiz4DWebSysModel.Store.OMNumbering" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" >
+        <EntityTypeShape EntityType="OM10800Model.Batch" Width="1.5" PointX="9.0499981963308525" PointY="3.5221098975847056" />
+        <EntityTypeShape EntityType="OM10800Model.OM_ShipDelivery" Width="1.5" PointX="0.912246488459523" PointY="12.860634049801451" />
+        <EntityTypeShape EntityType="OM10800Model.OM_ShipLine" Width="1.5" PointX="4.9548542150086039" PointY="23.710277121379168" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
