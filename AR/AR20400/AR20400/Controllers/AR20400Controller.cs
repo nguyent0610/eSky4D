@@ -33,6 +33,7 @@ namespace AR20400.Controllers
             var tabAdvTool = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabAdvTool");
             var tabSellingProduct = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabSellingProduct");
             var tabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
+			var readonlyShopType = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "blockShopType");
 
             if (tabContract == null)
                 ViewBag.Contract = "false";
@@ -74,6 +75,15 @@ namespace AR20400.Controllers
                     ViewBag.DisplayMethod = "false";
             }
 
+			if (readonlyShopType == null)
+				ViewBag.ReadonlyShopType = "false";
+			else
+			{
+				if (readonlyShopType.IntVal == 1)
+					ViewBag.ReadonlyShopType = "true";
+				else
+					ViewBag.ReadonlyShopType = "false";
+			}
             Util.InitRight(_screenNbr);
             return View();
         }

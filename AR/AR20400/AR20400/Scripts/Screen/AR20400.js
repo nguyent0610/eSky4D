@@ -55,6 +55,10 @@ var checkLoad = function (sto) {
             App.tabDetail.child('#pnlAR_CustSellingProducts').tab.hide();
         if (hideDisplayMethod == 'true')
             App.tabDetail.child('#pnlDispMethod').tab.hide();
+        if (readonlyShopType == 'true')
+            App.cboShopType.setReadOnly(true);
+        else
+            App.cboShopType.setReadOnly(false);
     }
 };
 
@@ -388,8 +392,11 @@ var stoLoad = function (sto) {
     else
         setAllowBank_InActive(true);
 
-    if (record.data.Status == 'H')
+    if (record.data.Status == 'H') {
         HQ.common.lockItem(App.frmMain, false);
+        if (readonlyShopType == 'true')
+            App.cboShopType.setReadOnly(true);
+    }
     else
         HQ.common.lockItem(App.frmMain, true);
 
