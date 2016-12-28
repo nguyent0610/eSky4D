@@ -127,6 +127,58 @@ namespace OM40600
     
             return base.ExecuteFunction<OM40600_pgSaleRouteMaster_Result>("OM40600_pgSaleRouteMaster", branchIDParameter, pJPIDParameter, custIDParameter, slsperIDParameter, routeIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="territory">No Metadata Documentation available.</param>
+        public ObjectResult<OM40600_pgLoadBranchID_Result> OM40600_pgLoadBranchID(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String territory)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter territoryParameter;
+            if (territory != null)
+            {
+                territoryParameter = new ObjectParameter("Territory", territory);
+            }
+            else
+            {
+                territoryParameter = new ObjectParameter("Territory", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM40600_pgLoadBranchID_Result>("OM40600_pgLoadBranchID", userIDParameter, cpnyIDParameter, langIDParameter, territoryParameter);
+        }
 
         #endregion
 
@@ -135,6 +187,159 @@ namespace OM40600
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM40600Model", Name="OM40600_pgLoadBranchID_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM40600_pgLoadBranchID_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM40600_pgLoadBranchID_Result object.
+        /// </summary>
+        /// <param name="pJPID">Initial value of the PJPID property.</param>
+        /// <param name="salesRouteID">Initial value of the SalesRouteID property.</param>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static OM40600_pgLoadBranchID_Result CreateOM40600_pgLoadBranchID_Result(global::System.String pJPID, global::System.String salesRouteID, global::System.String branchID)
+        {
+            OM40600_pgLoadBranchID_Result oM40600_pgLoadBranchID_Result = new OM40600_pgLoadBranchID_Result();
+            oM40600_pgLoadBranchID_Result.PJPID = pJPID;
+            oM40600_pgLoadBranchID_Result.SalesRouteID = salesRouteID;
+            oM40600_pgLoadBranchID_Result.BranchID = branchID;
+            return oM40600_pgLoadBranchID_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Selected
+        {
+            get
+            {
+                return _Selected;
+            }
+            set
+            {
+                OnSelectedChanging(value);
+                ReportPropertyChanging("Selected");
+                _Selected = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Selected");
+                OnSelectedChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Selected;
+        partial void OnSelectedChanging(Nullable<global::System.Boolean> value);
+        partial void OnSelectedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PJPID
+        {
+            get
+            {
+                return _PJPID;
+            }
+            set
+            {
+                OnPJPIDChanging(value);
+                ReportPropertyChanging("PJPID");
+                _PJPID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PJPID");
+                OnPJPIDChanged();
+            }
+        }
+        private global::System.String _PJPID;
+        partial void OnPJPIDChanging(global::System.String value);
+        partial void OnPJPIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SalesRouteID
+        {
+            get
+            {
+                return _SalesRouteID;
+            }
+            set
+            {
+                OnSalesRouteIDChanging(value);
+                ReportPropertyChanging("SalesRouteID");
+                _SalesRouteID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SalesRouteID");
+                OnSalesRouteIDChanged();
+            }
+        }
+        private global::System.String _SalesRouteID;
+        partial void OnSalesRouteIDChanging(global::System.String value);
+        partial void OnSalesRouteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

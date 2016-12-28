@@ -6,6 +6,12 @@
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer" />
+        <Function Name="OM40600_pgLoadBranchID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="Territory" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="OM40600_pgSaleRouteMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar(max)" Mode="In" />
           <Parameter Name="PJPID" Type="varchar(max)" Mode="In" />
@@ -24,6 +30,12 @@
             <Parameter Name="CustID" Mode="In" Type="String" />
             <Parameter Name="SlsperID" Mode="In" Type="String" />
             <Parameter Name="RouteID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM40600_pgLoadBranchID" ReturnType="Collection(OM40600Model.OM40600_pgLoadBranchID_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="Territory" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM40600_pgSaleRouteMaster_Result">
@@ -47,6 +59,13 @@
           <Property Type="Boolean" Name="Sat" Nullable="false" />
           <Property Type="Boolean" Name="Sun" Nullable="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="OM40600_pgLoadBranchID_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="PJPID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SalesRouteID" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -77,6 +96,17 @@
                 <ScalarProperty Name="Sat" ColumnName="Sat" />
                 <ScalarProperty Name="Sun" ColumnName="Sun" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM40600_pgLoadBranchID" FunctionName="eBiz4DWebSysModel.Store.OM40600_pgLoadBranchID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM40600Model.OM40600_pgLoadBranchID_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="PJPID" ColumnName="PJPID" />
+                <ScalarProperty Name="SalesRouteID" ColumnName="SalesRouteID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

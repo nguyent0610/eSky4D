@@ -8,9 +8,25 @@ var chkSelectHeader_change = function (chk, newValue, oldValue, eOpts) {
     App.stoDetail.resumeEvents();
     App.grdDetail.view.refresh();
 }
+var chkSelectHeaderBranchID_change = function (chk, newValue, oldValue, eOpts) {
+    App.stoDetailBranchID.suspendEvents();
+    var allData = App.stoDetailBranchID.snapshot || App.stoDetailBranchID.allData || App.stoDetailBranchID.data;
+    allData.each(function (record) {
+        record.set('Selected', chk.value);
+    });
+    App.stoDetailBranchID.resumeEvents();
+    App.grdDetailBranchID.view.refresh();
+}
+var chkSelectAllTerritory_change = function (chk, newValue, oldValue, eOpts) {
+    HQ.combo.selectAll(App.cboTerritory);
+}
 var dtpFromDate_change = function (dtp, newValue, oldValue, eOpts) {
     App.dtpToDate.setMinValue(newValue);
     App.dtpToDate.validate();
+}
+var dtpFromDateBranchID_change = function (dtp, newValue, oldValue, eOpts) {
+    App.dtpToDateBranchID.setMinValue(newValue);
+    App.dtpToDateBranchID.validate();
 }
 var cboBranchID_Change = function (item, newValue, oldValue) {
     App.cboPJPID.setValue('');
@@ -74,6 +90,41 @@ var btnGenerate_click = function () {
         HQ.message.show(728);
     }
 }
+var btnGenerateBranchID_click = function () {
+    if (HQ.isInsert || HQ.isUpdate) {
+        if (!App.dtpFromDate.validate()) {
+            App.dtpFromDate.setValue(App.dtpFromDateBranchID.getValue());
+        }
+        if (!App.dtpToDate.validate()) {
+            App.dtpToDate.setValue(App.dtpToDateBranchID.getValue());
+        }
+        var recordBranchID = HQ.store.findRecord(App.stoDetailBranchID, ["Selected"], [true]);
+        if (App.dtpFromDateBranchID.validate() && App.dtpToDateBranchID.validate() && recordBranchID != undefined) {
+
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang('SavingData'),
+                method: 'POST',
+                url: 'OM40600/SaveBranchID',
+                timeout: 1800000,
+                params: {
+                    lstDetBranchID: HQ.store.getAllData(App.stoDetailBranchID, ["Selected"], [true]),
+                    fromDateBranchID: App.dtpFromDateBranchID.getValue(),
+                    toDateBranchID: App.dtpToDateBranchID.getValue()
+                },
+                success: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                    btnLoadBranchID_click();
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+    else {
+        HQ.message.show(728);
+    }
+}
 var btnLoad_click = function () {
     HQ.branchID = '';
     HQ.slsperID = '';
@@ -109,6 +160,9 @@ var btnLoad_click = function () {
 
     App.stoDetail.reload();
 }
+var btnLoadBranchID_click = function () {
+    App.stoDetailBranchID.reload();
+}
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
 
@@ -121,6 +175,9 @@ var firstLoad = function () {
     App.dtpToDate.setValue(HQ.bussinessDate);
     App.dtpFromDate.setMinValue(HQ.bussinessDate);
 
+    App.dtpFromDateBranchID.setValue(HQ.bussinessDate);
+    App.dtpToDateBranchID.setValue(HQ.bussinessDate);
+        
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
@@ -140,7 +197,18 @@ var stoBeforeLoad = function (sto) {
 };
 
 /////////////////////////////////////////////////////////////////////////
-
+var joinParams = function (multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
+    }
+    else {
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
+        }
+    }
+    return returnValue;
+};
 
 
 

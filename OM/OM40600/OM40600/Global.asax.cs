@@ -36,16 +36,16 @@ namespace OM40600
             //Session["CpnyID"] = Current.CpnyID = "HQH00000";
             //Session["Language"] = Current.Language = "vi";
             //Session["LangID"] = 1;
-
+            Current.FormatDate = "dd-MM-yyyy";
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "DG_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();DG_eSky4DSys
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM40600"] = acc;
-            Session["DBApp"] = Current.DBApp = "DG_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";DG_eSky4DApp
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "18510580";
             Session["Language"] = Current.Language = "vi";
