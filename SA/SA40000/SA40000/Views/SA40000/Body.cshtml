@@ -123,13 +123,14 @@
                         )
                         , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                         .Items(
-                            HQ.NumberField().ID("lblWrkLowerDays").Name("WRKLOWERDAYS").HQLangCode("WRKLOWERDAYS").MarginSpec("5 0 0 0").Width(250).MinValue(0)
-                            , HQ.NumberField().ID("lblWrkUpperDays").Name("WRKUPPERDAYS").HQLangCode("WRKUPPERDAYS").MarginSpec("5 0 10 0").Width(250).MinValue(0)
+                            HQ.NumberField().ID("lblWrkLowerDays").Name("WRKLOWERDAYS").HQLangCode("WRKLOWERDAYS").MarginSpec("5 0 0 0").Width(250).MinValue(0).DecimalPrecision(0)
+                            , HQ.NumberField().ID("lblWrkUpperDays").Name("WRKUPPERDAYS").HQLangCode("WRKUPPERDAYS").MarginSpec("5 0 10 0").Width(250).MinValue(0).DecimalPrecision(0)
                         )
                         , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
      
                         .Items(
                             HQ.Checkbox().ID("chkWrkDateChk").Name("WRKDATECHK").HQLangCode("WRKDATECHK").MarginSpec("5 0 0 10")
+                         
                             , HQ.Button().ID("btnUpdate").HQLangCode("SA40000_Update").MarginSpec("5 0 0 10").Width(150)
                             .Listeners(p =>
                                 {
@@ -192,8 +193,12 @@
 
                     , X.Column().Text(Util.GetLang("Address")).DataIndex("Address").Width(150).Renderer("renderAddress")
 
-                    , X.CheckColumn().ID("WrkDateChk").Text(Util.GetLang("WrkDateChk")).DataIndex("WrkDateChk").Width(150).Editable(true)
-
+                    , X.CheckColumn().ID("WrkDateChk").DataIndex("WrkDateChk").Width(150).Editable(true).HideTitleEl(true)
+                       .HeaderItems(
+                            HQ.Checkbox().ID("chkSelectHeaderkWrkDateChk").HQLangCode("WrkDateChk")
+                            .Handler("chkSelectHeaderkWrkDateChk_change")
+                        )
+                    
                     , HQ.DateColumn().Text(Util.GetLang("WrkAdjDate")).DataIndex("WrkAdjDate")
                     .Width(150).ID("txtWrkAdjDate").Editor(HQ.DateField())
                   //   ,HQ.DateColumn().DataIndex("WrkAdjDate").Width(150).ID("txtWrkAdjDate").Editor(HQ.DateField())
@@ -201,11 +206,11 @@
                     , HQ.DateColumn().Text(Util.GetLang("WrkOpenDate")).DataIndex("WrkOpenDate")
                     .Width(150).ID("txtWrkOpenDate").Editor(HQ.DateField())
                    
-                    , X.NumberColumn().ID("WrkLowerDays").Text(Util.GetLang("WrkLowerDays")).DataIndex("WrkLowerDays").Format("0,000")
+                    , X.NumberColumn().ID("WrkLowerDays").Text(Util.GetLang("WrkLowerDays")).DataIndex("WrkLowerDays").Format("0")
                     .Width(150).Align(Alignment.Right)
                     .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
 
-                    , X.NumberColumn().ID("WrkUpperDays").Text(Util.GetLang("WrkUpperDays")).DataIndex("WrkUpperDays").Format("0,000").Width(150).Align(Alignment.Right)
+                    , X.NumberColumn().ID("WrkUpperDays").Text(Util.GetLang("WrkUpperDays")).DataIndex("WrkUpperDays").Format("0").Width(150).Align(Alignment.Right)
                     .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
 
                     , X.CommandColumn().Width(150)

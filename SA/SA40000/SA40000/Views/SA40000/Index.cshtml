@@ -32,9 +32,9 @@
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
         HQ.formatDate = '@Current.FormatDate';
-        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.isUpdate =true;// HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = true; //HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = true; //HQ.util.toBool('@acc.Delete.ToString()');
         var _dateServer = '@DateTime.Now.ToString("MM/dd/yyyy")';
     </script>  
     <title>@ViewBag.Title</title>

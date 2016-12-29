@@ -79,13 +79,28 @@ var menuClick = function (command) {
 
 var btnUpdate_Click = function (sender, e) {
     if (App.frmMain.isValid()) {
-        App.grdSYS_CloseDateSetUp.getStore().each(function (item) {
-            item.set("WrkDateChk", App.chkWrkDateChk.checked);
-            item.set("WrkUpperDays", App.lblWrkUpperDays.getValue());
-            item.set("WrkLowerDays", App.lblWrkLowerDays.getValue());
-            item.set("WrkOpenDate", App.lblWrkOpenDate.getValue());
-            item.set("WrkAdjDate", App.lblWrkAdjDate.getValue());
+        var store = App.stoSYS_CloseDateSetUp;
+        var allRecords = store.snapshot || store.allData || store.data;
+        store.suspendEvents();
+        allRecords.each(function (record) {
+            if (!Ext.isEmpty(record.data.BranchID))
+               // record.set('WrkDateChk', value);
+            record.set("WrkDateChk", App.chkWrkDateChk.checked);
+            record.set("WrkUpperDays", App.lblWrkUpperDays.getValue());
+            record.set("WrkLowerDays", App.lblWrkLowerDays.getValue());
+            record.set("WrkOpenDate", App.lblWrkOpenDate.getValue());
+            record.set("WrkAdjDate", App.lblWrkAdjDate.getValue());
         });
+        store.resumeEvents();
+        App.grdSYS_CloseDateSetUp.view.refresh();
+
+        //App.grdSYS_CloseDateSetUp.getStore().each(function (item) {
+        //    item.set("WrkDateChk", App.chkWrkDateChk.checked);
+        //    item.set("WrkUpperDays", App.lblWrkUpperDays.getValue());
+        //    item.set("WrkLowerDays", App.lblWrkLowerDays.getValue());
+        //    item.set("WrkOpenDate", App.lblWrkOpenDate.getValue());
+        //    item.set("WrkAdjDate", App.lblWrkAdjDate.getValue());
+        //});
     }
     else if (!App.lblWrkAdjDate.isValid()) {
 
@@ -411,3 +426,19 @@ var myValidateRecord = function (filter, record, columnName) {
     return false;
 };
 /////////////////////////////////////////////////////////////////////////
+
+var chkSelectHeaderkWrkDateChk_change = function (sender, value, oldValue) {
+    if (HQ.isUpdate)  {
+        var store = App.stoSYS_CloseDateSetUp;
+        var allRecords = store.snapshot || store.allData || store.data;
+        store.suspendEvents();
+        allRecords.each(function (record) {
+            if (!Ext.isEmpty(record.data.BranchID))
+                record.set('WrkDateChk', value);
+        });
+        store.resumeEvents();
+        App.grdSYS_CloseDateSetUp.view.refresh();
+    }
+    else
+        App.chkSelectHeaderkWrkDateChk.setValue(false);
+};
