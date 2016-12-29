@@ -37,11 +37,13 @@ namespace OM40600.Controllers
 
         public ActionResult GetData(string branchID, string pJPID, string custID, string slsperID, string routeID)
         {
+            _db.CommandTimeout = int.MaxValue;
             var dets = _db.OM40600_pgSaleRouteMaster(branchID, pJPID, custID, slsperID, routeID).ToList();
             return this.Store(dets);
         }
         public ActionResult GetDataBranchID(string territory)
         {
+            _db.CommandTimeout = int.MaxValue;
             var detBranchID = _db.OM40600_pgLoadBranchID(Current.UserName, Current.CpnyID, Current.LangID, territory).ToList();
             return this.Store(detBranchID);
         }
@@ -113,7 +115,7 @@ namespace OM40600.Controllers
             DataAccess dal = Util.Dal();
             try
             {
-
+                dal.CmdTimeout = int.MaxValue;
                 var detHeader = new StoreDataHandler(data["lstDetBranchID"]);
                 var lstDetBranchID = detHeader.ObjectData<OM40600_pgLoadBranchID_Result>().ToList();
 
@@ -123,27 +125,29 @@ namespace OM40600.Controllers
                 DateTime toDateBranchID = data["toDateBranchID"].ToDateShort();
 
 
-                string lstslsPerID = "";
-                string lstRouteID = "";
-                string lstCust = "";
-                string lstPJP = "";
-                string lstBranch = "";
-                foreach (var objBranch in lstDetBranchID)
+                StringBuilder lstslsPerID = new StringBuilder();
+                StringBuilder lstRouteID = new StringBuilder();
+                StringBuilder lstCust = new StringBuilder();
+                StringBuilder lstPJP = new StringBuilder();
+                StringBuilder lstBranch = new StringBuilder();
+                int numDetBranchID = lstDetBranchID.Count;
+                for (int j = 0; j < numDetBranchID; j++)
                 {
-                    var lstDet = _db.OM40600_pgSaleRouteMaster(objBranch.BranchID, objBranch.PJPID,"%","%", objBranch.SalesRouteID).ToList();
-                    foreach (var objHeader in lstDet)
+                    var lstDet = _db.OM40600_pgSaleRouteMaster(lstDetBranchID[j].BranchID, lstDetBranchID[j].PJPID, "%", "%", lstDetBranchID[j].SalesRouteID).ToList();
+                    int numOfDet = lstDet.Count;
+                    for (int i = 0; i < numOfDet; i++)
                     {
-                        lstslsPerID += objHeader.SlsPerID + ",";
-                        lstRouteID += objHeader.SalesRouteID + ",";
-                        lstCust += objHeader.CustID + ",";
-                        lstPJP += objHeader.PJPID + ",";
-                        lstBranch += objHeader.BranchID + ",";
+                        lstslsPerID.Append(lstDet[i].SlsPerID).Append(",");
+                        lstRouteID.Append(lstDet[i].SalesRouteID).Append(",");
+                        lstCust.Append(lstDet[i].CustID).Append(",");
+                        lstPJP.Append(lstDet[i].PJPID).Append(",");
+                        lstBranch.Append(lstDet[i].BranchID).Append(",");
                     }
                     try
                     {
                         PJPProcess.PJP pjp = new PJPProcess.PJP(Current.UserName, _screenNbr, dal);
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!pjp.OM40600CreateMCP(lstslsPerID, lstRouteID, lstCust, lstPJP, lstBranch, fromDateBranchID, toDateBranchID))
+                        if (!pjp.OM40600CreateMCP(lstslsPerID.PassNull(), lstRouteID.PassNull(), lstCust.PassNull(), lstPJP.PassNull(), lstBranch.PassNull(), fromDateBranchID, toDateBranchID))
                         {
                             dal.RollbackTrans();
                         }
