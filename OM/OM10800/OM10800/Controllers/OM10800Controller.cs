@@ -15,7 +15,7 @@ using HQFramework.DAL;
 using HQFramework.Common;
 using System.Drawing;
 using System.Globalization;
-
+using HQ.eSkySys;
 namespace OM10800.Controllers
 {
     [DirectController]
@@ -26,11 +26,22 @@ namespace OM10800.Controllers
         private string _screenNbr = "OM10800";
         private string _userName = Current.UserName;
         OM10800Entities _db = Util.CreateObjectContext<OM10800Entities>(false);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private JsonResult _logMessage;
-        public ActionResult Index()
+        public ActionResult Index(string branchID)
         {
           
             Util.InitRight(_screenNbr);
+            var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
+
+            if (branchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
+            {
+                return View("Popup");
+            }
+
+            if (branchID == null) branchID = Current.CpnyID;
+
+            ViewBag.BranchID = branchID;
             return View();
         }
 
@@ -68,7 +79,7 @@ namespace OM10800.Controllers
         {
             try
             {
-                string BranchID = data["cboCpnyID"].PassNull();
+                string BranchID = data["txtBranchID"].PassNull();
                 string BatNbr = data["cboBatNbr"].PassNull();
 
                 var batch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "OM");
@@ -105,7 +116,7 @@ namespace OM10800.Controllers
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstHeader"]);
                 var curHeader = dataHandler.ObjectData<OM10800_pdHeader_Result>().FirstOrDefault();
-                var CpnyID = data["cboCpnyID"].PassNull().ToUpper().Trim();
+                var CpnyID = data["txtBranchID"].PassNull().ToUpper().Trim();
                 var Handle = data["cboHandle"].PassNull().ToUpper().Trim();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstOrder"]);
@@ -146,7 +157,7 @@ namespace OM10800.Controllers
                 #region Save Order
 
                 lstOrder.Created.AddRange(lstOrder.Updated);
-
+                var lstRowDB = _db.OM_ShipLine.Where(p => p.BranchID == header.BranchID && p.BatNbr == header.BatNbr).ToList();
                 foreach (OM10800_pgOrder_Result curRow in lstOrder.Created)
                 {
 
@@ -177,12 +188,16 @@ namespace OM10800.Controllers
 
                             Updating_OM_ApproveOrder(RowDB, curRow);
                             _db.OM_ShipLine.AddObject(RowDB);
+                            lstRowDB.Add(RowDB);
                         }
                     }
                     else
                     {
                         if (RowDB != null)
+                        {
                             _db.OM_ShipLine.DeleteObject(RowDB);
+                            lstRowDB.Remove(RowDB);
+                        }
                     }
                 }
                 #endregion
@@ -232,7 +247,22 @@ namespace OM10800.Controllers
                 }
                 #endregion
                 if (Handle.PassNull() != "" && Handle.PassNull() != "N")
-                    header.Status = Handle;
+                {
+                    string lOrder = "";
+                    foreach (var objr in lstRowDB)
+                    {
+                        lOrder += objr.OrdNbr + ",";
+                    }
+
+                    var obj = _db.OM10800_ppCheckChangeStatus(Current.UserName, Current.CpnyID, Current.LangID, header.BranchID, header.BatNbr,lOrder, Handle).FirstOrDefault();
+                    if (obj.PassNull() == "")
+                        header.Status = Handle;
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "2013103001", "", new string[] { obj });
+                       
+                    }
+                }
                 _db.SaveChanges();
                 return Util.CreateMessage(MessageProcess.Save, header);
 

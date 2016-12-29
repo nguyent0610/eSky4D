@@ -110,6 +110,15 @@
           <Parameter Name="StartDate" Type="datetime" Mode="In" />
           <Parameter Name="EndDate" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="OM10800_ppCheckChangeStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
+          <Parameter Name="ListOrderNbr" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Handle" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="OMNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="GetType" Type="varchar" Mode="In" />
@@ -159,6 +168,15 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="GetType" Mode="In" Type="String" />
             <Parameter Name="OrderType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM10800_ppCheckChangeStatus" ReturnType="Collection(String)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="ListOrderNbr" Mode="In" Type="String" />
+            <Parameter Name="Handle" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM10800_pgDet_Result">
@@ -383,6 +401,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="OMNumbering" FunctionName="eBiz4DWebSysModel.Store.OMNumbering" />
+          <FunctionImportMapping FunctionImportName="OM10800_ppCheckChangeStatus" FunctionName="eBiz4DWebSysModel.Store.OM10800_ppCheckChangeStatus" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

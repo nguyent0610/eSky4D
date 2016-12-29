@@ -33,6 +33,7 @@
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
         HQ.bussinessDate = new Date('@DateTime.Now.Date');
+        HQ.branchID = '@ViewBag.branchID';
     </script>  
     <title>@ViewBag.Title</title>
 </head>
@@ -53,7 +54,7 @@
                 )
                 .Parameters(ps =>
                 {
-                    ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
                     ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
                 })
                         .Listeners(p => { p.Load.Fn = "stoData_Load"; p.Update.Fn = "frmChange"; })
@@ -75,7 +76,7 @@
             )
             .Parameters(ps =>
             {
-                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));               
                 ps.Add(new StoreParameter("startDate", "App.dteStartDate.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("endDate", "App.dteEndDate.getValue()", ParameterMode.Raw));
@@ -101,7 +102,7 @@
             )
             .Parameters(ps =>
             {
-                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));               
             })
             .Listeners(p => {

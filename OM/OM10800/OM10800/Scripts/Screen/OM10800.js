@@ -5,9 +5,6 @@ var fieldsLangCheckRequire = ["RoleID","Desc"];
 
 var _Source = 0;
 var _maxSource = 3;
-var _SourceByCboCpnyID = 0;
-var _maxSourceByCboCpnyID = 2;
-var _maxSource = 3;
 var _SourceData = 0;
 var _maxSourceData = 4;
 
@@ -19,14 +16,18 @@ var checkLoad = function (sto) {
     if (_Source == _maxSource) {
         _Source = 0;      
         HQ.common.showBusy(false);
-        App.cboCpnyID.setValue(HQ.cpnyID);
+        App.cboBatNbr.getStore().reload();
     }
 };
-var checkLoadBycboCpnyID = function (sto) {
-    _SourceByCboCpnyID++;
-    if (_SourceByCboCpnyID == _maxSourceByCboCpnyID) {
+var cboBatNbr_LoadStore = function (sto) {
+    App.cboBatNbr.suspendEvents();//tat su kien cho combobox
+    App.cboBatNbr.setValue('');   //set giá trị '' để chút bắt sự kiện change cho combo     
+    App.cboBatNbr.resumeEvents();
+    if (HQ.batNbr) {
         App.cboBatNbr.setValue(HQ.batNbr);
-        HQ.common.showBusy(false);
+    }
+    else {
+        bindHeader(true);
     }
 }
 
@@ -43,22 +44,14 @@ var stoData_Load = function (sto) {
            
             bindHeader(false);
         }
-        else bindHeader(true);
+        else
+            bindHeader(true);
     }
 };
-var checkLoadDatacboCpnyID_Change = function () {//load cac master phụ thuộc vào combo là key của màn hình rồi mới bind dữ liệu lên    
-    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    _SourceByCboCpnyID = 0;//dem lai source data load
-    App.cboBatNbr.getStore().reload();
-    App.cboLicensePlate.getStore().reload();
-    
-};
-
-
-var checkLoadData_Change = function () {//load cac master phụ thuộc vào combo là key của màn hình rồi mới bind dữ liệu lên
+var checkLoadDatacboBatNbr_Change = function () {//load cac master phụ thuộc vào combo là key của màn hình rồi mới bind dữ liệu lên
     if (App.cboBatNbr.rawValue == "")//truong hop new moi
     {
-        loadData();
+        if (!HQ.isNew) bindHeader(true);//neu la dang new thi chi xoa ma, cho nhap ma lai
     } else {
         loadData();
     }
@@ -125,25 +118,30 @@ var menuClick = function (command) {
 };
 
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var btnPopupOk_Click = function () {
+    if (!Ext.isEmpty(App.cboPopupCpny.getValue())) {
+        App.winPopup.hide();
+        window.location.href = 'OM10800?branchID=' + App.cboPopupCpny.getValue();
+    } else {
+        HQ.message.show(1000, [HQ.common.getLang('branchid')], '', true);
+    }
+}
 var firstLoad = function () {
+    App.txtBranchID.setValue(HQ.branchID);
     HQ.util.checkAccessRight();
     App.frmMain.isValid();
-    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.cboCpnyID.getStore().addListener('load', checkLoad);
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData")); 
     App.cboHandle.getStore().addListener('load', checkLoad);
-    App.cboStatus.getStore().addListener('load', checkLoad);
+    App.cboStatus.getStore().addListener('load', checkLoad);   
+    App.cboLicensePlate.getStore().addListener('load', checkLoad);
 
-    App.cboBatNbr.getStore().addListener('load', checkLoadBycboCpnyID);
-    App.cboLicensePlate.getStore().addListener('load', checkLoadBycboCpnyID);
 
-    App.cboCpnyID.getStore().reload();
     App.cboHandle.getStore().reload();
     App.cboStatus.getStore().reload();
+    App.cboLicensePlate.getStore().reload();
 
-
-
+    App.cboBatNbr.getStore().addListener('load', cboBatNbr_LoadStore);
 };
-
 var frmChange = function () {    
     HQ.isChange = HQ.store.isChange(App.stoDet) || HQ.store.isChange(App.stoDelivery);
     HQ.common.changeData(HQ.isChange, 'OM10800');//co thay doi du lieu gan * tren tab title header
@@ -154,28 +152,15 @@ var frmChange = function () {
     }
 };
 
-function cboCpnyID_Change(items, newValue, oldValue) {
-    if ((items.rawValue == "" || !items.hasFocus)) {// ko phai la truong hop new, neu xoa combo thi new moi hoặc trường hợp ko focus combo co thay doi thi load lai source        
-        checkLoadDatacboCpnyID_Change();
-    }
-}
-function cboCpnyID_Select(items, newValue, oldValue) {
-    checkLoadDatacboCpnyID_Change();
-}
-//khi nhan combo xo ra, neu da thay doi thi ko xo ra
-function cboCpnyID_Expand(sender, value) {
-    if (HQ.isChange) {
-        App.cboCpnyID.collapse();
-    }
-};
+
 
 function cboBatNbr_Change(items, newValue, oldValue) {
     if ((items.rawValue == "" || !items.hasFocus)) {// ko phai la truong hop new, neu xoa combo thi new moi hoặc trường hợp ko focus combo co thay doi thi load lai source        
-        checkLoadData_Change();
+        checkLoadDatacboBatNbr_Change();
     }
 }
 function cboBatNbr_Select(items, newValue, oldValue) {
-    checkLoadData_Change();
+    checkLoadDatacboBatNbr_Change();
 }
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
 function cboBatNbr_Expand(sender, value) {
@@ -196,7 +181,7 @@ var chkSelectHeaderOrder_Change = function (chk, newValue, oldValue, eOpts) {
     App.stoOrder.suspendEvents();
     var allData = App.stoOrder.snapshot || App.stoOrder.allData || App.stoOrder.data;
     allData.each(function (record) {
-        record.data.Selected = chk.value;
+        record.set('Selected', chk.value);
     });
     App.stoOrder.resumeEvents();
     App.grdOrder.view.refresh();
@@ -206,7 +191,7 @@ var chkSelectHeaderDelivery_Change = function (chk, newValue, oldValue, eOpts) {
     App.stoDelivery.suspendEvents();
     var allData = App.stoDelivery.snapshot || App.stoDelivery.allData || App.stoDelivery.data;
     allData.each(function (record) {
-        record.data.Selected = chk.value;
+        record.set('Selected',chk.value);
     });
     App.stoDelivery.resumeEvents();
     App.grdDelivery.view.refresh();
@@ -236,6 +221,10 @@ var bindHeader = function (isNew) {
     //các combo phu thuoc de phai clear het filter de lay gia tri cho dung
     App.cboHandle.getStore().clearFilter();  
     if (isNew) {
+        App.stoOrder.reload();
+        App.stoDet.reload();
+        App.stoDelivery.reload();
+
         App.stoHeader.clearData();
         HQ.store.insertBlank(App.stoHeader);
         record = App.stoHeader.getAt(0);
