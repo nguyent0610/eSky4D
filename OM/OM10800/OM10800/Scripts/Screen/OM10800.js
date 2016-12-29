@@ -68,7 +68,6 @@ var loadData = function () {
 }
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
-
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -116,7 +115,6 @@ var menuClick = function (command) {
             break;
     }
 };
-
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var btnPopupOk_Click = function () {
     if (!Ext.isEmpty(App.cboPopupCpny.getValue())) {
@@ -152,8 +150,6 @@ var frmChange = function () {
     }
 };
 
-
-
 function cboBatNbr_Change(items, newValue, oldValue) {
     if ((items.rawValue == "" || !items.hasFocus)) {// ko phai la truong hop new, neu xoa combo thi new moi hoặc trường hợp ko focus combo co thay doi thi load lai source        
         checkLoadDatacboBatNbr_Change();
@@ -168,7 +164,6 @@ function cboBatNbr_Expand(sender, value) {
         App.cboBatNbr.collapse();
     }
 };
-
 var slmOrder_Select= function (slm, selRec, idx, eOpts) {   
     App.grdDet.store.filterBy(function (record) {
         if (record.data.OrderNbr == selRec.data.OrderNbr) {
@@ -300,7 +295,6 @@ var save = function () {
         });
     }
 };
-
 var deleteData = function (item) {
     if (item == "yes") {
         App.frmMain.submit({
@@ -318,7 +312,6 @@ var deleteData = function (item) {
         });
     }
 };
-
 function refresh(item) {
     if (item == 'yes') {
         HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
