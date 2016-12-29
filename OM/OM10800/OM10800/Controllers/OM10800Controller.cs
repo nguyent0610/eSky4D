@@ -256,11 +256,14 @@ namespace OM10800.Controllers
 
                     var obj = _db.OM10800_ppCheckChangeStatus(Current.UserName, Current.CpnyID, Current.LangID, header.BranchID, header.BatNbr,lOrder, Handle).FirstOrDefault();
                     if (obj.PassNull() == "")
+                    {
                         header.Status = Handle;
+                        header.Rlsed = (Handle == "C" ? 1 : (Handle == "V" ? -1 : 0)).ToShort();
+                    }
                     else
                     {
                         throw new MessageException(MessageType.Message, "2013103001", "", new string[] { obj });
-                       
+
                     }
                 }
                 _db.SaveChanges();

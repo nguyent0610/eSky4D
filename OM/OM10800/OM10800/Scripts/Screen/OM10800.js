@@ -32,13 +32,12 @@ var cboBatNbr_LoadStore = function (sto) {
 }
 
 var stoData_Load = function (sto) {
-    
     _SourceData++;
     if (_SourceData == _maxSourceData) {
         setTimeout(function () {
             App.slmOrder.select(-1);
             App.slmOrder.select(0);
-        }, 300);
+        }, 100);
      
         if (App.stoHeader.data.items.length > 0) {
            
@@ -164,7 +163,7 @@ function cboBatNbr_Expand(sender, value) {
         App.cboBatNbr.collapse();
     }
 };
-var slmOrder_Select= function (slm, selRec, idx, eOpts) {   
+var slmOrder_Select = function (slm, selRec, idx, eOpts) {   
     App.grdDet.store.filterBy(function (record) {
         if (record.data.OrderNbr == selRec.data.OrderNbr) {
             return record;
@@ -216,6 +215,7 @@ var bindHeader = function (isNew) {
     //các combo phu thuoc de phai clear het filter de lay gia tri cho dung
     App.cboHandle.getStore().clearFilter();  
     if (isNew) {
+        _SourceData = 1;
         App.stoOrder.reload();
         App.stoDet.reload();
         App.stoDelivery.reload();
