@@ -267,8 +267,16 @@ namespace PJPProcess
             DateTime TodateTmp=Todate;
             for (int y = 0; y <= subYear; y++)
             {
-                Fromdate = y == 0 ? Fromdate : new DateTime(Fromdate.Year+y, 1, 1);
-                Todate = y == subYear ? TodateTmp : new DateTime(Fromdate.Year, 12, 31);
+
+                int nextyear = Fromdate.Year + 1;
+                if (y != 0)
+                {
+                    Fromdate = new DateTime(nextyear, 1, 1);
+                    Todate = new DateTime(nextyear, 12, 31);
+                }
+                if (y == subYear) Todate = TodateTmp;
+                
+
                 int iWeekStart = cal.GetWeekOfYear(Fromdate, dfi.CalendarWeekRule,
                                               dfi.FirstDayOfWeek);
 
