@@ -100,30 +100,44 @@ var btnGenerateBranchID_click = function () {
         }
         var recordBranchID = HQ.store.findRecord(App.stoDetailBranchID, ["Selected"], [true]);
         if (App.dtpFromDateBranchID.validate() && App.dtpToDateBranchID.validate() && recordBranchID != undefined) {
-
-            App.frmMain.submit({
-                waitMsg: HQ.common.getLang('SavingData'),
-                method: 'POST',
-                url: 'OM40600/SaveBranchID',
-                timeout: 1800000,
-                params: {
-                    lstDetBranchID: HQ.store.getAllData(App.stoDetailBranchID, ["Selected"], [true]),
-                    fromDateBranchID: App.dtpFromDateBranchID.getValue(),
-                    toDateBranchID: App.dtpToDateBranchID.getValue()
-                },
-                success: function (msg, data) {
-                    HQ.message.process(msg, data, true);
-                    btnLoadBranchID_click();
-                },
-                failure: function (msg, data) {
-                    HQ.message.process(msg, data, true);
-                }
-            });
+            var record = HQ.store.findRecord(App.stoDetailBranchID, ["Selected"], [true]);
+            if(record)
+                saveBranch(record);
         }
     }
     else {
         HQ.message.show(728);
     }
+}
+var saveBranch = function (record) {  
+    if (record) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang('SavingData'),
+            method: 'POST',
+            url: 'OM40600/SaveBranchID',
+            timeout: 18000000,
+            params: {
+                BranchID: record.data.BranchID,
+                PJPID: record.data.PJPID,
+                SalesRouteID: record.data.SalesRouteID,
+                fromDateBranchID: App.dtpFromDateBranchID.getValue(),
+                toDateBranchID: App.dtpToDateBranchID.getValue()
+            },
+            success: function (msg, data) {
+                record.data.Selected = false;
+                var record1= HQ.store.findRecord(App.stoDetailBranchID, ["Selected"], [true]);
+                if (record1)
+                    saveBranch(record1);
+                else {
+                    HQ.message.process(msg, data, true);
+                    btnLoadBranchID_click();
+                }
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    } 
 }
 var btnLoad_click = function () {
     HQ.branchID = '';

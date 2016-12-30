@@ -110,14 +110,14 @@ namespace OM40600.Controllers
         #endregion
          #region DataBranchID
         [HttpPost]
-        public ActionResult SaveBranchID(FormCollection data)
+        public ActionResult SaveBranchID(FormCollection data,string BranchID,string PJPID,string SalesRouteID)
         {
-            DataAccess dal = Util.Dal();
+           
             try
             {
-                dal.CmdTimeout = int.MaxValue;
-                var detHeader = new StoreDataHandler(data["lstDetBranchID"]);
-                var lstDetBranchID = detHeader.ObjectData<OM40600_pgLoadBranchID_Result>().ToList();
+                     
+                //var detHeader = new StoreDataHandler(data["lstDetBranchID"]);
+                //var lstDetBranchID = detHeader.ObjectData<OM40600_pgLoadBranchID_Result>().ToList();
 
 
 
@@ -130,10 +130,12 @@ namespace OM40600.Controllers
                 StringBuilder lstCust = new StringBuilder();
                 StringBuilder lstPJP = new StringBuilder();
                 StringBuilder lstBranch = new StringBuilder();
-                int numDetBranchID = lstDetBranchID.Count;
-                for (int j = 0; j < numDetBranchID; j++)
-                {
-                    var lstDet = _db.OM40600_pgSaleRouteMaster(lstDetBranchID[j].BranchID, lstDetBranchID[j].PJPID, "%", "%", lstDetBranchID[j].SalesRouteID).ToList();
+                //int numDetBranchID = lstDetBranchID.Count;
+                //for (int j = 0; j < numDetBranchID; j++)
+                //{
+                    DataAccess dal = Util.Dal();
+                    dal.CmdTimeout = int.MaxValue;          
+                    var lstDet = _db.OM40600_pgSaleRouteMaster(BranchID, PJPID, "%", "%", SalesRouteID).ToList();
                     int numOfDet = lstDet.Count;
                     for (int i = 0; i < numOfDet; i++)
                     {
@@ -162,7 +164,11 @@ namespace OM40600.Controllers
                         return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
 
                     }
-                }
+                    finally
+                    {
+                        
+                    }
+                //}
                 return Util.CreateMessage(MessageProcess.Process);
             }
             catch (Exception ex)
