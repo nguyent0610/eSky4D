@@ -100,6 +100,7 @@ var btnProcess_Click = function () {
             }
             App.dteFromDate.setValue(HQ.bussinessDate);
             App.dteToDate.setValue(HQ.EndDateYear);
+            App.dteFromDate.setMinValue(HQ.bussinessDate);
             App.winProcess.show();
         }
         else {

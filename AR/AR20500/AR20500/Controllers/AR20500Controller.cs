@@ -11,6 +11,7 @@ using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
 using HQ.eSkySys;
+using System.Globalization;
 namespace AR20500.Controllers
 {
     [DirectController]
@@ -368,8 +369,9 @@ namespace AR20500.Controllers
         {
             Int32 weekStart = default(Int32);
             Int32 weekEnd = default(Int32);
-            var fromdate = master.StartDate.Value;
-            var todate = master.EndDate.Value;
+            var FromDate = master.StartDate.Value;
+            var ToDate = master.EndDate.Value;
+
             var dMon = default(System.DateTime);
             var dTue = default(System.DateTime);
             var dWed = default(System.DateTime);
@@ -377,39 +379,438 @@ namespace AR20500.Controllers
             var dFri = default(System.DateTime);
             var dSat = default(System.DateTime);
             var dSun = default(System.DateTime);
-            _db.AR20500_DeleteSalesRouteDetByDate(fromdate, todate, master.SalesRouteID, master.CustID, master.BranchID);
-            if (master.SlsFreqType == "R")
+            _db.AR20500_DeleteSalesRouteDetByDate(FromDate, ToDate, master.SalesRouteID, master.CustID, master.BranchID);
+            weekStart = Utility.WeeksInYear(FromDate);
+            weekEnd = Utility.WeeksInYear(ToDate);
+            DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+            DateTime date1 = new DateTime(2011, 1, 1);
+            Calendar cal = dfi.Calendar;
+            int subYear = ToDate.Year - FromDate.Year;
+            DateTime TodateTmp = ToDate;
+            for (int y = 0; y <= subYear; y++)
             {
-                weekStart = Utility.WeeksInYear(fromdate);
-                weekEnd = Utility.WeeksInYear(todate);
-                for (Int32 i = weekStart; i <= weekEnd; i++)
+
+                int nextyear = FromDate.Year + 1;
+                if (y != 0)
                 {
-                    OM_SalesRouteDet det = new OM_SalesRouteDet();
-                    det.BranchID = master.BranchID;
-                    det.SalesRouteID = master.SalesRouteID;
-                    det.CustID = master.CustID;
-                    det.SlsPerID = master.SlsPerID;
-                    det.PJPID = master.PJPID;
-                    det.SlsFreq = master.SlsFreq;
-                    det.SlsFreqType = master.SlsFreqType;
-                    det.WeekofVisit = master.WeekofVisit;
-                    det.VisitSort = master.VisitSort;
-                    det.Crtd_Datetime = DateTime.Now;
-                    det.Crtd_Prog = _screenNbr;
-                    det.Crtd_User = _userName;
-                    det.LUpd_Datetime = DateTime.Now;
-                    det.LUpd_Prog = _screenNbr;
-                    det.LUpd_User = _userName;
-                    dMon = GetDateFromDayofWeek(fromdate.Year, i, "Monday");
-                    dTue = GetDateFromDayofWeek(fromdate.Year, i, "Tuesday");
-                    dWed = GetDateFromDayofWeek(fromdate.Year, i, "Wednesday");
-                    dThu = GetDateFromDayofWeek(fromdate.Year, i, "Thursday");
-                    dFri = GetDateFromDayofWeek(fromdate.Year, i, "Friday");
-                    dSat = GetDateFromDayofWeek(fromdate.Year, i, "Saturday");
-                    dSun = GetDateFromDayofWeek(fromdate.Year, i, "Sunday");
-                    if (master.SlsFreq == "F1")
+                    FromDate = new DateTime(nextyear, 1, 1);
+                    ToDate = new DateTime(nextyear, 12, 31);
+                }
+                if (y == subYear) ToDate = TodateTmp;
+
+
+                int iWeekStart = cal.GetWeekOfYear(FromDate, dfi.CalendarWeekRule,
+                                              dfi.FirstDayOfWeek);
+
+                int iWeekStartStart = cal.GetWeekOfYear(FromDate, dfi.CalendarWeekRule,
+                                              dfi.FirstDayOfWeek);
+
+                int iWeekEnd = cal.GetWeekOfYear(ToDate, dfi.CalendarWeekRule,
+                                              dfi.FirstDayOfWeek);
+                if (master.SlsFreqType == "R")
+                {
+                    weekStart = Utility.WeeksInYear(fromdate);
+                    weekEnd = Utility.WeeksInYear(todate);
+                    for (Int32 i = weekStart; i <= weekEnd; i++)
                     {
-                        if ((master.WeekofVisit == "W159" && (i % 4) == 1) || (master.WeekofVisit == "W2610" && (i % 4) == 2) || (master.WeekofVisit == "W3711" && (i % 4) == 3) || (master.WeekofVisit == "W4812" && (i % 4) == 0))
+                        OM_SalesRouteDet det = new OM_SalesRouteDet();
+                        det.BranchID = master.BranchID;
+                        det.SalesRouteID = master.SalesRouteID;
+                        det.CustID = master.CustID;
+                        det.SlsPerID = master.SlsPerID;
+                        det.PJPID = master.PJPID;
+                        det.SlsFreq = master.SlsFreq;
+                        det.SlsFreqType = master.SlsFreqType;
+                        det.WeekofVisit = master.WeekofVisit;
+                        det.VisitSort = master.VisitSort;
+                        det.Crtd_Datetime = DateTime.Now;
+                        det.Crtd_Prog = _screenNbr;
+                        det.Crtd_User = _userName;
+                        det.LUpd_Datetime = DateTime.Now;
+                        det.LUpd_Prog = _screenNbr;
+                        det.LUpd_User = _userName;
+                        dMon = GetDateFromDayofWeek(fromdate.Year, i, "Monday");
+                        dTue = GetDateFromDayofWeek(fromdate.Year, i, "Tuesday");
+                        dWed = GetDateFromDayofWeek(fromdate.Year, i, "Wednesday");
+                        dThu = GetDateFromDayofWeek(fromdate.Year, i, "Thursday");
+                        dFri = GetDateFromDayofWeek(fromdate.Year, i, "Friday");
+                        dSat = GetDateFromDayofWeek(fromdate.Year, i, "Saturday");
+                        dSun = GetDateFromDayofWeek(fromdate.Year, i, "Sunday");
+                        if (master.SlsFreq == "F1")
+                        {
+                            if ((master.WeekofVisit == "W159" && (i % 4) == 1) || (master.WeekofVisit == "W2610" && (i % 4) == 2) || (master.WeekofVisit == "W3711" && (i % 4) == 3) || (master.WeekofVisit == "W4812" && (i % 4) == 0))
+                            {
+                                if (master.Mon && dMon <= todate && dMon >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dMon;
+                                    det1.DayofWeek = "Mon";
+                                    det1.WeekNbr = i;
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+
+                                }
+                                if (master.Tue && dTue <= todate && dTue >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dTue;
+                                    det1.DayofWeek = "Tue";
+                                    det1.WeekNbr = i;
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Wed && dWed <= todate && dWed >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dWed;
+                                    det1.DayofWeek = "Wed";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Thu && dThu <= todate && dThu >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dThu;
+                                    det1.DayofWeek = "Thu";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Fri && dFri <= todate && dFri >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dFri;
+                                    det1.DayofWeek = "Fri";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Sat && dSat <= todate && dSat >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dSat;
+                                    det1.DayofWeek = "Sat";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Sun && dSun <= todate && dSun >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dSun;
+                                    det1.DayofWeek = "Sun";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                            }
+                        }
+                        else if (master.SlsFreq == "F2")
+                        {
+                            if ((master.WeekofVisit == "OW" && (i % 2) != 0) || (master.WeekofVisit == "EW" && (i % 2) == 0))
+                            {
+                                if (master.Mon && dMon <= todate && dMon >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dMon;
+                                    det1.DayofWeek = "Mon";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Tue && dTue <= todate && dTue >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dTue;
+                                    det1.DayofWeek = "Tue";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Wed && dWed <= todate && dWed >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dWed;
+                                    det1.DayofWeek = "Wed";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Thu && dThu <= todate && dThu >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+                                    det1.VisitDate = dThu;
+                                    det1.DayofWeek = "Thu";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Fri && dFri <= todate && dFri >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dFri;
+                                    det1.DayofWeek = "Fri";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Sat && dSat <= todate && dSat >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dSat;
+                                    det1.DayofWeek = "Sat";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                                if (master.Sun && dSun <= todate && dSun >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dSun;
+                                    det1.DayofWeek = "Sun";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                            }
+                        }
+                        else if (master.SlsFreq == "F4" || master.SlsFreq == "F4A" || master.SlsFreq == "F8" || master.SlsFreq == "F8A" || master.SlsFreq == "F12" || master.SlsFreq == "F16" || master.SlsFreq == "F20" || master.SlsFreq == "F24" || master.SlsFreq == "A")
                         {
                             if (master.Mon && dMon <= todate && dMon >= fromdate)
                             {
@@ -434,8 +835,9 @@ namespace AR20500.Controllers
                                 det1.VisitDate = dMon;
                                 det1.DayofWeek = "Mon";
                                 det1.WeekNbr = i;
+                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
                                 _db.OM_SalesRouteDet.AddObject(det1);
-
                             }
                             if (master.Tue && dTue <= todate && dTue >= fromdate)
                             {
@@ -460,6 +862,8 @@ namespace AR20500.Controllers
                                 det1.VisitDate = dTue;
                                 det1.DayofWeek = "Tue";
                                 det1.WeekNbr = i;
+                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
                             if (master.Wed && dWed <= todate && dWed >= fromdate)
@@ -540,7 +944,40 @@ namespace AR20500.Controllers
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
-                            if (master.Sat && dSat <= todate && dSat >= fromdate)
+                            // xet cho ngay thu 7, neu la F8A thi tuan di tuan nghi
+                            if (master.SlsFreq == "F8A" || master.SlsFreq == "F4A")
+                            {
+                                if ((master.WeekofVisit == "OW" && (i % 2) != 0) || (master.WeekofVisit == "EW" && (i % 2) == 0) || (master.WeekofVisit == "NA" && (i % 2) == (weekStart % 2)))
+                                {
+                                    if (master.Sat && dSat <= todate && dSat >= fromdate)
+                                    {
+                                        OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                        det1.ResetET();
+                                        det1.BranchID = master.BranchID;
+                                        det1.SalesRouteID = master.SalesRouteID;
+                                        det1.CustID = master.CustID;
+                                        det1.SlsPerID = master.SlsPerID;
+                                        det1.PJPID = master.PJPID;
+                                        det1.SlsFreq = master.SlsFreq;
+                                        det1.SlsFreqType = master.SlsFreqType;
+                                        det1.WeekofVisit = master.WeekofVisit;
+                                        det1.VisitSort = master.VisitSort;
+                                        det1.Crtd_Datetime = DateTime.Now;
+                                        det1.Crtd_Prog = _screenNbr;
+                                        det1.Crtd_User = _userName;
+                                        det1.LUpd_Datetime = DateTime.Now;
+                                        det1.LUpd_Prog = _screenNbr;
+                                        det1.LUpd_User = _userName;
+
+                                        det1.VisitDate = dSat;
+                                        det1.DayofWeek = "Sat";
+                                        det1.WeekNbr = i;
+                                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                        _db.OM_SalesRouteDet.AddObject(det1);
+                                    }
+                                }
+                            }
+                            else if (master.Sat && dSat <= todate && dSat >= fromdate)
                             {
                                 OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                 det1.ResetET();
@@ -593,196 +1030,36 @@ namespace AR20500.Controllers
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
                         }
+                        //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
                     }
-                    else if (master.SlsFreq == "F2")
+                }
+                else
+                {                   
+                    for (Int32 i = weekStart; i <= weekEnd; i++)
                     {
-                        if ((master.WeekofVisit == "OW" && (i % 2) != 0) || (master.WeekofVisit == "EW" && (i % 2) == 0))
-                        {
-                            if (master.Mon && dMon <= todate && dMon >= fromdate)
-                            {
-                                OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                                det1.ResetET();
-                                det1.BranchID = master.BranchID;
-                                det1.SalesRouteID = master.SalesRouteID;
-                                det1.CustID = master.CustID;
-                                det1.SlsPerID = master.SlsPerID;
-                                det1.PJPID = master.PJPID;
-                                det1.SlsFreq = master.SlsFreq;
-                                det1.SlsFreqType = master.SlsFreqType;
-                                det1.WeekofVisit = master.WeekofVisit;
-                                det1.VisitSort = master.VisitSort;
-                                det1.Crtd_Datetime = DateTime.Now;
-                                det1.Crtd_Prog = _screenNbr;
-                                det1.Crtd_User = _userName;
-                                det1.LUpd_Datetime = DateTime.Now;
-                                det1.LUpd_Prog = _screenNbr;
-                                det1.LUpd_User = _userName;
-
-                                det1.VisitDate = dMon;
-                                det1.DayofWeek = "Mon";
-                                det1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                _db.OM_SalesRouteDet.AddObject(det1);
-                            }
-                            if (master.Tue && dTue <= todate && dTue >= fromdate)
-                            {
-                                OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                                det1.ResetET();
-                                det1.BranchID = master.BranchID;
-                                det1.SalesRouteID = master.SalesRouteID;
-                                det1.CustID = master.CustID;
-                                det1.SlsPerID = master.SlsPerID;
-                                det1.PJPID = master.PJPID;
-                                det1.SlsFreq = master.SlsFreq;
-                                det1.SlsFreqType = master.SlsFreqType;
-                                det1.WeekofVisit = master.WeekofVisit;
-                                det1.VisitSort = master.VisitSort;
-                                det1.Crtd_Datetime = DateTime.Now;
-                                det1.Crtd_Prog = _screenNbr;
-                                det1.Crtd_User = _userName;
-                                det1.LUpd_Datetime = DateTime.Now;
-                                det1.LUpd_Prog = _screenNbr;
-                                det1.LUpd_User = _userName;
-
-                                det1.VisitDate = dTue;
-                                det1.DayofWeek = "Tue";
-                                det1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                _db.OM_SalesRouteDet.AddObject(det1);
-                            }
-                            if (master.Wed && dWed <= todate && dWed >= fromdate)
-                            {
-                                OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                                det1.ResetET();
-                                det1.BranchID = master.BranchID;
-                                det1.SalesRouteID = master.SalesRouteID;
-                                det1.CustID = master.CustID;
-                                det1.SlsPerID = master.SlsPerID;
-                                det1.PJPID = master.PJPID;
-                                det1.SlsFreq = master.SlsFreq;
-                                det1.SlsFreqType = master.SlsFreqType;
-                                det1.WeekofVisit = master.WeekofVisit;
-                                det1.VisitSort = master.VisitSort;
-                                det1.Crtd_Datetime = DateTime.Now;
-                                det1.Crtd_Prog = _screenNbr;
-                                det1.Crtd_User = _userName;
-                                det1.LUpd_Datetime = DateTime.Now;
-                                det1.LUpd_Prog = _screenNbr;
-                                det1.LUpd_User = _userName;
-
-                                det1.VisitDate = dWed;
-                                det1.DayofWeek = "Wed";
-                                det1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                _db.OM_SalesRouteDet.AddObject(det1);
-                            }
-                            if (master.Thu && dThu <= todate && dThu >= fromdate)
-                            {
-                                OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                                det1.ResetET();
-                                det1.BranchID = master.BranchID;
-                                det1.SalesRouteID = master.SalesRouteID;
-                                det1.CustID = master.CustID;
-                                det1.SlsPerID = master.SlsPerID;
-                                det1.PJPID = master.PJPID;
-                                det1.SlsFreq = master.SlsFreq;
-                                det1.SlsFreqType = master.SlsFreqType;
-                                det1.WeekofVisit = master.WeekofVisit;
-                                det1.VisitSort = master.VisitSort;
-                                det1.Crtd_Datetime = DateTime.Now;
-                                det1.Crtd_Prog = _screenNbr;
-                                det1.Crtd_User = _userName;
-                                det1.LUpd_Datetime = DateTime.Now;
-                                det1.LUpd_Prog = _screenNbr;
-                                det1.LUpd_User = _userName;
-                                det1.VisitDate = dThu;
-                                det1.DayofWeek = "Thu";
-                                det1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                _db.OM_SalesRouteDet.AddObject(det1);
-                            }
-                            if (master.Fri && dFri <= todate && dFri >= fromdate)
-                            {
-                                OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                                det1.ResetET();
-                                det1.BranchID = master.BranchID;
-                                det1.SalesRouteID = master.SalesRouteID;
-                                det1.CustID = master.CustID;
-                                det1.SlsPerID = master.SlsPerID;
-                                det1.PJPID = master.PJPID;
-                                det1.SlsFreq = master.SlsFreq;
-                                det1.SlsFreqType = master.SlsFreqType;
-                                det1.WeekofVisit = master.WeekofVisit;
-                                det1.VisitSort = master.VisitSort;
-                                det1.Crtd_Datetime = DateTime.Now;
-                                det1.Crtd_Prog = _screenNbr;
-                                det1.Crtd_User = _userName;
-                                det1.LUpd_Datetime = DateTime.Now;
-                                det1.LUpd_Prog = _screenNbr;
-                                det1.LUpd_User = _userName;
-
-                                det1.VisitDate = dFri;
-                                det1.DayofWeek = "Fri";
-                                det1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                _db.OM_SalesRouteDet.AddObject(det1);
-                            }
-                            if (master.Sat && dSat <= todate && dSat >= fromdate)
-                            {
-                                OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                                det1.ResetET();
-                                det1.BranchID = master.BranchID;
-                                det1.SalesRouteID = master.SalesRouteID;
-                                det1.CustID = master.CustID;
-                                det1.SlsPerID = master.SlsPerID;
-                                det1.PJPID = master.PJPID;
-                                det1.SlsFreq = master.SlsFreq;
-                                det1.SlsFreqType = master.SlsFreqType;
-                                det1.WeekofVisit = master.WeekofVisit;
-                                det1.VisitSort = master.VisitSort;
-                                det1.Crtd_Datetime = DateTime.Now;
-                                det1.Crtd_Prog = _screenNbr;
-                                det1.Crtd_User = _userName;
-                                det1.LUpd_Datetime = DateTime.Now;
-                                det1.LUpd_Prog = _screenNbr;
-                                det1.LUpd_User = _userName;
-
-                                det1.VisitDate = dSat;
-                                det1.DayofWeek = "Sat";
-                                det1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                _db.OM_SalesRouteDet.AddObject(det1);
-                            }
-                            if (master.Sun && dSun <= todate && dSun >= fromdate)
-                            {
-                                OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                                det1.ResetET();
-                                det1.BranchID = master.BranchID;
-                                det1.SalesRouteID = master.SalesRouteID;
-                                det1.CustID = master.CustID;
-                                det1.SlsPerID = master.SlsPerID;
-                                det1.PJPID = master.PJPID;
-                                det1.SlsFreq = master.SlsFreq;
-                                det1.SlsFreqType = master.SlsFreqType;
-                                det1.WeekofVisit = master.WeekofVisit;
-                                det1.VisitSort = master.VisitSort;
-                                det1.Crtd_Datetime = DateTime.Now;
-                                det1.Crtd_Prog = _screenNbr;
-                                det1.Crtd_User = _userName;
-                                det1.LUpd_Datetime = DateTime.Now;
-                                det1.LUpd_Prog = _screenNbr;
-                                det1.LUpd_User = _userName;
-
-                                det1.VisitDate = dSun;
-                                det1.DayofWeek = "Sun";
-                                det1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                _db.OM_SalesRouteDet.AddObject(det1);
-                            }
-                        }
-                    }
-                    else if (master.SlsFreq == "F4" || master.SlsFreq == "F4A" || master.SlsFreq == "F8" || master.SlsFreq == "F8A" || master.SlsFreq == "F12" || master.SlsFreq == "F16" || master.SlsFreq == "F20" || master.SlsFreq == "F24" || master.SlsFreq == "A")
-                    {
+                        OM_SalesRouteDet det = new OM_SalesRouteDet();
+                        det.BranchID = master.BranchID;
+                        det.SalesRouteID = master.SalesRouteID;
+                        det.CustID = master.CustID;
+                        det.SlsPerID = master.SlsPerID;
+                        det.PJPID = master.PJPID;
+                        det.SlsFreq = master.SlsFreq;
+                        det.SlsFreqType = master.SlsFreqType;
+                        det.WeekofVisit = master.WeekofVisit;
+                        det.VisitSort = master.VisitSort;
+                        det.Crtd_Datetime = DateTime.Now;
+                        det.Crtd_Prog = _screenNbr;
+                        det.Crtd_User = _userName;
+                        det.LUpd_Datetime = DateTime.Now;
+                        det.LUpd_Prog = _userName;
+                        det.LUpd_User = _userName;
+                        dMon = GetDateFromDayofWeek(fromdate.Year, i, "Monday");
+                        dTue = GetDateFromDayofWeek(fromdate.Year, i, "Tuesday");
+                        dWed = GetDateFromDayofWeek(fromdate.Year, i, "Wednesday");
+                        dThu = GetDateFromDayofWeek(fromdate.Year, i, "Thursday");
+                        dFri = GetDateFromDayofWeek(fromdate.Year, i, "Friday");
+                        dSat = GetDateFromDayofWeek(fromdate.Year, i, "Saturday");
+                        dSun = GetDateFromDayofWeek(fromdate.Year, i, "Sunday");
                         if (master.Mon && dMon <= todate && dMon >= fromdate)
                         {
                             OM_SalesRouteDet det1 = new OM_SalesRouteDet();
@@ -807,7 +1084,7 @@ namespace AR20500.Controllers
                             det1.DayofWeek = "Mon";
                             det1.WeekNbr = i;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                            //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
+
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
                         if (master.Tue && dTue <= todate && dTue >= fromdate)
@@ -834,7 +1111,7 @@ namespace AR20500.Controllers
                             det1.DayofWeek = "Tue";
                             det1.WeekNbr = i;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                            //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
+
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
                         if (master.Wed && dWed <= todate && dWed >= fromdate)
@@ -915,40 +1192,7 @@ namespace AR20500.Controllers
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
-                        // xet cho ngay thu 7, neu la F8A thi tuan di tuan nghi
-                        if (master.SlsFreq == "F8A" || master.SlsFreq == "F4A")
-                        {
-                            if ((master.WeekofVisit == "OW" && (i % 2) != 0) || (master.WeekofVisit == "EW" && (i % 2) == 0) || (master.WeekofVisit == "NA" && (i % 2) == (weekStart % 2)))
-                            {
-                                if (master.Sat && dSat <= todate && dSat >= fromdate)
-                                {
-                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                                    det1.ResetET();
-                                    det1.BranchID = master.BranchID;
-                                    det1.SalesRouteID = master.SalesRouteID;
-                                    det1.CustID = master.CustID;
-                                    det1.SlsPerID = master.SlsPerID;
-                                    det1.PJPID = master.PJPID;
-                                    det1.SlsFreq = master.SlsFreq;
-                                    det1.SlsFreqType = master.SlsFreqType;
-                                    det1.WeekofVisit = master.WeekofVisit;
-                                    det1.VisitSort = master.VisitSort;
-                                    det1.Crtd_Datetime = DateTime.Now;
-                                    det1.Crtd_Prog = _screenNbr;
-                                    det1.Crtd_User = _userName;
-                                    det1.LUpd_Datetime = DateTime.Now;
-                                    det1.LUpd_Prog = _screenNbr;
-                                    det1.LUpd_User = _userName;
-
-                                    det1.VisitDate = dSat;
-                                    det1.DayofWeek = "Sat";
-                                    det1.WeekNbr = i;
-                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                    _db.OM_SalesRouteDet.AddObject(det1);
-                                }
-                            }
-                        }
-                        else if (master.Sat && dSat <= todate && dSat >= fromdate)
+                        if (master.Sat && dSat <= todate && dSat >= fromdate)
                         {
                             OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                             det1.ResetET();
@@ -1001,224 +1245,8 @@ namespace AR20500.Controllers
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
                     }
-                    //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
+
                 }
-            }
-            else
-            {
-                weekStart = Utility.WeeksInYear(fromdate);
-                weekEnd = Utility.WeeksInYear(todate);
-                for (Int32 i = weekStart; i <= weekEnd; i++)
-                {
-                    OM_SalesRouteDet det = new OM_SalesRouteDet();
-                    det.BranchID = master.BranchID;
-                    det.SalesRouteID = master.SalesRouteID;
-                    det.CustID = master.CustID;
-                    det.SlsPerID = master.SlsPerID;
-                    det.PJPID = master.PJPID;
-                    det.SlsFreq = master.SlsFreq;
-                    det.SlsFreqType = master.SlsFreqType;
-                    det.WeekofVisit = master.WeekofVisit;
-                    det.VisitSort = master.VisitSort;
-                    det.Crtd_Datetime = DateTime.Now;
-                    det.Crtd_Prog = _screenNbr;
-                    det.Crtd_User = _userName;
-                    det.LUpd_Datetime = DateTime.Now;
-                    det.LUpd_Prog = _userName;
-                    det.LUpd_User = _userName;
-                    dMon = GetDateFromDayofWeek(fromdate.Year, i, "Monday");
-                    dTue = GetDateFromDayofWeek(fromdate.Year, i, "Tuesday");
-                    dWed = GetDateFromDayofWeek(fromdate.Year, i, "Wednesday");
-                    dThu = GetDateFromDayofWeek(fromdate.Year, i, "Thursday");
-                    dFri = GetDateFromDayofWeek(fromdate.Year, i, "Friday");
-                    dSat = GetDateFromDayofWeek(fromdate.Year, i, "Saturday");
-                    dSun = GetDateFromDayofWeek(fromdate.Year, i, "Sunday");
-                    if (master.Mon && dMon <= todate && dMon >= fromdate)
-                    {
-                        OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                        det1.ResetET();
-                        det1.BranchID = master.BranchID;
-                        det1.SalesRouteID = master.SalesRouteID;
-                        det1.CustID = master.CustID;
-                        det1.SlsPerID = master.SlsPerID;
-                        det1.PJPID = master.PJPID;
-                        det1.SlsFreq = master.SlsFreq;
-                        det1.SlsFreqType = master.SlsFreqType;
-                        det1.WeekofVisit = master.WeekofVisit;
-                        det1.VisitSort = master.VisitSort;
-                        det1.Crtd_Datetime = DateTime.Now;
-                        det1.Crtd_Prog = _screenNbr;
-                        det1.Crtd_User = _userName;
-                        det1.LUpd_Datetime = DateTime.Now;
-                        det1.LUpd_Prog = _screenNbr;
-                        det1.LUpd_User = _userName;
-
-                        det1.VisitDate = dMon;
-                        det1.DayofWeek = "Mon";
-                        det1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-
-                        _db.OM_SalesRouteDet.AddObject(det1);
-                    }
-                    if (master.Tue && dTue <= todate && dTue >= fromdate)
-                    {
-                        OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                        det1.ResetET();
-                        det1.BranchID = master.BranchID;
-                        det1.SalesRouteID = master.SalesRouteID;
-                        det1.CustID = master.CustID;
-                        det1.SlsPerID = master.SlsPerID;
-                        det1.PJPID = master.PJPID;
-                        det1.SlsFreq = master.SlsFreq;
-                        det1.SlsFreqType = master.SlsFreqType;
-                        det1.WeekofVisit = master.WeekofVisit;
-                        det1.VisitSort = master.VisitSort;
-                        det1.Crtd_Datetime = DateTime.Now;
-                        det1.Crtd_Prog = _screenNbr;
-                        det1.Crtd_User = _userName;
-                        det1.LUpd_Datetime = DateTime.Now;
-                        det1.LUpd_Prog = _screenNbr;
-                        det1.LUpd_User = _userName;
-
-                        det1.VisitDate = dTue;
-                        det1.DayofWeek = "Tue";
-                        det1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-
-                        _db.OM_SalesRouteDet.AddObject(det1);
-                    }
-                    if (master.Wed && dWed <= todate && dWed >= fromdate)
-                    {
-                        OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                        det1.ResetET();
-                        det1.BranchID = master.BranchID;
-                        det1.SalesRouteID = master.SalesRouteID;
-                        det1.CustID = master.CustID;
-                        det1.SlsPerID = master.SlsPerID;
-                        det1.PJPID = master.PJPID;
-                        det1.SlsFreq = master.SlsFreq;
-                        det1.SlsFreqType = master.SlsFreqType;
-                        det1.WeekofVisit = master.WeekofVisit;
-                        det1.VisitSort = master.VisitSort;
-                        det1.Crtd_Datetime = DateTime.Now;
-                        det1.Crtd_Prog = _screenNbr;
-                        det1.Crtd_User = _userName;
-                        det1.LUpd_Datetime = DateTime.Now;
-                        det1.LUpd_Prog = _screenNbr;
-                        det1.LUpd_User = _userName;
-
-                        det1.VisitDate = dWed;
-                        det1.DayofWeek = "Wed";
-                        det1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        _db.OM_SalesRouteDet.AddObject(det1);
-                    }
-                    if (master.Thu && dThu <= todate && dThu >= fromdate)
-                    {
-                        OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                        det1.ResetET();
-                        det1.BranchID = master.BranchID;
-                        det1.SalesRouteID = master.SalesRouteID;
-                        det1.CustID = master.CustID;
-                        det1.SlsPerID = master.SlsPerID;
-                        det1.PJPID = master.PJPID;
-                        det1.SlsFreq = master.SlsFreq;
-                        det1.SlsFreqType = master.SlsFreqType;
-                        det1.WeekofVisit = master.WeekofVisit;
-                        det1.VisitSort = master.VisitSort;
-                        det1.Crtd_Datetime = DateTime.Now;
-                        det1.Crtd_Prog = _screenNbr;
-                        det1.Crtd_User = _userName;
-                        det1.LUpd_Datetime = DateTime.Now;
-                        det1.LUpd_Prog = _screenNbr;
-                        det1.LUpd_User = _userName;
-
-                        det1.VisitDate = dThu;
-                        det1.DayofWeek = "Thu";
-                        det1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        _db.OM_SalesRouteDet.AddObject(det1);
-                    }
-                    if (master.Fri && dFri <= todate && dFri >= fromdate)
-                    {
-                        OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                        det1.ResetET();
-                        det1.BranchID = master.BranchID;
-                        det1.SalesRouteID = master.SalesRouteID;
-                        det1.CustID = master.CustID;
-                        det1.SlsPerID = master.SlsPerID;
-                        det1.PJPID = master.PJPID;
-                        det1.SlsFreq = master.SlsFreq;
-                        det1.SlsFreqType = master.SlsFreqType;
-                        det1.WeekofVisit = master.WeekofVisit;
-                        det1.VisitSort = master.VisitSort;
-                        det1.Crtd_Datetime = DateTime.Now;
-                        det1.Crtd_Prog = _screenNbr;
-                        det1.Crtd_User = _userName;
-                        det1.LUpd_Datetime = DateTime.Now;
-                        det1.LUpd_Prog = _screenNbr;
-                        det1.LUpd_User = _userName;
-
-                        det1.VisitDate = dFri;
-                        det1.DayofWeek = "Fri";
-                        det1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        _db.OM_SalesRouteDet.AddObject(det1);
-                    }
-                    if (master.Sat && dSat <= todate && dSat >= fromdate)
-                    {
-                        OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                        det1.ResetET();
-                        det1.BranchID = master.BranchID;
-                        det1.SalesRouteID = master.SalesRouteID;
-                        det1.CustID = master.CustID;
-                        det1.SlsPerID = master.SlsPerID;
-                        det1.PJPID = master.PJPID;
-                        det1.SlsFreq = master.SlsFreq;
-                        det1.SlsFreqType = master.SlsFreqType;
-                        det1.WeekofVisit = master.WeekofVisit;
-                        det1.VisitSort = master.VisitSort;
-                        det1.Crtd_Datetime = DateTime.Now;
-                        det1.Crtd_Prog = _screenNbr;
-                        det1.Crtd_User = _userName;
-                        det1.LUpd_Datetime = DateTime.Now;
-                        det1.LUpd_Prog = _screenNbr;
-                        det1.LUpd_User = _userName;
-
-                        det1.VisitDate = dSat;
-                        det1.DayofWeek = "Sat";
-                        det1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        _db.OM_SalesRouteDet.AddObject(det1);
-                    }
-                    if (master.Sun && dSun <= todate && dSun >= fromdate)
-                    {
-                        OM_SalesRouteDet det1 = new OM_SalesRouteDet();
-                        det1.ResetET();
-                        det1.BranchID = master.BranchID;
-                        det1.SalesRouteID = master.SalesRouteID;
-                        det1.CustID = master.CustID;
-                        det1.SlsPerID = master.SlsPerID;
-                        det1.PJPID = master.PJPID;
-                        det1.SlsFreq = master.SlsFreq;
-                        det1.SlsFreqType = master.SlsFreqType;
-                        det1.WeekofVisit = master.WeekofVisit;
-                        det1.VisitSort = master.VisitSort;
-                        det1.Crtd_Datetime = DateTime.Now;
-                        det1.Crtd_Prog = _screenNbr;
-                        det1.Crtd_User = _userName;
-                        det1.LUpd_Datetime = DateTime.Now;
-                        det1.LUpd_Prog = _screenNbr;
-                        det1.LUpd_User = _userName;
-
-                        det1.VisitDate = dSun;
-                        det1.DayofWeek = "Sun";
-                        det1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        _db.OM_SalesRouteDet.AddObject(det1);
-                    }
-                }
-
             }
             //_daapp.CommitTrans();
         }
