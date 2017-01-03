@@ -274,6 +274,7 @@ namespace PJPProcess
                     Fromdate = new DateTime(nextyear, 1, 1);
                     Todate = new DateTime(nextyear, 12, 31);
                 }
+                else Todate = new DateTime(Fromdate.Year, 12, 31);
                 if (y == subYear) Todate = TodateTmp;
                 
 
