@@ -380,8 +380,6 @@ namespace AR20500.Controllers
             var dSat = default(System.DateTime);
             var dSun = default(System.DateTime);
             _db.AR20500_DeleteSalesRouteDetByDate(FromDate, ToDate, master.SalesRouteID, master.CustID, master.BranchID);
-            weekStart = Utility.WeeksInYear(FromDate);
-            weekEnd = Utility.WeeksInYear(ToDate);
             DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
             DateTime date1 = new DateTime(2011, 1, 1);
             Calendar cal = dfi.Calendar;
@@ -396,8 +394,8 @@ namespace AR20500.Controllers
                     FromDate = new DateTime(nextyear, 1, 1);
                     ToDate = new DateTime(nextyear, 12, 31);
                 }
+                else ToDate = new DateTime(FromDate.Year, 12, 31);
                 if (y == subYear) ToDate = TodateTmp;
-
 
                 int iWeekStart = cal.GetWeekOfYear(FromDate, dfi.CalendarWeekRule,
                                               dfi.FirstDayOfWeek);
@@ -409,9 +407,8 @@ namespace AR20500.Controllers
                                               dfi.FirstDayOfWeek);
                 if (master.SlsFreqType == "R")
                 {
-                    weekStart = Utility.WeeksInYear(fromdate);
-                    weekEnd = Utility.WeeksInYear(todate);
-                    for (Int32 i = weekStart; i <= weekEnd; i++)
+
+                    for (Int32 i = iWeekStart; i <= iWeekEnd; i++)
                     {
                         OM_SalesRouteDet det = new OM_SalesRouteDet();
                         det.BranchID = master.BranchID;
@@ -429,18 +426,18 @@ namespace AR20500.Controllers
                         det.LUpd_Datetime = DateTime.Now;
                         det.LUpd_Prog = _screenNbr;
                         det.LUpd_User = _userName;
-                        dMon = GetDateFromDayofWeek(fromdate.Year, i, "Monday");
-                        dTue = GetDateFromDayofWeek(fromdate.Year, i, "Tuesday");
-                        dWed = GetDateFromDayofWeek(fromdate.Year, i, "Wednesday");
-                        dThu = GetDateFromDayofWeek(fromdate.Year, i, "Thursday");
-                        dFri = GetDateFromDayofWeek(fromdate.Year, i, "Friday");
-                        dSat = GetDateFromDayofWeek(fromdate.Year, i, "Saturday");
-                        dSun = GetDateFromDayofWeek(fromdate.Year, i, "Sunday");
+                        dMon = GetDateFromDayofWeek(FromDate.Year, i, "Monday");
+                        dTue = GetDateFromDayofWeek(FromDate.Year, i, "Tuesday");
+                        dWed = GetDateFromDayofWeek(FromDate.Year, i, "Wednesday");
+                        dThu = GetDateFromDayofWeek(FromDate.Year, i, "Thursday");
+                        dFri = GetDateFromDayofWeek(FromDate.Year, i, "Friday");
+                        dSat = GetDateFromDayofWeek(FromDate.Year, i, "Saturday");
+                        dSun = GetDateFromDayofWeek(FromDate.Year, i, "Sunday");
                         if (master.SlsFreq == "F1")
                         {
                             if ((master.WeekofVisit == "W159" && (i % 4) == 1) || (master.WeekofVisit == "W2610" && (i % 4) == 2) || (master.WeekofVisit == "W3711" && (i % 4) == 3) || (master.WeekofVisit == "W4812" && (i % 4) == 0))
                             {
-                                if (master.Mon && dMon <= todate && dMon >= fromdate)
+                                if (master.Mon && dMon <= ToDate && dMon >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -466,7 +463,7 @@ namespace AR20500.Controllers
                                     _db.OM_SalesRouteDet.AddObject(det1);
 
                                 }
-                                if (master.Tue && dTue <= todate && dTue >= fromdate)
+                                if (master.Tue && dTue <= ToDate && dTue >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -491,7 +488,7 @@ namespace AR20500.Controllers
                                     det1.WeekNbr = i;
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Wed && dWed <= todate && dWed >= fromdate)
+                                if (master.Wed && dWed <= ToDate && dWed >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -517,7 +514,7 @@ namespace AR20500.Controllers
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Thu && dThu <= todate && dThu >= fromdate)
+                                if (master.Thu && dThu <= ToDate && dThu >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -543,7 +540,7 @@ namespace AR20500.Controllers
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Fri && dFri <= todate && dFri >= fromdate)
+                                if (master.Fri && dFri <= ToDate && dFri >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -569,7 +566,7 @@ namespace AR20500.Controllers
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Sat && dSat <= todate && dSat >= fromdate)
+                                if (master.Sat && dSat <= ToDate && dSat >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -595,7 +592,7 @@ namespace AR20500.Controllers
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Sun && dSun <= todate && dSun >= fromdate)
+                                if (master.Sun && dSun <= ToDate && dSun >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -627,7 +624,7 @@ namespace AR20500.Controllers
                         {
                             if ((master.WeekofVisit == "OW" && (i % 2) != 0) || (master.WeekofVisit == "EW" && (i % 2) == 0))
                             {
-                                if (master.Mon && dMon <= todate && dMon >= fromdate)
+                                if (master.Mon && dMon <= ToDate && dMon >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -653,7 +650,7 @@ namespace AR20500.Controllers
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Tue && dTue <= todate && dTue >= fromdate)
+                                if (master.Tue && dTue <= ToDate && dTue >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -679,7 +676,7 @@ namespace AR20500.Controllers
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Wed && dWed <= todate && dWed >= fromdate)
+                                if (master.Wed && dWed <= ToDate && dWed >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -705,7 +702,7 @@ namespace AR20500.Controllers
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Thu && dThu <= todate && dThu >= fromdate)
+                                if (master.Thu && dThu <= ToDate && dThu >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -730,7 +727,7 @@ namespace AR20500.Controllers
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Fri && dFri <= todate && dFri >= fromdate)
+                                if (master.Fri && dFri <= ToDate && dFri >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -756,7 +753,7 @@ namespace AR20500.Controllers
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Sat && dSat <= todate && dSat >= fromdate)
+                                if (master.Sat && dSat <= ToDate && dSat >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -782,7 +779,7 @@ namespace AR20500.Controllers
                                     //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                     _db.OM_SalesRouteDet.AddObject(det1);
                                 }
-                                if (master.Sun && dSun <= todate && dSun >= fromdate)
+                                if (master.Sun && dSun <= ToDate && dSun >= FromDate)
                                 {
                                     OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                     det1.ResetET();
@@ -812,7 +809,7 @@ namespace AR20500.Controllers
                         }
                         else if (master.SlsFreq == "F4" || master.SlsFreq == "F4A" || master.SlsFreq == "F8" || master.SlsFreq == "F8A" || master.SlsFreq == "F12" || master.SlsFreq == "F16" || master.SlsFreq == "F20" || master.SlsFreq == "F24" || master.SlsFreq == "A")
                         {
-                            if (master.Mon && dMon <= todate && dMon >= fromdate)
+                            if (master.Mon && dMon <= ToDate && dMon >= FromDate)
                             {
                                 OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                 det1.ResetET();
@@ -839,7 +836,7 @@ namespace AR20500.Controllers
                                 //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
-                            if (master.Tue && dTue <= todate && dTue >= fromdate)
+                            if (master.Tue && dTue <= ToDate && dTue >= FromDate)
                             {
                                 OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                 det1.ResetET();
@@ -866,7 +863,7 @@ namespace AR20500.Controllers
                                 //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
-                            if (master.Wed && dWed <= todate && dWed >= fromdate)
+                            if (master.Wed && dWed <= ToDate && dWed >= FromDate)
                             {
                                 OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                 det1.ResetET();
@@ -892,7 +889,7 @@ namespace AR20500.Controllers
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
-                            if (master.Thu && dThu <= todate && dThu >= fromdate)
+                            if (master.Thu && dThu <= ToDate && dThu >= FromDate)
                             {
                                 OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                 det1.ResetET();
@@ -918,7 +915,7 @@ namespace AR20500.Controllers
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
-                            if (master.Fri && dFri <= todate && dFri >= fromdate)
+                            if (master.Fri && dFri <= ToDate && dFri >= FromDate)
                             {
                                 OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                 det1.ResetET();
@@ -949,7 +946,7 @@ namespace AR20500.Controllers
                             {
                                 if ((master.WeekofVisit == "OW" && (i % 2) != 0) || (master.WeekofVisit == "EW" && (i % 2) == 0) || (master.WeekofVisit == "NA" && (i % 2) == (weekStart % 2)))
                                 {
-                                    if (master.Sat && dSat <= todate && dSat >= fromdate)
+                                    if (master.Sat && dSat <= ToDate && dSat >= FromDate)
                                     {
                                         OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                         det1.ResetET();
@@ -977,7 +974,7 @@ namespace AR20500.Controllers
                                     }
                                 }
                             }
-                            else if (master.Sat && dSat <= todate && dSat >= fromdate)
+                            else if (master.Sat && dSat <= ToDate && dSat >= FromDate)
                             {
                                 OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                 det1.ResetET();
@@ -1003,7 +1000,7 @@ namespace AR20500.Controllers
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                                 _db.OM_SalesRouteDet.AddObject(det1);
                             }
-                            if (master.Sun && dSun <= todate && dSun >= fromdate)
+                            if (master.Sun && dSun <= ToDate && dSun >= FromDate)
                             {
                                 OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                                 det1.ResetET();
@@ -1053,14 +1050,14 @@ namespace AR20500.Controllers
                         det.LUpd_Datetime = DateTime.Now;
                         det.LUpd_Prog = _userName;
                         det.LUpd_User = _userName;
-                        dMon = GetDateFromDayofWeek(fromdate.Year, i, "Monday");
-                        dTue = GetDateFromDayofWeek(fromdate.Year, i, "Tuesday");
-                        dWed = GetDateFromDayofWeek(fromdate.Year, i, "Wednesday");
-                        dThu = GetDateFromDayofWeek(fromdate.Year, i, "Thursday");
-                        dFri = GetDateFromDayofWeek(fromdate.Year, i, "Friday");
-                        dSat = GetDateFromDayofWeek(fromdate.Year, i, "Saturday");
-                        dSun = GetDateFromDayofWeek(fromdate.Year, i, "Sunday");
-                        if (master.Mon && dMon <= todate && dMon >= fromdate)
+                        dMon = GetDateFromDayofWeek(FromDate.Year, i, "Monday");
+                        dTue = GetDateFromDayofWeek(FromDate.Year, i, "Tuesday");
+                        dWed = GetDateFromDayofWeek(FromDate.Year, i, "Wednesday");
+                        dThu = GetDateFromDayofWeek(FromDate.Year, i, "Thursday");
+                        dFri = GetDateFromDayofWeek(FromDate.Year, i, "Friday");
+                        dSat = GetDateFromDayofWeek(FromDate.Year, i, "Saturday");
+                        dSun = GetDateFromDayofWeek(FromDate.Year, i, "Sunday");
+                        if (master.Mon && dMon <= ToDate && dMon >= FromDate)
                         {
                             OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                             det1.ResetET();
@@ -1087,7 +1084,7 @@ namespace AR20500.Controllers
 
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
-                        if (master.Tue && dTue <= todate && dTue >= fromdate)
+                        if (master.Tue && dTue <= ToDate && dTue >= FromDate)
                         {
                             OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                             det1.ResetET();
@@ -1114,7 +1111,7 @@ namespace AR20500.Controllers
 
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
-                        if (master.Wed && dWed <= todate && dWed >= fromdate)
+                        if (master.Wed && dWed <= ToDate && dWed >= FromDate)
                         {
                             OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                             det1.ResetET();
@@ -1140,7 +1137,7 @@ namespace AR20500.Controllers
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
-                        if (master.Thu && dThu <= todate && dThu >= fromdate)
+                        if (master.Thu && dThu <= ToDate && dThu >= FromDate)
                         {
                             OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                             det1.ResetET();
@@ -1166,7 +1163,7 @@ namespace AR20500.Controllers
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
-                        if (master.Fri && dFri <= todate && dFri >= fromdate)
+                        if (master.Fri && dFri <= ToDate && dFri >= FromDate)
                         {
                             OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                             det1.ResetET();
@@ -1192,7 +1189,7 @@ namespace AR20500.Controllers
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
-                        if (master.Sat && dSat <= todate && dSat >= fromdate)
+                        if (master.Sat && dSat <= ToDate && dSat >= FromDate)
                         {
                             OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                             det1.ResetET();
@@ -1218,7 +1215,7 @@ namespace AR20500.Controllers
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
-                        if (master.Sun && dSun <= todate && dSun >= fromdate)
+                        if (master.Sun && dSun <= ToDate && dSun >= FromDate)
                         {
                             OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                             det1.ResetET();
