@@ -29,10 +29,10 @@
           <Property Name="Public" Type="bit" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="char" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="char" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="char" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="char" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="HOCreate" Type="bit" Nullable="false" />
         </EntityType>
@@ -70,8 +70,6 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="SiteID" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="IN_Site" EntityType="IN20300Model.IN_Site" />
-          <EntitySet Name="IN_SiteCpny" EntityType="IN20300Model.IN_SiteCpny" />
           <FunctionImport Name="IN20300_ppCheckForDeleteSiteID" ReturnType="Collection(String)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -79,6 +77,8 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="SiteID" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="IN_Site" EntityType="IN20300Model.IN_Site" />
+          <EntitySet Name="IN_SiteCpny" EntityType="IN20300Model.IN_SiteCpny" />
         </EntityContainer>
         <ComplexType Name="IN20300_pcCpnybySite_Result">
           <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" />
@@ -122,10 +122,10 @@
           <Property Type="Boolean" Name="Public" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Boolean" Name="HOCreate" Nullable="false" />
         </EntityType>
@@ -173,6 +173,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN20300_ppCheckForDeleteSiteID" FunctionName="eBiz4DWebSysModel.Store.IN20300_ppCheckForDeleteSiteID" />
           <EntitySetMapping Name="IN_Site">
             <EntityTypeMapping TypeName="IN20300Model.IN_Site">
               <MappingFragment StoreEntitySet="IN_Site">
@@ -209,7 +210,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN20300_ppCheckForDeleteSiteID" FunctionName="eBiz4DWebSysModel.Store.IN20300_ppCheckForDeleteSiteID" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -231,8 +231,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="70" >
-        <EntityTypeShape EntityType="IN20300Model.IN_Site" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="IN20300Model.IN_SiteCpny" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN20300Model.IN_Site" Width="1.5" PointX="11.148614605492266" PointY="6.5983888537615485" />
+        <EntityTypeShape EntityType="IN20300Model.IN_SiteCpny" Width="1.5" PointX="6.0195799889134154" PointY="3.2059676662115231" />
       </Diagram>
     </Diagrams>
   </Designer>
