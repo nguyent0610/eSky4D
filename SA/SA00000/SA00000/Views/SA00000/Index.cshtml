@@ -43,7 +43,7 @@
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         @(
             X.Store().ID("stoSYS_Company").AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(SYS_Company), "mdlSYS_Company", "CnpyID"))       
+            .Model(Util.GenerateModel(typeof(SA00000_pdHeader_Result), "mdlSYS_Company", "CnpyID"))       
             .Proxy(
                     X.AjaxProxy()                
                     .Url(Url.Action("GetSYS_Company", "SA00000"))                

@@ -33,6 +33,7 @@ namespace SA00000.Controllers
             {
                 ViewBag.SA00000PP = 0;
             }
+
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -51,7 +52,7 @@ namespace SA00000.Controllers
         #region Get information Company
         public ActionResult GetSYS_Company(string CpnyID)
         {
-            return this.Store(_db.SYS_Company.FirstOrDefault(p => p.CpnyID == CpnyID));
+            return this.Store(_db.SA00000_pdHeader(Current.UserName,Current.CpnyID,Current.LangID,CpnyID).FirstOrDefault());
         }
 
         public ActionResult GetSys_CompanyAddr(string CpnyID)
@@ -75,7 +76,7 @@ namespace SA00000.Controllers
                 string CpnyID = data["cboCpnyID"].PassNull();
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Company"]);
-                var curHeader = dataHandler.ObjectData<SYS_Company>().FirstOrDefault();
+                var curHeader = dataHandler.ObjectData<SA00000_pdHeader_Result>().FirstOrDefault();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSys_CompanyAddr"]);
                 ChangeRecords<SA00000_pgCompanyAddr_Result> lstSys_CompanyAddr = dataHandler1.BatchObjectData<SA00000_pgCompanyAddr_Result>();
@@ -225,7 +226,7 @@ namespace SA00000.Controllers
         #endregion
 
         //Update Header Company
-        private void UpdatingHeader(ref SYS_Company t,SYS_Company s)
+        private void UpdatingHeader(ref SYS_Company t,SA00000_pdHeader_Result s)
         {
             t.CpnyName = s.CpnyName;
             t.Address = s.Address;
