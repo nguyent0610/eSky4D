@@ -50,7 +50,7 @@
                          HQ.Combo().ID("cboSiteId").Name("cboSiteId").HQLangCode("SiteId").HQProcedure("IN20300_pcSitebyBranch")
                         .HQColumnShow("SiteId,Name").DisplayField("SiteId").ValueField("SiteId").MarginSpec("5 0 5 0")
                         .Width(350).HQHeightWidth(400, 500).AllowBlank(false)
-                        .HQDBSys(false).MaxLength(10).EnforceMaxLength(true).HQAutoLoad(false)
+                        .HQDBSys(false).MaxLength(30).EnforceMaxLength(true).HQAutoLoad(false)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection()
                         {
@@ -68,15 +68,7 @@
                      )       
                     , HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("Name").AllowBlank(false)
                             .Width(500).MarginSpec("0 0 5 0").MaxLength(200).EnforceMaxLength(true).DataIndex("Name")
-        // cboSiteId                    
-                    //, X.Container().Layout(LayoutType.HBox).Items(
-                        
-                    //    HQ.Checkbox().ID("chkPublic").Name("Public").HQLangCode("Public").DataIndex("Public").Hidden(true)
-                    //    .Listeners(lst =>
-                    //    {
-                    //        lst.Change.Handler = "chkAutoChange()";
-                    //    })
-                    //)
+
             )
         , X.TabPanel()
         .Region(Region.Center)
