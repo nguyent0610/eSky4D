@@ -339,6 +339,7 @@ namespace AR10200.Controllers
                 else
                 {
                     var obj = new AR_Adjust();
+                    obj.ResetET();
                     obj.Crtd_DateTime = DateTime.Now;
                     obj.Crtd_Prog = _screenNbr;
                     obj.Crtd_User = Current.UserName;
@@ -498,6 +499,7 @@ namespace AR10200.Controllers
             if (isNew)
             {
                 objB = new Batch();
+                objB.ResetET();
                 objB.BranchID = branchID;
                 objB.BatNbr = _db.ARNumbering(branchID, "BatNbr").FirstOrDefault();
                 objB.RefNbr = _db.ARNumbering(branchID, "RefNbr").FirstOrDefault();
@@ -529,7 +531,7 @@ namespace AR10200.Controllers
             if (isNew)
             {
                 objD = new AR_Doc();
-
+                objD.ResetET();
                 objD.BatNbr = inputRef.BatNbr;
                 objD.BranchID = branchID;
                // objD.RefNbr = _db.ARNumbering(Current.CpnyID, "RefNbr").FirstOrDefault();
@@ -538,6 +540,7 @@ namespace AR10200.Controllers
                 objD.Crtd_Prog = _screenNbr;
                 objD.Crtd_User = Current.UserName;
             }
+            
             if (string.IsNullOrWhiteSpace(inputRef.InvcNbr))
             {
                 objD.InvcNbr = _db.ARNumbering(branchID, "ReceiptNbr").FirstOrDefault();

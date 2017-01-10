@@ -549,6 +549,7 @@ var total = function () {
     var totalAmt = 0;
     var totalDocBal = 0;
     var store = App.stoAdjust;
+    store.suspendEvents();
     var allRecords = store.snapshot || store.allData || store.data;
     allRecords.each(function (record) {
         if (record.data.Payment) {
@@ -556,6 +557,7 @@ var total = function () {
             totalDocBal += record.data.DocBal;
         }
     });
+    store.resumeEvents();
     App.txtCuryCrTot.setValue(totalAmt);
     App.txtTotApply.setValue(totalAmt);
     App.txtUnTotApply.setValue(totalDocBal);
