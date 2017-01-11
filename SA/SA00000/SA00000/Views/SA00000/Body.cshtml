@@ -526,7 +526,7 @@
                 .Title(Util.GetLang("SA00000Process"))
                 .Layout(LayoutType.VBox).AutoScroll(true)
                 .Items(
-                    HQ.TextBox().HQLangCode("SAManager").DataIndex("SAManager").Width(600).Tag("X").ReadOnly(true)
+                    HQ.TextBox().HQLangCode("SAManager").DataIndex("SAManager").Width(600).Tag("X").ReadOnly(true).MarginSpec("5 0 0 0")
                 
                     ,HQ.Combo().ID("cboManager").Name("cboManager").HQProcedure("SA00000_pcUser").HQLangCode("SA00000Manager").HQDBSys(true)
                     .HQColumnShow("UserName,Name").DisplayField("UserName").ValueField("UserName").MultiSelect(true)
