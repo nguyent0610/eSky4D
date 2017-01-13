@@ -92,7 +92,7 @@
                     
                     , HQ.Combo().ID("cboHandle").Tag("X")
                     .Name("cboHandle").HQLangCode("HANDLE").HQProcedure("AR10200_pcGetHandle")
-                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQValue("N",false)
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").HQValue("N",false)
                     .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
@@ -335,7 +335,7 @@
 
             , X.GridPanel().ID("grdAdjust")
             .Region(Region.Center).Flex(1)
-            .View(X.GridView().TrackOver(false))
+            .View(X.GridView().TrackOver(false).GetRowClass(function => function.Fn = "grdAdjust_RowClass"))
             .StoreID("stoAdjust")
             .SortableColumns(false)
             .ColumnModel(

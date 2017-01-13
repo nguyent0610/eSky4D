@@ -214,16 +214,18 @@ var Store = {
     },
 
     stoAdjust_dataChanged: function (sto, eOpts) {
-        var paymentTotal = 0;
-        var unpaymentTotal = 0;
+        //var paymentTotal = 0;
+        //var unpaymentTotal = 0;
 
-        sto.each(function (record) {
-            paymentTotal += record.data.Payment;
-            unpaymentTotal += record.data.DocBal;
-        });
+        //sto.each(function (record) {
+        //    if (record.data.Reversal != 'NS') {
+        //        paymentTotal += record.data.Payment;
+        //        unpaymentTotal += record.data.DocBal;
+        //    }
+        //});
 
-        App.txtTotApply.setValue(paymentTotal);
-        App.txtUnTotApply.setValue(unpaymentTotal);
+        //App.txtTotApply.setValue(paymentTotal);
+        //App.txtUnTotApply.setValue(unpaymentTotal);
     }
 };
 
@@ -309,6 +311,7 @@ var Event = {
                 App.txtOdd.setValue(odd);
                 App.txtAutoPayment.setValue(0);
             }
+            total();
         },
 
         
@@ -351,6 +354,10 @@ var Event = {
 
     Grid: {
         chkSelectHeader_change: function (chk, newValue, oldValue, eOpts) {
+            if (App.cboStatus.getValue() != 'H') {
+
+                return false;
+            }
             //if (App.cboStatus.value == _hold) {
             //    var store = chk.up("grid").store;
             //    store.each(function (record) {
@@ -390,9 +397,11 @@ var Event = {
             App.grdAdjust.view.refresh();
 
             frmMain_fieldChange();
+            total();
         },
 
         grdAdjust_beforeEdit: function (editor, e) {
+            if (App.cboStatus.getValue() != 'H') return false;
             if (editor.activeEditor != undefined) editor.activeEditor.completeEdit();
             if (!HQ.grid.checkBeforeEdit(e, _keys)) {
                 return false;
@@ -552,7 +561,7 @@ var total = function () {
     store.suspendEvents();
     var allRecords = store.snapshot || store.allData || store.data;
     allRecords.each(function (record) {
-        if (record.data.Payment) {
+        if (record.data.Payment && record.data.Reversal!='NS') {
             totalAmt += record.data.Payment;
             totalDocBal += record.data.DocBal;
         }
@@ -742,21 +751,24 @@ var menuClick = function (command) {
                         var status = App.cboStatus.getValue();
 
                         if ((status == "U" || status == "C" || status == "H")
-                            && (handle == "C" || handle == "V" || handle == "R")) {
+                            && (handle == "VA" || handle == "C" || handle == "V" || handle == "R")) {
 
-                            if (handle == "R" || handle == "V" || handle == "C") {
+                            if (handle == "VA" || handle == "R" || handle == "V" || handle == "C") {
 
                                 if (handle == "R" && !HQ.isRelease) {
                                     HQ.message.show(737, '', '');
                                 }
-                                else if ((handle == "V" || handle == "C") && !HQ.isRelease) {
+                                else if ((handle == "VA" || handle == "V" || handle == "C") && !HQ.isRelease) {
                                     HQ.message.show(725, '', '');
                                 }
                                 else {
-                                    if (handle == "V" || handle == "C") {
+                                    if (handle == "VA" || handle == "V" || handle == "C") {
                                         if (handle == "V") {
                                             App.winRef.show();
                                             App.grdRef.store.reload();
+                                        }
+                                        else if (handle == "VA") {//huy het
+                                            Process.releaseAdjdRefNbr('%');
                                         }
                                     }
                                     else if (handle == "R") {
@@ -797,3 +809,11 @@ var checkGrid = function (store, field) {
     else
         return false;
 };
+
+
+var grdAdjust_RowClass = function (record) {
+    if (record.data.Reversal == 'NS') {
+        return 'hightlight-row-gray';
+    }
+   
+}

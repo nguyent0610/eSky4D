@@ -315,6 +315,8 @@
           <Property Type="String" Name="CustName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="IsChanged" Nullable="false" MaxLength="1" />
           <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="Reversal" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" />
         </ComplexType>
         <EntityType Name="AR_Adjust">
           <Key>

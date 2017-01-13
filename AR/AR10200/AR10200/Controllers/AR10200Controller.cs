@@ -1,4 +1,4 @@
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Ext.Net;
 using Ext.Net.MVC;
 using HQ.eSkyFramework;
@@ -26,6 +26,7 @@ namespace AR10200.Controllers
         private string _screenNbr = "AR10200";
         private string _moduleAR = "AR";
         private string _holdStatus = "H";
+        private bool isNewBatch = false;
         AR10200Entities _db = Util.CreateObjectContext<AR10200Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private JsonResult _logMessage;
@@ -98,81 +99,26 @@ namespace AR10200.Controllers
         {
             var branchID = data["txtBranchID"];
             var cboBatNbr = data["cboBatNbr"];
-       
-            var adjHandler = new StoreDataHandler(data["lstAdjust"]);
-            var lstAdjust = adjHandler.ObjectData<AR10200_pgBindingGrid_Result>();
-
+            var batHandler = new StoreDataHandler(data["lstBatNbr"]);
+            var inputBatNbr = batHandler.ObjectData<Batch>().FirstOrDefault();
             var batchObj = _db.Batches.FirstOrDefault(
-                       x => x.BranchID == branchID
-                           && x.BatNbr == cboBatNbr
-                           && x.Module == _moduleAR);
+                   x => x.BranchID == inputBatNbr.BranchID
+                       && x.BatNbr == inputBatNbr.BatNbr
+                       && x.Module == inputBatNbr.Module
+                       && x.Status == inputBatNbr.Status);
+
             if (batchObj != null)
             {
-                var refObj = _db.AR_Doc.FirstOrDefault(x => x.BranchID == branchID
-                            && x.BatNbr == batchObj.BatNbr
-                            && x.RefNbr == batchObj.RefNbr);
-                if (refObj != null)
+                if (batchObj.tstamp.ToHex() == inputBatNbr.tstamp.ToHex())
                 {
-                    if (strAdjdRefNbr == "%")
-                    {
-                        foreach (var adjust in lstAdjust)
-                        {
-                            if (adjust.Payment > 0)
-                            {
-                                var objAR_Balances = _db.AR_Balances.FirstOrDefault(p => p.CustID == adjust.CustId && p.BranchID == branchID);
-                                if (objAR_Balances != null)
-                                {
-                                    objAR_Balances.CurrBal = objAR_Balances.CurrBal + (double)adjust.Payment;
-                                    objAR_Balances.LUpd_DateTime = DateTime.Now;
-                                    objAR_Balances.LUpd_Prog = _screenNbr;
-                                    objAR_Balances.LUpd_User = _screenNbr;
-                                }
-                            }
-                        }
-                        batchObj.TotAmt = 0;
-                        batchObj.LUpd_DateTime = DateTime.Now;
-                        batchObj.LUpd_Prog = _screenNbr;
-                        batchObj.LUpd_User = _screenNbr;
-
-                        refObj.OrigDocAmt = 0;
-                        refObj.LUpd_DateTime = DateTime.Now;
-                        refObj.LUpd_Prog = _screenNbr;
-                        refObj.LUpd_User = _screenNbr;
-                    }
-                    else if (strAdjdRefNbr != "")
-                    {
-                        string[] tmp = strAdjdRefNbr.Split(',');
-                        double TotCancel = 0;
-                        foreach (var adjust in lstAdjust)
-                        {
-                            if (adjust.Payment > 0 && tmp.Equals(adjust.RefNbr) == true)
-                            {
-                                var objAR_Balances = _db.AR_Balances.FirstOrDefault(p => p.CustID == adjust.CustId && p.BranchID == branchID);
-                                if (objAR_Balances != null)
-                                {
-                                    objAR_Balances.CurrBal = objAR_Balances.CurrBal + (double)adjust.Payment;
-                                    objAR_Balances.LUpd_DateTime = DateTime.Now;
-                                    objAR_Balances.LUpd_Prog = _screenNbr;
-                                    objAR_Balances.LUpd_User = _screenNbr;
-                                }
-                                TotCancel += (double)adjust.Payment;
-                            }
-                        }
-                        batchObj.TotAmt = batchObj.TotAmt - TotCancel;
-                        batchObj.LUpd_DateTime = DateTime.Now;
-                        batchObj.LUpd_Prog = _screenNbr;
-                        batchObj.LUpd_User = _screenNbr;
-
-                        refObj.OrigDocAmt = refObj.OrigDocAmt - TotCancel;
-                        refObj.LUpd_DateTime = DateTime.Now;
-                        refObj.LUpd_Prog = _screenNbr;
-                        refObj.LUpd_User = _screenNbr;
-                    }
+                    Data_Release("V", branchID, cboBatNbr, strAdjdRefNbr);
+                }
+                else
+                {
+                    throw new MessageException(MessageType.Message, "19");
                 }
             }
-            _db.SaveChanges();
-
-            Data_Release("V", branchID, cboBatNbr, strAdjdRefNbr);
+           
             return Util.CreateMessage(MessageProcess.Save, new { batNbr = cboBatNbr });
         }
 
@@ -180,6 +126,7 @@ namespace AR10200.Controllers
         {
             try
             {
+                isNewBatch = false;
                 var branchID = data["txtBranchID"];
                 var cboBatNbr = data["cboBatNbr"];
                 var txtDescr = data["txtDescr"];
@@ -194,94 +141,78 @@ namespace AR10200.Controllers
                 if (_db.AR10200_ppCheckCloseDate(branchID, inputRefNbr.DocDate.ToDateShort(), "AR10200").FirstOrDefault() == "0")
                     throw new MessageException(MessageType.Message, "301");
 
-                // Check input BatNbr
-                //if (inputBatNbr != null)
-                //{
-                    inputBatNbr.Descr = txtDescr;
-                    inputBatNbr.ReasonCD = cboBankAcct;
+                inputBatNbr.Descr = txtDescr;
+                inputBatNbr.ReasonCD = cboBankAcct;
 
-                    // Save Batch
-                    var batchObj = _db.Batches.FirstOrDefault(
-                        x => x.BranchID == branchID
-                            && x.BatNbr == cboBatNbr
-                            && x.Module == _moduleAR
-                            && x.Status == _holdStatus);
+                // Save Batch
+                var batchObj = _db.Batches.FirstOrDefault(
+                    x => x.BranchID == branchID
+                        && x.BatNbr == cboBatNbr
+                        && x.Module == _moduleAR
+                        && x.Status == _holdStatus);
 
-                    if (batchObj != null)
+                if (batchObj != null)
+                {
+                    if (batchObj.tstamp.ToHex() == inputBatNbr.tstamp.ToHex())
                     {
-                        if (batchObj.tstamp.ToHex() == inputBatNbr.tstamp.ToHex())
-                        {
-                            Updating_Batch(ref batchObj, inputBatNbr, false, branchID);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
+                        Updating_Batch(ref batchObj, inputBatNbr, false, branchID);
                     }
                     else
                     {
-                        Updating_Batch(ref batchObj, inputBatNbr, true, branchID);
-
-                        _db.Batches.AddObject(batchObj);
+                        throw new MessageException(MessageType.Message, "19");
                     }
+                }
+                else
+                {
+                    Updating_Batch(ref batchObj, inputBatNbr, true, branchID);
 
-                    // Input RefNbr
-                    
-                    //if (inputRefNbr != null)
-                    //{
-                        inputRefNbr.RefNbr = batchObj.RefNbr;
-                        inputRefNbr.BatNbr = batchObj.BatNbr;
-                        inputRefNbr.DocDesc = txtDescr;
-                        //inputRefNbr.OrigDocAmt = data["txtTotAmt"] != null ? double.Parse(data["txtTotAmt"]) : 0;
-                        inputRefNbr.OrigDocAmt = batchObj.TotAmt;
-                        // Save RefNbr/AR_Doc
-                        var refObj = _db.AR_Doc.FirstOrDefault(x => x.BranchID == branchID
-                            && x.BatNbr == batchObj.BatNbr
-                            && x.RefNbr == batchObj.RefNbr);
+                    _db.Batches.AddObject(batchObj);
+                    isNewBatch = true;
+                }
 
-                        if (refObj != null)
+
+                inputRefNbr.RefNbr = batchObj.RefNbr;
+                inputRefNbr.BatNbr = batchObj.BatNbr;
+                inputRefNbr.DocDesc = txtDescr;
+                inputRefNbr.OrigDocAmt = batchObj.TotAmt;
+                // Save RefNbr/AR_Doc
+                var refObj = _db.AR_Doc.FirstOrDefault(x => x.BranchID == branchID
+                    && x.BatNbr == batchObj.BatNbr
+                    && x.RefNbr == batchObj.RefNbr);
+
+                if (refObj != null)
+                {
+                    if (refObj.tstamp.ToHex() == inputRefNbr.tstamp.ToHex())
+                    {
+
+                        Updating_AR_Doc(ref refObj, inputRefNbr, false, branchID);
+                        SaveAR_Adjust(data, refObj, branchID);
+                        return Json(new
                         {
-                            if (refObj.tstamp.ToHex() == inputRefNbr.tstamp.ToHex())
-                            {
-
-                                Updating_AR_Doc(ref refObj, inputRefNbr, false, branchID);
-                                SaveAR_Adjust(data, refObj, branchID);
-                                return Json(new
-                                {
-                                    success = true,
-                                    msgCode = 201405071,
-                                    batNbr = batchObj.BatNbr,
-                                    refNbr = batchObj.RefNbr
-                                });
-                            }
-                            else
-                            {
-                                throw new MessageException(MessageType.Message, "19");
-                            }
-                        }
-                        else
-                        {
-                            Updating_AR_Doc(ref refObj, inputRefNbr, true, branchID);
-                            _db.AR_Doc.AddObject(refObj);
-                            SaveAR_Adjust(data, refObj, branchID);
-                            return Json(new
-                            {
-                                success = true,
-                                msgCode = 201405071,
-                                batNbr = batchObj.BatNbr,
-                                refNbr = batchObj.RefNbr
-                            });
-                        }
-                    //}
-                    //else
-                    //{
-                    //    throw new MessageException(MessageType.Message, "22701");
-                    //}
-                //}
-                //else
-                //{
-                //    throw new MessageException(MessageType.Message, "22701");
-                //}
+                            success = true,
+                            msgCode = 201405071,
+                            batNbr = batchObj.BatNbr,
+                            refNbr = batchObj.RefNbr
+                        });
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
+                }
+                else
+                {
+                    Updating_AR_Doc(ref refObj, inputRefNbr, true, branchID);
+                    _db.AR_Doc.AddObject(refObj);
+                    SaveAR_Adjust(data, refObj, branchID);
+                    return Json(new
+                    {
+                        success = true,
+                        msgCode = 201405071,
+                        batNbr = batchObj.BatNbr,
+                        refNbr = batchObj.RefNbr
+                    });
+                }
 
                 if (_logMessage != null)
                 {
@@ -313,19 +244,6 @@ namespace AR10200.Controllers
             {
                 _db.AR_Adjust.DeleteObject(adjust);
             }
-
-            //var lstOldAdjusts = _db.AR_Adjust.Where(p => p.BranchID == branchID
-            //                                            && p.AdjgBatNbr == refObj.BatNbr
-            //                                            && p.AdjgRefNbr == refObj.RefNbr).ToList();
-
-            //foreach (var objold in lstOldAdjusts)
-            //{
-            //    if (lstAdjust.Where(p => p.InvcNbr == objold. &&).FirstOrDefault() == null)
-            //    {
-            //        _db.AR_Adjust.DeleteObject(objold);
-            //    }
-            //}
-
             foreach (var adjust in lstAdjust)
             {
                 var result = _db.AR_Adjust.FirstOrDefault(x => x.BranchID == branchID
@@ -351,6 +269,27 @@ namespace AR10200.Controllers
                     {
                         _db.AR_Adjust.AddObject(obj);
                     };
+                }
+                //kiểm tra batch đã có tạo nó chưa. Nếu đã có tạo mà chưa release thì ko cho nhập
+                if (isNewBatch)
+                {
+                    var objDocData = _db.AR_Doc.FirstOrDefault(x => x.BranchID == branchID
+                   && x.BatNbr == adjust.BatNbr
+                   && x.RefNbr == adjust.RefNbr);
+                    if (objDocData != null)
+                    {
+                        if (objDocData.tstamp.ToHex() != adjust.tstamp.ToHex())
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                        else
+                        {
+                            objDocData.LUpd_DateTime = DateTime.Now;
+                            objDocData.LUpd_User =Current.UserName;
+                            objDocData.LUpd_Prog = _screenNbr;
+                        }
+                    }
+                    else throw new MessageException(MessageType.Message, "19");
                 }
             }
             _db.SaveChanges();
@@ -595,7 +534,7 @@ namespace AR10200.Controllers
                         dal.CommitTrans();
 
                         Util.AppendLog(ref _logMessage, "9999", data: new { success = true, batNbr = BatNbr });
-                    }
+                    }                   
                     ar = null;
                 }
                 catch (Exception)

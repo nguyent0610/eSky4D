@@ -3623,7 +3623,9 @@ namespace AR10200
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="refNbr">Initial value of the RefNbr property.</param>
         /// <param name="isChanged">Initial value of the IsChanged property.</param>
-        public static AR10200_pgBindingGrid_Result CreateAR10200_pgBindingGrid_Result(global::System.Double docBal, global::System.DateTime docDate, global::System.String batNbr, global::System.String branchID, global::System.String refNbr, global::System.String isChanged)
+        /// <param name="reversal">Initial value of the Reversal property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static AR10200_pgBindingGrid_Result CreateAR10200_pgBindingGrid_Result(global::System.Double docBal, global::System.DateTime docDate, global::System.String batNbr, global::System.String branchID, global::System.String refNbr, global::System.String isChanged, global::System.String reversal, global::System.Byte[] tstamp)
         {
             AR10200_pgBindingGrid_Result aR10200_pgBindingGrid_Result = new AR10200_pgBindingGrid_Result();
             aR10200_pgBindingGrid_Result.DocBal = docBal;
@@ -3632,6 +3634,8 @@ namespace AR10200
             aR10200_pgBindingGrid_Result.BranchID = branchID;
             aR10200_pgBindingGrid_Result.RefNbr = refNbr;
             aR10200_pgBindingGrid_Result.IsChanged = isChanged;
+            aR10200_pgBindingGrid_Result.Reversal = reversal;
+            aR10200_pgBindingGrid_Result.tstamp = tstamp;
             return aR10200_pgBindingGrid_Result;
         }
 
@@ -3998,6 +4002,54 @@ namespace AR10200
         private Nullable<global::System.Boolean> _Selected;
         partial void OnSelectedChanging(Nullable<global::System.Boolean> value);
         partial void OnSelectedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Reversal
+        {
+            get
+            {
+                return _Reversal;
+            }
+            set
+            {
+                OnReversalChanging(value);
+                ReportPropertyChanging("Reversal");
+                _Reversal = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Reversal");
+                OnReversalChanged();
+            }
+        }
+        private global::System.String _Reversal;
+        partial void OnReversalChanging(global::System.String value);
+        partial void OnReversalChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
 
         #endregion
 
