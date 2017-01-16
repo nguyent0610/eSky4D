@@ -142,7 +142,7 @@
                     .Parameters(ps =>
                     {
                         ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
-                        ps.Add(new StoreParameter("SlsperID", "App.cboSlsperID.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("SlsperID", "App.cboSlsperID.valueModels?App.cboSlsperID.getValue().join(','):App.cboSlsperID.getValue()", ParameterMode.Raw));
                         ps.Add(new StoreParameter("FromDate", "App.dteFromDate.getValue()", ParameterMode.Raw));
                         ps.Add(new StoreParameter("ToDate", "App.dteToDate.getValue()", ParameterMode.Raw));
                     })
@@ -271,7 +271,7 @@
                     .Parameters(ps =>
                     {
                         ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
-                        ps.Add(new StoreParameter("SlsperID", "App.cboSlsperID.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("SlsperID", "App.cboSlsperID.valueModels?App.cboSlsperID.getValue().join(','):App.cboSlsperID.getValue()", ParameterMode.Raw));
                         ps.Add(new StoreParameter("FromDate", "App.dteFromDate.getValue()", ParameterMode.Raw));
                         ps.Add(new StoreParameter("ToDate", "App.dteToDate.getValue()", ParameterMode.Raw));
                     })

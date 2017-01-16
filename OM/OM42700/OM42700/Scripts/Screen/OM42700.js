@@ -15,6 +15,8 @@ var firstLoad = function () {
     App.frmMain.isValid();
     App.dteFromDate.setValue(HQ.bussinessDate);
     App.dteToDate.setValue(HQ.bussinessDate);
+    App.grdPDA.hide();
+    App.grdOrder.hide();
 }
 var frmChange = function () {
     if (App.cboType) {
