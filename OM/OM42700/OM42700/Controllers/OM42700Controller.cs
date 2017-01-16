@@ -112,9 +112,9 @@ namespace OM42700.Controllers
                         }
                     }
                 _db.SaveChanges();
-               
 
-                return Json(new { success = true });
+
+                return Util.CreateMessage(MessageProcess.Save);
             }
             catch (Exception ex)
             {
