@@ -38,8 +38,8 @@ namespace AR20400
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-			Current.Server = "SERVERP\\SQL2016";//"EARTHSVR\\SQL2012";
-			Current.DBSys = "PhuongUyen_eSky4DSys";
+			Current.Server = "TRUONGSAD";//"EARTHSVR\\SQL2012";
+            Current.DBSys = "JFV_eSky4DSysSupport";
             AccessRight acc = new AccessRight();
             Current.FormatDateJS = "dd.MM.yyyy";
             Current.FormatDate = "dd.MM.yyyy";
@@ -47,7 +47,7 @@ namespace AR20400
             acc.Insert = true;
             acc.Update = true;
             Session["AR20400"] = acc;
-			Session["DBApp"] = Current.DBApp = "PhuongUyen_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "JFV_eSky4DAppSupport";
             Session["UserName"] = Current.UserName = "admin";
 			Session["CpnyID"] = Current.CpnyID = "PU";
             Session["Language"] = Current.Language = "vi";          

@@ -364,7 +364,7 @@ var stoLoad = function (sto) {
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, ['BranchID', 'CustId']);
         record = sto.getAt(0);
-        if(App.cboCustTypeAR20400_pcCustType.data.items[0])
+        if (App.cboCustTypeAR20400_pcCustType.data.items[0])
             record.set('CustType', App.cboCustTypeAR20400_pcCustType.data.items[0].data.Code);
         else
             record.set('CustType', 'L');
@@ -381,6 +381,14 @@ var stoLoad = function (sto) {
             App.cboCustId.forceSelection = true;
         HQ.common.setRequire(App.frmMain);
         sto.commitChanges();
+    }
+    else {
+        var objPageCust = findRecordCombo(App.cboCustId.getValue());
+        if (objPageCust) {
+            var positionCust = calcPage(objPageCust.index);
+            App.cboCustId.loadPage(positionCust);
+        }
+        //App.cboCustId.setValue(App.cboCustId.getValue());
     }
     var record = sto.getAt(0);
     App.lblName.setValue(record.data.CustName);
@@ -704,7 +712,7 @@ var save = function () {
                                     var positionCust = calcPage(objPageCust.index);
                                     App.cboCustId.loadPage(positionCust);
                                 }
-                                App.cboCustId.setValue(CustId);
+                                App.cboCustId.setValue(data.result.CustId);
                                 App.stoAR_Customer.reload();
                             }
                            
@@ -720,7 +728,7 @@ var save = function () {
                                     var positionCust = calcPage(objPageCust.index);
                                     App.cboCustId.loadPage(positionCust);
                                 }
-                                App.cboCustId.setValue(CustId);
+                                App.cboCustId.setValue(data.result.CustId);
                                 App.stoAR_Customer.reload();
                             }
                         }
