@@ -140,7 +140,7 @@ namespace AR10200.Controllers
 
                 if (_db.AR10200_ppCheckCloseDate(branchID, inputRefNbr.DocDate.ToDateShort(), "AR10200").FirstOrDefault() == "0")
                     throw new MessageException(MessageType.Message, "301");
-
+                
                 inputBatNbr.Descr = txtDescr;
                 inputBatNbr.ReasonCD = cboBankAcct;
 
@@ -155,6 +155,7 @@ namespace AR10200.Controllers
                 {
                     if (batchObj.tstamp.ToHex() == inputBatNbr.tstamp.ToHex())
                     {
+                        
                         Updating_Batch(ref batchObj, inputBatNbr, false, branchID);
                     }
                     else
@@ -261,7 +262,7 @@ namespace AR10200.Controllers
                     obj.Crtd_DateTime = DateTime.Now;
                     obj.Crtd_Prog = _screenNbr;
                     obj.Crtd_User = Current.UserName;
-                    Updating_AR_Adjust(ref obj, adjust, branchID, handle);
+                    Updating_AR_Adjust(ref obj, adjust,refObj, branchID, handle);
                     obj.BatNbr = refObj.BatNbr;
                     obj.AdjgBatNbr = refObj.BatNbr;
                     obj.AdjgRefNbr = refObj.RefNbr;
@@ -300,7 +301,7 @@ namespace AR10200.Controllers
 
         }
 
-        private void Updating_AR_Adjust(ref AR_Adjust objAd, AR10200_pgBindingGrid_Result adjust, string branchID, string handle)
+        private void Updating_AR_Adjust(ref AR_Adjust objAd, AR10200_pgBindingGrid_Result adjust,AR_Doc objDoc, string branchID, string handle)
         {
             objAd.BranchID = branchID;
             objAd.AdjAmt = adjust.Payment != null ? adjust.Payment.ToDouble() : 0;
@@ -308,7 +309,7 @@ namespace AR10200.Controllers
             objAd.AdjdBatNbr = adjust.BatNbr;
             objAd.AdjdRefNbr = adjust.RefNbr;
             objAd.AdjDiscAmt = 0;
-            objAd.AdjgDocDate = adjust.DocDate.Short();
+            objAd.AdjgDocDate = objDoc.DocDate.Short();
             objAd.AdjgDocType = "PA";
             objAd.Reversal = "";
             objAd.CustID = adjust.CustId;

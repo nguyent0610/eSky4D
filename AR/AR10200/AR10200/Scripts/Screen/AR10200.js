@@ -72,6 +72,7 @@ var Process = {
             url: 'AR10200/ReleaseAdjdRef',
             timeout: 1800000,
             params: {
+                lstBatNbr: Ext.encode(App.stoBatNbr.getRecordsValues()),
                 strAdjdRefNbr: strAdjdRefNbr,
                 lstAdjust: Ext.encode(App.grdAdjust.store.getRecordsValues())
             },
@@ -778,7 +779,7 @@ var menuClick = function (command) {
                             }
                             return;
                         }
-                        else {
+                        else if(App.cboStatus.getValue()=='H') {
                             Process.saveBatch();
                         }
                     }
