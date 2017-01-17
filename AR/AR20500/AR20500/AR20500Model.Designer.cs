@@ -6990,7 +6990,8 @@ namespace AR20500
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="color">Initial value of the Color property.</param>
         /// <param name="custHT">Initial value of the CustHT property.</param>
-        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT)
+        /// <param name="eRPCustID">Initial value of the ERPCustID property.</param>
+        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID)
         {
             AR20500_pgDetail_Result aR20500_pgDetail_Result = new AR20500_pgDetail_Result();
             aR20500_pgDetail_Result.ID = id;
@@ -6999,6 +7000,7 @@ namespace AR20500
             aR20500_pgDetail_Result.Checked = @checked;
             aR20500_pgDetail_Result.Color = color;
             aR20500_pgDetail_Result.CustHT = custHT;
+            aR20500_pgDetail_Result.ERPCustID = eRPCustID;
             return aR20500_pgDetail_Result;
         }
 
@@ -8397,6 +8399,30 @@ namespace AR20500
         private global::System.String _Salut;
         partial void OnSalutChanging(global::System.String value);
         partial void OnSalutChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ERPCustID
+        {
+            get
+            {
+                return _ERPCustID;
+            }
+            set
+            {
+                OnERPCustIDChanging(value);
+                ReportPropertyChanging("ERPCustID");
+                _ERPCustID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ERPCustID");
+                OnERPCustIDChanged();
+            }
+        }
+        private global::System.String _ERPCustID;
+        partial void OnERPCustIDChanging(global::System.String value);
+        partial void OnERPCustIDChanged();
 
         #endregion
 

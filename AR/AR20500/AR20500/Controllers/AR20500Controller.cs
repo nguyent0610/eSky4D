@@ -215,7 +215,7 @@ namespace AR20500.Controllers
                                 objCust.DeliveryID = item.DeliveryID.PassNull(); ;
                                 objCust.Country = objCust.BillCountry = "VN";
                                 objCust.District = item.District.PassNull(); ;
-                                objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();
+                                objCust.CustId = item.ERPCustID.PassNull() != "" ? item.ERPCustID.PassNull() : _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();
                                 objCust.DfltShipToId = "DEFAULT";
                                 objCust.LTTContractNbr = item.CustHT;
                                 objCust.LUpd_Datetime = DateTime.Now;
