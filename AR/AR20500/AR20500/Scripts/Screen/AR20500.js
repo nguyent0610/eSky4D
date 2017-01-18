@@ -3,7 +3,9 @@ var keys = ['ID'];
 var _firstLoad = true;
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    if (HQ.isShowCustHT) HQ.grid.show(App.grdCust,['CustHT'])
+    if (HQ.isShowCustHT) HQ.grid.show(App.grdCust, ['CustHT'])
+    if (HQ.IsShowERPCust) HQ.grid.show(App.grdCust, ['ERPCustID'])
+
     App.stoAR20500_pdWeekofVisitAll.load(function () {
         App.cboCpnyID.getStore().load(function () {
             App.cboSlsperId.getStore().load(function () {
@@ -258,6 +260,9 @@ var menuClick = function (command) {
 };
 
 var grdCust_BeforeEdit = function (item, e) {
+    if (!HQ.isShowCustHT && e.field == 'CustHT') return false;
+    if (!HQ.IsShowERPCust && e.field == 'ERPCustID') return false;
+
     if (e.field != 'ColCheck' && App.cboStatus.getValue() != 'H') return false;
     if (e.field == 'WeekofVisit') {
         App.cboColWeekofVisit.getStore().reload();

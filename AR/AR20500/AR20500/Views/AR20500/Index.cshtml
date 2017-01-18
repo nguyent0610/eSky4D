@@ -3,7 +3,7 @@
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
 @using AR20500;
-
+@using HQ.eSkySys;
 @model System.Collections.IEnumerable
 @{
     Layout = null;
@@ -11,6 +11,14 @@
     var HQ = Html.HQ();
     ViewBag.Title = "AR20500";
     var acc = Session["AR20500"] as AccessRight;
+    eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
+
+   var objShowCust = _sys.SYS_Configurations.Where(p=>p.Code.ToUpper()=="AR205SHOWERPCUST").FirstOrDefault();
+   if (objShowCust != null)
+   {
+       ViewBag.IsShowERPCust = objShowCust.IntVal == 1 ? true : false;
+   }
+   else {ViewBag.IsShowERPCust = false;   }
     
 }
 <!DOCTYPE html>
@@ -68,6 +76,8 @@
         HQ.bussinessDate = new Date('@DateTime.Now.Date');
         HQ.EndDateYear = new Date('@( new DateTime(DateTime.Now.Year,12,31))')
         HQ.isShowCustHT = HQ.util.toBool('@ViewBag.IsShowCustHT');
+        HQ.IsShowERPCust = HQ.util.toBool('@ViewBag.IsShowERPCust');
+        
     </script>  
     <title>@ViewBag.Title</title>
 </head>

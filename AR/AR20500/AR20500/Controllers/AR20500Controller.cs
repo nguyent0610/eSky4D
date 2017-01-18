@@ -143,7 +143,7 @@ namespace AR20500.Controllers
                     }
                     if (errorCustID != string.Empty)
                         throw new MessageException(MessageType.Message, "2016062801", "askApprove", parm: new string[] { errorCustID });
-
+                    List<string> lstCustID = new List<string>();
                     foreach (var item in lstCust)
                     {
                         if (item.ColCheck == true)
@@ -162,6 +162,22 @@ namespace AR20500.Controllers
                                     _db.Dispose();
                                     continue;
                                     //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
+                                }
+                                if (item.ERPCustID.PassNull() != "" )
+                                {
+                                    string custERP = item.ERPCustID.PassNull().ToUpper().Trim();
+                                    string branchID = item.BranchID.PassNull();
+                                    if (lstCustID.Contains(custERP))
+                                    {
+                                        throw new MessageException(MessageType.Message, "1112", "", parm: new string[] { Util.GetLang("CustID") + " " + item.ERPCustID.PassNull() });
+                                    }
+
+                                    var objCust1 = _db.AR_Customer.Where(p => p.BranchID == branchID && p.CustId.ToUpper() == custERP).FirstOrDefault();
+                                    if(objCust1!=null)
+                                    {
+                                        throw new MessageException(MessageType.Message, "8001", "", parm: new string[] { Util.GetLang("CustID") + " " + item.ERPCustID.PassNull() });
+                                    }
+                                    lstCustID.Add(item.ERPCustID.PassNull().ToUpper());
                                 }
                                 objNew.WeekofVisit = item.WeekofVisit;
                                 objNew.Mon = item.Mon.Value ? int.Parse("1") : int.Parse("0");

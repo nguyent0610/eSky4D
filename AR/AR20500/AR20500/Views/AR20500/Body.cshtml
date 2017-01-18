@@ -184,7 +184,7 @@
                         , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(90)
                         , X.Column().Text(Util.GetLang("SlsName")).DataIndex("Name").Width(120)
                         , X.Column().Text(Util.GetLang("Addr")).DataIndex("Addr1").Width(250).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
-                        , X.Column().Text(Util.GetLang("ERPCustID")).DataIndex("ERPCustID").Width(250).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+                        , X.Column().Text(Util.GetLang("ERPCustID")).DataIndex("ERPCustID").Width(250).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true)).Hidden(true)
                         , X.Column().Text(Util.GetLang("NewCustID")).DataIndex("NewCustID").Width(100)
                         , X.Column().Text(Util.GetLang("CustHT")).DataIndex("CustHT").Width(100).Editor(X.TextField().MaxLength(30).EnforceMaxLength(true)).Hidden(true)
                         , X.Column()
