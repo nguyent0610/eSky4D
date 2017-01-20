@@ -21,7 +21,7 @@
         .BodyBorder(0).AutoScroll(true)
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar("print,close", true, ""))
-        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 130; })
         .Listeners(l=>{
             l.BoxReady.Handler = "firstLoad()";
             l.FieldChange.Fn = "frmChange";
@@ -30,20 +30,20 @@
             X.Panel().ID("pnlHeader")
             .Layout(LayoutType.HBox).Region(Region.North)
             .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
-            .Border(false).MinWidth(750)
+            .Border(false).MinWidth(900)
             .Listeners(ls=>ls.Render.Handler="HQ.common.control_render(this,'header')")
             .Items(
 
                 // First Column
                 X.Container().Layout(LayoutType.VBox)
-                .Flex(1).MinWidth(250)
-                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+               // .Flex(1).MinWidth(250)
+                //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
                     HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQLangCode("BranchID").Tag("X")
                     .HQProcedure("AR20200_pcBranchAllByUser")
                     .HQColumnShow("BranchID,BranchName,Channel").DisplayField("BranchID").ValueField("BranchID")
                     .AllowBlank(false).ForceSelection(true)//.HQValue("HQ.cpnyID", true)
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
@@ -62,7 +62,7 @@
                         HQ.Combo().ID("cboSlsperid").Name("cboSlsperid").HQLangCode("Slsperid").Tag("X")
                             .HQProcedure("AR20200_pcSalesPersonMaster").HQColumnShow("SlsperId,Name")
                             .DisplayField("SlsperId").ValueField("SlsperId").MaxLength(30).EnforceMaxLength(true)
-                            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                            .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                             .ForceSelection(true).HQAutoLoad(false)
                             .HQParam(new StoreParameterCollection() 
                             {
@@ -78,7 +78,7 @@
                             })
 
                         , HQ.Checkbox().ID("chkActive").Name("chkActive").HQLangCode("ACTIVE")
-                        .MarginSpec("5 0 0 10").DataIndex("Active")//.Flex(1)
+                        .MarginSpec("5 0 0 5").DataIndex("Active")//.Flex(1)
                     )
 
                     , HQ.Combo().ID("cboPosition").Name("cboPosition").HQLangCode("Position").HQProcedure("AR20200_pcPosition")
@@ -100,7 +100,7 @@
                     , HQ.Combo().ID("cboProductGroup").Name("cboProductGroup").HQLangCode("ProductGroup").DataIndex("ProductGroup")
                     .HQProcedure("AR20200_pcProductGroup").HQColumnShow("Code,Descr")
                     .DisplayField("Descr").ValueField("Code")
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .ForceSelection(true)
                     .LoadData()
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -112,20 +112,20 @@
 
                     
                     , HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("Name").DataIndex("Name")
-                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(30).EnforceMaxLength(true)
+                    .Width(350).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtAddr1").Name("txtAddr1").HQLangCode("Addr1").DataIndex("Addr1")
-                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(50).EnforceMaxLength(true)
+                    .Width(350).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(50).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtAddr2").Name("txtAddr2").HQLangCode("AR20200Addr2").DataIndex("Addr2")
-                    .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    .Width(350).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtEMailAddr").Name("txtEMailAddr").HQLangCode("EMailAddr").DataIndex("EMailAddr")
-                    .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true).AllowBlank(true)
+                    .Width(350).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true).AllowBlank(true)
 
                     , HQ.Combo().ID("cboDeliveryMan").Name("cboDeliveryMan").HQLangCode("DeliveryMan").HQProcedure("AR20200_pcDeliveryPerson")
                     .HQColumnShow("Slsperid,Name").DisplayField("Name").ValueField("Slsperid").DataIndex("DeliveryMan")
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() 
                         { 
@@ -139,7 +139,7 @@
 
                     , HQ.Combo().ID("cboSupID").Name("cboSupID").HQLangCode("SALESSUP").HQProcedure("AR20200_pcUser")
                     .HQColumnShow("Slsperid,Name").DisplayField("Name").ValueField("Slsperid").DataIndex("SupID")
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() 
                         { 
@@ -153,12 +153,12 @@
                     .LoadData()
 
                     , HQ.NumberField().ID("txtCrLmt").Name("txtCrLmt").HQLangCode("CrLmt").DataIndex("CrLmt")
-                    .Width(300).MarginSpec("5 0 0 0").DecimalPrecision(0).SelectOnFocus(true)
+                    .Width(350).MarginSpec("5 0 0 0").DecimalPrecision(0).SelectOnFocus(true)
                     .MinValue(0).AllowExponential(false)
 
                     , HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("SiteID").HQProcedure("AR20200_pcVend")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("VendID").HQAutoLoad(false)
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0").ForceSelection(true)
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 5 0").ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
@@ -174,13 +174,13 @@
 
                 // Second Column
                 , X.Container().Layout(LayoutType.VBox)
-                .Flex(1).MinWidth(250)
-                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                //.Flex(1).MinWidth(250)
+               // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
                     HQ.Combo().ID("cboStatus").ReadOnly(true).Tag("X").DataIndex("Status")
                         .Name("cboStatus").HQLangCode("Status").HQProcedure("AR20200_pcApproveStatus")
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQValue("H", false)
-                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .ForceSelection(true)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection() 
@@ -197,7 +197,7 @@
                     , HQ.Combo().ID("cboHandle")
                         .Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20200_pcApproveHandle").Tag("X")
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("ToStatus")
-                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .ForceSelection(true).HQAutoLoad(false)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection()
@@ -218,7 +218,7 @@
                     , HQ.Combo().ID("cboCountry").Name("cboCountry").DataIndex("Country").HQLangCode("COUNTRY")
                         .HQProcedure("AR20400_pcCountryID").HQColumnShow("CountryID,Descr")
                         .DisplayField("CountryID").ValueField("CountryID").AllowBlank(false)
-                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .LoadData()
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
@@ -233,7 +233,7 @@
                     , HQ.Combo().ID("cboState").Name("cboState").DataIndex("State").HQLangCode("STATE")
                         .HQProcedure("AR20400_pcStateByCountry").HQColumnShow("State,Descr")
                         .DisplayField("State").ValueField("State").AllowBlank(false)
-                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .HQParam(new StoreParameterCollection() 
                         {
                             new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw }
@@ -253,7 +253,7 @@
                     , HQ.Combo().ID("cboDistrict").Name("cboDistrict").DataIndex("District").HQLangCode("DISTRICT")
                         .HQProcedure("AR20400_pcDistrictByCountryState").HQColumnShow("District,Name")
                         .DisplayField("District").ValueField("District").AllowBlank(false)
-                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .HQParam(new StoreParameterCollection() 
                         {
                             new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw },
@@ -270,27 +270,27 @@
                         })
 
                     , HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("Phone").DataIndex("Phone").MaskRe(@"/[0-9-,;.*#()+/ ]/")
-                    .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
+                    .Width(350).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("Fax").DataIndex("Fax").MaskRe(@"/[0-9-,;.*#()+/ ]/")
-                    .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
+                    .Width(350).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.NumberField().ID("txtCmmnPct").Name("txtCmmnPct").HQLangCode("CmmnPct").DataIndex("CmmnPct")
-                    .Width(300).MarginSpec("5 0 0 0").SelectOnFocus(true).MinValue(0).AllowExponential(false)
+                    .Width(350).MarginSpec("5 0 0 0").SelectOnFocus(true).MinValue(0).AllowExponential(false)
 
                     , HQ.TextBox().ID("txtPPCPassword").Name("txtPPCPassword").HQLangCode("PPCPassword").DataIndex("PPCPassword")
-                    .Width(300).MarginSpec("5 0 0 0").InputType(Ext.Net.InputType.Password).MaxLength(100).EnforceMaxLength(true)
+                    .Width(350).MarginSpec("5 0 0 0").InputType(Ext.Net.InputType.Password).MaxLength(100).EnforceMaxLength(true)
 
                     , HQ.Checkbox().ID("chkPPCStorePicReq").Name("chkPPCStorePicReq").HQLangCode("PPCSTOREPICREQ")
-                    .MarginSpec("5 0 0 155").DataIndex("PPCStorePicReq")
+                    .MarginSpec("5 0 0 135").DataIndex("PPCStorePicReq")
 
                     , HQ.Checkbox().ID("chkPPCAdmin").Name("chkPPCAdmin").HQLangCode("PPCADMIN").DataIndex("PPCAdmin")
-                    .MarginSpec("5 0 0 155")
+                    .MarginSpec("5 0 0 135")
                 )
 
                 // Third Column
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
-                .MinWidth(200)//.Flex(1)
+                //.MinWidth(200)//.Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
                     X.Hidden().ID("hdnImages").DataIndex("Images")

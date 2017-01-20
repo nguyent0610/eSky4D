@@ -23,7 +23,7 @@ namespace AR20200.Controllers
     {
         private string _screenNbr = "AR20200";
         private string _beginStatus = "H";
-        private string _noneStatus = "N";
+        //private string _noneStatus = "N";
         private string _mt = "MT";
         AR20200Entities _db = Util.CreateObjectContext<AR20200Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
