@@ -112,7 +112,7 @@
             )
             .Listeners(lss =>
             {
-            lss.Render.Handler = "HQ.common.control_render(this,'header')";
+                lss.Render.Handler = "HQ.common.control_render(this,'header')";
             })
             
             
@@ -293,9 +293,9 @@
 
                                         )
 
-                                        , Html.X().Column().Text(Util.GetLang("LineTypeDescr")).Width(100).DataIndex("LineTypeDescr").Width(150)
+                                , Html.X().Column().Text(Util.GetLang("LineTypeDescr")).Width(100).DataIndex("LineTypeDescr").Width(150)
                                         
-                               ,Html.X().Column().Text(Util.GetLang("InvtID")).Width(100).DataIndex("InvtID")
+                                , Html.X().Column().Text(Util.GetLang("InvtID")).Width(100).DataIndex("InvtID")
                                         .Editor(
                                             HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQProcedure("AP10100_pcInventoryActiveByBranch")
                                                 .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
@@ -384,19 +384,19 @@
 
                             )
                             .SelectionModel(Html.X().RowSelectionModel().ID("slmgrdAP_Trans").Mode(SelectionMode.Multi))
-                             .Features( X.GridFilters()
+                            .Listeners (p=> p.BeforeSelect.Handler = "HQ.focus = 'AP_Trans';")
+                            .Features( X.GridFilters()
                                     .Local(true)
                                     .Filters(
-                                     X.StringFilter().DataIndex("LineType"),
-                                     X.StringFilter().DataIndex("LineTypeDescr"),
-                                      X.StringFilter().DataIndex("InvtID"),
-                                             X.NumericFilter().DataIndex("Qty"),
-                                             X.NumericFilter().DataIndex("UnitPrice"),
-                                             X.NumericFilter().DataIndex("TranAmt"),
-                                             X.StringFilter().DataIndex("TranDesc"),
-                                      X.StringFilter().DataIndex("TaxCat"),
-                                         X.StringFilter().DataIndex("TaxID")
-                                           
+                                        X.StringFilter().DataIndex("LineType"),
+                                        X.StringFilter().DataIndex("LineTypeDescr"),
+                                        X.StringFilter().DataIndex("InvtID"),
+                                        X.NumericFilter().DataIndex("Qty"),
+                                        X.NumericFilter().DataIndex("UnitPrice"),
+                                        X.NumericFilter().DataIndex("TranAmt"),
+                                        X.StringFilter().DataIndex("TranDesc"),
+                                        X.StringFilter().DataIndex("TaxCat"),
+                                        X.StringFilter().DataIndex("TaxID")
                                     )
                                  )
                             .Plugins(
@@ -412,7 +412,10 @@
                                )                 
                             //)//End grid
                         
-                )// tapDoc
+                ).Listeners(lss =>
+                {
+                    lss.Render.Handler = "HQ.common.control_render(this,'AP_Trans')";
+                })// tapDoc
                   , X.Panel()
                                 .ID("tabTax")
                                 .Layout(LayoutType.VBox)

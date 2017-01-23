@@ -38,7 +38,7 @@ namespace AP10100
             //Session["LangID"] = 1;
             Current.FormatDate = "dd-MM-yyyy";
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";//"MARSSVR\\SQL2012";
+            Current.Server = "HOANGSAD";//"MARSSVR\\SQL2012";
 			Current.DBSys = "ND_eSky4DSys";//"eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
