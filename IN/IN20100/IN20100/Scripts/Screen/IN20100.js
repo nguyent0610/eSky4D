@@ -235,7 +235,12 @@ var grdUnitConversion_Edit = function (item, e) {
 };
 
 var grdUnitConversion_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdUnitConversion, e, keys);
+    if (e.field == 'InvtID') {
+        return HQ.grid.checkValidateEditDG(App.grdUnitConversion, e, keys, true);
+    } else {
+        return HQ.grid.checkValidateEdit(App.grdUnitConversion, e, keys, true);
+    }
+    
 };
 
 var grdUnitConversion_Reject = function (record) {
