@@ -94,18 +94,18 @@ namespace IN10900.Controllers
 						_objStockOutlet.LUpd_User = Current.UserName;
 					}
 
-					var objin_trans = _db.IN_Trans.Where(p => p.BranchID.ToLower() == branchID.ToLower() && p.BatNbr.ToLower() == curItem.StkOutNbr.ToLower()).ToList();
+                    //var objin_trans = _db.IN_Trans.Where(p => p.BranchID.ToLower() == branchID.ToLower() && p.BatNbr.ToLower() == curItem.StkOutNbr.ToLower()).ToList();
 
-					if (objin_trans.Count() > 0)
-					{
-						foreach (var a in objin_trans)
-						{
-							a.TranDate = docDate.ToDateShort();
-							a.LUpd_DateTime = DateTime.Now;
-							a.LUpd_Prog = _screenNbr;
-							a.LUpd_User = Current.UserName;
-						}
-					}
+                    //if (objin_trans.Count() > 0)
+                    //{
+                    //    foreach (var a in objin_trans)
+                    //    {
+                    //        a.TranDate = docDate.ToDateShort();
+                    //        a.LUpd_DateTime = DateTime.Now;
+                    //        a.LUpd_Prog = _screenNbr;
+                    //        a.LUpd_User = Current.UserName;
+                    //    }
+                    //}
 
 
 				}

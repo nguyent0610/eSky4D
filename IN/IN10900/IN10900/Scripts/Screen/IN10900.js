@@ -294,6 +294,7 @@ var cboSlsPerID_Change = function (sender, value) {
 };
 
 var txtFromDate_Change = function () {
+    if (App.dteFromDate.isValid() &&  App.dteToDate.isValid())
     App.stoData.reload();
 }
 
@@ -312,39 +313,7 @@ var AdjustedCheckAll_Change = function (value) {
     }
 };
 
-// ham xu ly khi check vao 1 checkbox  nho trong Grid 
-//var AdjustedCheckEveryRow_Change = function (item, Value, newValue) {
-//    //select dong ma minh da check chon
-//    if (newValue.data.Selected == true) {
-//        //sau khi chon xong thay doi gia tri trong o pPayment va DocBal 
-//        //newValue.set("Payment", newValue.data.DocBal + newValue.data.Payment);
-//        //newValue.set("DocBal", 0);
-//        ChangeWhenSelectCheckBoxGrid();
-//    } else {
-//        //newValue.set("DocBal", newValue.data.OrigDocBal)
-//        //newValue.set("Payment", 0);
-//        ChangeWhenSelectCheckBoxGrid();
-//    }
-//};
 
-
-//cap nhap lai Application Total va Unapply Total sau khi chon checkbox cua Grid 
-//var ChangeWhenSelectCheckBoxGrid = function (item, newValue, oldValue) {
-//    //duyet trong store va lay tong cua cac payment dua vao o Application Total va thay doi ca trong UnApply Total
-//    for (var i = 0; i < App.stoDetail.data.length; i++) {
-//        tmpApplicationTotal += App.stoDetail.data.items[i].data.Payment;
-//    }
-
-//    App.txtPaid.setValue(tmpApplicationTotal);
-//    App.txtUnTotPayment.setValue(App.txtOrigDocAmt.value - App.txtPaid.value);
-//    //dk neu Apply Amount lon hon hoac bang ApplicationTotal , neu lon hon thi lay gia tri ApplicationTotal 
-//    if (tmpApplicationTotal >= App.txtPaid.value) {
-//        App.txtCuryCrTot.setValue(App.txtPaid.value);
-//    } else {  // neu nho hon lay gia tri Apply Amount
-//        App.txtCuryCrTot.setValue(tmpApplicationTotal);
-//    }
-//    tmpApplicationTotal = 0;
-//};
 ///////////////////////////////////////////////////////////////////////////
 ////// Process Data ///////////////////////////////////////////////////////
 var save = function () {
