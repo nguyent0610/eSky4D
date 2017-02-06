@@ -50,13 +50,13 @@ namespace IN20100.Controllers
                 foreach (IN20100_pgLoadUnitConversion_Result del in lstUnitConversion.Deleted)
                 {
                     // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
-                    if (lstUnitConversion.Created.Where(p => p.UnitType == del.UnitType).Count() > 0)
+                    if (lstUnitConversion.Created.Where(p => p.UnitType == del.UnitType && p.ClassID.ToLower() == del.ClassID.ToLower() && p.InvtID.ToLower() == del.InvtID.ToLower() && p.FromUnit.ToLower() == del.FromUnit.ToLower() && p.ToUnit.ToLower() == del.ToUnit.ToLower()).Count() > 0)
                     {
-                        lstUnitConversion.Created.Where(p => p.UnitType == del.UnitType).FirstOrDefault().tstamp = del.tstamp;
+                        lstUnitConversion.Created.Where(p => p.UnitType == del.UnitType && p.ClassID.ToLower() == del.ClassID.ToLower() && p.InvtID.ToLower() == del.InvtID.ToLower() && p.FromUnit.ToLower() == del.FromUnit.ToLower() && p.ToUnit.ToLower() == del.ToUnit.ToLower()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.IN_UnitConversion.ToList().Where(p => p.UnitType == del.UnitType).FirstOrDefault();
+                        var objDel = _db.IN_UnitConversion.ToList().Where(p => p.UnitType == del.UnitType && p.ClassID.ToLower() == del.ClassID.ToLower() && p.InvtID.ToLower() == del.InvtID.ToLower() && p.FromUnit.ToLower() == del.FromUnit.ToLower() && p.ToUnit.ToLower() == del.ToUnit.ToLower()).FirstOrDefault();
                         if (objDel != null)
                         {
                             _db.IN_UnitConversion.DeleteObject(objDel);
