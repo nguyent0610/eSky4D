@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="SYS_UserGroup">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="GroupID" />
+          </Key>
+          <Property Name="UserID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="GroupID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_Datetime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
+          <Property Name="LUpd_Datetime" Type="datetime" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="UserName" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CpnyID" Type="varchar(max)" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Email" Type="nvarchar" MaxLength="250" />
+          <Property Name="HomeScreenNbr" Type="varchar" MaxLength="10" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" />
+          <Property Name="PasswordQuestion" Type="nvarchar" MaxLength="200" />
+          <Property Name="PasswordAnswer" Type="nvarchar" MaxLength="100" />
+          <Property Name="UserTypes" Type="nvarchar" MaxLength="200" />
+          <Property Name="Tel" Type="varchar" MaxLength="15" />
+          <Property Name="ComputerID" Type="varchar" MaxLength="100" />
+          <Property Name="Blocked" Type="bit" Nullable="false" />
+          <Property Name="BlockedTime" Type="datetime" />
+          <Property Name="LoggedIn" Type="bit" Nullable="false" />
+          <Property Name="LastLoggedIn" Type="datetime" />
+          <Property Name="JobTitle" Type="nvarchar" MaxLength="200" />
+          <Property Name="Manager" Type="varchar" MaxLength="30" />
+          <Property Name="Department" Type="nvarchar" MaxLength="200" />
+          <Property Name="Channel" Type="varchar" MaxLength="200" />
+          <Property Name="AutoID" Type="varchar" MaxLength="50" />
+          <Property Name="ExpireDay" Type="int" Nullable="false" />
+          <Property Name="FailedLoginCount" Type="int" Nullable="false" />
+          <Property Name="BeginDay" Type="datetime" Nullable="false" />
+          <Property Name="CheckFirstLogin" Type="bit" Nullable="false" />
+          <Property Name="Images" Type="nvarchar" MaxLength="100" />
+          <Property Name="CpnyIDHand" Type="varchar(max)" />
+          <Property Name="Crtd_Datetime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
+          <Property Name="LUpd_Datetime" Type="datetime" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
+          <Property Name="MultiLogin" Type="bit" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="CrtLmt" Type="float" Nullable="false" />
+          <Property Name="CrtLmtInvoice" Type="float" Nullable="false" />
+        </EntityType>
+        <Function Name="SA03001_pgBranchAllByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="ListBranchID" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SA03001_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SYS_UserGroup" EntityType="Self.SYS_UserGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SA03001Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SA03001Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="SA03001_pgLoadGrid" ReturnType="Collection(SA03001Model.SA03001_pgLoadGrid_Result)">
+          <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="SA03001_pgBranchAllByUser" ReturnType="Collection(SA03001Model.SA03001_pgBranchAllByUser_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="ListBranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="SYS_UserGroup" EntityType="SA03001Model.SYS_UserGroup" />
+          <EntitySet Name="Users" EntityType="SA03001Model.User" />
+        </EntityContainer>
+        <ComplexType Name="SA03001_pgLoadGrid_Result">
+          <Property Type="String" Name="Manager" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="UserGroup" Nullable="true" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="CpnyID" Nullable="true" />
+          <Property Type="String" Name="UserTypes" Nullable="true" MaxLength="200" />
+          <Property Type="Boolean" Name="Blocked" Nullable="false" />
+          <Property Type="DateTime" Name="BlockedTime" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="FailedLoginCount" Nullable="false" />
+          <Property Type="DateTime" Name="LastLoggedIn" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="isChange" Nullable="true" />
+          <Property Type="DateTime" Name="StartDate" Nullable="true" />
+          <Property Type="DateTime" Name="EndDate" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SA03001_pgBranchAllByUser_Result">
+          <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="PVNName" Nullable="true" MaxLength="400" />
+          <Property Type="String" Name="Addr" Nullable="true" MaxLength="400" />
+          <Property Type="Boolean" Name="Check" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="SYS_UserGroup">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="GroupID" />
+          </Key>
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CpnyID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="HomeScreenNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordQuestion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordAnswer" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserTypes" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="ComputerID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Blocked" Type="Boolean" Nullable="false" />
+          <Property Name="BlockedTime" Type="DateTime" Precision="3" />
+          <Property Name="LoggedIn" Type="Boolean" Nullable="false" />
+          <Property Name="LastLoggedIn" Type="DateTime" Precision="3" />
+          <Property Name="JobTitle" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Manager" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Department" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Channel" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AutoID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ExpireDay" Type="Int32" Nullable="false" />
+          <Property Name="FailedLoginCount" Type="Int32" Nullable="false" />
+          <Property Name="BeginDay" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CheckFirstLogin" Type="Boolean" Nullable="false" />
+          <Property Name="Images" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CpnyIDHand" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_Datetime" Type="DateTime" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_Datetime" Type="DateTime" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MultiLogin" Type="Boolean" Nullable="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CrtLmt" Type="Double" Nullable="false" />
+          <Property Name="CrtLmtInvoice" Type="Double" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SA03001Entities" >
+          <FunctionImportMapping FunctionImportName="SA03001_pgLoadGrid" FunctionName="eBiz4DWebSysModel.Store.SA03001_pgLoadGrid">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_pgLoadGrid_Result">
+                <ScalarProperty Name="Manager" ColumnName="Manager" />
+                <ScalarProperty Name="UserGroup" ColumnName="UserGroup" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="UserTypes" ColumnName="UserTypes" />
+                <ScalarProperty Name="Blocked" ColumnName="Blocked" />
+                <ScalarProperty Name="BlockedTime" ColumnName="BlockedTime" />
+                <ScalarProperty Name="FailedLoginCount" ColumnName="FailedLoginCount" />
+                <ScalarProperty Name="LastLoggedIn" ColumnName="LastLoggedIn" />
+                <ScalarProperty Name="isChange" ColumnName="isChange" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA03001_pgBranchAllByUser" FunctionName="eBiz4DWebSysModel.Store.SA03001_pgBranchAllByUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_pgBranchAllByUser_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="PVNName" ColumnName="PVNName" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+                <ScalarProperty Name="Check" ColumnName="Check" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="SYS_UserGroup">
+            <EntityTypeMapping TypeName="SA03001Model.SYS_UserGroup">
+              <MappingFragment StoreEntitySet="SYS_UserGroup">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="SA03001Model.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="CrtLmtInvoice" ColumnName="CrtLmtInvoice" />
+                <ScalarProperty Name="CrtLmt" ColumnName="CrtLmt" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="MultiLogin" ColumnName="MultiLogin" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="CpnyIDHand" ColumnName="CpnyIDHand" />
+                <ScalarProperty Name="Images" ColumnName="Images" />
+                <ScalarProperty Name="CheckFirstLogin" ColumnName="CheckFirstLogin" />
+                <ScalarProperty Name="BeginDay" ColumnName="BeginDay" />
+                <ScalarProperty Name="FailedLoginCount" ColumnName="FailedLoginCount" />
+                <ScalarProperty Name="ExpireDay" ColumnName="ExpireDay" />
+                <ScalarProperty Name="AutoID" ColumnName="AutoID" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Manager" ColumnName="Manager" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="LastLoggedIn" ColumnName="LastLoggedIn" />
+                <ScalarProperty Name="LoggedIn" ColumnName="LoggedIn" />
+                <ScalarProperty Name="BlockedTime" ColumnName="BlockedTime" />
+                <ScalarProperty Name="Blocked" ColumnName="Blocked" />
+                <ScalarProperty Name="ComputerID" ColumnName="ComputerID" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="UserTypes" ColumnName="UserTypes" />
+                <ScalarProperty Name="PasswordAnswer" ColumnName="PasswordAnswer" />
+                <ScalarProperty Name="PasswordQuestion" ColumnName="PasswordQuestion" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="HomeScreenNbr" ColumnName="HomeScreenNbr" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="102" >
+        <EntityTypeShape EntityType="SA03001Model.SYS_UserGroup" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SA03001Model.User" Width="1.5" PointX="3.375" PointY="0.75" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
