@@ -143,6 +143,20 @@ var grdSYS_AccessDetRights_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdSYS_AccessDetRights_Edit = function (item, e) {
+    if (e.field == 'InitRights') {
+       // e.record.set("InitRights", e.value);
+        e.record.set("InsertRights", e.value);
+        e.record.set("UpdateRights", e.value);
+        e.record.set("DeleteRights", e.value);
+        e.record.set("ViewRights", e.value);
+        e.record.set("ReleaseRights", e.value);
+    } else if (e.field == 'InsertRights' || e.field == 'UpdateRights' || e.field == 'DeleteRights' || e.field == 'ViewRights' || e.field == 'ReleaseRights') {
+        var initRight = true;
+        if (e.record.data.InsertRights == false || e.record.data.UpdateRights == false || e.record.data.DeleteRights == false || e.record.data.ViewRights == false || e.record.data.ReleaseRights == false) {
+            initRight = false;
+        }
+        e.record.set("InitRights", initRight);
+    }
     HQ.grid.checkInsertKey(App.grdSYS_AccessDetRights, e, keys);
 };
 var grdSYS_AccessDetRights_ValidateEdit = function (item, e) {
@@ -153,86 +167,91 @@ var grdSYS_AccessDetRights_Reject = function (record) {
     frmChange();
 };
 
-//var InitRightsCheckAll_Change = function (value) {
-//    if (value) {
-//        App.stoSYS_AccessDetRights.suspendEvents();
-//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-//            item.set("InitRights", value.checked);
-//        });
-//        App.stoSYS_AccessDetRights.resumeEvents();
-//        App.grdSYS_AccessDetRights.view.refresh();
-//    }
+var InitRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("InitRights", value.checked);
+            item.set("InsertRights", value.checked);
+            item.set("UpdateRights", value.checked);
+            item.set("DeleteRights", value.checked);
+            item.set("ViewRights", value.checked);
+            item.set("ReleaseRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
 
-//};
+};
 
-//var InsertRightsCheckAll_Change = function (value) {
-//    if (value) {
-//        App.stoSYS_AccessDetRights.suspendEvents();
-//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-//            item.set("InsertRights", value.checked);
-//        });
-//        App.stoSYS_AccessDetRights.resumeEvents();
-//        App.grdSYS_AccessDetRights.view.refresh();
-//    }
-//};
+var InsertRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("InsertRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+};
 
-//var UpdateRightsCheckAll_Change = function (value) {
-//    if (value) {
-//        App.stoSYS_AccessDetRights.suspendEvents();
-//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-//            item.set("UpdateRights", value.checked);
-//        });
-//        App.stoSYS_AccessDetRights.resumeEvents();
-//        App.grdSYS_AccessDetRights.view.refresh();
-//    }
-//};
+var UpdateRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("UpdateRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+};
 
-//var DeleteRightsCheckAll_Change = function (value) {
-//    if (value) {
-//        App.stoSYS_AccessDetRights.suspendEvents();
-//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-//            item.set("DeleteRights", value.checked);
-//        });
-//        App.stoSYS_AccessDetRights.resumeEvents();
-//        App.grdSYS_AccessDetRights.view.refresh();
-//    }
-//};
+var DeleteRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("DeleteRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+};
 
-//var ViewRightsCheckAll_Change = function (value) {
-//    if (value) {
-//        App.stoSYS_AccessDetRights.suspendEvents();
-//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-//            item.set("ViewRights", value.checked);
-//        });
-//        App.stoSYS_AccessDetRights.resumeEvents();
-//        App.grdSYS_AccessDetRights.view.refresh();
-//    }
-//};
+var ViewRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("ViewRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+};
 
-//var ReleaseRightsCheckAll_Change = function (value) {
-//    if (value) {
-//        App.stoSYS_AccessDetRights.suspendEvents();
-//        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-//            item.set("ReleaseRights", value.checked);
-//        });
-//        App.stoSYS_AccessDetRights.resumeEvents();
-//        App.grdSYS_AccessDetRights.view.refresh();
-//    }
-//};
+var ReleaseRightsCheckAll_Change = function (value) {
+    if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
+        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+            item.set("ReleaseRights", value.checked);
+        });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
+    }
+};
 
 var LoadGrid = function (sender, e) {
     App.grdSYS_AccessDetRights.show();
     App.stoSYS_AccessDetRights.reload();
-    //if (App.InitRightsCheckAll.value == true || App.InsertRightsCheckAll.value == true ||
-    //    App.UpdateRightsCheckAll.value == true || App.DeleteRightsCheckAll.value == true ||
-    //    App.ViewRightsCheckAll.value == true || App.ReleaseRightsCheckAll.value == true) {
-    //    App.InitRightsCheckAll.setValue(false);
-    //    App.InsertRightsCheckAll.setValue(false);
-    //    App.UpdateRightsCheckAll.setValue(false);
-    //    App.DeleteRightsCheckAll.setValue(false);
-    //    App.ViewRightsCheckAll.setValue(false);
-    //    App.ReleaseRightsCheckAll.setValue(false);
-    //}
+    if (App.InitRightsCheckAll.value == true || App.InsertRightsCheckAll.value == true ||
+        App.UpdateRightsCheckAll.value == true || App.DeleteRightsCheckAll.value == true ||
+        App.ViewRightsCheckAll.value == true || App.ReleaseRightsCheckAll.value == true) {
+        App.InitRightsCheckAll.setValue(false);
+        App.InsertRightsCheckAll.setValue(false);
+        App.UpdateRightsCheckAll.setValue(false);
+        App.DeleteRightsCheckAll.setValue(false);
+        App.ViewRightsCheckAll.setValue(false);
+        App.ReleaseRightsCheckAll.setValue(false);
+    }
 };
 
 var cboRecType_Change = function (sender, e) {
