@@ -169,8 +169,11 @@ var grdSYS_AccessDetRights_Reject = function (record) {
 
 var InitRightsCheckAll_Change = function (value) {
     if (value) {
+        var allData = App.stoSYS_AccessDetRights.snapshot || App.stoSYS_AccessDetRights.allData || App.stoSYS_AccessDetRights.data;
+
         App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+
+        allData.each(function (item) {
             item.set("InitRights", value.checked);
             item.set("InsertRights", value.checked);
             item.set("UpdateRights", value.checked);
@@ -186,9 +189,15 @@ var InitRightsCheckAll_Change = function (value) {
 
 var InsertRightsCheckAll_Change = function (value) {
     if (value) {
+        var allData = App.stoSYS_AccessDetRights.snapshot || App.stoSYS_AccessDetRights.allData || App.stoSYS_AccessDetRights.data;
         App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+        allData.each(function (item) {
             item.set("InsertRights", value.checked);
+            var initRight = true;
+            if (item.data.InsertRights == false || item.data.UpdateRights == false || item.data.DeleteRights == false || item.data.ViewRights == false || item.data.ReleaseRights == false) {
+                initRight = false;
+            }
+            item.set("InitRights", initRight);
         });
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();
@@ -197,9 +206,15 @@ var InsertRightsCheckAll_Change = function (value) {
 
 var UpdateRightsCheckAll_Change = function (value) {
     if (value) {
+        var allData = App.stoSYS_AccessDetRights.snapshot || App.stoSYS_AccessDetRights.allData || App.stoSYS_AccessDetRights.data;
         App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+        allData.each(function (item) {
             item.set("UpdateRights", value.checked);
+            var initRight = true;
+            if (item.data.InsertRights == false || item.data.UpdateRights == false || item.data.DeleteRights == false || item.data.ViewRights == false || item.data.ReleaseRights == false) {
+                initRight = false;
+            }
+            item.set("InitRights", initRight);
         });
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();
@@ -208,9 +223,15 @@ var UpdateRightsCheckAll_Change = function (value) {
 
 var DeleteRightsCheckAll_Change = function (value) {
     if (value) {
+        var allData = App.stoSYS_AccessDetRights.snapshot || App.stoSYS_AccessDetRights.allData || App.stoSYS_AccessDetRights.data;
         App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+        allData.each(function (item) {
             item.set("DeleteRights", value.checked);
+            var initRight = true;
+            if (item.data.InsertRights == false || item.data.UpdateRights == false || item.data.DeleteRights == false || item.data.ViewRights == false || item.data.ReleaseRights == false) {
+                initRight = false;
+            }
+            item.set("InitRights", initRight);
         });
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();
@@ -219,9 +240,15 @@ var DeleteRightsCheckAll_Change = function (value) {
 
 var ViewRightsCheckAll_Change = function (value) {
     if (value) {
+        var allData = App.stoSYS_AccessDetRights.snapshot || App.stoSYS_AccessDetRights.allData || App.stoSYS_AccessDetRights.data;
         App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+        allData.each(function (item) {
             item.set("ViewRights", value.checked);
+            var initRight = true;
+            if (item.data.InsertRights == false || item.data.UpdateRights == false || item.data.DeleteRights == false || item.data.ViewRights == false || item.data.ReleaseRights == false) {
+                initRight = false;
+            }
+            item.set("InitRights", initRight);
         });
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();
@@ -230,9 +257,15 @@ var ViewRightsCheckAll_Change = function (value) {
 
 var ReleaseRightsCheckAll_Change = function (value) {
     if (value) {
+        var allData = App.stoSYS_AccessDetRights.snapshot || App.stoSYS_AccessDetRights.allData || App.stoSYS_AccessDetRights.data;
         App.stoSYS_AccessDetRights.suspendEvents();
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
+        allData.each(function (item) {
             item.set("ReleaseRights", value.checked);
+            var initRight = true;
+            if (item.data.InsertRights == false || item.data.UpdateRights == false || item.data.DeleteRights == false || item.data.ViewRights == false || item.data.ReleaseRights == false) {
+                initRight = false;
+            }
+            item.set("InitRights", initRight);
         });
         App.stoSYS_AccessDetRights.resumeEvents();
         App.grdSYS_AccessDetRights.view.refresh();

@@ -61,14 +61,23 @@ namespace SA00700.Controllers
 
                 foreach (SA00700_pgAccessRightsScreen_Result curLang in lstSYS_AccessDetRights.Created)
                 {
-                    if (curLang.ScreenNumber.PassNull() == "" || userID.PassNull() == "" || recType.PassNull()=="" ) continue;
-
+                    if (curLang.ScreenNumber.PassNull() == "" || userID.PassNull() == "" || recType.PassNull() == "")
+                    {
+                        continue;
+                    }
+                    
                     var lang = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber.ToLower() == curLang.ScreenNumber.ToLower() 
                                                                         && p.UserID.ToLower() == userID.ToLower()
                                                                         && p.CpnyID.ToLower() == cpnyID.ToLower()
                                                                         && p.RecType.ToLower() == recType.ToLower());
-
-                    if (lang != null)
+                    if (curLang.InitRights == false && curLang.InsertRights == false && curLang.UpdateRights == false && curLang.DeleteRights == false && curLang.ViewRights == false && curLang.ReleaseRights == false)
+                    {
+                        if (curLang != null)
+                        {
+                            _db.SYS_AccessDetRights.DeleteObject(lang);
+                        }
+                    }
+                    else if (lang != null)
                     {
                         if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
                         {
