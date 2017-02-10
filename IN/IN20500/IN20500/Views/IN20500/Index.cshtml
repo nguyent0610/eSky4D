@@ -30,14 +30,16 @@
         }
     </style>
     <script>
-        HQ.cpnyID = '@Current.CpnyID';
-        HQ.langID = '@Current.LangID';
-        HQ.userName = '@Current.UserName';
-        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-        HQ.bussinessDate = new Date('@DateTime.Now.Date');
-        HQ.IN20500Date = '@DateTime.Now.ToString(Current.FormatDate.Replace("/","").Replace(".","").Replace("-",""))';
+    HQ.cpnyID = '@Current.CpnyID';
+    HQ.langID = '@Current.LangID';
+    HQ.userName = '@Current.UserName';
+    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+    HQ.bussinessDate = new Date('@DateTime.Now.Date');
+    HQ.IN20500Date = '@DateTime.Now.ToString(Current.FormatDate.Replace("/","").Replace(".","").Replace("-",""))';
+
+    HQ.isHideChkPublic = HQ.util.toBool('@ViewBag.isHideChkPublic');
     </script>  
     <title>@ViewBag.Title</title>
 </head>

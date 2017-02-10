@@ -74,6 +74,13 @@ namespace IN20500.Controllers
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            var isHideChkPublic = false;
+            var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "IN20500CHKPUBLIC");
+            if (objConfig != null && objConfig.IntVal == 1)
+            {
+                isHideChkPublic = true;
+            }
+            ViewBag.isHideChkPublic = isHideChkPublic;
             return View();
         }
 

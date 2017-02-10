@@ -154,7 +154,7 @@
                 , X.Container().Layout(LayoutType.HBox)
                     .Items(
                         HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("Status").DataIndex("Status")
-                            .HQProcedure("IN20500_pcStatus").HQColumnShow("Code,Descr")
+                            .HQProcedure("IN20500_pcStatus").HQColumnShow("Code,Descr").Tag("X")
                             .DisplayField("Descr").ValueField("Code").AllowBlank(false)
                             .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
                             .HQParam(new StoreParameterCollection()
@@ -170,7 +170,7 @@
                             })
                             
                         , HQ.Checkbox().ID("chkPublic").Name("chkPublic").HQLangCode("Public").DataIndex("Public")
-                            .Width(300).MarginSpec("5 0 5 10")
+                            .Width(300).MarginSpec("5 0 5 10").Value(true).Hidden(true)
                             .Listeners(lst=>
                             {
                                 lst.Change.Fn = "chkPublic_Change";

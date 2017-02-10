@@ -33,6 +33,18 @@ var checkLoad = function (sto) {
 };
 
 var firstLoad = function () {
+
+    App.chkPublic.setVisible(!HQ.isHideChkPublic);
+   
+    if (HQ.isHideChkPublic) {
+        App.tabDetail.child('#pnlCpnyID').tab.setDisabled(true);
+        if (App.tabDetail.activeTab.id == "pnlCpnyID") {
+            App.tabDetail.setActiveTab(App.pnlDfltInfo);
+        }
+    } else {
+        App.tabDetail.child('#pnlCpnyID').tab.setDisabled(false);
+    }
+
     setView();
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
@@ -188,7 +200,6 @@ var menuClick = function (command) {
     }
 };
 
-
 var frmChange = function () {
     if (App.stoIN_Inventory.getCount() > 0) {
         App.frmMain.getForm().updateRecord();
@@ -217,6 +228,7 @@ var stoLoad = function (sto) {
         record = sto.getAt(0);
         record.set('ApproveStatus', 'H');
         record.set('Status', 'AC');
+        record.set('Public', HQ.isHideChkPublic);
         HQ.isNew = true;
         App.cboInvtID.forceSelection = false;
         HQ.common.setRequire(App.frmMain);
