@@ -43,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\..\..\..\..\..\DLL MVC\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Ext.Net, Version=2.4.0.28524, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\son\Desktop\eSky\dll\DLL\Ext.Net.dll</HintPath>

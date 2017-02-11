@@ -16,13 +16,9 @@
  <!--Không thay đổi phần head Đổi mã màn hình OM25100.js tùy theo màn hình đổi lại-->
 <head>
     <meta name="viewport" content="width=device-width" />
-    @*<script src='@Url.Content("Scripts/Screen/hq.language" + Current.LangID + ".js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/hq.language" + Current.LangID + ".js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/Screen/hq.common.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/OM25100.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>*@
-
-    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/screen/OM25100.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/OM25100.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
@@ -35,17 +31,14 @@
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-        //HQ.isUpdate = HQ.util.toBool('true');
-        //HQ.isInsert = HQ.util.toBool('false');
-        //HQ.isDelete = HQ.util.toBool('true');
-        @*HQ.bussinessDate = new Date('@DateTime.Now.Year', '@DateTime.Now.Month', '@DateTime.Now.Date');*@
+        HQ.ShowTabCondition = Number('@ViewBag.ShowTabCondition');
         HQ.bussinessDate = new Date('@DateTime.Now.Date');
 
     </script>  
     <title>@ViewBag.Title</title>
 </head>
     <body>
-        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
          
         @*Make the store - the binding data of the form*@
         @(
@@ -70,7 +63,7 @@
             .Listeners(l =>
                 {
                     l.BeforeLoad.Fn = "stoBeforeLoad";
-                    l.Load.Fn = "stoLoad";                   
+                    l.Load.Fn = "stoCycleNbr_Load";                   
                 }
             )
         )

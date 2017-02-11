@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("OM25100")]
-[assembly: AssemblyDescription("Tạo chỉnh nhà cung cấp")]
+[assembly: AssemblyDescription("OM25100")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Han Quang Software Solution")]
+[assembly: AssemblyCompany("HQ Software Solution")]
 [assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]
-[assembly: AssemblyCopyright("Han Quang Software Solution. All rights Reserved.")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copy right 2006-2016 HQ Software Solution. All rights Reserved")]
+[assembly: AssemblyTrademark("OM25100")]
 [assembly: AssemblyCulture("")]
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

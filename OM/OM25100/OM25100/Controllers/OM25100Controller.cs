@@ -10,11 +10,12 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
-
 using HQFramework.DAL;
 using HQFramework;
 using HQ.eSkyFramework.HQControl;
 using System.Drawing;
+using Aspose.Cells;
+using HQ.eSkySys;
 
 namespace OM25100.Controllers
 {
@@ -23,22 +24,30 @@ namespace OM25100.Controllers
     {
         private string _screenNbr = "OM25100";
         private string _userName = Current.UserName;
+        private string _cpnyID = Current.CpnyID;
+        private JsonResult _logMessage;
 
         OM25100Entities _db = Util.CreateObjectContext<OM25100Entities>(false);
-        //eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
 
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            var objConfig = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "OM25100TabCondition");
+            if (objConfig != null)
+                ViewBag.ShowTabCondition = objConfig.IntVal;
+            else
+                ViewBag.ShowTabCondition = 0;
             return View();
         }
         
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
+        #region -Get data-                
 
         public ActionResult GetMCCodeHeader(string CycleNbr, string KPI)
         {
@@ -92,7 +101,14 @@ namespace OM25100.Controllers
             var lstKPISales_Invt = _db.OM25100_pgKPISales_Invt(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
             return this.Store(lstKPISales_Invt);
         }
-       
+        public ActionResult GetKPICondition(string CycleNbr, string KPI)
+        {
+            var lstKPICondition = _db.OM25100_pgKPICondition(CycleNbr, KPI, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            return this.Store(lstKPICondition);
+        }
+        #endregion
+
+        #region -Save delete-
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
@@ -138,10 +154,13 @@ namespace OM25100.Controllers
 				ChangeRecords<OM25100_pgKPICustomer_Class_Result> stoOM_KPICustomer_Class = dataHander_grid7.BatchObjectData<OM25100_pgKPICustomer_Class_Result>();
 				stoOM_KPICustomer_Class.Created.AddRange(stoOM_KPICustomer_Class.Updated);
 
-
 				StoreDataHandler dataHander_grid8 = new StoreDataHandler(data["stoOM_KPICustomer_Invt"]);
 				ChangeRecords<OM25100_pgKPICustomer_Invt_Result> stoOM_KPICustomer_Invt = dataHander_grid8.BatchObjectData<OM25100_pgKPICustomer_Invt_Result>();
 				stoOM_KPICustomer_Invt.Created.AddRange(stoOM_KPICustomer_Invt.Updated);
+
+                StoreDataHandler dataHander_gridCondition = new StoreDataHandler(data["stoOM_KPICondition"]);
+                ChangeRecords<OM25100_pgKPICondition_Result> stoOM_KPICondition = dataHander_gridCondition.BatchObjectData<OM25100_pgKPICondition_Result>();
+                stoOM_KPICondition.Created.AddRange(stoOM_KPICondition.Updated);
 
                 #region OM_KPIHeader
                 var header = _db.OM_KPIHeader.FirstOrDefault(p => p.CycleNbr == CycleNbr && p.KPI == KPI);
@@ -198,6 +217,7 @@ namespace OM25100.Controllers
                     _db.OM_KPIHeader.AddObject(header);
                 }
                 #endregion
+
                 #region OM_KPICpny_All
                 foreach (OM25100_pgKPICpny_All_Result del in stoOM_KPICpny_All.Deleted)
                 {
@@ -634,8 +654,6 @@ namespace OM25100.Controllers
 					}
 				}
 
-
-
 				foreach (OM25100_pgKPICustomer_Invt_Result curItem in stoOM_KPICustomer_Invt.Created)
 				{
 					if (curItem.BranchID.PassNull() == "") continue;
@@ -665,6 +683,55 @@ namespace OM25100.Controllers
 					}
 				}
 				#endregion
+
+
+                #region OM_KPICondition
+                foreach (var del in stoOM_KPICondition.Deleted)
+                {
+                    if (stoOM_KPICondition.Created.Where(p => p.LineRef == del.LineRef).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    {
+                        stoOM_KPICondition.Created.Where(p => p.LineRef == del.LineRef).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.OM_KPICondition.ToList().Where(p => p.CycleNbr == header.CycleNbr
+                            && p.KPI.ToUpper() == header.KPI.ToUpper() && p.LineRef == del.LineRef).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.OM_KPICondition.DeleteObject(objDel);
+                        }
+                    }
+                }
+
+                foreach (var curItem in stoOM_KPICondition.Created)
+                {
+                    if (curItem.Type.PassNull() == "") continue;
+
+                    var objCondition = _db.OM_KPICondition.Where(p => p.CycleNbr == header.CycleNbr
+                        && p.KPI.ToUpper() == header.KPI.ToUpper() && p.LineRef.ToUpper() == curItem.LineRef.ToUpper()).FirstOrDefault();
+
+                    if (objCondition != null)
+                    {
+                        if (objCondition.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
+                        {
+                             Update_OM_KPICondition(ref objCondition, curItem, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        objCondition = new OM_KPICondition();
+                        Update_OM_KPICondition(ref objCondition, curItem, true);
+                        objCondition.CycleNbr = CycleNbr;
+                        objCondition.KPI = KPI;
+                        _db.OM_KPICondition.AddObject(objCondition);
+                    }
+                }
+                #endregion
+
                 _db.SaveChanges();
                 return Json(new { success = true, CycleNbr = CycleNbr }, "text/html");
             }
@@ -725,6 +792,11 @@ namespace OM25100.Controllers
                     _db.OM_KPISales_Invt.DeleteObject(OjbGroupDet);
                 }
 
+                var lstOM_KPICondition = _db.OM_KPICondition.Where(p => p.CycleNbr == CycleNbr && p.KPI == KPI).ToList();
+                foreach (var objCondition in lstOM_KPICondition)
+                {
+                    _db.OM_KPICondition.DeleteObject(objCondition);
+                }
                 _db.SaveChanges();
                 return Json(new { success = true }, "text/html");
             }
@@ -734,7 +806,7 @@ namespace OM25100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-
+                        
         private void UpdatingHeader(ref OM_KPIHeader t, OM_KPIHeader s)
         {
             t.Status = s.Status;           
@@ -743,6 +815,7 @@ namespace OM25100.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
+
         private void Update_OM_KPICpny_All(OM_KPICpny_All t, OM25100_pgKPICpny_All_Result s, bool isNew)
         {
             if (isNew)
@@ -760,7 +833,6 @@ namespace OM25100.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
-
 
         private void Update_OM_KPICpny_Class(OM_KPICpny_Class t, OM25100_pgKPICpny_Class_Result s, bool isNew)
         {
@@ -931,6 +1003,1025 @@ namespace OM25100.Controllers
 			t.LUpd_DateTime = DateTime.Now;
 			t.LUpd_Prog = _screenNbr;
 			t.LUpd_User = _userName;
-		}
+        }
+
+        private void Update_OM_KPICondition(ref OM_KPICondition t, OM25100_pgKPICondition_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.LineRef = s.LineRef;
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = Current.UserName;
+            }
+            
+            t.Type = s.Type;
+            t.Descr = s.Descr;
+            t.Value1 = s.Value1;
+            t.Value2 = s.Value2;
+            t.Value3 = s.Value3;
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
+        #endregion
+
+        [HttpPost]
+        public ActionResult Import(FormCollection data)
+        {
+            try
+            {
+                string KPIheader = data["cboKPI"].PassNull();
+                string appFor = data["cboApplyFor"].PassNull();
+                string appTo = data["cboApplyTo"].PassNull();
+
+                FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
+                HttpPostedFile file = fileUploadField.PostedFile;
+                FileInfo fileInfo = new FileInfo(file.FileName);
+
+                if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
+                {
+                    Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+                    if (workbook.Worksheets.Count > 0)
+                    {
+                        Worksheet workSheet = workbook.Worksheets[0];
+
+                        #region Check Template
+                        if (appFor == "C")
+                        {
+                            if (appTo == "A")
+                            {
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
+                                  || workSheet.Cells[0, 3].StringValue.Trim() != "Target"
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                                }
+                            }
+                            else if (appTo == "I")
+                            {
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
+                                  || workSheet.Cells[0, 3].StringValue.Trim() != "InvtID"
+                                  || workSheet.Cells[0, 4].StringValue.Trim() != "Target"
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                                }
+                            }
+                            else if (appTo == "G")
+                            {
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
+                                  || workSheet.Cells[0, 3].StringValue.Trim() != "ClassID"
+                                  || workSheet.Cells[0, 4].StringValue.Trim() != "Target"
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                                }
+                            }
+                        }
+                        else if (appFor == "S")
+                        {
+                            if (appTo == "A")
+                            {
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
+                                  || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
+                                  || workSheet.Cells[0, 4].StringValue.Trim() != "Target"
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                                }
+                            }
+                            else if (appTo == "I")
+                            {
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
+                                  || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
+                                  || workSheet.Cells[0, 4].StringValue.Trim() != "InvtID"
+                                  || workSheet.Cells[0, 5].StringValue.Trim() != "Target"
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                                }
+                            }
+                            else if (appTo == "G")
+                            {
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
+                                  || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
+                                  || workSheet.Cells[0, 4].StringValue.Trim() != "ClassID"
+                                  || workSheet.Cells[0, 5].StringValue.Trim() != "Target"
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                                }
+                            }
+                        }
+                        else if (appFor == "CUS")
+                        {
+                            if (appTo == "A")
+                            {
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
+                                  || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
+                                  || workSheet.Cells[0, 4].StringValue.Trim() != "CustID"
+                                  || workSheet.Cells[0, 5].StringValue.Trim() != "Target"
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                                }
+                            }
+                            else if (appTo == "I")
+                            {
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                     || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                     || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
+                                     || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
+                                     || workSheet.Cells[0, 4].StringValue.Trim() != "CustID"
+                                     || workSheet.Cells[0, 5].StringValue.Trim() != "InvtID"
+                                     || workSheet.Cells[0, 6].StringValue.Trim() != "Target"
+                                     )
+                                {
+                                    throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                                }
+                            }
+                            else if (appTo == "G")
+                            {
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                     || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                     || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
+                                     || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
+                                     || workSheet.Cells[0, 4].StringValue.Trim() != "CustID"
+                                     || workSheet.Cells[0, 5].StringValue.Trim() != "ClassID"
+                                     || workSheet.Cells[0, 6].StringValue.Trim() != "Target"
+                                     )
+                                {
+                                    throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "2017011810", "", null, "", null);
+                        }
+                        #endregion
+
+                        #region Define
+                        string message = string.Empty;
+                        string errorCycleNbr = string.Empty;
+                        string errorCycleNbrnotExists = string.Empty;
+                        string errorKPI = string.Empty;
+                        string errorKPInotExists = string.Empty;
+                        string errorKPIotherType = string.Empty;
+                        string errorBranchID = string.Empty;
+                        string errorBranchIDnotExists = string.Empty;
+                        string errorTargetFormat = string.Empty;
+                        string errorClassID = string.Empty;
+                        string errorClassIDnotExists = string.Empty;
+                        string errorInvtID = string.Empty;
+                        string errorInvtIDnotExists = string.Empty;
+                        string errorSlsperID = string.Empty;
+                        string errorSlsperIDnotExists = string.Empty;
+                        string errorCustID = string.Empty;
+                        string errorCustIDnotExists = string.Empty;
+                        string errorStatus = string.Empty;
+
+                        var lstCycle = _db.OM25100_piCycle(_userName, _cpnyID,Current.LangID).ToList();
+                        var lstKPI = _db.OM25100_piKPI(_userName, _cpnyID, Current.LangID).ToList();
+                        var lstBranch = _db.OM25100_piBranchID(_userName, _cpnyID, Current.LangID).ToList();
+                        var lstClass = _db.OM25100_piClassID(_userName, _cpnyID, Current.LangID).ToList();
+                        var lstInvt = _db.OM25100_piInvtID(_userName, _cpnyID, Current.LangID).ToList();
+                        var lstSlsper = _db.OM25100_piSlsperId(_userName, _cpnyID, Current.LangID).ToList();
+                        var lstCust = _db.OM25100_piCustId(_userName, _cpnyID, Current.LangID).ToList();
+
+                        List<OM_KPIHeader> lstOM_KPIHeader = new List<OM_KPIHeader>();
+                        List<OM_KPICpny_All> lstOM_KPICpny_All = new List<OM_KPICpny_All>();
+                        List<OM_KPICpny_Class> lstOM_KPICpny_Class = new List<OM_KPICpny_Class>();
+                        List<OM_KPICpny_Invt> lstOM_KPICpny_Invt = new List<OM_KPICpny_Invt>();
+                        List<OM_KPISales_All> lstOM_KPISales_All = new List<OM_KPISales_All>();
+                        List<OM_KPISales_Class> lstOM_KPISales_Class = new List<OM_KPISales_Class>();
+                        List<OM_KPISales_Invt> lstOM_KPISales_Invt = new List<OM_KPISales_Invt>();
+                        List<OM_KPICustomer_All> lstOM_KPICustomer_All = new List<OM_KPICustomer_All>();
+                        List<OM_KPICustomer_Class> lstOM_KPICustomer_Class = new List<OM_KPICustomer_Class>();
+                        List<OM_KPICustomer_Invt> lstOM_KPICustomer_Invt = new List<OM_KPICustomer_Invt>();
+                        #endregion
+
+                        for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
+                        {
+                            string CycleNbr = string.Empty;
+                            string KPI = string.Empty;
+                            string BranchID = string.Empty;
+                            string BranchName = string.Empty;
+                            string Target = string.Empty;
+                            string ClassID = string.Empty;
+                            string InvtID = string.Empty;
+                            string SlsperID = string.Empty;
+                            string SlsperName = string.Empty;
+                            string CustID = string.Empty;
+                            string CustName = string.Empty;
+
+                            var objCycle = new OM25100_piCycle_Result();
+                            var objKPI = new OM25100_piKPI_Result();
+                            var objBranch = new OM25100_piBranchID_Result();
+                            var objClass = new OM25100_piClassID_Result();
+                            var objInvt = new OM25100_piInvtID_Result();
+                            var objSlsper = new OM25100_piSlsperId_Result();
+                            var objCust = new OM25100_piCustId_Result();
+
+                            bool flagCheck = false;
+
+                            #region GetValue & CheckError
+                            CycleNbr = workSheet.Cells[i, 0].StringValue.PassNull();
+                            KPI = workSheet.Cells[i, 1].StringValue.PassNull();
+                            BranchID = workSheet.Cells[i, 2].StringValue.PassNull();
+
+                            if (appFor == "C")
+                            {
+                                if (appTo == "A")
+                                {
+                                    Target = workSheet.Cells[i, 3].StringValue.PassNull();
+                                }
+                                else if (appTo == "I")
+                                {
+                                    InvtID = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    Target = workSheet.Cells[i, 4].StringValue.PassNull();
+                                }
+                                else if (appTo == "G")
+                                {
+                                    ClassID = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    Target = workSheet.Cells[i, 4].StringValue.PassNull();
+                                }
+                            }
+                            else if (appFor == "S")
+                            {
+                                if (appTo == "A")
+                                {
+                                    SlsperID = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    Target = workSheet.Cells[i, 4].StringValue.PassNull();
+                                }
+                                else if (appTo == "I")
+                                {
+                                    SlsperID = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    InvtID = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    Target = workSheet.Cells[i, 5].StringValue.PassNull();
+                                }
+                                else if (appTo == "G")
+                                {
+                                    SlsperID = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    ClassID = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    Target = workSheet.Cells[i, 5].StringValue.PassNull();
+                                }
+                            }
+                            else if (appFor == "CUS")
+                            {
+                                if (appTo == "A")
+                                {
+                                    SlsperID = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    CustID = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    Target = workSheet.Cells[i, 5].StringValue.PassNull();
+                                }
+                                else if (appTo == "I")
+                                {
+                                    SlsperID = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    CustID = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    InvtID = workSheet.Cells[i, 5].StringValue.PassNull();
+                                    Target = workSheet.Cells[i, 6].StringValue.PassNull();
+                                }
+                                else if (appTo == "G")
+                                {
+                                    SlsperID = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    CustID = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    ClassID = workSheet.Cells[i, 5].StringValue.PassNull();
+                                    Target = workSheet.Cells[i, 6].StringValue.PassNull();
+                                }
+                            }
+
+                            if (CycleNbr == "" && KPI == "")
+                            {
+                                continue;
+                            }
+
+                            if (CycleNbr == "")
+                            {
+                                errorCycleNbr += (i + 1).ToString() + ",";
+                                flagCheck = true;
+                            }
+                            else
+                            {
+                                if (lstCycle.FirstOrDefault(p => p.CycleNbr == CycleNbr) == null)
+                                {
+                                    errorCycleNbrnotExists += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                }
+                            }
+
+                            if (KPI == "")
+                            {
+                                errorKPI += (i + 1).ToString() + ",";
+                                flagCheck = true;
+                            }
+                            else
+                            {
+                                objKPI = lstKPI.FirstOrDefault(p => p.KPI == KPI);
+                                if (objKPI == null)
+                                {
+                                    errorKPInotExists += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                }
+                                else
+                                {//errorKPIotherType
+                                    if (objKPI.ApplyFor != appFor || objKPI.ApplyTo != appTo)
+                                    {
+                                        errorKPIotherType += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                }
+                            }
+
+                            var flagBranchID = false;
+                            if (BranchID == "")
+                            {
+                                errorBranchID += (i + 1).ToString() + ",";
+                                flagCheck = true;
+                            }
+                            else
+                            {
+                                objBranch = lstBranch.FirstOrDefault(p => p.CpnyID == BranchID);
+                                if (objBranch == null)
+                                {
+                                    errorBranchIDnotExists += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                    flagBranchID = true;
+                                }
+                                else
+                                    BranchName = objBranch.CpnyName;
+                            }
+
+                            if (Target != "")
+                            {
+                                float n;
+                                bool isNumeric = float.TryParse(Target, out n);
+                                if (!isNumeric)
+                                {
+                                    errorTargetFormat += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                }
+                            }
+                            else
+                            {
+                                Target = "0";
+                            }
+
+                            if (appFor == "C")
+                            {
+                                if (appTo == "A")
+                                {
+
+                                }
+                                else if (appTo == "I")
+                                {
+                                    if (InvtID == "")
+                                    {
+                                        errorInvtID += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (flagBranchID == false)
+                                        {
+                                            if (lstInvt.FirstOrDefault(p => p.InvtID == InvtID) == null)
+                                            {
+                                                errorInvtIDnotExists += (i + 1).ToString() + ",";
+                                                flagCheck = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (appTo == "G")
+                                {
+                                    if (ClassID == "")
+                                    {
+                                        errorClassID += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstClass.FirstOrDefault(p => p.ClassID == ClassID) == null)
+                                        {
+                                            errorClassIDnotExists += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (appFor == "S")
+                            {
+                                if (SlsperID == "")
+                                {
+                                    errorSlsperID += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                }
+                                else
+                                {
+                                    if (flagBranchID == false)
+                                    {
+                                        objSlsper = lstSlsper.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperId == SlsperID);
+                                        if (objSlsper == null)
+                                        {
+                                            errorSlsperIDnotExists += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                        else
+                                            SlsperName = objSlsper.Name;
+                                    }
+                                }
+
+                                if (appTo == "A")
+                                {
+
+                                }
+                                else if (appTo == "I")
+                                {
+                                    if (InvtID == "")
+                                    {
+                                        errorInvtID += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (flagBranchID == false)
+                                        {
+                                            if (lstInvt.FirstOrDefault(p => p.InvtID == InvtID) == null)
+                                            {
+                                                errorInvtIDnotExists += (i + 1).ToString() + ",";
+                                                flagCheck = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (appTo == "G")
+                                {
+                                    if (ClassID == "")
+                                    {
+                                        errorClassID += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstClass.FirstOrDefault(p => p.ClassID == ClassID) == null)
+                                        {
+                                            errorClassIDnotExists += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (appFor == "CUS")
+                            {
+                                if (SlsperID == "")
+                                {
+                                    errorSlsperID += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                }
+                                else
+                                {
+                                    if (flagBranchID == false)
+                                    {
+                                        objSlsper = lstSlsper.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperId == SlsperID);
+                                        if (objSlsper == null)
+                                        {
+                                            errorSlsperIDnotExists += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                        else
+                                            SlsperName = objSlsper.Name;
+                                    }
+                                }
+
+                                if (CustID == "")
+                                {
+                                    errorCustID += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                }
+                                else
+                                {
+                                    if (flagBranchID == false)
+                                    {
+                                        objCust = lstCust.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperID == SlsperID && p.CustId == CustID);
+                                        if (objCust == null)
+                                        {
+                                            errorCustIDnotExists += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                        else
+                                            CustName = objCust.CustName;
+                                    }
+                                }
+
+                                if (appTo == "A")
+                                {
+
+                                }
+                                else if (appTo == "I")
+                                {
+                                    if (InvtID == "")
+                                    {
+                                        errorInvtID += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (flagBranchID == false)
+                                        {
+                                            if (lstInvt.FirstOrDefault(p => p.InvtID == InvtID) == null)
+                                            {
+                                                errorInvtIDnotExists += (i + 1).ToString() + ",";
+                                                flagCheck = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (appTo == "G")
+                                {
+                                    if (ClassID == "")
+                                    {
+                                        errorClassID += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstClass.FirstOrDefault(p => p.ClassID == ClassID) == null)
+                                        {
+                                            errorClassIDnotExists += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (flagCheck == true)
+                            {
+                                continue;
+                            }
+
+                            #endregion
+
+                            #region Import data to DB
+                            var record = _db.OM_KPIHeader.FirstOrDefault(p => p.CycleNbr == CycleNbr && p.KPI == KPI);
+                            if (record != null)
+                            {
+                                if (record.Status != "H")
+                                {
+                                    errorStatus += (i + 1).ToString() + ",";
+                                    continue;
+                                }
+                            }
+                            if (appFor == "C")
+                            {
+                                if (appTo == "A")
+                                {
+                                    //OM_KPICpny_All
+                                    var recordExists_OM_KPICpny_All = lstOM_KPICpny_All.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                        && p.KPI == KPI
+                                                                                                        && p.BranchID == BranchID);
+                                    if (recordExists_OM_KPICpny_All == null)
+                                    {
+                                        var recordItem = _db.OM_KPICpny_All.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                            && p.KPI == KPI
+                                                                                            && p.BranchID == BranchID);
+
+                                        if (recordItem == null)
+                                        {
+                                            recordItem = new OM_KPICpny_All();
+                                            recordItem.ResetET();
+                                            recordItem.CycleNbr = CycleNbr;
+                                            recordItem.KPI = KPI;
+                                            recordItem.BranchID = BranchID;
+                                            recordItem.CpnyName = BranchName;
+                                            recordItem.Target = Convert.ToDouble(Target);
+
+                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            _db.OM_KPICpny_All.AddObject(recordItem);
+                                            lstOM_KPICpny_All.Add(recordItem);
+                                        }
+                                        else
+                                        {
+                                            recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.LUpd_User = _userName;
+                                        }
+                                    }
+                                }
+                                else if (appTo == "I")
+                                {
+                                    //OM_KPICpny_Invt
+                                    var recordExists_OM_KPICpny_Invt = lstOM_KPICpny_Invt.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                            && p.KPI == KPI
+                                                                                                            && p.BranchID == BranchID
+                                                                                                            && p.InvtID == InvtID);
+                                    if (recordExists_OM_KPICpny_Invt == null)
+                                    {
+                                        var recordItem = _db.OM_KPICpny_Invt.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                && p.KPI == KPI
+                                                                                                && p.BranchID == BranchID
+                                                                                                && p.InvtID == InvtID);
+
+                                        if (recordItem == null)
+                                        {
+                                            recordItem = new OM_KPICpny_Invt();
+                                            recordItem.ResetET();
+                                            recordItem.CycleNbr = CycleNbr;
+                                            recordItem.KPI = KPI;
+                                            recordItem.BranchID = BranchID;
+                                            recordItem.CpnyName = BranchName;
+                                            recordItem.InvtID = InvtID;
+                                            recordItem.Target = Convert.ToDouble(Target);
+
+                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            _db.OM_KPICpny_Invt.AddObject(recordItem);
+                                            lstOM_KPICpny_Invt.Add(recordItem);
+                                        }
+                                        else
+                                        {
+                                            recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.LUpd_User = _userName;
+                                        }
+                                    }
+                                }
+                                else if (appTo == "G")
+                                {
+                                    //OM_KPICpny_Class
+                                    var recordExists_OM_KPICpny_Class = lstOM_KPICpny_Class.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                            && p.KPI == KPI
+                                                                                                            && p.BranchID == BranchID
+                                                                                                            && p.ClassID == ClassID);
+                                    if (recordExists_OM_KPICpny_Class == null)
+                                    {
+                                        var recordItem = _db.OM_KPICpny_Class.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                && p.KPI == KPI
+                                                                                                && p.BranchID == BranchID
+                                                                                                && p.ClassID == ClassID);
+
+                                        if (recordItem == null)
+                                        {
+                                            recordItem = new OM_KPICpny_Class();
+                                            recordItem.ResetET();
+                                            recordItem.CycleNbr = CycleNbr;
+                                            recordItem.KPI = KPI;
+                                            recordItem.BranchID = BranchID;
+                                            recordItem.CpnyName = BranchName;
+                                            recordItem.ClassID = ClassID;
+                                            recordItem.Target = Convert.ToDouble(Target);
+
+                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            _db.OM_KPICpny_Class.AddObject(recordItem);
+                                            lstOM_KPICpny_Class.Add(recordItem);
+                                        }
+                                        else
+                                        {
+                                            recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.LUpd_User = _userName;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (appFor == "S")
+                            {
+                                if (appTo == "A")
+                                {
+                                    //OM_KPISales_All
+                                    var recordExists_OM_KPISales_All = lstOM_KPISales_All.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                            && p.KPI == KPI
+                                                                                                            && p.BranchID == BranchID
+                                                                                                            && p.SlsperId == SlsperID);
+                                    if (recordExists_OM_KPISales_All == null)
+                                    {
+                                        var recordItem = _db.OM_KPISales_All.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                            && p.KPI == KPI
+                                                                                            && p.BranchID == BranchID
+                                                                                            && p.SlsperId == SlsperID);
+
+                                        if (recordItem == null)
+                                        {
+                                            recordItem = new OM_KPISales_All();
+                                            recordItem.ResetET();
+                                            recordItem.CycleNbr = CycleNbr;
+                                            recordItem.KPI = KPI;
+                                            recordItem.BranchID = BranchID;
+                                            recordItem.CpnyName = BranchName;
+                                            recordItem.SlsperId = SlsperID;
+                                            recordItem.SlsperName = SlsperName;
+                                            recordItem.Target = Convert.ToDouble(Target);
+
+                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            _db.OM_KPISales_All.AddObject(recordItem);
+                                            lstOM_KPISales_All.Add(recordItem);
+                                        }
+                                        else
+                                        {
+                                            recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.LUpd_User = _userName;
+                                        }
+                                    }
+                                }
+                                else if (appTo == "I")
+                                {
+                                    //OM_KPISales_Invt
+                                    var recordExists_OM_KPISales_Invt = lstOM_KPISales_Invt.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                            && p.KPI == KPI
+                                                                                                            && p.BranchID == BranchID
+                                                                                                            && p.SlsperId == SlsperID
+                                                                                                            && p.InvtID == InvtID);
+                                    if (recordExists_OM_KPISales_Invt == null)
+                                    {
+                                        var recordItem = _db.OM_KPISales_Invt.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                && p.KPI == KPI
+                                                                                                && p.BranchID == BranchID
+                                                                                                && p.SlsperId == SlsperID
+                                                                                                && p.InvtID == InvtID);
+
+                                        if (recordItem == null)
+                                        {
+                                            recordItem = new OM_KPISales_Invt();
+                                            recordItem.ResetET();
+                                            recordItem.CycleNbr = CycleNbr;
+                                            recordItem.KPI = KPI;
+                                            recordItem.BranchID = BranchID;
+                                            recordItem.CpnyName = BranchName;
+                                            recordItem.SlsperId = SlsperID;
+                                            recordItem.SlsperName = SlsperName;
+                                            recordItem.InvtID = InvtID;
+                                            recordItem.Target = Convert.ToDouble(Target);
+
+                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            _db.OM_KPISales_Invt.AddObject(recordItem);
+                                            lstOM_KPISales_Invt.Add(recordItem);
+                                        }
+                                        else
+                                        {
+                                            recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.LUpd_User = _userName;
+                                        }
+                                    }
+                                }
+                                else if (appTo == "G")
+                                {
+                                    //OM_KPISales_Class
+                                    var recordExists_OM_KPISales_Class = lstOM_KPISales_Class.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                                && p.KPI == KPI
+                                                                                                                && p.BranchID == BranchID
+                                                                                                                && p.SlsperId == SlsperID
+                                                                                                                && p.ClassID == ClassID);
+                                    if (recordExists_OM_KPISales_Class == null)
+                                    {
+                                        var recordItem = _db.OM_KPISales_Class.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                && p.KPI == KPI
+                                                                                                && p.BranchID == BranchID
+                                                                                                && p.SlsperId == SlsperID
+                                                                                                && p.ClassID == ClassID);
+
+                                        if (recordItem == null)
+                                        {
+                                            recordItem = new OM_KPISales_Class();
+                                            recordItem.ResetET();
+                                            recordItem.CycleNbr = CycleNbr;
+                                            recordItem.KPI = KPI;
+                                            recordItem.BranchID = BranchID;
+                                            recordItem.CpnyName = BranchName;
+                                            recordItem.SlsperId = SlsperID;
+                                            recordItem.SlsperName = SlsperName;
+                                            recordItem.ClassID = ClassID;
+                                            recordItem.Target = Convert.ToDouble(Target);
+
+                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            _db.OM_KPISales_Class.AddObject(recordItem);
+                                            lstOM_KPISales_Class.Add(recordItem);
+                                        }
+                                        else
+                                        {
+                                            recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.LUpd_User = _userName;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (appFor == "CUS")
+                            {
+                                if (appTo == "A")
+                                {
+                                    //OM_KPICustomer_All
+                                    var recordExists_OM_KPICustomer_All = lstOM_KPICustomer_All.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                                && p.KPI == KPI
+                                                                                                                && p.BranchID == BranchID
+                                                                                                                && p.SlsperId == SlsperID
+                                                                                                                && p.CustID == CustID);
+                                    if (recordExists_OM_KPICustomer_All == null)
+                                    {
+                                        var recordItem = _db.OM_KPICustomer_All.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                && p.KPI == KPI
+                                                                                                && p.BranchID == BranchID
+                                                                                                && p.SlsperId == SlsperID
+                                                                                                && p.CustID == CustID);
+
+                                        if (recordItem == null)
+                                        {
+                                            recordItem = new OM_KPICustomer_All();
+                                            recordItem.ResetET();
+                                            recordItem.CycleNbr = CycleNbr;
+                                            recordItem.KPI = KPI;
+                                            recordItem.BranchID = BranchID;
+                                            recordItem.CpnyName = BranchName;
+                                            recordItem.SlsperId = SlsperID;
+                                            recordItem.SlsperName = SlsperName;
+                                            recordItem.CustID = CustID;
+                                            recordItem.CustName = CustName;
+                                            recordItem.Target = Convert.ToDouble(Target);
+
+                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            _db.OM_KPICustomer_All.AddObject(recordItem);
+                                            lstOM_KPICustomer_All.Add(recordItem);
+                                        }
+                                        else
+                                        {
+                                            recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.LUpd_User = _userName;
+                                        }
+                                    }
+                                }
+                                else if (appTo == "I")
+                                {
+                                    //OM_KPICustomer_Invt
+                                    var recordExists_OM_KPICustomer_Invt = lstOM_KPICustomer_Invt.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                                && p.KPI == KPI
+                                                                                                                && p.BranchID == BranchID
+                                                                                                                && p.SlsperId == SlsperID
+                                                                                                                && p.CustID == CustID
+                                                                                                                && p.InvtID == InvtID);
+                                    if (recordExists_OM_KPICustomer_Invt == null)
+                                    {
+                                        var recordItem = _db.OM_KPICustomer_Invt.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                && p.KPI == KPI
+                                                                                                && p.BranchID == BranchID
+                                                                                                && p.SlsperId == SlsperID
+                                                                                                && p.CustID == CustID
+                                                                                                && p.InvtID == InvtID);
+
+                                        if (recordItem == null)
+                                        {
+                                            recordItem = new OM_KPICustomer_Invt();
+                                            recordItem.ResetET();
+                                            recordItem.CycleNbr = CycleNbr;
+                                            recordItem.KPI = KPI;
+                                            recordItem.BranchID = BranchID;
+                                            recordItem.CpnyName = BranchName;
+                                            recordItem.SlsperId = SlsperID;
+                                            recordItem.SlsperName = SlsperName;
+                                            recordItem.CustID = CustID;
+                                            recordItem.CustName = CustName;
+                                            recordItem.InvtID = InvtID;
+                                            recordItem.Target = Convert.ToDouble(Target);
+
+                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            _db.OM_KPICustomer_Invt.AddObject(recordItem);
+                                            lstOM_KPICustomer_Invt.Add(recordItem);
+                                        }
+                                        else
+                                        {
+                                            recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.LUpd_User = _userName;
+                                        }
+                                    }
+                                }
+                                else if (appTo == "G")
+                                {
+                                    //OM_KPICustomer_Class
+                                    var recordExists_OM_KPICustomer_Class = lstOM_KPICustomer_Class.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                                && p.KPI == KPI
+                                                                                                                && p.BranchID == BranchID
+                                                                                                                && p.SlsperId == SlsperID
+                                                                                                                && p.CustID == CustID
+                                                                                                                && p.ClassID == ClassID);
+                                    if (recordExists_OM_KPICustomer_Class == null)
+                                    {
+                                        var recordItem = _db.OM_KPICustomer_Class.FirstOrDefault(p => p.CycleNbr == CycleNbr
+                                                                                                && p.KPI == KPI
+                                                                                                && p.BranchID == BranchID
+                                                                                                && p.SlsperId == SlsperID
+                                                                                                && p.CustID == CustID
+                                                                                                && p.ClassID == ClassID);
+
+                                        if (recordItem == null)
+                                        {
+                                            recordItem = new OM_KPICustomer_Class();
+                                            recordItem.ResetET();
+                                            recordItem.CycleNbr = CycleNbr;
+                                            recordItem.KPI = KPI;
+                                            recordItem.BranchID = BranchID;
+                                            recordItem.CpnyName = BranchName;
+                                            recordItem.SlsperId = SlsperID;
+                                            recordItem.SlsperName = SlsperName;
+                                            recordItem.CustID = CustID;
+                                            recordItem.CustName = CustName;
+                                            recordItem.ClassID = ClassID;
+                                            recordItem.Target = Convert.ToDouble(Target);
+
+                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            _db.OM_KPICustomer_Class.AddObject(recordItem);
+                                            lstOM_KPICustomer_Class.Add(recordItem);
+                                        }
+                                        else
+                                        {
+                                            recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.LUpd_DateTime = DateTime.Now;
+                                            recordItem.LUpd_Prog = _screenNbr;
+                                            recordItem.LUpd_User = _userName;
+                                        }
+                                    }
+                                }
+                            }
+                            #endregion
+                        }// Vòng for
+
+                        message = errorCycleNbr == "" ? "" : string.Format(Message.GetString("2016091412", null), "Cycle", errorCycleNbr);
+                        message += errorCycleNbrnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "Cycle", errorCycleNbrnotExists);
+                        message += errorKPI == "" ? "" : string.Format(Message.GetString("2016091412", null), "KPI", errorKPI);
+                        message += errorKPInotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "KPI", errorKPInotExists);
+                        message += errorKPIotherType == "" ? "" : string.Format(Message.GetString("2017011811", null), errorKPIotherType);
+                        message += errorBranchID == "" ? "" : string.Format(Message.GetString("2016091412", null), "BranchID", errorBranchID);
+                        message += errorBranchIDnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "BranchID", errorBranchIDnotExists);
+                        message += errorTargetFormat == "" ? "" : string.Format(Message.GetString("2016091415", null), "Target", errorTargetFormat);
+                        message += errorClassID == "" ? "" : string.Format(Message.GetString("2016091412", null), "ClassID", errorClassID);
+                        message += errorClassIDnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "ClassID", errorClassIDnotExists);
+                        message += errorInvtID == "" ? "" : string.Format(Message.GetString("2016091412", null), "InvtID", errorInvtID);
+                        message += errorInvtIDnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "InvtID", errorInvtIDnotExists);
+                        message += errorSlsperID == "" ? "" : string.Format(Message.GetString("2016091412", null), "SlsperID", errorSlsperID);
+                        message += errorSlsperIDnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "SlsperID", errorSlsperIDnotExists);
+                        message += errorCustID == "" ? "" : string.Format(Message.GetString("2016091412", null), "CustID", errorCustID);
+                        message += errorCustIDnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "CustID", errorCustIDnotExists);
+                        message += errorStatus == "" ? "" : string.Format(Message.GetString("2016091420", null), errorStatus);
+
+                        if (message == "" || message == string.Empty)
+                        {
+                            _db.SaveChanges();
+                        }
+                        Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
+                    }
+                    return _logMessage;
+                }
+                else
+                {
+                    Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, messid = 9991, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+            }
+            return _logMessage;
+        }
     }
 }

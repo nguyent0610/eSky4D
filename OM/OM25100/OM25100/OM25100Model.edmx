@@ -6,6 +6,7 @@
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="OM_KPICondition" EntityType="eBiz4DWebAppModel.Store.OM_KPICondition" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_KPICpny_All" EntityType="eBiz4DWebAppModel.Store.OM_KPICpny_All" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_KPICpny_Class" EntityType="eBiz4DWebAppModel.Store.OM_KPICpny_Class" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_KPICpny_Invt" EntityType="eBiz4DWebAppModel.Store.OM_KPICpny_Invt" store:Type="Tables" Schema="dbo" />
@@ -17,6 +18,28 @@
           <EntitySet Name="OM_KPISales_Class" EntityType="eBiz4DWebAppModel.Store.OM_KPISales_Class" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_KPISales_Invt" EntityType="eBiz4DWebAppModel.Store.OM_KPISales_Invt" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
+        <EntityType Name="OM_KPICondition">
+          <Key>
+            <PropertyRef Name="CycleNbr" />
+            <PropertyRef Name="KPI" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Type" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="Value1" Type="float" Nullable="false" />
+          <Property Name="Value2" Type="float" Nullable="false" />
+          <Property Name="Value3" Type="float" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="OM_KPICpny_All">
           <Key>
             <PropertyRef Name="CycleNbr" />
@@ -246,6 +269,13 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="OM25100_pgKPICondition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CycleNbr" Type="varchar" Mode="In" />
+          <Parameter Name="KPI" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="OM25100_pgKPICpny_All" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -326,6 +356,41 @@
           <Parameter Name="KPI" Type="varchar" Mode="In" />
           <Parameter Name="Zone" Type="varchar(max)" Mode="In" />
           <Parameter Name="Territory" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OM25100_piBranchID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM25100_piClassID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM25100_piCustId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM25100_piCycle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM25100_piInvtID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM25100_piKPI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM25100_piSlsperId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -423,6 +488,49 @@
             <Parameter Name="Zone" Mode="In" Type="String" />
             <Parameter Name="Territory" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="OM25100_pgKPICondition" ReturnType="Collection(OM25100Model.OM25100_pgKPICondition_Result)">
+            <Parameter Name="CycleNbr" Mode="In" Type="String" />
+            <Parameter Name="KPI" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM25100_piBranchID" ReturnType="Collection(OM25100Model.OM25100_piBranchID_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM25100_piClassID" ReturnType="Collection(OM25100Model.OM25100_piClassID_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM25100_piCustId" ReturnType="Collection(OM25100Model.OM25100_piCustId_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM25100_piCycle" ReturnType="Collection(OM25100Model.OM25100_piCycle_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM25100_piInvtID" ReturnType="Collection(OM25100Model.OM25100_piInvtID_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM25100_piKPI" ReturnType="Collection(OM25100Model.OM25100_piKPI_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM25100_piSlsperId" ReturnType="Collection(OM25100Model.OM25100_piSlsperId_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <EntitySet Name="OM_KPICondition" EntityType="OM25100Model.OM_KPICondition" />
         </EntityContainer>
         <EntityType Name="OM_KPICpny_All">
           <Key>
@@ -755,6 +863,70 @@
           <Property Type="Double" Name="Target" Nullable="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
+        <ComplexType Name="OM25100_pgKPICondition_Result">
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="6" />
+          <Property Type="Double" Name="Value1" Nullable="false" />
+          <Property Type="Double" Name="Value2" Nullable="false" />
+          <Property Type="Double" Name="Value3" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="OM25100_piBranchID_Result">
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="OM25100_piClassID_Result">
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="OM25100_piCustId_Result">
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="OM25100_piInvtID_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="OM25100_piKPI_Result">
+          <Property Type="String" Name="KPI" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ApplyFor" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ApplyTo" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="OM25100_piSlsperId_Result">
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Position" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="PosDesc" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="OM25100_piCycle_Result">
+          <Property Type="String" Name="CycleNbr" Nullable="false" MaxLength="6" />
+        </ComplexType>
+        <EntityType Name="OM_KPICondition">
+          <Key>
+            <PropertyRef Name="CycleNbr" />
+            <PropertyRef Name="KPI" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Type="String" Name="CycleNbr" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="KPI" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="Value1" Nullable="false" />
+          <Property Type="Double" Name="Value2" Nullable="false" />
+          <Property Type="Double" Name="Value3" Nullable="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="Descr" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1104,6 +1276,101 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM25100_pgKPICondition" FunctionName="eBiz4DWebAppModel.Store.OM25100_pgKPICondition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM25100Model.OM25100_pgKPICondition_Result">
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Value1" ColumnName="Value1" />
+                <ScalarProperty Name="Value2" ColumnName="Value2" />
+                <ScalarProperty Name="Value3" ColumnName="Value3" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM25100_piBranchID" FunctionName="eBiz4DWebAppModel.Store.OM25100_piBranchID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM25100Model.OM25100_piBranchID_Result">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM25100_piClassID" FunctionName="eBiz4DWebAppModel.Store.OM25100_piClassID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM25100Model.OM25100_piClassID_Result">
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM25100_piCustId" FunctionName="eBiz4DWebAppModel.Store.OM25100_piCustId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM25100Model.OM25100_piCustId_Result">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM25100_piCycle" FunctionName="eBiz4DWebAppModel.Store.OM25100_piCycle" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM25100Model.OM25100_piCycle_Result">
+                <ScalarProperty Name="CycleNbr" ColumnName="CycleNbr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM25100_piInvtID" FunctionName="eBiz4DWebAppModel.Store.OM25100_piInvtID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM25100Model.OM25100_piInvtID_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM25100_piKPI" FunctionName="eBiz4DWebAppModel.Store.OM25100_piKPI">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM25100Model.OM25100_piKPI_Result">
+                <ScalarProperty Name="KPI" ColumnName="KPI" />
+                <ScalarProperty Name="ApplyFor" ColumnName="ApplyFor" />
+                <ScalarProperty Name="ApplyTo" ColumnName="ApplyTo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM25100_piSlsperId" FunctionName="eBiz4DWebAppModel.Store.OM25100_piSlsperId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM25100Model.OM25100_piSlsperId_Result">
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="PosDesc" ColumnName="PosDesc" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OM_KPICondition">
+            <EntityTypeMapping TypeName="OM25100Model.OM_KPICondition">
+              <MappingFragment StoreEntitySet="OM_KPICondition">
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Value3" ColumnName="Value3" />
+                <ScalarProperty Name="Value2" ColumnName="Value2" />
+                <ScalarProperty Name="Value1" ColumnName="Value1" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="KPI" ColumnName="KPI" />
+                <ScalarProperty Name="CycleNbr" ColumnName="CycleNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1126,17 +1393,18 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="73">
-        <EntityTypeShape EntityType="OM25100Model.OM_KPICpny_All" Width="1.5" PointX="3.375" PointY="0.75" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPICpny_Class" Width="1.5" PointX="5.375" PointY="0.75" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPICpny_Invt" Width="1.5" PointX="3.75" PointY="5.75" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPISales_All" Width="1.5" PointX="5.75" PointY="5.75" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPISales_Invt" Width="1.5" PointX="7.75" PointY="0.75" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPIHeader" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_All" Width="1.5" PointX="2.4586541924898766" PointY="12.965018680768562" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_Class" Width="1.5" PointX="3.8529763593585122" PointY="1.7669286587121564" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_Invt" Width="1.5" PointX="1.8641196479388138" PointY="1.6651178308134516" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPISales_Class" Width="1.5" PointX="5.0494204894869688" PointY="20.009896213193375" />
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="95">
+        <EntityTypeShape EntityType="OM25100Model.OM_KPICpny_All" Width="1.75" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPICpny_Class" Width="2.125" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPICpny_Invt" Width="1.75" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPISales_All" Width="1.875" PointX="3.75" PointY="5.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPISales_Invt" Width="1.875" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPIHeader" Width="1.5" PointX="6.75" PointY="5.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_All" Width="2.125" PointX="8.75" PointY="5.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_Class" Width="2" PointX="0.75" PointY="10.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_Invt" Width="2.125" PointX="3.75" PointY="10.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPISales_Class" Width="1.75" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPICondition" Width="1.5" PointX="6.75" PointY="10.75" />
       </Diagram>
     </Diagrams>
   </Designer>
