@@ -502,7 +502,7 @@ namespace AR20200.Controllers
             slsper.SupID = inputSlsper.SupID;
             slsper.CrLmt = inputSlsper.CrLmt;
             slsper.Active = inputSlsper.Active;
-
+            slsper.Channel = inputSlsper.Channel;
             // The Silverlight project does NOT encrypt the PPCPassword.
             slsper.PPCPassword = inputSlsper.PPCPassword;
 

@@ -292,22 +292,6 @@ namespace AR20200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_SalespersonLocationTrace> AR_SalespersonLocationTrace
-        {
-            get
-            {
-                if ((_AR_SalespersonLocationTrace == null))
-                {
-                    _AR_SalespersonLocationTrace = base.CreateObjectSet<AR_SalespersonLocationTrace>("AR_SalespersonLocationTrace");
-                }
-                return _AR_SalespersonLocationTrace;
-            }
-        }
-        private ObjectSet<AR_SalespersonLocationTrace> _AR_SalespersonLocationTrace;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_POSM> IN_POSM
         {
             get
@@ -736,6 +720,22 @@ namespace AR20200
             }
         }
         private ObjectSet<OM_SalesRouteDet> _OM_SalesRouteDet;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_SalespersonLocationTrace> AR_SalespersonLocationTrace
+        {
+            get
+            {
+                if ((_AR_SalespersonLocationTrace == null))
+                {
+                    _AR_SalespersonLocationTrace = base.CreateObjectSet<AR_SalespersonLocationTrace>("AR_SalespersonLocationTrace");
+                }
+                return _AR_SalespersonLocationTrace;
+            }
+        }
+        private ObjectSet<AR_SalespersonLocationTrace> _AR_SalespersonLocationTrace;
 
         #endregion
 
@@ -851,14 +851,6 @@ namespace AR20200
         public void AddToAR_SalesPerson_Map_IN_ProductClass(AR_SalesPerson_Map_IN_ProductClass aR_SalesPerson_Map_IN_ProductClass)
         {
             base.AddObject("AR_SalesPerson_Map_IN_ProductClass", aR_SalesPerson_Map_IN_ProductClass);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the AR_SalespersonLocationTrace EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_SalespersonLocationTrace(AR_SalespersonLocationTrace aR_SalespersonLocationTrace)
-        {
-            base.AddObject("AR_SalespersonLocationTrace", aR_SalespersonLocationTrace);
         }
     
         /// <summary>
@@ -1075,6 +1067,14 @@ namespace AR20200
         public void AddToOM_SalesRouteDet(OM_SalesRouteDet oM_SalesRouteDet)
         {
             base.AddObject("OM_SalesRouteDet", oM_SalesRouteDet);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_SalespersonLocationTrace EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_SalespersonLocationTrace(AR_SalespersonLocationTrace aR_SalespersonLocationTrace)
+        {
+            base.AddObject("AR_SalespersonLocationTrace", aR_SalespersonLocationTrace);
         }
 
         #endregion
@@ -3040,6 +3040,78 @@ namespace AR20200
         private Nullable<global::System.DateTime> _Birthdate;
         partial void OnBirthdateChanging(Nullable<global::System.DateTime> value);
         partial void OnBirthdateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String InActive
+        {
+            get
+            {
+                return _InActive;
+            }
+            set
+            {
+                OnInActiveChanging(value);
+                ReportPropertyChanging("InActive");
+                _InActive = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("InActive");
+                OnInActiveChanged();
+            }
+        }
+        private global::System.String _InActive;
+        partial void OnInActiveChanging(global::System.String value);
+        partial void OnInActiveChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SellProduct
+        {
+            get
+            {
+                return _SellProduct;
+            }
+            set
+            {
+                OnSellProductChanging(value);
+                ReportPropertyChanging("SellProduct");
+                _SellProduct = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SellProduct");
+                OnSellProductChanged();
+            }
+        }
+        private global::System.String _SellProduct;
+        partial void OnSellProductChanging(global::System.String value);
+        partial void OnSellProductChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String RefCustID
+        {
+            get
+            {
+                return _RefCustID;
+            }
+            set
+            {
+                OnRefCustIDChanging(value);
+                ReportPropertyChanging("RefCustID");
+                _RefCustID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("RefCustID");
+                OnRefCustIDChanged();
+            }
+        }
+        private global::System.String _RefCustID;
+        partial void OnRefCustIDChanging(global::System.String value);
+        partial void OnRefCustIDChanged();
 
         #endregion
 
@@ -5672,6 +5744,30 @@ namespace AR20200
         private Nullable<global::System.Int32> _VisitSort;
         partial void OnVisitSortChanging(Nullable<global::System.Int32> value);
         partial void OnVisitSortChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Salut
+        {
+            get
+            {
+                return _Salut;
+            }
+            set
+            {
+                OnSalutChanging(value);
+                ReportPropertyChanging("Salut");
+                _Salut = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Salut");
+                OnSalutChanged();
+            }
+        }
+        private global::System.String _Salut;
+        partial void OnSalutChanging(global::System.String value);
+        partial void OnSalutChanged();
 
         #endregion
 
@@ -7875,6 +7971,30 @@ namespace AR20200
         private global::System.String _Images;
         partial void OnImagesChanging(global::System.String value);
         partial void OnImagesChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Channel
+        {
+            get
+            {
+                return _Channel;
+            }
+            set
+            {
+                OnChannelChanging(value);
+                ReportPropertyChanging("Channel");
+                _Channel = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Channel");
+                OnChannelChanged();
+            }
+        }
+        private global::System.String _Channel;
+        partial void OnChannelChanging(global::System.String value);
+        partial void OnChannelChanged();
 
         #endregion
 
@@ -8310,7 +8430,7 @@ namespace AR20200
         /// <param name="updateTime">Initial value of the UpdateTime property.</param>
         /// <param name="type">Initial value of the Type property.</param>
         /// <param name="id">Initial value of the ID property.</param>
-        public static AR_SalespersonLocationTrace CreateAR_SalespersonLocationTrace(global::System.String branchID, global::System.String slsperID, global::System.Double lat, global::System.Double lng, global::System.DateTime updateTime, global::System.String type, global::System.Int32 id)
+        public static AR_SalespersonLocationTrace CreateAR_SalespersonLocationTrace(global::System.String branchID, global::System.String slsperID, global::System.Double lat, global::System.Double lng, global::System.DateTime updateTime, global::System.String type, global::System.String id)
         {
             AR_SalespersonLocationTrace aR_SalespersonLocationTrace = new AR_SalespersonLocationTrace();
             aR_SalespersonLocationTrace.BranchID = branchID;
@@ -8605,7 +8725,7 @@ namespace AR20200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 ID
+        public global::System.String ID
         {
             get
             {
@@ -8617,14 +8737,14 @@ namespace AR20200
                 {
                     OnIDChanging(value);
                     ReportPropertyChanging("ID");
-                    _ID = StructuralObject.SetValidValue(value);
+                    _ID = StructuralObject.SetValidValue(value, false);
                     ReportPropertyChanged("ID");
                     OnIDChanged();
                 }
             }
         }
-        private global::System.Int32 _ID;
-        partial void OnIDChanging(global::System.Int32 value);
+        private global::System.String _ID;
+        partial void OnIDChanging(global::System.String value);
         partial void OnIDChanged();
 
         #endregion
@@ -9210,6 +9330,30 @@ namespace AR20200
         private global::System.String _LastSlsID;
         partial void OnLastSlsIDChanging(global::System.String value);
         partial void OnLastSlsIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LastDeliveryID
+        {
+            get
+            {
+                return _LastDeliveryID;
+            }
+            set
+            {
+                OnLastDeliveryIDChanging(value);
+                ReportPropertyChanging("LastDeliveryID");
+                _LastDeliveryID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LastDeliveryID");
+                OnLastDeliveryIDChanged();
+            }
+        }
+        private global::System.String _LastDeliveryID;
+        partial void OnLastDeliveryIDChanging(global::System.String value);
+        partial void OnLastDeliveryIDChanged();
 
         #endregion
 
