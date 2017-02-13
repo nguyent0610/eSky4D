@@ -1671,8 +1671,8 @@
             <PropertyRef Name="BranchID" />
           </Key>
           <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Addr1" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr1" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="Double" Name="CmmnPct" />
           <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="EMailAddr" MaxLength="30" FixedLength="false" Unicode="false" />

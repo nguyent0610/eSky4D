@@ -115,10 +115,10 @@
                     .Width(350).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtAddr1").Name("txtAddr1").HQLangCode("Addr1").DataIndex("Addr1")
-                    .Width(350).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(50).EnforceMaxLength(true)
+                    .Width(350).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(200).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtAddr2").Name("txtAddr2").HQLangCode("AR20200Addr2").DataIndex("Addr2")
-                    .Width(350).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    .Width(350).MarginSpec("5 0 0 0").MaxLength(200).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtEMailAddr").Name("txtEMailAddr").HQLangCode("EMailAddr").DataIndex("EMailAddr")
                     .Width(350).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true).AllowBlank(true)
@@ -212,8 +212,8 @@
                             lst.Change.Fn = "cboHandle_Change";
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
-                            
-                    
+
+
 
                     , HQ.Combo().ID("cboCountry").Name("cboCountry").DataIndex("Country").HQLangCode("COUNTRY")
                         .HQProcedure("AR20400_pcCountryID").HQColumnShow("CountryID,Descr")
