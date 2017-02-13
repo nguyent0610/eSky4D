@@ -2,6 +2,7 @@
 //////////////////////////////////////////////////////////////////////
 var keys = ['UserName'];
 var _CustID = '';
+var _tstamp = '';
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
 
@@ -139,6 +140,7 @@ var grdPO_CostPurchasePrice_Reject = function (record) {
     stoChanged(App.stoPO_CostPurchasePrice);
 };
 var btnEdit_Click = function (record) {
+    _tstamp = record.data.tstamp;
     App.frmDetail.loadRecord(record);
     App.txtCpnyID.setValue(record.data.CpnyID.split(','));
     App.txtUserID.setValue(record.data.UserName);
@@ -257,7 +259,8 @@ var save = function () {
             lstCpnyID : App.txtCpnyID.getValue().join(','),
             isNewUser: HQ.isNew,
             valueStartDate: App.dtpStartDate.getValue().toDateString(),
-            valueEndDate: App.dtpEndDate.getValue().toDateString()
+            valueEndDate: App.dtpEndDate.getValue().toDateString(),
+            valueTstamp: _tstamp
         },
         success: function (msg, data) {
             HQ.message.show(201405071);

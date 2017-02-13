@@ -84,7 +84,7 @@
       <Schema Namespace="SA03001Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SA03001Entities" annotation:LazyLoadingEnabled="true" >
           <FunctionImport Name="SA03001_pgLoadGrid" ReturnType="Collection(SA03001Model.SA03001_pgLoadGrid_Result)">
-          <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
@@ -114,6 +114,7 @@
           <Property Type="Boolean" Name="isChange" Nullable="true" />
           <Property Type="DateTime" Name="StartDate" Nullable="true" />
           <Property Type="DateTime" Name="EndDate" Nullable="true" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SA03001_pgBranchAllByUser_Result">
           <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
@@ -205,6 +206,7 @@
                 <ScalarProperty Name="isChange" ColumnName="isChange" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

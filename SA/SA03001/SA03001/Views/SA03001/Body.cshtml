@@ -275,9 +275,9 @@
                             )   
                         ,X.Container().Layout(LayoutType.HBox).MarginSpec("10 0 0 0")
                         .Items(
-                            HQ.DateField().ID("dtpStartDate").Name("dtpStartDate").HQLangCode("StartDate").DataIndex("StartDate").LabelWidth(150)//.ReadOnly(true).Tag("X")
+                            HQ.DateField().ID("dtpStartDate").Name("dtpStartDate").HQLangCode("StartDate").DataIndex("StartDate").LabelWidth(150).Hidden(true)//.ReadOnly(true).Tag("X")
                             
-                            , HQ.DateField().ID("dtpEndDate").Name("dtpEndDate").HQLangCode("EndDate").DataIndex("EndDate").LabelWidth(180).MarginSpec("0 0 0 120")//.ReadOnly(true).Tag("X")
+                            , HQ.DateField().ID("dtpEndDate").Name("dtpEndDate").HQLangCode("EndDate").DataIndex("EndDate").LabelWidth(180).MarginSpec("0 0 0 120").Hidden(true)//.ReadOnly(true).Tag("X")
                         )           
                     )
             )

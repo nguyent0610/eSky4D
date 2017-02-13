@@ -73,7 +73,7 @@ namespace SA03001.Controllers
                 string blocked = data["valueBloked"].PassNull();
                 string tmpStartDate = data["valueStartDate"].PassNull();
                 string tmpEndDate = data["valueEndDate"].PassNull();
-
+                string valueTstamp = data["valueTstamp"].PassNull();
                 DateTime StartDate = DateTime.Parse(tmpStartDate);
                 DateTime EndDate = DateTime.Parse(tmpEndDate);
 
@@ -116,6 +116,13 @@ namespace SA03001.Controllers
                     objUser.ExpireDay = 90;
                     objUser.BeginDay = DateTime.Now;
                     objUser.LoggedIn = true;
+                }
+                else
+                {
+                    if (objUser.tstamp.ToHex() != valueTstamp.ToHex())
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
                 }
                
                 var listUserGroup = _db.SYS_UserGroup.Where(p => p.UserID == userName).ToList();
