@@ -334,6 +334,7 @@ var save = function () {
             },
             success: function (result, data) {
                 HQ.isNew = false;
+                HQ.isChange = false;
                 HQ.message.show(201405071, '', '');
                 //refresh('yes');
                 var NodeID = data.result.NodeID;

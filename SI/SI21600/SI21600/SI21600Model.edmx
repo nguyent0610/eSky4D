@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_Customer">
           <Key>
             <PropertyRef Name="CustId" />
@@ -12,11 +12,11 @@
           </Key>
           <Property Name="CustId" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="CustName" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Addr1" Type="nvarchar" MaxLength="200" />
-          <Property Name="Addr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Addr1" Type="nvarchar(max)" />
+          <Property Name="Addr2" Type="nvarchar" MaxLength="100" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
-          <Property Name="BillAddr1" Type="nvarchar" MaxLength="200" />
-          <Property Name="BillAddr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="BillAddr1" Type="nvarchar(max)" />
+          <Property Name="BillAddr2" Type="nvarchar" MaxLength="100" />
           <Property Name="BillAttn" Type="nvarchar" MaxLength="200" />
           <Property Name="BillCity" Type="varchar" MaxLength="10" />
           <Property Name="BillCountry" Type="varchar" MaxLength="3" />
@@ -74,14 +74,19 @@
           <Property Name="HasPG" Type="bit" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="EstablishDate" Type="date" />
           <Property Name="Birthdate" Type="date" />
+          <Property Name="RefCustID" Type="varchar" MaxLength="50" />
+          <Property Name="SellProduct" Type="varchar" MaxLength="10" />
+          <Property Name="InActive" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastOrderDate" Type="datetime" />
+          <Property Name="SearchName" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="IN_Inventory">
           <Key>
@@ -178,6 +183,7 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Descr1" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <Function Name="SI21600_ppMaxRC" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Type" Type="varchar" Mode="In" />
@@ -192,15 +198,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="SI21600Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SI21600Entities" annotation:LazyLoadingEnabled="true" >
-          <FunctionImport Name="SI21600_ptCompany" ReturnType="Collection(SI21600Model.SI21600_ptCompany_Result)">
-          <Parameter Name="UserID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="SI21600_ptTerritory" ReturnType="Collection(SI21600Model.SI21600_ptTerritory_Result)" />
-          <FunctionImport Name="SI21600_pgSYS_CloseDateBranchAuto" ReturnType="Collection(SI21600Model.SI21600_pgSYS_CloseDateBranchAuto_Result)">
-          <Parameter Name="ID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SI21600_GetAutoNumber" ReturnType="Collection(Int32)" />
-          <FunctionImport Name="SI21600_pdHeader" ReturnType="Collection(SI21600Model.SI21600_pdHeader_Result)" />
           <EntitySet Name="SI_Hierarchy" EntityType="SI21600Model.SI_Hierarchy" />
           <FunctionImport Name="SI21600_ppMaxRC" ReturnType="Collection(Int32)">
           <Parameter Name="Type" Mode="In" Type="String" />
@@ -208,27 +205,6 @@
           <EntitySet Name="AR_Customer" EntityType="SI21600Model.AR_Customer" />
           <EntitySet Name="IN_Inventory" EntityType="SI21600Model.IN_Inventory" />
         </EntityContainer>
-        <ComplexType Name="SI21600_ptCompany_Result">
-          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
-        </ComplexType>
-        <ComplexType Name="SI21600_ptTerritory_Result">
-          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
-        </ComplexType>
-        <ComplexType Name="SI21600_pgSYS_CloseDateBranchAuto_Result">
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="20" />
-        </ComplexType>
-        <ComplexType Name="SI21600_pdHeader_Result">
-          <Property Type="Boolean" Name="Active" Nullable="false" />
-          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
-          <Property Type="DateTime" Name="Time" Nullable="true" Precision="23" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="Int32" Name="UpDates" Nullable="false" />
-        </ComplexType>
         <EntityType Name="SI_Hierarchy">
           <Key>
             <PropertyRef Name="NodeID" />
@@ -249,6 +225,7 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Descr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -257,11 +234,11 @@
           </Key>
           <Property Name="CustId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CustName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Addr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Addr2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Addr1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Addr2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Attn" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="BillAddr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="BillAddr2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BillAddr1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BillAddr2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="BillAttn" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="BillCity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="BillCountry" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
@@ -319,14 +296,19 @@
           <Property Name="HasPG" Type="Boolean" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="EstablishDate" Type="DateTime" Precision="0" />
           <Property Name="Birthdate" Type="DateTime" Precision="0" />
+          <Property Name="RefCustID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SellProduct" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="InActive" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastOrderDate" Type="DateTime" Precision="3" />
+          <Property Name="SearchName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="IN_Inventory">
           <Key>
@@ -412,6 +394,7 @@
           <EntitySetMapping Name="SI_Hierarchy">
             <EntityTypeMapping TypeName="SI21600Model.SI_Hierarchy">
               <MappingFragment StoreEntitySet="SI_Hierarchy">
+                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -432,6 +415,11 @@
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="SI21600Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="SearchName" ColumnName="SearchName" />
+                <ScalarProperty Name="LastOrderDate" ColumnName="LastOrderDate" />
+                <ScalarProperty Name="InActive" ColumnName="InActive" />
+                <ScalarProperty Name="SellProduct" ColumnName="SellProduct" />
+                <ScalarProperty Name="RefCustID" ColumnName="RefCustID" />
                 <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
                 <ScalarProperty Name="EstablishDate" ColumnName="EstablishDate" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
@@ -604,7 +592,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="95" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="73" >
         <EntityTypeShape EntityType="SI21600Model.SI_Hierarchy" Width="1.5" PointX="4.875" PointY="0.75" />
         <EntityTypeShape EntityType="SI21600Model.AR_Customer" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SI21600Model.IN_Inventory" Width="1.5" PointX="2.75" PointY="0.75" />

@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -119,6 +119,37 @@ namespace SI21600.Controllers
                 var curHeader = dataHandler.ObjectData<SI_Hierarchy>().FirstOrDefault();
                 //ChangeRecords<SI_Hierarchy> lstSI_Hierarchy = dataHandler.BatchObjectData<SI_Hierarchy>();
                 //var header = new SI_Hierarchy();
+          
+                #region -Ktra dữ liệu-
+                if (ParentRecordID == 0)
+                {
+                    if (NodeLevel != 1)
+                    {
+                        throw new MessageException("2017021402", "", new string[] { NodeLevel.ToString() });
+                    }
+                }
+                else
+                {
+                    var obj = _sys.SI_Hierarchy.FirstOrDefault(x => x.RecordID != curHeader.RecordID && x.RecordID == ParentRecordID && x.Type == Type);
+                    if (obj == null)
+                    {
+                        if (curHeader.RecordID == ParentRecordID)
+                        {
+                            throw new MessageException("2017021403", "", new string[] { ParentRecordID.ToString() });
+                        }
+                        else
+                        {
+                            throw new MessageException("2017021401", "", new string[] { ParentRecordID.ToString() });
+                        }
+                        
+                    }
+                    else if ((obj.NodeLevel + 1) != NodeLevel)
+                    {
+                        throw new MessageException("2017021402", "", new string[] { NodeLevel.ToString() });
+                    }
+                }
+                
+                #endregion
 
                 #region Save SI_Hierarchy
                 var header = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.NodeLevel == NodeLevel && p.ParentRecordID == ParentRecordID && p.Type == Type);
@@ -166,7 +197,7 @@ namespace SI21600.Controllers
         private void UpdatingHeader(ref SI_Hierarchy t, SI_Hierarchy s)
         {
             t.Descr = s.Descr;
-
+            t.Descr1 = s.Descr1;
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
@@ -198,9 +229,13 @@ namespace SI21600.Controllers
                 var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type == Type);
                 if (obj != null)
                 {
+                    var lstChild = _sys.SI_Hierarchy.Where(x => x.ParentRecordID == obj.RecordID && x.Type == Type).ToList();
+                    for (int i = 0; i < lstChild.Count; i++)
+                    {
+                        _sys.SI_Hierarchy.DeleteObject(lstChild[i]);
+                    }
                     _sys.SI_Hierarchy.DeleteObject(obj);
-                }
-
+                }                
                 _sys.SaveChanges();
                 return Json(new { success = true });
 

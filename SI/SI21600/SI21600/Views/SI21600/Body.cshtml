@@ -72,11 +72,14 @@
         .Region(Region.Center)
         .Items(
             HQ.Combo().ID("cboNodeID").Name("cboNodeID").HQLangCode("ID").HQProcedure("SI21600_pcHierarchyAll")
-            .HQColumnShow("NodeID,Descr").DisplayField("NodeID").ValueField("NodeID").HQAutoLoad(false)
+            .HQColumnShow("NodeID,Descr,Descr1").DisplayField("NodeID").ValueField("NodeID").HQAutoLoad(false)
             .HQHeightWidth(400, 300).MarginSpec("5 0 5 0").AllowBlank(false).EnforceMaxLength(true).MaxLength(30)
             .HQParam(new StoreParameterCollection() 
             { 
-                new StoreParameter() { Name = "@Type", Value = "App.cboType.getValue()", Mode = ParameterMode.Raw }
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw}
+                ,new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                ,new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+                ,new StoreParameter() { Name = "@Type", Value = "App.cboType.getValue()", Mode = ParameterMode.Raw }
             })
             .LoadData()
             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -89,7 +92,9 @@
 
                 })
             , HQ.TextBox().ID("txtDescr").Name("Descr").HQLangCode("Descr").DataIndex("Descr")
-                                .Width(500).MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
+                .Width(500).MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
+            , HQ.TextBox().ID("txtDescr1").Name("Descr1").HQLangCode("Descr1").DataIndex("Descr1")
+                .Width(500).MaxLength(200).EnforceMaxLength(true)//.AllowBlank(false)
             , HQ.NumberField().ID("txtNodeLevel").Name("txtNodeLevel").HQLangCode("Level")
                                 .Width(300).MinValue(0).DecimalPrecision(0).ReadOnly(true)
             , HQ.NumberField().ID("txtParentRecordID").Name("txtParentRecordID").HQLangCode("ParentRecordID")
