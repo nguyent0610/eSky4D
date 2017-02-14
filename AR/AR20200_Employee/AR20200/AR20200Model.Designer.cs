@@ -164,22 +164,6 @@ namespace AR20200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_Setup> AR_Setup
-        {
-            get
-            {
-                if ((_AR_Setup == null))
-                {
-                    _AR_Setup = base.CreateObjectSet<AR_Setup>("AR_Setup");
-                }
-                return _AR_Setup;
-            }
-        }
-        private ObjectSet<AR_Setup> _AR_Setup;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<AR_Customer> AR_Customer
         {
             get
@@ -736,6 +720,22 @@ namespace AR20200
             }
         }
         private ObjectSet<AR_SalespersonLocationTrace> _AR_SalespersonLocationTrace;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_Setup> AR_Setup
+        {
+            get
+            {
+                if ((_AR_Setup == null))
+                {
+                    _AR_Setup = base.CreateObjectSet<AR_Setup>("AR_Setup");
+                }
+                return _AR_Setup;
+            }
+        }
+        private ObjectSet<AR_Setup> _AR_Setup;
 
         #endregion
 
@@ -787,14 +787,6 @@ namespace AR20200
         public void AddToAR_SalespersonCpnyAddr(AR_SalespersonCpnyAddr aR_SalespersonCpnyAddr)
         {
             base.AddObject("AR_SalespersonCpnyAddr", aR_SalespersonCpnyAddr);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Setup EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Setup(AR_Setup aR_Setup)
-        {
-            base.AddObject("AR_Setup", aR_Setup);
         }
     
         /// <summary>
@@ -1075,6 +1067,14 @@ namespace AR20200
         public void AddToAR_SalespersonLocationTrace(AR_SalespersonLocationTrace aR_SalespersonLocationTrace)
         {
             base.AddObject("AR_SalespersonLocationTrace", aR_SalespersonLocationTrace);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Setup EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Setup(AR_Setup aR_Setup)
+        {
+            base.AddObject("AR_Setup", aR_Setup);
         }
 
         #endregion
@@ -9330,30 +9330,6 @@ namespace AR20200
         private global::System.String _LastSlsID;
         partial void OnLastSlsIDChanging(global::System.String value);
         partial void OnLastSlsIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String LastDeliveryID
-        {
-            get
-            {
-                return _LastDeliveryID;
-            }
-            set
-            {
-                OnLastDeliveryIDChanging(value);
-                ReportPropertyChanging("LastDeliveryID");
-                _LastDeliveryID = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("LastDeliveryID");
-                OnLastDeliveryIDChanged();
-            }
-        }
-        private global::System.String _LastDeliveryID;
-        partial void OnLastDeliveryIDChanging(global::System.String value);
-        partial void OnLastDeliveryIDChanged();
 
         #endregion
 
