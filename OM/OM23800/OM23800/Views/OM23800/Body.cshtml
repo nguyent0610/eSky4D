@@ -183,7 +183,7 @@
                         {
                             lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";                        
                         })   
-                    , X.Container().Flex(1).Layout(LayoutType.HBox).MarginSpec("5 5 0 0")
+                    , X.Container().Flex(1).Layout(LayoutType.HBox).MarginSpec("5 5 0 0").Hidden(true)
                     .LayoutConfig(new HBoxLayoutConfig() { Align = HBoxAlign.Stretch })
                     .Items(
                         X.Label().Text(string.Format("{0} ({1}/{2})", Util.GetLang("Amt"), Util.GetLang("From"), Util.GetLang("To"))).Width(105)
@@ -323,15 +323,15 @@
                     .LayoutConfig(new HBoxLayoutConfig() { Align = HBoxAlign.Top, Pack = BoxPack.Center })
                     .Items(
                         X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
-                        .StyleSpec("background-color:#FF0000;")
+                        .StyleSpec("background-color:#22B14C;")
                         , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("InMCP")).Width(60)
 
                         , X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
-                        .StyleSpec("background-color:#CCFF33;")
+                        .StyleSpec("background-color:#FFF200;")
                         , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("NotInMCP")).Width(60)
 
                         , X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
-                        .StyleSpec("background-color:#000000;")
+                        .StyleSpec("background-color:#FF0000;")
                         , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("Inactive")).Width(60)
                     )
 
