@@ -2323,7 +2323,6 @@ var PosGmap = {
     PosGmap.directionsService.route(request, function (response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
-            //planPoints.splice(0, 1);
             PosGmap.directionsDisplays.push(directionsDisplay);
             idxPlan = idxPlan + 1;
             var planPoint = planPoints[idxPlan];
@@ -2342,7 +2341,20 @@ var PosGmap = {
             alert("NOT_FOUND");
         }
         else if (status == google.maps.DirectionsStatus.ZERO_RESULTS) {
-            alert("ZERO_RESULTS");
+            //alert("ZERO_RESULTS");
+            directionsDisplay.setDirections(response);
+            PosGmap.directionsDisplays.push(directionsDisplay);
+            idxPlan = idxPlan + 1;
+            var planPoint = planPoints[idxPlan];
+            if (planPoint && planPoint.length > 0) {
+                //PosGmap.getRoute();
+                setTimeout(function () {
+                    PosGmap.getRoute(planPoints, idxPlan);
+                }, 400);
+            } else {
+                App.grdVisitCustomerActual.store.reload();
+                App.storeMapActualVisit.reload();
+            }
         }
         else if (status == google.maps.DirectionsStatus.MAX_WAYPOINTS_EXCEEDED) {
             alert("MAX_WAYPOINTS_EXCEEDED");
