@@ -37,7 +37,7 @@ namespace OM25100.Controllers
             if (objConfig != null)
                 ViewBag.ShowTabCondition = objConfig.IntVal;
             else
-                ViewBag.ShowTabCondition = 1;
+                ViewBag.ShowTabCondition = 0;
             return View();
         }
         
