@@ -1191,14 +1191,14 @@
                                // , X.Column().Text(Util.GetLang("Position")).DataIndex("PosDesc").Width(200).AutoFocus(true)
                                , X.Column().ID("CustID").Text(Util.GetLang("CustID")).DataIndex("CustID")
                                     .Editor(
-                                            HQ.Combo().ID("cboCustId").Name("cboCustId").HQProcedure("OM25100_pcCustId").HQAutoLoad(true)
-                                            .HQColumnShow("CustId,CustName").DisplayField("CustId").ValueField("CustId")
-                                            .Width(500).HQHeightWidth(500, 400)
-                                            .HQParam(new StoreParameterCollection() 
+                                        HQ.Combo().ID("cboCustId").Name("cboCustId").HQProcedure("OM25100_pcCustId").HQAutoLoad(true)
+                                        .HQColumnShow("CustId,CustName").DisplayField("CustId").ValueField("CustId")
+                                        .Width(500).HQHeightWidth(500, 400)
+                                        .HQParam(new StoreParameterCollection() 
                                         {
-                                            new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperIdCust.getValue()", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@SlsperID", Value = "App.slmgrdOMKPICustomer_All.selected.items[0] == undefined ? '' : App.slmgrdOMKPICustomer_All.selected.items[0].data.SlsperId", Mode = ParameterMode.Raw },                                              
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "App.slmgrdOMKPICustomer_All.selected.items[0] == undefined ? '' : App.slmgrdOMKPICustomer_All.selected.items[0].data.BranchID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                         })
                                             .AllowBlank(true).ForceSelection(true).HQDBSys(false)
@@ -1367,9 +1367,9 @@
                                             .Width(500).HQHeightWidth(500, 400)
                                             .HQParam(new StoreParameterCollection() 
                                         {
-                                              new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperIdClassCust.getValue()", Mode = ParameterMode.Raw },   
+                                            new StoreParameter() { Name = "@SlsperID", Value = "App.slmgrdOMKPICustomer_Class.selected.items[0] == undefined ? '' : App.slmgrdOMKPICustomer_Class.selected.items[0].data.SlsperId", Mode = ParameterMode.Raw },                                              
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "App.slmgrdOMKPICustomer_Class.selected.items[0] == undefined ? '' : App.slmgrdOMKPICustomer_Class.selected.items[0].data.BranchID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                         })
                                             .AllowBlank(true).ForceSelection(true).HQDBSys(false)
@@ -1552,16 +1552,16 @@
                                     
                                     //, X.Column().Text(Util.GetLang("Position")).DataIndex("PosDesc").Width(200).AutoFocus(true) 
                                         
-                                             , X.Column().ID("CustIDInvt").Text(Util.GetLang("CustID")).DataIndex("CustID")
+                                    , X.Column().ID("CustIDInvt").Text(Util.GetLang("CustID")).DataIndex("CustID")
                                     .Editor(
                                             HQ.Combo().ID("cboCustIdInvt").Name("cboCustIdInvt").HQProcedure("OM25100_pcCustId").HQAutoLoad(true)
                                             .HQColumnShow("CustId,CustName").DisplayField("CustId").ValueField("CustId")
                                             .Width(500).HQHeightWidth(500, 400)
                                             .HQParam(new StoreParameterCollection() 
                                         {  
-                                            new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperIdInvtCust.getValue()", Mode = ParameterMode.Raw },                                              
+                                            new StoreParameter() { Name = "@SlsperID", Value = "App.slmgrdOMKPICustomer_Invt.selected.items[0] == undefined ? '' : App.slmgrdOMKPICustomer_Invt.selected.items[0].data.SlsperId", Mode = ParameterMode.Raw },                                              
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "App.slmgrdOMKPICustomer_Invt.selected.items[0] == undefined ? '' : App.slmgrdOMKPICustomer_Invt.selected.items[0].data.BranchID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                         })
                                             .AllowBlank(true).ForceSelection(true).HQDBSys(false)

@@ -454,6 +454,7 @@ var menuClick = function (command) {
                     if (App.grdOM_KPICondition.isHidden() == false)
                         if (HQ.store.checkRequirePass(App.stoOM_KPICondition, keys9, fieldsCheckRequire9, fieldsLangCheckRequire9))
                             save();
+                        else return;
                     else
                         save();
                 }               
@@ -1702,6 +1703,9 @@ var deleteData_GridCondition = function (item) {
 
 //grd OM_KPICpny_All/////////////////////////////////////
 var grdKPICpnyAll_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
         return false;
     }
@@ -1745,6 +1749,9 @@ var grdKPICpnyAll_Reject = function (record) {
 };
 //grd OM_KPICpny_Class/////////////////////////////////////
 var grdKPICpnyClass_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
         return false;
     }
@@ -1791,6 +1798,9 @@ var grdKPICpnyClass_Reject = function (record) {
 };
 //grd OM_KPICpny_Invt/////////////////////////////////////
 var grdKPICpnyInvt_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
         return false;
     }
@@ -1837,6 +1847,9 @@ var grdKPICpnyInvt_Reject = function (record) {
 };
 //grd OM_KPISales_All/////////////////////////////////////
 var grdKPISalesAll_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
         return false;
     }
@@ -1892,6 +1905,9 @@ var grdKPISalesAll_Reject = function (record) {
 };
 
 var grdKPISalesAll_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
         return false;
     }
@@ -1949,6 +1965,9 @@ var grdOM_KPICustomer_All_ValidateEdit = function (item, e) {
 
 
 var grdOM_KPICustomer_All_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
         return false;
     }
@@ -1963,6 +1982,8 @@ var grdOM_KPICustomer_All_BeforeEdit = function (editor, e) {
         return false;
     }
     else {
+        if (e.field == 'CustID')
+            App.cboCustId.store.reload();
         return HQ.grid.checkBeforeEdit(e, keys6);
     }
    
@@ -1973,6 +1994,9 @@ var grdKPICustomerAll_Reject = function (record) {
 };
 //grd OM_KPISales_Class/////////////////////////////////////
 var grdKPISalesClass_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
         return false;
     }
@@ -2022,8 +2046,12 @@ var grdKPISalesClass_ValidateEdit = function (item, e) {
     }
     //return HQ.grid.checkValidateEdit(App.grdOM_KPISales_Class, e, keys4);
 };
+
 //grd OM_KPICustomer_Class/////////////////////////////////////
 var grdKPICustomerClass_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
         return false;
     }
@@ -2038,6 +2066,8 @@ var grdKPICustomerClass_BeforeEdit = function (editor, e) {
         return false;
     }
     else {
+        if (e.field == 'CustID')
+            App.cboCustIdClass.store.reload();
         return HQ.grid.checkBeforeEdit(e, keys7);
     }
 };
@@ -2080,12 +2110,16 @@ var grdKPICustomerClass_ValidateEdit = function (item, e) {
 var grdKPISalesClass_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdOM_KPISales_Class);
 };
+
 var grdKPICustomerClass_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdOM_KPICustomer_Class);
 };
 
 //grd OM_KPICustomer_Invt/////////////////////////////////////
 var grdKPICustomerInvt_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
         return false;
     }
@@ -2100,8 +2134,11 @@ var grdKPICustomerInvt_BeforeEdit = function (editor, e) {
         return false;
     }
     else {
+        if (e.field == 'CustID')
+            App.cboCustIdInvt.store.reload();
         return HQ.grid.checkBeforeEdit(e, keys8);
     }
+    
     //return HQ.grid.checkBeforeEdit(e, keys5);
 
 };
@@ -2144,8 +2181,12 @@ var grdKPICustomerinvt_ValidateEdit = function (item, e) {
 var grdKPICustomerInvt_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdOM_KPICustomer_Invt);
 };
+
 //grd OM_KPISales_Invt/////////////////////////////////////
 var grdKPISalesInvt_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
     if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
         return false;
     }
@@ -2201,9 +2242,13 @@ var grdKPISalesInvt_Reject = function (record) {
 };
 
 var grdOM_KPICondition_BeforeEdit = function (editor, e) {    
-    if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
+    //if (App.cboZone.value.join(',') == '' && App.cboTerritory.value.join(',') == '') {
+    //    return false;
+    //}
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
         return false;
-    }    
+    }
+
     if (checkCancelEdit()) //(App.cboStatus.getValue() == 'C' || App.cboStatus.getValue() == 'E') 
     {
         return false;

@@ -37,7 +37,7 @@ namespace OM25100.Controllers
             if (objConfig != null)
                 ViewBag.ShowTabCondition = objConfig.IntVal;
             else
-                ViewBag.ShowTabCondition = 0;
+                ViewBag.ShowTabCondition = 1;
             return View();
         }
         
@@ -1051,7 +1051,7 @@ namespace OM25100.Controllers
                         {
                             if (appTo == "A")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
                                   || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
                                   || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
                                   || workSheet.Cells[0, 3].StringValue.Trim() != "Target"
@@ -1062,7 +1062,7 @@ namespace OM25100.Controllers
                             }
                             else if (appTo == "I")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
                                   || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
                                   || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
                                   || workSheet.Cells[0, 3].StringValue.Trim() != "InvtID"
@@ -1074,7 +1074,7 @@ namespace OM25100.Controllers
                             }
                             else if (appTo == "G")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
                                   || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
                                   || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
                                   || workSheet.Cells[0, 3].StringValue.Trim() != "ClassID"
@@ -1089,7 +1089,7 @@ namespace OM25100.Controllers
                         {
                             if (appTo == "A")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
                                   || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
                                   || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
                                   || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
@@ -1101,7 +1101,7 @@ namespace OM25100.Controllers
                             }
                             else if (appTo == "I")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
                                   || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
                                   || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
                                   || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
@@ -1114,7 +1114,7 @@ namespace OM25100.Controllers
                             }
                             else if (appTo == "G")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
                                   || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
                                   || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
                                   || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
@@ -1130,7 +1130,7 @@ namespace OM25100.Controllers
                         {
                             if (appTo == "A")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
                                   || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
                                   || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
                                   || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
@@ -1143,7 +1143,7 @@ namespace OM25100.Controllers
                             }
                             else if (appTo == "I")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
                                      || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
                                      || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
                                      || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
@@ -1157,7 +1157,7 @@ namespace OM25100.Controllers
                             }
                             else if (appTo == "G")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle"
+                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
                                      || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
                                      || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
                                      || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
