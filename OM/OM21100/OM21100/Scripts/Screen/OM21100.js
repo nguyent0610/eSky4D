@@ -118,9 +118,39 @@ var Main = {
 
                     && Main.Process.checkRequire(App.pnlDPPP.title, App.grdDiscItemClass.store.getChangedData().Updated, ["ClassID"], ["ClassID"])
                     && Main.Process.checkRequire(App.pnlDPPP.title, App.grdDiscItemClass.store.getChangedData().Updated, ["ClassID"], ["ClassID"])) {
-                return true;
+                
+                if (App.stoBundle.data.length > 0) {
+                    var flat = null;
+                    var breakByVal = App.cboBreakBy.getValue();
+                    var disClassVal = App.cboDiscClass.getValue();
+                    // Check Grid 
+                    App.stoBundle.data.each(function (item) {
+                        if (!Ext.isEmpty(item.data.InvtID) && (item.data.BundleOrItem == 'B' || disClassVal == 'BB' || disClassVal == "CB" || disClassVal == "TB")) {
+
+                            if (item.data.BundleQty == 0 && breakByVal == 'Q') {
+                                HQ.message.show(1111, [App.pnlDPBB.title, HQ.common.getLang('BreakQty')], '', true);
+                                flat = item;
+                                return false;
+                            }
+                            if (item.data.BundleAmt == 0 && breakByVal == 'A') {
+                                HQ.message.show(1111, [App.pnlDPBB.title, HQ.common.getLang('BreakAmt')], '', true);
+                                flat = item;
+                                return false;
+                            }
+                        }
+                    });
+                    if (!Ext.isEmpty(flat)) {
+                        App.slmBundle.select(App.stoBundle.indexOf(flat));
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }                
             }
             else {
+                
                 return false;
             }
         },
@@ -129,110 +159,194 @@ var Main = {
             var hasData = false;
             if (App.cboStatus.getValue() == _holdStatus) {
                 if (App.grdDiscBreak.store.getCount() > 1) {
-                    if (App.grdCompany.store.getCount() > 0) {
-                        // 0: {Code: "BB", Descr: "Item Bundle"}
-                        if (App.cboDiscClass.value == "BB") {
-                            if (App.grdBundle.store.getCount() > 1) {
-                                hasData = true;
+                    var flat = null;
+                    var discClassVal = App.cboDiscClass.getValue();
+                    var breakByVal = App.cboBreakBy.getValue();
+                    if (discClassVal == "BB" || discClassVal == "CB" || discClassVal == "TB") {
+                        var allData0 = App.grdFreeItem.store.snapshot || App.grdFreeItem.store.allData || App.grdFreeItem.store.data;
+                        var isValid = false;
+                        var showError = true;
+                        App.grdDiscBreak.store.data.each(function (item) {                                                        
+                            if (item.data.BreakAmt == 0) {
+                                if (item.data.BreakQty != 0 || item.data.DiscAmt != 0 || item.data.Descr != '') {
+                                    HQ.message.show(1111, [App.grdDiscBreak.title, App.grdDiscBreak.columns[2].text], '', true);
+                                    flat = item;
+                                    hasData = false;
+                                    return false;
+                                }
+                            } else {
+                                isValid = false;
+                                if (item.data.DiscAmt == 0) {
+
+                                    for (var i = 0; i < allData0.length; i++) {
+                                        if (!Ext.isEmpty(allData0.items[i].data.FreeItemID) && allData0.items[i].data.LineRef == item.data.LineRef) {
+                                            if (allData0.items[i].data.FreeItemQty == 0) {
+                                                flat = item;
+                                                showError = false;
+                                                isValid = false;
+                                                HQ.message.show(1111, [App.grdFreeItem.title, App.grdFreeItem.columns[3].text], '', true);
+                                                break;
+                                            }
+                                            isValid = true;
+                                        }
+                                    }
+                                } else {
+                                    isValid = true;
+                                }
+                                hasData = true;                                
+                            }
+                        });
+                        if (!Ext.isEmpty(flat)) {
+                            App.slmDiscBreak.select(App.grdDiscBreak.store.indexOf(flat));
+                            return false;
+                        }
+                        if (!isValid && showError) {
+                            HQ.message.show(1798);
+                            return false;
+                        }
+                    } else {
+                        App.grdDiscBreak.store.data.each(function (item) {
+                            if (breakByVal == 'A') {
+                                if (item.data.BreakAmt == 0) {
+                                    if (item.data.BreakQty != 0 || item.data.DiscAmt != 0 || item.data.Descr != '') {
+                                        HQ.message.show(1111, [App.grdDiscBreak.title, App.grdDiscBreak.columns[2].text], '', true);
+                                        flat = item;
+                                        hasData = false;
+                                        return false;
+                                    }
+                                } else {
+                                    hasData = true;
+                                }
+                            } else if (breakByVal == 'Q') {
+                                if (item.data.BreakQty == 0) {
+                                    if (item.data.BreakAmt != 0 || item.data.DiscAmt != 0 || item.data.Descr != '') {
+                                        HQ.message.show(1111, [App.grdDiscBreak.title, App.grdDiscBreak.columns[1].text], '', true);
+                                        flat = item;
+                                        hasData = false;
+                                        return false;
+                                    }
+                                } else {
+                                    hasData = true;
+                                }
+                            }
+                            
+                        });
+                        if (!Ext.isEmpty(flat)) {
+                            App.slmDiscBreak.select(App.grdDiscBreak.store.indexOf(flat));
+                            return false;
+                        }
+                    }
+
+
+                    if (!hasData) {
+                        HQ.message.show(1000, HQ.common.getLang('DiscBreak'), '');
+                        hasData = false;
+                        return hasData;
+                    } 
+                        if (App.grdCompany.store.getCount() > 0) {
+                            // 0: {Code: "BB", Descr: "Item Bundle"}
+                            if (App.cboDiscClass.value == "BB") {
+                                if (App.grdBundle.store.getCount() > 1) {
+                                    hasData = true;
+                                }
+                                else {
+                                    HQ.message.show(1000, HQ.common.getLang('DPBB'), '');
+                                    hasData = false;
+                                }
+                            }
+                                // 1: {Code: "CB", Descr: "Customer and Item Bundle"}
+                            else if (App.cboDiscClass.value == "CB") {
+                                if (App.grdBundle.store.getCount() > 1 && App.grdDiscCust.store.getCount() > 1) {
+                                    hasData = true;
+                                }
+                                else {
+                                    HQ.message.show(1000, HQ.common.getLang('DPBB') + ' / ' + HQ.common.getLang('DPCC'), '');
+                                    hasData = false;
+                                }
+                            }
+                                // 2: {Code: "CC", Descr: "Customer"}
+                            else if (App.cboDiscClass.value == "CC") {
+                                if (App.grdDiscCust.store.getCount() > 1) {
+                                    hasData = true;
+                                }
+                                else {
+                                    HQ.message.show(1000, HQ.common.getLang('DPCC'), '');
+                                    hasData = false;
+                                }
+                            }
+                                // 3: {Code: "CI", Descr: "Customer and Invt. Item"}
+                            else if (App.cboDiscClass.value == "CI") {
+                                if (App.grdDiscCust.store.getCount() > 1 && App.grdDiscItem.store.getCount() > 1) {
+                                    hasData = true;
+                                }
+                                else {
+                                    HQ.message.show(1000, HQ.common.getLang('DPCC') + ' / ' + HQ.common.getLang('DPII'), '');
+                                    hasData = false;
+                                }
+                            }
+                                // 4: {Code: "II", Descr: "Inventory Item"}
+                            else if (App.cboDiscClass.value == "II") {
+                                if (App.grdDiscItem.store.getCount() > 1) {
+                                    hasData = true;
+                                }
+                                else {
+                                    HQ.message.show(1000, HQ.common.getLang('DPII'), '');
+                                    hasData = false;
+                                }
+                            }
+                                // 5: {Code: "PP", Descr: "Product Group"}
+                            else if (App.cboDiscClass.value == "PP") {
+                                if (App.grdDiscItemClass.store.getCount() > 1) {
+                                    hasData = true;
+                                }
+                                else {
+                                    HQ.message.show(1000, HQ.common.getLang('DPPP'), '');
+                                    hasData = false;
+                                }
+                            }
+                                // 6: {Code: "TB", Descr: "Shop Type and Item Bundle"}
+                            else if (App.cboDiscClass.value == "TB") {
+                                if (App.grdDiscCustClass.store.getCount() > 1 && App.grdBundle.store.getCount() > 1) {
+                                    hasData = true;
+                                }
+                                else {
+                                    HQ.message.show(1000, HQ.common.getLang('DPTT') + ' / ' + HQ.common.getLang('DPBB'), '');
+                                    hasData = false;
+                                }
+                            }
+                                // 7: {Code: "TI", Descr: "Shop Type and Invt. Item"}
+                            else if (App.cboDiscClass.value == "TI") {
+                                if (App.grdDiscCustClass.store.getCount() > 1 && App.grdDiscItem.store.getCount() > 1) {
+                                    hasData = true;
+                                }
+                                else {
+                                    HQ.message.show(1000, HQ.common.getLang('DPTT') + ' / ' + HQ.common.getLang('DPII'), '');
+                                    hasData = false;
+                                }
+                            }
+                                // 8: {Code: "TP", Descr: "Prod. Group and Shop Type"}
+                            else if (App.cboDiscClass.value == "TP") {
+                                if (App.grdDiscCustClass.store.getCount() > 1 && App.grdDiscItemClass.store.getCount() > 1) {
+                                    hasData = true;
+                                }
+                                else {
+                                    HQ.message.show(1000, HQ.common.getLang('DPTT') + ' / ' + HQ.common.getLang('DPPP'), '');
+                                    hasData = false;
+                                }
+                            }
+                                // 9: {Code: "TT", Descr: "Shop Type"}
+                            else if (App.cboDiscClass.value == "TT") {
+                                if (App.grdDiscCustClass.store.getCount() > 1) {
+                                    hasData = true;
+                                }
+                                else {
+                                    HQ.message.show(1000, HQ.common.getLang('DPTT'), '');
+                                    hasData = false;
+                                }
                             }
                             else {
-                                HQ.message.show(1000, HQ.common.getLang('DPBB'), '');
                                 hasData = false;
-                            }
-                        }
-                            // 1: {Code: "CB", Descr: "Customer and Item Bundle"}
-                        else if (App.cboDiscClass.value == "CB") {
-                            if (App.grdBundle.store.getCount() > 1 && App.grdDiscCust.store.getCount() > 1) {
-                                hasData = true;
-                            }
-                            else {
-                                HQ.message.show(1000, HQ.common.getLang('DPBB') + ' / ' + HQ.common.getLang('DPCC'), '');
-                                hasData = false;
-                            }
-                        }
-                            // 2: {Code: "CC", Descr: "Customer"}
-                        else if (App.cboDiscClass.value == "CC") {
-                            if (App.grdDiscCust.store.getCount() > 1) {
-                                hasData = true;
-                            }
-                            else {
-                                HQ.message.show(1000, HQ.common.getLang('DPCC'), '');
-                                hasData = false;
-                            }
-                        }
-                            // 3: {Code: "CI", Descr: "Customer and Invt. Item"}
-                        else if (App.cboDiscClass.value == "CI") {
-                            if (App.grdDiscCust.store.getCount() > 1 && App.grdDiscItem.store.getCount() > 1) {
-                                hasData = true;
-                            }
-                            else {
-                                HQ.message.show(1000, HQ.common.getLang('DPCC') + ' / ' + HQ.common.getLang('DPII'), '');
-                                hasData = false;
-                            }
-                        }
-                            // 4: {Code: "II", Descr: "Inventory Item"}
-                        else if (App.cboDiscClass.value == "II") {
-                            if (App.grdDiscItem.store.getCount() > 1) {
-                                hasData = true;
-                            }
-                            else {
-                                HQ.message.show(1000, HQ.common.getLang('DPII'), '');
-                                hasData = false;
-                            }
-                        }
-                            // 5: {Code: "PP", Descr: "Product Group"}
-                        else if (App.cboDiscClass.value == "PP") {
-                            if (App.grdDiscItemClass.store.getCount() > 1) {
-                                hasData = true;
-                            }
-                            else {
-                                HQ.message.show(1000, HQ.common.getLang('DPPP'), '');
-                                hasData = false;
-                            }
-                        }
-                            // 6: {Code: "TB", Descr: "Shop Type and Item Bundle"}
-                        else if (App.cboDiscClass.value == "TB") {
-                            if (App.grdDiscCustClass.store.getCount() > 1 && App.grdBundle.store.getCount() > 1) {
-                                hasData = true;
-                            }
-                            else {
-                                HQ.message.show(1000, HQ.common.getLang('DPTT') + ' / ' + HQ.common.getLang('DPBB'), '');
-                                hasData = false;
-                            }
-                        }
-                            // 7: {Code: "TI", Descr: "Shop Type and Invt. Item"}
-                        else if (App.cboDiscClass.value == "TI") {
-                            if (App.grdDiscCustClass.store.getCount() > 1 && App.grdDiscItem.store.getCount() > 1) {
-                                hasData = true;
-                            }
-                            else {
-                                HQ.message.show(1000, HQ.common.getLang('DPTT') + ' / ' + HQ.common.getLang('DPII'), '');
-                                hasData = false;
-                            }
-                        }
-                            // 8: {Code: "TP", Descr: "Prod. Group and Shop Type"}
-                        else if (App.cboDiscClass.value == "TP") {
-                            if (App.grdDiscCustClass.store.getCount() > 1 && App.grdDiscItemClass.store.getCount() > 1) {
-                                hasData = true;
-                            }
-                            else {
-                                HQ.message.show(1000, HQ.common.getLang('DPTT') + ' / ' + HQ.common.getLang('DPPP'), '');
-                                hasData = false;
-                            }
-                        }
-                            // 9: {Code: "TT", Descr: "Shop Type"}
-                        else if (App.cboDiscClass.value == "TT") {
-                            if (App.grdDiscCustClass.store.getCount() > 1) {
-                                hasData = true;
-                            }
-                            else {
-                                HQ.message.show(1000, HQ.common.getLang('DPTT'), '');
-                                hasData = false;
-                            }
-                        }
-                        else {
-                            hasData = false;
-                        }
+                            }                                                
                     }
                     else {
                         HQ.message.show(1000, HQ.common.getLang('AppComp'), '');
@@ -422,7 +536,7 @@ var Main = {
             else {
                 HQ.message.show(4, '', '');
             }
-        }
+        }    
     },
 
     Event: {
@@ -535,6 +649,13 @@ var Main = {
                             if (e.record.data.tstamp)
                                 return false;
                         }
+                        if (e.store.storeId == 'stoBundle') {
+                            if ((e.field == 'BundleQty' && App.cboBreakBy.getValue() != 'Q')
+                                || (e.field == 'BundleAmt' && App.cboBreakBy.getValue() != 'A'))
+                            {
+                                return false;
+                            }
+                        }
                         return HQ.grid.checkInput(e, keys);
                     }
                     else {
@@ -594,6 +715,9 @@ var Main = {
                 //    HQ.message.show(20140811, e.column.text);
                 //    return false;
                 //}
+                if (e.store.storeId == 'stoFreeItem') {
+                    keys = ['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];
+                }
                 if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
                     HQ.message.show(1112, e.value);
                     return false;
@@ -795,6 +919,23 @@ var DiscDefintion = {
             return allNodes;
         },
 
+        getLeafNodes : function (node) {
+            var childNodes = [];
+            node.eachChild(function (child) {
+                if (child.isLeaf()) {
+                    childNodes.push(child);
+                }
+                else {
+                    var children = DiscDefintion.Process.getLeafNodes(child);
+                    if (children.length) {
+                        children.forEach(function (nill) {
+                            childNodes.push(nill);
+                        });
+                    }
+                }
+            });
+            return childNodes;
+        },
         renderCpnyName: function (value) {
             var record = App.cboGCpnyID.store.findRecord("CpnyID", value);
             if (record) {
@@ -865,6 +1006,54 @@ var DiscDefintion = {
         deleteAllCompanies: function (item) {
             if (item == "yes") {
                 App.grdCompany.store.removeAll();
+            }
+        }
+
+        , deleteAllInvts: function (item) {
+            if (item == "yes") {
+                App.grdDiscItem.store.suspendEvents();
+                while (App.grdDiscItem.store.data.length > 0) {
+                    App.grdDiscItem.store.removeAt(0);
+                }
+                App.grdDiscItem.store.resumeEvents();
+                //App.grdDiscItem.store.clearData();
+                App.grdDiscItem.view.refresh();
+                var invtBlank = HQ.store.findRecord(App.grdDiscItem.store, ['InvtID'], ['']);
+                if (!invtBlank) {
+                    App.grdDiscItem.store.insert(0, Ext.create("App.mdlDiscItem", {
+                        DiscID: App.cboDiscID.getValue(),
+                        DiscSeq: App.cboDiscSeq.getValue(),
+                        InvtID: '',
+                        UnitDesc: '',
+                        Descr: ''
+                    }));
+                    //HQ.store.insertBlank(App.grdDiscItem.store, ['InvtID']);
+                }
+            }
+        }
+        , deleteAllBundle: function (item) {
+            if (item == "yes") {
+                App.grdBundle.store.suspendEvents();
+                while (App.grdBundle.store.data.length > 0) {
+                    App.grdBundle.store.removeAt(0);
+                }
+                App.grdBundle.store.resumeEvents();
+               // App.grdBundle.store.clearData();
+                App.grdBundle.view.refresh();
+                var invtBlank = HQ.store.findRecord(App.grdBundle.store, ['InvtID'], ['']);
+                if (!invtBlank) {
+                    App.grdBundle.store.insert(0, Ext.create("App.mdlBundle", {
+                        DiscID: App.cboDiscID.getValue(),
+                        DiscSeq: App.cboDiscSeq.getValue(),
+                        InvtID: '',
+                        UnitDesc: '',
+                        Descr: '',
+                        BundleQty: 0,
+                        BundleAmt: 0
+                    }));
+
+                   // HQ.store.insertBlank(App.grdBundle.store, ['InvtID']);
+                }
             }
         }
     },
@@ -1058,12 +1247,15 @@ var DiscDefintion = {
 
         cboDiscClass_change: function (cbo, newValue, oldValue, eOpts) {
             // 0: {Code: "BB", Descr: "Item Bundle"}
+            var isbb = false;
             if (cbo.value == "BB") {
                 DiscDefintion.Process.enableATabInList(["pnlDPBB"]);
+                isbb = true;                
             }
                 // 1: {Code: "CB", Descr: "Customer and Item Bundle"}
             else if (cbo.value == "CB") {
                 DiscDefintion.Process.enableATabInList(["pnlDPBB", "pnlDPCC"]);
+                isbb = true;
             }
                 // 2: {Code: "CC", Descr: "Customer"}
             else if (cbo.value == "CC") {
@@ -1084,6 +1276,7 @@ var DiscDefintion = {
                 // 6: {Code: "TB", Descr: "Shop Type and Item Bundle"}
             else if (cbo.value == "TB") {
                 DiscDefintion.Process.enableATabInList(["pnlDPTT", "pnlDPBB"]);
+                isbb = true;
             }
                 // 7: {Code: "TI", Descr: "Shop Type and Invt. Item"}
             else if (cbo.value == "TI") {
@@ -1105,6 +1298,11 @@ var DiscDefintion = {
                     && cbo.value
                     && cbo.value.substring(1) != "I") {
                 App.cboProAplForItem.setValue("A");
+            }
+            if (isbb) {
+                App.grdDiscBreak.columns[2].setText(HQ.common.getLang('NoBundle'));
+            } else {
+                App.grdDiscBreak.columns[2].setText(HQ.common.getLang('BreakAmt'));
             }
         },
 
@@ -1233,12 +1431,50 @@ var DiscDefintion = {
             });
         },
 
+        treePanelInvt_checkChange: function (node, checked) {
+            if (node.hasChildNodes()) {
+                node.eachChild(function (childNode) {
+                    childNode.set('checked', checked);
+                    DiscDefintion.Event.treePanelInvt_checkChange(childNode, checked);
+                });
+            }
+        },
+
+        treePanelBundle_checkChange: function (node, checked) {
+            if (node.hasChildNodes()) {
+                node.eachChild(function (childNode) {
+                    childNode.set('checked', checked);
+                    DiscDefintion.Event.treePanelBundle_checkChange(childNode, checked);
+                });
+            }
+        },
+
         btnExpand_click: function (btn, e, eOpts) {
             App.treePanelBranch.expandAll();
         },
 
         btnCollapse_click: function (btn, e, eOpts) {
             App.treePanelBranch.collapseAll();
+        },
+        
+        btnInvtExpand_click : function (btn, e, eOpts) {
+            App.treePanelInvt.getStore().suspendEvents();
+            App.treePanelInvt.expandAll();
+            App.treePanelInvt.getStore().resumeEvents();
+        },
+
+        btnInvtCollapse_click : function (btn, e, eOpts) {
+            App.treePanelInvt.collapseAll();
+        },
+
+        btnBundleExpand_click: function (btn, e, eOpts) {
+            App.treePanelBundle.getStore().suspendEvents();
+            App.treePanelBundle.expandAll();
+            App.treePanelBundle.getStore().resumeEvents();
+        },
+
+        btnBundleCollapse_click: function (btn, e, eOpts) {
+            App.treePanelBundle.collapseAll();
         },
 
         btnAddAll_click: function (btn, e, eOpts) {
@@ -1251,6 +1487,7 @@ var DiscDefintion = {
                     if (status == _holdStatus) {
                         var allNodes = DiscDefintion.Process.getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
                         if (allNodes && allNodes.length > 0) {
+                            App.grdCompany.store.suspendEvents();
                             allNodes.forEach(function (node) {
                                 if (node.data.Type == "Company") {
                                     var idx = App.grdCompany.store.getCount();
@@ -1267,6 +1504,8 @@ var DiscDefintion = {
                                 }
                             });
                             App.treePanelBranch.clearChecked();
+                            App.grdCompany.store.resumeEvents();
+                            App.grdCompany.view.refresh();
                         }
                     }
                 }
@@ -1291,6 +1530,7 @@ var DiscDefintion = {
                     if (status == _holdStatus) {
                         var allNodes = App.treePanelBranch.getCheckedNodes();
                         if (allNodes && allNodes.length > 0) {
+                            App.grdCompany.store.suspendEvents();
                             allNodes.forEach(function (node) {
                                 if (node.attributes.Type == "Company") {
                                     var idx = App.grdCompany.store.getCount();
@@ -1307,6 +1547,8 @@ var DiscDefintion = {
                                 }
                             });
                             App.treePanelBranch.clearChecked();
+                            App.grdCompany.store.resumeEvents();
+                            App.grdCompany.view.refresh();
                         }
                     }
                 }
@@ -1368,6 +1610,317 @@ var DiscDefintion = {
                 HQ.message.show(4, '', '');
             }
         },
+
+        btnAddAllInvt_click : function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    var discId = App.cboDiscID.getValue();
+                    var discSeq = App.cboDiscSeq.getValue();
+                    var status = App.cboStatus.value;
+
+                    if (status == _holdStatus) {                                                
+                        var allNodes = DiscDefintion.Process.getLeafNodes(App.treePanelInvt.getRootNode());
+                        if (allNodes && allNodes.length > 0) {
+                            App.grdDiscItem.store.suspendEvents();
+                            var invtBlank = HQ.store.findRecord(App.grdDiscItem.store, ['InvtID'], ['']);
+                            if (!invtBlank) {
+                                var idx = App.grdDiscItem.store.length > 0 ? App.grdDiscItem.store.length -1 : 0;
+                                App.grdDiscItem.store.insert(idx, Ext.create("App.mdlDiscItem", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    InvtID: '',
+                                    UnitDesc: '',
+                                    Descr: ''
+                                }));
+                                //HQ.store.insertBlank(App.grdDiscItem.store, ['InvtID']);
+                            }
+                            allNodes.forEach(function (node) {
+                                if (node.data.Type == "Invt") {
+                                    var idx = App.grdDiscItem.store.getCount() -1;
+                                    var record = HQ.store.findInStore(App.grdDiscItem.store,
+                                        ['DiscID', 'DiscSeq', 'InvtID'],
+                                        [discId, discSeq, node.data.InvtID]);
+                                    if (!record) {
+                                        App.grdDiscItem.store.insert(idx, Ext.create("App.mdlDiscItem", {
+                                            DiscID: discId,
+                                            DiscSeq: discSeq,
+                                            InvtID: node.data.InvtID,
+                                            UnitDesc: node.data.Unit,
+                                            Descr: node.data.Descr
+                                        }));
+                                    }
+                                }
+                            });
+
+                            App.treePanelInvt.clearChecked();
+                            App.grdDiscItem.store.resumeEvents();
+                            App.grdDiscItem.view.refresh();
+                            
+                        }
+                    }
+
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
+
+        btnAddInvt_click: function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    var discId = App.cboDiscID.getValue();
+                    var discSeq = App.cboDiscSeq.getValue();
+                    var status = App.cboStatus.value;
+
+                    if (status == _holdStatus) {
+                        var allNodes = App.treePanelInvt.getCheckedNodes();
+                        if (allNodes && allNodes.length > 0) {
+                            App.grdDiscItem.store.suspendEvents();
+                            var invtBlank = HQ.store.findRecord(App.grdDiscItem.store, ['InvtID'], ['']);
+                            if (!invtBlank) {
+                                //HQ.store.insertBlank(App.grdDiscItem.store, ['InvtID']);
+                                var idx = App.grdDiscItem.store.length > 0 ? App.grdDiscItem.store.length - 1 : 0;
+                                App.grdDiscItem.store.insert(idx, Ext.create("App.mdlDiscItem", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    InvtID: '',
+                                    UnitDesc: '',
+                                    Descr: ''
+                                }));                                
+                            }                            
+                            allNodes.forEach(function (node) {
+                                if (node.attributes.Type == "Invt") {
+                                    var idx = App.grdDiscItem.store.getCount() -1;
+                                    var record = HQ.store.findInStore(App.grdDiscItem.store,
+                                        ['DiscID', 'DiscSeq', 'InvtID'],
+                                        [discId, discSeq, node.attributes.InvtID]);
+                                    if (!record) {
+                                        App.grdDiscItem.store.insert(idx, Ext.create("App.mdlDiscItem", {
+                                            DiscID: discId,
+                                            DiscSeq: discSeq,
+                                            InvtID: node.attributes.InvtID,
+                                            UnitDesc: node.attributes.Unit,
+                                            Descr: node.attributes.Descr
+                                        }));
+                                    }
+                                }
+                            });
+
+                            App.treePanelInvt.clearChecked();
+                            App.grdDiscItem.store.resumeEvents();
+                            App.grdDiscItem.view.refresh();
+                            
+                        }
+                    }
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }            
+        },
+
+        btnDelInvt_click : function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    //if (App.grdDiscItem.selModel.selected.items.length > 0 && !Ext.isEmpty(App.grdDiscItem.selModel.selected.items[0].data.InvtID)) {
+                        Main.Event.menuClick('delete');
+                   // }         
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
+
+        btnDelAllInvt_click : function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    HQ.message.show(2015020806, '', 'DiscDefintion.Process.deleteAllInvts');
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
+
+        btnAddAllBundle_click: function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    var discId = App.cboDiscID.getValue();
+                    var discSeq = App.cboDiscSeq.getValue();
+                    var status = App.cboStatus.value;
+
+                    if (status == _holdStatus) {
+                        var allNodes = DiscDefintion.Process.getLeafNodes(App.treePanelBundle.getRootNode());
+                        if (allNodes && allNodes.length > 0) {
+                            App.grdBundle.store.suspendEvents();
+                            var invtBlank = HQ.store.findRecord(App.grdBundle.store, ['InvtID'], ['']);
+                            if (!invtBlank) {
+                                var idx = App.grdDiscItem.store.length > 0 ? App.grdDiscItem.store.length - 1 : 0;
+                                App.grdBundle.store.insert(idx, Ext.create("App.mdlBundle", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    InvtID: '',
+                                    UnitDesc: '',
+                                    Descr: '',
+                                    BundleQty: 0,
+                                    BundleAmt: 0
+                                }));
+                                //HQ.store.insertBlank(App.grdBundle.store, ['InvtID']);
+                            }
+                            allNodes.forEach(function (node) {
+                                if (node.data.Type == "Invt") {
+                                    var idx = App.grdBundle.store.getCount() - 1;
+                                    var record = HQ.store.findInStore(App.grdBundle.store,
+                                        ['DiscID', 'DiscSeq', 'InvtID'],
+                                        [discId, discSeq, node.data.InvtID]);
+                                    if (!record) {
+                                        App.grdBundle.store.insert(idx, Ext.create("App.mdlBundle", {
+                                            DiscID: discId,
+                                            DiscSeq: discSeq,
+                                            InvtID: node.data.InvtID,
+                                            UnitDesc: node.data.Unit,
+                                            Descr: node.data.Descr,
+                                            BundleQty: 0,
+                                            BundleAmt: 0
+                                        }));
+                                    }
+                                }
+                            });
+
+                            App.treePanelBundle.clearChecked();
+                            App.grdBundle.store.resumeEvents();
+                            App.grdBundle.view.refresh();
+                            
+                        }
+                    }
+
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
+
+        btnAddBundle_click: function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    var discId = App.cboDiscID.getValue();
+                    var discSeq = App.cboDiscSeq.getValue();
+                    var status = App.cboStatus.value;
+
+                    if (status == _holdStatus) {
+                        var allNodes = App.treePanelBundle.getCheckedNodes();
+                        if (allNodes && allNodes.length > 0) {
+                            App.grdBundle.store.suspendEvents();
+                            var invtBlank = HQ.store.findRecord(App.grdBundle.store, ['InvtID'], ['']);
+                            if (!invtBlank) {
+                                var idx = App.grdDiscItem.store.length > 0 ? App.grdDiscItem.store.length - 1 : 0;
+                                App.grdBundle.store.insert(idx, Ext.create("App.mdlBundle", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    InvtID: '',
+                                    UnitDesc: '',
+                                    Descr: '',
+                                    BundleQty: 0,
+                                    BundleAmt: 0
+                                }));
+                                //HQ.store.insertBlank(App.grdBundle.store, ['InvtID']);
+                            }
+                            allNodes.forEach(function (node) {
+                                if (node.attributes.Type == "Invt") {
+                                    var idx = App.grdBundle.store.getCount() - 1;
+                                    var record = HQ.store.findInStore(App.grdBundle.store,
+                                        ['DiscID', 'DiscSeq', 'InvtID'],
+                                        [discId, discSeq, node.attributes.InvtID]);
+                                    if (!record) {
+                                        App.grdBundle.store.insert(idx, Ext.create("App.mdlBundle", {
+                                            DiscID: discId,
+                                            DiscSeq: discSeq,
+                                            InvtID: node.attributes.InvtID,
+                                            UnitDesc: node.attributes.Unit,
+                                            Descr: node.attributes.Descr,
+                                            BundleQty: 0,
+                                            BundleAmt: 0
+                                        }));
+                                    }
+                                }
+                            });
+
+                            App.treePanelBundle.clearChecked();
+                            App.grdBundle.store.resumeEvents();
+                            App.grdBundle.view.refresh();
+                            
+                        }
+                    }
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
+
+        btnDelBundle_click: function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    Main.Event.menuClick('delete');
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
+        btnDelAllBundle_click: function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    HQ.message.show(2015020806, '', 'DiscDefintion.Process.deleteAllBundle');
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },        
 
         btnHideTrigger_click: function (ctr) {
             ctr.clearValue();
@@ -1479,7 +2032,17 @@ var DiscDefintion = {
                         else {
                             return false;
                         }
-
+                        var isAllowInsert = true;
+                        for (var i = 0; i < App.grdDiscBreak.store.data.length; i++) {
+                            if (App.grdDiscBreak.store.data.items[i].data.DiscAmt) 
+                            {
+                                isAllowInsert = false;
+                                break;
+                            }
+                        }
+                        if (!isAllowInsert) {
+                            return false;
+                        }
                         return HQ.grid.checkInput(e, keys);
                     }
                     else {
@@ -1522,6 +2085,9 @@ var DiscDefintion = {
                 if (!App.cboDiscClass.readOnly) {
                     App.cboDiscClass.setReadOnly(true);
                 }
+            }
+            if (Ext.isEmpty(e.record.data.LineRef)) {
+                e.record.set('LineRef', HQ.store.lastLineRef(e.store));
             }
         },
 

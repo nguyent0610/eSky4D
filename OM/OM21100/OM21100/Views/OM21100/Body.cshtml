@@ -466,24 +466,12 @@
                                 //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
                                 de.AfterRender.CleanRequest = true;
                                 de.AfterRender.Method = HttpMethod.POST;
-                                de.AfterRender.Success = "";
+                                de.AfterRender.Success = "App.treePanelBranch.getRootNode().expand()";
                                 de.AfterRender.Timeout = 60000;
                                 de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
                                 de.AfterRender.EventMask.ShowMask = true;
                                 de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
                                 de.AfterRender.EventMask.MinDelay = 500;
-
-                                de.Expand.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
-                                de.Expand.Url = Url.Action("OM21100GetTreeBranch");
-                                //de.Expand.FormID = "moduleCatTree"+cat.catID;
-                                de.Expand.CleanRequest = true;
-                                de.Expand.Method = HttpMethod.POST;
-                                de.Expand.Success = "";
-                                de.Expand.Timeout = 60000;
-                                de.Expand.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                                de.Expand.EventMask.ShowMask = true;
-                                de.Expand.EventMask.Msg = Util.GetLang("LoadingData");
-                                de.Expand.EventMask.MinDelay = 500;
                             })
                             .BottomBar(
                                 X.Toolbar()
@@ -593,23 +581,95 @@
                 ) // pnlDiscDefintion
 
                 , X.Panel().ID("pnlDPII")
+                .Region(Region.Center)
                 .Title(Util.GetLang("DPII"))
                 .Layout(LayoutType.Border)
                 .Items(
+                        X.Panel().ID("treeInventory")
+                            .Region(Region.West).Flex(30)
+                            .MinWidth(150).Split(true).AutoScroll(true)
+                            .DirectEvents(de =>
+                            {
+                                de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeInventory"));
+                                de.AfterRender.Url = Url.Action("OM21100LoadTreeInventory");
+                                //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                                de.AfterRender.CleanRequest = true;
+                                de.AfterRender.Method = HttpMethod.POST;
+                                de.AfterRender.Success = "App.treePanelInvt.getRootNode().expand()";
+                                de.AfterRender.Timeout = 60000;
+                                de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                                de.AfterRender.EventMask.ShowMask = true;
+                                de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                                de.AfterRender.EventMask.MinDelay = 500;
+                            })
+                            .BottomBar(
+                                X.Toolbar()
+                                .Items(
+                                    X.ToolbarFill()
+
+                                    , HQ.Button()
+                                    .HQLangCode("Expand")
+                                    .Icon(Icon.BulletTogglePlus)
+                                        .Handler("DiscDefintion.Event.btnInvtExpand_click")
+
+                                    , X.ToolbarSpacer()
+                                    , X.ToolbarSeparator()
+                                    , X.ToolbarSpacer()
+
+                                    , HQ.Button()
+                                    .HQLangCode("Collapse")
+                                    .Icon(Icon.BulletToggleMinus)
+                                        .Handler("DiscDefintion.Event.btnInvtCollapse_click")
+
+                                    , X.ToolbarFill()
+                                )
+                            ) // treeBranch
+
+                            // Second Column
+                            ,
+                            X.Panel()
+                            .Region(Region.Center).Flex(8)
+                            .Layout(LayoutType.VBox)
+                            .MinWidth(50)
+                            .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                            .Items(
+                                HQ.Button().ID("btnInvtAddAll")
+                                .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                                .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                                .Handler("DiscDefintion.Event.btnAddAllInvt_click")
+
+                                , HQ.Button().ID("btnInvtAdd")
+                                .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                                .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                                .Handler("DiscDefintion.Event.btnAddInvt_click")
+
+                                , HQ.Button().ID("btnInvtDel")
+                                .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                                .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                                .Handler("DiscDefintion.Event.btnDelInvt_click")
+
+                                , HQ.Button().ID("btnInvtDelAll")
+                                .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                                .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                                .Handler("DiscDefintion.Event.btnDelAllInvt_click")
+                            ) // Container
+
+                            // Third column
+                            ,
                     X.GridPanel().ID("grdDiscItem")
-                    .Region(Region.Center)
+                    .Region(Region.East).Flex(60)
                     .Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
                     .StoreID("stoDiscItem")
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
-                        , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID")
+                        , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(110)
                         .Editor(
                             HQ.Combo().ID("cboDpiiInvtID")
                             .HQProcedure("OM21100_pcInventoryActiveByBranch")
                             .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color")
-                            .HQHeightWidth(400, 300)
+                            .HQHeightWidth(400, 400)
                             .ValueField("InvtID").DisplayField("InvtID")
                             .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() { 
@@ -618,7 +678,7 @@
                             .LoadData()
                         )
 
-                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
+                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
                         .Renderer("DiscDefintion.Process.renderDpiiInvtName")
 
                         , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDesc")
@@ -640,7 +700,7 @@
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
 
-                        , X.CommandColumn()
+                        , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))
@@ -671,16 +731,88 @@
                 , X.Panel().ID("pnlDPBB")
                 .Title(Util.GetLang("DPBB"))
                 .Layout(LayoutType.Border)
+                .Region(Region.Center)
                 .Items(
+                        X.Panel().ID("treeBundleItem")
+                                .Region(Region.West).Flex(30)
+                                .MinWidth(150).Split(true).AutoScroll(true)
+                                .DirectEvents(de =>
+                                {
+                                    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBundleItem"));
+                                    de.AfterRender.Url = Url.Action("OM21100LoadTreeBundleItem");
+                                    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                                    de.AfterRender.CleanRequest = true;
+                                    de.AfterRender.Method = HttpMethod.POST;
+                                    de.AfterRender.Success = "App.treePanelBundle.getRootNode().expand()";
+                                    de.AfterRender.Timeout = 60000;
+                                    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                                    de.AfterRender.EventMask.ShowMask = true;
+                                    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                                    de.AfterRender.EventMask.MinDelay = 500;
+                                })
+                                .BottomBar(
+                                    X.Toolbar()
+                                    .Items(
+                                        X.ToolbarFill()
+
+                                        , HQ.Button()
+                                        .HQLangCode("Expand")
+                                        .Icon(Icon.BulletTogglePlus)
+                                            .Handler("DiscDefintion.Event.btnBundleExpand_click")
+
+                                        , X.ToolbarSpacer()
+                                        , X.ToolbarSeparator()
+                                        , X.ToolbarSpacer()
+
+                                        , HQ.Button()
+                                        .HQLangCode("Collapse")
+                                        .Icon(Icon.BulletToggleMinus)
+                                            .Handler("DiscDefintion.Event.btnBundleCollapse_click")
+
+                                        , X.ToolbarFill()
+                                    )
+                                ) // treeBranch
+
+                                // Second Column
+                                ,
+                                X.Panel()
+                                .Region(Region.Center).Flex(8)
+                                .Layout(LayoutType.VBox)
+                                .MinWidth(50)
+                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                                .Items(
+                                    HQ.Button()//.ID("btnInvtAddAll")
+                                    .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                                    .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                                    .Handler("DiscDefintion.Event.btnAddAllBundle_click")
+
+                                    , HQ.Button()//.ID("btnInvtAdd")
+                                    .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                                    .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                                    .Handler("DiscDefintion.Event.btnAddBundle_click")
+
+                                    , HQ.Button()//.ID("btnInvtDel")
+                                    .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                                    .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                                    .Handler("DiscDefintion.Event.btnDelBundle_click")
+
+                                    , HQ.Button()//.ID("btnInvtDelAll")
+                                    .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                                    .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                                    .Handler("DiscDefintion.Event.btnDelAllBundle_click")
+                                ) // Container
+
+                                // Third column
+                                ,
                     X.GridPanel().ID("grdBundle")
-                    .Region(Region.Center)
-                    .Scroll(ScrollMode.Both)
+                    .Region(Region.East)
+                    .Scroll(ScrollMode.Both).Flex(60)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
                     .StoreID("stoBundle")
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
-                        , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID")
+                        , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(110)
                         .Editor(
                             HQ.Combo().ID("cboGInvtID")
                             .HQProcedure("OM21100_pcInventoryActiveByBranch")
@@ -697,7 +829,7 @@
                         , X.Column().Text(Util.GetLang("Descr")).DataIndex("InvtID")
                         .Renderer("DiscDefintion.Process.renderGInvtName")
                         
-                        , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDesc")
+                        , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDesc").Width(70)
                         .Renderer("DiscDefintion.Process.renderGInvtName")
                         .Editor(
                             HQ.Combo().ID("cboGInvtUnitDescr")
@@ -715,20 +847,20 @@
                         , X.NumberColumn().Text(Util.GetLang("BreakQty")).DataIndex("BundleQty")
                         .Align(Alignment.Right).Format("0,000")
                         .Editor(
-                            X.NumberField().SelectOnFocus(true).MinValue(0)
+                            X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                         )
 
                          , X.NumberColumn().Text(Util.GetLang("BreakAmt")).DataIndex("BundleAmt")
                          .Align(Alignment.Right).Format("0,000")
                         .Editor(
-                            X.NumberField().SelectOnFocus(true)
+                            X.NumberField().SelectOnFocus(true).DecimalPrecision(0)
                         )
 
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
 
-                        , X.CommandColumn()
+                        , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))

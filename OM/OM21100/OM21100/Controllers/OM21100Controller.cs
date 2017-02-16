@@ -131,7 +131,108 @@ namespace OM21100.Controllers
             
             return this.Direct();
         }
+        //OM21100LoadTreeInventory
 
+        [DirectMethod]
+        public ActionResult OM21100LoadTreeInventory(string panelID)
+        {
+            var a = new ItemsCollection<Plugin>();
+            a.Add(Html.X().TreeViewDragDrop().DDGroup("InvtID").EnableDrop(false));
+
+            TreeView v = new TreeView();
+            //v.Plugins.Add(a);
+            v.Copy = true;
+            TreePanel tree = new TreePanel()
+            {
+                ViewConfig = v
+            };
+            tree.ID = "treePanelInvt";
+            tree.ItemID = "treePanelInvt";
+            tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("NodeLevel", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("ParentRecordID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("InvtID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Descr", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("CnvFact", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Unit", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("InvtType", ModelFieldType.String));
+            tree.Border = false;
+            tree.RootVisible = true;
+            tree.Animate = true;
+
+            var root = new Node() { };
+
+            var hierarchy = new SI_Hierarchy()
+            {
+                RecordID = 0,
+                NodeID = "",
+                ParentRecordID = 0,
+                NodeLevel = 1,
+                Descr = "Root",
+                Type = "I"
+            };
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
+            tree.Root.Add(node);
+
+
+            var treeBranch = X.GetCmp<Panel>(panelID);
+            tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelInvt_checkChange";
+            tree.Listeners.BeforeItemExpand.Handler = "App.treePanelInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
+            tree.Listeners.AfterItemExpand.Handler = "App.treePanelInvt.el.unmask();Ext.resumeLayouts(true);";
+            tree.AddTo(treeBranch);
+            return this.Direct();
+        }
+
+        [DirectMethod]
+        public ActionResult OM21100LoadTreeBundleItem(string panelID)
+        {
+            var a = new ItemsCollection<Plugin>();
+            a.Add(Html.X().TreeViewDragDrop().DDGroup("InvtID").EnableDrop(false));
+
+            TreeView v = new TreeView();
+            //v.Plugins.Add(a);
+            v.Copy = true;
+            TreePanel tree = new TreePanel()
+            {
+                ViewConfig = v
+            };
+            tree.ID = "treePanelBundle";
+            tree.ItemID = "treePanelBundle";
+            tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("NodeLevel", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("ParentRecordID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("InvtID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Descr", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("CnvFact", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Unit", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("InvtType", ModelFieldType.String));
+            tree.Border = false;
+            tree.RootVisible = true;
+            tree.Animate = true;
+
+            var root = new Node() { };
+
+            var hierarchy = new SI_Hierarchy()
+            {
+                RecordID = 0,
+                NodeID = "",
+                ParentRecordID = 0,
+                NodeLevel = 1,
+                Descr = "Root",
+                Type = "I"
+            };
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
+            tree.Root.Add(node);
+
+            var treeBranch = X.GetCmp<Panel>(panelID);
+            tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelBundle_checkChange";
+            tree.Listeners.BeforeItemExpand.Handler = "App.treePanelBundle.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
+            tree.Listeners.AfterItemExpand.Handler = "App.treePanelBundle.el.unmask();Ext.resumeLayouts(true);";
+            tree.AddTo(treeBranch);
+            return this.Direct();
+        }
         public ActionResult GetCompany(string discID, string discSeq)
         {
             var companies = _db.OM21100_pgCompany(discID, discSeq, Current.CpnyID).ToList();
@@ -146,7 +247,7 @@ namespace OM21100.Controllers
 
         public ActionResult GetDiscBundle(string discID, string discSeq)
         {
-            var discBundles = _db.OM21100_pgDiscBundle(discID, discSeq).ToList();
+            var discBundles = _db.OM21100_pgDiscBundle(discID, discSeq).ToList();            
             return this.Store(discBundles);
         }
 
@@ -462,7 +563,7 @@ namespace OM21100.Controllers
                 _db.OM_DiscSeq.AddObject(seq);
             }
 
-            if (seq.Active == 1)
+            if (seq.Active == 1) // Không check trùng KM
             {
                 var lstSeq = (from p in _db.OM_DiscSeq where p.DiscClass == inputDisc.DiscClass 
                                   && (p.DiscID.ToUpper() != inputDisc.DiscID.ToUpper() 
@@ -1163,6 +1264,21 @@ namespace OM21100.Controllers
             var discItemChangeHandler = new StoreDataHandler(data["lstDiscItemChange"]);
             var lstDiscItemChange = discItemChangeHandler.BatchObjectData<OM21100_pgDiscItem_Result>();
 
+            foreach (var deleted in lstDiscItemChange.Deleted)
+            {
+                if (!lstDiscItem.Any(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.InvtID == deleted.InvtID))
+                {
+                    var deletedDiscItem = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.InvtID == deleted.InvtID);
+                    if (deletedDiscItem != null)
+                    {
+                        _db.OM_DiscItem.DeleteObject(deletedDiscItem);
+                    }
+                }
+                
+            }
+
             foreach (var currentItem in lstDiscItem)
             {
                 var discItem = (from p in _db.OM_DiscItem
@@ -1183,17 +1299,7 @@ namespace OM21100.Controllers
                     _db.OM_DiscItem.AddObject(newItem);
                 }
 
-            }
-
-            foreach (var deleted in lstDiscItemChange.Deleted)
-            {
-                var deletedDiscItem = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
-                    && p.DiscSeq == inputSeq.DiscSeq && p.InvtID == deleted.InvtID);
-                if (deletedDiscItem != null)
-                {
-                    _db.OM_DiscItem.DeleteObject(deletedDiscItem);
-                }
-            }
+            }            
 
             if (inputSeq.DiscClass == "II")
                 Submit_Data(handle, branches, inputSeq);
@@ -1336,6 +1442,20 @@ namespace OM21100.Controllers
             var discBundleChangeHandler = new StoreDataHandler(data["lstBundleChange"]);
             var lstBundleChange = discBundleChangeHandler.BatchObjectData<OM21100_pgDiscBundle_Result>();
 
+            foreach (var deleted in lstBundleChange.Deleted)
+            {
+                if (!lstDiscBundle.Any(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.InvtID == deleted.InvtID))
+                {
+                    var deletedBundle = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.InvtID == deleted.InvtID);
+                    if (deletedBundle != null)
+                    {
+                        _db.OM_DiscItem.DeleteObject(deletedBundle);
+                    }
+                }                
+            }
+
             foreach (var currentBundle in lstDiscBundle)
             {
                 var discBundle = (from p in _db.OM_DiscItem
@@ -1355,17 +1475,7 @@ namespace OM21100.Controllers
                     Update_Bundle(newBundle, currentBundle, true);
                     _db.OM_DiscItem.AddObject(newBundle);
                 }
-            }
-
-            foreach (var deleted in lstBundleChange.Deleted)
-            {
-                var deletedBundle = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
-                    && p.DiscSeq == inputSeq.DiscSeq && p.InvtID == deleted.InvtID);
-                if (deletedBundle != null)
-                {
-                    _db.OM_DiscItem.DeleteObject(deletedBundle);
-                }
-            }
+            }            
 
             if (inputSeq.DiscClass == "BB")
                 Submit_Data(handle, branches, inputSeq);
@@ -1648,5 +1758,134 @@ namespace OM21100.Controllers
             //updatedDiscount.Crtd_Role = Current.UserName;
             updatedDiscount.LUpd_User = Current.UserName;
         }
+
+        
+        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, string nodeType)
+        {
+            var node = new Node();
+            if (inactiveHierachy.Descr == "Root")
+            {
+                node.Text = inactiveHierachy.Descr;
+            }
+            else
+            {
+                node.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Parent", Mode = ParameterMode.Value });
+                node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
+                node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
+                node.Checked = false;
+            }
+
+            var childrenInactiveHierachies = _db.SI_Hierarchy
+                .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
+                    && p.Type == nodeType
+                    && p.NodeLevel == level).ToList();
+
+            if (childrenInactiveHierachies != null && childrenInactiveHierachies.Count > 0)
+            {
+                foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
+                {
+                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, nodeType));
+                }
+            }
+            else
+            {
+                if (childrenInactiveHierachies.Count == 0)
+                {
+                   var invts = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();
+                    //var invts = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();
+                    if (invts.Count > 0)
+                    {
+                        foreach (var invt in invts)
+                        {
+                            Node invtNode = new Node();
+
+                            invtNode.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Invt", Mode = ParameterMode.Value });
+                            invtNode.CustomAttributes.Add(new ConfigItem() { Name = "InvtID", Value = invt.InvtID, Mode = ParameterMode.Value });
+                            invtNode.CustomAttributes.Add(new ConfigItem() { Name = "Descr", Value = invt.Descr, Mode = ParameterMode.Value });
+                            invtNode.CustomAttributes.Add(new ConfigItem() { Name = "CnvFact", Value = invt.CnvFact.ToString(), Mode = ParameterMode.Value });
+                            invtNode.CustomAttributes.Add(new ConfigItem() { Name = "InvtType", Value = invt.InvtType, Mode = ParameterMode.Value });
+                            invtNode.CustomAttributes.Add(new ConfigItem() { Name = "Unit", Value = invt.Unit, Mode = ParameterMode.Value });
+                            invtNode.Leaf = true;
+                            invtNode.Checked = false;
+                            invtNode.Text = invt.InvtID + "-" + invt.Descr;
+                            invtNode.NodeID = inactiveHierachy.NodeID + "-" + invt.InvtID;
+
+                            node.Children.Add(invtNode);
+                        }
+                    }
+                    else node.Leaf = true;
+                }
+                else
+                {
+                    node.Leaf = false;
+                }
+            }
+            System.Diagnostics.Debug.WriteLine(node.Text);
+            return node;
+        }
+
+        //private Node createBundleNode(Node root, SI_Hierarchy inactiveHierachy, int level, string nodeType)
+        //{
+        //    var node = new Node();
+        //    if (inactiveHierachy.Descr == "Root")
+        //    {
+        //        node.Text = inactiveHierachy.Descr;
+        //    }
+        //    else
+        //    {
+        //        node.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Parent", Mode = ParameterMode.Value });
+        //        node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
+        //        node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
+        //        node.Checked = false;
+        //    }
+
+        //    var childrenInactiveHierachies = _db.SI_Hierarchy
+        //        .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
+        //            && p.Type == nodeType
+        //            && p.NodeLevel == level).ToList();
+
+        //    if (childrenInactiveHierachies != null && childrenInactiveHierachies.Count > 0)
+        //    {
+        //        foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
+        //        {
+        //            node.Children.Add(createBundleNode(node, childrenInactiveNode, level + 1, nodeType));
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (childrenInactiveHierachies.Count == 0)
+        //        {
+        //            var invts = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();
+        //            //var invts = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();
+        //            if (invts.Count > 0)
+        //            {
+        //                foreach (var invt in invts)
+        //                {
+        //                    Node invtNode = new Node();
+
+        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Invt", Mode = ParameterMode.Value });
+        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "InvtID", Value = invt.InvtID, Mode = ParameterMode.Value });
+        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "Descr", Value = invt.Descr, Mode = ParameterMode.Value });
+        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "CnvFact", Value = invt.CnvFact.ToString(), Mode = ParameterMode.Value });
+        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "InvtType", Value = invt.InvtType, Mode = ParameterMode.Value });
+        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "Unit", Value = invt.Unit, Mode = ParameterMode.Value });
+        //                    invtNode.Leaf = true;
+        //                    invtNode.Checked = false;
+        //                    invtNode.Text = invt.InvtID + "-" + invt.Descr;
+        //                    invtNode.NodeID = inactiveHierachy.NodeID + "-" + invt.InvtID;
+
+        //                    node.Children.Add(invtNode);
+        //                }
+        //            }
+        //            else node.Leaf = true;
+        //        }
+        //        else
+        //        {
+        //            node.Leaf = false;
+        //        }
+        //    }
+        //    System.Diagnostics.Debug.WriteLine(node.Text);
+        //    return node;
+        //}
     }
 }
