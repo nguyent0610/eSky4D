@@ -3037,8 +3037,7 @@ namespace OM21100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        /// <param name="cumulative">Initial value of the Cumulative property.</param>
-        public static OM_DiscBreak CreateOM_DiscBreak(global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.Double breakAmt, global::System.Double breakQty, global::System.Double discAmt, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Boolean cumulative)
+        public static OM_DiscBreak CreateOM_DiscBreak(global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.Double breakAmt, global::System.Double breakQty, global::System.Double discAmt, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_DiscBreak oM_DiscBreak = new OM_DiscBreak();
             oM_DiscBreak.DiscID = discID;
@@ -3054,7 +3053,6 @@ namespace OM21100
             oM_DiscBreak.LUpd_Prog = lUpd_Prog;
             oM_DiscBreak.LUpd_User = lUpd_User;
             oM_DiscBreak.tstamp = tstamp;
-            oM_DiscBreak.Cumulative = cumulative;
             return oM_DiscBreak;
         }
 
@@ -3406,30 +3404,6 @@ namespace OM21100
         private global::System.String _Descr;
         partial void OnDescrChanging(global::System.String value);
         partial void OnDescrChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean Cumulative
-        {
-            get
-            {
-                return _Cumulative;
-            }
-            set
-            {
-                OnCumulativeChanging(value);
-                ReportPropertyChanging("Cumulative");
-                _Cumulative = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Cumulative");
-                OnCumulativeChanged();
-            }
-        }
-        private global::System.Boolean _Cumulative;
-        partial void OnCumulativeChanging(global::System.Boolean value);
-        partial void OnCumulativeChanged();
 
         #endregion
 
@@ -8227,6 +8201,30 @@ namespace OM21100
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr1
+        {
+            get
+            {
+                return _Descr1;
+            }
+            set
+            {
+                OnDescr1Changing(value);
+                ReportPropertyChanging("Descr1");
+                _Descr1 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr1");
+                OnDescr1Changed();
+            }
+        }
+        private global::System.String _Descr1;
+        partial void OnDescr1Changing(global::System.String value);
+        partial void OnDescr1Changed();
 
         #endregion
 

@@ -237,7 +237,6 @@ var Main = {
                         }
                     }
 
-
                     if (!hasData) {
                         HQ.message.show(1000, HQ.common.getLang('DiscBreak'), '');
                         hasData = false;
@@ -1007,9 +1006,9 @@ var DiscDefintion = {
             if (item == "yes") {
                 App.grdCompany.store.removeAll();
             }
-        }
+        },
 
-        , deleteAllInvts: function (item) {
+        deleteAllInvts: function (item) {
             if (item == "yes") {
                 App.grdDiscItem.store.suspendEvents();
                 while (App.grdDiscItem.store.data.length > 0) {
@@ -1030,8 +1029,8 @@ var DiscDefintion = {
                     //HQ.store.insertBlank(App.grdDiscItem.store, ['InvtID']);
                 }
             }
-        }
-        , deleteAllBundle: function (item) {
+        },
+        deleteAllBundle: function (item) {
             if (item == "yes") {
                 App.grdBundle.store.suspendEvents();
                 while (App.grdBundle.store.data.length > 0) {
@@ -1989,10 +1988,24 @@ var DiscDefintion = {
                         else if (App.grdFreeItem.store.getCount() > 1 && e.field == "DiscAmt") {
                             return false
                         }
-                        else if (e.rowIdx > 0 && e.store.getAt(e.rowIdx - 1).data.DiscAmt == 0 && e.field == "DiscAmt") {
-                            return false;
+                        //else if (e.rowIdx > 0 && e.store.getAt(e.rowIdx - 1).data.DiscAmt == 0 && e.field == "DiscAmt") {
+                            
+                        //    //return false;
+                        //}
+                        else if (e.field == "DiscAmt") {
+                            var allFreeItem = App.stoFreeItem.snapshot || App.stoFreeItem.allData || App.stoFreeItem.data;
+                            var hasFreeItem = false;
+                            for (var i = 0; i < allFreeItem.length; i++) {
+                                if (!Ext.isEmpty(allFreeItem.items[i].data.FreeItemID)) {
+                                    hasFreeItem = true;
+                                    break;
+                                }
+                            }
+                            if (hasFreeItem) {
+                                return false;
+                            }
                         }
-
+                        
                         return HQ.grid.checkInput(e, keys);
                     }
                     else {

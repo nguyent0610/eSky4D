@@ -122,7 +122,6 @@
           <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="200" />
-          <Property Name="Cumulative" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscCpny">
           <Key>
@@ -374,6 +373,7 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Descr1" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <Function Name="OM21100_pgCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DiscID" Type="varchar" Mode="In" />
@@ -695,7 +695,6 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="Descr" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Cumulative" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscCpny">
           <Key>
@@ -919,6 +918,7 @@
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Name="Descr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="IN_Inventory">
           <Key>
@@ -1227,7 +1227,6 @@
           <EntitySetMapping Name="OM_DiscBreak">
             <EntityTypeMapping TypeName="OM21100Model.OM_DiscBreak">
               <MappingFragment StoreEntitySet="OM_DiscBreak">
-                <ScalarProperty Name="Cumulative" ColumnName="Cumulative" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
@@ -1439,6 +1438,7 @@
           <EntitySetMapping Name="SI_Hierarchy">
             <EntityTypeMapping TypeName="OM21100Model.SI_Hierarchy">
               <MappingFragment StoreEntitySet="SI_Hierarchy">
+                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />

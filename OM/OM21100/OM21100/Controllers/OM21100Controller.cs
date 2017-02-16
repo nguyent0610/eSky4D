@@ -1,4 +1,4 @@
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Ext.Net;
 using Ext.Net.MVC;
 using HQ.eSkyFramework;
@@ -562,8 +562,14 @@ namespace OM21100.Controllers
                 updateDiscSeq(ref seq, inputDiscSeq, true, roles, handle);
                 _db.OM_DiscSeq.AddObject(seq);
             }
-
-            if (seq.Active == 1) // Kh�ng check tr�ng KM
+            // Ktra có check trùng CTKM đang chạy không?
+            var checkPromo = true;
+            var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM10100CHECKPROMO");
+            if (objConfig != null && objConfig.IntVal == 1)
+            {
+                checkPromo = false;
+            }
+            if (seq.Active == 1 && checkPromo) // Không check trùng KM
             {
                 var lstSeq = (from p in _db.OM_DiscSeq where p.DiscClass == inputDisc.DiscClass 
                                   && (p.DiscID.ToUpper() != inputDisc.DiscID.ToUpper() 
