@@ -3,6 +3,7 @@
 var keys = ['UserName'];
 var _CustID = '';
 var _tstamp = '';
+var _selBranch = [];
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
 
@@ -100,8 +101,8 @@ var stoLoad = function (sto) {
 
 var stoBranch_Load = function (sto) {
     sto.suspendEvents();
-    for (var i = 0; i < App.txtCpnyID.value.length; i++) {
-        var record = HQ.store.findRecord(sto, ['BranchID'], [App.txtCpnyID.value[i]]);
+    for (var i = 0; i < _selBranch.length; i++) {
+        var record = HQ.store.findRecord(sto, ['BranchID'], [_selBranch[i]]);
         if (record) {
             record.data.Check = true;
         }
@@ -155,9 +156,12 @@ var btnEdit_Click = function (record) {
 var btnLocationCancel_Click = function () {
     App.winLocation.hide();
 };
+
 var btnAddCustomer_Click = function () {
     App.chkActive_All.setValue(false);
     App.stoBranch.reload();
+    _selBranch = App.txtCpnyID.value;
+
     App.winBranch.show();
 };
 var chkActiveAll_Change = function (sender, value, oldValue) {
@@ -170,7 +174,9 @@ var chkActiveAll_Change = function (sender, value, oldValue) {
         });
         store.resumeEvents();
         App.grdBranch.view.refresh();
-
+        if (value == false) {
+            _selBranch = [];
+        }
     }
 };
 var btnBranchOK_Click = function () {
