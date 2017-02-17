@@ -20,7 +20,7 @@ namespace SI21600.Controllers
         private string _screenNbr = "SI21600";
         private string _userName = Current.UserName;
         SI21600Entities _sys = Util.CreateObjectContext<SI21600Entities>(false);
-
+        List<SI_Hierarchy> lstHierarchy = new List<SI_Hierarchy>();
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
@@ -50,11 +50,12 @@ namespace SI21600.Controllers
             }
             else
             {
-                node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
-                node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
+                node.Text = inactiveHierachy.NodeID.ToString() + "- " + inactiveHierachy.Descr.ToString();
+                node.NodeID = inactiveHierachy.NodeID + "- " + inactiveHierachy.NodeLevel + "- " + inactiveHierachy.ParentRecordID.ToString() + "- " + inactiveHierachy.RecordID;
+                
             }
 
-            var childrenInactiveHierachies = _sys.SI_Hierarchy
+            var childrenInactiveHierachies = lstHierarchy  // _sys.SI_Hierarchy
                 .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
                     && p.Type == inactiveHierachy.Type
                     && p.NodeLevel == level).ToList();
@@ -98,6 +99,7 @@ namespace SI21600.Controllers
                 Type = nodeType
             };
             var z = 0;
+            lstHierarchy = _sys.SI_Hierarchy.Where(x => x.Type == nodeType).ToList();
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z);
 
             //quan trong dung de refresh slmTree

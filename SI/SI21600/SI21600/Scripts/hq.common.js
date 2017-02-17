@@ -883,7 +883,7 @@ var HQ = {
     },
     util: {
         checkSpecialChar: function (value) {
-            var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+            var regex = /^(\w*(\d|[a-zA-Z]))[\_]*[\-]*$/
             if (!HQ.util.passNull(value.toString()).match(regex))
                 return false;
             for (var i = 0, n = value.length; i < n; i++) {

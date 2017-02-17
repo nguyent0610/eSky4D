@@ -82,7 +82,7 @@ var menuClick = function (command) {
                     App.cboNodeID.setValue('');
                     App.txtDescr.setValue('');
                     if (_nodeID != 'root') {
-                        var obj = App.IDTree.getSelectedNodes().length > 0 ? App.IDTree.getSelectedNodes()[0].nodeID.split('-') : ['', 0, 0, 0];
+                        var obj = App.IDTree.getSelectedNodes().length > 0 ? App.IDTree.getSelectedNodes()[0].nodeID.split('- ') : ['', 0, 0, 0];
                         App.txtNodeLevel.setValue(parseInt(obj[1], "10") + 1);
                         App.txtParentRecordID.setValue(obj[3]);
                     }
@@ -164,7 +164,7 @@ var NodeSelected_Change = function (store, operation, options) {
     }
     else {
         if (HQ.isNew == false || Ext.isEmpty(App.cboNodeID.getValue())) {
-            parentRecordIDAll = operation.data.id.split("-");
+            parentRecordIDAll = operation.data.id.split("- ");
             _nodeID = parentRecordIDAll[0];
             _nodeLevel = parentRecordIDAll[1];
             _parentRecordID = parentRecordIDAll[2];
@@ -186,7 +186,7 @@ var NodeSelected_Change = function (store, operation, options) {
         else {
             App.cboNodeID.setValue("");
             App.txtDescr.setValue("");
-            parentRecordIDAll = operation.data.id.split("-");
+            parentRecordIDAll = operation.data.id.split("- ");
             App.txtNodeLevel.setValue(parentRecordIDAll[1]);
             App.txtParentRecordID.setValue(parentRecordIDAll[2]);
         }
@@ -404,7 +404,7 @@ var searchNode = function () {
     //tu dong bat node tree khi chon 1 cai tu cboInvtID
     var inactiveHierachy = App.stoSI_Hierarchy.getAt(0).data;
 
-    var invtIDDescr = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID + "-" + inactiveHierachy.RecordID;
+    var invtIDDescr = inactiveHierachy.NodeID + "- " + inactiveHierachy.NodeLevel + "- " + inactiveHierachy.ParentRecordID + "- " + inactiveHierachy.RecordID;
     var record = App.IDTree.getStore().getNodeById(invtIDDescr);
     if (App.IDTree.getStore().getNodeById(invtIDDescr)) {
         var depth = App.IDTree.getStore().getNodeById(invtIDDescr).data.depth;
@@ -416,11 +416,11 @@ var searchNode = function () {
                 App.slmTree.select(i);
                 tmpSelectedNode = App.slmTree.selected.items[0].data.id;
 
-                if (tmpSelectedNode.split('-').length == 4) {
-                    _nodeID = tmpSelectedNode.split('-')[0];
-                    _nodeLevel = tmpSelectedNode.split('-')[1];
-                    _parentRecordID = tmpSelectedNode.split('-')[2];
-                    _recordID = tmpSelectedNode.split('-')[3];
+                if (tmpSelectedNode.split('- ').length == 4) {
+                    _nodeID = tmpSelectedNode.split('- ')[0];
+                    _nodeLevel = tmpSelectedNode.split('- ')[1];
+                    _parentRecordID = tmpSelectedNode.split('- ')[2];
+                    _recordID = tmpSelectedNode.split('- ')[3];
 
                     App.txtNodeLevel.setValue(_nodeLevel);
                     App.txtParentRecordID.setValue(_parentRecordID);
