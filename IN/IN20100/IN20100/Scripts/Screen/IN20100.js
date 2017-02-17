@@ -236,7 +236,7 @@ var grdUnitConversion_Edit = function (item, e) {
 
 var grdUnitConversion_ValidateEdit = function (item, e) {
     if (e.field == 'InvtID' || e.field == 'ClassID') {
-        return HQ.grid.checkValidateEditDG(App.grdUnitConversion, e, keys, true);
+        return HQ.grid.checkValidateEditDG(App.grdUnitConversion, e, keys);
     } else {
         return HQ.grid.checkValidateEdit(App.grdUnitConversion, e, keys, true);
     }
