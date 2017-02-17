@@ -164,6 +164,7 @@
           <Property Name="TaxID01" Type="varchar" MaxLength="10" />
           <Property Name="TaxID02" Type="varchar" MaxLength="10" />
           <Property Name="TaxID03" Type="varchar" MaxLength="10" />
+          <Property Name="QtyHistory" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="PO_Header">
           <Key>
@@ -230,6 +231,7 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="IsExport" Type="bit" />
           <Property Name="SlsperID" Type="varchar" MaxLength="30" />
+          <Property Name="Note" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="PO_Invoice">
           <Key>
@@ -245,8 +247,8 @@
           <Property Name="DocDate" Type="smalldatetime" Nullable="false" />
           <Property Name="DocType" Type="varchar" MaxLength="2" />
           <Property Name="InvcDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="InvcNbr" Type="varchar" MaxLength="15" />
-          <Property Name="InvcNote" Type="varchar" MaxLength="10" />
+          <Property Name="InvcNbr" Type="varchar" MaxLength="30" />
+          <Property Name="InvcNote" Type="varchar" MaxLength="30" />
           <Property Name="PerPost" Type="varchar" MaxLength="6" />
           <Property Name="Terms" Type="varchar" MaxLength="10" />
           <Property Name="VendID" Type="varchar" MaxLength="15" />
@@ -445,7 +447,7 @@
           <Property Name="BooleanParm02" Type="smallint" Nullable="false" />
           <Property Name="BooleanParm03" Type="smallint" Nullable="false" />
           <Property Name="SelectionFormular" Type="nvarchar" MaxLength="1000" Nullable="false" />
-          <Property Name="UserID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="UserID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="AppPath" Type="varchar" MaxLength="400" Nullable="false" />
           <Property Name="ClientName" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="LoggedCpnyID" Type="varchar" MaxLength="30" />
@@ -478,6 +480,8 @@
         </Function>
         <Function Name="PO10200_pdIN_Inventory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="PO10200_pdIN_UnitConversion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="PO10200_pdOM_UserDefault" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -499,11 +503,6 @@
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="PONbr" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="PO10200_pdRight4Invc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Username" Type="varchar" Mode="In" />
-          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
-          <Parameter Name="LangID" Type="smallint" Mode="In" />
-        </Function>
         <Function Name="PO10200_pdSI_Tax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
@@ -511,6 +510,9 @@
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
           <Parameter Name="RcptNbr" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="PO10200_pgLoadTaxTrans" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
@@ -590,6 +592,9 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="BatNbr" Mode="In" Type="String" />
             <Parameter Name="RcptNbr" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="PO10200_pdAP_VenDorTaxes" ReturnType="Collection(PO10200Model.PO10200_pdAP_VenDorTaxes_Result)">
             <Parameter Name="VendID" Mode="In" Type="String" />
@@ -597,6 +602,8 @@
           </FunctionImport>
           <FunctionImport Name="PO10200_pdIN_Inventory" ReturnType="Collection(PO10200Model.PO10200_pdIN_Inventory_Result)">
           <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="PO10200_pdIN_UnitConversion" ReturnType="Collection(PO10200Model.PO10200_pdIN_UnitConversion_Result)" />
           <FunctionImport Name="PO10200_pdSI_Tax" ReturnType="Collection(PO10200Model.PO10200_pdSI_Tax_Result)">
@@ -671,11 +678,6 @@
           <EntitySet Name="PO_Trans" EntityType="PO10200Model.PO_Trans" />
           <FunctionImport Name="PO10200_pcSiteAll" ReturnType="Collection(PO10200Model.PO10200_pcSiteAll_Result)">
           <Parameter Name="BranchID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="PO10200_pdRight4Invc" ReturnType="Collection(Boolean)">
-            <Parameter Name="Username" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="PO10200_pdHeader_Result">
@@ -867,7 +869,7 @@
           <Property Type="String" Name="DfltPOUnit" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="DfltSite" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="DfltSOUnit" Nullable="true" MaxLength="15" />
-          <Property Type="Int16" Name="Exported" Nullable="false" />
+          <Property Type="Int16" Name="Exported" Nullable="true" />
           <Property Type="String" Name="InvtType" Nullable="true" MaxLength="1" />
           <Property Type="Double" Name="IRSftyStkDays" Nullable="false" />
           <Property Type="Double" Name="IRSftyStkPct" Nullable="false" />
@@ -878,16 +880,16 @@
           <Property Type="Double" Name="LossRate01" Nullable="false" />
           <Property Type="Double" Name="LossRate02" Nullable="false" />
           <Property Type="Double" Name="LossRate03" Nullable="false" />
-          <Property Type="Int16" Name="LotSerFxdLen" Nullable="false" />
+          <Property Type="Int32" Name="LotSerFxdLen" Nullable="false" />
           <Property Type="String" Name="LotSerFxdTyp" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="LotSerFxdVal" Nullable="true" MaxLength="12" />
           <Property Type="String" Name="LotSerIssMthd" Nullable="true" MaxLength="1" />
-          <Property Type="Int16" Name="LotSerNumLen" Nullable="false" />
+          <Property Type="Int32" Name="LotSerNumLen" Nullable="false" />
           <Property Type="String" Name="LotSerNumVal" Nullable="true" MaxLength="25" />
           <Property Type="String" Name="LotSerTrack" Nullable="true" MaxLength="2" />
           <Property Type="String" Name="MaterialType" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="NodeID" Nullable="true" MaxLength="30" />
-          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
+          <Property Type="Int32" Name="NodeLevel" Nullable="false" />
           <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
           <Property Type="String" Name="Picture" Nullable="true" MaxLength="30" />
           <Property Type="Double" Name="POFee" Nullable="false" />
@@ -895,7 +897,7 @@
           <Property Type="Double" Name="PrePayPct" Nullable="false" />
           <Property Type="String" Name="PriceClassID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SerAssign" Nullable="true" MaxLength="1" />
-          <Property Type="Int16" Name="ShelfLife" Nullable="false" />
+          <Property Type="Int32" Name="ShelfLife" Nullable="false" />
           <Property Type="String" Name="Size" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="SOFee" Nullable="false" />
           <Property Type="Double" Name="SOPrice" Nullable="false" />
@@ -911,10 +913,10 @@
           <Property Type="String" Name="ValMthd" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="VendID1" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="VendID2" Nullable="true" MaxLength="15" />
-          <Property Type="Int16" Name="WarrantyDays" Nullable="false" />
-          <Property Type="Boolean" Name="Public" Nullable="true" />
+          <Property Type="Int32" Name="WarrantyDays" Nullable="false" />
+          <Property Type="Int32" Name="Public" Nullable="true" />
           <Property Type="String" Name="ApproveStatus" Nullable="false" MaxLength="5" />
-          <Property Type="Boolean" Name="LotSerRcptAuto" Nullable="true" />
+          <Property Type="Int32" Name="LotSerRcptAuto" Nullable="true" />
         </ComplexType>
         <ComplexType Name="PO10200_pdIN_UnitConversion_Result">
           <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" />
@@ -1098,6 +1100,7 @@
           <Property Type="String" Name="TaxID01" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxID02" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxID03" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="QtyHistory" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="PO_Header">
           <Key>
@@ -1164,6 +1167,7 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Boolean" Name="IsExport" />
           <Property Type="String" Name="SlsperID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PO_Invoice">
           <Key>
@@ -1179,8 +1183,8 @@
           <Property Type="DateTime" Name="DocDate" Nullable="false" Precision="0" />
           <Property Type="String" Name="DocType" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="InvcDate" Nullable="false" Precision="0" />
-          <Property Type="String" Name="InvcNbr" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="InvcNote" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvcNbr" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvcNote" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="PerPost" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Terms" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="VendID" MaxLength="15" FixedLength="false" Unicode="false" />
@@ -1498,7 +1502,7 @@
           <Property Type="Int16" Name="BooleanParm02" Nullable="false" />
           <Property Type="Int16" Name="BooleanParm03" Nullable="false" />
           <Property Type="String" Name="SelectionFormular" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="AppPath" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ClientName" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LoggedCpnyID" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -1997,6 +2001,7 @@
           <EntitySetMapping Name="PO_Detail">
             <EntityTypeMapping TypeName="PO10200Model.PO_Detail">
               <MappingFragment StoreEntitySet="PO_Detail">
+                <ScalarProperty Name="QtyHistory" ColumnName="QtyHistory" />
                 <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
                 <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
                 <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />
@@ -2059,6 +2064,7 @@
           <EntitySetMapping Name="PO_Header">
             <EntityTypeMapping TypeName="PO10200Model.PO_Header">
               <MappingFragment StoreEntitySet="PO_Header">
+                <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
                 <ScalarProperty Name="IsExport" ColumnName="IsExport" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -2562,7 +2568,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="PO10200_pdRight4Invc" FunctionName="SA00300Model.Store.PO10200_pdRight4Invc" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

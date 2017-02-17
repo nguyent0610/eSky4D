@@ -46,28 +46,16 @@ namespace PO10200.Controllers
         bool b235 = false;//message235
         public ActionResult Index()
         {            
-            Util.InitRight(ScreenNbr);            
+            Util.InitRight(ScreenNbr);
+            ViewBag.BussinessDate = DateTime.Now.ToDateShort();
+            ViewBag.BussinessTime = DateTime.Now;
             bool isChangeSiteID = false;
-            bool isInvcConfig = false;
-            bool invcRight = false;
-            // Kiểm tra có cấu hình SiteID
             var obj = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToLower() == "po10200siteidconfig");
             if (obj != null)
             {
                 isChangeSiteID = obj.IntVal == 1;             
             }
-            // Kiểm tra có cấu hình ẩn hiện Số Hoá Đơn (Dùng cho Anova Milk)
-            var objInvc = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToLower() == "po10200invcconfig");
-            if (objInvc != null)
-            {
-                isInvcConfig = objInvc.IntVal == 1;
-                invcRight = _db.PO10200_pdRight4Invc(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().Value;
-            }            
-            ViewBag.InvcRight = invcRight;
-            ViewBag.IsInvcConfig = isInvcConfig;
-            ViewBag.IsChangeSiteID = isChangeSiteID;            
-            ViewBag.BussinessDate = DateTime.Now.ToDateShort();
-            ViewBag.BussinessTime = DateTime.Now;
+            ViewBag.IsChangeSiteID = isChangeSiteID;
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
@@ -80,6 +68,7 @@ namespace PO10200.Controllers
         {
             var obj = _db.PO10200_pdHeader(branchID, batNbr).FirstOrDefault();
             return this.Store(obj);
+
         }
         public ActionResult GetAP_VendorTax(string vendID, string ordFromId)
         {
@@ -89,7 +78,7 @@ namespace PO10200.Controllers
         }
         public ActionResult GetPO10200_pgDetail(string rcptNbr, string batNbr, string branchID)
         {
-            var lst = _db.PO10200_pgDetail(branchID, batNbr, rcptNbr).ToList();
+            var lst = _db.PO10200_pgDetail(branchID, batNbr, rcptNbr, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lst);
 
         }
@@ -523,7 +512,7 @@ namespace PO10200.Controllers
             for (int i = 0; i < _lstPOTrans.Count; i++)
             {               
                 var objPOT = _lstPOTrans[i];
-                var objInvtID=_db.PO10200_pdIN_Inventory(Current.UserName).Where(p=>p.InvtID==objPOT.InvtID).FirstOrDefault();
+                var objInvtID=_db.PO10200_pdIN_Inventory(Current.UserName, Current.CpnyID, Current.LangID).Where(p=>p.InvtID==objPOT.InvtID).FirstOrDefault();
 
                 // kiem tra xem co muc lot ko, neu san pham co quan li lot ma khong co muc lot, thong bao khong cho save
                 if (objInvtID != null)
@@ -759,7 +748,7 @@ namespace PO10200.Controllers
                 objr.PurchaseType = objr.PurchaseType;
                 if (objr.PurchaseType == "GI" || objr.PurchaseType == "PR" || objr.PurchaseType == "GP" || objr.PurchaseType == "GS")
                 {
-                    var objIN_Inventory = _db.PO10200_pdIN_Inventory(Current.UserName).Where(p => p.InvtID == objr.InvtID).FirstOrDefault();
+                    var objIN_Inventory = _db.PO10200_pdIN_Inventory(Current.UserName, Current.CpnyID, Current.LangID).Where(p => p.InvtID == objr.InvtID).FirstOrDefault();
                     var objIN_ItemSite = _db.IN_ItemSite.Where(p => p.InvtID == objr.InvtID && p.SiteID == objr.SiteID).FirstOrDefault();
                     //Kiem tra itemsite neu chua co thi add vao
                     if (objIN_ItemSite == null && lstInItemsiteNew.Where(p => p.InvtID == objr.InvtID && p.SiteID == objr.SiteID).Count()==0)

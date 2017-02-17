@@ -439,7 +439,10 @@ namespace PO10200
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="batNbr">No Metadata Documentation available.</param>
         /// <param name="rcptNbr">No Metadata Documentation available.</param>
-        public ObjectResult<PO10200_pgDetail_Result> PO10200_pgDetail(global::System.String branchID, global::System.String batNbr, global::System.String rcptNbr)
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<PO10200_pgDetail_Result> PO10200_pgDetail(global::System.String branchID, global::System.String batNbr, global::System.String rcptNbr, global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -471,7 +474,37 @@ namespace PO10200
                 rcptNbrParameter = new ObjectParameter("RcptNbr", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<PO10200_pgDetail_Result>("PO10200_pgDetail", branchIDParameter, batNbrParameter, rcptNbrParameter);
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<PO10200_pgDetail_Result>("PO10200_pgDetail", branchIDParameter, batNbrParameter, rcptNbrParameter, userIDParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
@@ -508,7 +541,9 @@ namespace PO10200
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
-        public ObjectResult<PO10200_pdIN_Inventory_Result> PO10200_pdIN_Inventory(global::System.String userID)
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<PO10200_pdIN_Inventory_Result> PO10200_pdIN_Inventory(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -520,7 +555,27 @@ namespace PO10200
                 userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<PO10200_pdIN_Inventory_Result>("PO10200_pdIN_Inventory", userIDParameter);
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<PO10200_pdIN_Inventory_Result>("PO10200_pdIN_Inventory", userIDParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
@@ -1040,47 +1095,6 @@ namespace PO10200
             }
     
             return base.ExecuteFunction<PO10200_pcSiteAll_Result>("PO10200_pcSiteAll", branchIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="username">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Boolean>> PO10200_pdRight4Invc(global::System.String username, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter usernameParameter;
-            if (username != null)
-            {
-                usernameParameter = new ObjectParameter("Username", username);
-            }
-            else
-            {
-                usernameParameter = new ObjectParameter("Username", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<Nullable<global::System.Boolean>>("PO10200_pdRight4Invc", usernameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -3222,7 +3236,8 @@ namespace PO10200
         /// <param name="taxAmt01">Initial value of the TaxAmt01 property.</param>
         /// <param name="taxAmt02">Initial value of the TaxAmt02 property.</param>
         /// <param name="taxAmt03">Initial value of the TaxAmt03 property.</param>
-        public static PO_Detail CreatePO_Detail(global::System.String branchID, global::System.String pONbr, global::System.String lineRef, global::System.Int32 blktLineID, global::System.Double cnvFact, global::System.Double costReceived, global::System.Double costReturned, global::System.Double costVouched, global::System.Double extCost, global::System.Double extWeight, global::System.Double extVolume, global::System.Double pOFee, global::System.DateTime promDate, global::System.Double qtyOrd, global::System.Double qtyRcvd, global::System.Double qtyReturned, global::System.Double qtyVouched, global::System.DateTime reqdDate, global::System.Double unitCost, global::System.Double unitWeight, global::System.Double unitVolume, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.Double discPct, global::System.Double discAmt, global::System.Double txblAmt00, global::System.Double txblAmt01, global::System.Double txblAmt02, global::System.Double txblAmt03, global::System.Double taxAmt00, global::System.Double taxAmt01, global::System.Double taxAmt02, global::System.Double taxAmt03)
+        /// <param name="qtyHistory">Initial value of the QtyHistory property.</param>
+        public static PO_Detail CreatePO_Detail(global::System.String branchID, global::System.String pONbr, global::System.String lineRef, global::System.Int32 blktLineID, global::System.Double cnvFact, global::System.Double costReceived, global::System.Double costReturned, global::System.Double costVouched, global::System.Double extCost, global::System.Double extWeight, global::System.Double extVolume, global::System.Double pOFee, global::System.DateTime promDate, global::System.Double qtyOrd, global::System.Double qtyRcvd, global::System.Double qtyReturned, global::System.Double qtyVouched, global::System.DateTime reqdDate, global::System.Double unitCost, global::System.Double unitWeight, global::System.Double unitVolume, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.Double discPct, global::System.Double discAmt, global::System.Double txblAmt00, global::System.Double txblAmt01, global::System.Double txblAmt02, global::System.Double txblAmt03, global::System.Double taxAmt00, global::System.Double taxAmt01, global::System.Double taxAmt02, global::System.Double taxAmt03, global::System.Double qtyHistory)
         {
             PO_Detail pO_Detail = new PO_Detail();
             pO_Detail.BranchID = branchID;
@@ -3259,6 +3274,7 @@ namespace PO10200
             pO_Detail.TaxAmt01 = taxAmt01;
             pO_Detail.TaxAmt02 = taxAmt02;
             pO_Detail.TaxAmt03 = taxAmt03;
+            pO_Detail.QtyHistory = qtyHistory;
             return pO_Detail;
         }
 
@@ -4618,6 +4634,30 @@ namespace PO10200
         private global::System.String _TaxID03;
         partial void OnTaxID03Changing(global::System.String value);
         partial void OnTaxID03Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double QtyHistory
+        {
+            get
+            {
+                return _QtyHistory;
+            }
+            set
+            {
+                OnQtyHistoryChanging(value);
+                ReportPropertyChanging("QtyHistory");
+                _QtyHistory = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("QtyHistory");
+                OnQtyHistoryChanged();
+            }
+        }
+        private global::System.Double _QtyHistory;
+        partial void OnQtyHistoryChanging(global::System.Double value);
+        partial void OnQtyHistoryChanged();
 
         #endregion
 
@@ -6116,6 +6156,30 @@ namespace PO10200
         private global::System.String _SlsperID;
         partial void OnSlsperIDChanging(global::System.String value);
         partial void OnSlsperIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Note
+        {
+            get
+            {
+                return _Note;
+            }
+            set
+            {
+                OnNoteChanging(value);
+                ReportPropertyChanging("Note");
+                _Note = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Note");
+                OnNoteChanged();
+            }
+        }
+        private global::System.String _Note;
+        partial void OnNoteChanging(global::System.String value);
+        partial void OnNoteChanged();
 
         #endregion
 
@@ -13011,7 +13075,6 @@ namespace PO10200
         /// Create a new PO10200_pdIN_Inventory_Result object.
         /// </summary>
         /// <param name="invtID">Initial value of the InvtID property.</param>
-        /// <param name="exported">Initial value of the Exported property.</param>
         /// <param name="iRSftyStkDays">Initial value of the IRSftyStkDays property.</param>
         /// <param name="iRSftyStkPct">Initial value of the IRSftyStkPct property.</param>
         /// <param name="iRSftyStkQty">Initial value of the IRSftyStkQty property.</param>
@@ -13036,11 +13099,10 @@ namespace PO10200
         /// <param name="stkWt">Initial value of the StkWt property.</param>
         /// <param name="warrantyDays">Initial value of the WarrantyDays property.</param>
         /// <param name="approveStatus">Initial value of the ApproveStatus property.</param>
-        public static PO10200_pdIN_Inventory_Result CreatePO10200_pdIN_Inventory_Result(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.String approveStatus)
+        public static PO10200_pdIN_Inventory_Result CreatePO10200_pdIN_Inventory_Result(global::System.String invtID, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int32 lotSerFxdLen, global::System.Int32 lotSerNumLen, global::System.Int32 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int32 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int32 warrantyDays, global::System.String approveStatus)
         {
             PO10200_pdIN_Inventory_Result pO10200_pdIN_Inventory_Result = new PO10200_pdIN_Inventory_Result();
             pO10200_pdIN_Inventory_Result.InvtID = invtID;
-            pO10200_pdIN_Inventory_Result.Exported = exported;
             pO10200_pdIN_Inventory_Result.IRSftyStkDays = iRSftyStkDays;
             pO10200_pdIN_Inventory_Result.IRSftyStkPct = iRSftyStkPct;
             pO10200_pdIN_Inventory_Result.IRSftyStkQty = iRSftyStkQty;
@@ -13315,9 +13377,9 @@ namespace PO10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int16 Exported
+        public Nullable<global::System.Int16> Exported
         {
             get
             {
@@ -13332,8 +13394,8 @@ namespace PO10200
                 OnExportedChanged();
             }
         }
-        private global::System.Int16 _Exported;
-        partial void OnExportedChanging(global::System.Int16 value);
+        private Nullable<global::System.Int16> _Exported;
+        partial void OnExportedChanging(Nullable<global::System.Int16> value);
         partial void OnExportedChanged();
     
         /// <summary>
@@ -13581,7 +13643,7 @@ namespace PO10200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int16 LotSerFxdLen
+        public global::System.Int32 LotSerFxdLen
         {
             get
             {
@@ -13596,8 +13658,8 @@ namespace PO10200
                 OnLotSerFxdLenChanged();
             }
         }
-        private global::System.Int16 _LotSerFxdLen;
-        partial void OnLotSerFxdLenChanging(global::System.Int16 value);
+        private global::System.Int32 _LotSerFxdLen;
+        partial void OnLotSerFxdLenChanging(global::System.Int32 value);
         partial void OnLotSerFxdLenChanged();
     
         /// <summary>
@@ -13677,7 +13739,7 @@ namespace PO10200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int16 LotSerNumLen
+        public global::System.Int32 LotSerNumLen
         {
             get
             {
@@ -13692,8 +13754,8 @@ namespace PO10200
                 OnLotSerNumLenChanged();
             }
         }
-        private global::System.Int16 _LotSerNumLen;
-        partial void OnLotSerNumLenChanging(global::System.Int16 value);
+        private global::System.Int32 _LotSerNumLen;
+        partial void OnLotSerNumLenChanging(global::System.Int32 value);
         partial void OnLotSerNumLenChanged();
     
         /// <summary>
@@ -13797,7 +13859,7 @@ namespace PO10200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int16 NodeLevel
+        public global::System.Int32 NodeLevel
         {
             get
             {
@@ -13812,8 +13874,8 @@ namespace PO10200
                 OnNodeLevelChanged();
             }
         }
-        private global::System.Int16 _NodeLevel;
-        partial void OnNodeLevelChanging(global::System.Int16 value);
+        private global::System.Int32 _NodeLevel;
+        partial void OnNodeLevelChanging(global::System.Int32 value);
         partial void OnNodeLevelChanged();
     
         /// <summary>
@@ -13989,7 +14051,7 @@ namespace PO10200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int16 ShelfLife
+        public global::System.Int32 ShelfLife
         {
             get
             {
@@ -14004,8 +14066,8 @@ namespace PO10200
                 OnShelfLifeChanged();
             }
         }
-        private global::System.Int16 _ShelfLife;
-        partial void OnShelfLifeChanging(global::System.Int16 value);
+        private global::System.Int32 _ShelfLife;
+        partial void OnShelfLifeChanging(global::System.Int32 value);
         partial void OnShelfLifeChanged();
     
         /// <summary>
@@ -14373,7 +14435,7 @@ namespace PO10200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int16 WarrantyDays
+        public global::System.Int32 WarrantyDays
         {
             get
             {
@@ -14388,8 +14450,8 @@ namespace PO10200
                 OnWarrantyDaysChanged();
             }
         }
-        private global::System.Int16 _WarrantyDays;
-        partial void OnWarrantyDaysChanging(global::System.Int16 value);
+        private global::System.Int32 _WarrantyDays;
+        partial void OnWarrantyDaysChanging(global::System.Int32 value);
         partial void OnWarrantyDaysChanged();
     
         /// <summary>
@@ -14397,7 +14459,7 @@ namespace PO10200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> Public
+        public Nullable<global::System.Int32> Public
         {
             get
             {
@@ -14412,8 +14474,8 @@ namespace PO10200
                 OnPublicChanged();
             }
         }
-        private Nullable<global::System.Boolean> _Public;
-        partial void OnPublicChanging(Nullable<global::System.Boolean> value);
+        private Nullable<global::System.Int32> _Public;
+        partial void OnPublicChanging(Nullable<global::System.Int32> value);
         partial void OnPublicChanged();
     
         /// <summary>
@@ -14445,7 +14507,7 @@ namespace PO10200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> LotSerRcptAuto
+        public Nullable<global::System.Int32> LotSerRcptAuto
         {
             get
             {
@@ -14460,8 +14522,8 @@ namespace PO10200
                 OnLotSerRcptAutoChanged();
             }
         }
-        private Nullable<global::System.Boolean> _LotSerRcptAuto;
-        partial void OnLotSerRcptAutoChanging(Nullable<global::System.Boolean> value);
+        private Nullable<global::System.Int32> _LotSerRcptAuto;
+        partial void OnLotSerRcptAutoChanging(Nullable<global::System.Int32> value);
         partial void OnLotSerRcptAutoChanged();
 
         #endregion
