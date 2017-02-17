@@ -123,8 +123,9 @@
                     .Width(300).HQHeightWidth(400, 300)
                     .HQParam(new StoreParameterCollection() 
                         { 
-                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
-                            , new StoreParameter() { Name = "@langid", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                            , new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                            , new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                         })
                     .LoadData()
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })

@@ -29,15 +29,15 @@ namespace OM20500
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";
-            Current.DBSys = "eBiz4DCloudSysJFV";
+            Current.Server = "HOANGSAD";
+            Current.DBSys = "FranciaBeauty_eSky4DSys";
             Current.FormatDate = "dd.MM.yyyy";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM20500"] = acc;
-            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppJFV";
+            Session["DBApp"] = Current.DBApp = "FranciaBeauty_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
