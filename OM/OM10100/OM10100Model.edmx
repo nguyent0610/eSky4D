@@ -2754,7 +2754,7 @@
         <ComplexType Name="OM10100_pdCustomer_Result">
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
           <Property Type="String" Name="BillAddr1" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="BillAddr2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BillAddr2" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="BillAttn" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="BillCity" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="BillCountry" Nullable="true" MaxLength="3" />
@@ -2768,7 +2768,13 @@
           <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="TaxRegNbr" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="DfltShipToId" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="CustAddr" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="CustAddr" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="TaxDflt" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="TaxID00" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxID01" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxID02" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxID03" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxLocId" Nullable="true" MaxLength="15" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4278,6 +4284,12 @@
                 <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
                 <ScalarProperty Name="DfltShipToId" ColumnName="DfltShipToId" />
                 <ScalarProperty Name="CustAddr" ColumnName="CustAddr" />
+                <ScalarProperty Name="TaxDflt" ColumnName="TaxDflt" />
+                <ScalarProperty Name="TaxID00" ColumnName="TaxID00" />
+                <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />
+                <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
+                <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
+                <ScalarProperty Name="TaxLocId" ColumnName="TaxLocId" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

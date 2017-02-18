@@ -29236,12 +29236,10 @@ namespace OM10100
         /// Create a new OM10100_pdCustomer_Result object.
         /// </summary>
         /// <param name="custName">Initial value of the CustName property.</param>
-        /// <param name="custAddr">Initial value of the CustAddr property.</param>
-        public static OM10100_pdCustomer_Result CreateOM10100_pdCustomer_Result(global::System.String custName, global::System.String custAddr)
+        public static OM10100_pdCustomer_Result CreateOM10100_pdCustomer_Result(global::System.String custName)
         {
             OM10100_pdCustomer_Result oM10100_pdCustomer_Result = new OM10100_pdCustomer_Result();
             oM10100_pdCustomer_Result.CustName = custName;
-            oM10100_pdCustomer_Result.CustAddr = custAddr;
             return oM10100_pdCustomer_Result;
         }
 
@@ -29636,7 +29634,7 @@ namespace OM10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String CustAddr
         {
@@ -29648,7 +29646,7 @@ namespace OM10100
             {
                 OnCustAddrChanging(value);
                 ReportPropertyChanging("CustAddr");
-                _CustAddr = StructuralObject.SetValidValue(value, false);
+                _CustAddr = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("CustAddr");
                 OnCustAddrChanged();
             }
@@ -29656,6 +29654,150 @@ namespace OM10100
         private global::System.String _CustAddr;
         partial void OnCustAddrChanging(global::System.String value);
         partial void OnCustAddrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TaxDflt
+        {
+            get
+            {
+                return _TaxDflt;
+            }
+            set
+            {
+                OnTaxDfltChanging(value);
+                ReportPropertyChanging("TaxDflt");
+                _TaxDflt = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TaxDflt");
+                OnTaxDfltChanged();
+            }
+        }
+        private global::System.String _TaxDflt;
+        partial void OnTaxDfltChanging(global::System.String value);
+        partial void OnTaxDfltChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TaxID00
+        {
+            get
+            {
+                return _TaxID00;
+            }
+            set
+            {
+                OnTaxID00Changing(value);
+                ReportPropertyChanging("TaxID00");
+                _TaxID00 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TaxID00");
+                OnTaxID00Changed();
+            }
+        }
+        private global::System.String _TaxID00;
+        partial void OnTaxID00Changing(global::System.String value);
+        partial void OnTaxID00Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TaxID01
+        {
+            get
+            {
+                return _TaxID01;
+            }
+            set
+            {
+                OnTaxID01Changing(value);
+                ReportPropertyChanging("TaxID01");
+                _TaxID01 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TaxID01");
+                OnTaxID01Changed();
+            }
+        }
+        private global::System.String _TaxID01;
+        partial void OnTaxID01Changing(global::System.String value);
+        partial void OnTaxID01Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TaxID02
+        {
+            get
+            {
+                return _TaxID02;
+            }
+            set
+            {
+                OnTaxID02Changing(value);
+                ReportPropertyChanging("TaxID02");
+                _TaxID02 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TaxID02");
+                OnTaxID02Changed();
+            }
+        }
+        private global::System.String _TaxID02;
+        partial void OnTaxID02Changing(global::System.String value);
+        partial void OnTaxID02Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TaxID03
+        {
+            get
+            {
+                return _TaxID03;
+            }
+            set
+            {
+                OnTaxID03Changing(value);
+                ReportPropertyChanging("TaxID03");
+                _TaxID03 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TaxID03");
+                OnTaxID03Changed();
+            }
+        }
+        private global::System.String _TaxID03;
+        partial void OnTaxID03Changing(global::System.String value);
+        partial void OnTaxID03Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TaxLocId
+        {
+            get
+            {
+                return _TaxLocId;
+            }
+            set
+            {
+                OnTaxLocIdChanging(value);
+                ReportPropertyChanging("TaxLocId");
+                _TaxLocId = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TaxLocId");
+                OnTaxLocIdChanged();
+            }
+        }
+        private global::System.String _TaxLocId;
+        partial void OnTaxLocIdChanging(global::System.String value);
+        partial void OnTaxLocIdChanged();
 
         #endregion
 
