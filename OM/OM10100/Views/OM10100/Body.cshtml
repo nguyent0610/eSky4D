@@ -387,16 +387,16 @@
 )
 
 @(
-    X.Viewport()
+ X.Viewport()
     .Layout(LayoutType.Fit)
     .Items(
-       
+
         X.Window().ID("winReport").Title("Report")
         .Hidden(true)
         .Resizable(false)
         .Width(350)
         .Items(
-        
+
                 X.ComboBox().ID("cboReport")
                 .MarginSpec("10 0 10 20").LabelWidth(70)
                 .Width(300).ForceSelection(true)
@@ -408,66 +408,66 @@
                 )
             )
             .Buttons(
-        
+
                 X.Button().ID("btnShowReport").Text(Util.GetLang("Preview"))
                 .Listeners(p => p.Click.Fn = "btnShowReport_Click")
-            
+
                 , X.Button().ID("btnCloseReport").Text(Util.GetLang("Closed"))
                 .Listeners(p => p.Click.Handler = "App.winReport.close()")
         )
-        
+
         , X.Window().ID("winBackOrder").Title("BackOrder")
         .Hidden(true)
         .Resizable(false)
         .Width(350)
         .Items(
-                
+
                     X.ComboBox().ID("cboBKOrderType").FieldLabel(Util.GetLang("OrderType"))
                     .SubmitValue(false)
-                    .ListConfig(Util.HQBoundList("OrderType,Descr",400,300)).MarginSpec("10 0 0 20")
+                    .ListConfig(Util.HQBoundList("OrderType,Descr", 400, 300)).MarginSpec("10 0 0 20")
                     .DisplayField("Descr").ValueField("OrderType")
                     .LabelWidth(80).Width(300)
                     .LabelAlign(LabelAlign.Right)
-                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Input","OrderType"))
-                    .ForceSelection(true)               
+                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "OrderType"))
+                    .ForceSelection(true)
                     .Listeners(p =>
                     {
                         p.Change.Fn = "cboBKOrderType_Change";
                     })
                     .StoreID("stoBKOrderType")
-                    
+
                     , X.ComboBox().ID("cboBKReasonCode").FieldLabel(Util.GetLang("ReasonCD"))
                     .SubmitValue(false)
                     .LabelAlign(LabelAlign.Right)
-                    .ListConfig(Util.HQBoundList("Code,Descr",400,300)).MarginSpec("5 0 0 20")
+                    .ListConfig(Util.HQBoundList("Code,Descr", 400, 300)).MarginSpec("5 0 0 20")
                     .DisplayField("Descr").ValueField("Code")
                     .LabelWidth(80).Width(300)
-                    .ForceSelection(true)               
+                    .ForceSelection(true)
                     .StoreID("stoBKReasonCode")
-                    
+
                     , HQ.Combo().ID("cboBKOrderNbr").HQLangCode("OrderNbr")
                     .HQAutoLoad(false)
                     .MarginSpec("5 0 10 20")
                     .HQProcedure("OM10100_pcBackOrder").HQColumnShow("OrderNbr,CustID,SlsPerID,OrderDate")
                     .DisplayField("OrderNbr").ValueField("OrderNbr")
                     .LabelWidth(80).Width(300).HQHeightWidth(400, 300)
-                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Select","OrderNbr"))
-                    .ForceSelection(true)   
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
+                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "OrderNbr"))
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@BranchID", Value = "App.txtBranchID.getValue()", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@OrderType", Value = "App.cboBKOrderType.getValue()", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@CustID", Value = "App.cboCustID.getValue()", Mode = ParameterMode.Raw }
                     })
                     .LoadData()
-         
-             
+
+
             )
             .Buttons(
                 X.Button().ID("btnBKOk").Text(Util.GetLang("OK"))
                 .Listeners(p => p.Click.Fn = "btnBKOk_Click")
         )
-        
+
         , X.Window()
         .ID("winLot")
         .Hidden(true)
@@ -479,7 +479,7 @@
         .Buttons(
             X.Button().ID("btnLotDel").Text(Util.GetLang("DeleteRights"))
             .Listeners(p => p.Click.Fn = "btnLotDel_Click")
-            
+
             , X.Button().ID("btnLotOK").Text(Util.GetLang("OK"))
             .Listeners(p => p.Click.Fn = "btnLotOK_Click")
         )
@@ -492,11 +492,11 @@
         )
         .Items(
             X.GridPanel().ID("grdLot")
-            .Border(true).BorderSpec("1 0 0 0")   
-            .StoreID("stoLotTrans")       
-            .ColumnModel(  
+            .Border(true).BorderSpec("1 0 0 0")
+            .StoreID("stoLotTrans")
+            .ColumnModel(
                 X.RowNumbererColumn().Renderer("renderRowNumber")
-                        
+
                 , X.Column().ID("colLotSerNbr").DataIndex("LotSerNbr").Text(Util.GetLang("LotSerNbr"))
                 .Editor(
                     X.ComboBox().ID("cboLotSerNbr").DataIndex("LotSerNbr")
@@ -513,7 +513,7 @@
                     })
                     .QueryMode(DataLoadMode.Local)
                     .MatchFieldWidth(false)
-                    .ListConfig(                        X.BoundList()
+                    .ListConfig(X.BoundList()
                         .Height(500).ItemSelector(".x-boundlist-item").LoadingText(Util.GetLang("Loading"))
                         .Tpl(
                             X.XTemplate()
@@ -528,7 +528,7 @@
                                         </tpl>
                                         <tr class='x-boundlist-item'>
                                             <td style='width:100px;'>{LotSerNbr}</td>
-                                            <td>{ExpDate:date("""+Current.FormatDateJS+@""")}</td>
+                                            <td>{ExpDate:date(""" + Current.FormatDateJS + @""")}</td>
                                             <td>{QtyAvail}</td>
                                         </tr>
                                         <tpl if='[xcount-xindex] == 0'>
@@ -541,8 +541,8 @@
                     .StoreID("stoCalcLot")
                 )
                 .Width(120)
-                                     
-               
+
+
                 , X.Column().ID("colLotUnitDesc").DataIndex("UnitDesc").Text(Util.GetLang("Unit"))
                 .Width(100)
                 .Editor(
@@ -556,19 +556,19 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
                 )
-                  
+
                  , X.Column().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("Qty"))
                 .Width(75)
                 .Align(Alignment.Right)
-                .Renderer("renderQtyAmt") 
+                .Renderer("renderQtyAmt")
                 .Editor(Html.X().NumberField().MaxValue(10000).MinValue(0).DecimalPrecision(0))
-                
-                
+
+
                 , X.Column().ID("colLotPrice").DataIndex("UnitPrice").Text(Util.GetLang("Price"))
                 .Width(75)
                 .Align(Alignment.Right)
-                .Renderer("renderQtyAmt") 
-                
+                .Renderer("renderQtyAmt")
+
                 , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate"))
             )
             .Listeners(lst =>
@@ -582,7 +582,7 @@
             .View(X.GridView().TrackOver(false))
             .Plugins(X.CellEditing().ClicksToEdit(1))
         )
-        
+
         , X.FormPanel().ID("frmMain")
         .Layout(LayoutType.Border).DefaultAnchor("100%")
         .TrackResetOnLoad(true)
@@ -593,16 +593,17 @@
             .Listeners(p=>p.Click.Fn="btnBackOrder_Click")
         }))
         .FieldDefaults(a => { a.LabelAlign = LabelAlign.Right; a.LabelWidth = 120; })
-        .Listeners(p => {
+        .Listeners(p =>
+        {
             p.BoxReady.Fn = "frmMain_BoxReady";
             p.FieldChange.Fn = "frmMain_FieldChange";
         })
         .BottomBar(
-        
+
             X.Toolbar()
             .Items(
                 X.ToolbarFill()
-                
+
                 , X.Label().ID("lblQtyAvail").Width(200).MarginSpec("0 0 0 30")
             )
         )
@@ -615,13 +616,13 @@
                 .MarginSpec("10 0 5 0").Layout(LayoutType.HBox)
                 .Items(
                     X.Hidden().ID("tstamp")
-                    
+
                     , HQ.Combo().ID("cboOrderType").Name("OrderType").DataIndex("OrderType").HQLangCode("OrderType")
                     .HQProcedure("OM10100_pcOrderType").HQColumnShow("OrderType,Descr")
                     .DisplayField("Descr").ValueField("OrderType")
                     .LabelWidth(130).Width(300).HQHeightWidth(400, 300)
-                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Input","OrderType"))
-                    .ForceSelection(true)               
+                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "OrderType"))
+                    .ForceSelection(true)
                     .HQControlFocus("cboOrderNbr")
                     .Listeners(p =>
                     {
@@ -629,13 +630,13 @@
                         p.Focus.Handler = "HQ.focus='order';";
                     })
                     .LoadData()
-                    
+
                     , HQ.TextBox().ID("txtInvcNbr").Name("InvcNbr").DataIndex("InvcNbr").HQLangCode("InvcNbr")
                     .MaxLength(30).EnforceMaxLength(true)
                     .LabelWidth(100).Width(200)
                     .HQControlFocus("txtInvcNote")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='order';")
-                    
+
                     , X.ComboBox().ID("cboOrderNbr").Name("OrderNbr").DataIndex("OrderNbr").FieldLabel(Util.GetLang("OrderNbr"))
                     .LabelWidth(100).Width(260)
                     .ValueField("OrderNbr").DisplayField("OrderNbr")
@@ -669,7 +670,7 @@
                                         </tpl>
                                         <tr class='x-boundlist-item'>
                                             <td style='width:100px;'>{OrderNbr}</td>
-                                            <td>{OrderDate:date("""+Current.FormatDateJS+@""")}</td>
+                                            <td>{OrderDate:date(""" + Current.FormatDateJS + @""")}</td>
                                             <td style='width:100px;'>{OrigOrderNbr}</td>
                                             <td>{CustID}</td>
                                             <td>{SlsPerID}</td>
@@ -684,7 +685,7 @@
                     )
                     .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{cboCustID}.focus();")); }))
                     .StoreID("stoOrder")
-                    
+
                     , HQ.Combo().ID("cboHandle").Name("Handle").HQLangCode("Handle")
                     .HQProcedure("OM10100_pcHandle").HQColumnShow("Code,Descr")
                     .DisplayField("Descr").ValueField("Code")
@@ -704,33 +705,33 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         lst.Focus.Handler = "HQ.focus='order';";
                     })
-                    
+
                 )
 
                 , X.FieldContainer()
                 .Layout(LayoutType.HBox)
                 .Items(
-                
+
                     HQ.TextBox().ID("txtBranchID").Name("BranchID").HQLangCode("BranchID")
                     .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "BranchID"))
                     .MaxLength(30).EnforceMaxLength(true)
                     .LabelWidth(130).Width(300)
                     .HQControlFocus("cboOrderNbr")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='order';")
-                    
+
                     , HQ.TextBox().ID("txtInvcNote").Name("InvcNote").DataIndex("InvcNote").HQLangCode("InvcNote")
                     .MaxLength(30).EnforceMaxLength(true)
                     .LabelWidth(100).Width(200)
                     .HQControlFocus("cboOrderNbr")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='order';")
-                    
+
                     , HQ.Combo().ID("cboCustID").Name("CustID").DataIndex("CustID").HQLangCode("CustID")
                     .HQProcedure("OM10100_pcCustomer").HQColumnShow("CustID,Name")
                     .DisplayField("CustID").ValueField("CustID")
                     .LabelWidth(100).Width(260).HQHeightWidth(400, 300)
-                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Select","CustID"))
-                    .ForceSelection(true)   
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
+                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "CustID"))
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@BranchID", Value = "App.txtBranchID.getValue()", Mode = ParameterMode.Raw }
                     })
@@ -742,7 +743,7 @@
                         p.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         p.Focus.Handler = "HQ.focus='order';";
                     })
-                    
+
                     , HQ.Combo().ID("cboStatus").Name("Status").DataIndex("Status").HQLangCode("Status")
                     .HQProcedure("OM10100_pcStatus").HQColumnShow("Code,Descr")
                     .DisplayField("Descr").ValueField("Code")
@@ -763,69 +764,71 @@
                 , X.FieldContainer()
                 .Layout(LayoutType.HBox)
                 .Items(
-                
+
                     HQ.TextBox().ID("txtCustAddr").Name("CustAddr").DataIndex("CustAddr").HQLangCode("AddressCust")
                     .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "AddressCust"))
                     .LabelWidth(130).Width(500)
                     .HQControlFocus("txtOrderDate")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='order';")
-                    
+
                     , HQ.TextBox().ID("txtCustName").Name("CustName").DataIndex("CustName").HQLangCode("CustName")
                     .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "CustName"))
                     .LabelWidth(100).Width(340)
                     .HQControlFocus("txtOrderDate")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='order';")
-                    
-                    ,HQ.Checkbox().ID("chkIsAddStock").HQLangCode("IsAddStock").DataIndex("IsAddStock").MarginSpec("0 0 0 5")
-                    
+
+                    , HQ.Checkbox().ID("chkIsAddStock").HQLangCode("IsAddStock").DataIndex("IsAddStock").MarginSpec("0 0 0 5")
+
                 )
             )
-            
+
             , X.TabPanel().ID("tabInfo")
             .Layout(LayoutType.Border).Region(Region.Center)
             .Items(
-            
+
                 X.Panel().ID("itmDetail").Title(Util.GetLang("OrdInvcInfo"))
                 .Region(Region.North).Layout(LayoutType.Border)
                 .PaddingSpec("5 0 0 0")
                 .Items(
-                
+
                     X.Panel()
                     .Region(Region.North).Layout(LayoutType.VBox)
                     .AutoScroll(true)
                     .Border(false)
                     .Height(108)
                     .Items(
-                    
+
                         X.FieldContainer()
                         .Layout(LayoutType.HBox)
                         .Items(
-                        
+
                             HQ.DateField().ID("txtOrderDate").Name("OrderDate").DataIndex("OrderDate").HQLangCode("OrderDate")
                             .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "TranDate"))
                             .LabelWidth(130).Width(300)
                             .MinDate(new DateTime(2000, 1, 1)).MaxDate(new DateTime(2100, 1, 1))
                             .HQControlFocus("txtFreightAmt")
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='batch';";
                                 p.Change.Fn = "txtOrderDate_Change";
                             })
-                           
+
                             , HQ.Checkbox().ID("chkDoNotCalDisc").Name("DoNotCalDisc").DataIndex("DoNotCalDisc").HQLangCode("DoNotCalcDisc")
-                            .Width(150) 
+                            .Width(150)
                             .MarginSpec("0 0 0 50")
-                            .HQControlFocus("chkCreditHold")      
-                            .Listeners(p => {
+                            .HQControlFocus("chkCreditHold")
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='batch';";
                             })
-                            
+
                             , HQ.Combo().ID("cboSlsPerID").Name("SlsPerID").DataIndex("SlsPerID").HQLangCode("SlsPerID")
                             .HQProcedure("OM10100_pcSalesPerson").HQColumnShow("SlsperID,Name")
                             .DisplayField("SlsperID").ValueField("SlsperID")
                             .LabelWidth(100).Width(300).HQHeightWidth(400, 300)
-                            .AllowBlank(false).BlankText(Util.GetLangPrefix("Select","SlsPerID"))
-                            .ForceSelection(true)   
-                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
+                            .AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "SlsPerID"))
+                            .ForceSelection(true)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection(){
                                 new StoreParameter() { Name = "@BranchID", Value = "App.txtBranchID.getValue()", Mode = ParameterMode.Raw }
                             })
@@ -837,41 +840,43 @@
                                 p.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 p.Focus.Handler = "HQ.focus='order';";
                             })
-                            
+
                             , HQ.NumberField().ID("txtOrdQty").Name("OrdQty").DataIndex("OrdQty").HQLangCode("QuantityTotal")
                             .LabelWidth(120).Width(220)
                             .DecimalPrecision(0)
-                            .Listeners(p => p.Focus.Handler = "HQ.focus='order';")  
+                            .Listeners(p => p.Focus.Handler = "HQ.focus='order';")
                         )
-                        
+
                         , X.FieldContainer()
                         .Layout(LayoutType.HBox)
                         .Items(
-                        
+
                             HQ.NumberField().ID("txtFreightAmt").Name("FreightAmt").DataIndex("FreightAmt").HQLangCode("FrtMisc")
                             .LabelWidth(130).Width(300)
                             .DecimalPrecision(0).MinValue(0)
                             .HQControlFocus("txtMiscAmt")
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='order';";
                                 p.Change.Fn = "txtFreightAmt_Change";
-                            })    
-                            
+                            })
+
                             , HQ.Checkbox().ID("chkCreditHold").Name("CreditHold").DataIndex("CreditHold").HQLangCode("CreditHold")
-                            .Width(150) 
+                            .Width(150)
                             .MarginSpec("0 0 0 50")
-                            //.HQControlFocus()      
-                            .Listeners(p => {
+        //.HQControlFocus()      
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='batch';";
-                            })  
-                            
+                            })
+
                             , HQ.Combo().ID("cboDeliveryID").Name("DeliveryID").DataIndex("DeliveryID").HQLangCode("DeliveryID")
                             .HQProcedure("OM10100_pcDeliveryID").HQColumnShow("SlsperID,Name")
                             .DisplayField("SlsperID").ValueField("SlsperID")
                             .LabelWidth(100).Width(300).HQHeightWidth(400, 300)
-                            //.AllowBlank(false).BlankText(Util.GetLangPrefix("Select","DeliveryID"))
-                            .ForceSelection(true)   
-                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
+        //.AllowBlank(false).BlankText(Util.GetLangPrefix("Select","DeliveryID"))
+                            .ForceSelection(true)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection(){
                                 new StoreParameter() { Name = "@BranchID", Value = "App.txtBranchID.getValue()", Mode = ParameterMode.Raw }
                             })
@@ -882,121 +887,130 @@
                                 p.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 p.Focus.Handler = "HQ.focus='order';";
                             })
-                            
+
                             , HQ.NumberField().ID("txtTxblAmt").Name("TxblAmt").DataIndex("TxblAmt").HQLangCode("TotItemAmt")
                             .LabelWidth(120).Width(220)
                             .DecimalPrecision(0)
-                            .Listeners(p => p.Focus.Handler = "HQ.focus='order';")             
+                            .Listeners(p => p.Focus.Handler = "HQ.focus='order';")
                         )
-                        
+
                         , X.FieldContainer()
                         .Layout(LayoutType.HBox)
                         .Items(
-                        
+
                             HQ.NumberField().ID("txtSOFeeTot").Name("SOFeeTot").DataIndex("SOFeeTot").HQLangCode("SOFee/MISCCHARGES")
                             .LabelWidth(130).Width(215)
                             .DecimalPrecision(0).MinValue(0)
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='order';";
-                            })    
-                            
+                            })
+
                             , HQ.NumberField().ID("txtMiscAmt").Name("MiscAmt").DataIndex("MiscAmt").DataIndex("MiscAmt")
                             .Width(80)
                             .MarginSpec("0 0 0 5")
                             .DecimalPrecision(0).MinValue(0)
                             .HQControlFocus("txtIssueNumber")
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='order';";
                                 p.Change.Fn = "txtMiscAmt_Change";
-                            })  
-                            
-                              
+                            })
+
+
                             , HQ.NumberField().ID("txtVolDiscPct").Name("VolDiscPct").DataIndex("VolDiscPct").HQLangCode("ManualVolDiscAmt")
                             .LabelWidth(130).Width(220)
                             .MarginSpec("0 0 0 190")
                             .MinValue(0)
                             .HQControlFocus("txtOrdDiscAmt")
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='order';";
-                                p.Change.Fn = "txtVolDiscPct_Change"; 
-                            }) 
-                            
+                                p.Change.Fn = "txtVolDiscPct_Change";
+                            })
+
                             , HQ.NumberField().ID("txtOrdDiscAmt").Name("OrdDiscAmt").DataIndex("OrdDiscAmt")
                             .Width(85)
                             .MarginSpec("0 0 0 5")
                             .DecimalPrecision(0).MinValue(0)
                             .HQControlFocus("cboOrderType")
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='order';";
                                 p.Change.Fn = "txtOrdDiscAmt_Change";
-                            })  
-                            
+                            })
+
                             , HQ.NumberField().ID("txtCuryTaxAmt").Name("CuryTaxAmt").DataIndex("CuryTaxAmt").HQLangCode("TotTax")
                             .LabelWidth(120).Width(220)
                             .DecimalPrecision(0)
                             .Listeners(p => p.Focus.Handler = "HQ.focus='order';")
-                            
+
                         )
-                        
+
                         , X.FieldContainer()
                         .Layout(LayoutType.HBox)
                         .Items(
-                        
+
                             HQ.NumberField().ID("txtIssueNumber").Name("IssueNumber").DataIndex("IssueNumber").HQLangCode("IssueNbr")
                             .LabelWidth(130).Width(215)
                             .DecimalPrecision(0).MinValue(0)
                             .HQControlFocus("txtOrderNo")
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='order';";
-                            })   
-                            
+                            })
+
                             , HQ.NumberField().ID("txtOrderNo").Name("OrderNo").DataIndex("OrderNo")
                             .Width(80)
                             .MarginSpec("0 0 0 5")
                             .DecimalPrecision(0).MinValue(0)
                             .HQControlFocus("cboSlsPerID")
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='order';";
-                            })   
-                            
+                            })
+
                             , HQ.NumberField().ID("txtVolDiscAmt").Name("VolDiscAmt").DataIndex("VolDiscAmt").HQLangCode("Vol/LineDisc")
                             .LabelWidth(130).Width(220)
                             .MarginSpec("0 0 0 190")
                             .DecimalPrecision(0).MinValue(0)
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='order';";
-                            })  
-                            
+                            })
+
                             , HQ.NumberField().ID("txtCuryLineDiscAmt").Name("CuryLineDiscAmt").DataIndex("CuryLineDiscAmt")
                             .Width(85)
                             .MarginSpec("0 0 0 5")
                             .DecimalPrecision(0).MinValue(0)
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='order';";
                             })
-                           
+
                             , HQ.NumberField().ID("txtCuryLineAmt").Name("CuryLineAmt").DataIndex("CuryLineAmt")
                             .MarginSpec("0 0 0 5")
                             .MinValue(0)
                             .Hidden(true)
-                            
+
                             , HQ.NumberField().ID("txtCuryOrdAmt").Name("CuryOrdAmt").DataIndex("CuryOrdAmt").HQLangCode("Total")
                             .LabelWidth(120).Width(220)
                             .DecimalPrecision(0).MinValue(0)
-                            .Listeners(p => {
+                            .Listeners(p =>
+                            {
                                 p.Focus.Handler = "HQ.focus='order';";
-                            })  
+                            })
                         )
                     )
-                    
+
                     , X.GridPanel().ID("grdOrdDet")
                     .Border(true).BorderSpec("1 0 0 0")
-                    .Region(Region.Center)       
-                    .StoreID("stoOrdDet")       
+                    .Region(Region.Center)
+                    .StoreID("stoOrdDet")
                     .ColumnModel(
-                    
+
                         X.RowNumbererColumn()
-                        
+
                         , X.Column().ID("colBOType").DataIndex("BOType").Text(Util.GetLang("Type"))
                         .Width(120)
                         .Renderer("renderBOType")
@@ -1017,7 +1031,7 @@
                             })
                             .LoadData()
                         )
-                                     
+
                         , X.Column().ID("colBarCode").DataIndex("BarCode").Text(Util.GetLang("BarCode"))
                         .Width(120)
                         .Editor(
@@ -1026,22 +1040,22 @@
                             .DisplayField("BarCode").ValueField("BarCode")
                             .LabelWidth(90).HQHeightWidth(400, 300)
                             .MatchFieldWidth(false)
-                            .StoreID("stoInvt")   
+                            .StoreID("stoInvt")
                             .ForceSelection(true)
                             .SubmitValue(false)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                            })                             
+                            })
                         )
-                            
+
                         , X.Column().ID("colInvtID").DataIndex("InvtID").Text(Util.GetLang("InvtID"))
                         .Width(120)
                         .Editor(
                             HQ.Combo().ID("cboDetInvtID")
                             .ListConfig(Util.HQBoundList("InvtID,Descr,Descr1,Color", 400, 300))
-                            .DisplayField("InvtID").ValueField("InvtID")                           
+                            .DisplayField("InvtID").ValueField("InvtID")
                             .MatchFieldWidth(false)
                             .StoreID("stoInvt")
                             .ForceSelection(true)
@@ -1054,21 +1068,21 @@
                                 lst.BeforeQuery.Handler = "FilterCombo(App.cboDetInvtID,'InvtID,Descr')";
                             })
                         )
-                                        
+
                         , X.Column().ID("colDescr").DataIndex("Descr").Text(Util.GetLang("Descr"))
                         .MinWidth(120)
-                            
-                            
+
+
                         , X.CheckColumn().ID("colFreeItem").DataIndex("FreeItem").Editable(true).Text(Util.GetLang("FreeItem"))
                         .Width(50)
-                            
-                        , X.Column().ID("colDiscCode").DataIndex("DiscCode") .Text(Util.GetLang("DiscCode"))
+
+                        , X.Column().ID("colDiscCode").DataIndex("DiscCode").Text(Util.GetLang("DiscCode"))
                         .Width(120)
                         .Editor(
                             HQ.Combo().ID("cboDetDiscCode")
                             .HQColumnShow("DiscCode,Descr")
                             .HQAutoLoad(false)
-                            .ListConfig(Util.HQBoundList("DiscCode,Descr",400,300))
+                            .ListConfig(Util.HQBoundList("DiscCode,Descr", 400, 300))
                             .MatchFieldWidth(false)
                             .DisplayField("DiscCode").ValueField("DiscCode")
                             .SubmitValue(false)
@@ -1081,7 +1095,7 @@
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
                         )
-                                         
+
                         , X.Column().ID("colSlsUnit").DataIndex("SlsUnit").Text(Util.GetLang("Unit"))
                         .Width(100)
                         .Editor(
@@ -1106,114 +1120,114 @@
                             .ForceSelection(true)
                             .SubmitValue(false)
                         )
-                                    
+
                         , X.Column().ID("colUnitRate").DataIndex("UnitRate").Text(Util.GetLang("CnvFact"))
                         .Width(100)
                         .Align(Alignment.Right)
                         .Editor(Html.X().NumberField().MaxValue(1000).MinValue(0).DecimalPrecision(0))
-                            
+
                         , X.Column().ID("colLineQty").DataIndex("LineQty").Text(Util.GetLang("Qty"))
                         .Width(75)
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
+                        .Renderer("renderQtyAmt")
                         .Editor(Html.X().NumberField().MaxValue(10000).MinValue(0).DecimalPrecision(0))
-                        
+
                         , X.ComponentColumn()
                         .Text("")
                         .Width(26)
                         .Component(
                             X.Button()
                             .MarginSpec("1 4 1 3").Height(18).Text("")
-                            .Listeners(p=>p.Click.Fn="btnLot_Click")   
+                            .Listeners(p => p.Click.Fn = "btnLot_Click")
                         )
-                        
+
                         , X.Column().ID("colQtyBO").DataIndex("QtyBO").Text(Util.GetLang("QtyBO"))
                         .Width(75)
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
+                        .Renderer("renderQtyAmt")
                         .Editor(Html.X().NumberField().MaxValue(10000).MinValue(0).DecimalPrecision(0))
-                           
-                        ,X.Column().ID("colSlsPrice").DataIndex("SlsPrice").Text(Util.GetLang("SalesPrice"))
-                        .Width(100)     
+
+                        , X.Column().ID("colSlsPrice").DataIndex("SlsPrice").Text(Util.GetLang("SalesPrice"))
+                        .Width(100)
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt")              
+                        .Renderer("renderQtyAmt")
                         .Editor(Html.X().NumberField().ID("txtDetSlsPrice").MaxValue(100000000).MinValue(0).DecimalPrecision(0))
-                           
-                        ,X.Column().ID("colDiscPct").DataIndex("DiscPct").Text(Util.GetLang("DiscPct"))
+
+                        , X.Column().ID("colDiscPct").DataIndex("DiscPct").Text(Util.GetLang("DiscPct"))
                         .Width(75)
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt2")  
+                        .Renderer("renderQtyAmt2")
                         .Editor(Html.X().NumberField().ID("txtDetDiscPct").MaxValue(1000).MinValue(0).DecimalPrecision(2))
-                          
+
                         , X.Column().ID("colDiscAmt").DataIndex("DiscAmt").Text(Util.GetLang("LineDiscAmt"))
                         .Width(75)
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt")  
+                        .Renderer("renderQtyAmt")
                         .Editor(Html.X().NumberField().ID("txtDetDiscAmt").MaxValue(1000000000).MinValue(0).DecimalPrecision(0))
-                          
+
                         , X.Column().ID("colManuDiscAmt").DataIndex("ManuDiscAmt").Text(Util.GetLang("ManuDiscAmt"))
                         .Width(75)
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt")  
+                        .Renderer("renderQtyAmt")
                         .Editor(Html.X().NumberField().MaxValue(1000000000).MinValue(0).DecimalPrecision(0))
-                          
+
                         , X.Column().ID("colDocDiscAmt").DataIndex("DocDiscAmt").Text(Util.GetLang("DocDiscAmt"))
                         .Width(75)
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt")  
-                        //.Editor(Html.X().NumberField().MaxValue(1000000000).MinValue(0).DecimalPrecision(0))
-                          
-                        , X.Column().ID("colLineAmt").DataIndex("LineAmt").Text(Util.GetLang("ExtCost"))       
+                        .Renderer("renderQtyAmt")
+        //.Editor(Html.X().NumberField().MaxValue(1000000000).MinValue(0).DecimalPrecision(0))
+
+                        , X.Column().ID("colLineAmt").DataIndex("LineAmt").Text(Util.GetLang("ExtCost"))
                         .Width(75)
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt")  
+                        .Renderer("renderQtyAmt")
                         .Editor(Html.X().NumberField().ID("txtDetLineAmt").MaxValue(1000000000).MinValue(0).DecimalPrecision(0))
-                          
+
                         , X.Column().ID("colSOFee").DataIndex("SOFee").Text(Util.GetLang("SOFee"))
                         .Width(75)
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
+                        .Renderer("renderQtyAmt")
                         .Editor(Html.X().NumberField().MaxValue(1000000000).MinValue(0).DecimalPrecision(0))
-                          
+
                         , X.Column().ID("colBOCustID").DataIndex("BOCustID").Text(Util.GetLang("BOCustID"))
-                        .Width(120)               
-//                        .Editor(
-//                            Html.X().ComboBox()
-//                                .ID("cboBOCustID")
-//                                .ForceSelection(true)
-//                                .QueryMode(DataLoadMode.Local)
-//                                .TriggerAction(TriggerAction.All)
-//                                .ValueField("CustID")
-//                                .DisplayField("CustID")
-//                                .StoreID("StoreCustBO")
-//                                .MatchFieldWidth(false)
-//                                .ListConfig(
-//                                    Html.X()
-//                                        .BoundList()
-//                                        .Height(500)
-//                                        .ItemSelector(".x-boundlist-item")
-//                                        .LoadingText(Util.GetLang("Loading"))
-//                                        .Tpl(Html.X().XTemplate()
-//                                            .Html(@"
-//                <tpl for='.'>   
-//                    <tpl if='[xindex] == 1'>
-//                        <table style='width:500px !important'>
-//                            <tr>
-//                                <th>" + Util.GetLang("CustID") + @"</th>
-//                                <th>" + Util.GetLang("CustName") + @" 1</th>
-//                            </tr>
-//                    </tpl>
-//                    <tr class='x-boundlist-item'>
-//                        <td style='width:100px;'>{CustID}</td>
-//                        <td>{CustName}</td>
-//                    </tr>
-//                    <tpl if='[xcount-xindex] == 0'>
-//                        </table>
-//                    </tpl>
-//                </tpl>")))
-//                                .Triggers(new FieldTrigger() {Icon = TriggerIcon.Clear, HideTrigger = false})
-//                                .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })),
-                    
+                        .Width(120)
+        //                        .Editor(
+        //                            Html.X().ComboBox()
+        //                                .ID("cboBOCustID")
+        //                                .ForceSelection(true)
+        //                                .QueryMode(DataLoadMode.Local)
+        //                                .TriggerAction(TriggerAction.All)
+        //                                .ValueField("CustID")
+        //                                .DisplayField("CustID")
+        //                                .StoreID("StoreCustBO")
+        //                                .MatchFieldWidth(false)
+        //                                .ListConfig(
+        //                                    Html.X()
+        //                                        .BoundList()
+        //                                        .Height(500)
+        //                                        .ItemSelector(".x-boundlist-item")
+        //                                        .LoadingText(Util.GetLang("Loading"))
+        //                                        .Tpl(Html.X().XTemplate()
+        //                                            .Html(@"
+        //                <tpl for='.'>   
+        //                    <tpl if='[xindex] == 1'>
+        //                        <table style='width:500px !important'>
+        //                            <tr>
+        //                                <th>" + Util.GetLang("CustID") + @"</th>
+        //                                <th>" + Util.GetLang("CustName") + @" 1</th>
+        //                            </tr>
+        //                    </tpl>
+        //                    <tr class='x-boundlist-item'>
+        //                        <td style='width:100px;'>{CustID}</td>
+        //                        <td>{CustName}</td>
+        //                    </tr>
+        //                    <tpl if='[xcount-xindex] == 0'>
+        //                        </table>
+        //                    </tpl>
+        //                </tpl>")))
+        //                                .Triggers(new FieldTrigger() {Icon = TriggerIcon.Clear, HideTrigger = false})
+        //                                .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })),
+
                         , X.Column().ID("colSiteID").DataIndex("SiteID").Text(Util.GetLang("SiteID"))
                         .Width(120)
                         .Editor(
@@ -1233,9 +1247,9 @@
                             })
                             .LoadData()
                         )
-                    
+
                         , X.Column().ID("colBudgetID1").DataIndex("BudgetID1").Text(Util.GetLang("BudgetID"))
-                        .Width(120)                        
+                        .Width(120)
                         .Editor(
                             HQ.Combo().ID("cboDetBudgetID")
                             .HQProcedure("OM10100_pcBudget").HQColumnShow("BudgetID,Descr")
@@ -1252,7 +1266,7 @@
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
                             .LoadData()
-                        ) 
+                        )
 
                         , X.Column().ID("colTaxCat").DataIndex("TaxCat").Text(Util.GetLang("TaxCat"))
                         .Width(120)
@@ -1269,24 +1283,29 @@
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
                             .LoadData()
-                       ) 
-                                                  
-                       , X.Column().ID("colTaxID") .DataIndex("TaxID").Text(Util.GetLang("TaxID"))
+                       )
+
+                       , X.Column().ID("colTaxID").DataIndex("TaxID").Text(Util.GetLang("TaxID"))
                        .Width(120)
                        .Editor(
                             X.MultiCombo().ID("cboDetTaxID")
                             .StoreID("stoTax")
                             .ValueField("TaxID").DisplayField("TaxID")
                             .MatchFieldWidth(false)
-                            .ForceSelection(true)      
-                            .SubmitValue(false)    
-                            .Triggers(new FieldTrigger() {Icon = TriggerIcon.Clear, HideTrigger = false})
-                            .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                            
+                            .ForceSelection(false)
+                            .SubmitValue(false)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                lst.Expand.Fn = "cboDetTaxID_Expand";
+                             
+                            })
+
                         )
 
                         , X.Column().ID("colOrigOrderNbr").DataIndex("OrigOrderNbr").Text(Util.GetLang("OrigOrderNbr"))
-                        .Width(120)               
+                        .Width(120)
                     )
                     .Listeners(lst =>
                     {
@@ -1299,24 +1318,24 @@
                     .SelectionModel(Html.X().RowSelectionModel().ID("smlOrdDet").Mode(SelectionMode.Single))
                     .View(X.GridView().TrackOver(false))
                     .Plugins(Html.X().CellEditing().ClicksToEdit(1))
-                     
+
                 ) // tab Ship
-                
+
                 , X.Panel().ID("itmShipping").Title(Util.GetLang("ShipInfo"))
                 .PaddingSpec("5 0 5 0")
                 .Layout(LayoutType.VBox)
                 .AutoScroll(true)
                 .Items(
-                
+
                     X.FieldContainer()
                     .Layout(LayoutType.HBox)
                     .Items(
-                    
+
                         HQ.Combo().ID("cboReasonCode").Name("ReasonCode").DataIndex("ReasonCode").HQLangCode("ReasonCD")
                         .HQProcedure("OM10100_pcReasonCode").HQColumnShow("Code,Descr")
                         .DisplayField("Descr").ValueField("Code")
                         .LabelWidth(130).Width(500).HQHeightWidth(400, 300)
-                        .ForceSelection(true)               
+                        .ForceSelection(true)
                         .HQControlFocus("txtExpiryDate")
                         .Listeners(p =>
                         {
@@ -1324,23 +1343,23 @@
                         })
                         .LoadData()
                     )
-                    
+
                     , X.FieldContainer()
                     .Layout(LayoutType.HBox)
                     .Items(
-                    
+
                         HQ.TextBox().ID("txtOrigOrderNbr").Name("OrigOrderNbr").DataIndex("OrigOrderNbr").HQLangCode("OrigOrderNbr")
                         .LabelWidth(130).Width(250)
-                            
+
                         , HQ.NumberField().ID("txtOrderWeight").Name("OrderWeight").DataIndex("OrderWeight").HQLangCode("OrdWeight")
                         .LabelWidth(130).Width(250)
                         .HQControlFocus("txtUnitsShipped")
                     )
-                    
+
                     , X.FieldContainer()
                     .Layout(LayoutType.HBox)
                     .Items(
-                    
+
                         HQ.DateField().ID("txtExpiryDate").Name("ExpiryDate").DataIndex("ExpiryDate").HQLangCode("CancelDate")
                         .LabelWidth(130).Width(250)
                         .HQControlFocus("txtShipDate")
@@ -1349,65 +1368,65 @@
                         .LabelWidth(130).Width(250)
                         .HQControlFocus("txtFreightCost")
                     )
-                    
+
                     , X.FieldContainer()
                     .Layout(LayoutType.HBox)
                     .Items(
-                    
+
                         HQ.DateField().ID("txtShipDate").Name("ShipDate").DataIndex("ShipDate").HQLangCode("ShipDate")
                         .AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "ShipDate"))
                         .LabelWidth(130).Width(250)
                         .HQControlFocus("txtARDocDate")
-                        
+
                         , HQ.NumberField().ID("txtFreightCost").Name("FreightCost").DataIndex("FreightCost").HQLangCode("FreightCost")
                         .MinValue(0)
                         .LabelWidth(130).Width(250)
                         .HQControlFocus("txtFreightAllocAmt")
                     )
-                    
+
                     , X.FieldContainer()
                     .Layout(LayoutType.HBox)
                     .Items(
-                        
+
                         HQ.DateField().ID("txtARDocDate").Name("ARDocDate").DataIndex("ARDocDate").HQLangCode("InvcDate")
                         .AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "InvcDate"))
-                        .LabelWidth(130).Width(250) 
+                        .LabelWidth(130).Width(250)
                         .HQControlFocus("cboTerms")
-                        
+
                         , HQ.NumberField().ID("txtFreightAllocAmt").Name("FreightAllocAmt").HQLangCode("FreightAllocAmt")
                         .LabelWidth(130).Width(250)
                         .MinValue(0)
                         .HQControlFocus("txtPremFreightAmt")
                     )
-                    
+
                     , X.FieldContainer()
                     .Layout(LayoutType.HBox)
                     .Items(
-                        
+
                         HQ.TextBox().ID("txtARRefNbr").Name("ARRefNbr").DataIndex("ARRefNbr").HQLangCode("RefNbr")
                         .LabelWidth(130).Width(250)
-                       
+
                         , HQ.NumberField().ID("txtPremFreightAmt").Name("PremFreightAmt").DataIndex("PremFreightAmt").HQLangCode("PremFreightAmt")
                         .LabelWidth(130).Width(250)
                         .HQControlFocus("txtCustOrderNbr")
                     )
-                    
+
                     , X.FieldContainer()
                     .Layout(LayoutType.HBox)
                     .Items(
-                    
+
                         HQ.TextBox().ID("txtLastInvcNbr").Name("LastInvcNbr").DataIndex("LastInvcNbr").HQLangCode("LastInvcNbr")
                         .LabelWidth(130).Width(250)
-                        
+
                         , HQ.TextBox().ID("txtCustOrderNbr").Name("CustOrderNbr").DataIndex("CustOrderNbr").HQLangCode("CustOrderNbr")
                         .LabelWidth(130).Width(250)
                         .HQControlFocus("txtCmmnPct")
                     )
-                    
+
                     , X.FieldContainer()
                     .Layout(LayoutType.HBox)
                     .Items(
-                        
+
                         HQ.Combo().ID("cboTerms").Name("Terms").DataIndex("Terms").HQLangCode("Term")
                         .HQProcedure("OM10100_pcTerms").HQColumnShow("TermsID,Descr")
                         .LabelWidth(130).Width(250).HQHeightWidth(400, 300)
@@ -1420,19 +1439,19 @@
                             p.Focus.Handler = "HQ.focus='order';";
                         })
                         .LoadData()
-                            
+
                         , HQ.NumberField().ID("txtCmmnPct").Name("CmmnPct").DataIndex("CmmnPct").HQLangCode("CmmnPct")
                         .LabelWidth(130).Width(250)
                         .HQControlFocus("cboReasonCode")
                     )
                 ) // tab ship
-                
+
                 , X.Panel().ID("itmAddress").Title(Util.GetLang("Address"))
                 .PaddingSpec("5 0 5 0")
                 .Layout(LayoutType.Anchor).AutoScroll(true)
                 .Items(
                     X.Hidden().ID("txtShipPriority").Name("ShipPriority").DataIndex("ShipPriority")
-                    
+
                     , HQ.Combo().ID("cboShiptoID").Name("ShiptoID").DataIndex("ShiptoID").HQLangCode("ShiptoID")
                     .HQColumnShow("ShipToId")
                     .HQAutoLoad(false)
@@ -1448,67 +1467,67 @@
                         p.Change.Fn = "cboShiptoID_Change";
                         p.Focus.Handler = "HQ.focus='order';";
                     })
-                    
-                    ,  X.FieldContainer()
+
+                    , X.FieldContainer()
                     .PaddingSpec("5 10 0 10")
                     .Layout(LayoutType.HBox)
                     .Items(
-                    
+
                         X.FieldSet()
                         .Title("<span style=\"font-size:12px;font-weight:bold;\">" + Util.GetLang("Billing") + "</span>")
                         .MinWidth(400)
                         .Layout(LayoutType.VBox)
                         .PaddingSpec("0 10 5 10")
                         .Items(
-                        
+
                             HQ.TextBox().ID("txtBillName").Name("BillName").DataIndex("BillName").HQLangCode("Name")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtBillAttn")
-                            
+
                             , HQ.TextBox().ID("txtBillAttn").Name("BillAttn").DataIndex("BillAttn").HQLangCode("Attn")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtBillAddrLine1")
-                            
+
                             , HQ.TextBox().ID("txtBillAddrLine1").Name("BillAddrLine1").DataIndex("BillAddrLine1").FieldLabel(Util.GetLang("Address1"))
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtBillAddrLine2")
-                            
+
                             , HQ.TextBox().ID("txtBillAddrLine2").Name("BillAddrLine2").DataIndex("BillAddrLine2").HQLangCode("Address2")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtBillZip")
-                            
-                            
+
+
                             , HQ.TextBox().ID("txtBillZip").Name("BillZip").DataIndex("BillZip").HQLangCode("Zip")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtBillPhone")
-                            
+
                             , HQ.TextBox().ID("txtBillPhone").Name("BillPhone").DataIndex("BillPhone").HQLangCode("Phone")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtBillFax")
-                            
-                            
+
+
                             , HQ.TextBox().ID("txtBillFax").Name("BillFax").DataIndex("BillFax").HQLangCode("Fax")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtBillCity")
-                            
-                            
+
+
                             , HQ.TextBox().ID("txtBillCity").Name("BillCity").DataIndex("BillCity").HQLangCode("City")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtBillStateID")
-                           
+
                             , HQ.TextBox().ID("txtBillStateID").Name("BillStateID").DataIndex("BillStateID").HQLangCode("State")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtBillCntryID")
-                            
+
                             , HQ.TextBox().ID("txtBillCntryID").Name("BillCntryID").DataIndex("BillCntryID").HQLangCode("Country")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtTaxRegNbr")
-                            
+
                             , HQ.TextBox().ID("txtTaxRegNbr").Name("TaxRegNbr").DataIndex("TaxRegNbr").HQLangCode("TaxRegNbr")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtShipName")
                         )
-                        
+
                         , X.FieldSet()
                         .MarginSpec("0 0 0 10")
                         .Title("<span style=\"font-size:12px;font-weight:bold;\">" + Util.GetLang("Shipping") + "</span>")
@@ -1516,44 +1535,44 @@
                         .Layout(LayoutType.VBox)
                         .PaddingSpec("0 10 5 10")
                         .Items(
-                        
+
                             HQ.TextBox().ID("txtShipName").Name("ShipName").DataIndex("ShipName").HQLangCode("Name")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtShipAttn")
-                            
-                            , HQ.TextBox().ID("txtShipAttn").Name("ShipAttn").DataIndex("ShipAttn").HQLangCode("Address1") 
+
+                            , HQ.TextBox().ID("txtShipAttn").Name("ShipAttn").DataIndex("ShipAttn").HQLangCode("Address1")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtShipAddrLine1")
-                            
+
                             , HQ.TextBox().ID("txtShipAddrLine1").Name("ShipAddrLine1").DataIndex("ShipAddrLine1").HQLangCode("Address1")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtShipAddrLine2")
-                            
+
                             , HQ.TextBox().ID("txtShipAddrLine2").Name("ShipAddrLine2").DataIndex("ShipAddrLine2").HQLangCode("Address2")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtShipZip")
-                            
-                            
+
+
                             , HQ.TextBox().ID("txtShipZip").Name("ShipZip").DataIndex("ShipZip").HQLangCode("Zip")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtShipPhone")
-                            
+
                             , HQ.TextBox().ID("txtShipPhone").Name("ShipPhone").DataIndex("ShipPhone").HQLangCode("Phone")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtShipFax")
-                            
+
                             , HQ.TextBox().ID("txtShipFax").Name("ShipFax").DataIndex("ShipFax").HQLangCode("Fax")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtShipCity")
-                            
+
                             , HQ.TextBox().ID("txtShipCity").Name("ShipCity").DataIndex("ShipCity").HQLangCode("City")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtShipStateID")
-                            
+
                             , HQ.TextBox().ID("txtShipStateID").Name("ShipStateID").DataIndex("ShipStateID").HQLangCode("State")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("txtShipCntryID")
-                            
+
                             , HQ.TextBox().ID("txtShipCntryID").Name("ShipCntryID").DataIndex("ShipCntryID").HQLangCode("Country")
                             .LabelWidth(110).Width(480)
                             .HQControlFocus("cboShiptoID")
@@ -1562,86 +1581,86 @@
                         )
                     )
                 ) // tab Address
-                
+
                 , X.Panel().ID("itmTax").Title(Util.GetLang("Tax"))
                 .Layout(LayoutType.Anchor).AnchorHorizontal("100%").AnchorVertical("100%")
                 .Items(
-            
+
                     X.GridPanel().ID("grdTaxTrans")
                     .StoreID("stoTaxTrans")
                     .AnchorHorizontal("100%").AnchorVertical("50%")
                     .ColumnModel(
-                
+
                         X.RowNumbererColumn()
-                    
+
                         , X.Column().DataIndex("LineRef").Text(Util.GetLang("LineRef"))
                         .Width(120)
-                        
+
                         , X.Column().DataIndex("TaxID").Text(Util.GetLang("TaxID"))
                         .Width(120)
-                        
+
                         , X.Column().DataIndex("TaxRate").Text(Util.GetLang("TaxRate"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
+                        .Renderer("renderQtyAmt")
                         .Width(120)
-                        
+
                         , X.Column().DataIndex("TaxAmt").Text(Util.GetLang("TaxAmt"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
+                        .Renderer("renderQtyAmt")
                         .Width(120)
-                        
+
                         , X.Column().DataIndex("TxblAmt").Text(Util.GetLang("TxblAmt"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
+                        .Renderer("renderQtyAmt")
                         .Width(120)
-                        
+
                         , X.Column().DataIndex("TaxLevel").Text(Util.GetLang("Level"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
-                        .Width(120)  
+                        .Renderer("renderQtyAmt")
+                        .Width(120)
                     )
                     .SelectionModel(Html.X().RowSelectionModel().ID("smlTaxTrans").Mode(SelectionMode.Single))
                     .View(X.GridView().TrackOver(false)) // grid tax trans
-                
+
                     , X.Panel()
                     .Layout(LayoutType.VBox).AnchorVertical("5%")
                     .Border(false)
-                    .LayoutConfig(config => { config.Add(new VBoxLayoutConfig() {Align = VBoxAlign.Center}); })
+                    .LayoutConfig(config => { config.Add(new VBoxLayoutConfig() { Align = VBoxAlign.Center }); })
                     .Items(
-                
+
                         X.Label()
                         .Margin(5).Text(Util.GetLang("TaxTotal")).AnchorHorizontal("100%")
                     )
-                
+
                     , X.GridPanel().ID("grdTaxDoc")
                     .AnchorHorizontal("100%").AnchorVertical("45%")
                     .StoreID("stoTaxDoc")
                     .ColumnModel(
-                
+
                         X.RowNumbererColumn()
-                    
+
                         , X.Column().DataIndex("TaxID").Text(Util.GetLang("TaxID"))
                         .Width(120)
-                        
+
                         , X.Column().DataIndex("TaxRate").Text(Util.GetLang("TaxRate"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
+                        .Renderer("renderQtyAmt")
                         .Width(120)
-                        
+
                         , X.Column().DataIndex("TaxAmt").Text(Util.GetLang("TaxAmt"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
-                        .Width(120)  
-                      
+                        .Renderer("renderQtyAmt")
+                        .Width(120)
+
                         , X.Column().DataIndex("TxblAmt").Text(Util.GetLang("TxblAmt"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
-                        .Width(120)   
+                        .Renderer("renderQtyAmt")
+                        .Width(120)
                     )
                     .SelectionModel(Html.X().RowSelectionModel().ID("smlTaxDoc").Mode(SelectionMode.Single))
                     .View(X.GridView().TrackOver(false))
                 ) // tab Tax    
-                
+
                 , X.Panel().ID("itemDiscount").Title(Util.GetLang("Discount"))
                 .Layout(LayoutType.Fit)
                 .AutoScroll(true)
@@ -1650,51 +1669,51 @@
                     .ID("grdDisc")
                     .StoreID("stoOrdDisc")
                     .ColumnModel(
-                    
+
                         X.RowNumbererColumn()
-                        
+
                         , X.Column().DataIndex("DiscID")
                         .Text(Util.GetLang("DiscID"))
-                        
+
                         , X.Column().DataIndex("DiscSeq").Text(Util.GetLang("DiscSeq"))
-                        
+
                         , X.Column().DataIndex("DiscBreakLineRef").Text(Util.GetLang("LineRef"))
-                        
+
                         , X.Column().DataIndex("DiscType").Text(Util.GetLang("Type"))
 
-                        , X.Column().DataIndex("DiscAmt").Text(Util.GetLang("DiscAmt")) 
+                        , X.Column().DataIndex("DiscAmt").Text(Util.GetLang("DiscAmt"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
-                         
+                        .Renderer("renderQtyAmt")
+
                         , X.Column().DataIndex("DisctblAmt").Text(Util.GetLang("DisctblAmt"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
-                        
+                        .Renderer("renderQtyAmt")
+
                         , X.Column().DataIndex("DisctblQty").Text(Util.GetLang("Qty"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
-                        
+                        .Renderer("renderQtyAmt")
+
                         , X.Column().DataIndex("FreeItemID").Text(Util.GetLang("FreeItemID"))
-                        
+
                         , X.Column().DataIndex("FreeItemQty").Text(Util.GetLang("FreeItemQty"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
-                        
+                        .Renderer("renderQtyAmt")
+
                         , X.Column().DataIndex("OrigFreeItemQty").Text(Util.GetLang("OrigFreeItemQty"))
                         .Align(Alignment.Right)
-                        .Renderer("renderQtyAmt") 
-                        
+                        .Renderer("renderQtyAmt")
+
                         , X.Column().DataIndex("SlsPerID").Text(Util.GetLang("SlsPerID"))
-                        
+
                         , X.Column().DataIndex("UserOperationLog").Text(Util.GetLang("UserLog"))
                         .Flex(1).MinWidth(120)
-                        
+
                     )
                     .SelectionModel(Html.X().RowSelectionModel().ID("smlOrdDisc").Mode(SelectionMode.Single))
                     .View(X.GridView().TrackOver(false))
                 ) // tab Discount
             ) // tab Control                      
-        ) 
+        )
     )
 )
 

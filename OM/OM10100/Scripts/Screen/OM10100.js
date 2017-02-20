@@ -839,6 +839,12 @@ var txtOrdDiscAmt_Change = function () {
 
 }
 
+var cboDetTaxID_Expand=function()
+{
+    if (App.cboDetTaxID.getValue() == '*') {
+        App.cboDetTaxID.selectAll();
+    } else HQ.combo.expand(App.cboDetTaxID, ',');
+}
 var grdOrdDet_BeforeEdit = function (item, e) {
     if (App.grdOrdDet.isLock) {
         return false;
@@ -919,7 +925,7 @@ var grdOrdDet_BeforeEdit = function (item, e) {
             }
         });
     }
-    if (Ext.isEmpty(record.data.TaxID)) {
+    if (Ext.isEmpty(record.data.TaxID)) {       
         record.data.TaxID = '*';
     }
 
@@ -932,6 +938,7 @@ var grdOrdDet_BeforeEdit = function (item, e) {
     record.commit();
 
     App.cboDetUnitDesc.setValue('');
+
 }
 var grdOrdDet_SelectionChange = function (item, selected) {
     HQ.focus = 'det';
@@ -960,9 +967,9 @@ var grdOrdDet_Edit = function (item, e) {
     var key = e.field;
     if (Object.keys(e.record.modified).length > 0) {
         App.grdOrdDet.isChange = true;
-        if (e.record.invt == undefined) {
+        //if (e.record.invt == undefined) {
             e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
-        }
+        //}
         var invt = e.record.invt;
         if (!Ext.isEmpty(invt)) {
 
@@ -2081,6 +2088,8 @@ var checkExitEdit = function (row) {
             det.InvtID = '';
             det.BarCode = '';
             record.commit();
+            App.grdOrdDet.view.loadMask.hide();
+            App.grdOrdDet.view.loadMask.setDisabled(false);
             return;
         }
 
@@ -2124,7 +2133,7 @@ var checkExitEdit = function (row) {
     }
     
     App.grdOrdDet.view.loadMask.hide();
-    App.grdOrdDet.view.loadMask.setDisabled(false)
+    App.grdOrdDet.view.loadMask.setDisabled(false);
 }
 var checkExitEditLot = function (row) {
     var key = row.field;
