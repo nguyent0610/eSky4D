@@ -268,6 +268,11 @@ var frmMain_BoxReady = function () {
     App.cboLotUnitDesc.lastQuery = '';
 
     if (HQ.checkSales) App.cboSlsPerID.setReadOnly(true);
+    if (HQ.checkKM) {
+        App.txtVolDiscPct.setReadOnly(true);
+        App.txtOrdDiscAmt.setReadOnly(true);
+        
+    }
     HQ.common.showBusy(true, HQ.waitMsg);
 }
 var frmMain_FieldChange = function (item, field, newValue, oldValue) {
@@ -854,6 +859,10 @@ var grdOrdDet_BeforeEdit = function (item, e) {
 
     if (!App.txtOrderDate.validate()) {
         HQ.message.show(1000, [HQ.common.getLang('OrderDate')], '', true);
+        return false;
+    }
+
+    if (HQ.checkKM && (e.field == 'DiscPct' || e.field == 'DiscAmt')) {
         return false;
     }
 
@@ -2781,6 +2790,11 @@ var setStatusForm = function () {
         App.cboCustID.setReadOnly(true);
     }
     if (HQ.checkSales) App.cboSlsPerID.setReadOnly(true);
+    if (HQ.checkKM) {
+        App.txtVolDiscPct.setReadOnly(true);
+        App.txtOrdDiscAmt.setReadOnly(true);
+
+    }
 }
 
 var checkDetAdd = function () {

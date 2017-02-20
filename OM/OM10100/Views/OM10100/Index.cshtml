@@ -12,10 +12,11 @@
     ViewBag.Title = "OM10100";
     var acc = Session["OM10100"] as AccessRight;
     var _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-    var conFig = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "OM101CHECKSALES");
+    var conFig = _sys.SYS_Configurations.Where(p => p.Code == "OM101CHECKSALES" || p.Code == "OM101CHECKKM").ToList();
 
 
-    ViewBag.checkSales = conFig == null ? false : (conFig.IntVal == 1 ? true : false);
+    ViewBag.checkSales = conFig.FirstOrDefault(p => p.Code == "OM101CHECKSALES") == null ? false : (conFig.FirstOrDefault(p => p.Code == "OM101CHECKSALES").IntVal == 1 ? true : false);
+    ViewBag.checkKM = conFig.FirstOrDefault(p => p.Code == "OM101CHECKKM") == null ? false : (conFig.FirstOrDefault(p => p.Code == "OM101CHECKKM").IntVal == 1 ? true : false);
     
 }
 <!DOCTYPE html>
@@ -41,7 +42,8 @@
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-        HQ.checkSales = HQ.util.toBool('@ViewBag.checkSales');;
+        HQ.checkSales = HQ.util.toBool('@ViewBag.checkSales');
+        HQ.checkKM = HQ.util.toBool('@ViewBag.checkKM');;
 
     </script>  
     <title>@ViewBag.Title</title>
