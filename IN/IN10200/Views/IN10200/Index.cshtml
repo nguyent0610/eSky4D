@@ -46,7 +46,7 @@
 @X.ProgressBarPager()<!--Khi cache cho grid -->   
 @(
     X.Store().ID("stoBatch")
-    .AutoLoad(false)
+    .AutoLoad(false).PageSize(20)
     .Model(Util.GenerateModel(typeof(IN10200_pcBatch_Result), "mdlBatch","BatNbr"))
     .Proxy(
         X.AjaxProxy()

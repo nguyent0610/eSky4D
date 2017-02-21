@@ -760,7 +760,7 @@ namespace IN10200.Controllers
         {
             query = query ?? string.Empty;
             if (page != 1) query = string.Empty;
-            var lstBatch = _app.IN10200_pcBatch(branchID, query, start, start + 20).ToList();
+            var lstBatch = _app.IN10200_pcBatch(branchID, query, start + 1, start + 20).ToList();
             var paging = new Paging<IN10200_pcBatch_Result>(lstBatch, lstBatch.Count > 0 ? lstBatch[0].TotalRecords.Value : 0);
             return this.Store(paging.Data, paging.TotalRecords);
         }
