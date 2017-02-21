@@ -45,7 +45,7 @@
 
 @(
     X.Store().ID("stoBatch")
-    .AutoLoad(false)
+    .AutoLoad(false).PageSize(20)
     .Model(Util.GenerateModel(typeof(IN10100_pcBatch_Result), "mdlBatch","BatNbr"))
     .Proxy(
         X.AjaxProxy()
