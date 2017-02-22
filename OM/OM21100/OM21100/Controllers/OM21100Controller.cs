@@ -132,6 +132,59 @@ namespace OM21100.Controllers
             return this.Direct();
         }
        
+        // Tree Free Item
+        [DirectMethod]
+        public ActionResult OM21100LoadTreeFreeItem(string panelID)
+        {
+            var a = new ItemsCollection<Plugin>();
+            a.Add(Html.X().TreeViewDragDrop().DDGroup("InvtID").EnableDrop(false));
+
+            TreeView v = new TreeView();
+            //v.Plugins.Add(a);
+            v.Copy = true;
+            TreePanel tree = new TreePanel()
+            {
+                ViewConfig = v
+            };
+            tree.ID = "treePanelFreeItem";
+            tree.ItemID = "treePanelFreeItem";
+            tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("NodeLevel", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("ParentRecordID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("InvtID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Descr", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("CnvFact", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Unit", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("InvtType", ModelFieldType.String));
+            tree.Border = false;
+            tree.RootVisible = true;
+            tree.Animate = true;
+
+            var root = new Node() { };
+
+            var hierarchy = new SI_Hierarchy()
+            {
+                RecordID = 0,
+                NodeID = "",
+                ParentRecordID = 0,
+                NodeLevel = 1,
+                Descr = "Root",
+                Type = "I"
+            };
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
+            tree.Root.Add(node);
+
+
+            var treeItem = X.GetCmp<Panel>(panelID);
+            tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelFreeItem_checkChange";
+            tree.Listeners.BeforeItemExpand.Handler = "App.treePanelFreeItem.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
+            tree.Listeners.AfterItemExpand.Handler = "App.treePanelFreeItem.el.unmask();Ext.resumeLayouts(true);";
+            tree.AddTo(treeItem);
+            return this.Direct();
+        }
+
+
         //OM21100LoadTreeInventory
 
         [DirectMethod]
@@ -234,6 +287,7 @@ namespace OM21100.Controllers
             tree.AddTo(treeBranch);
             return this.Direct();
         }
+        
         [DirectMethod]
         public ActionResult OM21100GetTreeCustomer(string panelID)
         {
@@ -1425,7 +1479,6 @@ namespace OM21100.Controllers
                     }
                 }                
             }
-
             foreach (var currentCust in lstDiscCust)
             {
                 var cust = (from p in _db.OM_DiscCust

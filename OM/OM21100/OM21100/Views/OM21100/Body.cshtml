@@ -346,107 +346,169 @@
                                     ls.Render.Handler = "HQ.common.control_render(this,'grdDiscBreak');";
                                 }) // grdDiscBreak
 
-                                , X.GridPanel().ID("grdFreeItem")
-                                .Title(Util.GetLang("FreeItemList")).TitleAlign(TitleAlign.Center)
-                                .Scroll(ScrollMode.Both).Flex(4)
-                                .Layout(LayoutType.Fit).Region(Region.Center)
-                                .View(X.GridView().TrackOver(false))
-                                .SortableColumns(false)
-                                .StoreID("stoFreeItem")
-                                .ColumnModel(
-                                    //X.RowNumbererColumn().Width(40)
-                                    X.Column().Text(Util.GetLang("InvtID")).DataIndex("FreeItemID")
-                                    .Editor(
-                                        HQ.Combo().ID("cboFreeItemID")
-                                        .HQProcedure("OM21100_pcInventoryActiveByBranch")
-                                        .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color")
-                                        .HQHeightWidth(400, 300)
-                                        .ValueField("InvtID").DisplayField("InvtID")
-                                        .ForceSelection(true).SelectOnFocus(true)
-                                        .HQParam(new StoreParameterCollection() { 
-                                            new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
+                            , X.Panel().ID("pnlFreeItem")
+                                .Title(Util.GetLang("FreeItemList"))
+                                .TitleAlign(TitleAlign.Center)
+                                .Region(Region.Center).Flex(4)
+                                .Layout(LayoutType.Border)
+                                .Items(
+                                    X.Panel().ID("treeFreeItem")
+                                    .Region(Region.West).Flex(45)
+                                    .MinWidth(150).Split(true).AutoScroll(true)
+                                    .DirectEvents(de =>
+                                    {
+                                        de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeFreeItem"));
+                                        de.AfterRender.Url = Url.Action("OM21100LoadTreeFreeItem");
+                                        //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                                        de.AfterRender.CleanRequest = true;
+                                        de.AfterRender.Method = HttpMethod.POST;
+                                        de.AfterRender.Success = "App.treePanelFreeItem.getRootNode().expand()";
+                                        de.AfterRender.Timeout = 60000;
+                                        de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                                        de.AfterRender.EventMask.ShowMask = true;
+                                        de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                                        de.AfterRender.EventMask.MinDelay = 500;
+                                    })
+                                    .BottomBar(
+                                        X.Toolbar()
+                                        .Items(
+                                            X.ToolbarFill()
+
+                                            , HQ.Button()
+                                            .HQLangCode("Expand")
+                                            .Icon(Icon.BulletTogglePlus)
+                                            .Handler("DiscDefintion.Event.btnFreeItemExpand_click")
+
+                                            , X.ToolbarSpacer()
+                                            , X.ToolbarSeparator()
+                                            , X.ToolbarSpacer()
+
+                                            , HQ.Button()
+                                            .HQLangCode("Collapse")
+                                            .Icon(Icon.BulletToggleMinus)
+                                            .Handler("DiscDefintion.Event.btnFreeItemCollapse_click")
+
+                                            , X.ToolbarFill()
+                                        )
+                                    ) // treeBranch
+
+                                    // Second Column
+                                    , X.Panel()
+                                    .Region(Region.Center).Flex(15)
+                                    .Layout(LayoutType.VBox)
+                                    .MinWidth(50)
+                                    .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                                    .Items(
+                                        HQ.Button()
+                                        .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                                        .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                                        .Handler("DiscDefintion.Event.btnAddAllFreeItem_click")
+
+                                        , HQ.Button()
+                                        .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                                        .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                                        .Handler("DiscDefintion.Event.btnAddFreeItem_click")
+
+                                        , HQ.Button()
+                                        .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                                        .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                                        .Handler("DiscDefintion.Event.btnDelFreeItem_click")
+
+                                        , HQ.Button()
+                                        .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                                        .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                                        .Handler("DiscDefintion.Event.btnDelAllFreeItem_click")
+                                    ) // Container
+                                    
+                                    , X.GridPanel().ID("grdFreeItem")
+                                    //.Title(Util.GetLang("FreeItemList"))
+                                   // .Scroll(ScrollMode.Both)
+                                    //.Layout(LayoutType.Fit)
+                                    .Region(Region.East).Flex(60)
+                                    .View(X.GridView().TrackOver(false))
+                                    .SortableColumns(false)
+                                    .StoreID("stoFreeItem")
+                                    .ColumnModel(
+                                        //X.RowNumbererColumn().Width(40)
+                                        X.Column().Text(Util.GetLang("InvtID")).DataIndex("FreeItemID")
+                                        .Editor(
+                                            HQ.Combo().ID("cboFreeItemID")
+                                            .HQProcedure("OM21100_pcInventoryActiveByBranch")
+                                            .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color")
+                                            .HQHeightWidth(400, 300)
+                                            .ValueField("InvtID").DisplayField("InvtID")
+                                            .ForceSelection(true).SelectOnFocus(true)
+                                            .HQParam(new StoreParameterCollection() { 
+                                                new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
+                                            })
+                                            .LoadData()
+                                        )
+
+                                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
+                                        .Renderer("DiscDefintion.Process.renderFreeItemName")
+
+                                        , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDescr")
+                                        .Renderer("DiscDefintion.Process.renderFreeItemName")
+                                        .Editor(
+                                            HQ.Combo().ID("cboGUnitDescr")
+                                            .HQProcedure("OM21100_pcClassUnitDescrByInvtID")//ok
+                                            .HQColumnShow("FromUnit,ClassID")
+                                            .HQHeightWidth(400, 300)
+                                            .ValueField("FromUnit").DisplayField("FromUnit")
+                                            .ForceSelection(true).SelectOnFocus(true)
+                                            .HQParam(new StoreParameterCollection() { 
+                                                new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdFreeItem,'FreeItemID')",ParameterMode.Raw)//se fix lai
+                                            })
+                                            .LoadData()
+                                            .Listeners(x => x.Expand.Handler = "this.store.reload()")
+                                        )
+
+                                        , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("FreeItemQty")
+                                        .Align(Alignment.Right).Format("0,000")
+                                        .Editor(
+                                            HQ.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                        )
+
+                                        , X.Column().Text(Util.GetLang("BudgetID")).DataIndex("FreeItemBudgetID")
+                                        .Editor(
+                                            HQ.Combo().ID("cboGFreeItemBudgetID")
+                                            .HQProcedure("OM21100_pcBudgetFreeItem").HQColumnShow("BudgetID,Descr")
+                                            .HQHeightWidth(400, 300)
+                                            .ValueField("BudgetID").DisplayField("BudgetID")
+                                            .ForceSelection(true).SelectOnFocus(true)
+                                            .HQParam(new StoreParameterCollection() { 
+                                                new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
+                                            })
+                                            .LoadData()
+                                        )
+
+                                        , X.CommandColumn()
+                                        .Commands(
+                                            X.GridCommand()
+                                            .Text(Util.GetLang("Reject"))
+                                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                            .CommandName("reject")
+                                            .Icon(Icon.ArrowUndo)
+                                        )
+                                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                        .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
+                                    )
+                                    .SelectionModel(X.RowSelectionModel().ID("slmFreeItem").Mode(SelectionMode.Multi))
+                                    .Plugins(
+                                        X.CellEditing()
+                                        .ClicksToEdit(1)
+                                        .Listeners(ls =>
+                                        {
+                                            ls.BeforeEdit.Fn = "DiscDefintion.Event.grdFreeItem_beforeEdit";
+                                            ls.Edit.Fn = "DiscDefintion.Event.grdFreeItem_edit";
+                                            ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                                         })
-                                        .LoadData()
                                     )
-
-                                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
-                                    .Renderer("DiscDefintion.Process.renderFreeItemName")
-
-                                    , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDescr")
-                                    .Renderer("DiscDefintion.Process.renderFreeItemName")
-                                    .Editor(
-                                        HQ.Combo().ID("cboGUnitDescr")
-                                        .HQProcedure("OM21100_pcClassUnitDescrByInvtID")//ok
-                                        .HQColumnShow("FromUnit,ClassID")
-                                        .HQHeightWidth(400, 300)
-                                        .ValueField("FromUnit").DisplayField("FromUnit")
-                                        .ForceSelection(true).SelectOnFocus(true)
-                                        .HQParam(new StoreParameterCollection() { 
-                                            new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdFreeItem,'FreeItemID')",ParameterMode.Raw)//se fix lai
-                                        })
-                                        .LoadData()
-                                        .Listeners(x => x.Expand.Handler = "this.store.reload()")
-                                    )
-
-                                    //, X.Column().Text(Util.GetLang("SiteID")).DataIndex("FreeITemSiteID")
-                                    //.Editor(
-                                    //    HQ.Combo().ID("cboGFreeItemSite")
-                                    //    .HQProcedure("OM21100_pcSite").HQColumnShow("SiteID,Name")
-                                    //    .HQHeightWidth(400, 300)
-                                    //    .ValueField("SiteID").DisplayField("SiteID")
-                                    //    .ForceSelection(true).SelectOnFocus(true)
-                                    //    .HQParam(new StoreParameterCollection() { 
-                                    //        new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
-                                    //        ,new StoreParameter("@UserID","HQ.userName",ParameterMode.Raw)
-                                    //    })
-                                    //    .LoadData()
-                                    //)
-
-                                    , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("FreeItemQty")
-                                    .Align(Alignment.Right).Format("0,000")
-                                    .Editor(
-                                        HQ.NumberField().SelectOnFocus(true).MinValue(0)
-                                    )
-
-                                    , X.Column().Text(Util.GetLang("BudgetID")).DataIndex("FreeItemBudgetID")
-                                    .Editor(
-                                        HQ.Combo().ID("cboGFreeItemBudgetID")
-                                        .HQProcedure("OM21100_pcBudgetFreeItem").HQColumnShow("BudgetID,Descr")
-                                        .HQHeightWidth(400, 300)
-                                        .ValueField("BudgetID").DisplayField("BudgetID")
-                                        .ForceSelection(true).SelectOnFocus(true)
-                                        .HQParam(new StoreParameterCollection() { 
-                                            new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
-                                        })
-                                        .LoadData()
-                                    )
-
-                                    , X.CommandColumn()
-                                    .Commands(
-                                        X.GridCommand()
-                                        .Text(Util.GetLang("Reject"))
-                                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                                        .CommandName("reject")
-                                        .Icon(Icon.ArrowUndo)
-                                    )
-                                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                                    .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
-                                )
-                                .SelectionModel(X.RowSelectionModel().ID("slmFreeItem").Mode(SelectionMode.Multi))
-                                .Plugins(
-                                    X.CellEditing()
-                                    .ClicksToEdit(1)
                                     .Listeners(ls =>
                                     {
-                                        ls.BeforeEdit.Fn = "DiscDefintion.Event.grdFreeItem_beforeEdit";
-                                        ls.Edit.Fn = "DiscDefintion.Event.grdFreeItem_edit";
-                                        ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
-                                    })
+                                        ls.Render.Handler = "HQ.common.control_render(this,'grdFreeItem')";
+                                    }) // grdFreeItem
                                 )
-                                .Listeners(ls =>
-                                {
-                                    ls.Render.Handler = "HQ.common.control_render(this,'grdFreeItem')";
-                                }) // grdFreeItem
                             ) // Panel
                         )// pnlDiscSeq
 
