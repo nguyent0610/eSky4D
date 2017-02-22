@@ -410,8 +410,23 @@
           <Parameter Name="DiscSeq" Type="varchar" Mode="In" />
           <Parameter Name="LineRef" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="OM21100_ptChannel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="OM21100_ptCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM21100_ptCustClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM21100_ptCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="OM21100_ptInventory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -499,6 +514,21 @@
           <EntitySet Name="IN_Inventory" EntityType="OM21100Model.IN_Inventory" />
           <FunctionImport Name="OM21100_ptInventory" ReturnType="Collection(OM21100Model.OM21100_ptInventory_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM21100_ptChannel" ReturnType="Collection(OM21100Model.OM21100_ptChannel_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM21100_ptCustClass" ReturnType="Collection(OM21100Model.OM21100_ptCustClass_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM21100_ptCustomer" ReturnType="Collection(OM21100Model.OM21100_ptCustomer_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
@@ -1004,6 +1034,25 @@
           <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
           <Property Type="Double" Name="CnvFact" Nullable="false" />
           <Property Type="String" Name="InvtType" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="OM21100_ptChannel_Result">
+          <Property Type="String" Name="Channel" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="OM21100_ptCustClass_Result">
+          <Property Type="String" Name="Channel" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="OM21100_ptCustomer_Result">
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Addr1" Nullable="true" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Terms" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Channel" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ClassID" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1542,6 +1591,37 @@
                 <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
                 <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
                 <ScalarProperty Name="InvtType" ColumnName="InvtType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21100_ptChannel" FunctionName="eBiz4DWebAppModel.Store.OM21100_ptChannel">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21100Model.OM21100_ptChannel_Result">
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21100_ptCustClass" FunctionName="eBiz4DWebAppModel.Store.OM21100_ptCustClass">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21100Model.OM21100_ptCustClass_Result">
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21100_ptCustomer" FunctionName="eBiz4DWebAppModel.Store.OM21100_ptCustomer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21100Model.OM21100_ptCustomer_Result">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

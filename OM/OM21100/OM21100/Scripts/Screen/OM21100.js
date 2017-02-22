@@ -935,6 +935,7 @@ var DiscDefintion = {
             });
             return childNodes;
         },
+
         renderCpnyName: function (value) {
             var record = App.cboGCpnyID.store.findRecord("CpnyID", value);
             if (record) {
@@ -1030,6 +1031,7 @@ var DiscDefintion = {
                 }
             }
         },
+
         deleteAllBundle: function (item) {
             if (item == "yes") {
                 App.grdBundle.store.suspendEvents();
@@ -1054,7 +1056,26 @@ var DiscDefintion = {
                    // HQ.store.insertBlank(App.grdBundle.store, ['InvtID']);
                 }
             }
-        }
+        },
+        deleteAllCust: function (item) {
+            if (item == "yes") {
+                App.grdDiscCust.store.suspendEvents();
+                while (App.grdDiscCust.store.data.length > 0) {
+                    App.grdDiscCust.store.removeAt(0);
+                }
+                App.grdDiscCust.store.resumeEvents();
+                //App.grdDiscItem.store.clearData();
+                App.grdDiscCust.view.refresh();
+                var invtBlank = HQ.store.findRecord(App.grdDiscCust.store, ['CustID'], ['']);
+                if (!invtBlank) {
+                    App.grdDiscCust.store.insert(0, Ext.create("App.mdlDiscCust", {
+                        DiscID: App.cboDiscID.getValue(),
+                        DiscSeq: App.cboDiscSeq.getValue(),
+                        CustID: ''
+                    }));
+                }
+            }
+        },
     },
 
     Event: {
@@ -1448,6 +1469,15 @@ var DiscDefintion = {
             }
         },
 
+        treePanelCustomer_checkChange: function (node, checked) {
+            if (node.hasChildNodes()) {
+                node.eachChild(function (childNode) {
+                    childNode.set('checked', checked);
+                    DiscDefintion.Event.treePanelCustomer_checkChange(childNode, checked);
+                });
+            }
+        },
+
         btnExpand_click: function (btn, e, eOpts) {
             App.treePanelBranch.expandAll();
         },
@@ -1474,6 +1504,16 @@ var DiscDefintion = {
 
         btnBundleCollapse_click: function (btn, e, eOpts) {
             App.treePanelBundle.collapseAll();
+        },
+
+        btnCustomerExpand_click: function (btn, e, eOpts) {
+            App.treePanelCustomer.getStore().suspendEvents();
+            App.treePanelCustomer.expandAll();
+            App.treePanelCustomer.getStore().resumeEvents();
+        },
+
+        btnCustomerCollapse_click: function (btn, e, eOpts) {
+            App.treePanelCustomer.collapseAll();
         },
 
         btnAddAll_click: function (btn, e, eOpts) {
@@ -1621,6 +1661,7 @@ var DiscDefintion = {
                         var allNodes = DiscDefintion.Process.getLeafNodes(App.treePanelInvt.getRootNode());
                         if (allNodes && allNodes.length > 0) {
                             App.grdDiscItem.store.suspendEvents();
+                            
                             var invtBlank = HQ.store.findRecord(App.grdDiscItem.store, ['InvtID'], ['']);
                             if (!invtBlank) {
                                 var idx = App.grdDiscItem.store.length > 0 ? App.grdDiscItem.store.length -1 : 0;
@@ -1633,28 +1674,29 @@ var DiscDefintion = {
                                 }));
                                 //HQ.store.insertBlank(App.grdDiscItem.store, ['InvtID']);
                             }
-                            allNodes.forEach(function (node) {
-                                if (node.data.Type == "Invt") {
-                                    var idx = App.grdDiscItem.store.getCount() -1;
+                            var allNodeLength = allNodes.length;
+                            var idx = App.grdDiscItem.store.getCount() - 1;
+                            for (var i = 0; i < allNodeLength; i++) {
+                                if (allNodes[i].data.Type == "Invt") {                                    
                                     var record = HQ.store.findInStore(App.grdDiscItem.store,
                                         ['DiscID', 'DiscSeq', 'InvtID'],
-                                        [discId, discSeq, node.data.InvtID]);
+                                        [discId, discSeq, allNodes[i].data.InvtID]);
                                     if (!record) {
                                         App.grdDiscItem.store.insert(idx, Ext.create("App.mdlDiscItem", {
                                             DiscID: discId,
                                             DiscSeq: discSeq,
-                                            InvtID: node.data.InvtID,
-                                            UnitDesc: node.data.Unit,
-                                            Descr: node.data.Descr
+                                            InvtID: allNodes[i].data.InvtID,
+                                            UnitDesc: allNodes[i].data.Unit,
+                                            Descr: allNodes[i].data.Descr
                                         }));
+                                        idx++;
                                     }
                                 }
-                            });
+                            }
 
                             App.treePanelInvt.clearChecked();
                             App.grdDiscItem.store.resumeEvents();
                             App.grdDiscItem.view.refresh();
-                            
                         }
                     }
 
@@ -1732,9 +1774,9 @@ var DiscDefintion = {
         btnDelInvt_click : function (btn, e, eOpts) {
             if (HQ.isUpdate) {
                 if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
-                    //if (App.grdDiscItem.selModel.selected.items.length > 0 && !Ext.isEmpty(App.grdDiscItem.selModel.selected.items[0].data.InvtID)) {
+                    if (App.cboStatus.value == _holdStatus) {
                         Main.Event.menuClick('delete');
-                   // }         
+                    }         
                 }
                 else {
                     if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
@@ -1750,7 +1792,9 @@ var DiscDefintion = {
         btnDelAllInvt_click : function (btn, e, eOpts) {
             if (HQ.isUpdate) {
                 if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
-                    HQ.message.show(2015020806, '', 'DiscDefintion.Process.deleteAllInvts');
+                    if (App.cboStatus.value == _holdStatus) {
+                        HQ.message.show(2015020806, '', 'DiscDefintion.Process.deleteAllInvts');
+                    }
                 }
                 else {
                     if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
@@ -1852,25 +1896,28 @@ var DiscDefintion = {
                                 }));
                                 //HQ.store.insertBlank(App.grdBundle.store, ['InvtID']);
                             }
-                            allNodes.forEach(function (node) {
-                                if (node.attributes.Type == "Invt") {
-                                    var idx = App.grdBundle.store.getCount() - 1;
+                            var idx = App.grdBundle.store.getCount() - 1;
+                            var allNodeLength = allNodes.length;
+                            for (var i = 0; i < allNodeLength; i++) {
+                                if (allNodes[i].attributes.Type == "Invt") {
+                                    
                                     var record = HQ.store.findInStore(App.grdBundle.store,
                                         ['DiscID', 'DiscSeq', 'InvtID'],
-                                        [discId, discSeq, node.attributes.InvtID]);
+                                        [discId, discSeq, allNodes[i].attributes.InvtID]);
                                     if (!record) {
                                         App.grdBundle.store.insert(idx, Ext.create("App.mdlBundle", {
                                             DiscID: discId,
                                             DiscSeq: discSeq,
-                                            InvtID: node.attributes.InvtID,
-                                            UnitDesc: node.attributes.Unit,
-                                            Descr: node.attributes.Descr,
+                                            InvtID: allNodes[i].attributes.InvtID,
+                                            UnitDesc: allNodes[i].attributes.Unit,
+                                            Descr: allNodes[i].attributes.Descr,
                                             BundleQty: 0,
                                             BundleAmt: 0
                                         }));
+                                        idx++;
                                     }
                                 }
-                            });
+                            }
 
                             App.treePanelBundle.clearChecked();
                             App.grdBundle.store.resumeEvents();
@@ -1893,7 +1940,9 @@ var DiscDefintion = {
         btnDelBundle_click: function (btn, e, eOpts) {
             if (HQ.isUpdate) {
                 if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
-                    Main.Event.menuClick('delete');
+                    if (App.cboStatus.value == _holdStatus) {
+                        Main.Event.menuClick('delete');
+                    }
                 }
                 else {
                     if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
@@ -1905,10 +1954,13 @@ var DiscDefintion = {
                 HQ.message.show(4, '', '');
             }
         },
+
         btnDelAllBundle_click: function (btn, e, eOpts) {
             if (HQ.isUpdate) {
                 if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
-                    HQ.message.show(2015020806, '', 'DiscDefintion.Process.deleteAllBundle');
+                    if (App.cboStatus.value == _holdStatus) {
+                        HQ.message.show(2015020806, '', 'DiscDefintion.Process.deleteAllBundle');
+                    }
                 }
                 else {
                     if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
@@ -1920,6 +1972,151 @@ var DiscDefintion = {
                 HQ.message.show(4, '', '');
             }
         },        
+
+        btnAddAllCustomer_click: function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    var discId = App.cboDiscID.getValue();
+                    var discSeq = App.cboDiscSeq.getValue();
+                    var status = App.cboStatus.value;
+
+                    if (status == _holdStatus) {
+                        var allNodes = DiscDefintion.Process.getLeafNodes(App.treePanelCustomer.getRootNode());
+                        if (allNodes && allNodes.length > 0) {
+                            App.grdDiscCust.store.suspendEvents();
+
+                            var invtBlank = HQ.store.findRecord(App.grdDiscCust.store, ['CustID'], ['']);
+                            if (!invtBlank) {
+                                var idx = App.grdDiscCust.store.length > 0 ? App.grdDiscCust.store.length - 1 : 0;
+                                App.grdDiscCust.store.insert(idx, Ext.create("App.mdlDiscCust", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    CustID: ''
+                                }));
+                            }
+                            var allNodeLength = allNodes.length;
+                            var idx = App.grdDiscCust.store.getCount() - 1;
+                            for (var i = 0; i < allNodeLength; i++) {
+                                if (allNodes[i].data.Type == "CustID") {
+                                    var record = HQ.store.findInStore(App.grdDiscCust.store,
+                                        ['DiscID', 'DiscSeq', 'CustID'],
+                                        [discId, discSeq, allNodes[i].data.RecID]);
+                                    if (!record) {
+                                        App.grdDiscCust.store.insert(idx, Ext.create("App.mdlDiscCust", {
+                                            DiscID: discId,
+                                            DiscSeq: discSeq,
+                                            CustID: allNodes[i].data.RecID
+                                        }));
+                                        idx++;
+                                    }
+                                }
+                            }
+
+                            App.treePanelCustomer.clearChecked();
+                            App.grdDiscCust.store.resumeEvents();
+                            App.grdDiscCust.view.refresh();
+                        }
+                    }
+
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
+
+        btnAddCustomer_click: function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    var discId = App.cboDiscID.getValue();
+                    var discSeq = App.cboDiscSeq.getValue();
+                    var status = App.cboStatus.value;
+
+                    if (status == _holdStatus) {
+                        var allNodes = App.treePanelCustomer.getCheckedNodes();
+                        if (allNodes && allNodes.length > 0) {
+                            App.grdDiscCust.store.suspendEvents();
+                            var invtBlank = HQ.store.findRecord(App.grdDiscCust.store, ['CustID'], ['']);
+                            if (!invtBlank) {
+                                var idx = App.grdDiscCust.store.length > 0 ? App.grdDiscCust.store.length - 1 : 0;
+                                App.grdDiscCust.store.insert(idx, Ext.create("App.mdlDiscCust", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    CustID: ''
+                                }));
+                            }
+                            allNodes.forEach(function (node) {
+                                if (node.attributes.Type == "CustID") {
+                                    var idx = App.grdDiscCust.store.getCount() - 1;
+                                    var record = HQ.store.findInStore(App.grdDiscCust.store,
+                                        ['DiscID', 'DiscSeq', 'CustID'],
+                                        [discId, discSeq, node.attributes.RecID]);
+                                    if (!record) {
+                                        App.grdDiscCust.store.insert(idx, Ext.create("App.mdlDiscCust", {
+                                            DiscID: discId,
+                                            DiscSeq: discSeq,
+                                            CustID: node.attributes.RecID
+                                        }));
+                                    }
+                                }
+                            });
+                            App.treePanelCustomer.clearChecked();
+                            App.grdDiscCust.store.resumeEvents();
+                            App.grdDiscCust.view.refresh();
+                        }
+                    }
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
+
+        btnDelCustomer_click: function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    if (App.cboStatus.value == _holdStatus) {
+                        Main.Event.menuClick('delete');
+                    }
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
+
+        btnDelAllCustomer_click: function (btn, e, eOpts) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    if (App.cboStatus.value == _holdStatus) {
+                        HQ.message.show(2015020806, '', 'DiscDefintion.Process.deleteAllCust');
+                    }
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
 
         btnHideTrigger_click: function (ctr) {
             ctr.clearValue();
@@ -2081,7 +2278,9 @@ var DiscDefintion = {
             if (totalKeys.indexOf(e.field)) {
                 keys.push(e.field);
             }
-
+            if (Ext.isEmpty(e.record.data.LineRef)) {
+                e.record.set('LineRef', HQ.store.lastLineRef(e.store));
+            }
             if (Main.Process.isSomeValidKey(e.store.getRecordsValues(), keys)) {
                 var discId = App.cboDiscID.getValue();
                 var discSeq = App.cboDiscSeq.getValue();
@@ -2099,21 +2298,22 @@ var DiscDefintion = {
                     App.cboDiscClass.setReadOnly(true);
                 }
             }
-            if (Ext.isEmpty(e.record.data.LineRef)) {
-                e.record.set('LineRef', HQ.store.lastLineRef(e.store));
-            }
+            
         },
 
         grdFreeItem_edit: function (editor, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-
+            var selRecs = App.grdDiscBreak.selModel.selected;
+            if (Ext.isEmpty(e.record.data.LineRef) && selRecs.length > 0) {
+                e.record.set('LineRef', selRecs.items[0].data.LineRef);
+            }
             if (keys.indexOf(e.field) != -1) {
                 var recordValues = e.store.getRecordsValues();
                 if (e.value != ''
                     && Main.Process.isAllValidKey(recordValues, keys)) {
                     var discId = App.cboDiscID.getValue();
                     var discSeq = App.cboDiscSeq.getValue();
-                    var selRecs = App.grdDiscBreak.selModel.selected;
+                    
                     if (selRecs.length > 0) {
                         var newData = {
                             DiscID: discId,
@@ -2127,6 +2327,7 @@ var DiscDefintion = {
                         if (!App.cboDiscClass.readOnly) {
                             App.cboDiscClass.setReadOnly(true);
                         }
+                        
                     }
                 }
             }

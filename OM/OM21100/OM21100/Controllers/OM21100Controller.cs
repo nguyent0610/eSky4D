@@ -131,6 +131,7 @@ namespace OM21100.Controllers
             
             return this.Direct();
         }
+       
         //OM21100LoadTreeInventory
 
         [DirectMethod]
@@ -231,6 +232,91 @@ namespace OM21100.Controllers
             tree.Listeners.BeforeItemExpand.Handler = "App.treePanelBundle.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
             tree.Listeners.AfterItemExpand.Handler = "App.treePanelBundle.el.unmask();Ext.resumeLayouts(true);";
             tree.AddTo(treeBranch);
+            return this.Direct();
+        }
+        [DirectMethod]
+        public ActionResult OM21100GetTreeCustomer(string panelID)
+        {
+            TreePanel tree = new TreePanel();
+            tree.ID = "treePanelCustomer";
+            tree.ItemID = "treePanelCustomer";
+
+            tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("BranchID", ModelFieldType.String));
+
+            tree.Border = false;
+            tree.RootVisible = true;
+            tree.Animate = true;
+
+            Node node = new Node();
+            node.NodeID = "Root";
+            tree.Root.Add(node);
+
+            var lstChannel = _db.OM21100_ptChannel(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            var lstCust = _db.OM21100_ptCustomer(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            var lstCustClass = _db.OM21100_ptCustClass(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            if (lstChannel.Count == 0)
+            {
+                node.Leaf = true;
+            }
+
+            foreach (var item in lstChannel)
+            {
+                var nodeChannel = new Node();
+                nodeChannel.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = item.Channel, Mode = ParameterMode.Value });
+                nodeChannel.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Channel", Mode = ParameterMode.Value });
+                //nodeTerritory.Cls = "tree-node-parent";
+                nodeChannel.Text = item.Descr;
+                nodeChannel.Checked = false;
+                nodeChannel.NodeID = "channel-" + item.Channel;
+                //nodeTerritory.IconCls = "tree-parent-icon";
+
+                var lstCustClassInChannel = lstCustClass.Where(x => x.Channel == item.Channel).ToList();
+                foreach (var custClass in lstCustClassInChannel)
+                {
+                    var nodeCussClass = new Node();
+                    nodeCussClass.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = custClass.ClassID, Mode = ParameterMode.Value });
+                    nodeCussClass.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "ClassID", Mode = ParameterMode.Value });
+                    nodeCussClass.Text = custClass.Descr;
+                    nodeCussClass.Checked = false;
+                    nodeCussClass.NodeID = "channel-custclassid-" + item.Channel + "-" + custClass.ClassID;
+                    
+
+                     var lstCustInCustClass = lstCust.Where(x => x.Channel == item.Channel && x.ClassID == custClass.ClassID).ToList();
+                     foreach (var cust in lstCustInCustClass)
+                     {
+                         var nodeCust = new Node();
+                         nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = cust.CustID, Mode = ParameterMode.Value });
+                         nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "CustID", Mode = ParameterMode.Value });
+                         nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "BranchID", Value = cust.BranchID, Mode = ParameterMode.Value });
+                         //nodeCompany.Cls = "tree-node-parent";
+                         nodeCust.Text = cust.CustName;
+                         nodeCust.Checked = false;
+                         nodeCust.Leaf = true;
+                         nodeCust.NodeID = "channel-custclassid-custid" + item.Channel + "-" + cust.ClassID + "-" + cust.CustID;
+                         //nodeCompany.IconCls = "tree-parent-icon";
+                         nodeCussClass.Children.Add(nodeCust);
+                     }
+
+                     if (lstCustInCustClass.Count() == 0)
+                     {
+                         nodeCussClass.Leaf = true;
+                     }
+                     nodeChannel.Children.Add(nodeCussClass);
+                }
+                if (lstCustClassInChannel.Count() == 0)
+                {
+                    nodeChannel.Leaf = true;
+                }
+                node.Children.Add(nodeChannel);
+            }
+
+            var treeBranch = X.GetCmp<Panel>(panelID);
+            tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelCustomer_checkChange";
+
+            tree.AddTo(treeBranch);
+
             return this.Direct();
         }
         public ActionResult GetCompany(string discID, string discSeq)
@@ -1326,6 +1412,20 @@ namespace OM21100.Controllers
             var discCustChangeHandler = new StoreDataHandler(data["lstDiscCustChange"]);
             var lstDiscCustChange = discCustChangeHandler.BatchObjectData<OM21100_pgDiscCust_Result>();
 
+            foreach (var deleted in lstDiscCustChange.Deleted)
+            {
+                if (!lstDiscCust.Any(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.CustID == deleted.CustID))
+                {
+                    var deletedDiscItem = _db.OM_DiscCust.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.CustID == deleted.CustID);
+                    if (deletedDiscItem != null)
+                    {
+                        _db.OM_DiscCust.DeleteObject(deletedDiscItem);
+                    }
+                }                
+            }
+
             foreach (var currentCust in lstDiscCust)
             {
                 var cust = (from p in _db.OM_DiscCust
@@ -1346,15 +1446,7 @@ namespace OM21100.Controllers
 
             }
 
-            foreach (var deleted in lstDiscCustChange.Deleted)
-            {
-                var deletedDiscItem = _db.OM_DiscCust.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
-                    && p.DiscSeq == inputSeq.DiscSeq && p.CustID == deleted.CustID);
-                if (deletedDiscItem != null)
-                {
-                    _db.OM_DiscCust.DeleteObject(deletedDiscItem);
-                }
-            }
+            
 
             if (inputSeq.DiscClass == "CC")
                 Submit_Data(handle, branches, inputSeq);
@@ -1830,68 +1922,6 @@ namespace OM21100.Controllers
             return node;
         }
 
-        //private Node createBundleNode(Node root, SI_Hierarchy inactiveHierachy, int level, string nodeType)
-        //{
-        //    var node = new Node();
-        //    if (inactiveHierachy.Descr == "Root")
-        //    {
-        //        node.Text = inactiveHierachy.Descr;
-        //    }
-        //    else
-        //    {
-        //        node.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Parent", Mode = ParameterMode.Value });
-        //        node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
-        //        node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
-        //        node.Checked = false;
-        //    }
-
-        //    var childrenInactiveHierachies = _db.SI_Hierarchy
-        //        .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
-        //            && p.Type == nodeType
-        //            && p.NodeLevel == level).ToList();
-
-        //    if (childrenInactiveHierachies != null && childrenInactiveHierachies.Count > 0)
-        //    {
-        //        foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
-        //        {
-        //            node.Children.Add(createBundleNode(node, childrenInactiveNode, level + 1, nodeType));
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (childrenInactiveHierachies.Count == 0)
-        //        {
-        //            var invts = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();
-        //            //var invts = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();
-        //            if (invts.Count > 0)
-        //            {
-        //                foreach (var invt in invts)
-        //                {
-        //                    Node invtNode = new Node();
-
-        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Invt", Mode = ParameterMode.Value });
-        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "InvtID", Value = invt.InvtID, Mode = ParameterMode.Value });
-        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "Descr", Value = invt.Descr, Mode = ParameterMode.Value });
-        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "CnvFact", Value = invt.CnvFact.ToString(), Mode = ParameterMode.Value });
-        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "InvtType", Value = invt.InvtType, Mode = ParameterMode.Value });
-        //                    invtNode.CustomAttributes.Add(new ConfigItem() { Name = "Unit", Value = invt.Unit, Mode = ParameterMode.Value });
-        //                    invtNode.Leaf = true;
-        //                    invtNode.Checked = false;
-        //                    invtNode.Text = invt.InvtID + "-" + invt.Descr;
-        //                    invtNode.NodeID = inactiveHierachy.NodeID + "-" + invt.InvtID;
-
-        //                    node.Children.Add(invtNode);
-        //                }
-        //            }
-        //            else node.Leaf = true;
-        //        }
-        //        else
-        //        {
-        //            node.Leaf = false;
-        //        }
-        //    }
-        //    System.Diagnostics.Debug.WriteLine(node.Text);
-        //    return node;
-        //}
+        
     }
 }

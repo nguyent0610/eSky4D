@@ -947,15 +947,83 @@
                 .Title(Util.GetLang("DPCC"))
                 .Layout(LayoutType.Border)
                 .Items(
-                    X.GridPanel().ID("grdDiscCust")
-                    .Region(Region.Center)
+                    X.Panel().ID("treeCustomer")
+                    .Region(Region.West).Flex(50)
+                    .MinWidth(150).Split(true).AutoScroll(true)
+                    .DirectEvents(de =>
+                    {
+                        de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCustomer"));
+                        de.AfterRender.Url = Url.Action("OM21100GetTreeCustomer");
+                        //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                        de.AfterRender.CleanRequest = true;
+                        de.AfterRender.Method = HttpMethod.POST;
+                        de.AfterRender.Success = "App.treePanelCustomer.getRootNode().expand()";
+                        de.AfterRender.Timeout = 60000;
+                        de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                        de.AfterRender.EventMask.ShowMask = true;
+                        de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                        de.AfterRender.EventMask.MinDelay = 500;
+                    })
+                    .BottomBar(
+                        X.Toolbar()
+                        .Items(
+                            X.ToolbarFill()
+
+                            , HQ.Button()
+                            .HQLangCode("Expand")
+                            .Icon(Icon.BulletTogglePlus)
+                            .Handler("DiscDefintion.Event.btnCustomerExpand_click")
+
+                            , X.ToolbarSpacer()
+                            , X.ToolbarSeparator()
+                            , X.ToolbarSpacer()
+
+                            , HQ.Button()
+                            .HQLangCode("Collapse")
+                            .Icon(Icon.BulletToggleMinus)
+                            .Handler("DiscDefintion.Event.btnCustomerCollapse_click")
+
+                            , X.ToolbarFill()
+                        )
+                    ) // treeBranch
+
+                    // Second Column
+                    , X.Panel()
+                    .Region(Region.Center).Flex(8)
+                    .Layout(LayoutType.VBox)
+                    .MinWidth(50)
+                    .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                    .Items(
+                        HQ.Button()                            
+                        .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                        .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                        .Handler("DiscDefintion.Event.btnAddAllCustomer_click")
+
+                        , HQ.Button()
+                        .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                        .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                        .Handler("DiscDefintion.Event.btnAddCustomer_click")
+
+                        , HQ.Button()
+                        .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                        .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                        .Handler("DiscDefintion.Event.btnDelCustomer_click")
+
+                        , HQ.Button()
+                        .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                        .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                        .Handler("DiscDefintion.Event.btnDelAllCustomer_click")
+                    ) // Container
+                    ,X.GridPanel().ID("grdDiscCust")
+                    .Region(Region.East)
+                    .Flex(60)
                     .Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
                     .StoreID("stoDiscCust")
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
-                        , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
+                        , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150)
                         .Editor(
                             HQ.Combo().ID("cboGCustID")
                             .HQProcedure("OM21100_pcCustomerActive").HQColumnShow("CustID,Name")
@@ -963,7 +1031,8 @@
                             .ValueField("CustID").DisplayField("CustID")
                             .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
+                                new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw),
+                                new StoreParameter("@UserName","HQ.userID",ParameterMode.Raw)
                             })
                             .LoadData()
                         )
@@ -972,7 +1041,7 @@
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
 
-                        , X.CommandColumn()
+                        , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))
