@@ -414,6 +414,7 @@ namespace ARProcess
                 //update Batch
                 if (objBatch.GetByKey(BranchID, "AR", BatNbr))
                 {
+                    objBatch.TotAmt = 0;
                     objBatch.Status = "V";
                     objBatch.Rlsed = -1;
                     objBatch.Update();
@@ -425,6 +426,7 @@ namespace ARProcess
                     objAR_Doc = new clsAR_Doc(Dal);
                     if (objAR_Doc.GetByKey(oldobjAR_Doc.BranchID, oldobjAR_Doc.BatNbr, oldobjAR_Doc.RefNbr))
                     {
+                        objAR_Doc.OrigDocAmt = 0;
                         objAR_Doc.Rlsed = -1;
                         objAR_Doc.Update();
                     }
@@ -469,28 +471,6 @@ namespace ARProcess
             {
                 clsAR_Adjust objAR_Adjust = new clsAR_Adjust(Dal);
                 clsBatch objBatch = new clsBatch(Dal);
-                clsAR_Doc objAR_Doc = new clsAR_Doc(Dal);
-                //if (RefNbr != "%")
-                //{
-                //    //lstdtAR_D = app.AR_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr).ToList();
-                   
-                //    //foreach (var objRefNbr in lstdtAR_D)
-                //    //{
-                //    //    if (RefNbr.Split(',').Contains(objRefNbr.RefNbr))
-                //    //    {
-                //    //        lstdtAR_D.Remove(objRefNbr);
-                //    //    }
-                      
-                //    //}
-                //    //foreach (var objRefNbr in lstdtAR_A)
-                //    //{
-                //    //    if (RefNbr.Split(',').Contains(objRefNbr.AdjdRefNbr))
-                //    //    {
-                //    //       lstdtAR_A.Remove(objRefNbr);
-                //    //    }
-
-                //    //}
-                //}  
                 lstdtAR_A = DataTableHelper.ConvertTo<clsAR_Adjust>(objAR_Adjust.GetAll(BranchID, BatNbr, "%", "%"));
         
                 foreach (clsAR_Adjust objAR_A  in lstdtAR_A)
@@ -508,18 +488,18 @@ namespace ARProcess
                         clsAR_Doc objAR_Doc1=new clsAR_Doc(Dal);
                         if(objAR_Doc1.GetByKey(BranchID, objAR_A.AdjdBatNbr ,objAR_A.AdjdRefNbr))
                         {
-                         
-                            objAR_Doc1.DocBal = objAR_Doc.DocBal + objAR_A.AdjAmt;
+
+                            objAR_Doc1.DocBal = objAR_Doc1.DocBal + objAR_A.AdjAmt;
                             objAR_Doc1.Update();
                         }
 
 
                         //update adj doc
                          clsAR_Doc objAR_Doc2=new clsAR_Doc(Dal);
-                         if(objAR_Doc2.GetByKey(BranchID, objAR_A.AdjdBatNbr ,objAR_A.AdjgRefNbr))
+                         if(objAR_Doc2.GetByKey(BranchID, objAR_A.AdjgBatNbr ,objAR_A.AdjgRefNbr))
                         {
-                       
-                            objAR_Doc2.OrigDocAmt = objAR_Doc.OrigDocAmt - objAR_A.AdjAmt;
+
+                            objAR_Doc2.OrigDocAmt = objAR_Doc2.OrigDocAmt - objAR_A.AdjAmt;
                               objAR_Doc2.Update();
                          }
                         //update batch
