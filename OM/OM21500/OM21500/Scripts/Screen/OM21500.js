@@ -1,14 +1,14 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 
 var keys = ['DiscCode'];
-var fieldsCheckRequire = ["DiscCode", "Descr", "FromDate", "ToDate", "PromoType", "ObjApply"];
-var fieldsLangCheckRequire = ["DiscCode", "Descr", "FromDate", "ToDate", "OM21500PromoType", "OM21500ObjApply"];
+var fieldsCheckRequire = ["DiscCode", "Descr", "FromDate", "ToDate", "PromoType"];//, "ObjApply"
+var fieldsLangCheckRequire = ["DiscCode", "Descr", "FromDate", "ToDate", "OM21500PromoType"];//, "OM21500ObjApply"
 var _crrDiscCode = '';
 var _cpnyTitle = '';
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 var _Source = 0;
-var _maxSource = 3;
+var _maxSource = 2;
 var _isLoadMaster = false;
 var loadPage = false;
 ///////////////////////////////////////////////////////////////////////
@@ -101,11 +101,11 @@ var firstLoad = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     loadPage = false;
     App.cboPromoType.getStore().addListener('load', checkLoad);
-    App.cboObjApply.getStore().addListener('load', checkLoad);
+    //App.cboObjApply.getStore().addListener('load', checkLoad);
     App.cboCpnyID.getStore().addListener('load', checkLoad);
 
     App.cboPromoType.getStore().reload();
-    App.cboObjApply.getStore().reload();
+    //App.cboObjApply.getStore().reload();
     App.cboCpnyID.getStore().reload();
     _cpnyTitle = App.pnlAppComp.title;
 }
@@ -271,10 +271,10 @@ var PromoType_render = function (value) {
     return (record) ? record.data.Descr : value;
 };
 
-var ObjApply_render = function (value) {
-    var record = HQ.store.findRecord(App.cboObjApply.store, ["Code"], [value]);
-    return (record) ? record.data.Descr : value;
-};
+//var ObjApply_render = function (value) {
+//    var record = HQ.store.findRecord(App.cboObjApply.store, ["Code"], [value]);
+//    return (record) ? record.data.Descr : value;
+//};
 
 var CpnyName_render = function (value) {
     var record = HQ.store.findRecord(App.cboCpnyID.store, ["CpnyID"], [value]);
@@ -293,10 +293,11 @@ var stringFilter = function (record) {
         if (this.dataIndex == 'PromoType') {
             App.cboPromoType.store.clearFilter();
             return HQ.grid.filterComboDescr(record, this, App.cboPromoType.store, "Code", "Descr");
-        } else if (this.dataIndex == 'ObjApply') {
-            App.cboObjApply.store.clearFilter();
-            return HQ.grid.filterComboDescr(record, this, App.cboObjApply.store, "Code", "Descr");
         }
+        //else if (this.dataIndex == 'ObjApply') {
+        //    App.cboObjApply.store.clearFilter();
+        //    return HQ.grid.filterComboDescr(record, this, App.cboObjApply.store, "Code", "Descr");
+        //}
     }
     //else if (this.dataIndex == 'Zone') {
     //    App.cboZone.store.clearFilter();

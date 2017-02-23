@@ -80,23 +80,23 @@
                         })
                         .LoadData()
                 )
-                , X.Column().Text(Util.GetLang("OM21500ObjApply")).DataIndex("ObjApply").Width(140).Renderer("ObjApply_render")
-                    .Editor(
-                        HQ.Combo().ID("cboObjApply").Name("cboObjApply")
-                        .HQDBSys(false).HQProcedure("OM21500_pcObjApply").ForceSelection(true).HQAutoLoad(false)
-                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 200)
-                        .HQParam(new StoreParameterCollection() {       
-                            new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },  
-                        })
-                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        .Listeners(lst =>
-                        {
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        })
-                        .LoadData()
-                    )                                    
+                //, X.Column().Text(Util.GetLang("OM21500ObjApply")).DataIndex("ObjApply").Width(140).Renderer("ObjApply_render")
+                //    .Editor(
+                //        HQ.Combo().ID("cboObjApply").Name("cboObjApply")
+                //        .HQDBSys(false).HQProcedure("OM21500_pcObjApply").ForceSelection(true).HQAutoLoad(false)
+                //        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 200)
+                //        .HQParam(new StoreParameterCollection() {       
+                //            new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                //            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                //            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },  
+                //        })
+                //        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                //        .Listeners(lst =>
+                //        {
+                //            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                //        })
+                //        .LoadData()
+                //    )                                    
                 , X.CommandColumn().Width(130)
                 .Commands(
                     X.GridCommand()
