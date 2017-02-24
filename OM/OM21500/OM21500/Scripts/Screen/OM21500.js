@@ -88,7 +88,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            //HQ.common.close(this);
+            HQ.common.close(this);
             break;
     }
 
@@ -108,6 +108,18 @@ var firstLoad = function () {
     //App.cboObjApply.getStore().reload();
     App.cboCpnyID.getStore().reload();
     _cpnyTitle = App.pnlAppComp.title;
+
+    if (HQ.isInsert == false) {
+      //  App.menuClickbtnNew.disable();
+        App.btnAdd.disable();
+        App.btnAddAll.disable();
+    }
+    if (HQ.isDelete == false) {
+        App.btnDel.disable();
+        App.btnDelAll.disable();
+    }
+    //if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false)
+    //    App.menuClickbtnSave.disable();
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 //var stoChanged = function (sto) {
@@ -127,12 +139,12 @@ var stoLoad = function (sto) {
         }
         HQ.isFirstLoad = false;
     }
-    if (!HQ.isInsert && HQ.isNew) {        
-        HQ.common.lockItem(App.frmMain, true);
-    }
-    else if (!HQ.isUpdate && !HQ.isNew) {
-        HQ.common.lockItem(App.frmMain, true);
-    }
+    //if (!HQ.isInsert && HQ.isNew) {        
+    //    HQ.common.lockItem(App.frmMain, true);
+    //}
+    //else if (!HQ.isUpdate && !HQ.isNew) {
+    //    HQ.common.lockItem(App.frmMain, true);
+    //}
 
     App.stoDescCpny.reload();
 };
@@ -148,6 +160,7 @@ var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 var grdOM_DiscDescr_BeforeEdit = function (editor, e) {
+    
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdOM_DiscDescr_Edit = function (item, e) {
@@ -263,6 +276,7 @@ function refresh(item) {
         } else {
             App.stoDescCpny.reload();
         }
+        setTitle();
     }
 };
 
@@ -286,6 +300,8 @@ var setTitle = function () {
     if (_crrDiscCode != '') {
         title = _cpnyTitle + ' (' + App.grdOM_DiscDescr.columns[1].text + ':' + _crrDiscCode + ')';
     }
+    else
+        title = '';
     App.pnlAppComp.setTitle(title);
 }
 var stringFilter = function (record) {

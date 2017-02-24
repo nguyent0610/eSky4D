@@ -9,7 +9,7 @@ Global
 		SccTeamFoundationServer = http://192.168.120.10:8088/tfs/hqsoft
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = OM21500\\OM21500.csproj
-		SccProjectName1 = ../../../eSky_SonHa/OM/OM21500/OM21500
+		SccProjectName1 = OM21500
 		SccLocalPath1 = OM21500
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
