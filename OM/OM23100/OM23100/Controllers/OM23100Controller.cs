@@ -35,7 +35,7 @@ namespace OM23100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -492,9 +492,6 @@ namespace OM23100.Controllers
                 DataTable dtClass = dal.ExecDataTable("OM23100_peProductClass", CommandType.StoredProcedure, ref pc);
                 SheetDataMaster.Cells.ImportDataTable(dtClass, true, 0, 6, false);// du lieu Inventory
 
-
-
-
                 Style style = workbook.GetStyleInPool(0);
                 StyleFlag flag = new StyleFlag();
                 Range range;
@@ -509,7 +506,6 @@ namespace OM23100.Controllers
                 comment.WidthCM = 5;
 
                 #region template
-
                 SetCellValueHeader(SheetTarget.Cells["D1"], Util.GetLang("OM231EHeader"), TextAlignmentType.Center, TextAlignmentType.Center);
                 SheetTarget.Cells.Merge(0, 1, 2, 4);
                 
@@ -521,7 +517,11 @@ namespace OM23100.Controllers
                 SetCellValueHeader(SheetTarget.Cells["F4"], Util.GetLang("OM231Class"), TextAlignmentType.Center, TextAlignmentType.Center);
                 SetCellValueHeader(SheetTarget.Cells["G4"], Util.GetLang("OM231SellIN"), TextAlignmentType.Center, TextAlignmentType.Center);
                 SetCellValueHeader(SheetTarget.Cells["H4"], Util.GetLang("OM231SellOut"), TextAlignmentType.Center, TextAlignmentType.Center);
-           
+                SetCellValueHeader(SheetTarget.Cells["I4"], Util.GetLang("OM231Coverage"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["J4"], Util.GetLang("OM231DNA"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["K4"], Util.GetLang("OM231ForcusedSKU"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["L4"], Util.GetLang("OM231VisitTime"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["M4"], Util.GetLang("OM231LPPC"), TextAlignmentType.Center, TextAlignmentType.Center);
                 #endregion
 
                 #region formular
@@ -610,20 +610,14 @@ namespace OM23100.Controllers
 
                 String formulaSTT = "=IF(ISERROR(IF(B5<>\"\",A4+1 ,\"\")),1,IF(B5<>\"\",A4+1,\"\"))";
                 SheetTarget.Cells["A5"].SetSharedFormula(formulaSTT, 1000, 1);
-
-
                 #endregion
 
-
-
                 #region Fomat cell
-
 
                 cell = SheetTarget.Cells["G5"];
                 style = cell.GetStyle();
                 style.Custom = "#,##0";
                 cell.SetStyle(style);
-
 
                 var range1 = SheetTarget.Cells.CreateRange("A5", "A1000");
                 cell = SheetTarget.Cells["A5"];
@@ -637,33 +631,49 @@ namespace OM23100.Controllers
                 cell = SheetTarget.Cells["H5"];
                 range3.SetStyle(style);
 
+                var range4 = SheetTarget.Cells.CreateRange("I5", "I1000");
+                cell = SheetTarget.Cells["I5"];
+                range4.SetStyle(style);
+
+                var range5 = SheetTarget.Cells.CreateRange("J5", "J1000");
+                cell = SheetTarget.Cells["J5"];
+                range5.SetStyle(style);
+
+                var range6 = SheetTarget.Cells.CreateRange("K5", "K1000");
+                cell = SheetTarget.Cells["K5"];
+                range6.SetStyle(style);
+
+                var range7 = SheetTarget.Cells.CreateRange("L5", "L1000");
+                cell = SheetTarget.Cells["L5"];
+                range7.SetStyle(style);
+
+                var range8 = SheetTarget.Cells.CreateRange("M5", "M1000");
+                cell = SheetTarget.Cells["M5"];
+                range8.SetStyle(style);
+
                 cell = SheetTarget.Cells["E5"];
                 style = cell.GetStyle();
                 style.Custom = "MM/yyyy";
                
-                var range4 = SheetTarget.Cells.CreateRange("E5", "E1000");
-                range4.SetStyle(style);
+                var range9 = SheetTarget.Cells.CreateRange("E5", "E1000");
+                range9.SetStyle(style);
 
 
 
-                SheetTarget.AutoFilter.Range = "A4:H4";
+                SheetTarget.AutoFilter.Range = "A4:M4";
                 style = SheetTarget.Cells["A4"].GetStyle();
                 //style.HorizontalAlignment = TextAlignmentType.Right;             
                 style.IsLocked = false;
-                range = SheetTarget.Cells.CreateRange("A4:H4");
+                range = SheetTarget.Cells.CreateRange("A4:M4");
                 range.SetStyle(style);
-
                 #endregion
 
                 SheetTarget.AutoFitColumns();
-
-
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Flush();
                 stream.Position = 0;
 
                 return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = Util.GetLang("OM231NameEx")+".xlsx" };
-
             }
             catch (Exception ex)
             {
@@ -681,7 +691,7 @@ namespace OM23100.Controllers
         public ActionResult Import(FormCollection data)
         {
             try
-            {               
+            {
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
                 HttpPostedFile file = fileUploadField.PostedFile; 
                 FileInfo fileInfo = new FileInfo(file.FileName);
@@ -702,9 +712,8 @@ namespace OM23100.Controllers
                         {
                             Worksheet workSheet = workbook.Worksheets[0];
                             string stt,branchid,slsperid,classid = string.Empty;
-                            double sellin, sellout = 0;
-                            DateTime month;                           
-                            int lineRef = 1;
+                            double sellin, sellout, coverage, dna, forcusedsku, visitime, lppc = 0;
+                            DateTime month;
                             var lstBranch=_db.OM23100_peBranch(Current.UserName).ToList();
                             var lstSlsper=_db.OM23100_peSale(Current.UserName).ToList();
                             var lstClass=_db.OM23100_peProductClass(Current.UserName).ToList();
@@ -722,6 +731,11 @@ namespace OM23100.Controllers
                                     classid = workSheet.Cells[i, 5].StringValue.PassNull().ToUpper().Trim();
                                     sellin = workSheet.Cells[i, 6].DoubleValue;
                                     sellout = workSheet.Cells[i, 7].DoubleValue;
+                                    coverage = workSheet.Cells[i, 8].DoubleValue;
+                                    dna = workSheet.Cells[i, 9].DoubleValue;
+                                    forcusedsku = workSheet.Cells[i, 10].DoubleValue;
+                                    visitime = workSheet.Cells[i, 11].DoubleValue;
+                                    lppc = workSheet.Cells[i, 12].DoubleValue;
                                 }
                                 catch
                                 {
@@ -774,21 +788,23 @@ namespace OM23100.Controllers
                                     objFCS.SlsperId = slsperid;
                                     objFCS.FCSDate = month;
 
-                                    objFCS.Coverage = 0;
+                                   
                                     objFCS.Crtd_DateTime = DateTime.Now;
                                     objFCS.Crtd_Prog = _screenNbr;
                                     objFCS.Crtd_User = _userName;
-                                    objFCS.DNA = 0;
-                                    objFCS.ForcusedSKU = 0;
-                                    objFCS.LPPC = 0;
+                                    
+                                    
                                     objFCS.LUpd_DateTime = DateTime.Now;
                                     objFCS.LUpd_Prog = _screenNbr;
                                     objFCS.LUpd_User = _userName;
                                     objFCS.SellIn = sellin;
                                     objFCS.SellOut = sellout;
-                                    objFCS.Visit = 0;
+                                    objFCS.Coverage = coverage;
+                                    objFCS.DNA = dna;
+                                    objFCS.ForcusedSKU = forcusedsku;
                                     objFCS.VisitTime = 0;
-
+                                    objFCS.LPPC = lppc;
+                                    objFCS.Visit = visitime;
                                     _db.OM_FCS.AddObject(objFCS);
                                     lstImport.Add(objFCS);
 
@@ -800,6 +816,12 @@ namespace OM23100.Controllers
                                     objFCS.LUpd_User = _userName;
                                     objFCS.SellIn = sellin;
                                     objFCS.SellOut = sellout;
+                                    objFCS.Coverage = coverage;
+                                    objFCS.DNA = dna;
+                                    objFCS.ForcusedSKU = forcusedsku;
+                                    objFCS.VisitTime = 0;
+                                    objFCS.Visit = visitime;
+                                    objFCS.LPPC = lppc;
                                 }
                             }
                         }
