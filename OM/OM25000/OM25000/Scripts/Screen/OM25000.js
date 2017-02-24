@@ -169,7 +169,9 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdDet.deleteSelected();
-        stoData_changed(App.stoData);
+        //   stoData_changed(App.stoData);
+        HQ.isChange = true;
+        HQ.common.changeData(HQ.isChange, 'OM25000');
       
     }
 };
