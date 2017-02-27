@@ -387,12 +387,11 @@ var menuClick = function (command) {
             }
             break;
         case "refresh":
-            if (!Ext.isEmpty(App.cboOrderNbr.getValue())) {
-                App.stoOrder.forceLoad = true;
-                App.stoOrder.reload();
-            } else {
-                defaultOnNew();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
             }
+            else refresh('yes');
+           
 
             break;
         case "print":
@@ -968,8 +967,8 @@ var grdOrdDet_Edit = function (item, e) {
     var key = e.field;
     if (Object.keys(e.record.modified).length > 0) {
         App.grdOrdDet.isChange = true;
-        App.cboOrderType.setReadOnly(true);
-        App.cboOrderNbr.setReadOnly(true);
+        setChange(true);
+
         //if (e.record.invt == undefined) {
             e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
         //}
@@ -1715,6 +1714,16 @@ var report = function () {
     });
 }
 
+function refresh(item) {
+    if (item == 'yes') {
+        if (!Ext.isEmpty(App.cboOrderNbr.getValue())) {
+            App.stoOrder.forceLoad = true;
+            App.stoOrder.reload();
+        } else {
+            defaultOnNew();
+        }
+    }
+}
 //////////////////////////////////
 var checkExitEdit = function (row) {
     App.stoInvt.clearFilter();
