@@ -379,7 +379,8 @@ var menuClick = function (command) {
             }
             break;
         case "new":
-            if ((HQ.isChange || App.grdOrdDet.isChange) && !Ext.isEmpty(App.cboOrderNbr.getValue())) {
+            if ((HQ.isChange || App.grdOrdDet.isChange))
+                {// && !Ext.isEmpty(App.cboOrderNbr.getValue())) {
                 HQ.message.show(2015030201, '', "askNew", true);
             } else {
                 defaultOnNew();
@@ -967,6 +968,8 @@ var grdOrdDet_Edit = function (item, e) {
     var key = e.field;
     if (Object.keys(e.record.modified).length > 0) {
         App.grdOrdDet.isChange = true;
+        App.cboOrderType.setReadOnly(true);
+        App.cboOrderNbr.setReadOnly(true);
         //if (e.record.invt == undefined) {
             e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
         //}
@@ -2943,10 +2946,10 @@ var askNew = function (item) {
 var setChange = function (isChange) {
     HQ.isChange = isChange;
     if (isChange) {
-        if (!Ext.isEmpty(App.cboOrderNbr.getValue())) {
+        //if (!Ext.isEmpty(App.cboOrderNbr.getValue())) {
             App.cboOrderType.setReadOnly(true);
             App.cboOrderNbr.setReadOnly(true);
-        }
+        //}
 
     } else {
         App.grdOrdDet.isChange = false;
