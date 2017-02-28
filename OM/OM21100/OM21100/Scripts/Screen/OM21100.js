@@ -4,7 +4,7 @@ var _isNewDisc = false;
 var _isNewSeq = false;
 var _discLoad = "";
 var _seqLoad = "";
-
+var _selBranchID = '';
 var Main = {
 
     Process: {
@@ -158,7 +158,11 @@ var Main = {
         checkHasData: function () {
             var hasData = false;
             if (App.cboStatus.getValue() == _holdStatus) {
-                if (App.grdDiscBreak.store.getCount() > 1) {
+                if (App.grdDiscBreak.store.getCount() > 1 ||
+                    (App.grdDiscBreak.store.getCount() == 1 &&
+                        (App.grdDiscBreak.store.data.items[0].data.BreakQty > 0 || 
+                            App.grdDiscBreak.store.data.items[0].data.BreakAmt > 0)
+                    )) {
                     var flat = null;
                     var discClassVal = App.cboDiscClass.getValue();
                     var breakByVal = App.cboBreakBy.getValue();
@@ -427,7 +431,7 @@ var Main = {
                                     }
                                     else {
                                         HQ.message.show(201405071);
-                                    }
+                                    }                                    
                                     Main.Process.reloadAllData();
                                 },
                                 failure: function (msg, data) {
@@ -643,9 +647,24 @@ var Main = {
                             newData.LineRef = HQ.store.lastLineRef(sto);
                             keys.splice(idxLref, 1);
                         }
-
-                        var newRec = Ext.create(sto.model.modelName, newData);
-                        HQ.store.insertRecord(sto, keys, newRec, false);
+                        if (sto.storeId == 'stoDiscCust' || sto.storeId == 'stoDiscItem' || sto.storeId == 'stoBundle') {
+                            if (sto.data.length < sto.pageSize ||
+                                sto.currentPage == (sto.totalCount / sto.pageSize)
+                                ) {
+                                var obj = HQ.store.findRecord(sto, keys, [discId, discSeq, '', '', '', '', '']);
+                                if (!obj) {
+                                    var newRec = Ext.create(sto.model.modelName, newData);
+                                    HQ.store.insertRecord(sto, keys, newRec, false);
+                                }
+                            }
+                        } else {
+                            var obj = HQ.store.findRecord(sto, keys, [discId, discSeq, '', '', '', '', '']);
+                            if (!obj) {
+                                var newRec = Ext.create(sto.model.modelName, newData);
+                                HQ.store.insertRecord(sto, keys, newRec, false);
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -669,6 +688,20 @@ var Main = {
                                 return false;
                             }
                         }
+                        if (e.field == 'UnitDesc') {
+                            if (e.store.storeId == 'stoDiscItem') {
+                                App.cboGItemUnitDescr.store.reload();
+                            }
+                            else if (e.store.storeId == 'stoBundle') {
+                                App.cboGInvtUnitDescr.store.reload();
+                            }
+                            else if (e.store.storeId == 'stoFreeItem') {
+                                App.cboGUnitDescr.store.reload();
+                            }
+                            else if (e.store.storeId == 'stoDiscItemClass') {
+                                App.cboGClassUnitDescr.store.reload();
+                            }
+                        }
                         return HQ.grid.checkInput(e, keys);
                     }
                     else {
@@ -680,7 +713,7 @@ var Main = {
                         Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
                     }
                     return false;
-                }
+                }                
             }
             else {
                 return false;
@@ -716,7 +749,7 @@ var Main = {
                         App.cboDiscType.setReadOnly(true);
                     }
                 }
-            }
+            }            
         },
 
         grd_validateEdit: function (item, e) {
@@ -730,6 +763,19 @@ var Main = {
                 //}
                 if (e.store.storeId == 'stoFreeItem') {
                     keys = ['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];
+                }
+                if (e.store.storeId == 'stoDiscCust') {
+                    e.record.set('BranchID', _selBranchID);
+                    if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
+                        e.record.set('BranchID', '');
+                        HQ.message.show(1112, e.value);
+                        return false;
+                    }
+                } else {
+                    if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
+                        HQ.message.show(1112, e.value);
+                        return false;
+                    }
                 }
                 if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
                     HQ.message.show(1112, e.value);
@@ -1066,13 +1112,10 @@ var DiscDefintion = {
 
         deleteAllInvts: function (item) {
             if (item == "yes") {
-                App.grdDiscItem.store.suspendEvents();
-                while (App.grdDiscItem.store.data.length > 0) {
-                    App.grdDiscItem.store.removeAt(0);
-                }
-                App.grdDiscItem.store.resumeEvents();
-                //App.grdDiscItem.store.clearData();
+                App.grdDiscItem.store.removeAll();
+                App.grdDiscItem.store.submitData();
                 App.grdDiscItem.view.refresh();
+                App.grdDiscItem.store.loadPage(1);
                 var invtBlank = HQ.store.findRecord(App.grdDiscItem.store, ['InvtID'], ['']);
                 if (!invtBlank) {
                     App.grdDiscItem.store.insert(0, Ext.create("App.mdlDiscItem", {
@@ -1082,20 +1125,16 @@ var DiscDefintion = {
                         UnitDesc: '',
                         Descr: ''
                     }));
-                    //HQ.store.insertBlank(App.grdDiscItem.store, ['InvtID']);
                 }
             }
         },
 
         deleteAllBundle: function (item) {
             if (item == "yes") {
-                App.grdBundle.store.suspendEvents();
-                while (App.grdBundle.store.data.length > 0) {
-                    App.grdBundle.store.removeAt(0);
-                }
-                App.grdBundle.store.resumeEvents();
-               // App.grdBundle.store.clearData();
+                App.grdBundle.store.removeAll();
+                App.grdBundle.store.submitData();
                 App.grdBundle.view.refresh();
+                App.grdBundle.store.loadPage(1);
                 var invtBlank = HQ.store.findRecord(App.grdBundle.store, ['InvtID'], ['']);
                 if (!invtBlank) {
                     App.grdBundle.store.insert(0, Ext.create("App.mdlBundle", {
@@ -1107,21 +1146,16 @@ var DiscDefintion = {
                         BundleQty: 0,
                         BundleAmt: 0
                     }));
-
-                   // HQ.store.insertBlank(App.grdBundle.store, ['InvtID']);
                 }
             }
         },
 
         deleteAllCust: function (item) {
             if (item == "yes") {
-                App.grdDiscCust.store.suspendEvents();
-                while (App.grdDiscCust.store.data.length > 0) {
-                    App.grdDiscCust.store.removeAt(0);
-                }
-                App.grdDiscCust.store.resumeEvents();
-                //App.grdDiscItem.store.clearData();
+                App.grdDiscCust.store.removeAll();
+                App.grdDiscCust.store.submitData();
                 App.grdDiscCust.view.refresh();
+                App.grdDiscCust.store.loadPage(1);
                 var invtBlank = HQ.store.findRecord(App.grdDiscCust.store, ['CustID'], ['']);
                 if (!invtBlank) {
                     App.grdDiscCust.store.insert(0, Ext.create("App.mdlDiscCust", {
@@ -1130,6 +1164,7 @@ var DiscDefintion = {
                         CustID: ''
                     }));
                 }
+
             }
         },
     },
@@ -1501,45 +1536,73 @@ var DiscDefintion = {
             }
         },
 
+
+        cboGCustID_Change: function (item, newValue, oldValue, eOpts) {
+            _selBranchID = '';
+            if (item.valueModels != undefined && item.valueModels[0]) {
+                _selBranchID = item.valueModels[0].data.BranchID;
+            }
+        },
+
         treePanelBranch_checkChange: function (node, checked, eOpts) {
-            node.childNodes.forEach(function (childNode) {
-                childNode.set("checked", checked);
-            });
+            if (App.cboStatus.getValue() == _holdStatus) {
+                node.childNodes.forEach(function (childNode) {
+                    childNode.set("checked", checked);
+                });
+            } else {
+                App.treePanelBranch.clearChecked();
+            }
         },
 
         treePanelFreeItem_checkChange: function (node, checked) {
-            if (node.hasChildNodes()) {
-                node.eachChild(function (childNode) {
-                    childNode.set('checked', checked);
-                    DiscDefintion.Event.treePanelFreeItem_checkChange(childNode, checked);
-                });
+            if (App.cboStatus.getValue() == _holdStatus && App.grdDiscBreak.selModel.selected.length > 0 && Main.Process.checkAddFreeItem()) {
+                if (node.hasChildNodes()) {
+                    node.eachChild(function (childNode) {
+                        childNode.set('checked', checked);
+                        DiscDefintion.Event.treePanelFreeItem_checkChange(childNode, checked);
+                    });
+                }
+            } else {
+                App.treePanelFreeItem.clearChecked();
             }
         },
 
         treePanelInvt_checkChange: function (node, checked) {
-            if (node.hasChildNodes()) {
-                node.eachChild(function (childNode) {
-                    childNode.set('checked', checked);
-                    DiscDefintion.Event.treePanelInvt_checkChange(childNode, checked);
-                });
+            if (App.cboStatus.getValue() == _holdStatus) {
+                if (node.hasChildNodes()) {
+                    node.eachChild(function (childNode) {
+                        childNode.set('checked', checked);
+                        DiscDefintion.Event.treePanelInvt_checkChange(childNode, checked);
+                    });
+                }
+            } else {
+                App.treePanelInvt.clearChecked();
             }
         },
 
         treePanelBundle_checkChange: function (node, checked) {
-            if (node.hasChildNodes()) {
-                node.eachChild(function (childNode) {
-                    childNode.set('checked', checked);
-                    DiscDefintion.Event.treePanelBundle_checkChange(childNode, checked);
-                });
+            if (App.cboStatus.getValue() == _holdStatus) {
+                if (node.hasChildNodes()) {
+                    node.eachChild(function (childNode) {
+                        childNode.set('checked', checked);
+                        DiscDefintion.Event.treePanelBundle_checkChange(childNode, checked);
+                    });
+                }
+            } else {
+                App.treePanelBundle.clearChecked();
             }
         },
 
         treePanelCustomer_checkChange: function (node, checked) {
-            if (node.hasChildNodes()) {
-                node.eachChild(function (childNode) {
-                    childNode.set('checked', checked);
-                    DiscDefintion.Event.treePanelCustomer_checkChange(childNode, checked);
-                });
+            if (App.cboStatus.getValue() == _holdStatus) {
+                if (node.hasChildNodes()) {
+                    node.eachChild(function (childNode) {
+                        childNode.set('checked', checked);
+                        DiscDefintion.Event.treePanelCustomer_checkChange(childNode, checked);
+                    });
+                }
+            } else {
+                App.treePanelCustomer.clearChecked();
             }
         },
 
@@ -1744,7 +1807,7 @@ var DiscDefintion = {
 
                             var invtBlank = HQ.store.findRecord(App.grdFreeItem.store, ['FreeItemID', 'LineRef'], ['', lineRef]);
                             if (!invtBlank) {
-                                var idx = App.grdFreeItem.store.length > 0 ? App.grdFreeItem.store.length - 1 : 0;
+                                var idx = App.grdFreeItem.store.data.length > 0 ? App.grdFreeItem.store.data.length - 1 : 0;
                                 App.grdFreeItem.store.insert(idx, Ext.create("App.mdlFreeItem", {
                                     DiscID: discId,
                                     DiscSeq: discSeq,
@@ -1806,7 +1869,7 @@ var DiscDefintion = {
                             var invtBlank = HQ.store.findRecord(App.grdFreeItem.store, ['FreeItemID', 'LineRef'], ['', lineRef]);
                             if (!invtBlank) {
                                 //HQ.store.insertBlank(App.grdDiscItem.store, ['InvtID']);
-                                var idx = App.grdFreeItem.store.length > 0 ? App.grdFreeItem.store.length - 1 : 0;
+                                var idx = App.grdFreeItem.store.data.length > 0 ? App.grdFreeItem.store.data.length - 1 : 0;
                                 App.grdFreeItem.store.insert(idx, Ext.create("App.mdlFreeItem", {
                                     DiscID: discId,
                                     DiscSeq: discSeq,
@@ -1814,9 +1877,10 @@ var DiscDefintion = {
                                     LineRef: lineRef
                                 }));
                             }
+                            var idx = App.grdFreeItem.store.getCount() - 1;
                             allNodes.forEach(function (node) {
                                 if (node.attributes.Type == "Invt") {
-                                    var idx = App.grdDiscItem.store.getCount() - 1;
+                                    
                                     var record = HQ.store.findInStore(App.grdFreeItem.store,
                                         ['DiscID', 'DiscSeq', 'FreeItemID', 'LineRef'],
                                         [discId, discSeq, node.attributes.InvtID, lineRef]);
@@ -1853,7 +1917,8 @@ var DiscDefintion = {
             if (HQ.isUpdate) {
                 if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
                     if (App.cboStatus.value == _holdStatus) {
-                        HQ.message.show(2015020807, DiscDefintion.Process.indexSelect(App.grdFreeItem), 'Main.Process.deleteSelectedInGrid');//Main.Event.menuClick('delete');
+                        //HQ.message.show(2015020807, DiscDefintion.Process.indexSelect(App.grdFreeItem), 'Main.Process.deleteSelectedInGrid');//
+                        Main.Event.menuClick('delete');
                     }
                 }
                 else {
@@ -1899,8 +1964,35 @@ var DiscDefintion = {
                             App.grdDiscItem.store.suspendEvents();
                             
                             var invtBlank = HQ.store.findRecord(App.grdDiscItem.store, ['InvtID'], ['']);
+                            if (invtBlank) {
+                                App.grdDiscItem.store.remove(invtBlank);
+                            }
+                            
+                            var allNodeLength = allNodes.length;
+                            for (var i = 0; i < allNodeLength; i++) {
+                                if (allNodes[i].data.Type == "Invt") {                                    
+                                    var record = HQ.store.findInStore(App.grdDiscItem.store,
+                                        ['DiscID', 'DiscSeq', 'InvtID'],
+                                        [discId, discSeq, allNodes[i].data.InvtID]);
+                                    if (!record) {
+                                        App.grdDiscItem.store.insert(0, Ext.create("App.mdlDiscItem", {
+                                            DiscID: discId,
+                                            DiscSeq: discSeq,
+                                            InvtID: allNodes[i].data.InvtID,
+                                            UnitDesc: allNodes[i].data.Unit,
+                                            Descr: allNodes[i].data.Descr
+                                        }));
+                                       // idx++;
+                                    }
+                                }
+                            }
+                            App.treePanelInvt.clearChecked();
+                            App.grdDiscItem.store.resumeEvents();
+                            App.grdDiscItem.view.refresh();
+                            App.grdDiscItem.store.loadPage(1);
+                            var invtBlank = HQ.store.findRecord(App.grdDiscItem.store, ['InvtID'], ['']);
                             if (!invtBlank) {
-                                var idx = App.grdDiscItem.store.length > 0 ? App.grdDiscItem.store.length -1 : 0;
+                                var idx = App.grdDiscItem.store.data.length > 0 ? App.grdDiscItem.store.data.length -1 : 0;
                                 App.grdDiscItem.store.insert(idx, Ext.create("App.mdlDiscItem", {
                                     DiscID: discId,
                                     DiscSeq: discSeq,
@@ -1908,31 +2000,8 @@ var DiscDefintion = {
                                     UnitDesc: '',
                                     Descr: ''
                                 }));
-                                //HQ.store.insertBlank(App.grdDiscItem.store, ['InvtID']);
                             }
-                            var allNodeLength = allNodes.length;
-                            var idx = App.grdDiscItem.store.getCount() - 1;
-                            for (var i = 0; i < allNodeLength; i++) {
-                                if (allNodes[i].data.Type == "Invt") {                                    
-                                    var record = HQ.store.findInStore(App.grdDiscItem.store,
-                                        ['DiscID', 'DiscSeq', 'InvtID'],
-                                        [discId, discSeq, allNodes[i].data.InvtID]);
-                                    if (!record) {
-                                        App.grdDiscItem.store.insert(idx, Ext.create("App.mdlDiscItem", {
-                                            DiscID: discId,
-                                            DiscSeq: discSeq,
-                                            InvtID: allNodes[i].data.InvtID,
-                                            UnitDesc: allNodes[i].data.Unit,
-                                            Descr: allNodes[i].data.Descr
-                                        }));
-                                        idx++;
-                                    }
-                                }
-                            }
-
-                            App.treePanelInvt.clearChecked();
-                            App.grdDiscItem.store.resumeEvents();
-                            App.grdDiscItem.view.refresh();
+                            
                         }
                     }
 
@@ -1960,16 +2029,8 @@ var DiscDefintion = {
                         if (allNodes && allNodes.length > 0) {
                             App.grdDiscItem.store.suspendEvents();
                             var invtBlank = HQ.store.findRecord(App.grdDiscItem.store, ['InvtID'], ['']);
-                            if (!invtBlank) {
-                                //HQ.store.insertBlank(App.grdDiscItem.store, ['InvtID']);
-                                var idx = App.grdDiscItem.store.length > 0 ? App.grdDiscItem.store.length - 1 : 0;
-                                App.grdDiscItem.store.insert(idx, Ext.create("App.mdlDiscItem", {
-                                    DiscID: discId,
-                                    DiscSeq: discSeq,
-                                    InvtID: '',
-                                    UnitDesc: '',
-                                    Descr: ''
-                                }));                                
+                            if (invtBlank) {
+                                App.grdDiscItem.store.remove(invtBlank);
                             }                            
                             allNodes.forEach(function (node) {
                                 if (node.attributes.Type == "Invt") {
@@ -1992,7 +2053,18 @@ var DiscDefintion = {
                             App.treePanelInvt.clearChecked();
                             App.grdDiscItem.store.resumeEvents();
                             App.grdDiscItem.view.refresh();
-                            
+                            App.grdDiscItem.store.loadPage(1);
+                            var invtBlank = HQ.store.findRecord(App.grdDiscItem.store, ['InvtID'], ['']);
+                            if (!invtBlank) {
+                                var idx = App.grdDiscItem.store.data.length > 0 ? App.grdDiscItem.store.data.length - 1 : 0;
+                                App.grdDiscItem.store.insert(idx, Ext.create("App.mdlDiscItem", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    InvtID: '',
+                                    UnitDesc: '',
+                                    Descr: ''
+                                }));
+                            }
                         }
                     }
                 }
@@ -2056,18 +2128,8 @@ var DiscDefintion = {
                         if (allNodes && allNodes.length > 0) {
                             App.grdBundle.store.suspendEvents();
                             var invtBlank = HQ.store.findRecord(App.grdBundle.store, ['InvtID'], ['']);
-                            if (!invtBlank) {
-                                var idx = App.grdDiscItem.store.length > 0 ? App.grdDiscItem.store.length - 1 : 0;
-                                App.grdBundle.store.insert(idx, Ext.create("App.mdlBundle", {
-                                    DiscID: discId,
-                                    DiscSeq: discSeq,
-                                    InvtID: '',
-                                    UnitDesc: '',
-                                    Descr: '',
-                                    BundleQty: 0,
-                                    BundleAmt: 0
-                                }));
-                                //HQ.store.insertBlank(App.grdBundle.store, ['InvtID']);
+                            if (invtBlank) {
+                                App.grdBundle.store.remove(invtBlank);
                             }
                             allNodes.forEach(function (node) {
                                 if (node.data.Type == "Invt") {
@@ -2092,7 +2154,20 @@ var DiscDefintion = {
                             App.treePanelBundle.clearChecked();
                             App.grdBundle.store.resumeEvents();
                             App.grdBundle.view.refresh();
-                            
+                            App.grdBundle.store.loadPage(1);
+                            var invtBlank = HQ.store.findRecord(App.grdBundle.store, ['InvtID'], ['']);
+                            if (!invtBlank) {
+                                var idx = App.grdBundle.store.data.length > 0 ? App.grdBundle.store.data.length - 1 : 0;
+                                App.grdBundle.store.insert(idx, Ext.create("App.mdlBundle", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    InvtID: '',
+                                    UnitDesc: '',
+                                    Descr: '',
+                                    BundleQty: 0,
+                                    BundleAmt: 0
+                                }));
+                            }
                         }
                     }
 
@@ -2120,18 +2195,8 @@ var DiscDefintion = {
                         if (allNodes && allNodes.length > 0) {
                             App.grdBundle.store.suspendEvents();
                             var invtBlank = HQ.store.findRecord(App.grdBundle.store, ['InvtID'], ['']);
-                            if (!invtBlank) {
-                                var idx = App.grdDiscItem.store.length > 0 ? App.grdDiscItem.store.length - 1 : 0;
-                                App.grdBundle.store.insert(idx, Ext.create("App.mdlBundle", {
-                                    DiscID: discId,
-                                    DiscSeq: discSeq,
-                                    InvtID: '',
-                                    UnitDesc: '',
-                                    Descr: '',
-                                    BundleQty: 0,
-                                    BundleAmt: 0
-                                }));
-                                //HQ.store.insertBlank(App.grdBundle.store, ['InvtID']);
+                            if (invtBlank) {
+                                App.grdBundle.store.remove(invtBlank);
                             }
                             var idx = App.grdBundle.store.getCount() - 1;
                             var allNodeLength = allNodes.length;
@@ -2155,11 +2220,22 @@ var DiscDefintion = {
                                     }
                                 }
                             }
-
                             App.treePanelBundle.clearChecked();
                             App.grdBundle.store.resumeEvents();
                             App.grdBundle.view.refresh();
-                            
+                            App.grdBundle.store.loadPage(1);
+                            if (!invtBlank) {
+                                var idx = App.grdBundle.store.data.length > 0 ? App.grdBundle.store.data.length - 1 : 0;
+                                App.grdBundle.store.insert(idx, Ext.create("App.mdlBundle", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    InvtID: '',
+                                    UnitDesc: '',
+                                    Descr: '',
+                                    BundleQty: 0,
+                                    BundleAmt: 0
+                                }));
+                            }
                         }
                     }
                 }
@@ -2218,41 +2294,53 @@ var DiscDefintion = {
                     var discSeq = App.cboDiscSeq.getValue();
                     var status = App.cboStatus.value;
 
-                    if (status == _holdStatus) {
+                    if (status == _holdStatus) {                        
+                       // App.frmMain.body.mask();
                         var allNodes = DiscDefintion.Process.getLeafNodes(App.treePanelCustomer.getRootNode());
                         if (allNodes && allNodes.length > 0) {
                             App.grdDiscCust.store.suspendEvents();
-
+                            //while (App.grdDiscCust.store.data.length > 0) {
+                            //    App.grdDiscCust.store.removeAt(0);
+                            //}
+                            //App.grdDiscCust.store.removeAll();
+                            //App.grdDiscCust.store.submitData();
                             var invtBlank = HQ.store.findRecord(App.grdDiscCust.store, ['CustID'], ['']);
-                            if (!invtBlank) {
-                                var idx = App.grdDiscCust.store.length > 0 ? App.grdDiscCust.store.length - 1 : 0;
-                                App.grdDiscCust.store.insert(idx, Ext.create("App.mdlDiscCust", {
-                                    DiscID: discId,
-                                    DiscSeq: discSeq,
-                                    CustID: ''
-                                }));
+                            if (invtBlank) {
+                                App.grdDiscCust.store.remove(invtBlank);
                             }
                             var allNodeLength = allNodes.length;
                             var idx = App.grdDiscCust.store.getCount() - 1;
                             for (var i = 0; i < allNodeLength; i++) {
                                 if (allNodes[i].data.Type == "CustID") {
                                     var record = HQ.store.findInStore(App.grdDiscCust.store,
-                                        ['DiscID', 'DiscSeq', 'CustID'],
-                                        [discId, discSeq, allNodes[i].data.RecID]);
+                                        ['DiscID', 'DiscSeq', 'CustID', 'BranchID'],
+                                        [discId, discSeq, allNodes[i].data.RecID, allNodes[i].data.BranchID]);
                                     if (!record) {
                                         App.grdDiscCust.store.insert(idx, Ext.create("App.mdlDiscCust", {
                                             DiscID: discId,
                                             DiscSeq: discSeq,
-                                            CustID: allNodes[i].data.RecID
+                                            CustID: allNodes[i].data.RecID,
+                                            BranchID: allNodes[i].data.BranchID
                                         }));
                                         idx++;
                                     }
                                 }
                             }
-
-                            App.treePanelCustomer.clearChecked();
+                            App.treePanelCustomer.clearChecked();                            
                             App.grdDiscCust.store.resumeEvents();
                             App.grdDiscCust.view.refresh();
+                            App.grdDiscCust.store.loadPage(1);
+                            var invtBlank = HQ.store.findRecord(App.grdDiscCust.store, ['CustID'], ['']);
+                            if (!invtBlank) {
+                                var idx = App.grdDiscCust.store.data.length > 0 ? App.grdDiscCust.store.data.length - 1 : 0;
+                                App.grdDiscCust.store.insert(idx, Ext.create("App.mdlDiscCust", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    CustID: '',
+                                    BranchID: ''
+                                }));
+                            }
+                            //App.frmMain.body.unmask();
                         }
                     }
 
@@ -2279,26 +2367,23 @@ var DiscDefintion = {
                         var allNodes = App.treePanelCustomer.getCheckedNodes();
                         if (allNodes && allNodes.length > 0) {
                             App.grdDiscCust.store.suspendEvents();
-                            var invtBlank = HQ.store.findRecord(App.grdDiscCust.store, ['CustID'], ['']);
-                            if (!invtBlank) {
-                                var idx = App.grdDiscCust.store.length > 0 ? App.grdDiscCust.store.length - 1 : 0;
-                                App.grdDiscCust.store.insert(idx, Ext.create("App.mdlDiscCust", {
-                                    DiscID: discId,
-                                    DiscSeq: discSeq,
-                                    CustID: ''
-                                }));
+                            var invtBlank = HQ.store.findRecord(App.grdDiscCust.store, ['CustID', 'BranchID'], ['', '']);
+                            if (invtBlank) {
+                                App.grdDiscCust.store.remove(invtBlank);
                             }
+
+                            var idx = App.grdDiscCust.store.data.length > 0 ? App.grdDiscCust.store.data.length - 1 : 0;
                             allNodes.forEach(function (node) {
-                                if (node.attributes.Type == "CustID") {
-                                    var idx = App.grdDiscCust.store.getCount() - 1;
+                                if (node.attributes.Type == "CustID") {                                    
                                     var record = HQ.store.findInStore(App.grdDiscCust.store,
-                                        ['DiscID', 'DiscSeq', 'CustID'],
-                                        [discId, discSeq, node.attributes.RecID]);
+                                        ['DiscID', 'DiscSeq', 'CustID', 'BranchID'],
+                                        [discId, discSeq, node.attributes.RecID, node.attributes.BranchID]);
                                     if (!record) {
                                         App.grdDiscCust.store.insert(idx, Ext.create("App.mdlDiscCust", {
                                             DiscID: discId,
                                             DiscSeq: discSeq,
-                                            CustID: node.attributes.RecID
+                                            CustID: node.attributes.RecID,
+                                            BranchID: node.attributes.BranchID
                                         }));
                                     }
                                 }
@@ -2306,6 +2391,17 @@ var DiscDefintion = {
                             App.treePanelCustomer.clearChecked();
                             App.grdDiscCust.store.resumeEvents();
                             App.grdDiscCust.view.refresh();
+                            App.grdDiscCust.store.loadPage(1);
+                            var invtBlank = HQ.store.findRecord(App.grdDiscCust.store, ['CustID', 'BranchID'], ['', '']);
+                            if (!invtBlank) {
+                                var idx = App.grdDiscCust.store.data.length > 0 ? App.grdDiscCust.store.data.length - 1 : 0;
+                                App.grdDiscCust.store.insert(idx, Ext.create("App.mdlDiscCust", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    CustID: '',
+                                    BranchID: ''
+                                }));
+                            }
                         }
                     }
                 }
@@ -2368,6 +2464,10 @@ var DiscDefintion = {
 
             store.clearFilter();
             if (selected.length > 0) {
+                var objFree = HQ.store.findRecord(store, ['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'], [discID, discSeq, selected[0].data.LineRef, '']);
+                if (objFree) {
+                    store.remove(objFree);
+                }
                 store.filterBy(function (record) {
                     if (record.data.LineRef == selected[0].data.LineRef) {
                         return record;
@@ -2381,7 +2481,6 @@ var DiscDefintion = {
                             DiscSeq: discSeq,
                             LineRef: selected[0].data.LineRef
                         };
-
                         var newRec = Ext.create(store.model.modelName, newData);
                         HQ.store.insertRecord(store, keys, newRec, false);
                     }
@@ -2470,7 +2569,6 @@ var DiscDefintion = {
                             if (e.record.data.tstamp)
                                 return false;
                         }
-
                         var selRec = App.slmDiscBreak.getSelection();
                         if (selRec) {
                             if (selRec[0].data.DiscAmt) {
@@ -2490,6 +2588,9 @@ var DiscDefintion = {
                         }
                         if (!isAllowInsert) {
                             return false;
+                        }
+                        if (e.store.storeId == 'stoFreeItem') {
+                            App.cboGUnitDescr.store.reload();
                         }
                         return HQ.grid.checkInput(e, keys);
                     }

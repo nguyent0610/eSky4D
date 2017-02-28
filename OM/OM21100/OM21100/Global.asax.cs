@@ -28,29 +28,16 @@ namespace OM21100
 
         protected void Session_Start(object sender, EventArgs e)
         {
-            //Current.Authorize = false;
-            //Current.Server = "MARSSVR\\SQL2012";
-            //Current.DBSys = "eSky4DSys";
-            //AccessRight acc = new AccessRight();
-            //acc.Delete = true;
-            //acc.Insert = true;
-            //acc.Update = true;
-            //Session["OM21100"] = acc;
-            //Session["DBApp"] = Current.DBApp = "eSky4DApp";
-            //Session["UserName"] = Current.UserName = "admin";
-            //Session["CpnyID"] = Current.CpnyID = "0201";
-            //Session["Language"] = Current.Language = "vi";
-            //Session["LangID"] = 1;
             Current.FormatDate = "dd.MM.yyyy";
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "FranciaBeauty_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = "FranciaBeauty_TEST_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
-            Session["OM10100"] = acc;
-            Session["DBApp"] = Current.DBApp = "FranciaBeauty_eSky4DApp";// "eBiz4DWebApp";
+            Session["OM21100"] = acc;
+            Session["DBApp"] = Current.DBApp = "FranciaBeauty_TEST_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "18247";
             Session["Language"] = Current.Language = "vi";

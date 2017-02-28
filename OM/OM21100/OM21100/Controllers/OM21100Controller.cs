@@ -23,8 +23,7 @@ namespace OM21100.Controllers
         private string _screenNbr = "OM21100";
         OM21100Entities _db = Util.CreateObjectContext<OM21100Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-
-        //
+        List<OM21100_ptInventory_Result> _lstPtInventory = new List<OM21100_ptInventory_Result>();        
         // GET: /OM21100/
         public ActionResult Index()
         {
@@ -172,6 +171,8 @@ namespace OM21100.Controllers
                 Descr = "Root",
                 Type = "I"
             };
+            // Get inventory for load tree
+            _lstPtInventory = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList();
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
             tree.Root.Add(node);
 
@@ -183,7 +184,6 @@ namespace OM21100.Controllers
             tree.AddTo(treeItem);
             return this.Direct();
         }
-
 
         //OM21100LoadTreeInventory
 
@@ -226,9 +226,10 @@ namespace OM21100.Controllers
                 Descr = "Root",
                 Type = "I"
             };
+            // Get inventory for load tree
+            _lstPtInventory = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList();
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
             tree.Root.Add(node);
-
 
             var treeBranch = X.GetCmp<Panel>(panelID);
             tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelInvt_checkChange";
@@ -277,6 +278,8 @@ namespace OM21100.Controllers
                 Descr = "Root",
                 Type = "I"
             };
+            // Get inventory for load tree
+            _lstPtInventory = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList();
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
             tree.Root.Add(node);
 
@@ -310,23 +313,24 @@ namespace OM21100.Controllers
             var lstChannel = _db.OM21100_ptChannel(Current.UserName, Current.CpnyID, Current.LangID).ToList();
             var lstCust = _db.OM21100_ptCustomer(Current.UserName, Current.CpnyID, Current.LangID).ToList();
             var lstCustClass = _db.OM21100_ptCustClass(Current.UserName, Current.CpnyID, Current.LangID).ToList();
-            if (lstChannel.Count == 0)
+            if (lstChannel.Count() == 0)
             {
                 node.Leaf = true;
             }
-
+            
             foreach (var item in lstChannel)
             {
+                string channel = item.Channel;
                 var nodeChannel = new Node();
-                nodeChannel.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = item.Channel, Mode = ParameterMode.Value });
+                nodeChannel.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = channel, Mode = ParameterMode.Value });
                 nodeChannel.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Channel", Mode = ParameterMode.Value });
                 //nodeTerritory.Cls = "tree-node-parent";
                 nodeChannel.Text = item.Descr;
                 nodeChannel.Checked = false;
-                nodeChannel.NodeID = "channel-" + item.Channel;
+                nodeChannel.NodeID = "channel-" + channel;
                 //nodeTerritory.IconCls = "tree-parent-icon";
-
-                var lstCustClassInChannel = lstCustClass.Where(x => x.Channel == item.Channel).ToList();
+                
+                var lstCustClassInChannel = lstCustClass.Where(x => x.Channel == channel);//.ToList();
                 foreach (var custClass in lstCustClassInChannel)
                 {
                     var nodeCussClass = new Node();
@@ -334,10 +338,10 @@ namespace OM21100.Controllers
                     nodeCussClass.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "ClassID", Mode = ParameterMode.Value });
                     nodeCussClass.Text = custClass.Descr;
                     nodeCussClass.Checked = false;
-                    nodeCussClass.NodeID = "channel-custclassid-" + item.Channel + "-" + custClass.ClassID;
-                    
+                    nodeCussClass.NodeID = "channel-custclassid-" + channel + "-" + custClass.ClassID;
 
-                     var lstCustInCustClass = lstCust.Where(x => x.Channel == item.Channel && x.ClassID == custClass.ClassID).ToList();
+                    string custClassID = custClass.ClassID;
+                    var lstCustInCustClass = lstCust.Where(x => x.Channel == channel && x.ClassID == custClassID);//.ToList();
                      foreach (var cust in lstCustInCustClass)
                      {
                          var nodeCust = new Node();
@@ -348,7 +352,7 @@ namespace OM21100.Controllers
                          nodeCust.Text = cust.CustName;
                          nodeCust.Checked = false;
                          nodeCust.Leaf = true;
-                         nodeCust.NodeID = "channel-custclassid-custid" + item.Channel + "-" + cust.ClassID + "-" + cust.CustID;
+                         nodeCust.NodeID = "channel-custclassid-custid" + channel + "-" + custClassID + "-" + cust.CustID;
                          //nodeCompany.IconCls = "tree-parent-icon";
                          nodeCussClass.Children.Add(nodeCust);
                      }
@@ -399,7 +403,7 @@ namespace OM21100.Controllers
 
         public ActionResult GetDiscCust(string discID, string discSeq)
         {
-            var discCusts = _db.OM21100_pgDiscCust(discID, discSeq, Current.CpnyID).ToList();
+            var discCusts = _db.OM21100_pgDiscCust(discID, discSeq, Current.CpnyID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(discCusts);
         }
 
@@ -1031,13 +1035,15 @@ namespace OM21100.Controllers
             List<OM21100_pgCompany_Result> lstCompany)
         {
             var handle = data["cboHandle"];
+            string discID = inputDisc.DiscID.ToUpper();
+            string discSeq = inputSeq.DiscSeq.ToUpper();
             if (roles.Contains("HO") || roles.Contains("DIST"))
             {
                 foreach (var cnpy in lstCompany)
                 {
                     var sysCom = (from p in _db.OM_DiscCpny
-                                  where p.DiscID.ToUpper() == inputDisc.DiscID.ToUpper() 
-                                      && p.DiscSeq.ToUpper() == inputSeq.DiscSeq.ToUpper() 
+                                  where p.DiscID.ToUpper() == discID
+                                      && p.DiscSeq.ToUpper() == discSeq
                                       && p.CpnyID == cnpy.CpnyID select p).FirstOrDefault();
                     if (sysCom == null)
                     {
@@ -1053,8 +1059,8 @@ namespace OM21100.Controllers
             else
             {
                 var sysCom = (from p in _db.OM_DiscCpny
-                              where p.DiscID.ToUpper() == inputDisc.DiscID.ToUpper() 
-                                  && p.DiscSeq.ToUpper() == inputSeq.DiscSeq.ToUpper() 
+                              where p.DiscID.ToUpper() == discID
+                                  && p.DiscSeq.ToUpper() == discSeq 
                                   && p.CpnyID == Current.CpnyID select p).FirstOrDefault();
                 if (sysCom == null)
                 {
@@ -1073,7 +1079,6 @@ namespace OM21100.Controllers
                         });
                     }
                 }
-
             }
 
             var cpnyHandler = new StoreDataHandler(data["lstCompanyChange"]);
@@ -1469,10 +1474,10 @@ namespace OM21100.Controllers
             foreach (var deleted in lstDiscCustChange.Deleted)
             {
                 if (!lstDiscCust.Any(p => p.DiscID == inputSeq.DiscID
-                    && p.DiscSeq == inputSeq.DiscSeq && p.CustID == deleted.CustID))
+                    && p.DiscSeq == inputSeq.DiscSeq && p.CustID == deleted.CustID && p.BranchID == deleted.BranchID))
                 {
                     var deletedDiscItem = _db.OM_DiscCust.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
-                    && p.DiscSeq == inputSeq.DiscSeq && p.CustID == deleted.CustID);
+                    && p.DiscSeq == inputSeq.DiscSeq && p.CustID == deleted.CustID && p.BranchID == deleted.BranchID);
                     if (deletedDiscItem != null)
                     {
                         _db.OM_DiscCust.DeleteObject(deletedDiscItem);
@@ -1483,20 +1488,21 @@ namespace OM21100.Controllers
             {
                 var cust = (from p in _db.OM_DiscCust
                             where
-                                p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq &&
-                                p.CustID == currentCust.CustID
+                                p.DiscID == inputSeq.DiscID 
+                                && p.DiscSeq == inputSeq.DiscSeq 
+                                && p.CustID == currentCust.CustID
+                                && p.BranchID == currentCust.BranchID
                             select p).FirstOrDefault();
-                if (cust != null)
-                {
-                    Update_DiscCust(cust, currentCust, false);
-                }
-                else
+                if (cust == null)
                 {
                     OM_DiscCust newCust = new OM_DiscCust();
                     Update_DiscCust(newCust, currentCust, true);
                     _db.OM_DiscCust.AddObject(newCust);
-                }
-
+                }                                   
+                //else
+                //{
+                //    Update_DiscCust(cust, currentCust, false);
+                //}
             }
 
             
@@ -1519,6 +1525,7 @@ namespace OM21100.Controllers
                     t.DiscID = s.DiscID;
                     t.DiscSeq = s.DiscSeq;
                     t.CustID = s.CustID;
+                    t.BranchID = s.BranchID;
                     t.Crtd_DateTime = DateTime.Now;
                     t.Crtd_Prog = _screenNbr;
                     t.Crtd_User = Current.UserName;
@@ -1761,44 +1768,7 @@ namespace OM21100.Controllers
             {
                 throw ex;
             }
-        }
-
-        private void updateDiscItemClass(ref OM_DiscItemClass discItemClass, OM21100_pgDiscItemClass_Result created, bool isNew)
-        {
-            if (isNew)
-            {
-                discItemClass.ClassID = created.ClassID;
-                discItemClass.DiscID = created.DiscID;
-                discItemClass.DiscSeq = created.DiscSeq;
-
-                discItemClass.Crtd_DateTime = DateTime.Now;
-                discItemClass.Crtd_Prog = _screenNbr;
-                discItemClass.Crtd_User = Current.UserName;
-            }
-
-            discItemClass.UnitDesc = created.UnitDesc;
-            discItemClass.LUpd_DateTime = DateTime.Now;
-            discItemClass.LUpd_Prog = _screenNbr;
-            discItemClass.LUpd_User = Current.UserName;
-        }
-
-        private void updateDiscCust(ref OM_DiscCust discCust, OM21100_pgDiscCust_Result created, bool isNew)
-        {
-            if (isNew)
-            {
-                discCust.CustID = created.CustID;
-                discCust.DiscID = created.DiscID;
-                discCust.DiscSeq = created.DiscSeq;
-
-                discCust.Crtd_DateTime = DateTime.Now;
-                discCust.Crtd_Prog = _screenNbr;
-                discCust.Crtd_User = Current.UserName;
-            }
-
-            discCust.LUpd_DateTime = DateTime.Now;
-            discCust.LUpd_Prog = _screenNbr;
-            discCust.LUpd_User = Current.UserName;
-        }
+        }        
 
         private void Update_DiscCustClass(OM_DiscCustClass t, OM21100_pgDiscCustClass_Result s, bool isNew)
         {
@@ -1824,22 +1794,6 @@ namespace OM21100.Controllers
             {
                 throw ex;
             }
-        }
-
-        private void updateBundle(ref OM_DiscItem bundle, OM21100_pgDiscBundle_Result created, bool isNew)
-        {
-            if (isNew)
-            {
-                bundle.InvtID = created.InvtID;
-                bundle.DiscID = created.DiscID;
-                bundle.DiscSeq = created.DiscSeq;
-                bundle.Crtd_DateTime = DateTime.Now;
-                bundle.Crtd_Prog = _screenNbr;
-                bundle.Crtd_User = Current.UserName;
-            }
-            bundle.BundleQty = created.BundleQty;
-            bundle.BundleAmt = created.BundleAmt;
-            bundle.BundleNbr = created.BundleNbr;
         }
 
         private void updateDiscSeq(ref OM_DiscSeq updatedDiscSeq, OM_DiscSeq inputDiscSeq, bool isNew, string[] roles, string handle)
@@ -1909,7 +1863,6 @@ namespace OM21100.Controllers
             //updatedDiscount.Crtd_Role = Current.UserName;
             updatedDiscount.LUpd_User = Current.UserName;
         }
-
         
         private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, string nodeType)
         {
@@ -1942,7 +1895,7 @@ namespace OM21100.Controllers
             {
                 if (childrenInactiveHierachies.Count == 0)
                 {
-                   var invts = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();
+                    var invts = _lstPtInventory.Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();
                     //var invts = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();
                     if (invts.Count > 0)
                     {
@@ -1960,7 +1913,7 @@ namespace OM21100.Controllers
                             invtNode.Checked = false;
                             invtNode.Text = invt.InvtID + "-" + invt.Descr;
                             invtNode.NodeID = inactiveHierachy.NodeID + "-" + invt.InvtID;
-
+                            
                             node.Children.Add(invtNode);
                         }
                     }
@@ -1973,8 +1926,7 @@ namespace OM21100.Controllers
             }
             System.Diagnostics.Debug.WriteLine(node.Text);
             return node;
-        }
-
-        
+        }        
+    
     }
 }

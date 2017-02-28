@@ -139,6 +139,7 @@
                                         l.Change.Fn = "DiscDefintion.Event.cboDiscSeq_change";
                                         l.Blur.Fn = "DiscDefintion.Event.cboDiscSeq_change";
                                         l.Select.Fn = "DiscDefintion.Event.cboDiscSeq_select";
+                                        //l.Expand.Handler = "App.cboDiscSeq.store.clearFilter();";
                                     })
 
                                     , HQ.Combo().ID("cboDiscFor")
@@ -354,7 +355,9 @@
                                 .Items(
                                     X.Panel().ID("treeFreeItem")
                                     .Region(Region.West).Flex(45)
-                                    .MinWidth(150).Split(true).AutoScroll(true)
+                                    .MinWidth(150).Split(true)
+                                    .AutoScroll(true)
+                                    .SetAutoScroll(true)
                                     .DirectEvents(de =>
                                     {
                                         de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeFreeItem"));
@@ -428,6 +431,27 @@
                                     .View(X.GridView().TrackOver(false))
                                     .SortableColumns(false)
                                     .StoreID("stoFreeItem")
+
+                                        //.Store(
+                                        //    X.Store().ID("stoFreeItem").AutoLoad(false)
+                                        //    .PageSize(50)
+                                        //        .Model(Util.GenerateModel(typeof(OM21100_pgFreeItem_Result), "mdlFreeItem", "DiscID,DiscSeq,LineRef,FreeItemID"))
+                                        //    .Listeners(l =>
+                                        //        {
+                                        //            l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];";
+                                        //            l.Load.Fn = "Main.Event.sto_load";
+                                        //            l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                                        //            l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                                        //        })
+                                        //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetFreeItem", "OM21100")))
+                                        //    .Parameters(ps =>
+                                        //        {
+                                        //            ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                                        //            ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                                        //        })
+                                        //)
+                                        
+                                                                                
                                     .ColumnModel(
                                         //X.RowNumbererColumn().Width(40)
                                         X.Column().Text(Util.GetLang("InvtID")).DataIndex("FreeItemID")
@@ -460,7 +484,7 @@
                                                 new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdFreeItem,'FreeItemID')",ParameterMode.Raw)//se fix lai
                                             })
                                             .LoadData()
-                                            .Listeners(x => x.Expand.Handler = "this.store.reload()")
+                                            //.Listeners(x => x.Expand.Handler = "this.store.reload()")
                                         )
 
                                         , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("FreeItemQty")
@@ -494,6 +518,22 @@
                                         .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
                                     )
                                     .SelectionModel(X.RowSelectionModel().ID("slmFreeItem").Mode(SelectionMode.Multi))
+                                    // .BottomBar(
+                                    //    X.PagingToolbar()
+                                    //    .HideRefresh(true)
+                                    //    .Items(
+                                    //        X.Label("Page size:"),
+                                    //        X.ToolbarSpacer(10),
+                                    //        X.ComboBox()
+                                    //        .Width(80)
+                                    //        .Items("1", "2", "10", "20", "30", "50")
+                                    //        .SelectedItems("50")
+                                    //        .Listeners(l =>
+                                    //            {
+                                    //                l.Select.Fn = "HQ.grid.onPageSelect";
+                                    //            })
+                                    //    )
+                                    //)
                                     .Plugins(
                                         X.CellEditing()
                                         .ClicksToEdit(1)
@@ -723,7 +763,25 @@
                     .Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
-                    .StoreID("stoDiscItem")
+                   // .StoreID("stoDiscItem")                   
+                    .Store(
+                        X.Store().ID("stoDiscItem").AutoLoad(false)
+                        .PageSize(50)
+                            .Model(Util.GenerateModel(typeof(OM21100_pgDiscItem_Result), "mdlDiscItem", "DiscID,DiscSeq,InvtID", true))
+                        .Listeners(l =>
+                            {
+                                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
+                                l.Load.Fn = "Main.Event.sto_load";
+                                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                            })
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDiscItem", "OM21100")))
+                        .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                            })
+                    )
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
                         , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(110)
@@ -755,7 +813,7 @@
                                 new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdDiscItem,'InvtID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
-                            .Listeners(x => x.Expand.Handler = "this.store.reload();")
+                            //.Listeners(x => x.Expand.Handler = "this.store.reload();")
                         )
 
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
@@ -773,7 +831,23 @@
                         .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
                         .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
                     )
-                    .SelectionModel(X.RowSelectionModel().ID("slmDiscItem").Mode(SelectionMode.Multi))
+                    .SelectionModel(X.RowSelectionModel().ID("slmDiscItem").Mode(SelectionMode.Multi))                        
+                        .BottomBar(
+                        X.PagingToolbar()
+                        .HideRefresh(true)
+                        .Items(
+                            X.Label("Page size:"),
+                            X.ToolbarSpacer(10),
+                            X.ComboBox()
+                            .Width(80)
+                            .Items("1", "2", "10", "20", "30", "50")
+                            .SelectedItems("50")
+                            .Listeners(l =>
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                })
+                        )
+                    )
                     .Plugins(
                         X.CellEditing()
                         .ClicksToEdit(1)
@@ -871,7 +945,25 @@
                     .Scroll(ScrollMode.Both).Flex(60)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
-                    .StoreID("stoBundle")
+                    //.StoreID("stoBundle")                    
+                    .Store(
+                        X.Store().ID("stoBundle").AutoLoad(false)
+                        .PageSize(50)
+                            .Model(Util.GenerateModel(typeof(OM21100_pgDiscBundle_Result), "mdlBundle", "DiscID,DiscSeq,InvtID", true))
+                        .Listeners(l =>
+                            {
+                                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
+                                l.Load.Fn = "Main.Event.sto_load";
+                                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                            })
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDiscBundle", "OM21100")))
+                        .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                            })
+                    )
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
                         , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(110)
@@ -903,7 +995,7 @@
                                 new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdBundle,'InvtID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
-                            .Listeners(x => x.Expand.Handler = "this.store.reload();")
+                           // .Listeners(x => x.Expand.Handler = "this.store.reload();")
                         )
 
                         , X.NumberColumn().Text(Util.GetLang("BreakQty")).DataIndex("BundleQty")
@@ -934,6 +1026,22 @@
                         .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
                     )
                     .SelectionModel(X.RowSelectionModel().ID("slmBundle").Mode(SelectionMode.Multi))
+                        .BottomBar(
+                        X.PagingToolbar()
+                        .HideRefresh(true)
+                        .Items(
+                            X.Label("Page size:"),
+                            X.ToolbarSpacer(10),
+                            X.ComboBox()
+                            .Width(80)
+                            .Items("1", "2", "10", "20", "30", "50")
+                            .SelectedItems("50")
+                            .Listeners(l =>
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                })
+                        )
+                    )
                     .Plugins(
                         X.CellEditing()
                         .ClicksToEdit(1)
@@ -1082,27 +1190,47 @@
                     .Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
-                    .StoreID("stoDiscCust")
+//                    .StoreID("stoDiscCust")
+                    .Store(
+                        X.Store().ID("stoDiscCust").AutoLoad(false)
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(OM21100_pgDiscCust_Result), "mdlDiscCust", "DiscID,DiscSeq,CustID,BranchID", true))
+                        .Listeners(l =>
+                            {
+                                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'CustID', 'BranchID'];";
+                                l.Load.Fn = "Main.Event.sto_load";
+                                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                            })
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDiscCust", "OM21100")))
+                        .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                            })
+                    )
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
                         , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150)
                         .Editor(
                             HQ.Combo().ID("cboGCustID")
-                            .HQProcedure("OM21100_pcCustomerActive").HQColumnShow("CustID,Name")
+                            .HQProcedure("OM21100_pcCustomerActive").HQColumnShow("CustID,Name,BranchID")
                             .HQHeightWidth(400, 300)
                             .ValueField("CustID").DisplayField("CustID")
                             .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw),
-                                new StoreParameter("@UserName","HQ.userID",ParameterMode.Raw)
+                                new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
                             })
+                            .Listeners(l => l.Change.Fn = "DiscDefintion.Event.cboGCustID_Change")
                             .LoadData()
                         )
-
+                        , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("BranchID")
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
 
+                        
                         , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()
@@ -1115,6 +1243,23 @@
                         .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
                     )
                     .SelectionModel(X.RowSelectionModel().ID("slmDiscCust").Mode(SelectionMode.Multi))
+                         .BottomBar(
+                            X.PagingToolbar()
+                            .HideRefresh(true)
+                            .Items(
+                                X.Label("Page size:"),
+                                X.ToolbarSpacer(10),
+                                X.ComboBox()
+                                .Width(80)
+                                .Items("1", "2", "10", "20", "30", "50")
+                                .SelectedItems("50")
+                                .Listeners(l =>
+                                    {
+                                        l.Select.Fn = "HQ.grid.onPageSelect";
+                                    })
+                            )
+                            //.Plugins(X.ProgressBarPager().ID("paggrdPrice"))
+                        )
                     .Plugins(
                         X.CellEditing()
                         .ClicksToEdit(1)
@@ -1164,14 +1309,14 @@
                                 new StoreParameter("@ClassID","Main.Process.getParamForGridCombo(App.grdDiscItemClass,'ClassID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
-                            .Listeners(x => x.Expand.Handler = "this.store.reload()")
+                           // .Listeners(x => x.Expand.Handler = "this.store.reload()")
                         )
 
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
 
-                        , X.CommandColumn()
+                        , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))
