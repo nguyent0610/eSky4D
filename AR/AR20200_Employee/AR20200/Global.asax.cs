@@ -30,13 +30,13 @@ namespace AR20200
         {
             Current.Authorize = false;
             Current.Server = "HOANGSAD";
-            Current.DBSys = "ND_eSky4DSys";
+            Current.DBSys = "APC_Test_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["AR20200"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "APC_Test_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "XUANHUONG";
             Session["Language"] = Current.Language = "vi";
