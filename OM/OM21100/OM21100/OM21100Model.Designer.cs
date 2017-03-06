@@ -7324,6 +7324,30 @@ namespace OM21100
         private global::System.String _DiscBreakLineRef;
         partial void OnDiscBreakLineRefChanging(global::System.String value);
         partial void OnDiscBreakLineRefChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String RefLineRef
+        {
+            get
+            {
+                return _RefLineRef;
+            }
+            set
+            {
+                OnRefLineRefChanging(value);
+                ReportPropertyChanging("RefLineRef");
+                _RefLineRef = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("RefLineRef");
+                OnRefLineRefChanged();
+            }
+        }
+        private global::System.String _RefLineRef;
+        partial void OnRefLineRefChanging(global::System.String value);
+        partial void OnRefLineRefChanged();
 
         #endregion
 

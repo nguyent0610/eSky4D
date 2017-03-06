@@ -20,7 +20,7 @@
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
         .TopBar(Util.SetupToolbar("PO20100", "Main.Event.menuClick"))
-        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 130; })
         .Items(
             X.TabPanel().ID("tabMain")
             .Layout(LayoutType.Fit)
@@ -82,7 +82,8 @@
                             HQ.TextBox().ID("txtDescr")
                             .MarginSpec("5 5 0 5")
                             .HQLangCode("Descr").DataIndex("Descr")
-                            .MaxLength(50).EnforceMaxLength(true).AllowBlank(false)
+                            .MaxLength(50).EnforceMaxLength(true)
+                            .AllowBlank(false)
 
                             , HQ.Combo().ID("cboDiscClass")
                             .MarginSpec("5 5 0 5")
@@ -110,167 +111,179 @@
                         .Layout(LayoutType.Border)
                         .Items(
                             X.FormPanel().ID("frmDiscSeqInfo")
-                            .Layout(LayoutType.HBox)
+                            .Layout(LayoutType.VBox)
                             .Region(Region.North)
-                            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
+                            .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Left }).Border(false)
                             .Items(
-        // First Column
-                                X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0").Flex(1)
-                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
-                                .MinWidth(200)//.MaxWidth(300)
+
+                                X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")//.Flex(1)
+                               // .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
                                 .Items(
+                                    // First Column
+                                    X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.Flex(1)
+                                   // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                                    .MinWidth(200)//.MaxWidth(300)
+                                    .Items(
 
-                                    HQ.Combo().ID("cboDiscSeq")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("DiscSeq").HQProcedure("OM21100_pcDiscSequenceAll").HQColumnShow("DiscSeq,Descr")
-                                    .HQHeightWidth(400, 300).ValueField("DiscSeq").DisplayField("DiscSeq")
-                                    .MaxLength(10).EnforceMaxLength(true)//.HQFirstDefault(true)
-                                    .AllowBlank(false).AllowOnlyWhitespace(false)
-                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                    .HQParam(new StoreParameterCollection() { 
-                                        new StoreParameter("@DiscID", "App.cboDiscID.getValue()", ParameterMode.Raw)
-                                        , new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
-                                        , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
-                                    })
-                                    .LoadData()
-                                    .Listeners(l =>
-                                    {
-                                        l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
-                                        l.Change.Fn = "DiscDefintion.Event.cboDiscSeq_change";
-                                        l.Blur.Fn = "DiscDefintion.Event.cboDiscSeq_change";
-                                        l.Select.Fn = "DiscDefintion.Event.cboDiscSeq_select";
-                                        //l.Expand.Handler = "App.cboDiscSeq.store.clearFilter();";
-                                    })
+                                        HQ.Combo().ID("cboDiscSeq")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("DiscSeq").HQProcedure("OM21100_pcDiscSequenceAll").HQColumnShow("DiscSeq,Descr")
+                                        .HQHeightWidth(400, 300).ValueField("DiscSeq").DisplayField("DiscSeq")
+                                        .MaxLength(10).EnforceMaxLength(true)//.HQFirstDefault(true)
+                                        .AllowBlank(false).AllowOnlyWhitespace(false)
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .HQParam(new StoreParameterCollection() { 
+                                            new StoreParameter("@DiscID", "App.cboDiscID.getValue()", ParameterMode.Raw)
+                                            , new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
+                                            , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                                        })
+                                        .LoadData()
+                                        .Listeners(l =>
+                                        {
+                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                            l.Change.Fn = "DiscDefintion.Event.cboDiscSeq_change";
+                                            l.Blur.Fn = "DiscDefintion.Event.cboDiscSeq_change";
+                                            l.Select.Fn = "DiscDefintion.Event.cboDiscSeq_select";
+                                            //l.Expand.Handler = "App.cboDiscSeq.store.clearFilter();";
+                                        })
 
-                                    , HQ.Combo().ID("cboDiscFor")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("DiscFor").HQProcedure("OM21100_pcDiscFor").HQColumnShow("Descr")
-                                    .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("DiscFor")
-                                    .ForceSelection(true).AllowBlank(false)
-                                    .HQParam(new StoreParameterCollection() { 
-                                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                    })
-                                    .LoadData()
-                                    .Listeners(l => l.Change.Fn = "DiscDefintion.Event.cboDiscFor_change")
+                                        , HQ.Combo().ID("cboDiscFor")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("DiscFor").HQProcedure("OM21100_pcDiscFor").HQColumnShow("Descr")
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("DiscFor")
+                                        .ForceSelection(true).AllowBlank(false)
+                                        .HQParam(new StoreParameterCollection() { 
+                                            new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+                                        .Listeners(l => l.Change.Fn = "DiscDefintion.Event.cboDiscFor_change")
                                     
-                                    , HQ.Combo().ID("cboBreakBy")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("BreakBy").HQProcedure("OM21100_pcBreakBy").HQColumnShow("Descr")
-                                    .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("BreakBy")
-                                    .ForceSelection(true).AllowBlank(false)
-                                    .HQParam(new StoreParameterCollection() { 
-                                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                    })
-                                    .LoadData()
-                                    .Listeners(l => l.Change.Fn = "DiscDefintion.Event.cboBreakBy_change")
+                                        , HQ.Combo().ID("cboBreakBy")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("BreakBy").HQProcedure("OM21100_pcBreakBy").HQColumnShow("Descr")
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("BreakBy")
+                                        .ForceSelection(true).AllowBlank(false)
+                                        .HQParam(new StoreParameterCollection() { 
+                                            new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+                                        .Listeners(l => l.Change.Fn = "DiscDefintion.Event.cboBreakBy_change")
 
-                                    , HQ.Combo().ID("cboBudgetID")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("BudgetID").HQProcedure("OM21100_pcBudgetDiscount").HQColumnShow("BudgetID,Descr")
-                                    .HQHeightWidth(400, 300).ValueField("BudgetID").DisplayField("Descr").DataIndex("BudgetID")
-                                    .ForceSelection(true)
-                                    .HQParam(new StoreParameterCollection() { 
-                                        new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
-                                    })
-                                    .LoadData()
+                                        , HQ.Combo().ID("cboBudgetID")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("BudgetID").HQProcedure("OM21100_pcBudgetDiscount").HQColumnShow("BudgetID,Descr")
+                                        .HQHeightWidth(400, 300).ValueField("BudgetID").DisplayField("Descr").DataIndex("BudgetID")
+                                        .ForceSelection(true)
+                                        .HQParam(new StoreParameterCollection() { 
+                                            new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()                                   
+                                    ) // Container
 
-                                    , HQ.TextBox().ID("txtSeqDescr")
-                                    .MarginSpec("5 5 0 5")
+                                    // Second Column
+                                    , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.Flex(1)
+                                   // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                                    .MinWidth(200)//.MaxWidth(300)
+                                    .Items(
+
+                                        HQ.Combo().ID("cboProAplForItem")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("ProAplForItem").HQProcedure("OM21100_pcProApl").HQColumnShow("Code,Descr")
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")//.LabelWidth(160)
+                                        .ForceSelection(true).AllowBlank(false).DataIndex("ProAplForItem")
+                                        .HQParam(new StoreParameterCollection() { 
+                                            new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+                                        .Listeners(ls=>ls.Change.Fn="DiscDefintion.Event.cboProAplForItem_change")
+
+                                        , HQ.DateField().ID("dteStartDatePO")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("StartDatePO").DataIndex("POStartDate")
+                                        .Hidden(true)
+
+                                        , HQ.DateField().ID("dteEndDatePO")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("EndDatePO").DataIndex("POEndDate")
+                                        .Hidden(true)
+
+                                        , HQ.DateField().ID("dteStartDate")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("StartDate").DataIndex("StartDate")
+
+                                        , HQ.DateField().ID("dteEndDate")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("EndDate").DataIndex("EndDate")
+                                    ) // Container
+
+                                    // Third Column
+                                    , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.Flex(1)
+                                    .MinWidth(200)
+                                    //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                                    .Items(
+                                        HQ.Combo().ID("cboStatus")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("Status").HQProcedure("OM21100_pcStatus").HQColumnShow("Descr")
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                                        .ReadOnly(true).DataIndex("Status")
+                                        .HQParam(new StoreParameterCollection() { 
+                                            new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                            , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+                                        .Listeners(l => l.Change.Handler = "App.cboHandle.store.reload()")
+
+                                        , HQ.Combo().ID("cboHandle")
+                                        .MarginSpec("5 5 0 5")
+                                        .HQLangCode("Handle").HQProcedure("OM21100_pcHandle").HQColumnShow("Descr")
+                                        .HQHeightWidth(400, 300).ValueField("ToStatus").DisplayField("Descr")
+                                        .ForceSelection(true)
+                                        .HQParam(new StoreParameterCollection() { 
+                                            new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                            , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                            , new StoreParameter("@Status", "App.cboStatus.getValue()", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+
+                                        , HQ.Checkbox().ID("chkPOUse")
+                                        .MarginSpec("5 5 0 160")
+                                        .BoxLabel(Util.GetLang("POUse")).DataIndex("POUse")
+                                        .Hidden(true)
+                                    ) // Container
+
+                                    // Forth Column
+                                    , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
+                                   // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                                    .Items(
+                                        HQ.Checkbox().ID("chkActive")
+                                        .MarginSpec("5 5 0 10")
+                                        .BoxLabel(Util.GetLang("Active")).DataIndex("Active")
+
+                                        , HQ.Checkbox().ID("chkDiscTerm")
+                                        .MarginSpec("5 5 0 10")
+                                        .BoxLabel(Util.GetLang("DiscTerm")).DataIndex("Promo")
+
+                                        , HQ.Checkbox().ID("chkAutoFreeItem")
+                                        .MarginSpec("5 5 0 10")
+                                        .BoxLabel(Util.GetLang("AutoFreeItem")).DataIndex("AutoFreeItem")
+
+                                        , HQ.Checkbox().ID("chkAllowEditDisc")
+                                        .MarginSpec("5 5 0 10")
+                                        .BoxLabel(Util.GetLang("AllowEditDisc")).DataIndex("AllowEditDisc")
+                                        .Hidden(true)
+                                    ) // Container
+                                ),
+                                X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
+                                //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.LE })
+                                .Items(
+                                     HQ.TextBox().ID("txtSeqDescr")
+                                    .MarginSpec("0 5 0 5")
                                     .HQLangCode("Descr").DataIndex("Descr")
-                                    .MaxLength(50).EnforceMaxLength(true).AllowBlank(false)
-                                ) // Container
-
-                                // Second Column
-                                , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0").Flex(1)
-                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
-                                .MinWidth(200)//.MaxWidth(300)
-                                .Items(
-
-                                    HQ.Combo().ID("cboProAplForItem")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("ProAplForItem").HQProcedure("OM21100_pcProApl").HQColumnShow("Code,Descr")
-                                    .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")//.LabelWidth(160)
-                                    .ForceSelection(true).AllowBlank(false).DataIndex("ProAplForItem")
-                                    .HQParam(new StoreParameterCollection() { 
-                                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                    })
-                                    .LoadData()
-                                    .Listeners(ls=>ls.Change.Fn="DiscDefintion.Event.cboProAplForItem_change")
-
-                                    , HQ.DateField().ID("dteStartDatePO")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("StartDatePO").DataIndex("POStartDate")
-                                    .Hidden(true)
-
-                                    , HQ.DateField().ID("dteEndDatePO")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("EndDatePO").DataIndex("POEndDate")
-                                    .Hidden(true)
-
-                                    , HQ.DateField().ID("dteStartDate")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("StartDate").DataIndex("StartDate")
-
-                                    , HQ.DateField().ID("dteEndDate")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("EndDate").DataIndex("EndDate")
-                                ) // Container
-
-                                // Third Column
-                                , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0").Flex(1).MinWidth(200)
-                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
-                                .Items(
-                                    HQ.Combo().ID("cboStatus")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("Status").HQProcedure("OM21100_pcStatus").HQColumnShow("Descr")
-                                    .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
-                                    .ReadOnly(true).DataIndex("Status")
-                                    .HQParam(new StoreParameterCollection() { 
-                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
-                                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                    })
-                                    .LoadData()
-                                    .Listeners(l => l.Change.Handler = "App.cboHandle.store.reload()")
-
-                                    , HQ.Combo().ID("cboHandle")
-                                    .MarginSpec("5 5 0 5")
-                                    .HQLangCode("Handle").HQProcedure("OM21100_pcHandle").HQColumnShow("Descr")
-                                    .HQHeightWidth(400, 300).ValueField("ToStatus").DisplayField("Descr")
-                                    .ForceSelection(true)
-                                    .HQParam(new StoreParameterCollection() { 
-                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
-                                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                        , new StoreParameter("@Status", "App.cboStatus.getValue()", ParameterMode.Raw)
-                                    })
-                                    .LoadData()
-
-                                    , HQ.Checkbox().ID("chkPOUse")
-                                    .MarginSpec("5 5 0 160")
-                                    .BoxLabel(Util.GetLang("POUse")).DataIndex("POUse")
-                                    .Hidden(true)
-                                ) // Container
-
-                                // Forth Column
-                                , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
-                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
-                                .Items(
-                                    HQ.Checkbox().ID("chkActive")
-                                    .MarginSpec("5 5 0 10")
-                                    .BoxLabel(Util.GetLang("Active")).DataIndex("Active")
-
-                                    , HQ.Checkbox().ID("chkDiscTerm")
-                                    .MarginSpec("5 5 0 10")
-                                    .BoxLabel(Util.GetLang("DiscTerm")).DataIndex("Promo")
-
-                                    , HQ.Checkbox().ID("chkAutoFreeItem")
-                                    .MarginSpec("5 5 0 10")
-                                    .BoxLabel(Util.GetLang("AutoFreeItem")).DataIndex("AutoFreeItem")
-
-                                    , HQ.Checkbox().ID("chkAllowEditDisc")
-                                    .MarginSpec("5 5 0 10")
-                                    .BoxLabel(Util.GetLang("AllowEditDisc")).DataIndex("AllowEditDisc")
-                                    .Hidden(true)
-                                ) // Container
+                                    
+                                    .StyleSpec("text-align:left").Width(880)
+                                    //.MaxLength(50).EnforceMaxLength(true)
+                                    .AllowBlank(false)
+                                )
                             )
                             .Listeners(ls =>
                             {

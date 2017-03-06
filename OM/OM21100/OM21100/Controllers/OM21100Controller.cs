@@ -1430,6 +1430,18 @@ namespace OM21100.Controllers
                 
             }
 
+            var lstDel = _db.OM_DiscItem.Where(p => p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq).ToList();
+            for (int i = 0; i < lstDel.Count; i++)
+            {
+                var objDel = lstDiscItem.FirstOrDefault(p => p.DiscID == lstDel[i].DiscID
+                                && p.DiscSeq == lstDel[i].DiscSeq
+                                && p.InvtID == lstDel[i].InvtID);
+                if (objDel == null)
+                {
+                    _db.OM_DiscItem.DeleteObject(lstDel[i]);
+                }
+            }
+
             foreach (var currentItem in lstDiscItem)
             {
                 var discItem = (from p in _db.OM_DiscItem
@@ -1483,6 +1495,19 @@ namespace OM21100.Controllers
                         _db.OM_DiscCust.DeleteObject(deletedDiscItem);
                     }
                 }                
+            }
+
+            var lstDel = _db.OM_DiscCust.Where(p => p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq).ToList();
+            for (int i = 0; i < lstDel.Count; i++)
+            {
+                var objDel = lstDiscCust.FirstOrDefault(p => p.DiscID == lstDel[i].DiscID
+                                && p.DiscSeq == lstDel[i].DiscSeq
+                                && p.CustID == lstDel[i].CustID
+                                && p.BranchID == lstDel[i].BranchID);
+                if (objDel == null)
+                {
+                    _db.OM_DiscCust.DeleteObject(lstDel[i]);
+                }
             }
             foreach (var currentCust in lstDiscCust)
             {
@@ -1612,6 +1637,18 @@ namespace OM21100.Controllers
                         _db.OM_DiscItem.DeleteObject(deletedBundle);
                     }
                 }                
+            }
+
+            var lstDel = _db.OM_DiscItem.Where(p => p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq).ToList();
+            for (int i = 0; i < lstDel.Count; i++)
+            {
+                var objDel = lstDiscBundle.FirstOrDefault(p => p.DiscID == lstDel[i].DiscID
+                                && p.DiscSeq == lstDel[i].DiscSeq
+                                && p.InvtID == lstDel[i].InvtID);
+                if (objDel == null)
+                {
+                    _db.OM_DiscItem.DeleteObject(lstDel[i]);
+                }
             }
 
             foreach (var currentBundle in lstDiscBundle)

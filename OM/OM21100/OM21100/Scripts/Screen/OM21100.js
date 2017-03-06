@@ -1112,8 +1112,25 @@ var DiscDefintion = {
 
         deleteAllInvts: function (item) {
             if (item == "yes") {
+
+
+                //App.grdDiscItem.store.suspendEvents();
+                //var store = App.grdDiscItem.store.snapshot || App.grdDiscItem.store.allData || App.grdDiscItem.store.data;
+                //var index = 0;
+                //while (store.length > 0) {
+                //    App.grdDiscItem.getSelectionModel().select(store.items[0]);
+                //    App.grdDiscItem.deleteSelected();
+                //    index++;
+                //    if (index >= App.grdDiscItem.store.pageSize) {
+                //        App.grdDiscItem.view.refresh();
+                //        App.grdDiscItem.store.loadPage(1);
+                //        index = 0;
+                //    }
+                //}
+                //App.grdDiscItem.store.resumeEvents();
+
                 App.grdDiscItem.store.removeAll();
-                App.grdDiscItem.store.submitData();
+               // App.grdDiscItem.store.submitData();
                 App.grdDiscItem.view.refresh();
                 App.grdDiscItem.store.loadPage(1);
                 var invtBlank = HQ.store.findRecord(App.grdDiscItem.store, ['InvtID'], ['']);
@@ -1152,7 +1169,7 @@ var DiscDefintion = {
 
         deleteAllCust: function (item) {
             if (item == "yes") {
-                App.grdDiscCust.store.removeAll();
+                App.grdDiscCust.store.removeAll();                
                 App.grdDiscCust.store.submitData();
                 App.grdDiscCust.view.refresh();
                 App.grdDiscCust.store.loadPage(1);
@@ -1240,6 +1257,8 @@ var DiscDefintion = {
                 App.dteEndDate.setReadOnly(false);
                 App.chkDiscTerm.setReadOnly(false);
                 App.chkAutoFreeItem.setReadOnly(false);
+                App.cboBudgetID.setReadOnly(false);
+                App.txtSeqDescr.setReadOnly(false);
             }
             else {
                 App.cboProAplForItem.setReadOnly(true);
@@ -1247,6 +1266,8 @@ var DiscDefintion = {
                 App.dteEndDate.setReadOnly(true);
                 App.chkDiscTerm.setReadOnly(true);
                 App.chkAutoFreeItem.setReadOnly(true);
+                App.cboBudgetID.setReadOnly(true);
+                App.txtSeqDescr.setReadOnly(true);
             }
 
             App.grdDiscBreak.store.load(function () {
