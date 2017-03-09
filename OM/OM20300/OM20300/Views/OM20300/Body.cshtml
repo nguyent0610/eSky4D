@@ -1,0 +1,62 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM20300;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", false, ""))
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 120; })
+    .Layout(LayoutType.Border)    
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().Region(Region.North).Layout(LayoutType.VBox).AutoScroll(true)
+        .Items(
+           X.FieldContainer().Layout(LayoutType.HBox)
+           .Items(
+                HQ.Combo().ID("cboBudgetID").HQLangCode("BudgetID").AllowBlank(false)
+                , HQ.TextBox().ID("txtDescr").HQLangCode("Descr").Width(550)                                
+           )
+           
+           ,X.FieldContainer().Layout(LayoutType.HBox)
+           .Items(
+                 HQ.Combo().ID("cboApplyTo").HQLangCode("ApplyTo")
+                , HQ.Combo().ID("AllocType").HQLangCode("AllocType")
+                , HQ.Combo().ID("Status").HQLangCode("Status").ReadOnly(true).Tag("X")
+                                          
+           )
+           
+           ,X.FieldContainer().Layout(LayoutType.HBox)
+           .Items(
+               
+                HQ.NumberField().ID("numTotalBudget").HQLangCode("TotalBudget").ReadOnly(true).Tag("X")
+                , HQ.NumberField().ID("numAlloc").HQLangCode("Alloc").ReadOnly(true).Tag("X")
+                , HQ.Combo().ID("Handle").HQLangCode("Handle").ReadOnly(false).Tag("X")    
+                                                      
+           )
+           ,X.FieldContainer().Layout(LayoutType.HBox)
+           .Items(               
+                HQ.DateField().ID("dteRvsdDate").HQLangCode("RvsdDate")                              
+                , HQ.NumberField().ID("numFreeAlloc").HQLangCode("FreeAlloc").ReadOnly(true).Tag("X")
+                , HQ.Checkbox().ID("chkActive").HQLangCode("Active").MarginSpec("0 0 0 125")   
+         
+           )
+
+        )
+        , X.Panel().Region(Region.Center).Layout(LayoutType.VBox)
+        .Items(
+           
+        )
+    )//giao dien
+))

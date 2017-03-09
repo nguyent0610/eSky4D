@@ -1,0 +1,148 @@
+using HQ.eSkyFramework;
+using Ext.Net;
+using Ext.Net.MVC;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
+namespace OM20300.Controllers
+{
+    [DirectController]
+    [CustomAuthorize]
+    [CheckSessionOut]
+    public class OM20300Controller : Controller
+    {
+        private string _screenNbr = "OM20300";
+        private string _userName = Current.UserName;
+
+        OM20300Entities _db = Util.CreateObjectContext<OM20300Entities>(false);
+
+        public ActionResult Index()
+        {
+            
+            Util.InitRight(_screenNbr);
+            return View();
+        }
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
+        {
+            return PartialView();
+        }
+
+        
+        public ActionResult GetOM20300Header(string branchId, string setupID)
+        {
+            var setupData = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == setupID);
+            return this.Store(setupData);
+        }
+
+        [HttpPost]
+        public ActionResult Save(FormCollection data)
+        {
+            string branchId = Current.CpnyID;
+            string dfltBankAcct = data["cboBankAcct"];
+            string classID = data["cboClassID"];
+            string lastBatNbr = data["txtLastBatNbr"];
+            string lastRefNbr = data["txtLastRefNbr"];
+            string lastPaymentNbr = data["txtLastPaymentNbr"];
+            string preFixBat = data["txtPreFixBat"];
+            string tranDescDef = data["cboTranDescDef"];
+            string terms = data["cboTermsID"];
+
+
+            try
+            {
+
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM20300Header"]);
+                ChangeRecords<AP_Setup> lstSetup = dataHandler.BatchObjectData<AP_Setup>();
+                
+
+                lstSetup.Created.AddRange(lstSetup.Updated);
+
+                foreach (AP_Setup curSetup in lstSetup.Created)
+                {
+                    if (curSetup.BranchID.PassNull() == "") continue;
+
+                    var setup = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == "AP");
+
+                    if (setup != null)
+                    {
+                        if (setup.tstamp.ToHex() == curSetup.tstamp.ToHex())
+                        {
+                            Update_Setup(setup, curSetup, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        setup = new AP_Setup();
+                        setup.DfltBankAcct = dfltBankAcct; 
+                        setup.ClassID = classID;
+                        setup.LastBatNbr = lastBatNbr;
+                        setup.LastRefNbr = lastRefNbr;
+                        setup.LastPaymentNbr = lastPaymentNbr;
+                        setup.PreFixBat = preFixBat;
+                        setup.TranDescDflt = tranDescDef;
+                        setup.terms = terms;
+
+                        Update_Setup(setup, curSetup, true);
+                        _db.AP_Setup.AddObject(setup);
+                    }
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+        [DirectMethod]
+        public ActionResult Delete(string branchId)
+        {
+            branchId = Current.CpnyID;
+            var cpny = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId);
+            if (cpny != null)
+            {
+                _db.AP_Setup.DeleteObject(cpny);
+
+            }   
+            _db.SaveChanges();
+            return this.Direct();
+        }
+        private void Update_Setup(AP_Setup s, AP_Setup d, bool isNew)
+        {
+            if (isNew)
+            {
+                s.BranchID = d.BranchID;
+                s.SetupID = "AP";
+                s.Crtd_DateTime = DateTime.Now;
+                s.Crtd_Prog = _screenNbr;
+                s.Crtd_User = _userName;
+            }
+            s.ClassID = d.ClassID;
+            s.DfltBankAcct = d.DfltBankAcct;
+            s.LastBatNbr = d.LastBatNbr;
+            s.LastRefNbr = d.LastRefNbr;
+            s.LastPaymentNbr = d.LastPaymentNbr;
+            s.PreFixBat = d.PreFixBat;
+            s.TranDescDflt = d.TranDescDflt;
+            s.terms = d.terms;
+            s.LUpd_DateTime = DateTime.Now;
+            s.LUpd_Prog = _screenNbr;
+            s.LUpd_User = _userName;
+        }
+        
+    }
+}
