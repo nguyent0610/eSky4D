@@ -111,8 +111,8 @@ namespace OM20300.Controllers
         {
             try
             {
-                string Status = data["cboStatus"].PassNull();
-                string Handle = data["cboHandle"].PassNull();
+                string Status = data["Status"].PassNull();
+                string Handle = data["Handle"].PassNull();
 
                 _objBudget = Util.ConvertToObject<OM20300_pcBudget_Result>(data, true ,new string[]{"Active"});
                 _objBudget.Active = data["Active"].PassNull() != string.Empty ? true : false;
@@ -239,45 +239,45 @@ namespace OM20300.Controllers
                     }
                 }
 
-                var handle = data["Handle"].PassNull();
-                if (handle != string.Empty && handle!="N")
-                {
-                    string branch = Current.CpnyID;
-                    foreach (var cpny in lstCpny)
-                    {
-                        branch += cpny.CpnyID + ',';
-                    }
-                    if (branch.Length > 0) branch = branch.Substring(0, branch.Length - 1);
+                //var handle = data["Handle"].PassNull();
+                //if (handle != string.Empty && handle!="N")
+                //{
+                //    string branch = Current.CpnyID;
+                //    foreach (var cpny in lstCpny)
+                //    {
+                //        branch += cpny.CpnyID + ',';
+                //    }
+                //    if (branch.Length > 0) branch = branch.Substring(0, branch.Length - 1);
 
-                    var task = (from p in _app.HO_PendingTasks
-                                where p.ObjectID == _objBudget.BudgetID && p.EditScreenNbr == "OM20300"
-                                    && p.BranchID == branch
-                                select p).FirstOrDefault();
+                //    var task = (from p in _app.HO_PendingTasks
+                //                where p.ObjectID == _objBudget.BudgetID && p.EditScreenNbr == "OM20300"
+                //                    && p.BranchID == branch
+                //                select p).FirstOrDefault();
                  
 
-                    var approveHandle = _app.SI_ApprovalFlowHandle.FirstOrDefault(p => p.AppFolID == "OM20300" && p.Status == _objBudget.Status && p.Handle == handle);
-                    if (task == null && approveHandle != null)
-                    {
-                        if (!approveHandle.Param00.PassNull().Split(',').Any(p => p.ToLower() == "notapprove"))
-                        {
-                            HO_PendingTasks newTask = new HO_PendingTasks();
-                            newTask.BranchID = branch;
-                            newTask.ObjectID = _objBudget.BudgetID;
-                            newTask.EditScreenNbr = "OM20300";
-                            newTask.Content = string.Format(approveHandle.ContentApprove, _objBudget.BudgetID, _objBudget.Descr, branch);
-                            newTask.Crtd_Datetime = newTask.LUpd_Datetime = DateTime.Now;
-                            newTask.Crtd_Prog = newTask.LUpd_Prog = "OM20300";
-                            newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
-                            newTask.Status = approveHandle.ToStatus;
-                            _app.HO_PendingTasks.AddObject(newTask);
+                //    var approveHandle = _app.SI_ApprovalFlowHandle.FirstOrDefault(p => p.AppFolID == "OM20300" && p.Status == _objBudget.Status && p.Handle == handle);
+                //    if (task == null && approveHandle != null)
+                //    {
+                //        if (!approveHandle.Param00.PassNull().Split(',').Any(p => p.ToLower() == "notapprove"))
+                //        {
+                //            HO_PendingTasks newTask = new HO_PendingTasks();
+                //            newTask.BranchID = branch;
+                //            newTask.ObjectID = _objBudget.BudgetID;
+                //            newTask.EditScreenNbr = "OM20300";
+                //            newTask.Content = string.Format(approveHandle.ContentApprove, _objBudget.BudgetID, _objBudget.Descr, branch);
+                //            newTask.Crtd_Datetime = newTask.LUpd_Datetime = DateTime.Now;
+                //            newTask.Crtd_Prog = newTask.LUpd_Prog = "OM20300";
+                //            newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
+                //            newTask.Status = approveHandle.ToStatus;
+                //            _app.HO_PendingTasks.AddObject(newTask);
 
-                        }
-                        budget.Status = approveHandle.ToStatus;
-                    }
-                    _app.SaveChanges();
-                    if (approveHandle != null) Approve.Mail_Approve("OM20300", _objBudget.BudgetID, approveHandle.RoleID, approveHandle.Status, approveHandle.Handle, Current.LangID.ToString(), Current.UserName, branch, Current.CpnyID, string.Empty, string.Empty, string.Empty);
-                }
-                else
+                //        }
+                //        budget.Status = approveHandle.ToStatus;
+                //    }
+                //    _app.SaveChanges();
+                //    if (approveHandle != null) Approve.Mail_Approve("OM20300", _objBudget.BudgetID, approveHandle.RoleID, approveHandle.Status, approveHandle.Handle, Current.LangID.ToString(), Current.UserName, branch, Current.CpnyID, string.Empty, string.Empty, string.Empty);
+                //}
+                //else
                     _app.SaveChanges();
 
 
@@ -317,7 +317,7 @@ namespace OM20300.Controllers
             s.QtyAmtFree = _objBudget.QtyAmtFree;
             s.QtyAmtTotal = _objBudget.QtyAmtTotal;
             s.RvsdDate = _objBudget.RvsdDate;
-            s.Status = _objBudget.Status.PassNull();
+            //s.Status = _objBudget.Status.PassNull();
             s.LUpd_DateTime = DateTime.Now;
             s.LUpd_Prog = "OM20300";
             s.LUpd_User = Current.UserName;
