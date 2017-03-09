@@ -58,6 +58,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\HQ.eSkySys.dll</HintPath>
     </Reference>
+    <Reference Include="HQSendMailApprove, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\DLL\HQSendMailApprove.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -140,11 +144,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OM20300Model.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OM20300Model.edmx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -152,6 +151,11 @@
     <Compile Include="Controllers\OM20300Controller.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="OM20300Model1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OM20300Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -214,7 +218,7 @@
     <Content Include="Content\Site.css" />
     <EntityDeploy Include="OM20300Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>OM20300Model.Designer.cs</LastGenOutput>
+      <LastGenOutput>OM20300Model1.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\hq.common.debug.js" />

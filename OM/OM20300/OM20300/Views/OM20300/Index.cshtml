@@ -1,69 +1,46 @@
+﻿@using HQ.eSkyFramework;
 @using Ext.Net;
 @using Ext.Net.MVC;
-@using HQ.eSkyFramework;
-@using HQ.eSkyFramework.HQControl;
+@*@using OM20300.Models;*@
 @using OM20300;
 
-@model System.Collections.IEnumerable
 @{
     Layout = null;
-    var X = Html.X();
     ViewBag.Title = "OM20300";
+    var X = Html.X();
     var acc = Session["OM20300"] as AccessRight;
 }
+
 <!DOCTYPE html>
 <html>
- <!--Không thay đổi phần head Đổi mã màn hình OM20300.js tùy theo màn hình đổi lại-->
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/OM20300.js")' type="text/javascript"></script>
-    <style>
-        .x-grid-row-over .x-grid-cell-inner {
-            font-weight : bold;
-        }
-    </style>
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/OM20300.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+
     <script>
-       
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
+        HQ.businessDate = new Date();
+        HQ.isRelease = HQ.util.toBool('@acc.Release.ToString()');
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-
+        HQ.beginStatus = '@ViewBag.BeginStatus';
+        HQ.endStatus = '@ViewBag.EndStatus';
+        HQ.roles = '@ViewBag.Roles';
     </script>  
     <title>@ViewBag.Title</title>
 </head>
-<body>   
-    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+<body>
+    @(X.ResourceManager().Theme(Theme.Gray))
     
-
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
-      
-        @(Html.X().Store().ID("stoOM20300Header")   
-            .Model(Util.GenerateModel(typeof(AP_Setup), "OM20300Model", "BrandID"))       
-            .Proxy(
-                X.AjaxProxy()                
-                .Url(Url.Action("GetOM20300Header", "OM20300"))                
-                .ActionMethods(action =>
-                {
-                    action.Read = HttpMethod.POST;
-                })
-                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-            ) 
-            .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("branchId", Current.CpnyID, ParameterMode.Value));
-                                ps.Add(new StoreParameter("setupID", "AP", ParameterMode.Value));
-                            })      
-            .Listeners(p=>p.Load.Handler="loadDataHeader()" )
-      )  
-      <!-- Gọi hàm Body trong OM20300Controller để dựng view Body.cshtml, mục đích tạo cache. -->          
-       @{Html.RenderAction("Body", new { lang=@Current.LangID});}   
-    
+        <!-- Gọi hàm Body trong OM24000Controller để dựng view Body.cshtml, mục đích tạo cache. -->    
+
+        @{Html.RenderAction("Body", new { lang=Current.LangID});}  
 </body>
 </html>
- 
