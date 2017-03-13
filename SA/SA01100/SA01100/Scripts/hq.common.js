@@ -1,3 +1,88 @@
+Ext.override(Ext.net.DirectEvent, {
+    showFailure: function (response, errorMsg) {
+        var bodySize = Ext.getBody().getViewSize(),
+            width = (bodySize.width < 500) ? bodySize.width - 50 : 500,
+            height = (bodySize.height < 300) ? bodySize.height - 50 : 300,
+            win;
+
+        if (Ext.isEmpty(errorMsg)) {
+            errorMsg = response.responseText;
+        }
+        if (response.status == 500 || response.status == 0) Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('ErrorConnectServer'));
+        else {
+            win = new Ext.window.Window({
+                id: "winError",
+                modal: true,
+                width: width,
+                height: height,
+                title: "Request Failure",
+                layout: "fit",
+                maximizable: false, //default is true
+                closable: true, //default is true
+                items: [{
+                    xtype: "container",
+                    layout: {
+                        type: "vbox",
+                        align: "stretch"
+                    },
+                    items: [
+                        {
+                            xtype: "container",
+                            height: 42,
+                            layout: "absolute",
+                            defaultType: "label",
+                            items: [
+                                {
+                                    xtype: "component",
+                                    x: 5,
+                                    y: 5,
+                                    html: '<div class="x-message-box-error" style="width:32px;height:32px"></div>'
+                                },
+                                {
+                                    x: 42,
+                                    y: 6,
+                                    html: "<b>Status Code: </b>"
+                                },
+                                {
+                                    x: 125,
+                                    y: 6,
+                                    text: response.status
+                                },
+                                {
+                                    x: 42,
+                                    y: 25,
+                                    html: "<b>Status Text: </b>"
+                                },
+                                {
+                                    x: 125,
+                                    y: 25,
+                                    text: response.statusText
+                                }
+                            ]
+                        },
+                        {
+                            flex: 1,
+                            itemId: "__ErrorMessageEditor",
+                            xtype: "htmleditor",
+                            value: errorMsg,
+                            readOnly: true,
+                            enableAlignments: false,
+                            enableColors: false,
+                            enableFont: false,
+                            enableFontSize: false,
+                            enableFormat: false,
+                            enableLinks: false,
+                            enableLists: false,
+                            enableSourceEdit: false
+                        }
+                    ]
+                }]
+            });
+
+            win.show();
+        }
+    }
+});
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
@@ -73,10 +158,15 @@ var HQ = {
     store: {
         isChange: function (store) {
             if ((store.getChangedData().Created != undefined && store.getChangedData().Created.length > 1)
-                || store.getChangedData().Updated != undefined
-                || store.getChangedData().Deleted != undefined) {
+                || store.getChangedData().Updated != undefined) {
                 return true;
-            } else {
+            } else if (store.getChangedData().Deleted != undefined) {
+                for (var i = 0; i < store.getChangedData().Deleted.length; i++) {
+                    if (store.getChangedData().Deleted[i].tstamp != '') return true;
+                }
+                return false;
+            }
+            else {
                 return false;
             }
         },
@@ -1070,7 +1160,8 @@ var FilterCombo = function (control, stkeyFilter) {
             // get filter
             store.filters.items.forEach(function (item) {
                 if (item.id != control.id + '-query-filter') {
-                    filtersAux.push(item);
+                    if (item.property && item.value)
+                        filtersAux.push(item);
                 }
             });
             store.clearFilter();

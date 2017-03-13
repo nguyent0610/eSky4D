@@ -65,7 +65,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoSYS_Message, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (checkRequirePass(App.stoSYS_Message, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -76,6 +76,51 @@ var menuClick = function (command) {
             break;
     }
 
+};
+
+var checkRequirePass = function (store, keys, fieldsCheck, fieldsLang) {
+    items = store.getChangedData().Created;
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (items[i][keys[jkey]]) {
+                    for (var k = 0; k < fieldsCheck.length; k++) {
+                        if (fieldsCheck[k] == 'Type' && items[i].Type.toString().trim() == "0") {
+                            HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                            return false;
+                        }
+                        if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
+                            HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                            return false;
+                        }
+                    }
+                    break; // Check data one time
+                }
+            }
+        }
+    }
+
+    items = store.getChangedData().Updated;
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (items[i][keys[jkey]]) {
+                    for (var k = 0; k < fieldsCheck.length; k++) {
+                        if (fieldsCheck[k] == 'Type' && items[i].Type.toString().trim() == "0") {
+                            HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                            return false;
+                        }
+                        if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
+                            HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                            return false;
+                        }
+                    }
+                    break; // Check data one time
+                }
+            }
+        }
+    }
+    return true;
 };
 
 var stoChanged = function (sto) {
