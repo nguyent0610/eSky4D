@@ -195,6 +195,16 @@ var grdOrder_BeforeEdit = function (editor, context, eOpts) {
 }
 var grdDelivery_BeforeEdit = function (editor, context, eOpts) {
     if (App.cboStatus.getValue() != 'H') return false;
+    var obj = HQ.store.findRecord(App.stoDelivery, ["Selected"], [true]);
+    if (obj && obj.data.SlsPerID != context.record.data.SlsPerID) {
+        obj.set('Selected', false);
+    }
+}
+var grdDelivery_Edit = function (editor, context, eOpts) {
+    //var obj = HQ.store.findRecord(App.stoDelivery, ["Selected"], [true]);
+    //if (obj && obj.data.SlsPerID != context.record.data.SlsPerID) {
+    //    obj.set('Selected', false);
+    //}
 }
 
 var btnLoad_click = function () {

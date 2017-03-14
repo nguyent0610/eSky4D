@@ -326,10 +326,10 @@
                         .HideTitleEl(true).DataIndex("Selected")
                         .Align(Alignment.Center).ToolTip(Util.GetLang("Selected"))
                         .Width(50).Editable(true)
-                        .HeaderItems(
-                            HQ.Checkbox()
-                            .Handler("chkSelectHeaderDelivery_Change")
-                        )
+                        //.HeaderItems(
+                        //    HQ.Checkbox()
+                        //    .Handler("chkSelectHeaderDelivery_Change")
+                        //)
 
                 
                         , X.Column()
@@ -344,8 +344,8 @@
                         X.CellEditing()
                         .ClicksToEdit(1) 
                         .Listeners(ls =>
-                        {                          
-                            ls.Edit.Fn = "frmChange";
+                        {
+                            ls.Edit.Fn = "grdDelivery_Edit";
                             ls.BeforeEdit.Fn = "grdDelivery_BeforeEdit";
                         })                       
                     ).Features(
