@@ -35,7 +35,6 @@ namespace SA02210.Controllers
             return PartialView();
         }
 
-
         public ActionResult GetSYS_FavouriteGroupUser(string UserGroupID)
         {
             return this.Store(_db.SA02210_pgSYS_FavouriteGroupUser(UserGroupID).ToList());

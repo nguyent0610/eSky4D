@@ -76,7 +76,6 @@ var menuClick = function (command) {
         case "close":
             break;
     }
-
 };
 
 var tabSA02210_AfterRender = function (obj) {
@@ -100,7 +99,7 @@ var cboUserGroupID_Select = function (sender,value) {
 };
 
 var stoBeforeLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
 };
 
 var stoChanged = function (sto) {
@@ -130,7 +129,6 @@ var grdSYS_FavouriteGroupUser_BeforeEdit = function (editor, e) {
 };
 
 var grdSYS_FavouriteGroupUser_Edit = function (item, e) {
-    
     if (e.field == "ScreenNumber") {
         var selectedRecord = App.cboScreenNumber.store.findRecord(e.field, e.value);
         if (selectedRecord) {
@@ -141,6 +139,7 @@ var grdSYS_FavouriteGroupUser_Edit = function (item, e) {
         }
     }
     HQ.grid.checkInsertKey(App.grdSYS_FavouriteGroupUser, e, keys);
+    stoChanged(App.stoSYS_FavouriteGroupUser);
 };
 
 var grdSYS_FavouriteGroupUser_ValidateEdit = function (item, e) {

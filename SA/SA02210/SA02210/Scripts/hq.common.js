@@ -1,3 +1,88 @@
+Ext.override(Ext.net.DirectEvent, {
+    showFailure: function (response, errorMsg) {
+        var bodySize = Ext.getBody().getViewSize(),
+            width = (bodySize.width < 500) ? bodySize.width - 50 : 500,
+            height = (bodySize.height < 300) ? bodySize.height - 50 : 300,
+            win;
+
+        if (Ext.isEmpty(errorMsg)) {
+            errorMsg = response.responseText;
+        }
+        if (response.status == 500 || response.status == 0) Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('ErrorConnectServer'));
+        else {
+            win = new Ext.window.Window({
+                id: "winError",
+                modal: true,
+                width: width,
+                height: height,
+                title: "Request Failure",
+                layout: "fit",
+                maximizable: false, //default is true
+                closable: true, //default is true
+                items: [{
+                    xtype: "container",
+                    layout: {
+                        type: "vbox",
+                        align: "stretch"
+                    },
+                    items: [
+                        {
+                            xtype: "container",
+                            height: 42,
+                            layout: "absolute",
+                            defaultType: "label",
+                            items: [
+                                {
+                                    xtype: "component",
+                                    x: 5,
+                                    y: 5,
+                                    html: '<div class="x-message-box-error" style="width:32px;height:32px"></div>'
+                                },
+                                {
+                                    x: 42,
+                                    y: 6,
+                                    html: "<b>Status Code: </b>"
+                                },
+                                {
+                                    x: 125,
+                                    y: 6,
+                                    text: response.status
+                                },
+                                {
+                                    x: 42,
+                                    y: 25,
+                                    html: "<b>Status Text: </b>"
+                                },
+                                {
+                                    x: 125,
+                                    y: 25,
+                                    text: response.statusText
+                                }
+                            ]
+                        },
+                        {
+                            flex: 1,
+                            itemId: "__ErrorMessageEditor",
+                            xtype: "htmleditor",
+                            value: errorMsg,
+                            readOnly: true,
+                            enableAlignments: false,
+                            enableColors: false,
+                            enableFont: false,
+                            enableFontSize: false,
+                            enableFormat: false,
+                            enableLinks: false,
+                            enableLists: false,
+                            enableSourceEdit: false
+                        }
+                    ]
+                }]
+            });
+
+            win.show();
+        }
+    }
+});
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
@@ -23,11 +108,13 @@ if (typeof String.prototype.trim !== 'function') {
         return this.replace(/^\s+|\s+$/g, '');
     }
 }
+
 if (typeof String.prototype.unsign !== 'function') {
     String.prototype.unsign = function () {
-        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ĩ/g, "e").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
+        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/ý|ỳ|ỷ|ỹ|ỵ/g, "y").replace(/ú|ù|ủ|ũ|ụ|ứ|ừ|ử|ữ|ự/g, "u").replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/g, "o")
     }
 }
+
 if (!('forEach' in Array.prototype)) {
     Array.prototype.forEach = function (action, that /*opt*/) {
         for (var i = 0, n = this.length; i < n; i++)
@@ -40,6 +127,7 @@ Date.prototype.addDays = function (days) {
     this.setDate(this.getDate() + days);
     return this;
 };
+
 Date.prototype.getFromFormat = function (format) {
     var yyyy = this.getFullYear().toString();
     format = format.replace(/yyyy/g, yyyy)
@@ -55,6 +143,7 @@ Date.prototype.getFromFormat = function (format) {
     format = format.replace(/ss/g, (ss[1] ? ss : "0" + ss[0]));
     return format;
 };
+
 Number.prototype.format = function (n, x, s, c) {
     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
         num = this.toFixed(Math.max(0, ~~n));
@@ -69,10 +158,15 @@ var HQ = {
     store: {
         isChange: function (store) {
             if ((store.getChangedData().Created != undefined && store.getChangedData().Created.length > 1)
-                || store.getChangedData().Updated != undefined
-                || store.getChangedData().Deleted != undefined) {
+                || store.getChangedData().Updated != undefined) {
                 return true;
-            } else {
+            } else if (store.getChangedData().Deleted != undefined) {
+                for (var i = 0; i < store.getChangedData().Deleted.length; i++) {
+                    if (store.getChangedData().Deleted[i].tstamp != '') return true;
+                }
+                return false;
+            }
+            else {
                 return false;
             }
         },
@@ -278,6 +372,7 @@ var HQ = {
                                     return false;
                                 }
                             }
+                            break; // Check data one time
                         }
                     }
                 }
@@ -294,6 +389,7 @@ var HQ = {
                                     return false;
                                 }
                             }
+                            break; // Check data one time
                         }
                     }
                 }
@@ -895,11 +991,11 @@ var HQ = {
             return true;
         },
         checkAccessRight: function () {
-            if (HQ.isInsert == false)
+            if (HQ.isInsert == false && App.menuClickbtnNew)
                 App.menuClickbtnNew.disable();
-            if (HQ.isDelete == false)
+            if (HQ.isDelete == false && App.menuClickbtnDelete)
                 App.menuClickbtnDelete.disable();
-            if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false)
+            if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false && App.menuClickbtnSave)
                 App.menuClickbtnSave.disable();
         },
         toBool: function (parm) {
@@ -1003,6 +1099,17 @@ var HQ = {
                                     isValid = false;
                                     return false;
                                 }
+                                else {//PhucHD check value có chứa mã HTML
+                                    if (item.value) {
+                                        var regex = /<[/a-zA-Z][\s\S]*>/
+                                        if (HQ.util.passNull(item.value.toString()).match(regex)) {
+                                            invalidField = item.id;
+                                            HQ.message.show(2016101010, item.fieldLabel, 'HQ.util.focusControl');
+                                            isValid = false;
+                                            return false;
+                                        }
+                                    }
+                                }
                             })
             return isValid;
         },
@@ -1053,7 +1160,8 @@ var FilterCombo = function (control, stkeyFilter) {
             // get filter
             store.filters.items.forEach(function (item) {
                 if (item.id != control.id + '-query-filter') {
-                    filtersAux.push(item);
+                    if (item.property && item.value)
+                        filtersAux.push(item);
                 }
             });
             store.clearFilter();
