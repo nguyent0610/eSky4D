@@ -80,6 +80,7 @@
                 ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));               
                 ps.Add(new StoreParameter("startDate", "App.dteStartDate.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("endDate", "App.dteEndDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("dateEnt", "App.dteTran.getValue()", ParameterMode.Raw)); 
             })
             .Listeners(p => {
                 p.Load.Fn = "stoData_Load";

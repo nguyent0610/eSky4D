@@ -55,17 +55,17 @@ namespace OM10800.Controllers
             var obj = _db.OM10800_pdHeader(Current.CpnyID, Current.UserName, Current.LangID, branchID,batNbr).FirstOrDefault();
             return this.Store(obj);
         }
-        public ActionResult GetOrder(string branchID, string batNbr, DateTime startDate, DateTime endDate)
+        public ActionResult GetOrder(string branchID, string batNbr, DateTime startDate, DateTime endDate, DateTime dateEnt)
         {
             _db.CommandTimeout = int.MaxValue;
-            var orders = _db.OM10800_pgOrder(Current.UserName, Current.CpnyID, Current.LangID,branchID,batNbr, startDate, endDate).ToList();
+            var orders = _db.OM10800_pgOrder(Current.UserName, Current.CpnyID, Current.LangID, branchID, batNbr, startDate, endDate, dateEnt).ToList();
             return this.Store(orders);
         }
         public ActionResult GetDet(string branchID, string batNbr,
-            DateTime startDate, DateTime endDate)
+            DateTime startDate, DateTime endDate, DateTime dateEnt)
         {
             _db.CommandTimeout = int.MaxValue;
-            var dets = _db.OM10800_pgDet(Current.UserName, Current.CpnyID, Current.LangID, branchID, batNbr,startDate, endDate).ToList();
+            var dets = _db.OM10800_pgDet(Current.UserName, Current.CpnyID, Current.LangID, branchID, batNbr, startDate, endDate, dateEnt).ToList();
             return this.Store(dets);
         }
         public ActionResult GetDelivery(string branchID, string batNbr)

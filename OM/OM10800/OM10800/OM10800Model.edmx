@@ -100,6 +100,7 @@
           <Parameter Name="BatNbr" Type="nvarchar" Mode="In" />
           <Parameter Name="StartDate" Type="datetime" Mode="In" />
           <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="DateEnt" Type="datetime" Mode="In" />
         </Function>
         <Function Name="OM10800_pgOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -109,6 +110,7 @@
           <Parameter Name="BatNbr" Type="nvarchar" Mode="In" />
           <Parameter Name="StartDate" Type="datetime" Mode="In" />
           <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="DateEnt" Type="datetime" Mode="In" />
         </Function>
         <Function Name="OM10800_ppCheckChangeStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -129,24 +131,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="OM10800Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="OM10800Entities" annotation:LazyLoadingEnabled="true" >
-          <FunctionImport Name="OM10800_pgDet" ReturnType="Collection(OM10800Model.OM10800_pgDet_Result)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="BatNbr" Mode="In" Type="String" />
-            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
-            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
-          <FunctionImport Name="OM10800_pgOrder" ReturnType="Collection(OM10800Model.OM10800_pgOrder_Result)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="BatNbr" Mode="In" Type="String" />
-            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
-            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
           <FunctionImport Name="OM10800_pgDelivery" ReturnType="Collection(OM10800Model.OM10800_pgDelivery_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -178,26 +162,27 @@
             <Parameter Name="ListOrderNbr" Mode="In" Type="String" />
             <Parameter Name="Handle" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="OM10800_pgDet" ReturnType="Collection(OM10800Model.OM10800_pgDet_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="DateEnt" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="OM10800_pgOrder" ReturnType="Collection(OM10800Model.OM10800_pgOrder_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="DateEnt" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
-        <ComplexType Name="OM10800_pgDet_Result">
-          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
-          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
-          <Property Type="String" Name="InvtID" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
-          <Property Type="Double" Name="LineQty" Nullable="false" />
-          <Property Type="String" Name="SlsUnit" Nullable="true" MaxLength="15" />
-        </ComplexType>
-        <ComplexType Name="OM10800_pgOrder_Result">
-          <Property Type="Boolean" Name="Selected" Nullable="true" />
-          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
-          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="CustName" Nullable="true" MaxLength="200" />
-          <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
-          <Property Type="String" Name="SlsPerID" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="InvcNote" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="InvcNbr" Nullable="true" MaxLength="15" />
-          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
-        </ComplexType>
         <ComplexType Name="OM10800_pgDelivery_Result">
           <Property Type="Boolean" Name="Selected" Nullable="true" />
           <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" />
@@ -280,39 +265,31 @@
           <Property Type="String" Name="RefNbr" Nullable="true" MaxLength="10" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
+        <ComplexType Name="OM10800_pgDet_Result">
+          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="InvtID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="LineQty" Nullable="false" />
+          <Property Type="String" Name="SlsUnit" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="OM10800_pgOrder_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="SlsPerID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="InvcNote" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="InvcNbr" Nullable="true" MaxLength="15" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="OM10800Entities" >
-          <FunctionImportMapping FunctionImportName="OM10800_pgDet" FunctionName="eBiz4DWebSysModel.Store.OM10800_pgDet">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM10800Model.OM10800_pgDet_Result">
-                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
-                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="LineQty" ColumnName="LineQty" />
-                <ScalarProperty Name="SlsUnit" ColumnName="SlsUnit" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="OM10800_pgOrder" FunctionName="eBiz4DWebSysModel.Store.OM10800_pgOrder">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM10800Model.OM10800_pgOrder_Result">
-                <ScalarProperty Name="Selected" ColumnName="Selected" />
-                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="CustName" ColumnName="CustName" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
-                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
-                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="OM10800_pgDelivery" FunctionName="eBiz4DWebSysModel.Store.OM10800_pgDelivery">
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM10800Model.OM10800_pgDelivery_Result">
@@ -402,6 +379,33 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="OMNumbering" FunctionName="eBiz4DWebSysModel.Store.OMNumbering" />
           <FunctionImportMapping FunctionImportName="OM10800_ppCheckChangeStatus" FunctionName="eBiz4DWebSysModel.Store.OM10800_ppCheckChangeStatus" />
+          <FunctionImportMapping FunctionImportName="OM10800_pgDet" FunctionName="eBiz4DWebSysModel.Store.OM10800_pgDet">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM10800Model.OM10800_pgDet_Result">
+                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="LineQty" ColumnName="LineQty" />
+                <ScalarProperty Name="SlsUnit" ColumnName="SlsUnit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM10800_pgOrder" FunctionName="eBiz4DWebSysModel.Store.OM10800_pgOrder">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM10800Model.OM10800_pgOrder_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
+                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
