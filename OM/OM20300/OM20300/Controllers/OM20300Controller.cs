@@ -30,21 +30,14 @@ namespace OM20300.Controllers
         {
             var user = _db.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
 
-            var begin = _app.SI_ApprovalFlowHandle.Where(p => p.AppFolID == "OM20300").ToList().FirstOrDefault(p => p.Param00.PassNull().Split(',').Any(c => c.ToLower() == "begin"));
-            ViewBag.BeginStatus = begin == null ? "H" : begin.Status;
-            if (user.UserTypes.Split(',').Any(p => p.ToLower() == "ho"))
-            {
-                
-                var end = _app.SI_ApprovalFlowHandle.Where(p => p.AppFolID == "OM20300").ToList().FirstOrDefault(p => p.Param00.PassNull().Split(',').Any(c => c.ToLower() == "end"));
-                ViewBag.EndStatus = end == null ? "C" : end.Status;
-                ViewBag.Roles = user.UserTypes.PassNull();
-                return View();
-            }
-            else
-            {
-               
-                return View("Sub");
-            }
+
+            ViewBag.BeginStatus = "H";
+
+          
+            ViewBag.EndStatus = "C";
+            ViewBag.Roles = user.UserTypes.PassNull();
+            return View();
+
         }
 
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
