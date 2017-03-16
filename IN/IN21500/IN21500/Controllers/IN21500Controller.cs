@@ -28,30 +28,34 @@ namespace IN21500.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             
             return PartialView();
         }
+
         public ActionResult GetData()
         {
             var lstInvtID=_db.IN21500_pcInvtID(Current.UserName,Current.CpnyID).ToList();
             var lst = (from p in _db.IN21500_pgData(Current.UserName, Current.CpnyID).ToList() select new IN21500_pgData_Result() { InvtID = p.InvtID, Descr = lstInvtID.Where(c => c.InvtID == p.InvtID).FirstOrDefault() == null ? p.Descr : lstInvtID.Where(c => c.InvtID == p.InvtID).FirstOrDefault().Descr,Date=p.Date,tstamp=p.tstamp }).ToList();            
             return this.Store(lst);
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-           
             try
             {
-
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
                 ChangeRecords<IN21500_pgData_Result> lstLang = dataHandler.BatchObjectData<IN21500_pgData_Result>();
                 foreach (IN21500_pgData_Result deleted in lstLang.Deleted)
                 {
-                    var del = _db.IN_InventoryDateMaster.Where(p => p.InvtID == deleted.InvtID && p.Date.Month==deleted.Date.Month && p.Date.Year==deleted.Date.Year).FirstOrDefault();
+                    var del = _db.IN_InventoryDateMaster.Where(p => p.InvtID == deleted.InvtID 
+                        && p.Date.Month == deleted.Date.Month 
+                        && p.Date.Year == deleted.Date.Year
+                        && p.Date.Day == deleted.Date.Day).FirstOrDefault();
                     if (del != null)
                     {
                         _db.IN_InventoryDateMaster.DeleteObject(del);
@@ -64,7 +68,10 @@ namespace IN21500.Controllers
                 {
                     if (curLang.InvtID.PassNull() == "") continue;
 
-                    var lang = _db.IN_InventoryDateMaster.Where(p => p.InvtID == curLang.InvtID && p.Date.Month == curLang.Date.Month && p.Date.Year == curLang.Date.Year).FirstOrDefault();
+                    var lang = _db.IN_InventoryDateMaster.Where(p => p.InvtID == curLang.InvtID 
+                        && p.Date.Month == curLang.Date.Month 
+                        && p.Date.Year == curLang.Date.Year
+                        && p.Date.Day == curLang.Date.Day).FirstOrDefault();
 
                     if (lang != null)
                     {
@@ -102,12 +109,9 @@ namespace IN21500.Controllers
         }
         private void Update_Invt(IN_InventoryDateMaster t, IN21500_pgData_Result s)
         {
-          
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
-     
-     
     }
 }
