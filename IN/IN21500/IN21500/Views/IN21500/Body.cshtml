@@ -67,8 +67,12 @@
                                 .LoadData()               
                     ),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150),
-            X.DateColumn().Text(Util.GetLang("Date")).DataIndex("Date").Width(150)
-                .Editor(X.DateField().AllowBlank(false).EnforceMaxLength(true).Listeners(lst=>lst.SpecialKey.Fn="")),            
+            
+            HQ.DateColumn().Text(Util.GetLang("Date")).DataIndex("Date").Width(150)
+                .Editor(HQ.DateField()),
+            
+            //X.DateColumn().Text(Util.GetLang("Date")).DataIndex("Date").Width(150)
+            //    .Editor(X.DateField().AllowBlank(false).EnforceMaxLength(true).Listeners(lst=>lst.SpecialKey.Fn="")),            
             X.CommandColumn().Width(150)
             .Commands(
                 X.GridCommand()
