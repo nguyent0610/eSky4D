@@ -184,6 +184,7 @@ namespace SA00001.Controllers
             t.CreditLimit = s.CreditLimit;
             t.MaxValue = s.MaxValue;
             t.State = s.State;
+            t.Zone = s.Zone;
             //t.IP = s.IP;
             //t.Port = s.Port;
             //t.Station = s.Station;

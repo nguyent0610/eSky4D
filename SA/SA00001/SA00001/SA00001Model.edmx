@@ -40,6 +40,7 @@
           <Property Name="Type" Type="varchar" MaxLength="50" />
           <Property Name="State" Type="varchar" MaxLength="10" />
           <Property Name="ReturnLimit" Type="smallint" />
+          <Property Name="Zone" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Sys_CompanyAddr">
           <Key>
@@ -98,7 +99,7 @@
           </FunctionImport>
           <EntitySet Name="SYS_Company" EntityType="SA00001Model.SYS_Company" />
           <FunctionImport Name="SA000001_pgCompanyAddr" ReturnType="Collection(SA00001Model.SA000001_pgCompanyAddr_Result)">
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
+          <Parameter Name="CpnyID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Sys_CompanyAddr">
@@ -156,6 +157,7 @@
           <Property Type="Double" Name="CreditLimit" Nullable="false" />
           <Property Type="Double" Name="MaxValue" Nullable="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="Zone" Nullable="true" MaxLength="10" />
           </ComplexType>
         <EntityType Name="SYS_Company">
           <Key>
@@ -192,6 +194,7 @@
           <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="State" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="ReturnLimit" Type="Int16" />
+          <Property Name="Zone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="SA000001_pgCompanyAddr_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -278,12 +281,14 @@
                 <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
                 <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="SYS_Company">
             <EntityTypeMapping TypeName="SA00001Model.SYS_Company">
               <MappingFragment StoreEntitySet="SYS_Company">
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
                 <ScalarProperty Name="ReturnLimit" ColumnName="ReturnLimit" />
                 <ScalarProperty Name="State" ColumnName="State" />
                 <ScalarProperty Name="Type" ColumnName="Type" />

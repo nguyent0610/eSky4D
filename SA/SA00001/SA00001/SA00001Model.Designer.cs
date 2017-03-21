@@ -986,6 +986,30 @@ namespace SA00001
         private Nullable<global::System.Int16> _ReturnLimit;
         partial void OnReturnLimitChanging(Nullable<global::System.Int16> value);
         partial void OnReturnLimitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Zone
+        {
+            get
+            {
+                return _Zone;
+            }
+            set
+            {
+                OnZoneChanging(value);
+                ReportPropertyChanging("Zone");
+                _Zone = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Zone");
+                OnZoneChanged();
+            }
+        }
+        private global::System.String _Zone;
+        partial void OnZoneChanging(global::System.String value);
+        partial void OnZoneChanged();
 
         #endregion
 
@@ -2749,6 +2773,30 @@ namespace SA00001
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Zone
+        {
+            get
+            {
+                return _Zone;
+            }
+            set
+            {
+                OnZoneChanging(value);
+                ReportPropertyChanging("Zone");
+                _Zone = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Zone");
+                OnZoneChanged();
+            }
+        }
+        private global::System.String _Zone;
+        partial void OnZoneChanging(global::System.String value);
+        partial void OnZoneChanged();
 
         #endregion
 
