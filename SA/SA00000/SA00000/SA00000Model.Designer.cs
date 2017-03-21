@@ -234,6 +234,47 @@ namespace SA00000
     
             return base.ExecuteFunction<SA00000_pdHeader_Result>("SA00000_pdHeader", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<SA00000_pgLoadUsers_Result> SA00000_pgLoadUsers(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<SA00000_pgLoadUsers_Result>("SA00000_pgLoadUsers", userIDParameter, cpnyIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -3159,6 +3200,107 @@ namespace SA00000
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA00000Model", Name="SA00000_pgLoadUsers_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA00000_pgLoadUsers_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA00000_pgLoadUsers_Result object.
+        /// </summary>
+        /// <param name="userName">Initial value of the UserName property.</param>
+        public static SA00000_pgLoadUsers_Result CreateSA00000_pgLoadUsers_Result(global::System.String userName)
+        {
+            SA00000_pgLoadUsers_Result sA00000_pgLoadUsers_Result = new SA00000_pgLoadUsers_Result();
+            sA00000_pgLoadUsers_Result.UserName = userName;
+            return sA00000_pgLoadUsers_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String UserName
+        {
+            get
+            {
+                return _UserName;
+            }
+            set
+            {
+                OnUserNameChanging(value);
+                ReportPropertyChanging("UserName");
+                _UserName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("UserName");
+                OnUserNameChanged();
+            }
+        }
+        private global::System.String _UserName;
+        partial void OnUserNameChanging(global::System.String value);
+        partial void OnUserNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> CheckUser
+        {
+            get
+            {
+                return _CheckUser;
+            }
+            set
+            {
+                OnCheckUserChanging(value);
+                ReportPropertyChanging("CheckUser");
+                _CheckUser = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CheckUser");
+                OnCheckUserChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _CheckUser;
+        partial void OnCheckUserChanging(Nullable<global::System.Boolean> value);
+        partial void OnCheckUserChanged();
 
         #endregion
 

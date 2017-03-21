@@ -48,7 +48,7 @@ namespace SA00000
             Session["DBApp"] = Current.DBApp = "ANVM_Test_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "en";
+            Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 0;
         }
     }

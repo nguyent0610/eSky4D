@@ -526,17 +526,20 @@
                 .Title(Util.GetLang("SA00000Process"))
                 .Layout(LayoutType.VBox).AutoScroll(true)
                 .Items(
-                    HQ.TextBox().HQLangCode("SAManager").DataIndex("SAManager").Width(600).Tag("X").ReadOnly(true).MarginSpec("5 0 0 0")
+                    HQ.Button().ID("btnAddSAManager").Text(Util.GetLang("AddSAManager")).MarginSpec("5 0 0 250").Width(200)
+                        .Listeners(p => p.Click.Fn = "btnAddSAManager_Click")
+                    ,HQ.TextBox().ID("txtSAManager").HQLangCode("SAManager").DataIndex("SAManager").Width(600).Tag("X").ReadOnly(true).MarginSpec("5 0 0 0")
+                    ,HQ.TextBox().ID("txtManager").HQLangCode("SA00000Manager").Width(600).Tag("X").ReadOnly(true).MarginSpec("5 0 0 0")
                 
-                    ,HQ.Combo().ID("cboManager").Name("cboManager").HQProcedure("SA00000_pcUser").HQLangCode("SA00000Manager").HQDBSys(true)
-                    .HQColumnShow("UserName,Name").DisplayField("UserName").ValueField("UserName").MultiSelect(true)
-                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")
-                    .LoadData().ForceSelection(true)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst =>
-                    {
-                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";                      
-                    })
+                    //,HQ.Combo().ID("cboManager").Name("cboManager").HQProcedure("SA00000_pcUser").HQLangCode("SA00000Manager").HQDBSys(true)
+                    //.HQColumnShow("UserName,Name").DisplayField("UserName").ValueField("UserName").MultiSelect(true)//.Hidden(true)
+                    //.HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")
+                    //.LoadData().ForceSelection(true)
+                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    //.Listeners(lst =>
+                    //{
+                    //    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";                      
+                    //})
                     ,HQ.Combo().ID("cboBranchOld").Name("cboBranchOld").HQProcedure("SA00000_pcCompanyAll").HQDBSys(true).HQLangCode("SA00000BranchOld").HQAutoLoad(false)
                     .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
                     .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")                    
@@ -567,3 +570,66 @@
         )// frmMain
     )
 )
+@(X.Window()
+    .ID("winUsers")
+    .Hidden(true).Resizable(true).Maximizable(true)
+    .Width(500).Height(500)
+    .Layout(LayoutType.Fit)
+    .AutoScroll(true).Closable(true)
+    .Buttons(
+        X.Button().ID("btnAdd").Text(Util.GetLang("Add"))
+        .Listeners(p => p.Click.Fn = "btnAdd_Click")
+       , X.Button().ID("btnCancel").Text(Util.GetLang("Cancel"))
+        .Listeners(p => p.Click.Fn = "btnCancel_Click")
+    )
+    .Items(
+       X.GridPanel().ID("grdUsers")
+            .SelectionMemory(false)
+            .Store(
+                X.Store()
+                    .ID("stoUsers")
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(SA00000_pgLoadUsers_Result), "mdlSA00000_pgLoadUsers", ""))
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetUsers"))).AutoLoad(false)                       
+              )
+            .ColumnModel(
+                 X.RowNumbererColumn().Text(Util.GetLang("Index")).Width(50).Sortable(false)
+                , X.Column().Text(Util.GetLang("UserID")).DataIndex("UserName").Width(150)
+                , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(150)
+                , X.CheckColumn().ID("CheckUser").DataIndex("CheckUser").Width(30).Editable(true).HideTitleEl(true)
+                    .HeaderItems(
+                        HQ.Checkbox().ID("CheckUser_All").MarginSpec("0 0 0 7").Listeners(l=>l.Change.Fn="CheckUser_Change")
+                    )
+            )
+            .BottomBar(
+                X.PagingToolbar()
+                    .Items(
+                        X.Label("Page size:"),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("50")
+                        .Listeners(l =>
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
+                        )
+                    .Plugins(X.ProgressBarPager())
+            ) 
+            .SelectionModel(
+                X.RowSelectionModel()                
+                    .Mode(SelectionMode.Multi)
+             )
+            // .SortableColumns(false)
+            .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("UserName"),
+                    X.StringFilter().DataIndex("Name")
+                )
+            )
+        
+    )    
+)  

@@ -324,6 +324,39 @@ var cboDistrict_Change = function (sender, value) {
     //    HQ.combo.expand(App.cboDistrict, ',');
     //}
 };
+var btnAddSAManager_Click = function () {
+    App.winUsers.show();
+    App.stoUsers.reload();
+};
+var btnAdd_Click = function () {
+    var listUSers = '';
+    var allData = App.stoUsers.snapshot || App.stoUsers.allData || App.stoUsers.data;
+    for (var i = 0; i < allData.length; i++) {
+        if (allData.items[i].data.CheckUser == true) {
+            listUSers += allData.items[i].data.UserName + ', ';
+        }
+    }
+    App.txtManager.setValue(listUSers);
+    App.winUsers.hide();
+};
+
+var btnCancel_Click = function () {
+    App.winUsers.hide();
+};
+var CheckUser_Change = function () {
+    var allData = App.stoUsers.snapshot || App.stoUsers.allData || App.stoUsers.data;
+    App.stoUsers.suspendEvents();
+    for (var i = 0; i < allData.items.length; i++) {
+        item = allData.items[i];
+        if (App.CheckUser_All.getValue() == true) {
+            item.set('CheckUser', true);
+        }
+        else
+            item.set('CheckUser', false);
+    }
+    App.stoUsers.resumeEvents();
+    App.grdUsers.view.refresh();
+};
 ////////////Kiem tra combo chinh CpnyID
 //khi co su thay doi du lieu cua cac conttol tren form
 var frmChange = function () {
@@ -389,7 +422,7 @@ var stoLoad = function (sto) {
 
     App.cboBranchOld.setValue('');
     App.cboSlsperID.setValue('');
-    App.cboManager.setValue('');
+    App.txtManager.setValue('');
 };
 
 /////////////////////////////// GIRD Sys_CompanyAddr /////////////////////////////////

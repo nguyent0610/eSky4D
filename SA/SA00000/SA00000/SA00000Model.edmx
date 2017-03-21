@@ -102,6 +102,11 @@
         <Function Name="SA00000_pgCompanyAddr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="nchar" Mode="In" />
         </Function>
+        <Function Name="SA00000_pgLoadUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="SA00000_pgSubCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
         </Function>
@@ -124,6 +129,11 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA00000_pgLoadUsers" ReturnType="Collection(SA00000Model.SA00000_pgLoadUsers_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="SA00000_pgCompanyAddr_Result">
@@ -263,6 +273,11 @@
           <Property Type="String" Name="State" Nullable="true" MaxLength="10" />
           <Property Type="Int16" Name="ReturnLimit" Nullable="true" />
           <Property Type="String" Name="SAManager" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="SA00000_pgLoadUsers_Result">
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="503" />
+          <Property Type="Boolean" Name="CheckUser" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -418,6 +433,15 @@
                 <ScalarProperty Name="State" ColumnName="State" />
                 <ScalarProperty Name="ReturnLimit" ColumnName="ReturnLimit" />
                 <ScalarProperty Name="SAManager" ColumnName="SAManager" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00000_pgLoadUsers" FunctionName="eBiz4DWebSysModel.Store.SA00000_pgLoadUsers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00000Model.SA00000_pgLoadUsers_Result">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CheckUser" ColumnName="CheckUser" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

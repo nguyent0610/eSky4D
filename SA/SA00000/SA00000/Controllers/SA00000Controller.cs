@@ -64,6 +64,11 @@ namespace SA00000.Controllers
         {
             return this.Store(_db.SA00000_pgSubCompany(CpnyID).ToList());
         }
+
+        public ActionResult GetUsers()
+        {
+            return this.Store(_db.SA00000_pgLoadUsers(Current.UserName, Current.CpnyID, Current.LangID).ToList());
+        }
         #endregion
 
         #region Save & Update information Company
@@ -210,7 +215,7 @@ namespace SA00000.Controllers
                 // sau khi save xong gọi tới hàm tạo user hoặc chuyển save, truyền xuống danh sách
                 Dictionary<string, string> dicData = new Dictionary<string, string>();
                 dicData.Add("@BranchID",header.CpnyID);
-                dicData.Add("@UserManger",data["cboManager"]);
+                dicData.Add("@UserManger", data["txtManager"]);
                 dicData.Add("@BranchOld",data["cboBranchOld"]);
                 dicData.Add("@SlsperID",data["cboSlsperID"]);
 
