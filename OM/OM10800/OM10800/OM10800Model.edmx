@@ -4,21 +4,16 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="Batch" EntityType="eBiz4DWebSysModel.Store.Batch" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_ShipDelivery" EntityType="eBiz4DWebSysModel.Store.OM_ShipDelivery" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_ShipLine" EntityType="eBiz4DWebSysModel.Store.OM_ShipLine" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="Batch">
           <Key>
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="Module" />
             <PropertyRef Name="BatNbr" />
           </Key>
-          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="Module" Type="varchar" Nullable="false" MaxLength="2" />
-          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Module" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="BatNbr" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="TotAmt" Type="float" Nullable="false" />
           <Property Name="DateEnt" Type="smalldatetime" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="100" />
@@ -29,7 +24,7 @@
           <Property Name="JrnlType" Type="varchar" MaxLength="2" />
           <Property Name="NoteID" Type="int" Nullable="false" />
           <Property Name="OrigBatNbr" Type="varchar" MaxLength="10" />
-          <Property Name="OrigBranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="OrigBranchID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="OrigScrnNbr" Type="varchar" MaxLength="5" />
           <Property Name="ReasonCD" Type="varchar" MaxLength="10" />
           <Property Name="RefNbr" Type="varchar" MaxLength="10" />
@@ -37,12 +32,12 @@
           <Property Name="Rlsed" Type="smallint" Nullable="false" />
           <Property Name="Status" Type="varchar" MaxLength="1" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_ShipDelivery">
           <Key>
@@ -50,16 +45,16 @@
             <PropertyRef Name="BatNbr" />
             <PropertyRef Name="SlsperID" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="15" />
-          <Property Name="SlsperID" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="BranchID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="BatNbr" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="SlsperID" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_ShipLine">
           <Key>
@@ -67,16 +62,16 @@
             <PropertyRef Name="BatNbr" />
             <PropertyRef Name="OrdNbr" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="15" />
-          <Property Name="OrdNbr" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="BranchID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="BatNbr" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="OrdNbr" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <Function Name="OM10800_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -111,6 +106,8 @@
           <Parameter Name="StartDate" Type="datetime" Mode="In" />
           <Parameter Name="EndDate" Type="datetime" Mode="In" />
           <Parameter Name="DateEnt" Type="datetime" Mode="In" />
+          <Parameter Name="State" Type="varchar" Mode="In" />
+          <Parameter Name="District" Type="varchar" Mode="In" />
         </Function>
         <Function Name="OM10800_ppCheckChangeStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -126,6 +123,11 @@
           <Parameter Name="GetType" Type="varchar" Mode="In" />
           <Parameter Name="OrderType" Type="varchar" Mode="In" />
         </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="Batch" EntityType="Self.Batch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_ShipDelivery" EntityType="Self.OM_ShipDelivery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_ShipLine" EntityType="Self.OM_ShipLine" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -181,6 +183,8 @@
             <Parameter Name="StartDate" Mode="In" Type="DateTime" />
             <Parameter Name="EndDate" Mode="In" Type="DateTime" />
             <Parameter Name="DateEnt" Mode="In" Type="DateTime" />
+            <Parameter Name="State" Mode="In" Type="String" />
+            <Parameter Name="District" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM10800_pgDelivery_Result">
@@ -188,6 +192,8 @@
           <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
           <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="District" Nullable="true" MaxLength="30" />
         </ComplexType>
         <EntityType Name="Batch">
           <Key>
@@ -280,8 +286,8 @@
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
           <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
           <Property Type="String" Name="SlsPerID" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="InvcNote" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="InvcNbr" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="InvcNote" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="InvcNbr" Nullable="true" MaxLength="30" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
       </Schema>
@@ -297,6 +303,8 @@
                 <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="District" ColumnName="District" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -422,14 +430,15 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="OM10800Model.Batch" Width="1.5" PointX="9.0499981963308525" PointY="3.5221098975847056" />
-        <EntityTypeShape EntityType="OM10800Model.OM_ShipDelivery" Width="1.5" PointX="0.912246488459523" PointY="12.860634049801451" />
-        <EntityTypeShape EntityType="OM10800Model.OM_ShipLine" Width="1.5" PointX="4.9548542150086039" PointY="23.710277121379168" />
+        <EntityTypeShape EntityType="OM10800Model.Batch" Width="1.5" PointX="3.875" PointY="0.5" />
+        <EntityTypeShape EntityType="OM10800Model.OM_ShipDelivery" Width="1.5" PointX="0.5" PointY="0.5" />
+        <EntityTypeShape EntityType="OM10800Model.OM_ShipLine" Width="1.5" PointX="2.25" PointY="0.5" />
       </Diagram>
     </Diagrams>
   </Designer>

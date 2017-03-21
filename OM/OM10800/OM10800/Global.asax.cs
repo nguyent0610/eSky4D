@@ -38,16 +38,17 @@ namespace OM10800
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";
-            Current.DBSys = "eSky4DSys";
+            Current.Server = "TRUONGSAD";
+            Current.DBSys = "FranciaBeauty_eSky4DSys";
             AccessRight acc = new AccessRight();
+            Current.FormatDate = "dd-MM-yyyy";
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
-            Session["OM41300"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";
+            Session["OM10800"] = acc;
+            Session["DBApp"] = Current.DBApp = "FranciaBeauty_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
+            Session["CpnyID"] = Current.CpnyID = "18247";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }

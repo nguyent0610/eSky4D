@@ -4,7 +4,7 @@ var fieldsCheckRequire = ["RoleID","Desc"];
 var fieldsLangCheckRequire = ["RoleID","Desc"];
 
 var _Source = 0;
-var _maxSource = 3;
+var _maxSource = 5;
 var _SourceData = 0;
 var _maxSourceData = 4;
 
@@ -63,7 +63,7 @@ var loadData = function () {
     App.stoOrder.reload();
     App.stoDet.reload();
     App.stoDelivery.reload();
-   
+    App.cboSlsperID.store.reload();
 }
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
@@ -129,9 +129,11 @@ var firstLoad = function () {
     App.frmMain.isValid();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData")); 
     App.cboHandle.getStore().addListener('load', checkLoad);
-    App.cboStatus.getStore().addListener('load', checkLoad);   
-    App.cboLicensePlate.getStore().addListener('load', checkLoad);
+    App.cboStatus.getStore().addListener('load', checkLoad);
+    App.cboState.getStore().addListener('load', checkLoad);
+    App.cboDistrict.getStore().addListener('load', checkLoad);
 
+    App.cboLicensePlate.getStore().addListener('load', checkLoad);
 
     App.cboHandle.getStore().reload();
     App.cboStatus.getStore().reload();
@@ -163,7 +165,73 @@ function cboBatNbr_Expand(sender, value) {
         App.cboBatNbr.collapse();
     }
 };
-var slmOrder_Select = function (slm, selRec, idx, eOpts) {   
+
+var cboSlsperID_Change = function (combo) {
+
+    if (combo.valueModels != null && combo.valueModels[0]) {
+        App.cboState.setValue(combo.valueModels[0].data.State);
+        App.cboDistrict.forceSelection = false;
+        App.cboDistrict.setValue(combo.valueModels[0].data.District);
+        App.cboDistrict.forceSelection = true;
+
+        HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+
+        _SourceData = 1;
+        App.stoOrder.reload();
+        App.stoDet.reload();
+        App.stoDelivery.reload();
+       // App.cboSlsperID.store.reload();
+    } else {
+        App.cboState.setValue('');
+        App.cboDistrict.setValue('');
+    }
+
+    
+};
+
+var cboSlsperID_Select = function (combo) {
+    if (combo.valueModels != null && combo.valueModels[0]) {
+        App.cboState.setValue(combo.valueModels[0].data.State);
+        App.cboDistrict.forceSelection = false;
+        App.cboDistrict.setValue(combo.valueModels[0].data.District);
+        App.cboDistrict.forceSelection = true;
+
+        HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+
+        _SourceData = 1;
+        App.stoOrder.reload();
+        App.stoDet.reload();
+        App.stoDelivery.reload();
+        //App.cboSlsperID.store.reload();
+    } else {
+        App.cboState.setValue('');
+        App.cboDistrict.setValue('');
+    }
+};
+
+var cboState_Change = function (combo) {
+    App.cboDistrict.setValue('');
+};
+// Expand Territory
+var cboDistrict_Expand = function (combo) {
+    HQ.combo.expand(App.cboDistrict, ',');
+    App.cboDistrict.store.clearFilter();
+    
+    var store = App.cboDistrict.store;
+    // Filter data -- 
+    store.filterBy(function (record) {
+        if (record) {
+            if (record.data['State'].toString() == App.cboState.getValue()) {
+                return record;
+            }
+        }
+    });
+};
+var cboDistrict_Collapse = function (cbombo) {
+    App.cboDistrict.store.clearFilter();
+};
+
+var slmOrder_Select = function (slm, selRec, idx, eOpts) {
     App.grdDet.store.filterBy(function (record) {
         if (record.data.OrderNbr == selRec.data.OrderNbr) {
             return record;
@@ -200,7 +268,8 @@ var grdDelivery_BeforeEdit = function (editor, context, eOpts) {
         obj.set('Selected', false);
     }
 }
-var grdDelivery_Edit = function (editor, context, eOpts) {
+var grdDelivery_Edit = function (editor, e, eOpts) {
+
     //var obj = HQ.store.findRecord(App.stoDelivery, ["Selected"], [true]);
     //if (obj && obj.data.SlsPerID != context.record.data.SlsPerID) {
     //    obj.set('Selected', false);
@@ -214,6 +283,7 @@ var btnLoad_click = function () {
     App.stoOrder.reload();
     App.stoDet.reload();
     App.stoDelivery.reload();
+    App.cboSlsperID.store.reload();
 }
 //// Process Data ///////////////////////////////////////////////////////
 // Xử lí các hàm liên quan tới Controller hoặc các nút trên menu
@@ -229,6 +299,7 @@ var bindHeader = function (isNew) {
         App.stoOrder.reload();
         App.stoDet.reload();
         App.stoDelivery.reload();
+        App.cboSlsperID.store.reload();
 
         App.stoHeader.clearData();
         HQ.store.insertBlank(App.stoHeader);
@@ -339,3 +410,15 @@ var stringFilter = function (record) {
 }
 /////////////////////////////////////////////////////////////////////////
 
+var joinParams = function (multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
+    }
+    else {
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
+        }
+    }
+    return returnValue;
+};

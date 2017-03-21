@@ -504,7 +504,9 @@ namespace OM10800
         /// <param name="startDate">No Metadata Documentation available.</param>
         /// <param name="endDate">No Metadata Documentation available.</param>
         /// <param name="dateEnt">No Metadata Documentation available.</param>
-        public ObjectResult<OM10800_pgOrder_Result> OM10800_pgOrder(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String batNbr, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate, Nullable<global::System.DateTime> dateEnt)
+        /// <param name="state">No Metadata Documentation available.</param>
+        /// <param name="district">No Metadata Documentation available.</param>
+        public ObjectResult<OM10800_pgOrder_Result> OM10800_pgOrder(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String batNbr, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate, Nullable<global::System.DateTime> dateEnt, global::System.String state, global::System.String district)
         {
             ObjectParameter userNameParameter;
             if (userName != null)
@@ -586,7 +588,27 @@ namespace OM10800
                 dateEntParameter = new ObjectParameter("DateEnt", typeof(global::System.DateTime));
             }
     
-            return base.ExecuteFunction<OM10800_pgOrder_Result>("OM10800_pgOrder", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter, batNbrParameter, startDateParameter, endDateParameter, dateEntParameter);
+            ObjectParameter stateParameter;
+            if (state != null)
+            {
+                stateParameter = new ObjectParameter("State", state);
+            }
+            else
+            {
+                stateParameter = new ObjectParameter("State", typeof(global::System.String));
+            }
+    
+            ObjectParameter districtParameter;
+            if (district != null)
+            {
+                districtParameter = new ObjectParameter("District", district);
+            }
+            else
+            {
+                districtParameter = new ObjectParameter("District", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM10800_pgOrder_Result>("OM10800_pgOrder", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter, batNbrParameter, startDateParameter, endDateParameter, dateEntParameter, stateParameter, districtParameter);
         }
 
         #endregion
@@ -2207,6 +2229,54 @@ namespace OM10800
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String State
+        {
+            get
+            {
+                return _State;
+            }
+            set
+            {
+                OnStateChanging(value);
+                ReportPropertyChanging("State");
+                _State = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("State");
+                OnStateChanged();
+            }
+        }
+        private global::System.String _State;
+        partial void OnStateChanging(global::System.String value);
+        partial void OnStateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String District
+        {
+            get
+            {
+                return _District;
+            }
+            set
+            {
+                OnDistrictChanging(value);
+                ReportPropertyChanging("District");
+                _District = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("District");
+                OnDistrictChanged();
+            }
+        }
+        private global::System.String _District;
+        partial void OnDistrictChanging(global::System.String value);
+        partial void OnDistrictChanged();
 
         #endregion
 

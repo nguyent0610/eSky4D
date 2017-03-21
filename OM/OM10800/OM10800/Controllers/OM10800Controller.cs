@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -23,6 +23,7 @@ namespace OM10800.Controllers
     [CheckSessionOut]
     public class OM10800Controller : Controller
     {
+        // Màn hình chuẩn, các store tách tuỳ theo dự án (OM10800_pgOrder, OM10800_pgDet,..)
         private string _screenNbr = "OM10800";
         private string _userName = Current.UserName;
         OM10800Entities _db = Util.CreateObjectContext<OM10800Entities>(false);
@@ -55,10 +56,10 @@ namespace OM10800.Controllers
             var obj = _db.OM10800_pdHeader(Current.CpnyID, Current.UserName, Current.LangID, branchID,batNbr).FirstOrDefault();
             return this.Store(obj);
         }
-        public ActionResult GetOrder(string branchID, string batNbr, DateTime startDate, DateTime endDate, DateTime dateEnt)
+        public ActionResult GetOrder(string branchID, string batNbr, DateTime startDate, DateTime endDate, DateTime dateEnt, string state, string district)
         {
             _db.CommandTimeout = int.MaxValue;
-            var orders = _db.OM10800_pgOrder(Current.UserName, Current.CpnyID, Current.LangID, branchID, batNbr, startDate, endDate, dateEnt).ToList();
+            var orders = _db.OM10800_pgOrder(Current.UserName, Current.CpnyID, Current.LangID, branchID, batNbr, startDate, endDate, dateEnt, state, district).ToList();
             return this.Store(orders);
         }
         public ActionResult GetDet(string branchID, string batNbr,
@@ -246,6 +247,7 @@ namespace OM10800.Controllers
                     }
                 }
                 #endregion
+                
                 if (Handle.PassNull() != "" && Handle.PassNull() != "N")
                 {
                     string lOrder = "";
@@ -263,12 +265,10 @@ namespace OM10800.Controllers
                     else
                     {
                         throw new MessageException(MessageType.Message, "2013103001", "", new string[] { obj });
-
                     }
                 }
                 _db.SaveChanges();
                 return Util.CreateMessage(MessageProcess.Save, header);
-
             }
             catch (Exception ex)
             {
@@ -291,7 +291,6 @@ namespace OM10800.Controllers
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
-
         }
         private void Updating_OM_ApproveOrder(OM_ShipLine t, OM10800_pgOrder_Result s)
         {                
@@ -301,10 +300,7 @@ namespace OM10800.Controllers
         }
 
         private void Updating_OM_ShipDelivery(OM_ShipDelivery t, OM10800_pgDelivery_Result s)
-        {
-
-          
-
+        {          
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
