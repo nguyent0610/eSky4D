@@ -105,18 +105,19 @@ var grdData_Edit = function (item, e) {
     frmChange();
 };
 var grdData_ValidateEdit = function (item, e) {
-    if (e.field == 'Date') {
+    //if (e.field == 'Date') {
 
-        var yyyy =  e.value.getFullYear().toString();
-        var mm = ( e.value.getMonth() + 1).toString(); // getMonth() is zero-based
-        var dd =  e.value.getDate().toString();
-        var date = (mm[1] ? mm : "0" + mm[0]) + "/" + yyyy;
+    //    var yyyy =  e.value.getFullYear().toString();
+    //    var mm = ( e.value.getMonth() + 1).toString(); // getMonth() is zero-based
+    //    var dd =  e.value.getDate().toString();
+    //    var date = (mm[1] ? mm : "0" + mm[0]) + "/" + yyyy;
 
-        if (HQ.grid.checkDuplicate(App.grdData, e, ["InvtID","Date"])) {
-            HQ.message.show(1112, datess);
-            return false;
-        }
-    }       
+    //    if (HQ.grid.checkDuplicate(App.grdData, e, ["InvtID","Date"])) {
+    //        HQ.message.show(1112, datess);
+    //        return false;
+    //    }
+    //}       
+    return HQ.grid.checkValidateEdit(App.grdData, e, ['InvtID', 'Date'],false);
 };
 var grdData_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdData);
