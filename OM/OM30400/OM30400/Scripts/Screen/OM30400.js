@@ -1074,8 +1074,8 @@ var PosGmap = {
 
     initialize: function () {
         PosGmap.map_canvas = document.getElementById("map_canvas");
-
-        var initLatLng = new google.maps.LatLng(10.782171, 106.654012, 17);
+        var viewlocate = defaultLocation.split(',');
+        var initLatLng = new google.maps.LatLng(Number(viewlocate[0]), Number(viewlocate[1]), Number(viewlocate[2]));
         var myOptions = {
             center: initLatLng,
             zoom: 16,

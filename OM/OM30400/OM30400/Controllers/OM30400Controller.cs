@@ -43,6 +43,18 @@ namespace OM30400.Controllers
                 else
                     ViewBag.hideButtonPosition = "false";
             }
+
+            var dflocation = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "OM30400defaultLocation");
+
+            if (dflocation == null)
+            {
+                ViewBag.defaultLocation = "21.0314475,105.8394291,16";
+            }
+            else
+            {
+                ViewBag.defaultLocation = dflocation.TextVal;
+            }
+
             return View();
         }
 
