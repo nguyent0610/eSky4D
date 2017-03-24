@@ -44,7 +44,7 @@ namespace OM30400.Controllers
                     ViewBag.hideButtonPosition = "false";
             }
 
-            var dflocation = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "OM30400defaultLocation");
+            var dflocation = _db.OM30400_ppGetDefaultLocation(Current.CpnyID, Current.LangID, Current.UserName).FirstOrDefault();
 
             if (dflocation == null)
             {
@@ -52,7 +52,7 @@ namespace OM30400.Controllers
             }
             else
             {
-                ViewBag.defaultLocation = dflocation.TextVal;
+                ViewBag.defaultLocation = dflocation.Location;
             }
 
             return View();
