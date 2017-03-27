@@ -818,7 +818,7 @@ function deleteHeader(item) {
 
 var defaultOnNew = function () {
     var record = recentRecord = Ext.create('App.mdlBudget');
-    record.data.AllocType = '2';
+    record.data.AllocType = '0';
     record.data.ApplyTo = 'F';
     record.data.Status = HQ.beginStatus;
     record.data.RvsdDate = HQ.businessDate;
