@@ -29,11 +29,7 @@ namespace OM20300.Controllers
         public ActionResult Index()
         {
             var user = _db.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
-
-
             ViewBag.BeginStatus = "H";
-
-          
             ViewBag.EndStatus = "C";
             ViewBag.Roles = user.UserTypes.PassNull();
             return View();
@@ -95,9 +91,7 @@ namespace OM20300.Controllers
                 }
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
-
         }
-
 
         [HttpPost]
         public ActionResult Save(FormCollection data)
@@ -170,8 +164,6 @@ namespace OM20300.Controllers
                             Update_Item(freeItem, item, false);
                         }
                     }
-
-                  
                 }
 
                 var lstCpnyDB = _app.OM_PPCpny.Where(p => p.BudgetID.ToLower() == _objBudget.BudgetID.ToLower()).ToList();
@@ -231,58 +223,15 @@ namespace OM20300.Controllers
                         Update_Alloc(allocDB, item, false);
                     }
                 }
+               
+                _app.SaveChanges();
 
-                //var handle = data["Handle"].PassNull();
-                //if (handle != string.Empty && handle!="N")
-                //{
-                //    string branch = Current.CpnyID;
-                //    foreach (var cpny in lstCpny)
-                //    {
-                //        branch += cpny.CpnyID + ',';
-                //    }
-                //    if (branch.Length > 0) branch = branch.Substring(0, branch.Length - 1);
-
-                //    var task = (from p in _app.HO_PendingTasks
-                //                where p.ObjectID == _objBudget.BudgetID && p.EditScreenNbr == "OM20300"
-                //                    && p.BranchID == branch
-                //                select p).FirstOrDefault();
-                 
-
-                //    var approveHandle = _app.SI_ApprovalFlowHandle.FirstOrDefault(p => p.AppFolID == "OM20300" && p.Status == _objBudget.Status && p.Handle == handle);
-                //    if (task == null && approveHandle != null)
-                //    {
-                //        if (!approveHandle.Param00.PassNull().Split(',').Any(p => p.ToLower() == "notapprove"))
-                //        {
-                //            HO_PendingTasks newTask = new HO_PendingTasks();
-                //            newTask.BranchID = branch;
-                //            newTask.ObjectID = _objBudget.BudgetID;
-                //            newTask.EditScreenNbr = "OM20300";
-                //            newTask.Content = string.Format(approveHandle.ContentApprove, _objBudget.BudgetID, _objBudget.Descr, branch);
-                //            newTask.Crtd_Datetime = newTask.LUpd_Datetime = DateTime.Now;
-                //            newTask.Crtd_Prog = newTask.LUpd_Prog = "OM20300";
-                //            newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
-                //            newTask.Status = approveHandle.ToStatus;
-                //            _app.HO_PendingTasks.AddObject(newTask);
-
-                //        }
-                //        budget.Status = approveHandle.ToStatus;
-                //    }
-                //    _app.SaveChanges();
-                //    if (approveHandle != null) Approve.Mail_Approve("OM20300", _objBudget.BudgetID, approveHandle.RoleID, approveHandle.Status, approveHandle.Handle, Current.LangID.ToString(), Current.UserName, branch, Current.CpnyID, string.Empty, string.Empty, string.Empty);
-                //}
-                //else
-                    _app.SaveChanges();
-
-
-                if (_logMessage != null)
-                {
-                    return _logMessage;
-                }
                 return Util.CreateMessage(MessageProcess.Save);
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
             
         }
@@ -359,6 +308,7 @@ namespace OM20300.Controllers
             s.LUpd_Prog = "OM20300";
             s.LUpd_User = Current.UserName;
         }
+
         private void Update_Alloc(OM_PPAlloc s, OM20300_pgAlloc_Result t, bool isnew)
         {
             if (isnew)
@@ -439,7 +389,8 @@ namespace OM20300.Controllers
             query = query ?? string.Empty;
             List<OM20300_pcBudget_Result> lstBudget = new List<OM20300_pcBudget_Result>();
             var user = _db.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
-            int type = user.UserTypes.PassNull().Split(',').Any(p => p.ToLower() == "ho") == true ? 0 : 1;
+            //int type = user.UserTypes.PassNull().Split(',').Any(p => p.ToLower() == "ho") == true ? 0 : 1;
+            int type = 0;
             if (query == string.Empty)
             {
                 lstBudget = _app.OM20300_pcBudget(user.CpnyID, type).ToList();
