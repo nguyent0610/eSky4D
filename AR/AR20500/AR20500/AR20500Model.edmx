@@ -25,8 +25,8 @@
           <Property Name="Addr1" Type="nvarchar(max)" />
           <Property Name="Addr2" Type="nvarchar" MaxLength="100" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
-          <Property Name="BillAddr1" Type="nvarchar" MaxLength="200" />
-          <Property Name="BillAddr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="BillAddr1" Type="nvarchar(max)" />
+          <Property Name="BillAddr2" Type="nvarchar" MaxLength="100" />
           <Property Name="BillAttn" Type="nvarchar" MaxLength="200" />
           <Property Name="BillCity" Type="varchar" MaxLength="10" />
           <Property Name="BillCountry" Type="varchar" MaxLength="3" />
@@ -92,9 +92,11 @@
           <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
           <Property Name="EstablishDate" Type="date" />
           <Property Name="Birthdate" Type="date" />
-          <Property Name="InActive" Type="nvarchar" MaxLength="100" />
-          <Property Name="SellProduct" Type="varchar" MaxLength="10" />
           <Property Name="RefCustID" Type="varchar" MaxLength="50" />
+          <Property Name="SellProduct" Type="varchar" MaxLength="10" />
+          <Property Name="InActive" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastOrderDate" Type="datetime" />
+          <Property Name="SearchName" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -140,7 +142,7 @@
           <Property Name="TradeType" Type="varchar" MaxLength="10" />
           <Property Name="Lat" Type="float" />
           <Property Name="Lng" Type="float" />
-          <Property Name="ImageFileName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ImageFileName" Type="varchar" MaxLength="100" />
           <Property Name="Status" Type="varchar" MaxLength="2" />
           <Property Name="IsActive" Type="int" />
           <Property Name="Crtd_Datetime" Type="datetime" />
@@ -152,7 +154,7 @@
           <Property Name="CustType" Type="varchar" MaxLength="1" />
           <Property Name="Territory" Type="varchar" MaxLength="10" />
           <Property Name="Location" Type="varchar" MaxLength="10" />
-          <Property Name="PriceClass" Type="varchar" MaxLength="6" />
+          <Property Name="PriceClass" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Startday" Type="datetime" />
           <Property Name="Endday" Type="datetime" />
           <Property Name="PJPID" Type="varchar" MaxLength="10" />
@@ -171,6 +173,7 @@
           <Property Name="DateCust" Type="datetime" />
           <Property Name="TaxCode" Type="nvarchar" MaxLength="50" />
           <Property Name="VisitSort" Type="int" />
+          <Property Name="CodeHT" Type="varchar" MaxLength="50" />
           <Property Name="Salut" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
@@ -306,6 +309,8 @@
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Code" Type="varchar" MaxLength="10" />
+          <Property Name="Area" Type="varchar" MaxLength="50" />
         </EntityType>
         <Function Name="AR20500_AfterApprove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NewcustID" Type="varchar" Mode="In" />
@@ -447,7 +452,7 @@
           <Property Type="String" Name="Addr2" Nullable="true" MaxLength="100" />
           <Property Type="Double" Name="Lat" Nullable="true" />
           <Property Type="Double" Name="Lng" Nullable="true" />
-          <Property Type="String" Name="ImageFileName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ImageFileName" Nullable="true" MaxLength="150" />
           <Property Type="String" Name="Status" Nullable="true" MaxLength="2" />
           <Property Type="Int32" Name="IsActive" Nullable="true" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="true" Precision="23" />
@@ -468,7 +473,7 @@
           <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="CustType" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="Location" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="PriceClass" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="PriceClass" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="DeliveryID" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="SlsFreq" Nullable="true" MaxLength="10" />
           <Property Type="Int32" Name="VisitSort" Nullable="true" />
@@ -488,7 +493,7 @@
           <Property Type="String" Name="Color" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="CustHT" MaxLength="30" Nullable="false" />
           <Property Type="String" Name="Salut" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="ERPCustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ERPCustID" Nullable="false" MaxLength="1" />
         </ComplexType>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -575,6 +580,8 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="Code" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Area" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OM_SalesRouteDet">
           <Key>
@@ -655,8 +662,8 @@
           <Property Type="String" Name="Addr1" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Addr2" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Attn" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillAddr1" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillAddr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAddr1" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAddr2" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillAttn" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillCity" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BillCountry" MaxLength="3" FixedLength="false" Unicode="false" />
@@ -725,6 +732,8 @@
           <Property Type="String" Name="InActive" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="SellProduct" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="RefCustID" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LastOrderDate" Precision="3" />
+          <Property Type="String" Name="SearchName" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInfor">
           <Key>
@@ -753,7 +762,7 @@
           <Property Type="String" Name="TradeType" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="Lat" />
           <Property Type="Double" Name="Lng" />
-          <Property Type="String" Name="ImageFileName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ImageFileName" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="IsActive" />
           <Property Type="DateTime" Name="Crtd_Datetime" Precision="3" />
@@ -765,7 +774,7 @@
           <Property Type="String" Name="CustType" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Territory" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Location" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="PriceClass" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PriceClass" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Startday" Precision="3" />
           <Property Type="DateTime" Name="Endday" Precision="3" />
           <Property Type="String" Name="PJPID" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -784,6 +793,7 @@
           <Property Type="DateTime" Name="DateCust" Precision="3" />
           <Property Type="String" Name="TaxCode" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="VisitSort" />
+          <Property Type="String" Name="CodeHT" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Salut" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
@@ -853,6 +863,7 @@
                 <ScalarProperty Name="Color" ColumnName="Color" />
                 <ScalarProperty Name="CustHT" ColumnName="CustHT" />
                 <ScalarProperty Name="Salut" ColumnName="Salut" />
+                <ScalarProperty Name="ERPCustID" ColumnName="ERPCustID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -926,6 +937,8 @@
           <EntitySetMapping Name="SI_State">
             <EntityTypeMapping TypeName="AR20500Model.SI_State">
               <MappingFragment StoreEntitySet="SI_State">
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -1017,6 +1030,8 @@
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20500Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="SearchName" ColumnName="SearchName" />
+                <ScalarProperty Name="LastOrderDate" ColumnName="LastOrderDate" />
                 <ScalarProperty Name="RefCustID" ColumnName="RefCustID" />
                 <ScalarProperty Name="SellProduct" ColumnName="SellProduct" />
                 <ScalarProperty Name="InActive" ColumnName="InActive" />
@@ -1099,6 +1114,7 @@
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
               <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
                 <ScalarProperty Name="Salut" ColumnName="Salut" />
+                <ScalarProperty Name="CodeHT" ColumnName="CodeHT" />
                 <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
                 <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
                 <ScalarProperty Name="DateCust" ColumnName="DateCust" />
@@ -1183,7 +1199,7 @@
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteDet" Width="1.5" PointX="2.75" PointY="5.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.5" PointX="6.75" PointY="7.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="8.75" PointY="7.75" />
-        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="8.15404408804795" PointY="18.491448723939921" />
+        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="10.839351089130785" PointY="19.886036613903027" />
       </Diagram>
     </Diagrams>
   </Designer>

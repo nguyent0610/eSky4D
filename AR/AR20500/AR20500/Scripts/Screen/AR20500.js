@@ -455,6 +455,23 @@ var renderSalesRouteID = function (value) {
     return value;
 };
 
+var renderClassId = function (value) {
+    var obj = App.cboColClassId.store.findRecord("ClassId", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+var renderPriceClassID = function (value) {
+    var obj = App.cboColPriceClassID.store.findRecord("PriceClass", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+
 var slmCust_Select = function (rowModel, record, index, eOpts) {
     if (record[0]) {
         if (record[0].data.Lat && record[0].data.Lng) {

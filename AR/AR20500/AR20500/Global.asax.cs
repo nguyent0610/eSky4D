@@ -38,14 +38,14 @@ namespace AR20500
             //Session["LangID"] = 1;
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
-            Current.Server = "HOANGSAD"; //"EARTHSVR\\SQL2014";//"HQDBDG";//"EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ND_eSky4DSys";//"ANVM_eSky4DSys";//"ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+			Current.Server = "TRUONGSAD"; //"EARTHSVR\\SQL2014";//"HQDBDG";//"EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
+			Current.DBSys = "ANVM_Test_eSky4DSys";//"ND_eSky4DSys";//"ANVM_eSky4DSys";//"ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["AR20500"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";//"ANVM_eSky4DApp";//"ND_eSky4DApp";// "eBiz4DWebApp";
+			Session["DBApp"] = Current.DBApp = "ANVM_Test_eSky4DApp";//"ND_eSky4DApp";//"ANVM_eSky4DApp";//"ND_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3120";
             Session["Language"] = Current.Language = "vi";
