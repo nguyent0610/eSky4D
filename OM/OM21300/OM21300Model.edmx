@@ -1,0 +1,846 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OM21300Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="OM21300ModelStoreContainer" />
+        <Function Name="OM21300_pcBrand" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="OM21300_pcCustClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="OM21300_pcDay" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pcFillType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pcLocation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pcVisitType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdBorder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="ShapeID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdChartColumn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Period" Type="varchar" Mode="In" />
+          <Parameter Name="DSRID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DaysOfWeek" Type="varchar" Mode="In" />
+          <Parameter Name="WeekEO" Type="varchar" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BrandID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FromAmt" Type="float" Mode="In" />
+          <Parameter Name="ToAmt" Type="float" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdChartPie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Period" Type="varchar" Mode="In" />
+          <Parameter Name="DSRID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DaysOfWeek" Type="varchar" Mode="In" />
+          <Parameter Name="WeekEO" Type="varchar" Mode="In" />
+          <Parameter Name="BrandID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FromAmt" Type="float" Mode="In" />
+          <Parameter Name="ToAmt" Type="float" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdCity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Period" Type="varchar" Mode="In" />
+          <Parameter Name="DSRID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DaysOfWeek" Type="varchar" Mode="In" />
+          <Parameter Name="WeekEO" Type="varchar" Mode="In" />
+          <Parameter Name="BrandID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FromAmt" Type="float" Mode="In" />
+          <Parameter Name="ToAmt" Type="float" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdCityShape" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="OM21300_pdCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdCoverage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Period" Type="varchar" Mode="In" />
+          <Parameter Name="DSRID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DaysOfWeek" Type="varchar" Mode="In" />
+          <Parameter Name="WeekEO" Type="varchar" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BrandID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FromAmt" Type="float" Mode="In" />
+          <Parameter Name="ToAmt" Type="float" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdCoverageExport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Period" Type="varchar" Mode="In" />
+          <Parameter Name="DSRID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DaysOfWeek" Type="varchar" Mode="In" />
+          <Parameter Name="WeekEO" Type="varchar" Mode="In" />
+          <Parameter Name="BrandID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FromAmt" Type="float" Mode="In" />
+          <Parameter Name="ToAmt" Type="float" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdCust1000" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Period" Type="varchar" Mode="In" />
+          <Parameter Name="DSRID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DaysOfWeek" Type="varchar" Mode="In" />
+          <Parameter Name="WeekEO" Type="varchar" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BrandID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FromAmt" Type="float" Mode="In" />
+          <Parameter Name="ToAmt" Type="float" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdCustChartPie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Period" Type="varchar" Mode="In" />
+          <Parameter Name="DSRID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DaysOfWeek" Type="varchar" Mode="In" />
+          <Parameter Name="WeekEO" Type="varchar" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BrandID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FromAmt" Type="float" Mode="In" />
+          <Parameter Name="ToAmt" Type="float" Mode="In" />
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdDistrict" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdDistrictBorder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CityID" Type="varchar" Mode="In" />
+          <Parameter Name="DistrictID" Type="varchar" Mode="In" />
+          <Parameter Name="ShapeID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdDistrictDSM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="DSRID" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdDSM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdDSR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="DSM" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdLocationBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Period" Type="varchar" Mode="In" />
+          <Parameter Name="DSRID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DaysOfWeek" Type="varchar" Mode="In" />
+          <Parameter Name="WeekEO" Type="varchar" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BrandID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FromAmt" Type="float" Mode="In" />
+          <Parameter Name="ToAmt" Type="float" Mode="In" />
+        </Function>
+        <Function Name="OM21300_pdRole" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM21300Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="OM21300Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="OM21300_pcBrand" ReturnType="Collection(OM21300Model.OM21300_pcBrand_Result)" />
+          <FunctionImport Name="OM21300_pcCustClass" ReturnType="Collection(OM21300Model.OM21300_pcCustClass_Result)" />
+          <FunctionImport Name="OM21300_pcDay" ReturnType="Collection(OM21300Model.OM21300_pcDay_Result)">
+          <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pcFillType" ReturnType="Collection(OM21300Model.OM21300_pcFillType_Result)">
+          <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pcLocation" ReturnType="Collection(OM21300Model.OM21300_pcLocation_Result)">
+          <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pcVisitType" ReturnType="Collection(OM21300Model.OM21300_pcVisitType_Result)">
+          <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdBorder" ReturnType="Collection(OM21300Model.OM21300_pdBorder_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="ShapeID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdBranch" ReturnType="Collection(OM21300Model.OM21300_pdBranch_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdCity" ReturnType="Collection(OM21300Model.OM21300_pdCity_Result)">
+            <Parameter Name="Period" Mode="In" Type="String" />
+            <Parameter Name="DSRID" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
+            <Parameter Name="WeekEO" Mode="In" Type="String" />
+            <Parameter Name="BrandID" Mode="In" Type="String" />
+            <Parameter Name="FromAmt" Mode="In" Type="Double" />
+            <Parameter Name="ToAmt" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdCityShape" ReturnType="Collection(OM21300Model.OM21300_pdCityShape_Result)" />
+          <FunctionImport Name="OM21300_pdCompany" ReturnType="Collection(OM21300Model.OM21300_pdCompany_Result)">
+          <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdCoverage" ReturnType="Collection(OM21300Model.OM21300_pdCoverage_Result)">
+            <Parameter Name="Period" Mode="In" Type="String" />
+            <Parameter Name="DSRID" Mode="In" Type="String" />
+            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
+            <Parameter Name="WeekEO" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="BrandID" Mode="In" Type="String" />
+            <Parameter Name="FromAmt" Mode="In" Type="Double" />
+            <Parameter Name="ToAmt" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdCoverageExport">
+            <Parameter Name="Period" Mode="In" Type="String" />
+            <Parameter Name="DSRID" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
+            <Parameter Name="WeekEO" Mode="In" Type="String" />
+            <Parameter Name="BrandID" Mode="In" Type="String" />
+            <Parameter Name="FromAmt" Mode="In" Type="Double" />
+            <Parameter Name="ToAmt" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdCust1000" ReturnType="Collection(OM21300Model.OM21300_pdCust1000_Result)">
+            <Parameter Name="Period" Mode="In" Type="String" />
+            <Parameter Name="DSRID" Mode="In" Type="String" />
+            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
+            <Parameter Name="WeekEO" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="BrandID" Mode="In" Type="String" />
+            <Parameter Name="FromAmt" Mode="In" Type="Double" />
+            <Parameter Name="ToAmt" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdDistrict" ReturnType="Collection(OM21300Model.OM21300_pdDistrict_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdDistrictBorder" ReturnType="Collection(OM21300Model.OM21300_pdDistrictBorder_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CityID" Mode="In" Type="String" />
+            <Parameter Name="DistrictID" Mode="In" Type="String" />
+            <Parameter Name="ShapeID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdDistrictDSM" ReturnType="Collection(OM21300Model.OM21300_pdDistrictDSM_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="DSRID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdDSM" ReturnType="Collection(OM21300Model.OM21300_pdDSM_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdDSR" ReturnType="Collection(OM21300Model.OM21300_pdDSR_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="DSM" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdLocationBranch" ReturnType="Collection(OM21300Model.OM21300_pdLocationBranch_Result)">
+            <Parameter Name="Period" Mode="In" Type="String" />
+            <Parameter Name="DSRID" Mode="In" Type="String" />
+            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
+            <Parameter Name="WeekEO" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="BrandID" Mode="In" Type="String" />
+            <Parameter Name="FromAmt" Mode="In" Type="Double" />
+            <Parameter Name="ToAmt" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdRole" ReturnType="Collection(String)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdCustChartPie" ReturnType="Collection(OM21300Model.OM21300_pdCustChartPie_Result)">
+            <Parameter Name="Period" Mode="In" Type="String" />
+            <Parameter Name="DSRID" Mode="In" Type="String" />
+            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
+            <Parameter Name="WeekEO" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="BrandID" Mode="In" Type="String" />
+            <Parameter Name="FromAmt" Mode="In" Type="Double" />
+            <Parameter Name="ToAmt" Mode="In" Type="Double" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdChartPie" ReturnType="Collection(OM21300Model.OM21300_pdChartPie_Result)">
+            <Parameter Name="Period" Mode="In" Type="String" />
+            <Parameter Name="DSRID" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
+            <Parameter Name="WeekEO" Mode="In" Type="String" />
+            <Parameter Name="BrandID" Mode="In" Type="String" />
+            <Parameter Name="FromAmt" Mode="In" Type="Double" />
+            <Parameter Name="ToAmt" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="OM21300_pdChartColumn" ReturnType="Collection(OM21300Model.OM21300_pdChartColumn_Result)">
+            <Parameter Name="Period" Mode="In" Type="String" />
+            <Parameter Name="DSRID" Mode="In" Type="String" />
+            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
+            <Parameter Name="WeekEO" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="BrandID" Mode="In" Type="String" />
+            <Parameter Name="FromAmt" Mode="In" Type="Double" />
+            <Parameter Name="ToAmt" Mode="In" Type="Double" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="OM21300_pcBrand_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Color" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pcCustClass_Result">
+          <Property Type="String" Name="ClassId" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Color" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pcDay_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="5" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pcFillType_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="9" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pcLocation_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="Image" Nullable="false" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pcVisitType_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdBorder_Result">
+          <Property Type="Double" Name="X" Nullable="false" />
+          <Property Type="Double" Name="Y" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdBranch_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdCity_Result">
+          <Property Type="String" Name="City" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="13" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="CityID" Nullable="false" MaxLength="6" />
+          <Property Type="Double" Name="CustOrd" Nullable="true" />
+          <Property Type="Double" Name="CustNoOrd" Nullable="true" />
+          <Property Type="Double" Name="Coverage" Nullable="true" />
+          <Property Type="String" Name="Color" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdCityShape_Result">
+          <Property Type="String" Name="ShapeID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="CityID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdCompany_Result">
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Address1" Nullable="true" MaxLength="400" />
+          <Property Type="String" Name="Address2" Nullable="true" MaxLength="400" />
+          <Property Type="String" Name="Tel" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Fax" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="TaxRegNbr" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Channel" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="District" Nullable="true" />
+          <Property Type="String" Name="CpnyType" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Plant" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="DatabaseName" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="23" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Double" Name="Deposit" Nullable="false" />
+          <Property Type="Double" Name="CreditLimit" Nullable="false" />
+          <Property Type="Double" Name="MaxValue" Nullable="false" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdCoverage_Result">
+          <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="CustId" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DSM" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="Lat" Nullable="true" />
+          <Property Type="Double" Name="Lng" Nullable="true" />
+          <Property Type="String" Name="WeekofVisit" Nullable="true" MaxLength="10" />
+          <Property Type="Int16" Name="VisitSort" Nullable="true" />
+          <Property Type="String" Name="Sun" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Mon" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Tue" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Wed" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Thu" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Fri" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Sat" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="RouteID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="BrandID" Nullable="true" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="District" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Image" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="Amt" Nullable="true" />
+          <Property Type="String" Name="ClassID" Nullable="true" />
+          </ComplexType>
+        <ComplexType Name="OM21300_pdCust1000_Result">
+          <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="CustId" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DSM" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="Lat" Nullable="true" />
+          <Property Type="Double" Name="Lng" Nullable="true" />
+          <Property Type="String" Name="WeekofVisit" Nullable="true" MaxLength="10" />
+          <Property Type="Int16" Name="VisitSort" Nullable="true" />
+          <Property Type="String" Name="Sun" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Mon" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Tue" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Wed" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Thu" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Fri" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Sat" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="RouteID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="BrandID" Nullable="true" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="District" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Image" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="Amt" Nullable="true" />
+          <Property Type="String" Name="ClassID" Nullable="true" MaxLength="30" />
+          </ComplexType>
+        <ComplexType Name="OM21300_pdDistrict_Result">
+          <Property Type="String" Name="ShapeID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="DistrictID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CityID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="District" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CityName" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdDistrictBorder_Result">
+          <Property Type="String" Name="X" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Y" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="ShapeID" Nullable="false" MaxLength="7" />
+          <Property Type="String" Name="DistrictID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="District" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdDistrictDSM_Result">
+          <Property Type="String" Name="City" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="District" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdDSM_Result">
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="CmmnPct" Nullable="true" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="EMailAddr" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Fax" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ProductGroup" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="DeliveryMan" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Position" Nullable="true" MaxLength="2" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="LUpd_User" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Crtd_User" Nullable="true" MaxLength="30" />
+          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="District" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="SupID" Nullable="true" MaxLength="30" />
+          <Property Type="Double" Name="CrLmt" Nullable="true" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="PPCPassword" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="PPCStorePicReq" Nullable="true" />
+          <Property Type="String" Name="VendID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="2" />
+          <Property Type="Boolean" Name="PPCAdmin" Nullable="false" />
+          <Property Type="String" Name="Images" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdDSR_Result">
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="District" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdLocationBranch_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="200" />
+          <Property Type="Double" Name="Lat" Nullable="false" />
+          <Property Type="Double" Name="Lng" Nullable="false" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdCustChartPie_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="Double" Name="Amount" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdChartPie_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="ProductClass" Nullable="false" MaxLength="12" />
+          <Property Type="String" Name="MaterialType" Nullable="false" MaxLength="12" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="5" />
+          <Property Type="Double" Name="Amount" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdChartColumn_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="9" />
+          <Property Type="Double" Name="Amount" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OM21300ModelStoreContainer" CdmEntityContainer="OM21300Entities" >
+          <FunctionImportMapping FunctionImportName="OM21300_pcBrand" FunctionName="OM21300Model.Store.OM21300_pcBrand">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pcBrand_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pcCustClass" FunctionName="OM21300Model.Store.OM21300_pcCustClass">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pcCustClass_Result">
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pcDay" FunctionName="OM21300Model.Store.OM21300_pcDay">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pcDay_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pcFillType" FunctionName="OM21300Model.Store.OM21300_pcFillType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pcFillType_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pcLocation" FunctionName="OM21300Model.Store.OM21300_pcLocation">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pcLocation_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pcVisitType" FunctionName="OM21300Model.Store.OM21300_pcVisitType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pcVisitType_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdBorder" FunctionName="OM21300Model.Store.OM21300_pdBorder">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdBorder_Result">
+                <ScalarProperty Name="X" ColumnName="X" />
+                <ScalarProperty Name="Y" ColumnName="Y" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdCity" FunctionName="OM21300Model.Store.OM21300_pdCity">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdCity_Result">
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="CustOrd" ColumnName="CustOrd" />
+                <ScalarProperty Name="CustNoOrd" ColumnName="CustNoOrd" />
+                <ScalarProperty Name="Coverage" ColumnName="Coverage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdCityShape" FunctionName="OM21300Model.Store.OM21300_pdCityShape">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdCityShape_Result">
+                <ScalarProperty Name="ShapeID" ColumnName="ShapeID" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdCompany" FunctionName="OM21300Model.Store.OM21300_pdCompany">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdCompany_Result">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
+                <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
+                <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="State" ColumnName="State" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdCoverage" FunctionName="OM21300Model.Store.OM21300_pdCoverage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdCoverage_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DSM" ColumnName="DSM" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="WeekofVisit" ColumnName="WeekofVisit" />
+                <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
+                <ScalarProperty Name="Sun" ColumnName="Sun" />
+                <ScalarProperty Name="Mon" ColumnName="Mon" />
+                <ScalarProperty Name="Tue" ColumnName="Tue" />
+                <ScalarProperty Name="Wed" ColumnName="Wed" />
+                <ScalarProperty Name="Thu" ColumnName="Thu" />
+                <ScalarProperty Name="Fri" ColumnName="Fri" />
+                <ScalarProperty Name="Sat" ColumnName="Sat" />
+                <ScalarProperty Name="RouteID" ColumnName="RouteID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Amt" ColumnName="Amt" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdCoverageExport" FunctionName="OM21300Model.Store.OM21300_pdCoverageExport" />
+          <FunctionImportMapping FunctionImportName="OM21300_pdCust1000" FunctionName="OM21300Model.Store.OM21300_pdCust1000">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdCust1000_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DSM" ColumnName="DSM" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="WeekofVisit" ColumnName="WeekofVisit" />
+                <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
+                <ScalarProperty Name="Sun" ColumnName="Sun" />
+                <ScalarProperty Name="Mon" ColumnName="Mon" />
+                <ScalarProperty Name="Tue" ColumnName="Tue" />
+                <ScalarProperty Name="Wed" ColumnName="Wed" />
+                <ScalarProperty Name="Thu" ColumnName="Thu" />
+                <ScalarProperty Name="Fri" ColumnName="Fri" />
+                <ScalarProperty Name="Sat" ColumnName="Sat" />
+                <ScalarProperty Name="RouteID" ColumnName="RouteID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Amt" ColumnName="Amt" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdDistrict" FunctionName="OM21300Model.Store.OM21300_pdDistrict">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdDistrict_Result">
+                <ScalarProperty Name="ShapeID" ColumnName="ShapeID" />
+                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdDistrictBorder" FunctionName="OM21300Model.Store.OM21300_pdDistrictBorder">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdDistrictBorder_Result">
+                <ScalarProperty Name="X" ColumnName="X" />
+                <ScalarProperty Name="Y" ColumnName="Y" />
+                <ScalarProperty Name="ShapeID" ColumnName="ShapeID" />
+                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
+                <ScalarProperty Name="District" ColumnName="District" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdDistrictDSM" FunctionName="OM21300Model.Store.OM21300_pdDistrictDSM">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdDistrictDSM_Result">
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="District" ColumnName="District" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdDSM" FunctionName="OM21300Model.Store.OM21300_pdDSM">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdDSM_Result">
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="CmmnPct" ColumnName="CmmnPct" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="EMailAddr" ColumnName="EMailAddr" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ProductGroup" ColumnName="ProductGroup" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="DeliveryMan" ColumnName="DeliveryMan" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="SupID" ColumnName="SupID" />
+                <ScalarProperty Name="CrLmt" ColumnName="CrLmt" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="PPCPassword" ColumnName="PPCPassword" />
+                <ScalarProperty Name="PPCStorePicReq" ColumnName="PPCStorePicReq" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PPCAdmin" ColumnName="PPCAdmin" />
+                <ScalarProperty Name="Images" ColumnName="Images" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdDSR" FunctionName="OM21300Model.Store.OM21300_pdDSR">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdDSR_Result">
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="District" ColumnName="District" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdLocationBranch" FunctionName="OM21300Model.Store.OM21300_pdLocationBranch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdLocationBranch_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdRole" FunctionName="OM21300Model.Store.OM21300_pdRole" />
+          <FunctionImportMapping FunctionImportName="OM21300_pdCustChartPie" FunctionName="OM21300Model.Store.OM21300_pdCustChartPie">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdCustChartPie_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdChartPie" FunctionName="OM21300Model.Store.OM21300_pdChartPie">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdChartPie_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ProductClass" ColumnName="ProductClass" />
+                <ScalarProperty Name="MaterialType" ColumnName="MaterialType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21300_pdChartColumn" FunctionName="OM21300Model.Store.OM21300_pdChartColumn">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdChartColumn_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="b93c99dc98a745769db9c7faa724cd62" Name="Diagram1" />
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
