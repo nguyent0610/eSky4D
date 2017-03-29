@@ -284,6 +284,11 @@ var grdTop_BeforeEdit = function (editor, e) {
 };
 var grdTop_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdTop, e, keysTop);
+
+    _AppFolID = e.record.data.AppFolID;
+    _RoleID = e.record.data.RoleID;
+    _Status = e.record.data.Status;
+
     frmChange();
 };
 var grdTop_ValidateEdit = function (item, e) {
@@ -297,6 +302,7 @@ var grdTop_Reject = function (record) {
 
 //Bot Grid
 var grdBot_BeforeEdit = function (editor, e) {
+    if (_AppFolID == '' || _RoleID == '' || _Status == '') return false;
     return HQ.grid.checkBeforeEdit(e, keysBot);
 };
 var grdBot_Edit = function (item, e) {
@@ -349,8 +355,6 @@ var grdBot_Reject = function (record) {
 
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
-
-var _
 
 var save = function () {
     if (App.frmMain.isValid()) {
