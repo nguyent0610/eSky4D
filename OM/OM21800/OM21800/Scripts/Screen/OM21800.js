@@ -6,8 +6,9 @@ var fieldsLangCheckRequire = ['Territory', 'DiscID', 'DiscSeq', 'StartDate', 'En
 var _Source = 0;
 var _maxSource = 2;
 var _isLoadMaster = false;
-
-
+var imagName;
+var flag = false;
+var _row;
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 var checkLoad = function (sto) {
@@ -273,3 +274,26 @@ var dates = {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
+var fupImage_change = function (fup, newValue, oldValue, eOpts, record) {
+    if (fup.value) {
+        var ext = fup.value.split(".").pop().toLowerCase();
+        if (ext == "jpg" || ext == "png" || ext == "gif" || ext == "pdf" || ext == "mp4") {
+            imagName = fup.value;
+            _row.set('Poster', imagName);
+            flag = true;
+        }
+        else {
+            HQ.message.show(148, '', '');
+        }
+    }
+};
+
+var btnImage_Click = function (record) {
+    _row = record;
+    var uploadField = Ext.getCmp('fupImages');
+    uploadField.fileInputEl.dom.click(record);
+};
+var btnDelete_Click = function (record) {
+    if (record.data.Poster)
+        record.set('Poster', '');
+};

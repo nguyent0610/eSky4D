@@ -14,6 +14,7 @@ using Aspose.Cells;
 using HQFramework.DAL;
 using HQFramework.Common;
 using System.Drawing;
+using HQ.eSkySys;
 
 namespace OM21800.Controllers
 {
@@ -25,14 +26,32 @@ namespace OM21800.Controllers
         private string _screenNbr = "OM21800";
         private string _userName = Current.UserName;
         OM21800Entities _db = Util.CreateObjectContext<OM21800Entities>(false);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private JsonResult _logMessage;
+        private string _filePath;
+        internal string FilePath
+        {
+            get
+            {
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "OM21800ImgConfig");
+                if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
+                {
+                    _filePath = config.TextVal;
+                }
+                else
+                {
+                    _filePath = Server.MapPath("~\\Images\\OM21800");
+                }
+                return _filePath;
+            }
+        }
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -82,7 +101,35 @@ namespace OM21800.Controllers
                     var lang = _db.OM_DiscountInfor.Where(p => p.Territory.ToLower() == curItem.Territory.ToLower()
                                                             && p.DiscID.ToLower() == curItem.DiscID.ToLower()
                                                             && p.DiscSeq.ToLower() == curItem.DiscSeq.ToLower()).FirstOrDefault();
-
+                    #region Upload files
+                    var files = Request.Files;
+                    if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
+                    {
+                        // Xoa file cu di
+                        var oldPath = string.Format("{0}\\{1}", FilePath, curItem.Poster);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                        // Upload file moi
+                        string newFileName = string.Format("{0}", files[0].FileName);
+                        files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
+                        curItem.Poster = newFileName;
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(curItem.Poster) && string.IsNullOrWhiteSpace(lang.Poster))
+                        {
+                            // Xoa file cu di
+                            var oldPath = string.Format("{0}\\{1}", FilePath, curItem.Poster);
+                            if (System.IO.File.Exists(oldPath))
+                            {
+                                System.IO.File.Delete(oldPath);
+                            }
+                            curItem.Poster = string.Empty;
+                        }
+                    }
+                    #endregion
                     if (lang != null)
                     {
                         if (lang.tstamp.ToHex() == curItem.tstamp.ToHex())
@@ -102,7 +149,7 @@ namespace OM21800.Controllers
                         _db.OM_DiscountInfor.AddObject(lang);
                     }
                 }
-
+                
                 _db.SaveChanges();
                 return Json(new { success = true });
             }

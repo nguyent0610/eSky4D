@@ -16,15 +16,16 @@
     .ID("frmMain")
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
-    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .TopBar(Util.SetupToolbar("Print", true, ""))    
     .Layout(LayoutType.Border)
     .Listeners(l =>
     {
         l.BoxReady.Handler = "firstLoad()";
     })
     .Items(
-
-        X.Panel().ID("pnlGrid")
+        X.FileUploadField().ID("fupImages").Hidden(true)
+         .Listeners(lst => lst.Change.Fn = "fupImage_change")
+        ,X.Panel().ID("pnlGrid")
         .Region(Region.Center)
         .Layout(LayoutType.Border)
         .Items(
@@ -103,10 +104,22 @@
 				    .Editor(HQ.DateField().Format("MM/dd/yyyy"))
 
                 , X.Column().Text(Util.GetLang("Poster")).DataIndex("Poster").Width(200)
-				    .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
-                    
+				    //.Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
+                
+                , X.CommandColumn().Text(Util.GetLang("")).Align(Alignment.Center).Width(70)
+                .Commands(
+                    X.GridCommand().Icon(Icon.DiskUpload).CommandName("Upload").Text("Upload")
+                )
+                .Listeners(l => l.Command.Handler = "btnImage_Click(record);")    
+                
+                , X.CommandColumn().Text(Util.GetLang("")).Align(Alignment.Center).Width(70)
+                .Commands(
+                    X.GridCommand().Icon(Icon.Delete).CommandName("Delete").Text("Delete")
+                )
+                .Listeners(l => l.Command.Handler = "btnDelete_Click(record);")
+                        
                 , X.CheckColumn().ID("chkStatus").DataIndex("Status").Width(70).Editable(true).HideTitleEl(false).Text(Util.GetLang("Status"))
-                    
+              
                 , X.CommandColumn().Width(150)
                 .Commands(
                     X.GridCommand()
