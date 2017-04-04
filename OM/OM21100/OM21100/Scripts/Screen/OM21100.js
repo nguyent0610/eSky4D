@@ -521,6 +521,7 @@ var Main = {
                             HQ.message.show(data.result.msgCode);
                         }
                         else {
+                            App.cboDiscSeq.setValue('');
                             HQ.message.show(201405071);
                         }
                         App.cboDiscSeq.store.load();
