@@ -29,16 +29,16 @@ namespace OM24100
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";////192.168.130.4
-            Current.DBSys = "ND_eSky4DSys";
+            Current.Server = "HOANGSAD";////192.168.130.4
+            Current.DBSys = "SonHa_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM24100"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "SonHa_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004";
+            Session["CpnyID"] = Current.CpnyID = "NPP0001";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }
