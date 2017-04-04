@@ -681,8 +681,8 @@
                         })
 
                     , HQ.Combo().ID("cboSalesManHistory").Name("cboSalesManHistory").HQLangCode("SalesMan").HQProcedure("OM30400_pcSalesMan")
-                    .HQColumnShow("SlsperId,Name").DisplayField("SlsperId").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
-                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
+                    .HQColumnShow("SlsperId,Name,SalaryCode").DisplayField("SlsperId").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 350).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
