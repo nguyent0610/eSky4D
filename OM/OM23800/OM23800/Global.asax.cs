@@ -30,14 +30,14 @@ namespace OM23800
         {
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";////192.168.130.4//EARTHSVR
-            Current.DBSys = "ND_Test_eSky4DApp";////eBiz4DCloudSysJFV
+            Current.Server = "HOANGSAD";////192.168.130.4//EARTHSVR
+            Current.DBSys = "SonHa_eSky4DSys";////eBiz4DCloudSysJFV
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM23800"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_Test_eSky4DApp";//eBiz4DCloudAppJFV
+            Session["DBApp"] = Current.DBApp = "SonHa_eSky4DApp";//eBiz4DCloudAppJFV
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "NDMT";
             Session["Language"] = Current.Language = "vi";

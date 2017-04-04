@@ -195,8 +195,8 @@
                     .LayoutConfig(new HBoxLayoutConfig() { Align = HBoxAlign.Top, Pack = BoxPack.Center })
                     .Items(
                         HQ.Combo().ID("cboSalesManMCL").Name("cboSalesManMCL").HQLangCode("SalesMan").HQProcedure("OM23800_pcSalesMan")
-                        .HQColumnShow("SlsperId,Name").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
-                        .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1)//.AllowBlank(false)
+                        .HQColumnShow("SlsperId,Name,SalaryCode").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
+                        .HQHeightWidth(400, 350).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1)//.AllowBlank(false)
                         .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
