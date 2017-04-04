@@ -1183,6 +1183,7 @@ var drawDistrictBorder = function (city, cityB) {
             var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < districtBorder.length; i++) {
                 if (districtBorder[i].data.City == cityB[0].data.City) {
+                    if (districtBorder[i].getPath())                       
                     districtBorder[i].getPath().forEach(function (element, index) { bounds.extend(element); });
                 }
             }
