@@ -122,7 +122,7 @@
                         })
 
                      , HQ.Combo().ID("cboSalesManPlan").Name("cboSalesManPlan").HQLangCode("SalesMan").HQProcedure("OM30400_pcSalesMan")
-                    .HQColumnShow("SlsperId,Name").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
+                    .HQColumnShow("SlsperId,Name,SalaryCode").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
                     .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
                     .HQParam(new StoreParameterCollection() 
                     { 
@@ -317,7 +317,7 @@
                         })
 
                     , HQ.Combo().ID("cboSalesManMCL").Name("cboSalesManMCL").HQLangCode("SalesMan").HQProcedure("OM30400_pcSalesMan")
-                    .HQColumnShow("SlsperId,Name").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
+                    .HQColumnShow("SlsperId,Name,SalaryCode").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
                     .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1)
                     .HQParam(new StoreParameterCollection() 
                     { 
@@ -475,7 +475,7 @@
                     )
 
                     , HQ.Combo().ID("cboSalesManActual").Name("cboSalesManActual").HQLangCode("SalesMan").HQProcedure("OM30400_pcSalesMan")
-                    .HQColumnShow("SlsperId,Name").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
+                    .HQColumnShow("SlsperId,Name,SalaryCode").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
                     .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false).Disabled(true)
                     .HQParam(new StoreParameterCollection() 
                     { 
