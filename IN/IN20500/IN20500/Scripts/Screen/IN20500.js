@@ -19,6 +19,7 @@ var parentRecordIDAll = '';
 var parentRecordID = '';
 var _copy = false;
 var _treeExpandAll = false;
+var isnewclick = false;
 
 var checkLoad = function (sto) {
     _Source += 1;
@@ -137,6 +138,7 @@ var menuClick = function (command) {
                     if (HQ.isChange) {
                         HQ.message.show(150);
                     } else {
+                        isnewclick = true;
                         App.txtInvtIDCopy.setValue('');
                         _copy = false;
                         InvtID = '';
@@ -281,7 +283,7 @@ var stoLoad = function (sto) {
         HQ.common.lockItem(App.frmMain, true);
         App.txtDfltLotSerFxdVal.setReadOnly(true);
     }
-
+  //  isnewclick = false;
     if (!HQ.isNew && !Ext.isEmpty(App.cboInvtID.getValue()))
         searchNode();
 };
@@ -453,6 +455,8 @@ var deleteData = function (item) {
                     url: 'IN20500/DeleteAll',
                     timeout: 7200,
                     success: function (msg, data) {
+                        InvtID = '';
+                        isnewclick = true;
                         ReloadTree('delete');
                         menuClick("new");
                     },
@@ -679,6 +683,7 @@ var cboInvtID_Change = function (sender, value) {
         //    sender.setValue(sender.originalValue);
         //    return;
         //}
+        if(!isnewclick)
         InvtID = value;
         App.cboDfltPOUnit.store.reload();
         App.cboDfltSOUnit.store.reload();
@@ -696,6 +701,7 @@ var cboInvtID_Select = function (sender, value) {
         //    sender.setValue(sender.originalValue);
         //    return;
         //}
+        if (!isnewclick)
         InvtID = value;
         App.cboDfltPOUnit.store.reload();
         App.cboDfltSOUnit.store.reload();
@@ -912,10 +918,14 @@ var ReloadTree = function (type, valueInvtID) {
                         var positionInvtID = calcPage(objPage.index);
                         App.cboInvtID.loadPage(positionInvtID);
                     }
-                    App.cboInvtID.setValue(valueInvtID);
-
-                    //App.cboInvtID.setValue(InvtID);
-                    App.stoIN_Inventory.reload();
+                    if (!isnewclick) {
+                        App.cboInvtID.setValue(valueInvtID);
+                        App.stoIN_Inventory.reload();
+                    }
+                    else isnewclick = true;
+                        //App.cboInvtID.setValue(InvtID);
+                       
+                   
                 }
                 else if (type =='delete')
                 {
