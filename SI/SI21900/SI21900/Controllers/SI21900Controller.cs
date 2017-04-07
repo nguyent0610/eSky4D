@@ -107,6 +107,7 @@ namespace SI21900.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
+			t.Zone = s.Zone;
             t.Descr = s.Descr;
 
             t.LUpd_DateTime = DateTime.Now;

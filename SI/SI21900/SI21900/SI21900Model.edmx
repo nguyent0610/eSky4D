@@ -21,6 +21,7 @@
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Zone" Type="varchar" MaxLength="10" />
         </EntityType>
         <Function Name="SI21900_pgLoadTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
@@ -28,9 +29,16 @@
     <edmx:ConceptualModels>
       <Schema Namespace="SI21900Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SI21900Entities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="SI_Territory" EntityType="SI21900Model.SI_Territory" />
           <FunctionImport Name="SI21900_pgLoadTerritory" ReturnType="Collection(SI21900Model.SI21900_pgLoadTerritory_Result)" />
+          <EntitySet Name="SI_Territory" EntityType="SI21900Model.SI_Territory" />
         </EntityContainer>
+        <ComplexType Name="SI21900_pgLoadTerritory_Result">
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="Zone" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ZoneDescr" Nullable="true" MaxLength="200" />
+        </ComplexType>
         <EntityType Name="SI_Territory">
           <Key>
             <PropertyRef Name="Territory" />
@@ -44,21 +52,29 @@
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="Zone" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="SI21900_pgLoadTerritory_Result">
-          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SI21900Entities" >
+          <FunctionImportMapping FunctionImportName="SI21900_pgLoadTerritory" FunctionName="eBiz4DWebSysModel.Store.SI21900_pgLoadTerritory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI21900Model.SI21900_pgLoadTerritory_Result">
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
+                <ScalarProperty Name="ZoneDescr" ColumnName="ZoneDescr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="SI_Territory">
             <EntityTypeMapping TypeName="SI21900Model.SI_Territory">
               <MappingFragment StoreEntitySet="SI_Territory">
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
@@ -71,15 +87,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SI21900_pgLoadTerritory" FunctionName="eBiz4DWebSysModel.Store.SI21900_pgLoadTerritory">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SI21900Model.SI21900_pgLoadTerritory_Result">
-                <ScalarProperty Name="Territory" ColumnName="Territory" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -101,7 +108,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="SI21900Model.SI_Territory" Width="1.5" PointX="6.3929578002509473" PointY="27.695777742050485" />
+        <EntityTypeShape EntityType="SI21900Model.SI_Territory" Width="1.5" PointX="6.1692652842818134" PointY="2.0265508899588842" />
       </Diagram>
     </Diagrams>
   </Designer>

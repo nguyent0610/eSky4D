@@ -45,10 +45,34 @@
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
+              //X.Column().Text(Util.GetLang("Zone")).DataIndex("Zone").Width(150)
+              //      .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
+       
             X.Column().ID("Territory").Text(Util.GetLang("Territory")).DataIndex("Territory").Width(150)
                     .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
                     .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),
+                    
+              X.Column().Text(Util.GetLang("Zone")).DataIndex("Zone")
+                        .Editor(
+                            HQ.Combo().ID("cboZone")
+                            .HQProcedure("SI21900_pcZone")
+                            .HQColumnShow("Code,Descr")
+                            .HQHeightWidth(400, 300)
+                            .ValueField("Code").DisplayField("Code")
+                            .ForceSelection(true).SelectOnFocus(true)
+                            .LoadData()
+                            .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = " { this.clearValue();}"; //"if (index == 0) { this.clearValue();}";
+                                        lst.Change.Fn = "cboZone_Change";
+                                        
+                                    })
+                        ),
+                        
+             X.Column().Text(Util.GetLang("ZoneDescr")).DataIndex("ZoneDescr").Width(150),
+                  //  .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),            
+                            
             X.CommandColumn()
             .Width(150)
             .Commands(
@@ -95,7 +119,9 @@
                 .Local(true)
                 .Filters(
                     X.StringFilter().DataIndex("Territory"),
-                    X.StringFilter().DataIndex("Descr")
+                    X.StringFilter().DataIndex("Descr"),
+                     X.StringFilter().DataIndex("Zone"),
+                      X.StringFilter().DataIndex("ZoneDescr")
                 )
         )
     )
