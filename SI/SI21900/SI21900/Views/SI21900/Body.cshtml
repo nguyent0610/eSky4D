@@ -57,15 +57,17 @@
                         .Editor(
                             HQ.Combo().ID("cboZone")
                             .HQProcedure("SI21900_pcZone")
-                            .HQColumnShow("Code,Descr")
+                            .HQColumnShow("Code,Descr").DataIndex("Zone")
                             .HQHeightWidth(400, 300)
                             .ValueField("Code").DisplayField("Code")
                             .ForceSelection(true).SelectOnFocus(true)
                             .LoadData()
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = " { this.clearValue();}"; //"if (index == 0) { this.clearValue();}";
                                         lst.Change.Fn = "cboZone_Change";
+                                        lst.Select.Fn = "cboZone_Change";
                                         
                                     })
                         ),

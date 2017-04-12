@@ -127,15 +127,18 @@ var grdTerritory_Reject = function (record) {
 };
 
 var cboZone_Change = function (item, newValue, oldValue) {
-   
-    var r = HQ.store.findRecord(App.cboZone.getStore(), ["Code"], [item.valueModels[0].data.Code])
-    if (Ext.isEmpty(r)) {
-        App.slmTerritory.getSelection()[0].set('ZoneDescr', "");
-        //App.slmTerritory.getSelection()[0].set('BranchID', "");
-    }
-    else {
-        App.slmTerritory.getSelection()[0].set('ZoneDescr', r.data.Descr);
-       // App.slmgrdCust.getSelection()[0].set('BranchID', r.data.BranchID);
+    if (item.valueModels != null) {
+        if (item.valueModels.length > 0) {
+            var r = HQ.store.findRecord(App.cboZone.getStore(), ["Code"], [item.valueModels[0].data.Code])
+            if (!r) {
+                App.slmTerritory.getSelection()[0].set('ZoneDescr', "");
+                //App.slmTerritory.getSelection()[0].set('BranchID', "");
+            }
+            else {
+                App.slmTerritory.getSelection()[0].set('ZoneDescr', r.data.Descr);
+                // App.slmgrdCust.getSelection()[0].set('BranchID', r.data.BranchID);
+            }
+        }
     }
 };
 //////////////////////////////////////////////////////////
