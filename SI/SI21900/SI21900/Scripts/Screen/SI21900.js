@@ -110,6 +110,8 @@ var stoTerritory_Load = function (sto) {
 
 var grdTerritory_BeforeEdit = function (editor, e) {
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
+    if (e.field == 'Zone')
+        App.cboZone.store.clearFilter();
 };
 
 var grdTerritory_Edit = function (item, e) {
