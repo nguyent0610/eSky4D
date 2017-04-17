@@ -237,7 +237,7 @@
 
             //, X.MenuItem().ID("btnCluster").Text("Nhóm khách hàng lại").Icon(Icon.ZoomOut).Listeners(p => p.Click.Fn = "btnCluster_Click")
 
-            X.MenuItem().ID("btnDashboard").Icon(Icon.ChartBar).Text("Dashboard").Listeners(p => p.Click.Fn = "btnDashboard_Click")
+            X.MenuItem().ID("btnDashboard").Icon(Icon.ChartBar).Text("Dashboard").Listeners(p => p.Click.Fn = "btnDashboard_Click").Hidden(true)
 
             , X.MenuItem().Icon(Icon.Printer).Text("In Bản Đồ").MenuItem(
 
@@ -262,9 +262,9 @@
 
             , X.MenuItem().ID("btnHideDetail").Text("Ẩn Khách Hàng").Icon(Icon.UserDelete).Listeners(p => p.Click.Fn = "btnHideDetail_Click")
 
-            , X.MenuItem().ID("btnShowBorder").Text("Hiện Border Khách Hàng").Icon(Icon.MapCursor).Listeners(p => p.Click.Fn = "btnShowBorder_Click")
+            , X.MenuItem().ID("btnShowBorder").Text("Hiện Border Khách Hàng").Icon(Icon.MapCursor).Listeners(p => p.Click.Fn = "btnShowBorder_Click").Hidden(true)
 
-            , X.MenuItem().ID("btnHideBorder").Text("Ẩn Border Khách Hàng").Icon(Icon.MapDelete).Listeners(p => p.Click.Fn = "btnHideBorder_Click")
+            , X.MenuItem().ID("btnHideBorder").Text("Ẩn Border Khách Hàng").Icon(Icon.MapDelete).Listeners(p => p.Click.Fn = "btnHideBorder_Click").Hidden(true)
 
             , X.MenuItem().ID("btnCity").Text("Xem Mức Thành Phố/Tỉnh").Icon(Icon.World).Listeners(p => p.Click.Fn = "btnCity_Click")
 
@@ -320,7 +320,8 @@
             .Hidden(true)
 
             , X.Panel().Layout(LayoutType.HBox).ID("pnlCustInfo")
-            .Title("Thông Tin Khách Hàng")
+
+            .Title(Util.GetLang("CustomerInfo"))
             .Region(Region.North)
             .BodyPadding(5)
             .Items(
@@ -337,64 +338,64 @@
                 .Items(
                     X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
-                        X.Label().Text("Chi Nhánh: ").Cls("popup-label")
+                        X.Label().Text(Util.GetLang("BranchID")+": ").Cls("popup-label")
 
                         , X.Label().ID("lblCust_BranchID").MarginSpec("0 0 0 5")
                     )
 
                     , X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
-                        X.Label().Text("Mã Khách Hàng: ").Cls("popup-label")
+                        X.Label().Text(Util.GetLang("CustID")+": ").Cls("popup-label")
 
                         , X.Label().ID("lblCust_CustID").MarginSpec("0 0 0 5")
                     )
 
                     , X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
-                        X.Label().Text("Tên KH: ").Cls("popup-label")
+                        X.Label().Text(Util.GetLang("CustName")+": ").Cls("popup-label")
 
                         , X.Label().ID("lblCust_CustName").MarginSpec("0 0 0 5")
                     )
                     , X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
-                        X.Label().Text("ĐC 1: ").Cls("popup-label")
+                        X.Label().Text(Util.GetLang("Addr1")+": ").Cls("popup-label")
 
                         , X.Label().ID("lblCust_Addr").MarginSpec("0 0 0 5")
                     )
                     
                     , X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
-                        X.Label().Text("ĐC 2: ").Cls("popup-label")
+                        X.Label().Text(Util.GetLang("Addr2")+": ").Cls("popup-label")
 
                         , X.Label().ID("lblCust_Addr2").MarginSpec("0 0 0 5")
                     )
                     
                     , X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
-                        X.Label().Text("Giám Sát: ").Cls("popup-label")
+                        X.Label().Text(Util.GetLang("DSM")+": ").Cls("popup-label")
 
                         , X.Label().ID("lblCust_DSM").MarginSpec("0 0 0 5")
                     )
                     , X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
-                        X.Label().Text("DSR: ").Cls("popup-label")
+                        X.Label().Text(Util.GetLang("DSR")+": ").Cls("popup-label")
 
                         , X.Label().ID("lblCust_DSR").MarginSpec("0 0 0 5")
                     )
 
                     , X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
-                        X.Label().Text("Doanh Số: ").Cls("popup-label")
+                        X.Label().Text(Util.GetLang("Slsamt")+": ").Cls("popup-label")
 
                         , X.Label().ID("lblCust_Amt").MarginSpec("0 0 0 5")
                     )
-                    , X.FieldContainer().Layout(LayoutType.HBox)
+                    , X.FieldContainer().Layout(LayoutType.HBox).Hidden(true)
                     .Items(
                         X.Label().Text("Doanh Số P3M: ").Cls("popup-label")
 
                         , X.Label().ID("lblCust_AmtP3M").MarginSpec("0 0 0 5")
                     )
-                    , X.FieldContainer().Layout(LayoutType.HBox)
+                    , X.FieldContainer().Layout(LayoutType.HBox).Hidden(true)
                     .Items(
                         X.Label().Text("Doanh Số Cùng Kỳ: ").Cls("popup-label")
 
@@ -405,7 +406,7 @@
 
             , X.Panel().Region(Region.Center).ID("pnlCustChart")
             .Layout(LayoutType.Fit)
-            .Title("Tỷ Trọng Nhãn Hàng")
+            .Title(Util.GetLang("ProportionBrand"))//"Tỷ Trọng Nhãn Hàng")
             .Items(
                 X.Chart().ID("chartCust")
                     .Animate(true)
@@ -450,7 +451,8 @@
             .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
             .Items(
                 X.Panel()
-                .Title("Doanh Số Theo Ngành Hàng").Flex(1).AnchorVertical("100%")
+                .Title(Util.GetLang("SlsAmtClass"))//"Doanh Số Theo Ngành Hàng")
+                .Flex(1).AnchorVertical("100%")
                 .Layout(LayoutType.Fit)
                 .Items(
                     X.Chart().ID("chart1")
@@ -484,7 +486,7 @@
 
                 )
                 , X.Panel().Flex(1)
-                .Title("Doanh Số Theo Nhãn Hàng")
+                .Title(Util.GetLang("SlsAmtBrand"))//"Doanh Số Theo Nhãn Hàng")
                 .Layout(LayoutType.Fit)
                 .Items(
                     X.Chart()
@@ -503,7 +505,7 @@
                         X.CategoryAxis()
                             .Position(Position.Bottom)
                             .Fields("Code")
-                            .Title("Nhãn Hàng")
+                            .Title(Util.GetLang("Productclass"))//"Nhãn Hàng")
                     )
                     .Series(
                         X.ColumnSeries()
@@ -546,7 +548,8 @@
             , X.Panel()
             .ID("pnlFilter")
             .Region(Region.West).Layout(LayoutType.VBox)
-            .Title("Filter Form")
+
+            .Title(Util.GetLang("FilterForm"))
             .Header(true)
             .AutoScroll(true)
             .CollapseMode(CollapseMode.Header)
@@ -556,15 +559,15 @@
                 X.Toolbar()
                 .Items(
                     X.Button().ID("btnFilter").Icon(Icon.ArrowRefresh)
-                    .Text("Đọc Dữ Liệu")
+                    .Text(Util.GetLang("LoadData"))//"Đọc Dữ Liệu")
                     .Listeners(p => p.Click.Fn = "btnFilter_Click")
 
                     , X.Button().ID("btnExport").Icon(Icon.TableGo)
-                    .Text("Export")
+                    .Text(Util.GetLang("Export"))//"Export")
                     .Listeners(p => p.Click.Fn = "btnExport_Click")
 
                     , X.Button().ID("btnClose")
-                    .Text("Trở Về")
+                    .Text(Util.GetLang("Back"))//"Trở Về")
                     .Icon(Icon.Map)
                     .Hidden(true)
                     .Listeners(p => p.Click.Fn = "btnClose_Click")
@@ -573,7 +576,8 @@
 
 
                     , X.ComboBox().ID("cboFillType").StoreID("stoFillType")
-                    .FieldLabel("Tô Màu")
+
+                    .FieldLabel(Util.GetLang("ColorWith"))
                     .Flex(1)
                     .LabelWidth(40)
                     .ValueField("Code").DisplayField("Descr")
@@ -584,11 +588,12 @@
                 )
             )
             .Items(
-                X.DateField().ID("txtFromDate").Name("FromDate")
+                HQ.DateField().ID("txtFromDate").Name("FromDate")
                 .Type(DatePickerType.Month)
                 .Editable(false)
                 .Format("MM/yyyy")
-                .FieldLabel("Tháng")
+
+                .HQLangCode("Month")
                 .MarginSpec("5 0 0 10")
                 .InputWidth(80)
 
@@ -619,14 +624,16 @@
                 .QueryMode(DataLoadMode.Local)
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                .FieldLabel("Site Type")
+
+                .FieldLabel(Util.GetLang("SiteType"))
                 .MarginSpec("5 0 0 10")
                 .Width(280)
                 
                 ,HQ.Checkbox().ID("chkShowBranchID").HQLangCode("chkShowBranchID") .MarginSpec("5 0 0 10")
                     .Listeners(l=>l.Change.Fn="chkShowBranchID_Change").Hidden(true)
                 
-                , X.Label().Text("Phân Cấp:").MarginSpec(" 0 0 10").ID("lblTree")
+                , X.Label().Text(Util.GetLang("OM213Tree"))//"Phân Cấp:")
+                .MarginSpec(" 0 0 10").ID("lblTree")
 
                 , X.Panel()
                 .ID("pnlTree")
@@ -669,7 +676,7 @@
                 .QueryMode(DataLoadMode.Local)
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                .FieldLabel("Nhóm Khách hàng")
+                .FieldLabel(Util.GetLang("CustClass"))//"Nhóm Khách hàng")
                 .MarginSpec("5 0 0 10")
                 .Listeners(p =>
                 {
@@ -711,7 +718,7 @@
                 .QueryMode(DataLoadMode.Local)
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                .FieldLabel("Nhãn Hàng")
+                .FieldLabel(Util.GetLang("Productclass"))//"Nhãn Hàng")
                 .MarginSpec("5 0 0 10")
                 .Width(280)
                 .Listeners(p =>
@@ -745,7 +752,7 @@
                 .QueryMode(DataLoadMode.Local)
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                .FieldLabel("Thứ")
+                .FieldLabel(Util.GetLang("DayofWeek"))//"Thứ")
                 .MarginSpec("5 0 0 10")
                 .Width(280)
 
@@ -757,7 +764,7 @@
                 .QueryMode(DataLoadMode.Local)
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                .FieldLabel("Tuần Viếng Thăm")
+                .FieldLabel(Util.GetLang("WeekofVisit"))//"Tuần Viếng Thăm")
                 .MarginSpec("5 0 0 10")
                 .Width(280)
 
@@ -766,7 +773,7 @@
                 
                 
                 , X.NumberField().ID("txtFromAmt").Name("FromAmt")
-                .FieldLabel("Doanh Số Từ:")
+                .FieldLabel(Util.GetLang("SlsAmtFrom"))//"Doanh Số Từ:")
                 .Width(280)
                 .LabelWidth(100)
                 .MinValue(0)
@@ -776,7 +783,7 @@
                 .LabelStyle("text-align:left !important")
 
                 , X.NumberField().ID("txtToAmt").Name("ToAmt")
-                .FieldLabel("Doanh Số Đến:")
+                .FieldLabel(Util.GetLang("SlsAmtTo"))//"Doanh Số Đến:")
                 .LabelStyle("text-align:left !important")
                 .MarginSpec("5 0 0 10")
                 .Width(280)
@@ -801,19 +808,22 @@
             .Region(Region.Center)
             .Listeners(p => p.TabChange.Fn = "tnlMap_Change")
             .Items(
-                X.Panel()
+
+                X.Panel().Layout(LayoutType.Fit)
                 .ID("pnlMap")
-                .Title("Bản Đồ")
+                .Title(Util.GetLang("Map"))//"Bản Đồ")
                 .Border(false)
                 .ContextMenuID("menuMap")
-                .Html(
-                    "<div id='wrapMap' style='width:100%;height:100%'></div>"
-                )
+
+                    .Html(
+                        "<div id='wrapMap' style='width:100%;height:100%'></div>"
+
+                    )
                 .Listeners(p => p.AfterRender.Fn = "pnlMap_AfterRender")
 
                 , X.Panel()
                 .ID("pnlCustTop")
-                .Title("1000 Store")
+                .Title(Util.GetLang("1000Store"))//"1000 Store")
                 .Layout(LayoutType.Fit)
                 .Border(false)
                 .Items(
@@ -821,27 +831,28 @@
                     .ColumnModel(
                         X.RowNumbererColumn().MinWidth(50).MaxWidth(90).Resizable(true)
 
-                        , X.Column().DataIndex("CpnyID").Text("Công Ty")
+                        //, X.Column().DataIndex("CpnyID").Text("Công Ty")
 
-                        , X.Column().DataIndex("BranchID").Text("Chi Nhánh")
+                        , X.Column().DataIndex("BranchID").Text(Util.GetLang("BranchID"))//"Chi Nhánh")
 
-                        , X.Column().DataIndex("DSM").Text("DSM")
+                        , X.Column().DataIndex("DSM").Text(Util.GetLang("DSM"))//"DSM")
 
-                        , X.Column().DataIndex("SlsperId").Text("DSR")
+                        , X.Column().DataIndex("SlsperId").Text(Util.GetLang("DSR"))//"DSR")
 
-                        , X.Column().DataIndex("CustId").Text("Mã KH")
+                        , X.Column().DataIndex("CustId").Text(Util.GetLang("CustID"))//"Mã KH")
 
-                        , X.Column().DataIndex("CustName").Text("Tên KH")
+                        , X.Column().DataIndex("CustName").Text(Util.GetLang("CustName"))//"Tên KH")
 
-                        , X.Column().DataIndex("SegmentID").Text("Phân Mảng")
+                        , X.Column().DataIndex("SegmentID").Text(Util.GetLang("SegmentID"))//"Phân Mảng")
 
-                        , X.Column().DataIndex("Channel").Text("Kênh Phân Phối")
+                        , X.Column().DataIndex("Channel").Text(Util.GetLang("Channel"))//"Kênh Phân Phối")
 
-                        , X.Column().DataIndex("RouteID").Text("Mã Tuyến")
+                        , X.Column().DataIndex("RouteID").Text(Util.GetLang("RouteID"))//"Mã Tuyến")
 
-                        , X.Column().DataIndex("Addr1").Text("Địa Chỉ")
+                        , X.Column().DataIndex("Addr1").Text(Util.GetLang("Addr1"))//"Địa Chỉ")
 
-                        , X.Column().DataIndex("Amt").Text("Doanh Số").Renderer("renderQtyAmt")
+                        , X.Column().DataIndex("Amt").Text(Util.GetLang("SlsAmt"))//"Doanh Số")
+                        .Renderer("renderQtyAmt")
                     )
                     .SelectionModel(X.RowSelectionModel())
                     .BottomBar(X.PagingToolbar().ID("gpgCustTop"))
@@ -875,7 +886,7 @@
 
                 , X.Panel()
                 .ID("pnlCust")
-                .Title("Thông Tin Khách Hàng")
+                .Title(Util.GetLang("CustomerInfo"))//"Thông Tin Khách Hàng")
                 .Layout(LayoutType.Fit)
                 .Border(false)
                 .Items(
@@ -883,27 +894,28 @@
                     .ColumnModel(
                         X.RowNumbererColumn().MinWidth(50).MaxWidth(90).Resizable(true)
 
-                        , X.Column().DataIndex("CpnyID").Text("Công Ty")
+                        //, X.Column().DataIndex("CpnyID").Text("Công Ty")
 
-                        , X.Column().DataIndex("BranchID").Text("Chi Nhánh")
+                        , X.Column().DataIndex("BranchID").Text(Util.GetLang("BranchID"))//"Chi Nhánh")
 
-                        , X.Column().DataIndex("DSM").Text("DSM")
+                        , X.Column().DataIndex("DSM").Text(Util.GetLang("DSM"))//"DSM")
 
-                        , X.Column().DataIndex("SlsperId").Text("DSR")
+                        , X.Column().DataIndex("SlsperId").Text(Util.GetLang("DSR"))//"DSR")
 
-                        , X.Column().DataIndex("CustId").Text("Mã KH")
+                        , X.Column().DataIndex("CustId").Text(Util.GetLang("CustID"))//"Mã KH")
 
-                        , X.Column().DataIndex("CustName").Text("Tên KH")
+                        , X.Column().DataIndex("CustName").Text(Util.GetLang("CustName"))//"Tên KH")
 
-                        , X.Column().DataIndex("SegmentID").Text("Phân Mảng")
+                        , X.Column().DataIndex("SegmentID").Text(Util.GetLang("SegmentID"))//"Phân Mảng")
 
-                        , X.Column().DataIndex("Channel").Text("Kênh Phân Phối")
+                        , X.Column().DataIndex("Channel").Text(Util.GetLang("Channel"))//"Kênh Phân Phối")
 
-                        , X.Column().DataIndex("RouteID").Text("Mã Tuyến")
+                        , X.Column().DataIndex("RouteID").Text(Util.GetLang("RouteID"))//"Mã Tuyến")
 
-                        , X.Column().DataIndex("Addr1").Text("Địa Chỉ")
+                        , X.Column().DataIndex("Addr1").Text(Util.GetLang("Addr1"))//"Địa Chỉ")
 
-                        , X.Column().DataIndex("Amt").Text("Doanh Số").Renderer("renderQtyAmt")
+                        , X.Column().DataIndex("Amt").Text(Util.GetLang("SlsAmt"))//"Doanh Số")
+                        .Renderer("renderQtyAmt")
                     )
                     .SelectionModel(X.RowSelectionModel())
                     .BottomBar(X.PagingToolbar().ID("gpgCust"))

@@ -57,7 +57,7 @@ var frmMain_BoxReady = function () {
     App.cboBrand.store.load();
     App.stoDistrict.load();
     App.stoCityShape.load();
- 
+
 
     App.gpgCust.items.getByKey("refresh").hide();
 
@@ -88,7 +88,7 @@ var frmMain_BoxReady = function () {
     if (window.mobilecheck()) {
         App.winFilter.add(App.pnlFilter);
         App.pnlFilter.header.hide();
-        
+
         App.btnPopup.show();
         App.cboBrand.setEditable(false);
         App.cboFillType.setEditable(false);
@@ -101,7 +101,7 @@ var frmMain_BoxReady = function () {
 
         overridePickerClick(App.cboDay);
         overridePickerClick(App.cboCustClass);
-     
+
 
         App.pnlFilter.addBodyCls('filter-form');
         App.tnlMap.closeTab(App.pnlCust);
@@ -113,10 +113,10 @@ var frmMain_BoxReady = function () {
         App.tnlCust.add(App.pnlCustChart);
         App.chartCust.clearListeners();
         App.tnlCust.show();
-      
+
     }
     App.winLegend.hide();
-   
+
     App.btnPopup.addListener('click', function () {
         App.winCust.hide();
         App.winFilter.show();
@@ -124,12 +124,12 @@ var frmMain_BoxReady = function () {
         App.winFilter.setPosition(document.documentElement.clientWidth - 320, 0);
     });
 
-    
+
 }
 var overridePickerClick = function (combo) {
     var picker = combo.getPicker();
     picker.onItemClick = function (record, item, index, e, eOpts) {
-     
+
         picker.events["itemclick"].listeners.length = 0;
         var tmp = [];
         if (item.getAttribute('class').indexOf('hq-mcombo-item-checked') == -1) {
@@ -169,7 +169,7 @@ var checkSource = function () {
         });
         App.cboDay.setValue(dataDay);
 
- 
+
         App.cboVisitType.setValue('ALL');
 
         var dataCustClass = [];
@@ -188,7 +188,7 @@ var checkSource = function () {
 
         App.cboBrand.setValue(brand);
 
-      
+
         var rootNode = App.treeDSR.getRootNode();
         for (var i = 0; i < rootNode.childNodes.length; i++) {
             var firstCpny = rootNode.childNodes[i];
@@ -214,7 +214,7 @@ var pnlMap_AfterRender = function () {
             } else {
                 App.menuMap.showAt(event.pixel.x + App.pnlFilter.getWidth(), event.pixel.y);
             }
-          
+
         }
     );
 
@@ -258,7 +258,7 @@ var printMaps = function (type) {
                 districtBorder[i].getPath().forEach(function (element, index) { bounds.extend(element); });
             }
         }
-       
+
     }
 
     map.fitBounds(bounds);
@@ -441,15 +441,14 @@ var unCheckParentNode = function (node) {
     }
 }
 
-var chkShowBranchID_Change = function (item, value)
-{
+var chkShowBranchID_Change = function (item, value) {
     changeLocation();
 }
 var cboLocationType_Change = function () {
     changeLocation();
 }
 var cboCustClass_Change = function () {
- 
+
 }
 var cboBrand_Change = function () {
 
@@ -494,7 +493,7 @@ var cboFillType_Change = function () {
                         var data = dsrColor[j].split('@');
                         var data2 = data[0].split('#');
 
-                        if ( item.data.BranchID + '#' + item.data.SlsperId == data2[0] + '#' + data2[1]) {
+                        if (item.data.BranchID + '#' + item.data.SlsperId == data2[0] + '#' + data2[1]) {
                             var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
                                         new google.maps.Size(15, 28),
                                         new google.maps.Point(0, 0),
@@ -505,31 +504,31 @@ var cboFillType_Change = function () {
                         }
                     }
                 }
-                //else if (code == 3) {
-                //    App.stoChannel.each(function (channel) {
-                //        if (item.data.Channel == channel.data.Code) {
-                //            var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + channel.data.Color.replace("#", ""),
-                //                        new google.maps.Size(15, 28),
-                //                        new google.maps.Point(0, 0),
-                //                        new google.maps.Point(0, 0),
-                //                        new google.maps.Size(15, 28));
-                //            item.setOptions({ icon: pinImage });
-                //            return false;
-                //        }
-                //    });
-                //} else if (code == 4) {
-                //    App.stoSegment.each(function (segment) {
-                //        if (item.data.Channel == segment.data.ClassID && item.data.SegmentID == segment.data.SegmentID) {
-                //            var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + segment.data.Color.replace("#", ""),
-                //                        new google.maps.Size(15, 28),
-                //                        new google.maps.Point(0, 0),
-                //                        new google.maps.Point(0, 0),
-                //                        new google.maps.Size(15, 28));
-                //            item.setOptions({ icon: pinImage });
-                //            return false;
-                //        }
-                //    });
-                //}
+                    //else if (code == 3) {
+                    //    App.stoChannel.each(function (channel) {
+                    //        if (item.data.Channel == channel.data.Code) {
+                    //            var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + channel.data.Color.replace("#", ""),
+                    //                        new google.maps.Size(15, 28),
+                    //                        new google.maps.Point(0, 0),
+                    //                        new google.maps.Point(0, 0),
+                    //                        new google.maps.Size(15, 28));
+                    //            item.setOptions({ icon: pinImage });
+                    //            return false;
+                    //        }
+                    //    });
+                    //} else if (code == 4) {
+                    //    App.stoSegment.each(function (segment) {
+                    //        if (item.data.Channel == segment.data.ClassID && item.data.SegmentID == segment.data.SegmentID) {
+                    //            var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + segment.data.Color.replace("#", ""),
+                    //                        new google.maps.Size(15, 28),
+                    //                        new google.maps.Point(0, 0),
+                    //                        new google.maps.Point(0, 0),
+                    //                        new google.maps.Size(15, 28));
+                    //            item.setOptions({ icon: pinImage });
+                    //            return false;
+                    //        }
+                    //    });
+                    //}
                 else if (code == 5) {
                     App.stoShop.each(function (segment) {
                         if (item.data.Shop == segment.data.Shop) {
@@ -571,7 +570,7 @@ var cboFillType_Change = function () {
                 }
             }
         }
-        
+
         generateLegend();
     }
 }
@@ -586,7 +585,7 @@ var btnFilter_Click = function () {
         App.stoCust.clearFilter();
         App.stoCust.clearData();
     }
-  
+
     App.stoCustTop.clearFilter();
     App.stoCustTop.clearData();
 
@@ -660,8 +659,7 @@ var getSourceBorder = function () {
             var flat = false;
 
             for (j = 0; j < cityMap.length; j++) {
-                if (cityMap[j].shapeID == shapes[0].ShapeID)
-                {
+                if (cityMap[j].shapeID == shapes[0].ShapeID) {
                     flat = true;
                     break;
                 }
@@ -688,7 +686,7 @@ var getSourceBorder = function () {
                 shapes.splice(0, 1);
                 getSourceBorder();
             }
-            
+
 
         } else {
             App.stoDistrictBorder.load({
@@ -731,7 +729,7 @@ var getSourceBorder = function () {
                 }
             });
         }
-      
+
     }
 }
 var checkSourceCov = function () {
@@ -750,7 +748,7 @@ var checkSourceCov = function () {
             } else {
                 draw();
             }
-           
+
         } else {
             App.stoDistrictDSM.data.each(function (item) {
                 for (var i = 0; i < App.stoDistrict.data.items.length; i++) {
@@ -818,7 +816,7 @@ var draw = function () {
     if (window.mobilecheck()) {
         App.winFilter.hide();
     }
-  
+
 
     clearDistrictBorder();
     clearCityBorder();
@@ -872,7 +870,7 @@ var drawCityBorder = function () {
             var countOrder = cityData ? cityData.CustOrd : 0;
             var totalCust = cityData ? cityData.CustOrd + cityData.CustNoOrd : 0;
 
-            var percent = totalCust == 0 ? 0 : (countOrder / totalCust * 100);
+            var percent = cityData ? cityData.Coverage : 0;// totalCust == 0 ? 0 : (countOrder / totalCust * 100);
             var color = cityData ? cityData.Color : 'red';// percent > 90 ? 'green' : (percent > 80 ? 'yellow' : 'red');
 
             var border = new google.maps.Polygon({
@@ -907,7 +905,7 @@ var drawCityBorder = function () {
                     var countOrder = cityRecord.data.CustOrd;
                     var totalCust = cityRecord.data.CustOrd + cityRecord.data.CustNoOrd;
 
-                    var percent = totalCust == 0 ? 0 : (countOrder / totalCust * 100);
+                    var percent = cityRecord ? cityRecord.data.Coverage : 0;// totalCust == 0 ? 0 : (countOrder / totalCust * 100);
                     var color = cityRecord.data.Color;//
                     //var color = percent > 90 ? 'green' : (percent > 80 ? 'yellow' : 'red');
 
@@ -976,7 +974,7 @@ var cityBorderListener = function (border, city) {
                     } else {
                         App.menuBorder.showAt(e[keys[i]].x, e[keys[i]].y);
                     }
-               
+
                     break;
                 }
             }
@@ -1057,7 +1055,7 @@ var drawHull = function (points) {
         strokeOpacity: 0.7
     });
 
-    new LongPress(polyline, 1000,'cust');
+    new LongPress(polyline, 1000, 'cust');
     google.maps.event.addListener(polyline, "longpress", function (event) {
         google.maps.event.trigger(polyline, 'rightclick', event);
     });
@@ -1071,7 +1069,7 @@ var drawHull = function (points) {
                 } else {
                     App.menuCustBorder.showAt(e[keys[i]].x, e[keys[i]].y);
                 }
-               
+
                 break;
             }
         }
@@ -1108,30 +1106,31 @@ var drawDistrictBorder = function (city, cityB) {
                 }
             }
 
-            var countOrder = 0;
-            var totalCust = 0;
-            var cityCustObj = getCityCustObj(city.City);
+            //var countOrder = 0;
+            //var totalCust = 0;
+            //var cityCustObj = getCityCustObj(city.City);
 
-            for (var i = 0; i < cityCustObj.Custs.length; i++) {
-                var item = cityCustObj.Custs[i];
-                if (item.District == district.data.District) {
-                    totalCust++;
-                    if (item.Amt > 0) {
-                        countOrder++;
-                    }
-                }
-            }
+            //for (var i = 0; i < cityCustObj.Custs.length; i++) {
+            //    var item = cityCustObj.Custs[i];
+            //    if (item.District == district.data.District) {
+            //        totalCust++;
+            //        if (item.Amt > 0) {
+            //            countOrder++;
+            //        }
+            //    }
+            //}
 
-            var percent = totalCust == 0 ? 0 : countOrder / totalCust * 100;
-            var color = percent > 90 ? 'green' : (percent > 80 ? 'yellow' : 'red');
+            //var percent = totalCust == 0 ? 0 : countOrder / totalCust * 100;
+            var color = district.data ? district.data.Color : 'red';//percent > 90 ? 'green' : (percent > 80 ? 'yellow' : 'red');
+           
             var border = new google.maps.Polygon({
                 paths: pos,
                 data: district.data,
                 color: color,
                 cityBorder: cityB,
-                TotalCust: totalCust,
-                Percent: percent,
-                CountOrder: countOrder,
+                TotalCust: district.data.CustOrd + district.data.CustNoOrd,// totalCust,
+                Percent: district.data.Coverage,//percent,
+                CountOrder:district.data.CustOrd, //countOrder,
                 strokeColor: color,
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
@@ -1143,9 +1142,9 @@ var drawDistrictBorder = function (city, cityB) {
 
             google.maps.event.addListener(border, "mouseover", function () {
                 App.lblInfo.setText('Chi Nhánh: ' + this.cityBorder[0].data.BranchID + '  -  Thành Phố/Tỉnh: ' + this.cityBorder[0].data.Name + '  -  Quận/Huyện: ' + this.data.Name);
-                App.lblCountAmt.setText(Ext.util.Format.number(this.CountOrder, '0,000'));
-                App.lblCountNoAmt.setText(Ext.util.Format.number(this.TotalCust - this.CountOrder, '0,000'));
-                App.lblPercentAmt.setText(Ext.util.Format.number(this.Percent, '0,000') + ' %');
+                App.lblCountAmt.setText(Ext.util.Format.number(district.data.CustOrd, '0,000'));
+                App.lblCountNoAmt.setText(Ext.util.Format.number(district.data.CustNoOrd, '0,000'));
+                App.lblPercentAmt.setText(Ext.util.Format.number(district.data.Coverage, '0,000') + ' %');
             });
 
             google.maps.event.addListener(border, "mouseout", function () {
@@ -1183,8 +1182,8 @@ var drawDistrictBorder = function (city, cityB) {
             var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < districtBorder.length; i++) {
                 if (districtBorder[i].data.City == cityB[0].data.City) {
-                    if (districtBorder[i].getPath())                       
-                    districtBorder[i].getPath().forEach(function (element, index) { bounds.extend(element); });
+                    if (districtBorder[i].getPath())
+                        districtBorder[i].getPath().forEach(function (element, index) { bounds.extend(element); });
                 }
             }
             map.setZoom(13);
@@ -1210,28 +1209,28 @@ var drawDistrictBorderDSM = function () {
                     }
                 }
 
-                var countOrder = 0;
-                var totalCust = 0;
-                var branchID = '';
-                App.stoCoverage.data.each(function (item) {
-                    if (item.data.District == district.data.District && item.data.City == district.data.City) {
-                        totalCust++;
-                        branchID = item.data.BranchID;
-                        if (item.data.Amt > 0) {
-                            countOrder++;
-                        }
-                    }
-                });
+                //var countOrder = 0;
+                //var totalCust = 0;
+                //var branchID = '';
+                //App.stoCoverage.data.each(function (item) {
+                //    if (item.data.District == district.data.District && item.data.City == district.data.City) {
+                //        totalCust++;
+                //        branchID = item.data.BranchID;
+                //        if (item.data.Amt > 0) {
+                //            countOrder++;
+                //        }
+                //    }
+                //});
 
-                var percent = totalCust == 0 ? 0 : countOrder / totalCust * 100;
-                var color = percent > 90 ? 'green' : (percent > 80 ? 'yellow' : 'red');
+                //var percent = totalCust == 0 ? 0 : countOrder / totalCust * 100;
+                var color = district.data ? district.data.Color : 'red';// percent > 90 ? 'green' : (percent > 80 ? 'yellow' : 'red');
                 var border = new google.maps.Polygon({
                     paths: pos,
                     data: App.stoDistrict.data.items[i].data,
                     color: color,
-                    totalCust: totalCust,
-                    percent: percent,
-                    countOrder: countOrder,
+                    TotalCust: district.data.CustOrd + district.data.CustNoOrd,// totalCust,
+                    Percent: district.data.Coverage,//percent,
+                    CountOrder: district.data.CustOrd, //countOrder,
                     strokeColor: color,
                     strokeOpacity: 0.8,
                     strokeWeight: 2,
@@ -1241,13 +1240,13 @@ var drawDistrictBorderDSM = function () {
                     fillOpacity: 0.35
                 });
 
-                new LongPress(border, 1000 ,'border');
+                new LongPress(border, 1000, 'border');
 
                 google.maps.event.addListener(border, "mouseover", function () {
                     App.lblInfo.setText('Chi Nhánh: ' + branchID + '  -  Thành Phố/Tỉnh: ' + this.data.CityName + '  -  Quận/Huyện: ' + this.data.Name);
-                    App.lblCountAmt.setText(Ext.util.Format.number(this.countOrder, '0,000'));
-                    App.lblCountNoAmt.setText(Ext.util.Format.number(this.totalCust - this.countOrder, '0,000'));
-                    App.lblPercentAmt.setText(Ext.util.Format.number(this.percent, '0,000') + ' %');
+                    App.lblCountAmt.setText(Ext.util.Format.number(district.data.CustOrd, '0,000'));
+                    App.lblCountNoAmt.setText(Ext.util.Format.number(district.data.CustNoOrd, '0,000'));
+                    App.lblPercentAmt.setText(Ext.util.Format.number(district.data.Coverage, '0,000') + ' %');
                 });
 
                 google.maps.event.addListener(border, "mouseout", function () {
@@ -1256,7 +1255,7 @@ var drawDistrictBorderDSM = function () {
                     App.lblCountNoAmt.setText('0');
                     App.lblPercentAmt.setText('0 %');
                 });
-             
+
                 google.maps.event.addListener(border, "longpress", function (event) {
                     google.maps.event.trigger(border, 'rightclick', event);
                 });
@@ -1302,14 +1301,17 @@ var setupMenuBorder = function (border) {
         App.btnHideDetail.hide();
     }
 
-    if (border.showBorder) {
-        App.btnShowBorder.hide();
-        App.btnHideBorder.show();
-    } else {
-        App.btnShowBorder.show();
-        App.btnHideBorder.hide();
-    }
+    //if (border.showBorder) {
+    //    App.btnShowBorder.hide();
+    //    App.btnHideBorder.show();
+    //} else {
+    //    App.btnShowBorder.show();
+    //    App.btnHideBorder.hide();
 
+
+    //}
+    App.btnShowBorder.hide();
+    App.btnHideBorder.hide();
     if (HQ.role != 'DSM' && HQ.role != 'DSR') {
         if (border.level == 0) {
             App.btnCity.hide();
@@ -1372,7 +1374,7 @@ var btnShowBorder_Click = function () {
         cityCustObj = getCityCustObj(city);
         showBorder(cityCustObj, code, level);
     }
-    
+
 }
 var btnHideBorder_Click = function () {
     App.menuBorder.border.showBorder = false;
@@ -1512,9 +1514,9 @@ var showDetail = function (code, level) {
             }
         }
     }
-  
 
-    
+
+
 }
 var drawCust = function (cityCustObj) {
     var pinImageRed = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'EC2828',
@@ -1563,7 +1565,7 @@ var drawCust = function (cityCustObj) {
             for (var j = 0; j < dsrColor.length; j++) {
                 var data = dsrColor[j].split('@');
                 var data2 = data[0].split('#');
-                if ( item.BranchID + '#' + item.SlsperId == data2[0] + '#' + data2[1]) {
+                if (item.BranchID + '#' + item.SlsperId == data2[0] + '#' + data2[1]) {
                     var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
                                 new google.maps.Size(15, 28),
                                 new google.maps.Point(0, 0),
@@ -1697,7 +1699,7 @@ var changeLocation = function () {
     var locationType = App.cboLocationType.getValue();
 
     for (i = 0; i < custTopMarkers.length; i++) {
-        custTopMarkers[i].setMap(locationType.indexOf('T') !=-1 ? map:null);
+        custTopMarkers[i].setMap(locationType.indexOf('T') != -1 ? map : null);
     }
 
     for (var i = 0; i < locationMarkers.length; i++) {
@@ -1729,7 +1731,7 @@ var drawMap = function () {
             } else if (type == '1') {
                 for (var i = 0; i < dsmColor.length; i++) {
                     var data = dsmColor[i].split('@');
-                    if ( item.data.BranchID + '#' + item.data.DSM == data[0]) {
+                    if (item.data.BranchID + '#' + item.data.DSM == data[0]) {
                         var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
                                     new google.maps.Size(15, 28),
                                     new google.maps.Point(0, 0),
@@ -1742,7 +1744,7 @@ var drawMap = function () {
             } else if (type == '2') {
                 for (var i = 0; i < dsrColor.length; i++) {
                     var data = dsrColor[i].split('@');
-                    if ( item.data.BranchID + '#' + item.data.SlsperId == data[0]) {
+                    if (item.data.BranchID + '#' + item.data.SlsperId == data[0]) {
                         var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
                                     new google.maps.Size(15, 28),
                                     new google.maps.Point(0, 0),
@@ -1795,15 +1797,15 @@ var drawMap = function () {
         var mcOptions = { gridSize: 50, maxZoom: 15 };
         markerCluster = new MarkerClusterer(map, markers, mcOptions);
     } else {
-        App.stoCoverage.data.each(function (item) { 
+        App.stoCoverage.data.each(function (item) {
             var latLng = new google.maps.LatLng(item.data.Lat, item.data.Lng);
             var marker = null;
             if (type == '0') {
-                marker = new google.maps.Marker({ position: latLng, icon: ((min == 0 && item.data.Amt > min) || (min > 0 && item.data.Amt >= min)) && ((item.data.Amt <= max && max > 0) || max ==0)? pinImageGreen : pinImageRed, map: map });
+                marker = new google.maps.Marker({ position: latLng, icon: ((min == 0 && item.data.Amt > min) || (min > 0 && item.data.Amt >= min)) && ((item.data.Amt <= max && max > 0) || max == 0) ? pinImageGreen : pinImageRed, map: map });
             } else if (type == '1') {
                 for (var i = 0; i < dsmColor.length; i++) {
                     var data = dsmColor[i].split('@');
-                    if ( item.data.BranchID + '#' + item.data.DSM == data[0]) {
+                    if (item.data.BranchID + '#' + item.data.DSM == data[0]) {
                         var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
                                     new google.maps.Size(15, 28),
                                     new google.maps.Point(0, 0),
@@ -1869,7 +1871,9 @@ var drawMap = function () {
     }
 }
 
-var tnlMap_Change = function () {
+var tnlMap_Change = function (sender, item) {
+    if (item.id == 'pnlMap') google.maps.event.trigger(map, "resize");
+
     App.winCust.hide();
 }
 var showPopup = function (e, data) {
@@ -1889,13 +1893,13 @@ var showPopup = function (e, data) {
     if (Ext.isEmpty(data.Image)) {
         App.imgCust.setImageUrl('Content/Images/no_image.png');
     } else {
-        App.imgCust.setImageUrl('Images/OM21300/' + data.Image);
+        App.imgCust.setImageUrl(data.Image);
     }
 
     App.stoCustChartPie.load({
         params: {
             fromDate: App.txtFromDate.getValue(),
-            dsr: data.BranchID + '#' + data.SlsperId,          
+            dsr: data.BranchID + '#' + data.SlsperId,
             dayOfWeek: App.cboDay.getValue().join(),
             weekEO: App.cboVisitType.getValue(),
             brand: App.cboBrand.getValue().join(),
@@ -1909,7 +1913,7 @@ var showPopup = function (e, data) {
             App.winCust.showAt(App.frmMain.getWidth() - 400, 25);
         }
     });
-   
+
 }
 var generateLegend = function () {
     if ((HQ.role != 'DSM' && HQ.role != 'DSR') || window.mobilecheck()) return;
@@ -1920,11 +1924,11 @@ var generateLegend = function () {
         num = 1;
         var container = new Ext.form.FieldContainer({
             layout: {
-                type:'hbox'
+                type: 'hbox'
             },
             items: [
-                new Ext.form.Label({flex: 1, html: '<div><span style=" width:15px;height:15px;background-color:#28EC4B;display:inline-block;vertical-align:middle;margin-right:5px;"></span><span style="vertical-align: middle;">Có Đơn Hàng</span></div>' }),
-                new Ext.form.Label({flex: 1, html: '<div><span style=" width:15px;height:15px;background-color:#EC2828;display:inline-block;vertical-align:middle;margin-right:5px;"></span><span style="vertical-align: middle;">Không Có Đơn Hàng</span></div>' })
+                new Ext.form.Label({ flex: 1, html: '<div><span style=" width:15px;height:15px;background-color:#28EC4B;display:inline-block;vertical-align:middle;margin-right:5px;"></span><span style="vertical-align: middle;">Có Đơn Hàng</span></div>' }),
+                new Ext.form.Label({ flex: 1, html: '<div><span style=" width:15px;height:15px;background-color:#EC2828;display:inline-block;vertical-align:middle;margin-right:5px;"></span><span style="vertical-align: middle;">Không Có Đơn Hàng</span></div>' })
             ]
         });
         App.pnlLegend.add(container);
@@ -1933,7 +1937,7 @@ var generateLegend = function () {
         var container = null;
         for (i = 0; i < dsmColor.length; i++) {
             var data = dsmColor[i].split('@');
-            if (i % 2 == 0 ) {
+            if (i % 2 == 0) {
                 container = new Ext.form.FieldContainer({
                     layout: {
                         type: 'hbox'
@@ -1950,7 +1954,7 @@ var generateLegend = function () {
                     container.add(label);
                 }
                 App.pnlLegend.add(container);
-            } 
+            }
         }
     } else if (fillType == 2) {
         num = (dsrColor.length + 1) / 2;
@@ -2004,7 +2008,7 @@ var generateLegend = function () {
     }
     else if (fillType == 4) {
         num = (App.stoBrand.data.items.length + 1) / 2;
-      
+
         var container = null;
         for (i = 0; i < App.stoBrand.data.items.length; i++) {
             var data = App.stoBrand.data.items[i].data;
@@ -2089,8 +2093,8 @@ var btnDashboard_Click = function () {
         }, callback: function () {
             App.stoChartColumn.load({
                 params: {
-                    fromDate: App.txtFromDate.getValue(),                  
-                    dsr: getDSRPost(dsr).join(),                  
+                    fromDate: App.txtFromDate.getValue(),
+                    dsr: getDSRPost(dsr).join(),
                     dayOfWeek: App.cboDay.getValue().join(),
                     weekEO: App.cboVisitType.getValue(),
                     brand: App.cboBrand.getValue().join(),
@@ -2143,7 +2147,7 @@ var pie_ItemClick = function (item) {
         params: {
             fromDate: App.txtFromDate.getValue(),
             toDate: App.txtToDate.getValue(),
-            dsr: getDSRPost(dsr).join(),          
+            dsr: getDSRPost(dsr).join(),
             dayOfWeek: App.cboDay.getValue().join(),
             weekEO: App.cboVisitType.getValue(),
             brand: App.cboBrand.getValue().join(),
@@ -2178,7 +2182,7 @@ var grdCust_CellDblClick = function (item, td, cellIndex, record, tr, rowIndex, 
             }
         }
     }
-    
+
 }
 var grdCustTop_CellDblClick = function (item, td, cellIndex, record, tr, rowIndex, e) {
     for (var i = 0; i < custTopMarkers.length; i++) {
@@ -2204,8 +2208,8 @@ var btnExport_Click = function () {
         success: function (msg, data) {
         },
         params: {
-            fromDate: formatDate(App.txtFromDate.getValue()),          
-            dsr: getDSRPost(dsr).join(),         
+            fromDate: formatDate(App.txtFromDate.getValue()),
+            dsr: getDSRPost(dsr).join(),
             dayOfWeek: App.cboDay.getValue().join(),
             weekEO: App.cboVisitType.getValue(),
             brand: App.cboBrand.getValue().join(),
@@ -2228,7 +2232,7 @@ var loadCust = function (city, func) {
 
     for (var i = 0 ; i < dsr.length; i++) {
         var dsrData = dsr[i].split('#');
-        if (dsrData[3] == city) {
+        if (dsrData[2] == city) {
             dsrDetail.push(dsr[i]);
         }
     }
@@ -2237,15 +2241,15 @@ var loadCust = function (city, func) {
 
     App.stoCoverage.load({
         params: {
-            fromDate: App.txtFromDate.getValue(),        
-            dsr: getDSRPost(dsrDetail).join(),          
+            fromDate: App.txtFromDate.getValue(),
+            dsr: getDSRPost(dsrDetail).join(),
             dayOfWeek: App.cboDay.getValue().join(),
             weekEO: App.cboVisitType.getValue(),
             brand: App.cboBrand.getValue().join(),
             classID: App.cboCustClass.getValue().join(),
             fromAmt: App.txtFromAmt.getValue(),
             toAmt: App.txtToAmt.getValue()
-            
+
         }, callback: function () {
             addStoCust();
             HQ.common.showBusy(false);
@@ -2276,7 +2280,7 @@ var getDSRPost = function (dsrData) {
     return dsrPost;
 }
 
-function LongPress(obj, length,type) {
+function LongPress(obj, length, type) {
     var me = this;
     me.length = length;
     me.obj = obj;
@@ -2284,13 +2288,13 @@ function LongPress(obj, length,type) {
     google.maps.event.addListener(obj, 'mousedown', function (e) {
         me.onMouseDown(e);
     });
-   
+
     google.maps.event.addListener(obj, 'mouseup', function (e) {
         me.onMouseUp(e);
     });
     google.maps.event.addListener(obj, 'drag', function (e) {
         me.onMapDrag(e);
-      
+
         App.menuMap.hide();
         App.menuBorder.hide();
         App.menuCustBorder.hide();

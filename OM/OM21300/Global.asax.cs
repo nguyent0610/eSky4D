@@ -38,7 +38,7 @@ namespace OM21300
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server = "PHUQUOCD";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "Richy_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
@@ -47,7 +47,7 @@ namespace OM21300
             Session["OM23800"] = acc;
             Session["DBApp"] = Current.DBApp = "Richy_eSky4DApp";//eBiz4DCloudAppJFV
             Session["UserName"] = Current.UserName = "Richy";
-            Session["CpnyID"] = Current.CpnyID = "2001584413";
+            Session["CpnyID"] = Current.CpnyID = "NPP0001";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }

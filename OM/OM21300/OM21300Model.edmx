@@ -423,13 +423,17 @@
           <Property Type="String" Name="ClassID" Nullable="true" MaxLength="30" />
           </ComplexType>
         <ComplexType Name="OM21300_pdDistrict_Result">
-          <Property Type="String" Name="ShapeID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="DistrictID" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="CityID" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="District" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="City" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="CityName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="ShapeID" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="DistrictID" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="CityID" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="District" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="CityName" Nullable="false" MaxLength="255" />
+          <Property Type="Double" Name="CustOrd" Nullable="true" />
+          <Property Type="Double" Name="CustNoOrd" Nullable="true" />
+          <Property Type="Double" Name="Coverage" Nullable="true" />
+          <Property Type="String" Name="Color" Nullable="false" MaxLength="5" />
         </ComplexType>
         <ComplexType Name="OM21300_pdDistrictBorder_Result">
           <Property Type="String" Name="X" Nullable="false" MaxLength="1" />
@@ -708,6 +712,10 @@
                 <ScalarProperty Name="District" ColumnName="District" />
                 <ScalarProperty Name="City" ColumnName="City" />
                 <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CustOrd" ColumnName="CustOrd" />
+                <ScalarProperty Name="CustNoOrd" ColumnName="CustNoOrd" />
+                <ScalarProperty Name="Coverage" ColumnName="Coverage" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

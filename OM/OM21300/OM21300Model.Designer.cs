@@ -4860,23 +4860,15 @@ namespace OM21300
         /// <summary>
         /// Create a new OM21300_pdDistrict_Result object.
         /// </summary>
-        /// <param name="shapeID">Initial value of the ShapeID property.</param>
-        /// <param name="districtID">Initial value of the DistrictID property.</param>
-        /// <param name="cityID">Initial value of the CityID property.</param>
         /// <param name="name">Initial value of the Name property.</param>
-        /// <param name="district">Initial value of the District property.</param>
-        /// <param name="city">Initial value of the City property.</param>
         /// <param name="cityName">Initial value of the CityName property.</param>
-        public static OM21300_pdDistrict_Result CreateOM21300_pdDistrict_Result(global::System.String shapeID, global::System.String districtID, global::System.String cityID, global::System.String name, global::System.String district, global::System.String city, global::System.String cityName)
+        /// <param name="color">Initial value of the Color property.</param>
+        public static OM21300_pdDistrict_Result CreateOM21300_pdDistrict_Result(global::System.String name, global::System.String cityName, global::System.String color)
         {
             OM21300_pdDistrict_Result oM21300_pdDistrict_Result = new OM21300_pdDistrict_Result();
-            oM21300_pdDistrict_Result.ShapeID = shapeID;
-            oM21300_pdDistrict_Result.DistrictID = districtID;
-            oM21300_pdDistrict_Result.CityID = cityID;
             oM21300_pdDistrict_Result.Name = name;
-            oM21300_pdDistrict_Result.District = district;
-            oM21300_pdDistrict_Result.City = city;
             oM21300_pdDistrict_Result.CityName = cityName;
+            oM21300_pdDistrict_Result.Color = color;
             return oM21300_pdDistrict_Result;
         }
 
@@ -4887,7 +4879,7 @@ namespace OM21300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String ShapeID
         {
@@ -4899,7 +4891,7 @@ namespace OM21300
             {
                 OnShapeIDChanging(value);
                 ReportPropertyChanging("ShapeID");
-                _ShapeID = StructuralObject.SetValidValue(value, false);
+                _ShapeID = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("ShapeID");
                 OnShapeIDChanged();
             }
@@ -4911,7 +4903,7 @@ namespace OM21300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String DistrictID
         {
@@ -4923,7 +4915,7 @@ namespace OM21300
             {
                 OnDistrictIDChanging(value);
                 ReportPropertyChanging("DistrictID");
-                _DistrictID = StructuralObject.SetValidValue(value, false);
+                _DistrictID = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("DistrictID");
                 OnDistrictIDChanged();
             }
@@ -4935,7 +4927,7 @@ namespace OM21300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String CityID
         {
@@ -4947,7 +4939,7 @@ namespace OM21300
             {
                 OnCityIDChanging(value);
                 ReportPropertyChanging("CityID");
-                _CityID = StructuralObject.SetValidValue(value, false);
+                _CityID = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("CityID");
                 OnCityIDChanged();
             }
@@ -4983,7 +4975,7 @@ namespace OM21300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String District
         {
@@ -4995,7 +4987,7 @@ namespace OM21300
             {
                 OnDistrictChanging(value);
                 ReportPropertyChanging("District");
-                _District = StructuralObject.SetValidValue(value, false);
+                _District = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("District");
                 OnDistrictChanged();
             }
@@ -5007,7 +4999,7 @@ namespace OM21300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String City
         {
@@ -5019,7 +5011,7 @@ namespace OM21300
             {
                 OnCityChanging(value);
                 ReportPropertyChanging("City");
-                _City = StructuralObject.SetValidValue(value, false);
+                _City = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("City");
                 OnCityChanged();
             }
@@ -5051,6 +5043,102 @@ namespace OM21300
         private global::System.String _CityName;
         partial void OnCityNameChanging(global::System.String value);
         partial void OnCityNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> CustOrd
+        {
+            get
+            {
+                return _CustOrd;
+            }
+            set
+            {
+                OnCustOrdChanging(value);
+                ReportPropertyChanging("CustOrd");
+                _CustOrd = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CustOrd");
+                OnCustOrdChanged();
+            }
+        }
+        private Nullable<global::System.Double> _CustOrd;
+        partial void OnCustOrdChanging(Nullable<global::System.Double> value);
+        partial void OnCustOrdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> CustNoOrd
+        {
+            get
+            {
+                return _CustNoOrd;
+            }
+            set
+            {
+                OnCustNoOrdChanging(value);
+                ReportPropertyChanging("CustNoOrd");
+                _CustNoOrd = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CustNoOrd");
+                OnCustNoOrdChanged();
+            }
+        }
+        private Nullable<global::System.Double> _CustNoOrd;
+        partial void OnCustNoOrdChanging(Nullable<global::System.Double> value);
+        partial void OnCustNoOrdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Coverage
+        {
+            get
+            {
+                return _Coverage;
+            }
+            set
+            {
+                OnCoverageChanging(value);
+                ReportPropertyChanging("Coverage");
+                _Coverage = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Coverage");
+                OnCoverageChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Coverage;
+        partial void OnCoverageChanging(Nullable<global::System.Double> value);
+        partial void OnCoverageChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Color
+        {
+            get
+            {
+                return _Color;
+            }
+            set
+            {
+                OnColorChanging(value);
+                ReportPropertyChanging("Color");
+                _Color = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Color");
+                OnColorChanged();
+            }
+        }
+        private global::System.String _Color;
+        partial void OnColorChanging(global::System.String value);
+        partial void OnColorChanged();
 
         #endregion
 
