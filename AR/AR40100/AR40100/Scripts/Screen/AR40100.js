@@ -139,6 +139,16 @@ var save = function () {
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
+                if (this.result.parm && this.result.parm[1] != '') {
+                    var lstBranchBatNbr = this.result.parm[1].split(',');
+                    for (var i = 0; i < lstBranchBatNbr.length; i++) {
+                        var BranchBatNbr = lstBranchBatNbr[i].split('#');
+                        var record = HQ.store.findRecord(App.stoData, ['BranchID','BatNbr'], [BranchBatNbr[0], BranchBatNbr[1]]);
+                        if (record) {
+                            App.stoData.remove(record);
+                        }                       
+                    }
+                }
             }
         });
     }

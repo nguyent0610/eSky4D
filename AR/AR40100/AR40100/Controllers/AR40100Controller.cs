@@ -54,16 +54,19 @@ namespace AR40100.Controllers
                 var lstData = detHeader.ObjectData<AR40100_pgBatch_Result>().Where(p => p.Selected == true).ToList();
                 string ErrChange = "";//những đơn đã thay đổi
                 string message = "";//những đơn đã thay đổi
+                string BatNbr = "";//Những đơn release thành công
                 if (lstData.Count > 0)
                 {
                     var lstOldData = _db.AR40100_pgBatch(Current.UserName, Current.CpnyID, Current.LangID).ToList();
                    
                     DataAccess dal = Util.Dal();
+                    int i = 0;
                     foreach (var obj in lstData)
                     {
+                     
                         //kiểm tra tstamp thông báo 1 lần
                         var objData = lstOldData.Where(p => p.BranchID == obj.BranchID && p.BatNbr == obj.BatNbr).FirstOrDefault();
-                        if (objData.tstamp.ToHex() == obj.tstamp.ToHex())//nếu giống nhau thì gọi hàm release
+                        if (objData.tstamp.ToHex() == obj.tstamp.ToHex())// &&(i==1||i==3) )//nếu giống nhau thì gọi hàm release
                         {
                             try
                             {
@@ -76,6 +79,7 @@ namespace AR40100.Controllers
                                 }
                                 else
                                 {
+                                    BatNbr += objData.BranchID + "#" + objData.BatNbr + ",";
                                     dal.CommitTrans();                                  
                                 }
                             }
@@ -85,11 +89,11 @@ namespace AR40100.Controllers
                                 if (ex is MessageException)
                                 {
                                     var msg = ex as MessageException;
-                                    message += "Lô" + objData.BranchID +" - "+objData.BatNbr + ":" + Message.GetString(msg.Code, msg.Parm) + "</br>";
+                                    message += Util.GetLang("BatNbr") + objData.BranchID +" - "+objData.BatNbr + ":" + Message.GetString(msg.Code, msg.Parm) + "</br>";
                                 }
                                 else
                                 {
-                                    message += "Lô" + objData.BranchID + " - " + objData.BatNbr + " bị lỗi: " + ex.ToString() + "</br>";
+                                    message += Util.GetLang("BatNbr") + objData.BranchID + " - " + objData.BatNbr + " : " + ex.ToString() + "</br>";
                                 }
                             }
                         }
@@ -105,8 +109,8 @@ namespace AR40100.Controllers
                 else
                 {
                     if (ErrChange!="")
-                        message += "Lô" + ErrChange + ": " + Message.GetString("19",new string[]{}) + "</br>";
-                    throw new MessageException("20410", parm: new[] { message });
+                        message += Util.GetLang("BatNbr") + ErrChange + ": " + Message.GetString("19", new string[] { }) + "</br>";
+                    throw new MessageException("20410", parm: new[] { message, BatNbr.TrimEnd(',') });
                 }
             }
             catch (Exception ex)
