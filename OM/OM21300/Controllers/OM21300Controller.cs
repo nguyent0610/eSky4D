@@ -98,7 +98,9 @@ namespace OM21300.Controllers
             }
             _app = Util.CreateObjectContext<OM21300Entities>(false);
             Util.InitRight("OM21300");
-            ViewBag.Role = _app.OM21300_pdRole(Current.CpnyID, Current.UserName).FirstOrDefault();
+            var objRole = _app.OM21300_pdRole(Current.CpnyID, Current.UserName).FirstOrDefault();
+            ViewBag.Role =objRole.Role;
+            ViewBag.IsShowDisctrictBorder = objRole.IsShowDisctrictBorder;
             if (ViewBag.Role == "DSM" || ViewBag.Role == "DSR" || ViewBag.Role == "ASM")
             {
                 return View("IndexDSM");
@@ -136,7 +138,7 @@ namespace OM21300.Controllers
             node.NodeID = "tree-node-root-company";
             Random rand = new Random();
 
-            var role = _app.OM21300_pdRole(Current.CpnyID, Current.UserName).FirstOrDefault(); 
+            var role = _app.OM21300_pdRole(Current.CpnyID, Current.UserName).FirstOrDefault().Role; 
             foreach (var item in lstCompany)
 	        {
 		        var nodeCompany = new Node();

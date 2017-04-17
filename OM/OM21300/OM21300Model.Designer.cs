@@ -923,7 +923,7 @@ namespace OM21300
         /// </summary>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> OM21300_pdRole(global::System.String cpnyID, global::System.String userID)
+        public ObjectResult<OM21300_pdRole_Result> OM21300_pdRole(global::System.String cpnyID, global::System.String userID)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -945,7 +945,7 @@ namespace OM21300
                 userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("OM21300_pdRole", cpnyIDParameter, userIDParameter);
+            return base.ExecuteFunction<OM21300_pdRole_Result>("OM21300_pdRole", cpnyIDParameter, userIDParameter);
         }
     
         /// <summary>
@@ -6419,6 +6419,83 @@ namespace OM21300
         private global::System.String _Type;
         partial void OnTypeChanging(global::System.String value);
         partial void OnTypeChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM21300Model", Name="OM21300_pdRole_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM21300_pdRole_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM21300_pdRole_Result object.
+        /// </summary>
+        /// <param name="role">Initial value of the Role property.</param>
+        public static OM21300_pdRole_Result CreateOM21300_pdRole_Result(global::System.String role)
+        {
+            OM21300_pdRole_Result oM21300_pdRole_Result = new OM21300_pdRole_Result();
+            oM21300_pdRole_Result.Role = role;
+            return oM21300_pdRole_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Role
+        {
+            get
+            {
+                return _Role;
+            }
+            set
+            {
+                OnRoleChanging(value);
+                ReportPropertyChanging("Role");
+                _Role = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Role");
+                OnRoleChanged();
+            }
+        }
+        private global::System.String _Role;
+        partial void OnRoleChanging(global::System.String value);
+        partial void OnRoleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsShowDisctrictBorder
+        {
+            get
+            {
+                return _IsShowDisctrictBorder;
+            }
+            set
+            {
+                OnIsShowDisctrictBorderChanging(value);
+                ReportPropertyChanging("IsShowDisctrictBorder");
+                _IsShowDisctrictBorder = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsShowDisctrictBorder");
+                OnIsShowDisctrictBorderChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsShowDisctrictBorder;
+        partial void OnIsShowDisctrictBorderChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsShowDisctrictBorderChanged();
 
         #endregion
 

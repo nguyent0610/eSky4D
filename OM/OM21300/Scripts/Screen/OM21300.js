@@ -995,33 +995,35 @@ var cityBorderListener = function (border, city) {
 }
 
 var cityBorderClick = function (border, city) {
-    border.level = 1;
-    if (border.custBorder) {
-        border.custBorder.setMap(null);
-        border.showDetail = false;
-    }
-    HQ.common.showBusy(true, HQ.waitMsg);
-    App.stoDistrictBorder.load({
-        params: {
-            cityID: city.CityID,
-            districtID: '',
-            shapeID: ''
-        },
-        callback: function () {
-            var cityB = [];
-            for (var i = 0; i < cityBorder.length; i++) {
-                if (cityBorder[i].data.City == city.City) {
-                    cityB.push(cityBorder[i]);
-                    if (cityBorder[i].custBorder) {
-                        cityBorder[i].showBorder = false;
-                        cityBorder[i].custBorder.setMap(null);
+    if (HQ.IsShowDisctrictBorder) {
+        border.level = 1;
+        if (border.custBorder) {
+            border.custBorder.setMap(null);
+            border.showDetail = false;
+        }
+        HQ.common.showBusy(true, HQ.waitMsg);
+        App.stoDistrictBorder.load({
+            params: {
+                cityID: city.CityID,
+                districtID: '',
+                shapeID: ''
+            },
+            callback: function () {
+                var cityB = [];
+                for (var i = 0; i < cityBorder.length; i++) {
+                    if (cityBorder[i].data.City == city.City) {
+                        cityB.push(cityBorder[i]);
+                        if (cityBorder[i].custBorder) {
+                            cityBorder[i].showBorder = false;
+                            cityBorder[i].custBorder.setMap(null);
+                        }
                     }
                 }
+                drawDistrictBorder(city, cityB);
+                HQ.common.showBusy(false, HQ.waitMsg);
             }
-            drawDistrictBorder(city, cityB);
-            HQ.common.showBusy(false, HQ.waitMsg);
-        }
-    });
+        });
+    }
 }
 
 var calculateConvexHull = function () {

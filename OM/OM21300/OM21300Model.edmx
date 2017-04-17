@@ -242,7 +242,7 @@
             <Parameter Name="FromAmt" Mode="In" Type="Double" />
             <Parameter Name="ToAmt" Mode="In" Type="Double" />
           </FunctionImport>
-          <FunctionImport Name="OM21300_pdRole" ReturnType="Collection(String)">
+          <FunctionImport Name="OM21300_pdRole" ReturnType="Collection(OM21300Model.OM21300_pdRole_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
@@ -508,6 +508,10 @@
           <Property Type="String" Name="Code" Nullable="false" MaxLength="2" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="9" />
           <Property Type="Double" Name="Amount" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OM21300_pdRole_Result">
+          <Property Type="String" Name="Role" Nullable="false" MaxLength="3" />
+          <Property Type="Boolean" Name="IsShowDisctrictBorder" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -796,7 +800,14 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="OM21300_pdRole" FunctionName="OM21300Model.Store.OM21300_pdRole" />
+          <FunctionImportMapping FunctionImportName="OM21300_pdRole" FunctionName="OM21300Model.Store.OM21300_pdRole" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdRole_Result">
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="IsShowDisctrictBorder" ColumnName="IsShowDisctrictBorder" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="OM21300_pdCustChartPie" FunctionName="OM21300Model.Store.OM21300_pdCustChartPie">
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM21300Model.OM21300_pdCustChartPie_Result">
