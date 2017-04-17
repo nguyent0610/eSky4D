@@ -1,0 +1,120 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using AR40100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print,Delete,New", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad()";
+    })
+    .Items(
+        X.Panel().ID("pnlGrid")
+        .Region(Region.Center)
+        .Layout(LayoutType.Border)
+        .Items(
+            X.GridPanel()
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .ID("grdData")
+            //.SelectionMemory(false)
+            .Region(Region.Center).Flex(1)
+            .Store(
+                X.Store()
+                .ID("stoData").AutoLoad(false)
+                .PageSize(50)
+                .Model(Util.GenerateModel(typeof(AR40100_pgBatch_Result), "mdlAR40100_pgBatch", "",false))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData")))
+                .Listeners(l =>
+                {
+                    l.Load.Fn = "stoData_Load";
+                    l.Update.Fn = "frmChange";
+                })
+            )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdData');")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40)
+                , X.CheckColumn().ID("ColCheck").DataIndex("Selected").Width(30).Editable(true).HideTitleEl(true)
+                            .HeaderItems(
+                                HQ.Checkbox().ID("ColCheck_Header")
+                                    .Listeners(l =>
+                                    {
+                                        l.Change.Fn = "ColCheck_Header_Change";
+                                    })
+                        )
+                , X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID")
+                , X.Column().Text(Util.GetLang("PerPost")).DataIndex("PerPost")
+				, X.Column().Text(Util.GetLang("BatNbr")).DataIndex("BatNbr")
+                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
+                , X.Column().Text(Util.GetLang("EditScrnNbr")).DataIndex("EditScrnNbr")
+                , X.Column().Text(Util.GetLang("AR401LUpd_Prog")).DataIndex("LUpd_Prog")
+                , X.Column().Text(Util.GetLang("RcptNo")).DataIndex("RcptNo")
+                , X.Column().Text(Util.GetLang("Crtd_User")).DataIndex("Crtd_User")
+                , X.NumberColumn().Text(Util.GetLang("TotAmt")).DataIndex("TotAmt").Format("0,000").Align(Alignment.Right)
+	
+                
+                , X.CommandColumn().Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdData_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                
+            )
+
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("RoleID"),
+                        X.StringFilter().DataIndex("Desc")
+                    )
+            )
+                
+
+        ).Listeners(lst =>
+        {
+            lst.Render.Handler = "HQ.common.control_render(this,'grdData')";
+        })
+    )
+))
