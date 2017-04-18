@@ -265,7 +265,7 @@ var printMaps = function (type) {
 
     var recentZoom = map.getZoom();
     var recentCenter = map.getCenter();
-
+    google.maps.event.trigger(map, "resize");
     var html = $("html");
     var body = $('body'),
         mapContainer = $('#wrapMap'),
@@ -276,19 +276,19 @@ var printMaps = function (type) {
 
     if (type == 'A0') {
         mapContainer.css({ "height": "33.1in", "width": "46.8in" });
-        html.css({ "height": "33.1in", "width": "46.8in" });
+        html.css({ "height": "32.6in", "width": "46.8in" });
     } else if (type == 'A1') {
         mapContainer.css({ "height": "23.4in", "width": "33.1in" });
-        html.css({ "height": "23.4in", "width": "33.1in" });
+        html.css({ "height": "23.35in", "width": "33.1in" });
     } else if (type == 'A2') {
         mapContainer.css({ "height": "16.5in", "width": "23.4in" });
-        html.css({ "height": "16.5in", "width": "23.4in" });
+        html.css({ "height": "16.45in", "width": "23.4in" });
     } else if (type == 'A3') {
         mapContainer.css({ "height": "11.7in", "width": "16.5in" });
-        html.css({ "height": "11.7in", "width": "16.5in" });
+        html.css({ "height": "11.65in", "width": "16.5in" });
     } else if (type == 'A4') {
         mapContainer.css({ "height": "8.3in", "width": "11.7in" });
-        html.css({ "height": "8.3in", "width": "11.7in" });
+        html.css({ "height": "8.25in", "width": "11.7in" });
     }
 
     printContainer
@@ -332,7 +332,7 @@ var printMaps = function (type) {
             });
             map.setZoom(recentZoom);
             map.fitBounds(bounds);
-        });
+        });        
         map.setCenter(recentCenter);
         map.setZoom(recentZoom - 2);
     });
@@ -2234,9 +2234,9 @@ var loadCust = function (city, func) {
 
     for (var i = 0 ; i < dsr.length; i++) {
         var dsrData = dsr[i].split('#');
-        if (dsrData[2] == city) {
+        //if (dsrData[2] == city) {
             dsrDetail.push(dsr[i]);
-        }
+        //}
     }
 
     HQ.common.showBusy(true, HQ.waitMsg);
