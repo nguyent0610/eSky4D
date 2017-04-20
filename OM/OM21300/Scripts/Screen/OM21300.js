@@ -1295,7 +1295,7 @@ var drawDistrictBorderDSM = function () {
 }
 var setupMenuBorder = function (border) {
     App.menuBorder.border = border;
-    if (border.showDetail) {
+    if (HQ.showDetail) {
         App.btnShowDetail.hide();
         App.btnHideDetail.show();
     } else {
@@ -1330,6 +1330,7 @@ var btnHideCustBorder_Click = function () {
 }
 var btnShowDetail_Click = function () {
     App.menuBorder.border.showDetail = true;
+    HQ.showDetail = true;
     if (App.menuBorder.border.level != undefined) {
         showDetail(App.menuBorder.border.data.City, 0);
     } else {
@@ -1338,6 +1339,7 @@ var btnShowDetail_Click = function () {
 }
 var btnHideDetail_Click = function () {
     App.menuBorder.border.showDetail = false;
+    HQ.showDetail = false;
     if (App.menuBorder.border.level != undefined) {
         hideDetail(App.menuBorder.border.data.City, 0);
     } else {
@@ -1345,6 +1347,7 @@ var btnHideDetail_Click = function () {
     }
 }
 var btnShowBorder_Click = function () {
+  
     App.menuBorder.border.showBorder = true;
     var level = 0;
     var code = '';
