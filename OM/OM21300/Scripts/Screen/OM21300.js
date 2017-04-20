@@ -1439,25 +1439,29 @@ var hideBorder = function (code, level) {
 }
 var hideDetail = function (code, level) {
     var border = level == 0 ? App.menuBorder.border : App.menuBorder.border.cityBorder;
-    if (level == 0) {
-        var cityCustObj = null;
-        for (var i = 0; i < cityCust.length; i++) {
-            if (cityCust[i].City == border.data.City) {
-                cityCustObj = cityCust[i];
-                break;
-            }
-        }
-        for (var i = 0; i < cityCustObj.markers.length; i++) {
-            cityCustObj.markers[i].setMap(null);
-        }
-    } else {
-        for (var i = 0; i < markers.length; i++) {
-            var data = markers[i].data;
-            if ((level == 0 && data.City == code) || (level == 1 && data.District == code)) {
-                markers[i].setMap(null);
-            }
-        }
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
     }
+    
+    //if (level == 0) {
+    //    var cityCustObj = null;
+    //    for (var i = 0; i < cityCust.length; i++) {
+    //        if (cityCust[i].City == border.data.City) {
+    //            cityCustObj = cityCust[i];
+    //            break;
+    //        }
+    //    }
+    //    for (var i = 0; i < cityCustObj.markers.length; i++) {
+    //        cityCustObj.markers[i].setMap(null);
+    //    }
+    //} else {
+    //    for (var i = 0; i < markers.length; i++) {
+    //        var data = markers[i].data;
+    //        if ((level == 0 && data.City == code) || (level == 1 && data.District == code)) {
+    //            markers[i].setMap(null);
+    //        }
+    //    }
+    //}
 }
 var showDetail = function (code, level) {
 
