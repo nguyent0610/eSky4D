@@ -49,6 +49,7 @@
                     .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("AR23800Descr")).DataIndex("Descr").Width(200)
                     .Editor(Html.X().TextField().MaxLength(100).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("IsDelete")).DataIndex("IsDelete").Width(200).Hidden(true),
             X.CommandColumn()
             .Width(150)
             .Commands(
