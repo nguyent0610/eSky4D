@@ -54,6 +54,8 @@ namespace AR23800.Controllers
                         var del = _db.AR_Position.Where(p => p.CodeID == deleted.CodeID).FirstOrDefault();
                         if (del != null)
                         {
+                            if(_db.AR23800_ppCheckDeletePosition(deleted.CodeID).FirstOrDefault() == "1")
+                                throw new MessageException(MessageType.Message, "18", "");
                             _db.AR_Position.DeleteObject(del);
                         }
                     }
