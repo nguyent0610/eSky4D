@@ -55,6 +55,13 @@ var menuClick = function (command) {
             if (HQ.isDelete) {
                 if (App.slmCodeID.selected.items[0] != undefined) {
                     if (App.slmCodeID.selected.items[0].data.RoleID != "") {
+                        var values = HQ.grid.indexSelect(App.grdCodeID).split(',');
+                        for (var i = 0; i < values.length; i++) {
+                            if (App.grdCodeID.store.data.items[values[i] - 1].data.IsDelete != "") {
+                                HQ.message.show(18);
+                                return false;
+                            }
+                        }
                         HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdCodeID)], 'deleteData', true);
                     }
                 }
