@@ -624,6 +624,11 @@
                     .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "OrderType"))
                     .ForceSelection(true)
                     .HQControlFocus("cboOrderNbr")
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                    })
                     .Listeners(p =>
                     {
                         p.Change.Fn = "cboOrderType_Change";
