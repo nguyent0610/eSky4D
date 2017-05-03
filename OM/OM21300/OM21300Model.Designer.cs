@@ -3380,6 +3380,21 @@ namespace OM21300
     [Serializable()]
     public partial class OM21300_pdCoverage_Result : ComplexObject
     {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM21300_pdCoverage_Result object.
+        /// </summary>
+        /// <param name="no">Initial value of the No property.</param>
+        public static OM21300_pdCoverage_Result CreateOM21300_pdCoverage_Result(global::System.String no)
+        {
+            OM21300_pdCoverage_Result oM21300_pdCoverage_Result = new OM21300_pdCoverage_Result();
+            oM21300_pdCoverage_Result.No = no;
+            return oM21300_pdCoverage_Result;
+        }
+
+        #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -4053,6 +4068,30 @@ namespace OM21300
         private global::System.String _ClassID;
         partial void OnClassIDChanging(global::System.String value);
         partial void OnClassIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String No
+        {
+            get
+            {
+                return _No;
+            }
+            set
+            {
+                OnNoChanging(value);
+                ReportPropertyChanging("No");
+                _No = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("No");
+                OnNoChanged();
+            }
+        }
+        private global::System.String _No;
+        partial void OnNoChanging(global::System.String value);
+        partial void OnNoChanged();
 
         #endregion
 

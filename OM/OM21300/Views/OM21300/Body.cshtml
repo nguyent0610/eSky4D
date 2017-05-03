@@ -261,7 +261,7 @@
             X.MenuItem().ID("btnShowDetail").Text("Hiện Khách Hàng").Icon(Icon.User).Listeners(p => p.Click.Fn = "btnShowDetail_Click")
 
             , X.MenuItem().ID("btnHideDetail").Text("Ẩn Khách Hàng").Icon(Icon.UserDelete).Listeners(p => p.Click.Fn = "btnHideDetail_Click")
-
+            
             , X.MenuItem().ID("btnShowBorder").Text("Hiện Border Khách Hàng").Icon(Icon.MapCursor).Listeners(p => p.Click.Fn = "btnShowBorder_Click").Hidden(true)
 
             , X.MenuItem().ID("btnHideBorder").Text("Ẩn Border Khách Hàng").Icon(Icon.MapDelete).Listeners(p => p.Click.Fn = "btnHideBorder_Click").Hidden(true)
@@ -597,7 +597,7 @@
                 .MarginSpec("5 0 0 10")
                 .InputWidth(80)
 
-             , X.MultiCombo().ID("cboLocationType").StoreID("stoLocationType")
+             , X.MultiCombo().ID("cboLocationType").StoreID("stoLocationType").LabelAlign(LabelAlign.Right)
                 .ValueField("Code").DisplayField("Descr")
                 .MatchFieldWidth(false)
                 .ForceSelection(true)
@@ -948,10 +948,14 @@
                 )
             )
             .BottomBar(
+                
                 X.StatusBar()
                 .ID("statusBar")
+                .StatusAlign(StatusAlign.Right)
                 .Items(
-
+                    HQ.Checkbox().ID("chkShowLabel").HQLangCode("ShowLabel").Listeners(l=>l.Change.Fn="chkShowLabel_Change"),
+                    
+                    X.Container().Flex(100),
                     X.Label().ID("lblInfo").MarginSpec("0 10 0 5")
 
                     , X.ToolbarSeparator()

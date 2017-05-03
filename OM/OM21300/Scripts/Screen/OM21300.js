@@ -237,7 +237,25 @@ var pnlMap_AfterRender = function () {
                 }
             }
         );
-
+    //google.maps.event.addListener(map, 'zoom_changed', function () {
+    //    zoomLevel = map.getZoom();
+    //    if (zoomLevel < 13) {
+    //        for (s = 0; s < cityCust.length; s++) {
+    //            var cityMarkers = cityCust[s].markers;
+    //            for (var i = 0; i < cityMarkers.length; i++) {
+    //                var item = cityMarkers[i];
+    //                item.setLabel('')
+    //            }
+    //        }           
+    //    }
+    //    else for (s = 0; s < cityCust.length; s++) {
+    //        var cityMarkers = cityCust[s].markers;
+    //        for (var i = 0; i < cityMarkers.length; i++) {
+    //            var item = cityMarkers[i];
+    //            item.setLabel(item.data.No);
+    //        }
+    //    }
+    //});
     new LongPress(map, 1000, 'map');
 }
 
@@ -456,16 +474,31 @@ var cboBrand_Change = function () {
 var cboFillType_Change = function () {
     var fillType = HQ.store.findInStore(App.cboFillType.store, ['Code'], [App.cboFillType.getValue()]);
     if (fillType) {
-        var pinImageRed = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'EC2828',
-                   new google.maps.Size(15, 30),
-                   new google.maps.Point(0, 0),
-                   new google.maps.Point(0, 0),
-       new google.maps.Size(15, 30));
-
-        var pinImageGreen = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '28EC4B',
-                          new google.maps.Size(15, 30),
-                          new google.maps.Point(0, 0),
-                          new google.maps.Point(0, 0), new google.maps.Size(15, 30));
+       // var pinImageRed = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'EC2828',
+       //            new google.maps.Size(15, 30),
+       //            new google.maps.Point(0, 0),
+       //            new google.maps.Point(0, 0),
+       //new google.maps.Size(15, 30));
+        var pinImageRed = {
+            url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'EC2828',
+            size: new google.maps.Size(15, 30),
+            scaledSize: new google.maps.Size(15, 30),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(0, 0),
+            labelOrigin: new google.maps.Point(5, -5)
+        };
+        //var pinImageGreen = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '28EC4B',
+        //                  new google.maps.Size(15, 30),
+        //                  new google.maps.Point(0, 0),
+        //                  new google.maps.Point(0, 0), new google.maps.Size(15, 30));
+        var pinImageGreen = {
+            url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '28EC4B',
+            size: new google.maps.Size(15, 30),
+            scaledSize: new google.maps.Size(15, 30),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(0, 0),
+            labelOrigin: new google.maps.Point(5, -5)
+        };
         var code = fillType.Code;
         var min = App.txtFromAmt.getValue();
         var max = App.txtToAmt.getValue();
@@ -479,11 +512,20 @@ var cboFillType_Change = function () {
                     for (var j = 0; j < dsmColor.length; j++) {
                         var data = dsmColor[j].split('@');
                         if (item.data.BranchID + '#' + item.data.DSM == data[0]) {
-                            var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
-                                        new google.maps.Size(15, 28),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Size(15, 28));
+                            //var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                            //            new google.maps.Size(15, 28),
+                            //            new google.maps.Point(0, 0),
+                            //            new google.maps.Point(0, 0),
+                            //            new google.maps.Size(15, 28));
+                            var pinImage = {
+                                url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                                size: new google.maps.Size(15, 30),
+                                scaledSize: new google.maps.Size(15, 30),
+                                origin: new google.maps.Point(0, 0),
+                                anchor: new google.maps.Point(0, 0),
+                                labelOrigin: new google.maps.Point(5, -5)
+                            };
+
                             item.setOptions({ icon: pinImage });
                             break;
                         }
@@ -494,11 +536,14 @@ var cboFillType_Change = function () {
                         var data2 = data[0].split('#');
 
                         if (item.data.BranchID + '#' + item.data.SlsperId == data2[0] + '#' + data2[1]) {
-                            var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
-                                        new google.maps.Size(15, 28),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Size(15, 28));
+                            var pinImage = {
+                                url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                                size: new google.maps.Size(15, 30),
+                                scaledSize: new google.maps.Size(15, 30),
+                                origin: new google.maps.Point(0, 0),
+                                anchor: new google.maps.Point(0, 0),
+                                labelOrigin: new google.maps.Point(5, -5)
+                            };
                             item.setOptions({ icon: pinImage });
                             break;
                         }
@@ -532,11 +577,14 @@ var cboFillType_Change = function () {
                 else if (code == 5) {
                     App.stoShop.each(function (segment) {
                         if (item.data.Shop == segment.data.Shop) {
-                            var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + segment.data.Color.replace("#", ""),
-                                        new google.maps.Size(15, 28),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Size(15, 28));
+                            var pinImage = {
+                                url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                                size: new google.maps.Size(15, 30),
+                                scaledSize: new google.maps.Size(15, 30),
+                                origin: new google.maps.Point(0, 0),
+                                anchor: new google.maps.Point(0, 0),
+                                labelOrigin: new google.maps.Point(5, -5)
+                            };
                             item.setOptions({ icon: pinImage });
                             return false;
                         }
@@ -545,11 +593,14 @@ var cboFillType_Change = function () {
                 else if (code == 6) {
                     App.stoActualsituation.each(function (segment) {
                         if (item.data.Actualsituation == segment.data.Actualsituation) {
-                            var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + segment.data.Color.replace("#", ""),
-                                        new google.maps.Size(15, 28),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Size(15, 28));
+                            var pinImage = {
+                                url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                                size: new google.maps.Size(15, 30),
+                                scaledSize: new google.maps.Size(15, 30),
+                                origin: new google.maps.Point(0, 0),
+                                anchor: new google.maps.Point(0, 0),
+                                labelOrigin: new google.maps.Point(5, -5)
+                            };
                             item.setOptions({ icon: pinImage });
                             return false;
                         }
@@ -558,11 +609,14 @@ var cboFillType_Change = function () {
                 else if (code == 7) {
                     App.stoRevenue.each(function (segment) {
                         if (item.data.Revenue == segment.data.Revenue) {
-                            var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + segment.data.Color.replace("#", ""),
-                                        new google.maps.Size(15, 28),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Size(15, 28));
+                            var pinImage = {
+                                url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                                size: new google.maps.Size(15, 30),
+                                scaledSize: new google.maps.Size(15, 30),
+                                origin: new google.maps.Point(0, 0),
+                                anchor: new google.maps.Point(0, 0),
+                                labelOrigin: new google.maps.Point(5, -5)
+                            };
                             item.setOptions({ icon: pinImage });
                             return false;
                         }
@@ -575,6 +629,8 @@ var cboFillType_Change = function () {
     }
 }
 var btnFilter_Click = function () {
+    App.menuBorder.border.showDetail = false;
+    HQ.showDetail = false;
     App.winCust.hide();
 
     clearMarkers();
@@ -1196,6 +1252,7 @@ var drawDistrictBorder = function (city, cityB) {
     //map.setCenter(cityBorder[0].getBounds().getCenter());
     //map.setZoom(11);
 }
+
 var drawDistrictBorderDSM = function () {
     clearDistrictBorder();
 
@@ -1523,26 +1580,50 @@ var showDetail = function (code, level) {
             }
         }
     }
-
+    //zoom_changed();
 
 
 }
 var drawCust = function (cityCustObj) {
-    var pinImageRed = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'EC2828',
-                    new google.maps.Size(15, 30),
-                    new google.maps.Point(0, 0),
-                    new google.maps.Point(0, 0),
-        new google.maps.Size(15, 30));
+    //var pinImageRed = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'EC2828',
+    //                new google.maps.Size(15, 30),
+    //                new google.maps.Point(0, 0),
+    //                new google.maps.Point(0, 0),
+    //                new google.maps.Point(40, 30),
+    //                new google.maps.Size(15, 30));
 
-    var pinImageGreen = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '28EC4B',
-                      new google.maps.Size(15, 30),
-                      new google.maps.Point(0, 0),
-                      new google.maps.Point(0, 0), new google.maps.Size(15, 30));
+    var pinImageRed = {
+        url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'EC2828',
+        size: new google.maps.Size(15, 30),
+        scaledSize: new google.maps.Size(15, 30),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(0, 0),
+        labelOrigin: new google.maps.Point(5, -5)
+    };
+
+
+    //var pinImageGreen = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '28EC4B',
+    //                  new google.maps.Size(15, 30),
+    //                  new google.maps.Point(0, 0),
+    //                  new google.maps.Point(0, 0),
+    //            new google.maps.Point(40, 30),
+    //            new google.maps.Size(15, 30));
+
+    var pinImageGreen = {
+        url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '28EC4B',
+        size: new google.maps.Size(15, 30),
+        scaledSize: new google.maps.Size(15, 30),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(0, 0),
+        labelOrigin: new google.maps.Point(5, -5)
+    };
 
     var pinStar = new google.maps.MarkerImage("Content/Images/OM21300/star_marker.png",
                    new google.maps.Size(30, 45),
                    new google.maps.Point(0, 0),
-                   new google.maps.Point(0, 0), new google.maps.Size(30, 45));
+                   new google.maps.Point(0, 0),
+            new google.maps.Point(40, 30),
+            new google.maps.Size(30, 45));
     markers = [];
 
     var type = App.cboFillType.getValue();
@@ -1554,18 +1635,21 @@ var drawCust = function (cityCustObj) {
         var marker = null;
 
         if (item.Type == 'S') {
-            marker = new google.maps.Marker({ position: latLng, icon: pinStar });
+            marker = new google.maps.Marker({ position: latLng, icon: pinStar, label: { text: App.chkShowLabel.getValue()? item.No:' '} });
         } else if (type == '0') {
-            marker = new google.maps.Marker({ position: latLng, icon: ((min == 0 && item.Amt > min) || (min > 0 && item.Amt >= min)) && ((item.Amt <= max && max > 0) || max == 0) ? pinImageGreen : pinImageRed });
+            marker = new google.maps.Marker({ position: latLng, icon: ((min == 0 && item.Amt > min) || (min > 0 && item.Amt >= min)) && ((item.Amt <= max && max > 0) || max == 0) ? pinImageGreen : pinImageRed, label: { text: App.chkShowLabel.getValue() ? item.No : ' ' } });
         } else if (type == '1') {
             for (var j = 0; j < dsmColor.length; j++) {
                 var data = dsmColor[j].split('@');
                 if (item.BranchID + '#' + item.DSM == data[0]) {
-                    var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
-                                new google.maps.Size(15, 28),
-                                new google.maps.Point(0, 0),
-                                new google.maps.Point(0, 0),
-                                new google.maps.Size(15, 28));
+                    var pinImage = {
+                        url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                        size: new google.maps.Size(15, 30),
+                        scaledSize: new google.maps.Size(15, 30),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(0, 0),
+                        labelOrigin: new google.maps.Point(5, -5)
+                    };
                     marker = new google.maps.Marker({ position: latLng, icon: pinImage });
                     break;
                 }
@@ -1575,11 +1659,14 @@ var drawCust = function (cityCustObj) {
                 var data = dsrColor[j].split('@');
                 var data2 = data[0].split('#');
                 if (item.BranchID + '#' + item.SlsperId == data2[0] + '#' + data2[1]) {
-                    var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
-                                new google.maps.Size(15, 28),
-                                new google.maps.Point(0, 0),
-                                new google.maps.Point(0, 0),
-                                new google.maps.Size(15, 28));
+                    var pinImage = {
+                        url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                        size: new google.maps.Size(15, 30),
+                        scaledSize: new google.maps.Size(15, 30),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(0, 0),
+                        labelOrigin: new google.maps.Point(5, -5)
+                    };
                     marker = new google.maps.Marker({ position: latLng, icon: pinImage });
                     break;
                 }
@@ -1588,11 +1675,14 @@ var drawCust = function (cityCustObj) {
         else if (type == '3') {
             App.stoBrand.each(function (brand) {
                 if (item.Brand == brand.data.Code) {
-                    var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + brand.data.Color.replace("#", ""),
-                                new google.maps.Size(15, 28),
-                                new google.maps.Point(0, 0),
-                                new google.maps.Point(0, 0),
-                                new google.maps.Size(15, 28));
+                    var pinImage = {
+                        url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                        size: new google.maps.Size(15, 30),
+                        scaledSize: new google.maps.Size(15, 30),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(0, 0),
+                        labelOrigin: new google.maps.Point(5, -5)
+                    };
                     marker = new google.maps.Marker({ position: latLng, icon: pinImage });
                     return false;
                 }
@@ -1617,6 +1707,7 @@ var drawCust = function (cityCustObj) {
             marker.BranchID = item.BranchID;
             marker.CpnyID = item.CpnyID;
             marker.data = item;
+            marker.Label = 'AAAA';
             marker.addListener('click', function (e) {
                 var $this = this;
                 $this.setAnimation(google.maps.Animation.BOUNCE);
@@ -1716,16 +1807,31 @@ var changeLocation = function () {
     }
 }
 var drawMap = function () {
-    var pinImageRed = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'EC2828',
-                    new google.maps.Size(15, 30),
-                    new google.maps.Point(0, 0),
-                    new google.maps.Point(0, 0),
-        new google.maps.Size(15, 30));
-
-    var pinImageGreen = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '28EC4B',
-                      new google.maps.Size(15, 30),
-                      new google.maps.Point(0, 0),
-                      new google.maps.Point(0, 0), new google.maps.Size(15, 30));
+    //var pinImageRed = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'EC2828',
+    //                new google.maps.Size(15, 30),
+    //                new google.maps.Point(0, 0),
+    //                new google.maps.Point(0, 0),
+    //    new google.maps.Size(15, 30));
+    var pinImageRed = {
+        url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'EC2828',
+        size: new google.maps.Size(15, 30),
+        scaledSize: new google.maps.Size(15, 30),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(0, 0),
+        labelOrigin: new google.maps.Point(5, -5)
+    };
+    //var pinImageGreen = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '28EC4B',
+    //                  new google.maps.Size(15, 30),
+    //                  new google.maps.Point(0, 0),
+    //                  new google.maps.Point(0, 0), new google.maps.Size(15, 30));
+    var pinImageGreen = {
+        url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '28EC4B',
+        size: new google.maps.Size(15, 30),
+        scaledSize: new google.maps.Size(15, 30),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(0, 0),
+        labelOrigin: new google.maps.Point(5, -5)
+    };
     markers = [];
     var type = App.cboFillType.getValue();
     var min = App.txtFromAmt.getValue();
@@ -1741,11 +1847,14 @@ var drawMap = function () {
                 for (var i = 0; i < dsmColor.length; i++) {
                     var data = dsmColor[i].split('@');
                     if (item.data.BranchID + '#' + item.data.DSM == data[0]) {
-                        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
-                                    new google.maps.Size(15, 28),
-                                    new google.maps.Point(0, 0),
-                                    new google.maps.Point(0, 0),
-                                    new google.maps.Size(15, 28));
+                        var pinImage = {
+                            url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                            size: new google.maps.Size(15, 30),
+                            scaledSize: new google.maps.Size(15, 30),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(0, 0),
+                            labelOrigin: new google.maps.Point(5, -5)
+                        };
                         marker = new google.maps.Marker({ position: latLng, icon: pinImage });
                         break;
                     }
@@ -1754,11 +1863,14 @@ var drawMap = function () {
                 for (var i = 0; i < dsrColor.length; i++) {
                     var data = dsrColor[i].split('@');
                     if (item.data.BranchID + '#' + item.data.SlsperId == data[0]) {
-                        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
-                                    new google.maps.Size(15, 28),
-                                    new google.maps.Point(0, 0),
-                                    new google.maps.Point(0, 0),
-                                    new google.maps.Size(15, 28));
+                        var pinImage = {
+                            url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                            size: new google.maps.Size(15, 30),
+                            scaledSize: new google.maps.Size(15, 30),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(0, 0),
+                            labelOrigin: new google.maps.Point(5, -5)
+                        };
                         marker = new google.maps.Marker({ position: latLng, icon: pinImage });
                         break;
                     }
@@ -1815,11 +1927,14 @@ var drawMap = function () {
                 for (var i = 0; i < dsmColor.length; i++) {
                     var data = dsmColor[i].split('@');
                     if (item.data.BranchID + '#' + item.data.DSM == data[0]) {
-                        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
-                                    new google.maps.Size(15, 28),
-                                    new google.maps.Point(0, 0),
-                                    new google.maps.Point(0, 0),
-                                    new google.maps.Size(15, 28));
+                        var pinImage = {
+                            url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                            size: new google.maps.Size(15, 30),
+                            scaledSize: new google.maps.Size(15, 30),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(0, 0),
+                            labelOrigin: new google.maps.Point(5, -5)
+                        };
                         marker = new google.maps.Marker({ position: latLng, icon: pinImage, map: map });
                         break;
                     }
@@ -1828,11 +1943,14 @@ var drawMap = function () {
                 for (var i = 0; i < dsrColor.length; i++) {
                     var data = dsrColor[i].split('@');
                     if (item.data.BranchID + '#' + item.data.SlsperId == data[0]) {
-                        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
-                                    new google.maps.Size(15, 28),
-                                    new google.maps.Point(0, 0),
-                                    new google.maps.Point(0, 0),
-                                    new google.maps.Size(15, 28));
+                        var pinImage = {
+                            url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + data[1],
+                            size: new google.maps.Size(15, 30),
+                            scaledSize: new google.maps.Size(15, 30),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(0, 0),
+                            labelOrigin: new google.maps.Point(5, -5)
+                        };
                         marker = new google.maps.Marker({ position: latLng, icon: pinImage, map: map });
                         break;
                     }
@@ -2333,4 +2451,23 @@ window.mobilecheck = function () {
     }
 
     return check;
+}
+
+function chkShowLabel_Change(sender,value) {
+    if (!value) {
+        for (s = 0; s < cityCust.length; s++) {
+            var cityMarkers = cityCust[s].markers;
+            for (var i = 0; i < cityMarkers.length; i++) {
+                var item = cityMarkers[i];
+                item.setLabel('')
+            }
+        }           
+    }
+    else for (s = 0; s < cityCust.length; s++) {
+        var cityMarkers = cityCust[s].markers;
+        for (var i = 0; i < cityMarkers.length; i++) {
+            var item = cityMarkers[i];
+            item.setLabel(item.data.No);
+        }
+    }
 }

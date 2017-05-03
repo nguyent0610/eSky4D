@@ -391,6 +391,7 @@
           <Property Type="String" Name="Image" Nullable="true" MaxLength="100" />
           <Property Type="Double" Name="Amt" Nullable="true" />
           <Property Type="String" Name="ClassID" Nullable="true" />
+          <Property Type="String" Name="No" Nullable="false" />
           </ComplexType>
         <ComplexType Name="OM21300_pdCust1000_Result">
           <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
