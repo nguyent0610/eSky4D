@@ -137,6 +137,25 @@ namespace AR23800
     
             return base.ExecuteFunction<AR23800_pgAR_Position_Result>("AR23800_pgAR_Position", userIDParameter, cpnyIDParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="positionID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR23800_ppCheckDeletePosition(global::System.String positionID)
+        {
+            ObjectParameter positionIDParameter;
+            if (positionID != null)
+            {
+                positionIDParameter = new ObjectParameter("PositionID", positionID);
+            }
+            else
+            {
+                positionIDParameter = new ObjectParameter("PositionID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR23800_ppCheckDeletePosition", positionIDParameter);
+        }
 
         #endregion
 
@@ -431,12 +450,14 @@ namespace AR23800
         /// <param name="codeID">Initial value of the CodeID property.</param>
         /// <param name="descr">Initial value of the Descr property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static AR23800_pgAR_Position_Result CreateAR23800_pgAR_Position_Result(global::System.String codeID, global::System.String descr, global::System.Byte[] tstamp)
+        /// <param name="isDelete">Initial value of the IsDelete property.</param>
+        public static AR23800_pgAR_Position_Result CreateAR23800_pgAR_Position_Result(global::System.String codeID, global::System.String descr, global::System.Byte[] tstamp, global::System.String isDelete)
         {
             AR23800_pgAR_Position_Result aR23800_pgAR_Position_Result = new AR23800_pgAR_Position_Result();
             aR23800_pgAR_Position_Result.CodeID = codeID;
             aR23800_pgAR_Position_Result.Descr = descr;
             aR23800_pgAR_Position_Result.tstamp = tstamp;
+            aR23800_pgAR_Position_Result.IsDelete = isDelete;
             return aR23800_pgAR_Position_Result;
         }
 
@@ -515,6 +536,30 @@ namespace AR23800
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String IsDelete
+        {
+            get
+            {
+                return _IsDelete;
+            }
+            set
+            {
+                OnIsDeleteChanging(value);
+                ReportPropertyChanging("IsDelete");
+                _IsDelete = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("IsDelete");
+                OnIsDeleteChanged();
+            }
+        }
+        private global::System.String _IsDelete;
+        partial void OnIsDeleteChanging(global::System.String value);
+        partial void OnIsDeleteChanged();
 
         #endregion
 
