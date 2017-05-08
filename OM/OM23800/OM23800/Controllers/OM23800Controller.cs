@@ -1665,7 +1665,7 @@ namespace OM23800.Controllers
                 string routeID = data["RouteID"].PassNull();
                 string slsperID = data["SlsperID"].PassNull();
                 var headerRowIdx = 3;
-                int numberRow = 5000;
+                int numberRow = 3000;
 
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
