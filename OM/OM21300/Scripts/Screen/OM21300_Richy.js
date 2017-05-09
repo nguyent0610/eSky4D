@@ -265,23 +265,29 @@ var pnlFilter_Collapse = function () {
 
 var printMaps = function (type) {
     var bounds = new google.maps.LatLngBounds();
-    if (HQ.role != 'DSM' && HQ.role != 'DSR') {
-        for (var i = 0; i < cityBorder.length; i++) {
-            cityBorder[i].getPath().forEach(function (element, index) { bounds.extend(element); });
-        }
+    //if (HQ.role != 'DSM' && HQ.role != 'DSR') {
+    //    for (var i = 0; i < cityBorder.length; i++) {
+    //        cityBorder[i].getPath().forEach(function (element, index) {
+    //            bounds.extend(element);
+    //        });
+    //    }
 
-    } else {
-        for (var i = 0; i < districtBorder.length; i++) {
-            if (districtBorder[i].data.City == cityB[0].data.City) {
-                districtBorder[i].getPath().forEach(function (element, index) { bounds.extend(element); });
-            }
-        }
+    //} else {
+    //    for (var i = 0; i < districtBorder.length; i++) {
+    //        if (districtBorder[i].data.City == cityB[0].data.City) {
+    //            districtBorder[i].getPath().forEach(function (element, index) { bounds.extend(element); });
+    //        }
+    //    }
 
+    //}
+    clearCityBorder();
+    for (var i = 0; i < markers.length; i++) {
+        if(map.getBounds().contains(markers[i].position))
+        bounds.extend(markers[i].position);
     }
     var recentZoom = map.getZoom();
     var recentCenter = map.getCenter();
     map.fitBounds(bounds);
-
 
     google.maps.event.trigger(map, "resize");
     var html = $("html");
@@ -344,9 +350,10 @@ var printMaps = function (type) {
                     mapContainerParent.prepend(mapContainer);
                     printContainer.remove();
                     google.maps.event.trigger(map, "resize");
+                    drawCityBorder();
                     map.setCenter(recentCenter);
                     map.setZoom(recentZoom);
-                }, 1000);
+                }, 2000);
             });
             map.setZoom(recentZoom);
             map.fitBounds(bounds);

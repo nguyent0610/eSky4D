@@ -327,6 +327,7 @@
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\hq.common.debug.js" />
     <Content Include="Scripts\hq.common.js" />
+    <Content Include="Scripts\Screen\OM21300_Richy.js" />
     <Content Include="Scripts\Screen\map.city.js" />
     <Content Include="Scripts\Screen\map.country.js" />
     <Content Include="Scripts\Screen\OM21300.js" />
@@ -398,7 +399,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="D:\Working Project\Cloud\MVC.nrproj" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="D:\Working Project\Cloud\MVC.nrproj" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
