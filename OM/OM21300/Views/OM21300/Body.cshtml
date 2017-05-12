@@ -358,9 +358,9 @@
                     )
                     , X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
-                        X.Label().Text(Util.GetLang("Addr1")+": ").Cls("popup-label")
+                        X.Label().ID("lblCust_AddrLang").Text(Util.GetLang("Addr1")+": ").Cls("popup-label")
 
-                        , X.Label().ID("lblCust_Addr").MarginSpec("0 0 0 5")
+                        , X.Label().ID("lblCust_Addr").MarginSpec("0 0 0 5").Height(30)
                     )
                     
                     , X.FieldContainer().Layout(LayoutType.HBox)

@@ -2038,6 +2038,7 @@ var showPopup = function (e, data) {
         , callback: function () {
             HQ.common.showBusy(false);
             App.winCust.showAt(App.frmMain.getWidth() - 400, 25);
+            App.lblCust_Addr.setWidth(245 - App.lblCust_AddrLang.getWidth())
         }
     });
 

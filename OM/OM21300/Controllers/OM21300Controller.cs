@@ -129,13 +129,15 @@ namespace OM21300.Controllers
             tree.Fields.Add(new ModelField("Color", ModelFieldType.String));
             tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
             tree.AutoScroll = true;
-            tree.RootVisible = false;
+            tree.RootVisible = true;            
             tree.Border = false;
             tree.Header = false;
             tree.Listeners.CheckChange.Fn = "tree_CheckChange";
     
             Node node = new Node();
             node.NodeID = "tree-node-root-company";
+            node.Checked = true;
+            node.Expanded = true;
             Random rand = new Random();
 
             var role = _app.OM21300_pdRole(Current.CpnyID, Current.UserName).FirstOrDefault().Role; 
@@ -149,7 +151,7 @@ namespace OM21300.Controllers
                 nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "Data", Value = item.CpnyID, Mode = ParameterMode.Value });
                 nodeCompany.IconCls = "tree-parent-icon";
                 nodeCompany.IconFile = Url.Content(@"~\Content\Images\OM21300\company.png");
-                nodeCompany.Expanded = (role == "DSM" || role == "ASM");
+                nodeCompany.Expanded = false;// (role == "DSM" || role == "ASM");
                 var lstDSM = _app.OM21300_pdDSM(Current.UserName, item.CpnyID).ToList();
                 nodeCompany.Leaf = lstDSM.Count == 0 ? true : false;
                 foreach (var dsm in lstDSM)
