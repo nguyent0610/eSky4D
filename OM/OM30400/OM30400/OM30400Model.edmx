@@ -390,6 +390,7 @@
           <Property Type="DateTime" Name="VisitDate" Nullable="false" Precision="23" />
           <Property Type="Double" Name="Lat" Nullable="false" />
           <Property Type="Double" Name="Lng" Nullable="false" />
+          <Property Type="String" Name="Phone" Nullable="true" FixedLength="false" />
         </ComplexType>
         <ComplexType Name="OM30400_pgHistory_Result">
           <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
@@ -748,7 +749,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="36">
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="80">
         <EntityTypeShape EntityType="OM30400Model.AR_Customer" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM30400Model.OM_SalesRouteMaster" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>

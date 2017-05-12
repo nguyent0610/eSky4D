@@ -771,11 +771,14 @@ var Index = {
                             '</div>' +
                             '<h1 id="firstHeading" class="firstHeading">' +
                                 record.data.SlsperID + ": " + record.data.Name +
-                            '</h1>' +
+                            '</h1>' +                            
                             '<div id="bodyContent">' +
-                                '<p>' +
-                                    (record.data.CustId ? (record.data.CustId + ": " + record.data.CustName + " - ") : "") +
-                                    record.data.Addr +
+                                '<p style = "font-size: 18px;font-weight: bold;">' +
+                                        (record.data.Phone ? (HQ.common.getLang('Phone') + ": " + record.data.Phone) : "") +
+                                '</p>' +
+                                '<p>' 
+                                      +  
+                                    (record.data.CustId ? (record.data.CustId + ": " + record.data.CustName + " - ") : "") + record.data.Addr +
                                 '</p>' +
                             '</div>' +
                         '</div>'
