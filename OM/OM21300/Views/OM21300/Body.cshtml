@@ -352,15 +352,15 @@
 
                     , X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
-                        X.Label().Text(Util.GetLang("CustName")+": ").Cls("popup-label")
+                        X.Label().ID("lblCust_CustNameLang").Text(Util.GetLang("CustName")+": ").Cls("popup-label")
 
-                        , X.Label().ID("lblCust_CustName").MarginSpec("0 0 0 5")
+                        , X.Label().ID("lblCust_CustName").MarginSpec("0 0 0 5").Height(35)
                     )
                     , X.FieldContainer().Layout(LayoutType.HBox)
                     .Items(
                         X.Label().ID("lblCust_AddrLang").Text(Util.GetLang("Addr1")+": ").Cls("popup-label")
 
-                        , X.Label().ID("lblCust_Addr").MarginSpec("0 0 0 5").Height(30)
+                        , X.Label().ID("lblCust_Addr").MarginSpec("0 0 0 5").Height(35)
                     )
                     
                     , X.FieldContainer().Layout(LayoutType.HBox)
@@ -547,7 +547,7 @@
 
             , X.Panel()
             .ID("pnlFilter")
-            .Region(Region.West).Layout(LayoutType.VBox)
+            .Region(Region.West).Layout(LayoutType.Border)
 
             .Title(Util.GetLang("FilterForm"))
             .Header(true)
@@ -588,6 +588,9 @@
                 )
             )
             .Items(
+            
+            X.Panel()
+            .Region(Region.North).Layout(LayoutType.VBox).Items(            
                 HQ.DateField().ID("txtFromDate").Name("FromDate")
                 .Type(DatePickerType.Month)
                 .Editable(false)
@@ -634,67 +637,46 @@
                 
                 , X.Label().Text(Util.GetLang("OM213Tree"))//"Phân Cấp:")
                 .MarginSpec(" 0 0 10").ID("lblTree")
-
+                )
                 , X.Panel()
                 .ID("pnlTree")
+                .TopBar(X.Toolbar().Items(
+                    HQ.Combo().ID("cboCpny").Name("BranchID").HQLangCode("BranchID")
+                    .HQProcedure("OM21300_pcBranchID").HQColumnShow("BranchID,BranchName,Addr")
+                    .DisplayField("BranchID").ValueField("BranchID")
+                    .HQHeightWidth(400, 300)
+                    .BlankText(Util.GetLangPrefix("Input", "BranchID")).MultiSelect(true)
+                    .HQParam(new StoreParameterCollection(){
+                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                    })
+                    .ForceSelection(true)
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboCpny_Change";
+                    })
+                ))
                 .MarginSpec("3 0 0 10")
+                .Region(Region.Center)
                 .Layout(LayoutType.Fit)
                 .Header(false)
-                .Height(250)
-                .Width(280)
                 
-                , X.MultiCombo().ID("cboCustClass").Name("Material").StoreID("stoCustClass")
-                .ValueField("ClassId").DisplayField("ClassId")
-                .MatchFieldWidth(false)
-                .ForceSelection(true)
-                .ListConfig(
-                    X.BoundList()
-                    .Height(500).ItemSelector(".x-boundlist-item").SelectedItemCls("hq-mcombo-item-checked")
-                    .Tpl(
-                        X.XTemplate()
-                        .Html(@"<tpl for='.'>
-                        <tpl if='[xindex] == 1'>
-                            <table style='width:500px !important'>
-                                <tr>
-                                    <th></th>
-                                    <th>" + Util.GetLang("Code") + @"</th>
-                                    <th>" + Util.GetLang("Descr") + @"</th>
-                                </tr>
-                        </tpl>
-                        <tr class='x-boundlist-item hq-mcombo-item-unchecked'>
-                            <td style='width:15px'></td>
-                            <td style='width:20px;'><span style='width:15px;height:15px;background-color:{Color};display:inline-block;vertical-align:middle;'</span></td>
-                            <td>{ClassId}</td>
-                            <td>{Descr}</td>
-                        </tr>
-                        <tpl if='[xcount-xindex] == 0'>
-                            </table>
-                        </tpl>
-                    </tpl>")
-                    )
-                )
-                .QueryMode(DataLoadMode.Local)
-                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                .FieldLabel(Util.GetLang("CustClass"))//"Nhóm Khách hàng")
-                .MarginSpec("5 0 0 10")
-                .Listeners(p =>
-                {
-                    p.Change.Fn = "cboCustClass_Change";
-                })
-                .Width(280)
-                
-                
-                , X.MultiCombo().ID("cboBrand").Name("Brand").StoreID("stoBrand")
-                .ValueField("Code").DisplayField("Code")
-                .MatchFieldWidth(false)
-                .ForceSelection(true)
-                .ListConfig(
-                    X.BoundList()
-                    .Height(500).ItemSelector(".x-boundlist-item").SelectedItemCls("hq-mcombo-item-checked")
-                    .Tpl(
-                        X.XTemplate()
-                        .Html(@"<tpl for='.'>
+                ,X.Panel()
+                .Region(Region.South).Layout(LayoutType.VBox).Items(  
+                     X.MultiCombo().ID("cboCustClass").Name("Material").StoreID("stoCustClass")
+                    .ValueField("ClassId").DisplayField("ClassId")
+                    .MatchFieldWidth(false)
+                    .ForceSelection(true)
+                    .ListConfig(
+                        X.BoundList()
+                        .Height(500).ItemSelector(".x-boundlist-item").SelectedItemCls("hq-mcombo-item-checked")
+                        .Tpl(
+                            X.XTemplate()
+                            .Html(@"<tpl for='.'>
                             <tpl if='[xindex] == 1'>
                                 <table style='width:500px !important'>
                                     <tr>
@@ -706,91 +688,135 @@
                             <tr class='x-boundlist-item hq-mcombo-item-unchecked'>
                                 <td style='width:15px'></td>
                                 <td style='width:20px;'><span style='width:15px;height:15px;background-color:{Color};display:inline-block;vertical-align:middle;'</span></td>
-                                <td>{Code}</td>
+                                <td>{ClassId}</td>
                                 <td>{Descr}</td>
                             </tr>
                             <tpl if='[xcount-xindex] == 0'>
                                 </table>
                             </tpl>
                         </tpl>")
+                        )
                     )
-                )
-                .QueryMode(DataLoadMode.Local)
-                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                .FieldLabel(Util.GetLang("Productclass"))//"Nhãn Hàng")
-                .MarginSpec("5 0 0 10")
-                .Width(280)
-                .Listeners(p =>
-                {
-                    p.Change.Fn = "cboBrand_Change";
-                })
+                    .QueryMode(DataLoadMode.Local)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                    .FieldLabel(Util.GetLang("CustClass"))//"Nhóm Khách hàng")
+                    .MarginSpec("5 0 0 10")
+                    .Listeners(p =>
+                    {
+                        p.Change.Fn = "cboCustClass_Change";
+                    })
+                    .Width(280)
+                
+                
+                    , X.MultiCombo().ID("cboBrand").Name("Brand").StoreID("stoBrand")
+                    .ValueField("Code").DisplayField("Code")
+                    .MatchFieldWidth(false)
+                    .ForceSelection(true)
+                    .ListConfig(
+                        X.BoundList()
+                        .Height(500).ItemSelector(".x-boundlist-item").SelectedItemCls("hq-mcombo-item-checked")
+                        .Tpl(
+                            X.XTemplate()
+                            .Html(@"<tpl for='.'>
+                                <tpl if='[xindex] == 1'>
+                                    <table style='width:500px !important'>
+                                        <tr>
+                                            <th></th>
+                                            <th>" + Util.GetLang("Code") + @"</th>
+                                            <th>" + Util.GetLang("Descr") + @"</th>
+                                        </tr>
+                                </tpl>
+                                <tr class='x-boundlist-item hq-mcombo-item-unchecked'>
+                                    <td style='width:15px'></td>
+                                    <td style='width:20px;'><span style='width:15px;height:15px;background-color:{Color};display:inline-block;vertical-align:middle;'</span></td>
+                                    <td>{Code}</td>
+                                    <td>{Descr}</td>
+                                </tr>
+                                <tpl if='[xcount-xindex] == 0'>
+                                    </table>
+                                </tpl>
+                            </tpl>")
+                        )
+                    )
+                    .QueryMode(DataLoadMode.Local)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                    .FieldLabel(Util.GetLang("Productclass"))//"Nhãn Hàng")
+                    .MarginSpec("5 0 0 10")
+                    .Width(280)
+                    .Listeners(p =>
+                    {
+                        p.Change.Fn = "cboBrand_Change";
+                    })
                
-                , X.MultiCombo().ID("cboDay").Name("Day").StoreID("stoDay")
-                .ValueField("Code").DisplayField("Descr")
-                .MatchFieldWidth(false)
-                .ForceSelection(true)
-                .ListConfig(
-                    X.BoundList()
-                    .Height(500).ItemSelector(".x-boundlist-item").SelectedItemCls("hq-mcombo-item-checked")
-                    .Tpl(
-                        X.XTemplate()
-                        .Html(@"<tpl for='.'>
-                            <tpl if='[xindex] == 1'>
-                                <table style='width:500px !important'>
-                            </tpl>
-                            <tr class='x-boundlist-item hq-mcombo-item-unchecked'>
-                                <td style='width:15px'></td>                                
-                                <td>{Descr}</td>
-                            </tr>
-                            <tpl if='[xcount-xindex] == 0'>
-                                </table>
-                            </tpl>
-                        </tpl>")
+                    , X.MultiCombo().ID("cboDay").Name("Day").StoreID("stoDay")
+                    .ValueField("Code").DisplayField("Descr")
+                    .MatchFieldWidth(false)
+                    .ForceSelection(true)
+                    .ListConfig(
+                        X.BoundList()
+                        .Height(500).ItemSelector(".x-boundlist-item").SelectedItemCls("hq-mcombo-item-checked")
+                        .Tpl(
+                            X.XTemplate()
+                            .Html(@"<tpl for='.'>
+                                <tpl if='[xindex] == 1'>
+                                    <table style='width:500px !important'>
+                                </tpl>
+                                <tr class='x-boundlist-item hq-mcombo-item-unchecked'>
+                                    <td style='width:15px'></td>                                
+                                    <td>{Descr}</td>
+                                </tr>
+                                <tpl if='[xcount-xindex] == 0'>
+                                    </table>
+                                </tpl>
+                            </tpl>")
+                        )
                     )
+                    .QueryMode(DataLoadMode.Local)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                    .FieldLabel(Util.GetLang("DayofWeek"))//"Thứ")
+                    .MarginSpec("5 0 0 10")
+                    .Width(280)
+
+                    , X.ComboBox().ID("cboVisitType").Name("VisitType").StoreID("stoVisitType")
+                    .ValueField("Code").DisplayField("Descr")
+                    .MatchFieldWidth(false)
+                    .ForceSelection(true)
+                    .ListConfig(Util.HQBoundList("Code,Descr", 300, 400))
+                    .QueryMode(DataLoadMode.Local)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                    .FieldLabel(Util.GetLang("WeekofVisit"))//"Tuần Viếng Thăm")
+                    .MarginSpec("5 0 0 10")
+                    .Width(280)
+
+                
+                
+                
+                
+                    , X.NumberField().ID("txtFromAmt").Name("FromAmt")
+                    .FieldLabel(Util.GetLang("SlsAmtFrom"))//"Doanh Số Từ:")
+                    .Width(280)
+                    .LabelWidth(100)
+                    .MinValue(0)
+                    .Step(1000)
+                    .MarginSpec("5 0 0 10")
+                    .DecimalPrecision(0)
+                    .LabelStyle("text-align:left !important")
+
+                    , X.NumberField().ID("txtToAmt").Name("ToAmt")
+                    .FieldLabel(Util.GetLang("SlsAmtTo"))//"Doanh Số Đến:")
+                    .LabelStyle("text-align:left !important")
+                    .MarginSpec("5 0 0 10")
+                    .Width(280)
+                    .LabelWidth(100)
+                    .MinValue(0)
+                    .Step(1000)
+                    .DecimalPrecision(0)
+                    ,X.Container().Height(30)
                 )
-                .QueryMode(DataLoadMode.Local)
-                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                .FieldLabel(Util.GetLang("DayofWeek"))//"Thứ")
-                .MarginSpec("5 0 0 10")
-                .Width(280)
-
-                , X.ComboBox().ID("cboVisitType").Name("VisitType").StoreID("stoVisitType")
-                .ValueField("Code").DisplayField("Descr")
-                .MatchFieldWidth(false)
-                .ForceSelection(true)
-                .ListConfig(Util.HQBoundList("Code,Descr", 300, 400))
-                .QueryMode(DataLoadMode.Local)
-                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                .FieldLabel(Util.GetLang("WeekofVisit"))//"Tuần Viếng Thăm")
-                .MarginSpec("5 0 0 10")
-                .Width(280)
-
-                
-                
-                
-                
-                , X.NumberField().ID("txtFromAmt").Name("FromAmt")
-                .FieldLabel(Util.GetLang("SlsAmtFrom"))//"Doanh Số Từ:")
-                .Width(280)
-                .LabelWidth(100)
-                .MinValue(0)
-                .Step(1000)
-                .MarginSpec("5 0 0 10")
-                .DecimalPrecision(0)
-                .LabelStyle("text-align:left !important")
-
-                , X.NumberField().ID("txtToAmt").Name("ToAmt")
-                .FieldLabel(Util.GetLang("SlsAmtTo"))//"Doanh Số Đến:")
-                .LabelStyle("text-align:left !important")
-                .MarginSpec("5 0 0 10")
-                .Width(280)
-                .LabelWidth(100)
-                .MinValue(0)
-                .Step(1000)
-                .DecimalPrecision(0)
 
 
             )

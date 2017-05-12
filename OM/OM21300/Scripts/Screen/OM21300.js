@@ -29,7 +29,7 @@ var frmMain_BoxReady = function () {
     App.txtToAmt.setValue(0);
     //App.btnCluster.hide();
     //App.btnDetail.show();
-    App.direct.OM21300_GetTreeData({
+    App.direct.OM21300_GetTreeData("",{
         success: function (result) {
             checkSource();
         },
@@ -2038,7 +2038,10 @@ var showPopup = function (e, data) {
         , callback: function () {
             HQ.common.showBusy(false);
             App.winCust.showAt(App.frmMain.getWidth() - 400, 25);
-            App.lblCust_Addr.setWidth(245 - App.lblCust_AddrLang.getWidth())
+            App.lblCust_Addr.setWidth(245 - App.lblCust_AddrLang.getWidth());
+            App.lblCust_CustName.setWidth(245 - App.lblCust_CustNameLang.getWidth());
+            App.lblCust_Addr.setHeight(35);
+            App.lblCust_CustName.setHeight(35);
         }
     });
 
@@ -2471,4 +2474,23 @@ function chkShowLabel_Change(sender,value) {
             item.setLabel(item.data.No);
         }
     }
+}
+var cboCpny_Change = function (item, value) {
+    App.direct.OM21300_GetTreeData(item.rawValue, {
+        success: function (result) {
+            var rootNode = App.treeDSR.getRootNode();
+            dsr = [];
+            dsrColor = [];
+            dsmColor = [];
+            for (var i = 0; i < rootNode.childNodes.length; i++) {
+                var firstCpny = rootNode.childNodes[i];
+
+                checkNode(true, firstCpny);
+            }
+            HQ.common.showBusy(false);
+        },
+        failure: function (errorMsg) {
+        },
+        timeout: 360000
+    });
 }

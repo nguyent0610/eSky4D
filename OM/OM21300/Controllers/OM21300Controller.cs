@@ -119,7 +119,7 @@ namespace OM21300.Controllers
             return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
         }
         [DirectMethod]
-        public ActionResult OM21300_GetTreeData()
+        public ActionResult OM21300_GetTreeData(string cpnyID)
         {
             var lstCompany = _app.OM21300_pdCompany(Current.UserName).ToList();
             Panel panel = this.GetCmp<Panel>("pnlTree");
@@ -143,6 +143,7 @@ namespace OM21300.Controllers
             var role = _app.OM21300_pdRole(Current.CpnyID, Current.UserName).FirstOrDefault().Role; 
             foreach (var item in lstCompany)
 	        {
+                if (cpnyID!=""&&!cpnyID.Replace(" ", "").Split(',').Contains(item.CpnyID)) continue;
 		        var nodeCompany = new Node();
                 nodeCompany.Checked = false;
                 nodeCompany.NodeID = "node-company-" + item.CpnyID;
