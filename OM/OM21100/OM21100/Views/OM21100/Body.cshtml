@@ -477,6 +477,9 @@
                                             .ForceSelection(true).SelectOnFocus(true)
                                             .HQParam(new StoreParameterCollection() { 
                                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
+                                                 ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                                
                                             })
                                             .LoadData()
                                         )
@@ -806,7 +809,9 @@
                             .ValueField("InvtID").DisplayField("InvtID")
                             .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
+                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
+                                                 ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                             })
                             .LoadData()
                         )
@@ -988,7 +993,9 @@
                             .ValueField("InvtID").DisplayField("InvtID")
                             .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
+                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
+                                                 ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                             })
                             .LoadData()
                         )

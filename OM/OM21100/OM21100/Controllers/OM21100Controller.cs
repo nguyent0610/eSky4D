@@ -23,7 +23,8 @@ namespace OM21100.Controllers
         private string _screenNbr = "OM21100";
         OM21100Entities _db = Util.CreateObjectContext<OM21100Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-        List<OM21100_ptInventory_Result> _lstPtInventory = new List<OM21100_ptInventory_Result>();        
+        List<OM21100_ptInventory_Result> _lstPtInventory = new List<OM21100_ptInventory_Result>();
+        List<OM21100_pdSI_Hierarchy_Result> _lstSI_HierarchyI = new List<OM21100_pdSI_Hierarchy_Result>();     
         // GET: /OM21100/
         public ActionResult Index()
         {
@@ -162,17 +163,17 @@ namespace OM21100.Controllers
 
             var root = new Node() { };
 
-            var hierarchy = new SI_Hierarchy()
+            var hierarchy = new OM21100_pdSI_Hierarchy_Result()
             {
                 RecordID = 0,
                 NodeID = "",
                 ParentRecordID = 0,
                 NodeLevel = 1,
-                Descr = "Root",
-                Type = "I"
+                Descr = "Root"
             };
             // Get inventory for load tree
             _lstPtInventory = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            _lstSI_HierarchyI = _db.OM21100_pdSI_Hierarchy(Current.UserName, Current.CpnyID, Current.LangID).ToList();
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
             tree.Root.Add(node);
 
@@ -217,17 +218,17 @@ namespace OM21100.Controllers
 
             var root = new Node() { };
 
-            var hierarchy = new SI_Hierarchy()
+            var hierarchy = new OM21100_pdSI_Hierarchy_Result()
             {
                 RecordID = 0,
                 NodeID = "",
                 ParentRecordID = 0,
                 NodeLevel = 1,
-                Descr = "Root",
-                Type = "I"
+                Descr = "Root"
             };
             // Get inventory for load tree
             _lstPtInventory = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            _lstSI_HierarchyI = _db.OM21100_pdSI_Hierarchy(Current.UserName, Current.CpnyID, Current.LangID).ToList();
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
             tree.Root.Add(node);
 
@@ -269,17 +270,17 @@ namespace OM21100.Controllers
 
             var root = new Node() { };
 
-            var hierarchy = new SI_Hierarchy()
+            var hierarchy = new OM21100_pdSI_Hierarchy_Result()
             {
                 RecordID = 0,
                 NodeID = "",
                 ParentRecordID = 0,
                 NodeLevel = 1,
-                Descr = "Root",
-                Type = "I"
+                Descr = "Root"
             };
             // Get inventory for load tree
             _lstPtInventory = _db.OM21100_ptInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            _lstSI_HierarchyI = _db.OM21100_pdSI_Hierarchy(Current.UserName, Current.CpnyID, Current.LangID).ToList();
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
             tree.Root.Add(node);
 
@@ -1902,8 +1903,8 @@ namespace OM21100.Controllers
             //updatedDiscount.Crtd_Role = Current.UserName;
             updatedDiscount.LUpd_User = Current.UserName;
         }
-        
-        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, string nodeType)
+
+        private Node createNode(Node root, OM21100_pdSI_Hierarchy_Result inactiveHierachy, int level, string nodeType)
         {
             var node = new Node();
             if (inactiveHierachy.Descr == "Root")
@@ -1918,14 +1919,13 @@ namespace OM21100.Controllers
                 node.Checked = false;
             }
 
-            var childrenInactiveHierachies = _db.SI_Hierarchy
+            var childrenInactiveHierachies = _lstSI_HierarchyI
                 .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
-                    && p.Type == nodeType
                     && p.NodeLevel == level).ToList();
 
             if (childrenInactiveHierachies != null && childrenInactiveHierachies.Count > 0)
             {
-                foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
+                foreach (OM21100_pdSI_Hierarchy_Result childrenInactiveNode in childrenInactiveHierachies)
                 {
                     node.Children.Add(createNode(node, childrenInactiveNode, level + 1, nodeType));
                 }
