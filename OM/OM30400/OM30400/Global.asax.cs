@@ -30,13 +30,13 @@ namespace OM30400
         {
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";
-            Current.DBSys = "SonHa_test_eSky4DSys";// "ND_eSky4DSys";//eBiz4DCloudSysJFV
+            Current.DBSys = "SonHa_eSky4DSys";// "ND_eSky4DSys";//eBiz4DCloudSysJFV
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM30400"] = acc;
-            Session["DBApp"] = Current.DBApp = "SonHa_test_eSky4DApp";// "ND_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "SonHa_eSky4DApp";// "ND_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "C000065";
             Session["Language"] = Current.Language = "vi";

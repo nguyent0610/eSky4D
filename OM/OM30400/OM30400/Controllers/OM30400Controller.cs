@@ -1,4 +1,4 @@
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Ext.Net;
 using Ext.Net.MVC;
 using System.Collections;
@@ -167,7 +167,16 @@ namespace OM30400.Controllers
                 if (actualVisit[i].PicPath.PassNull() != "")
                 {
                     var file = actualVisit[i].PicPath.PassNull().Replace("/", "\\").Replace("//", "\\").Split('\\');
-                    actualVisit[i].PicPath = Util.ImageToBin(actualVisit[i].PicPath.PassNull().Replace(file[file.Length - 1], ""), file[file.Length - 1]);
+                    string fileName = file[file.Length - 1];
+                    if (fileName == string.Empty) // Bỏ qua khi ko có tên hình
+                    {
+                        continue;
+                    }
+                    string path = actualVisit[i].PicPath.PassNull().Replace(fileName, "");
+                    actualVisit[i].PicPath = Util.ImageToBin(path, fileName);
+                    //actualVisit[i].PicPath = Util.ImageToBin(
+                    //                                        actualVisit[i].PicPath.PassNull().Replace(file[file.Length - 1], "")
+                    //                                        , file[file.Length - 1]);
                 }
             }
             return this.Store(actualVisit);
