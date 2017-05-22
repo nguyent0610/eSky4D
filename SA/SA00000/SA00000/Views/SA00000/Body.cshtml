@@ -528,7 +528,7 @@
                 .Items(
                     HQ.Button().ID("btnAddSAManager").Text(Util.GetLang("AddSAManager")).MarginSpec("5 0 0 250").Width(200)
                         .Listeners(p => p.Click.Fn = "btnAddSAManager_Click")
-                    ,HQ.TextBox().ID("txtSAManager").HQLangCode("SAManager").DataIndex("SAManager").Width(600).Tag("X").ReadOnly(true).MarginSpec("5 0 0 0")
+                    ,HQ.TextArea().ID("txtSAManager").HQLangCode("SAManager").DataIndex("SAManager").Width(600).Tag("X").ReadOnly(true).MarginSpec("5 0 0 0")
                     ,HQ.TextBox().ID("txtManager").HQLangCode("SA00000Manager").Width(600).Tag("X").ReadOnly(true).MarginSpec("5 0 0 0")
                 
                     //,HQ.Combo().ID("cboManager").Name("cboManager").HQProcedure("SA00000_pcUser").HQLangCode("SA00000Manager").HQDBSys(true)
