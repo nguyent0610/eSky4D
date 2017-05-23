@@ -129,7 +129,7 @@
                 .Editor(Html.X().NumberField().MaxValue(10000).MinValue(0).DecimalPrecision(0))
                 
                 
-                , X.Column().ID("colLotPrice").DataIndex("UnitPrice").Text(Util.GetLang("Price"))
+                , X.Column().ID("colLotPrice").DataIndex("UnitPrice").Text(Util.GetLang("IN10200UnitPrice"))
                 .Width(75)
                 .Align(Alignment.Right)
                 .Renderer("renderQtyAmt") 
@@ -616,7 +616,7 @@
                 
                 X.Column()
                 .DataIndex("UnitPrice")
-                .Text(Util.GetLang("UnitPrice"))
+                .Text(Util.GetLang("IN10200UnitPrice"))
                 .Align(Alignment.Right)
                 .Width(100)
                 .Renderer("rdrTrans_QtyAmt")

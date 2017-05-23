@@ -38,8 +38,8 @@ namespace IN10200
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = "ND_Test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             Current.FormatDate = "dd.MM.yyyy";
             AccessRight acc = new AccessRight();
             Current.FormatDateJS = "yyyy.MM.dd";
@@ -48,7 +48,7 @@ namespace IN10200
             acc.Insert = true;
             acc.Update = true;
             Session["IN10200"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "ND_Test_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
