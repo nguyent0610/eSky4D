@@ -787,7 +787,7 @@ var grdTrans_Edit = function (item, e) {
                     row: e
                 });
                 App.stoPrice.load({
-                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.DateEnt.getValue() },
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.DateEnt.getValue(), valMthd: invt.ValMthd, siteID: App.SiteID.getValue() },
                     callback: checkSourceEdit,
                     row: e
                 });

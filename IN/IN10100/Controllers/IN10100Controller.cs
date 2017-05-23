@@ -114,7 +114,7 @@ namespace IN10100.Controllers
         }
         public ActionResult GetPrice(string invtID, string uom, DateTime effDate,string siteID,string valMthd)
         {
-            var lstPrice = _app.IN10100_pdPrice("", invtID, uom, DateTime.Now, valMthd,siteID).ToList();
+            var lstPrice = _app.IN10100_pdPrice("", invtID, uom, DateTime.Now.ToDateShort(), valMthd,siteID).ToList();
             return this.Store(lstPrice);
         }
         public ActionResult GetUnit(string invtID)
