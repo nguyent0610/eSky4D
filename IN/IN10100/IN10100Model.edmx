@@ -311,7 +311,7 @@
           <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="TrnsfrDocNbr" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Comment" Type="nvarchar" MaxLength="30" />
+          <Property Name="Comment" Type="nvarchar" Nullable="false" MaxLength="200" />
           <Property Name="ExpectedDate" Type="smalldatetime" Nullable="false" />
           <Property Name="NoteID" Type="int" Nullable="false" />
           <Property Name="ReasonCD" Type="varchar" MaxLength="10" />
@@ -345,7 +345,7 @@
             <PropertyRef Name="ToUnit" />
           </Key>
           <Property Name="UnitType" Type="char" Nullable="false" MaxLength="1" />
-          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="FromUnit" Type="nvarchar" Nullable="false" MaxLength="15" />
           <Property Name="ToUnit" Type="nvarchar" Nullable="false" MaxLength="15" />
@@ -409,7 +409,7 @@
           <Property Name="BooleanParm02" Type="smallint" Nullable="false" />
           <Property Name="BooleanParm03" Type="smallint" Nullable="false" />
           <Property Name="SelectionFormular" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="AppPath" Type="varchar" Nullable="false" MaxLength="400" />
           <Property Name="ClientName" Type="varchar" Nullable="false" MaxLength="40" />
           <Property Name="LoggedCpnyID" Type="varchar" MaxLength="30" />
@@ -429,6 +429,7 @@
         <Function Name="IN10100_pcHandle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="Status" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN10100_pcStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -450,6 +451,8 @@
           <Parameter Name="InvtID" Type="varchar" Mode="In" />
           <Parameter Name="UOM" Type="nvarchar" Mode="In" />
           <Parameter Name="EffDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="ValMthd" Type="varchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN10100_pdTrnsfer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -502,6 +505,7 @@
           <FunctionImport Name="IN10100_pcHandle" ReturnType="Collection(IN10100Model.IN10100_pcHandle_Result)">
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="IN10100_pcStatus" ReturnType="Collection(IN10100Model.IN10100_pcStatus_Result)">
           <Parameter Name="LangID" Mode="In" Type="Int16" />
@@ -512,12 +516,6 @@
           </FunctionImport>
           <FunctionImport Name="IN10100_pcUnitConversion" ReturnType="Collection(IN10100Model.IN10100_pcUnitConversion_Result)">
           <Parameter Name="CpnyID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="IN10100_pdPrice" ReturnType="Collection(IN10100Model.IN10100_pdPrice_Result)">
-            <Parameter Name="VendID" Mode="In" Type="String" />
-            <Parameter Name="InvtID" Mode="In" Type="String" />
-            <Parameter Name="UOM" Mode="In" Type="String" />
-            <Parameter Name="EffDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="INNumbering" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -555,6 +553,14 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="ScreenNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN10100_pdPrice" ReturnType="Collection(IN10100Model.IN10100_pdPrice_Result)">
+            <Parameter Name="VendID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="UOM" Mode="In" Type="String" />
+            <Parameter Name="EffDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ValMthd" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Batch">
@@ -804,7 +810,7 @@
             <PropertyRef Name="ToUnit" />
           </Key>
           <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ToUnit" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
@@ -881,9 +887,6 @@
           <Property Type="String" Name="MultDiv" Nullable="false" MaxLength="1" />
           <Property Type="Double" Name="CnvFact" Nullable="false" />
         </ComplexType>
-        <ComplexType Name="IN10100_pdPrice_Result">
-          <Property Type="Double" Name="Price" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="IN10100_pdTrnsfer_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="1" />
@@ -931,7 +934,7 @@
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TrnsfrDocNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Comment" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Comment" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Type="DateTime" Name="ExpectedDate" Nullable="false" Precision="0" />
           <Property Type="Int32" Name="NoteID" Nullable="false" />
           <Property Type="String" Name="ReasonCD" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -981,7 +984,7 @@
           <Property Type="Int16" Name="BooleanParm02" Nullable="false" />
           <Property Type="Int16" Name="BooleanParm03" Nullable="false" />
           <Property Type="String" Name="SelectionFormular" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="AppPath" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ClientName" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LoggedCpnyID" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -1138,6 +1141,9 @@
           <Property Type="String" Name="IsChanged" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="PosmID" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="ClassID" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="IN10100_pdPrice_Result">
+          <Property Type="Double" Name="Price" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1482,13 +1488,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN10100_pdPrice" FunctionName="eBiz4DWebSysModel.Store.IN10100_pdPrice" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN10100Model.IN10100_pdPrice_Result">
-                <ScalarProperty Name="Price" ColumnName="Price" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="INNumbering" FunctionName="eBiz4DWebSysModel.Store.INNumbering" />
           <FunctionImportMapping FunctionImportName="IN10100_pdTrnsfer" FunctionName="eBiz4DWebSysModel.Store.IN10100_pdTrnsfer">
             <ResultMapping>
@@ -1759,6 +1758,13 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN10100_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.IN10100_ppCheckCloseDate" />
+          <FunctionImportMapping FunctionImportName="IN10100_pdPrice" FunctionName="eBiz4DWebSysModel.Store.IN10100_pdPrice" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10100Model.IN10100_pdPrice_Result">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

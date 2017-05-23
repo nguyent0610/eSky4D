@@ -775,7 +775,7 @@ var grdTrans_Edit = function (item, e) {
                     params: { siteID: App.SiteID.getValue(), invtID: e.record.data.InvtID }, callback: checkSourceEdit, row: e
                 });
                 App.stoPrice.load({
-                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.DateEnt.getValue() }, callback: checkSourceEdit, row: e
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.DateEnt.getValue(), valMthd: invt.ValMthd, siteID: App.SiteID.getValue() }, callback: checkSourceEdit, row: e
                 });
             } else if (key == 'UnitDesc') {
                 HQ.common.showBusy(true, 'Process...');
@@ -809,7 +809,6 @@ var grdLot_BeforeEdit = function (item, e) {
     var record = e.record;
 
     if (key == 'LotSerNbr' && !Ext.isEmpty(record.data.LotSerNbr)) return false;
-
     if (Ext.isEmpty(record.data.InvtID)) {
         record.data.InvtID = App.winLot.record.data.InvtID;
         record.data.SiteID = App.winLot.record.data.SiteID;
@@ -1457,11 +1456,11 @@ var checkExitEdit = function (row) {
             site.SiteID = trans.SiteID;
             site.InvtID = trans.InvtID;
         }
-        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
-            trans.UnitPrice = Math.round(site.AvgCost, 0);
-        } else {
+        //if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+        //    trans.UnitPrice = Math.round(site.AvgCost, 0);
+        //} else {
             trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
-        }
+        //}
 
         trans.TranAmt = trans.Qty * trans.UnitPrice;
         trans.ClassID = invt.ClassID;

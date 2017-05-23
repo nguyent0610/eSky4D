@@ -112,9 +112,9 @@ namespace IN10100.Controllers
             var lstUnit = _app.IN10100_pcUnitConversion(cpnyID).ToList();
             return this.Store(lstUnit);
         }
-        public ActionResult GetPrice(string invtID, string uom, DateTime effDate)
+        public ActionResult GetPrice(string invtID, string uom, DateTime effDate,string siteID,string valMthd)
         {
-            var lstPrice = _app.IN10100_pdPrice("", invtID, uom, DateTime.Now).ToList();
+            var lstPrice = _app.IN10100_pdPrice("", invtID, uom, DateTime.Now, valMthd,siteID).ToList();
             return this.Store(lstPrice);
         }
         public ActionResult GetUnit(string invtID)
@@ -1050,18 +1050,18 @@ namespace IN10100.Controllers
                                 newLot.UnitDesc = workSheet.Cells[i, 2].StringValue;
                                 newLot.UnitMultDiv = "M";
                                 newLot.WarrantyDate = DateTime.Now;
-                                if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
-                                {
-                                    var item = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == newLot.SiteID && p.InvtID== newLot.InvtID);
-                                    if (item != null)
-                                    {
-                                        newLot.UnitCost = newLot.UnitPrice = item.AvgCost;
-                                    }
-                                }
-                                else
-                                {
-                                    newLot.UnitCost = newLot.UnitPrice = _app.IN10100_pdPrice("", invtID, newLot.UnitDesc, newLot.TranDate).FirstOrDefault().Price.Value;
-                                }
+                                //if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
+                                //{
+                                //    var item = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == newLot.SiteID && p.InvtID== newLot.InvtID);
+                                //    if (item != null)
+                                //    {
+                                //        newLot.UnitCost = newLot.UnitPrice = item.AvgCost;
+                                //    }
+                                //}
+                                //else
+                                //{
+                                    newLot.UnitCost = newLot.UnitPrice = _app.IN10100_pdPrice("", invtID, newLot.UnitDesc, newLot.TranDate, objInvt.ValMthd, newLot.SiteID).FirstOrDefault().Price.Value;
+                                //}
 
                                 lstLot.Add(newLot);
                             }

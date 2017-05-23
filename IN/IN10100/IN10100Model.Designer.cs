@@ -394,7 +394,8 @@ namespace IN10100
         /// </summary>
         /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="status">No Metadata Documentation available.</param>
-        public ObjectResult<IN10100_pcHandle_Result> IN10100_pcHandle(Nullable<global::System.Int16> langID, global::System.String status)
+        /// <param name="userID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10100_pcHandle_Result> IN10100_pcHandle(Nullable<global::System.Int16> langID, global::System.String status, global::System.String userID)
         {
             ObjectParameter langIDParameter;
             if (langID.HasValue)
@@ -416,7 +417,17 @@ namespace IN10100
                 statusParameter = new ObjectParameter("Status", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<IN10100_pcHandle_Result>("IN10100_pcHandle", langIDParameter, statusParameter);
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10100_pcHandle_Result>("IN10100_pcHandle", langIDParameter, statusParameter, userIDParameter);
         }
     
         /// <summary>
@@ -485,58 +496,6 @@ namespace IN10100
             }
     
             return base.ExecuteFunction<IN10100_pcUnitConversion_Result>("IN10100_pcUnitConversion", cpnyIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="vendID">No Metadata Documentation available.</param>
-        /// <param name="invtID">No Metadata Documentation available.</param>
-        /// <param name="uOM">No Metadata Documentation available.</param>
-        /// <param name="effDate">No Metadata Documentation available.</param>
-        public ObjectResult<IN10100_pdPrice_Result> IN10100_pdPrice(global::System.String vendID, global::System.String invtID, global::System.String uOM, Nullable<global::System.DateTime> effDate)
-        {
-            ObjectParameter vendIDParameter;
-            if (vendID != null)
-            {
-                vendIDParameter = new ObjectParameter("VendID", vendID);
-            }
-            else
-            {
-                vendIDParameter = new ObjectParameter("VendID", typeof(global::System.String));
-            }
-    
-            ObjectParameter invtIDParameter;
-            if (invtID != null)
-            {
-                invtIDParameter = new ObjectParameter("InvtID", invtID);
-            }
-            else
-            {
-                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
-            }
-    
-            ObjectParameter uOMParameter;
-            if (uOM != null)
-            {
-                uOMParameter = new ObjectParameter("UOM", uOM);
-            }
-            else
-            {
-                uOMParameter = new ObjectParameter("UOM", typeof(global::System.String));
-            }
-    
-            ObjectParameter effDateParameter;
-            if (effDate.HasValue)
-            {
-                effDateParameter = new ObjectParameter("EffDate", effDate);
-            }
-            else
-            {
-                effDateParameter = new ObjectParameter("EffDate", typeof(global::System.DateTime));
-            }
-    
-            return base.ExecuteFunction<IN10100_pdPrice_Result>("IN10100_pdPrice", vendIDParameter, invtIDParameter, uOMParameter, effDateParameter);
         }
     
         /// <summary>
@@ -813,6 +772,80 @@ namespace IN10100
             }
     
             return base.ExecuteFunction<global::System.String>("IN10100_ppCheckCloseDate", branchIDParameter, dateParameter, screenNbrParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="vendID">No Metadata Documentation available.</param>
+        /// <param name="invtID">No Metadata Documentation available.</param>
+        /// <param name="uOM">No Metadata Documentation available.</param>
+        /// <param name="effDate">No Metadata Documentation available.</param>
+        /// <param name="valMthd">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10100_pdPrice_Result> IN10100_pdPrice(global::System.String vendID, global::System.String invtID, global::System.String uOM, Nullable<global::System.DateTime> effDate, global::System.String valMthd, global::System.String siteID)
+        {
+            ObjectParameter vendIDParameter;
+            if (vendID != null)
+            {
+                vendIDParameter = new ObjectParameter("VendID", vendID);
+            }
+            else
+            {
+                vendIDParameter = new ObjectParameter("VendID", typeof(global::System.String));
+            }
+    
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
+            }
+    
+            ObjectParameter uOMParameter;
+            if (uOM != null)
+            {
+                uOMParameter = new ObjectParameter("UOM", uOM);
+            }
+            else
+            {
+                uOMParameter = new ObjectParameter("UOM", typeof(global::System.String));
+            }
+    
+            ObjectParameter effDateParameter;
+            if (effDate.HasValue)
+            {
+                effDateParameter = new ObjectParameter("EffDate", effDate);
+            }
+            else
+            {
+                effDateParameter = new ObjectParameter("EffDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter valMthdParameter;
+            if (valMthd != null)
+            {
+                valMthdParameter = new ObjectParameter("ValMthd", valMthd);
+            }
+            else
+            {
+                valMthdParameter = new ObjectParameter("ValMthd", typeof(global::System.String));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10100_pdPrice_Result>("IN10100_pdPrice", vendIDParameter, invtIDParameter, uOMParameter, effDateParameter, valMthdParameter, siteIDParameter);
         }
 
         #endregion
@@ -7069,6 +7102,7 @@ namespace IN10100
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="batNbr">Initial value of the BatNbr property.</param>
         /// <param name="trnsfrDocNbr">Initial value of the TrnsfrDocNbr property.</param>
+        /// <param name="comment">Initial value of the Comment property.</param>
         /// <param name="expectedDate">Initial value of the ExpectedDate property.</param>
         /// <param name="noteID">Initial value of the NoteID property.</param>
         /// <param name="rcptDate">Initial value of the RcptDate property.</param>
@@ -7080,12 +7114,13 @@ namespace IN10100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static IN_Transfer CreateIN_Transfer(global::System.String branchID, global::System.String batNbr, global::System.String trnsfrDocNbr, global::System.DateTime expectedDate, global::System.Int32 noteID, global::System.DateTime rcptDate, global::System.DateTime tranDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static IN_Transfer CreateIN_Transfer(global::System.String branchID, global::System.String batNbr, global::System.String trnsfrDocNbr, global::System.String comment, global::System.DateTime expectedDate, global::System.Int32 noteID, global::System.DateTime rcptDate, global::System.DateTime tranDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             IN_Transfer iN_Transfer = new IN_Transfer();
             iN_Transfer.BranchID = branchID;
             iN_Transfer.BatNbr = batNbr;
             iN_Transfer.TrnsfrDocNbr = trnsfrDocNbr;
+            iN_Transfer.Comment = comment;
             iN_Transfer.ExpectedDate = expectedDate;
             iN_Transfer.NoteID = noteID;
             iN_Transfer.RcptDate = rcptDate;
@@ -7188,7 +7223,7 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Comment
         {
@@ -7200,7 +7235,7 @@ namespace IN10100
             {
                 OnCommentChanging(value);
                 ReportPropertyChanging("Comment");
-                _Comment = StructuralObject.SetValidValue(value, true);
+                _Comment = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Comment");
                 OnCommentChanged();
             }
