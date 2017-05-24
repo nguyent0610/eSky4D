@@ -2477,7 +2477,7 @@ var DiscDefintion = {
         btnHideTrigger_click: function (ctr) {
 
             ctr.clearValue();
-            ctr.clearFilter();
+           
         },
 
         slmDiscBreak_selectChange: function (grid, selected, eOpts) {

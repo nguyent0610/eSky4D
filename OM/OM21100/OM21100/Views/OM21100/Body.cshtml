@@ -53,7 +53,7 @@
                             .LoadData()
                             .Listeners(l =>
                             {
-                                l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                l.TriggerClick.Handler = "this.clearValue(); this.store.clearFilter();";//l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                 l.Change.Fn = "DiscDefintion.Event.cboDiscID_change";
                                 l.Blur.Fn = "DiscDefintion.Event.cboDiscID_change";
                                 l.Select.Fn = "DiscDefintion.Event.cboDiscID_select";
