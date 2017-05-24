@@ -44,6 +44,7 @@
                             .HQLangCode("DiscID").HQProcedure("OM21100_pcDiscountAll").HQColumnShow("DiscID,Descr")
                             .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
                             .AllowBlank(false).AllowOnlyWhitespace(false).MaxLength(10).EnforceMaxLength(true)
+                             .TriggerAction(TriggerAction.All)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
