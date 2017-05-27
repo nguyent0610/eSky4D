@@ -1,4 +1,4 @@
-//// Declare //////////////////////////////////////////////////////////
+﻿//// Declare //////////////////////////////////////////////////////////
 var keys = ['Territory', 'DiscID', 'DiscSeq'];
 var fieldsCheckRequire = ['Territory', 'DiscID', 'DiscSeq', 'StartDate', 'EndDate','Descr','Poster'];
 var fieldsLangCheckRequire = ['Territory', 'DiscID', 'DiscSeq', 'StartDate', 'EndDate', 'Descr', 'Poster'];
@@ -177,6 +177,12 @@ var checkInsertKey =  function (grd, e, keys) {
 };
 
 var grdOM_DiscountInfor_ValidateEdit = function (item, e) {
+    if (e.field == 'DiscID' || e.field == 'DiscSeq') {
+        if (!checkSpecialChar(e.value)) {
+            HQ.message.show(20140811, [HQ.grid.findColumnNameByIndex(App.grdOM_DiscountInfor.columns, e.field)], '', true);
+            return false;
+        }
+    }
     //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
     return checkValidateEdit(App.grdOM_DiscountInfor, e, keys);
 };
@@ -297,3 +303,20 @@ var btnDelete_Click = function (record) {
     if (record.data.Poster)
         record.set('Poster', '');
 };
+
+checkSpecialChar = function (value) {
+    var abortChars = ['!', '@', '#', '$', '%', '^', '&', '*', '.', ',', '?','*', '.'];
+    for (var i = 0; i < abortChars.length; i++) {
+        value = value.split(abortChars[i]).join('');
+    }
+
+    var regex = /^[a-zA-Z0-9_-]+$/; //var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/ 20160913: Cho phép nhập ký tự '-'
+    if (!HQ.util.passNull(value.toString()).match(regex))
+        return false;
+    for (var i = 0, n = value.length; i < n; i++) {
+        if (value.charCodeAt(i) > 127) {
+            return false;
+        }
+    }
+    return true;
+}

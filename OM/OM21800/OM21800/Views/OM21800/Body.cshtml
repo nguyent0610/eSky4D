@@ -97,10 +97,10 @@
                 , X.Column().Text(Util.GetLang("DescrClass")).DataIndex("DescrClass").Width(200).Hidden(true)
 				    .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
     
-                , X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDate").Width(150).Format("MM/dd/yyyy")
+                , X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDate").Width(100).Format("MM/dd/yyyy")
 				    .Editor(HQ.DateField().Format("MM/dd/yyyy"))
 
-                , X.DateColumn().Text(Util.GetLang("EndDate")).DataIndex("EndDate").Width(150).Format("MM/dd/yyyy")
+                , X.DateColumn().Text(Util.GetLang("EndDate")).DataIndex("EndDate").Width(100).Format("MM/dd/yyyy")
 				    .Editor(HQ.DateField().Format("MM/dd/yyyy"))
 
                 , X.Column().Text(Util.GetLang("Poster")).DataIndex("Poster").Width(200)
