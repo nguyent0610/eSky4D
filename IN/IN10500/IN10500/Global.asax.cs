@@ -38,7 +38,7 @@ namespace IN10500
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString(); ND_eSky4DSys eBiz4DCloudSysJFV
             Current.FormatDate = "MM-dd-yyyy";
             AccessRight acc = new AccessRight() ;
