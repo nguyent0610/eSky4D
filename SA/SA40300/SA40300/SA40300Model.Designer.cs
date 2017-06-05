@@ -68,6 +68,22 @@ namespace SA40300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<SYS_ReportParm> SYS_ReportParm
+        {
+            get
+            {
+                if ((_SYS_ReportParm == null))
+                {
+                    _SYS_ReportParm = base.CreateObjectSet<SYS_ReportParm>("SYS_ReportParm");
+                }
+                return _SYS_ReportParm;
+            }
+        }
+        private ObjectSet<SYS_ReportParm> _SYS_ReportParm;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<Server_MailAutoDetail> Server_MailAutoDetail
         {
             get
@@ -96,26 +112,18 @@ namespace SA40300
             }
         }
         private ObjectSet<Server_MailAutoHeader> _Server_MailAutoHeader;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<SYS_ReportParm> SYS_ReportParm
-        {
-            get
-            {
-                if ((_SYS_ReportParm == null))
-                {
-                    _SYS_ReportParm = base.CreateObjectSet<SYS_ReportParm>("SYS_ReportParm");
-                }
-                return _SYS_ReportParm;
-            }
-        }
-        private ObjectSet<SYS_ReportParm> _SYS_ReportParm;
 
         #endregion
 
         #region AddTo Methods
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SYS_ReportParm EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSYS_ReportParm(SYS_ReportParm sYS_ReportParm)
+        {
+            base.AddObject("SYS_ReportParm", sYS_ReportParm);
+        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the Server_MailAutoDetail EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -131,14 +139,6 @@ namespace SA40300
         public void AddToServer_MailAutoHeader(Server_MailAutoHeader server_MailAutoHeader)
         {
             base.AddObject("Server_MailAutoHeader", server_MailAutoHeader);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the SYS_ReportParm EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSYS_ReportParm(SYS_ReportParm sYS_ReportParm)
-        {
-            base.AddObject("SYS_ReportParm", sYS_ReportParm);
         }
 
         #endregion
@@ -181,7 +181,8 @@ namespace SA40300
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="langID">Initial value of the LangID property.</param>
-        public static Server_MailAutoDetail CreateServer_MailAutoDetail(global::System.String mailID, global::System.String reportID, global::System.String reportViewID, global::System.Int16 beforeDateParm00, global::System.Int16 beforeDateParm01, global::System.Int16 beforeDateParm02, global::System.Int16 beforeDateParm03, global::System.Int16 booleanParm00, global::System.Int16 booleanParm01, global::System.Int16 booleanParm02, global::System.Int16 booleanParm03, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Int16 langID)
+        /// <param name="storeName">Initial value of the StoreName property.</param>
+        public static Server_MailAutoDetail CreateServer_MailAutoDetail(global::System.String mailID, global::System.String reportID, global::System.String reportViewID, global::System.Int16 beforeDateParm00, global::System.Int16 beforeDateParm01, global::System.Int16 beforeDateParm02, global::System.Int16 beforeDateParm03, global::System.Int16 booleanParm00, global::System.Int16 booleanParm01, global::System.Int16 booleanParm02, global::System.Int16 booleanParm03, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Int16 langID, global::System.String storeName)
         {
             Server_MailAutoDetail server_MailAutoDetail = new Server_MailAutoDetail();
             server_MailAutoDetail.MailID = mailID;
@@ -203,6 +204,7 @@ namespace SA40300
             server_MailAutoDetail.LUpd_User = lUpd_User;
             server_MailAutoDetail.tstamp = tstamp;
             server_MailAutoDetail.LangID = langID;
+            server_MailAutoDetail.StoreName = storeName;
             return server_MailAutoDetail;
         }
 
@@ -914,6 +916,30 @@ namespace SA40300
         private global::System.String _CpnyID;
         partial void OnCpnyIDChanging(global::System.String value);
         partial void OnCpnyIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String StoreName
+        {
+            get
+            {
+                return _StoreName;
+            }
+            set
+            {
+                OnStoreNameChanging(value);
+                ReportPropertyChanging("StoreName");
+                _StoreName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("StoreName");
+                OnStoreNameChanged();
+            }
+        }
+        private global::System.String _StoreName;
+        partial void OnStoreNameChanging(global::System.String value);
+        partial void OnStoreNameChanged();
 
         #endregion
 
@@ -941,7 +967,9 @@ namespace SA40300
         /// <param name="isNotAttachFile">Initial value of the IsNotAttachFile property.</param>
         /// <param name="isNotDeleteFile">Initial value of the IsNotDeleteFile property.</param>
         /// <param name="fileName">Initial value of the FileName property.</param>
-        public static Server_MailAutoHeader CreateServer_MailAutoHeader(global::System.String mailID, global::System.String mailTo, global::System.Boolean active, global::System.DateTime dateTime, global::System.Byte[] tstamp, global::System.Boolean isNotAttachFile, global::System.Boolean isNotDeleteFile, global::System.String fileName)
+        /// <param name="isZipFile">Initial value of the IsZipFile property.</param>
+        /// <param name="useStore">Initial value of the UseStore property.</param>
+        public static Server_MailAutoHeader CreateServer_MailAutoHeader(global::System.String mailID, global::System.String mailTo, global::System.Boolean active, global::System.DateTime dateTime, global::System.Byte[] tstamp, global::System.Boolean isNotAttachFile, global::System.Boolean isNotDeleteFile, global::System.String fileName, global::System.Boolean isZipFile, global::System.Boolean useStore)
         {
             Server_MailAutoHeader server_MailAutoHeader = new Server_MailAutoHeader();
             server_MailAutoHeader.MailID = mailID;
@@ -952,6 +980,8 @@ namespace SA40300
             server_MailAutoHeader.IsNotAttachFile = isNotAttachFile;
             server_MailAutoHeader.IsNotDeleteFile = isNotDeleteFile;
             server_MailAutoHeader.FileName = fileName;
+            server_MailAutoHeader.IsZipFile = isZipFile;
+            server_MailAutoHeader.UseStore = useStore;
             return server_MailAutoHeader;
         }
 
@@ -1513,6 +1543,54 @@ namespace SA40300
         private global::System.String _FileName;
         partial void OnFileNameChanging(global::System.String value);
         partial void OnFileNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsZipFile
+        {
+            get
+            {
+                return _IsZipFile;
+            }
+            set
+            {
+                OnIsZipFileChanging(value);
+                ReportPropertyChanging("IsZipFile");
+                _IsZipFile = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsZipFile");
+                OnIsZipFileChanged();
+            }
+        }
+        private global::System.Boolean _IsZipFile;
+        partial void OnIsZipFileChanging(global::System.Boolean value);
+        partial void OnIsZipFileChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean UseStore
+        {
+            get
+            {
+                return _UseStore;
+            }
+            set
+            {
+                OnUseStoreChanging(value);
+                ReportPropertyChanging("UseStore");
+                _UseStore = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UseStore");
+                OnUseStoreChanged();
+            }
+        }
+        private global::System.Boolean _UseStore;
+        partial void OnUseStoreChanging(global::System.Boolean value);
+        partial void OnUseStoreChanged();
 
         #endregion
 
@@ -1541,7 +1619,8 @@ namespace SA40300
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SYS_ReportParm CreateSYS_ReportParm(global::System.String reportNbr, global::System.String reportFormat, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp)
+        /// <param name="isReadOnly">Initial value of the IsReadOnly property.</param>
+        public static SYS_ReportParm CreateSYS_ReportParm(global::System.String reportNbr, global::System.String reportFormat, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.Boolean isReadOnly)
         {
             SYS_ReportParm sYS_ReportParm = new SYS_ReportParm();
             sYS_ReportParm.ReportNbr = reportNbr;
@@ -1553,6 +1632,7 @@ namespace SA40300
             sYS_ReportParm.LUpd_User = lUpd_User;
             sYS_ReportParm.LUpd_DateTime = lUpd_DateTime;
             sYS_ReportParm.tstamp = tstamp;
+            sYS_ReportParm.IsReadOnly = isReadOnly;
             return sYS_ReportParm;
         }
 
@@ -2357,6 +2437,30 @@ namespace SA40300
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsReadOnly
+        {
+            get
+            {
+                return _IsReadOnly;
+            }
+            set
+            {
+                OnIsReadOnlyChanging(value);
+                ReportPropertyChanging("IsReadOnly");
+                _IsReadOnly = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsReadOnly");
+                OnIsReadOnlyChanged();
+            }
+        }
+        private global::System.Boolean _IsReadOnly;
+        partial void OnIsReadOnlyChanging(global::System.Boolean value);
+        partial void OnIsReadOnlyChanged();
 
         #endregion
 

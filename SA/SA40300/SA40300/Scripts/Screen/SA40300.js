@@ -1,1 +1,308 @@
-﻿var _0x7115 = ["\x52\x65\x70\x6F\x72\x74\x49\x44", "\x52\x65\x70\x6F\x72\x74\x56\x69\x65\x77\x49\x44", "\x4C\x61\x6E\x67\x49\x44", "\x42\x65\x66\x6F\x72\x65\x44\x61\x74\x65\x50\x61\x72\x6D\x30\x30", "\x42\x65\x66\x6F\x72\x65\x44\x61\x74\x65\x50\x61\x72\x6D\x30\x31", "\x42\x65\x66\x6F\x72\x65\x44\x61\x74\x65\x50\x61\x72\x6D\x30\x32", "\x42\x65\x66\x6F\x72\x65\x44\x61\x74\x65\x50\x61\x72\x6D\x30\x33", "\x66\x6F\x63\x75\x73", "\x68\x65\x61\x64\x65\x72", "\x63\x62\x6F\x4D\x61\x69\x6C\x49\x44", "\x69\x73\x43\x68\x61\x6E\x67\x65", "\x66\x69\x72\x73\x74", "\x63\x6F\x6D\x62\x6F", "\x67\x72\x64\x4D\x61\x69\x6C\x44\x65\x74\x61\x69\x6C", "\x67\x72\x69\x64", "\x6E\x65\x78\x74", "\x70\x72\x65\x76", "\x6C\x61\x73\x74", "", "\x72\x65\x66\x72\x65\x73\x68", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x72\x65\x6C\x6F\x61\x64", "\x73\x74\x6F\x4D\x61\x69\x6C\x48\x65\x61\x64\x65\x72", "\x6C\x6F\x61\x64", "\x67\x65\x74\x53\x74\x6F\x72\x65", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x69\x73\x4E\x65\x77", "\x73\x65\x74\x56\x61\x6C\x75\x65", "\x69\x6E\x73\x65\x72\x74", "\x6E\x65\x77", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x64\x65\x6C\x65\x74\x65\x52\x65\x63\x6F\x72\x64\x46\x6F\x72\x6D", "\x69\x6E\x64\x65\x78\x53\x65\x6C\x65\x63\x74", "\x64\x65\x6C\x65\x74\x65\x52\x65\x63\x6F\x72\x64\x47\x72\x69\x64", "\x64\x65\x6C\x65\x74\x65", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x63\x68\x65\x63\x6B\x52\x65\x71\x75\x69\x72\x65\x50\x61\x73\x73", "\x66\x6F\x72\x6D", "\x73\x74\x6F\x4D\x61\x69\x6C\x44\x65\x74\x61\x69\x6C", "\x73\x74\x6F\x72\x65", "\x73\x61\x76\x65", "\x70\x72\x69\x6E\x74", "\x63\x6C\x6F\x73\x65", "\x63\x6F\x6D\x6D\x6F\x6E", "\x75\x70\x64\x61\x74\x65\x52\x65\x63\x6F\x72\x64", "\x67\x65\x74\x46\x6F\x72\x6D", "\x53\x41\x34\x30\x33\x30\x30", "\x63\x68\x61\x6E\x67\x65\x44\x61\x74\x61", "\x73\x65\x74\x52\x65\x61\x64\x4F\x6E\x6C\x79", "\x63\x68\x65\x63\x6B\x42\x65\x66\x6F\x72\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x49\x6E\x73\x65\x72\x74\x4B\x65\x79", "\x63\x68\x65\x63\x6B\x56\x61\x6C\x69\x64\x61\x74\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x52\x65\x6A\x65\x63\x74", "\x69\x73\x46\x69\x72\x73\x74\x4C\x6F\x61\x64", "\x6C\x6F\x61\x64\x69\x6E\x67\x64\x61\x74\x61", "\x67\x65\x74\x4C\x61\x6E\x67", "\x73\x68\x6F\x77\x42\x75\x73\x79", "\x66\x6F\x72\x63\x65\x53\x65\x6C\x65\x63\x74\x69\x6F\x6E", "\x63\x62\x6F\x4D\x61\x69\x6C\x54\x6F", "\x63\x62\x6F\x4D\x61\x69\x6C\x43\x43", "\x6C\x65\x6E\x67\x74\x68", "\x64\x61\x74\x61", "\x4D\x61\x69\x6C\x49\x44", "\x69\x6E\x73\x65\x72\x74\x42\x6C\x61\x6E\x6B", "\x67\x65\x74\x41\x74", "\x44\x61\x74\x65\x54\x69\x6D\x65", "\x62\x75\x73\x73\x69\x6E\x65\x73\x73\x44\x61\x74\x65", "\x54\x69\x6D\x65", "\x62\x75\x73\x73\x69\x6E\x65\x73\x73\x54\x69\x6D\x65", "\x54\x79\x70\x65\x41\x75\x74\x6F", "\x4D", "\x73\x65\x74\x52\x65\x71\x75\x69\x72\x65", "\x63\x6F\x6D\x6D\x69\x74\x43\x68\x61\x6E\x67\x65\x73", "\x4D\x61\x69\x6C\x43\x43", "\x3B", "\x67", "\x2C", "\x72\x65\x70\x6C\x61\x63\x65", "\x4D\x61\x69\x6C\x54\x6F", "\x6C\x6F\x61\x64\x52\x65\x63\x6F\x72\x64", "\x67\x65\x74\x56\x61\x6C\x75\x65", "\x69\x73\x45\x6D\x70\x74\x79", "\x76\x61\x6C\x75\x65\x4D\x6F\x64\x65\x6C\x73", "\x6C\x6F\x61\x64\x69\x6E\x67", "\x63\x68\x6B\x49\x73\x44\x65\x6C\x65\x74\x65\x46\x69\x6C\x65", "\x64\x69\x73\x61\x62\x6C\x65", "\x65\x6E\x61\x62\x6C\x65", "\x73\x65\x74", "\x69\x74\x65\x6D\x73", "\x73\x65\x6C\x65\x63\x74\x65\x64", "\x73\x6C\x6D\x4D\x61\x69\x6C\x44\x65\x74\x61\x69\x6C", "\x63\x62\x6F\x52\x65\x70\x6F\x72\x74\x56\x69\x65\x77\x49\x44", "\x69\x73\x56\x61\x6C\x69\x64", "\x53\x75\x62\x6D\x69\x74\x69\x6E\x67\x2E\x2E\x2E", "\x53\x41\x34\x30\x33\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x43\x68\x61\x6E\x67\x65\x64\x44\x61\x74\x61", "\x65\x6E\x63\x6F\x64\x65", "\x6D\x61\x69\x6C\x49\x64", "\x72\x65\x73\x75\x6C\x74", "\x6D\x73\x67\x43\x6F\x64\x65", "\x66\x69\x65\x6C\x64\x4C\x61\x62\x65\x6C", "\x6D\x73\x67\x50\x61\x72\x61\x6D", "\x70\x72\x6F\x63\x65\x73\x73", "\x73\x75\x62\x6D\x69\x74", "\x79\x65\x73", "\x44\x65\x6C\x65\x74\x69\x6E\x67\x44\x61\x74\x61", "\x53\x41\x34\x30\x33\x30\x30\x2F\x44\x65\x6C\x65\x74\x65", "\x64\x65\x6C\x65\x74\x65\x53\x65\x6C\x65\x63\x74\x65\x64"]; var focusrecord = 0; var keys = [_0x7115[0], _0x7115[1]]; var fieldsCheckRequire = [_0x7115[0], _0x7115[1], _0x7115[2], _0x7115[3], _0x7115[4], _0x7115[5], _0x7115[6]]; var fieldsLangCheckRequire = [_0x7115[0], _0x7115[1], _0x7115[2], _0x7115[3], _0x7115[4], _0x7115[5], _0x7115[6]]; var menuClick = function (_0x4d49x6) { switch (_0x4d49x6) { case _0x7115[11]: if (HQ[_0x7115[7]] == _0x7115[8]) { HQ[_0x7115[12]][_0x7115[11]](App[_0x7115[9]], HQ[_0x7115[10]]) } else { if (HQ[_0x7115[7]] == _0x7115[13]) { HQ[_0x7115[14]][_0x7115[11]](App[_0x7115[13]]) } }; break;; case _0x7115[15]: if (HQ[_0x7115[7]] == _0x7115[8]) { HQ[_0x7115[12]][_0x7115[15]](App[_0x7115[9]], HQ[_0x7115[10]]) } else { if (HQ[_0x7115[7]] == _0x7115[13]) { HQ[_0x7115[14]][_0x7115[15]](App[_0x7115[13]]) } }; break;; case _0x7115[16]: if (HQ[_0x7115[7]] == _0x7115[8]) { HQ[_0x7115[12]][_0x7115[16]](App[_0x7115[9]], HQ[_0x7115[10]]) } else { if (HQ[_0x7115[7]] == _0x7115[13]) { HQ[_0x7115[14]][_0x7115[16]](App[_0x7115[13]]) } }; break;; case _0x7115[17]: if (HQ[_0x7115[7]] == _0x7115[8]) { HQ[_0x7115[12]][_0x7115[17]](App[_0x7115[9]], HQ[_0x7115[10]]) } else { if (HQ[_0x7115[7]] == _0x7115[13]) { HQ[_0x7115[14]][_0x7115[17]](App[_0x7115[13]]) } }; break;; case _0x7115[19]: if (HQ[_0x7115[10]]) { HQ[_0x7115[21]][_0x7115[20]](20150303, _0x7115[18], _0x7115[19]) } else { HQ[_0x7115[10]] = false; App[_0x7115[9]][_0x7115[25]]()[_0x7115[24]](function () { App[_0x7115[23]][_0x7115[22]]() }); }; break;; case _0x7115[30]: if (HQ[_0x7115[26]]) { if (HQ[_0x7115[7]] == _0x7115[8]) { if (HQ[_0x7115[10]]) { HQ[_0x7115[21]][_0x7115[20]](150, _0x7115[18], _0x7115[18]) } else { HQ[_0x7115[27]] = true; App[_0x7115[9]][_0x7115[28]](_0x7115[18]); cboMailID_Change(App[_0x7115[9]]); } } else { if (HQ[_0x7115[7]] == _0x7115[13]) { HQ[_0x7115[14]][_0x7115[29]](App[_0x7115[13]], keys) } } }; break;; case _0x7115[35]: if (HQ[_0x7115[31]]) { if (HQ[_0x7115[7]] == _0x7115[8]) { HQ[_0x7115[21]][_0x7115[20]](11, _0x7115[18], _0x7115[32]) } else { if (HQ[_0x7115[7]] == _0x7115[13]) { var _0x4d49x7 = HQ[_0x7115[14]][_0x7115[33]](App[_0x7115[13]]); if (_0x4d49x7 != _0x7115[18]) { HQ[_0x7115[21]][_0x7115[20]](2015020807, [HQ[_0x7115[14]][_0x7115[33]](App[_0x7115[13]]), _0x7115[18]], _0x7115[34], true) }; } } }; break;; case _0x7115[42]: if (HQ[_0x7115[36]] || HQ[_0x7115[26]] || HQ[_0x7115[31]]) { if (HQ[_0x7115[39]][_0x7115[38]](App[_0x7115[37]]) && HQ[_0x7115[41]][_0x7115[38]](App[_0x7115[40]], keys, fieldsCheckRequire, fieldsLangCheckRequire)) { save() } }; break;; case _0x7115[43]: break;; case _0x7115[44]: HQ[_0x7115[45]][_0x7115[44]](this); break;; } }; var firstLoad = function () { App[_0x7115[23]][_0x7115[22]]() }; var frmChange = function () { App[_0x7115[37]][_0x7115[47]]()[_0x7115[46]](); HQ[_0x7115[10]] = HQ[_0x7115[41]][_0x7115[10]](App[_0x7115[23]]) == false ? HQ[_0x7115[41]][_0x7115[10]](App[_0x7115[40]]) : true; HQ[_0x7115[45]][_0x7115[49]](HQ[_0x7115[10]], _0x7115[48]); App[_0x7115[9]][_0x7115[50]](HQ[_0x7115[10]]); }; var grdMailDetail_BeforeEdit = function (_0x4d49xb, _0x4d49xc) { return HQ[_0x7115[14]][_0x7115[51]](_0x4d49xc, keys) }; var grdMailDetail_Edit = function (_0x4d49xe, _0x4d49xc) { HQ[_0x7115[14]][_0x7115[52]](App[_0x7115[13]], _0x4d49xc, keys); frmChange(); }; var grdMailDetail_ValidateEdit = function (_0x4d49xe, _0x4d49xc) { return HQ[_0x7115[14]][_0x7115[53]](App[_0x7115[13]], _0x4d49xc, keys) }; var grdMailDetail_Reject = function (_0x4d49x11) { HQ[_0x7115[14]][_0x7115[54]](_0x4d49x11, App[_0x7115[13]]); frmChange(); }; var loadDataAutoHeader = function (_0x4d49x13) { HQ[_0x7115[55]] = true; HQ[_0x7115[45]][_0x7115[58]](true, HQ[_0x7115[45]][_0x7115[57]](_0x7115[56])); HQ[_0x7115[27]] = false; App[_0x7115[60]][_0x7115[59]] = false; App[_0x7115[61]][_0x7115[59]] = false; if (_0x4d49x13[_0x7115[63]][_0x7115[62]] == 0) { HQ[_0x7115[41]][_0x7115[65]](_0x4d49x13, _0x7115[64]); _0x4d49x11 = _0x4d49x13[_0x7115[66]](0); _0x4d49x11[_0x7115[63]][_0x7115[67]] = HQ[_0x7115[68]];;; _0x4d49x11[_0x7115[63]][_0x7115[69]] = HQ[_0x7115[70]]; _0x4d49x11[_0x7115[63]][_0x7115[71]] = _0x7115[72]; HQ[_0x7115[27]] = true; HQ[_0x7115[45]][_0x7115[73]](App[_0x7115[37]]); _0x4d49x13[_0x7115[74]](); }; var _0x4d49x11 = _0x4d49x13[_0x7115[66]](0); _0x4d49x11[_0x7115[63]][_0x7115[75]] = _0x4d49x11[_0x7115[63]][_0x7115[75]][_0x7115[79]](new RegExp(_0x7115[76], _0x7115[77]), _0x7115[78]); _0x4d49x11[_0x7115[63]][_0x7115[80]] = _0x4d49x11[_0x7115[63]][_0x7115[80]][_0x7115[79]](new RegExp(_0x7115[76], _0x7115[77]), _0x7115[78]); App[_0x7115[37]][_0x7115[47]]()[_0x7115[81]](_0x4d49x11); App[_0x7115[40]][_0x7115[22]](); if (Ext[_0x7115[83]](App[_0x7115[9]][_0x7115[82]]())) { App[_0x7115[9]][_0x7115[7]](true) }; }; var loadDataAutoDetail = function (_0x4d49x13) { if (HQ[_0x7115[55]]) { if (HQ[_0x7115[26]]) { HQ[_0x7115[41]][_0x7115[65]](_0x4d49x13, keys) }; HQ[_0x7115[55]] = false; }; frmChange(); HQ[_0x7115[45]][_0x7115[58]](false); }; var cboMailID_Change = function (_0x4d49x16, _0x4d49x17, _0x4d49x18) { if ((!HQ[_0x7115[27]] || _0x4d49x16[_0x7115[84]] != null) && !App[_0x7115[23]][_0x7115[85]]) { App[_0x7115[23]][_0x7115[22]]() } }; var cboMailID_Select = function (_0x4d49x16) { if (_0x4d49x16[_0x7115[84]] != null && !App[_0x7115[23]][_0x7115[85]]) { App[_0x7115[23]][_0x7115[22]]() } }; var chkIsAttachFile_Change = function (_0x4d49x16, _0x4d49xc) { if (_0x4d49xc) { App[_0x7115[86]][_0x7115[28]](true); App[_0x7115[86]][_0x7115[87]](); } else { App[_0x7115[86]][_0x7115[88]]() } }; var cboReportID_Change = function (_0x4d49x16, _0x4d49xc) { App[_0x7115[92]][_0x7115[91]][_0x7115[90]][0][_0x7115[89]](_0x7115[1], _0x7115[18]); App[_0x7115[93]][_0x7115[25]]()[_0x7115[24]](); }; function save() { App[_0x7115[37]][_0x7115[47]]()[_0x7115[46]](); if (App[_0x7115[37]][_0x7115[94]]()) { App[_0x7115[37]][_0x7115[105]]({ timeout: 1800000, waitMsg: _0x7115[95], url: _0x7115[96], params: { lstheader: Ext[_0x7115[98]](App[_0x7115[23]][_0x7115[97]]({ skipIdForPhantomRecords: false })), lstgrd: Ext[_0x7115[98]](App[_0x7115[40]][_0x7115[97]]({ skipIdForPhantomRecords: false })), isNew: HQ[_0x7115[27]] }, success: function (_0x4d49x1d, _0x4d49x1e) { HQ[_0x7115[21]][_0x7115[20]](201405071, _0x7115[18], _0x7115[18]); var _0x4d49x1f = _0x4d49x1e[_0x7115[100]][_0x7115[99]]; App[_0x7115[9]][_0x7115[25]]()[_0x7115[24]](function () { App[_0x7115[9]][_0x7115[28]](_0x4d49x1f); App[_0x7115[23]][_0x7115[22]](); }); }, failure: function (_0x4d49x20, _0x4d49x1e) { if (_0x4d49x1e[_0x7115[100]][_0x7115[101]]) { if (_0x4d49x1e[_0x7115[100]][_0x7115[101]] == 2000) { HQ[_0x7115[21]][_0x7115[20]](_0x4d49x1e[_0x7115[100]][_0x7115[101]], [App[_0x7115[9]][_0x7115[102]], App[_0x7115[9]][_0x7115[82]]()], _0x7115[18], true) } else { HQ[_0x7115[21]][_0x7115[20]](_0x4d49x1e[_0x7115[100]][_0x7115[101]], _0x4d49x1e[_0x7115[100]][_0x7115[103]], _0x7115[18]) } } else { HQ[_0x7115[21]][_0x7115[104]](_0x4d49x20, _0x4d49x1e, true) } } }) }; } var deleteRecordForm = function (_0x4d49xe) { if (_0x4d49xe == _0x7115[106]) { App[_0x7115[37]][_0x7115[105]]({ clientValidation: false, timeout: 1800000, waitMsg: HQ[_0x7115[45]][_0x7115[57]](_0x7115[107]), url: _0x7115[108], params: { mailId: App[_0x7115[9]][_0x7115[82]]() }, success: function (_0x4d49x22, _0x4d49x1e) { App[_0x7115[9]][_0x7115[28]](_0x7115[18]); App[_0x7115[9]][_0x7115[25]]()[_0x7115[24]](function () { cboMailID_Change(App[_0x7115[9]]) }); }, failure: function (_0x4d49x22, _0x4d49x1e) { if (_0x4d49x1e[_0x7115[100]][_0x7115[101]]) { HQ[_0x7115[21]][_0x7115[20]](_0x4d49x1e[_0x7115[100]][_0x7115[101]], _0x4d49x1e[_0x7115[100]][_0x7115[103]], _0x7115[18]) } } }) } }; var deleteRecordGrid = function (_0x4d49xe) { if (_0x4d49xe == _0x7115[106]) { App[_0x7115[13]][_0x7115[109]](); frmChange(); } }; function refresh(_0x4d49xe) { if (_0x4d49xe == _0x7115[106]) { HQ[_0x7115[10]] = false; App[_0x7115[9]][_0x7115[25]]()[_0x7115[24]](function () { App[_0x7115[23]][_0x7115[22]]() }); } }
+﻿////Declare//////////////////////////////////////////////////////////
+var focusrecord = 0;//biến tạm focusrecord để biết đang focus vào form hay Grid để xác định các xử lý các nút phía trên
+//khai bao dung cho kiem tra tren grid, co nhieu luoi thi dat ten theo luoi
+var keys = ['ReportID', 'ReportViewID'];
+var fieldsCheckRequire = ["ReportID", "ReportViewID", "LangID", "BeforeDateParm00", "BeforeDateParm01", "BeforeDateParm02", "BeforeDateParm03"];
+var fieldsLangCheckRequire = ["ReportID", "ReportViewID", "LangID", "BeforeDateParm00", "BeforeDateParm01", "BeforeDateParm02", "BeforeDateParm03"];
+
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+// Load and show binding data to the form
+// Command of the topbar on screen
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            if (HQ.focus == 'header') {
+                HQ.combo.first(App.cboMailID, HQ.isChange);
+            } else if (HQ.focus == 'grdMailDetail') {
+                HQ.grid.first(App.grdMailDetail);
+            }
+            break;
+        case "next":
+            if (HQ.focus == 'header') {
+                HQ.combo.next(App.cboMailID, HQ.isChange);
+            } else if (HQ.focus == 'grdMailDetail') {
+                HQ.grid.next(App.grdMailDetail);
+            }
+            break;
+        case "prev":
+            if (HQ.focus == 'header') {
+                HQ.combo.prev(App.cboMailID, HQ.isChange);
+            } else if (HQ.focus == 'grdMailDetail') {
+                HQ.grid.prev(App.grdMailDetail);
+            }
+            break;
+        
+        case "last":
+            if (HQ.focus == 'header') {
+                HQ.combo.last(App.cboMailID, HQ.isChange);
+            } else if (HQ.focus == 'grdMailDetail') {
+                HQ.grid.last(App.grdMailDetail);
+            }
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                App.cboMailID.getStore().load(function () { App.stoMailHeader.reload(); });
+                
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (HQ.focus == 'header') {
+                    if (HQ.isChange) {
+                        HQ.message.show(150, '', '');
+                    }
+                    else {
+                        HQ.isNew = true;
+                        App.cboMailID.setValue('');
+                        cboMailID_Change(App.cboMailID);
+                    }
+                } else if (HQ.focus == 'grdMailDetail') {
+                    HQ.grid.insert(App.grdMailDetail,keys);
+                }
+            }
+            break;
+        case "delete":         
+            if (HQ.isDelete) {
+                if (HQ.focus == 'header') {
+                    HQ.message.show(11, '', 'deleteRecordForm');
+                } else if (HQ.focus == 'grdMailDetail') {
+                    var rowindex = HQ.grid.indexSelect(App.grdMailDetail);
+                    if(rowindex!='')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdMailDetail),''], 'deleteRecordGrid',true)
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                //checkRequire để kiếm tra các field yêu cầu có rỗng hay ko
+                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoMailDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    var flat = null;
+                    var checkExistStore = App.chkIsUseStore.getValue();
+                    App.stoMailDetail.data.each(function (item) {
+                        if (!Ext.isEmpty(item.data.ReportID) && !Ext.isEmpty(item.data.ReportViewID)) {
+
+                            if (item.data.StoreName == '') {
+                                if (checkExistStore) {
+                                    var index = HQ.grid.findColumnIndex(App.grdMailDetail.columns, 'StoreName');
+                                    HQ.message.show(1111, ['', App.grdMailDetail.columns[index].text], '', true);
+                                    flat = item;
+                                    return false;
+                                }
+                            } else {
+                                if (!checkSpecialChar(item.data.StoreName)) {
+                                    HQ.message.show(2017060501, [''], '', true);
+                                    flat = item;
+                                    return false;
+                                }
+                            }
+                        }                        
+                    });
+                    if (!Ext.isEmpty(flat)) {
+                        App.slmMailDetail.select(App.stoMailDetail.indexOf(flat));
+                        return false;
+                    }
+                    save();
+                }
+            }
+            break;
+        case "print":           
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+
+};
+
+//load lần đầu khi mở
+var firstLoad = function () {
+    App.stoMailHeader.reload();
+};
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = HQ.store.isChange(App.stoMailHeader) == false ? HQ.store.isChange(App.stoMailDetail) : true;
+    HQ.common.changeData(HQ.isChange, 'SA40300');//co thay doi du lieu gan * tren tab title header
+    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+    App.cboMailID.setReadOnly(HQ.isChange);
+};
+
+//xu li su kiem tren luoi giong nhu luoi binh thuong
+var grdMailDetail_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdMailDetail_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdMailDetail, e, keys);
+    frmChange();
+};
+var grdMailDetail_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdMailDetail, e, keys);
+};
+var grdMailDetail_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdMailDetail);
+    frmChange();
+};
+
+//hàm này chạy sau khi store của form trong Controller vừa chạy xong đã load dữ liệu vào store của form
+var loadDataAutoHeader = function (sto) {
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+    HQ.isNew = false;
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "MailID");
+        record = sto.getAt(0);
+        //gan du lieu mac dinh ban dau
+        record.data.DateTime = HQ.bussinessDate;;
+        record.data.Time = HQ.bussinessTime;
+        
+        record.data.TypeAuto = 'M';
+        HQ.isNew = true;//record la new    
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require                       
+        sto.commitChanges();
+    }
+    var record = sto.getAt(0);
+    record.data.MailCC = record.data.MailCC.replace(new RegExp(';', 'g'), ',');//cat dua ve du lieu dau , de set su thay doi
+    record.data.MailTo = record.data.MailTo.replace(new RegExp(';', 'g'), ',');//cat dua ve du lieu dau , de set su thay doi
+    //sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
+    //record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    App.stoMailDetail.reload();
+    if (Ext.isEmpty(App.cboMailID.getValue()))
+        App.cboMailID.focus(true);//focus ma khi tao moi
+};
+var loadDataAutoDetail = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+    frmChange();
+    HQ.common.showBusy(false);
+};
+var cboMailID_Change = function (sender, newValue, oldValue) {
+    if ((!HQ.isNew || sender.valueModels != null) && !App.stoMailHeader.loading ) {
+        App.stoMailHeader.reload();
+    }
+   
+};
+var cboMailID_Select = function (sender) {  
+    if (sender.valueModels != null && !App.stoMailHeader.loading) {
+        App.stoMailHeader.reload();
+    }
+};
+var chkIsAttachFile_Change = function (sender, e) { 
+    if (e) {
+        App.chkIsDeleteFile.setValue(true);
+        App.chkIsDeleteFile.disable();
+    }
+    else {
+        App.chkIsDeleteFile.enable();
+    }
+}
+
+var chkIsUseStore_Change = function (sender, e) {
+    App.txtTemplateFile.allowBlank = App.chkIsUseStore.getValue();
+    App.txtTemplateFile.validate();
+}
+var cboReportID_Change = function (sender, e) {
+    App.slmMailDetail.selected.items[0].set('ReportViewID', '');
+    App.cboReportViewID.getStore().load();
+}
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+// Submit the changed data (created, updated) into server side
+function save() {
+    //dòng này để bắt các thay đổi của form 
+    App.frmMain.getForm().updateRecord();
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: 'Submiting...',
+            url: 'SA40300/Save',
+            params: {
+                lstheader: Ext.encode(App.stoMailHeader.getChangedData({ skipIdForPhantomRecords: false })),//,
+                lstgrd: Ext.encode(App.stoMailDetail.getChangedData({ skipIdForPhantomRecords: false })),
+                isNew: HQ.isNew
+
+            },
+            success: function (result, data) {
+                HQ.message.show(201405071, '', '');
+                var mailId = data.result.mailId;
+                App.cboMailID.getStore().load(function () {
+                    App.cboMailID.setValue(mailId);
+                    App.stoMailHeader.reload();
+                });                                         
+            }
+            , failure: function (errorMsg, data) {
+                if (data.result.msgCode) {
+                    if (data.result.msgCode == 2000)//loi trung key ko the add
+                        HQ.message.show(data.result.msgCode, [App.cboMailID.fieldLabel, App.cboMailID.getValue()], '', true);
+                    else HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+            }
+        });
+    }
+}
+// Xac nhan xoa record tren grid
+var deleteRecordForm = function (item) {
+    if (item == 'yes') {
+        App.frmMain.submit({
+            clientValidation: false,
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang('DeletingData'),
+            url: 'SA40300/Delete',
+            params: {
+                mailId: App.cboMailID.getValue()
+            },
+            success: function (action, data) {
+                App.cboMailID.setValue("");
+                App.cboMailID.getStore().load(function () { cboMailID_Change(App.cboMailID); });
+
+            },
+
+            failure: function (action, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                }
+            }
+        });
+    }
+};
+var deleteRecordGrid = function (item) {
+    if (item == "yes") {
+        App.grdMailDetail.deleteSelected();
+        frmChange();
+    }
+};
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        App.cboMailID.getStore().load(function () { App.stoMailHeader.reload(); });
+        
+    }
+};
+
+var checkSpecialChar = function (value) {
+    var regex = /^[a-zA-Z0-9_]+$/; //var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/ 20160913: Cho phép nhập ký tự '-'
+    if (!HQ.util.passNull(value.toString()).match(regex))
+        return false;
+    for (var i = 0, n = value.length; i < n; i++) {
+        if (value.charCodeAt(i) > 127) {
+            return false;
+        }
+    }
+    return true;
+}
+///////////////////////////////////

@@ -20,7 +20,6 @@ namespace SA40300.Controllers
         string screenNbr = "SA40300";
         SA40300Entities _db = Util.CreateObjectContext<SA40300Entities>(true);
 
-
         public ActionResult Index()
         {
             ViewBag.BussinessDate = DateTime.Now.ToDateShort();
@@ -40,8 +39,10 @@ namespace SA40300.Controllers
             ViewBag.BussinessDate = DateTime.Now.ToDateShort();
             ViewBag.BussinessTime = DateTime.Now;
             var obj=_db.Server_MailAutoHeader.FirstOrDefault(p => p.MailID == mailID);
-            if(obj!=null)
-            obj.PassUnZip=obj.PassUnZip.ToString().PassNull()==""?"":Encryption.Decrypt(obj.PassUnZip.ToString(), "1210Hq10s081f359t");
+            if (obj != null)
+            {
+                obj.PassUnZip = obj.PassUnZip.ToString().PassNull() == "" ? "" : Encryption.Decrypt(obj.PassUnZip.ToString(), "1210Hq10s081f359t");
+            }
             return this.Store(obj);
         }
         public ActionResult GetMailDetail(string mailID)
@@ -88,7 +89,6 @@ namespace SA40300.Controllers
                             record.tstamp = new byte[0];
                             UpdatingServer_MailAutoDetail(created, ref record);
                             _db.Server_MailAutoDetail.AddObject(record);
-
 
                         }
                         else
@@ -204,6 +204,8 @@ namespace SA40300.Controllers
             d.ListParm02 = s.ListParm02;
             d.ListParm03 = s.ListParm03;
 
+            d.StoreName = s.StoreName;
+
             d.LUpd_Datetime = DateTime.Now;
             d.LUpd_Prog = screenNbr;
             d.LUpd_User = Current.UserName;
@@ -229,7 +231,9 @@ namespace SA40300.Controllers
             d.Body = s.Body;
             d.PassUnZip = s.PassUnZip.PassNull().Trim()==string.Empty?"": Encryption.Encrypt(s.PassUnZip, "1210Hq10s081f359t"); ;
             d.FileName = s.FileName;
-                 
+            d.IsZipFile = s.IsZipFile;
+            d.UseStore = s.UseStore;
+
             d.LUpd_Datetime = DateTime.Now;
             d.LUpd_Prog = screenNbr;
             d.LUpd_User = Current.UserName;

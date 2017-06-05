@@ -53,12 +53,15 @@
                             lst.Select.Fn = "cboMailID_Select";
                         })
 
+                    , HQ.Checkbox().ID("chkIsUseStore").Name("chkIsUseStore").HQLangCode("SA40300UseStore")
+                        .MarginSpec("0 0 0 5").DataIndex("UseStore").MarginSpec("5 10 0 105").Width(165)
+                    .Listeners(lst =>
+                    {
+                        lst.Change.Fn = "chkIsUseStore_Change";
+                    })
+               
                     , HQ.Checkbox().ID("chkActive").Name("chkActive").HQLangCode("ACTIVE")
-                    .DataIndex("Active").MarginSpec("5 10 0 105").Width(165)
-
-                    , HQ.TextBox().ID("txtHeader").Name("txtHeader").HQLangCode("HEADERMAIL").DataIndex("Header")
-                    .Width(400).MarginSpec("5 0 0 0")
-
+                    .DataIndex("Active").MarginSpec("5 10 0 105")
                 )
 
                 , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")
@@ -72,8 +75,6 @@
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Expand.Handler = "HQ.combo.expand(this,';');";
-                                    lst.Focus.Handler = "this.forceSelection = true;";
-
                                 })
                       , HQ.Combo().ID("cboType").Name("cboType").HQLangCode("SA40300TYPE").HQProcedure("SA40300_pcType")
                             .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("TypeAuto")
@@ -84,9 +85,16 @@
                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                 })
                             .LoadData()
-
-                    , HQ.TextBox().ID("txtBody").Name("txtBody").HQLangCode("BODYMAIL").DataIndex("Body")
-                    .Width(400).MarginSpec("5 0 0 0")
+                   
+                    , HQ.Checkbox().ID("chkIsAttachFile").Name("chkIsAttachFile").HQLangCode("NotAttachFile")
+                    .MarginSpec("0 0 0 5").DataIndex("IsNotAttachFile").MarginSpec("5 10 0 105")
+                    .Listeners(lst =>
+                    {
+                        lst.Change.Fn = "chkIsAttachFile_Change";
+                    })
+                    
+                    , HQ.Checkbox().ID("chkIsDeleteFile").Name("chkIsDeleteFile").HQLangCode("NotDeleteFile")
+                    .MarginSpec("0 0 0 5").DataIndex("IsNotDeleteFile").MarginSpec("5 10 0 10")
 
                 )
 
@@ -101,16 +109,17 @@
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Expand.Handler = "HQ.combo.expand(this,';');";
-                                    lst.Focus.Handler = "this.forceSelection = true;";
                                 })
 
                     , HQ.DateField().ID("dtmDateTime").Name("dtmDateTime").HQLangCode("DATE").DataIndex("DateTime")
                         .Width(200).MarginSpec("5 0 0 0").AllowBlank(false)
                     , X.TimeField().ID("dtmTime").Name("dtmTime").DataIndex("Time")
                         .Width(80).MarginSpec("5 0 0 0").AllowBlank(false)
-                    , HQ.TextBox().ID("txtPass").Name("txtPass").HQLangCode("PassUnZip").DataIndex("PassUnZip")
-                        .Width(400).MarginSpec("5 0 0 0").InputType(Ext.Net.InputType.Password)
-                        .MaxLength(100).EnforceMaxLength(true)
+
+                    , HQ.TextBox().ID("txtHeader").Name("txtHeader").HQLangCode("HEADERMAIL").DataIndex("Header")
+                        .Width(400).MarginSpec("5 0 0 0")
+                        
+                   
 
 
                 )
@@ -119,8 +128,8 @@
                      HQ.TextBox().ID("txtMailSubject").Name("txtMailSubject").HQLangCode("MAILSUBJECT").DataIndex("Subject")
                     .Width(580).MarginSpec("5 0 0 0").AllowBlank(false)
 
-                    , HQ.TextBox().ID("txtNameFile").Name("txtNameFile").HQLangCode("NameFile").DataIndex("FileName")
-                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
+                       , HQ.TextBox().ID("txtBody").Name("txtBody").HQLangCode("BODYMAIL").DataIndex("Body")
+                        .Width(400).MarginSpec("5 0 0 0") 
 
                 )
 
@@ -130,14 +139,10 @@
                      HQ.TextBox().ID("txtTemplateFile").Name("txtTemplateFile").HQLangCode("TEMPLATEFILE").DataIndex("TemplateFile")
                     .Width(580).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(250).EnforceMaxLength(true)
 
-                    , HQ.Checkbox().ID("chkIsAttachFile").Name("chkIsAttachFile").HQLangCode("NotAttachFile")
-                    .MarginSpec("0 0 0 5").DataIndex("IsNotAttachFile").MarginSpec("5 10 0 105")
-                    .Listeners(lst =>
-                        {
-
-                            lst.Change.Fn = "chkIsAttachFile_Change";
-                        })
-
+                    , HQ.TextBox().ID("txtPass").Name("txtPass").HQLangCode("PassUnZip").DataIndex("PassUnZip")
+                    .Width(400).MarginSpec("5 0 0 0").InputType(Ext.Net.InputType.Password)
+                    .MaxLength(100).EnforceMaxLength(true)
+                            
                 )
 
                 , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")
@@ -145,8 +150,8 @@
                      HQ.TextBox().ID("txtExportFolder").Name("txtExportFolder").HQLangCode("EXPORTFOLDER").DataIndex("ExportFolder")
                     .Width(580).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(250).EnforceMaxLength(true)
 
-                    , HQ.Checkbox().ID("chkIsDeleteFile").Name("chkIsDeleteFile").HQLangCode("NotDeleteFile")
-                    .MarginSpec("0 0 0 5").DataIndex("IsNotDeleteFile").MarginSpec("5 10 0 105")
+                    , HQ.TextBox().ID("txtNameFile").Name("txtNameFile").HQLangCode("NameFile").DataIndex("FileName")
+                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
 
                 )
             )//end header
@@ -216,6 +221,8 @@
                                 })
                         .LoadData()
                         )
+                , Html.X().Column().Text(Util.GetLang("SA40300StoreName")).DataIndex("StoreName").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)) 
                 , Html.X().Column().Text(Util.GetLang("LoggedCpnyID")).DataIndex("LoggedCpnyID").Width(150)
                     .Editor(Html.X().TextField())
 
@@ -223,7 +230,7 @@
                     .Editor(Html.X().TextField())
 
                 , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("LangID")).DataIndex("LangID").Width(150).Align(Alignment.Right)
-                    .Editor(Html.X().NumberField().ID("nblang").DecimalPrecision(2))
+                    .Editor(Html.X().NumberField().ID("nblang").DecimalPrecision(0).MaxValue(Int16.MaxValue).MinValue(0))
 
                 , Html.X().Column().Text(Util.GetLang("StringParm00")).DataIndex("StringParm00").Width(150)
                     .Editor(Html.X().TextField().MaxLength(1000).EnforceMaxLength(true))
@@ -267,7 +274,7 @@
                 , Html.X().Column().Text(Util.GetLang("ListParm03")).DataIndex("ListParm03").Width(150)
                     .Editor(Html.X().TextField())
 
-                , Html.X().CommandColumn().Width(150)
+                , Html.X().CommandColumn().Width(125)
                     .Commands(
                         Html.X().GridCommand()
                             .Text(Util.GetLang("Reject"))
