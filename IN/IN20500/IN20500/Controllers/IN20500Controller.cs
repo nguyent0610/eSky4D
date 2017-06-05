@@ -52,7 +52,6 @@ namespace IN20500.Controllers
                 return _filePath;
             }
         }
-
         internal string PathVideo
         {
             get
@@ -68,9 +67,7 @@ namespace IN20500.Controllers
                 }
                 return _Path;
             }
-        }
-     
-
+        }     
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
@@ -83,23 +80,19 @@ namespace IN20500.Controllers
             ViewBag.isHideChkPublic = isHideChkPublic;
             return View();
         }
-
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
         public ActionResult GetIN_Inventory(string InvtID)
         {
             return this.Store(_db.IN20500_pdHeader(InvtID).FirstOrDefault());
         }
-
         public ActionResult GetCpny(string InvtID)
         {
             return this.Store(_db.IN20500_pgIN_InvtCpny(InvtID).ToList());
         }
-
 
         [HttpPost]
         public ActionResult Save(FormCollection data, string NodeID, string NodeLevel, string ParentRecordID, string HiddenTree, string Copy)
@@ -411,11 +404,23 @@ namespace IN20500.Controllers
             var node = new Node();
             var k = -1;
             if (inactiveHierachy.Descr == "root")
+            {
                 node.Text = inactiveHierachy.Descr;
+                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeID", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeLevel", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "ParentRecordID", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "RecordID", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "InvtID", Value = "", Mode = ParameterMode.Value });
+            }
             else
             {
                 node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
                 node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
+                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeID", Value = inactiveHierachy.NodeID, Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeLevel", Value = inactiveHierachy.NodeLevel.ToString(), Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "ParentRecordID", Value = inactiveHierachy.ParentRecordID.ToString(), Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "RecordID", Value = inactiveHierachy.RecordID.ToString(), Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "InvtID", Value = "", Mode = ParameterMode.Value });
             }
 
             var tmps = lstIN_Inventory
@@ -435,6 +440,11 @@ namespace IN20500.Controllers
                     Node nodetmp = new Node();
                     nodetmp.Text = tmp.InvtID + "-" + tmp.Descr;
                     nodetmp.NodeID = tmp.InvtID + "-" + "|";
+                    nodetmp.CustomAttributes.Add(new ConfigItem() { Name = "NodeID", Value = inactiveHierachy.NodeID, Mode = ParameterMode.Value });
+                    nodetmp.CustomAttributes.Add(new ConfigItem() { Name = "NodeLevel", Value = inactiveHierachy.NodeLevel.ToString(), Mode = ParameterMode.Value });
+                    nodetmp.CustomAttributes.Add(new ConfigItem() { Name = "ParentRecordID", Value = inactiveHierachy.ParentRecordID.ToString(), Mode = ParameterMode.Value });
+                    nodetmp.CustomAttributes.Add(new ConfigItem() { Name = "RecordID", Value = inactiveHierachy.RecordID.ToString(), Mode = ParameterMode.Value });
+                    nodetmp.CustomAttributes.Add(new ConfigItem() { Name = "InvtID", Value = tmp.InvtID.ToString(), Mode = ParameterMode.Value });
                     nodetmp.Leaf = true;
                     node.Children.Add(nodetmp);
                 }

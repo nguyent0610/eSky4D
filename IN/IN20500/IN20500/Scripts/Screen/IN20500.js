@@ -844,23 +844,29 @@ var nodeSelected_Change = function (store, operation, options) {
     if (operation.internalId != 'root') {
         _root = 'false';
         var InvtID1 = '';
-        //_leaf = operation.data.leaf;
-        parentRecordIDAll = operation.internalId.split("-");
-        if (parentRecordIDAll[1] != '|') {
-            _nodeID = parentRecordIDAll[0];
-            _nodeLevel = parentRecordIDAll[1];
-            _parentRecordID = parentRecordIDAll[2];
-            _recordID = parentRecordIDAll[3];
-        } else {
-            parentRecordIDAll = operation.data.parentId.split("-");
-            _nodeID = parentRecordIDAll[0];
-            _nodeLevel = parentRecordIDAll[1];
-            _parentRecordID = parentRecordIDAll[2];
-            _recordID = parentRecordIDAll[3];
-            var InvtIDall = operation.data.id.split("-");
-            InvtID1 = InvtIDall[0];
-            //InvtID = InvtIDall[0];
-        }
+        _nodeID = operation.raw.NodeID;
+        _nodeLevel = operation.raw.NodeLevel;
+        _parentRecordID = operation.raw.ParentRecordID;
+        _recordID = operation.raw.RecordID;
+        InvtID1 = operation.raw.InvtID;
+
+        ////_leaf = operation.data.leaf;
+        ////parentRecordIDAll = operation.internalId.split("-");
+        //if (operation.raw.InvtID!='') {
+        //    _nodeID = operation.raw.NodeID;
+        //    _nodeLevel = operation.raw.NodeID;
+        //    _parentRecordID = operation.raw.NodeID;
+        //    _recordID = operation.raw.NodeID;
+        //} else {
+        //    //parentRecordIDAll = operation.data.parentId.split("-");
+        //    _nodeID = parentRecordIDAll[0];
+        //    _nodeLevel = parentRecordIDAll[1];
+        //    _parentRecordID = parentRecordIDAll[2];
+        //    _recordID = parentRecordIDAll[3];
+        //    var InvtIDall = operation.data.id.split("-");
+        //    InvtID1 = operation.raw.InvtID;// InvtIDall[0];
+        //    //InvtID = InvtIDall[0];
+        //}
     } else {
         _root = 'true';
         _nodeID = '';

@@ -38,14 +38,14 @@ namespace IN20500
             //Session["LangID"] = 1;
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-			Current.DBSys = "FranciaBeauty_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = "JJVN_Demo_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN20500"] = acc;
-			Session["DBApp"] = Current.DBApp = "FranciaBeauty_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "JJVN_Demo_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
