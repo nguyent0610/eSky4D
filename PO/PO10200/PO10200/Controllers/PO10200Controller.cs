@@ -78,7 +78,7 @@ namespace PO10200.Controllers
         }
         public ActionResult GetPO10200_pgDetail(string rcptNbr, string batNbr, string branchID)
         {
-            var lst = _db.PO10200_pgDetail(branchID, batNbr, rcptNbr, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            var lst = _db.PO10200_pgDetail(branchID, batNbr, rcptNbr).ToList();
             return this.Store(lst);
 
         }
@@ -512,7 +512,7 @@ namespace PO10200.Controllers
             for (int i = 0; i < _lstPOTrans.Count; i++)
             {               
                 var objPOT = _lstPOTrans[i];
-                var objInvtID=_db.PO10200_pdIN_Inventory(Current.UserName, Current.CpnyID, Current.LangID).Where(p=>p.InvtID==objPOT.InvtID).FirstOrDefault();
+                var objInvtID=_db.PO10200_pdIN_Inventory(Current.UserName).Where(p=>p.InvtID==objPOT.InvtID).FirstOrDefault();
 
                 // kiem tra xem co muc lot ko, neu san pham co quan li lot ma khong co muc lot, thong bao khong cho save
                 if (objInvtID != null)
@@ -748,7 +748,7 @@ namespace PO10200.Controllers
                 objr.PurchaseType = objr.PurchaseType;
                 if (objr.PurchaseType == "GI" || objr.PurchaseType == "PR" || objr.PurchaseType == "GP" || objr.PurchaseType == "GS")
                 {
-                    var objIN_Inventory = _db.PO10200_pdIN_Inventory(Current.UserName, Current.CpnyID, Current.LangID).Where(p => p.InvtID == objr.InvtID).FirstOrDefault();
+                    var objIN_Inventory = _db.PO10200_pdIN_Inventory(Current.UserName).Where(p => p.InvtID == objr.InvtID).FirstOrDefault();
                     var objIN_ItemSite = _db.IN_ItemSite.Where(p => p.InvtID == objr.InvtID && p.SiteID == objr.SiteID).FirstOrDefault();
                     //Kiem tra itemsite neu chua co thi add vao
                     if (objIN_ItemSite == null && lstInItemsiteNew.Where(p => p.InvtID == objr.InvtID && p.SiteID == objr.SiteID).Count()==0)

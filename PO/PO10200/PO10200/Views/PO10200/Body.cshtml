@@ -238,11 +238,11 @@
                                                                 lst.Focus.Handler = "this.forceSelection=true;";
                                                             })
 
-                                                    , HQ.TextBox().ID("txtInputInvcNote").MaxLength(20).HQLangCode("INVCNBR").LabelWidth(100).Width(190).AllowBlank(false).Tag("X")
-                                                    , HQ.TextBox().ID("txtInputInvcNbr").MaxLength(20).HideLabel(true).Width(90).AllowBlank(false).Tag("X")
+                                                    //, HQ.TextBox().ID("txtInputInvcNote").MaxLength(20).HQLangCode("INVCNBR").LabelWidth(100).Width(190).AllowBlank(false).Tag("X")
+                                                    //, HQ.TextBox().ID("txtInputInvcNbr").MaxLength(20).HideLabel(true).Width(90).AllowBlank(false).Tag("X")
 
-                                                    , HQ.TextBox().ID("txtInvcNote").Name("InvcNote").MaxLength(20).HQLangCode("INVCNBR").LabelWidth(100).Width(190).Hidden(true)
-                                                    , HQ.TextBox().ID("txtInvcNbr").Name("InvcNbr").MaxLength(20).HideLabel(true).Width(90).Hidden(true)
+                                                    , HQ.TextBox().ID("txtInvcNote").Name("InvcNote").MaxLength(20).HQLangCode("INVCNBR").LabelWidth(100).Width(190)//.Hidden(true)
+                                                    , HQ.TextBox().ID("txtInvcNbr").Name("InvcNbr").MaxLength(20).HideLabel(true).Width(90)//.Hidden(true)
 
                                                     , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("txtRcptTot").Name("RcptTot").HQLangCode("LINETOT").LabelWidth(100).InputWidth(105).AllowBlank(false).Tag("X")
                                                     , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("txtTaxAmt").Name("TaxAmt").HQLangCode("TAX").LabelWidth(110).InputWidth(120).AllowBlank(false).Tag("X")
