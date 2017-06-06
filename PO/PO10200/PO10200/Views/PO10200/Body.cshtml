@@ -162,7 +162,7 @@
                                                                 lst.Change.Fn = "cboPONbr_Change";
                                                                 lst.Select.Fn = "cboPONbr_Select";
                                                                 lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
-                                                                lst.Focus.Handler = "this.forceSelection=true;";
+                                                                lst.Focus.Handler = "if(!App.cboBatNbr.getValue())this.forceSelection=true;";
                                                             })
 
                                                     , HQ.DateField().ID("dtRcptDate").Name("RcptDate").AllowBlank(false).HQLangCode("RECEIPTDATE").LabelWidth(100).InputWidth(105).AllowBlank(false)
