@@ -164,22 +164,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_Customer> AR_Customer
-        {
-            get
-            {
-                if ((_AR_Customer == null))
-                {
-                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
-                }
-                return _AR_Customer;
-            }
-        }
-        private ObjectSet<AR_Customer> _AR_Customer;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<AR_NewCustomerInfor> AR_NewCustomerInfor
         {
             get
@@ -192,6 +176,22 @@ namespace AR20500
             }
         }
         private ObjectSet<AR_NewCustomerInfor> _AR_NewCustomerInfor;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_Customer> AR_Customer
+        {
+            get
+            {
+                if ((_AR_Customer == null))
+                {
+                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
+                }
+                return _AR_Customer;
+            }
+        }
+        private ObjectSet<AR_Customer> _AR_Customer;
 
         #endregion
 
@@ -246,19 +246,19 @@ namespace AR20500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Customer(AR_Customer aR_Customer)
-        {
-            base.AddObject("AR_Customer", aR_Customer);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the AR_NewCustomerInfor EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToAR_NewCustomerInfor(AR_NewCustomerInfor aR_NewCustomerInfor)
         {
             base.AddObject("AR_NewCustomerInfor", aR_NewCustomerInfor);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Customer(AR_Customer aR_Customer)
+        {
+            base.AddObject("AR_Customer", aR_Customer);
         }
 
         #endregion
@@ -2642,48 +2642,24 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> LastOrderDate
+        public global::System.String PhotoCode
         {
             get
             {
-                return _LastOrderDate;
+                return _PhotoCode;
             }
             set
             {
-                OnLastOrderDateChanging(value);
-                ReportPropertyChanging("LastOrderDate");
-                _LastOrderDate = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("LastOrderDate");
-                OnLastOrderDateChanged();
+                OnPhotoCodeChanging(value);
+                ReportPropertyChanging("PhotoCode");
+                _PhotoCode = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PhotoCode");
+                OnPhotoCodeChanged();
             }
         }
-        private Nullable<global::System.DateTime> _LastOrderDate;
-        partial void OnLastOrderDateChanging(Nullable<global::System.DateTime> value);
-        partial void OnLastOrderDateChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String SearchName
-        {
-            get
-            {
-                return _SearchName;
-            }
-            set
-            {
-                OnSearchNameChanging(value);
-                ReportPropertyChanging("SearchName");
-                _SearchName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SearchName");
-                OnSearchNameChanged();
-            }
-        }
-        private global::System.String _SearchName;
-        partial void OnSearchNameChanging(global::System.String value);
-        partial void OnSearchNameChanged();
+        private global::System.String _PhotoCode;
+        partial void OnPhotoCodeChanging(global::System.String value);
+        partial void OnPhotoCodeChanged();
 
         #endregion
 
@@ -3027,15 +3003,13 @@ namespace AR20500
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
-        /// <param name="priceClass">Initial value of the PriceClass property.</param>
-        public static AR_NewCustomerInfor CreateAR_NewCustomerInfor(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String priceClass)
+        public static AR_NewCustomerInfor CreateAR_NewCustomerInfor(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked)
         {
             AR_NewCustomerInfor aR_NewCustomerInfor = new AR_NewCustomerInfor();
             aR_NewCustomerInfor.ID = id;
             aR_NewCustomerInfor.BranchID = branchID;
             aR_NewCustomerInfor.CustID = custID;
             aR_NewCustomerInfor.Checked = @checked;
-            aR_NewCustomerInfor.PriceClass = priceClass;
             return aR_NewCustomerInfor;
         }
 
@@ -3868,7 +3842,7 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String PriceClass
         {
@@ -3880,7 +3854,7 @@ namespace AR20500
             {
                 OnPriceClassChanging(value);
                 ReportPropertyChanging("PriceClass");
-                _PriceClass = StructuralObject.SetValidValue(value, false);
+                _PriceClass = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("PriceClass");
                 OnPriceClassChanged();
             }
@@ -4320,30 +4294,6 @@ namespace AR20500
         private Nullable<global::System.Int32> _VisitSort;
         partial void OnVisitSortChanging(Nullable<global::System.Int32> value);
         partial void OnVisitSortChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CodeHT
-        {
-            get
-            {
-                return _CodeHT;
-            }
-            set
-            {
-                OnCodeHTChanging(value);
-                ReportPropertyChanging("CodeHT");
-                _CodeHT = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CodeHT");
-                OnCodeHTChanged();
-            }
-        }
-        private global::System.String _CodeHT;
-        partial void OnCodeHTChanging(global::System.String value);
-        partial void OnCodeHTChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -7035,54 +6985,6 @@ namespace AR20500
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Code
-        {
-            get
-            {
-                return _Code;
-            }
-            set
-            {
-                OnCodeChanging(value);
-                ReportPropertyChanging("Code");
-                _Code = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Code");
-                OnCodeChanged();
-            }
-        }
-        private global::System.String _Code;
-        partial void OnCodeChanging(global::System.String value);
-        partial void OnCodeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Area
-        {
-            get
-            {
-                return _Area;
-            }
-            set
-            {
-                OnAreaChanging(value);
-                ReportPropertyChanging("Area");
-                _Area = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Area");
-                OnAreaChanged();
-            }
-        }
-        private global::System.String _Area;
-        partial void OnAreaChanging(global::System.String value);
-        partial void OnAreaChanged();
 
         #endregion
 
@@ -7108,18 +7010,16 @@ namespace AR20500
         /// </summary>
         /// <param name="id">Initial value of the ID property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
-        /// <param name="priceClass">Initial value of the PriceClass property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="color">Initial value of the Color property.</param>
         /// <param name="custHT">Initial value of the CustHT property.</param>
         /// <param name="eRPCustID">Initial value of the ERPCustID property.</param>
-        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String priceClass, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID)
+        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID)
         {
             AR20500_pgDetail_Result aR20500_pgDetail_Result = new AR20500_pgDetail_Result();
             aR20500_pgDetail_Result.ID = id;
             aR20500_pgDetail_Result.BranchID = branchID;
-            aR20500_pgDetail_Result.PriceClass = priceClass;
             aR20500_pgDetail_Result.CustID = custID;
             aR20500_pgDetail_Result.Checked = @checked;
             aR20500_pgDetail_Result.Color = color;
@@ -8047,7 +7947,7 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String PriceClass
         {
@@ -8059,7 +7959,7 @@ namespace AR20500
             {
                 OnPriceClassChanging(value);
                 ReportPropertyChanging("PriceClass");
-                _PriceClass = StructuralObject.SetValidValue(value, false);
+                _PriceClass = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("PriceClass");
                 OnPriceClassChanged();
             }

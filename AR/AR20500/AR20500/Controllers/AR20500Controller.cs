@@ -217,7 +217,7 @@ namespace AR20500.Controllers
                                 objCust.Crtd_Datetime = DateTime.Now;
                                 objCust.Crtd_Prog = "AR20500";
                                 objCust.Crtd_User = Current.UserName;
-
+                                objCust.PhotoCode = item.ImageFileName;
                                 //var state = _db.SI_State.FirstOrDefault(p => p.State.ToLower() == objCust.State.ToLower());
                                 //if (state != null) 
                                 //{
