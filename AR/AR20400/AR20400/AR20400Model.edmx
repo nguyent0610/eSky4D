@@ -113,11 +113,11 @@
           </Key>
           <Property Name="CustId" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="CustName" Type="nvarchar" Nullable="false" MaxLength="200" />
-          <Property Name="Addr1" Type="nvarchar" MaxLength="200" />
-          <Property Name="Addr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Addr1" Type="nvarchar(max)" />
+          <Property Name="Addr2" Type="nvarchar" MaxLength="200" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
           <Property Name="BillAddr1" Type="nvarchar" MaxLength="200" />
-          <Property Name="BillAddr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="BillAddr2" Type="nvarchar" MaxLength="200" />
           <Property Name="BillAttn" Type="nvarchar" MaxLength="200" />
           <Property Name="BillCity" Type="varchar" MaxLength="10" />
           <Property Name="BillCountry" Type="varchar" MaxLength="3" />
@@ -185,6 +185,8 @@
           <Property Name="Birthdate" Type="date" />
           <Property Name="InActive" Type="nvarchar" MaxLength="100" />
           <Property Name="SellProduct" Type="varchar" MaxLength="10" />
+          <Property Name="RefCustID" Type="varchar" MaxLength="50" />
+          <Property Name="PhotoCode" Type="varchar" MaxLength="2000" />
         </EntityType>
         <EntityType Name="AR_CustSellingProducts">
           <Key>
@@ -402,6 +404,7 @@
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Descr1" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <Function Name="AR20400_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -840,15 +843,16 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="Descr1" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="AR20400_pdHeader_Result">
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
           <Property Type="String" Name="Addr1" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Attn" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="BillAddr1" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="BillAddr2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BillAddr2" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="BillAttn" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="BillCity" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="BillCountry" Nullable="true" MaxLength="3" />
@@ -910,6 +914,7 @@
           <Property Type="DateTime" Name="Birthdate" Nullable="true" />
           <Property Type="String" Name="InActive" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="SellProduct" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PhotoCode" Nullable="true" MaxLength="2000" />
         </ComplexType>
         <ComplexType Name="AR20400_pgAR_CustAdvTool_Result">
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
@@ -975,11 +980,11 @@
           </Key>
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr1" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr1" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Attn" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillAddr1" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillAddr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAddr2" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillAttn" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillCity" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BillCountry" MaxLength="3" FixedLength="false" Unicode="false" />
@@ -1047,6 +1052,8 @@
           <Property Type="DateTime" Name="Birthdate" Precision="0" />
           <Property Type="String" Name="InActive" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="SellProduct" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RefCustID" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PhotoCode" MaxLength="2000" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1338,6 +1345,7 @@
           <EntitySetMapping Name="SI_Hierarchy">
             <EntityTypeMapping TypeName="AR20400Model.SI_Hierarchy">
               <MappingFragment StoreEntitySet="SI_Hierarchy">
+                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -1425,6 +1433,7 @@
                 <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
                 <ScalarProperty Name="InActive" ColumnName="InActive" />
                 <ScalarProperty Name="SellProduct" ColumnName="SellProduct" />
+                <ScalarProperty Name="PhotoCode" ColumnName="PhotoCode" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1519,6 +1528,8 @@
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="PhotoCode" ColumnName="PhotoCode" />
+                <ScalarProperty Name="RefCustID" ColumnName="RefCustID" />
                 <ScalarProperty Name="SellProduct" ColumnName="SellProduct" />
                 <ScalarProperty Name="InActive" ColumnName="InActive" />
                 <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
@@ -1630,7 +1641,7 @@
         <EntityTypeShape EntityType="AR20400Model.AR_SOAddress" Width="1.5" PointX="8.75" PointY="9.75" />
         <EntityTypeShape EntityType="AR20400Model.SI_ApprovalFlowHandle" Width="1.5" PointX="10.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20400Model.SI_Hierarchy" Width="1.5" PointX="4.75" PointY="10.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_Customer" Width="1.5" PointX="10.75" PointY="7.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_Customer" Width="1.5" PointX="4.3186522574716495" PointY="26.534610552030898" />
       </Diagram>
     </Diagrams>
   </Designer>

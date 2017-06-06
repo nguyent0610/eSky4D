@@ -26,7 +26,23 @@ namespace AR20400.Controllers
         AR20400Entities _db = Util.CreateObjectContext<AR20400Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private JsonResult _logMessage;
-
+        private string _filePath;
+        internal string FilePath
+        {
+            get
+            {
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadAR20400");
+                if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
+                {
+                    _filePath = config.TextVal;
+                }
+                else
+                {
+                    _filePath = Server.MapPath("~\\Images\\AR20400");
+                }
+                return _filePath;
+            }
+        }
         public ActionResult Index()
         {
             var tabContract = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabContract");
@@ -474,12 +490,32 @@ namespace AR20400.Controllers
                         }
                     }
                     #endregion
+
+                    #region Upload files
+                    var files = Request.Files;
+                    if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
+                    {
+
+                        string newFileName = string.Format("{0}_{1}{2}", header.BranchID, header.CustId, Path.GetExtension(files[0].FileName));
+                        Util.UploadFile(FilePath, newFileName, files[0]);
+                        header.PhotoCode = newFileName;
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(header.PhotoCode) && string.IsNullOrWhiteSpace(curHeader.PhotoCode))
+                        {
+
+                            Util.UploadFile(FilePath, header.PhotoCode, null);
+                            header.PhotoCode = string.Empty;
+                        }
+                    }
+                    #endregion
                 }
                 else
                 {
                     throw new MessageException(MessageType.Message, "2016030901");
                 }
-
+                
                 _db.SaveChanges();
                 return Json(new { success = true, CustId = CustId, isNew = isNew });
             }
@@ -749,6 +785,12 @@ namespace AR20400.Controllers
                         if (objAR_Customer != null)
                         {
                             _db.AR_Customer.DeleteObject(objAR_Customer);
+                            if (!string.IsNullOrWhiteSpace(objAR_Customer.PhotoCode))
+                            {
+
+                                Util.UploadFile(FilePath, objAR_Customer.PhotoCode, null);
+
+                            }
                         }
 
                         var objAR_SOAddress = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == BranchID
@@ -787,7 +829,7 @@ namespace AR20400.Controllers
 
                             _db.AR_LTTContract.DeleteObject(item);
                         }
-
+                        
                         _db.SaveChanges();
                     }
                     else
@@ -811,11 +853,21 @@ namespace AR20400.Controllers
             if (inactiveHierachy.Descr == "root")
             {
                 node.Text = inactiveHierachy.Descr;
+                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeID", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeLevel", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "ParentRecordID", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "RecordID", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "CustID", Value = "", Mode = ParameterMode.Value });
             }
             else
             {
                 node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
                 node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
+                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeID", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeLevel", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "ParentRecordID", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "RecordID", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "CustID", Value = "", Mode = ParameterMode.Value });
             }
 
             var tmps = _db.AR20400_ptCustomer(CpnyID)
@@ -837,6 +889,12 @@ namespace AR20400.Controllers
                     nodetmp.Text = tmp.CustId + "-" + tmp.CustName;
                     nodetmp.NodeID = tmp.CustId + "-" + "|";
                     nodetmp.Leaf = true;
+                    nodetmp.CustomAttributes.Add(new ConfigItem() { Name = "NodeID", Value = inactiveHierachy.NodeID, Mode = ParameterMode.Value });
+                    nodetmp.CustomAttributes.Add(new ConfigItem() { Name = "NodeLevel", Value = inactiveHierachy.NodeLevel.ToString(), Mode = ParameterMode.Value });
+                    nodetmp.CustomAttributes.Add(new ConfigItem() { Name = "ParentRecordID", Value = inactiveHierachy.ParentRecordID.ToString(), Mode = ParameterMode.Value });
+                    nodetmp.CustomAttributes.Add(new ConfigItem() { Name = "RecordID", Value = inactiveHierachy.RecordID.ToString(), Mode = ParameterMode.Value });
+                    nodetmp.CustomAttributes.Add(new ConfigItem() { Name = "CustID", Value = tmp.CustId.ToString(), Mode = ParameterMode.Value });
+           
                     node.Children.Add(nodetmp);
                 }
             }
@@ -940,6 +998,28 @@ namespace AR20400.Controllers
         //        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
         //    }
         //}
+
+        public ActionResult ImageToBin(string fileName)
+        {
+            try
+            {
+                var imgString64 = Util.ImageToBin(FilePath, fileName);
+                var jsonResult = Json(new { success = true, imgSrc = imgString64 }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
 
     }
 }

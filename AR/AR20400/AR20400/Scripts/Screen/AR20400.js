@@ -393,6 +393,16 @@ var stoLoad = function (sto) {
     var record = sto.getAt(0);
     App.lblName.setValue(record.data.CustName);
     App.frmMain.getForm().loadRecord(record);
+
+    // display image
+    App.fupImages.reset();
+    if (record.data.PhotoCode) {
+        displayImage(App.imgImages, record.data.PhotoCode);
+    }
+    else {
+        App.imgImages.setImageUrl("");
+    }
+
     App.stoAR_LTTContract.reload();
 
     if (record.data.Status == 'I')
@@ -402,18 +412,22 @@ var stoLoad = function (sto) {
 
     if (record.data.Status == 'H') {
         HQ.common.lockItem(App.frmMain, false);
+        App.fupImages.setDisabled(false);
         if (readonlyShopType == 'true')
             App.cboShopType.setReadOnly(true);
     }
-    else
+    else {
         HQ.common.lockItem(App.frmMain, true);
-
+        App.fupImages.setDisabled(true);
+    }
     if (!HQ.isInsert && HQ.isNew) {
         App.cboCustId.forceSelection = true;
         HQ.common.lockItem(App.frmMain, true);
+        App.fupImages.setDisabled(true);
     }
     else if (!HQ.isUpdate && !HQ.isNew) {
         HQ.common.lockItem(App.frmMain, true);
+        App.fupImages.setDisabled(true);
     }
     if (!HQ.isNew && _hiddenTree == 'false') searchNode();
 };
@@ -1197,23 +1211,28 @@ var nodeSelected_Change = function (store, operation, options) {
     if (operation.internalId != 'root') {
         _root = 'false';
         var CustID1 = '';
+        _nodeID = operation.raw.NodeID;
+        _nodeLevel = operation.raw.NodeLevel;
+        _parentRecordID = operation.raw.ParentRecordID;
+        _recordID = operation.raw.RecordID;
+        CustID1 = operation.raw.CustID;
         //_leaf = operation.data.leaf;
-        parentRecordIDAll = operation.internalId.split("-");
-        if (parentRecordIDAll[1] != '|') {
-            _nodeID = parentRecordIDAll[0];
-            _nodeLevel = parentRecordIDAll[1];
-            _parentRecordID = parentRecordIDAll[2];
-            _recordID = parentRecordIDAll[3];
-        } else {
-            parentRecordIDAll = operation.data.parentId.split("-");
-            _nodeID = parentRecordIDAll[0];
-            _nodeLevel = parentRecordIDAll[1];
-            _parentRecordID = parentRecordIDAll[2];
-            _recordID = parentRecordIDAll[3];
-            var custIDall = operation.data.id.split("-");
-            CustID1 = custIDall[0];
-            //CustId = custIDall[0];
-        }
+        //parentRecordIDAll = operation.internalId.split("-");
+        //if (parentRecordIDAll[1] != '|') {
+        //    _nodeID = parentRecordIDAll[0];
+        //    _nodeLevel = parentRecordIDAll[1];
+        //    _parentRecordID = parentRecordIDAll[2];
+        //    _recordID = parentRecordIDAll[3];
+        //} else {
+        //    parentRecordIDAll = operation.data.parentId.split("-");
+        //    _nodeID = parentRecordIDAll[0];
+        //    _nodeLevel = parentRecordIDAll[1];
+        //    _parentRecordID = parentRecordIDAll[2];
+        //    _recordID = parentRecordIDAll[3];
+        //    var custIDall = operation.data.id.split("-");
+        //    CustID1 = custIDall[0];
+        //    //CustId = custIDall[0];
+        //}
     } else {
         _root = 'true';
         _nodeID = '';
@@ -1354,5 +1373,61 @@ var expandAll = function(tree) {
             }
         });
         return nodes;
+    });
+};
+
+/////////////////////////////////
+//Image
+var btnClearImage_click = function (sender, e) {
+    App.fupImages.reset();
+    App.imgImages.setImageUrl("");
+    App.hdnImages.setValue("");
+};
+
+var fupImages_change = function (fup, newValue, oldValue, eOpts) {
+    if (fup.value) {
+        var ext = fup.value.split(".").pop().toLowerCase();
+        if (ext == "jpg" || ext == "png" || ext == "gif") {
+            App.hdnImages.setValue(fup.value);
+            readImage(fup, App.imgImages);
+        }
+        else {
+            HQ.message.show(148, '', '');
+        }
+    }
+};
+
+var readImage = function (fup, imgControl) {
+    var files = fup.fileInputEl.dom.files;
+    if (files && files[0]) {
+        var FR = new FileReader();
+        FR.onload = function (e) {
+            imgControl.setImageUrl(e.target.result);
+           
+        };
+        FR.readAsDataURL(files[0]);
+    }
+};
+var displayImage = function (imgControl, fileName) {
+    Ext.Ajax.request({
+        url: 'AR20400/ImageToBin',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        params: JSON.stringify({
+            fileName: fileName
+        }),
+        success: function (result) {
+            var jsonData = Ext.decode(result.responseText);
+            if (jsonData.imgSrc) {
+                imgControl.setImageUrl(jsonData.imgSrc);
+               
+            }
+            else {
+                imgControl.setImageUrl("");
+            }
+        },
+        failure: function (errorMsg, data) {
+            HQ.message.process(errorMsg, data, true);
+        }
     });
 };
