@@ -768,7 +768,12 @@ var deleteData = function (item) {
                     success: function (msg, data) {
                         if (_hiddenTree == 'false')
                             ReloadTree('delete');
-                        menuClick("new");
+                        else {
+                           
+                            App.cboCustId.getStore().reload();
+                            App.cboCustId.setValue('');
+                            //menuClick("new");
+                        }
                         
                     },
                     failure: function (msg, data) {
