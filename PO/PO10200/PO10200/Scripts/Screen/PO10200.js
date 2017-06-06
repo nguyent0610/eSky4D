@@ -28,13 +28,14 @@ var store_Load = function (sto) {
 };
 
 var loadDataHeader = function (sto) {
+    App.frmMain.suspendEvents();
     App.lblQtyAvail.setText('');
     App.cboPONbr.allowBlank = true;
     App.cboPONbr.validate();
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));   
     HQ.common.setForceSelection(App.frmMain, false, "cboBranchID,cboBatNbr,cboHandle");
     HQ.isFirstLoad = false;
-    
+    sto.suspendEvents();
     HQ.isNew = false;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "PONbr");
@@ -90,7 +91,12 @@ var loadDataHeader = function (sto) {
         App.cboPONbr.allowBlank = false;
         App.cboPONbr.validate();
     }
-    
+   
+    HQ.common.changeData(HQ.isChange, 'PO10200');
+
+    App.frmMain.resumeEvents();
+    sto.resumeEvents();
+    frmChange();
 };
 var loadDataDetail = function (sto) {
     //neu sto da co du lieu thi ko duoc sua cac combo ben duoi
@@ -112,11 +118,11 @@ var loadDataDetail = function (sto) {
         HQ.isFirstLoad = false;
     }
 
-    frmChange();
+  
     HQ.common.showBusy(false);
     App.stoLotTrans.reload();
     calcDet();
-    
+    frmChange();
 };
 var loadPO10200_pdSI_Tax = function () {
     if (App.stoPO10200_pdSI_Tax.getCount() > 0) {
@@ -269,7 +275,7 @@ var firstLoad = function () {
     App.cboPosmID.store.reload();
 };
 var frmChange = function (sender) {
-    if (App.stoHeader.data.length > 0 && App.cboBranchID.getValue()!=null) {
+    if (App.stoHeader.data.length > 0 && App.cboBranchID.getValue() != null && !(App.cboBranchID.hasFocus || App.cboBatNbr.hasFocus)) {
         App.frmMain.getForm().updateRecord();
         HQ.isChange = HQ.store.isChange(App.stoHeader) == false ? HQ.store.isChange(App.stoPO10200_pgDetail) : true;
         HQ.common.changeData(HQ.isChange, 'PO10200');//co thay doi du lieu gan * tren tab title header
@@ -1639,7 +1645,6 @@ function calcDet() {
     App.txtRcptFeeTot.setValue(Math.round(poFee, 0));
     App.txtAfterTaxAmt.setValue(Math.round(taxAmt, 0) + Math.round(txblAmtTot, 0) + Math.round(poFee, 0));
 
-  
 
 }
 function delTaxMutil() {
