@@ -726,7 +726,7 @@ var save = function () {
                                     var positionCust = calcPage(objPageCust.index);
                                     App.cboCustId.loadPage(positionCust);
                                 }
-                                App.cboCustId.setValue(data.result.CustId);
+                                App.cboCustId.setValue(CustId);
                                 App.stoAR_Customer.reload();
                             }
                            
@@ -737,12 +737,12 @@ var save = function () {
                             else
                             {
                                 App.cboCustId.forceSelection = false;
-                                var objPageCust = findRecordCombo(data.result.CustId);
+                                var objPageCust = findRecordCombo(CustId);
                                 if (objPageCust) {
                                     var positionCust = calcPage(objPageCust.index);
                                     App.cboCustId.loadPage(positionCust);
                                 }
-                                App.cboCustId.setValue(data.result.CustId);
+                                App.cboCustId.setValue(CustId);
                                 App.stoAR_Customer.reload();
                             }
                         }
@@ -769,9 +769,9 @@ var deleteData = function (item) {
                         if (_hiddenTree == 'false')
                             ReloadTree('delete');
                         else {
-                           
+                            CustId = '';
                             App.cboCustId.getStore().reload();
-                            App.cboCustId.setValue('');
+                          
                             //menuClick("new");
                         }
                         

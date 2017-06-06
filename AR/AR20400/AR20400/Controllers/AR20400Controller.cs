@@ -837,7 +837,7 @@ namespace AR20400.Controllers
                         throw new MessageException(MessageType.Message, "18","");
                     }
                 }
-                return Json(new { success = true });
+                return Json(new { success = true, CustId = "" });
             }
             catch (Exception ex)
             {
