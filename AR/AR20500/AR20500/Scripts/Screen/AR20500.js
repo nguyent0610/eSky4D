@@ -26,7 +26,7 @@ var loadSourceCombo = function () {
     });
 };
 
-var cboCpnyID_Change = function (sender,e) {
+var cboCpnyID_Change = function (sender, e) {
     if (_Change == true) {
         HQ.message.show(20150303, '', 'refresh');
     } else {
@@ -72,8 +72,8 @@ var btnLoad_Click = function () {
 var ColCheck_Header_Change = function (value) {
     if (value) {
         App.stoCust.each(function (item) {
-            if(item.data.Status==App.cboStatus.getValue())
-            item.set("ColCheck", value.checked);
+            if (item.data.Status == App.cboStatus.getValue())
+                item.set("ColCheck", value.checked);
         });
     }
 };
@@ -83,16 +83,16 @@ var btnProcess_Click = function () {
     for (var i = 0; i < App.grdCust.store.getCount() ; i++) {
         var data = App.grdCust.store.data.items[i].data;
         if (data.ColCheck) {
-            count++;           
+            count++;
         }
     }
-    if (App.cboHandle.getValue() && count>0) {
+    if (App.cboHandle.getValue() && count > 0) {
         if (App.cboHandle.getValue() == 'A') {
             var rowerror = '';
             for (var i = 0; i < App.grdCust.store.getCount() ; i++) {
                 var data = App.grdCust.store.data.items[i].data;
                 if (data.ColCheck) {
-        
+
                     if (!isValidSel(data)) rowerror += i + 1 + ',';
                 }
             }
@@ -143,10 +143,10 @@ var btnProcess_Click = function () {
 
 var btnOKMCP_Click = function () {
     if (App.dteFromDate.isValid() && App.dteToDate.isValid()) {
-        if (App.dteFromDate.lastValue.getFullYear() != App.dteToDate.lastValue.getFullYear()) {
-            HQ.message.show(201506111);
-            return;
-        }
+        //if (App.dteFromDate.lastValue.getFullYear() != App.dteToDate.lastValue.getFullYear()) {
+        //    HQ.message.show(201506111);
+        //    return;
+        //}
         App.winProcess.hide();
         var d = Ext.Date.parse("01/01/1990", "m/d/Y");
         if (App.FromDate.getValue() < d || App.ToDate.getValue() < d) return;
@@ -275,9 +275,9 @@ var grdCust_BeforeEdit = function (item, e) {
     }
 };
 
-var grdCust_Edit = function (item, e,oldvalue,newvalue) {
+var grdCust_Edit = function (item, e, oldvalue, newvalue) {
     var det = e.record.data;
-    if (e.field == 'WeekofVisit' ) {
+    if (e.field == 'WeekofVisit') {
         var record = HQ.store.findRecord(App.cboColWeekofVisit.getStore(), ["Code"], [e.value]);
         if (record) {
             e.record.set("Mon", record.data.Mon);
@@ -405,7 +405,7 @@ var stoLoad = function (sto, records, successful, eOpts) {
     var markers = [];
     records.forEach(function (record) {
         var marker = {
-            "index":record.index,
+            "index": record.index,
             "id": record.index + 1,
             "title": record.data.CustID + ": " + record.data.OutletName,
             "lat": record.data.Lat,
@@ -454,23 +454,6 @@ var renderSalesRouteID = function (value) {
     }
     return value;
 };
-
-var renderClassId = function (value) {
-    var obj = App.cboColClassId.store.findRecord("ClassId", value);
-    if (obj) {
-        return obj.data.Descr;
-    }
-    return value;
-};
-
-var renderPriceClassID = function (value) {
-    var obj = App.cboColPriceClassID.store.findRecord("PriceClass", value);
-    if (obj) {
-        return obj.data.Descr;
-    }
-    return value;
-};
-
 
 var slmCust_Select = function (rowModel, record, index, eOpts) {
     if (record[0]) {
