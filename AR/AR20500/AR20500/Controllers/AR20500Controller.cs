@@ -109,6 +109,7 @@ namespace AR20500.Controllers
         {
             try
             {
+                _db.CommandTimeout = int.MaxValue;
                 string errorCustID = string.Empty;
                 mForm = data;
                 StoreDataHandler custHandler = new StoreDataHandler(data["lstCust"]);
