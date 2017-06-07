@@ -1,0 +1,121 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM27700;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM27700";
+    var acc = Session["OM27700"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/screen/OM27700.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.dateNow = new Date('@ViewBag.dateNow');
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
+
+        @*Make the store - the binding data of the form*@
+        @(X.Store().ID("stoDisplay")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM_Accumulated), "mdlOM_Accumulated", "AccumulateID"))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetAccumulateById", "OM27700"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(p => { 
+                p.Load.Fn = "Store.stoDisplay_load";
+                p.BeforeLoad.Fn = "Store.sto_BeforeLoad";
+            })
+        // Store: stoDisplay
+        )
+
+        @(X.Store().ID("stoLevel")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM27700_pgLevel_Result), "mdlLevel", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetLevel", "OM27700"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Handler = "this.HQFieldKeys=['LevelID'];"; // ,'LevelDescr'
+                l.Load.Fn = "Store.stoGrid_load";
+                l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                l.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+                // Store: stoLevel
+        )
+
+        @(
+            X.Store().ID("stoInvt")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM27700_pgInvt_Result), "mdlInvt", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetInvt", "OM27700"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Handler = "this.HQFieldKeys=['InvtID'];";
+                l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                l.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+                // Store: stoInvt
+        )       
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong OM27700Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>
