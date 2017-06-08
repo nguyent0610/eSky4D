@@ -140,7 +140,7 @@ namespace PO10200.Controllers
                             .Where(p => Util.PassNull(p.LotSerNbr) != string.Empty)
                             .ToList();
 
-                lstSiteAll = _db.PO10200_pcSiteAll(_branchID).ToList();
+               
                 if (Data_Checking(b235))
                 {
                     if ((_status == "U" || _status == "C"  ) && (_handle == "C" || _handle == "V"))
@@ -410,7 +410,7 @@ namespace PO10200.Controllers
         }
         private void Save_Batch(bool isDeleteGrd = false)
         {
-
+            lstSiteAll = _db.PO10200_pcSiteAll(_branchID).ToList();
             _objBatch = _db.Batches.FirstOrDefault(p => p.Module == "IN" && p.BatNbr == _batNbr && p.BranchID == _branchID);
             if (_objBatch != null)
             {
