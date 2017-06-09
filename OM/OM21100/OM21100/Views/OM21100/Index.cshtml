@@ -83,6 +83,7 @@
             .Listeners(x =>
             {
                 x.Load.Fn = "DiscDefintion.Event.stoDiscSeqInfo_load";
+                x.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.common.getLang('LoadingData'));";
             })
                 // Store: stoDiscSeqInfo
         )
