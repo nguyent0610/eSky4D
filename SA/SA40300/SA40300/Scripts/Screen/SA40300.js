@@ -4,9 +4,18 @@ var focusrecord = 0;//biến tạm focusrecord để biết đang focus vào for
 var keys = ['ReportID', 'ReportViewID'];
 var fieldsCheckRequire = ["ReportID", "ReportViewID", "LangID", "BeforeDateParm00", "BeforeDateParm01", "BeforeDateParm02", "BeforeDateParm03"];
 var fieldsLangCheckRequire = ["ReportID", "ReportViewID", "LangID", "BeforeDateParm00", "BeforeDateParm01", "BeforeDateParm02", "BeforeDateParm03"];
-
+var _HTML = 'HTML';
+var _popupType = '';
+var _listUser = '';
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
+var store_Load = function (sto) {
+    HQ.numSource++;
+    if (HQ.numSource == 4) {
+        HQ.common.showBusy(false);
+        App.stoMailHeader.reload();
+    }
+};
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
 // Load and show binding data to the form
@@ -108,6 +117,13 @@ var menuClick = function (command) {
                         App.slmMailDetail.select(App.stoMailDetail.indexOf(flat));
                         return false;
                     }
+                    if (App.cboMailType.getValue() == _HTML) {
+                        if (!checkSpecialChar(App.txtStoreName.getValue())) {
+                            HQ.message.show(2017060501, [''], '', true);
+                            flat = item;
+                            return false;
+                        } 
+                    }
                     save();
                 }
             }
@@ -123,14 +139,20 @@ var menuClick = function (command) {
 
 //load lần đầu khi mở
 var firstLoad = function () {
-    App.stoMailHeader.reload();
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+    HQ.numSource = 0;
+    App.cboMailType.getStore().addListener('load', store_Load);
+    App.cboMailTo.getStore().addListener('load', store_Load);
+    App.cboMailCC.getStore().addListener('load', store_Load);
+    App.cboType.getStore().addListener('load', store_Load);   
 };
 var frmChange = function () {
     App.frmMain.getForm().updateRecord();
-    HQ.isChange = HQ.store.isChange(App.stoMailHeader) == false ? HQ.store.isChange(App.stoMailDetail) : true;
+    HQ.isChange = HQ.store.isChange(App.stoMailHeader) || HQ.store.isChange(App.stoMailDetail);
     HQ.common.changeData(HQ.isChange, 'SA40300');//co thay doi du lieu gan * tren tab title header
     //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
     App.cboMailID.setReadOnly(HQ.isChange);
+    App.cboMailType.setReadOnly(HQ.isChange);
 };
 
 //xu li su kiem tren luoi giong nhu luoi binh thuong
@@ -152,7 +174,7 @@ var grdMailDetail_Reject = function (record) {
 //hàm này chạy sau khi store của form trong Controller vừa chạy xong đã load dữ liệu vào store của form
 var loadDataAutoHeader = function (sto) {
     HQ.isFirstLoad = true;
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
     HQ.isNew = false;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "MailID");
@@ -167,8 +189,9 @@ var loadDataAutoHeader = function (sto) {
         sto.commitChanges();
     }
     var record = sto.getAt(0);
-    record.data.MailCC = record.data.MailCC.replace(new RegExp(';', 'g'), ',');//cat dua ve du lieu dau , de set su thay doi
-    record.data.MailTo = record.data.MailTo.replace(new RegExp(';', 'g'), ',');//cat dua ve du lieu dau , de set su thay doi
+    record.data.MailCC = record.data.MailCC.replace(new RegExp(',', 'g'), ',');//cat dua ve du lieu dau , de set su thay doi
+    record.data.MailTo = record.data.MailTo.replace(new RegExp(',', 'g'), ',');//cat dua ve du lieu dau , de set su thay doi
+
     //sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
     //record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
@@ -186,6 +209,70 @@ var loadDataAutoDetail = function (sto) {
     frmChange();
     HQ.common.showBusy(false);
 };
+
+var stoMailAutoUser_Load = function (sto) {
+    HQ.common.showBusy(false);
+};
+var cboMailType_Change = function (sender, newValue, oldValue) {
+    if ((!HQ.isNew || sender.valueModels != null) && !App.cboMailID.store.loading) {
+        App.cboMailID.store.reload();
+    }
+    var isHtml = false;
+    if (newValue == _HTML) {
+        isHtml = true;
+        //App.grdMailDetail.hide();
+        //App.chkSplitMailTo.show();
+        //App.cboMailTo.getTrigger(0).show();
+        //App.cboMailCC.getTrigger(0).show();
+        
+
+        App.cboMailTo.setWidth(275);
+        App.cboMailCC.setWidth(255);
+    } else {
+        
+        App.cboMailTo.setWidth(300);
+        App.cboMailCC.setWidth(280);
+        //App.cboMailTo.getTrigger(0).hide()
+        //App.cboMailCC.getTrigger(0).hide()
+    }
+
+    App.btnMailTo.setVisible(isHtml);
+    App.btnMailCC.setVisible(isHtml);
+    App.cboMailTo.setReadOnly(isHtml);
+    App.cboMailCC.setReadOnly(isHtml);
+
+    App.btnMailTo.setVisible(isHtml);
+    App.btnMailCC.setVisible(isHtml);
+    App.chkSplitMailTo.setVisible(isHtml);
+    App.txtStoreName.setVisible(isHtml);
+
+    App.chkIsDeleteFile.setVisible(!isHtml);
+    App.chkIsUseStore.setVisible(!isHtml);
+    App.txtHeader.setVisible(!isHtml);
+    //App.txtMailSubject.setVisible(!isHtml);
+    App.txtBody.setVisible(!isHtml);
+    App.txtTemplateFile.setVisible(!isHtml);
+    App.txtPass.setVisible(!isHtml);
+    App.txtExportFolder.setVisible(!isHtml);
+    App.txtNameFile.setVisible(!isHtml);
+    App.chkIsAttachFile.setVisible(!isHtml);    
+    App.grdMailDetail.setVisible(!isHtml);
+
+    App.txtStoreName.allowBlank = !isHtml;
+
+   // App.txtMailSubject.allowBlank = isHtml;
+    App.txtNameFile.allowBlank = isHtml;
+    App.txtExportFolder.allowBlank = isHtml;
+    App.txtTemplateFile.allowBlank = isHtml;
+    App.frmMain.validate();
+};
+
+var cboMailType_Select = function (sender) {
+    if (sender.valueModels != null && !App.cboMailID.store.loading) {
+        App.cboMailID.store.reload();
+    }
+};
+
 var cboMailID_Change = function (sender, newValue, oldValue) {
     if ((!HQ.isNew || sender.valueModels != null) && !App.stoMailHeader.loading ) {
         App.stoMailHeader.reload();
@@ -215,6 +302,80 @@ var cboReportID_Change = function (sender, e) {
     App.slmMailDetail.selected.items[0].set('ReportViewID', '');
     App.cboReportViewID.getStore().load();
 }
+
+var cboMailTo_Expand = function () {
+    if (App.cboMailType.getValue() == _HTML) {
+        cboMailTo_TriggerClick();
+        App.cboMailTo.collapse();
+    } else {
+        HQ.combo.expand(App.cboMailTo, ',');
+    }
+}
+
+var cboMailCC_Expand = function () {
+    if (App.cboMailType.getValue() == _HTML) {
+        cboMailCC_TriggerClick();
+        App.cboMailCC.collapse();
+    } else {
+        HQ.combo.expand(App.cboMailCC, ',');
+    }    
+}
+
+var cboMailTo_TriggerClick = function () {
+    _popupType = 'TO';
+    _listUser = joinParams(App.cboMailTo);
+    App.frmMain.mask();
+    App.stoMailAutoUser.reload();
+    App.winMailAutoUser.show();
+}
+
+var cboMailCC_TriggerClick = function () {
+    _popupType = 'CC';
+    _listUser = joinParams(App.cboMailCC);
+    App.frmMain.mask();
+    App.stoMailAutoUser.reload();
+    App.winMailAutoUser.show();
+}
+
+var btnOK_Click = function () {
+    var res = "";
+    var store = App.stoMailAutoUser;
+    var allRecords = store.snapshot || store.allData || store.data;
+    store.suspendEvents();
+    allRecords.each(function (record) {
+        if (record.data.Selected == true) {
+            res += record.data.UserID + ',';
+        }
+    });
+    store.resumeEvents();
+    if (_popupType == 'CC') {
+        App.cboMailCC.setValue(res.split(','));
+    } else {
+        App.cboMailTo.setValue(res.split(','));
+    }
+    App.winMailAutoUser.hide();
+    App.frmMain.unmask();
+};
+var btnCancel_Click = function () {
+    App.winMailAutoUser.hide();
+    App.frmMain.unmask();
+};
+
+var chkActiveAll_Change = function (sender, value, oldValue) {
+    if (sender.hasFocus) {
+        var store = App.stoMailAutoUser;
+        var allRecords = store.snapshot || store.allData || store.data;
+        store.suspendEvents();
+        allRecords.each(function (record) {
+            record.set('Selected', value);
+        });
+        store.resumeEvents();
+        App.grdMailAutoUser.view.refresh();
+        //if (value == false) {
+        //    _selBranch = [];
+        //}
+    }
+};
 
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
@@ -304,5 +465,18 @@ var checkSpecialChar = function (value) {
         }
     }
     return true;
+}
+
+joinParams = function (multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
+    }
+    else {
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
+        }
+    }
+    return returnValue;
 }
 ///////////////////////////////////

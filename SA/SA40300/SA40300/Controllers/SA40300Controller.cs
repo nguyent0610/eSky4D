@@ -49,12 +49,17 @@ namespace SA40300.Controllers
         {
             return this.Store(_db.Server_MailAutoDetail.Where(p => p.MailID == mailID));
         }
-       
+        public ActionResult GetMailAutoUser(string emailID, string sendType, string listUser)
+        {
+            var lstData = _db.SA40300_pgMailtAutoUser(emailID, sendType, listUser, Current.UserName, Current.CpnyID, Current.LangID);
+            return this.Store(lstData);
+        }
         [HttpPost]
         public ActionResult Save(FormCollection data, bool isNew)
         {
             try
             {
+                string mailType = data["cboMailType"].PassNull();
                 string mailId = isNew ? DateTime.Now.ToString("yyyyMMddhhmmssff") : data["cboMailID"];
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstgrd"]);
                 ChangeRecords<Server_MailAutoDetail> lstgrd = dataHandler1.BatchObjectData<Server_MailAutoDetail>();
@@ -119,6 +124,7 @@ namespace SA40300.Controllers
                         else
                         {
                             objHeader = new Server_MailAutoHeader();
+                            objHeader.MailType = mailType;
                             objHeader.MailID = mailId;
                             objHeader.Crtd_Datetime = DateTime.Now;
                             objHeader.Crtd_Prog = screenNbr;
@@ -173,6 +179,12 @@ namespace SA40300.Controllers
                 {
                     _db.Server_MailAutoHeader.DeleteObject(cpny);
                 }
+                // Xoa Server_MailAutoUser
+                var lstMail = _db.Server_MailAutoUser.Where(p => p.MailID == mailId).ToList();
+                for (int i = 0; i < lstMail.Count(); i++)
+                {
+                    _db.Server_MailAutoUser.DeleteObject(lstMail[i]);
+                }
                 _db.SaveChanges();
                 return Json(new { success = true });
             }
@@ -213,8 +225,92 @@ namespace SA40300.Controllers
 
         private void UpdatingHeader(Server_MailAutoHeader s, ref Server_MailAutoHeader d)
         {
-            d.MailTo = s.MailTo.Replace(",",";");  
-            d.MailCC = s.MailCC.Replace(",", ";");
+            if (d.MailType == "HTML")
+            {
+                string mailID = d.MailID.ToUpper();
+                var lstMail = _db.Server_MailAutoUser.Where(p => p.MailID == s.MailID && p.SendType == "TO").ToList();
+                if (s.MailTo.Length > 0)
+                {
+                    string[] mailTos = s.MailTo.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var item in lstMail)
+                    {
+                        if (mailTos.FirstOrDefault(x => x == item.UserID) == null)
+                        {
+                            _db.Server_MailAutoUser.DeleteObject(item);
+                        }
+                    }
+                    // Delete 
+                    foreach (var item in mailTos)
+                    {
+                        var obj = _db.Server_MailAutoUser.FirstOrDefault(x => x.MailID.ToUpper() == mailID && x.UserID == item && x.SendType == "CC");
+                        if (obj == null)
+                        {
+                            obj = new Server_MailAutoUser();
+                            obj.UserID = item;
+                            obj.SendType = "TO";
+                            obj.MailID = d.MailID;
+                            obj.Crtd_DateTime = DateTime.Now;
+                            obj.Crtd_Prog = screenNbr;
+                            obj.Crtd_User = Current.UserName;
+                            obj.LUpd_DateTime = DateTime.Now;
+                            obj.LUpd_Prog = screenNbr;
+                            obj.LUpd_User = Current.UserName;
+                            _db.Server_MailAutoUser.AddObject(obj);
+                        }
+                    }
+                }
+                else
+                {
+                    // Xoa Server_MailAutoUser                    
+                    for (int i = 0; i < lstMail.Count(); i++)
+                    {
+                        _db.Server_MailAutoUser.DeleteObject(lstMail[i]);
+                    }
+                }
+
+                // Mail CC
+                lstMail = _db.Server_MailAutoUser.Where(p => p.MailID == s.MailID && p.SendType == "CC").ToList();
+                if (s.MailCC.Length > 0)
+                {
+                    string[] mailTos = s.MailCC.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var item in lstMail)
+                    {
+                        if (mailTos.FirstOrDefault(x => x == item.UserID) == null)
+                        {
+                            _db.Server_MailAutoUser.DeleteObject(item);
+                        }
+                    }
+                    // Delete 
+                    foreach (var item in mailTos)
+                    {
+                        var obj = _db.Server_MailAutoUser.FirstOrDefault(x => x.MailID.ToUpper() == mailID && x.UserID == item && x.SendType == "CC");
+                        if (obj == null)
+                        {
+                            obj = new Server_MailAutoUser();
+                            obj.UserID = item;
+                            obj.SendType = "CC";
+                            obj.MailID = d.MailID;
+                            obj.Crtd_DateTime = DateTime.Now;
+                            obj.Crtd_Prog = screenNbr;
+                            obj.Crtd_User = Current.UserName;
+                            obj.LUpd_DateTime = DateTime.Now;
+                            obj.LUpd_Prog = screenNbr;
+                            obj.LUpd_User = Current.UserName;
+                            _db.Server_MailAutoUser.AddObject(obj);
+                        }                        
+                    }
+                }
+                else
+                {
+                    // Xoa Server_MailAutoUser                    
+                    for (int i = 0; i < lstMail.Count(); i++)
+                    {
+                        _db.Server_MailAutoUser.DeleteObject(lstMail[i]);
+                    }
+                }
+            }
+            d.MailTo = s.MailTo;//.Replace(",",";");  
+            d.MailCC = s.MailCC;//.Replace(",", ";");
             d.Subject = s.Subject;
             d.TemplateFile = s.TemplateFile;
             d.ExportFolder = s.ExportFolder;
@@ -222,8 +318,7 @@ namespace SA40300.Controllers
             d.TypeAuto = s.TypeAuto;
             d.DateTime = s.DateTime;
             d.Time =new DateTime(s.DateTime.Year,s.DateTime.Month,s.DateTime.Day,s.Time.Value.Hour,s.Time.Value.Minute,0);
-
-
+            
             d.IsNotDeleteFile = s.IsNotDeleteFile;
             d.IsNotAttachFile = s.IsNotAttachFile;
 
@@ -233,6 +328,9 @@ namespace SA40300.Controllers
             d.FileName = s.FileName;
             d.IsZipFile = s.IsZipFile;
             d.UseStore = s.UseStore;
+
+            d.StoreName = s.StoreName.PassNull();
+            d.SplitMailTo = s.SplitMailTo;
 
             d.LUpd_Datetime = DateTime.Now;
             d.LUpd_Prog = screenNbr;
