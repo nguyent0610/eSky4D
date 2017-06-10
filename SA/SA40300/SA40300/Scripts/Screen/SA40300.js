@@ -226,23 +226,22 @@ var cboMailType_Change = function (sender, newValue, oldValue) {
         //App.cboMailCC.getTrigger(0).show();
         
 
-        App.cboMailTo.setWidth(275);
-        App.cboMailCC.setWidth(255);
+        //App.cboMailTo.setWidth(275);
+        //App.cboMailCC.setWidth(255);
     } else {
         
-        App.cboMailTo.setWidth(300);
-        App.cboMailCC.setWidth(280);
+        //App.cboMailTo.setWidth(300);
+        //App.cboMailCC.setWidth(280);
         //App.cboMailTo.getTrigger(0).hide()
         //App.cboMailCC.getTrigger(0).hide()
     }
+    App.txtMailTO.setVisible(isHtml);
+    App.txtMailCC.setVisible(isHtml);
+    App.btnMailTo.setVisible(!isHtml);
+    App.btnMailCC.setVisible(!isHtml);
+    App.cboMailTo.setVisible(!isHtml);
+    App.cboMailCC.setVisible(!isHtml);
 
-    App.btnMailTo.setVisible(isHtml);
-    App.btnMailCC.setVisible(isHtml);
-    App.cboMailTo.setReadOnly(isHtml);
-    App.cboMailCC.setReadOnly(isHtml);
-
-    App.btnMailTo.setVisible(isHtml);
-    App.btnMailCC.setVisible(isHtml);
     App.chkSplitMailTo.setVisible(isHtml);
     App.txtStoreName.setVisible(isHtml);
 
@@ -324,7 +323,9 @@ var cboMailCC_Expand = function () {
 var cboMailTo_TriggerClick = function () {
     _popupType = 'TO';
     _listUser = joinParams(App.cboMailTo);
+    App.chkActive_All.setValue(false);
     App.frmMain.mask();
+    App.stoMailAutoUser.removeAll();
     App.stoMailAutoUser.reload();
     App.winMailAutoUser.show();
 }
@@ -332,6 +333,7 @@ var cboMailTo_TriggerClick = function () {
 var cboMailCC_TriggerClick = function () {
     _popupType = 'CC';
     _listUser = joinParams(App.cboMailCC);
+    App.chkActive_All.setValue(false);
     App.frmMain.mask();
     App.stoMailAutoUser.reload();
     App.winMailAutoUser.show();
@@ -402,7 +404,7 @@ function save() {
                     App.stoMailHeader.reload();
                 });                                         
             }
-            , failure: function (errorMsg, data) {
+            , failure: function (msg, data) {
                 if (data.result.msgCode) {
                     if (data.result.msgCode == 2000)//loi trung key ko the add
                         HQ.message.show(data.result.msgCode, [App.cboMailID.fieldLabel, App.cboMailID.getValue()], '', true);
@@ -429,7 +431,7 @@ var deleteRecordForm = function (item) {
             success: function (action, data) {
                 App.cboMailID.setValue("");
                 App.cboMailID.getStore().load(function () { cboMailID_Change(App.cboMailID); });
-
+                HQ.message.show(2015032101);
             },
 
             failure: function (action, data) {

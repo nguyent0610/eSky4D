@@ -242,7 +242,7 @@ namespace SA40300.Controllers
                     // Delete 
                     foreach (var item in mailTos)
                     {
-                        var obj = _db.Server_MailAutoUser.FirstOrDefault(x => x.MailID.ToUpper() == mailID && x.UserID == item && x.SendType == "CC");
+                        var obj = _db.Server_MailAutoUser.FirstOrDefault(x => x.MailID.ToUpper() == mailID && x.UserID == item && x.SendType == "TO");
                         if (obj == null)
                         {
                             obj = new Server_MailAutoUser();

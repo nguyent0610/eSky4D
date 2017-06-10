@@ -1042,30 +1042,6 @@ namespace SA40300
         private global::System.String _StoreName;
         partial void OnStoreNameChanging(global::System.String value);
         partial void OnStoreNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String ReportType
-        {
-            get
-            {
-                return _ReportType;
-            }
-            set
-            {
-                OnReportTypeChanging(value);
-                ReportPropertyChanging("ReportType");
-                _ReportType = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("ReportType");
-                OnReportTypeChanged();
-            }
-        }
-        private global::System.String _ReportType;
-        partial void OnReportTypeChanging(global::System.String value);
-        partial void OnReportTypeChanged();
 
         #endregion
 
