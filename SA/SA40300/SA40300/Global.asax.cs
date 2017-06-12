@@ -39,14 +39,14 @@ namespace SA40300
 
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ND_test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "POC_Pepsi_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();ND_test_eSky4D
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
            
             Session["SA40300"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_test_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "POC_Pepsi_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";

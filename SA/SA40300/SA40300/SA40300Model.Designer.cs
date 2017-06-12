@@ -3106,6 +3106,30 @@ namespace SA40300
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String UserTypes
+        {
+            get
+            {
+                return _UserTypes;
+            }
+            set
+            {
+                OnUserTypesChanging(value);
+                ReportPropertyChanging("UserTypes");
+                _UserTypes = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("UserTypes");
+                OnUserTypesChanged();
+            }
+        }
+        private global::System.String _UserTypes;
+        partial void OnUserTypesChanging(global::System.String value);
+        partial void OnUserTypesChanged();
 
         #endregion
 

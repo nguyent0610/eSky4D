@@ -49,6 +49,7 @@ namespace SA40300.Controllers
         {
             return this.Store(_db.Server_MailAutoDetail.Where(p => p.MailID == mailID));
         }
+
         public ActionResult GetMailAutoUser(string emailID, string sendType, string listUser)
         {
             var lstData = _db.SA40300_pgMailtAutoUser(emailID, sendType, listUser, Current.UserName, Current.CpnyID, Current.LangID);
