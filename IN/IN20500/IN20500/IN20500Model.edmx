@@ -200,7 +200,7 @@
             <PropertyRef Name="InvtID" />
           </Key>
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BarCode" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BarCode" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Buyer" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ClassID" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Color" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -689,7 +689,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="37" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="63" >
         <EntityTypeShape EntityType="IN20500Model.IN_Inventory" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN20500Model.SI_Hierarchy" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN20500Model.IN_InvtCpny" Width="1.5" PointX="4.75" PointY="0.75" />

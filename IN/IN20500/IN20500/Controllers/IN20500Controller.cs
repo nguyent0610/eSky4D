@@ -493,7 +493,6 @@ namespace IN20500.Controllers
             List<SI_Hierarchy> lstSI_Hierarchy = _db.SI_Hierarchy.Where(p => p.Type == nodeType).ToList();
             List<IN_Inventory> lstIN_Inventory = _db.IN_Inventory.ToList();
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z, lstSI_Hierarchy, lstIN_Inventory);
-
             //quan trong dung de refresh slmTree
             this.GetCmp<TreePanel>("treeInvt").SetRootNode(node);
             return this.Direct();

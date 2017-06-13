@@ -81,7 +81,7 @@
                         HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQLangCode("InvtID").Tag("X").AllowBlank(false)//
                             .HQProcedure("IN20500_pcloadInvtID").HQColumnShow("InvtID,Descr,Descr1,BarCode,Color")
                             .DisplayField("InvtID").ValueField("InvtID").MaxLength(30).EnforceMaxLength(true)
-                            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
+                            .Width(300).HQHeightWidth(400, 450).MarginSpec("5 0 0 0").ForceSelection(true)
                             .HQisPaging(true).PageSize(20).LoadData()
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst =>
@@ -168,7 +168,8 @@
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 lst.Focus.Handler = "this.forceSelection = true;";  
                             })
-                            
+                        , HQ.TextBox().ID("txtBarCode").MarginSpec("5 0 5 0").Width(300).HQLangCode("IN20500BarCode").DataIndex("BarCode").AllowBlank(true).MaxLength(30).EnforceMaxLength(true).Tag("X")//.LabelWidth(80)    
+                        
                         , HQ.Checkbox().ID("chkPublic").Name("chkPublic").HQLangCode("Public").DataIndex("Public")
                             .Width(300).MarginSpec("5 0 5 10").Value(true).Hidden(true)
                             .Listeners(lst=>

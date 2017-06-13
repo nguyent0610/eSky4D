@@ -20,16 +20,16 @@ var parentRecordID = '';
 var _copy = false;
 var _treeExpandAll = false;
 var isnewclick = false;
-
+var _firstExpand = true;
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
         _isLoadMaster = true;
-        _Source = 0;
-        ReloadTree();
+        //_Source = 0;
+       // ReloadTree();
         App.cboInvtID.store.reload();
         App.stoIN_Inventory.reload();
-        HQ.common.showBusy(false);
+       // HQ.common.showBusy(false);
     }
 };
 
@@ -50,8 +50,8 @@ var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     App.frmMain.isValid();
-    ReloadTree();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    ReloadTree();   
     App.cboInvtID.getStore().addListener('load', checkLoad);
     App.cboApproveStatus.getStore().addListener('load', checkLoad);
     App.cboStatus.getStore().addListener('load', checkLoad);
@@ -87,7 +87,6 @@ var setView = function () {
     App.fupPPCStoreMediaReq.button.setWidth(100);
     App.frmMain.resumeLayouts(true);
     App.frmMain.doLayout();
-
 };
 
 var menuClick = function (command) {
@@ -153,7 +152,7 @@ var menuClick = function (command) {
             break;
         case "delete":
             if (HQ.isDelete) {
-                if (App.cboApproveStatus.getValue() == 'H') {
+                //if (App.cboApproveStatus.getValue() == 'H') {
                     if (HQ.focus == 'header') {
                         if (App.cboInvtID.getValue()) {
                             HQ.message.show(11, '', 'deleteData');
@@ -168,7 +167,7 @@ var menuClick = function (command) {
                             }
                         }
                     }
-                }
+               // }
             }
             break;
         case "save":
@@ -180,7 +179,12 @@ var menuClick = function (command) {
                         App.cboInvtID.focus();
                         App.cboInvtID.selectText();
                         return false;
-                    } 
+                    } else if (!Ext.isEmpty(App.txtBarCode.getValue()) && HQ.util.checkSpecialChar(App.txtBarCode.getValue()) == false) {
+                        HQ.message.show(20140811, App.txtBarCode.fieldLabel);
+                        App.txtBarCode.focus();
+                        App.txtBarCode.selectText();
+                        return false;
+                    }
                     if (_recordID != '' && _parentRecordID != '' && _nodeID != '' && _nodeLevel != '') {
                         if (_root == 'true') {
                             HQ.message.show(2015040901, '', '');
@@ -261,18 +265,18 @@ var stoLoad = function (sto) {
     }
     App.stoCpny.reload();
 
-    if (record.data.ApproveStatus == 'H') {
+    //if (record.data.ApproveStatus == 'H') {
         HQ.common.lockItem(App.frmMain, false);
         App.fupPPCStorePicReq.setDisabled(false);
         App.fupPPCStoreMediaReq.setDisabled(false);
         App.txtDfltLotSerFxdVal.setReadOnly(false);
-    }
-    else {
-        HQ.common.lockItem(App.frmMain, true);
-        App.fupPPCStorePicReq.setDisabled(true);
-        App.fupPPCStoreMediaReq.setDisabled(true);
-        App.txtDfltLotSerFxdVal.setReadOnly(true);
-    }
+    //}
+    //else {
+    //    HQ.common.lockItem(App.frmMain, true);
+    //    App.fupPPCStorePicReq.setDisabled(true);
+    //    App.fupPPCStoreMediaReq.setDisabled(true);
+    //    App.txtDfltLotSerFxdVal.setReadOnly(true);
+    //}
 
     if (!HQ.isInsert && HQ.isNew) {
         App.cboInvtID.forceSelection = true;
@@ -320,7 +324,7 @@ var stoCpny_Load = function (sto) {
 };
 
 var grdCpny_BeforeEdit = function (editor, e) {
-    if (App.cboApproveStatus.getValue() != 'H') return false;
+  //  if (App.cboApproveStatus.getValue() != 'H') return false;
     if (!HQ.grid.checkBeforeEdit(e, keysTab)) return false;
 };
 
@@ -431,9 +435,11 @@ var save = function () {
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
                 HQ.message.show(201405071);
+                HQ.common.showBusy(true, HQ.common.getLang("WaitMsg"));
                 InvtID = data.result.InvtID;
                 App.cboInvtID.getStore().reload({
                     callback: function () {
+                        
                         ReloadTree('save', data.result.InvtID);
                     }
                 });
@@ -915,7 +921,7 @@ var ReloadTree = function (type, valueInvtID) {
     try {
         _treeExpandAll = false;
         App.direct.ReloadTreeIN20500({
-            success: function (data) {
+            success: function (data) {                
                 if (type == 'save') {
 
                     App.cboInvtID.forceSelection = false;
@@ -938,8 +944,17 @@ var ReloadTree = function (type, valueInvtID) {
                     InvtID = '';
                     App.cboInvtID.getStore().reload();
                 }
+                if (_firstExpand) {
+                    App.frmMain.mask();
+                    App.treeInvt.getRootNode().expand();
+                    App.frmMain.unmask();
+                    _firstExpand = false;
+                }
+                
+                HQ.common.showBusy(false);
             },
             failure: function () {
+                HQ.common.showBusy(false);
                 alert("fail");
             },
             //eventMask: { msg: 'loadingTree', showMask: true }
