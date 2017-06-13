@@ -135,7 +135,8 @@ namespace AP10400.Controllers
 
 				StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstAp_Adjust"]);
 				var lstAp_Adjust = dataHandler2.ObjectData<AP10400_pgLoadGridTrans_Result>().ToList();
-				if (_db.AP10100_ppCheckCloseDate(BranchID.PassNull(), curHeader.DocDate.ToDateShort()).FirstOrDefault() == "0")
+				if (_db.AP10100_ppCheckCloseDate(BranchID.PassNull(), curHeader.DocDate.ToDateShort()).FirstOrDefault() == "0"
+					&&  _status=="H")
 					throw new MessageException(MessageType.Message, "301");
 				#region Save Header
                 var headerBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.Module == "AP" && p.EditScrnNbr == "AP10400");
@@ -289,18 +290,18 @@ namespace AP10400.Controllers
 				{
 					throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
 				}
-				foreach (AP10400_pgLoadGridTrans_Result created in lstgrd.Created)
+				int coutpayment = 0;
+				foreach (AP10400_pgLoadGridTrans_Result created in lstAp_Adjust)//lstgrd.Created)
 				{
-					if (created.InvcNbr.PassNull() != "")
+					if (created.InvcNbr.PassNull() != "" && created.Payment != 0 && Handle != "R" && headerBatch.Status != "C")
 					{
-						if (created.Payment == 0 && Handle != "R" && headerBatch.Status != "C")
-						{
-							throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
-						}
-						var checkrecord = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.AdjdRefNbr == created.RefNbr).FirstOrDefault();//&& p.BatNbr == BatNbr&& p.BatNbr == BatNbr && p.AdjgRefNbr == RefNbr
+						coutpayment++;
+						var checkrecord = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.AdjdRefNbr == created.RefNbr && p.BatNbr != BatNbr).FirstOrDefault();//&& p.BatNbr == BatNbr&& p.BatNbr == BatNbr && p.AdjgRefNbr == RefNbr
 
 						if (checkrecord != null)
 						{
+							var checkheaderBatch = _db.Batches.FirstOrDefault(p => p.BranchID == BranchID && p.BatNbr == checkrecord.BatNbr/*BatNbr*/ && p.Module == "AP" && p.EditScrnNbr == "AP10400" && p.Status == "H");
+						  if (checkheaderBatch!=null)
 							throw new MessageException(MessageType.Message, "20160808", "", new string[] { checkrecord.BatNbr });
 
 						}
@@ -334,9 +335,16 @@ namespace AP10400.Controllers
 							record.Crtd_User = Current.UserName;
 							_db.AP_Adjust.AddObject(record);
 						}
+						else
+						{
+							UpdatingGridAd_Adjust(created, ref record);
+						}
 					}
 				}
-
+				if (coutpayment == 0 && Handle != "R" && headerBatch.Status != "C")
+				{
+					throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
+				}
 				//foreach (AP10400_pgLoadGridTrans_Result updated in lstgrd.Updated)
 				//{
 				//	var record = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.AdjdRefNbr == updated.RefNbr && p.AdjgRefNbr == RefNbr).FirstOrDefault();

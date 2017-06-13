@@ -575,6 +575,7 @@ var save = function () {
             params: {
                 lstHeader: Ext.encode(App.stoHeader.getRecordsValues()),
                 lstgrd: HQ.store.getData(App.stoDetail),
+             
                 lstAp_Adjust:Ext.encode(App.stoDetail.getRecordsValues())
             },
             success: function (msg, data) {
