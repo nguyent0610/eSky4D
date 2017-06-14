@@ -43,8 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="APProcess">
-      <HintPath>..\..\..\Process\APProcess\APProcess\bin\Release\APProcess.dll</HintPath>
+    <Reference Include="APProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Hao\20170504\NhuHao\DLL MVC moi\XuanHuong\APProcess.dll</HintPath>
     </Reference>
     <Reference Include="Aspose.Cells, Version=8.3.2.1, Culture=neutral, PublicKeyToken=00725b1ceb58d0a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -166,11 +167,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="AP10400SysModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AP10400SysModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AP10400Model.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -238,10 +234,6 @@
     <EntityDeploy Include="AP10400Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>AP10400Model.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <EntityDeploy Include="AP10400SysModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AP10400SysModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\hq.common.js" />

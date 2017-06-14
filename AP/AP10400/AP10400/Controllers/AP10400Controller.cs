@@ -179,17 +179,17 @@ namespace AP10400.Controllers
                     headerBatch.TotAmt = curHeader.TotAmt;
                     headerBatch.DateEnt = curHeader.DocDate;
                     headerBatch.OrigBranchID = "";
-					if (Handle == "R")
-					{
-						headerBatch.Rlsed = 1;
-						headerBatch.Status = "C";
-					}
-					else 
-					if (Handle == "N" || Handle == "")
-					{
+                    //if (Handle == "R")
+                    //{
+                    //    headerBatch.Rlsed = 1;
+                    //    headerBatch.Status = "C";
+                    //}
+                    //else 
+                    //if (Handle == "N" || Handle == "")
+                    //{
 						headerBatch.Rlsed = 0;
 						headerBatch.Status = "H";
-					}
+                    //}
                     headerBatch.IntRefNbr = curHeader.IntRefNbr;
                     headerBatch.ReasonCD = curHeader.ReasonCD;
                     headerBatch.TotAmt = curHeader.TotAmt;
@@ -286,14 +286,14 @@ namespace AP10400.Controllers
 
 				}
 				lstgrd.Created.AddRange(lstgrd.Updated);
-				if (lstAp_Adjust.Count() == 0 && Handle != "R" && headerBatch.Status != "C")
+				if (lstAp_Adjust.Count() == 0 &&  headerBatch.Status != "C")
 				{
 					throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
 				}
 				int coutpayment = 0;
 				foreach (AP10400_pgLoadGridTrans_Result created in lstAp_Adjust)//lstgrd.Created)
 				{
-					if (created.InvcNbr.PassNull() != "" && created.Payment != 0 && Handle != "R" && headerBatch.Status != "C")
+					if (created.InvcNbr.PassNull() != "" && created.Payment != 0  && headerBatch.Status != "C")
 					{
 						coutpayment++;
 						var checkrecord = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.AdjdRefNbr == created.RefNbr && p.BatNbr != BatNbr).FirstOrDefault();//&& p.BatNbr == BatNbr&& p.BatNbr == BatNbr && p.AdjgRefNbr == RefNbr
@@ -341,7 +341,7 @@ namespace AP10400.Controllers
 						}
 					}
 				}
-				if (coutpayment == 0 && Handle != "R" && headerBatch.Status != "C")
+				if (coutpayment == 0 &&  headerBatch.Status != "C")
 				{
 					throw new MessageException(MessageType.Message, "1000", "", new string[] { Util.GetLang("Payment") });
 				}

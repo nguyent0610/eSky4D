@@ -38,14 +38,14 @@ namespace AP10400
             //Session["LangID"] = 1;
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";
-            Current.DBSys = "ND_eSky4DSys";
+            Current.Server = "TRUONGSAD";
+            Current.DBSys = "XH_TEST_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["AP10400"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "XH_TEST_eSky4DApp";
 			Session["UserName"] = Current.UserName = "admin";
 			Session["CpnyID"] = Current.CpnyID = "040100001";
             Session["Language"] = Current.Language = "vi";
