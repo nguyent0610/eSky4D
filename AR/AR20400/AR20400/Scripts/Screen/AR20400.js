@@ -37,7 +37,7 @@ var parentRecordIDAll = '';
 var parentRecordID = '';
 var _Flag;
 var _treeExpandAll = false;
-
+var _countchildNodes = 0;
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -213,9 +213,13 @@ var menuClick = function (command) {
             if (HQ.isDelete) {
                 if (App.cboStatus.getValue() == 'H') {
                     if (HQ.focus == 'header') {
-                        if (App.cboCustId.getValue()) {
+                        if (App.cboCustId.getValue() && _countchildNodes == 0) {
                             HQ.message.show(11, '', 'deleteData');
                         } else {
+                            if (_countchildNodes > 0) {
+                                HQ.message.show(2017061302);
+                                return;
+                            }
                             menuClick('new');
                         }
                     }
@@ -254,6 +258,10 @@ var menuClick = function (command) {
                             }
                         }
                     }
+                }
+                else {
+                    HQ.message.show(2017061301);
+                    return;
                 }
             }
             break;
@@ -744,6 +752,7 @@ var save = function () {
                                 }
                                 App.cboCustId.setValue(CustId);
                                 App.stoAR_Customer.reload();
+                                ReloadTree('save', CustId);
                             }
                         }
                     }
@@ -1212,32 +1221,32 @@ var btnCollapse_click = function (btn, e, eOpts) {
 };
 
 var nodeSelected_Change = function (store, operation, options) {
-        
+    _countchildNodes = operation.childNodes.length;
     if (operation.internalId != 'root') {
         _root = 'false';
         var CustID1 = '';
-        _nodeID = operation.raw.NodeID;
-        _nodeLevel = operation.raw.NodeLevel;
-        _parentRecordID = operation.raw.ParentRecordID;
-        _recordID = operation.raw.RecordID;
-        CustID1 = operation.raw.CustID;
+        //_nodeID = operation.raw.NodeID;
+        //_nodeLevel = operation.raw.NodeLevel;
+        //_parentRecordID = operation.raw.ParentRecordID;
+        //_recordID = operation.raw.RecordID;
+        //CustID1 = operation.raw.CustID;
         //_leaf = operation.data.leaf;
-        //parentRecordIDAll = operation.internalId.split("-");
-        //if (parentRecordIDAll[1] != '|') {
-        //    _nodeID = parentRecordIDAll[0];
-        //    _nodeLevel = parentRecordIDAll[1];
-        //    _parentRecordID = parentRecordIDAll[2];
-        //    _recordID = parentRecordIDAll[3];
-        //} else {
-        //    parentRecordIDAll = operation.data.parentId.split("-");
-        //    _nodeID = parentRecordIDAll[0];
-        //    _nodeLevel = parentRecordIDAll[1];
-        //    _parentRecordID = parentRecordIDAll[2];
-        //    _recordID = parentRecordIDAll[3];
-        //    var custIDall = operation.data.id.split("-");
-        //    CustID1 = custIDall[0];
-        //    //CustId = custIDall[0];
-        //}
+        parentRecordIDAll = operation.internalId.split("-");
+        if (parentRecordIDAll[1] != '|') {
+            _nodeID = parentRecordIDAll[0];
+            _nodeLevel = parentRecordIDAll[1];
+            _parentRecordID = parentRecordIDAll[2];
+            _recordID = parentRecordIDAll[3];
+        } else {
+            parentRecordIDAll = operation.data.parentId.split("-");
+            _nodeID = parentRecordIDAll[0];
+            _nodeLevel = parentRecordIDAll[1];
+            _parentRecordID = parentRecordIDAll[2];
+            _recordID = parentRecordIDAll[3];
+            var custIDall = operation.data.id.split("-");
+            CustID1 = custIDall[0];
+            //CustId = custIDall[0];
+        }
     } else {
         _root = 'true';
         _nodeID = '';
@@ -1267,7 +1276,9 @@ var nodeSelected_Change = function (store, operation, options) {
     }
         
 };
-
+var node_Expand = function (item) {
+    App.treeCust.view.focusRow(App.slmtreeCust.getSelection()[0]);
+};
 //var stoCustId_Load = function () {
 //    //App.cboCustId.setValue(CustId);
 //};
