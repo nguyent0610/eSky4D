@@ -820,8 +820,9 @@ var defaultOnNew = function () {
     var record = recentRecord = Ext.create('App.mdlBudget');
     record.data.AllocType = '0';
     record.data.ApplyTo = 'F';
+    record.data.Active = true;
     record.data.Status = HQ.beginStatus;
-    record.data.RvsdDate = HQ.businessDate;
+    record.data.RvsdDate = HQ.bussinessDate;
     App.frmMain.validate();
     bindBudget(record);
 };

@@ -36,7 +36,7 @@ namespace OM20300.Controllers
 
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public System.Web.Mvc.PartialViewResult Body(string lang)
         {
                   return PartialView();

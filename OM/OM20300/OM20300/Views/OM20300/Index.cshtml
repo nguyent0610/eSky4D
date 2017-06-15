@@ -23,7 +23,8 @@
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
-        HQ.businessDate = new Date();
+        //HQ.businessDate = new Date();
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');
         HQ.isRelease = HQ.util.toBool('@acc.Release.ToString()');
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');

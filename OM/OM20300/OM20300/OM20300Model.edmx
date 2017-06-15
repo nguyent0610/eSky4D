@@ -633,6 +633,7 @@
           <Property Type="Double" Name="QtyAmtAlloc" Nullable="false" />
           <Property Type="String" Name="tstamp" Nullable="true" />
           <Property Type="String" Name="AllocType" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="StatusDescr" Nullable="true" MaxLength="400" />
         </ComplexType>
         <ComplexType Name="OM20300_pcBranch_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="50" />
@@ -970,6 +971,7 @@
                 <ScalarProperty Name="QtyAmtAlloc" ColumnName="QtyAmtAlloc" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="AllocType" ColumnName="AllocType" />
+                <ScalarProperty Name="StatusDescr" ColumnName="StatusDescr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

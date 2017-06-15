@@ -88,11 +88,13 @@
                                     <tr>
                                         <th>" + Util.GetLang("BudgetID") + @"</th>
                                         <th>" + Util.GetLang("Descr") + @"</th>
+                                        <th>" + Util.GetLang("Status") + @"</th>
                                     </tr>
                             </tpl>
                             <tr class='x-boundlist-item'>
                                 <td style='width:100px;'>{BudgetID}</td>
                                 <td>{Descr}</td>
+                                <td>{StatusDescr}</td>
                             </tr>
                             <tpl if='[xcount-xindex] == 0'>
                                 </table>
@@ -297,6 +299,9 @@
                         , X.Column().DataIndex("QtyAmtSpent").Sortable(false)
                         .Width(150).Text(Util.GetLang("Spent"))
                         .Renderer("renderQtyAmt").Align(Alignment.Right)
+                        
+                        , X.Column().DataIndex("QtyAmtAvail").Sortable(false)
+                        .Width(110).Text(Util.GetLang("BudgetResidual")).Align(Alignment.Right)
                     )
                     .Listeners(lst =>
                     {
@@ -382,9 +387,12 @@
                         , X.Column().DataIndex("QtyAmtAlloc").Renderer("renderQtyAmt").Sortable(false)
                         .Width(150).Text(Util.GetLang("Budget")).Align(Alignment.Right)
                         .Editor(X.NumberField().MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
-
+                        
                         , X.Column().DataIndex("QtyAmtSpent").Align(Alignment.Right).Sortable(false)
                         .Width(150).Text(Util.GetLang("Spent")).Renderer("renderQtyAmt")
+                        
+                        , X.Column().DataIndex("QtyAmtAvail").Sortable(false)
+                        .Width(110).Text(Util.GetLang("BudgetResidual")).Align(Alignment.Right)
 
                     )
                     .Listeners(lst =>

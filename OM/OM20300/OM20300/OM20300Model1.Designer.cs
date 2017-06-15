@@ -6139,6 +6139,30 @@ namespace OM20300
         private global::System.String _AllocType;
         partial void OnAllocTypeChanging(global::System.String value);
         partial void OnAllocTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StatusDescr
+        {
+            get
+            {
+                return _StatusDescr;
+            }
+            set
+            {
+                OnStatusDescrChanging(value);
+                ReportPropertyChanging("StatusDescr");
+                _StatusDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StatusDescr");
+                OnStatusDescrChanged();
+            }
+        }
+        private global::System.String _StatusDescr;
+        partial void OnStatusDescrChanging(global::System.String value);
+        partial void OnStatusDescrChanged();
 
         #endregion
 
