@@ -104,7 +104,7 @@ namespace AR20400.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -863,10 +863,10 @@ namespace AR20400.Controllers
             {
                 node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
                 node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
-                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeID", Value = "", Mode = ParameterMode.Value });
-                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeLevel", Value = "", Mode = ParameterMode.Value });
-                node.CustomAttributes.Add(new ConfigItem() { Name = "ParentRecordID", Value = "", Mode = ParameterMode.Value });
-                node.CustomAttributes.Add(new ConfigItem() { Name = "RecordID", Value = "", Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeID", Value = inactiveHierachy.NodeID, Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "NodeLevel", Value = inactiveHierachy.NodeLevel.ToString(), Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "ParentRecordID", Value = inactiveHierachy.ParentRecordID.ToString(), Mode = ParameterMode.Value });
+                node.CustomAttributes.Add(new ConfigItem() { Name = "RecordID", Value = inactiveHierachy.RecordID.ToString(), Mode = ParameterMode.Value });
                 node.CustomAttributes.Add(new ConfigItem() { Name = "CustID", Value = "", Mode = ParameterMode.Value });
             }
 

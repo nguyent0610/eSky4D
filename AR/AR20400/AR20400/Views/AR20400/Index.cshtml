@@ -108,7 +108,15 @@
             })
             .LoadData()
         )
-
+      @(Html.HQ().Store().ID("stoAR20400_ppGetTerritoryForUser").AutoLoad(true)
+            .HQProcedure("AR20400_ppGetTerritoryForUser")
+            .HQParam(new StoreParameterCollection() { 
+                new StoreParameter("@UserID","HQ.userName", ParameterMode.Raw)
+                ,new StoreParameter("@BranchID","HQ.cpnyID", ParameterMode.Raw)
+            })
+            .LoadData()
+             .Listeners(l=>l.Load.Fn="stoAR20400_ppGetTerritoryForUser_load")
+        )
         <!-- Gọi hàm Body trong AR20400Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
         @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>

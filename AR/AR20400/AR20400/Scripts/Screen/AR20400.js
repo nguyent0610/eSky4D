@@ -37,7 +37,8 @@ var parentRecordIDAll = '';
 var parentRecordID = '';
 var _Flag;
 var _treeExpandAll = false;
-var _countchildNodes = 0;
+var value1 = '';
+var value2 = '';
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -61,7 +62,13 @@ var checkLoad = function (sto) {
             App.cboShopType.setReadOnly(false);
     }
 };
-
+var stoAR20400_ppGetTerritoryForUser_load = function (sto) {
+    if (sto.data.length > 0) {
+        var objData = sto.data.items[0].data;
+        value1 = objData.Territory;
+        value2 = objData.Area;
+    }
+};
 var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
@@ -213,13 +220,9 @@ var menuClick = function (command) {
             if (HQ.isDelete) {
                 if (App.cboStatus.getValue() == 'H') {
                     if (HQ.focus == 'header') {
-                        if (App.cboCustId.getValue() && _countchildNodes == 0) {
+                        if (App.cboCustId.getValue()) {
                             HQ.message.show(11, '', 'deleteData');
                         } else {
-                            if (_countchildNodes > 0) {
-                                HQ.message.show(2017061302);
-                                return;
-                            }
                             menuClick('new');
                         }
                     }
@@ -258,10 +261,6 @@ var menuClick = function (command) {
                             }
                         }
                     }
-                }
-                else {
-                    HQ.message.show(2017061301);
-                    return;
                 }
             }
             break;
@@ -382,6 +381,8 @@ var stoLoad = function (sto) {
         record.set('ExpiryDate', HQ.bussinessDate);
         record.set('EstablishDate', HQ.bussinessDate);
         record.set('Birthdate', HQ.bussinessDate);
+        record.set('Territory', value1);
+        record.set('Area', value2);
         HQ.isNew = true;
         App.cboCustId.forceSelection = false;
         //if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1')
@@ -438,6 +439,9 @@ var stoLoad = function (sto) {
         App.fupImages.setDisabled(true);
     }
     if (!HQ.isNew && _hiddenTree == 'false') searchNode();
+    
+    HQ.common.showBusy(false);
+
 };
 
 /////////////////////////////// GIRD AR_LTTContract /////////////////////////////////
@@ -721,8 +725,11 @@ var save = function () {
                 HQ.isFirstLoad = true;
                 HQ.message.show(201405071);
                 CustId = data.result.CustId;
+                HQ.common.showBusy(true, HQ.common.getLang("WaitMsg"));
                 App.cboCustId.getStore().reload({
                     callback: function () {
+                        //ReloadTree('save', CustId);
+
                         if (Ext.isEmpty(App.cboCustId.getValue())) {
                             if (_hiddenTree == 'false' && data.result.isNew == 'true')
                                 ReloadTree('save', CustId);
@@ -740,6 +747,7 @@ var save = function () {
                            
                         }
                         else {
+                            //var custNameTmp = App.cboCustId.getValue() + '-' + App.txtCustName.getValue();
                             if (_hiddenTree == 'false' && data.result.isNew == 'true')
                                 ReloadTree('save', CustId);
                             else
@@ -750,8 +758,9 @@ var save = function () {
                                     var positionCust = calcPage(objPageCust.index);
                                     App.cboCustId.loadPage(positionCust);
                                 }
+                                //App.slmtreeCust.selected.items[0].set('text', custNameTmp);
                                 App.cboCustId.setValue(CustId);
-                                App.stoAR_Customer.reload();
+                               // App.stoAR_Customer.reload();
                                 ReloadTree('save', CustId);
                             }
                         }
@@ -1221,32 +1230,32 @@ var btnCollapse_click = function (btn, e, eOpts) {
 };
 
 var nodeSelected_Change = function (store, operation, options) {
-    _countchildNodes = operation.childNodes.length;
+        
     if (operation.internalId != 'root') {
         _root = 'false';
         var CustID1 = '';
-        //_nodeID = operation.raw.NodeID;
-        //_nodeLevel = operation.raw.NodeLevel;
-        //_parentRecordID = operation.raw.ParentRecordID;
-        //_recordID = operation.raw.RecordID;
-        //CustID1 = operation.raw.CustID;
+        _nodeID = operation.raw.NodeID;
+        _nodeLevel = operation.raw.NodeLevel;
+        _parentRecordID = operation.raw.ParentRecordID;
+        _recordID = operation.raw.RecordID;
+        CustID1 = operation.raw.CustID;
         //_leaf = operation.data.leaf;
-        parentRecordIDAll = operation.internalId.split("-");
-        if (parentRecordIDAll[1] != '|') {
-            _nodeID = parentRecordIDAll[0];
-            _nodeLevel = parentRecordIDAll[1];
-            _parentRecordID = parentRecordIDAll[2];
-            _recordID = parentRecordIDAll[3];
-        } else {
-            parentRecordIDAll = operation.data.parentId.split("-");
-            _nodeID = parentRecordIDAll[0];
-            _nodeLevel = parentRecordIDAll[1];
-            _parentRecordID = parentRecordIDAll[2];
-            _recordID = parentRecordIDAll[3];
-            var custIDall = operation.data.id.split("-");
-            CustID1 = custIDall[0];
-            //CustId = custIDall[0];
-        }
+        //parentRecordIDAll = operation.internalId.split("-");
+        //if (parentRecordIDAll[1] != '|') {
+        //    _nodeID = parentRecordIDAll[0];
+        //    _nodeLevel = parentRecordIDAll[1];
+        //    _parentRecordID = parentRecordIDAll[2];
+        //    _recordID = parentRecordIDAll[3];
+        //} else {
+        //    parentRecordIDAll = operation.data.parentId.split("-");
+        //    _nodeID = parentRecordIDAll[0];
+        //    _nodeLevel = parentRecordIDAll[1];
+        //    _parentRecordID = parentRecordIDAll[2];
+        //    _recordID = parentRecordIDAll[3];
+        //    var custIDall = operation.data.id.split("-");
+        //    CustID1 = custIDall[0];
+        //    //CustId = custIDall[0];
+        //}
     } else {
         _root = 'true';
         _nodeID = '';
@@ -1276,9 +1285,7 @@ var nodeSelected_Change = function (store, operation, options) {
     }
         
 };
-var node_Expand = function (item) {
-    App.treeCust.view.focusRow(App.slmtreeCust.getSelection()[0]);
-};
+
 //var stoCustId_Load = function () {
 //    //App.cboCustId.setValue(CustId);
 //};
@@ -1297,9 +1304,10 @@ var findRecordCombo = function (value) {
 };
     
 var ReloadTree = function (type, valueCustId) {
-    try {
+    try {       
         _treeExpandAll = false;
-        App.direct.ReloadTreeAR20400(App.cboCpnyID.getValue(), {
+        
+        App.direct.ReloadTreeAR20400(App.cboCpnyID.getValue(), {            
             success: function (data) {
                 if (type == 'save') {
                     App.cboCustId.forceSelection = false;
@@ -1340,7 +1348,9 @@ var searchNode = function () {
     }
     Ext.resumeLayouts(true);
 };
-
+var node_Expand = function (item) {
+    App.treeCust.view.focusRow(App.slmtreeCust.getSelection()[0]);
+};
 var expandParentNode = function (node) {
     var parentNode = node.parentNode;
     if (parentNode) {
