@@ -55,7 +55,7 @@ namespace AP10400.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -293,7 +293,7 @@ namespace AP10400.Controllers
 				int coutpayment = 0;
 				foreach (AP10400_pgLoadGridTrans_Result created in lstAp_Adjust)//lstgrd.Created)
 				{
-					if (created.InvcNbr.PassNull() != "" && created.Payment != 0  && headerBatch.Status != "C")
+                    if (created.InvcNbr.PassNull() != "" && created.Payment != 0 && _status != "C")
 					{
 						coutpayment++;
 						var checkrecord = _db.AP_Adjust.Where(p => p.BranchID == BranchID && p.AdjdRefNbr == created.RefNbr && p.BatNbr != BatNbr).FirstOrDefault();//&& p.BatNbr == BatNbr&& p.BatNbr == BatNbr && p.AdjgRefNbr == RefNbr
