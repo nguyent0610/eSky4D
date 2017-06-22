@@ -1117,6 +1117,14 @@ var Event = {
                 e.record.set("CpnyName", '');
             HQ.grid.checkInsertKey(App.grdCompany, e, keys);
         },
+        grdCustID_edit: function (item, e) {
+            var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+            HQ.grid.checkInsertKey(App.grdCustomer, e, keys);
+        },
+        grdCustID_ValidateEdit: function (item, e) {
+            var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+            return HQ.grid.checkValidateEdit(App.grdCustomer, e, keys);
+        },
         grd_edit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
             if (e.store.storeId == 'stoLevel') {
@@ -1255,7 +1263,12 @@ var Event = {
         }
 
         , grdCustomer_BeforeEdit: function (item, e) {
-            return false;
+            var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+            if (HQ.grid.checkBeforeEdit(e, keys))
+                return false;
+            if(e.field == "CustID")
+                if(e.value != '')
+                    return false;
         }
 
         , grdSales_BeforeEdit: function (item, e) {

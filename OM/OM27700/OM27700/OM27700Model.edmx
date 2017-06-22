@@ -4,25 +4,37 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="HO_PendingTasks" EntityType="eBiz4DWebAppModel.Store.HO_PendingTasks" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="IN_Inventory" EntityType="eBiz4DWebAppModel.Store.IN_Inventory" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_Accumulated" EntityType="eBiz4DWebAppModel.Store.OM_Accumulated" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_AccumulatedCpny" EntityType="eBiz4DWebAppModel.Store.OM_AccumulatedCpny" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_AccumulatedCustomer" EntityType="eBiz4DWebAppModel.Store.OM_AccumulatedCustomer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_AccumulatedInvt" EntityType="eBiz4DWebAppModel.Store.OM_AccumulatedInvt" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_AccumulatedLevel" EntityType="eBiz4DWebAppModel.Store.OM_AccumulatedLevel" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_AccumulatedSalesPerson" EntityType="eBiz4DWebAppModel.Store.OM_AccumulatedSalesPerson" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SI_ApprovalFlowHandle" EntityType="eBiz4DWebAppModel.Store.SI_ApprovalFlowHandle" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SI_Hierarchy" EntityType="eBiz4DWebAppModel.Store.SI_Hierarchy" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
         <EntityType Name="HO_PendingTasks">
           <Key>
             <PropertyRef Name="TaskID" />
           </Key>
-          <Property Name="ObjectID" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ObjectID" Type="varchar" Nullable="false" MaxLength="200" />
           <Property Name="BranchID" Type="varchar(max)" Nullable="false" />
-          <Property Name="EditScreenNbr" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="EditScreenNbr" Type="varchar" Nullable="false" MaxLength="12" />
           <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Note" Type="nvarchar(max)" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="TaskID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="TaskID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Parm00" Type="nvarchar(max)" />
           <Property Name="Parm02" Type="nvarchar(max)" />
           <Property Name="Parm01" Type="nvarchar(max)" />
@@ -31,8 +43,8 @@
           <Key>
             <PropertyRef Name="InvtID" />
           </Key>
-          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BarCode" Type="varchar" MaxLength="20" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BarCode" Type="varchar" MaxLength="30" />
           <Property Name="Buyer" Type="varchar" MaxLength="10" />
           <Property Name="ClassID" Type="varchar" MaxLength="10" />
           <Property Name="Color" Type="nvarchar" MaxLength="20" />
@@ -93,50 +105,50 @@
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="ApproveStatus" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="ApproveStatus" Type="varchar" Nullable="false" MaxLength="5" />
           <Property Name="Media" Type="varchar" MaxLength="100" />
           <Property Name="LotSerRcptAuto" Type="bit" />
-          <Property Name="Category" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Brand" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="ProGroup" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="ProType" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Category" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Brand" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ProGroup" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ProType" Type="varchar" Nullable="false" MaxLength="30" />
         </EntityType>
         <EntityType Name="OM_Accumulated">
           <Key>
             <PropertyRef Name="AccumulateID" />
           </Key>
-          <Property Name="AccumulateID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Descr" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="AccumulateID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Descr" Type="nvarchar" Nullable="false" MaxLength="500" />
           <Property Name="FromDate" Type="datetime" Nullable="false" />
           <Property Name="ToDate" Type="datetime" Nullable="false" />
-          <Property Name="ApplyFor" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="ApplyType" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="ObjApply" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ApplyFor" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ApplyType" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ObjApply" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Type" Type="bit" />
           <Property Name="Status" Type="varchar" MaxLength="2" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_AccumulatedCpny">
           <Key>
             <PropertyRef Name="AccumulateID" />
             <PropertyRef Name="CpnyID" />
           </Key>
-          <Property Name="AccumulateID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="CpnyID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AccumulateID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CpnyID" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_AccumulatedCustomer">
           <Key>
@@ -144,16 +156,17 @@
             <PropertyRef Name="CpnyID" />
             <PropertyRef Name="CustID" />
           </Key>
-          <Property Name="AccumulateID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="CpnyID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="CustID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AccumulateID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CpnyID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="NumRegLot" Type="float" />
         </EntityType>
         <EntityType Name="OM_AccumulatedInvt">
           <Key>
@@ -161,37 +174,37 @@
             <PropertyRef Name="LevelID" />
             <PropertyRef Name="InvtID" />
           </Key>
-          <Property Name="AccumulateID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="LevelID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="AccumulateID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="LevelID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Qty" Type="float" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_AccumulatedLevel">
           <Key>
             <PropertyRef Name="AccumulateID" />
             <PropertyRef Name="LevelID" />
           </Key>
-          <Property Name="AccumulateID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="LevelID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="LevelDescr" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="AccumulateID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="LevelID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="LevelDescr" Type="nvarchar" Nullable="false" MaxLength="200" />
           <Property Name="LevelFrom" Type="float" Nullable="false" />
           <Property Name="LevelTo" Type="float" Nullable="false" />
           <Property Name="PercentBonus" Type="float" Nullable="false" />
-          <Property Name="LevelType" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="LevelType" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_AccumulatedSalesPerson">
           <Key>
@@ -199,16 +212,16 @@
             <PropertyRef Name="CpnyID" />
             <PropertyRef Name="SlsperID" />
           </Key>
-          <Property Name="AccumulateID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="CpnyID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="SlsperID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AccumulateID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CpnyID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="SlsperID" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -217,10 +230,10 @@
             <PropertyRef Name="Status" />
             <PropertyRef Name="Handle" />
           </Key>
-          <Property Name="AppFolID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="RoleID" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Handle" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="AppFolID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="RoleID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Handle" Type="varchar" Nullable="false" MaxLength="5" />
           <Property Name="LangHandle" Type="varchar" MaxLength="50" />
           <Property Name="ToStatus" Type="varchar" MaxLength="10" />
           <Property Name="ProcName" Type="nvarchar" MaxLength="250" />
@@ -235,12 +248,12 @@
           <Property Name="Param04" Type="nvarchar" MaxLength="500" />
           <Property Name="Param05" Type="nvarchar" MaxLength="500" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="MailApprove" Type="varchar" MaxLength="100" />
           <Property Name="ProcContent" Type="varchar" MaxLength="100" />
         </EntityType>
@@ -251,19 +264,19 @@
             <PropertyRef Name="Type" />
             <PropertyRef Name="ParentRecordID" />
           </Key>
-          <Property Name="NodeID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="NodeID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="NodeLevel" Type="smallint" Nullable="false" />
-          <Property Name="Type" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="Type" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="ParentRecordID" Type="int" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="200" />
           <Property Name="RecordID" Type="int" Nullable="false" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="Descr1" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <Function Name="OM27700_pcCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -322,18 +335,6 @@
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
-        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
-          <EntitySet Name="HO_PendingTasks" EntityType="Self.HO_PendingTasks" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="IN_Inventory" EntityType="Self.IN_Inventory" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_Accumulated" EntityType="Self.OM_Accumulated" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_AccumulatedCpny" EntityType="Self.OM_AccumulatedCpny" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_AccumulatedCustomer" EntityType="Self.OM_AccumulatedCustomer" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_AccumulatedInvt" EntityType="Self.OM_AccumulatedInvt" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_AccumulatedLevel" EntityType="Self.OM_AccumulatedLevel" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_AccumulatedSalesPerson" EntityType="Self.OM_AccumulatedSalesPerson" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SI_ApprovalFlowHandle" EntityType="Self.SI_ApprovalFlowHandle" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SI_Hierarchy" EntityType="Self.SI_Hierarchy" Schema="dbo" store:Type="Tables" />
-        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -379,7 +380,6 @@
           </FunctionImport>
           <EntitySet Name="OM_Accumulated" EntityType="OM27700Model.OM_Accumulated" />
           <EntitySet Name="OM_AccumulatedCpny" EntityType="OM27700Model.OM_AccumulatedCpny" />
-          <EntitySet Name="OM_AccumulatedCustomer" EntityType="OM27700Model.OM_AccumulatedCustomer" />
           <EntitySet Name="OM_AccumulatedInvt" EntityType="OM27700Model.OM_AccumulatedInvt" />
           <EntitySet Name="OM_AccumulatedLevel" EntityType="OM27700Model.OM_AccumulatedLevel" />
           <EntitySet Name="OM_AccumulatedSalesPerson" EntityType="OM27700Model.OM_AccumulatedSalesPerson" />
@@ -405,6 +405,7 @@
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="OM_AccumulatedCustomer" EntityType="OM27700Model.OM_AccumulatedCustomer" />
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
           <Key>
@@ -467,7 +468,7 @@
             <PropertyRef Name="InvtID" />
           </Key>
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BarCode" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BarCode" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Buyer" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ClassID" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Color" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -637,23 +638,6 @@
           <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <EntityType Name="OM_AccumulatedCustomer">
-          <Key>
-            <PropertyRef Name="AccumulateID" />
-            <PropertyRef Name="CpnyID" />
-            <PropertyRef Name="CustID" />
-          </Key>
-          <Property Name="AccumulateID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CpnyID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CustID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-        </EntityType>
         <EntityType Name="OM_AccumulatedInvt">
           <Key>
             <PropertyRef Name="AccumulateID" />
@@ -725,6 +709,7 @@
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Double" Name="NumRegLot" Nullable="true" />
         </ComplexType>
         <ComplexType Name="OM27700_pgSalesPerson_Result">
           <Property Type="String" Name="AccumulateID" Nullable="false" MaxLength="50" />
@@ -733,6 +718,24 @@
           <Property Type="String" Name="SlsName" Nullable="true" MaxLength="30" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
+        <EntityType Name="OM_AccumulatedCustomer">
+          <Key>
+            <PropertyRef Name="AccumulateID" />
+            <PropertyRef Name="CpnyID" />
+            <PropertyRef Name="CustID" />
+          </Key>
+          <Property Type="String" Name="AccumulateID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="Double" Name="NumRegLot" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -993,22 +996,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OM_AccumulatedCustomer">
-            <EntityTypeMapping TypeName="OM27700Model.OM_AccumulatedCustomer">
-              <MappingFragment StoreEntitySet="OM_AccumulatedCustomer">
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
-                <ScalarProperty Name="AccumulateID" ColumnName="AccumulateID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OM_AccumulatedInvt">
             <EntityTypeMapping TypeName="OM27700Model.OM_AccumulatedInvt">
               <MappingFragment StoreEntitySet="OM_AccumulatedInvt">
@@ -1088,6 +1075,7 @@
                 <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
                 <ScalarProperty Name="CustName" ColumnName="CustName" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="NumRegLot" ColumnName="NumRegLot" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1102,6 +1090,23 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="OM_AccumulatedCustomer">
+            <EntityTypeMapping TypeName="OM27700Model.OM_AccumulatedCustomer">
+              <MappingFragment StoreEntitySet="OM_AccumulatedCustomer">
+                <ScalarProperty Name="NumRegLot" ColumnName="NumRegLot" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="AccumulateID" ColumnName="AccumulateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1131,10 +1136,10 @@
         <EntityTypeShape EntityType="OM27700Model.SI_Hierarchy" Width="1.5" PointX="0.75" PointY="5.125" />
         <EntityTypeShape EntityType="OM27700Model.OM_Accumulated" Width="1.5" PointX="4.375" PointY="0.5" />
         <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedCpny" Width="1.5" PointX="4.375" PointY="4.625" />
-        <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedCustomer" Width="1.5" PointX="6.25" PointY="4.625" />
         <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedInvt" Width="1.5" PointX="8" PointY="0.5" />
         <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedLevel" Width="1.5" PointX="6.25" PointY="0.5" />
         <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedSalesPerson" Width="1.5" PointX="8" PointY="4.625" />
+        <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedCustomer" Width="1.5" PointX="8.2197027766237518" PointY="10.523176093829411" />
       </Diagram>
     </Diagrams>
   </Designer>

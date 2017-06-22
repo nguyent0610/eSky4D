@@ -29,17 +29,17 @@ namespace OM27700
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";
-            Current.DBSys = "ND_TEST_eSky4DSys";
+            Current.Server = "TRUONGSAD";
+            Current.DBSys = "XMen_eSky4DSys";
             Current.FormatDate = "MM-dd-yyyy";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM27700"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_TEST_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "XMen_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "18247";
+            Session["CpnyID"] = Current.CpnyID = "NPP0001";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
 

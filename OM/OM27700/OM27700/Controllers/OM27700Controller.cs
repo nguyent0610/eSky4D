@@ -47,7 +47,7 @@ namespace OM27700.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -678,7 +678,15 @@ namespace OM27700.Controllers
                     newCust.Crtd_DateTime = DateTime.Now;
                     newCust.Crtd_Prog = _screenNbr;
                     newCust.Crtd_User = Current.UserName;
+                    update_Customer(newCust, currentCust, true);
                     _db.OM_AccumulatedCustomer.AddObject(newCust);
+                }
+                else
+                {
+                    if (cust.tstamp.ToHex() == currentCust.tstamp.ToHex())
+                    {
+                        update_Customer(cust, currentCust, false);
+                    }
                 }
             }
         }
@@ -978,6 +986,20 @@ namespace OM27700.Controllers
             createdLevel.LUpd_DateTime = DateTime.Now;
             createdLevel.LUpd_Prog = _screenNbr;
             createdLevel.LUpd_User = Current.UserName;
+        }
+        private void update_Customer(OM_AccumulatedCustomer t, OM27700_pgCustomer_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = Current.UserName;
+            }
+            t.NumRegLot = s.NumRegLot;
+
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = Current.UserName;
         }
         #endregion
        

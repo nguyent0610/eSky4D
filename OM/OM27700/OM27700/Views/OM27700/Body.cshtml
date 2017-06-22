@@ -541,24 +541,24 @@
                         X.Panel().ID("treeCustomer")
                         .Region(Region.West).Flex(4)
                         .MinWidth(150).Split(true).AutoScroll(true)
-                                .Listeners(lst =>
-                                {
+                        .Listeners(lst =>
+                        {
 
-                                })
-        //.DirectEvents(de =>
-        //{
-        //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCustomer"));
-        //    de.AfterRender.Url = Url.Action("OM27700GetTreeCustomer");
-        //    de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-        //    de.AfterRender.CleanRequest = true;
-        //    de.AfterRender.Method = HttpMethod.POST;
-        //    de.AfterRender.Success = "App.treePanelCustomer.getRootNode().expand();";
-        //    de.AfterRender.Timeout = 60000;
-        //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-        //    de.AfterRender.EventMask.ShowMask = true;
-        //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-        //    de.AfterRender.EventMask.MinDelay = 500;
-        //})
+                        })
+                        //.DirectEvents(de =>
+                        //{
+                        //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCustomer"));
+                        //    de.AfterRender.Url = Url.Action("OM27700GetTreeCustomer");
+                        //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                        //    de.AfterRender.CleanRequest = true;
+                        //    de.AfterRender.Method = HttpMethod.POST;
+                        //    de.AfterRender.Success = "App.treePanelCustomer.getRootNode().expand();";
+                        //    de.AfterRender.Timeout = 60000;
+                        //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                        //    de.AfterRender.EventMask.ShowMask = true;
+                        //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                        //    de.AfterRender.EventMask.MinDelay = 500;
+                        //})
                         .BottomBar(
                             X.Toolbar()
                             .Items(
@@ -647,8 +647,13 @@
 
                             , X.Column().MinWidth(100).Flex(1)
                             .Text(Util.GetLang("CustName")).DataIndex("CustName")
-        //.Renderer("Process.renderCpnyName")
+                            //.Renderer("Process.renderCpnyName")
                             , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
+                            , X.NumberColumn().Text(Util.GetLang("NumRegLot")).DataIndex("NumRegLot")
+                            .StyleSpec("text-align:right;").Format(formatNum).Align(Alignment.Right)
+                            .Editor(
+                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0)
+                            )
                             , X.CommandColumn()
                             .Commands(
                                 X.GridCommand()
@@ -684,8 +689,8 @@
                             .Listeners(ls =>
                             {
                                 ls.BeforeEdit.Fn = "Event.Grid.grdCustomer_BeforeEdit";
-                                //ls.Edit.Fn = "Event.Grid.grdCpnyID_edit";
-                                //ls.ValidateEdit.Fn = "Event.Grid.grdCpnyID_validateEdit";
+                                ls.Edit.Fn = "Event.Grid.grdCustID_edit";
+                                ls.ValidateEdit.Fn = "Event.Grid.grdCustID_ValidateEdit";
                             })
                         ) // grdCompany
                         .Features(

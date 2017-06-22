@@ -164,22 +164,6 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_AccumulatedCustomer> OM_AccumulatedCustomer
-        {
-            get
-            {
-                if ((_OM_AccumulatedCustomer == null))
-                {
-                    _OM_AccumulatedCustomer = base.CreateObjectSet<OM_AccumulatedCustomer>("OM_AccumulatedCustomer");
-                }
-                return _OM_AccumulatedCustomer;
-            }
-        }
-        private ObjectSet<OM_AccumulatedCustomer> _OM_AccumulatedCustomer;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_AccumulatedInvt> OM_AccumulatedInvt
         {
             get
@@ -224,6 +208,22 @@ namespace OM27700
             }
         }
         private ObjectSet<OM_AccumulatedSalesPerson> _OM_AccumulatedSalesPerson;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_AccumulatedCustomer> OM_AccumulatedCustomer
+        {
+            get
+            {
+                if ((_OM_AccumulatedCustomer == null))
+                {
+                    _OM_AccumulatedCustomer = base.CreateObjectSet<OM_AccumulatedCustomer>("OM_AccumulatedCustomer");
+                }
+                return _OM_AccumulatedCustomer;
+            }
+        }
+        private ObjectSet<OM_AccumulatedCustomer> _OM_AccumulatedCustomer;
 
         #endregion
 
@@ -278,14 +278,6 @@ namespace OM27700
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_AccumulatedCustomer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_AccumulatedCustomer(OM_AccumulatedCustomer oM_AccumulatedCustomer)
-        {
-            base.AddObject("OM_AccumulatedCustomer", oM_AccumulatedCustomer);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the OM_AccumulatedInvt EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_AccumulatedInvt(OM_AccumulatedInvt oM_AccumulatedInvt)
@@ -307,6 +299,14 @@ namespace OM27700
         public void AddToOM_AccumulatedSalesPerson(OM_AccumulatedSalesPerson oM_AccumulatedSalesPerson)
         {
             base.AddObject("OM_AccumulatedSalesPerson", oM_AccumulatedSalesPerson);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_AccumulatedCustomer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_AccumulatedCustomer(OM_AccumulatedCustomer oM_AccumulatedCustomer)
+        {
+            base.AddObject("OM_AccumulatedCustomer", oM_AccumulatedCustomer);
         }
 
         #endregion
@@ -4041,6 +4041,30 @@ namespace OM27700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> NumRegLot
+        {
+            get
+            {
+                return _NumRegLot;
+            }
+            set
+            {
+                OnNumRegLotChanging(value);
+                ReportPropertyChanging("NumRegLot");
+                _NumRegLot = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("NumRegLot");
+                OnNumRegLotChanged();
+            }
+        }
+        private Nullable<global::System.Double> _NumRegLot;
+        partial void OnNumRegLotChanging(Nullable<global::System.Double> value);
+        partial void OnNumRegLotChanged();
 
         #endregion
 
@@ -6847,6 +6871,30 @@ namespace OM27700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> NumRegLot
+        {
+            get
+            {
+                return _NumRegLot;
+            }
+            set
+            {
+                OnNumRegLotChanging(value);
+                ReportPropertyChanging("NumRegLot");
+                _NumRegLot = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("NumRegLot");
+                OnNumRegLotChanged();
+            }
+        }
+        private Nullable<global::System.Double> _NumRegLot;
+        partial void OnNumRegLotChanging(Nullable<global::System.Double> value);
+        partial void OnNumRegLotChanged();
 
         #endregion
 
