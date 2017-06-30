@@ -139,6 +139,8 @@ var stoLoad = function (sto) {
         }
         HQ.isFirstLoad = false;
     }
+    _crrDiscCode = "";
+    setTitle();
     //if (!HQ.isInsert && HQ.isNew) {        
     //    HQ.common.lockItem(App.frmMain, true);
     //}
@@ -260,6 +262,8 @@ var deleteData = function (item) {
     if (item == "yes") {
         App.grdOM_DiscDescr.deleteSelected();
         App.grdOM_DiscDescr.view.refresh();
+        _crrDiscCode = "";
+        setTitle();
         App.grdCompany.store.removeAll();
         frmChange();
     }

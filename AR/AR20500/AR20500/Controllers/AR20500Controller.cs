@@ -198,6 +198,8 @@ namespace AR20500.Controllers
                                 objNew.OutletName = item.OutletName;
                                 objNew.Phone = item.Phone;
                                 objNew.Addr1 = item.Addr1;
+								objNew.ClassId = item.ClassId;
+								objNew.PriceClass = item.PriceClass;
 
                                 var objCust = new AR_Customer();
                                 objCust.ResetET();

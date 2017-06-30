@@ -112,6 +112,7 @@ var grdDet_Edit = function (item, e) {
     //    }
     //}
     HQ.grid.checkInsertKey(App.grdDet, e, keys);
+    stoData_changed(App.stoData);
     //App.grdDet.view.refresh();
     //stoData_changed(App.stoData);
 };
