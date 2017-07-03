@@ -47,7 +47,7 @@ namespace SA00300.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -58,6 +58,10 @@ namespace SA00300.Controllers
             var objHeader = _db.Users.FirstOrDefault(p => p.UserName == UserID);
             if (objHeader != null)
             {
+                if (objHeader.LastLoggedIn != null)
+                {
+                    objHeader.LastLoggedIn = objHeader.LastLoggedIn.ToDateShort();
+                }
                 try
                 {
                     objHeader.Password = objHeader.Password.PassNull() == "" ? "" : Encryption.Decrypt(objHeader.Password, "1210Hq10s081f359t");
