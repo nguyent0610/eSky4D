@@ -48,7 +48,15 @@
         })
         .Layout(LayoutType.Border)
         .TrackResetOnLoad(true)
-        .TopBar(Util.SetupToolbar())
+        .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("ImportTemplate")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";              
+            })},"Print",true,""))
         .FieldDefaults(p =>{
             p.LabelAlign = LabelAlign.Right;
             p.LabelWidth = 100;

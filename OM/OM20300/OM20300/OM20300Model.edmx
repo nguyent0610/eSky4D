@@ -269,12 +269,22 @@
           <Property Name="Zone" Type="varchar" MaxLength="10" />
         </EntityType>
         <Function Name="OM20300_pcBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="OM20300_pcBudget" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="Type" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OM20300_pcInventory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM20300_pcUnit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="parm1" Type="nvarchar" Mode="In" />
+          <Parameter Name="parm2" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="OM20300_pgAlloc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BudgetID" Type="varchar" Mode="In" />
@@ -321,8 +331,18 @@
             <Parameter Name="Type" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="OM20300_pcBranch" ReturnType="Collection(OM20300Model.OM20300_pcBranch_Result)">
-            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM20300_pcInventory" ReturnType="Collection(OM20300Model.OM20300_pcInventory_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM20300_pcUnit" ReturnType="Collection(OM20300Model.OM20300_pcUnit_Result)">
+            <Parameter Name="parm1" Mode="In" Type="String" />
+            <Parameter Name="parm2" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_ApprovalFlowHandle">
@@ -640,6 +660,16 @@
           <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Addr" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="OM20300_pcInventory_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="StkUnit" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="OM20300_pcUnit_Result">
+          <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="ClassId" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="InvtId" Nullable="false" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -982,6 +1012,24 @@
                 <ScalarProperty Name="BranchName" ColumnName="BranchName" />
                 <ScalarProperty Name="Addr" ColumnName="Addr" />
                 <ScalarProperty Name="Territory" ColumnName="Territory" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20300_pcInventory" FunctionName="OM20300Model.Store.OM20300_pcInventory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20300Model.OM20300_pcInventory_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="StkUnit" ColumnName="StkUnit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20300_pcUnit" FunctionName="OM20300Model.Store.OM20300_pcUnit">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20300Model.OM20300_pcUnit_Result">
+                <ScalarProperty Name="FromUnit" ColumnName="FromUnit" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="InvtId" ColumnName="InvtId" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

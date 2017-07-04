@@ -13,6 +13,8 @@ using System.Xml.Linq;
 using System.Data.Objects;
 using System.Data;
 using HQSendMailApprove;
+using Aspose.Cells;
+using System.IO;
 namespace OM20300.Controllers
 {
     [DirectController]
@@ -20,15 +22,16 @@ namespace OM20300.Controllers
     [CheckSessionOut]
     public class OM20300Controller : Controller
     {
-        eSkySysEntities _db = Util.CreateObjectContext<eSkySysEntities>(true);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         OM20300Entities _app = Util.CreateObjectContext<OM20300Entities>(false);
         OM20300_pcBudget_Result _objBudget = null;
         JsonResult _logMessage = null;
+        string _screenNbr = "OM20300";
 
         #region Action
         public ActionResult Index()
         {
-            var user = _db.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
+            var user = _sys.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
             ViewBag.BeginStatus = "H";
             ViewBag.EndStatus = "C";
             ViewBag.Roles = user.UserTypes.PassNull();
@@ -243,7 +246,7 @@ namespace OM20300.Controllers
                 s.ResetET();
                 s.BudgetID = _objBudget.BudgetID;
                 s.Crtd_DateTime = DateTime.Now;
-                s.Crtd_Prog = "OM20300";
+                s.Crtd_Prog = _screenNbr;
                 s.Crtd_User = Current.UserName;
             }
             if (Handle == string.Empty || Handle == "N")
@@ -261,7 +264,7 @@ namespace OM20300.Controllers
             s.RvsdDate = _objBudget.RvsdDate;
             //s.Status = _objBudget.Status.PassNull();
             s.LUpd_DateTime = DateTime.Now;
-            s.LUpd_Prog = "OM20300";
+            s.LUpd_Prog = _screenNbr;
             s.LUpd_User = Current.UserName;
         }
 
@@ -273,7 +276,7 @@ namespace OM20300.Controllers
                 s.BudgetID = _objBudget.BudgetID;
                 s.FreeItemID = t.FreeItemID;
                 s.Crtd_DateTime = DateTime.Now;
-                s.Crtd_Prog = "OM20300";
+                s.Crtd_Prog = _screenNbr;
                 s.Crtd_User = Current.UserName;
             }
             s.QtyAmtAlloc = t.QtyAmtAlloc;
@@ -282,7 +285,7 @@ namespace OM20300.Controllers
             s.UnitDesc = t.UnitDesc;
 
             s.LUpd_DateTime = DateTime.Now;
-            s.LUpd_Prog = "OM20300";
+            s.LUpd_Prog = _screenNbr;
             s.LUpd_User = Current.UserName;
         }
 
@@ -295,7 +298,7 @@ namespace OM20300.Controllers
                 s.FreeItemID = t.FreeItemID;
                 s.CpnyID = t.CpnyID;
                 s.Crtd_DateTime = DateTime.Now;
-                s.Crtd_Prog = "OM20300";
+                s.Crtd_Prog = _screenNbr;
                 s.Crtd_User = Current.UserName;
             }
             s.ApplyTo = _objBudget.ApplyTo;
@@ -305,7 +308,7 @@ namespace OM20300.Controllers
             s.UnitDesc = t.UnitDesc;
 
             s.LUpd_DateTime = DateTime.Now;
-            s.LUpd_Prog = "OM20300";
+            s.LUpd_Prog = _screenNbr;
             s.LUpd_User = Current.UserName;
         }
 
@@ -319,7 +322,7 @@ namespace OM20300.Controllers
                 s.CpnyID = t.CpnyID;
                 s.ObjID=t.ObjID;
                 s.Crtd_DateTime = DateTime.Now;
-                s.Crtd_Prog = "OM20300";
+                s.Crtd_Prog = _screenNbr;
                 s.Crtd_User = Current.UserName;
             }
             s.ApplyTo = _objBudget.ApplyTo;
@@ -329,7 +332,7 @@ namespace OM20300.Controllers
             s.UnitDesc = t.UnitDesc;
 
             s.LUpd_DateTime = DateTime.Now;
-            s.LUpd_Prog = "OM20300";
+            s.LUpd_Prog = _screenNbr;
             s.LUpd_User = Current.UserName;
         }
      
@@ -363,7 +366,7 @@ namespace OM20300.Controllers
                 nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "Value", Value = item.Territory, Mode = ParameterMode.Value });
                 nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "Descr", Value = item.Descr, Mode = ParameterMode.Value });
 
-                var lstCpny = _app.OM20300_pcBranch(Current.UserName, Current.CpnyID).Where(p => p.Territory.ToLower() == item.Territory.ToLower()).ToList();
+                var lstCpny = _app.OM20300_pcBranch(Current.UserName, Current.CpnyID,Current.LangID).Where(p => p.Territory.ToLower() == item.Territory.ToLower()).ToList();
                 nodeTerritory.Leaf = lstCpny.Count == 0 ? true : false;
                 foreach (var cpny in lstCpny)
                 {
@@ -388,7 +391,7 @@ namespace OM20300.Controllers
         {
             query = query ?? string.Empty;
             List<OM20300_pcBudget_Result> lstBudget = new List<OM20300_pcBudget_Result>();
-            var user = _db.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
+            var user = _sys.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
             //int type = user.UserTypes.PassNull().Split(',').Any(p => p.ToLower() == "ho") == true ? 0 : 1;
             int type = 0;
             if (query == string.Empty)
@@ -427,5 +430,475 @@ namespace OM20300.Controllers
         }
        
         #endregion
+
+
+        [ValidateInput(false)]
+        public ActionResult Import(FormCollection data)
+        {
+            try
+            {
+                FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
+                HttpPostedFile file = fileUploadField.PostedFile;
+                FileInfo fileInfo = new FileInfo(file.FileName);
+                Dictionary<string, int> lstOrderReference = new Dictionary<string, int>();
+                List<OM20300_pgAlloc_Result> lstresult = new List<OM20300_pgAlloc_Result>(); //_lstImport;
+                string allocType = data["AllocType"];
+                string message = string.Empty;
+                string rowNumInvtNotMapped = "";
+                string rowCustIDNotMapped = "";
+                bool isFormatQuantity = false;
+                bool isFormatAmount = false;
+                if (fileInfo.Extension.ToLower() == ".xls" || fileInfo.Extension.ToLower() == ".xlsx")
+                {
+                    try
+                    {
+                        //LoadOptions loadOptions = new LoadOptions(LoadFormat.CSV);
+                        Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+                        if (workbook.Worksheets.Count > 0)
+                        {
+                            Worksheet workSheet = workbook.Worksheets[0];
+                            #region Nha Phan Phoi
+                            if (allocType == "0")
+                            {
+                                if (workSheet.Cells[0, 0].StringValue.ToUpper().Trim() == "BUDGET ID"
+                                   && workSheet.Cells[0, 1].StringValue.ToUpper().Trim() == "BRANCH ID"
+                                   && workSheet.Cells[0, 2].StringValue.ToUpper().Trim() == "TOTAL"
+                                   && workSheet.Cells[0, 3].StringValue.ToUpper().Trim() == "FREE ITEM ID"
+                                   && workSheet.Cells[0, 4].StringValue.ToUpper().Trim() == "UNIT"
+                                   && workSheet.Cells[0, 5].StringValue.ToUpper().Trim() == "ALLOCATED"
+                                   && workSheet.Cells[0, 6].StringValue.ToUpper().Trim() == "DESCRIPTION"
+                                   )
+                                {
+                                    isFormatQuantity = true;
+                                }
+                                else if (workSheet.Cells[0, 0].StringValue.ToUpper().Trim() == "BUDGET ID"
+                                   && workSheet.Cells[0, 1].StringValue.ToUpper().Trim() == "BRANCH ID"
+                                   && workSheet.Cells[0, 2].StringValue.ToUpper().Trim() == "TOTAL"
+                                   && workSheet.Cells[0, 3].StringValue.ToUpper().Trim() == "ALLOCATED"
+                                   && workSheet.Cells[0, 4].StringValue.ToUpper().Trim() == "DESCRIPTION"
+                                )
+                                {
+                                    isFormatAmount = true;
+                                }
+                                if (!isFormatQuantity && !isFormatAmount)
+                                {
+                                    throw new MessageException(MessageType.Message, "1005", parm: new[] { fileInfo.Name });
+                                }
+                                var _lstcpnyCheck = _app.OM20300_pcBranch(Current.UserName,Current.CpnyID,Current.LangID).ToList();
+                                List<OM_PPCpny> lstppcpny = new List<OM_PPCpny>();
+                                List<OM_PPBudget> lstppBudget = new List<OM_PPBudget>();
+                                List<OM_PPCpny> lstppcpnyDB = new List<OM_PPCpny>();
+                                #region Amount
+                                if (isFormatAmount)
+                                {
+                                    for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
+                                    {
+                                        string budgetID = ""; string cpnyID = "";
+                                        budgetID = workSheet.Cells[i, 0].StringValue.ToUpper();
+                                        cpnyID = workSheet.Cells[i, 1].StringValue.ToUpper();
+                                        //Check CpnyID co trong danh sach cpny ko
+                                        if (_lstcpnyCheck.Where(p => p.BranchID.ToUpper() == cpnyID).Count() == 0 && (cpnyID != "" || budgetID != ""))
+                                        {
+                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), Util.GetLang("CpnyID") });
+                                        }
+                                        //Check trong file excel co row nao bi trung lap 2 dong tro len ko(trung BudgetID,Cpny)
+                                        if (lstppcpny.Where(p => p.CpnyID.PassNull().ToUpper().Trim() == cpnyID && p.BudgetID.PassNull().Trim().ToUpper() == budgetID
+                                                         && p.FreeItemID.PassNull().Trim().ToUpper() == ".").Count() > 0)
+                                        {
+                                            throw new MessageException(MessageType.Message, "1017", parm: new[] { (i + 1).PassNull() });
+                                        }
+                                        OM_PPCpny ppcpny = new OM_PPCpny();
+                                        ppcpny.ResetET();
+                                        ppcpny.BudgetID = budgetID;
+                                        ppcpny.CpnyID = cpnyID;
+                                        ppcpny.FreeItemID = ".";
+                                        ppcpny.UnitDesc = "";
+                                        ppcpny.ApplyTo = "A";
+                                        ppcpny.QtyAmtAlloc = workSheet.Cells[i, 3].Value == null ? 0 : workSheet.Cells[i, 3].Value.ToDouble();
+                                        ppcpny.QtyAmtAvail = ppcpny.QtyAmtAlloc;
+                                        ppcpny.QtyAmtSpent = 0;
+                                        ppcpny.Crtd_DateTime = DateTime.Now;
+                                        ppcpny.Crtd_Prog = _screenNbr;
+                                        ppcpny.Crtd_User = Current.UserName;
+                                        ppcpny.LUpd_DateTime = DateTime.Now;
+                                        ppcpny.LUpd_Prog = _screenNbr;
+                                        ppcpny.LUpd_User = Current.UserName;
+                                        bool isAddCpnyID = false;
+                                        if (budgetID != "" && cpnyID != "")
+                                        {
+                                            lstppcpny.Add(ppcpny);
+                                            isAddCpnyID = true;
+                                        }
+
+                                        if (lstppBudget.Where(p => p.BudgetID == budgetID).Count() == 0 && budgetID.Trim() != "" && isAddCpnyID == true)
+                                        {
+                                            OM_PPBudget ppbudget = new OM_PPBudget();
+                                            ppbudget.ResetET();
+                                            ppbudget.BudgetID = budgetID;
+                                            ppbudget.Active = true;
+                                            ppbudget.ApplyTo = "A";
+                                            ppbudget.Descr = workSheet.Cells[i, 4].Value.PassNull().Trim().ToUpper();
+                                            ppbudget.RvsdDate = DateTime.Now.ToDateShort();
+                                            ppbudget.QtyAmtTotal = workSheet.Cells[i, 2].Value == null ? 0 : workSheet.Cells[i, 2].Value.ToDouble();
+                                            ppbudget.AllocType = "0";
+                                            ppbudget.Status = "H";
+                                            ppbudget.Crtd_DateTime = DateTime.Now;
+                                            ppbudget.Crtd_Prog = _screenNbr;
+                                            ppbudget.Crtd_User = Current.UserName;
+                                            ppbudget.LUpd_DateTime = DateTime.Now;
+                                            ppbudget.LUpd_Prog = _screenNbr;
+                                            ppbudget.LUpd_User = Current.UserName;
+                                            lstppBudget.Add(ppbudget);
+                                        }
+                                    }
+                                    foreach (OM_PPBudget temp in lstppBudget)
+                                    {
+                                        //TINH LAI SO LUONG PHAN BO         
+                                        var lstppcpnyCal = lstppcpny;
+                                        lstppcpnyDB = _app.OM_PPCpny.ToList().Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper()).ToList();
+                                        foreach (var obj in lstppcpnyDB)
+                                        {
+                                            if (lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.CpnyID == obj.CpnyID && p.FreeItemID == obj.FreeItemID).Count() == 0)
+                                            {
+                                                lstppcpnyCal.Add(obj);
+                                            }
+                                        }
+                                        temp.QtyAmtAlloc = lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper()).Sum(p => p.QtyAmtAlloc);
+                                        //Check tong ngan sach co nho hon tong cap phai ko
+                                        if (temp.QtyAmtTotal < temp.QtyAmtAlloc)
+                                        {
+                                            throw new MessageException(MessageType.Message, "1018", parm: new[] { temp.BudgetID });
+                                        }
+                                        temp.QtyAmtFree = temp.QtyAmtTotal - temp.QtyAmtAlloc;
+                                    }
+
+                                    #region Save Data
+                                    foreach (var obj in lstppcpny)
+                                    {
+                                        var cpny = _app.OM_PPCpny.ToList().Where(p => p.BudgetID.Trim().ToUpper() == obj.BudgetID.Trim().ToUpper()
+                                                                            && p.CpnyID.Trim().ToUpper() == obj.CpnyID.Trim().ToUpper()
+                                                                            && p.FreeItemID.Trim().ToUpper() == obj.FreeItemID.Trim().ToUpper()).FirstOrDefault();
+                                        if (cpny == null)
+                                        {
+                                            _app.OM_PPCpny.AddObject(obj);
+                                        }
+                                        else
+                                        {
+                                            update_OM_PPCpny(cpny, obj);
+                                        }
+                                    }
+                                    foreach (var obj in lstppBudget)
+                                    {
+                                        var budget = _app.OM_PPBudget.ToList().Where(p => p.BudgetID.Trim().ToUpper() == obj.BudgetID.Trim().ToUpper()).FirstOrDefault();
+                                        if (budget == null)
+                                        {
+                                            _app.OM_PPBudget.AddObject(obj);
+                                        }
+                                        else
+                                        {
+                                            if (budget.Status != "H" && budget.Status != "C" && budget.Status != "D")
+                                            {
+                                                //neu status dang cho xet duyet thi ko import de
+                                                throw new MessageException(MessageType.Message, "1029", parm: new[] { obj.BudgetID });
+                                            }
+
+                                            Update_OM_PPBudget(budget, obj);
+                                        }
+                                    }
+                                    #endregion
+                                    _app.SaveChanges();
+                                }
+                                #endregion
+                                #region Qty
+                                else if (isFormatQuantity)
+                                {
+                                    List<OM20300_pcInventory_Result> _lstInvtCheck = _app.OM20300_pcInventory(Current.UserName,Current.CpnyID,Current.LangID).ToList();
+                                    List<OM_PPFreeItem> lstppfreeItem = new List<OM_PPFreeItem>();
+                                    for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
+                                    {
+                                        string budgetID, cpnyID, invtID, unitDescr = "";
+                                        budgetID = workSheet.Cells[i, 0].StringValue.ToUpper();
+                                        cpnyID = workSheet.Cells[i, 1].StringValue.ToUpper();
+                                        invtID = workSheet.Cells[i, 3].Value.PassNull().Trim().ToUpper();
+                                        unitDescr = workSheet.Cells[i, 4].Value.PassNull().Trim().ToUpper();
+
+                                        //Check invtID co trong danh sach IN_INventory ko
+                                        if (_lstInvtCheck.Where(p => p.InvtID.ToUpper() == invtID).Count() == 0 && (invtID != "" || cpnyID != "" || budgetID != ""))
+                                        {
+                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), Util.GetLang("InvtID") });
+                                        }
+                                        //Check CpnyID co trong danh sach cpny ko
+                                        if (_lstcpnyCheck.Where(p => p.BranchID.ToUpper() == cpnyID).Count() == 0 && (cpnyID != "" || budgetID != ""))
+                                        {
+                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), Util.GetLang("CpnyID") });
+                                        }
+                                        //Check Unit co trong danh sach Unit ko
+                                        if (_app.OM20300_pcUnit("", invtID).ToList().Where(p => p.FromUnit == unitDescr).Count() == 0 && (invtID != "" || cpnyID != "" || budgetID != ""))
+                                        {
+                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), Util.GetLang("UnitDescr") });
+                                        }
+                                        //Check trong file excel co row nao bi trung lap 2 dong tro len ko(trung BudgetID,Cpny)
+                                        if (lstppcpny.Where(p => p.CpnyID.PassNull().ToUpper().Trim() == cpnyID && p.BudgetID.PassNull().Trim().ToUpper() == budgetID
+                                                         && p.FreeItemID.PassNull().Trim().ToUpper() == invtID).Count() > 0)
+                                        {
+                                            throw new MessageException(MessageType.Message, "1017", parm: new[] { (i + 1).PassNull() });
+                                        }
+
+                                        OM_PPCpny ppcpny = new OM_PPCpny();
+                                        ppcpny.ResetET();
+                                        ppcpny.BudgetID = budgetID;
+                                        ppcpny.CpnyID = cpnyID;
+                                        ppcpny.FreeItemID = invtID;
+                                        ppcpny.UnitDesc = unitDescr;
+                                        ppcpny.ApplyTo = "F";
+                                        ppcpny.QtyAmtAlloc = workSheet.Cells[i, 5].Value == null ? 0 : workSheet.Cells[i, 5].Value.ToDouble();
+                                        ppcpny.QtyAmtAvail = ppcpny.QtyAmtAlloc;
+                                        ppcpny.QtyAmtSpent = 0;
+                                        ppcpny.Crtd_DateTime = DateTime.Now;
+                                        ppcpny.Crtd_Prog = _screenNbr;
+                                        ppcpny.Crtd_User = Current.UserName;
+                                        ppcpny.LUpd_DateTime = DateTime.Now;
+                                        ppcpny.LUpd_Prog = _screenNbr;
+                                        ppcpny.LUpd_User = Current.UserName;
+                                        bool isAddCpnyID = false;
+                                        if (budgetID != "" && cpnyID != "")
+                                        {
+                                            lstppcpny.Add(ppcpny);
+                                            isAddCpnyID = true;
+                                        }
+
+                                        if (lstppfreeItem.Where(p => p.BudgetID.PassNull().ToUpper().Trim() == budgetID && p.FreeItemID.PassNull().ToUpper().Trim() == invtID).Count() == 0 && isAddCpnyID == true)
+                                        {
+                                            OM_PPFreeItem ppfreeItem = new OM_PPFreeItem();
+                                            ppfreeItem.ResetET();
+                                            ppfreeItem.BudgetID = ppcpny.BudgetID;
+                                            ppfreeItem.FreeItemID = ppcpny.FreeItemID;
+                                            ppfreeItem.UnitDesc = unitDescr;
+                                            ppfreeItem.QtyAmtAlloc = ppcpny.QtyAmtAlloc;
+                                            ppfreeItem.QtyAmtAvail = ppfreeItem.QtyAmtAlloc;
+                                            ppfreeItem.QtyAmtSpent = 0;
+                                            ppfreeItem.Crtd_DateTime = DateTime.Now;
+                                            ppfreeItem.Crtd_Prog = _screenNbr;
+                                            ppfreeItem.Crtd_User = Current.UserName;
+                                            ppfreeItem.LUpd_DateTime = DateTime.Now;
+                                            ppfreeItem.LUpd_Prog = _screenNbr;
+                                            ppfreeItem.LUpd_User = Current.UserName;
+                                            lstppfreeItem.Add(ppfreeItem);
+                                        }
+                                        else if (lstppfreeItem.Where(p => p.BudgetID.PassNull().ToUpper().Trim() == budgetID && p.FreeItemID.PassNull().ToUpper().Trim() == invtID).Count() > 0 && isAddCpnyID == true)
+                                        {
+                                            OM_PPFreeItem ppfreeItem = lstppfreeItem.Where(p => p.BudgetID.PassNull().ToUpper().Trim() == budgetID && p.FreeItemID.PassNull().ToUpper().Trim() == invtID).FirstOrDefault();
+                                            ppfreeItem.QtyAmtAlloc += ppcpny.QtyAmtAlloc;
+                                            ppfreeItem.QtyAmtAvail = ppfreeItem.QtyAmtAlloc;
+                                        }
+
+                                        if (lstppBudget.Where(p => p.BudgetID == budgetID).Count() == 0 && budgetID.Trim() != "")
+                                        {
+                                            OM_PPBudget ppbudget = new OM_PPBudget();
+                                            ppbudget.ResetET();
+                                            ppbudget.BudgetID = budgetID;
+                                            ppbudget.Active = true;
+                                            ppbudget.ApplyTo = "F";
+                                            ppbudget.Descr = workSheet.Cells[i, 6].Value.PassNull().Trim().ToUpper();
+                                            ppbudget.RvsdDate = DateTime.Now.ToDateShort();
+                                            ppbudget.QtyAmtTotal = workSheet.Cells[i, 2].Value == null ? 0 : workSheet.Cells[i, 2].Value.ToDouble();
+                                            ppbudget.AllocType = "0";
+                                            ppbudget.Status = "H";
+                                            ppbudget.Crtd_DateTime = DateTime.Now;
+                                            ppbudget.Crtd_Prog = _screenNbr;
+                                            ppbudget.Crtd_User = Current.UserName;
+                                            ppbudget.LUpd_DateTime = DateTime.Now;
+                                            ppbudget.LUpd_Prog = _screenNbr;
+                                            ppbudget.LUpd_User = Current.UserName;
+                                            lstppBudget.Add(ppbudget);
+                                        }
+
+                                    }
+
+                                    foreach (OM_PPBudget temp in lstppBudget)
+                                    {
+                                        //TINH LAI SO LUONG PHAN BO         
+                                        var lstppcpnyCal = lstppcpny;
+                                        lstppcpnyDB = _app.OM_PPCpny.ToList().Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper()).ToList();
+                                        foreach (var obj in lstppcpnyDB)
+                                        {
+                                            if (lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.CpnyID == obj.CpnyID && p.FreeItemID == obj.FreeItemID).Count() == 0)
+                                            {
+                                                lstppcpnyCal.Add(obj);
+                                            }
+                                        }
+
+                                        //TINH LAI SO LUONG PHAN BO         
+                                        //var lstppfreeItemCal = lstppfreeItem.ToList();
+                                        var lstppfreeItemDB = _app.OM_PPFreeItem.ToList().Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper()).ToList();
+                                        foreach (var obj in lstppfreeItemDB)
+                                        {
+                                            var objFreeItem = lstppfreeItem.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.FreeItemID == obj.FreeItemID).FirstOrDefault();
+                                            if (objFreeItem == null)
+                                            {
+                                                obj.QtyAmtAlloc = lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.FreeItemID == obj.FreeItemID).Sum(p => p.QtyAmtAlloc);
+                                                obj.QtyAmtAvail = lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.FreeItemID == obj.FreeItemID).Sum(p => p.QtyAmtAvail);
+                                                obj.QtyAmtSpent = lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.FreeItemID == obj.FreeItemID).Sum(p => p.QtyAmtSpent);
+                                                lstppfreeItem.Add(obj);
+                                            }
+                                            else
+                                            {
+                                                objFreeItem.QtyAmtAlloc = lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.FreeItemID == obj.FreeItemID).Sum(p => p.QtyAmtAlloc);
+                                                objFreeItem.QtyAmtAvail = lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.FreeItemID == obj.FreeItemID).Sum(p => p.QtyAmtAvail);
+                                                objFreeItem.QtyAmtSpent = lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.FreeItemID == obj.FreeItemID).Sum(p => p.QtyAmtSpent);
+                                            }
+                                        }
+                                        temp.QtyAmtAlloc = lstppfreeItem.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper()).Sum(p => p.QtyAmtAlloc);
+                                        //Check tong ngan sach co nho hon tong cap phai ko
+                                        if (temp.QtyAmtTotal < temp.QtyAmtAlloc)
+                                        {
+                                            throw new MessageException(MessageType.Message, "1018", parm: new[] { temp.BudgetID });
+                                        }
+                                        temp.QtyAmtFree = temp.QtyAmtTotal - temp.QtyAmtAlloc;
+                                    }
+                                    #region Save Data
+                                    foreach (var obj in lstppcpny)
+                                    {
+                                        var cpny = _app.OM_PPCpny.ToList().Where(p => p.BudgetID.Trim().ToUpper() == obj.BudgetID
+                                                     && p.CpnyID.Trim().ToUpper() == obj.CpnyID
+                                                     && p.FreeItemID.Trim().ToUpper() == obj.FreeItemID).FirstOrDefault();
+                                        if (cpny == null)
+                                        {
+                                            _app.OM_PPCpny.AddObject(obj);
+                                        }
+                                        else
+                                        {
+                                            update_OM_PPCpny(cpny, obj);
+
+                                        }
+                                    }
+                                    foreach (var obj in lstppfreeItem)
+                                    {
+                                        var freeItem = _app.OM_PPFreeItem.ToList().Where(p => p.BudgetID.Trim().ToUpper() == obj.BudgetID
+                                                         && p.FreeItemID.Trim().ToUpper() == obj.FreeItemID).FirstOrDefault();
+                                        if (freeItem == null)
+                                        {
+                                            _app.OM_PPFreeItem.AddObject(obj);
+                                        }
+                                        else
+                                        {
+                                            update_OM_PPFreeItem(freeItem, obj);
+                                        }
+                                    }
+                                    foreach (var obj in lstppBudget)
+                                    {
+                                        var budget = _app.OM_PPBudget.ToList().Where(p => p.BudgetID.Trim().ToUpper() == obj.BudgetID).FirstOrDefault();
+                                        if (budget == null)
+                                        {
+                                            _app.OM_PPBudget.AddObject(obj);
+                                        }
+                                        else
+                                        {
+                                            if (budget.Status != "H" && budget.Status != "C" && budget.Status != "D")
+                                            {
+                                                //neu status dang cho xet duyet thi ko import de
+                                                throw new MessageException(MessageType.Message, "1029", parm: new[] { obj.BudgetID });
+                                            }
+
+                                            Update_OM_PPBudget(budget, obj);
+                                        }
+                                    }
+                                    _app.SaveChanges();
+                                    #endregion
+                                }
+                                #endregion
+
+                            }
+                            #endregion
+                    
+                        }
+                        return Json(new { success = true, msgCode = 20121418 }, "text/html");
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is MessageException)
+                        {
+                            return (ex as MessageException).ToMessage();
+                        }
+                        else
+                        {
+                            return Json(new { success = false, type = "error", errorMsg = ex.ToString() }, "text/html");
+                        }
+                    }
+                }
+                else
+                {
+                    Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
+                }
+
+                return _logMessage;
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() }, "text/html");
+                }
+            }
+
+        }
+
+        private void update_OM_PPAlloc(OM_PPAlloc s, OM_PPAlloc t)
+        {
+            s.UnitDesc = t.UnitDesc;
+            s.QtyAmtAlloc = t.QtyAmtAlloc;
+            s.QtyAmtAvail = t.QtyAmtAvail;
+            s.QtyAmtSpent = t.QtyAmtSpent;
+
+            s.LUpd_DateTime = DateTime.Now;
+            s.LUpd_Prog = _screenNbr;
+            s.LUpd_User = Current.UserName;
+        }
+        private void update_OM_PPCpny(OM_PPCpny s, OM_PPCpny t)
+        {
+            s.UnitDesc = t.UnitDesc;
+            s.QtyAmtAlloc = t.QtyAmtAlloc;
+            s.QtyAmtAvail = t.QtyAmtAvail;
+            s.QtyAmtSpent = t.QtyAmtSpent;
+
+            s.LUpd_DateTime = DateTime.Now;
+            s.LUpd_Prog = _screenNbr;
+            s.LUpd_User = Current.UserName;
+        }
+        private void Update_OM_PPBudget(OM_PPBudget s, OM_PPBudget t)
+        {
+
+            s.Active = t.Active;
+            s.AllocType = t.AllocType;
+            s.ApplyTo = t.ApplyTo;
+            s.Descr = t.Descr;
+            s.Status = t.Status;
+            s.RvsdDate = t.RvsdDate;
+            s.QtyAmtAlloc = t.QtyAmtAlloc;
+            s.QtyAmtFree = t.QtyAmtFree;
+            s.QtyAmtTotal = t.QtyAmtTotal;
+
+            s.LUpd_DateTime = DateTime.Now;
+            s.LUpd_Prog = _screenNbr;
+            s.LUpd_User = Current.UserName;
+
+
+        }
+        private void update_OM_PPFreeItem(OM_PPFreeItem s, OM_PPFreeItem t)
+        {
+            s.UnitDesc = t.UnitDesc;
+            s.QtyAmtAlloc = t.QtyAmtAlloc;
+            s.QtyAmtAvail = t.QtyAmtAvail;
+            s.QtyAmtSpent = t.QtyAmtSpent;
+
+            s.LUpd_DateTime = DateTime.Now;
+            s.LUpd_Prog = _screenNbr;
+            s.LUpd_User = Current.UserName;
+        }
     }
 }

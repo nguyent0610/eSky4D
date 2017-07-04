@@ -409,18 +409,19 @@ namespace OM20300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
-        public ObjectResult<OM20300_pcBranch_Result> OM20300_pcBranch(global::System.String userID, global::System.String cpnyID)
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM20300_pcBranch_Result> OM20300_pcBranch(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
-            ObjectParameter userIDParameter;
-            if (userID != null)
+            ObjectParameter userNameParameter;
+            if (userName != null)
             {
-                userIDParameter = new ObjectParameter("UserID", userID);
+                userNameParameter = new ObjectParameter("UserName", userName);
             }
             else
             {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
             }
     
             ObjectParameter cpnyIDParameter;
@@ -433,7 +434,88 @@ namespace OM20300
                 cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM20300_pcBranch_Result>("OM20300_pcBranch", userIDParameter, cpnyIDParameter);
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM20300_pcBranch_Result>("OM20300_pcBranch", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM20300_pcInventory_Result> OM20300_pcInventory(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM20300_pcInventory_Result>("OM20300_pcInventory", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="parm1">No Metadata Documentation available.</param>
+        /// <param name="parm2">No Metadata Documentation available.</param>
+        public ObjectResult<OM20300_pcUnit_Result> OM20300_pcUnit(global::System.String parm1, global::System.String parm2)
+        {
+            ObjectParameter parm1Parameter;
+            if (parm1 != null)
+            {
+                parm1Parameter = new ObjectParameter("parm1", parm1);
+            }
+            else
+            {
+                parm1Parameter = new ObjectParameter("parm1", typeof(global::System.String));
+            }
+    
+            ObjectParameter parm2Parameter;
+            if (parm2 != null)
+            {
+                parm2Parameter = new ObjectParameter("parm2", parm2);
+            }
+            else
+            {
+                parm2Parameter = new ObjectParameter("parm2", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM20300_pcUnit_Result>("OM20300_pcUnit", parm1Parameter, parm2Parameter);
         }
 
         #endregion
@@ -6163,6 +6245,212 @@ namespace OM20300
         private global::System.String _StatusDescr;
         partial void OnStatusDescrChanging(global::System.String value);
         partial void OnStatusDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM20300Model", Name="OM20300_pcInventory_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM20300_pcInventory_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM20300_pcInventory_Result object.
+        /// </summary>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        public static OM20300_pcInventory_Result CreateOM20300_pcInventory_Result(global::System.String invtID)
+        {
+            OM20300_pcInventory_Result oM20300_pcInventory_Result = new OM20300_pcInventory_Result();
+            oM20300_pcInventory_Result.InvtID = invtID;
+            return oM20300_pcInventory_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StkUnit
+        {
+            get
+            {
+                return _StkUnit;
+            }
+            set
+            {
+                OnStkUnitChanging(value);
+                ReportPropertyChanging("StkUnit");
+                _StkUnit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StkUnit");
+                OnStkUnitChanged();
+            }
+        }
+        private global::System.String _StkUnit;
+        partial void OnStkUnitChanging(global::System.String value);
+        partial void OnStkUnitChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM20300Model", Name="OM20300_pcUnit_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM20300_pcUnit_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM20300_pcUnit_Result object.
+        /// </summary>
+        /// <param name="fromUnit">Initial value of the FromUnit property.</param>
+        /// <param name="classId">Initial value of the ClassId property.</param>
+        /// <param name="invtId">Initial value of the InvtId property.</param>
+        public static OM20300_pcUnit_Result CreateOM20300_pcUnit_Result(global::System.String fromUnit, global::System.String classId, global::System.String invtId)
+        {
+            OM20300_pcUnit_Result oM20300_pcUnit_Result = new OM20300_pcUnit_Result();
+            oM20300_pcUnit_Result.FromUnit = fromUnit;
+            oM20300_pcUnit_Result.ClassId = classId;
+            oM20300_pcUnit_Result.InvtId = invtId;
+            return oM20300_pcUnit_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String FromUnit
+        {
+            get
+            {
+                return _FromUnit;
+            }
+            set
+            {
+                OnFromUnitChanging(value);
+                ReportPropertyChanging("FromUnit");
+                _FromUnit = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("FromUnit");
+                OnFromUnitChanged();
+            }
+        }
+        private global::System.String _FromUnit;
+        partial void OnFromUnitChanging(global::System.String value);
+        partial void OnFromUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ClassId
+        {
+            get
+            {
+                return _ClassId;
+            }
+            set
+            {
+                OnClassIdChanging(value);
+                ReportPropertyChanging("ClassId");
+                _ClassId = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ClassId");
+                OnClassIdChanged();
+            }
+        }
+        private global::System.String _ClassId;
+        partial void OnClassIdChanging(global::System.String value);
+        partial void OnClassIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtId
+        {
+            get
+            {
+                return _InvtId;
+            }
+            set
+            {
+                OnInvtIdChanging(value);
+                ReportPropertyChanging("InvtId");
+                _InvtId = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtId");
+                OnInvtIdChanged();
+            }
+        }
+        private global::System.String _InvtId;
+        partial void OnInvtIdChanging(global::System.String value);
+        partial void OnInvtIdChanged();
 
         #endregion
 

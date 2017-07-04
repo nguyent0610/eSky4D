@@ -894,7 +894,8 @@ var bindCompany = function () {
 
     if (App.cboApplyTo.getValue() == 'F') {
         if (curInvtID != '') {
-            App.stoBudgetCompany.filter('FreeItemID', curInvtID);
+            //App.stoBudgetCompany.filter('FreeItemID', curInvtID,true);
+            HQ.store.filterStore(App.stoBudgetCompany, 'FreeItemID', curInvtID);
             var recordNew = HQ.store.findInStore(App.stoBudgetCompany, ['FreeItemID', 'CpnyID'], [curInvtID, '']);
             if (!recordNew) {
                 //var row = Ext.create('App.mdlBudgetCompany');
@@ -1150,6 +1151,39 @@ var filterComboxEx = function (control, stkeyFilter, func) {
                 });
             }
 
+        }
+    }
+};
+var btnImport_Click = function (c, e) {
+    if (HQ.isInsert || HQ.isUpdate) {
+        var files = c.fileInputEl.dom.files;
+        var fileName = c.getValue();
+        var ext = fileName.split(".").pop().toLowerCase();
+        if (ext == "xls" || ext == "xlsx") {
+            App.frmMain.submit({
+                waitMsg: HQ.waitMsg,
+                url: 'OM20300/Import',
+                timeout: 1800000,
+                clientValidation: false,
+                success: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
+                        App.cboBudgetID.store.reload();
+                    }
+                    else {
+                        HQ.message.process(msg, data, true);
+                        App.cboBudgetID.store.reload();
+                    }
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                    App.btnImport.reset();
+                }
+            });
+
+        } else {
+            HQ.message.show('2014070701', [ext], '', true);
+            App.btnImport.reset();
         }
     }
 };
