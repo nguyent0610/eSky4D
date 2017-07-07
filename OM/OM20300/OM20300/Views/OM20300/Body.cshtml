@@ -226,7 +226,7 @@
                 .Layout(LayoutType.HBox)
                 .Items(
                     X.TextField().ID("txtDescr").Name("Descr").DataIndex("Descr")
-                    .LabelWidth(100).Width(480).MaxLength(100).EnforceMaxLength(true)
+                    .LabelWidth(100).Width(480).MaxLength(250).EnforceMaxLength(true)
                     .BlankText(Util.GetLang("Descr")).AllowBlank(false)
                     .FieldLabel(Util.GetLang("Descr"))
                     .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{cboCustID}.focus();")); }))
@@ -308,7 +308,7 @@
                         .Width(150).Text(Util.GetLang("Spent"))
                         .Renderer("renderQtyAmt").Align(Alignment.Right)
                         
-                        , X.Column().DataIndex("QtyAmtAvail").Sortable(false)
+                        , X.Column().DataIndex("QtyAmtAvail").Sortable(false).Renderer("renderQtyAmt")
                         .Width(110).Text(Util.GetLang("BudgetResidual")).Align(Alignment.Right)
                     )
                     .Listeners(lst =>
@@ -399,7 +399,7 @@
                         , X.Column().DataIndex("QtyAmtSpent").Align(Alignment.Right).Sortable(false)
                         .Width(150).Text(Util.GetLang("Spent")).Renderer("renderQtyAmt")
                         
-                        , X.Column().DataIndex("QtyAmtAvail").Sortable(false)
+                        , X.Column().DataIndex("QtyAmtAvail").Sortable(false).Renderer("renderQtyAmt")
                         .Width(110).Text(Util.GetLang("BudgetResidual")).Align(Alignment.Right)
 
                     )

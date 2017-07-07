@@ -465,6 +465,7 @@ var grdBudgetCompany_ValidateEdit = function (item, e) {
 
         if (e.record.data.QtyAmtSpent > e.value)
             return false;
+      
         if (App.cboApplyTo.getValue() == 'F') {
 
             var totalAlloc = 0;
@@ -524,7 +525,9 @@ var grdBudgetCompany_Edit = function (item, e) {
         record.set('FreeItemID', curInvtID);
         record.set('UnitDesc', curUnitDesc);
     }
-    
+    else if (key == 'QtyAmtAlloc') {
+            e.record.set('QtyAmtAvail', e.value - e.record.data.QtyAmtSpent)        
+    }
    
     App.cboAllocType.setReadOnly(true);
     App.cboApplyTo.setReadOnly(true);
@@ -618,6 +621,8 @@ var grdBudgetCust_Edit = function (item, e) {
             record.set('CpnyID', cpnyID);
             record.set('QtyAmtAlloc', 0);
         }
+    } else if (key == 'QtyAmtAlloc') {
+        e.record.set('QtyAmtAvail', e.value - e.record.data.QtyAmtSpent)
     }
     frmChange();
 };
@@ -679,7 +684,7 @@ var grdBudgetFree_ValidateEdit = function (item, e) {
         var FreeItems = App.smlBudgetInvt.selected.items[0] == undefined ? '' : App.smlBudgetInvt.selected.items[0].data.FreeItemID;
         if (e.record.data.QtyAmtSpent > e.value)
             return false;
-
+       
         var totalAlloc = 0;
         App.stoBudgetFree.data.each(function (item) {
             totalAlloc += item.data.QtyAmtAlloc;
@@ -722,6 +727,9 @@ var grdBudgetFree_Edit = function (item, e) {
             curUnitDesc = objInvt ? objInvt.StkUnit : '';
             bindCompany();
         }
+    }
+    else if (key == 'QtyAmtAlloc') {
+        e.record.set('QtyAmtAvail', e.value - e.record.data.QtyAmtSpent)
     }
     App.cboAllocType.setReadOnly(true);
     App.cboApplyTo.setReadOnly(true);

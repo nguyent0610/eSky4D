@@ -15,6 +15,7 @@ using System.Data;
 using HQSendMailApprove;
 using Aspose.Cells;
 using System.IO;
+using System.Text.RegularExpressions;
 namespace OM20300.Controllers
 {
     [DirectController]
@@ -496,10 +497,41 @@ namespace OM20300.Controllers
                                         string budgetID = ""; string cpnyID = "";
                                         budgetID = workSheet.Cells[i, 0].StringValue.ToUpper();
                                         cpnyID = workSheet.Cells[i, 1].StringValue.ToUpper();
+                                        string budgetDescr = workSheet.Cells[i, 4].Value.PassNull().Trim().ToUpper();
+                                        double QtyAmtTotal = 0;
+                                        try
+                                        {
+                                            QtyAmtTotal = workSheet.Cells[i, 2].Value == null ? 0 : workSheet.Cells[i, 2].Value.ToDouble();
+                                        }
+                                        catch
+                                        {
+                                            throw new MessageException(MessageType.Message, "201707072", parm: new[] { (i + 1).PassNull(), "TOTAL" });
+                                        }
+                                        double QtyAmtAlloc = 0;
+                                        try
+                                        {
+                                            QtyAmtAlloc=workSheet.Cells[i, 3].Value == null ? 0 : workSheet.Cells[i, 3].Value.ToDouble();
+                                        }
+                                        catch
+                                        {
+                                            throw new MessageException(MessageType.Message, "201707072", parm: new[] { (i + 1).PassNull(), "ALLOCATED" });
+                                        }
+                                        
+                                       
+                                        //Check budgetDescr ko duoc de trong
+                                        if (budgetDescr.PassNull() == "" && (cpnyID != "" || budgetID != ""))
+                                        {
+                                            throw new MessageException(MessageType.Message, "201707071", parm: new[] { (i + 1).PassNull(), "DESCRIPTION" });
+                                        }
+                                        //check ky tu dac biet                                 
+                                        if (CheckSpecialChar(budgetID))
+                                        {
+                                            throw new MessageException(MessageType.Message, "201312121", parm: new[] { "Dòng " + (i + 1).PassNull() + " BUDGET ID" });
+                                        }
                                         //Check CpnyID co trong danh sach cpny ko
                                         if (_lstcpnyCheck.Where(p => p.BranchID.ToUpper() == cpnyID).Count() == 0 && (cpnyID != "" || budgetID != ""))
                                         {
-                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), Util.GetLang("CpnyID") });
+                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), "BRANCH ID" });
                                         }
                                         //Check trong file excel co row nao bi trung lap 2 dong tro len ko(trung BudgetID,Cpny)
                                         if (lstppcpny.Where(p => p.CpnyID.PassNull().ToUpper().Trim() == cpnyID && p.BudgetID.PassNull().Trim().ToUpper() == budgetID
@@ -514,7 +546,7 @@ namespace OM20300.Controllers
                                         ppcpny.FreeItemID = ".";
                                         ppcpny.UnitDesc = "";
                                         ppcpny.ApplyTo = "A";
-                                        ppcpny.QtyAmtAlloc = workSheet.Cells[i, 3].Value == null ? 0 : workSheet.Cells[i, 3].Value.ToDouble();
+                                        ppcpny.QtyAmtAlloc = QtyAmtAlloc;// workSheet.Cells[i, 3].Value == null ? 0 : workSheet.Cells[i, 3].Value.ToDouble();
                                         ppcpny.QtyAmtAvail = ppcpny.QtyAmtAlloc;
                                         ppcpny.QtyAmtSpent = 0;
                                         ppcpny.Crtd_DateTime = DateTime.Now;
@@ -539,7 +571,7 @@ namespace OM20300.Controllers
                                             ppbudget.ApplyTo = "A";
                                             ppbudget.Descr = workSheet.Cells[i, 4].Value.PassNull().Trim().ToUpper();
                                             ppbudget.RvsdDate = DateTime.Now.ToDateShort();
-                                            ppbudget.QtyAmtTotal = workSheet.Cells[i, 2].Value == null ? 0 : workSheet.Cells[i, 2].Value.ToDouble();
+                                            ppbudget.QtyAmtTotal = QtyAmtTotal;// workSheet.Cells[i, 2].Value == null ? 0 : workSheet.Cells[i, 2].Value.ToDouble();
                                             ppbudget.AllocType = "0";
                                             ppbudget.Status = "H";
                                             ppbudget.Crtd_DateTime = DateTime.Now;
@@ -612,30 +644,62 @@ namespace OM20300.Controllers
                                 #region Qty
                                 else if (isFormatQuantity)
                                 {
-                                    List<OM20300_pcInventory_Result> _lstInvtCheck = _app.OM20300_pcInventory(Current.UserName,Current.CpnyID,Current.LangID).ToList();
+                                    List<IN_Inventory> _lstInvtCheck = _app.IN_Inventory.ToList();//OM20300_pcInventory(Current.UserName,Current.CpnyID,Current.LangID).ToList();
                                     List<OM_PPFreeItem> lstppfreeItem = new List<OM_PPFreeItem>();
                                     for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
                                     {
-                                        string budgetID, cpnyID, invtID, unitDescr = "";
+                                        string budgetID, cpnyID, invtID, unitDescr,budgetDescr = "";
                                         budgetID = workSheet.Cells[i, 0].StringValue.ToUpper();
                                         cpnyID = workSheet.Cells[i, 1].StringValue.ToUpper();
                                         invtID = workSheet.Cells[i, 3].Value.PassNull().Trim().ToUpper();
                                         unitDescr = workSheet.Cells[i, 4].Value.PassNull().Trim().ToUpper();
+                                        budgetDescr = workSheet.Cells[i, 6].Value.PassNull().Trim().ToUpper();
 
-                                        //Check invtID co trong danh sach IN_INventory ko
-                                        if (_lstInvtCheck.Where(p => p.InvtID.ToUpper() == invtID).Count() == 0 && (invtID != "" || cpnyID != "" || budgetID != ""))
+                                        double QtyAmtTotal = 0;
+                                        try
                                         {
-                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), Util.GetLang("InvtID") });
+                                            QtyAmtTotal = workSheet.Cells[i, 2].Value == null ? 0 : workSheet.Cells[i, 2].Value.ToDouble();
+                                        }
+                                        catch
+                                        {
+                                            throw new MessageException(MessageType.Message, "201707072", parm: new[] { (i + 1).PassNull(), "TOTAL" });
+                                        }
+                                        double QtyAmtAlloc = 0;
+                                        try
+                                        {
+                                            QtyAmtAlloc = workSheet.Cells[i, 5].Value == null ? 0 : workSheet.Cells[i, 5].Value.ToDouble();
+                                        }
+                                        catch
+                                        {
+                                            throw new MessageException(MessageType.Message, "201707072", parm: new[] { (i + 1).PassNull(), "ALLOCATED" });
+                                        }
+                                        
+
+                                        //Check budgetDescr ko duoc de trong
+                                        if (budgetDescr.PassNull()=="" && (invtID != "" || cpnyID != "" || budgetID != ""))
+                                        {
+                                            throw new MessageException(MessageType.Message, "201707071", parm: new[] { (i + 1).PassNull(), "DESCRIPTION" });
+                                        }
+                                        //check ky tu dac biet                                 
+                                        if (CheckSpecialChar(budgetID))
+                                        {
+                                            throw new MessageException(MessageType.Message, "201312121", parm: new[]{ "Dòng "+ (i + 1).PassNull()+ " BUDGET ID" });
+                                        }
+                                        var objInvtID = _lstInvtCheck.Where(p => p.InvtID.ToUpper() == invtID).FirstOrDefault();
+                                        //Check invtID co trong danh sach IN_INventory ko
+                                        if (objInvtID==null && (invtID != "" || cpnyID != "" || budgetID != ""))
+                                        {
+                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), "FREE ITEM ID" });
                                         }
                                         //Check CpnyID co trong danh sach cpny ko
                                         if (_lstcpnyCheck.Where(p => p.BranchID.ToUpper() == cpnyID).Count() == 0 && (cpnyID != "" || budgetID != ""))
                                         {
-                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), Util.GetLang("CpnyID") });
+                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), "BRANCH ID" });
                                         }
                                         //Check Unit co trong danh sach Unit ko
-                                        if (_app.OM20300_pcUnit("", invtID).ToList().Where(p => p.FromUnit == unitDescr).Count() == 0 && (invtID != "" || cpnyID != "" || budgetID != ""))
+                                        if (_app.OM20300_pcUnit(objInvtID.ClassID, invtID).ToList().Where(p => p.FromUnit == unitDescr).Count() == 0 && (invtID != "" || cpnyID != "" || budgetID != ""))
                                         {
-                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), Util.GetLang("UnitDescr") });
+                                            throw new MessageException(MessageType.Message, "1016", parm: new[] { (i + 1).PassNull(), "UNIT" });
                                         }
                                         //Check trong file excel co row nao bi trung lap 2 dong tro len ko(trung BudgetID,Cpny)
                                         if (lstppcpny.Where(p => p.CpnyID.PassNull().ToUpper().Trim() == cpnyID && p.BudgetID.PassNull().Trim().ToUpper() == budgetID
@@ -651,7 +715,7 @@ namespace OM20300.Controllers
                                         ppcpny.FreeItemID = invtID;
                                         ppcpny.UnitDesc = unitDescr;
                                         ppcpny.ApplyTo = "F";
-                                        ppcpny.QtyAmtAlloc = workSheet.Cells[i, 5].Value == null ? 0 : workSheet.Cells[i, 5].Value.ToDouble();
+                                        ppcpny.QtyAmtAlloc = QtyAmtAlloc;
                                         ppcpny.QtyAmtAvail = ppcpny.QtyAmtAlloc;
                                         ppcpny.QtyAmtSpent = 0;
                                         ppcpny.Crtd_DateTime = DateTime.Now;
@@ -701,7 +765,7 @@ namespace OM20300.Controllers
                                             ppbudget.ApplyTo = "F";
                                             ppbudget.Descr = workSheet.Cells[i, 6].Value.PassNull().Trim().ToUpper();
                                             ppbudget.RvsdDate = DateTime.Now.ToDateShort();
-                                            ppbudget.QtyAmtTotal = workSheet.Cells[i, 2].Value == null ? 0 : workSheet.Cells[i, 2].Value.ToDouble();
+                                            ppbudget.QtyAmtTotal = QtyAmtTotal;
                                             ppbudget.AllocType = "0";
                                             ppbudget.Status = "H";
                                             ppbudget.Crtd_DateTime = DateTime.Now;
@@ -899,6 +963,14 @@ namespace OM20300.Controllers
             s.LUpd_DateTime = DateTime.Now;
             s.LUpd_Prog = _screenNbr;
             s.LUpd_User = Current.UserName;
+        }
+
+        private bool CheckSpecialChar(string value)
+        {
+            //check ky tu dac biet
+            var regex = @"[,;'""@~#%/\\\.\[\{\(\*\+\?\^\$\|\]\-!]";
+            Regex r = new Regex(regex, RegexOptions.IgnoreCase);
+            return r.IsMatch(value);
         }
     }
 }
