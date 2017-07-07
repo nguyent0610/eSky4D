@@ -968,7 +968,7 @@ namespace OM20300.Controllers
         private bool CheckSpecialChar(string value)
         {
             //check ky tu dac biet
-            var regex = @"[,;'""@~#%/\\\.\[\{\(\*\+\?\^\$\|\]\-!]";
+            var regex = @"[,;'""@~#%/\\\.\[\{\(\*\+\?\^\$\|\]!]";
             Regex r = new Regex(regex, RegexOptions.IgnoreCase);
             return r.IsMatch(value);
         }
