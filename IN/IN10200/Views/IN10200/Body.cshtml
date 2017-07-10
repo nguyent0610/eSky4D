@@ -283,7 +283,8 @@
                     .ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection(){
-                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                     })
                     .HQControlFocus("txtDateEnt")
                     .LoadData()
@@ -358,7 +359,8 @@
                     .ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection(){
-                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                     })
                     .HQControlFocus("cboHandle")
                     .LoadData()
@@ -561,7 +563,8 @@
                     .LabelWidth(90)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection(){
-                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                     })
                     .LoadData()
                     .Listeners(lst =>
@@ -634,6 +637,9 @@
 		                        .HQDBSys(false).HQProcedure("IN10200_pcPOSM").HQHeightWidth(400, 300)
 		                        .HQColumnShow("PosmID").DisplayField("PosmID").ValueField("PosmID")
 		                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .HQParam(new StoreParameterCollection(){
+                                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                                })
 		                        .Listeners(lst =>
 		                        {
 			                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";

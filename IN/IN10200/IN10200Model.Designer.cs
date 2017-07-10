@@ -340,58 +340,6 @@ namespace IN10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="query">No Metadata Documentation available.</param>
-        /// <param name="from">No Metadata Documentation available.</param>
-        /// <param name="to">No Metadata Documentation available.</param>
-        public ObjectResult<IN10200_pcBatch_Result> IN10200_pcBatch(global::System.String branchID, global::System.String query, Nullable<global::System.Int32> from, Nullable<global::System.Int32> to)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter queryParameter;
-            if (query != null)
-            {
-                queryParameter = new ObjectParameter("Query", query);
-            }
-            else
-            {
-                queryParameter = new ObjectParameter("Query", typeof(global::System.String));
-            }
-    
-            ObjectParameter fromParameter;
-            if (from.HasValue)
-            {
-                fromParameter = new ObjectParameter("From", from);
-            }
-            else
-            {
-                fromParameter = new ObjectParameter("From", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter toParameter;
-            if (to.HasValue)
-            {
-                toParameter = new ObjectParameter("To", to);
-            }
-            else
-            {
-                toParameter = new ObjectParameter("To", typeof(global::System.Int32));
-            }
-    
-            return base.ExecuteFunction<IN10200_pcBatch_Result>("IN10200_pcBatch", branchIDParameter, queryParameter, fromParameter, toParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="batNbr">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="lineRef">No Metadata Documentation available.</param>
@@ -611,6 +559,69 @@ namespace IN10200
             }
     
             return base.ExecuteFunction<global::System.String>("IN10200_ppCheckCloseDate", branchIDParameter, dateParameter, screenNbrParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="query">No Metadata Documentation available.</param>
+        /// <param name="from">No Metadata Documentation available.</param>
+        /// <param name="to">No Metadata Documentation available.</param>
+        public ObjectResult<IN10200_pcBatch_Result> IN10200_pcBatch(global::System.String userID, global::System.String branchID, global::System.String query, Nullable<global::System.Int32> from, Nullable<global::System.Int32> to)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter queryParameter;
+            if (query != null)
+            {
+                queryParameter = new ObjectParameter("Query", query);
+            }
+            else
+            {
+                queryParameter = new ObjectParameter("Query", typeof(global::System.String));
+            }
+    
+            ObjectParameter fromParameter;
+            if (from.HasValue)
+            {
+                fromParameter = new ObjectParameter("From", from);
+            }
+            else
+            {
+                fromParameter = new ObjectParameter("From", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter toParameter;
+            if (to.HasValue)
+            {
+                toParameter = new ObjectParameter("To", to);
+            }
+            else
+            {
+                toParameter = new ObjectParameter("To", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction<IN10200_pcBatch_Result>("IN10200_pcBatch", userIDParameter, branchIDParameter, queryParameter, fromParameter, toParameter);
         }
 
         #endregion
@@ -6867,6 +6878,7 @@ namespace IN10200
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="batNbr">Initial value of the BatNbr property.</param>
         /// <param name="trnsfrDocNbr">Initial value of the TrnsfrDocNbr property.</param>
+        /// <param name="comment">Initial value of the Comment property.</param>
         /// <param name="expectedDate">Initial value of the ExpectedDate property.</param>
         /// <param name="noteID">Initial value of the NoteID property.</param>
         /// <param name="rcptDate">Initial value of the RcptDate property.</param>
@@ -6878,12 +6890,13 @@ namespace IN10200
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static IN_Transfer CreateIN_Transfer(global::System.String branchID, global::System.String batNbr, global::System.String trnsfrDocNbr, global::System.DateTime expectedDate, global::System.Int32 noteID, global::System.DateTime rcptDate, global::System.DateTime tranDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static IN_Transfer CreateIN_Transfer(global::System.String branchID, global::System.String batNbr, global::System.String trnsfrDocNbr, global::System.String comment, global::System.DateTime expectedDate, global::System.Int32 noteID, global::System.DateTime rcptDate, global::System.DateTime tranDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             IN_Transfer iN_Transfer = new IN_Transfer();
             iN_Transfer.BranchID = branchID;
             iN_Transfer.BatNbr = batNbr;
             iN_Transfer.TrnsfrDocNbr = trnsfrDocNbr;
+            iN_Transfer.Comment = comment;
             iN_Transfer.ExpectedDate = expectedDate;
             iN_Transfer.NoteID = noteID;
             iN_Transfer.RcptDate = rcptDate;
@@ -6986,7 +6999,7 @@ namespace IN10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Comment
         {
@@ -6998,7 +7011,7 @@ namespace IN10200
             {
                 OnCommentChanging(value);
                 ReportPropertyChanging("Comment");
-                _Comment = StructuralObject.SetValidValue(value, true);
+                _Comment = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Comment");
                 OnCommentChanged();
             }

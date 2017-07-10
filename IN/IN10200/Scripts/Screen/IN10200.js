@@ -1560,6 +1560,11 @@ var setStatusForm = function () {
 };
 
 var checkExitEdit = function (row) {
+    var flagPosm = false;
+    if (row.record.data.ClassID == "POSM")
+        flagPosm = true;
+    else
+        flagPosm = false;
     var key = row.field;
     var trans = row.record.data;
     if (key == 'InvtID' || key == 'BarCode') {
@@ -1597,8 +1602,8 @@ var checkExitEdit = function (row) {
         } else {
             trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
         }
-
-        trans.TranAmt = trans.Qty * trans.UnitPrice;
+        if (flagPosm == false)
+            trans.TranAmt = trans.Qty * trans.UnitPrice;
         trans.ClassID = invt.ClassID;
         getQtyAvail(row.record);
 
@@ -1634,7 +1639,8 @@ var checkExitEdit = function (row) {
         } else {
             trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
         }
-        trans.TranAmt = trans.Qty * trans.UnitPrice;
+        if (flagPosm == false)
+            trans.TranAmt = trans.Qty * trans.UnitPrice;
         getQtyAvail(row.record);
         if (trans.Qty > 0) {
             calcLot(row.record);
@@ -1672,8 +1678,8 @@ var checkExitEdit = function (row) {
                 }
             }
         }
-
-        trans.TranAmt = trans.Qty * trans.UnitPrice;
+        if (flagPosm == false)
+            trans.TranAmt = trans.Qty * trans.UnitPrice;
         getQtyAvail(row.record);
 
         calcLot(row.record);

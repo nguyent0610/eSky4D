@@ -311,7 +311,7 @@
           <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="TrnsfrDocNbr" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Comment" Type="nvarchar" MaxLength="30" />
+          <Property Name="Comment" Type="nvarchar" Nullable="false" MaxLength="200" />
           <Property Name="ExpectedDate" Type="smalldatetime" Nullable="false" />
           <Property Name="NoteID" Type="int" Nullable="false" />
           <Property Name="ReasonCD" Type="varchar" MaxLength="10" />
@@ -345,7 +345,7 @@
             <PropertyRef Name="ToUnit" />
           </Key>
           <Property Name="UnitType" Type="char" Nullable="false" MaxLength="1" />
-          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="FromUnit" Type="nvarchar" Nullable="false" MaxLength="15" />
           <Property Name="ToUnit" Type="nvarchar" Nullable="false" MaxLength="15" />
@@ -409,7 +409,7 @@
           <Property Name="BooleanParm02" Type="smallint" Nullable="false" />
           <Property Name="BooleanParm03" Type="smallint" Nullable="false" />
           <Property Name="SelectionFormular" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="AppPath" Type="varchar" Nullable="false" MaxLength="400" />
           <Property Name="ClientName" Type="varchar" Nullable="false" MaxLength="40" />
           <Property Name="LoggedCpnyID" Type="varchar" MaxLength="30" />
@@ -421,6 +421,7 @@
           <Property Name="ListParm03" Type="nvarchar(max)" />
         </EntityType>
         <Function Name="IN10200_pcBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="Query" Type="nvarchar" Mode="In" />
           <Parameter Name="From" Type="int" Mode="In" />
@@ -468,12 +469,6 @@
           <EntitySet Name="OM_UserDefault" EntityType="IN10200Model.OM_UserDefault" />
           <EntitySet Name="IN_Transfer" EntityType="IN10200Model.IN_Transfer" />
           <EntitySet Name="RPTRunnings" EntityType="IN10200Model.RPTRunning" />
-          <FunctionImport Name="IN10200_pcBatch" ReturnType="Collection(IN10200Model.IN10200_pcBatch_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="Query" Mode="In" Type="String" />
-            <Parameter Name="From" Mode="In" Type="Int32" />
-            <Parameter Name="To" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="IN10200_pgIssueLoad" ReturnType="Collection(IN10200Model.IN10200_pgIssueLoad_Result)">
             <Parameter Name="BatNbr" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -503,6 +498,13 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="ScreenNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN10200_pcBatch" ReturnType="Collection(IN10200Model.IN10200_pcBatch_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="Query" Mode="In" Type="String" />
+            <Parameter Name="From" Mode="In" Type="Int32" />
+            <Parameter Name="To" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Batch">
@@ -715,7 +717,7 @@
             <PropertyRef Name="ToUnit" />
           </Key>
           <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ToUnit" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
@@ -763,7 +765,7 @@
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TrnsfrDocNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Comment" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Comment" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Type="DateTime" Name="ExpectedDate" Nullable="false" Precision="0" />
           <Property Type="Int32" Name="NoteID" Nullable="false" />
           <Property Type="String" Name="ReasonCD" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -813,7 +815,7 @@
           <Property Type="Int16" Name="BooleanParm02" Nullable="false" />
           <Property Type="Int16" Name="BooleanParm03" Nullable="false" />
           <Property Type="String" Name="SelectionFormular" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="AppPath" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ClientName" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LoggedCpnyID" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -824,22 +826,6 @@
           <Property Type="String" Name="ListParm02" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ListParm03" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <ComplexType Name="IN10200_pcBatch_Result">
-          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
-          <Property Type="DateTime" Name="DateEnt" Nullable="false" Precision="16" />
-          <Property Type="String" Name="ReasonCD" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="JrnlType" Nullable="true" MaxLength="2" />
-          <Property Type="String" Name="tstamp" Nullable="true" />
-          <Property Type="String" Name="IntRefNbr" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="FromToSiteID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="RvdBatNbr" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="RefNbr" Nullable="true" MaxLength="10" />
-          <Property Type="Double" Name="TotAmt" Nullable="false" />
-          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="IN10200_pgIssueLoad_Result">
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -981,6 +967,22 @@
         </EntityType>
         <ComplexType Name="IN10200_pdPrice_Result">
           <Property Type="Double" Name="Price" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN10200_pcBatch_Result">
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="DateTime" Name="DateEnt" Nullable="false" Precision="16" />
+          <Property Type="String" Name="ReasonCD" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="JrnlType" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
+          <Property Type="String" Name="IntRefNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FromToSiteID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="RvdBatNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="RefNbr" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="TotAmt" Nullable="false" />
+          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1301,26 +1303,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN10200_pcBatch" FunctionName="eBiz4DWebSysModel.Store.IN10200_pcBatch">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN10200Model.IN10200_pcBatch_Result">
-                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEnt" ColumnName="DateEnt" />
-                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
-                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="IntRefNbr" ColumnName="IntRefNbr" />
-                <ScalarProperty Name="FromToSiteID" ColumnName="FromToSiteID" />
-                <ScalarProperty Name="RvdBatNbr" ColumnName="RvdBatNbr" />
-                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
-                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
-                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN10200_pgIssueLoad" FunctionName="eBiz4DWebSysModel.Store.IN10200_pgIssueLoad">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN10200Model.IN10200_pgIssueLoad_Result">
@@ -1476,6 +1458,26 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN10200_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.IN10200_ppCheckCloseDate" />
+          <FunctionImportMapping FunctionImportName="IN10200_pcBatch" FunctionName="eBiz4DWebSysModel.Store.IN10200_pcBatch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10200Model.IN10200_pcBatch_Result">
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateEnt" ColumnName="DateEnt" />
+                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
+                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="IntRefNbr" ColumnName="IntRefNbr" />
+                <ScalarProperty Name="FromToSiteID" ColumnName="FromToSiteID" />
+                <ScalarProperty Name="RvdBatNbr" ColumnName="RvdBatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -63,7 +63,7 @@ namespace IN10200.Controllers
 
             if (branchID == null) branchID = Current.CpnyID;
 
-            var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID);
+            var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID && p.UserID == Current.UserName);
 
             ViewBag.INSite = userDft == null ? "" : userDft.INSite;
             ViewBag.BranchID = branchID;
@@ -73,7 +73,7 @@ namespace IN10200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -314,6 +314,7 @@ namespace IN10200.Controllers
 
                 DataAccess dal = Util.Dal();
                 ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@EffDate", DbType.DateTime, clsCommon.GetValueDBNull(data["DateEnd"].ToDateShort()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(data["SiteID"].PassNull()), ParameterDirection.Input, 30));
@@ -760,7 +761,7 @@ namespace IN10200.Controllers
         {
             query = query ?? string.Empty;
             if (page != 1) query = string.Empty;
-            var lstBatch = _app.IN10200_pcBatch(branchID, query, start + 1, start + 20).ToList();
+            var lstBatch = _app.IN10200_pcBatch(Current.UserName, branchID, query, start + 1, start + 20).ToList();
             var paging = new Paging<IN10200_pcBatch_Result>(lstBatch, lstBatch.Count > 0 ? lstBatch[0].TotalRecords.Value : 0);
             return this.Store(paging.Data, paging.TotalRecords);
         }
