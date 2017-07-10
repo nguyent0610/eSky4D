@@ -133,7 +133,7 @@
                             .LoadData()
                             .Listeners(lst =>
                             {
-                                lst.Change.Handler = "App.cboHandle.store.reload();";
+                                lst.Change.Fn = "cboStatus_Change";
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
 
@@ -633,7 +633,7 @@
 
                             , HQ.Combo().ID("cboDistrict").Name("cboDistrict").DataIndex("District").HQLangCode("DISTRICT").HideLabel(true)
                                 .HQProcedure("AR20400_pcDistrictByCountryState").HQColumnShow("District,Name")
-                                .DisplayField("District").ValueField("District").AllowBlank(false)
+                                .DisplayField("District").ValueField("District")
                                 .Width(200).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                 .HQParam(new StoreParameterCollection() 
                                 {

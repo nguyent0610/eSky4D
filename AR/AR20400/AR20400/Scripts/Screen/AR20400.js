@@ -367,7 +367,7 @@ var stoLoad = function (sto) {
     App.cboCpnyID.forceSelection = true;
     App.cboCustId.forceSelection = true;
     HQ.isNew = false;
-
+    App.cboDistrict.allowBlank = false;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, ['BranchID', 'CustId']);
         record = sto.getAt(0);
@@ -385,6 +385,7 @@ var stoLoad = function (sto) {
         record.set('Area', value2);
         HQ.isNew = true;
         App.cboCustId.forceSelection = false;
+        App.cboDistrict.allowBlank = true;
         //if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1')
         if (_Flag == "1")
             App.cboCustId.forceSelection = true;
@@ -1099,6 +1100,16 @@ var cboTerritory_Change_Select = function (sender, e) {
     }
 };
 
+var cboStatus_Change = function (sender, e)
+{
+    App.cboHandle.store.reload();
+    if (App.cboStatus.value == "H") {
+        App.cboDistrict.allowBlank = true;
+    }
+    else {
+        App.cboDistrict.allowBlank = false;
+    }
+}
 
 var filterComboSate = function (sender, e) {
     if (sender.hasFocus) {

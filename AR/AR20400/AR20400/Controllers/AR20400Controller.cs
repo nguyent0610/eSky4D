@@ -839,7 +839,7 @@ namespace AR20400.Controllers
                 }
                 return Json(new { success = true, CustId = "" });
             }
-            catch (Exception ex)
+            catch (Exception ex)		
             {
                 if (ex is MessageException) return (ex as MessageException).ToMessage();
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
