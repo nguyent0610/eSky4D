@@ -421,6 +421,7 @@
           <Property Name="ListParm03" Type="nvarchar(max)" />
         </EntityType>
         <Function Name="IN10100_pcBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="Query" Type="nvarchar" Mode="In" />
           <Parameter Name="From" Type="int" Mode="In" />
@@ -496,12 +497,6 @@
           <EntitySet Name="IN_Setup" EntityType="IN10100Model.IN_Setup" />
           <EntitySet Name="IN_UnitConversion" EntityType="IN10100Model.IN_UnitConversion" />
           <EntitySet Name="OM_UserDefault" EntityType="IN10100Model.OM_UserDefault" />
-          <FunctionImport Name="IN10100_pcBatch" ReturnType="Collection(IN10100Model.IN10100_pcBatch_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="Query" Mode="In" Type="String" />
-            <Parameter Name="From" Mode="In" Type="Int32" />
-            <Parameter Name="To" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="IN10100_pcHandle" ReturnType="Collection(IN10100Model.IN10100_pcHandle_Result)">
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="Status" Mode="In" Type="String" />
@@ -561,6 +556,13 @@
             <Parameter Name="EffDate" Mode="In" Type="DateTime" />
             <Parameter Name="ValMthd" Mode="In" Type="String" />
             <Parameter Name="SiteID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN10100_pcBatch" ReturnType="Collection(IN10100Model.IN10100_pcBatch_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="Query" Mode="In" Type="String" />
+            <Parameter Name="From" Mode="In" Type="Int32" />
+            <Parameter Name="To" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Batch">
@@ -849,22 +851,6 @@
           <Property Type="DateTime" Name="WorkingDate" Precision="0" />
           <Property Type="String" Name="DiscSite" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="IN10100_pcBatch_Result">
-          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
-          <Property Type="DateTime" Name="DateEnt" Nullable="false" Precision="16" />
-          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
-          <Property Type="String" Name="ReasonCD" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="JrnlType" Nullable="true" MaxLength="2" />
-          <Property Type="String" Name="tstamp" Nullable="true" />
-          <Property Type="String" Name="IntRefNbr" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="FromToSiteID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="RvdBatNbr" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="RefNbr" Nullable="true" MaxLength="10" />
-          <Property Type="Double" Name="TotAmt" Nullable="false" />
-        </ComplexType>
         <ComplexType Name="IN10100_pcHandle_Result">
           <Property Type="String" Name="Code" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
@@ -1144,6 +1130,22 @@
         </ComplexType>
         <ComplexType Name="IN10100_pdPrice_Result">
           <Property Type="Double" Name="Price" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN10100_pcBatch_Result">
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="DateTime" Name="DateEnt" Nullable="false" Precision="16" />
+          <Property Type="String" Name="ReasonCD" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="JrnlType" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
+          <Property Type="String" Name="IntRefNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FromToSiteID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="RvdBatNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="RefNbr" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="TotAmt" Nullable="false" />
+          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1430,26 +1432,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN10100_pcBatch" FunctionName="eBiz4DWebSysModel.Store.IN10100_pcBatch">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN10100Model.IN10100_pcBatch_Result">
-                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEnt" ColumnName="DateEnt" />
-                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
-                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
-                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="IntRefNbr" ColumnName="IntRefNbr" />
-                <ScalarProperty Name="FromToSiteID" ColumnName="FromToSiteID" />
-                <ScalarProperty Name="RvdBatNbr" ColumnName="RvdBatNbr" />
-                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
-                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN10100_pcHandle" FunctionName="eBiz4DWebSysModel.Store.IN10100_pcHandle">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN10100Model.IN10100_pcHandle_Result">
@@ -1762,6 +1744,26 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN10100Model.IN10100_pdPrice_Result">
                 <ScalarProperty Name="Price" ColumnName="Price" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10100_pcBatch" FunctionName="eBiz4DWebSysModel.Store.IN10100_pcBatch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10100Model.IN10100_pcBatch_Result">
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateEnt" ColumnName="DateEnt" />
+                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
+                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="IntRefNbr" ColumnName="IntRefNbr" />
+                <ScalarProperty Name="FromToSiteID" ColumnName="FromToSiteID" />
+                <ScalarProperty Name="RvdBatNbr" ColumnName="RvdBatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

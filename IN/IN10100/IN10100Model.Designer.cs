@@ -340,58 +340,6 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="query">No Metadata Documentation available.</param>
-        /// <param name="from">No Metadata Documentation available.</param>
-        /// <param name="to">No Metadata Documentation available.</param>
-        public ObjectResult<IN10100_pcBatch_Result> IN10100_pcBatch(global::System.String branchID, global::System.String query, Nullable<global::System.Int32> from, Nullable<global::System.Int32> to)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter queryParameter;
-            if (query != null)
-            {
-                queryParameter = new ObjectParameter("Query", query);
-            }
-            else
-            {
-                queryParameter = new ObjectParameter("Query", typeof(global::System.String));
-            }
-    
-            ObjectParameter fromParameter;
-            if (from.HasValue)
-            {
-                fromParameter = new ObjectParameter("From", from);
-            }
-            else
-            {
-                fromParameter = new ObjectParameter("From", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter toParameter;
-            if (to.HasValue)
-            {
-                toParameter = new ObjectParameter("To", to);
-            }
-            else
-            {
-                toParameter = new ObjectParameter("To", typeof(global::System.Int32));
-            }
-    
-            return base.ExecuteFunction<IN10100_pcBatch_Result>("IN10100_pcBatch", branchIDParameter, queryParameter, fromParameter, toParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="status">No Metadata Documentation available.</param>
         /// <param name="userID">No Metadata Documentation available.</param>
@@ -846,6 +794,69 @@ namespace IN10100
             }
     
             return base.ExecuteFunction<IN10100_pdPrice_Result>("IN10100_pdPrice", vendIDParameter, invtIDParameter, uOMParameter, effDateParameter, valMthdParameter, siteIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="query">No Metadata Documentation available.</param>
+        /// <param name="from">No Metadata Documentation available.</param>
+        /// <param name="to">No Metadata Documentation available.</param>
+        public ObjectResult<IN10100_pcBatch_Result> IN10100_pcBatch(global::System.String userID, global::System.String branchID, global::System.String query, Nullable<global::System.Int32> from, Nullable<global::System.Int32> to)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter queryParameter;
+            if (query != null)
+            {
+                queryParameter = new ObjectParameter("Query", query);
+            }
+            else
+            {
+                queryParameter = new ObjectParameter("Query", typeof(global::System.String));
+            }
+    
+            ObjectParameter fromParameter;
+            if (from.HasValue)
+            {
+                fromParameter = new ObjectParameter("From", from);
+            }
+            else
+            {
+                fromParameter = new ObjectParameter("From", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter toParameter;
+            if (to.HasValue)
+            {
+                toParameter = new ObjectParameter("To", to);
+            }
+            else
+            {
+                toParameter = new ObjectParameter("To", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction<IN10100_pcBatch_Result>("IN10100_pcBatch", userIDParameter, branchIDParameter, queryParameter, fromParameter, toParameter);
         }
 
         #endregion
@@ -9653,30 +9664,6 @@ namespace IN10100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> TotalRecords
-        {
-            get
-            {
-                return _TotalRecords;
-            }
-            set
-            {
-                OnTotalRecordsChanging(value);
-                ReportPropertyChanging("TotalRecords");
-                _TotalRecords = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("TotalRecords");
-                OnTotalRecordsChanged();
-            }
-        }
-        private Nullable<global::System.Int32> _TotalRecords;
-        partial void OnTotalRecordsChanging(Nullable<global::System.Int32> value);
-        partial void OnTotalRecordsChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
         public global::System.String ReasonCD
         {
             get
@@ -9863,6 +9850,30 @@ namespace IN10100
         private global::System.Double _TotAmt;
         partial void OnTotAmtChanging(global::System.Double value);
         partial void OnTotAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> TotalRecords
+        {
+            get
+            {
+                return _TotalRecords;
+            }
+            set
+            {
+                OnTotalRecordsChanging(value);
+                ReportPropertyChanging("TotalRecords");
+                _TotalRecords = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TotalRecords");
+                OnTotalRecordsChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _TotalRecords;
+        partial void OnTotalRecordsChanging(Nullable<global::System.Int32> value);
+        partial void OnTotalRecordsChanged();
 
         #endregion
 
