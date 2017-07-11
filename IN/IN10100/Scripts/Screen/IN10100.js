@@ -1497,11 +1497,11 @@ var checkExitEdit = function (row) {
         trans.CnvFact = cnv.CnvFact;
         trans.UnitMultDiv = cnv.MultDiv;
 
-        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
-            trans.UnitPrice = Math.round(trans.UnitMultDiv == 'M' ? site.AvgCost * trans.CnvFact : site.AvgCost / trans.CnvFact, 0);
-        } else {
+        //if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+        //    trans.UnitPrice = Math.round(trans.UnitMultDiv == 'M' ? site.AvgCost * trans.CnvFact : site.AvgCost / trans.CnvFact, 0);
+        //} else {
             trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
-        }
+        //}
         if(flagPosm == false)
             trans.TranAmt = trans.Qty * trans.UnitPrice;
         calcLot(row.record, false);
