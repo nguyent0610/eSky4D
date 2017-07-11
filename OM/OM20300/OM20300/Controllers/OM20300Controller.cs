@@ -814,7 +814,9 @@ namespace OM20300.Controllers
                                                     throw new MessageException(MessageType.Message, "201707102", parm: new[] { temp.BudgetID, objImp.CpnyID });
                                                 }
                                                 else
-                                                    objImp.QtyAmtSpent = objDB.QtyAmtSpent;
+                                                {
+                                                    objImp.QtyAmtSpent = objDB.QtyAmtSpent;                                         
+                                                }
                                             }
                                         }
 
@@ -940,11 +942,9 @@ namespace OM20300.Controllers
 
         private void update_OM_PPAlloc(OM_PPAlloc s, OM_PPAlloc t)
         {
-            s.UnitDesc = t.UnitDesc;
-            s.QtyAmtAlloc = t.QtyAmtAlloc;
-            s.QtyAmtAvail = t.QtyAmtAvail;
+            s.UnitDesc = t.UnitDesc;           
             s.QtyAmtSpent = t.QtyAmtSpent;
-
+            s.QtyAmtAvail = t.QtyAmtAlloc - t.QtyAmtSpent;
             s.LUpd_DateTime = DateTime.Now;
             s.LUpd_Prog = _screenNbr;
             s.LUpd_User = Current.UserName;
@@ -952,10 +952,9 @@ namespace OM20300.Controllers
         private void update_OM_PPCpny(OM_PPCpny s, OM_PPCpny t)
         {
             s.UnitDesc = t.UnitDesc;
-            s.QtyAmtAlloc = t.QtyAmtAlloc;
-            s.QtyAmtAvail = t.QtyAmtAvail;
+            s.QtyAmtAlloc = t.QtyAmtAlloc;           
             s.QtyAmtSpent = t.QtyAmtSpent;
-
+            s.QtyAmtAvail = t.QtyAmtAlloc - t.QtyAmtSpent;
             s.LUpd_DateTime = DateTime.Now;
             s.LUpd_Prog = _screenNbr;
             s.LUpd_User = Current.UserName;
@@ -983,9 +982,9 @@ namespace OM20300.Controllers
         {
             s.UnitDesc = t.UnitDesc;
             s.QtyAmtAlloc = t.QtyAmtAlloc;
-            s.QtyAmtAvail = t.QtyAmtAvail;
+          
             s.QtyAmtSpent = t.QtyAmtSpent;
-
+            s.QtyAmtAvail = s.QtyAmtAlloc - t.QtyAmtSpent;
             s.LUpd_DateTime = DateTime.Now;
             s.LUpd_Prog = _screenNbr;
             s.LUpd_User = Current.UserName;
