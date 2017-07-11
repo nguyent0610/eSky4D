@@ -535,7 +535,7 @@ namespace OM20300.Controllers
                                         }
                                         //Check trong file excel co row nao bi trung lap 2 dong tro len ko(trung BudgetID,Cpny)
                                         if (lstppcpny.Where(p => p.CpnyID.PassNull().ToUpper().Trim() == cpnyID && p.BudgetID.PassNull().Trim().ToUpper() == budgetID
-                                                         && p.FreeItemID.PassNull().Trim().ToUpper() == ".").Count() > 0)
+                                                         && p.FreeItemID.PassNull().Trim().ToUpper() == "").Count() > 0)
                                         {
                                             throw new MessageException(MessageType.Message, "1017", parm: new[] { (i + 1).PassNull() });
                                         }
