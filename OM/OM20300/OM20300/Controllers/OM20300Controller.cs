@@ -543,7 +543,7 @@ namespace OM20300.Controllers
                                         ppcpny.ResetET();
                                         ppcpny.BudgetID = budgetID;
                                         ppcpny.CpnyID = cpnyID;
-                                        ppcpny.FreeItemID = ".";
+                                        ppcpny.FreeItemID = "";
                                         ppcpny.UnitDesc = "";
                                         ppcpny.ApplyTo = "A";
                                         ppcpny.QtyAmtAlloc = QtyAmtAlloc;// workSheet.Cells[i, 3].Value == null ? 0 : workSheet.Cells[i, 3].Value.ToDouble();
@@ -588,11 +588,22 @@ namespace OM20300.Controllers
                                         //TINH LAI SO LUONG PHAN BO         
                                         var lstppcpnyCal = lstppcpny;
                                         lstppcpnyDB = _app.OM_PPCpny.ToList().Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper()).ToList();
-                                        foreach (var obj in lstppcpnyDB)
+                                        foreach (var objDB in lstppcpnyDB)
                                         {
-                                            if (lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.CpnyID == obj.CpnyID && p.FreeItemID == obj.FreeItemID).Count() == 0)
+                                            var objImp = lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.CpnyID == objDB.CpnyID && p.FreeItemID == objDB.FreeItemID).FirstOrDefault();
+                                            if (objImp == null)
                                             {
-                                                lstppcpnyCal.Add(obj);
+                                                lstppcpnyCal.Add(objDB);
+                                            }
+                                            else
+                                            {
+                                                if (objImp.QtyAmtAlloc < objDB.QtyAmtSpent)
+                                                {
+                                                    //Nha PP nay co QtyAllo no hon QtySpent
+                                                    throw new MessageException(MessageType.Message, "201707102", parm: new[] { temp.BudgetID, objImp.CpnyID });
+                                                }
+                                                else
+                                                    objImp.QtyAmtSpent = objDB.QtyAmtSpent;
                                             }
                                         }
                                         temp.QtyAmtAlloc = lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper()).Sum(p => p.QtyAmtAlloc);
@@ -633,7 +644,12 @@ namespace OM20300.Controllers
                                                 //neu status dang cho xet duyet thi ko import de
                                                 throw new MessageException(MessageType.Message, "1029", parm: new[] { obj.BudgetID });
                                             }
-
+                                            if (budget.ApplyTo!=obj.ApplyTo)
+                                            {
+                                                //không đúng applyto đã có
+                                                throw new MessageException(MessageType.Message, "201707101", parm: new[] { obj.BudgetID });
+                                            }
+                                            
                                             Update_OM_PPBudget(budget, obj);
                                         }
                                     }
@@ -730,10 +746,10 @@ namespace OM20300.Controllers
                                             lstppcpny.Add(ppcpny);
                                             isAddCpnyID = true;
                                         }
-
-                                        if (lstppfreeItem.Where(p => p.BudgetID.PassNull().ToUpper().Trim() == budgetID && p.FreeItemID.PassNull().ToUpper().Trim() == invtID).Count() == 0 && isAddCpnyID == true)
+                                        OM_PPFreeItem ppfreeItem =lstppfreeItem.Where(p => p.BudgetID.PassNull().ToUpper().Trim() == budgetID && p.FreeItemID.PassNull().ToUpper().Trim() == invtID).FirstOrDefault();
+                                        if (ppfreeItem==null && isAddCpnyID == true)
                                         {
-                                            OM_PPFreeItem ppfreeItem = new OM_PPFreeItem();
+                                            ppfreeItem = new OM_PPFreeItem();
                                             ppfreeItem.ResetET();
                                             ppfreeItem.BudgetID = ppcpny.BudgetID;
                                             ppfreeItem.FreeItemID = ppcpny.FreeItemID;
@@ -749,9 +765,8 @@ namespace OM20300.Controllers
                                             ppfreeItem.LUpd_User = Current.UserName;
                                             lstppfreeItem.Add(ppfreeItem);
                                         }
-                                        else if (lstppfreeItem.Where(p => p.BudgetID.PassNull().ToUpper().Trim() == budgetID && p.FreeItemID.PassNull().ToUpper().Trim() == invtID).Count() > 0 && isAddCpnyID == true)
+                                        else if (ppfreeItem!=null && isAddCpnyID == true)
                                         {
-                                            OM_PPFreeItem ppfreeItem = lstppfreeItem.Where(p => p.BudgetID.PassNull().ToUpper().Trim() == budgetID && p.FreeItemID.PassNull().ToUpper().Trim() == invtID).FirstOrDefault();
                                             ppfreeItem.QtyAmtAlloc += ppcpny.QtyAmtAlloc;
                                             ppfreeItem.QtyAmtAvail = ppfreeItem.QtyAmtAlloc;
                                         }
@@ -784,11 +799,22 @@ namespace OM20300.Controllers
                                         //TINH LAI SO LUONG PHAN BO         
                                         var lstppcpnyCal = lstppcpny;
                                         lstppcpnyDB = _app.OM_PPCpny.ToList().Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper()).ToList();
-                                        foreach (var obj in lstppcpnyDB)
+                                        foreach (var objDB in lstppcpnyDB)
                                         {
-                                            if (lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.CpnyID == obj.CpnyID && p.FreeItemID == obj.FreeItemID).Count() == 0)
+                                            var objImp = lstppcpnyCal.Where(p => p.BudgetID.Trim().ToUpper() == temp.BudgetID.Trim().ToUpper() && p.CpnyID == objDB.CpnyID && p.FreeItemID == objDB.FreeItemID).FirstOrDefault();
+                                            if (objImp == null)
                                             {
-                                                lstppcpnyCal.Add(obj);
+                                                lstppcpnyCal.Add(objDB);
+                                            }
+                                            else
+                                            {
+                                                if (objImp.QtyAmtAlloc < objDB.QtyAmtSpent)
+                                                {
+                                                    //Nha PP nay co QtyAllo no hon QtySpent
+                                                    throw new MessageException(MessageType.Message, "201707102", parm: new[] { temp.BudgetID, objImp.CpnyID });
+                                                }
+                                                else
+                                                    objImp.QtyAmtSpent = objDB.QtyAmtSpent;
                                             }
                                         }
 

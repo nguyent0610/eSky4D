@@ -493,8 +493,7 @@ var grdBudgetCompany_ValidateEdit = function (item, e) {
         } else {
             var totalAlloc = 0;
             App.stoBudgetCompany.suspendEvents();
-            App.stoBudgetCompany.data.each(function (item) {
-                if (item.data.FreeItemID == FreeItems)
+            App.stoBudgetCompany.data.each(function (item) {              
                     totalAlloc += item.data.QtyAmtAlloc;
             });
             App.stoBudgetCompany.resumeEvents();
