@@ -891,7 +891,11 @@ namespace OM20300.Controllers
                                                 //neu status dang cho xet duyet thi ko import de
                                                 throw new MessageException(MessageType.Message, "1029", parm: new[] { obj.BudgetID });
                                             }
-
+                                            if (budget.ApplyTo != obj.ApplyTo)
+                                            {
+                                                //không đúng applyto đã có
+                                                throw new MessageException(MessageType.Message, "201707101", parm: new[] { obj.BudgetID });
+                                            }
                                             Update_OM_PPBudget(budget, obj);
                                         }
                                     }
