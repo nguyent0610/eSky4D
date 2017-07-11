@@ -439,6 +439,8 @@
           <Parameter Name="InvtID" Type="varchar" Mode="In" />
           <Parameter Name="UOM" Type="nvarchar" Mode="In" />
           <Parameter Name="EffDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="ValMthd" Type="varchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN10200_pgIssueLoad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
@@ -488,12 +490,6 @@
           </FunctionImport>
           <EntitySet Name="IN_Trans" EntityType="IN10200Model.IN_Trans" />
           <EntitySet Name="IN_LotTrans" EntityType="IN10200Model.IN_LotTrans" />
-          <FunctionImport Name="IN10200_pdPrice" ReturnType="Collection(IN10200Model.IN10200_pdPrice_Result)">
-            <Parameter Name="VendID" Mode="In" Type="String" />
-            <Parameter Name="InvtID" Mode="In" Type="String" />
-            <Parameter Name="UOM" Mode="In" Type="String" />
-            <Parameter Name="EffDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
           <FunctionImport Name="IN10200_ppCheckCloseDate" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
@@ -505,6 +501,14 @@
             <Parameter Name="Query" Mode="In" Type="String" />
             <Parameter Name="From" Mode="In" Type="Int32" />
             <Parameter Name="To" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="IN10200_pdPrice" ReturnType="Collection(IN10200Model.IN10200_pdPrice_Result)">
+            <Parameter Name="VendID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="UOM" Mode="In" Type="String" />
+            <Parameter Name="EffDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ValMthd" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Batch">
@@ -965,9 +969,6 @@
           <Property Type="Double" Name="CnvFact" Nullable="false" />
           <Property Type="String" Name="UnitMultDiv" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="IN10200_pdPrice_Result">
-          <Property Type="Double" Name="Price" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="IN10200_pcBatch_Result">
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
@@ -983,6 +984,9 @@
           <Property Type="String" Name="RefNbr" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="TotAmt" Nullable="false" />
           <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN10200_pdPrice_Result">
+          <Property Type="Double" Name="Price" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1450,13 +1454,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN10200_pdPrice" FunctionName="eBiz4DWebSysModel.Store.IN10200_pdPrice" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN10200Model.IN10200_pdPrice_Result">
-                <ScalarProperty Name="Price" ColumnName="Price" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN10200_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.IN10200_ppCheckCloseDate" />
           <FunctionImportMapping FunctionImportName="IN10200_pcBatch" FunctionName="eBiz4DWebSysModel.Store.IN10200_pcBatch">
             <ResultMapping>
@@ -1475,6 +1472,13 @@
                 <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
                 <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
                 <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10200_pdPrice" FunctionName="eBiz4DWebSysModel.Store.IN10200_pdPrice" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10200Model.IN10200_pdPrice_Result">
+                <ScalarProperty Name="Price" ColumnName="Price" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

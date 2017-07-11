@@ -783,9 +783,9 @@ namespace IN10200.Controllers
             var lstTrans = _app.IN10200_pgIssueLoad(batNbr, branchID, "%", "%").ToList();
             return this.Store(lstTrans);
         }
-        public ActionResult GetPrice(string invtID, string uom, DateTime effDate)
+        public ActionResult GetPrice(string invtID, string uom, DateTime effDate, string siteID, string valMthd)
         {
-            var lstPrice = _app.IN10200_pdPrice("", invtID, uom, DateTime.Now).ToList();
+            var lstPrice = _app.IN10200_pdPrice("", invtID, uom, DateTime.Now, valMthd, siteID).ToList();
             return this.Store(lstPrice);
         }
         public ActionResult GetItemSite(string invtID, string siteID)

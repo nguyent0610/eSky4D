@@ -906,7 +906,7 @@ var grdTrans_Edit = function (item, e) {
                     row: e
                 });
                 App.stoPrice.load({
-                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtDateEnt.getValue() }, callback: checkSourceEdit, row: e
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtDateEnt.getValue(), valMthd: invt.ValMthd, siteID: App.cboSiteID.getValue() }, callback: checkSourceEdit, row: e
                 });
 
             } else if (key == 'UnitDesc') {
@@ -924,7 +924,7 @@ var grdTrans_Edit = function (item, e) {
                     row: e
                 });
                 App.stoPrice.load({
-                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtDateEnt.getValue() },
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtDateEnt.getValue(), valMthd: invt.ValMthd, siteID: App.cboSiteID.getValue() },
                     callback: checkSourceEdit,
                     row: e
                 });
@@ -1597,11 +1597,11 @@ var checkExitEdit = function (row) {
             site.SiteID = trans.SiteID;
             site.InvtID = trans.InvtID;
         }
-        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
-            trans.UnitPrice = Math.round(site.AvgCost, 0);
-        } else {
+        //if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+        //    trans.UnitPrice = Math.round(site.AvgCost, 0);
+        //} else {
             trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
-        }
+        //}
         if (flagPosm == false)
             trans.TranAmt = trans.Qty * trans.UnitPrice;
         trans.ClassID = invt.ClassID;
@@ -1634,11 +1634,11 @@ var checkExitEdit = function (row) {
         trans.CnvFact = cnv.CnvFact;
         trans.UnitMultDiv = cnv.MultDiv;
 
-        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
-            trans.UnitPrice = Math.round(trans.UnitMultDiv == 'M' ? site.AvgCost * trans.CnvFact : site.AvgCost / trans.CnvFact, 0);
-        } else {
+        //if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+        //    trans.UnitPrice = Math.round(trans.UnitMultDiv == 'M' ? site.AvgCost * trans.CnvFact : site.AvgCost / trans.CnvFact, 0);
+        //} else {
             trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
-        }
+        //}
         if (flagPosm == false)
             trans.TranAmt = trans.Qty * trans.UnitPrice;
         getQtyAvail(row.record);

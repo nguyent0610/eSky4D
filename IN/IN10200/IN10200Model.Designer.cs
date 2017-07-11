@@ -471,58 +471,6 @@ namespace IN10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="vendID">No Metadata Documentation available.</param>
-        /// <param name="invtID">No Metadata Documentation available.</param>
-        /// <param name="uOM">No Metadata Documentation available.</param>
-        /// <param name="effDate">No Metadata Documentation available.</param>
-        public ObjectResult<IN10200_pdPrice_Result> IN10200_pdPrice(global::System.String vendID, global::System.String invtID, global::System.String uOM, Nullable<global::System.DateTime> effDate)
-        {
-            ObjectParameter vendIDParameter;
-            if (vendID != null)
-            {
-                vendIDParameter = new ObjectParameter("VendID", vendID);
-            }
-            else
-            {
-                vendIDParameter = new ObjectParameter("VendID", typeof(global::System.String));
-            }
-    
-            ObjectParameter invtIDParameter;
-            if (invtID != null)
-            {
-                invtIDParameter = new ObjectParameter("InvtID", invtID);
-            }
-            else
-            {
-                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
-            }
-    
-            ObjectParameter uOMParameter;
-            if (uOM != null)
-            {
-                uOMParameter = new ObjectParameter("UOM", uOM);
-            }
-            else
-            {
-                uOMParameter = new ObjectParameter("UOM", typeof(global::System.String));
-            }
-    
-            ObjectParameter effDateParameter;
-            if (effDate.HasValue)
-            {
-                effDateParameter = new ObjectParameter("EffDate", effDate);
-            }
-            else
-            {
-                effDateParameter = new ObjectParameter("EffDate", typeof(global::System.DateTime));
-            }
-    
-            return base.ExecuteFunction<IN10200_pdPrice_Result>("IN10200_pdPrice", vendIDParameter, invtIDParameter, uOMParameter, effDateParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="date">No Metadata Documentation available.</param>
         /// <param name="screenNbr">No Metadata Documentation available.</param>
@@ -622,6 +570,80 @@ namespace IN10200
             }
     
             return base.ExecuteFunction<IN10200_pcBatch_Result>("IN10200_pcBatch", userIDParameter, branchIDParameter, queryParameter, fromParameter, toParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="vendID">No Metadata Documentation available.</param>
+        /// <param name="invtID">No Metadata Documentation available.</param>
+        /// <param name="uOM">No Metadata Documentation available.</param>
+        /// <param name="effDate">No Metadata Documentation available.</param>
+        /// <param name="valMthd">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10200_pdPrice_Result> IN10200_pdPrice(global::System.String vendID, global::System.String invtID, global::System.String uOM, Nullable<global::System.DateTime> effDate, global::System.String valMthd, global::System.String siteID)
+        {
+            ObjectParameter vendIDParameter;
+            if (vendID != null)
+            {
+                vendIDParameter = new ObjectParameter("VendID", vendID);
+            }
+            else
+            {
+                vendIDParameter = new ObjectParameter("VendID", typeof(global::System.String));
+            }
+    
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
+            }
+    
+            ObjectParameter uOMParameter;
+            if (uOM != null)
+            {
+                uOMParameter = new ObjectParameter("UOM", uOM);
+            }
+            else
+            {
+                uOMParameter = new ObjectParameter("UOM", typeof(global::System.String));
+            }
+    
+            ObjectParameter effDateParameter;
+            if (effDate.HasValue)
+            {
+                effDateParameter = new ObjectParameter("EffDate", effDate);
+            }
+            else
+            {
+                effDateParameter = new ObjectParameter("EffDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter valMthdParameter;
+            if (valMthd != null)
+            {
+                valMthdParameter = new ObjectParameter("ValMthd", valMthd);
+            }
+            else
+            {
+                valMthdParameter = new ObjectParameter("ValMthd", typeof(global::System.String));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10200_pdPrice_Result>("IN10200_pdPrice", vendIDParameter, invtIDParameter, uOMParameter, effDateParameter, valMthdParameter, siteIDParameter);
         }
 
         #endregion
