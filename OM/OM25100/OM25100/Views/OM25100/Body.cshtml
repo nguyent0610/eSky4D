@@ -129,6 +129,12 @@
                             lst.Select.Fn = "cboZone_Change";
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
+                        
+                        , HQ.Button().ID("btnLoad")
+                        .HQLangCode("Load")
+                        .MarginSpec("0 0 0 50").Width(125)
+                        .Handler("btnLoad_click")
+                        .Icon(Icon.DatabaseGo)
                     )
                 , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
                     .Items(
@@ -228,11 +234,25 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
 
-                        , HQ.Button().ID("btnLoad")
-                        .HQLangCode("Load")
-                        .MarginSpec("0 0 0 125").Width(125)
-                        .Handler("btnLoad_click")
-                        .Icon(Icon.DatabaseGo)
+                        
+                        , HQ.Combo().ID("cboSlsperIdHeader").Name("cboSlsperIdHeader").HQLangCode("OM25100_TypeStaff").HQProcedure("OM25100_pcSalesPerson").ForceSelection(true).HQAutoLoad(true)
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").AllowBlank(false)
+                        .Width(250).DataIndex("SlsperId")
+                        .HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() 
+                            {
+                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                            })
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                                   
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                       
                     )
             ).Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'pnlHeader')")
 ////////////////////////////////////////////////////////////////End Header////////////////////////////////////////////////////
@@ -651,6 +671,7 @@
                                     ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
                                     ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
                                     ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("TypeStaff", "App.cboSlsperIdHeader.getValue()", ParameterMode.Raw));
 
                                 })
                                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPISales_All"))).AutoLoad(false)

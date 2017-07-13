@@ -67,9 +67,9 @@ namespace OM25100.Controllers
         {
             return this.Store(_db.OM25100_pgKPICpny_Invt(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList());
         }
-        public ActionResult GetKPISales_All(string CycleNbr, string KPI, string Zone, string Territory)
+        public ActionResult GetKPISales_All(string CycleNbr, string KPI, string Zone, string Territory, string TypeStaff)
         {
-            var lstKPISales_All = _db.OM25100_pgKPISales_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
+            var lstKPISales_All = _db.OM25100_pgKPISales_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory, TypeStaff).ToList();
             return this.Store(lstKPISales_All);
             //return this.Store(_db.OM25100_pgKPISales_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList());
         }

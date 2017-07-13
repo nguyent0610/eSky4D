@@ -517,91 +517,6 @@ namespace OM25100
         /// <param name="kPI">No Metadata Documentation available.</param>
         /// <param name="zone">No Metadata Documentation available.</param>
         /// <param name="territory">No Metadata Documentation available.</param>
-        public ObjectResult<OM25100_pgKPISales_All_Result> OM25100_pgKPISales_All(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String cycleNbr, global::System.String kPI, global::System.String zone, global::System.String territory)
-        {
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            ObjectParameter cycleNbrParameter;
-            if (cycleNbr != null)
-            {
-                cycleNbrParameter = new ObjectParameter("CycleNbr", cycleNbr);
-            }
-            else
-            {
-                cycleNbrParameter = new ObjectParameter("CycleNbr", typeof(global::System.String));
-            }
-    
-            ObjectParameter kPIParameter;
-            if (kPI != null)
-            {
-                kPIParameter = new ObjectParameter("KPI", kPI);
-            }
-            else
-            {
-                kPIParameter = new ObjectParameter("KPI", typeof(global::System.String));
-            }
-    
-            ObjectParameter zoneParameter;
-            if (zone != null)
-            {
-                zoneParameter = new ObjectParameter("Zone", zone);
-            }
-            else
-            {
-                zoneParameter = new ObjectParameter("Zone", typeof(global::System.String));
-            }
-    
-            ObjectParameter territoryParameter;
-            if (territory != null)
-            {
-                territoryParameter = new ObjectParameter("Territory", territory);
-            }
-            else
-            {
-                territoryParameter = new ObjectParameter("Territory", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<OM25100_pgKPISales_All_Result>("OM25100_pgKPISales_All", userIDParameter, cpnyIDParameter, langIDParameter, cycleNbrParameter, kPIParameter, zoneParameter, territoryParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        /// <param name="cycleNbr">No Metadata Documentation available.</param>
-        /// <param name="kPI">No Metadata Documentation available.</param>
-        /// <param name="zone">No Metadata Documentation available.</param>
-        /// <param name="territory">No Metadata Documentation available.</param>
         public ObjectResult<OM25100_pgKPISales_Class_Result> OM25100_pgKPISales_Class(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String cycleNbr, global::System.String kPI, global::System.String zone, global::System.String territory)
         {
             ObjectParameter userIDParameter;
@@ -1450,6 +1365,102 @@ namespace OM25100
             }
     
             return base.ExecuteFunction<OM25100_piSlsperId_Result>("OM25100_piSlsperId", userIDParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="cycleNbr">No Metadata Documentation available.</param>
+        /// <param name="kPI">No Metadata Documentation available.</param>
+        /// <param name="zone">No Metadata Documentation available.</param>
+        /// <param name="territory">No Metadata Documentation available.</param>
+        /// <param name="position">No Metadata Documentation available.</param>
+        public ObjectResult<OM25100_pgKPISales_All_Result> OM25100_pgKPISales_All(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String cycleNbr, global::System.String kPI, global::System.String zone, global::System.String territory, global::System.String position)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter cycleNbrParameter;
+            if (cycleNbr != null)
+            {
+                cycleNbrParameter = new ObjectParameter("CycleNbr", cycleNbr);
+            }
+            else
+            {
+                cycleNbrParameter = new ObjectParameter("CycleNbr", typeof(global::System.String));
+            }
+    
+            ObjectParameter kPIParameter;
+            if (kPI != null)
+            {
+                kPIParameter = new ObjectParameter("KPI", kPI);
+            }
+            else
+            {
+                kPIParameter = new ObjectParameter("KPI", typeof(global::System.String));
+            }
+    
+            ObjectParameter zoneParameter;
+            if (zone != null)
+            {
+                zoneParameter = new ObjectParameter("Zone", zone);
+            }
+            else
+            {
+                zoneParameter = new ObjectParameter("Zone", typeof(global::System.String));
+            }
+    
+            ObjectParameter territoryParameter;
+            if (territory != null)
+            {
+                territoryParameter = new ObjectParameter("Territory", territory);
+            }
+            else
+            {
+                territoryParameter = new ObjectParameter("Territory", typeof(global::System.String));
+            }
+    
+            ObjectParameter positionParameter;
+            if (position != null)
+            {
+                positionParameter = new ObjectParameter("Position", position);
+            }
+            else
+            {
+                positionParameter = new ObjectParameter("Position", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM25100_pgKPISales_All_Result>("OM25100_pgKPISales_All", userIDParameter, cpnyIDParameter, langIDParameter, cycleNbrParameter, kPIParameter, zoneParameter, territoryParameter, positionParameter);
         }
 
         #endregion
@@ -7723,21 +7734,15 @@ namespace OM25100
         /// <summary>
         /// Create a new OM25100_pgKPISales_All_Result object.
         /// </summary>
-        /// <param name="cycleNbr">Initial value of the CycleNbr property.</param>
-        /// <param name="kPI">Initial value of the KPI property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="slsperId">Initial value of the SlsperId property.</param>
         /// <param name="target">Initial value of the Target property.</param>
-        /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM25100_pgKPISales_All_Result CreateOM25100_pgKPISales_All_Result(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String slsperId, global::System.Double target, global::System.Byte[] tstamp)
+        public static OM25100_pgKPISales_All_Result CreateOM25100_pgKPISales_All_Result(global::System.String branchID, global::System.String slsperId, global::System.Double target)
         {
             OM25100_pgKPISales_All_Result oM25100_pgKPISales_All_Result = new OM25100_pgKPISales_All_Result();
-            oM25100_pgKPISales_All_Result.CycleNbr = cycleNbr;
-            oM25100_pgKPISales_All_Result.KPI = kPI;
             oM25100_pgKPISales_All_Result.BranchID = branchID;
             oM25100_pgKPISales_All_Result.SlsperId = slsperId;
             oM25100_pgKPISales_All_Result.Target = target;
-            oM25100_pgKPISales_All_Result.tstamp = tstamp;
             return oM25100_pgKPISales_All_Result;
         }
 
@@ -7748,7 +7753,7 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String CycleNbr
         {
@@ -7760,7 +7765,7 @@ namespace OM25100
             {
                 OnCycleNbrChanging(value);
                 ReportPropertyChanging("CycleNbr");
-                _CycleNbr = StructuralObject.SetValidValue(value, false);
+                _CycleNbr = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("CycleNbr");
                 OnCycleNbrChanged();
             }
@@ -7772,7 +7777,7 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String KPI
         {
@@ -7784,7 +7789,7 @@ namespace OM25100
             {
                 OnKPIChanging(value);
                 ReportPropertyChanging("KPI");
-                _KPI = StructuralObject.SetValidValue(value, false);
+                _KPI = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("KPI");
                 OnKPIChanged();
             }
@@ -7940,7 +7945,7 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.Byte[] tstamp
         {
@@ -7952,7 +7957,7 @@ namespace OM25100
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, false);
+                _tstamp = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
