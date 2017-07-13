@@ -264,8 +264,8 @@ var save = function () {
             valueBloked: App.ckbBloked.getValue(),
             lstCpnyID : App.txtCpnyID.getValue().join(','),
             isNewUser: HQ.isNew,
-            valueStartDate: App.dtpStartDate.getValue().toDateString(),
-            valueEndDate: App.dtpEndDate.getValue().toDateString(),
+            //valueStartDate: App.dtpStartDate.getValue().toDateString(),
+            //valueEndDate: App.dtpEndDate.getValue().toDateString(),
             valueTstamp: _tstamp
         },
         success: function (msg, data) {

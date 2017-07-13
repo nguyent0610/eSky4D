@@ -71,11 +71,11 @@ namespace SA03001.Controllers
                 string userType = data["cboUserTypes"].PassNull();
                 string userGroup = data["cboUserGroup"].PassNull();
                 string blocked = data["valueBloked"].PassNull();
-                string tmpStartDate = data["valueStartDate"].PassNull();
-                string tmpEndDate = data["valueEndDate"].PassNull();
+                //string tmpStartDate = data["valueStartDate"].PassNull();
+                //string tmpEndDate = data["valueEndDate"].PassNull();
                 string valueTstamp = data["valueTstamp"].PassNull();
-                DateTime StartDate = DateTime.Parse(tmpStartDate);
-                DateTime EndDate = DateTime.Parse(tmpEndDate);
+                //DateTime StartDate = DateTime.Parse(tmpStartDate);
+                //DateTime EndDate = DateTime.Parse(tmpEndDate);
 
                 bool isNewUser = false;
 
