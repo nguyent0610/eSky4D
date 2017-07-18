@@ -4,11 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
-          <EntitySet Name="IN_POSMCust" EntityType="eBiz4DWebAppModel.Store.IN_POSMCust" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="IN_POSMHeader" EntityType="eBiz4DWebAppModel.Store.IN_POSMHeader" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="IN_POSMCust">
           <Key>
             <PropertyRef Name="PosmID" />
@@ -16,41 +12,45 @@
             <PropertyRef Name="CustID" />
             <PropertyRef Name="PosmCode" />
           </Key>
-          <Property Name="PosmID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="PosmCode" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="SlsperID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="PosmID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CustID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PosmCode" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SlsperID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Qty" Type="int" Nullable="false" />
           <Property Name="AppQty" Type="int" Nullable="false" />
           <Property Name="IsAgree" Type="bit" Nullable="false" />
-          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="Status" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_POSMHeader">
           <Key>
             <PropertyRef Name="PosmID" />
           </Key>
-          <Property Name="PosmID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="PosmID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="FromDate" Type="datetime" Nullable="false" />
           <Property Name="ToDate" Type="datetime" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="ProgTypeFCS" Type="varchar" MaxLength="2" />
           <Property Name="ProgType" Type="varchar" MaxLength="2" />
         </EntityType>
+        <Function Name="IN20200_ppCheckPosmINCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PosmID" Type="varchar" Mode="In" />
+          <Parameter Name="PosmCode" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="IN22000_pdBranchIDImport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
@@ -65,6 +65,10 @@
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="PosmID" Type="varchar" Mode="In" />
         </Function>
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="IN_POSMCust" EntityType="Self.IN_POSMCust" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IN_POSMHeader" EntityType="Self.IN_POSMHeader" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -77,14 +81,18 @@
           </FunctionImport>
           <EntitySet Name="IN_POSMCust" EntityType="IN22000Model.IN_POSMCust" />
           <FunctionImport Name="IN22000_pdBranchIDImport" ReturnType="Collection(IN22000Model.IN22000_pdBranchIDImport_Result)">
-            <Parameter Name="UserID" Mode="In" Type="String" />
+          <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="IN22000_pdPOSMImport" ReturnType="Collection(IN22000Model.IN22000_pdPOSMImport_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="IN22000_pdPosmProductImport" ReturnType="Collection(IN22000Model.IN22000_pdPosmProductImport_Result)">
-            <Parameter Name="UserID" Mode="In" Type="String" />
+          <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN20200_ppCheckPosmINCust" ReturnType="Collection(String)">
+            <Parameter Name="PosmID" Mode="In" Type="String" />
+            <Parameter Name="PosmCode" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="IN_POSMHeader">
@@ -238,6 +246,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN20200_ppCheckPosmINCust" FunctionName="eBiz4DWebAppModel.Store.IN20200_ppCheckPosmINCust" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -255,6 +264,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

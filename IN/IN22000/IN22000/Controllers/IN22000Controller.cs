@@ -30,6 +30,9 @@ namespace IN22000.Controllers
         private string _userName = Current.UserName;
         private string _beginStatus = "H";
         IN22000Entities _db = Util.CreateObjectContext<IN22000Entities>(false);
+
+        private string CheckPosmInCust = "";
+        private bool CheckPosm = false;
         private JsonResult _logMessage;
         //
         // GET: /IN22000/
@@ -61,6 +64,8 @@ namespace IN22000.Controllers
         {
             try
             {
+                CheckPosm = false;
+                CheckPosmInCust = "";
                 var posmID = data["cboPosmID"];
                 if (!string.IsNullOrWhiteSpace(posmID))
                 {
@@ -82,7 +87,13 @@ namespace IN22000.Controllers
                                         && x.PosmID == created.PosmID
                                         && x.CustID == "."
                                         && x.PosmCode == created.PosmCode);
-                                if (createdCpny == null)
+                                if (_db.IN20200_ppCheckPosmINCust(posmID, created.PosmCode).FirstOrDefault() == "1")
+                                {
+                                    CheckPosmInCust += created.PosmCode + ",";
+                                    CheckPosm = true;
+                                    continue;
+                                }
+                                if (createdCpny == null && CheckPosm == false)
                                 {
                                     createdCpny = new IN_POSMCust();
                                     updateBranch(ref createdCpny, created, true);
@@ -102,7 +113,7 @@ namespace IN22000.Controllers
                                         && x.PosmID == updated.PosmID
                                         && x.CustID == "."
                                         && x.PosmCode == updated.PosmCode);
-                                if (updatedCpny != null)
+                                if (updatedCpny != null && CheckPosm == false)
                                 {
                                     updateBranch(ref updatedCpny, updated, true);
                                 }
@@ -120,7 +131,7 @@ namespace IN22000.Controllers
                                         && x.PosmID == deleted.PosmID
                                         && x.CustID == "."
                                         && x.PosmCode == deleted.PosmCode);
-                                if (deletedCpny != null)
+                                if (deletedCpny != null && CheckPosm == false)
                                 {
                                     _db.IN_POSMCust.DeleteObject(deletedCpny);
                                 }
@@ -128,7 +139,14 @@ namespace IN22000.Controllers
                         }
 
                         _db.SaveChanges();
-                        return Json(new { success = true, msgCode = 201405071 });
+                        if (CheckPosm == false)
+                        {
+                            return Json(new { success = true, msgCode = 201405071 });
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "20170718", "", new string[] { CheckPosmInCust.RemoveLast() });
+                        }
                     }
                     else
                     {

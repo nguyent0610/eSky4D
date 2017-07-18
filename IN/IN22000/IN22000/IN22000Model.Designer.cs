@@ -218,6 +218,36 @@ namespace IN22000
     
             return base.ExecuteFunction<IN22000_pdPosmProductImport_Result>("IN22000_pdPosmProductImport", userIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="posmID">No Metadata Documentation available.</param>
+        /// <param name="posmCode">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> IN20200_ppCheckPosmINCust(global::System.String posmID, global::System.String posmCode)
+        {
+            ObjectParameter posmIDParameter;
+            if (posmID != null)
+            {
+                posmIDParameter = new ObjectParameter("PosmID", posmID);
+            }
+            else
+            {
+                posmIDParameter = new ObjectParameter("PosmID", typeof(global::System.String));
+            }
+    
+            ObjectParameter posmCodeParameter;
+            if (posmCode != null)
+            {
+                posmCodeParameter = new ObjectParameter("PosmCode", posmCode);
+            }
+            else
+            {
+                posmCodeParameter = new ObjectParameter("PosmCode", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("IN20200_ppCheckPosmINCust", posmIDParameter, posmCodeParameter);
+        }
 
         #endregion
 
