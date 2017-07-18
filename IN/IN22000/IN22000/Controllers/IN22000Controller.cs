@@ -87,7 +87,7 @@ namespace IN22000.Controllers
                                         && x.PosmID == created.PosmID
                                         && x.CustID == "."
                                         && x.PosmCode == created.PosmCode);
-                                if (_db.IN20200_ppCheckPosmINCust(posmID, created.PosmCode).FirstOrDefault() == "1")
+                                if (_db.IN22000_ppCheckPosmINCust(posmID, created.PosmCode).FirstOrDefault() == "1")
                                 {
                                     CheckPosmInCust += created.PosmCode + ",";
                                     CheckPosm = true;

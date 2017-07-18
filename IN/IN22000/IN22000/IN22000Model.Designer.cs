@@ -224,7 +224,7 @@ namespace IN22000
         /// </summary>
         /// <param name="posmID">No Metadata Documentation available.</param>
         /// <param name="posmCode">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> IN20200_ppCheckPosmINCust(global::System.String posmID, global::System.String posmCode)
+        public ObjectResult<global::System.String> IN22000_ppCheckPosmINCust(global::System.String posmID, global::System.String posmCode)
         {
             ObjectParameter posmIDParameter;
             if (posmID != null)
@@ -246,7 +246,7 @@ namespace IN22000
                 posmCodeParameter = new ObjectParameter("PosmCode", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("IN20200_ppCheckPosmINCust", posmIDParameter, posmCodeParameter);
+            return base.ExecuteFunction<global::System.String>("IN22000_ppCheckPosmINCust", posmIDParameter, posmCodeParameter);
         }
 
         #endregion

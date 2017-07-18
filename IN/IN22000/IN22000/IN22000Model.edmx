@@ -47,10 +47,6 @@
           <Property Name="ProgTypeFCS" Type="varchar" MaxLength="2" />
           <Property Name="ProgType" Type="varchar" MaxLength="2" />
         </EntityType>
-        <Function Name="IN20200_ppCheckPosmINCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PosmID" Type="varchar" Mode="In" />
-          <Parameter Name="PosmCode" Type="varchar" Mode="In" />
-        </Function>
         <Function Name="IN22000_pdBranchIDImport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
@@ -64,6 +60,10 @@
         <Function Name="IN22000_pgBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="PosmID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN22000_ppCheckPosmINCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PosmID" Type="varchar" Mode="In" />
+          <Parameter Name="PosmCode" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
           <EntitySet Name="IN_POSMCust" EntityType="Self.IN_POSMCust" Schema="dbo" store:Type="Tables" />
@@ -90,7 +90,7 @@
           <FunctionImport Name="IN22000_pdPosmProductImport" ReturnType="Collection(IN22000Model.IN22000_pdPosmProductImport_Result)">
           <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="IN20200_ppCheckPosmINCust" ReturnType="Collection(String)">
+          <FunctionImport Name="IN22000_ppCheckPosmINCust" ReturnType="Collection(String)">
             <Parameter Name="PosmID" Mode="In" Type="String" />
             <Parameter Name="PosmCode" Mode="In" Type="String" />
           </FunctionImport>
@@ -246,7 +246,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN20200_ppCheckPosmINCust" FunctionName="eBiz4DWebAppModel.Store.IN20200_ppCheckPosmINCust" />
+          <FunctionImportMapping FunctionImportName="IN22000_ppCheckPosmINCust" FunctionName="eBiz4DWebAppModel.Store.IN22000_ppCheckPosmINCust" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
