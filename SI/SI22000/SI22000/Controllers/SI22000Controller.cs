@@ -56,7 +56,7 @@ namespace SI22000.Controllers
 
         public ActionResult GetCycle(string yearNbr)
         {
-            return this.Store(_db.SI_Cycle.Where(p => p.YearNbr == yearNbr));
+            return this.Store(_db.SI22000_pgLoadCycle(yearNbr).ToList());
         }
         [HttpPost]
         [ValidateInput(false)]
@@ -118,6 +118,7 @@ namespace SI22000.Controllers
                         record.StartDate = updated.StartDate;
                         record.EndDate = updated.EndDate;
                         record.Status = status;
+                        record.WorkingDay = updated.WorkingDay;
 
                         record.LUpd_DateTime = DateTime.Now;
                         record.LUpd_Prog = screenNbr;
@@ -130,6 +131,7 @@ namespace SI22000.Controllers
                         record.CycleNbr = updated.CycleNbr;
                         record.StartDate = updated.StartDate;
                         record.EndDate = updated.EndDate;
+                        record.WorkingDay = updated.WorkingDay;
                         if (handle == "N" || handle == null) {
                             record.Status = handle.PassNull();
                         }

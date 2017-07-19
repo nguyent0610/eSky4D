@@ -110,6 +110,9 @@ X.Viewport().Layout(LayoutType.Fit)
                 ,X.DateColumn().Text(Util.GetLang("EndDate")).DataIndex("EndDate").Width(150).Format("dd/MM/yyyy")
                     .Editor(X.DateField().EnforceMaxLength(true))
                 ,X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(0)
+                
+                ,X.Column().Align(Alignment.Right).Text(Util.GetLang("WorkingDay")).DataIndex("WorkingDay").Width(150)
+                    .Editor(X.NumberField().DecimalPrecision(0))
                 , X.CommandColumn().Width(150)
                     .Commands(
                         Html.X().GridCommand()

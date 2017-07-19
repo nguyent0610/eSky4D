@@ -2229,7 +2229,8 @@ namespace SI22000
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_Cycle CreateSI_Cycle(global::System.String yearNbr, global::System.String cycleNbr, global::System.DateTime startDate, global::System.DateTime endDate, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp)
+        /// <param name="status">Initial value of the Status property.</param>
+        public static SI_Cycle CreateSI_Cycle(global::System.String yearNbr, global::System.String cycleNbr, global::System.DateTime startDate, global::System.DateTime endDate, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp, global::System.String status)
         {
             SI_Cycle sI_Cycle = new SI_Cycle();
             sI_Cycle.YearNbr = yearNbr;
@@ -2243,6 +2244,7 @@ namespace SI22000
             sI_Cycle.Crtd_Prog = crtd_Prog;
             sI_Cycle.Crtd_User = crtd_User;
             sI_Cycle.tstamp = tstamp;
+            sI_Cycle.Status = status;
             return sI_Cycle;
         }
 
@@ -2523,7 +2525,7 @@ namespace SI22000
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Status
         {
@@ -2535,7 +2537,7 @@ namespace SI22000
             {
                 OnStatusChanging(value);
                 ReportPropertyChanging("Status");
-                _Status = StructuralObject.SetValidValue(value, true);
+                _Status = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Status");
                 OnStatusChanged();
             }
@@ -2543,6 +2545,30 @@ namespace SI22000
         private global::System.String _Status;
         partial void OnStatusChanging(global::System.String value);
         partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> WorkingDay
+        {
+            get
+            {
+                return _WorkingDay;
+            }
+            set
+            {
+                OnWorkingDayChanging(value);
+                ReportPropertyChanging("WorkingDay");
+                _WorkingDay = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WorkingDay");
+                OnWorkingDayChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _WorkingDay;
+        partial void OnWorkingDayChanging(Nullable<global::System.Int32> value);
+        partial void OnWorkingDayChanged();
 
         #endregion
 
@@ -2883,6 +2909,30 @@ namespace SI22000
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> WorkingDay
+        {
+            get
+            {
+                return _WorkingDay;
+            }
+            set
+            {
+                OnWorkingDayChanging(value);
+                ReportPropertyChanging("WorkingDay");
+                _WorkingDay = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WorkingDay");
+                OnWorkingDayChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _WorkingDay;
+        partial void OnWorkingDayChanging(Nullable<global::System.Int32> value);
+        partial void OnWorkingDayChanged();
 
         #endregion
 
