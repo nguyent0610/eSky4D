@@ -591,7 +591,7 @@ var Event = {
             if (_source == 5) {
                 _source = 0;
                 HQ.isNew = false;
-                App.grdInvt.store.filterBy(function (record) { });
+                //App.grdInvt.store.filterBy(function (record) { });
                 HQ.common.showBusy(false);
             }
         },
@@ -1470,135 +1470,135 @@ var addNode = function (node) {
     Event.Form.frmMain_fieldChange();//frmChange();
 };
 
-var btnAddAllInvt_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
-        if (App.frmMain.isValid()) {
-            var accumulateID = App.cboAccumulateID.getValue();
-            var status = App.cboStatus.value;
+//var btnAddAllInvt_click = function (btn, e, eOpts) {
+//    if (HQ.isUpdate) {
+//        if (App.frmMain.isValid()) {
+//            var accumulateID = App.cboAccumulateID.getValue();
+//            var status = App.cboStatus.value;
 
-            if (accumulateID && status == _beginStatus) {
-                if (HQ.isUpdate) {
-                    var allNodes = getLeafNodes(App.treePanelInvt.getRootNode());
-                    if (allNodes && allNodes.length > 0) {
-                        App.stoSetup.suspendEvents();
-                        allNodes.forEach(function (node) {
-                            if (node.data.Type == "Invt") {
-                                var record = HQ.store.findInStore(App.stoSetup, ['InvtID'], [node.data.InvtID]); // App.grdOM21700.store
-                                if (!record) {
-                                    HQ.store.insertBlank(App.stoSetup, ['InvtID']);
-                                    record = App.stoSetup.getAt(App.grdSetup.store.getCount() - 1);
-                                    record.set('InvtID', node.data.InvtID);
-                                    record.set('Descr', node.data.Descr);
-                                    record.set('Qty', node.data.CnvFact);
-                                }
-                            }
-                        });
-                        App.stoSetup.resumeEvents();
-                        // App.stoSetup.loadPage(1);
-                        App.grdSetup.view.refresh();
+//            if (accumulateID && status == _beginStatus) {
+//                if (HQ.isUpdate) {
+//                    var allNodes = getLeafNodes(App.treePanelInvt.getRootNode());
+//                    if (allNodes && allNodes.length > 0) {
+//                        App.stoSetup.suspendEvents();
+//                        allNodes.forEach(function (node) {
+//                            if (node.data.Type == "Invt") {
+//                                var record = HQ.store.findInStore(App.stoSetup, ['InvtID'], [node.data.InvtID]); // App.grdOM21700.store
+//                                if (!record) {
+//                                    HQ.store.insertBlank(App.stoSetup, ['InvtID']);
+//                                    record = App.stoSetup.getAt(App.grdSetup.store.getCount() - 1);
+//                                    record.set('InvtID', node.data.InvtID);
+//                                    record.set('Descr', node.data.Descr);
+//                                    record.set('Qty', node.data.CnvFact);
+//                                }
+//                            }
+//                        });
+//                        App.stoSetup.resumeEvents();
+//                        // App.stoSetup.loadPage(1);
+//                        App.grdSetup.view.refresh();
 
-                        var record = App.stoSetup.getAt(App.stoSetup.getCount() - 1);
-                        App.treePanelInvt.clearChecked();
-                        Event.Form.frmMain_fieldChange();
-                    }
-                }
-                else {
-                    HQ.message.show(4, '', '');
-                }
-            }
-        }
-        else {
-            Process.showFieldInvalid(App.frmMain);
-        }
-    }
-    else {
-        HQ.message.show(4, '', '');
-    }
-};
+//                        var record = App.stoSetup.getAt(App.stoSetup.getCount() - 1);
+//                        App.treePanelInvt.clearChecked();
+//                        Event.Form.frmMain_fieldChange();
+//                    }
+//                }
+//                else {
+//                    HQ.message.show(4, '', '');
+//                }
+//            }
+//        }
+//        else {
+//            Process.showFieldInvalid(App.frmMain);
+//        }
+//    }
+//    else {
+//        HQ.message.show(4, '', '');
+//    }
+//};
 
-var btnAddInvt_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
-        if (App.frmMain.isValid()) {
-            var accumulateID = App.cboAccumulateID.getValue();
-            var status = App.cboStatus.value;
+//var btnAddInvt_click = function (btn, e, eOpts) {
+//    if (HQ.isUpdate) {
+//        if (App.frmMain.isValid()) {
+//            var accumulateID = App.cboAccumulateID.getValue();
+//            var status = App.cboStatus.value;
 
-            if (accumulateID && status == _beginStatus) {
-                var allNodes = App.treePanelInvt.getCheckedNodes();
-                if (allNodes && allNodes.length > 0) {
-                    App.stoSetup.suspendEvents();
-                    allNodes.forEach(function (node) {
-                        if (node.attributes.Type == "Invt") {
-                            var record = HQ.store.findInStore(App.stoSetup, ['InvtID'], [node.attributes.InvtID]);
-                            if (!record) {
-                                HQ.store.insertBlank(App.stoSetup, ['InvtID']);
-                                record = App.stoSetup.getAt(App.grdSetup.store.getCount() - 1);
-                                record.set('InvtID', node.attributes.InvtID);
-                                record.set('Descr', node.attributes.Descr);
-                                record.set('Qty', node.attributes.CnvFact);
-                            }
-                        }
-                    });
-                    App.stoSetup.resumeEvents();
-                    //  App.stoSetup.loadPage(1);
-                    App.grdSetup.view.refresh();
+//            if (accumulateID && status == _beginStatus) {
+//                var allNodes = App.treePanelInvt.getCheckedNodes();
+//                if (allNodes && allNodes.length > 0) {
+//                    App.stoSetup.suspendEvents();
+//                    allNodes.forEach(function (node) {
+//                        if (node.attributes.Type == "Invt") {
+//                            var record = HQ.store.findInStore(App.stoSetup, ['InvtID'], [node.attributes.InvtID]);
+//                            if (!record) {
+//                                HQ.store.insertBlank(App.stoSetup, ['InvtID']);
+//                                record = App.stoSetup.getAt(App.grdSetup.store.getCount() - 1);
+//                                record.set('InvtID', node.attributes.InvtID);
+//                                record.set('Descr', node.attributes.Descr);
+//                                record.set('Qty', node.attributes.CnvFact);
+//                            }
+//                        }
+//                    });
+//                    App.stoSetup.resumeEvents();
+//                    //  App.stoSetup.loadPage(1);
+//                    App.grdSetup.view.refresh();
 
-                    App.treePanelInvt.clearChecked();
-                }
-                Event.Form.frmMain_fieldChange();
-            }
-        }
-        else {
-            Process.showFieldInvalid(App.frmMain);
-        }
-    }
-    else {
-        HQ.message.show(4, '', '');
-    }
-};
+//                    App.treePanelInvt.clearChecked();
+//                }
+//                Event.Form.frmMain_fieldChange();
+//            }
+//        }
+//        else {
+//            Process.showFieldInvalid(App.frmMain);
+//        }
+//    }
+//    else {
+//        HQ.message.show(4, '', '');
+//    }
+//};
 
-var btnDelInvt_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
-        if (App.frmMain.isValid()) {
-            var status = App.cboStatus.value;
+//var btnDelInvt_click = function (btn, e, eOpts) {
+//    if (HQ.isUpdate) {
+//        if (App.frmMain.isValid()) {
+//            var status = App.cboStatus.value;
 
-            if (status == _beginStatus) {
-                var selRecs = App.grdSetup.selModel.selected.items;
-                if (selRecs.length > 0) {
-                    var params = [];
-                    selRecs.forEach(function (record) {
-                        params.push(record.data.InvtID);
-                    });
-                    HQ.message.show(2015020806,
-                        params.join(" & ") + ",",
-                        'deleteSelectedInvt');
-                }
-            }
-        }
-        else {
-            Process.showFieldInvalid(App.frmMain);
-        }
-    }
-    else {
-        HQ.message.show(4, '', '');
-    }
-};
+//            if (status == _beginStatus) {
+//                var selRecs = App.grdSetup.selModel.selected.items;
+//                if (selRecs.length > 0) {
+//                    var params = [];
+//                    selRecs.forEach(function (record) {
+//                        params.push(record.data.InvtID);
+//                    });
+//                    HQ.message.show(2015020806,
+//                        params.join(" & ") + ",",
+//                        'deleteSelectedInvt');
+//                }
+//            }
+//        }
+//        else {
+//            Process.showFieldInvalid(App.frmMain);
+//        }
+//    }
+//    else {
+//        HQ.message.show(4, '', '');
+//    }
+//};
 
-var btnDelAllInvt_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
-        if (App.frmMain.isValid()) {
-            var status = App.cboStatus.value;
-            if (status == _beginStatus) {
-                HQ.message.show(2015020806, '', 'deleteAllInvts');
-            }
-        }
-        else {
-            Process.showFieldInvalid(App.frmMain);
-        }
-    }
-    else {
-        HQ.message.show(4, '', '');
-    }
-};
+//var btnDelAllInvt_click = function (btn, e, eOpts) {
+//    if (HQ.isUpdate) {
+//        if (App.frmMain.isValid()) {
+//            var status = App.cboStatus.value;
+//            if (status == _beginStatus) {
+//                HQ.message.show(2015020806, '', 'deleteAllInvts');
+//            }
+//        }
+//        else {
+//            Process.showFieldInvalid(App.frmMain);
+//        }
+//    }
+//    else {
+//        HQ.message.show(4, '', '');
+//    }
+//};
 
 var getDeepAllLeafNodes = function (node, onlyLeaf) {
     var allNodes = new Array();
@@ -1644,14 +1644,14 @@ var deleteSelectedLoc = function (item) {
 
 var deleteSelectedInvt = function (item) {
     if (item == "yes") {
-        App.grdSetup.deleteSelected();
+        App.grdInvt.deleteSelected();
         Event.Form.frmMain_fieldChange();
     }
 };
 
 var deleteAllInvts = function (item) {
     if (item == "yes") {
-        App.stoSetup.removeAll();
+        App.grdInvt.removeAll();
         Event.Form.frmMain_fieldChange();
     }
 };
@@ -1951,5 +1951,135 @@ var deleteAllSales = function (item) {
         App.grdSales.view.refresh();
         App.stoSales.loadPage(1);
         Event.Form.frmMain_fieldChange();
+    }
+};
+
+
+var btnAddAllInvt_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        if (App.frmMain.isValid()) {
+            var accumulateID = App.cboAccumulateID.getValue();
+            var status = App.cboStatus.value;
+
+            if (accumulateID && status == _beginStatus) {
+                if (HQ.isUpdate) {
+                    var allNodes = getLeafNodes(App.treePanelInvt.getRootNode());
+                    if (allNodes && allNodes.length > 0) {
+                        App.stoInvt.suspendEvents();
+                        allNodes.forEach(function (node) {
+                            if (node.data.Type == "Invt") {
+                                var record = HQ.store.findInStore(App.stoInvt, ['InvtID'], [node.data.InvtID]); // App.grdOM21700.store
+                                if (!record) {
+                                    HQ.store.insertBlank(App.stoInvt, ['InvtID']);
+                                    record = App.stoInvt.getAt(App.grdInvt.store.getCount() - 1);
+                                    record.set('InvtID', node.data.InvtID);
+                                    record.set('Descr', node.data.Descr);
+                                    record.set('Unit', node.data.Unit);
+                                }
+                            }
+                        });
+                        App.stoInvt.resumeEvents();
+                        // App.stoSetup.loadPage(1);
+                        App.grdInvt.view.refresh();
+
+                        var record = App.stoInvt.getAt(App.stoInvt.getCount() - 1);
+                        App.treePanelInvt.clearChecked();
+                        Event.Form.frmMain_fieldChange();
+                    }
+                }
+                else {
+                    HQ.message.show(4, '', '');
+                }
+            }
+        }
+        else {
+            Process.showFieldInvalid(App.frmMain);
+        }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnAddInvt_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        if (App.frmMain.isValid()) {
+            var accumulateID = App.cboAccumulateID.getValue();
+            var status = App.cboStatus.value;
+
+            if (accumulateID && status == _beginStatus) {
+                var allNodes = App.treePanelInvt.getCheckedNodes();
+                if (allNodes && allNodes.length > 0) {
+                    App.stoInvt.suspendEvents();
+                    allNodes.forEach(function (node) {
+                        if (node.attributes.Type == "Invt") {
+                            var record = HQ.store.findInStore(App.stoInvt, ['InvtID'], [node.attributes.InvtID]);
+                            if (!record) {
+                                HQ.store.insertBlank(App.stoInvt, ['InvtID']);
+                                record = App.stoInvt.getAt(App.grdInvt.store.getCount() - 1);
+                                record.set('InvtID', node.attributes.InvtID);
+                                record.set('Descr', node.attributes.Descr);
+                                record.set('Unit', node.attributes.Unit);
+                            }
+                        }
+                    });
+                    App.stoInvt.resumeEvents();
+                    App.grdInvt.view.refresh();
+
+                    App.treePanelInvt.clearChecked();
+                }
+                Event.Form.frmMain_fieldChange();
+            }
+        }
+        else {
+            Process.showFieldInvalid(App.frmMain);
+        }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnDelInvt_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        if (App.frmMain.isValid()) {
+            var status = App.cboStatus.value;
+
+            if (status == _beginStatus) {
+                var selRecs = App.grdInvt.selModel.selected.items;
+                if (selRecs.length > 0) {
+                    var params = [];
+                    selRecs.forEach(function (record) {
+                        params.push(record.data.InvtID);
+                    });
+                    HQ.message.show(2015020806,
+                        params.join(" & ") + ",",
+                        'deleteSelectedInvt');
+                }
+            }
+        }
+        else {
+            Process.showFieldInvalid(App.frmMain);
+        }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnDelAllInvt_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        if (App.frmMain.isValid()) {
+            var status = App.cboStatus.value;
+            if (status == _beginStatus) {
+                HQ.message.show(2015020806, '', 'deleteAllInvts');
+            }
+        }
+        else {
+            Process.showFieldInvalid(App.frmMain);
+        }
+    }
+    else {
+        HQ.message.show(4, '', '');
     }
 };

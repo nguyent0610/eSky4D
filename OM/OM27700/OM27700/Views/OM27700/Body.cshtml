@@ -453,75 +453,148 @@
                     }) // pnlLevel
 
                     , X.Panel().ID("pnlInvt")
-                    .Region(Region.East).Hidden(true)
-                    .Layout(LayoutType.Fit).Flex(1).Split(true)
+                    .Region(Region.East).Hidden(true).Title(Util.GetLang("Inventory"))
+                    .Flex(1).Split(true).Layout(LayoutType.Border)
                     .Items(
-                        X.GridPanel().ID("grdInvt")
-                        .Title(Util.GetLang("Inventory"))
-                        .Layout(LayoutType.Fit)
-                        .Scroll(ScrollMode.Both)
-                        .View(X.GridView().TrackOver(false))
-                        .SortableColumns(false)
-                        .StoreID("stoInvt")
-                        .ColumnModel(
-                            X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-                            , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(150)
-                            .Editor(
-                                HQ.Combo().ID("cboColInvtID")
-                                .HQProcedure("OM27700_pcInvtID").HQColumnShow("Code,Descr")
-                                .HQHeightWidth(400, 300)
-                                .ValueField("Code").DisplayField("Code")
-                                .ForceSelection(true)
-                                .HQParam(new StoreParameterCollection() { 
-                            new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
-                            new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
-                            new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                        X.Panel().ID("treeInvtID")
+                        .Region(Region.West)
+                        .MinWidth(150).Split(true).AutoScroll(true).Width(200)                    
+                        .DirectEvents(de =>
+                        {
+                            de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeInvtID"));
+                            de.AfterRender.Url = Url.Action("OM27700GetInvt");
+                            //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                            de.AfterRender.CleanRequest = true;
+                            de.AfterRender.Method = HttpMethod.POST;
+                            de.AfterRender.Success = "App.treePanelInvt.getRootNode().expand();";
+
+                            de.AfterRender.Timeout = 60000;
+                            de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                            de.AfterRender.EventMask.ShowMask = true;
+                            de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                            de.AfterRender.EventMask.MinDelay = 500;
                         })
-                                .LoadData()
+                        .BottomBar(
+                            X.Toolbar()
+                            .Items(
+                                X.ToolbarFill()
+
+                                , HQ.Button().ID("btnExpandInvt")
+                                .HQLangCode("Expand")
+                                .Icon(Icon.BulletTogglePlus)
+                                .Handler("btnInvtExpand_click")
+
+                                , X.ToolbarSpacer()
+                                , X.ToolbarSeparator()
+                                , X.ToolbarSpacer()
+
+                                , HQ.Button().ID("btnCollapseInvt")
+                                .HQLangCode("Collapse")
+                                .Icon(Icon.BulletToggleMinus)
+                                .Handler("btnInvtCollapse_click")
+
+                                , X.ToolbarFill()
                             )
-
-                            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250)
-                            .Renderer("Process.renderInvtInfo")
-
-                            , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("Qty").Width(150)
-                            .Format("0,000").Align(Alignment.Right)
-                            .Editor(
-                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
-                            )
-
-                            , X.Column().Text(Util.GetLang("StkUnit")).DataIndex("StkUnit")
-                            .Renderer("Process.renderInvtInfo")
-
-                            , X.CommandColumn().Width(150)
-                            .Commands(
-                                X.GridCommand()
-                                .Text(Util.GetLang("Reject"))
-                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                                .CommandName("reject")
-                                .Icon(Icon.ArrowUndo)
-                            )
-                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                            .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                         )
-                        .SelectionModel(X.RowSelectionModel().ID("slmInvt").Mode(SelectionMode.Multi))
-                        .Plugins(
-                            X.CellEditing()
-                            .ClicksToEdit(1)
-                            .Listeners(ls =>
-                            {
-                                ls.BeforeEdit.Fn = "Event.Grid.grd_beforeEdit";
-                                ls.Edit.Fn = "Event.Grid.grd_edit";
-                                ls.ValidateEdit.Fn = "Event.Grid.grd_validateEdit";
+                        // treeInvt 
+                        
+                        
+                        ,X.Panel()
+                        .Region(Region.Center).Flex(1)
+                        .Layout(LayoutType.VBox)
+                        .MinWidth(50)
+                        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                        .Items(
+                            HQ.Button().ID("btnAddAllInvt")
+                            .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                            .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnAddAllInvt_click")
+
+                            , HQ.Button().ID("btnAddInvt")
+                            .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                            .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnAddInvt_click")
+
+                            , HQ.Button().ID("btnDelInvt")
+                            .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                            .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnDelInvt_click")
+
+                            , HQ.Button().ID("btnDelAllInvt")
+                            .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                            .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnDelAllInvt_click")
+                        ) // Panel
+                    
+                        ,
+                        X.Panel().ID("pnlControl").Region(Region.East).Flex(6).Layout(LayoutType.Fit).AutoScroll(true)
+                        .Items
+                        (
+                            X.GridPanel().ID("grdInvt")                  
+                            .Scroll(ScrollMode.Both)
+                            .View(X.GridView().TrackOver(false))
+                            .SortableColumns(false)
+                            .StoreID("stoInvt")
+                            .ColumnModel(
+                                X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+                                , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(150)
+                                .Editor(
+                                    HQ.Combo().ID("cboColInvtID")
+                                    .HQProcedure("OM27700_pcInvtID").HQColumnShow("Code,Descr")
+                                    .HQHeightWidth(400, 300)
+                                    .ValueField("Code").DisplayField("Code")
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() { 
+                                new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                             })
-                        ) // grdInvt
-                        .Features(
-                            X.GridFilters()
-                            .Local(true)
-                            .Filters(
-                                X.StringFilter().DataIndex("InvtID"),
-                                X.StringFilter().DataIndex("Descr"),
-                                X.NumericFilter().DataIndex("Qty"),
-                                X.StringFilter().DataIndex("StkUnit")
+                                    .LoadData()
+                                )
+
+                                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250)
+                                .Renderer("Process.renderInvtInfo")
+
+                                , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("Qty").Width(150)
+                                .Format("0,000").Align(Alignment.Right)
+                                .Editor(
+                                    HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                                )
+
+                                , X.Column().Text(Util.GetLang("StkUnit")).DataIndex("StkUnit")
+                                .Renderer("Process.renderInvtInfo")
+
+                                , X.CommandColumn().Width(150)
+                                .Commands(
+                                    X.GridCommand()
+                                    .Text(Util.GetLang("Reject"))
+                                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                    .CommandName("reject")
+                                    .Icon(Icon.ArrowUndo)
+                                )
+                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
+                            )
+                            .SelectionModel(X.RowSelectionModel().ID("slmInvt").Mode(SelectionMode.Multi))
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "Event.Grid.grd_beforeEdit";
+                                    ls.Edit.Fn = "Event.Grid.grd_edit";
+                                    ls.ValidateEdit.Fn = "Event.Grid.grd_validateEdit";
+                                })
+                            ) // grdInvt
+                            .Features(
+                                X.GridFilters()
+                                .Local(true)
+                                .Filters(
+                                    X.StringFilter().DataIndex("InvtID"),
+                                    X.StringFilter().DataIndex("Descr"),
+                                    X.NumericFilter().DataIndex("Qty"),
+                                    X.StringFilter().DataIndex("StkUnit")
+                                )
                             )
                         )
                     )

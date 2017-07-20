@@ -187,7 +187,7 @@ namespace OM27700.Controllers
             {
                 if (childrenInactiveHierachies.Count == 0)
                 {
-                    var invts = lstInventory.Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();// _db.OM27700_pcInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList()
+                    var invts = _db.OM27700_pcInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();// _db.OM27700_pcInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList()
                     if (invts.Count > 0)
                     {
                         foreach (var invt in invts)
@@ -215,56 +215,6 @@ namespace OM27700.Controllers
             }
             System.Diagnostics.Debug.WriteLine(node.Text);
             return node;
-        }
-
-        [DirectMethod]
-        public ActionResult OM27700GetInvt(string panelID)
-        {
-            var a = new ItemsCollection<Plugin>();
-            a.Add(Html.X().TreeViewDragDrop().DDGroup("InvtID").EnableDrop(false));
-
-            TreeView v = new TreeView();
-            //v.Plugins.Add(a);
-            v.Copy = true;
-            TreePanel tree = new TreePanel()
-            {
-                ViewConfig = v
-            };
-            tree.ID = "treePanelInvt";
-            tree.ItemID = "treePanelInvt";
-            tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
-            tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
-            tree.Fields.Add(new ModelField("NodeLevel", ModelFieldType.String));
-            tree.Fields.Add(new ModelField("ParentRecordID", ModelFieldType.String));
-            tree.Fields.Add(new ModelField("InvtID", ModelFieldType.String));
-            tree.Fields.Add(new ModelField("Descr", ModelFieldType.String));
-            tree.Fields.Add(new ModelField("CnvFact", ModelFieldType.String));
-            tree.Border = false;
-            tree.RootVisible = true;
-            tree.Animate = true;
-
-            var root = new Node() { };
-
-            var hierarchy = new SI_Hierarchy()
-            {
-                RecordID = 0,
-                NodeID = "",
-                ParentRecordID = 0,
-                NodeLevel = 1,
-                Descr = "Root",
-                Type = "I"
-            };
-            lstInventory = _db.OM27700_pcInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList();
-            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
-            tree.Root.Add(node);
-
-
-            var treeBranch = X.GetCmp<Panel>(panelID);
-            tree.Listeners.CheckChange.Fn = "treePanelInvt_checkChange";
-            tree.Listeners.BeforeItemExpand.Handler = "App.treePanelInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
-            tree.Listeners.AfterItemExpand.Handler = "App.treePanelInvt.el.unmask();Ext.resumeLayouts(true);";
-            tree.AddTo(treeBranch);
-            return this.Direct();
         }
 
         [DirectMethod]
@@ -437,6 +387,58 @@ namespace OM27700.Controllers
 
             tree.AddTo(treeCustomer);
 
+            return this.Direct();
+        }
+
+        [DirectMethod]
+        public ActionResult OM27700GetInvt(string panelID)
+        {
+            var a = new ItemsCollection<Plugin>();
+            a.Add(Html.X().TreeViewDragDrop().DDGroup("InvtID").EnableDrop(false));
+
+            TreeView v = new TreeView();
+            //v.Plugins.Add(a);
+            v.Copy = true;
+            TreePanel tree = new TreePanel()
+            {
+                ViewConfig = v
+            };
+            tree.ID = "treePanelInvt";
+            tree.ItemID = "treePanelInvt";
+            tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("NodeLevel", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("ParentRecordID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("InvtID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Descr", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("CnvFact", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Unit", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("StkUnit", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("ClassID", ModelFieldType.String));
+            tree.Border = false;
+            tree.RootVisible = true;
+            tree.Animate = true;
+
+            var root = new Node() { };
+
+            var hierarchy = new SI_Hierarchy()
+            {
+                RecordID = 0,
+                NodeID = "",
+                ParentRecordID = 0,
+                NodeLevel = 1,
+                Descr = "Root",
+                Type = "I"
+            };
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
+            tree.Root.Add(node);
+
+
+            var treeBranch = X.GetCmp<Panel>(panelID);
+            tree.Listeners.CheckChange.Fn = "treePanelInvt_checkChange";
+            tree.Listeners.BeforeItemExpand.Handler = "App.treePanelInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
+            tree.Listeners.AfterItemExpand.Handler = "App.treePanelInvt.el.unmask();Ext.resumeLayouts(true);";
+            tree.AddTo(treeBranch);
             return this.Direct();
         }
         #endregion
