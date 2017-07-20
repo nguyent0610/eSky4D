@@ -577,6 +577,7 @@
                                     HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQProcedure("OM25100_pcInvtID").HQAutoLoad(true)
                                     .HQColumnShow("InvtID,Descr").DisplayField("Descr").ValueField("InvtID")
                                     .Width(500).HQHeightWidth(500, 400)
+                                   // .HQisPaging(true).PageSize(20)
                                     .HQParam(new StoreParameterCollection() 
                                     {
                                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
@@ -1051,6 +1052,7 @@
                                                 HQ.Combo().ID("cboSalesInvtID").Name("cboSalesInvtID").HQProcedure("OM25100_pcInvtID").HQAutoLoad(true)
                                                 .HQColumnShow("InvtID,Descr").DisplayField("Descr").ValueField("InvtID")
                                                 .Width(500).HQHeightWidth(500, 400)
+                                               // .HQisPaging(true).PageSize(20)
                                                 .HQParam(new StoreParameterCollection() 
                                                 {
                                                     new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
@@ -1215,6 +1217,7 @@
                                         HQ.Combo().ID("cboCustId").Name("cboCustId").HQProcedure("OM25100_pcCustId").HQAutoLoad(true)
                                         .HQColumnShow("CustId,CustName").DisplayField("CustId").ValueField("CustId")
                                         .Width(500).HQHeightWidth(500, 400)
+                                        .HQisPaging(true).PageSize(20)
                                         .HQParam(new StoreParameterCollection() 
                                         {
                                             new StoreParameter() { Name = "@SlsperID", Value = "App.slmgrdOMKPICustomer_All.selected.items[0] == undefined ? '' : App.slmgrdOMKPICustomer_All.selected.items[0].data.SlsperId", Mode = ParameterMode.Raw },                                              
@@ -1386,6 +1389,7 @@
                                             HQ.Combo().ID("cboCustIdClass").Name("cboCustIdClass").HQProcedure("OM25100_pcCustId").HQAutoLoad(true)
                                             .HQColumnShow("CustId,CustName").DisplayField("CustId").ValueField("CustId")
                                             .Width(500).HQHeightWidth(500, 400)
+                                            .HQisPaging(true).PageSize(20)
                                             .HQParam(new StoreParameterCollection() 
                                         {
                                             new StoreParameter() { Name = "@SlsperID", Value = "App.slmgrdOMKPICustomer_Class.selected.items[0] == undefined ? '' : App.slmgrdOMKPICustomer_Class.selected.items[0].data.SlsperId", Mode = ParameterMode.Raw },                                              
@@ -1578,6 +1582,7 @@
                                             HQ.Combo().ID("cboCustIdInvt").Name("cboCustIdInvt").HQProcedure("OM25100_pcCustId").HQAutoLoad(true)
                                             .HQColumnShow("CustId,CustName").DisplayField("CustId").ValueField("CustId")
                                             .Width(500).HQHeightWidth(500, 400)
+                                            .HQisPaging(true).PageSize(20)
                                             .HQParam(new StoreParameterCollection() 
                                         {  
                                             new StoreParameter() { Name = "@SlsperID", Value = "App.slmgrdOMKPICustomer_Invt.selected.items[0] == undefined ? '' : App.slmgrdOMKPICustomer_Invt.selected.items[0].data.SlsperId", Mode = ParameterMode.Raw },                                              
@@ -1604,6 +1609,7 @@
                                                 HQ.Combo().ID("cboCustomerInvtID").Name("cboCustomerInvtID").HQProcedure("OM25100_pcInvtID").HQAutoLoad(true)
                                                 .HQColumnShow("InvtID,Descr").DisplayField("Descr").ValueField("InvtID")
                                                 .Width(500).HQHeightWidth(500, 400)
+                                               // .HQisPaging(true).PageSize(20)
                                                 .HQParam(new StoreParameterCollection() 
                                                 {
                                                     new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },

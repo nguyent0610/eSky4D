@@ -68,6 +68,38 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<OM_KPIHeader> OM_KPIHeader
+        {
+            get
+            {
+                if ((_OM_KPIHeader == null))
+                {
+                    _OM_KPIHeader = base.CreateObjectSet<OM_KPIHeader>("OM_KPIHeader");
+                }
+                return _OM_KPIHeader;
+            }
+        }
+        private ObjectSet<OM_KPIHeader> _OM_KPIHeader;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_KPICondition> OM_KPICondition
+        {
+            get
+            {
+                if ((_OM_KPICondition == null))
+                {
+                    _OM_KPICondition = base.CreateObjectSet<OM_KPICondition>("OM_KPICondition");
+                }
+                return _OM_KPICondition;
+            }
+        }
+        private ObjectSet<OM_KPICondition> _OM_KPICondition;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<OM_KPICpny_All> OM_KPICpny_All
         {
             get
@@ -132,6 +164,22 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<OM_KPISales_Class> OM_KPISales_Class
+        {
+            get
+            {
+                if ((_OM_KPISales_Class == null))
+                {
+                    _OM_KPISales_Class = base.CreateObjectSet<OM_KPISales_Class>("OM_KPISales_Class");
+                }
+                return _OM_KPISales_Class;
+            }
+        }
+        private ObjectSet<OM_KPISales_Class> _OM_KPISales_Class;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<OM_KPISales_Invt> OM_KPISales_Invt
         {
             get
@@ -144,22 +192,6 @@ namespace OM25100
             }
         }
         private ObjectSet<OM_KPISales_Invt> _OM_KPISales_Invt;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<OM_KPIHeader> OM_KPIHeader
-        {
-            get
-            {
-                if ((_OM_KPIHeader == null))
-                {
-                    _OM_KPIHeader = base.CreateObjectSet<OM_KPIHeader>("OM_KPIHeader");
-                }
-                return _OM_KPIHeader;
-            }
-        }
-        private ObjectSet<OM_KPIHeader> _OM_KPIHeader;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -208,42 +240,26 @@ namespace OM25100
             }
         }
         private ObjectSet<OM_KPICustomer_Invt> _OM_KPICustomer_Invt;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<OM_KPISales_Class> OM_KPISales_Class
-        {
-            get
-            {
-                if ((_OM_KPISales_Class == null))
-                {
-                    _OM_KPISales_Class = base.CreateObjectSet<OM_KPISales_Class>("OM_KPISales_Class");
-                }
-                return _OM_KPISales_Class;
-            }
-        }
-        private ObjectSet<OM_KPISales_Class> _OM_KPISales_Class;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<OM_KPICondition> OM_KPICondition
-        {
-            get
-            {
-                if ((_OM_KPICondition == null))
-                {
-                    _OM_KPICondition = base.CreateObjectSet<OM_KPICondition>("OM_KPICondition");
-                }
-                return _OM_KPICondition;
-            }
-        }
-        private ObjectSet<OM_KPICondition> _OM_KPICondition;
 
         #endregion
 
         #region AddTo Methods
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_KPIHeader EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_KPIHeader(OM_KPIHeader oM_KPIHeader)
+        {
+            base.AddObject("OM_KPIHeader", oM_KPIHeader);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_KPICondition EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_KPICondition(OM_KPICondition oM_KPICondition)
+        {
+            base.AddObject("OM_KPICondition", oM_KPICondition);
+        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the OM_KPICpny_All EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -278,19 +294,19 @@ namespace OM25100
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the OM_KPISales_Class EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_KPISales_Class(OM_KPISales_Class oM_KPISales_Class)
+        {
+            base.AddObject("OM_KPISales_Class", oM_KPISales_Class);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the OM_KPISales_Invt EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_KPISales_Invt(OM_KPISales_Invt oM_KPISales_Invt)
         {
             base.AddObject("OM_KPISales_Invt", oM_KPISales_Invt);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_KPIHeader EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_KPIHeader(OM_KPIHeader oM_KPIHeader)
-        {
-            base.AddObject("OM_KPIHeader", oM_KPIHeader);
         }
     
         /// <summary>
@@ -315,22 +331,6 @@ namespace OM25100
         public void AddToOM_KPICustomer_Invt(OM_KPICustomer_Invt oM_KPICustomer_Invt)
         {
             base.AddObject("OM_KPICustomer_Invt", oM_KPICustomer_Invt);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_KPISales_Class EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_KPISales_Class(OM_KPISales_Class oM_KPISales_Class)
-        {
-            base.AddObject("OM_KPISales_Class", oM_KPISales_Class);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_KPICondition EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_KPICondition(OM_KPICondition oM_KPICondition)
-        {
-            base.AddObject("OM_KPICondition", oM_KPICondition);
         }
 
         #endregion
@@ -2025,30 +2025,6 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Double Target
@@ -2370,30 +2346,6 @@ namespace OM25100
         private global::System.String _BranchID;
         partial void OnBranchIDChanging(global::System.String value);
         partial void OnBranchIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2750,30 +2702,6 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String InvtID
@@ -3011,7 +2939,6 @@ namespace OM25100
         /// <param name="cycleNbr">Initial value of the CycleNbr property.</param>
         /// <param name="kPI">Initial value of the KPI property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
-        /// <param name="slsperId">Initial value of the SlsperId property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="target">Initial value of the Target property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
@@ -3021,13 +2948,12 @@ namespace OM25100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_KPICustomer_All CreateOM_KPICustomer_All(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String slsperId, global::System.String custID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static OM_KPICustomer_All CreateOM_KPICustomer_All(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String custID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_KPICustomer_All oM_KPICustomer_All = new OM_KPICustomer_All();
             oM_KPICustomer_All.CycleNbr = cycleNbr;
             oM_KPICustomer_All.KPI = kPI;
             oM_KPICustomer_All.BranchID = branchID;
-            oM_KPICustomer_All.SlsperId = slsperId;
             oM_KPICustomer_All.CustID = custID;
             oM_KPICustomer_All.Target = target;
             oM_KPICustomer_All.Crtd_DateTime = crtd_DateTime;
@@ -3130,30 +3056,6 @@ namespace OM25100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.String SlsperId
         {
             get
@@ -3162,43 +3064,16 @@ namespace OM25100
             }
             set
             {
-                if (_SlsperId != value)
-                {
-                    OnSlsperIdChanging(value);
-                    ReportPropertyChanging("SlsperId");
-                    _SlsperId = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("SlsperId");
-                    OnSlsperIdChanged();
-                }
+                OnSlsperIdChanging(value);
+                ReportPropertyChanging("SlsperId");
+                _SlsperId = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SlsperId");
+                OnSlsperIdChanged();
             }
         }
         private global::System.String _SlsperId;
         partial void OnSlsperIdChanging(global::System.String value);
         partial void OnSlsperIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String SlsperName
-        {
-            get
-            {
-                return _SlsperName;
-            }
-            set
-            {
-                OnSlsperNameChanging(value);
-                ReportPropertyChanging("SlsperName");
-                _SlsperName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SlsperName");
-                OnSlsperNameChanged();
-            }
-        }
-        private global::System.String _SlsperName;
-        partial void OnSlsperNameChanging(global::System.String value);
-        partial void OnSlsperNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -3226,30 +3101,6 @@ namespace OM25100
         private global::System.String _CustID;
         partial void OnCustIDChanging(global::System.String value);
         partial void OnCustIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CustName
-        {
-            get
-            {
-                return _CustName;
-            }
-            set
-            {
-                OnCustNameChanging(value);
-                ReportPropertyChanging("CustName");
-                _CustName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CustName");
-                OnCustNameChanged();
-            }
-        }
-        private global::System.String _CustName;
-        partial void OnCustNameChanging(global::System.String value);
-        partial void OnCustNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -3464,7 +3315,6 @@ namespace OM25100
         /// <param name="cycleNbr">Initial value of the CycleNbr property.</param>
         /// <param name="kPI">Initial value of the KPI property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
-        /// <param name="slsperId">Initial value of the SlsperId property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="classID">Initial value of the ClassID property.</param>
         /// <param name="target">Initial value of the Target property.</param>
@@ -3475,13 +3325,12 @@ namespace OM25100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_KPICustomer_Class CreateOM_KPICustomer_Class(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String slsperId, global::System.String custID, global::System.String classID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static OM_KPICustomer_Class CreateOM_KPICustomer_Class(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String custID, global::System.String classID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_KPICustomer_Class oM_KPICustomer_Class = new OM_KPICustomer_Class();
             oM_KPICustomer_Class.CycleNbr = cycleNbr;
             oM_KPICustomer_Class.KPI = kPI;
             oM_KPICustomer_Class.BranchID = branchID;
-            oM_KPICustomer_Class.SlsperId = slsperId;
             oM_KPICustomer_Class.CustID = custID;
             oM_KPICustomer_Class.ClassID = classID;
             oM_KPICustomer_Class.Target = target;
@@ -3585,30 +3434,6 @@ namespace OM25100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.String SlsperId
         {
             get
@@ -3617,43 +3442,16 @@ namespace OM25100
             }
             set
             {
-                if (_SlsperId != value)
-                {
-                    OnSlsperIdChanging(value);
-                    ReportPropertyChanging("SlsperId");
-                    _SlsperId = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("SlsperId");
-                    OnSlsperIdChanged();
-                }
+                OnSlsperIdChanging(value);
+                ReportPropertyChanging("SlsperId");
+                _SlsperId = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SlsperId");
+                OnSlsperIdChanged();
             }
         }
         private global::System.String _SlsperId;
         partial void OnSlsperIdChanging(global::System.String value);
         partial void OnSlsperIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String SlsperName
-        {
-            get
-            {
-                return _SlsperName;
-            }
-            set
-            {
-                OnSlsperNameChanging(value);
-                ReportPropertyChanging("SlsperName");
-                _SlsperName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SlsperName");
-                OnSlsperNameChanged();
-            }
-        }
-        private global::System.String _SlsperName;
-        partial void OnSlsperNameChanging(global::System.String value);
-        partial void OnSlsperNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -3681,30 +3479,6 @@ namespace OM25100
         private global::System.String _CustID;
         partial void OnCustIDChanging(global::System.String value);
         partial void OnCustIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CustName
-        {
-            get
-            {
-                return _CustName;
-            }
-            set
-            {
-                OnCustNameChanging(value);
-                ReportPropertyChanging("CustName");
-                _CustName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CustName");
-                OnCustNameChanged();
-            }
-        }
-        private global::System.String _CustName;
-        partial void OnCustNameChanging(global::System.String value);
-        partial void OnCustNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -3946,7 +3720,6 @@ namespace OM25100
         /// <param name="cycleNbr">Initial value of the CycleNbr property.</param>
         /// <param name="kPI">Initial value of the KPI property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
-        /// <param name="slsperId">Initial value of the SlsperId property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="target">Initial value of the Target property.</param>
@@ -3957,13 +3730,12 @@ namespace OM25100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_KPICustomer_Invt CreateOM_KPICustomer_Invt(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String slsperId, global::System.String custID, global::System.String invtID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static OM_KPICustomer_Invt CreateOM_KPICustomer_Invt(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String custID, global::System.String invtID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_KPICustomer_Invt oM_KPICustomer_Invt = new OM_KPICustomer_Invt();
             oM_KPICustomer_Invt.CycleNbr = cycleNbr;
             oM_KPICustomer_Invt.KPI = kPI;
             oM_KPICustomer_Invt.BranchID = branchID;
-            oM_KPICustomer_Invt.SlsperId = slsperId;
             oM_KPICustomer_Invt.CustID = custID;
             oM_KPICustomer_Invt.InvtID = invtID;
             oM_KPICustomer_Invt.Target = target;
@@ -4067,30 +3839,6 @@ namespace OM25100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.String SlsperId
         {
             get
@@ -4099,43 +3847,16 @@ namespace OM25100
             }
             set
             {
-                if (_SlsperId != value)
-                {
-                    OnSlsperIdChanging(value);
-                    ReportPropertyChanging("SlsperId");
-                    _SlsperId = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("SlsperId");
-                    OnSlsperIdChanged();
-                }
+                OnSlsperIdChanging(value);
+                ReportPropertyChanging("SlsperId");
+                _SlsperId = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SlsperId");
+                OnSlsperIdChanged();
             }
         }
         private global::System.String _SlsperId;
         partial void OnSlsperIdChanging(global::System.String value);
         partial void OnSlsperIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String SlsperName
-        {
-            get
-            {
-                return _SlsperName;
-            }
-            set
-            {
-                OnSlsperNameChanging(value);
-                ReportPropertyChanging("SlsperName");
-                _SlsperName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SlsperName");
-                OnSlsperNameChanged();
-            }
-        }
-        private global::System.String _SlsperName;
-        partial void OnSlsperNameChanging(global::System.String value);
-        partial void OnSlsperNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -4163,30 +3884,6 @@ namespace OM25100
         private global::System.String _CustID;
         partial void OnCustIDChanging(global::System.String value);
         partial void OnCustIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CustName
-        {
-            get
-            {
-                return _CustName;
-            }
-            set
-            {
-                OnCustNameChanging(value);
-                ReportPropertyChanging("CustName");
-                _CustName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CustName");
-                OnCustNameChanged();
-            }
-        }
-        private global::System.String _CustName;
-        partial void OnCustNameChanging(global::System.String value);
-        partial void OnCustNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -4835,30 +4532,6 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SlsperId
@@ -4882,30 +4555,6 @@ namespace OM25100
         private global::System.String _SlsperId;
         partial void OnSlsperIdChanging(global::System.String value);
         partial void OnSlsperIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String SlsperName
-        {
-            get
-            {
-                return _SlsperName;
-            }
-            set
-            {
-                OnSlsperNameChanging(value);
-                ReportPropertyChanging("SlsperName");
-                _SlsperName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SlsperName");
-                OnSlsperNameChanged();
-            }
-        }
-        private global::System.String _SlsperName;
-        partial void OnSlsperNameChanging(global::System.String value);
-        partial void OnSlsperNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5261,30 +4910,6 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SlsperId
@@ -5308,30 +4933,6 @@ namespace OM25100
         private global::System.String _SlsperId;
         partial void OnSlsperIdChanging(global::System.String value);
         partial void OnSlsperIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String SlsperName
-        {
-            get
-            {
-                return _SlsperName;
-            }
-            set
-            {
-                OnSlsperNameChanging(value);
-                ReportPropertyChanging("SlsperName");
-                _SlsperName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SlsperName");
-                OnSlsperNameChanged();
-            }
-        }
-        private global::System.String _SlsperName;
-        partial void OnSlsperNameChanging(global::System.String value);
-        partial void OnSlsperNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5714,30 +5315,6 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SlsperId
@@ -5761,30 +5338,6 @@ namespace OM25100
         private global::System.String _SlsperId;
         partial void OnSlsperIdChanging(global::System.String value);
         partial void OnSlsperIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String SlsperName
-        {
-            get
-            {
-                return _SlsperName;
-            }
-            set
-            {
-                OnSlsperNameChanging(value);
-                ReportPropertyChanging("SlsperName");
-                _SlsperName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SlsperName");
-                OnSlsperNameChanged();
-            }
-        }
-        private global::System.String _SlsperName;
-        partial void OnSlsperNameChanging(global::System.String value);
-        partial void OnSlsperNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

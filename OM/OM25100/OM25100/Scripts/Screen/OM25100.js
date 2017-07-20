@@ -24,17 +24,17 @@ var keys5 = ['BranchID', 'SlsperId', 'InvtID'];
 var fieldsCheckRequire5 = ["BranchID", "SlsperId", "InvtID", "Target"];
 var fieldsLangCheckRequire5 = ["BranchID", "SlsperId", "InvtID", "Target"];
 
-var keys6 = ['BranchID', 'SlsperId', 'CustID'];
-var fieldsCheckRequire6 = ["BranchID", "SlsperId", 'CustID', "Target"];
-var fieldsLangCheckRequire6 = ["BranchID", "SlsperId", 'CustID', "Target"];
+var keys6 = ['BranchID', 'CustID']; // 'SlsperId', 
+var fieldsCheckRequire6 = ["BranchID", 'CustID', "Target"];
+var fieldsLangCheckRequire6 = ["BranchID", 'CustID', "Target"];
 
-var keys7 = ['BranchID', 'SlsperId', 'CustID', 'ClassID'];
-var fieldsCheckRequire7 = ["BranchID", "SlsperId", 'CustID', "ClassID", "Target"];
-var fieldsLangCheckRequire7 = ["BranchID", "SlsperId", 'CustID', "ClassID", "Target"];
+var keys7 = ['BranchID', 'CustID', 'ClassID']; // "SlsperId",
+var fieldsCheckRequire7 = ["BranchID", 'CustID', "ClassID", "Target"];
+var fieldsLangCheckRequire7 = ["BranchID", 'CustID', "ClassID", "Target"];
 
-var keys8 = ['BranchID', 'SlsperId', 'CustID', 'InvtID'];
-var fieldsCheckRequire8 = ["BranchID", "SlsperId", "CustID", "InvtID", "Target"];
-var fieldsLangCheckRequire8 = ["BranchID", "SlsperId", "CustID", "InvtID", "Target"];
+var keys8 = ['BranchID', 'CustID', 'InvtID']; //'SlsperId', 
+var fieldsCheckRequire8 = ["BranchID", "CustID", "InvtID", "Target"];
+var fieldsLangCheckRequire8 = ["BranchID", "CustID", "InvtID", "Target"];
 
 var keys9 = ['LineRef'];
 var fieldsCheckRequire9 = ["LineRef", "Descr"];
@@ -240,6 +240,18 @@ var menuClick = function (command) {
                     else if (HQ.focus == 'grdOM_KPISales_Invt') {
                         HQ.grid.insert(App.grdOM_KPISales_Invt, keys5);
                     }
+
+                    else if (HQ.focus == 'grdOM_KPICustomer_All') {
+                        HQ.grid.insert(App.grdOM_KPICustomer_All, keys6);
+                    }
+                    else if (HQ.focus == 'grdOM_KPICustomer_Class') {
+                        HQ.grid.insert(App.grdOM_KPICustomer_Class, keys7);
+                    }
+                    else if (HQ.focus == 'grdOM_KPICustomer_Invt') {
+                        HQ.grid.insert(App.grdOM_KPICustomer_Invt, keys8);
+                    }
+
+
                     else if (HQ.focus == 'grdOM_KPICondition') {
                         HQ.grid.insert(App.grdOM_KPICondition, keys9);
                     }
@@ -349,6 +361,8 @@ var menuClick = function (command) {
                                 }
                             }
                             issave = true;
+                        } else {
+                            return;
                         }
                     }
                     else if (App.grdOM_KPICpny_Class.isHidden() == false) {
@@ -360,7 +374,9 @@ var menuClick = function (command) {
                                 }
                             }
                             issave = true;
-                        }                            
+                        } else {
+                            return;
+                        }
                     }
                     else if (App.grdOM_KPICpny_Invt.isHidden() == false) {
                         if (HQ.store.checkRequirePass(App.stoOM_KPICpny_Invt, keys2, fieldsCheckRequire2, fieldsLangCheckRequire2)) {
@@ -371,6 +387,8 @@ var menuClick = function (command) {
                                 }
                             }
                             issave = true;
+                        } else {
+                            return;
                         }
                     }
                     else if (App.grdOM_KPISales_All.isHidden() == false) {
@@ -382,6 +400,8 @@ var menuClick = function (command) {
                                 }
                             }
                             issave = true;
+                        } else {
+                            return;
                         }
                     }
                     else if (App.grdOM_KPISales_Class.isHidden() == false) {
@@ -394,6 +414,8 @@ var menuClick = function (command) {
                                 }
                             }
                             issave = true;
+                        } else {
+                            return;
                         }
                     }
                     else if (App.grdOM_KPISales_Invt.isHidden() == false) {
@@ -406,44 +428,52 @@ var menuClick = function (command) {
                                 }
                             }
                             issave = true;
+                        } else {
+                            return;
                         }
                     }
                     else if (App.grdOM_KPICustomer_All.isHidden() == false) {
                         if (HQ.store.checkRequirePass(App.stoOM_KPICustomer_All, keys6, fieldsCheckRequire6, fieldsLangCheckRequire6)) {
                             if (App.stoOM_KPICustomer_All.data.length > 0) {
                                 if (!Ext.isEmpty(App.stoOM_KPICustomer_All.data.items[0].data.BranchID)
-                                    && !Ext.isEmpty(App.stoOM_KPICustomer_All.data.items[0].data.SlsperId)
+                                   // && !Ext.isEmpty(App.stoOM_KPICustomer_All.data.items[0].data.SlsperId)
                                     && !Ext.isEmpty(App.stoOM_KPICustomer_All.data.items[0].data.CustID)) {
                                     isError = false;
                                 }
                             }
                             issave = true;
+                        } else {
+                            return;
                         }
                     }
                     else if (App.grdOM_KPICustomer_Class.isHidden() == false) {
                         if (HQ.store.checkRequirePass(App.stoOM_KPICustomer_Class, keys7, fieldsCheckRequire7, fieldsLangCheckRequire7)) {
                             if (App.stoOM_KPICustomer_Class.data.length > 0) {
                                 if (!Ext.isEmpty(App.stoOM_KPICustomer_Class.data.items[0].data.BranchID)
-                                    && !Ext.isEmpty(App.stoOM_KPICustomer_Class.stoOM_KPICustomer_Invt.items[0].data.SlsperId)
-                                    && !Ext.isEmpty(App.stoOM_KPICustomer_Class.stoOM_KPICustomer_Invt.items[0].data.CustID)
+                                    //&& !Ext.isEmpty(App.stoOM_KPICustomer_Class.data.items[0].data.SlsperId)
+                                    && !Ext.isEmpty(App.stoOM_KPICustomer_Class.data.items[0].data.CustID)
                                     && !Ext.isEmpty(App.stoOM_KPICustomer_Class.data.items[0].data.ClassID)) {
                                     isError = false;
                                 }
                             }
                             issave = true;
+                        } else {
+                            return;
                         }
                     }
                     else if (App.grdOM_KPICustomer_Invt.isHidden() == false) {
                         if (HQ.store.checkRequirePass(App.stoOM_KPICustomer_Invt, keys8, fieldsCheckRequire8, fieldsLangCheckRequire8)) {
                             if (App.stoOM_KPICustomer_Invt.data.length > 0) {
                                 if (!Ext.isEmpty(App.stoOM_KPICustomer_Invt.data.items[0].data.BranchID)
-                                    && !Ext.isEmpty(App.stoOM_KPICustomer_Invt.data.items[0].data.SlsperId)
+                                    //&& !Ext.isEmpty(App.stoOM_KPICustomer_Invt.data.items[0].data.SlsperId)
                                     && !Ext.isEmpty(App.stoOM_KPICustomer_Invt.data.items[0].data.CustID)
                                     && !Ext.isEmpty(App.stoOM_KPICustomer_Invt.data.items[0].data.InvtID)) {
                                     isError = false;
                                 }
                             }
                             issave = true;
+                        } else {
+                            return;
                         }
                     }
                     
@@ -1935,6 +1965,8 @@ var grdOM_KPICustomer_All_Edit = function (item, e) {
         var obj = HQ.store.findRecord(App.cboCpnyIDCustomerAll.store, ["CpnyID"], [e.value]);  //  App.cboCpnyIDOM25100_pcBranchID.findRecord('CpnyID', e.value);
         if (obj) {
             e.record.set('CpnyName', obj.data.CpnyName);
+        } else {
+            e.record.set('CpnyName', '');
         }
     }
     if (e.field == 'SlsperId') {
@@ -1942,6 +1974,8 @@ var grdOM_KPICustomer_All_Edit = function (item, e) {
         var obj = HQ.store.findRecord(App.cboSlsperIdCust.store, ["SlsperId"], [e.value]);  //App.cboSlsperIdOM25100_pcSlsperId.findRecord('SlsperId', e.value);
         if (obj) {
             e.record.set('SlsperName', obj.data.Name);
+        } else {
+            e.record.set('SlsperName', '');
         }
     }
     if (e.field == 'CustID') {
@@ -1949,10 +1983,12 @@ var grdOM_KPICustomer_All_Edit = function (item, e) {
         var obj = HQ.store.findRecord(App.cboCustId.store, ["CustId"], [e.value]);  //App.cboCustIdOM25100_pcCustId.findRecord('CustId', e.value);
         if (obj) {
             e.record.set('CustName', obj.data.CustName);
+        } else {
+            e.record.set('CustName', '');
         }
     }
-    HQ.grid.checkInsertKey(App.grdOM_KPISales_All, e, keys6);
-    HQ.isChange = HQ.store.isGridChange(App.grdOM_KPISales_All.store, keys6);
+    HQ.grid.checkInsertKey(App.grdOM_KPICustomer_All, e, keys6);
+    HQ.isChange = HQ.store.isGridChange(App.grdOM_KPICustomer_All.store, keys6);
     HQ.common.changeData(HQ.isChange, 'OM25100');
 };
 
@@ -1982,8 +2018,17 @@ var grdOM_KPICustomer_All_BeforeEdit = function (editor, e) {
         return false;
     }
     else {
-        if (e.field == 'CustID')
+        if (e.field == 'SlsperId') {
+            if (e.record.data.BranchID != '' && e.record.data.CustID == '') {
+                return true;
+            }
+            if (e.record.data.BranchID == '' || e.record.data.BranchID != '' && e.record.data.CustID != '') {
+                return false;
+            }
+        }
+        if (e.field == 'CustID') {
             App.cboCustId.store.reload();
+        }
         return HQ.grid.checkBeforeEdit(e, keys6);
     }
    
@@ -2066,8 +2111,17 @@ var grdKPICustomerClass_BeforeEdit = function (editor, e) {
         return false;
     }
     else {
-        if (e.field == 'CustID')
+        if (e.field == 'SlsperId') {
+            if (e.record.data.BranchID != '' && e.record.data.CustID == '') {
+                return true;
+            }
+            if (e.record.data.BranchID == '' || e.record.data.BranchID != '' && e.record.data.CustID != '') {
+                return false;
+            }
+        }
+        if (e.field == 'CustID') {
             App.cboCustIdClass.store.reload();
+        }
         return HQ.grid.checkBeforeEdit(e, keys7);
     }
 };
@@ -2079,6 +2133,8 @@ var grdKPICustomerClass_Edit = function (item, e) {
         var obj = HQ.store.findRecord(App.cboCpnyIDCustomerClass.store, ["CpnyID"], [e.value]);  //  App.cboCpnyIDOM25100_pcBranchID.findRecord('CpnyID', e.value);
         if (obj) {
             e.record.set('CpnyName', obj.data.CpnyName);
+        } else {
+            e.record.set('CpnyName', '');
         }
     }
     if (e.field == 'SlsperId') {
@@ -2086,6 +2142,8 @@ var grdKPICustomerClass_Edit = function (item, e) {
         var obj = HQ.store.findRecord(App.cboSlsperIdClassCust.store, ["SlsperId"], [e.value]);  //App.cboSlsperIdOM25100_pcSlsperId.findRecord('SlsperId', e.value);
         if (obj) {
             e.record.set('SlsperName', obj.data.Name);
+        } else {
+            e.record.set('SlsperName', '');
         }
     }
     if (e.field == 'CustID') {
@@ -2093,6 +2151,8 @@ var grdKPICustomerClass_Edit = function (item, e) {
         var obj = HQ.store.findRecord(App.cboCustIdClass.store, ["CustId"], [e.value]);  //App.cboCustIdOM25100_pcCustId.findRecord('CustId', e.value);
         if (obj) {
             e.record.set('CustName', obj.data.CustName);
+        } else {
+            e.record.set('CustName', '');
         }
     }
     HQ.grid.checkInsertKey(App.grdOM_KPICustomer_Class, e, keys7);
@@ -2134,8 +2194,17 @@ var grdKPICustomerInvt_BeforeEdit = function (editor, e) {
         return false;
     }
     else {
-        if (e.field == 'CustID')
+        if (e.field == 'SlsperId') {
+            if (e.record.data.BranchID != '' && e.record.data.CustID == '') {
+                return true;
+            }
+            if (e.record.data.BranchID == '' || e.record.data.BranchID != '' && e.record.data.CustID != '') {
+                return false;
+            }            
+        } 
+        if (e.field == 'CustID') {
             App.cboCustIdInvt.store.reload();
+        }
         return HQ.grid.checkBeforeEdit(e, keys8);
     }
     
@@ -2150,6 +2219,8 @@ var grdKPICustomerInvt_Edit = function (item, e) {
         var obj = HQ.store.findRecord(App.cboCpnyIDCustomerinvt.store, ["CpnyID"], [e.value]);  //  App.cboCpnyIDOM25100_pcBranchID.findRecord('CpnyID', e.value);
         if (obj) {
             e.record.set('CpnyName', obj.data.CpnyName);
+        } else {
+            e.record.set('CpnyName', '');
         }
     }
     if (e.field == 'SlsperId') {
@@ -2157,6 +2228,8 @@ var grdKPICustomerInvt_Edit = function (item, e) {
         var obj = HQ.store.findRecord(App.cboSlsperIdInvtCust.store, ["SlsperId"], [e.value]);  //App.cboSlsperIdOM25100_pcSlsperId.findRecord('SlsperId', e.value);
         if (obj) {
             e.record.set('SlsperName', obj.data.Name);
+        } else {
+            e.record.set('SlsperName', '');
         }
     }
     if (e.field == 'CustID') {
@@ -2164,6 +2237,8 @@ var grdKPICustomerInvt_Edit = function (item, e) {
         var obj = HQ.store.findRecord(App.cboCustIdInvt.store, ["CustId"], [e.value]);  //App.cboCustIdOM25100_pcCustId.findRecord('CustId', e.value);
         if (obj) {
             e.record.set('CustName', obj.data.CustName);
+        } else {
+            e.record.set('CustName', '');
         }
     }
     HQ.grid.checkInsertKey(App.grdOM_KPICustomer_Invt, e, keys5);
