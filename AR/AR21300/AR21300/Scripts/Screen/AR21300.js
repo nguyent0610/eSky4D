@@ -89,7 +89,8 @@ var firstLoad = function () {
     if (HQ.isUpdate == false && HQ.isInsert == false && HQ.isDelete == false) {
         App.menuClickbtnSave.disable();
     }
-    App.stoArea.reload();
+    App.cboTerritory.getStore().addListener('load', checkLoad);
+    //App.stoArea.reload();
 };
 
 var frmChange = function () {

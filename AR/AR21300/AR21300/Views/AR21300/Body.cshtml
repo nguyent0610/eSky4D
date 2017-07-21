@@ -66,8 +66,27 @@
                                     X.RowNumbererColumn(),
                                    X.Column().Text(Util.GetLang("Area")).DataIndex("Area").Width(200)
 				                             .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
-                                     X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
-				                              .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true)),       
+                                   X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
+				                              .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true)),
+                                   X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(180)
+				                              .Editor(HQ.Combo().ID("cboTerritory")
+                                                .HQProcedure("AR21300_pcTerritory")
+                                                .HQColumnShow("Territory,Descr").DisplayField("Territory").ValueField("Territory")
+                                                .ForceSelection(true)
+                                                .HQHeightWidth(400, 300)
+                                                .HQParam(new StoreParameterCollection() 
+                                                { 
+                                                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                })
+                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                .LoadData()
+                                                .Listeners(lst =>
+                                                {
+                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                })
+                                                ),                 
                                     X.CommandColumn().Width(150)
                                                     .Commands(
                                                                 X.GridCommand()

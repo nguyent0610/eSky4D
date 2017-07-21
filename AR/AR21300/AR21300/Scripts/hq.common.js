@@ -25,9 +25,9 @@ if (typeof String.prototype.trim !== 'function') {
 }
 if (typeof String.prototype.unsign !== 'function') {
     String.prototype.unsign = function () {
-        return this.replace(/à|á|?|?|ã|â|?|?|?|?|?|a|?|?|?|?|?/g, "a").replace(/\ /g, '-').replace(/d/g, "d").replace(/d/g, "d").replace(/?|ý|?|?|?/g, "y").replace(/ù|ú|?|?|u|u|?|?|?|?|?/g, "u").replace(/ò|ó|?|?|õ|ô|?|?|?|?|?|o|?|?|?|?|?.+/g, "o").replace(/è|é|?|?|?|ê|?|?|?|?|?.+/g, "e").replace(/ì|í|?|?|i/g, "i");
-        }
+        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ĩ/g, "e").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
     }
+}
 if (!('forEach' in Array.prototype)) {
     Array.prototype.forEach = function (action, that /*opt*/) {
         for (var i = 0, n = this.length; i < n; i++)

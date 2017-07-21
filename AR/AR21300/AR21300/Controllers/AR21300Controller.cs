@@ -110,7 +110,7 @@ namespace AR21300.Controllers
                 t.Crtd_User = _userName;
             }
             t.Descr = s.Descr;
-
+            t.Territory = s.Territory;
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
