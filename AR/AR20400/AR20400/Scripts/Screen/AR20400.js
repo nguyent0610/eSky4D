@@ -23,7 +23,7 @@ var _lstAR_LTTContractDetail;
 var CustId = '';
 var _focusNo = 0;
 var _Source = 0;
-var _maxSource = 29;
+var _maxSource = 30;
 var _isLoadMaster = false;
 
 var _hiddenTree = '';
@@ -103,7 +103,7 @@ var firstLoad = function () {
     App.cboTypeADV.getStore().addListener('load', checkLoad);
     App.cboCodeDisplay.getStore().addListener('load', checkLoad);
     App.cboSellingProd1.getStore().addListener('load', checkLoad);
-
+    App.cboSubTerritory.getStore().addListener('load', checkLoad);
     //App.cboCustId.getStore().addListener('load', stoCustId_Load);
 
 };
@@ -406,8 +406,8 @@ var stoLoad = function (sto) {
 
     // display image
     App.fupImages.reset();
-    if (record.data.PhotoCode) {
-        displayImage(App.imgImages, record.data.PhotoCode);
+    if (record.data.ProfilePic) {
+        displayImage(App.imgImages, record.data.ProfilePic);
     }
     else {
         App.imgImages.setImageUrl("");
@@ -1097,9 +1097,31 @@ var cboTerritory_Change_Select = function (sender, e) {
         App.cboState.setValue('');
         App.cboCity.setValue('');
         App.cboDistrict.setValue('');
+        App.cboSubTerritory.setValue('');
     }
+  
 };
+var cboSubTerritory_Focus = function (sender, e) {
+    var code = App.cboTerritory.getValue();
+    App.cboSubTerritory.store.clearFilter();
+    App.cboSubTerritory.store.filter("Territory", code);
+    App.cboSubTerritory.forceSelection = true;
+}
+var cboShopType_Focus = function (sender, e) {
+    var code = App.cboChannel.getValue();
+    App.cboShopType.store.clearFilter();
+    App.cboShopType.store.filter("Channel", code);
+    App.cboShopType.forceSelection = true;
+}
 
+var cboChannel_Change_Select = function (sender, e) {
+    if (sender.hasFocus) {
+        App.cboShopType.setValue('');     
+    }
+    var code = App.cboChannel.getValue();
+    App.cboShopType.store.clearFilter();
+    App.cboShopType.store.filter("Channel", code);
+};
 var cboStatus_Change = function (sender, e)
 {
     App.cboHandle.store.reload();

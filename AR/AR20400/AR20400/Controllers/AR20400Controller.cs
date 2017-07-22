@@ -498,15 +498,15 @@ namespace AR20400.Controllers
 
                         string newFileName = string.Format("{0}_{1}{2}", header.BranchID, header.CustId, Path.GetExtension(files[0].FileName));
                         Util.UploadFile(FilePath, newFileName, files[0]);
-                        header.PhotoCode = newFileName;
+                        header.ProfilePic = newFileName;
                     }
                     else
                     {
-                        if (!string.IsNullOrWhiteSpace(header.PhotoCode) && string.IsNullOrWhiteSpace(curHeader.PhotoCode))
+                        if (!string.IsNullOrWhiteSpace(header.ProfilePic) && string.IsNullOrWhiteSpace(curHeader.ProfilePic))
                         {
 
-                            Util.UploadFile(FilePath, header.PhotoCode, null);
-                            header.PhotoCode = string.Empty;
+                            Util.UploadFile(FilePath, header.ProfilePic, null);
+                            header.ProfilePic = string.Empty;
                         }
                     }
                     #endregion
@@ -556,7 +556,7 @@ namespace AR20400.Controllers
                 Approve.Mail_Approve(_screenNbr, t.CustId, user.UserTypes, t.Status, Handle, Current.LangID.ToString()
                              , _userName, t.BranchID, Current.CpnyID, string.Empty, string.Empty, string.Empty);
             }
-
+            t.SubTerritory = s.SubTerritory;
             t.ClassId = s.ClassId;
             t.CustType = s.CustType;
             t.CustName = s.CustName;
@@ -785,10 +785,10 @@ namespace AR20400.Controllers
                         if (objAR_Customer != null)
                         {
                             _db.AR_Customer.DeleteObject(objAR_Customer);
-                            if (!string.IsNullOrWhiteSpace(objAR_Customer.PhotoCode))
+                            if (!string.IsNullOrWhiteSpace(objAR_Customer.ProfilePic))
                             {
 
-                                Util.UploadFile(FilePath, objAR_Customer.PhotoCode, null);
+                                Util.UploadFile(FilePath, objAR_Customer.ProfilePic, null);
 
                             }
                         }

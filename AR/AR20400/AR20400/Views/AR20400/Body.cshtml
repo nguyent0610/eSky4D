@@ -444,7 +444,17 @@
                                         lst.Select.Fn = "cboTerritory_Change_Select";
                                         lst.Focus.Handler = "this.forceSelection = true;";  
                                     })
-
+                                ,HQ.Combo().ID("cboSubTerritory").Name("cboSubTerritory").HQLangCode("SubTERRITORY").DataIndex("SubTerritory")
+                                    .HQProcedure("AR20400_pcSubTerritory").HQColumnShow("Code,Descr")
+                                    .DisplayField("Code").ValueField("Code")
+                                    .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                                    .LoadData()
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus; this.clearValue();}";
+                                        lst.Focus.Fn = "cboSubTerritory_Focus";   
+                                    })
                                 , HQ.Combo().ID("cboArea").Name("cboArea").HQLangCode("AREA").DataIndex("Area")
                                     .HQProcedure("AR20400_pcArea").HQColumnShow("Area,Descr")
                                     .DisplayField("Area").ValueField("Area")
@@ -477,7 +487,9 @@
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst =>
                                     {
-                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus; this.clearValue();}";
+                                        lst.Change.Fn = "cboChannel_Change_Select";
+                                        lst.Select.Fn = "cboChannel_Change_Select";
                                         lst.Focus.Handler = "this.forceSelection = true;";  
                                     })
 
@@ -490,7 +502,7 @@
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Fn = "cboShopType_Focus";  
                                     })
 
                                 , HQ.Combo().ID("cboSellingProd").Name("cboSellingProd").HQLangCode("SELLINGPROD").DataIndex("SellProduct")
@@ -515,7 +527,7 @@
 
                                 )
                             )
-                            ,X.Hidden().ID("hdnImages").DataIndex("PhotoCode")
+                            ,X.Hidden().ID("hdnImages").DataIndex("ProfilePic")
                             , X.Image().ID("imgImages").Width(280).Height(280).MarginSpec("10 0 5 0")//.Listeners(l=>l.ResizerResize.Handler="App.imgImages.setWidth(App.imgImages.getWidth());")
 
                             , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 50")
