@@ -29,7 +29,7 @@ namespace AR21000.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -112,7 +112,7 @@ namespace AR21000.Controllers
                 t.Crtd_User = _userName;
             }
             t.Descr = s.Descr;
-
+            t.Channel = s.Channel;
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;

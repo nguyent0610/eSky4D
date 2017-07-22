@@ -49,6 +49,20 @@
                     .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true))
                 , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
                         .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true))
+                , X.Column()
+                            .Text(Util.GetLang("Channel")).DataIndex("Channel")
+                            .Editor(
+                                HQ.Combo().ID("cboChannel").HQProcedure("AR21000_pcChannel")
+                                .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                                .ForceSelection(true).HQHeightWidth(400, 300)                               
+                                .LoadData()
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                    {
+
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                            )
                 , Html.X().CommandColumn().Width(150)
                                         .Commands(
                                             Html.X().GridCommand()
@@ -99,7 +113,8 @@
                     .Local(true)
                     .Filters(
                         X.StringFilter().DataIndex("Code"),
-                        X.StringFilter().DataIndex("Descr")
+                        X.StringFilter().DataIndex("Descr"),
+                         X.StringFilter().DataIndex("Channel")
                      )
             )
         )

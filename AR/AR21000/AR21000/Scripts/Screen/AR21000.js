@@ -85,7 +85,8 @@ var firstLoad = function () {
     HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
     HQ.isFirstLoad = true;
     App.frmMain.isValid();
-    checkLoad(); // Mới
+    App.cboChannel.getStore().addListener('load', checkLoad);
+
 };
 
 
