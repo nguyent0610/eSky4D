@@ -5,10 +5,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AR20500", "AR20500\AR20500.
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 1
+		SccNumberOfProjects = 2
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.120.4:8088/tfs/hqsoft
 		SccLocalPath0 = .
+		SccProjectUniqueName1 = AR20500\\AR20500.csproj
+		SccProjectName1 = AR20500
+		SccLocalPath1 = AR20500
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
