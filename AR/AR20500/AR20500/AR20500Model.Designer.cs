@@ -2642,24 +2642,48 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String PhotoCode
+        public global::System.String ProfilePic
         {
             get
             {
-                return _PhotoCode;
+                return _ProfilePic;
             }
             set
             {
-                OnPhotoCodeChanging(value);
-                ReportPropertyChanging("PhotoCode");
-                _PhotoCode = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("PhotoCode");
-                OnPhotoCodeChanged();
+                OnProfilePicChanging(value);
+                ReportPropertyChanging("ProfilePic");
+                _ProfilePic = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ProfilePic");
+                OnProfilePicChanged();
             }
         }
-        private global::System.String _PhotoCode;
-        partial void OnPhotoCodeChanging(global::System.String value);
-        partial void OnPhotoCodeChanged();
+        private global::System.String _ProfilePic;
+        partial void OnProfilePicChanging(global::System.String value);
+        partial void OnProfilePicChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SubTerritory
+        {
+            get
+            {
+                return _SubTerritory;
+            }
+            set
+            {
+                OnSubTerritoryChanging(value);
+                ReportPropertyChanging("SubTerritory");
+                _SubTerritory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SubTerritory");
+                OnSubTerritoryChanged();
+            }
+        }
+        private global::System.String _SubTerritory;
+        partial void OnSubTerritoryChanging(global::System.String value);
+        partial void OnSubTerritoryChanged();
 
         #endregion
 
@@ -4318,6 +4342,54 @@ namespace AR20500
         private global::System.String _Salut;
         partial void OnSalutChanging(global::System.String value);
         partial void OnSalutChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ProfilePic
+        {
+            get
+            {
+                return _ProfilePic;
+            }
+            set
+            {
+                OnProfilePicChanging(value);
+                ReportPropertyChanging("ProfilePic");
+                _ProfilePic = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ProfilePic");
+                OnProfilePicChanged();
+            }
+        }
+        private global::System.String _ProfilePic;
+        partial void OnProfilePicChanging(global::System.String value);
+        partial void OnProfilePicChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SubTerritory
+        {
+            get
+            {
+                return _SubTerritory;
+            }
+            set
+            {
+                OnSubTerritoryChanging(value);
+                ReportPropertyChanging("SubTerritory");
+                _SubTerritory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SubTerritory");
+                OnSubTerritoryChanged();
+            }
+        }
+        private global::System.String _SubTerritory;
+        partial void OnSubTerritoryChanging(global::System.String value);
+        partial void OnSubTerritoryChanged();
 
         #endregion
 

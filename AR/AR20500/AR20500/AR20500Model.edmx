@@ -23,10 +23,10 @@
           <Property Name="CustId" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="CustName" Type="nvarchar" Nullable="false" MaxLength="200" />
           <Property Name="Addr1" Type="nvarchar(max)" />
-          <Property Name="Addr2" Type="nvarchar" MaxLength="200" />
+          <Property Name="Addr2" Type="nvarchar" MaxLength="100" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
           <Property Name="BillAddr1" Type="nvarchar" MaxLength="200" />
-          <Property Name="BillAddr2" Type="nvarchar" MaxLength="200" />
+          <Property Name="BillAddr2" Type="nvarchar" MaxLength="50" />
           <Property Name="BillAttn" Type="nvarchar" MaxLength="200" />
           <Property Name="BillCity" Type="varchar" MaxLength="10" />
           <Property Name="BillCountry" Type="varchar" MaxLength="3" />
@@ -95,7 +95,8 @@
           <Property Name="InActive" Type="nvarchar" MaxLength="100" />
           <Property Name="SellProduct" Type="varchar" MaxLength="10" />
           <Property Name="RefCustID" Type="varchar" MaxLength="50" />
-          <Property Name="PhotoCode" Type="varchar" MaxLength="2000" />
+          <Property Name="ProfilePic" Type="varchar" MaxLength="100" />
+          <Property Name="SubTerritory" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -173,6 +174,8 @@
           <Property Name="TaxCode" Type="nvarchar" MaxLength="50" />
           <Property Name="VisitSort" Type="int" />
           <Property Name="Salut" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProfilePic" Type="varchar" MaxLength="100" />
+          <Property Name="SubTerritory" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -705,6 +708,8 @@
           <Property Type="String" Name="TaxCode" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="VisitSort" />
           <Property Type="String" Name="Salut" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ProfilePic" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SubTerritory" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -714,10 +719,10 @@
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Addr1" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr2" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Attn" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillAddr1" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillAddr2" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAddr2" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillAttn" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillCity" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BillCountry" MaxLength="3" FixedLength="false" Unicode="false" />
@@ -786,7 +791,8 @@
           <Property Type="String" Name="InActive" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="SellProduct" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="RefCustID" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="PhotoCode" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ProfilePic" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SubTerritory" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1019,6 +1025,8 @@
           <EntitySetMapping Name="AR_NewCustomerInfor">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
               <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
+                <ScalarProperty Name="SubTerritory" ColumnName="SubTerritory" />
+                <ScalarProperty Name="ProfilePic" ColumnName="ProfilePic" />
                 <ScalarProperty Name="Salut" ColumnName="Salut" />
                 <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
                 <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
@@ -1079,7 +1087,8 @@
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20500Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
-                <ScalarProperty Name="PhotoCode" ColumnName="PhotoCode" />
+                <ScalarProperty Name="SubTerritory" ColumnName="SubTerritory" />
+                <ScalarProperty Name="ProfilePic" ColumnName="ProfilePic" />
                 <ScalarProperty Name="RefCustID" ColumnName="RefCustID" />
                 <ScalarProperty Name="SellProduct" ColumnName="SellProduct" />
                 <ScalarProperty Name="InActive" ColumnName="InActive" />
@@ -1178,15 +1187,15 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="63" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="94" >
         <EntityTypeShape EntityType="AR20500Model.AR_CustomerLocation" Width="2.25" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.OM_PJP" Width="1.5" PointX="3.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteMaster" Width="3.25" PointX="5.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.SI_State" Width="1.5" PointX="0.75" PointY="4.75" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteDet" Width="1.5" PointX="2.75" PointY="5.75" />
-        <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.5" PointX="6.75" PointY="7.75" />
-        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="8.15404408804795" PointY="18.491448723939921" />
-        <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="11.62259718758175" PointY="29.113131611194987" />
+        <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.5" PointX="4.75" PointY="7.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="8.75" PointY="7.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="4.1530347970095622" PointY="22.040223936569049" />
       </Diagram>
     </Diagrams>
   </Designer>

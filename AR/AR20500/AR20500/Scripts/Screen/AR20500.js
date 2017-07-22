@@ -91,25 +91,25 @@ var btnProcess_Click = function () {
             var rowerror = '';
             var isnullclass = '';
             var isnullpriceclass = '';
-            for (var i = 0; i < App.grdCust.store.getCount() ; i++) {
-                var data = App.grdCust.store.data.items[i].data;
-                if (data.ColCheck) {
+            //for (var i = 0; i < App.grdCust.store.getCount() ; i++) {
+            //    var data = App.grdCust.store.data.items[i].data;
+            //    if (data.ColCheck) {
 
-                    if (!isValidSel(data)) rowerror += i + 1 + ',';
-                    if(data.ClassId==''||data.ClassId==null)
-                        isnullclass += i + 1 + ',';
-                    if (data.PriceClass == '' || data.PriceClass == null)
-                        isnullpriceclass += i + 1 + ',';
-                }
-            }
-            if (isnullclass != '') {
-                HQ.message.show(1000, HQ.common.getLang('ClassId'), '');
-                return;
-            }
-            if (isnullpriceclass != '') {
-                HQ.message.show(1000, HQ.common.getLang('PriceClass'), '');
-                return;
-            }
+            //        if (!isValidSel(data)) rowerror += i + 1 + ',';
+            //        if(data.ClassId==''||data.ClassId==null)
+            //            isnullclass += i + 1 + ',';
+            //        if (data.PriceClass == '' || data.PriceClass == null)
+            //            isnullpriceclass += i + 1 + ',';
+            //    }
+            //}
+            //if (isnullclass != '') {
+            //    HQ.message.show(1000, HQ.common.getLang('ClassId'), '');
+            //    return;
+            //}
+            //if (isnullpriceclass != '') {
+            //    HQ.message.show(1000, HQ.common.getLang('PriceClass'), '');
+            //    return;
+            //}
             if (rowerror != '') {
                 HQ.message.show(201302071, rowerror, '');
                 return;
