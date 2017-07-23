@@ -34,7 +34,7 @@
             HQ.Combo().ID("cboCpnyID").Name("cboCpnyID")
                 .HQLangCode("CPNYID").HQDBSys(true).AllowBlank(false).MarginSpec("5 0 0 0")
                 .HQProcedure("SA00000_pcCompanyAll").HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
-                .HQHeightWidth(400, 400).Width(600).MaxLength(9).EnforceMaxLength(true)
+                .HQHeightWidth(400, 400).Width(600).MaxLength(30).EnforceMaxLength(true)
                 .LoadData()
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst =>
