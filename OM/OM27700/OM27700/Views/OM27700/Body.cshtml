@@ -52,7 +52,7 @@
                             .LoadData()
                             .Listeners(l =>
                             {
-                                l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                                l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 l.Change.Fn = "Event.Form.cboAccumulateID_change";
                             })
 
@@ -253,97 +253,101 @@
                         .Handler("Event.Tree.btnDelAll_click")
                     ) // Panel
 
-                    , X.GridPanel().ID("grdCompany")
-                    .Region(Region.East).Flex(6)
-                    .Scroll(ScrollMode.Both)
-                    .View(X.GridView().TrackOver(false))
-                    .SortableColumns(false)
+                    ,
+                    X.Panel().Region(Region.East).Flex(6).Layout(LayoutType.Fit).AutoScroll(true)
+                    .Items
+                    (
+                        X.GridPanel().ID("grdCompany")
+                        .Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false))
+                        .SortableColumns(false)
 
-                    .Store(
-                        X.Store()
-                        .ID("stoCompany")
-                        .PageSize(50)
-                        .Model(Util.GenerateModel(typeof(OM27700_pgCompany_Result), "mdlCompany", ""))
-                        .Parameters(ps =>
-                        {
-                             ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
+                        .Store(
+                            X.Store()
+                            .ID("stoCompany")
+                            .PageSize(50)
+                            .Model(Util.GenerateModel(typeof(OM27700_pgCompany_Result), "mdlCompany", ""))
+                            .Parameters(ps =>
+                            {
+                                 ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
 
-                        })
-                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCompany"))).AutoLoad(false)
-                        .Listeners(l =>
-                        {
-                            l.BeforeLoad.Handler = "this.HQFieldKeys=['CpnyID'];";
-                            l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
-                            //l.Load.Fn = "Main.Event.sto_load"; 
-                        })
-                    )
-                    .ColumnModel(
-                        X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-                        
-                        , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
-                        .Editor(
-                            HQ.Combo().ID("cboGCpnyID")
-                            .HQProcedure("OM27700_pcCompany").HQColumnShow("CpnyID,CpnyName")
-                            .HQHeightWidth(400, 300)
-                            .ValueField("CpnyID").DisplayField("CpnyID")
-                            .ForceSelection(true)
-                            .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
-                                new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
-                                new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                             })
-                            .LoadData()
-                        )
-                        , X.Column().MinWidth(100).Flex(1)
-                        .Text(Util.GetLang("CpnyName")).DataIndex("CpnyName")
-                        //.Renderer("Process.renderCpnyName")
-
-                        , X.CommandColumn()
-                        .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
-                        )
-                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
-                    )
-                    .SelectionModel(X.RowSelectionModel().ID("slmCompany").Mode(SelectionMode.Multi))
-                    .BottomBar(
-                        X.PagingToolbar()
-                        .Items(
-                            X.Label("Page size:"),
-                            X.ToolbarSpacer(10),
-                            X.ComboBox()
-                            .Width(80)
-                            .Items("1", "2", "10", "20", "30", "50")
-                            .SelectedItems("50")
+                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCompany"))).AutoLoad(false)
                             .Listeners(l =>
-                                {
-                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                            {
+                                l.BeforeLoad.Handler = "this.HQFieldKeys=['CpnyID'];";
+                                l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                                l.Load.Fn = "Store.stoGrid_load"; 
+                            })
+                        )
+                        .ColumnModel(
+                            X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+                        
+                            , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
+                            .Editor(
+                                HQ.Combo().ID("cboGCpnyID")
+                                .HQProcedure("OM27700_pcCompany").HQColumnShow("CpnyID,CpnyName")
+                                .HQHeightWidth(400, 300)
+                                .ValueField("CpnyID").DisplayField("CpnyID")
+                                .ForceSelection(true)
+                                .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                                 })
-                        )
-                        .Plugins(X.ProgressBarPager().ID("paggrdCompany"))
-                    )              
-                    .Plugins(
-                        X.CellEditing()
-                        .ClicksToEdit(1)
-                        .Listeners(ls =>
-                        {
-                            ls.BeforeEdit.Fn = "Event.Grid.grdCpnyID_beforeEdit";
-                            ls.Edit.Fn = "Event.Grid.grdCpnyID_edit";
-                            ls.ValidateEdit.Fn = "Event.Grid.grdCpnyID_validateEdit";
-                        })
-                    ) // grdCompany
-                    .Features(
-                            X.GridFilters()
-                            .Local(true)
-                            .Filters(
-                                X.StringFilter().DataIndex("CpnyID"),
-                                X.StringFilter().DataIndex("CpnyName")
+                                .LoadData()
                             )
+                            , X.Column().MinWidth(100).Flex(1)
+                            .Text(Util.GetLang("CpnyName")).DataIndex("CpnyName")
+                            //.Renderer("Process.renderCpnyName")
+
+                            , X.CommandColumn()
+                            .Commands(
+                                X.GridCommand()
+                                .Text(Util.GetLang("Reject"))
+                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                .CommandName("reject")
+                                .Icon(Icon.ArrowUndo)
+                            )
+                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                            .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                         )
+                        .SelectionModel(X.RowSelectionModel().ID("slmCompany").Mode(SelectionMode.Multi))
+                        .BottomBar(
+                            X.PagingToolbar()
+                            .Items(
+                                X.Label("Page size:"),
+                                X.ToolbarSpacer(10),
+                                X.ComboBox()
+                                .Width(80)
+                                .Items("1", "2", "10", "20", "30", "50")
+                                .SelectedItems("50")
+                                .Listeners(l =>
+                                    {
+                                        l.Select.Fn = "HQ.grid.onPageSelect";
+                                    })
+                            )
+                            .Plugins(X.ProgressBarPager().ID("paggrdCompany"))
+                        )              
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "Event.Grid.grdCpnyID_beforeEdit";
+                                ls.Edit.Fn = "Event.Grid.grdCpnyID_edit";
+                                ls.ValidateEdit.Fn = "Event.Grid.grdCpnyID_validateEdit";
+                            })
+                        ) // grdCompany
+                        .Features(
+                                X.GridFilters()
+                                .Local(true)
+                                .Filters(
+                                    X.StringFilter().DataIndex("CpnyID"),
+                                    X.StringFilter().DataIndex("CpnyName")
+                                )
+                            )
+                    )
                 )
                 .Listeners(x =>
                 {
@@ -677,104 +681,112 @@
                             .Handler("btnCustomerDelAll_click")
                         ) // Panel
 
-                        , X.GridPanel().ID("grdCustomer")
-                        .Region(Region.East).Flex(6)
-                        .Scroll(ScrollMode.Both)
-                        .View(X.GridView().TrackOver(false))
-                        .SortableColumns(false)
+                        ,
+                         X.Panel().Region(Region.East).Flex(6).Layout(LayoutType.Fit).AutoScroll(true)
+                        .Items
+                        (                        
+                            X.GridPanel().ID("grdCustomer")
+                            .Scroll(ScrollMode.Both)
+                            .View(X.GridView().TrackOver(false))
+                            .SortableColumns(false)
 
-                        .Store(
-                            X.Store()
-                                .ID("stoCustomer")
-                            .PageSize(50).AutoLoad(false)
-                            .Model(Util.GenerateModel(typeof(OM27700_pgCustomer_Result), "mdlCustomer", ""))
-                            .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
-                            })
-                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCustomer")))
-                                .Listeners(l =>
+                            .Store(
+                                X.Store()
+                                    .ID("stoCustomer")
+                                .PageSize(50).AutoLoad(false)
+                                .Model(Util.GenerateModel(typeof(OM27700_pgCustomer_Result), "mdlCustomer", ""))
+                                .Parameters(ps =>
                                 {
-                                    l.BeforeLoad.Handler = "this.HQFieldKeys=['CpnyID,CustID'];";
-                                    l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                                    ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
                                 })
-                        )
-                        .ColumnModel(
-                            X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-
-                            , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
-                            .Editor(
-                                HQ.Combo().ID("cboCustID")
-                                .HQProcedure("OM27700_pcCustomer").HQColumnShow("CustID,CustName,CpnyID")
-                                .HQHeightWidth(400, 450)
-                                .ValueField("CustID").DisplayField("CustID")
-                                .ForceSelection(true)
-                                .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
-                                new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
-                                new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
-                            })
-                                .LoadData()
-                            )
-
-
-                            , X.Column().MinWidth(100).Flex(1)
-                            .Text(Util.GetLang("CustName")).DataIndex("CustName")
-                            //.Renderer("Process.renderCpnyName")
-                            , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
-                            , X.NumberColumn().Text(Util.GetLang("NumRegLot")).DataIndex("NumRegLot")
-                            .StyleSpec("text-align:right;").Format(formatNum).Align(Alignment.Right)
-                            .Editor(
-                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0)
-                            )
-                            , X.CommandColumn()
-                            .Commands(
-                                X.GridCommand()
-                                .Text(Util.GetLang("Reject"))
-                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                                .CommandName("reject")
-                                .Icon(Icon.ArrowUndo)
-                            )
-                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                            .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
-                        )
-                        .SelectionModel(X.RowSelectionModel().ID("slmCustomer").Mode(SelectionMode.Multi))
-                        .BottomBar(
-                            X.PagingToolbar()
-                            .HideRefresh(true)
-                            .Items(
-                                X.Label("Page size:"),
-                                X.ToolbarSpacer(10),
-                                X.ComboBox()
-                                .Width(80)
-                                .Items("1", "2", "10", "20", "30", "50")
-                                .SelectedItems("50").ForceSelection(true)
-                                .Listeners(l =>
+                                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCustomer")))
+                                    .Listeners(l =>
                                     {
-                                        l.Select.Fn = "HQ.grid.onPageSelect";
+                                        l.BeforeLoad.Handler = "this.HQFieldKeys=['CustID'];";
+                                        l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                                        l.Load.Fn = "Store.stoGrid_load";
                                     })
                             )
-                            .Plugins(X.ProgressBarPager())
-                        )
-                        .Plugins(
-                            X.CellEditing()
-                            .ClicksToEdit(1)
-                            .Listeners(ls =>
-                            {
-                                ls.BeforeEdit.Fn = "Event.Grid.grdCustomer_BeforeEdit";
-                                ls.Edit.Fn = "Event.Grid.grdCustID_edit";
-                                ls.ValidateEdit.Fn = "Event.Grid.grdCustID_ValidateEdit";
-                            })
-                        ) // grdCompany
-                        .Features(
-                                X.GridFilters()
-                                .Local(true)
-                                .Filters(
-                                    X.StringFilter().DataIndex("CpnyID"),
-                                    X.StringFilter().DataIndex("CustID"),
-                                    X.StringFilter().DataIndex("CustName")
+                            .ColumnModel(
+                                X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+
+                                , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
+                                .Editor(
+                                    HQ.Combo().ID("cboCustID")
+                                    .HQProcedure("OM27700_pcCustomer").HQColumnShow("CustID,CustName,BranchID")
+                                    .HQHeightWidth(400, 450)
+                                    .ValueField("CustID").DisplayField("CustID")
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                                })
+                                    .LoadData()
                                 )
+
+
+                                , X.Column().MinWidth(100).Flex(1)
+                                .Text(Util.GetLang("CustName")).DataIndex("CustName")
+                                //.Renderer("Process.renderCpnyName")
+                                
+                                , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
+                                //.Renderer("Process.renderCustCpnyID")
+                                
+                                , X.NumberColumn().Text(Util.GetLang("NumRegLot")).DataIndex("NumRegLot")
+                                .StyleSpec("text-align:right;").Format(formatNum).Align(Alignment.Right)
+                                .Editor(
+                                    HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0)
+                                )
+                                , X.CommandColumn()
+                                .Commands(
+                                    X.GridCommand()
+                                    .Text(Util.GetLang("Reject"))
+                                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                    .CommandName("reject")
+                                    .Icon(Icon.ArrowUndo)
+                                )
+                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                             )
+                            .SelectionModel(X.RowSelectionModel().ID("slmCustomer").Mode(SelectionMode.Multi))
+                            .BottomBar(
+                                X.PagingToolbar()
+                                .HideRefresh(true)
+                                .Items(
+                                    X.Label("Page size:"),
+                                    X.ToolbarSpacer(10),
+                                    X.ComboBox()
+                                    .Width(80)
+                                    .Items("1", "2", "10", "20", "30", "50")
+                                    .SelectedItems("50").ForceSelection(true)
+                                    .Listeners(l =>
+                                        {
+                                            l.Select.Fn = "HQ.grid.onPageSelect";
+                                        })
+                                )
+                                .Plugins(X.ProgressBarPager())
+                            )
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "Event.Grid.grdCustomer_BeforeEdit";
+                                    ls.Edit.Fn = "Event.Grid.grdCustID_edit";
+                                    ls.ValidateEdit.Fn = "Event.Grid.grdCustID_ValidateEdit";
+                                })
+                            ) // grdCompany
+                            .Features(
+                                    X.GridFilters()
+                                    .Local(true)
+                                    .Filters(
+                                        X.StringFilter().DataIndex("CpnyID"),
+                                        X.StringFilter().DataIndex("CustID"),
+                                        X.StringFilter().DataIndex("CustName")
+                                    )
+                                )
+                       )
                 )
                 .Listeners(x =>
                 {
@@ -839,98 +851,107 @@
                             .Handler("btnSalesDelAll_click")
                         ) // Panel
 
-                        , X.GridPanel().ID("grdSales")
-                        .Region(Region.East).Flex(6)
-                        .Scroll(ScrollMode.Both)
-                        .View(X.GridView().TrackOver(false))
-                        .SortableColumns(false)
+                        , 
+                         X.Panel().Region(Region.East).Flex(6).Layout(LayoutType.Fit).AutoScroll(true)
+                        .Items
+                        (
+                        
+                            X.GridPanel().ID("grdSales")
+                            .Scroll(ScrollMode.Both)
+                            .View(X.GridView().TrackOver(false))
+                            .SortableColumns(false)
 
-                        .Store(
-                            X.Store()
-                                .ID("stoSales")
-                            .PageSize(50).AutoLoad(false)
-                            .Model(Util.GenerateModel(typeof(OM27700_pgSalesPerson_Result), "mdlSales", ""))
-                            .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
-                            })
-                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSales")))
-                                .Listeners(l =>
+                            .Store(
+                                X.Store()
+                                    .ID("stoSales")
+                                .PageSize(50).AutoLoad(false)
+                                .Model(Util.GenerateModel(typeof(OM27700_pgSalesPerson_Result), "mdlSales", ""))
+                                .Parameters(ps =>
                                 {
-                                    l.BeforeLoad.Handler = "this.HQFieldKeys=['CpnyID,SlsperID'];";
-                                    l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                                    ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
                                 })
-                        )
-                        .ColumnModel(
-                            X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-
-                            , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID")
-                            .Editor(
-                                HQ.Combo().ID("cboSlsperID")
-                                    .HQProcedure("OM27700_pcSalesPerson").HQColumnShow("SlsperID,SlsName,CpnyID")
-                                .HQHeightWidth(400, 450)
-                                .ValueField("SlsperID").DisplayField("SlsperID")
-                                .ForceSelection(true)
-                                .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
-                                new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
-                                new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
-                            })
-                                .LoadData()
-                            )
-
-
-                            , X.Column().MinWidth(100).Flex(1)
-                            .Text(Util.GetLang("SlsName")).DataIndex("SlsName")
-                            , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
-                            , X.CommandColumn()
-                            .Commands(
-                                X.GridCommand()
-                                .Text(Util.GetLang("Reject"))
-                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                                .CommandName("reject")
-                                .Icon(Icon.ArrowUndo)
-                            )
-                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                            .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
-                        )
-                        .SelectionModel(X.RowSelectionModel().ID("slmSales").Mode(SelectionMode.Multi))
-                        .BottomBar(
-                            X.PagingToolbar()
-                            .HideRefresh(true)
-                            .Items(
-                                X.Label("Page size:"),
-                                X.ToolbarSpacer(10),
-                                X.ComboBox()
-                                .Width(80)
-                                .Items("1", "2", "10", "20", "30", "50")
-                                .SelectedItems("50").ForceSelection(true)
-                                .Listeners(l =>
+                                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSales")))
+                                    .Listeners(l =>
                                     {
-                                        l.Select.Fn = "HQ.grid.onPageSelect";
+                                        l.BeforeLoad.Handler = "this.HQFieldKeys=['SlsperID'];";
+                                        l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                                        l.Load.Handler = "HQ.store.insertBlank(App.stoSales, ['SlsperID']);";
                                     })
                             )
-                            .Plugins(X.ProgressBarPager())
-                        )
-                        .Plugins(
-                            X.CellEditing()
-                            .ClicksToEdit(1)
-                            .Listeners(ls =>
-                            {
-                                ls.BeforeEdit.Fn = "Event.Grid.grdSales_BeforeEdit";
-                                //ls.Edit.Fn = "Event.Grid.grdCpnyID_edit";
-                                //ls.ValidateEdit.Fn = "Event.Grid.grdCpnyID_validateEdit";
-                            })
-                        ) // grdCompany
-                        .Features(
-                                X.GridFilters()
-                                .Local(true)
-                                .Filters(
-                                    X.StringFilter().DataIndex("CpnyID"),
-                                    X.StringFilter().DataIndex("SlsperID"),
-                                    X.StringFilter().DataIndex("SlsName")
+                            .ColumnModel(
+                                X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+
+                                , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID")
+                                .Editor(
+                                    HQ.Combo().ID("cboSlsperID")
+                                    .HQProcedure("OM27700_pcSalesPerson").HQColumnShow("SlsperID,SlsName,BranchID")
+                                    .HQHeightWidth(400, 450)
+                                    .ValueField("SlsperID").DisplayField("SlsperID")
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                                })
+                                    .LoadData()
                                 )
+
+
+                                , X.Column().MinWidth(100).Flex(1)
+                                .Text(Util.GetLang("SlsName")).DataIndex("SlsName")
+                                //.Renderer("Process.renderSlsperName")
+                                
+                                , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
+                                //.Renderer("Process.renderCpnyID")
+                                , X.CommandColumn()
+                                .Commands(
+                                    X.GridCommand()
+                                    .Text(Util.GetLang("Reject"))
+                                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                    .CommandName("reject")
+                                    .Icon(Icon.ArrowUndo)
+                                )
+                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                             )
+                            .SelectionModel(X.RowSelectionModel().ID("slmSales").Mode(SelectionMode.Multi))
+                            .BottomBar(
+                                X.PagingToolbar()
+                                .HideRefresh(true)
+                                .Items(
+                                    X.Label("Page size:"),
+                                    X.ToolbarSpacer(10),
+                                    X.ComboBox()
+                                    .Width(80)
+                                    .Items("1", "2", "10", "20", "30", "50")
+                                    .SelectedItems("50").ForceSelection(true)
+                                    .Listeners(l =>
+                                        {
+                                            l.Select.Fn = "HQ.grid.onPageSelect";
+                                        })
+                                )
+                                .Plugins(X.ProgressBarPager())
+                            )
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "Event.Grid.grdSales_BeforeEdit";
+                                    ls.Edit.Fn = "Event.Grid.grdSales_edit";
+                                    ls.ValidateEdit.Fn = "Event.Grid.grdSales_validateEdit";
+                                })
+                            ) // grdCompany
+                            .Features(
+                                    X.GridFilters()
+                                    .Local(true)
+                                    .Filters(
+                                        X.StringFilter().DataIndex("CpnyID"),
+                                        X.StringFilter().DataIndex("SlsperID"),
+                                        X.StringFilter().DataIndex("SlsName")
+                                    )
+                                )
+                       )
                 ).Listeners(x =>
                 {
                     x.Render.Handler = "HQ.common.control_render(this,'sales')";

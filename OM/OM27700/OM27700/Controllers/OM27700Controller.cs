@@ -32,7 +32,7 @@ namespace OM27700.Controllers
     public class OM27700Controller : Controller
     {
         private string _screenNbr = "OM27700";
-        private string _beginStatus = "H";
+        //private string _beginStatus = "H";
         private string _noneStatus = "N";
         private string _applyTypeQty = "Q";
         OM27700Entities _db = Util.CreateObjectContext<OM27700Entities>(false);
@@ -453,6 +453,11 @@ namespace OM27700.Controllers
 
                 var accumulateInfoHandler = new StoreDataHandler(data["lstAccumulate"]);
                 var inputAccumulate = accumulateInfoHandler.ObjectData<OM_Accumulated>().FirstOrDefault(p => !string.IsNullOrWhiteSpace(accumulateID));
+                if (handle != "" || handle != "N")
+                    inputAccumulate.Status = handle;
+                else
+                    inputAccumulate.Status = data["cboStatus"];
+
                             
                 if (inputAccumulate != null)
                 {
@@ -578,12 +583,13 @@ namespace OM27700.Controllers
         private void Save_Task(FormCollection data, OM_Accumulated accumulate, string handle)
         {
             var cpnyHandler = new StoreDataHandler(data["lstCpny"]);
-            var lstCpny = cpnyHandler.ObjectData<OM27700_pgCompany_Result>()
-                        .Where(p => !string.IsNullOrWhiteSpace(p.CpnyID))
-                        .ToList();
+            var lstCpny = cpnyHandler.BatchObjectData<OM27700_pgCompany_Result>();
+
+            lstCpny.Created.AddRange(lstCpny.Updated);
+
 
             string branch = string.Empty;
-            foreach (var cpny in lstCpny)
+            foreach (var cpny in lstCpny.Created.Where(p => !string.IsNullOrWhiteSpace(p.CpnyID)))
             {
                 branch += cpny.CpnyID + ',';
             }
@@ -739,20 +745,34 @@ namespace OM27700.Controllers
         {
             string AccumulateID = accumulateID.ToUpper();
             var discCustHandler = new StoreDataHandler(data["lstCpny"]);
-            var lstCpny = discCustHandler.ObjectData<OM27700_pgCompany_Result>()
-                        .Where(p => Util.PassNull(p.CpnyID) != string.Empty)
-                        .ToList();
+            var lstCpny = discCustHandler.BatchObjectData<OM27700_pgCompany_Result>();
 
+            lstCpny.Created.AddRange(lstCpny.Updated);
             var lstDel = _db.OM_AccumulatedCustomer.Where(p => p.AccumulateID.ToUpper() == AccumulateID).ToList();
             for (int i = 0; i < lstDel.Count; i++)
             {
-                if (!lstCpny.Any(p => p.CpnyID == lstDel[i].CpnyID))
+                if (!lstCpny.Created.Any(p => p.CpnyID == lstDel[i].CpnyID))
                 {
                     _db.OM_AccumulatedCustomer.DeleteObject(lstDel[i]);
                 }
             }
 
-            foreach (var currentCust in lstCpny)
+            foreach (var deleted in lstCpny.Deleted)
+            {
+                if (lstCpny.Created.Where(x => x.AccumulateID == deleted.AccumulateID && x.CpnyID == deleted.CpnyID).Count() > 0)
+                {
+                    lstCpny.Created.Where(x => x.AccumulateID == deleted.AccumulateID && x.CpnyID == deleted.CpnyID).FirstOrDefault().tstamp = deleted.tstamp;
+                }
+                else
+                {
+                    var createdLevel = _db.OM_AccumulatedCpny.FirstOrDefault(x => x.AccumulateID == deleted.AccumulateID && x.CpnyID == deleted.CpnyID);
+                    if (!string.IsNullOrWhiteSpace(deleted.AccumulateID) && createdLevel != null)
+                    {
+                        _db.OM_AccumulatedCpny.DeleteObject(createdLevel);
+                    }
+                }
+            }
+            foreach (var currentCust in lstCpny.Created)
             {
                 var cust = (from p in _db.OM_AccumulatedCpny
                             where
@@ -774,6 +794,9 @@ namespace OM27700.Controllers
                     _db.OM_AccumulatedCpny.AddObject(newCust);
                 }
             }
+
+
+
             //var cpnyChangeHandler = new StoreDataHandler(data["lstCpnyChange"]);
             //var lstCpnyChange = cpnyChangeHandler.BatchObjectData<OM27700_pgCompany_Result>();
             
@@ -950,7 +973,7 @@ namespace OM27700.Controllers
         {
             if (isNew)
             {
-                accumulate.Status = _beginStatus;
+                //accumulate.Status = _beginStatus;
 
                 accumulate.AccumulateID= inputAccumulate.AccumulateID;
                 accumulate.Crtd_DateTime = DateTime.Now;
@@ -964,8 +987,7 @@ namespace OM27700.Controllers
             accumulate.FromDate = inputAccumulate.FromDate;
             accumulate.ToDate = inputAccumulate.ToDate;
             accumulate.ObjApply = inputAccumulate.ObjApply;
-            //if (cboHandle.ToValue() == "N" || cboHandle.ToValue() == null)
-            //    accumulate.Status = cboStatus.ToValue().PassNull();
+            accumulate.Status = inputAccumulate.Status;
 
             accumulate.LUpd_DateTime = DateTime.Now;
             accumulate.LUpd_Prog = _screenNbr;

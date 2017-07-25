@@ -30,14 +30,14 @@ namespace OM27700
         {
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";
-            Current.DBSys = "Kido_eSky4DSys";
+            Current.DBSys = "FranciaBeauty_Test_eSky4DSys";
             Current.FormatDate = "MM-dd-yyyy";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM27700"] = acc;
-            Session["DBApp"] = Current.DBApp = "Kido_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "FranciaBeauty_Test_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "NPP0001";
             Session["Language"] = Current.Language = "vi";

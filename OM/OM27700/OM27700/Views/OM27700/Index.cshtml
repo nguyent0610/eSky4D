@@ -109,6 +109,7 @@
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['InvtID'];";
                 l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
                 l.Update.Handler = "Event.Form.frmMain_fieldChange()";
+                l.Load.Fn = "Store.stoGrid_load";
             })
                 // Store: stoInvt
         )       
