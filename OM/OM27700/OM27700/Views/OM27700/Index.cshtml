@@ -112,7 +112,35 @@
                 l.Load.Fn = "Store.stoGrid_load";
             })
                 // Store: stoInvt
-        )       
+        )  
+        
+         @(
+            X.Store().ID("stoSale")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM27700_pgSalesInvt_Result), "mdlSalesInvt", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetSaleInvt", "OM27700"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Handler = "this.HQFieldKeys=['InvtID'];";
+                l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                l.Update.Handler = "Event.Form.frmMain_fieldChange()";
+                l.Load.Fn = "Store.stoGrid_load";
+            })
+                // Store: stoInvt
+        )
+             
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 

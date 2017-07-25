@@ -956,6 +956,160 @@
                 {
                     x.Render.Handler = "HQ.common.control_render(this,'sales')";
                 }) // tabSales
+                
+                , X.Panel().ID("tabSaleProduct")
+                .Title(Util.GetLang("SaleProduct"))
+                .Region(Region.Center)
+                .Layout(LayoutType.Fit)
+                .Items(
+                    X.Panel().Layout(LayoutType.Border).ID("pnlSaleProduct").Region(Region.Center)
+                    .Items(
+                        X.Panel().ID("treeSaleInvt")
+                        .Region(Region.West)
+                        .MinWidth(150).Split(true).AutoScroll(true).Width(200)                    
+                        .DirectEvents(de =>
+                        {
+                            de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeSaleInvt"));
+                            de.AfterRender.Url = Url.Action("OM27700GetSale");
+                            de.AfterRender.CleanRequest = true;
+                            de.AfterRender.Method = HttpMethod.POST;
+                            de.AfterRender.Success = "App.treeInvt.getRootNode().expand();";
+
+                            de.AfterRender.Timeout = 60000;
+                            de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                            de.AfterRender.EventMask.ShowMask = true;
+                            de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                            de.AfterRender.EventMask.MinDelay = 500;
+                        })
+                        .BottomBar(
+                            X.Toolbar()
+                            .Items(
+                                X.ToolbarFill()
+
+                                , HQ.Button().ID("btnExpandSale")
+                                .HQLangCode("Expand")
+                                .Icon(Icon.BulletTogglePlus)
+                                .Handler("btnSaleExpand_click")
+
+                                , X.ToolbarSpacer()
+                                , X.ToolbarSeparator()
+                                , X.ToolbarSpacer()
+
+                                , HQ.Button().ID("btnCollapseSale")
+                                .HQLangCode("Collapse")
+                                .Icon(Icon.BulletToggleMinus)
+                                .Handler("btnSaleCollapse_click")
+
+                                , X.ToolbarFill()
+                            )
+                        )
+                        // treeInvt 
+                        
+                        
+                        ,X.Panel().ID("pnlControlAddSale")
+                        .Region(Region.Center).Flex(1)
+                        .Layout(LayoutType.VBox)
+                        .MinWidth(50)
+                        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                        .Items(
+                            HQ.Button().ID("btnAddAllSale")
+                            .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                            .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnAddAllSale_click")
+
+                            , HQ.Button().ID("btnAddSale")
+                            .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                            .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnAddSale_click")
+
+                            , HQ.Button().ID("btnDelSale")
+                            .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                            .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnDelSale_click")
+
+                            , HQ.Button().ID("btnDelAllSale")
+                            .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                            .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnDelAllSale_click")
+                        ) // Panel
+                    
+                        ,
+                        X.Panel().ID("pnlControlSale").Region(Region.East).Flex(6).Layout(LayoutType.Fit).AutoScroll(true)
+                        .Items
+                        (
+                            X.GridPanel().ID("grdSale")                  
+                            .Scroll(ScrollMode.Both)
+                            .View(X.GridView().TrackOver(false))
+                            .SortableColumns(false)
+                            .StoreID("stoSale")
+                            .ColumnModel(
+                                X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+                                , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(150)
+                                        .Editor(
+                                            HQ.Combo().ID("cboSaleInvtID")
+                                            .HQProcedure("OM27700_pcInvtID").HQColumnShow("Code,Descr")
+                                            .HQHeightWidth(400, 300)
+                                            .ValueField("Code").DisplayField("Code")
+                                            .ForceSelection(true)
+                                            .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                                })
+                                            .LoadData()
+                                        )
+
+                                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250)
+                                .Renderer("Process.renderInvtInfo")
+
+                                , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("Qty").Width(150)
+                                .Format("0,000").Align(Alignment.Right)
+                                .Editor(
+                                    HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(1)
+                                )
+
+                                , X.Column().Text(Util.GetLang("StkUnit")).DataIndex("StkUnit")
+                                .Renderer("Process.renderInvtInfo")
+
+                                , X.CommandColumn().Width(150)
+                                .Commands(
+                                    X.GridCommand()
+                                    .Text(Util.GetLang("Reject"))
+                                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                    .CommandName("reject")
+                                    .Icon(Icon.ArrowUndo)
+                                )
+                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                .Listeners(l => l.Command.Handler = "Event.Grid.grd_Salereject(this, record);")
+                            )
+                            .SelectionModel(X.RowSelectionModel().ID("slmSale").Mode(SelectionMode.Multi))
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "Event.Grid.grdSale_beforeEdit";
+                                    ls.Edit.Fn = "Event.Grid.grdSale_edit";
+                                    ls.ValidateEdit.Fn = "Event.Grid.grdSale_validateEdit";
+                                })
+                            ) // grdInvt
+                            .Features(
+                                X.GridFilters()
+                                .Local(true)
+                                .Filters(
+                                    X.StringFilter().DataIndex("InvtID"),
+                                    X.StringFilter().DataIndex("Descr"),
+                                    X.NumericFilter().DataIndex("Qty"),
+                                    X.StringFilter().DataIndex("StkUnit")
+                                )
+                            )
+                        )
+                    )
+                    //.Listeners(x =>
+                    //{
+                    //    x.Render.Handler = "HQ.common.control_render(this,'saleProduct')";
+                    //})// pnlInvt
+                )
             )
         )
         .Listeners(lst =>

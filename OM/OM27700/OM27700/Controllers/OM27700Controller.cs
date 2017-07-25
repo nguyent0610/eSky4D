@@ -145,6 +145,12 @@ namespace OM27700.Controllers
             return this.Store(invts);
         }
 
+        public ActionResult GetSaleInvt(string accumulateID)
+        {
+            var invts = _db.OM27700_pgSalesInvt(accumulateID, Current.CpnyID, Current.UserName, Current.LangID).ToList();
+            return this.Store(invts);
+        }
+
         public ActionResult GetCustomer(string accumulateID)
         {
             var lstCustomer = _db.OM27700_pgCustomer(accumulateID, Current.CpnyID, Current.UserName, Current.LangID).ToList();
@@ -441,6 +447,58 @@ namespace OM27700.Controllers
             tree.AddTo(treeBranch);
             return this.Direct();
         }
+
+
+        public ActionResult OM27700GetSale(string panelID)
+        {
+            var a = new ItemsCollection<Plugin>();
+            a.Add(Html.X().TreeViewDragDrop().DDGroup("InvtID").EnableDrop(false));
+
+            TreeView v = new TreeView();
+            //v.Plugins.Add(a);
+            v.Copy = true;
+            TreePanel tree = new TreePanel()
+            {
+                ViewConfig = v
+            };
+            tree.ID = "treeInvt";
+            tree.ItemID = "treeInvt";
+            tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("NodeLevel", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("ParentRecordID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("InvtID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Descr", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("CnvFact", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Unit", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("StkUnit", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("ClassID", ModelFieldType.String));
+            tree.Border = false;
+            tree.RootVisible = true;
+            tree.Animate = true;
+
+            var root = new Node() { };
+
+            var hierarchy = new SI_Hierarchy()
+            {
+                RecordID = 0,
+                NodeID = "",
+                ParentRecordID = 0,
+                NodeLevel = 1,
+                Descr = "Root",
+                Type = "I"
+            };
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
+            tree.Root.Add(node);
+
+
+            var treeBranch = X.GetCmp<Panel>(panelID);
+            tree.Listeners.CheckChange.Fn = "treeSaleInvt_checkChange";
+            tree.Listeners.BeforeItemExpand.Handler = "App.treeSaleInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
+            tree.Listeners.AfterItemExpand.Handler = "App.treeSaleInvt.el.unmask();Ext.resumeLayouts(true);";
+            tree.AddTo(treeBranch);
+            return this.Direct();
+        }
         #endregion
 
         #region -Data Processing-               
@@ -453,7 +511,7 @@ namespace OM27700.Controllers
 
                 var accumulateInfoHandler = new StoreDataHandler(data["lstAccumulate"]);
                 var inputAccumulate = accumulateInfoHandler.ObjectData<OM_Accumulated>().FirstOrDefault(p => !string.IsNullOrWhiteSpace(accumulateID));
-                if (handle != "" || handle != "N")
+                if (handle != "" && handle != "N")
                     inputAccumulate.Status = handle;
                 else
                     inputAccumulate.Status = data["cboStatus"];
@@ -493,6 +551,7 @@ namespace OM27700.Controllers
                     }
                     Save_Customer(data, accumulateID);
                     Save_Sales(data, accumulateID);
+                    Save_ProductSale(data, accumulateID);
                     // handle here
                     if (handle != _noneStatus && handle != null)
                     {
@@ -954,7 +1013,70 @@ namespace OM27700.Controllers
             }
         }
 
+        private void Save_ProductSale(FormCollection data, string accumulateID)
+        {
+            var invtChangeHandler = new StoreDataHandler(data["lstSaleProduct"]);
+            var lstInvtChange = invtChangeHandler.BatchObjectData<OM27700_pgSalesInvt_Result>();
+            lstInvtChange.Created.AddRange(lstInvtChange.Updated);
+
+            foreach (var deleted in lstInvtChange.Deleted)
+            {
+                if (lstInvtChange.Created.Where(x =>x.InvtID == deleted.InvtID).Count() > 0)
+                {
+                    lstInvtChange.Created.FirstOrDefault(x =>x.InvtID == deleted.InvtID).tstamp = deleted.tstamp;
+                }
+                else
+                {
+                    var deletedLevel = _db.OM_AccumulatedInvtSetup.FirstOrDefault(x =>
+                            x.AccumulateID == accumulateID
+                            && x.InvtID == deleted.InvtID);
+                    if (!string.IsNullOrWhiteSpace(deleted.InvtID) && deletedLevel != null
+                        && !string.IsNullOrWhiteSpace(deleted.InvtID))
+                    {
+                        _db.OM_AccumulatedInvtSetup.DeleteObject(deletedLevel);
+                    }
+                }
+            }
+
+            foreach (var created in lstInvtChange.Created)
+            {
+                var createdInvt = _db.OM_AccumulatedInvtSetup.FirstOrDefault(x => x.AccumulateID == accumulateID
+                    && x.InvtID == created.InvtID);
+                if (!string.IsNullOrWhiteSpace(created.InvtID)
+                    && !string.IsNullOrWhiteSpace(created.InvtID))
+                {
+                    if (createdInvt != null)
+                    {
+                        update_SaleInvt(ref createdInvt, created, false);
+                    }
+                    else
+                    {
+                        createdInvt = new OM_AccumulatedInvtSetup();
+                        createdInvt.AccumulateID = accumulateID;
+                        update_SaleInvt(ref createdInvt, created, true);
+                        _db.OM_AccumulatedInvtSetup.AddObject(createdInvt);
+                    }
+
+                }
+            }
+        }
+
         private void update_Invt(ref OM_AccumulatedInvt createdInvt, OM27700_pgInvt_Result created, bool isNew)
+        {
+            if (isNew)
+            {
+                createdInvt.InvtID = created.InvtID;
+                createdInvt.Crtd_DateTime = DateTime.Now;
+                createdInvt.Crtd_Prog = _screenNbr;
+                createdInvt.Crtd_User = Current.UserName;
+            }
+            createdInvt.Qty = created.Qty;
+            createdInvt.LUpd_DateTime = DateTime.Now;
+            createdInvt.LUpd_Prog = _screenNbr;
+            createdInvt.LUpd_User = Current.UserName;
+        }
+
+        private void update_SaleInvt(ref OM_AccumulatedInvtSetup createdInvt, OM27700_pgSalesInvt_Result created, bool isNew)
         {
             if (isNew)
             {
