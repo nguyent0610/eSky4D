@@ -562,7 +562,7 @@
                                 , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("Qty").Width(150)
                                 .Format("0,000").Align(Alignment.Right)
                                 .Editor(
-                                    HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                                    HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(1)
                                 )
 
                                 , X.Column().Text(Util.GetLang("StkUnit")).DataIndex("StkUnit")

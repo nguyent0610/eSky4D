@@ -546,9 +546,9 @@ var Store = {
             var rec = Ext.create(App.stoLevel.model.modelName, {
                 LevelID: Process.lastNbr(App.stoLevel)
             });
-            HQ.store.insertRecord(App.stoLevel, ['LevelID'], rec);
+            //HQ.store.insertRecord(App.stoLevel, ['LevelID'], rec);
 
-            HQ.store.insertBlank(App.stoInvt, ['InvtID']);
+            //HQ.store.insertBlank(App.stoInvt, ['InvtID']);
             App.grdCompany.store.reload();
             App.grdLevel.store.reload();
             App.grdInvt.store.reload();
@@ -612,17 +612,10 @@ var Store = {
                         HQ.store.insertRecord(sto, keys, rec);
                     }
                     if (keys.indexOf('InvtID') > -1) {
-                        if (sto.model.modelName == 'App.mdlSalesInvt') {
                             var rec = Ext.create(sto.model.modelName, {
                                 InvtID: '',
                                 Qty: '1'
                             });
-                        }
-                        else {
-                            var rec = Ext.create(sto.model.modelName, {
-                                InvtID: '',
-                            });
-                        }
                         HQ.store.insertRecord(sto, keys, rec);
                     }
                     if (keys.indexOf('CustID') > -1) {
@@ -1062,6 +1055,7 @@ var Event = {
                                     return;
                                 }
                                 else {
+                                    //var objData = HQ.store.getAll(App.stoInvt, ['LevelID','InvtID'], [item.data.LevelID]);
                                     if (filterStore(App.stoInvt, 'LevelID', item.data.LevelID) == 1) {
                                         CheckIntIDNotItems = 1;
                                         HQ.message.show(20170725, '');
@@ -1108,7 +1102,8 @@ var Event = {
                     if (Process.isAllValidKey(store.getRecordsValues(), keys)) {
                         var newData = {
                             AccumulateID: accumulateID,
-                            LevelID: selected[0].data.LevelID
+                            LevelID: selected[0].data.LevelID,
+                            Qty: '1'
                         };
 
                         var newRec = Ext.create(store.model.modelName, newData);
@@ -1226,7 +1221,7 @@ var Event = {
 
         grdSale_edit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-            checkInsertKey(App.grdSale, e, keys);
+            AddRowDefaultOne(App.grdSale, e, keys);
         },
 
         grdCpnyID_edit: function (item, e) {
@@ -1278,19 +1273,15 @@ var Event = {
         },
         grdCustID_ValidateEdit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-            if (HQ.grid.checkDuplicate(App.grdCustomer, e, keys)) {
-                if (e.column.xtype == "datecolumn")
-                    HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
-                else HQ.message.show(1112, e.value);
-                return false;
-            }
+            return HQ.grid.checkValidateEdit(App.grdCustomer, e, keys);
         },
         grd_edit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
             if (e.store.storeId == 'stoLevel') {
                 if (e.field == 'LevelDescr') {
                     var rec = Ext.create(e.store.model.modelName, {
-                        LevelID: Process.lastNbr(e.store)
+                        LevelID: Process.lastNbr(e.store),
+                        Qty: "1"
                     });
                     var record = HQ.store.findRecord(App.stoLevel, ['LevelDescr'], ['']);
                     if (!record) {
@@ -1305,19 +1296,25 @@ var Event = {
                         && Process.isAllValidKey(e.store.getChangedData().Updated, keys)) {
                         if (keys.indexOf('LevelID') > -1) {
                             var rec = Ext.create(e.store.model.modelName, {
-                                LevelID: Process.lastNbr(e.store)
+                                LevelID: Process.lastNbr(e.store),
+                                Qty: "1"
                             });
                             HQ.store.insertRecord(e.store, keys, rec);
                         }
                         else {
                             if (e.record.data.LevelID) {
                                 var rec = Ext.create(e.store.model.modelName, {
-                                    LevelID: e.record.data.LevelID
+                                    LevelID: e.record.data.LevelID,
+                                    Qty: "1"
                                 });
                                 HQ.store.insertRecord(e.store, keys, rec);
                             }
                             else {
-                                HQ.store.insertBlank(e.store, keys);
+                                var rec = Ext.create(e.store.model.modelName, {
+                                    LevelID: e.record.data.LevelID,
+                                    Qty: "1"
+                                });
+                                HQ.store.insertRecord(e.store, keys, rec);
                             }
                         }
                     }
@@ -1342,7 +1339,7 @@ var Event = {
                 }
                 if (e.value != "")
                 {
-                    if (checkDuplicateInvtID(e.grid, e, keys)) {
+                    if (checkDuplicateInvtIDOfLevel(App.grdInvt, e, keys)) {
                         HQ.message.show(1112, e.value);
                         return false;
                     }
@@ -1465,7 +1462,7 @@ var Event = {
                     var status = App.cboStatus.value;
 
                     if (accumulateID && status == _beginStatus) {
-                        var allNodes = Process.getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
+                        var allNodes = Process.getDeepAllLeafNodes(App.treePanelBranch.getRootNode());
                         if (allNodes && allNodes.length > 0) {
                             App.stoCompany.suspendEvents();
                             allNodes.forEach(function (node) {
@@ -1475,16 +1472,17 @@ var Event = {
                                         ['CpnyID'],
                                         [node.data.RecID]);
                                     if (!record) {
-                                        App.grdCompany.store.insert(idx, Ext.create("App.mdlCompany", {
+                                        App.grdCompany.store.insert(idx - 1, Ext.create("App.mdlCompany", {
                                             CpnyID: node.data.RecID,
                                             CpnyName: node.data.text
                                         }));
+                                    
                                     }
                                 }
                             });
                             App.stoCompany.resumeEvents();
                             App.grdCompany.view.refresh();
-                            App.grdCompany.store.loadPage(1);
+                            //App.grdCompany.store.loadPage(1);
                             App.treePanelBranch.clearChecked();
 
                             Event.Form.frmMain_fieldChange();
@@ -1517,7 +1515,7 @@ var Event = {
                                         ['CpnyID'],
                                         [node.attributes.RecID]);
                                     if (!record) {
-                                        App.grdCompany.store.insert(idx, Ext.create("App.mdlCompany", {
+                                        App.grdCompany.store.insert(idx - 1, Ext.create("App.mdlCompany", {
                                             CpnyID: node.attributes.RecID,
                                             CpnyName: node.text
                                         }));
@@ -1526,7 +1524,7 @@ var Event = {
                             });
                             App.stoCompany.resumeEvents();
                             App.grdCompany.view.refresh();
-                            App.grdCompany.store.loadPage(1);
+                            //App.grdCompany.store.loadPage(1);
                             App.treePanelBranch.clearChecked();
                             Event.Form.frmMain_fieldChange();
                         }
@@ -2176,6 +2174,7 @@ var btnAddAllInvt_click = function (btn, e, eOpts) {
                                     record.set('InvtID', node.data.InvtID);
                                     record.set('Descr', node.data.Descr);
                                     record.set('Unit', node.data.Unit);
+                                    record.set('Qty', "1");
                                 }
                             }
                         });
@@ -2221,6 +2220,7 @@ var btnAddInvt_click = function (btn, e, eOpts) {
                                 record.set('InvtID', node.attributes.InvtID);
                                 record.set('Descr', node.attributes.Descr);
                                 record.set('Unit', node.attributes.Unit);
+                                record.set('Qty', "1");
                             }
                         }
                     });
@@ -2426,7 +2426,7 @@ var RefeshView = function (btn, e, eOpts) {
     App.grdCustomer.getStore().reload();
 }
 
-var checkDuplicateInvtID = function (grd, row, keys) {
+var checkDuplicateInvtIDOfLevel = function (grd, row, keys) {
     var found = false;
     var store = grd.getStore();
     if (keys == undefined) keys = row.record.idProperty.split(',');
@@ -2460,14 +2460,14 @@ var filterStore = function (store, field, value) {
             }
         }
     });
-    if (store.data.length <= 1)
+    if (store.data.length <= 1 && store.data.items[0].data.InvtID == "")
         return 1;
     else
         return 0;
 }
 
 
-var checkInsertKey = function (grd, e, keys) {
+var AddRowDefaultOne = function (grd, e, keys) {
     if (keys.indexOf(e.field) != -1) {
         if (e.value != '')
         {
