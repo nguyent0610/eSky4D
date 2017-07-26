@@ -1569,12 +1569,20 @@ var DiscDefintion = {
                     cbo.resumeEvents();
                 }
                 else {
-                    if (cbo.value == "M") {
-                        App.chkAutoFreeItem.setValue(true);
-                    }
-                    else {
-                        App.chkAutoFreeItem.setValue(false);
-                    }
+                    
+                }
+
+                if (cbo.value == "A") {
+                    App.chkAutoFreeItem.setDisabled(true);
+                    App.chkAutoFreeItem.setValue(false);
+                }
+                else if (cbo.value == "M") {
+                    App.chkAutoFreeItem.setDisabled(true);
+                    App.chkAutoFreeItem.setValue(true);
+                }
+                else {
+                    App.chkAutoFreeItem.setDisabled(false);
+                    App.chkAutoFreeItem.setValue(false);
                 }
             }
         },
