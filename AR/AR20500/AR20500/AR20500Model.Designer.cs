@@ -164,22 +164,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_NewCustomerInfor> AR_NewCustomerInfor
-        {
-            get
-            {
-                if ((_AR_NewCustomerInfor == null))
-                {
-                    _AR_NewCustomerInfor = base.CreateObjectSet<AR_NewCustomerInfor>("AR_NewCustomerInfor");
-                }
-                return _AR_NewCustomerInfor;
-            }
-        }
-        private ObjectSet<AR_NewCustomerInfor> _AR_NewCustomerInfor;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<AR_Customer> AR_Customer
         {
             get
@@ -192,6 +176,22 @@ namespace AR20500
             }
         }
         private ObjectSet<AR_Customer> _AR_Customer;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_NewCustomerInfor> AR_NewCustomerInfor
+        {
+            get
+            {
+                if ((_AR_NewCustomerInfor == null))
+                {
+                    _AR_NewCustomerInfor = base.CreateObjectSet<AR_NewCustomerInfor>("AR_NewCustomerInfor");
+                }
+                return _AR_NewCustomerInfor;
+            }
+        }
+        private ObjectSet<AR_NewCustomerInfor> _AR_NewCustomerInfor;
 
         #endregion
 
@@ -246,19 +246,19 @@ namespace AR20500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the AR_NewCustomerInfor EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_NewCustomerInfor(AR_NewCustomerInfor aR_NewCustomerInfor)
-        {
-            base.AddObject("AR_NewCustomerInfor", aR_NewCustomerInfor);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToAR_Customer(AR_Customer aR_Customer)
         {
             base.AddObject("AR_Customer", aR_Customer);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_NewCustomerInfor EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_NewCustomerInfor(AR_NewCustomerInfor aR_NewCustomerInfor)
+        {
+            base.AddObject("AR_NewCustomerInfor", aR_NewCustomerInfor);
         }
 
         #endregion
@@ -4390,6 +4390,30 @@ namespace AR20500
         private global::System.String _SubTerritory;
         partial void OnSubTerritoryChanging(global::System.String value);
         partial void OnSubTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CodeHT
+        {
+            get
+            {
+                return _CodeHT;
+            }
+            set
+            {
+                OnCodeHTChanging(value);
+                ReportPropertyChanging("CodeHT");
+                _CodeHT = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CodeHT");
+                OnCodeHTChanged();
+            }
+        }
+        private global::System.String _CodeHT;
+        partial void OnCodeHTChanging(global::System.String value);
+        partial void OnCodeHTChanged();
 
         #endregion
 

@@ -176,6 +176,7 @@
           <Property Name="Salut" Type="nvarchar" MaxLength="100" />
           <Property Name="ProfilePic" Type="varchar" MaxLength="100" />
           <Property Name="SubTerritory" Type="varchar" MaxLength="10" />
+          <Property Name="CodeHT" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -430,8 +431,8 @@
             <Parameter Name="Phone" Mode="In" Type="String" />
             <Parameter Name="Addr1" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="AR_NewCustomerInfor" EntityType="AR20500Model.AR_NewCustomerInfor" />
           <EntitySet Name="AR_Customer" EntityType="AR20500Model.AR_Customer" />
+          <EntitySet Name="AR_NewCustomerInfor" EntityType="AR20500Model.AR_NewCustomerInfor" />
         </EntityContainer>
         <ComplexType Name="AR20500_pgDetail_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
@@ -649,68 +650,6 @@
           <Property Type="Boolean" Name="Result" Nullable="true" />
           <Property Type="String" Name="Lang" Nullable="true" MaxLength="100" />
         </ComplexType>
-        <EntityType Name="AR_NewCustomerInfor">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="BranchID" />
-          </Key>
-          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="CustID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="OutletName" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ContactName" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Mobile" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Fax" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Email" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Addr1" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr2" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr3" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="State" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="City" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="District" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Channel" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ClassId" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Area" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShopType" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TradeType" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="Lat" />
-          <Property Type="Double" Name="Lng" />
-          <Property Type="String" Name="ImageFileName" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="IsActive" />
-          <Property Type="DateTime" Name="Crtd_Datetime" Precision="3" />
-          <Property Type="DateTime" Name="LUpd_Datetime" Precision="3" />
-          <Property Type="String" Name="SlsperID" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ApproveStatus" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="NewCustID" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="Boolean" Name="Checked" Nullable="false" />
-          <Property Type="String" Name="CustType" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Territory" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Location" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="PriceClass" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Startday" Precision="3" />
-          <Property Type="DateTime" Name="Endday" Precision="3" />
-          <Property Type="String" Name="PJPID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SlsFreq" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="WeekofVisit" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SalesRouteID" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="Mon" />
-          <Property Type="Int32" Name="Tue" />
-          <Property Type="Int32" Name="Wed" />
-          <Property Type="Int32" Name="Thu" />
-          <Property Type="Int32" Name="Fri" />
-          <Property Type="Int32" Name="Sat" />
-          <Property Type="Int32" Name="Sun" />
-          <Property Type="String" Name="Ward" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="DeliveryID" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="DateCust" Precision="3" />
-          <Property Type="String" Name="TaxCode" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="VisitSort" />
-          <Property Type="String" Name="Salut" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ProfilePic" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SubTerritory" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="AR_Customer">
           <Key>
             <PropertyRef Name="CustId" />
@@ -793,6 +732,69 @@
           <Property Type="String" Name="RefCustID" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProfilePic" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SubTerritory" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AR_NewCustomerInfor">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OutletName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ContactName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Mobile" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Fax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Email" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Addr1" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr3" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="State" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="City" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="District" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Channel" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ClassId" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Area" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShopType" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TradeType" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="Lat" />
+          <Property Type="Double" Name="Lng" />
+          <Property Type="String" Name="ImageFileName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="IsActive" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Precision="3" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Precision="3" />
+          <Property Type="String" Name="SlsperID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ApproveStatus" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="NewCustID" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Checked" Nullable="false" />
+          <Property Type="String" Name="CustType" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Territory" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Location" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PriceClass" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Startday" Precision="3" />
+          <Property Type="DateTime" Name="Endday" Precision="3" />
+          <Property Type="String" Name="PJPID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsFreq" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="WeekofVisit" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SalesRouteID" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Mon" />
+          <Property Type="Int32" Name="Tue" />
+          <Property Type="Int32" Name="Wed" />
+          <Property Type="Int32" Name="Thu" />
+          <Property Type="Int32" Name="Fri" />
+          <Property Type="Int32" Name="Sat" />
+          <Property Type="Int32" Name="Sun" />
+          <Property Type="String" Name="Ward" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DeliveryID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="DateCust" Precision="3" />
+          <Property Type="String" Name="TaxCode" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="VisitSort" />
+          <Property Type="String" Name="Salut" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ProfilePic" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SubTerritory" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CodeHT" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1022,68 +1024,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerApprove" />
-          <EntitySetMapping Name="AR_NewCustomerInfor">
-            <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
-              <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
-                <ScalarProperty Name="SubTerritory" ColumnName="SubTerritory" />
-                <ScalarProperty Name="ProfilePic" ColumnName="ProfilePic" />
-                <ScalarProperty Name="Salut" ColumnName="Salut" />
-                <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
-                <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
-                <ScalarProperty Name="DateCust" ColumnName="DateCust" />
-                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
-                <ScalarProperty Name="Ward" ColumnName="Ward" />
-                <ScalarProperty Name="Sun" ColumnName="Sun" />
-                <ScalarProperty Name="Sat" ColumnName="Sat" />
-                <ScalarProperty Name="Fri" ColumnName="Fri" />
-                <ScalarProperty Name="Thu" ColumnName="Thu" />
-                <ScalarProperty Name="Wed" ColumnName="Wed" />
-                <ScalarProperty Name="Tue" ColumnName="Tue" />
-                <ScalarProperty Name="Mon" ColumnName="Mon" />
-                <ScalarProperty Name="SalesRouteID" ColumnName="SalesRouteID" />
-                <ScalarProperty Name="WeekofVisit" ColumnName="WeekofVisit" />
-                <ScalarProperty Name="SlsFreq" ColumnName="SlsFreq" />
-                <ScalarProperty Name="PJPID" ColumnName="PJPID" />
-                <ScalarProperty Name="Endday" ColumnName="Endday" />
-                <ScalarProperty Name="Startday" ColumnName="Startday" />
-                <ScalarProperty Name="PriceClass" ColumnName="PriceClass" />
-                <ScalarProperty Name="Location" ColumnName="Location" />
-                <ScalarProperty Name="Territory" ColumnName="Territory" />
-                <ScalarProperty Name="CustType" ColumnName="CustType" />
-                <ScalarProperty Name="Checked" ColumnName="Checked" />
-                <ScalarProperty Name="NewCustID" ColumnName="NewCustID" />
-                <ScalarProperty Name="ApproveStatus" ColumnName="ApproveStatus" />
-                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
-                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
-                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ImageFileName" ColumnName="ImageFileName" />
-                <ScalarProperty Name="Lng" ColumnName="Lng" />
-                <ScalarProperty Name="Lat" ColumnName="Lat" />
-                <ScalarProperty Name="TradeType" ColumnName="TradeType" />
-                <ScalarProperty Name="ShopType" ColumnName="ShopType" />
-                <ScalarProperty Name="Area" ColumnName="Area" />
-                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
-                <ScalarProperty Name="Channel" ColumnName="Channel" />
-                <ScalarProperty Name="District" ColumnName="District" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Addr3" ColumnName="Addr3" />
-                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
-                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
-                <ScalarProperty Name="OutletName" ColumnName="OutletName" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20500Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
@@ -1167,6 +1107,69 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AR_NewCustomerInfor">
+            <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
+              <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
+                <ScalarProperty Name="CodeHT" ColumnName="CodeHT" />
+                <ScalarProperty Name="SubTerritory" ColumnName="SubTerritory" />
+                <ScalarProperty Name="ProfilePic" ColumnName="ProfilePic" />
+                <ScalarProperty Name="Salut" ColumnName="Salut" />
+                <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
+                <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
+                <ScalarProperty Name="DateCust" ColumnName="DateCust" />
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="Sun" ColumnName="Sun" />
+                <ScalarProperty Name="Sat" ColumnName="Sat" />
+                <ScalarProperty Name="Fri" ColumnName="Fri" />
+                <ScalarProperty Name="Thu" ColumnName="Thu" />
+                <ScalarProperty Name="Wed" ColumnName="Wed" />
+                <ScalarProperty Name="Tue" ColumnName="Tue" />
+                <ScalarProperty Name="Mon" ColumnName="Mon" />
+                <ScalarProperty Name="SalesRouteID" ColumnName="SalesRouteID" />
+                <ScalarProperty Name="WeekofVisit" ColumnName="WeekofVisit" />
+                <ScalarProperty Name="SlsFreq" ColumnName="SlsFreq" />
+                <ScalarProperty Name="PJPID" ColumnName="PJPID" />
+                <ScalarProperty Name="Endday" ColumnName="Endday" />
+                <ScalarProperty Name="Startday" ColumnName="Startday" />
+                <ScalarProperty Name="PriceClass" ColumnName="PriceClass" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="CustType" ColumnName="CustType" />
+                <ScalarProperty Name="Checked" ColumnName="Checked" />
+                <ScalarProperty Name="NewCustID" ColumnName="NewCustID" />
+                <ScalarProperty Name="ApproveStatus" ColumnName="ApproveStatus" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ImageFileName" ColumnName="ImageFileName" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="TradeType" ColumnName="TradeType" />
+                <ScalarProperty Name="ShopType" ColumnName="ShopType" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Addr3" ColumnName="Addr3" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="OutletName" ColumnName="OutletName" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1194,8 +1197,8 @@
         <EntityTypeShape EntityType="AR20500Model.SI_State" Width="1.5" PointX="0.75" PointY="4.75" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteDet" Width="1.5" PointX="2.75" PointY="5.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.5" PointX="4.75" PointY="7.75" />
-        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="8.75" PointY="7.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="4.1530347970095622" PointY="22.040223936569049" />
+        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="4.8145575508543095" PointY="20.466730589264412" />
       </Diagram>
     </Diagrams>
   </Designer>

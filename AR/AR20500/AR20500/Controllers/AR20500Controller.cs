@@ -164,22 +164,22 @@ namespace AR20500.Controllers
                                     continue;
                                     //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
                                 }
-                                if (item.ERPCustID.PassNull() != "" )
-                                {
-                                    string custERP = item.ERPCustID.PassNull().ToUpper().Trim();
-                                    string branchID = item.BranchID.PassNull();
-                                    if (lstCustID.Contains(custERP))
-                                    {
-                                        throw new MessageException(MessageType.Message, "1112", "", parm: new string[] { Util.GetLang("CustID") + " " + item.ERPCustID.PassNull() });
-                                    }
+                                //if (item.ERPCustID.PassNull() != "" )
+                                //{
+                                //    string custERP = item.ERPCustID.PassNull().ToUpper().Trim();
+                                //    string branchID = item.BranchID.PassNull();
+                                //    if (lstCustID.Contains(custERP))
+                                //    {
+                                //        throw new MessageException(MessageType.Message, "1112", "", parm: new string[] { Util.GetLang("CustID") + " " + item.ERPCustID.PassNull() });
+                                //    }
 
-                                    var objCust1 = _db.AR_Customer.Where(p => p.BranchID == branchID && p.CustId.ToUpper() == custERP).FirstOrDefault();
-                                    if(objCust1!=null)
-                                    {
-                                        throw new MessageException(MessageType.Message, "8001", "", parm: new string[] { Util.GetLang("CustID") + " " + item.ERPCustID.PassNull() });
-                                    }
-                                    lstCustID.Add(item.ERPCustID.PassNull().ToUpper());
-                                }
+                                //    var objCust1 = _db.AR_Customer.Where(p => p.BranchID == branchID && p.CustId.ToUpper() == custERP).FirstOrDefault();
+                                //    if(objCust1!=null)
+                                //    {
+                                //        throw new MessageException(MessageType.Message, "8001", "", parm: new string[] { Util.GetLang("CustID") + " " + item.ERPCustID.PassNull() });
+                                //    }
+                                //    lstCustID.Add(item.ERPCustID.PassNull().ToUpper());
+                                //}
                                 objNew.WeekofVisit = item.WeekofVisit;
                                 objNew.Mon = item.Mon.Value ? int.Parse("1") : int.Parse("0");
                                 objNew.Tue = item.Tue.Value ? int.Parse("1") : int.Parse("0");
@@ -200,6 +200,7 @@ namespace AR20500.Controllers
                                 objNew.Addr1 = item.Addr1;
 								objNew.ClassId = item.ClassId;
 								objNew.PriceClass = item.PriceClass;
+                                objNew.CodeHT = item.ERPCustID;
 
                                 var objCust = new AR_Customer();
                                 objCust.ResetET();
@@ -236,7 +237,7 @@ namespace AR20500.Controllers
                                 objCust.DeliveryID = item.DeliveryID.PassNull(); ;
                                 objCust.Country = objCust.BillCountry = "VN";
                                 objCust.District = item.District.PassNull(); ;
-                                objCust.CustId = item.ERPCustID.PassNull() != "" ? item.ERPCustID.PassNull() : _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();
+                                objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();//item.ERPCustID.PassNull() != "" ? item.ERPCustID.PassNull() : _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();
                                 objCust.DfltShipToId = "DEFAULT";
                                 objCust.LTTContractNbr = item.CustHT;
                                 objCust.LUpd_Datetime = DateTime.Now;
@@ -264,7 +265,7 @@ namespace AR20500.Controllers
                                 objCust.CustType = "R";
                                 objCust.EstablishDate = new DateTime(1900, 1, 1);
                                 objCust.Birthdate = new DateTime(1900, 1, 1);
-                                objCust.RefCustID = "";
+                                objCust.RefCustID = item.ERPCustID.PassNull();
                                 _db.AR_Customer.AddObject(objCust);
 
                                 AR_CustomerLocation loc = new AR_CustomerLocation();
