@@ -215,7 +215,9 @@
                             .AllowBlank(false).EnforceMaxLength(true).MaxLength(200)
                             .Width(675).MarginSpec("5 0 0 0")
                             .Listeners(p=>p.Change.Fn ="txtCustName_Change")
-                            
+                        , HQ.TextBox().ID("txtRefCustID").Name("txtRefCustID").HQLangCode("RefCustID").DataIndex("RefCustID")
+                            .AllowBlank(true).EnforceMaxLength(true).MaxLength(50)
+                            .Width(675).MarginSpec("5 0 0 0")   
                         , HQ.TextBox().ID("txtInActive").Name("txtInActive").HQLangCode("InActiveAR20400").DataIndex("InActive")
                             .AllowBlank(true).EnforceMaxLength(true).MaxLength(100)
                             .Width(675).MarginSpec("5 0 0 0")

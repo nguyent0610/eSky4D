@@ -10609,6 +10609,30 @@ namespace AR20400
         private global::System.String _SubTerritory;
         partial void OnSubTerritoryChanging(global::System.String value);
         partial void OnSubTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String RefCustID
+        {
+            get
+            {
+                return _RefCustID;
+            }
+            set
+            {
+                OnRefCustIDChanging(value);
+                ReportPropertyChanging("RefCustID");
+                _RefCustID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("RefCustID");
+                OnRefCustIDChanged();
+            }
+        }
+        private global::System.String _RefCustID;
+        partial void OnRefCustIDChanging(global::System.String value);
+        partial void OnRefCustIDChanged();
 
         #endregion
 

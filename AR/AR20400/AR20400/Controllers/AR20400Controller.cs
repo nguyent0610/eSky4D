@@ -618,6 +618,7 @@ namespace AR20400.Controllers
             t.TaxID03 = s.TaxID03;
             t.InActive = s.InActive;
             t.SellProduct = s.SellProduct;
+            t.RefCustID = s.RefCustID;
 
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

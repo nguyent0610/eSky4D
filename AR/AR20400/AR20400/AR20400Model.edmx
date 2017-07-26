@@ -917,6 +917,7 @@
           <Property Type="String" Name="SellProduct" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="ProfilePic" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="SubTerritory" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="RefCustID" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="AR20400_pgAR_CustAdvTool_Result">
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
@@ -1438,6 +1439,7 @@
                 <ScalarProperty Name="SellProduct" ColumnName="SellProduct" />
                 <ScalarProperty Name="ProfilePic" ColumnName="ProfilePic" />
                 <ScalarProperty Name="SubTerritory" ColumnName="SubTerritory" />
+                <ScalarProperty Name="RefCustID" ColumnName="RefCustID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
