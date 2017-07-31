@@ -987,8 +987,7 @@ var DiscDefintion = {
                 node.eachChild(
                  function (Mynode) {
                      allNodes = allNodes.concat(Mynode.childNodes);
-                 }
-                );
+                 });
             }
             return allNodes;
         },
@@ -2572,35 +2571,40 @@ var DiscDefintion = {
                         else if ((App.cboDiscClass.value == "BB" || App.cboDiscClass.value == "CB"
                             || App.cboDiscClass.value == "TB") && e.field == "BreakQty") {
                             return false;
-                        }
-                        else if (e.field == "DiscAmt") {
+                        } else if (e.field == "DiscAmt") {
                             if (App.grdFreeItem.store.getCount() > 1 
                                 && App.grdFreeItem.store.data.items[0].data.LineRef == e.record.data.LineRef 
                                 && !Ext.isEmpty(App.grdFreeItem.store.data.items[0].data.FreeItemID)) {
-                                console.log(App.grdFreeItem.store.data.items[0].data.FreeItemID);
+                                //console.log(App.grdFreeItem.store.data.items[0].data.FreeItemID);
                                 return false;
                             } else {
                                 var allFreeItem = App.stoFreeItem.snapshot || App.stoFreeItem.allData || App.stoFreeItem.data; // 
                                 var hasFreeItem = false;
-                                for (var i = 0; i < allFreeItem.length; i++) {
-                                    if (allFreeItem.items[i].data.LineRef == e.record.data.LineRef && !Ext.isEmpty(allFreeItem.items[i].data.FreeItemID)) {
-                                        console.log(allFreeItem.items[i].data.FreeItemID);
-                                        hasFreeItem = true;
-                                        break;
+                                if (!HQ.addSameKind) {
+                                    for (var i = 0; i < allFreeItem.length; i++) {
+                                        if (allFreeItem.items[i].data.LineRef == e.record.data.LineRef && !Ext.isEmpty(allFreeItem.items[i].data.FreeItemID)) {
+                                            hasFreeItem = true;
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    for (var i = 0; i < allFreeItem.length; i++) {
+                                        if (!Ext.isEmpty(allFreeItem.items[i].data.FreeItemID)) {
+                                            hasFreeItem = true;
+                                            break;
+                                        }
                                     }
                                 }
                                 if (hasFreeItem) {
                                     return false;
                                 }
-                            }
-                            
-                        }
+                            }                            
+                        }  
                         //else if (e.rowIdx > 0 && e.store.getAt(e.rowIdx - 1).data.DiscAmt == 0 && e.field == "DiscAmt") {
 
                         //    //return false;
                         //}
                         
-
                         return HQ.grid.checkInput(e, keys);
                     }
                     else {
@@ -2641,17 +2645,18 @@ var DiscDefintion = {
                             return false;
                         }
                         // Cùng 1 DiscSeq có thể KM Tiền ở mức này và KM tặng hàng ở mức khác
-                        //var isAllowInsert = true;
-                        //for (var i = 0; i < App.grdDiscBreak.store.data.length; i++) {
-                        //    if (App.grdDiscBreak.store.data.items[i].data.DiscAmt) 
-                        //    {
-                        //        isAllowInsert = false;
-                        //        break;
-                        //    }
-                        //}
-                        //if (!isAllowInsert) {
-                        //    return false;
-                        //}
+                        if (HQ.addSameKind) {
+                            var isAllowInsert = true;
+                            for (var i = 0; i < App.grdDiscBreak.store.data.length; i++) {
+                                if (App.grdDiscBreak.store.data.items[i].data.DiscAmt) {
+                                    isAllowInsert = false;
+                                    break;
+                                }
+                            }
+                            if (!isAllowInsert) {
+                                return false;
+                            }
+                        }
                         if (e.store.storeId == 'stoFreeItem') {
                             App.cboGUnitDescr.store.reload();
                         }

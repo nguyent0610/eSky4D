@@ -29,6 +29,13 @@ namespace OM21100.Controllers
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            var objCheck = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM21100SAMEPROMOKIND");
+            var sameKind = true;
+            if (objCheck != null && objCheck.IntVal == 0)
+            {
+                sameKind = false;
+            }
+            ViewBag.addSameKind = sameKind;
             return View();
         }
 
