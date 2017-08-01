@@ -455,18 +455,18 @@ namespace OM21100.Controllers
                         }
                         else
                         {
-                            // Update discount
-                            if (disc.tstamp.ToHex() == inputDisc.tstamp.ToHex())
-                            {
+                            //// Update discount
+                            //if (disc.tstamp.ToHex() == inputDisc.tstamp.ToHex())
+                            //{
                                 updateDiscount(ref disc, inputDisc, false, roles);
                                 saveDiscSeq(data, disc, inputDiscSeq, isNewDiscSeq);
 
-                                return Json(new { success = true, msgCode = 201405071, tstamp=disc.tstamp.ToHex() });
-                            }
-                            else
-                            {
-                                throw new MessageException(MessageType.Message, "19");
-                            }
+                                return Json(new { success = true, msgCode = 201405071, tstamp = disc.tstamp.ToHex() });
+                            //}
+                            //else
+                            //{
+                            //    throw new MessageException(MessageType.Message, "19");
+                            //}
                         }
                     }
                     else
@@ -707,7 +707,10 @@ namespace OM21100.Controllers
                 {
                     throw new MessageException(MessageType.Message, "8001", "", new string[] { Util.GetLang("DiscSeq") });
                 }
-
+                if (seq.tstamp.ToHex() != inputDiscSeq.tstamp.ToHex())
+                {
+                    throw new MessageException(MessageType.Message, "19");
+                }
                 updateDiscSeq(ref seq, inputDiscSeq, false, roles, handle);
             }
             else
