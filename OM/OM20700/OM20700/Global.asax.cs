@@ -38,7 +38,7 @@ namespace OM20700
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";
+            Current.Server = "HOANGSAD";
             Current.DBSys = "eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;

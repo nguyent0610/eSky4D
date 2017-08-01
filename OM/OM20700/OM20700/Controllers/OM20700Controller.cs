@@ -82,7 +82,7 @@ namespace OM20700.Controllers
                 throw new MessageException(MessageType.Message, "97");
 
             }
-            if ((lstPrice.Where(p => p.InvtID.PassNull() != "" && p.Price != 0).Count() ==0))
+            if ((lstPrice.Where(p => p.InvtID.PassNull() != "" && p.QtyBreak != 0).Count() == 0))
             {
                 throw new MessageException(MessageType.Message, "2015020804");
 
