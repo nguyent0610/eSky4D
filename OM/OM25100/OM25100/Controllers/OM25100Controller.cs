@@ -1460,23 +1460,23 @@ namespace OM25100.Controllers
                             }
                             else if (appFor == "CUS")
                             {
-                                if (SlsperID == "")
-                                {
-                                    errorSlsperID += (i + 1).ToString() + ",";
-                                    flagCheck = true;
-                                }
-                                else
-                                {
-                                    if (flagBranchID == false)
-                                    {
-                                        objSlsper = lstSlsper.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperId == SlsperID);
-                                        if (objSlsper == null)
-                                        {
-                                            errorSlsperIDnotExists += (i + 1).ToString() + ",";
-                                            flagCheck = true;
-                                        }
-                                    }
-                                }
+                                //if (SlsperID == "")
+                                //{
+                                //    errorSlsperID += (i + 1).ToString() + ",";
+                                //    flagCheck = true;
+                                //}
+                                //else
+                                //{
+                                //    if (flagBranchID == false)
+                                //    {
+                                //        objSlsper = lstSlsper.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperId == SlsperID);
+                                //        if (objSlsper == null)
+                                //        {
+                                //            errorSlsperIDnotExists += (i + 1).ToString() + ",";
+                                //            flagCheck = true;
+                                //        }
+                                //    }
+                                //}
 
                                 if (CustID == "")
                                 {
