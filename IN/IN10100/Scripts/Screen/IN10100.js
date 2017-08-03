@@ -173,6 +173,9 @@ var checkExitEditLot = function (row) {
             newRow.data.UnitMultDiv = lot.UnitMultDiv;
             HQ.store.insertRecord(App.stoLotTrans, key, newRow, true);
         }
+        if (lot.ExpDate == null || lot.ExpDate == undefined || lot.ExpDate == '') {
+            lot.ExpDate = App.DateEnt.getValue();//HQ.businessDate;
+        }
     }
     record.commit();
     HQ.common.showBusy(false);

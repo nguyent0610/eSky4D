@@ -584,7 +584,7 @@
                 X.ComboBox().ID("cboLotSerNbr").DataIndex("LotSerNbr")
                 .ValueField("LotSerNbr").DisplayField("LotSerNbr")
                 .SubmitValue(false)
-                .MinChars(1).TypeAhead(false).ForceSelection(true)
+                .MinChars(1).TypeAhead(false).ForceSelection(false)
                 .TriggerAction(TriggerAction.All)
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(l =>
