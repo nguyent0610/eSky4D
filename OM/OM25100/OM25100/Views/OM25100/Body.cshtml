@@ -1290,7 +1290,8 @@
                                             X.StringFilter().DataIndex("CpnyName"),
                                             X.StringFilter().DataIndex("SlsperId"),
                                             X.StringFilter().DataIndex("SlsperName"),
-                                            X.StringFilter().DataIndex("PosDesc"),
+                                            X.StringFilter().DataIndex("CustID"),
+                                            X.StringFilter().DataIndex("CustName"),
                                             X.NumericFilter().DataIndex("Target")
                                         )
                                 )
@@ -1482,7 +1483,8 @@
                                             X.StringFilter().DataIndex("CpnyName"),
                                             X.StringFilter().DataIndex("SlsperId"),
                                             X.StringFilter().DataIndex("SlsperName"),
-                                            X.StringFilter().DataIndex("PosDesc"),
+                                            X.StringFilter().DataIndex("CustID"),
+                                            X.StringFilter().DataIndex("CustName"),
                                             X.StringFilter().DataIndex("ClassID"),
                                             X.NumericFilter().DataIndex("Target")
                                         )
@@ -1677,7 +1679,8 @@
                                                 X.StringFilter().DataIndex("CpnyName"),
                                                 X.StringFilter().DataIndex("SlsperId"),
                                                 X.StringFilter().DataIndex("SlsperName"),
-                                                X.StringFilter().DataIndex("PosDesc"),
+                                                X.StringFilter().DataIndex("CustID"),
+                                                X.StringFilter().DataIndex("CustName"),
                                                 X.StringFilter().DataIndex("InvtID"),
                                                 X.NumericFilter().DataIndex("Target")
                                             )
@@ -1799,6 +1802,7 @@
                                                 .Local(true)
                                                 .Filters(
                                                     X.StringFilter().DataIndex("Type").ValidateRecord(p=>p.Fn="stringFilter"),
+                                                    X.StringFilter().DataIndex("Descr"),
                                                     X.NumericFilter().DataIndex("Value1"),
                                                     X.NumericFilter().DataIndex("Value2"),
                                                     X.NumericFilter().DataIndex("Value3")
