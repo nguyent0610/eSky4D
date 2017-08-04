@@ -1,7 +1,7 @@
 //// Declare //////////////////////////////////////////////////////////
 var keys = ["Country", "State", "District", "Ward"];
-var fieldsCheckRequire = ["Country", "State", "District", "Ward"]
-var fieldsLangCheckRequire = ["Country", "State", "District", "Ward"];
+var fieldsCheckRequire = ["Country", "State", "District", "Ward", "Name"]
+var fieldsLangCheckRequire = ["Country", "State", "District", "Ward", "Name"];
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
@@ -40,7 +40,7 @@ var menuClick = function (command) {
                 App.stoWard.reload();
             }
             break;
-           
+
         case "new":
             if (HQ.isInsert) {
                 HQ.grid.insert(App.grdWard, keys);
@@ -119,11 +119,20 @@ var stoBeforeLoad = function (sto) {
 };
 
 var grdArea_BeforeEdit = function (editor, e) {
+    if (e.field == 'State') {
+        App.cboState.getStore().reload();
+    }
+    if (e.field == 'District') {
+        App.cboDistrict.getStore().reload();
+    }
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 
 var grdArea_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdWard, e, keys);
+    if (e.field == 'Ward' && e.value != '') {
+        App.cboCountry.value = null;
+    }
     frmChange();
 };
 
@@ -164,8 +173,7 @@ var deleteData = function (item) {
 };
 
 ///////////////// Event Change Combo /
-var cboCountry_change = function (sender, value)
-{
+var cboCountry_change = function (sender, value) {
     App.cboState.setValue("");
     App.cboState.getStore().reload();
     //App.cboState.getStore().load(function () {
@@ -181,8 +189,7 @@ var cboCountry_change = function (sender, value)
     //});
 }
 
-var cboState_change = function (sender, value)
-{
+var cboState_change = function (sender, value) {
     App.cboDistrict.setValue("");
     App.cboDistrict.getStore().reload();
     //App.cboDistrict.getStore().load(function () {

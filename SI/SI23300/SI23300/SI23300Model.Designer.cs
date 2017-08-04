@@ -163,7 +163,6 @@ namespace SI23300
         /// <param name="state">Initial value of the State property.</param>
         /// <param name="district">Initial value of the District property.</param>
         /// <param name="ward">Initial value of the Ward property.</param>
-        /// <param name="name">Initial value of the Name property.</param>
         /// <param name="crtd_Datetime">Initial value of the Crtd_Datetime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
@@ -171,14 +170,13 @@ namespace SI23300
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_Ward CreateSI_Ward(global::System.String country, global::System.String state, global::System.String district, global::System.String ward, global::System.String name, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static SI_Ward CreateSI_Ward(global::System.String country, global::System.String state, global::System.String district, global::System.String ward, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             SI_Ward sI_Ward = new SI_Ward();
             sI_Ward.Country = country;
             sI_Ward.State = state;
             sI_Ward.District = district;
             sI_Ward.Ward = ward;
-            sI_Ward.Name = name;
             sI_Ward.Crtd_Datetime = crtd_Datetime;
             sI_Ward.Crtd_Prog = crtd_Prog;
             sI_Ward.Crtd_User = crtd_User;
@@ -304,7 +302,7 @@ namespace SI23300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Name
         {
@@ -316,7 +314,7 @@ namespace SI23300
             {
                 OnNameChanging(value);
                 ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, false);
+                _Name = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Name");
                 OnNameChanged();
             }

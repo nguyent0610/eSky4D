@@ -12,15 +12,15 @@
     var acc = Session["SI23300"] as AccessRight;
 }
 
-<style> @*Thuoc tinh hover tren grid *@
-    .x-grid-row-over .x-grid-cell-inner {
-        font-weight : bold;
+<style>
+    @*Thuoc tinh hover tren grid *@ .x-grid-row-over .x-grid-cell-inner {
+        font-weight: bold;
     }
 </style>
 
 @(X.Viewport()
           .Layout(LayoutType.Fit)
-          .Items(               
+          .Items(
                 X.FormPanel()
                 .ID("frmMain")
                 .DefaultAnchor("100%")
@@ -36,7 +36,9 @@
                 .Height(480)
                 .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
                 .Items(
-                        X.GridPanel()
+                    X.Panel().ID("pnlGrid").Layout(LayoutType.Border)
+                    .Items(
+                        X.GridPanel().Region(Region.Center)
                         .Frame(true)
                         .AnchorHorizontal("100%")
                         .AnchorVertical("100%")
@@ -46,12 +48,12 @@
                         .ID("grdWard")
                         .Store(
                                 X.Store()
-                                .ID("stoWard")    
-                                //.RemotePaging(true)
+                                .ID("stoWard")
+        //.RemotePaging(true)
                                 .AutoLoad(false)
-                                //.DataSource(Model)
+        //.DataSource(Model)
                                 .PageSize(50)
-                                .Model(Util.GenerateModel(typeof(SI23300_pgLoadGrid_Result), "mdlSI_WardModel", ""))                                                                                                                                  
+                                .Model(Util.GenerateModel(typeof(SI23300_pgLoadGrid_Result), "mdlSI_WardModel", ""))
                                 .ServerProxy(
                                             X.AjaxProxy()
                                             .Url(Url.Action("GetData"))
@@ -65,15 +67,15 @@
                         .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdChannel');")
                         .SortableColumns(false)
                         .ColumnModel(
-                                    X.RowNumbererColumn(),                                   
+                                    X.RowNumbererColumn(),
                                    X.Column().Text(Util.GetLang("Country")).DataIndex("Country").Width(150)
                                              .Editor(HQ.Combo().ID("cboCountry")
                                                     .HQProcedure("SI23300_pcCountry").ForceSelection(true)
                                                     .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID")
                                                     .ForceSelection(true)
                                                     .HQHeightWidth(400, 300)
-                                                    .HQParam(new StoreParameterCollection() 
-                                                { 
+                                                    .HQParam(new StoreParameterCollection()
+                                                {
                                                     new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                                     new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -92,8 +94,8 @@
                                                     .HQColumnShow("State,Descr").DisplayField("State").ValueField("State")
                                                     .ForceSelection(true)
                                                     .HQHeightWidth(400, 300)
-                                                    .HQParam(new StoreParameterCollection() 
-                                                { 
+                                                    .HQParam(new StoreParameterCollection()
+                                                {
                                                     new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                                     new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
@@ -107,14 +109,14 @@
                                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                                     })
                                                     )
-                                   ,X.Column().Text(Util.GetLang("District")).DataIndex("District").Width(150)
+                                   , X.Column().Text(Util.GetLang("District")).DataIndex("District").Width(150)
                                                 .Editor(HQ.Combo().ID("cboDistrict").ForceSelection(true)
                                                     .HQProcedure("SI23300_pcDistrict")
                                                     .HQColumnShow("District,Name").DisplayField("District").ValueField("District")
                                                     .ForceSelection(true)
                                                     .HQHeightWidth(400, 300)
-                                                    .HQParam(new StoreParameterCollection() 
-                                                    { 
+                                                    .HQParam(new StoreParameterCollection()
+                                                    {
                                                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
@@ -127,15 +129,15 @@
                                                     {
                                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                                     })
-                                                    ), 
+                                                    ),
                                     X.Column().Text(Util.GetLang("Ward")).DataIndex("Ward").Width(150)
                                                     .Editor(
                                                         HQ.TextBox().MaxLength(10).EnforceMaxLength(true)
                                                     ),
                                     X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(200)
                                                     .Editor(
-                                                            HQ.TextBox().MaxLength(30).EnforceMaxLength(true)
-                                                        ),                 
+                                                            HQ.TextBox().MaxLength(50).EnforceMaxLength(true)
+                                                        ),
                                     X.CommandColumn().Width(150)
                                                     .Commands(
                                                                 X.GridCommand()
@@ -157,7 +159,7 @@
                                                                 })
                                     )
                         .SelectionModel(X.RowSelectionModel().ID("slmArea").Mode(SelectionMode.Multi))
-                        .BottomBar(//Phan trang       
+                        .BottomBar(//Phan trang
                                     X.PagingToolbar()
                                     .ID("PagingToolbar")
                                     .Items(
@@ -181,7 +183,7 @@
                                                 ls.BeforeEdit.Fn = "grdArea_BeforeEdit";
                                                 ls.Edit.Fn = "grdArea_Edit";
                                                 ls.ValidateEdit.Fn = "grdArea_ValidateEdit";
-                                            })        
+                                            })
                                 )
                         .Features(
                                 X.GridFilters()//Filter
@@ -191,9 +193,10 @@
                                             X.StringFilter().DataIndex("State"),
                                             X.StringFilter().DataIndex("District"),
                                             X.StringFilter().DataIndex("Ward"),
-                                            X.StringFilter().DataIndex("Name")                                                        
+                                            X.StringFilter().DataIndex("Name")
                                             )
                                 )
+                       )
             )
-        )          
+        )
 )
