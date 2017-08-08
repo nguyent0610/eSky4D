@@ -1072,7 +1072,17 @@
                             ls.Edit.Fn = "Main.Event.grd_edit";
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
-                    ) // grdBundle
+                    )
+                        //.Features(
+                        //    X.GridFilters()
+                        //    .Local(true)
+                        //    .Filters(
+                        //            X.StringFilter().DataIndex("InvtID"),
+                        //        X.StringFilter().DataIndex("CustName"),
+                        //        X.StringFilter().DataIndex("BranchID"),
+                        //        X.StringFilter().DataIndex("TerritoryName")
+                        //    )
+                        //) // grdBundle
                 )
                 .Listeners(ls =>
                 {
@@ -1127,7 +1137,8 @@
                             ls.Edit.Fn = "Main.Event.grd_edit";
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
-                    ) // grdDiscCustClass
+                    )
+                    // grdDiscCustClass
                 )
                 .Listeners(ls =>
                 {
@@ -1247,6 +1258,8 @@
                             .LoadData()
                         )
                         , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("BranchID")
+
+                        , X.Column().Text(Util.GetLang("Territory")).DataIndex("TerritoryName")
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
@@ -1290,7 +1303,17 @@
                             ls.Edit.Fn = "Main.Event.grd_edit";
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
-                    ) // grdDiscCustClass
+                    )
+                    //.Features(
+                    //X.GridFilters()
+                    //    .Local(true)
+                    //    .Filters(
+                    //        X.StringFilter().DataIndex("CustID"),
+                    //        X.StringFilter().DataIndex("CustName"),
+                    //        X.StringFilter().DataIndex("BranchID"),
+                    //        X.StringFilter().DataIndex("TerritoryName")
+                    //    )
+                    //)// grdDiscCustClass
                 )
                 .Listeners(ls =>
                 {
@@ -1358,7 +1381,15 @@
                             ls.Edit.Fn = "Main.Event.grd_edit";
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
-                    ) // grdDiscItemClass
+                        )
+                        //.Features(
+                        //    X.GridFilters()
+                        //        .Local(true)
+                        //        .Filters(
+                        //            X.StringFilter().DataIndex("ClassID"),
+                        //            X.StringFilter().DataIndex("UnitDesc")
+                        //        )
+                        //) // grdDiscItemClass
                 )
                 .Listeners(ls =>
                 {

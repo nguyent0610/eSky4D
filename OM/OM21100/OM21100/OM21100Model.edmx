@@ -571,6 +571,8 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TerritoryName" Nullable="true" MaxLength="200" />
         </ComplexType>
         <ComplexType Name="OM21100_pgDiscBundle_Result">
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="23" />
@@ -1069,7 +1071,9 @@
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Channel" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="ClassID" Nullable="true" MaxLength="6" />
-          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="251" />
+          <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TerritoryName" Nullable="true" MaxLength="200" />
         </ComplexType>
         <ComplexType Name="OM21100_pdSI_Hierarchy_Result">
           <Property Type="String" Name="NodeID" Nullable="false" MaxLength="30" />
@@ -1109,6 +1113,8 @@
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="CustID" ColumnName="CustID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="TerritoryName" ColumnName="TerritoryName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1643,6 +1649,8 @@
                 <ScalarProperty Name="Channel" ColumnName="Channel" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="TerritoryName" ColumnName="TerritoryName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

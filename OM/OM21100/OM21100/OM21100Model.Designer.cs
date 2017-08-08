@@ -9749,6 +9749,54 @@ namespace OM21100
         private global::System.String _BranchID;
         partial void OnBranchIDChanging(global::System.String value);
         partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TerritoryName
+        {
+            get
+            {
+                return _TerritoryName;
+            }
+            set
+            {
+                OnTerritoryNameChanging(value);
+                ReportPropertyChanging("TerritoryName");
+                _TerritoryName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TerritoryName");
+                OnTerritoryNameChanged();
+            }
+        }
+        private global::System.String _TerritoryName;
+        partial void OnTerritoryNameChanging(global::System.String value);
+        partial void OnTerritoryNameChanged();
 
         #endregion
 
@@ -11710,6 +11758,54 @@ namespace OM21100
         private global::System.String _CustName;
         partial void OnCustNameChanging(global::System.String value);
         partial void OnCustNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TerritoryName
+        {
+            get
+            {
+                return _TerritoryName;
+            }
+            set
+            {
+                OnTerritoryNameChanging(value);
+                ReportPropertyChanging("TerritoryName");
+                _TerritoryName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TerritoryName");
+                OnTerritoryNameChanged();
+            }
+        }
+        private global::System.String _TerritoryName;
+        partial void OnTerritoryNameChanging(global::System.String value);
+        partial void OnTerritoryNameChanged();
 
         #endregion
 

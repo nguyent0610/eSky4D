@@ -2370,7 +2370,8 @@ var DiscDefintion = {
                                             DiscID: discId,
                                             DiscSeq: discSeq,
                                             CustID: allNodes[i].data.RecID,
-                                            BranchID: allNodes[i].data.BranchID
+                                            BranchID: allNodes[i].data.BranchID,
+                                            TerritoryName: allNodes[i].data.Territory
                                         }));
                                         idx++;
                                     }
@@ -2387,7 +2388,8 @@ var DiscDefintion = {
                                     DiscID: discId,
                                     DiscSeq: discSeq,
                                     CustID: '',
-                                    BranchID: ''
+                                    BranchID: '',
+                                    TerritoryName: ''
                                 }));
                             }
                             //App.frmMain.body.unmask();
@@ -2433,7 +2435,8 @@ var DiscDefintion = {
                                             DiscID: discId,
                                             DiscSeq: discSeq,
                                             CustID: node.attributes.RecID,
-                                            BranchID: node.attributes.BranchID
+                                            BranchID: node.attributes.BranchID,
+                                            TerritoryName: node.attributes.Territory
                                         }));
                                     }
                                 }
@@ -2449,7 +2452,8 @@ var DiscDefintion = {
                                     DiscID: discId,
                                     DiscSeq: discSeq,
                                     CustID: '',
-                                    BranchID: ''
+                                    BranchID: '',
+                                    TerritoryName: ''
                                 }));
                             }
                         }

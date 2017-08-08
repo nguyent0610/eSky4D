@@ -309,6 +309,7 @@ namespace OM21100.Controllers
             tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
             tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
             tree.Fields.Add(new ModelField("BranchID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Territory", ModelFieldType.String));
 
             tree.Border = false;
             tree.RootVisible = true;
@@ -356,6 +357,7 @@ namespace OM21100.Controllers
                          nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = cust.CustID, Mode = ParameterMode.Value });
                          nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "CustID", Mode = ParameterMode.Value });
                          nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "BranchID", Value = cust.BranchID, Mode = ParameterMode.Value });
+                         nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "Territory", Value = cust.TerritoryName, Mode = ParameterMode.Value });
                          //nodeCompany.Cls = "tree-node-parent";
                          nodeCust.Text = cust.CustName;
                          nodeCust.Checked = false;
