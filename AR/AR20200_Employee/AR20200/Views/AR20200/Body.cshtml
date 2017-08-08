@@ -170,6 +170,10 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                     .LoadData()
+                    , HQ.DateField().ID("dtpBeginDate").HQLangCode("StartDate").DataIndex("BeginDate").MarginSpec("5 0 0 0").AllowBlank(false).Value(DateTime.Now).Width(350)
+                     .Listeners(lst=>lst.Change.Fn = "dtpBeginDate_Change")
+                    , HQ.DateField().ID("dtpEndDate").HQLangCode("EndDate").DataIndex("EndDate").MarginSpec("5 0 0 0").AllowBlank(false).Value(DateTime.Now).Width(350)
+                      .Listeners(lst=>lst.Change.Fn = "dtpEndDate_Change")
                 )
 
                 // Second Column

@@ -170,6 +170,9 @@ var stoLoad = function (sto) {
         record = sto.getAt(0);
         record.set('Active', true);
         record.set('Status', _beginStatus);
+        record.set('Country', 'VN');
+        record.set('BeginDate', HQ.bussinessDate);
+        record.set('EndDate', HQ.bussinessDate);
         HQ.isNew = true;
         App.cboSlsperid.forceSelection = false;
         if (_Flag == "1")
@@ -361,6 +364,17 @@ var cboSlsperid_TriggerClick = function (sender, value) {
     App.cboSlsperid.clearValue();
 };
 
+var dtpBeginDate_Change = function () {
+    App.dtpEndDate.setMinValue(App.dtpBeginDate.getValue());
+    if (App.dtpEndDate.getValue() < App.dtpBeginDate.getValue()) {
+        App.dtpEndDate.setValue(App.dtpBeginDate.getValue());
+    }
+};
+var dtpEndDate_Change = function () {
+    if (App.dtpEndDate.getValue() < App.dtpBeginDate.getValue()) {
+        App.dtpEndDate.setValue(App.dtpBeginDate.getValue());
+    }
+};
 /////////////////////////////////
 //Image
 var btnClearImage_click = function (sender, e) {

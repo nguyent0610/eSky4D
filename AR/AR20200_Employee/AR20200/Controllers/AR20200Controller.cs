@@ -509,6 +509,8 @@ namespace AR20200.Controllers
             slsper.PPCStorePicReq = inputSlsper.PPCStorePicReq;
             slsper.VendID = inputSlsper.VendID;
             slsper.PPCAdmin = inputSlsper.PPCAdmin;
+            slsper.BeginDate = inputSlsper.BeginDate;
+            slsper.EndDate = inputSlsper.EndDate;
 
             slsper.LUpd_DateTime = DateTime.Now;
             slsper.LUpd_Prog = _screenNbr;

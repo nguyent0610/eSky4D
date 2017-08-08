@@ -132,22 +132,6 @@ namespace AR20200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_Salesperson> AR_Salesperson
-        {
-            get
-            {
-                if ((_AR_Salesperson == null))
-                {
-                    _AR_Salesperson = base.CreateObjectSet<AR_Salesperson>("AR_Salesperson");
-                }
-                return _AR_Salesperson;
-            }
-        }
-        private ObjectSet<AR_Salesperson> _AR_Salesperson;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<AR_SalespersonCpnyAddr> AR_SalespersonCpnyAddr
         {
             get
@@ -160,22 +144,6 @@ namespace AR20200
             }
         }
         private ObjectSet<AR_SalespersonCpnyAddr> _AR_SalespersonCpnyAddr;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<AR_Customer> AR_Customer
-        {
-            get
-            {
-                if ((_AR_Customer == null))
-                {
-                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
-                }
-                return _AR_Customer;
-            }
-        }
-        private ObjectSet<AR_Customer> _AR_Customer;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -736,6 +704,38 @@ namespace AR20200
             }
         }
         private ObjectSet<AR_Setup> _AR_Setup;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_Salesperson> AR_Salesperson
+        {
+            get
+            {
+                if ((_AR_Salesperson == null))
+                {
+                    _AR_Salesperson = base.CreateObjectSet<AR_Salesperson>("AR_Salesperson");
+                }
+                return _AR_Salesperson;
+            }
+        }
+        private ObjectSet<AR_Salesperson> _AR_Salesperson;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_Customer> AR_Customer
+        {
+            get
+            {
+                if ((_AR_Customer == null))
+                {
+                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
+                }
+                return _AR_Customer;
+            }
+        }
+        private ObjectSet<AR_Customer> _AR_Customer;
 
         #endregion
 
@@ -774,27 +774,11 @@ namespace AR20200
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Salesperson EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Salesperson(AR_Salesperson aR_Salesperson)
-        {
-            base.AddObject("AR_Salesperson", aR_Salesperson);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the AR_SalespersonCpnyAddr EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToAR_SalespersonCpnyAddr(AR_SalespersonCpnyAddr aR_SalespersonCpnyAddr)
         {
             base.AddObject("AR_SalespersonCpnyAddr", aR_SalespersonCpnyAddr);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Customer(AR_Customer aR_Customer)
-        {
-            base.AddObject("AR_Customer", aR_Customer);
         }
     
         /// <summary>
@@ -1075,6 +1059,22 @@ namespace AR20200
         public void AddToAR_Setup(AR_Setup aR_Setup)
         {
             base.AddObject("AR_Setup", aR_Setup);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Salesperson EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Salesperson(AR_Salesperson aR_Salesperson)
+        {
+            base.AddObject("AR_Salesperson", aR_Salesperson);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Customer(AR_Customer aR_Customer)
+        {
+            base.AddObject("AR_Customer", aR_Customer);
         }
 
         #endregion
@@ -3112,6 +3112,54 @@ namespace AR20200
         private global::System.String _RefCustID;
         partial void OnRefCustIDChanging(global::System.String value);
         partial void OnRefCustIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ProfilePic
+        {
+            get
+            {
+                return _ProfilePic;
+            }
+            set
+            {
+                OnProfilePicChanging(value);
+                ReportPropertyChanging("ProfilePic");
+                _ProfilePic = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ProfilePic");
+                OnProfilePicChanged();
+            }
+        }
+        private global::System.String _ProfilePic;
+        partial void OnProfilePicChanging(global::System.String value);
+        partial void OnProfilePicChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SubTerritory
+        {
+            get
+            {
+                return _SubTerritory;
+            }
+            set
+            {
+                OnSubTerritoryChanging(value);
+                ReportPropertyChanging("SubTerritory");
+                _SubTerritory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SubTerritory");
+                OnSubTerritoryChanged();
+            }
+        }
+        private global::System.String _SubTerritory;
+        partial void OnSubTerritoryChanging(global::System.String value);
+        partial void OnSubTerritoryChanged();
 
         #endregion
 
@@ -5768,6 +5816,78 @@ namespace AR20200
         private global::System.String _Salut;
         partial void OnSalutChanging(global::System.String value);
         partial void OnSalutChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ProfilePic
+        {
+            get
+            {
+                return _ProfilePic;
+            }
+            set
+            {
+                OnProfilePicChanging(value);
+                ReportPropertyChanging("ProfilePic");
+                _ProfilePic = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ProfilePic");
+                OnProfilePicChanged();
+            }
+        }
+        private global::System.String _ProfilePic;
+        partial void OnProfilePicChanging(global::System.String value);
+        partial void OnProfilePicChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SubTerritory
+        {
+            get
+            {
+                return _SubTerritory;
+            }
+            set
+            {
+                OnSubTerritoryChanging(value);
+                ReportPropertyChanging("SubTerritory");
+                _SubTerritory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SubTerritory");
+                OnSubTerritoryChanged();
+            }
+        }
+        private global::System.String _SubTerritory;
+        partial void OnSubTerritoryChanging(global::System.String value);
+        partial void OnSubTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CodeHT
+        {
+            get
+            {
+                return _CodeHT;
+            }
+            set
+            {
+                OnCodeHTChanging(value);
+                ReportPropertyChanging("CodeHT");
+                _CodeHT = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CodeHT");
+                OnCodeHTChanged();
+            }
+        }
+        private global::System.String _CodeHT;
+        partial void OnCodeHTChanging(global::System.String value);
+        partial void OnCodeHTChanged();
 
         #endregion
 
@@ -7995,6 +8115,54 @@ namespace AR20200
         private global::System.String _Channel;
         partial void OnChannelChanging(global::System.String value);
         partial void OnChannelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> BeginDate
+        {
+            get
+            {
+                return _BeginDate;
+            }
+            set
+            {
+                OnBeginDateChanging(value);
+                ReportPropertyChanging("BeginDate");
+                _BeginDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("BeginDate");
+                OnBeginDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _BeginDate;
+        partial void OnBeginDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnBeginDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> EndDate
+        {
+            get
+            {
+                return _EndDate;
+            }
+            set
+            {
+                OnEndDateChanging(value);
+                ReportPropertyChanging("EndDate");
+                _EndDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EndDate");
+                OnEndDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _EndDate;
+        partial void OnEndDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnEndDateChanged();
 
         #endregion
 
@@ -8746,6 +8914,102 @@ namespace AR20200
         private global::System.String _ID;
         partial void OnIDChanging(global::System.String value);
         partial void OnIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Network
+        {
+            get
+            {
+                return _Network;
+            }
+            set
+            {
+                OnNetworkChanging(value);
+                ReportPropertyChanging("Network");
+                _Network = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Network");
+                OnNetworkChanged();
+            }
+        }
+        private global::System.String _Network;
+        partial void OnNetworkChanging(global::System.String value);
+        partial void OnNetworkChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> Battery
+        {
+            get
+            {
+                return _Battery;
+            }
+            set
+            {
+                OnBatteryChanging(value);
+                ReportPropertyChanging("Battery");
+                _Battery = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Battery");
+                OnBatteryChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _Battery;
+        partial void OnBatteryChanging(Nullable<global::System.Int32> value);
+        partial void OnBatteryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Note
+        {
+            get
+            {
+                return _Note;
+            }
+            set
+            {
+                OnNoteChanging(value);
+                ReportPropertyChanging("Note");
+                _Note = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Note");
+                OnNoteChanged();
+            }
+        }
+        private global::System.String _Note;
+        partial void OnNoteChanging(global::System.String value);
+        partial void OnNoteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Accuracy
+        {
+            get
+            {
+                return _Accuracy;
+            }
+            set
+            {
+                OnAccuracyChanging(value);
+                ReportPropertyChanging("Accuracy");
+                _Accuracy = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Accuracy");
+                OnAccuracyChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Accuracy;
+        partial void OnAccuracyChanging(Nullable<global::System.Double> value);
+        partial void OnAccuracyChanged();
 
         #endregion
 
@@ -15444,6 +15708,30 @@ namespace AR20200
         private global::System.String _DiscBreakLineRef;
         partial void OnDiscBreakLineRefChanging(global::System.String value);
         partial void OnDiscBreakLineRefChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String RefLineRef
+        {
+            get
+            {
+                return _RefLineRef;
+            }
+            set
+            {
+                OnRefLineRefChanging(value);
+                ReportPropertyChanging("RefLineRef");
+                _RefLineRef = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("RefLineRef");
+                OnRefLineRefChanged();
+            }
+        }
+        private global::System.String _RefLineRef;
+        partial void OnRefLineRefChanging(global::System.String value);
+        partial void OnRefLineRefChanged();
 
         #endregion
 

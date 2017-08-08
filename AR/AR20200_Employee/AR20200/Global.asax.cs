@@ -29,14 +29,14 @@ namespace AR20200
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";
-            Current.DBSys = "APC_Test_eSky4DSys";
+            Current.Server = "TRUONGSAD";
+            Current.DBSys = "ND_Test_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["AR20200"] = acc;
-            Session["DBApp"] = Current.DBApp = "APC_Test_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "ND_Test_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "XUANHUONG";
             Session["Language"] = Current.Language = "vi";
