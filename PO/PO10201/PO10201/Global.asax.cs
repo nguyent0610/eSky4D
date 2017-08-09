@@ -28,10 +28,12 @@ namespace PO10201
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = ConfigurationManager.AppSettings["Server"].ToString(); //"EARTHSVR\\SQL2012";
+            Current.Server = "HOANGSAD";//ConfigurationManager.AppSettings["Server"].ToString(); //"EARTHSVR\\SQL2012";
             Current.DBSys = "eSky4DSys";// "eBiz4DWebSys";// ConfigurationManager.AppSettings["DBSys"].ToString();
             Current.Theme = "Default";
+            Current.FormatDate = "MM-dd-yyyy";
             AccessRight acc = new AccessRight();
+
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;

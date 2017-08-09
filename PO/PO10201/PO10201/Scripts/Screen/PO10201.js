@@ -37,6 +37,7 @@ var loadDataHeader = function (sto) {
         var record = sto.getAt(0);
         //gan du lieu mac dinh ban dau
         //record.data.ShiptoType = "D";
+        record.data.VendID = App.cboVendID.getStore().data.items[0].data.VendID;
         record.data.Status = "H";
         record.data.RcptType = "X";
         record.data.RcptDate = HQ.bussinessDate;
