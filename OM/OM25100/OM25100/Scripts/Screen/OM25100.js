@@ -1346,7 +1346,10 @@ var cboZone_Change = function (sender, newValue, oldValue) {
         }
     }
 };
-
+var cboTerritory_Expand = function (sender, newValue, oldValue) {
+    App.cboTerritory.setValue('');
+    App.cboTerritory.store.reload();
+};
 var cboBranchIDAll_Change = function (sender, value) {
     if (sender.valueModels && sender.valueModels[0]) {
         _branchID = value;
