@@ -56,7 +56,15 @@
             .Icon(Icon.BookAdd)
             .Listeners(p=>{
                 p.Change.Fn = "btnImport_Click";              
-            })},"Print",true,""))
+            })
+             , X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            }) 
+        },"Print",true,""))
         .FieldDefaults(p =>{
             p.LabelAlign = LabelAlign.Right;
             p.LabelWidth = 100;
@@ -367,6 +375,27 @@
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true")
 
+                         , X.Column().DataIndex("Territory").Sortable(false)
+                        .Width(150).Text(Util.GetLang("Territory")).Renderer("renderTerritory")
+                        .Editor(
+                            HQ.Combo().ID("cboTerritory").HQProcedure("OM20300_pcTerritory")
+                            .HQColumnShow("Territory,Descr")
+                            .HQHeightWidth(300,400)
+                            .ForceSelection(true)                           
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw),
+                                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw),
+                                new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                            })                            
+                            .ValueField("Territory").DisplayField("Descr")                            
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "cboTerritory_Change";
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                            .LoadData()
+                        )
                         , X.Column().DataIndex("CpnyID").Sortable(false)
                         .Width(150).Text(Util.GetLang("CpnyID"))
                         .Editor(
@@ -377,13 +406,15 @@
                             .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw),
                                 new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
-                                new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                new StoreParameter("@Territory", "App.cboTerritory.getValue()", ParameterMode.Raw),
                             })                            
                             .ValueField("BranchID").DisplayField("BranchID")                            
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst =>
                             {
                                 lst.Change.Fn = "cboCompany_Change";
+                                lst.Expand.Fn = "cboCompany_Expand";
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
                             .LoadData()
@@ -524,4 +555,27 @@
             )
         )
     )
+)
+@(X.Window()
+    .ID("winDetailFileNameExport")
+    .Hidden(true).Resizable(true).Maximizable(true)
+    .Width(200).Height(150)
+    .Layout(LayoutType.VBox)
+    .AutoScroll(true).Closable(true)
+    .Buttons(
+        X.Button().ID("btnFileNameCancel").Text(Util.GetLang("Cancel"))
+        .Listeners(p => p.Click.Fn = "btnFileNameCancel_Click")
+    )
+    .Items(
+      X.Container().Layout(LayoutType.HBox)
+      .Items(
+        HQ.Checkbox().ID("chkAmount").HQLangCode("Amount").MarginSpec("5 20 5 5")
+        ,HQ.Checkbox().ID("chkQuantity").HQLangCode("Quantity").MarginSpec("5 0 5 5")      
+          )
+     ,X.Container().Layout(LayoutType.HBox)
+     .Items(
+        X.Button().ID("btnFileNameExport").Text(Util.GetLang("Export")).Icon(Icon.ArrowTurnRight).MarginSpec("5 0 0 50").Width(100)
+        .Listeners(p => p.Click.Fn = "btnFileNameExport_Click")
+        )
+    )    
 )

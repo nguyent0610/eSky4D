@@ -308,7 +308,14 @@ var txtQtyAmtTotal_Change = function () {
 var txtQtyAmtAlloc_Change = function () {
     updateQty();
 };
-
+var cboTerritory_Change = function (item, newValue, oldValue) {
+    if (App.cboTerritory.valueModels && !App.cboTerritory.loading) {
+        App.cboCompany.store.reload();
+    }
+};
+var cboCompany_Expand = function () {
+    App.cboCompany.store.reload();
+};
 var cboCompany_Change = function (item, newValue, oldValue) {
     if (App.smlBudgetCompany.getSelection().length > 0) {
         var r = '';
@@ -436,7 +443,10 @@ var grdBudgetCompany_BeforeEdit = function (item, e) {
     if (e.field == 'CpnyID' && !Ext.isEmpty(e.record.data.CpnyID)) {
         return false;
     }
-    if (e.field != 'CpnyID' && Ext.isEmpty(e.record.data.CpnyID)) {
+    if (e.field == 'Territory' && !Ext.isEmpty(e.record.data.CpnyID)) {
+        return false;
+    }
+    if (e.field != 'CpnyID' && e.field != 'Territory' && Ext.isEmpty(e.record.data.CpnyID)) {
         return false;
     }
 };
@@ -826,7 +836,8 @@ function deleteHeader(item) {
 var defaultOnNew = function () {
     var record = recentRecord = Ext.create('App.mdlBudget');
     record.data.AllocType = '0';
-    record.data.ApplyTo = 'F';
+    //record.data.ApplyTo = 'F';
+    record.data.ApplyTo = 'A';
     record.data.Active = true;
     record.data.Status = HQ.beginStatus;
     record.data.RvsdDate = HQ.bussinessDate;
@@ -1193,4 +1204,53 @@ var btnImport_Click = function (c, e) {
             App.btnImport.reset();
         }
     }
+};
+var btnExport_Click = function () {
+    App.winDetailFileNameExport.show();
+};
+var btnFileNameExport_Click = function () {
+    if (App.chkAmount.getValue()) {
+        App.frmMain.submit({
+            url: 'OM20300/ExportAmount',
+            type: 'POST',
+            timeout: 1000000,
+            clientValidation: false,
+            params: {
+
+            },
+            success: function (msg, data) {
+                alert('sus');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+    if (App.chkQuantity.getValue()) {
+        App.frmMain.submit({
+            url: 'OM20300/ExportQuantity',
+            type: 'POST',
+            timeout: 1000000,
+            clientValidation: false,
+            params: {
+
+            },
+            success: function (msg, data) {
+                alert('sus');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+var btnFileNameCancel_Click = function () {
+    App.winDetailFileNameExport.hide();
+};
+var renderTerritory = function (value, metaData, record, row, col, store, gridView) {
+    var r = HQ.store.findRecord(App.cboTerritory.store, ['Territory'], [record.data.Territory])
+    if (Ext.isEmpty(r)) {
+        return value;
+    }
+    return r.data.Descr;
 };

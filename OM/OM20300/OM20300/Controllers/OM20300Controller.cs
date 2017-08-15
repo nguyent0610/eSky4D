@@ -16,6 +16,7 @@ using HQSendMailApprove;
 using Aspose.Cells;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Drawing;
 namespace OM20300.Controllers
 {
     [DirectController]
@@ -40,7 +41,7 @@ namespace OM20300.Controllers
 
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public System.Web.Mvc.PartialViewResult Body(string lang)
         {
                   return PartialView();
@@ -367,7 +368,7 @@ namespace OM20300.Controllers
                 nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "Value", Value = item.Territory, Mode = ParameterMode.Value });
                 nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "Descr", Value = item.Descr, Mode = ParameterMode.Value });
 
-                var lstCpny = _app.OM20300_pcBranch(Current.UserName, Current.CpnyID,Current.LangID).Where(p => p.Territory.ToLower() == item.Territory.ToLower()).ToList();
+                var lstCpny = _app.OM20300_pcBranchID(Current.UserName, Current.CpnyID,Current.LangID).Where(p => p.Territory.ToLower() == item.Territory.ToLower()).ToList();
                 nodeTerritory.Leaf = lstCpny.Count == 0 ? true : false;
                 foreach (var cpny in lstCpny)
                 {
@@ -485,7 +486,7 @@ namespace OM20300.Controllers
                                 {
                                     throw new MessageException(MessageType.Message, "1005", parm: new[] { fileInfo.Name });
                                 }
-                                var _lstcpnyCheck = _app.OM20300_pcBranch(Current.UserName,Current.CpnyID,Current.LangID).ToList();
+                                var _lstcpnyCheck = _app.OM20300_pcBranchID(Current.UserName,Current.CpnyID,Current.LangID).ToList();
                                 List<OM_PPCpny> lstppcpny = new List<OM_PPCpny>();
                                 List<OM_PPBudget> lstppBudget = new List<OM_PPBudget>();
                                 List<OM_PPCpny> lstppcpnyDB = new List<OM_PPCpny>();
@@ -943,6 +944,102 @@ namespace OM20300.Controllers
             }
 
         }
+        #region Export
+        [HttpPost]
+        public ActionResult ExportAmount(FormCollection data)
+        {
+            try
+            {
+                Stream stream = new MemoryStream();
+                Workbook workbook = new Workbook();
+                Worksheet SheetDataAM = workbook.Worksheets[0];
+                SheetDataAM.Name = "AM";
+                workbook.Worksheets.Add();
+                SetCellValueGrid(SheetDataAM.Cells["A1"], Util.GetLang("BUDGET ID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["B1"], Util.GetLang("BRANCH ID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["C1"], Util.GetLang("TOTALEx"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["D1"], Util.GetLang("ALLOCATED"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["E1"], Util.GetLang("DESCRIPTION"), TextAlignmentType.Center, TextAlignmentType.Left);               
+
+                SheetDataAM.Cells.SetColumnWidth(0, 15);
+                SheetDataAM.Cells.SetColumnWidth(1, 15);
+                SheetDataAM.Cells.SetColumnWidth(2, 15);
+                SheetDataAM.Cells.SetColumnWidth(3, 15);
+                SheetDataAM.Cells.SetColumnWidth(4, 20);
+               
+                workbook.Save(stream, SaveFormat.Xlsx);
+                stream.Flush();
+                stream.Position = 0;
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "TemplateImportBudget_Amount_JJVN.xlsx" };
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+        public ActionResult ExportQuantity(FormCollection data)
+        {
+            try
+            {
+                Stream stream = new MemoryStream();
+                Workbook workbook = new Workbook();
+                Worksheet SheetDataAM = workbook.Worksheets[0];
+                SheetDataAM.Name = "QT";
+                workbook.Worksheets.Add();
+                SetCellValueGrid(SheetDataAM.Cells["A1"], Util.GetLang("BUDGET ID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["B1"], Util.GetLang("BRANCH ID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["C1"], Util.GetLang("TOTALEx"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["D1"], Util.GetLang("FREE ITEM ID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["E1"], Util.GetLang("UNITEx"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["F1"], Util.GetLang("ALLOCATED"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetDataAM.Cells["G1"], Util.GetLang("DESCRIPTION"), TextAlignmentType.Center, TextAlignmentType.Left);
+
+                SheetDataAM.Cells.SetColumnWidth(0, 15);
+                SheetDataAM.Cells.SetColumnWidth(1, 15);
+                SheetDataAM.Cells.SetColumnWidth(2, 15);
+                SheetDataAM.Cells.SetColumnWidth(3, 15);
+                SheetDataAM.Cells.SetColumnWidth(4, 15);
+                SheetDataAM.Cells.SetColumnWidth(5, 15);
+                SheetDataAM.Cells.SetColumnWidth(6, 20);
+
+                workbook.Save(stream, SaveFormat.Xlsx);
+                stream.Flush();
+                stream.Position = 0;
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "TemplateImportBudget_Quantity_JJVN.xlsx" };
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+        private void SetCellValueGrid(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
+        {
+            c.PutValue(" " + lang);
+            var style = c.GetStyle();
+            style.Number = 49;
+            style.Font.Name = "Times New Roman";
+            style.HorizontalAlignment = TextAlignmentType.Center;
+            style.VerticalAlignment = TextAlignmentType.Center;
+            style.Font.IsBold = true;
+            style.Font.Size = 11;
+            style.Font.Color = Color.Black;
+            c.SetStyle(style);
+        }
+        #endregion
 
         private void update_OM_PPAlloc(OM_PPAlloc s, OM_PPAlloc t)
         {

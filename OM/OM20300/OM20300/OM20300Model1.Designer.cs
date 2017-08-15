@@ -412,7 +412,8 @@ namespace OM20300
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<OM20300_pcBranch_Result> OM20300_pcBranch(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        /// <param name="territory">No Metadata Documentation available.</param>
+        public ObjectResult<OM20300_pcBranch_Result> OM20300_pcBranch(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String territory)
         {
             ObjectParameter userNameParameter;
             if (userName != null)
@@ -444,7 +445,17 @@ namespace OM20300
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<OM20300_pcBranch_Result>("OM20300_pcBranch", userNameParameter, cpnyIDParameter, langIDParameter);
+            ObjectParameter territoryParameter;
+            if (territory != null)
+            {
+                territoryParameter = new ObjectParameter("Territory", territory);
+            }
+            else
+            {
+                territoryParameter = new ObjectParameter("Territory", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM20300_pcBranch_Result>("OM20300_pcBranch", userNameParameter, cpnyIDParameter, langIDParameter, territoryParameter);
         }
     
         /// <summary>
@@ -516,6 +527,47 @@ namespace OM20300
             }
     
             return base.ExecuteFunction<OM20300_pcUnit_Result>("OM20300_pcUnit", parm1Parameter, parm2Parameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM20300_pcBranchID_Result> OM20300_pcBranchID(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM20300_pcBranchID_Result>("OM20300_pcBranchID", userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -2762,6 +2814,30 @@ namespace OM20300
         private global::System.String _ProType;
         partial void OnProTypeChanging(global::System.String value);
         partial void OnProTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Channel
+        {
+            get
+            {
+                return _Channel;
+            }
+            set
+            {
+                OnChannelChanging(value);
+                ReportPropertyChanging("Channel");
+                _Channel = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Channel");
+                OnChannelChanged();
+            }
+        }
+        private global::System.String _Channel;
+        partial void OnChannelChanging(global::System.String value);
+        partial void OnChannelChanged();
 
         #endregion
 
@@ -5924,6 +6000,131 @@ namespace OM20300
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM20300Model", Name="OM20300_pcBranchID_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM20300_pcBranchID_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM20300_pcBranchID_Result object.
+        /// </summary>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static OM20300_pcBranchID_Result CreateOM20300_pcBranchID_Result(global::System.String branchID)
+        {
+            OM20300_pcBranchID_Result oM20300_pcBranchID_Result = new OM20300_pcBranchID_Result();
+            oM20300_pcBranchID_Result.BranchID = branchID;
+            return oM20300_pcBranchID_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BranchName
+        {
+            get
+            {
+                return _BranchName;
+            }
+            set
+            {
+                OnBranchNameChanging(value);
+                ReportPropertyChanging("BranchName");
+                _BranchName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchName");
+                OnBranchNameChanged();
+            }
+        }
+        private global::System.String _BranchName;
+        partial void OnBranchNameChanging(global::System.String value);
+        partial void OnBranchNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Addr
+        {
+            get
+            {
+                return _Addr;
+            }
+            set
+            {
+                OnAddrChanging(value);
+                ReportPropertyChanging("Addr");
+                _Addr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Addr");
+                OnAddrChanged();
+            }
+        }
+        private global::System.String _Addr;
+        partial void OnAddrChanging(global::System.String value);
+        partial void OnAddrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="OM20300Model", Name="OM20300_pcBudget_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -7011,6 +7212,30 @@ namespace OM20300
         private global::System.String _tstamp;
         partial void OntstampChanging(global::System.String value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
 
         #endregion
 
