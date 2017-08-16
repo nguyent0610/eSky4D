@@ -1,0 +1,84 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM27400;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM27400";
+    var acc = Session["OM27400"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình OM27400.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language" + Current.LangID + ".js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/OM27400.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.ShowTabCondition = Number('@ViewBag.ShowTabCondition');
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');       
+    </script>  
+    <title>@ViewBag.Title</title>
+    <style>
+        .x-monthpicker-months {
+            visibility: hidden;
+            width: 1px;
+        }
+        .x-monthpicker {
+            width: 110px;
+        }
+    </style>
+
+</head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
+         
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("stoQuarterNbr")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM_KPIQuarterHeader), "mdlOM_KPIHeader", "QuarterNbr,KPI"))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetMCCodeHeader", "OM27400"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("QuarterNbr", "App.cboQuarterNbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
+                
+            })
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoQuarterNbr_Load";                   
+                }
+            )
+        )
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid --> 
+        <!-- Gọi hàm Body trong OM27400Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID });}   
+    </body>
+</html>
