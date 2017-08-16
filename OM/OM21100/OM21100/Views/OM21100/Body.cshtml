@@ -196,7 +196,11 @@
                                             new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                         })
                                         .LoadData()
-                                        .Listeners(ls=>ls.Change.Fn="DiscDefintion.Event.cboProAplForItem_change")
+                                            .Listeners(ls => 
+                                            {
+                                                ls.Change.Fn = "DiscDefintion.Event.cboProAplForItem_change";
+                                                ls.BeforeShow.Fn = "DiscDefintion.Event.cboProAplForItem_beforeShow";
+                                            })
 
                                         , HQ.DateField().ID("dteStartDatePO")
                                         .MarginSpec("5 5 0 5")

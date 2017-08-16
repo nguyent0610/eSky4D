@@ -5,6 +5,7 @@ var _isNewSeq = false;
 var _discLoad = "";
 var _seqLoad = "";
 var _selBranchID = '';
+var _selTerritory = '';
 var Main = {
 
     Process: {
@@ -772,10 +773,11 @@ var Main = {
                 if (e.store.storeId == 'stoDiscCust') {
                     e.record.set('BranchID', _selBranchID);
                     if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
-                        e.record.set('BranchID', '');
+                        e.record.set('BranchID', '');                        
                         HQ.message.show(1112, e.value);
                         return false;
                     }
+                    e.record.set('TerritoryName', _selTerritory);
                 } else {
                     if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
                         HQ.message.show(1112, e.value);
@@ -1559,6 +1561,19 @@ var DiscDefintion = {
         cboProAplForItem_change: function (cbo, newValue, oldValue, eOpts) {
             var discSeqRec = App.frmDiscSeqInfo.getRecord();
             if (!discSeqRec.data.tstamp) {
+                //var obj = HQ.store.findRecord(App.cboDiscClass.store, ['Code'], [App.cboDiscClass.getValue()]);
+                //if (obj) {
+                //    if (cbo.value == "M"
+                //    && obj.data.ProAplForItem == false) {
+
+                //        cbo.suspendEvents(false);
+                //        cbo.setValue("A");
+                //        cbo.resumeEvents();
+                //    }
+                //    else {
+
+                //    }
+                //}
                 if (cbo.value == "M"
                     && App.cboDiscClass.value
                     && App.cboDiscClass.value.substring(1) != "I") {
@@ -1589,8 +1604,10 @@ var DiscDefintion = {
 
         cboGCustID_Change: function (item, newValue, oldValue, eOpts) {
             _selBranchID = '';
+            _selTerritory = '';
             if (item.valueModels != undefined && item.valueModels[0]) {
                 _selBranchID = item.valueModels[0].data.BranchID;
+                _selTerritory = item.valueModels[0].data.TerritoryName;
             }
         },
 
