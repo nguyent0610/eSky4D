@@ -1450,11 +1450,25 @@ var DiscDefintion = {
                 DiscDefintion.Process.enableATabInList([]);
             }
 
-            if (App.cboProAplForItem.value == "M"
-                    && cbo.value
-                    && cbo.value.substring(1) != "I") {
-                App.cboProAplForItem.setValue("A");
+            //if (App.cboProAplForItem.value == "M"
+            //        && cbo.value
+            //        && cbo.value.substring(1) != "I") {
+            //    App.cboProAplForItem.setValue("A");
+            //}
+            if (cbo.value != null) {
+                var recordcboDiscClass = App.cboDiscClassOM21100_pcDiscClass.findRecord('Code', cbo.value);
+                if (recordcboDiscClass != null) {
+                    if (!recordcboDiscClass.data.ProAplForItem) {
+                        App.cboProAplForItem.setValue("A");
+                        App.cboProAplForItem.setReadOnly(true);
+                    }
+                    else {
+                        App.cboProAplForItem.setReadOnly(false);
+                    }
+                }
             }
+            else
+                App.cboProAplForItem.setReadOnly(false);
             if (isbb) {
                 App.grdDiscBreak.columns[2].setText(HQ.common.getLang('NoBundle'));
             } else {
@@ -1574,17 +1588,18 @@ var DiscDefintion = {
 
                 //    }
                 //}
-                if (cbo.value == "M"
-                    && App.cboDiscClass.value
-                    && App.cboDiscClass.value.substring(1) != "I") {
+              
+                //if (cbo.value == "M"
+                //    && App.cboDiscClass.value
+                //    && App.cboDiscClass.value.substring(1) != "I") {
 
-                    cbo.suspendEvents(false);
-                    cbo.setValue("A");
-                    cbo.resumeEvents();
-                }
-                else {
+                //    cbo.suspendEvents(false);
+                //    cbo.setValue("A");
+                //    cbo.resumeEvents();
+                //}
+                //else {
                     
-                }
+                //}
 
                 if (cbo.value == "A") {
                     App.chkAutoFreeItem.setDisabled(true);
