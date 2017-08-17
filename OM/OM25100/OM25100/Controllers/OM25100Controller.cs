@@ -1704,6 +1704,7 @@ namespace OM25100.Controllers
                                             recordItem.SlsperId = SlsperID;
                                             //recordItem.SlsperName = SlsperName;
                                             recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.Position = lstSlsper.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperId == SlsperID).Position;
 
                                             recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
                                             recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
@@ -1748,6 +1749,7 @@ namespace OM25100.Controllers
                                            // recordItem.SlsperName = SlsperName;
                                             recordItem.InvtID = InvtID;
                                             recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.Position = lstSlsper.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperId == SlsperID).Position;
 
                                             recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
                                             recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
@@ -1792,6 +1794,7 @@ namespace OM25100.Controllers
                                            // recordItem.SlsperName = SlsperName;
                                             recordItem.ClassID = ClassID;
                                             recordItem.Target = Convert.ToDouble(Target);
+                                            recordItem.Position = lstSlsper.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperId == SlsperID).Position;
 
                                             recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
                                             recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
