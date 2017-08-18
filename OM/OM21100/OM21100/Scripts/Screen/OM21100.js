@@ -1455,20 +1455,21 @@ var DiscDefintion = {
             //        && cbo.value.substring(1) != "I") {
             //    App.cboProAplForItem.setValue("A");
             //}
-            if (cbo.value != null) {
-                var recordcboDiscClass = App.cboDiscClassOM21100_pcDiscClass.findRecord('Code', cbo.value);
-                if (recordcboDiscClass != null) {
-                    if (!recordcboDiscClass.data.ProAplForItem) {
-                        App.cboProAplForItem.setValue("A");
-                        App.cboProAplForItem.setReadOnly(true);
-                    }
-                    else {
-                        App.cboProAplForItem.setReadOnly(false);
-                    }
-                }
-            }
-            else
-                App.cboProAplForItem.setReadOnly(false);
+            //if (cbo.value != null) {
+            //    var recordcboDiscClass = App.cboDiscClassOM21100_pcDiscClass.findRecord('Code', cbo.value);
+            //    if (recordcboDiscClass != null) {
+            //        if (!recordcboDiscClass.data.ProAplForItem) {
+            //            App.cboProAplForItem.setValue("A");
+            //            App.cboProAplForItem.setReadOnly(true);
+            //        }
+            //        else {
+            //            App.cboProAplForItem.setReadOnly(false);
+            //        }
+            //    }
+            //}
+            //else {
+            //    App.cboProAplForItem.setReadOnly(false);
+            //}
             if (isbb) {
                 App.grdDiscBreak.columns[2].setText(HQ.common.getLang('NoBundle'));
             } else {
@@ -1574,20 +1575,29 @@ var DiscDefintion = {
 
         cboProAplForItem_change: function (cbo, newValue, oldValue, eOpts) {
             var discSeqRec = App.frmDiscSeqInfo.getRecord();
-            if (!discSeqRec.data.tstamp) {
-                //var obj = HQ.store.findRecord(App.cboDiscClass.store, ['Code'], [App.cboDiscClass.getValue()]);
-                //if (obj) {
-                //    if (cbo.value == "M"
-                //    && obj.data.ProAplForItem == false) {
+            //if (discSeqRec.data.tstamp) {
+            //    if (Ext.isEmpty(newValue)) {
+            //        App.cboProAplForItem.suspendEvents(false);
+            //        App.cboProAplForItem.setValue(oldValue);                    
+            //        App.cboProAplForItem.resumeEvents();
+            //        return;
+            //    }                
+            //}
+                var recordcboDiscClass = App.cboDiscClassOM21100_pcDiscClass.findRecord('Code', App.cboDiscClass.value);
+                if (recordcboDiscClass != null) {
+                    if (!recordcboDiscClass.data.ProAplForItem) {
+                        App.cboProAplForItem.suspendEvents(false);
+                        if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
+                            App.cboProAplForItem.setValue("");
+                        } else {
+                            App.cboProAplForItem.setValue("A");
+                        }                        
+                        App.cboProAplForItem.resumeEvents();
+                    }
+                }
+                
+           
 
-                //        cbo.suspendEvents(false);
-                //        cbo.setValue("A");
-                //        cbo.resumeEvents();
-                //    }
-                //    else {
-
-                //    }
-                //}
               
                 //if (cbo.value == "M"
                 //    && App.cboDiscClass.value
@@ -1613,7 +1623,7 @@ var DiscDefintion = {
                     App.chkAutoFreeItem.setDisabled(false);
                     App.chkAutoFreeItem.setValue(false);
                 }
-            }
+            //}
         },
 
 
