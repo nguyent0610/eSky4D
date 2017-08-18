@@ -301,7 +301,7 @@
         </EntityType>
         <ComplexType Name="IN20500_pdHeader_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="BarCode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="BarCode" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="Buyer" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="ClassID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="Color" Nullable="true" MaxLength="20" />
@@ -364,6 +364,7 @@
           <Property Type="String" Name="Brand" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="ProGroup" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="ProType" Nullable="false" MaxLength="30" />
+          <Property Type="Boolean" Name="EditableInfo" Nullable="true" />
         </ComplexType>
         <ComplexType Name="IN20500_pgIN_InvtCpny_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
@@ -602,6 +603,7 @@
                 <ScalarProperty Name="Brand" ColumnName="Brand" />
                 <ScalarProperty Name="ProGroup" ColumnName="ProGroup" />
                 <ScalarProperty Name="ProType" ColumnName="ProType" />
+                <ScalarProperty Name="EditableInfo" ColumnName="EditableInfo" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -689,12 +691,12 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="63" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="85" >
         <EntityTypeShape EntityType="IN20500Model.IN_Inventory" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN20500Model.SI_Hierarchy" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN20500Model.IN_InvtCpny" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="IN20500Model.HO_PendingTasks" Width="1.5" PointX="4.75" PointY="3.75" />
-        <EntityTypeShape EntityType="IN20500Model.SI_ApprovalFlowHandle" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN20500Model.HO_PendingTasks" Width="1.5" PointX="2.75" PointY="4.375" />
+        <EntityTypeShape EntityType="IN20500Model.SI_ApprovalFlowHandle" Width="1.5" PointX="4.75" PointY="2.25" />
       </Diagram>
     </Diagrams>
   </Designer>

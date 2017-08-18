@@ -5253,6 +5253,30 @@ namespace IN20500
         private global::System.String _ProType;
         partial void OnProTypeChanging(global::System.String value);
         partial void OnProTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> EditableInfo
+        {
+            get
+            {
+                return _EditableInfo;
+            }
+            set
+            {
+                OnEditableInfoChanging(value);
+                ReportPropertyChanging("EditableInfo");
+                _EditableInfo = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EditableInfo");
+                OnEditableInfoChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _EditableInfo;
+        partial void OnEditableInfoChanging(Nullable<global::System.Boolean> value);
+        partial void OnEditableInfoChanged();
 
         #endregion
 

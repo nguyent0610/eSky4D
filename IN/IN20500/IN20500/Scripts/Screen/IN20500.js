@@ -264,19 +264,11 @@ var stoLoad = function (sto) {
         App.imgPPCStoreMediaReq.setImageUrl("");
     }
     App.stoCpny.reload();
-
-    //if (record.data.ApproveStatus == 'H') {
-        HQ.common.lockItem(App.frmMain, false);
-        App.fupPPCStorePicReq.setDisabled(false);
-        App.fupPPCStoreMediaReq.setDisabled(false);
-        App.txtDfltLotSerFxdVal.setReadOnly(false);
-    //}
-    //else {
-    //    HQ.common.lockItem(App.frmMain, true);
-    //    App.fupPPCStorePicReq.setDisabled(true);
-    //    App.fupPPCStoreMediaReq.setDisabled(true);
-    //    App.txtDfltLotSerFxdVal.setReadOnly(true);
-    //}
+    var isLock = false;
+    HQ.common.lockItem(App.frmMain, isLock);
+    App.fupPPCStorePicReq.setDisabled(isLock);
+    App.fupPPCStoreMediaReq.setDisabled(isLock);
+    App.txtDfltLotSerFxdVal.setReadOnly(isLock);
 
     if (!HQ.isInsert && HQ.isNew) {
         App.cboInvtID.forceSelection = true;
@@ -287,10 +279,12 @@ var stoLoad = function (sto) {
         HQ.common.lockItem(App.frmMain, true);
         App.txtDfltLotSerFxdVal.setReadOnly(true);
     }
+    setReadOnly(record.data.EditableInfo);
   //  isnewclick = false;
     if (!HQ.isNew && !Ext.isEmpty(App.cboInvtID.getValue()))
         searchNode();
 };
+
 
 var checkLotSerial = function (type) {
     //App.txtDfltLotSerFxdVal.setReadOnly(false);
@@ -303,6 +297,37 @@ var checkLotSerial = function (type) {
         App.txtDfltLotSerFxdLen.setReadOnly(false);
     }
 };
+
+var setReadOnly = function (isReadOnly) {
+    App.cboClassID.setReadOnly(isReadOnly);
+    App.cboStkUnit.setReadOnly(isReadOnly);
+    App.cboDfltPOUnit.setReadOnly(isReadOnly);
+    App.cboDfltSOUnit.setReadOnly(isReadOnly);
+
+    App.cboLotSerTrack.setReadOnly(isReadOnly);
+    App.cboValMthd.setReadOnly(isReadOnly);
+    HQ.common.lockItem(App.pnlLotSerial, isReadOnly);
+
+    //App.cboDfltLotSerAssign.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    //App.cboClassID.setReadOnly(isReadOnly);
+    if (isReadOnly) {
+        App.menuClickbtnDelete.disable();
+    } else {
+        App.menuClickbtnDelete.enable();
+    }
+}
 
 /////////////////////////////// GIRD AR_CustDisplayMethod /////////////////////////////////
 var stoCpny_Load = function (sto) {
@@ -932,19 +957,19 @@ var ReloadTree = function (type, valueInvtID) {
                     }
                     if (!isnewclick) {
                         App.cboInvtID.setValue(valueInvtID);
-                        App.stoIN_Inventory.reload();
+                        //App.stoIN_Inventory.reload();
                     }
                     else isnewclick = true;
                         //App.cboInvtID.setValue(InvtID);
                        
-                   
+                    App.stoIN_Inventory.reload();
                 }
                 else if (type =='delete')
                 {
                     InvtID = '';
                     App.cboInvtID.getStore().reload();
                 }
-                if (_firstExpand) {
+                if (_firstExpand || type == 'delete') {
                     App.frmMain.mask();
                     App.treeInvt.getRootNode().expand();
                     App.frmMain.unmask();
