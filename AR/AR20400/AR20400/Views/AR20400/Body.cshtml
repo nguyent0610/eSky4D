@@ -1467,6 +1467,112 @@
                 {
                     lss.Render.Handler = "HQ.common.control_render(this,'grdAR_CustDisplayMethod')";
                 })
+                , X.Panel().ID("pnlAR_CustomerChild")     //////////////Tab Hinh Thuc Trung Bay //////////////
+                .Title(Util.GetLang("AR_CustomerChild"))
+                .Layout(LayoutType.Border)
+                .CloseAction(CloseAction.Hide)
+                .Items(
+                    X.GridPanel()
+                    .Scroll(ScrollMode.Both)
+                    .View(X.GridView().TrackOver(false))
+                    .ID("grdAR_CustomerChild")
+                    //.SelectionMemory(false)
+                    .Region(Region.Center).Flex(1)
+                    .Store(
+                        X.Store()
+                        .ID("stoAR_CustomerChild").AutoLoad(false)
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(AR20400_pgAR_CustomerChild_Result), "mdlAR20400_pgAR_CustomerChild_Result", ""))
+                        .Parameters(ps =>
+                        {
+                            ps.Add(new StoreParameter("CustID", "App.cboCustId.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                        })
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetAR_CustomerChild")))
+                        .Listeners(l =>
+                        {
+                            l.Load.Fn = "stoAR_CustomerChild_Load";
+                            l.Update.Fn = "frmChange";
+                        })
+                    )
+                    .SortableColumns(false)
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true;")
+                        //Colum thiet ke o day
+                        , X.Column().Text(Util.GetLang("CustChildID")).DataIndex("CustChildID").Width(150)
+                            .Editor(
+                                HQ.Combo().ID("cboCustChildID").Name("cboCustChildID").HQAutoLoad(false)
+                                    .HQDBSys(false).HQProcedure("AR20400_pcCustomer").HQHeightWidth(400, 300)
+                                    .HQColumnShow("CustId,CustName,Addr1,Addr2").DisplayField("CustId").ValueField("CustId")
+                                    .ForceSelection(true).HQisPaging(true).PageSize(20)
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    .HQParam(new StoreParameterCollection() 
+                                    {
+                                        new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                                    })
+                                    .LoadData()
+                            )
+
+                        , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(200)
+                            //.Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
+
+                        , X.CommandColumn().Width(150)
+                        .Commands(
+                            X.GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                        )
+                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                        .Listeners(l => l.Command.Handler = "grdAR_CustomerChild(record);")
+                    )
+                    .SelectionModel(X.RowSelectionModel().ID("slmAR_CustomerChild").Mode(SelectionMode.Multi))
+                    .BottomBar(
+                        X.PagingToolbar()
+                        .Items(
+                            X.Label("Page size:"),
+                            X.ToolbarSpacer(10),
+                            X.ComboBox()
+                            .Width(80)
+                            .Items("1", "2", "10", "20", "30", "50")
+                            .SelectedItems("50")
+                            .Listeners(l =>
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                })
+                        )
+                        .Plugins(X.ProgressBarPager())
+                    )
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.BeforeEdit.Fn = "grdAR_CustomerChild_BeforeEdit";
+                            ls.Edit.Fn = "grdAR_CustomerChild_Edit";
+                            ls.ValidateEdit.Fn = "grdAR_CustomerChild_ValidateEdit";
+                        })
+                    )
+
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("DispMethod"),
+                                X.StringFilter().DataIndex("Descr")
+                            )
+                    )
+                )//Tab Hinh Thuc Trung Bay
+                .Listeners(lss =>
+                {
+                    lss.Render.Handler = "HQ.common.control_render(this,'grdAR_CustomerChild')";
+                })
 
             )//xtab
         )

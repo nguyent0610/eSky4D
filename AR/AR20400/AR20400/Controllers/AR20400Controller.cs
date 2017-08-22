@@ -49,6 +49,7 @@ namespace AR20400.Controllers
             var tabAdvTool = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabAdvTool");
             var tabSellingProduct = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabSellingProduct");
             var tabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
+            var tabCustomerChild = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "tabCustomerChild");
 			var readonlyShopType = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "blockShopType");
 
             if (tabContract == null)
@@ -90,6 +91,15 @@ namespace AR20400.Controllers
                 else
                     ViewBag.DisplayMethod = "false";
             }
+            if (tabCustomerChild == null)
+                ViewBag.CustomerChild = "false";
+            else
+            {
+                if (tabCustomerChild.IntVal == 1)
+                    ViewBag.CustomerChild = "true";
+                else
+                    ViewBag.CustomerChild = "false";
+            }
 
 			if (readonlyShopType == null)
 				ViewBag.ReadonlyShopType = "false";
@@ -104,7 +114,7 @@ namespace AR20400.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -128,6 +138,10 @@ namespace AR20400.Controllers
         public ActionResult GetAR_CustDisplayMethod(string CustId)
         {
             return this.Store(_db.AR20400_pgAR_CustDisplayMethod(CustId).ToList());
+        }
+        public ActionResult GetAR_CustomerChild(string BranchID, string CustID)
+        {
+            return this.Store(_db.AR20400_pgAR_CustomerChild(BranchID, CustID).ToList());
         }
 
         public ActionResult GetAR_LTTContract(string CustId)
@@ -173,6 +187,8 @@ namespace AR20400.Controllers
 
                 StoreDataHandler dataHandler5 = new StoreDataHandler(data["lstAR_LTTContractDetail"]);
                 var lstAR_LTTContractDetail = dataHandler5.ObjectData<AR20400_pgAR_LTTContractDetail_Result>() == null ? new List<AR20400_pgAR_LTTContractDetail_Result>() : dataHandler5.ObjectData<AR20400_pgAR_LTTContractDetail_Result>().Where(p => p.Type != "");
+                StoreDataHandler dataHandler7 = new StoreDataHandler(data["lstAR_CustomerChild"]);
+                ChangeRecords<AR20400_pgAR_CustomerChild_Result> lstAR_CustomerChild = dataHandler7.BatchObjectData<AR20400_pgAR_CustomerChild_Result>();
 
                 var objAR_Setup = _db.AR_Setup.FirstOrDefault(p => p.BranchID == BranchID && p.SetupId == "AR");
                 if (objAR_Setup != null)
@@ -490,6 +506,51 @@ namespace AR20400.Controllers
                         }
                     }
                     #endregion
+                    #region Save AR_CustomerChild
+
+                    foreach (AR20400_pgAR_CustomerChild_Result deleted in lstAR_CustomerChild.Deleted)
+                    {
+                        var objDelete = _db.AR_CustomerChild.Where(p => p.CustID == CustId
+                                                                      && p.BranchID == BranchID && p.CustChildID == deleted.CustChildID).FirstOrDefault();
+                        if (objDelete != null)
+                        {
+                            _db.AR_CustomerChild.DeleteObject(objDelete);
+                        }
+                    }
+
+                    lstAR_CustomerChild.Created.AddRange(lstAR_CustomerChild.Updated);
+
+                    foreach (AR20400_pgAR_CustomerChild_Result curLang in lstAR_CustomerChild.Created)
+                    {
+                        if (curLang.CustChildID.PassNull() == "") continue;
+
+                        var lang = _db.AR_CustomerChild.FirstOrDefault(p => p.BranchID.ToLower() == BranchID.ToLower()
+                                                                      && p.CustID.ToLower() == CustId.ToLower()
+                                                                      && p.CustChildID.ToLower() == curLang.CustChildID.ToLower());
+
+                        if (lang != null)
+                        {
+                            if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                            {
+                                UpdatingAR_CustomerChild(lang, curLang, false);
+                            }
+                            else
+                            {
+                                throw new MessageException(MessageType.Message, "19");
+                            }
+                        }
+                        else
+                        {
+                            lang = new AR_CustomerChild();
+                            lang.ResetET();
+                            lang.CustID = CustId;
+                            lang.CustChildID = curLang.CustChildID;
+                            lang.BranchID = BranchID;
+                            UpdatingAR_CustomerChild(lang, curLang, true);
+                            _db.AR_CustomerChild.AddObject(lang);
+                        }
+                    }
+                    #endregion
 
                     #region Upload files
                     var files = Request.Files;
@@ -720,6 +781,20 @@ namespace AR20400.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
+        private void UpdatingAR_CustomerChild(AR_CustomerChild t, AR20400_pgAR_CustomerChild_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+               
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
 
         private void UpdatingAR_LTTContract(AR_LTTContract t, AR20400_pgAR_LTTContract_Result s, bool isNew)
         {
@@ -817,6 +892,12 @@ namespace AR20400.Controllers
                         foreach (var item in lstAR_CustDisplayMethod)
                         {
                             _db.AR_CustDisplayMethod.DeleteObject(item);
+                        }
+                        var lstAR_CustomerChild = _db.AR_CustomerChild.Where(p => p.BranchID == BranchID
+                                                                   && p.CustID == CustId).ToList();
+                        foreach (var item in lstAR_CustomerChild)
+                        {
+                            _db.AR_CustomerChild.DeleteObject(item);
                         }
 
                         var lstAR_LTTContract = _db.AR_LTTContract.Where(p => p.CustID == CustId).ToList();

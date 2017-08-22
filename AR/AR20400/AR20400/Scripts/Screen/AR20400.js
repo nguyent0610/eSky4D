@@ -56,6 +56,9 @@ var checkLoad = function (sto) {
             App.tabDetail.child('#pnlAR_CustSellingProducts').tab.hide();
         if (hideDisplayMethod == 'true')
             App.tabDetail.child('#pnlDispMethod').tab.hide();
+        if (hideCustomerChild == 'true')
+            App.tabDetail.child('#pnlAR_CustomerChild').tab.hide();
+        
         if (readonlyShopType == 'true')
             App.cboShopType.setReadOnly(true);
         else
@@ -128,6 +131,9 @@ var menuClick = function (command) {
             else if (HQ.focus == 'grdAR_CustDisplayMethod') {
                 HQ.grid.first(App.grdAR_CustDisplayMethod);
             }
+            else if (HQ.focus == 'grdAR_CustomerChild') {
+                HQ.grid.first(App.grdAR_CustomerChild);
+            }
             break;
         case "prev":
             if (HQ.focus == 'header') {
@@ -144,6 +150,9 @@ var menuClick = function (command) {
             }
             else if (HQ.focus == 'grdAR_CustDisplayMethod') {
                 HQ.grid.prev(App.grdAR_CustDisplayMethod);
+            }
+            else if (HQ.focus == 'grdAR_CustomerChild') {
+                HQ.grid.prev(App.grdAR_CustomerChild);
             }
             break;
         case "next":
@@ -162,6 +171,9 @@ var menuClick = function (command) {
             else if (HQ.focus == 'grdAR_CustDisplayMethod') {
                 HQ.grid.next(App.grdAR_CustDisplayMethod);
             }
+            else if (HQ.focus == 'grdAR_CustomerChild') {
+                HQ.grid.next(App.grdAR_CustomerChild);
+            }
             break;
         case "last":
             if (HQ.focus == 'header') {
@@ -178,6 +190,9 @@ var menuClick = function (command) {
             }
             else if (HQ.focus == 'grdAR_CustDisplayMethod') {
                 HQ.grid.last(App.grdAR_CustDisplayMethod);
+            }
+            else if (HQ.focus == 'grdAR_CustomerChild') {
+                HQ.grid.last(App.grdAR_CustomerChild);
             }
             break;
         case "refresh":
@@ -213,7 +228,10 @@ var menuClick = function (command) {
                 }
                 else if (HQ.focus == 'grdAR_CustDisplayMethod') {
                     HQ.grid.insert(App.grdAR_CustDisplayMethod);
+                } else if (HQ.focus == 'grdAR_CustomerChild') {
+                    HQ.grid.insert(App.grdAR_CustomerChild);
                 }
+                
             }
             break;
         case "delete":
@@ -261,6 +279,13 @@ var menuClick = function (command) {
                             }
                         }
                     }
+                    else if (HQ.focus == 'grdAR_CustomerChild') {
+                        if (App.slmAR_CustomerChild.selected.items[0] != undefined) {
+                            if (App.slmAR_CustomerChild.selected.items[0].data.CustChildID != "") {
+                                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdAR_CustomerChild)], 'deleteData', true);
+                                    }
+                                }
+                            } 
                 }
             }
             break;
@@ -442,6 +467,8 @@ var stoLoad = function (sto) {
     if (!HQ.isNew && _hiddenTree == 'false' ) searchNode();
     
     HQ.common.showBusy(false);
+
+    
 
 };
 
@@ -662,12 +689,9 @@ var stoAR_CustDisplayMethod_Load = function (sto) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keysTab_6);
         }
-        HQ.isFirstLoad = false; //sto load cuoi se su dung
     }
     frmChange();
-    if (_isLoadMaster) {
-        HQ.common.showBusy(false);
-    }
+    App.stoAR_CustomerChild.reload();
 };
 
 var grdAR_CustDisplayMethod_BeforeEdit = function (editor, e) {
@@ -697,6 +721,49 @@ var grdAR_CustDisplayMethod_Reject = function (record) {
     frmChange();
 };
 
+
+/////////////////////////////// GIRD AR_CustomerChild /////////////////////////////////
+var stoAR_CustomerChild_Load = function (sto) {
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, ["CustChildID"]);
+        }
+        HQ.isFirstLoad = false; //sto load cuoi se su dung
+    }
+    frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
+};
+
+var grdAR_CustomerChild_BeforeEdit = function (editor, e) {
+    if (App.cboStatus.getValue() != 'H') return false;
+    if (!HQ.grid.checkBeforeEdit(e, ["CustChildID"])) return false;
+};
+
+var grdAR_CustomerChild_Edit = function (item, e) {
+    if (e.field == 'CustChildID') {
+        if (e.value) {
+            var objDisplayMethod = App.cboCustChildID.store.findRecord(['CustId'], [e.value]);
+            if (objDisplayMethod) {
+                e.record.set('CustName', objDisplayMethod.data.CustName);
+            }
+        }
+    }
+    HQ.grid.checkInsertKey(App.grdAR_CustomerChild, e, ["CustChildID"]);
+    frmChange();
+};
+
+var grdAR_CustomerChild_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdAR_CustomerChild, e, ["CustChildID"]);
+};
+
+var grdAR_CustomerChild_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdAR_CustomerChild);
+    frmChange();
+};
+
 //Process
 var save = function () {
     if (App.frmMain.isValid()) {
@@ -718,6 +785,7 @@ var save = function () {
                 lstAR_CustAdvTool: HQ.store.getData(App.stoAR_CustAdvTool),
                 lstAR_CustSellingProducts: HQ.store.getData(App.stoAR_CustSellingProducts),
                 lstAR_CustDisplayMethod: HQ.store.getData(App.stoAR_CustDisplayMethod),
+                lstAR_CustomerChild: HQ.store.getData(App.stoAR_CustomerChild),
                 lstAR_LTTContract: Ext.encode(_lstAR_LTTContract),
                 lstAR_LTTContractDetail: Ext.encode(_lstAR_LTTContractDetail)
             },
@@ -730,7 +798,8 @@ var save = function () {
                 App.cboCustId.getStore().reload({
                     callback: function () {
                         //ReloadTree('save', CustId);
-
+                        var allData = App.cboCustId.store.snapshot || App.cboCustId.store.allData || App.cboCustId.store.data;      
+                        App.cboCustChildID.store.loadData(allData.items);
                         if (Ext.isEmpty(App.cboCustId.getValue())) {
                             if (_hiddenTree == 'false' && data.result.isNew == 'true')
                                 ReloadTree('save', CustId);
@@ -821,6 +890,10 @@ var deleteData = function (item) {
         }
         else if (HQ.focus == 'grdAR_CustDisplayMethod') {
             App.grdAR_CustDisplayMethod.deleteSelected();
+            frmChange();
+        }
+        else if (HQ.focus == 'grdAR_CustomerChild') {
+            App.grdAR_CustomerChild.deleteSelected();
             frmChange();
         }
     }
@@ -960,6 +1033,7 @@ var cboCpnyID_Change = function (sender, value) {
     if (sender.valueModels != null && !App.stoAR_Customer.loading) {
         App.cboCustId.setValue('');
         App.cboCustId.store.reload();
+        App.cboCustChildID.store.reload();
         App.cboSlsperId.setValue('');
         App.cboSlsperId.store.reload();
         App.cboDeliveryID.setValue('');
@@ -982,6 +1056,7 @@ var cboCpnyID_Select = function (sender, value) {
     if (sender.valueModels != null && !App.stoAR_Customer.loading) {
         App.cboCustId.setValue('');
         App.cboCustId.store.reload();
+        App.cboCustChildID.store.reload();
         App.cboSlsperId.setValue('');
         App.cboSlsperId.store.reload();
         App.cboDeliveryID.setValue('');
