@@ -49,7 +49,7 @@ namespace AR20400.Controllers
             var tabAdvTool = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabAdvTool");
             var tabSellingProduct = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabSellingProduct");
             var tabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
-            var tabCustomerChild = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "tabCustomerChild");
+            var tabCustomerChild = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabCustomerChild");
 			var readonlyShopType = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "blockShopType");
 
             if (tabContract == null)
