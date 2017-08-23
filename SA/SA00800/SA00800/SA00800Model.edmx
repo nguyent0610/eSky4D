@@ -439,7 +439,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="94" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="68" >
         <EntityTypeShape EntityType="SA00800Model.SYS_ReportControl" Width="1.5" PointX="3.233785334617731" PointY="4.5254305622193174" />
         <EntityTypeShape EntityType="SA00800Model.SYS_ReportParm" Width="1.5" PointX="9.2466827506416855" PointY="6.7106656165377538" />
       </Diagram>

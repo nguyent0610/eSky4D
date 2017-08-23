@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
+using HQFramework.DAL;
+using HQFramework.Common;
 namespace SA00800.Controllers
 {
     [DirectController]
@@ -146,6 +148,16 @@ namespace SA00800.Controllers
                 #endregion
 
                 _db.SaveChanges();
+
+                var mDal = Util.Dal(true);
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@LangID", DbType.String, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 8));
+                pc.Add(new ParamStruct("@ReportNbr", DbType.String, clsCommon.GetValueDBNull(ReportNbr), ParameterDirection.Input, 30));
+                mDal.ExecNonQuery("SA00800_ppAfterSave", CommandType.StoredProcedure, ref pc);
+
+
                 return Json(new { success = true, ReportNbr = ReportNbr });
             }
             catch (Exception ex)
@@ -249,6 +261,13 @@ namespace SA00800.Controllers
                 }
 
                 _db.SaveChanges();
+                var mDal = Util.Dal(true);
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@LangID", DbType.String, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 8));
+                pc.Add(new ParamStruct("@ReportNbr", DbType.String, clsCommon.GetValueDBNull(ReportNbr), ParameterDirection.Input, 30));
+                mDal.ExecNonQuery("SA00800_ppAfterDelete", CommandType.StoredProcedure, ref pc);
                 return Json(new { success = true });
             }
             catch (Exception ex)
