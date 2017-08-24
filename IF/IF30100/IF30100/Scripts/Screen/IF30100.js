@@ -55,9 +55,9 @@ var getComboValue = function (val) {
 }
 var getDate = function (val,type) {
     if (type == 'Y') {
-        new Date(val.getYear(), 0, 1)
+        return new Date(val.getFullYear(), 0, 1)
     } else if (type == 'M') {
-        new Date(val.getYear(), val.getMonth(), 1)
+        return new Date(val.getFullYear(), val.getMonth(), 1)
     } else if (type == 'D') {
         return val;
     }
