@@ -36,7 +36,7 @@ namespace IF30100
             //Session["CpnyID"] = Current.CpnyID = "HQH00000";
             //Session["Language"] = Current.Language = "vi";
             //Session["LangID"] = 1;
-            Current.FormatDate = "dd.MM.yyyy";
+
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "ND_Test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();

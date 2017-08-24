@@ -158,9 +158,9 @@ namespace IF30100.Controllers
                            
                         }
                     }
-                    comboField.Listeners.Change.Handler = GetHandle(lstColumn, col);
+                    comboField.Listeners.Blur.Handler = GetHandle(lstColumn, col);
                     comboField.LoadData();
-                    comboField.Listeners.BeforeQuery.Handler = "";
+                    //comboField.Listeners.BeforeQuery.Handler = "";
                     comboField.Listeners.Render.Handler = string.Format("HQ.parm.push({{id:'{0}',type:'combo'}})", "Parm_" + col.ColumnName);
                     comboField.AddTo(pnlFilterHeader);
                 

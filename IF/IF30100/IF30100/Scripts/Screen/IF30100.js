@@ -49,7 +49,9 @@ var firstLoad = function () {
 
 var getComboValue = function (val) {
     if (val == null) return '';
-    return val.join(',');
+
+    if (val.constructor === Array) return val.join(',')
+    else return val;
 }
 var getDate = function (val,type) {
     if (type == 'Y') {
@@ -82,6 +84,7 @@ var chkHeader_Change = function (ct, column, e, t) {
         data.each(function (item) {
             item.set('Sel', t.checked ? true : false);
         });
+       
     }
     
 }
@@ -278,6 +281,7 @@ var colCheck_Header_Change = function (value) {
         App.stoDet.each(function (item) {
             item.set("Checked", value.checked);
         });
+        getWhere(App.cboReport.valueModels[0].data.ReportView);
         App.stoDet.resumeEvents();
         App.grdDet.view.refresh();
     }
