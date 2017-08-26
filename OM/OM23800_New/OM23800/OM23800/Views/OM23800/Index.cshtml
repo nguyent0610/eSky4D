@@ -1,0 +1,239 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM23800;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM23800";
+    var acc = Session["OM23800"] as AccessRight;
+    var HQ = Html.HQ();
+
+    var googleAPIKey = "AIzaSyDsIdoRqgq9lYr8sBdp7sz7O8_4Nc96_Mg"; // AIzaSyCqucQ1Ub4mFPFg8ldw3nDq4iQ6F3znEfA
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/screen/OM23800.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+
+        <script src='@Url.Content("https://maps.googleapis.com/maps/api/js?key=" + googleAPIKey + "&sensor=false&libraries=drawing")' type="text/javascript"></script>
+
+        @*<script type="text/javascript" src='https://maps.googleapis.com/maps/api/js?key=' + apikey + '&sensor=false&libraries=drawing'></script>*@
+        <script src="~/Scripts/Screen/OM30400_map_label.js"></script>
+        <script src="~/Scripts/Screen/OM30400_map_contextMenu.js"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.allowModifyCust = HQ.util.toBool('@ViewBag.AllowModifyCust');
+            HQ.CountCust = Number('@ViewBag.CountCust');         
+            HQ.dateNow = '@DateTime.Now.Date';
+            HQ.googleAPIKey = '@googleAPIKey';
+        </script>
+        <style type="text/css">
+            html {
+                height: 100%;
+            }
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            #map_canvas {
+                height: 100%;
+            }
+            .x-grid3-hd-inner {
+                white-space: normal;
+            }
+            #content {
+                line-height: 1.35;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .row-FF0000 .x-grid-cell {
+                color: #FF0000 !important;
+            }
+
+            .row-CCFF33 .x-grid-cell {
+                background-color: #CCFF33 !important;
+            }
+
+            .row-000000 .x-grid-cell {
+                color: #000000 !important;
+            }
+
+            .labels {
+                color: #FF0000;
+                background-color: white;
+                font-family: "Lucida Grande", "Arial", sans-serif;
+                font-size: 10px;
+                font-weight: bold;
+                text-align: center;
+                width: 60px;
+                border: 2px solid black;
+                white-space: nowrap;
+            }
+
+           
+            /*	start styles for the ContextMenu	*/
+            .context_menu{
+	            background-color:white;
+	            border:1px solid gray;
+            }
+            .context_menu_item{
+	            padding:3px 6px;
+            }
+            .context_menu_item:hover{
+	            background-color:#CCCCCC;
+            }
+            .context_menu_separator{
+	            background-color:gray;
+	            height:1px;
+	            margin:0;
+	            padding:0;
+            }
+            /*	end styles for the ContextMenu	*/
+        </style>
+    </head>
+    <body>
+        @(X.ResourceManager()
+        .ShowWarningOnAjaxFailure(false)
+        .Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Default" : Current.Theme.PassNull())))
+
+        @*@( X.Store().ID("stoMCL")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM23800_pgMCL_Result), "mdlMCP", ""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadMCP", "OM23800")).Timeout(1800000))
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("channel", "App.cboChannelMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("territory", "App.cboAreaMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("province", "App.cboProvinceMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("distributor", "App.cboDistributorMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("shopType", "App.cboShopTypeMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperId", "App.cboSalesManMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("daysOfWeek", "App.cboDayOfWeek.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("weekOfVisit", "App.cboWeekOfVisit.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("hightLight", "App.chkHightLight.checked", ParameterMode.Raw));
+                ps.Add(new StoreParameter("colorFor", "App.cboColorFor.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("isMcp", "App.radMcp.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("isnumberingCust", "App.chkNumberingCust.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("amtFrom", "App.numAmtFrom.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("amtTo", "App.numAmtTo.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("brand", "App.cboBrand.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("markFor", "App.cboMarkFor.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("pJPID", "App.cboPJPIDMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("routeID", "App.cboRouteIDMCL.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l => {
+                l.BeforeLoad.Handler = "App.frmMain.getEl().mask(HQ.common.getLang('Loading'), 'x-mask-loading');";
+                l.Load.Fn = "Event.Store.stoMCL_load";
+            })
+        )*@
+
+        @( X.Store().ID("stoOverLays")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM23800_pdOverLays_Result), "mdlOM23800_pdOverLays", ""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadOverLays", "OM23800")).Timeout(1800000))
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("BranchID", "App.cboDistributorMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("PJPID", "App.cboPJPIDMCL.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l => {
+                //l.BeforeLoad.Handler = "App.frmMain.getEl().mask(HQ.common.getLang('Loading'), 'x-mask-loading');";
+                l.Load.Fn = "Event.Store.stoOverLays_load";
+            })
+        )
+
+        @(X.Store().ID("storeMcpInfo")
+        //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM_SalesRouteMaster), "OM_SalesRouteMasterModel", "PJPID,SalesRouteID,CustID,SlsPerID,BranchID"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadSalesRouteMaster")))
+                    .Parameters(ps =>
+                    {
+                        //ps.Add(new StoreParameter("CustID", "", ParameterMode.Value));
+                        //ps.Add(new StoreParameter("SlsPerID", "", ParameterMode.Value));
+                        //ps.Add(new StoreParameter("BranchID", "", ParameterMode.Value));
+                    })
+            .Listeners(l => {
+                l.BeforeLoad.Handler = "HQ.common.showBusy(false, HQ.waitMsg);";
+                l.Load.Fn = "McpInfo.storeMcpInfo_load"; })
+        )
+
+        @(X.Store().ID("stoMCPCusts")
+            //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM23800_pgMCL_Result),"mdlMcpCusts",""))
+            //.ServerProxy(X.AjaxProxy().Url(Url.Action("LoadMcpCusts")))
+            //        .Parameters(ps =>
+            //        {
+            //            ps.Add(new StoreParameter("CustIDs", "App.winMcpCusts.custIDs", ParameterMode.Raw));
+            //        })
+            //.Listeners(l=>l.Load.Fn="McpInfo.storeMcpInfo_load")
+        )
+
+        @(Html.X().Store().ID("stoAR_Customer").AutoLoad(false)
+                    .Model(Util.GenerateModel(typeof(AR_Customer), "AR_CustomerModel", ""))
+            .Proxy(
+                X.AjaxProxy().Url(Url.Action("GetAR_Customer", "OM23800"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboAddBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custID", "App.cboAddCustID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(p =>
+            {
+                p.Load.Fn = "Popup.stoAR_Customer_Load";
+                p.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.waitMsg, App.frmDetail);";
+            })
+        )
+
+        @(Html.HQ().Store().ID("stoCheckAutoCustID").AutoLoad(false)
+            .HQProcedure("OM23800_ppCheckAutoCustID")
+            .HQParam(new StoreParameterCollection() {
+                new StoreParameter() { Name = "@BranchID", Value = "App.cboAddBranchID.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            })
+            .Listeners(p =>
+            {
+                //p.BeforeLoad.Fn = "stoBeforeLoad";
+                p.Load.Fn = "Popup.stoCheckAutoCustID_Load";
+            })
+            .LoadData()
+        )
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong OM22001Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", "OM23800", new { lang = Current.LangID }); }
+        @{ Html.RenderAction("MCPInfo","OM23800", new { lang = Current.LangID }); }
+        @{ Html.RenderAction("MCPCusts","OM23800", new { lang = Current.LangID }); }
+        @{ Html.RenderAction("ImportExport","OM23800", new { lang = Current.LangID }); }
+        @{ Html.RenderAction("SuggestView", "OM23800", new { lang = Current.LangID }); }
+    </body>
+</html>

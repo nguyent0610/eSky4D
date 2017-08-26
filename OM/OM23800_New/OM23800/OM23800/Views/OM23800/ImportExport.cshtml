@@ -1,0 +1,461 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM23800;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Window().ID("winImExMcp")
+.Title(Util.GetLang("Choose"))
+.Icon(Icon.PageExcel).Layout(LayoutType.Fit)
+.Hidden(true).Height(170).Width(330)
+.Modal(true).Resizable(false)
+.Items(
+    X.FormPanel().ID("frmMain_ImExMcp")
+    .Layout(LayoutType.Border)
+    .TrackResetOnLoad(true)
+    .DefaultAnchor("100%")
+    .BodyPadding(5)
+    .BodyBorder(0)//.BodyStyle("BodyStyle='background: none;'")
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Items(
+        X.Container().Layout(LayoutType.VBox)
+        .Region(Region.Center)
+        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+        .Items(
+            HQ.Combo().ID("cboBranchID_ImExMcp").Name("cboBranchID_ImExMcp").HQLangCode("BranchID")
+            .HQProcedure("OM23800_pcBranchID_ImExMcp")
+            .HQColumnShow("BranchID,BranchName").DisplayField("BranchName").ValueField("BranchID")
+            .Width(300).HQHeightWidth(400, 300).MarginSpec("3 0 0 0").InputWidth(200).AllowBlank(false)
+            .HQDBSys(false).ForceSelection(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                lst.Change.Fn = "ImExMcp.cboBranchID_Change";
+            })
+            ,HQ.Combo().ID("cboPJPID_ImExMcp").Name("cboPJPID_ImExMcp").HQLangCode("PJPID")
+            .HQProcedure("OM23800_pcPJPID_ImExMcp")
+            .HQColumnShow("PJPID,Descr").DisplayField("PJPID").ValueField("PJPID")
+            .Width(300).HQHeightWidth(400, 300).MarginSpec("3 0 0 0").InputWidth(200).AllowBlank(false)
+            .HQDBSys(false)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID_ImExMcp.getValue()", Mode = ParameterMode.Raw }
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                lst.Change.Fn = "ImExMcp.cboPJPID_Change";
+            })
+
+            , HQ.Combo().ID("cboSlsPerID_ImExMcp").Name("cboSlsPerID_ImExMcp")
+            .HQLangCode("Slsperid").HQProcedure("OM23800_pcSlsperID_ImExMcp")
+            .HQColumnShow("Slsperid,Name").DisplayField("Name").ValueField("Slsperid")
+            .Width(300).HQHeightWidth(400, 300).MarginSpec("3 0 0 0").InputWidth(200)
+            .HQDBSys(false).ForceSelection(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID_ImExMcp.getValue()", Mode = ParameterMode.Raw }
+                ,new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                       
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+            })
+
+            , HQ.Combo().ID("cboRouteID_ImExMcp").Name("cboRouteID_ImExMcp")
+            .HQLangCode("Route").HQProcedure("OM23800_pcRouteID_ImExMcp")
+            .HQColumnShow("SalesRoute,Descr").DisplayField("Descr").ValueField("SalesRoute")
+            .Width(300).HQHeightWidth(400, 300).MarginSpec("3 0 0 0").InputWidth(200)
+            .HQDBSys(false).ForceSelection(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID_ImExMcp.getValue()", Mode = ParameterMode.Raw }
+                //,new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+            })
+        )
+
+        , X.Container().Layout(LayoutType.HBox)
+        .Region(Region.South)
+        .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
+        .Items(
+            HQ.Button().ID("btnExport_ImExMcp")
+            .MarginSpec("0 0 0 105").HQLangCode("Export")
+            .Icon(Icon.Tick).Flex(1).Hidden(true)
+            .Handler("ImExMcp.btnExport_ImExMcp_click")
+            
+            , X.FileUploadField().ID("fupImport_ImExMcp")
+            .MarginSpec("0 0 0 105").Text(Util.GetLang("Import"))
+            .Icon(Icon.Tick).Flex(1).Hidden(true).ButtonOnly(true)
+            .Listeners(ls=>ls.Change.Fn="ImExMcp.fupImport_ImExMcp_change")
+            
+            , HQ.Button().ID("btnCancel_ImExMcp")
+            .MarginSpec("0 0 0 5")
+            .HQLangCode("Cancel").Icon(Icon.Cancel).Flex(1)
+            .Handler("App.winImExMcp.close()")
+        )
+    ) // frmMain_ImExMcp
+)
+.Listeners(ls => {
+    ls.Show.Fn = "ImExMcp.winImExMcp_show";
+}) // winImExMcp
+)
+
+@(
+ X.Window().ID("winImExCust")
+.Title(Util.GetLang("Choose"))
+.Icon(Icon.PageExcel).Layout(LayoutType.Fit)
+.Hidden(true)
+.Height(270)
+.Width(330)
+.Modal(true).Resizable(true)
+.Items(
+    X.FormPanel().ID("frmMain_ImExCust")
+    .Layout(LayoutType.Border)
+    .TrackResetOnLoad(true)
+    .DefaultAnchor("100%")
+    .BodyPadding(5)
+    .BodyBorder(0)//.BodyStyle("BodyStyle='background: none;'")
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Items(
+        X.Container().Layout(LayoutType.VBox)
+        .Region(Region.Center)
+        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+        .Items(
+
+            HQ.Combo().ID("cboBranchID_ImExCust").Name("cboBranchID_ImExCust").HQLangCode("BranchID")
+                .HQProcedure("OM23800_pcBranchID_ImExCust")
+                .HQColumnShow("BranchID,BranchName").DisplayField("BranchName").ValueField("BranchID")
+                .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").InputWidth(200)//.AllowBlank(false)
+                .HQDBSys(false).ForceSelection(true)
+                .HQAutoLoad(true)
+                .HQFirstDefault(true)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@Channel", Value = "App.cboChannel_ImExCust.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@State", Value = "App.cboProvince_ImExCust.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory_ImExCust.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            })
+                .LoadData()
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                    lst.Change.Fn = "Event.Form.cboBranchID_ImExCust_change";
+
+                })
+
+                ,
+            HQ.Combo().ID("cboChannel_ImExCust").Name("cboChannel_ImExCust").HQLangCode("Channel")
+            .HQProcedure("OM23800_pcChannel_ImExCust")
+            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Hidden(true)
+            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").InputWidth(200).AllowBlank(true)
+            .HQDBSys(false).ForceSelection(true)//.MultiSelect(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                lst.Change.Handler = "App.cboBranchID_ImExCust.store.reload()";
+            })
+            , HQ.Combo().ID("cboTerritory_ImExCust").Name("cboTerritory_ImExCust").HQLangCode("Territory")
+                .HQProcedure("OM23800_pcTerritory_ImExCust")
+                .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").InputWidth(200)//.AllowBlank(false)
+                .HQDBSys(false).ForceSelection(true)//.MultiSelect(true)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            })
+                .LoadData()
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                    lst.Change.Handler = "App.cboProvince_ImExCust.store.reload();";//App.cboBranchID_ImExCust.store.reload()
+                })
+            ,
+            HQ.Combo().ID("cboProvince_ImExCust").Name("cboProvince_ImExCust").HQLangCode("Province")
+            .HQProcedure("OM23800_pcProvince_ImExCust")//.Hidden(true)
+            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").InputWidth(200)//.AllowBlank(false)
+            .HQDBSys(false).ForceSelection(true)//.MultiSelect(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory_ImExCust.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                lst.Change.Handler = "App.cboBranchID_ImExCust.store.reload();";
+            })
+            
+            ,  HQ.Combo().ID("cboSlsperID_ImExCust").Name("cboSlsperID_ImExCust").HQLangCode("SlsperID")
+                .HQProcedure("OM23800_pcSlsperID_CustImExMcp")
+            .HQColumnShow("Slsperid,Name").DisplayField("Name").ValueField("Slsperid")
+            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").InputWidth(200)
+            .HQDBSys(false).ForceSelection(true)
+            .MultiSelect(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID_ImExCust.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory_ImExCust.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@Channel", Value = "App.cboChannel_ImExCust.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@State", Value = "App.cboProvince_ImExCust.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            })
+                .LoadData()
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                    //lst.Change.Fn = "Event.Form.cboBranchID_ImExCust_change";
+                })
+                
+            , X.RadioGroup().ID("radgActionCust")
+            .MarginSpec("5 5 0 5").AllowBlank(false)
+            .Items(
+                X.Radio().ID("radUpdateCust")
+                .BoxLabel(Util.GetLang("Update"))
+                ,X.Radio().ID("radCreateCust")
+                .BoxLabel(Util.GetLang("CreateNew"))
+            )
+        )
+
+        , X.Container().Layout(LayoutType.HBox)
+        .Region(Region.South)
+        .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
+        .Items(
+            HQ.Button().ID("btnExport_ImExCust")
+            .MarginSpec("0 0 0 105").HQLangCode("Export")
+            .Icon(Icon.Tick).Flex(1).Hidden(true)
+            .Handler("ImExCust.btnExport_ImExCust_click")
+
+            , X.FileUploadField().ID("fupImport_ImExCust")
+            .MarginSpec("0 0 0 105").Text(Util.GetLang("Import"))
+            .Icon(Icon.Tick).Flex(1).Hidden(true).ButtonOnly(true)
+            .Listeners(ls => ls.Change.Fn = "ImExCust.fupImport_ImExCust_change")
+
+            , HQ.Button().ID("btnCancel_ImExCust")
+            .MarginSpec("0 0 0 5")
+            .HQLangCode("Cancel").Icon(Icon.Cancel).Flex(1)
+            .Handler("App.winImExCust.close()")
+        )
+    ) // frmMain_ImExCust
+)
+.Listeners(ls =>
+{
+    ls.Show.Fn = "ImExCust.winImExCust_show";
+}) // winImExCust
+)
+
+
+@(
+ X.Window().ID("winImExCustMCP")
+.Title(Util.GetLang("Choose"))
+.Icon(Icon.PageExcel).Layout(LayoutType.Fit)
+.Hidden(true)
+.Height(230)
+.Width(345)
+.Modal(true).Resizable(true)
+.Items(
+    X.FormPanel().ID("frmMain_ImExCustMCP")
+    .Layout(LayoutType.Border)
+    .TrackResetOnLoad(true)
+    .DefaultAnchor("100%")
+    .BodyPadding(5)
+    .BodyBorder(0)//.BodyStyle("BodyStyle='background: none;'")
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Items(
+        X.Container().Layout(LayoutType.VBox)
+        .Region(Region.Center)
+        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+        .Items(
+            HQ.Combo().ID("cboBranchID_ImExCustMCP").Name("cboBranchID_ImExCustMCP").HQLangCode("BranchID")
+            .HQProcedure("OM23800_pcBranchID_ImExCustMCP")
+            .HQColumnShow("BranchID,BranchName").DisplayField("BranchName").ValueField("BranchID")
+            .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").LabelWidth(110)//.AllowBlank(false)
+            .HQDBSys(false).ForceSelection(true)
+            .HQAutoLoad(true)
+            //.ReadOnly(true)
+            .HQFirstDefault(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@State", Value = "App.cboProvince_ImExCustMCP.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory_ImExCustMCP.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                // lst.Change.Fn = "Event.Form.cboBranchID_ImExCustMCP_change";
+            }),
+
+            HQ.Combo().ID("cboTerritory_ImExCustMCP").Name("cboTerritory_ImExCustMCP").HQLangCode("Territory")
+                .HQProcedure("OM23800_pcTerritory_ImExCustMCP")
+                .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").LabelWidth(110)//.AllowBlank(false)
+                .HQDBSys(false).ForceSelection(true)//.MultiSelect(true)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                lst.Change.Handler = "App.cboProvince_ImExCustMCP.store.reload();App.cboSlsSupID.store.reload();App.cboSlsperID_ImExCustMCP.store.reload();";
+            })
+            ,
+            HQ.Combo().ID("cboProvince_ImExCustMCP").Name("cboProvince_ImExCustMCP").HQLangCode("Province")
+            .HQProcedure("OM23800_pcProvince_ImExCustMCP")//.Hidden(true)
+            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").LabelWidth(110)//.AllowBlank(false)
+            .HQDBSys(false).ForceSelection(true)//.MultiSelect(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory_ImExCustMCP.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                lst.Change.Handler = "App.cboSlsSupID.store.reload();App.cboSlsperID_ImExCustMCP.store.reload();";
+            })
+
+            , HQ.Combo().ID("cboSlsSupID").Name("cboSlsSupID").HQLangCode("OM20500SupID")
+            .HQProcedure("OM23800_pcFilterSalesSup").HQColumnShow("Code,Descr")
+            .DisplayField("Descr").ValueField("Code")
+            .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+            .HQAutoLoad(true)
+            .MultiSelect(false)
+            .LabelWidth(110)
+            .Width(300)
+            .HQParam(new StoreParameterCollection() 
+            {
+                new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID_ImExCustMCP.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory_ImExCustMCP.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@State", Value = "App.cboProvince_ImExCustMCP.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }   
+            })
+            .LoadData()
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus; this.clearValue();}";
+                lst.Change.Handler = "App.cboSlsperID_ImExCustMCP.store.reload();";
+                
+            })
+            ,  HQ.Combo().ID("cboSlsperID_ImExCustMCP").Name("cboSlsperID_ImExCustMCP").HQLangCode("SlsperID")
+                .HQProcedure("OM23800_pcSlsperID_ImExCustMCP")
+            .HQColumnShow("SlsperID,Name").DisplayField("Name").ValueField("SlsperID")
+                .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").LabelWidth(110)
+            .HQDBSys(false).ForceSelection(true)
+            .MultiSelect(true)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID_ImExCustMCP.getValue()", Mode = ParameterMode.Raw },                
+                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory_ImExCustMCP.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@State", Value = "App.cboProvince_ImExCustMCP.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@SupID", Value = "App.cboSlsSupID.getValue()", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            })
+                .LoadData()
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                })
+
+                , X.RadioGroup().ID("radgActionCustMCP").HideLabel(true).FieldLabel(Util.GetLang("Update") + " - " + Util.GetLang("CreateNew"))
+            .MarginSpec("5 5 0 5").AllowBlank(false)
+            .Items(
+                X.Radio().ID("radUpdateCustMCP")
+                .BoxLabel(Util.GetLang("Update"))
+                , X.Radio().ID("radCreateCustMCP")
+                .BoxLabel(Util.GetLang("CreateNew"))
+            )
+        )
+
+        , X.Container().Layout(LayoutType.HBox)
+        .Region(Region.South)
+        .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
+        .Items(
+            HQ.Button().ID("btnExpCustMCP")
+            .MarginSpec("0 0 0 105").HQLangCode("Export")
+            .Icon(Icon.Tick).Flex(1).Hidden(true)
+            .Handler("ImExCust.btnExport_ImExCustMCP_click")
+
+            , X.FileUploadField().ID("btnImpCustMCP")
+            .MarginSpec("0 0 0 105").Text(Util.GetLang("Import"))
+            .Icon(Icon.Tick).Flex(1).Hidden(true).ButtonOnly(true)
+                .Listeners(ls => ls.Change.Fn = "ImExCust.btnImport_ImExCustMCP_change")
+
+            , HQ.Button()
+            .MarginSpec("0 0 0 5")
+            .HQLangCode("Cancel").Icon(Icon.Cancel).Flex(1)
+            .Handler("App.winImExCustMCP.close()")
+        )
+    ) // frmMain_ImExCust
+)
+.Listeners(ls =>
+{
+   // ls.Show.Fn = "ImExCust.winImExCustMCP_show";
+}) // winImExCustMCP
+)
