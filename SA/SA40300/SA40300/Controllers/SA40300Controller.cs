@@ -24,6 +24,14 @@ namespace SA40300.Controllers
         {
             ViewBag.BussinessDate = DateTime.Now.ToDateShort();
             ViewBag.BussinessTime = DateTime.Now;
+            string hiddenColumns = string.Empty;
+            var sys = Util.CreateObjectContext<HQ.eSkySys.eSkySysEntities>(true);
+            var objConfig = sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "SA40300HIDECOLUMNS");
+            if (objConfig != null)
+            {
+                hiddenColumns = objConfig.TextVal.PassNull().Trim();
+            }
+            ViewBag.HideColumn = hiddenColumns;
             return View();
         }
 

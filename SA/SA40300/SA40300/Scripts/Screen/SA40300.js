@@ -5,6 +5,7 @@ var keys = ['ReportID', 'ReportViewID'];
 var fieldsCheckRequire = ["ReportID", "ReportViewID", "LangID", "BeforeDateParm00", "BeforeDateParm01", "BeforeDateParm02", "BeforeDateParm03"];
 var fieldsLangCheckRequire = ["ReportID", "ReportViewID", "LangID", "BeforeDateParm00", "BeforeDateParm01", "BeforeDateParm02", "BeforeDateParm03"];
 var _HTML = 'HTML';
+var _TEMP = 'TEMP';
 var _popupType = '';
 var _listUser = '';
 ///////////////////////////////////////////////////////////////////////
@@ -90,7 +91,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                checkAllowBlank(App.cboMailType.getValue() == _HTML);
+                checkAllowBlank(App.cboMailType.getValue() == _HTML || App.cboMailType.getValue() == _TEMP);
                 //checkRequire để kiếm tra các field yêu cầu có rỗng hay ko
                 if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoMailDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     var flat = null;
@@ -118,7 +119,7 @@ var menuClick = function (command) {
                         App.slmMailDetail.select(App.stoMailDetail.indexOf(flat));
                         return false;
                     }
-                    if (App.cboMailType.getValue() == _HTML) {
+                    if (App.cboMailType.getValue() == _HTML || App.cboMailType.getValue() == _TEMP) {
                         if (!checkSpecialChar(App.txtStoreName.getValue())) {
                             HQ.message.show(2017060501, [''], '', true);
                             flat = item;
@@ -140,14 +141,16 @@ var menuClick = function (command) {
 
 //load lần đầu khi mở
 var firstLoad = function () {
+    App.frmMain.mask();
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
     HQ.numSource = 0;
     App.cboMailType.getStore().addListener('load', store_Load);
     App.cboMailTo.getStore().addListener('load', store_Load);
     App.cboMailCC.getStore().addListener('load', store_Load);
-    App.cboType.getStore().addListener('load', store_Load);   
+    App.cboType.getStore().addListener('load', store_Load);
 };
 var frmChange = function () {
+  
     App.frmMain.getForm().updateRecord();
     HQ.isChange = HQ.store.isChange(App.stoMailHeader) || HQ.store.isChange(App.stoMailDetail);
     HQ.common.changeData(HQ.isChange, 'SA40300');//co thay doi du lieu gan * tren tab title header
@@ -218,17 +221,20 @@ var loadDataAutoDetail = function (sto) {
     }
     frmChange();
     HQ.common.showBusy(false);
+    App.frmMain.unmask();
 };
 
 var stoMailAutoUser_Load = function (sto) {
     HQ.common.showBusy(false);
+    App.winMailAutoUser.unmask();
 };
 var cboMailType_Change = function (sender, newValue, oldValue) {
     if ((!HQ.isNew || sender.valueModels != null) && !App.cboMailID.store.loading) {
         App.cboMailID.store.reload();
     }
+    App.frmMain.suspendLayouts();
     var isHtml = false;
-    if (newValue == _HTML) {
+    if (newValue == _HTML || newValue == _TEMP) {
         isHtml = true;
         App.cboMailCC.dataIndex = '';
         App.cboMailTo.dataIndex = "";
@@ -241,8 +247,6 @@ var cboMailType_Change = function (sender, newValue, oldValue) {
         App.txtMailCC.dataIndex = '';
 
     }
-
-    
 
     App.txtMailTO.setVisible(isHtml);
     App.txtMailCC.setVisible(isHtml);
@@ -260,14 +264,17 @@ var cboMailType_Change = function (sender, newValue, oldValue) {
     App.txtHeader.setVisible(!isHtml);
     //App.txtMailSubject.setVisible(!isHtml);
     App.txtBody.setVisible(!isHtml);
-    App.txtTemplateFile.setVisible(!isHtml);
+    App.txtTemplateFile.setVisible(newValue == _TEMP || !isHtml);
     App.txtPass.setVisible(!isHtml);
     App.txtExportFolder.setVisible(!isHtml);
     App.txtNameFile.setVisible(!isHtml);
     App.chkIsAttachFile.setVisible(!isHtml);    
     App.grdMailDetail.setVisible(!isHtml);
 
-    checkAllowBlank(isHtml);        
+    checkAllowBlank(isHtml);
+
+    App.frmMain.resumeLayouts();
+    App.frmMain.doLayout();
 };
 
 var cboMailType_Select = function (sender) {
@@ -279,8 +286,7 @@ var cboMailType_Select = function (sender) {
 var cboMailID_Change = function (sender, newValue, oldValue) {
     if ((!HQ.isNew || sender.valueModels != null) && !App.stoMailHeader.loading ) {
         App.stoMailHeader.reload();
-    }
-   
+    }   
 };
 var cboMailID_Select = function (sender) {  
     if (sender.valueModels != null && !App.stoMailHeader.loading) {
@@ -307,7 +313,7 @@ var cboReportID_Change = function (sender, e) {
 }
 
 var cboMailTo_Expand = function () {
-    if (App.cboMailType.getValue() == _HTML) {
+    if (App.cboMailType.getValue() == _HTML || App.cboMailType.getValue() == _TEMP) {
         cboMailTo_TriggerClick();
         App.cboMailTo.collapse();
     } else {
@@ -316,7 +322,7 @@ var cboMailTo_Expand = function () {
 }
 
 var cboMailCC_Expand = function () {
-    if (App.cboMailType.getValue() == _HTML) {
+    if (App.cboMailType.getValue() == _HTML || App.cboMailType.getValue() == _TEMP) {
         cboMailCC_TriggerClick();
         App.cboMailCC.collapse();
     } else {
@@ -332,6 +338,13 @@ var cboMailTo_TriggerClick = function () {
     App.stoMailAutoUser.removeAll();
     App.stoMailAutoUser.reload();
     App.winMailAutoUser.show();
+}
+var winMailAutoUser_beforeShow = function () {
+    App.frmMain.mask();
+    App.winMailAutoUser.mask();
+    if (HQ.hideColumn != '') {
+        HQ.grid.hide(App.grdMailAutoUser, HQ.hideColumn.split(','));
+    }
 }
 
 var cboMailCC_TriggerClick = function () {
