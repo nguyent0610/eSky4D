@@ -14,6 +14,10 @@ var choiceData = [];
 var _editCust = false;
 var _selectedSales = '';
 var _btnLoadClick = false;
+var _mapTypeControl = false;
+var _scale_factor = 0.6;
+var slsMarker;
+var slsMarker1;
 
 var Process = {
     createMarkerDescription: function (record, hightLight) {
@@ -168,7 +172,7 @@ var Process = {
     },
 
     renderColor: function (value, metaData, record, rowIndex, colIndex, store) {
-        if (App.chkHightLight.checked) {
+        if (!Ext.isEmpty(record.data.Color)) { //App.chkHightLight.checked
             metaData.style = "color:#" + record.data.Color + "!IMPORTANT;";
         }
         return value;
@@ -224,6 +228,7 @@ var Event = {
             else
                 App.stoOverLays.reload();
             App.frmMain.resumeLayouts();
+            App.grdMCL.view.refresh();
         },
 
         stoOverLays_load: function (store, records, successful, eOpts) {
@@ -394,18 +399,22 @@ var Event = {
         
 
         chkHightLight_change: function (cbo, newValue, oldValue, eOpts) {
-            if (cbo.checked) {
-                //App.ctnNumbering.show();
-                App.ctnHighLight.show();
-                App.cboColorFor.allowBlank = false;
-                App.cboColorFor.validate();
-            }
-            else {
-                //App.ctnNumbering.hide();
-                App.ctnHighLight.hide();
-                App.cboColorFor.allowBlank = true;
-                App.cboColorFor.validate();
-            }
+            //if (cbo.checked) {
+            //    //App.ctnNumbering.show();
+            //    App.ctnHighLight.show();
+            //    App.cboColorFor.allowBlank = false;
+            //    App.cboColorFor.validate();
+            //}
+            //else {
+            //    //App.ctnNumbering.hide();
+            //    App.ctnHighLight.hide();
+            //    App.cboColorFor.allowBlank = true;
+            //    App.cboColorFor.validate();
+            //}
+        }
+        , cboColorFor_Change: function (cbo, newValue, oldValue, eOpts) {            
+            App.chkHightLight.setChecked(!Ext.isEmpty(newValue));
+            App.cboMarkFor.store.reload();
         }
 
         , btnImportCustMCP_click: function (mni, e, eOpts) {
@@ -434,6 +443,15 @@ var Event = {
             } else {
                 HQ.message.show(4);
             }
+        }
+
+        , cboChannelMCL_change: function (cbo, newValue, oldValue, eOpts) {
+            App.cboShopTypeMCL.clearValue();
+            App.cboShopTypeMCL.store.reload();
+        }
+        , cboChannelMCL_select: function () {
+            App.cboShopTypeMCL.clearValue();
+            App.cboShopTypeMCL.store.reload();
         }
     },
 
@@ -1547,6 +1565,8 @@ var Gmap = {
         drawingManager: {},
         overlays: [],
         labels: [],
+        seaMarkers: [],
+        seaMarkers1: [],
 
         geocoder: {},
         suggestMarker: null,
@@ -1562,6 +1582,7 @@ var Gmap = {
                 center: initLatLng,
                 zoom: 16,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
+                , mapTypeControl: _mapTypeControl
             };
 
             Gmap.Declare.map = new google.maps.Map(Gmap.Declare.map_canvas, myOptions);
@@ -1572,6 +1593,12 @@ var Gmap = {
             Gmap.Declare.stopMarkers = [];
             Gmap.Declare.overlays = [];
             Gmap.Declare.labels = [];
+
+            Gmap.Process.scaleImage1(Gmap.Declare.map.getZoom());
+            Gmap.Declare.map.addListener('zoom_changed', function () {
+                Gmap.Process.scaleImage(Gmap.Declare.map.getZoom());
+                Gmap.Process.scaleImage1(Gmap.Declare.map.getZoom());
+            });
         },
 
         prepairDrawing: function () {
@@ -1953,8 +1980,14 @@ var Gmap = {
         drawMCP: function (markers, hightLight, isMcp) {
             Gmap.Process.prepairMap();
             Gmap.Process.clearMap(Gmap.Declare.stopMarkers, Gmap.Declare.overlays, Gmap.Declare.labels);
-
+            
             if (markers.length > 0) {
+                _scale_factor = 0.5;
+                if (markers.length > 1000) {
+                    _scale_factor = 0.7;
+                } else if (markers.length > 100) {
+                    _scale_factor = 0.6;
+                }
                 Gmap.Declare.stopMarkers = [];
                 var bounds = new google.maps.LatLngBounds();
                 // For each marker in list
@@ -1984,8 +2017,14 @@ var Gmap = {
                         center: myLatlng,
                         zoom: 16,
                         mapTypeId: google.maps.MapTypeId.ROADMAP
+                        , mapTypeControl: _mapTypeControl
                     };
                     Gmap.Declare.map = new google.maps.Map(Gmap.Declare.map_canvas, myOptions);
+                    Gmap.Process.scaleImage1(Gmap.Declare.map.getZoom());
+                    Gmap.Declare.map.addListener('zoom_changed', function () {
+                        Gmap.Process.scaleImage(Gmap.Declare.map.getZoom());
+                        Gmap.Process.scaleImage1(Gmap.Declare.map.getZoom());
+                    });
                 }
 
                 // Make the marker at each location
@@ -1996,11 +2035,16 @@ var Gmap = {
  
                 //Use scaledSize instead of size:
                 //var labelIcon = App.chkNumberingCust.getValue() == true ? i + 1 : '';
-                if (App.chkNumberingCust.getValue()) {
+                if (App.chkNumberingCust.getValue()) {                                       
                     var image = {
-                        url: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|{2}', i + 1, data.color, color), // image is 512 x 512
-                       // scaledSize: new google.maps.Size(22, 32)
+                        url: Ext.String.format('https://chart.googleapis.com/chart?chst=d_map_spin&chld={3}|0|{1}|10|_|{0}', i + 1, data.color, color, _scale_factor), // image is 512 x 512
+                        // scaledSize: new google.maps.Size(22, 32)
                     };
+                    //var image = {
+                    //    url: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|{2}', i + 1, data.color, color), // image is 512 x 512
+                    //    // scaledSize: new google.maps.Size(22, 32)
+                    //};
+                    
                 } else {
                     var image = {
                         url: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|{2}', '', data.color, color), // image is 512 x 512
@@ -2123,6 +2167,210 @@ var Gmap = {
             Gmap.Process.showContextMenu(Gmap.Declare.map, bermudaTriangle, label, custIDs, listMcpCusts);
             
         }
+
+        , scaleImage: function (zoom) {
+            var lat = 13.471608;
+            var lng = 109.669605;
+            var size = zoom > 8 ? zoom * 35 : 1;
+        
+            var height = size;
+            if (zoom > 14) {
+                height = (size + 350) * 2;
+                lat = 13.576581291896971;
+                lng = 109.68578338623047;
+            }
+            else if (zoom == 14) {
+                height = (size + 350) * 2;
+                //  lat = 14.071608;            
+            }
+            else if (zoom == 13) {
+                height = (size + 350);
+              //  lat = 14.071608;            
+            } else {
+                size = size - 150;
+                if (size < 0) {
+                    size = 1;
+                }
+            }
+            var image1 = {
+                url: 'Images/OM23800/EastSea.png',
+                scaledSize: new google.maps.Size(size, height), // scaled size
+            };
+            Gmap.Process.clearMap(Gmap.Declare.seaMarkers);
+            Gmap.Declare.seaMarkers = [];
+       
+            var markers = [];        
+            var
+                marker = {
+                    "id": "00001", // Zoom 8, 10, 11
+                    "title": "East Vietnam Sea",
+                    "lat": lat,
+                    "lng": lng,
+                    "color": 'f44e42',
+                    "Icon": image1,
+                    "Zindex": 1
+            }
+            markers.push(marker);
+
+            if (markers.length > 0) {
+                if (slsMarker != undefined) {
+                    slsMarker.setVisible(false);
+                    slsMarker = null;
+                }
+                // List of locations
+                var lat_lng = new Array();
+
+                // For each marker in list
+                for (i = 0; i < markers.length; i++) {
+                    var data = markers[i];
+                    if (data.lat && data.lng) {
+                        var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+                        // Push the location to list
+                        lat_lng.push(myLatlng);
+
+                        // Make the marker at each location
+                        var markerLabel = i + 1;
+                        slsMarker = new google.maps.Marker({
+                            id: data.id,
+                            position: myLatlng,
+                            map: Gmap.Declare.map,
+                            title: data.title,
+                            icon: data.Icon,
+                            zIndex: data.Zindex
+                        });
+                        Gmap.Declare.seaMarkers.push(slsMarker);
+                    }
+                }
+
+                Gmap.Declare.directionsDisplay.setMap(Gmap.Declare.map);
+            }
+            else {
+                Gmap.Process.clearMap(Gmap.Declare.seaMarkers);
+            }
+        },
+
+        scaleImage1: function (zoom) {
+            var lat1 = 15.288091715896193;
+            if (zoom < 9) {
+                lat1 = 14.488091715896193;
+            }
+            var size = zoom > 2 ? zoom * 35 : 1;
+            var height = zoom > 2 ? zoom * 35 : 1;
+            if (zoom > 13) {
+                lat1 = 15.480151358815984;
+                height = height * 1;
+            }
+            else if (zoom == 13) {
+                lat1 = 15.480151358815984;
+                height = height * 1;
+            } else if (zoom == 12) {
+               // lat1 = 14.487261;
+                height = height * 2;
+            }
+            else  if ( zoom < 12 && zoom > 9) {
+            
+            }
+            else if (zoom < 9 && zoom > 2) {            
+                if (zoom == 8) {
+                    size = size / 2;
+                    height = height / 2;
+                    lat1 = 14.888091715896193;
+                }
+                else if (zoom == 7) {
+                    size = size / 2;
+                    height = height / 2;
+                }
+                else if (zoom == 6) {
+                    size = size / 2;
+                    height = height / 2;                
+                }
+                else if (zoom == 5) {
+                    size = size / 3;
+                    height = height / 5;
+                } else if (zoom == 4) {
+                    size = 55;
+                    height = 25;
+                } else if (zoom == 3) {
+                    size = 45;
+                    height = 25;
+                    lat1 = 14.000091715896193;
+                } else {
+                    size = 45;
+                    height = 25;                
+                }
+            } else if (zoom <= 2) {
+                size = size / 2;
+                height = height / 2;
+            }
+       
+            var image = {
+                url: 'Images/OM23800/EastSea.png',
+                scaledSize: new google.maps.Size(size, height), // scaled size
+            };
+            Gmap.Process.clearMap(Gmap.Declare.seaMarkers1);
+            Gmap.Declare.seaMarkers1 = [];
+
+            var markers = [];
+            var
+            marker = {
+                "id": "00002", // 9
+                "title": "",
+                "lat": lat1,
+                "lng": 114.40475296229124,
+                "color": 'f44e42',
+                "Icon": image,
+                "Zindex": 1
+            }
+            markers.push(marker);
+
+
+            if (markers.length > 0) {
+                if (slsMarker1 != undefined) {
+                    slsMarker1.setVisible(false);
+                    slsMarker1 = null;
+                }
+                // List of locations
+                var lat_lng = new Array();
+
+                // For each marker in list
+                for (i = 0; i < markers.length; i++) {
+                    var data = markers[i];
+                    if (data.lat && data.lng) {
+                        var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+                        // Push the location to list
+                        lat_lng.push(myLatlng);
+
+                        // Make the marker at each location
+                        slsMarker1 = new google.maps.Marker({
+                            id: data.id,
+                            position: myLatlng,
+                            map: Gmap.Declare.map,
+                            title: data.title,
+                            icon: data.Icon,
+                            zIndex: data.Zindex
+                        });
+                        Gmap.Declare.seaMarkers1.push(slsMarker1);
+                    }
+                }
+
+                Gmap.Declare.directionsDisplay.setMap(Gmap.Declare.map);
+            }
+            else {
+                Gmap.Process.clearMap(Gmap.Declare.seaMarkers1);
+            }
+        },
+        clearMap: function (stopMarkers) {
+            for (i = 0; i < stopMarkers.length; i++) {
+                stopMarkers[i].setMap(null);
+
+                if (i == stopMarkers.length - 1) {
+                    stopMarkers = [];
+                }
+            }
+            Gmap.Declare.directionsDisplay.setMap(Gmap.Declare.map);
+        },
     }
 };
 
@@ -2814,12 +3062,12 @@ var getSelected = function () {
     var allNodes = getDeepAllLeafNodes(App.treeAVC.getRootNode(), true);
     allNodes.forEach(function (node) {
         if (node.data.checked) {
-            //if (node.data.Type == 'S') {
+            if (node.data.Type != 'B') {
                 var index = dsr.indexOf(node.data.Data);
                 if (index == -1) {
                     dsr.push(node.data.Data);
                 }
-            //}
+            }
             if (node.childNodes.length > 0) {
                 getChildSelected(node);
             }
@@ -2831,12 +3079,12 @@ var getSelected = function () {
 var getChildSelected = function (node) {
     for (var i = 0; i < node.childNodes.length; i++) {
         if (node.childNodes[i].data.checked) {
-            //if (node.childNodes[i].data.Type == 'S') {
+            if (node.childNodes[i].data.Type != 'B') {
                 var index = dsr.indexOf(node.childNodes[i].data.Data);
                 if (index == -1) {
                     dsr.push(node.childNodes[i].data.Data);
                 }
-            //}
+            }
             if (node.childNodes[i].childNodes.length) {
                 getChildSelected(node.childNodes[i]);
             }

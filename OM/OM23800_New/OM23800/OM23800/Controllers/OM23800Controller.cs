@@ -1275,9 +1275,35 @@ namespace OM23800.Controllers
                 DataAccess dal = Util.Dal();
                 Style style = workbook.GetStyleInPool(0);
                 StyleFlag flag = new StyleFlag();
-                var beforeColTexts = new string[] { "N0", "CustId", "CustName", "Addr1", "Name", "Lat", "lng" };
+                var beforeColTexts = new string[] { "N0", "CustId", "CustName", "Addr1", "Name", "Lat", "lng", "Distributor" };
 
                 #region header info
+
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pjpID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@Channel", DbType.String, clsCommon.GetValueDBNull(channel), ParameterDirection.Input, int.MaxValue));
+                pc.Add(new ParamStruct("@Territory", DbType.String, clsCommon.GetValueDBNull(territory), ParameterDirection.Input, int.MaxValue));
+                pc.Add(new ParamStruct("@Province", DbType.String, clsCommon.GetValueDBNull(province), ParameterDirection.Input, int.MaxValue));
+                pc.Add(new ParamStruct("@Distributor", DbType.String, clsCommon.GetValueDBNull(distributor), ParameterDirection.Input, int.MaxValue));
+                pc.Add(new ParamStruct("@ShopType", DbType.String, clsCommon.GetValueDBNull(shopType), ParameterDirection.Input, int.MaxValue));
+                pc.Add(new ParamStruct("@SlsperId", DbType.String, clsCommon.GetValueDBNull(slsperId), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@DaysOfWeek", DbType.String, clsCommon.GetValueDBNull(daysOfWeek), ParameterDirection.Input, 3));
+                pc.Add(new ParamStruct("@WeekEO", DbType.String, clsCommon.GetValueDBNull(weekOfVisit), ParameterDirection.Input, 2));
+
+                pc.Add(new ParamStruct("@BrandID", DbType.String, clsCommon.GetValueDBNull(""), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@LangID", DbType.String, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 2));
+
+                DataTable dtDataHeaderExport = dal.ExecDataTable("OM23800_peMCLHeaer", CommandType.StoredProcedure, ref pc);
+                if (dtDataHeaderExport.Rows.Count > 0)
+                {
+                    distributorDescr = dtDataHeaderExport.Rows[0][0].PassNull();
+                    provinceDescr = dtDataHeaderExport.Rows[0][1].PassNull();
+                    territoryDescr = dtDataHeaderExport.Rows[0][2].PassNull();
+                }
                 // Title header
                 SetCellValue(SheetMCP.Cells["A2"],
                     string.Format("{0}", Util.GetLang("OM23800EHeader")),
@@ -1287,17 +1313,17 @@ namespace OM23800.Controllers
                 SetCellValue(SheetMCP.Cells["B3"],
                     string.Format("{0}", Util.GetLang("Area")),
                     TextAlignmentType.Center, TextAlignmentType.Left, true, 10, false);
-                SheetMCP.Cells["C3"].PutValue(string.Format("{0} - {1}", territory, territoryDescr));
+                SheetMCP.Cells["C3"].PutValue(territoryDescr);
 
                 SetCellValue(SheetMCP.Cells["B4"],
                     string.Format("{0}", Util.GetLang("Provice")),
                     TextAlignmentType.Center, TextAlignmentType.Left, true, 10, false);
-                SheetMCP.Cells["C4"].PutValue(string.Format("{0} - {1}", province, provinceDescr));
+                SheetMCP.Cells["C4"].PutValue(provinceDescr);
 
                 SetCellValue(SheetMCP.Cells["B5"],
                     string.Format("{0}", Util.GetLang("Distributor")),
                     TextAlignmentType.Center, TextAlignmentType.Left, true, 10, false);
-                SheetMCP.Cells["C5"].PutValue(string.Format("{0} - {1}", distributor, distributorDescr));
+                SheetMCP.Cells["C5"].PutValue(distributorDescr);
 
                 SetCellValue(SheetMCP.Cells["B6"],
                     string.Format("{0}", Util.GetLang("Channel")),
@@ -1340,7 +1366,7 @@ namespace OM23800.Controllers
                 #endregion
 
                 #region export data
-                ParamCollection pc = new ParamCollection();
+                pc = new ParamCollection();
                 pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pjpID), ParameterDirection.Input, 30));            
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
@@ -5785,7 +5811,7 @@ namespace OM23800.Controllers
                                  {
                                      #region -SS-
 
-                                     var nodeSS = SetNodeValue(ss, isChecked, "S", "SS", Ext.Net.Icon.UserGreen);
+                                     var nodeSS = SetNodeValue(ss, isChecked, "SS", "SS", Ext.Net.Icon.UserGreen);
                                      _allCurrentSalesman += ss.Data + ",";
 
                                      var lstSales = lstS.Where(x => x.SupID == ss.SlsperID).ToList();
