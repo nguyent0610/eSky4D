@@ -55,7 +55,7 @@
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)
                 
-                , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(120).Renderer("renderTerritory")
+                , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Renderer("renderTerritory")
                     .Editor(
                         HQ.Combo().ID("cboTerritory").Name("cboTerritory").ForceSelection(true)
                         .HQDBSys(false).HQProcedure("OM21800_pcTerritory").HQHeightWidth(400, 300)
@@ -71,17 +71,17 @@
                 , X.Column().Text(Util.GetLang("DescrTerr")).DataIndex("DescrTerr").Width(200).Hidden(true)
                     .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
                 
-                , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID").Width(200)
+                , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 				    .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
-                , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq").Width(200)
+                , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq").Width(50)
 				    .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
 				    .Editor(X.TextField())
 
                 
-                , X.Column().Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(120).Renderer("renderClassID")
+                , X.Column().Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(80).Renderer("renderClassID")
                     .Editor(
                         HQ.Combo().ID("cboClassID").Name("cboClassID").ForceSelection(true)
                         .HQDBSys(false).HQProcedure("OM21800_pcClassID").HQHeightWidth(400, 300)
@@ -119,7 +119,20 @@
                 .Listeners(l => l.Command.Handler = "btnDelete_Click(record);")
                         
                 , X.CheckColumn().ID("chkStatus").DataIndex("Status").Width(70).Editable(true).HideTitleEl(false).Text(Util.GetLang("Status"))
-              
+                
+                , X.Column().Text(Util.GetLang("Channel")).DataIndex("Channel")        
+                 .Editor(
+                        HQ.Combo().ID("cboChannel").Name("cboChannel").ForceSelection(true)
+                        .HQDBSys(false).HQProcedure("OM21800_pcChannel").HQHeightWidth(400, 300)
+                        .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .LoadData()
+                    )
+                
                 , X.CommandColumn().Width(150)
                 .Commands(
                     X.GridCommand()

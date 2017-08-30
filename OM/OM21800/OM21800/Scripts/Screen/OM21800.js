@@ -1,7 +1,7 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 var keys = ['Territory', 'DiscID', 'DiscSeq'];
-var fieldsCheckRequire = ['Territory', 'DiscID', 'DiscSeq', 'StartDate', 'EndDate','Descr','Poster'];
-var fieldsLangCheckRequire = ['Territory', 'DiscID', 'DiscSeq', 'StartDate', 'EndDate', 'Descr', 'Poster'];
+var fieldsCheckRequire = ['Territory', 'DiscID', 'DiscSeq', 'StartDate', 'EndDate','Descr'];
+var fieldsLangCheckRequire = ['Territory', 'DiscID', 'DiscSeq', 'StartDate', 'EndDate', 'Descr'];
 
 var _Source = 0;
 var _maxSource = 2;
@@ -168,7 +168,9 @@ var grdOM_DiscountInfor_Edit = function (item, e) {
     frmChange();
 };
 
-var checkInsertKey =  function (grd, e, keys) {
+var checkInsertKey = function (grd, e, keys) {
+
+
     if (keys.indexOf(e.field) != -1) {
         if (e.value != '')
             //HQ.store.insertBlank(grd.getStore(), keys);
@@ -258,6 +260,7 @@ var renderClassID = function (value, metaData, rec, rowIndex, colIndex, store) {
     }
 };
 
+
 var dates = {
     convert: function (d) {
         return (
@@ -283,13 +286,18 @@ var dates = {
 var fupImage_change = function (fup, newValue, oldValue, eOpts, record) {
     if (fup.value) {
         var ext = fup.value.split(".").pop().toLowerCase();
-        if (ext == "jpg" || ext == "png" || ext == "gif" || ext == "pdf" || ext == "mp4") {
-            imagName = fup.value;
-            _row.set('Poster', imagName);
-            flag = true;
+        if (fup.value.split(".")[0].indexOf(' ') >= 0 || /[^a-zA-Z0-9\-\/!@#$&()\\-`.+,/\"]/.test(fup.value.split(".")[0])) {
+            HQ.message.show(20170828, '', '');
         }
         else {
-            HQ.message.show(148, '', '');
+            if (ext == "jpg" || ext == "png" || ext == "gif" || ext == "pdf" || ext == "mp4" || ext == "jpeg" || ext == "docx" || ext == "xlsx") {
+                imagName = fup.value;
+                _row.set('Poster', imagName);
+                flag = true;
+            }
+            else {
+                HQ.message.show(148, '', '');
+            }
         }
     }
 };
@@ -305,7 +313,7 @@ var btnDelete_Click = function (record) {
 };
 
 checkSpecialChar = function (value) {
-    var abortChars = ['!', '@', '#', '$', '%', '^', '&', '*', '.', ',', '?','*', '.'];
+    var abortChars = ['!', '@', '#', '$', '%', '^', '&', '*', ',', '?','*', '.', '(' , ')', ' '];
     for (var i = 0; i < abortChars.length; i++) {
         value = value.split(abortChars[i]).join('');
     }

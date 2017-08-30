@@ -38,14 +38,14 @@ namespace OM21800
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";
-            Current.DBSys = "SonHa_eSky4DSys";
+            Current.Server = "TRUONGSAD";
+            Current.DBSys = "FranciaBeauty_Test_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM41300"] = acc;
-            Session["DBApp"] = Current.DBApp = "SonHa_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "FranciaBeauty_Test_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "C000058";
             Session["Language"] = Current.Language = "vi";

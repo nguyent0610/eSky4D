@@ -33,7 +33,7 @@ namespace OM21800.Controllers
         {
             get
             {
-                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "OM21800ImgConfig");
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadOM21800111");
                 if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
                 {
                     _filePath = config.TextVal;
@@ -172,6 +172,7 @@ namespace OM21800.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
+            t.Channel = s.Channel;
             t.DescrTerr = s.DescrTerr;
             t.Descr = s.Descr;
             t.ClassID = s.ClassID;
