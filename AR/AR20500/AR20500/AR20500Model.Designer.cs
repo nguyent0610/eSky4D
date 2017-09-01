@@ -8543,6 +8543,30 @@ namespace AR20500
         private global::System.String _ERPCustID;
         partial void OnERPCustIDChanging(global::System.String value);
         partial void OnERPCustIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String AR20500CreateDate
+        {
+            get
+            {
+                return _AR20500CreateDate;
+            }
+            set
+            {
+                OnAR20500CreateDateChanging(value);
+                ReportPropertyChanging("AR20500CreateDate");
+                _AR20500CreateDate = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("AR20500CreateDate");
+                OnAR20500CreateDateChanged();
+            }
+        }
+        private global::System.String _AR20500CreateDate;
+        partial void OnAR20500CreateDateChanging(global::System.String value);
+        partial void OnAR20500CreateDateChanged();
 
         #endregion
 
