@@ -33,7 +33,7 @@ namespace OM21800.Controllers
         {
             get
             {
-                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadOM21800111");
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadOM21800");
                 if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
                 {
                     _filePath = config.TextVal;
@@ -101,35 +101,7 @@ namespace OM21800.Controllers
                     var lang = _db.OM_DiscountInfor.Where(p => p.Territory.ToLower() == curItem.Territory.ToLower()
                                                             && p.DiscID.ToLower() == curItem.DiscID.ToLower()
                                                             && p.DiscSeq.ToLower() == curItem.DiscSeq.ToLower()).FirstOrDefault();
-                    #region Upload files
-                    var files = Request.Files;
-                    if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
-                    {
-                        // Xoa file cu di
-                        var oldPath = string.Format("{0}\\{1}", FilePath, curItem.Poster);
-                        if (System.IO.File.Exists(oldPath))
-                        {
-                            System.IO.File.Delete(oldPath);
-                        }
-                        // Upload file moi
-                        string newFileName = string.Format("{0}", files[0].FileName);
-                        files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
-                        curItem.Poster = newFileName;
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrWhiteSpace(curItem.Poster) && string.IsNullOrWhiteSpace(lang.Poster))
-                        {
-                            // Xoa file cu di
-                            var oldPath = string.Format("{0}\\{1}", FilePath, curItem.Poster);
-                            if (System.IO.File.Exists(oldPath))
-                            {
-                                System.IO.File.Delete(oldPath);
-                            }
-                            curItem.Poster = string.Empty;
-                        }
-                    }
-                    #endregion
+
                     if (lang != null)
                     {
                         if (lang.tstamp.ToHex() == curItem.tstamp.ToHex())
@@ -160,6 +132,41 @@ namespace OM21800.Controllers
             }
         }
 
+
+        public ActionResult UploadImage(string fileOldName, string fileName)
+        {
+            try
+            {
+                #region Upload files
+                var files = Request.Files;
+                if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
+                {
+                    // Xoa file cu di
+                    var oldPath = string.Format("{0}\\{1}", FilePath, fileOldName);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                    // Upload file moi
+                    string newFileName = string.Format("{0}", files[0].FileName);
+                    files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
+                }
+                #endregion
+                return Json(new { success = true, Exist = fileName }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
         private void Update_Language(OM_DiscountInfor t, OM21800_pgOM_DiscountInfor_Result s, bool isNew)
         {
             if (isNew)

@@ -294,6 +294,27 @@ var fupImage_change = function (fup, newValue, oldValue, eOpts, record) {
                 imagName = fup.value;
                 _row.set('Poster', imagName);
                 flag = true;
+
+                App.frmMain.submit({
+                    timeout: 1800000,
+                    //waitMsg: HQ.common.getLang("Uploading"),
+                    type: 'POST',
+                    url: 'OM21800/UploadImage',
+                    params: ({
+                        fileOldName: _row.data.SampleImage,
+                        fileName: fup.value,
+                    }),
+                    success: function (msg, data) {
+                        HQ.message.process(msg, data, true);
+                        if (data.result.Exist) {
+                            _row.set('SampleImage', data.result.Exist);
+
+                        }
+                    },
+                    failure: function (errorMsg, data) {
+                        HQ.message.process(errorMsg, data, true);
+                    }
+                });
             }
             else {
                 HQ.message.show(148, '', '');
