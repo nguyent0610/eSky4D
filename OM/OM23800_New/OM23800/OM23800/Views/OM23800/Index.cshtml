@@ -26,7 +26,7 @@
         <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
         <script src='@Url.Content("Scripts/screen/OM23800.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
 
-        <script src='@Url.Content("https://maps.googleapis.com/maps/api/js?key=" + googleAPIKey + "&sensor=false&libraries=drawing")' type="text/javascript"></script>
+        <script src='@Url.Content("https://maps.googleapis.com/maps/api/js?key=" + googleAPIKey + "&libraries=drawing")' type="text/javascript"></script>
 
         @*<script type="text/javascript" src='https://maps.googleapis.com/maps/api/js?key=' + apikey + '&sensor=false&libraries=drawing'></script>*@
         <script src="~/Scripts/Screen/OM30400_map_label.js"></script>
@@ -145,7 +145,15 @@
                 l.Load.Fn = "Event.Store.stoMCL_load";
             })
         )*@
-
+        @(Html.HQ().Store().ID("stoWeekOfVisit").AutoLoad(true)
+            .HQProcedure("OM23800_pcWeekOfVisit")
+        .HQParam(new StoreParameterCollection() {
+            new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+            new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+        })
+        .LoadData()
+        )
         @( X.Store().ID("stoOverLays")
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM23800_pdOverLays_Result), "mdlOM23800_pdOverLays", ""))
@@ -235,5 +243,8 @@
         @{ Html.RenderAction("MCPCusts","OM23800", new { lang = Current.LangID }); }
         @{ Html.RenderAction("ImportExport","OM23800", new { lang = Current.LangID }); }
         @{ Html.RenderAction("SuggestView", "OM23800", new { lang = Current.LangID }); }
+
+
+        @{ Html.RenderAction("ChangeRouteView", "OM23800", new { lang = Current.LangID }); }
     </body>
 </html>

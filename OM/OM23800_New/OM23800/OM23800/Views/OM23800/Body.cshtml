@@ -136,6 +136,14 @@
                                 .Icon(Icon.Add).Text(Util.GetLang("AddNew") + " " + Util.GetLang("Customer"))
                                 .ToolTip(Util.GetLang("AddNew") + " " + Util.GetLang("Customer"))
                                 .Handler("Event.Form.btnAddNewCustomer_Click")
+
+
+                                , X.MenuSeparator()
+
+                                , X.MenuItem().ID("btnChangeRoute")
+                                .Icon(Icon.ArrowBranch).Text(Util.GetLang("OM22400"))
+                                .ToolTip(Util.GetLang("OM22400"))
+                                    .Handler("Event.Form.btnChangeRoute_Click")
                             )
                         )
 
@@ -675,7 +683,7 @@
 
 @(X.Window()
     .ID("winAddNewCustomer")
-    .Title(Util.GetLang("AddNew"))
+    .Title(Util.GetLang("AR20400"))
     .Icon(Icon.Application)
    .Maximized(true)
     .Modal(true)
@@ -1139,9 +1147,10 @@
     //.Resizable(true)
     //.Maximizable(true)
     .Maximized(true)
+    .Closable(false)
     .MinWidth(350).MinHeight(250)//.Minimizable(true)
     .StyleSpec("z-index:80000;")
-    .Width(650).Height(450)
+    .Width(650).Height(450)    
     .Layout(LayoutType.Fit)
             .Listeners(x =>
             {
@@ -1152,6 +1161,13 @@
         X.FormPanel()
         .Layout(LayoutType.Border)
         .DefaultButton("btnSearch")
+        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{             
+            X.Button()
+            .Icon(Icon.ApplicationHome)
+            .Text(Util.GetLang("Close"))
+            .ToolTip(Util.GetLang("Close"))
+            .Handler("App.winCustID.close();")                          
+        }, buttonHidden: "print,delete,save,new,refresh", isShowNavigationButtons: false, handlerName: ""))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Items(
             X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0").Region(Region.North)

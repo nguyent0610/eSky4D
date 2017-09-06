@@ -126,7 +126,12 @@ namespace OM23800.Controllers
         {
             return PartialView();
         }
-
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult ChangeRouteView(string lang)
+        {
+            return PartialView();
+        }
+        
         public ActionResult LoadMCP(string routeID,string pJPID, string channel, string territory,
             string province, string distributor, string shopType,
             string slsperId, string daysOfWeek, string weekOfVisit,
@@ -412,6 +417,12 @@ namespace OM23800.Controllers
                                     && x.SalesRouteID == branchID
                                     && x.PJPID == pJPID);
             return this.Store(slsRouteMster);
+        }
+
+        public ActionResult GetChangeRoute(string branchID, string pJPID, string slsperID, string routeID)
+        {
+            var lstData = _db.OM23800_pgLoadGrid(branchID, pJPID, slsperID, routeID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            return this.Store(lstData);
         }
 
         public ActionResult LoadOverLays(string BranchID,string PJPID)
@@ -6225,6 +6236,56 @@ namespace OM23800.Controllers
                  }
              }
          }
+        #endregion
+
+        #region -ChangeRouteProcess-        
+        [HttpPost]
+         public ActionResult ChangeRouteProcess(FormCollection data)
+        {
+            try
+            {
+                string BranchID = data["cboBranchID"].PassNull();
+                string PJPID = data["cboPJPID"].PassNull();
+                string SlsPerID = data["cboSalesMan"].PassNull();
+                string SalesRouteID = data["cboRouteID"].PassNull();
+                string BranchID1 = data["cboBranchID1"].PassNull();
+                string PJPID1 = data["cboPJPID1"].PassNull();
+                string SlsPerID1 = data["cboSalesMan1"].PassNull();
+                string SalesRouteID1 = data["cboRouteID1"].PassNull();
+
+                DateTime dtNow = DateTime.Now;
+                var dataHandler = new StoreDataHandler(data["lstData"]);
+                var lstData = dataHandler.ObjectData<OM23800_pgLoadGrid_Result>().Where(p => p.Selected == true).ToList();
+                var strCust = string.Empty;
+
+                bool flag = false;
+                foreach (var record in lstData)
+                {
+                    if (record.Selected == true)
+                    {
+                        if (flag == false)
+                        {
+                            if (record.BranchID != BranchID || record.PJPID != PJPID || record.SlsPerID != SlsPerID || record.SalesRouteID != SalesRouteID)
+                            {
+                                throw new MessageException(MessageType.Message, "2017090601");
+                            }
+                            flag = true;
+                        }
+                        strCust += record.CustID.PassNull() + ",";
+                    }
+                }
+                if (strCust != "" && strCust != string.Empty)
+                {
+                    _db.OM23800_ppChangeRoute(BranchID, PJPID, SlsPerID, SalesRouteID, BranchID1, PJPID1, SlsPerID1, SalesRouteID1, strCust.TrimEnd(','),Current.UserName, Current.CpnyID, Current.LangID);
+                }
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
         #endregion
     }
 }

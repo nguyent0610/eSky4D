@@ -386,6 +386,15 @@
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="OM23800_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="PJPID" Type="varchar" Mode="In" />
+          <Parameter Name="SlsPerID" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRouteID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="OM23800_pgMCL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RouteID" Type="varchar" Mode="In" />
           <Parameter Name="PJPID" Type="varchar" Mode="In" />
@@ -414,6 +423,20 @@
         <Function Name="OM23800_ppAllowModifyCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM23800_ppChangeRoute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID_A" Type="varchar" Mode="In" />
+          <Parameter Name="PJPID_A" Type="varchar" Mode="In" />
+          <Parameter Name="SlsPerID_A" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRouteID_A" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID_B" Type="varchar" Mode="In" />
+          <Parameter Name="PJPID_B" Type="varchar" Mode="In" />
+          <Parameter Name="SlsPerID_B" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRouteID_B" Type="varchar" Mode="In" />
+          <Parameter Name="StringCustID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="OM23800_ppCheckAutoCustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -617,6 +640,29 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="OM23800_ptParentNode" ReturnType="Collection(OM23800Model.OM23800_ptParentNode_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM23800_pgLoadGrid" ReturnType="Collection(OM23800Model.OM23800_pgLoadGrid_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="PJPID" Mode="In" Type="String" />
+            <Parameter Name="SlsPerID" Mode="In" Type="String" />
+            <Parameter Name="SalesRouteID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM23800_ppChangeRoute">
+            <Parameter Name="BranchID_A" Mode="In" Type="String" />
+            <Parameter Name="PJPID_A" Mode="In" Type="String" />
+            <Parameter Name="SlsPerID_A" Mode="In" Type="String" />
+            <Parameter Name="SalesRouteID_A" Mode="In" Type="String" />
+            <Parameter Name="BranchID_B" Mode="In" Type="String" />
+            <Parameter Name="PJPID_B" Mode="In" Type="String" />
+            <Parameter Name="SlsPerID_B" Mode="In" Type="String" />
+            <Parameter Name="SalesRouteID_B" Mode="In" Type="String" />
+            <Parameter Name="StringCustID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
@@ -1047,6 +1093,30 @@
           <Property Type="String" Name="Color" Nullable="true" MaxLength="6" />
           <Property Type="Int32" Name="Level" Nullable="false" />
           <Property Type="String" Name="Data" Nullable="true" MaxLength="65" />
+        </ComplexType>
+        <ComplexType Name="OM23800_pgLoadGrid_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="PJPID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SalesRouteID" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SlsFreq" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="SlsFreqType" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="VisitSort" Nullable="false" />
+          <Property Type="String" Name="WeekofVisit" Nullable="false" MaxLength="10" />
+          <Property Type="Boolean" Name="Mon" Nullable="false" />
+          <Property Type="Boolean" Name="Tue" Nullable="false" />
+          <Property Type="Boolean" Name="Wed" Nullable="false" />
+          <Property Type="Boolean" Name="Thu" Nullable="false" />
+          <Property Type="Boolean" Name="Fri" Nullable="false" />
+          <Property Type="Boolean" Name="Sat" Nullable="false" />
+          <Property Type="Boolean" Name="Sun" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="StartDate" Nullable="true" />
+          <Property Type="DateTime" Name="EndDate" Nullable="true" />
+          <Property Type="String" Name="SlsName" Nullable="false" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1529,6 +1599,35 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM23800_pgLoadGrid" FunctionName="eBiz4DWebAppModel.Store.OM23800_pgLoadGrid">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23800Model.OM23800_pgLoadGrid_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="PJPID" ColumnName="PJPID" />
+                <ScalarProperty Name="SalesRouteID" ColumnName="SalesRouteID" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="SlsFreq" ColumnName="SlsFreq" />
+                <ScalarProperty Name="SlsFreqType" ColumnName="SlsFreqType" />
+                <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
+                <ScalarProperty Name="WeekofVisit" ColumnName="WeekofVisit" />
+                <ScalarProperty Name="Mon" ColumnName="Mon" />
+                <ScalarProperty Name="Tue" ColumnName="Tue" />
+                <ScalarProperty Name="Wed" ColumnName="Wed" />
+                <ScalarProperty Name="Thu" ColumnName="Thu" />
+                <ScalarProperty Name="Fri" ColumnName="Fri" />
+                <ScalarProperty Name="Sat" ColumnName="Sat" />
+                <ScalarProperty Name="Sun" ColumnName="Sun" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="SlsName" ColumnName="SlsName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM23800_ppChangeRoute" FunctionName="eBiz4DWebAppModel.Store.OM23800_ppChangeRoute" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
