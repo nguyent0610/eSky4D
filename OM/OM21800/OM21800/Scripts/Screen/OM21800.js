@@ -285,12 +285,13 @@ var dates = {
 ////////////////////////////////////////////////////////////////////////////////////////
 var fupImage_change = function (fup, newValue, oldValue, eOpts, record) {
     if (fup.value) {
+        var imagNameTmp = fup.value.split(".");
         var ext = fup.value.split(".").pop().toLowerCase();
-        if (fup.value.split(".")[0].indexOf(' ') >= 0 || /[^a-zA-Z0-9\-\/!@#$&()\\-`.+,/\"]/.test(fup.value.split(".")[0])) {
+        if (/[^a-zA-Z0-9\-_\s"]/.test(fup.value.split(".")[0]) || imagNameTmp.length > 2) {
             HQ.message.show(20170828, '', '');
         }
         else {
-            if (ext == "jpg" || ext == "png" || ext == "gif" || ext == "pdf" || ext == "mp4" || ext == "jpeg" || ext == "docx" || ext == "xlsx") {
+            if (ext == "jpg" || ext == "png" || ext == "gif" || ext == "pdf" || ext == "mp4" || ext == "jpeg" || ext == "docx" || ext == "xlsx" || ext == "doc" || ext == "xls") {
                 imagName = fup.value;
                 _row.set('Poster', imagName);
                 flag = true;
