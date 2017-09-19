@@ -101,7 +101,7 @@
                             })
                             .LoadData()
                                 .Listeners(l =>
-                                {
+                                {                                    
                                     l.Change.Fn = "DiscDefintion.Event.cboDiscClass_change";
                                     l.TriggerClick.Handler = "this.clearValue(); this.store.clearFilter();";
                             })
@@ -170,6 +170,7 @@
                                             {
                                                 l.Change.Fn = "DiscDefintion.Event.cboDiscFor_change";
                                                 l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                                l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                             })
 
                                         , HQ.Combo().ID("cboBreakBy")
@@ -186,6 +187,7 @@
                                             {
                                                 l.Change.Fn = "DiscDefintion.Event.cboBreakBy_change";
                                                 l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                                l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                             })
 
                                         , HQ.Combo().ID("cboBudgetID")
@@ -201,6 +203,7 @@
                                         .Listeners(l =>
                                         {
                                             l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                         })
                                     ) // Container
 
@@ -225,6 +228,8 @@
                                                 l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                                 l.Change.Fn = "DiscDefintion.Event.cboProAplForItem_change";
                                                 l.BeforeShow.Fn = "DiscDefintion.Event.cboProAplForItem_beforeShow";
+                                                l.Expand.Fn = "DiscDefintion.Event.cboProAplForItem_Expand";
+                                                l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";                                                                                            
                                             })
 
                                         , HQ.DateField().ID("dteStartDatePO")
@@ -240,10 +245,17 @@
                                         , HQ.DateField().ID("dteStartDate")
                                         .MarginSpec("5 5 0 5")
                                         .HQLangCode("StartDate").DataIndex("StartDate")
+                                        .Listeners(l => {
+                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                        })
 
                                         , HQ.DateField().ID("dteEndDate")
                                         .MarginSpec("5 5 0 5")
                                         .HQLangCode("EndDate").DataIndex("EndDate")
+                                            .Listeners(l =>
+                                            {
+                                                l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                            })
                                     ) // Container
 
                                     // Third Column
@@ -288,18 +300,34 @@
                                         HQ.Checkbox().ID("chkActive")
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("Active")).DataIndex("Active")
+                                            .Listeners(l =>
+                                            {
+                                                l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            })
 
                                         , HQ.Checkbox().ID("chkDiscTerm")
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("DiscTerm")).DataIndex("Promo")
+                                            .Listeners(l =>
+                                                {
+                                                    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                                })
 
                                         , HQ.Checkbox().ID("chkAutoFreeItem")
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("AutoFreeItem")).DataIndex("AutoFreeItem")
+                                            .Listeners(l =>
+                                                {
+                                                    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                                })
 
                                         , HQ.Checkbox().ID("chkAllowEditDisc")
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("AllowEditDisc")).DataIndex("AllowEditDisc")
+                                            .Listeners(l =>
+                                                {
+                                                    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                                })
                                         .Hidden(true)
                                     ) // Container
                                 ),
@@ -313,6 +341,10 @@
                                     .StyleSpec("text-align:left").Width(880)
         //.MaxLength(50).EnforceMaxLength(true)
                                     .AllowBlank(false)
+                                    .Listeners(l =>
+                                    {
+                                        l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                    })
                                 )
                             )
                             .Listeners(ls =>

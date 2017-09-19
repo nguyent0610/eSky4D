@@ -1478,12 +1478,22 @@ var DiscDefintion = {
         },
 
         cboDiscSeq_change: function (cbo, newValue, oldValue, eOpts) {
-            //var selRec = HQ.store.findInStore(cbo.store, ["DiscSeq"], [cbo.getValue()]);
-            //if (selRec || !_isNewSeq) {
-            if (HQ.util.passNull(cbo.getValue()) != _seqLoad && !cbo.hasFocus) {
-                App.stoDiscSeqInfo.reload();
-            }
+
+            //if (sender.valueModels != null && !App.stoSalesPerson.loading) {
+            //    if (App.cboSlsperid.allowBlank == false && HQ.isChange == true) {
+            //        HQ.message.show(150, '', '');
+            //        sender.setValue(sender.originalValue);
+            //        return;
+            //    }
+            //    App.stoSalesPerson.reload();
             //}
+
+            //var selRec = HQ.store.findInStore(cbo.store, ["DiscSeq"], [cbo.getValue()]);
+            //    if (selRec || !_isNewSeq) {
+                if (HQ.util.passNull(cbo.getValue()) != _seqLoad && !cbo.hasFocus) {
+                    App.stoDiscSeqInfo.reload();
+                }
+           // }
         },
 
         cboDiscSeq_select: function (cbo, newValue, oldValue, eOpts) {
@@ -1626,6 +1636,43 @@ var DiscDefintion = {
             //}
         },
 
+        cboProAplForItem_Expand: function () {
+            var store = App.cboProAplForItem.store;
+            store.clearFilter();
+            var recordcboDiscClass = App.cboDiscClassOM21100_pcDiscClass.findRecord('Code', App.cboDiscClass.value);
+            if (recordcboDiscClass != null) {               
+                if (!recordcboDiscClass.data.ProAplForItem) {
+                    store.filterBy(function (record) {
+                        if (record) {
+                            if (record.data.Code == 'A') {
+                                return record;
+                            }
+                        }                    
+                    });
+                }
+            } else {
+                store.filterBy(function (record) {
+                });
+            }
+            App.cboProAplForItem.store.update();
+        },
+
+        checkExpandCombo: function() {
+            if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
+                HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+                return false;
+            }
+        },
+
+        checkChangeCheckBox: function(chk, newValue, oldValue, eOpts) {
+            if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
+                HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+                chk.suspendEvents();
+                chk.setValue(false);
+                chk.resumeEvents();
+                return false;
+            }
+        },
 
         cboGCustID_Change: function (item, newValue, oldValue, eOpts) {
             _selBranchID = '';
