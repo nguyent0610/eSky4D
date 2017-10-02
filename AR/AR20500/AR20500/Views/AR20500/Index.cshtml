@@ -77,6 +77,8 @@
         HQ.EndDateYear = new Date('@( new DateTime(DateTime.Now.Year,12,31))')
         HQ.isShowCustHT = HQ.util.toBool('@ViewBag.IsShowCustHT');
         HQ.IsShowERPCust = HQ.util.toBool('@ViewBag.IsShowERPCust');
+
+        HQ.IsRequireRefCustID = HQ.util.toBool('@ViewBag.IsRequireRefCustID');
         
     </script>  
     <title>@ViewBag.Title</title>

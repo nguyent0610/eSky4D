@@ -91,6 +91,22 @@ var btnProcess_Click = function () {
             var rowerror = '';
             var isnullclass = '';
             var isnullpriceclass = '';
+            if (HQ.IsRequireRefCustID) {
+                for (var i = 0; i < App.grdCust.store.getCount() ; i++) {
+                    var data = App.grdCust.store.data.items[i].data;
+                    if (data.ColCheck) {
+                        if (Ext.isEmpty(data.ERPCustID)) {
+                            HQ.message.show(1000, HQ.common.getLang('ERPCustID'), '');
+                            rowerror += i + 1 + ',';
+                            break;
+                        }
+                    }
+                }
+            }
+            if (rowerror != '') {
+                return;
+            }
+
             //for (var i = 0; i < App.grdCust.store.getCount() ; i++) {
             //    var data = App.grdCust.store.data.items[i].data;
             //    if (data.ColCheck) {
@@ -110,10 +126,10 @@ var btnProcess_Click = function () {
             //    HQ.message.show(1000, HQ.common.getLang('PriceClass'), '');
             //    return;
             //}
-            if (rowerror != '') {
-                HQ.message.show(201302071, rowerror, '');
-                return;
-            }
+            //if (rowerror != '') {
+            //    HQ.message.show(201302071, rowerror, '');
+            //    return;
+            //}
           
             App.dteFromDate.setValue(HQ.bussinessDate);
             App.dteToDate.setValue(HQ.EndDateYear);

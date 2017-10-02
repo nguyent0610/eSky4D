@@ -82,6 +82,14 @@ namespace AR20500.Controllers
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            var requireRefCustID = false;
+            // IntVal = 0 khong check dieu kien - IntVal = 1 co check dieu kien trùng RefCustID
+            var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "AR20500CheckRefCust");
+            if (config != null && config.FloatVal == 1)
+            {
+                requireRefCustID = true;
+            }
+            ViewBag.IsRequireRefCustID = requireRefCustID;
             ViewBag.IsShowCustHT = _db.AR20500_pdIsShowCustHT().FirstOrDefault();
             return View();
         }
@@ -116,22 +124,43 @@ namespace AR20500.Controllers
 
                 var lstCust = custHandler.ObjectData<AR20500_pgDetail_Result>();
                
-              
                 var access = Session["AR20500"] as AccessRight;
 
                 if (!access.Update && !access.Insert)
                     throw new MessageException(MessageType.Message, "728");
                 string handle = data["cboHandle"];
                 string custlist = "";
+                List<string> lstCustHT = new List<string>();
 
                 if (handle != "N" && handle != string.Empty)
                 {
                     if (checkApprove == 1 && askApprove == 0 && handle == "A")
                     {
+                        var isCheckRefCustID = IsCheckRefCustID();
                         foreach (var item in lstCust)
                         {
                             if (item.ColCheck == true)
                             {
+                                if (isCheckRefCustID && !string.IsNullOrWhiteSpace(item.ERPCustID))
+                                {
+                                    string key = (item.BranchID + item.ERPCustID).ToUpper();
+                                    if (lstCustHT.Any(x => x == key))
+                                    {
+                                        throw new MessageException(MessageType.Message, "2017071401", "", parm: new string[] { item.BranchID, item.CustID, item.ERPCustID });
+                                    }
+                                    else
+                                    {
+                                        var obj = _db.AR_Customer.FirstOrDefault(x => x.BranchID == item.BranchID && x.RefCustID.ToUpper() == item.ERPCustID.ToUpper());
+                                        if (obj != null)
+                                        {
+                                            throw new MessageException(MessageType.Message, "2017071401", "", parm: new string[] { item.BranchID, item.CustID, item.ERPCustID });
+                                        }
+                                        if (!lstCustHT.Any(x => x == key))
+                                        {
+                                            lstCustHT.Add(key);
+                                        }
+                                    }
+                                }
                                 //Check dieu kien Name/Addr/Phone
                                 var objCheck = _db.AR20500_ppCheckApprove(item.OutletName, item.Phone, item.Addr1, Current.LangID).FirstOrDefault();
                                 if (objCheck != null)
@@ -224,11 +253,8 @@ namespace AR20500.Controllers
                                 
                                 objCust.ProfilePic = objNew.ProfilePic;
                                 objCust.SubTerritory = objNew.SubTerritory;
-                                //var state = _db.SI_State.FirstOrDefault(p => p.State.ToLower() == objCust.State.ToLower());
-                                //if (state != null) 
-                                //{
-                                objCust.Territory = item.Territory.PassNull();
-                                //}
+  
+                                objCust.Territory = item.Territory.PassNull();                                
                                 objCust.Attn = objCust.BillAttn = item.ContactName.PassNull();
                                 objCust.CustName = objCust.BillName = item.OutletName.PassNull();
                                 objCust.CustType = item.CustType.PassNull(); ;
@@ -1328,5 +1354,18 @@ namespace AR20500.Controllers
             }
         }
 
+        private bool IsCheckRefCustID()
+        {
+
+            var _checkRefCustID = false;
+            // IntVal = 0 khong check dieu kien - IntVal = 1 co check dieu kien trùng RefCustID
+            var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "AR20500CheckRefCust");
+            if (config != null && config.IntVal == 1)
+            {
+                _checkRefCustID = true;
+            }
+            return _checkRefCustID;
+        }
+       
     }
 }
