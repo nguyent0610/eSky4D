@@ -24,7 +24,16 @@ namespace OM21100.Controllers
         OM21100Entities _db = Util.CreateObjectContext<OM21100Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         List<OM21100_ptInventory_Result> _lstPtInventory = new List<OM21100_ptInventory_Result>();
-        List<OM21100_pdSI_Hierarchy_Result> _lstSI_HierarchyI = new List<OM21100_pdSI_Hierarchy_Result>();     
+        List<OM21100_pdSI_Hierarchy_Result> _lstSI_HierarchyI = new List<OM21100_pdSI_Hierarchy_Result>();
+
+        private const string Channel = "CT"; // Cho Chứng Từ
+        private const string CustCate = "CL"; // Loại KH cho Chứng Từ
+
+        private const string ItemChannel = "IC"; // Mặt hàng + Channel
+        private const string GItemChannel = "GC"; // Nhóm MH + Channel
+        private const string ItemCustCate = "GI"; // Mặt Hàng + Loại KH
+        private const string GItemCustCate = "GP"; // Nhóm MH + Loại KH 
+         
         // GET: /OM21100/
         public ActionResult Index()
         {
@@ -39,7 +48,7 @@ namespace OM21100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -423,6 +432,18 @@ namespace OM21100.Controllers
             return this.Store(discItems);
         }
 
+        public ActionResult GetDiscCustCate(string discID, string discSeq)
+        {
+            var custcates = _db.OM21100_pgDiscCustCate(discID, discSeq, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            return this.Store(custcates);
+        }
+
+        public ActionResult GetDiscChannel(string discID, string discSeq)
+        {
+            var channels = _db.OM21100_pgDiscChannel(discID, discSeq, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            return this.Store(channels);
+        }
+
         public ActionResult SaveData(FormCollection data, bool isNewDiscID, bool isNewDiscSeq)
         {
             try
@@ -457,18 +478,9 @@ namespace OM21100.Controllers
                         }
                         else
                         {
-                            //// Update discount
-                            //if (disc.tstamp.ToHex() == inputDisc.tstamp.ToHex())
-                            //{
-                                updateDiscount(ref disc, inputDisc, false, roles);
-                                saveDiscSeq(data, disc, inputDiscSeq, isNewDiscSeq);
-
-                                return Json(new { success = true, msgCode = 201405071, tstamp = disc.tstamp.ToHex() });
-                            //}
-                            //else
-                            //{
-                            //    throw new MessageException(MessageType.Message, "19");
-                            //}
+                            updateDiscount(ref disc, inputDisc, false, roles);
+                            saveDiscSeq(data, disc, inputDiscSeq, isNewDiscSeq);
+                            return Json(new { success = true, msgCode = 201405071, tstamp = disc.tstamp.ToHex() });
                         }
                     }
                     else
@@ -554,6 +566,17 @@ namespace OM21100.Controllers
                         foreach (var item in lstCompany)
                             _db.OM_DiscCpny.DeleteObject(item);
 
+                        var lstDiscCustCate = (from p in _db.OM_DiscCustCate where p.DiscID.ToUpper() == discID select p).ToList();
+                        foreach (var item in lstDiscCustCate)
+                        {
+                            _db.OM_DiscCustCate.DeleteObject(item);
+                        }
+
+                        var lstDiscChannel = (from p in _db.OM_DiscChannel where p.DiscID.ToUpper() == discID select p).ToList();
+                        foreach (var item in lstDiscChannel)
+                        {
+                            _db.OM_DiscChannel.DeleteObject(item);
+                        }
                         Submit_Data(null, "", null);
                         return Json(new { success = true });
                     }
@@ -622,6 +645,17 @@ namespace OM21100.Controllers
                         foreach (var item in lstCompany)
                             _db.OM_DiscCpny.DeleteObject(item);
 
+                        var lstDiscCustCate = (from p in _db.OM_DiscCustCate where p.DiscID.ToUpper() == discID select p).ToList();
+                        foreach (var item in lstDiscCustCate)
+                        {
+                            _db.OM_DiscCustCate.DeleteObject(item);
+                        }
+
+                        var lstDiscChannel = (from p in _db.OM_DiscChannel where p.DiscID.ToUpper() == discID select p).ToList();
+                        foreach (var item in lstDiscChannel)
+                        {
+                            _db.OM_DiscChannel.DeleteObject(item);
+                        }
                         Submit_Data(null, "", null);
                         return Json(new { success = true });
                     }
@@ -688,10 +722,10 @@ namespace OM21100.Controllers
             {
                 if (item.DiscAmt == 0 
                     && !((_db.OM_DiscFreeItem.Any(p => p.LineRef == item.LineRef && p.DiscID == inputDisc.DiscID && p.DiscSeq == inputDiscSeq.DiscSeq)
-                    && !lstFreeItemChange.Deleted.Any(p => p.LineRef == item.LineRef))
-                    || lstFreeItem.Any(p => p.LineRef == item.LineRef)
-                    || lstFreeItemChange.Created.Any(p => p.LineRef == item.LineRef)
-                    || lstFreeItemChange.Updated.Any(p => p.LineRef == item.LineRef)))
+                    && !lstFreeItemChange.Deleted.Any(p => p.LineRef == item.LineRef && p.FreeItemID != string.Empty))
+                    || lstFreeItem.Any(p => p.LineRef == item.LineRef && p.FreeItemID != string.Empty)
+                    || lstFreeItemChange.Created.Any(p => p.LineRef == item.LineRef && p.FreeItemID != string.Empty)
+                    || lstFreeItemChange.Updated.Any(p => p.LineRef == item.LineRef && p.FreeItemID != string.Empty)))
                 {
                     throw new MessageException(MessageType.Message, "1798");
                 }
@@ -1348,6 +1382,31 @@ namespace OM21100.Controllers
                 Save_Bundle(data, handle, branches, inputSeq);
             else if (inputSeq.DiscClass == "CB")
                 Save_Bundle(data, handle, branches, inputSeq);
+
+            else if (inputSeq.DiscClass == Channel)
+            {
+                Save_DiscChannel(data, handle, branches, inputSeq);
+            }
+            else if (inputSeq.DiscClass == CustCate)
+            {
+                Save_DiscCustCate(data, handle, branches, inputSeq);
+            }
+            else if (inputSeq.DiscClass == ItemChannel)
+            {
+                Save_DiscItem(data, handle, branches, inputSeq);
+            }
+            else if (inputSeq.DiscClass == ItemCustCate)
+            {
+                Save_DiscItem(data, handle, branches, inputSeq);
+            }
+            else if (inputSeq.DiscClass == GItemChannel)
+            {
+                Save_DiscItemClass(data, handle, branches, inputSeq);
+            }            
+            else if (inputSeq.DiscClass == GItemCustCate)
+            {
+                Save_DiscItemClass(data, handle, branches, inputSeq);
+            }
         }
 
         private void Save_DiscCustClass(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
@@ -1377,7 +1436,6 @@ namespace OM21100.Controllers
                     Update_DiscCustClass(newCustClass, currentCustClass, true);
                     _db.OM_DiscCustClass.AddObject(newCustClass);
                 }
-
             }
 
             foreach (var deleted in lstDiscCustClassChange.Deleted)
@@ -1476,7 +1534,6 @@ namespace OM21100.Controllers
                     Update_DiscItem(newItem, currentItem, true);
                     _db.OM_DiscItem.AddObject(newItem);
                 }
-
             }            
 
             if (inputSeq.DiscClass == "II")
@@ -1485,7 +1542,14 @@ namespace OM21100.Controllers
                 Save_DiscCust(data,handle, branches, inputSeq);
             else if (inputSeq.DiscClass == "TI")
                 Save_DiscCustClass(data, handle, branches, inputSeq);
-
+            else if (inputSeq.DiscClass == ItemChannel)
+            {
+                Save_DiscChannel(data, handle, branches, inputSeq);
+            }
+            else if (inputSeq.DiscClass == ItemCustCate)
+            {
+                Save_DiscCustCate(data, handle, branches, inputSeq);
+            }
         }
 
         private void Save_DiscCust(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
@@ -1609,7 +1673,6 @@ namespace OM21100.Controllers
                     Update_DiscItemClass(newItemClass, currentItemClass, true);
                     _db.OM_DiscItemClass.AddObject(newItemClass);
                 }
-
             }
 
             foreach (var deleted in lstDiscItemClassChange.Deleted)
@@ -1626,8 +1689,16 @@ namespace OM21100.Controllers
                 Submit_Data(handle, branches, inputSeq);
             else if (inputSeq.DiscClass == "TP")
                 Save_DiscCustClass(data, handle, branches, inputSeq);
+            else if (inputSeq.DiscClass == GItemChannel)
+            {
+                Save_DiscChannel(data, handle, branches, inputSeq);
+            }
+            else if (inputSeq.DiscClass == GItemCustCate)
+            {
+                Save_DiscCustCate(data, handle, branches, inputSeq);
+            }
 
-        }
+        }        
 
         private void Save_Bundle(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
         {
@@ -1696,6 +1767,105 @@ namespace OM21100.Controllers
 
         }
 
+        private void Save_DiscCustCate(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        {
+            var discItemHandler = new StoreDataHandler(data["lstDiscCustCate"]);
+            var lstCustCate = discItemHandler.ObjectData<OM21100_pgDiscCustCate_Result>()
+                        .Where(p => Util.PassNull(p.CustCateID) != string.Empty).ToList();
+
+            var discItemChangeHandler = new StoreDataHandler(data["lstDiscCustCateChange"]);
+            var lstCustCateChange = discItemChangeHandler.BatchObjectData<OM21100_pgDiscCustCate_Result>();
+
+            foreach (var deleted in lstCustCateChange.Deleted)
+            {
+                if (!lstCustCate.Any(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.CustCateID == deleted.CustCateID))
+                {
+                    var deletedDiscItem = _db.OM_DiscCustCate.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.CustCateID == deleted.CustCateID);
+                    if (deletedDiscItem != null)
+                    {
+                        _db.OM_DiscCustCate.DeleteObject(deletedDiscItem);
+                    }
+                }
+            }
+
+            foreach (var currentItem in lstCustCate)
+            {
+                var discItem = (from p in _db.OM_DiscCustCate
+                                where
+                                    p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq &&
+                                    p.CustCateID == currentItem.CustCateID
+                                select p).FirstOrDefault();
+                if (discItem == null)
+                {
+                    discItem = new OM_DiscCustCate();
+                    discItem.DiscID = inputSeq.DiscID;
+                    discItem.DiscSeq = inputSeq.DiscSeq;
+                    discItem.CustCateID = currentItem.CustCateID;
+                    discItem.LUpd_DateTime = DateTime.Now;
+                    discItem.LUpd_Prog = _screenNbr;
+                    discItem.LUpd_User = Current.UserName;
+                    discItem.Crtd_DateTime = DateTime.Now;
+                    discItem.Crtd_Prog = _screenNbr;
+                    discItem.Crtd_User = Current.UserName;
+                    discItem.tstamp = new byte[1];
+                    _db.OM_DiscCustCate.AddObject(discItem);
+                }
+            }
+
+            Submit_Data(handle, branches, inputSeq);
+        }
+
+        private void Save_DiscChannel(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
+        {
+            var discItemHandler = new StoreDataHandler(data["lstDiscChannel"]);
+            var lstChannel = discItemHandler.ObjectData<OM21100_pgDiscChannel_Result>()
+                        .Where(p => Util.PassNull(p.ChannelID) != string.Empty).ToList();
+
+            var discItemChangeHandler = new StoreDataHandler(data["lstDiscChannelChange"]);
+            var lstChannelChange = discItemChangeHandler.BatchObjectData<OM21100_pgDiscChannel_Result>();
+
+            foreach (var deleted in lstChannelChange.Deleted)
+            {
+                if (!lstChannel.Any(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.ChannelID == deleted.ChannelID))
+                {
+                    var deletedDiscItem = _db.OM_DiscChannel.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.ChannelID == deleted.ChannelID);
+                    if (deletedDiscItem != null)
+                    {
+                        _db.OM_DiscChannel.DeleteObject(deletedDiscItem);
+                    }
+                }
+            }
+
+            foreach (var currentItem in lstChannel)
+            {
+                var discItem = (from p in _db.OM_DiscChannel
+                                where
+                                    p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq &&
+                                    p.ChannelID == currentItem.ChannelID
+                                select p).FirstOrDefault();
+                if (discItem == null)
+                {
+                    discItem = new OM_DiscChannel();
+                    discItem.DiscID = inputSeq.DiscID;
+                    discItem.DiscSeq = inputSeq.DiscSeq;
+                    discItem.ChannelID = currentItem.ChannelID;
+                    discItem.LUpd_DateTime = DateTime.Now;
+                    discItem.LUpd_Prog = _screenNbr;
+                    discItem.LUpd_User = Current.UserName;
+                    discItem.Crtd_DateTime = DateTime.Now;
+                    discItem.Crtd_Prog = _screenNbr;
+                    discItem.Crtd_User = Current.UserName;
+                    discItem.tstamp = new byte[1];
+                    _db.OM_DiscChannel.AddObject(discItem);
+                }
+            }
+
+            Submit_Data(handle, branches, inputSeq);
+        }
         private void Update_DiscItemClass(OM_DiscItemClass t, OM21100_pgDiscItemClass_Result s, bool isNew)
         {
             try

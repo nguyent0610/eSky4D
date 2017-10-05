@@ -143,8 +143,7 @@
                 // Store: stoFreeItem
         )
 
-        @(
- X.Store().ID("stoCompany")
+        @(X.Store().ID("stoCompany")
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM21100_pgCompany_Result), "mdlCompany", "DiscID,DiscSeq,CpnyID"))
             .Proxy(
@@ -169,64 +168,9 @@
                 l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
                 // Store: stoCompany
-        )
+        )      
 
-        @*@(X.Store().ID("stoDiscItem")
-            .AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(OM21100_pgDiscItem_Result), "mdlDiscItem", "DiscID,DiscSeq,InvtID"))
-            .Proxy(
-                X.AjaxProxy()
-                .Url(Url.Action("GetDiscItem", "OM21100"))
-                .ActionMethods(action =>
-                {
-                    action.Read = HttpMethod.POST;
-                })
-                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-            )
-            .Parameters(ps =>
-            {
-                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
-                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
-            })
-            .Listeners(l =>
-            {
-                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
-                l.Load.Fn = "Main.Event.sto_load";
-                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
-                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
-            })
-                // Store: stoDiscItem
-        )*@
-
-        @*@(X.Store().ID("stoBundle")
-            .AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(OM21100_pgDiscBundle_Result), "mdlBundle", "DiscID,DiscSeq,InvtID"))
-            .Proxy(
-                X.AjaxProxy()
-                .Url(Url.Action("GetDiscBundle", "OM21100"))
-                .ActionMethods(action =>
-                {
-                    action.Read = HttpMethod.POST;
-                })
-                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-            )
-            .Parameters(ps =>
-            {
-                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
-                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
-            })
-            .Listeners(l =>
-            {
-                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
-                l.Load.Fn = "Main.Event.sto_load";
-                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
-                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
-            })
-                // Store: stoBundle
-        )*@
-
-         @(
- X.Store().ID("stoDiscCustClass")
+         @(X.Store().ID("stoDiscCustClass")
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM21100_pgDiscCustClass_Result), "mdlDiscCustClass", "DiscID,DiscSeq,ClassID"))
             .Proxy(
@@ -252,37 +196,8 @@
             })
                  // Store: stoDiscCustClass
         )
-
-        @*@(
-    X.Store().ID("stoDiscCust")
-               .AutoLoad(false)
-               .Model(Util.GenerateModel(typeof(OM21100_pgDiscCust_Result), "mdlDiscCust", "DiscID,DiscSeq,CustID,BranchID"))
-               .Proxy(
-                   X.AjaxProxy()
-                   .Url(Url.Action("GetDiscCust", "OM21100"))
-                   .ActionMethods(action =>
-                   {
-                       action.Read = HttpMethod.POST;
-                   })
-                   .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-               )
-               .Parameters(ps =>
-               {
-                   ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
-                   ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
-               })
-               .Listeners(l =>
-               {
-                   l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'CustID', 'BranchID'];";
-                   l.Load.Fn = "Main.Event.sto_load";
-                   l.Update.Handler = "Main.Event.frmMain_fieldChange()";
-                   l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
-               })
-                   // Store: stoDiscCust
-           )*@
-
-        @(
- X.Store().ID("stoDiscItemClass")
+       
+        @(X.Store().ID("stoDiscItemClass")
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM21100_pgDiscItemClass_Result), "mdlDiscItemClass", "DiscID,DiscSeq,ClassID"))
             .Proxy(

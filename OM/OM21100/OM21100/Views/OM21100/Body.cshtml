@@ -53,7 +53,7 @@
                             .LoadData()
                             .Listeners(l =>
                             {
-                                l.TriggerClick.Handler = "this.clearValue(); this.store.clearFilter();";//l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                l.TriggerClick.Handler = "HQ.focus == 'frmDiscDefintionTop'; this.clearValue(); this.store.clearFilter();";//l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                 l.Change.Fn = "DiscDefintion.Event.cboDiscID_change";
                                 l.Blur.Fn = "DiscDefintion.Event.cboDiscID_change";
                                 l.Select.Fn = "DiscDefintion.Event.cboDiscID_select";
@@ -578,10 +578,12 @@
                                             .HQHeightWidth(400, 300)
                                             .ValueField("BudgetID").DisplayField("BudgetID")
                                             .ForceSelection(true).SelectOnFocus(true)
+                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                             .HQParam(new StoreParameterCollection() { 
                                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                                             })
                                             .LoadData()
+                                            .Listeners(l => l.TriggerClick.Handler = "this.clearValue();")
                                         )
 
                                         , X.CommandColumn()
@@ -1414,7 +1416,6 @@
                                 new StoreParameter("@ClassID","Main.Process.getParamForGridCombo(App.grdDiscItemClass,'ClassID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
-        // .Listeners(x => x.Expand.Handler = "this.store.reload()")
                         )
 
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
@@ -1456,6 +1457,171 @@
                 {
                     ls.Render.Handler = "HQ.common.control_render(this,'pnlDPPP')";
                 }) // pnlDPPP
+
+                , X.Panel().ID("pnlDPCL")
+                .Title(Util.GetLang("DPCL"))
+                .Layout(LayoutType.Border)
+                .Items(
+                    X.GridPanel().ID("grdDiscCustCate")
+                    .Region(Region.Center)
+                    .Scroll(ScrollMode.Both)
+                    .View(X.GridView().TrackOver(false))
+                    .SortableColumns(false)
+                    .Store(
+                        X.Store().ID("stoDiscCustCate").AutoLoad(false)
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(OM21100_pgDiscCustCate_Result), "mdlDiscCustCate", "", true))
+                        .Listeners(l =>
+                            {
+                                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'CustCateID'];";
+                                l.Load.Fn = "Main.Event.sto_load";
+                                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                            })
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDiscCustCate", "OM21100")))
+                        .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                            })
+                    )
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40)
+                        , X.Column().Text(Util.GetLang("CustCateID")).DataIndex("CustCateID")
+                        .Editor(
+                            HQ.Combo().ID("cboCustCate")
+                            .HQProcedure("OM21100_pcCustCate").HQColumnShow("Code,Descr")
+                            .HQHeightWidth(400, 300)
+                            .ValueField("Code").DisplayField("Code")
+                            .ForceSelection(true).SelectOnFocus(true)
+                            .HQParam(new StoreParameterCollection() { 
+                                new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw),
+                                new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw),
+                                new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
+                            })
+                            .LoadData()
+                        )
+
+                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")                                          
+                        , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
+                        , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
+                        , X.CommandColumn().Width(130)
+                        .Commands(
+                            X.GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                        )
+                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                        .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
+                    )
+                    .SelectionModel(X.RowSelectionModel().ID("slmDiscCustCate").Mode(SelectionMode.Multi))
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.BeforeEdit.Fn = "Main.Event.grd_beforeEdit";
+                            ls.Edit.Fn = "Main.Event.grd_edit";
+                            ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
+                        })
+                    )
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("CustCateID"),
+                                X.StringFilter().DataIndex("Descr")
+                            )
+                    ) // grdDiscItemClass
+                )
+                .Listeners(ls =>
+                {
+                    ls.Render.Handler = "HQ.common.control_render(this,'pnlDPCL')";
+                }) // CustCate
+
+                        , X.Panel().ID("pnlDPCT")
+                    .Title(Util.GetLang("DPCT"))
+                    .Layout(LayoutType.Border)
+                    .Items(
+                        X.GridPanel().ID("grdDiscChannel")
+                        .Region(Region.Center)
+                        .Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false))
+                        .SortableColumns(false)
+                        .Store(
+                            X.Store().ID("stoDiscChannel").AutoLoad(false)
+                            .PageSize(50)
+                            .Model(Util.GenerateModel(typeof(OM21100_pgDiscChannel_Result), "mdlDiscChannel", "", true))
+                            .Listeners(l =>
+                                {
+                                    l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'ChannelID'];";
+                                    l.Load.Fn = "Main.Event.sto_load";
+                                    l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                                    l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                                })
+                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDiscChannel", "OM21100")))
+                            .Parameters(ps =>
+                                {
+                                    ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                                })
+                        )
+                        .ColumnModel(
+                            X.RowNumbererColumn().Width(40)
+                            , X.Column().Text(Util.GetLang("ChannelID")).DataIndex("ChannelID")
+                            .Editor(
+                                HQ.Combo().ID("cboChannel")
+                                .HQProcedure("OM21100_pcChannel").HQColumnShow("Code,Descr")
+                                .HQHeightWidth(400, 300)
+                                .ValueField("Code").DisplayField("Code")
+                                .ForceSelection(true).SelectOnFocus(true)
+                                .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw),
+                                    new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw),
+                                    new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
+                                })
+                                .LoadData()
+                            )
+                            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
+                            , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
+                            , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
+                            , X.CommandColumn().Width(130)
+                            .Commands(
+                                X.GridCommand()
+                                .Text(Util.GetLang("Reject"))
+                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                .CommandName("reject")
+                                .Icon(Icon.ArrowUndo)
+                            )
+                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                            .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
+                        )
+                        .SelectionModel(X.RowSelectionModel().ID("slmDiscChannel").Mode(SelectionMode.Multi))
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "Main.Event.grd_beforeEdit";
+                                ls.Edit.Fn = "Main.Event.grd_edit";
+                                ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
+                            })
+                        )
+                        .Features(
+                            X.GridFilters()
+                                .Local(true)
+                                .Filters(
+                                    X.StringFilter().DataIndex("ChannelID"),
+                                    X.StringFilter().DataIndex("Descr")
+                                )
+                        ) // grdDiscItemClass
+                    )
+                    .Listeners(ls =>
+                    {
+                        ls.Render.Handler = "HQ.common.control_render(this,'pnlDPCT')";
+                    }) // Channel
 
             ) // tabMain
         )
