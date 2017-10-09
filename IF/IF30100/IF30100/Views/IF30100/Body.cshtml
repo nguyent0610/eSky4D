@@ -3,6 +3,7 @@
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
 @using IF30100;
+@using IF30100.Controllers;
 @{
     Layout = null;
     var X = Html.X();
@@ -152,81 +153,136 @@
                     .Items(X.TabPanel().ID("tabFilterGrid"))
                 )
                 
-                ,X.Panel().ID("pnlProc").Region(Region.Center).Layout(LayoutType.Border).Title(Util.GetLang("Parameter")).Hidden(true)
+                ,X.TabPanel().ID("pnlProc").Region(Region.Center).Layout(LayoutType.Border).Hidden(true)
                 .Items(
-                    X.Panel().Border(false).Region(Region.North).Layout(LayoutType.Fit)
+                X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Fit).Title(Util.GetLang("Parameter"))
                     .Items(
-                        X.Panel()
-                        .Border(false)                             
-                        .Layout(LayoutType.Column)
-                        .Items(                                                                          
+                        X.Panel().Border(false).Region(Region.North).Layout(LayoutType.Fit)
+                        .Items(
                             X.Panel()
-                            .ID("pnlDate").Margin(5)
-                            .Title(Util.GetLang("dateparm"))
-                            .BodyPadding(5).Hidden(true)
-                            .Layout(LayoutType.VBox)
-                            //.Collapsible(false)
-                            .MinHeight(150)
-                            .Width(250)
-                            .Items(
-                            ),
+                            .Border(false)                             
+                            .Layout(LayoutType.Column)
+                            .Items(                                                                          
+                                X.Panel()
+                                .ID("pnlDate").Margin(5)
+                                .Title(Util.GetLang("dateparm"))
+                                .BodyPadding(5).Hidden(true)
+                                .Layout(LayoutType.VBox)
+                                //.Collapsible(false)
+                                .MinHeight(150)
+                                .Width(250)
+                                .Items(
+                                ),
                            
-                            X.Panel().ColumnWidth(0.8).Margin(5)
-                            .ID("pnlStringParm").Hidden(true)
-                            .Title(Util.GetLang("stringparm"))
-                            .Layout(LayoutType.Anchor)
-                            .BodyPadding(5)
-                            .AnchorHorizontal("100%")
-                            .AnchorVertical("100%")
-                            .ColumnWidth(1)
-                            //.Collapsible(false)
-                            .MinHeight(150)
-                            .Items(
+                                X.Panel().ColumnWidth(0.8).Margin(5)
+                                .ID("pnlStringParm").Hidden(true)
+                                .Title(Util.GetLang("stringparm"))
+                                .Layout(LayoutType.Anchor)
+                                .BodyPadding(5)
+                                .AnchorHorizontal("100%")
+                                .AnchorVertical("100%")
+                                .ColumnWidth(1)
+                                //.Collapsible(false)
+                                .MinHeight(150)
+                                .Items(
 
-
-                            )
-                            ,
-                            X.Panel().Margin(5)
-                            .ID("pnlBoaleanParm").Hidden(true)
-                            .Title(Util.GetLang("booleanparm"))
-                            .BodyPadding(5)
-                            .Layout(LayoutType.VBox)
-                            //.Collapsible(false)
-                            .MinHeight(150)
-                            .Width(200)
-                            .Items(
-
-                            )
-                            
-                        )
-                        
-                    )
-                    ,X.TabPanel()
-                        .Layout(LayoutType.Anchor)
-                        .Region(Region.Center)
-                        .AnchorHorizontal("100%")
-                        .AnchorVertical("100%")                                                          
-                        .ID("tabList")  
-                        .Listeners(lst=>lst.TabChange.Fn="tabList_TabChange")                                                                         
-                        .Items(
-                                                
-                            )
-                            ,
-                                        
-                X.Panel()
-                        .Region(Region.South)
-                        .Layout(LayoutType.HBox)
-                        .ID("pnlButton")
-                        .Height(30)
-                        .Border(false)
-                        .ButtonAlign(Alignment.Right)
-                        .Items(
-                              
 
                                 )
+                                ,
+                                X.Panel().Margin(5)
+                                .ID("pnlBoaleanParm").Hidden(true)
+                                .Title(Util.GetLang("booleanparm"))
+                                .BodyPadding(5)
+                                .Layout(LayoutType.VBox)
+                                //.Collapsible(false)
+                                .MinHeight(150)
+                                .Width(200)
+                                .Items(
+
+                                )
+                            
+                            )
+                        
+                        )
+                        ,X.TabPanel()
+                            .Layout(LayoutType.Anchor)
+                            .Region(Region.Center)
+                            .AnchorHorizontal("100%")
+                            .AnchorVertical("100%")                                                          
+                            .ID("tabList")  
+                            .Listeners(lst=>lst.TabChange.Fn="tabList_TabChange")                                                                         
+                            .Items(
+                                                
+                                )
+                                ,
+                                        
+                    X.Panel()
+                            .Region(Region.South)
+                            .Layout(LayoutType.HBox)
+                            .ID("pnlButton")
+                            .Height(30)
+                            .Border(false)
+                            .ButtonAlign(Alignment.Right)
+                            .Items(
+                              
+
+                                    )
+
+                            )
+                , X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Fit).Title(Util.GetLang("ChoiceColumn"))
+                    .Items(
+                        X.GridPanel().ID("grdChoiceColumn")
+                        .MarginSpec("3 0 0 0")
+                        .Border(true).BorderSpec("1 0 0 0")
+                        .RowLines(true)
+                        .ColumnLines(true)
+                            .Store(
+                                X.Store()
+                                .ID("stoChoiceColumn")
+                                .PageSize(50)
+                                .Model(Util.GenerateModel(typeof(DataInfo), "mdlDataInfo", "")
+                                )
+                                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetChoiceColumnInfo")).Timeout(int.MaxValue)).AutoLoad(false)
+                                .Parameters(ps =>
+                                {
+                                    ps.Add(new StoreParameter("name", "getView()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("sys", "false", ParameterMode.Value));
+                                })                                
+                            )
+                        .ColumnModel(
+                            X.RowNumbererColumn()//.Renderer("renderRowNumber")
+                            , X.Column().Text(Util.GetLang("Column_Name")).DataIndex("ColumnName").Width(200)
+                            , X.CheckColumn().ID("ColCheckChoiceColumn").DataIndex("Checked").Editable(true).HideTitleEl(true)
+                            .HeaderItems(
+                                HQ.Checkbox().ID("ColCheckChoiceColumn_Header").HQLangCode("IF30100Check")
+                                .Listeners(l =>
+                                {
+                                    l.Change.Fn = "ColCheckChoiceColumn_Change";
+                                })
+                            )
 
                         )
-                        
+                        .SelectionModel(X.RowSelectionModel().ID("smlChoiceColumnDetail").Mode(SelectionMode.Single))
+                        .View(X.GridView().TrackOver(false))
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    //ls.Edit.Fn = "grdDet_Edit";
+                                })
+                        )
+                        .Features(
+                            X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("Column_Name"),
+                                X.BooleanFilter().DataIndex("Checked")
+                            )
+                        )                            
+                    )
+                    
+                )       
                 ,X.GridPanel().ID("grdDet")
                 .MarginSpec("3 0 0 0")
                 .BottomBar(X.Toolbar().Items(

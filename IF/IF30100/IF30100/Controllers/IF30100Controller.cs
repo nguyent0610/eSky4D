@@ -10,7 +10,6 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
-
 using HQFramework.DAL;
 using HQFramework.Common;
 using HQ.eSkyFramework.HQControl;
@@ -19,6 +18,7 @@ using Microsoft.Office.Interop.Excel;
 using Aspose.Cells;
 using System.Runtime.InteropServices;
 using System.Globalization;
+using System.Data.SqlClient;
 namespace IF30100.Controllers
 {
     [DirectController]
@@ -85,6 +85,41 @@ namespace IF30100.Controllers
         public ActionResult GetIF30100_pgData(string view)
         {
             return this.Store(_db.IF30100_pgData(view).ToList());
+        }
+        public ActionResult GetChoiceColumnInfo(bool sys, string type, string name)
+        {
+
+            System.Data.DataTable dt = new System.Data.DataTable();
+            Dictionary<string, string> lstprocParam = new Dictionary<string, string>();
+            dt = GetDataParam(name, sys);
+            if (dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+
+                    lstprocParam.Add(dt.Rows[i][0].ToString(), ConvertData(dt.Rows[i][1].ToString()));
+                }
+            }
+            dt = GetDataTableColumn(name, lstprocParam, sys);
+
+            List<DataInfo> lst = new List<DataInfo>();
+            foreach (DataRow itm in dt.Rows)
+            {
+                if (itm["ColumnName"].ToString() != "tstamp")
+                {
+                    string typeData = itm["DataTypeName"].ToString();
+                    DataInfo d = new DataInfo()
+                    {
+
+                        Checked = false,
+                        ColumnName = itm["ColumnName"].ToString(),
+                     
+                    };
+                    lst.Add(d);
+                }
+            }
+
+            return this.Store(lst);
         }
 
         [DirectMethod]
@@ -2293,7 +2328,8 @@ namespace IF30100.Controllers
                     }
                 #endregion
                 _db.SaveChanges();
-
+                string[] choiceColumn = data["choiceColumn"].PassNull().Split('@');
+                
                 try
                 {
                     Stream stream = new MemoryStream();
@@ -2307,22 +2343,29 @@ namespace IF30100.Controllers
                     System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.StoredProcedure, ref pc);
 
                     Cell cell;
+                    List<int> lstColumn = new List<int>();
+                    //remove column
+                    for (int x = 0; x < dtInvtID.Columns.Count; x++)
+                    {
+                        if (choiceColumn.Contains(dtInvtID.Columns[x].ColumnName)) lstColumn.Add(x);
+                    }
                     for (int j = 1; j < dtInvtID.Rows.Count; j++)
                     {
-                        for (int x = 0; x < dtInvtID.Columns.Count; x++)
+                        for (int x = 0; x < lstColumn.Count; x++)
                         {
+                           
                             if(j==1)
-                                SetCellValueGrid(SheetData.Cells.Rows[0][x], Util.GetLang(dtInvtID.Columns[x].ColumnName), TextAlignmentType.Center, TextAlignmentType.Left);
+                                SetCellValueGrid(SheetData.Cells.Rows[0][x], Util.GetLang(dtInvtID.Columns[lstColumn[x]].ColumnName), TextAlignmentType.Center, TextAlignmentType.Left);
                             cell = SheetData.Cells[j, x];
-                            if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("DATE"))
+                            if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("DATE"))
                             {
-                               
-                                DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][x].ToString());
+
+                                DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][lstColumn[x]].ToString());
                                 cell.PutValue(tmpValue.ToString(Current.FormatDate));
                             }
                             else
                             {
-                                cell.PutValue(dtInvtID.Rows[j][x].ToString());
+                                cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString());
                             }
                         }
                     }
@@ -2363,5 +2406,88 @@ namespace IF30100.Controllers
 
             //return Json(created.ReportName + created.ReportID + ".xls");
         }
+
+        #region other
+        private string ConvertData(string data)
+        {
+            switch (data.ToUpper())
+            {
+                case "DATETIME":
+                case "DATE":
+                    data = "1900-1-1";
+                    break;
+                case "VARCHAR":
+                    data = "@#@";
+                    break;
+                case "NVARCHAR":
+                    data = "@#@";
+                    break;
+                case "FLOAT":
+                case "INT":
+                case "SMALLINT":
+                    data = "0";
+                    break;
+                case "BIT":
+                    data = "0";
+                    break;
+                default:
+                    data = "0";
+                    break;
+            }
+
+
+            return data;
+        }
+        private System.Data.DataTable GetDataParam(string procName, bool sys = false, bool isReadOnly = true)
+        {
+
+            DataAccess dal = Util.Dal(sys,isReadOnly);
+            string sqlqueryproc = @"select PARAMETER_NAME, DATA_TYPE from information_schema.parameters where specific_name = '" + procName + "'";
+            System.Data.DataTable dt = new System.Data.DataTable();
+            return dal.ExecDataTable(sqlqueryproc, CommandType.Text);
+
+        }
+        public System.Data.DataTable GetDataTableColumn(string procName, Dictionary<string, string> parameter, bool sys = false, bool isReadOnly = true)
+        {
+
+
+            string strConnection = Util.Dal(sys, isReadOnly).ConnectionString;
+
+            SqlCommand cmd = new SqlCommand();
+            SqlConnection cn = new SqlConnection(strConnection);
+            System.Data.DataTable dt = new System.Data.DataTable();
+            SqlDataReader myReader;
+
+            try
+            {
+                cn.Open();
+                cmd.Connection = cn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = procName;
+                if (parameter != null)
+                {
+
+                    foreach (var parm in parameter)
+                    {
+                        cmd.Parameters.Add(new SqlParameter(parm.Key, parm.Value));
+                    }
+                }
+                myReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                dt = myReader.GetSchemaTable();
+                return dt;
+            }
+            finally
+            {
+                cn.Close();
+            }
+        }
+        #endregion
     }
+    public class DataInfo
+    {
+        public bool Checked { get; set; }
+        public string ColumnName { get; set; }
+      
+    }
+
 }

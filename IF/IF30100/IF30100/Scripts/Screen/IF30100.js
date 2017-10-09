@@ -286,6 +286,17 @@ var colCheck_Header_Change = function (value) {
         App.grdDet.view.refresh();
     }
 };
+var ColCheckChoiceColumn_Change = function (value) {
+    if (value) {
+        App.stoChoiceColumn.suspendEvents();
+        App.stoChoiceColumn.each(function (item) {
+            item.set("Checked", value.checked);
+        });
+        App.stoChoiceColumn.resumeEvents();
+        App.grdstoChoiceColumn.view.refresh();
+    }
+};
+
 
 var frmMain_BoxReady = function () {
     if (HQ.screenNbr != 'IF30100') {
@@ -339,6 +350,7 @@ var loadParam = function (i, reportNbr, reportView) {
         success: function (result) {
             setTimeout(function () {
                 App.btnLoadParamList.fireEvent("click");
+                App.stoChoiceColumn.reload();
                 HQ.common.showBusy(false);
             }, 200);
         }
@@ -350,6 +362,7 @@ function exportExcelProc() {
     var List1 = '';
     var List2 = '';
     var List3 = '';
+    var ChoiceColumn = '';
     App.List0.store.suspendEvents();
     var allData0 = App.List0.store.snapshot || App.List0.store.allData || App.List0.store.data;
     allData0.each(function (record) {
@@ -381,6 +394,13 @@ function exportExcelProc() {
             List3 += record.data[App.List3.tag] + ',';
     });
     App.List3.store.resumeEvents();
+    App.stoChoiceColumn.suspendEvents();
+    var allChoiceColumn = App.stoChoiceColumn.snapshot || App.stoChoiceColumn.allData || App.stoChoiceColumn.data;
+    allChoiceColumn.each(function (record) {
+        if (record.data.Checked)
+            ChoiceColumn += record.data.ColumnName + '@';
+    });
+    App.stoChoiceColumn.resumeEvents();
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("Exporting"),
@@ -392,6 +412,7 @@ function exportExcelProc() {
                 list1: List1,//App.List1.getSelectionSubmit().getSelectionModelField().getValue(),
                 list2: List2,//App.List2.getSelectionSubmit().getSelectionModelField().getValue(),
                 list3: List3,//App.List3.getSelectionSubmit().getSelectionModelField().getValue(),
+                choiceColumn:ChoiceColumn,
                 proc: App.cboReport.valueModels[0].data.ReportView,
                 name: App.cboReport.valueModels[0].data.ReportName,
                 reportNbr: App.cboReport.valueModels[0].data.ReportNbr,
