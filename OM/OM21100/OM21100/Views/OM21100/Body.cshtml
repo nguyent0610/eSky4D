@@ -57,6 +57,7 @@
                                 l.Change.Fn = "DiscDefintion.Event.cboDiscID_change";
                                 l.Blur.Fn = "DiscDefintion.Event.cboDiscID_change";
                                 l.Select.Fn = "DiscDefintion.Event.cboDiscID_select";
+                                l.Expand.Handler = "App.cboDiscID.store.clearFilter();";
                             })
 
                             , HQ.Combo().ID("cboDiscType")

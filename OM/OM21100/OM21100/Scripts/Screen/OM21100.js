@@ -708,7 +708,13 @@ var Main = {
                 }
                 App.cboDiscID.setReadOnly(HQ.isChange0);
                 App.cboDiscSeq.setReadOnly(HQ.isChange);
-                //App.btnSearch.setReadOnly(HQ.isChange);
+                if (HQ.isChange && !App.cboDiscClass.readOnly) {
+                    App.cboDiscClass.setReadOnly(true);
+                    App.cboDiscType.setReadOnly(true);
+                } else if (!HQ.isChange && App.cboDiscSeq.store.data.length == 0) {
+                    App.cboDiscClass.setReadOnly(false);
+                    App.cboDiscType.setReadOnly(false);
+                }
             }
         },
 
@@ -741,6 +747,13 @@ var Main = {
                                     HQ.store.insertRecord(sto, keys, newRec, false);
                                 }
                             }
+                        }
+                        else if (sto.storeId == 'stoDiscBreak') {
+                            var obj = HQ.store.findRecord(sto, ["DiscID", "DiscSeq", "LineRef"], [discId, discSeq, '']);
+                            if (!obj) {
+                                var newRec = Ext.create(sto.model.modelName, newData);
+                                HQ.store.insertRecord(sto, keys, newRec, false);
+                            }
                         } else {
                             var obj = HQ.store.findRecord(sto, keys, [discId, discSeq, '', '', '', '', '']);
                             if (!obj) {
@@ -748,15 +761,8 @@ var Main = {
                                 HQ.store.insertRecord(sto, keys, newRec, false);
                             }
                         }
-
                     }
-                    if (sto.storeId == 'stoDiscBreak') {
-                        var obj = HQ.store.findRecord(sto, ["DiscID", "DiscSeq", "LineRef"], [discId, discSeq, '']);
-                        if (!obj) {
-                            var newRec = Ext.create(sto.model.modelName, newData);
-                            HQ.store.insertRecord(sto, keys, newRec, false);
-                        }
-                    }
+                    
                 }
                 
             }
@@ -2915,6 +2921,7 @@ var DiscDefintion = {
 
                 if (!App.cboDiscClass.readOnly) {
                     App.cboDiscClass.setReadOnly(true);
+                    App.cboDiscType.setReadOnly(true);
                 }
             }
         },
@@ -2944,6 +2951,7 @@ var DiscDefintion = {
 
                         if (!App.cboDiscClass.readOnly) {
                             App.cboDiscClass.setReadOnly(true);
+                            App.cboDiscType.setReadOnly(true);
                         }
 
                     }
