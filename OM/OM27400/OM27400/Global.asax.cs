@@ -31,13 +31,13 @@ namespace OM27400
            Current.Authorize = false;
             Current.Server = "TRUONGSAD";
             Current.FormatDate = "dd-MM.yyyy";
-            Current.DBSys = "FranciaBeauty_TEST_eSky4DSys";
+            Current.DBSys = "ECOPharm_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM27400"] = acc;
-            Session["DBApp"] = Current.DBApp = "FranciaBeauty_TEST_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "ECOPharm_eSky4DApp";
 			Session["UserName"] = Current.UserName = "admin";
 			Session["CpnyID"] = Current.CpnyID = "Nissin";
             Session["Language"] = Current.Language = "vi";

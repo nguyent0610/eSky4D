@@ -8,7 +8,6 @@
     var X = Html.X();
     var HQ = Html.HQ();
     var DecimalPlaces = 2;
-    string yearNbr = "2015";// DateTime.Now.Year.ToString();
 }
 
 @(
@@ -55,22 +54,12 @@
                .Items(
                     
                     HQ.Combo().ID("cboYearNbr").Name("cboYearNbr").HQLangCode("Year").Width(0).ForceSelection(false).Hidden(true)
-                    //    .HQProcedure("OM27400_pcYearNbr").HQAutoLoad(true).ForceSelection(false)
-                    //    .HQColumnShow("YearNbr").DisplayField("YearNbr").ValueField("YearNbr").HQFirstDefault(true)                  
-                    //    .HQParam(new StoreParameterCollection() 
-                    //    { 
-                    //        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                    //        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                    //        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                    //    })
-                    //    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    //    .LoadData()
-                            .Listeners(lst =>
-                            {
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Change.Fn = "cboYearNbr_Change";//khi thay doi du lieu
-                            })
-                    ,HQ.DateField().Name("dteYearNbr").Type(DatePickerType.Month).Format("yyyy").Width(250).HQLangCode("Year")
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboYearNbr_Change";//khi thay doi du lieu
+                    })
+                    ,HQ.DateField().Name("dteYearNbr").Type(DatePickerType.Month).Format("yyyy").Width(220).HQLangCode("Year")
                      .AllowBlank(false)                         
                           .Listeners(lst =>
                         {
@@ -95,10 +84,9 @@
                             lst.Change.Fn = "cboKPI_Change";//khi thay doi du lieu
                             lst.TriggerClick.Fn = "cboKPI_TriggerClick";                            
                             lst.Focus.Handler = "this.forceSelection=false";
+                            lst.Expand.Handler = "App.cboKPI.store.reload();";
                         })
 
-                    //, HQ.TextBox().ID("Type").Name("Type").HQLangCode("Type")
-                    //.Width(300).DataIndex("Type").ReadOnly(true)
                     , HQ.Combo().ID("cboType").Name("cboType").HQLangCode("Type").HQProcedure("OM27400_pcType").ForceSelection(true).HQAutoLoad(true).ReadOnly(true)
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                         .Width(250).DataIndex("Code")
@@ -137,7 +125,7 @@
                         .HQProcedure("OM27400_pcQuarterNbr").HQAutoLoad(true).MaxLength(15).EnforceMaxLength(true).ForceSelection(true)
                         .HQColumnShow("Quarter,StartDate,EndDate").DisplayField("Quarter").ValueField("QuarterNbr")
                         .AllowBlank(false)
-                        .Width(250).HQHeightWidth(500, 300).Editable(true)
+                        .Width(220).HQHeightWidth(500, 300).Editable(true)
                         .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@YearNbr", Value = "App.cboYearNbr.getValue()", Mode = ParameterMode.Raw },
@@ -201,7 +189,7 @@
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@Zone", Value = "App.cboZone.getValue().join(',')", Mode = ParameterMode.Raw }
+                            new StoreParameter() { Name = "@Zone", Value = "joinParams(App.cboZone)", Mode = ParameterMode.Raw }
                         })
                         .LoadData()
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -211,13 +199,11 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                     )
-                , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 5 0")
+                , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
                     .Items(
                         HQ.DateField().ShowToday(true).ID("dtefromday").Name("dtefromday").HQLangCode("FromDate").DataIndex("StartDate")
-                        .Format(Current.FormatDate).Width(250).ReadOnly(true)                                                
+                        .Format(Current.FormatDate).Width(220).ReadOnly(true)                                                
 
-                        //, HQ.TextBox().ID("txtApplyTo").Name("ApplyTo").HQLangCode("ApplyTo").DataIndex("ApplyTo")
-                        //.Width(300).AllowBlank(true).MaxLength(200).EnforceMaxLength(true).ReadOnly(true)
                         , HQ.Combo().ID("cboApplyTo").Name("cboApplyTo").HQLangCode("OM27400ApplyTo").HQProcedure("OM27400_pcApplyTo").ForceSelection(true).HQAutoLoad(true).ReadOnly(true)
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                         .Width(250).DataIndex("Code")
@@ -260,7 +246,7 @@
                     .Items(
                         HQ.DateField().ShowToday(true).ID("dtetoday").Name("dtetoday").HQLangCode("ToDate").DataIndex("EndDate")
                         .Format(Current.FormatDate)
-                        .Width(250).ReadOnly(true)
+                        .Width(220).ReadOnly(true)
                     )
             ).Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'pnlHeader')")
 ////////////////////////////////////////////////////////////////End Header////////////////////////////////////////////////////
@@ -291,8 +277,8 @@
                                     {
                                         ps.Add(new StoreParameter("QuarterNbr", "App.cboQuarterNbr.getValue()", ParameterMode.Raw));
                                         ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
-                                        ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                                        ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Zone", "joinParams(App.cboZone)", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
 
                                     })
                                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPICpny_All"))).AutoLoad(false)
@@ -318,7 +304,7 @@
                                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                        new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                        new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw }
                                     })
                                         .LoadData()
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -406,8 +392,8 @@
                             {
                                 ps.Add(new StoreParameter("QuarterNbr", "App.cboQuarterNbr.getValue()", ParameterMode.Raw));
                                 ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("Zone", "joinParams(App.cboZone)", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
 
                             })
                             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPICpny_Class"))).AutoLoad(false)
@@ -432,7 +418,7 @@
                                     new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                    new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                    new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw }
                                 })
                                 .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                 .LoadData()
@@ -542,8 +528,8 @@
                             {
                                 ps.Add(new StoreParameter("QuarterNbr", "App.cboQuarterNbr.getValue()", ParameterMode.Raw));
                                 ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("Zone", "joinParams(App.cboZone)", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
 
                             })
                             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPICpny_Invt"))).AutoLoad(false)
@@ -567,7 +553,7 @@
                                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                        new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                        new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw }
                                     })
                                     .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                     .LoadData()
@@ -677,8 +663,8 @@
                                 {
                                     ps.Add(new StoreParameter("QuarterNbr", "App.cboQuarterNbr.getValue()", ParameterMode.Raw));
                                     ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
-                                    ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                                    ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("Zone", "joinParams(App.cboZone)", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
 
                                 })
                                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPISales_All"))).AutoLoad(false)
@@ -702,7 +688,7 @@
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                            new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw }
                                         })
                                         .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                         .LoadData()
@@ -821,8 +807,8 @@
                                     {
                                         ps.Add(new StoreParameter("QuarterNbr", "App.cboQuarterNbr.getValue()", ParameterMode.Raw));
                                         ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
-                                        ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                                        ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Zone", "joinParams(App.cboZone)", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
 
                                     })
                                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPISales_Class"))).AutoLoad(false)
@@ -846,7 +832,7 @@
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                            new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw }
                                         })
                                             .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                             .LoadData()
@@ -987,8 +973,8 @@
                                     {
                                         ps.Add(new StoreParameter("QuarterNbr", "App.cboQuarterNbr.getValue()", ParameterMode.Raw));
                                         ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
-                                        ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                                        ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Zone", "joinParams(App.cboZone)", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
 
                                     })
                                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPISales_Invt"))).AutoLoad(false)
@@ -1012,7 +998,7 @@
                                                 new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                                 new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                                 new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                                new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw }
                                             })
                                                 .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                                 .LoadData()
@@ -1154,8 +1140,8 @@
                                 {
                                     ps.Add(new StoreParameter("QuarterNbr", "App.cboQuarterNbr.getValue()", ParameterMode.Raw));
                                     ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
-                                    ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                                    ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("Zone", "joinParams(App.cboZone)", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
 
                                 })
                                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPICustomer_All"))).AutoLoad(false)
@@ -1179,7 +1165,7 @@
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                            new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw }
                                         })
                                         .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                         .LoadData()
@@ -1322,8 +1308,8 @@
                                     {
                                         ps.Add(new StoreParameter("QuarterNbr", "App.cboQuarterNbr.getValue()", ParameterMode.Raw));
                                         ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
-                                        ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                                        ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Zone", "joinParams(App.cboZone)", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
 
                                     })
                                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPICustomer_Class"))).AutoLoad(false)
@@ -1347,7 +1333,7 @@
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                            new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw }
                                         })
                                             .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                             .LoadData()
@@ -1516,9 +1502,8 @@
                                     {
                                         ps.Add(new StoreParameter("QuarterNbr", "App.cboQuarterNbr.getValue()", ParameterMode.Raw));
                                         ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
-                                        ps.Add(new StoreParameter("Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                                        ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
-
+                                        ps.Add(new StoreParameter("Zone", "joinParams(App.cboZone)", ParameterMode.Raw));
+                                        ps.Add(new StoreParameter("Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
                                     })
                                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPICustomer_Invt"))).AutoLoad(false)
                                     .Listeners(l =>
@@ -1541,7 +1526,7 @@
                                                 new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                                 new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                                 new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                                new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                                                new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw }
                                             })
                                                 .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                                 .LoadData()

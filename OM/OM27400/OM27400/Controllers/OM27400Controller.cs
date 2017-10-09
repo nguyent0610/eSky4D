@@ -1614,10 +1614,10 @@ namespace OM27400.Controllers
                                 }
                                 lstOM_KPIQuarterHeader.Add(record);
                             }
-                            else
-                            {
-                                errorCheckExist += (i + 1).ToString() + ",";
-                            }
+                            //else
+                            //{
+                            //    errorCheckExist += (i + 1).ToString() + ",";
+                            //}
                             if (appFor == "C")
                             {
                                 if (appTo == "A")
