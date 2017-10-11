@@ -7384,6 +7384,30 @@ namespace OM21100
         private global::System.String _Crtd_Role;
         partial void OnCrtd_RoleChanging(global::System.String value);
         partial void OnCrtd_RoleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Profile
+        {
+            get
+            {
+                return _Profile;
+            }
+            set
+            {
+                OnProfileChanging(value);
+                ReportPropertyChanging("Profile");
+                _Profile = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Profile");
+                OnProfileChanged();
+            }
+        }
+        private global::System.String _Profile;
+        partial void OnProfileChanging(global::System.String value);
+        partial void OnProfileChanged();
 
         #endregion
 

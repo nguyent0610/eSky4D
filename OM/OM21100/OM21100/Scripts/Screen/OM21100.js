@@ -708,7 +708,8 @@ var Main = {
                 }
                 App.cboDiscID.setReadOnly(HQ.isChange0);
                 App.cboDiscSeq.setReadOnly(HQ.isChange);
-                if (HQ.isChange && !App.cboDiscClass.readOnly) {
+
+                if (HQ.isChange && !App.cboDiscClass.readOnly || !Ext.isEmpty(App.cboDiscSeq.getValue())) {
                     App.cboDiscClass.setReadOnly(true);
                     App.cboDiscType.setReadOnly(true);
                 } else if (!HQ.isChange && App.cboDiscSeq.store.data.length == 0) {
@@ -1306,6 +1307,23 @@ var DiscDefintion = {
     },
 
     Event: {
+        btnUpload_change: function (fup, newValue, oldValue, eOpts) {
+            if (fup.value) {
+                var ext = fup.value.split(".").pop().toLowerCase();
+                if (ext == "jpg" || ext == "png" || ext == "gif" || ext == "pdf" || ext == "mp4" || ext == "jpeg" || ext == "docx" || ext == "xlsx" || ext == "doc" || ext == "xls") {
+                    App.txtProfile.setValue(App.cboDiscID.value + App.cboDiscSeq.value + fup.value);               
+                }
+                else {
+                    HQ.message.show(148, '', '');
+                }
+            }
+        },
+
+        btnClearProfile_click: function (sender, e) {
+            App.btnUpload.reset();
+            App.txtProfile.setValue("");
+        },
+
         storeGridLoaded : function(sto) {
             HQ.gridSource++;
             if (HQ.gridSource == 10) {
@@ -1388,6 +1406,9 @@ var DiscDefintion = {
                 App.chkAutoFreeItem.setReadOnly(false);
                 App.cboBudgetID.setReadOnly(false);
                 App.txtSeqDescr.setReadOnly(false);
+
+                App.btnUpload.enable();
+                App.btnDelImg.enable();
             }
             else {
                 App.cboProAplForItem.setReadOnly(true);
@@ -1397,6 +1418,9 @@ var DiscDefintion = {
                 App.chkAutoFreeItem.setReadOnly(true);
                 App.cboBudgetID.setReadOnly(true);
                 App.txtSeqDescr.setReadOnly(true);
+
+                App.btnUpload.disable();
+                App.btnDelImg.disable();
             }
 
             HQ.gridSource = 0;

@@ -257,6 +257,25 @@
                                             {
                                                 l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                             })
+                                        , 
+                                        X.Container().Layout(LayoutType.HBox).Items(
+                                            X.FileUploadField().ID("btnUpload")
+                                            .MarginSpec("5 0 0 77")                                            
+                                            .Text(Util.GetLang("Upload"))                                        
+                                            .ButtonOnly(true)
+                                                    .Listeners(lst => lst.Change.Fn = "DiscDefintion.Event.btnUpload_change")
+                                            
+                                            , X.TextField()
+                                            .ID("txtProfile")
+                                            .DataIndex("Profile")
+                                                .MarginSpec("5 0 0 2")
+                                                .Width(130)
+                                                .ReadOnly(true).Tag("X")
+                                                
+                                            , X.Button().Icon(Icon.ImageDelete).ID("btnDelImg")
+                                                .MarginSpec("5 0 0 1")
+                                                .Listeners(l => l.Click.Fn = "DiscDefintion.Event.btnClearProfile_click")
+                                        )
                                     ) // Container
 
                                     // Third Column
@@ -286,8 +305,10 @@
                                             , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                             , new StoreParameter("@Status", "App.cboStatus.getValue()", ParameterMode.Raw)
                                         })
-                                        .LoadData()
-
+                                        .LoadData()                                        
+                                        
+                                        
+                                        
                                         , HQ.Checkbox().ID("chkPOUse")
                                         .MarginSpec("5 5 0 160")
                                         .BoxLabel(Util.GetLang("POUse")).DataIndex("POUse")

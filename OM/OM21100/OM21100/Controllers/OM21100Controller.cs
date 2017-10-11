@@ -755,6 +755,59 @@ namespace OM21100.Controllers
                 updateDiscSeq(ref seq, inputDiscSeq, true, roles, handle);
                 _db.OM_DiscSeq.AddObject(seq);
             }
+
+            #region Upload files
+            var files = Request.Files;
+            string filePath = GetFilePath();
+            if (files.Count > 0) // Co chon file de upload
+            {
+                if (files[0].ContentLength > 0)
+                {
+                    string midPath = string.Format("{0}{1}", inputDiscSeq.DiscID, inputDiscSeq.DiscSeq);
+
+                    Random rand = new Random();
+                    string newFolder = filePath.TrimEnd(new char[] { '\\' }) + "\\"; //  seq.Crtd_DateTime.ToString("yyyyMM") +
+                    if (!System.IO.Directory.Exists(newFolder))
+                    {
+                        System.IO.Directory.CreateDirectory(newFolder);
+                    }
+                    string newFileName = midPath + files[0].FileName;
+                    Util.UploadFile(newFolder, newFileName, files[0]);
+                    try
+                    {
+                        string oldFile = filePath.TrimEnd(new char[] { '\\' }) + "\\" + seq.Profile;
+                        if (System.IO.File.Exists(oldFile))
+                        {
+                            System.IO.File.Delete(oldFile);
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                    seq.Profile = newFileName;
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(seq.Profile) && string.IsNullOrWhiteSpace(inputDiscSeq.Profile))
+                    {
+
+                        Util.UploadFile(filePath, seq.Profile, null);
+                        seq.Profile = string.Empty;
+                    }
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(seq.Profile) && string.IsNullOrWhiteSpace(inputDiscSeq.Profile))
+                {
+
+                    Util.UploadFile(filePath, seq.Profile, null);
+                    seq.Profile = string.Empty;
+                }
+
+            }
+            #endregion
             // Ktra có check trùng CTKM đang chạy không?
             var checkPromo = true;
             var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM10100CHECKPROMO");
@@ -2147,7 +2200,43 @@ namespace OM21100.Controllers
             }
             System.Diagnostics.Debug.WriteLine(node.Text);
             return node;
-        }        
-    
+        }
+
+
+        #region -Profile-
+        
+       
+        private string GetFilePath()
+        {
+            var objConfig = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM21100PROFILEPATH");
+            if (objConfig != null && !string.IsNullOrWhiteSpace(objConfig.TextVal))
+            {
+                return objConfig.TextVal;
+            }
+            return Server.MapPath("~\\Images\\");
+        }
+
+        public ActionResult ImageToBin(string fileName)
+        {
+            try
+            {
+                var imgString64 = Util.ImageToBin(GetFilePath(), fileName);
+                var jsonResult = Json(new { success = true, imgSrc = imgString64 }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }       
+        #endregion
     }
 }
