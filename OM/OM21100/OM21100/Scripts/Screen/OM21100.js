@@ -987,6 +987,7 @@ var Main = {
                         HQ.message.show(20150303, '', 'Main.Process.refresh');
                     }
                     else {
+                        App.btnUpload.reset();
                         if (HQ.focus == 'frmDiscDefintionTop') {
                             App.cboDiscID.store.load(function (records, operation, success) {
                                 App.stoDiscInfo.reload();
@@ -1307,7 +1308,25 @@ var DiscDefintion = {
     },
 
     Event: {
-        btnUpload_change: function (fup, newValue, oldValue, eOpts) {
+        btnTmpUpload_Click: function(){
+            if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
+                HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+                return false;
+            }
+            if (document.getElementById('btnUpload-inputEl')) {
+                document.getElementById('btnUpload-inputEl').click();
+            } else if (document.getElementById('btnUpload-button-fileInputEl')) {
+                document.getElementById('btnUpload-button-fileInputEl').click();
+            }
+        }
+
+        , btnUpload_change: function (fup, newValue, oldValue, eOpts) {
+            if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
+                App.btnUpload.reset();
+                HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+                return false;
+            }
+
             if (fup.value) {
                 var ext = fup.value.split(".").pop().toLowerCase();
                 if (ext == "jpg" || ext == "png" || ext == "gif" || ext == "pdf" || ext == "mp4" || ext == "jpeg" || ext == "docx" || ext == "xlsx" || ext == "doc" || ext == "xls") {
@@ -1408,6 +1427,7 @@ var DiscDefintion = {
                 App.txtSeqDescr.setReadOnly(false);
 
                 App.btnUpload.enable();
+                //App.btnTmpUpload.enable();
                 App.btnDelImg.enable();
             }
             else {
@@ -1420,6 +1440,7 @@ var DiscDefintion = {
                 App.txtSeqDescr.setReadOnly(true);
 
                 App.btnUpload.disable();
+                //App.btnTmpUpload.enable();
                 App.btnDelImg.disable();
             }
 
@@ -1831,6 +1852,39 @@ var DiscDefintion = {
                 _selTerritory = item.valueModels[0].data.TerritoryName;
             }
         },
+
+        treeBranch_AfterRender : function(id) {
+            App.direct.OM21100GetTreeBranch( id, {
+                success: function (result) {
+                    App.treePanelBranch.getRootNode().expand()
+                }
+            });
+        },
+
+        treeInventory_AfterRender : function (id) {
+            App.direct.OM21100LoadTreeInventory(id, {
+                success: function (result) {
+                    App.treePanelInvt.getRootNode().expand()
+                }
+            });
+        },
+
+        treeBundleItem_AfterRender: function (id) {
+            App.direct.OM21100LoadTreeBundleItem(id, {
+                success: function (result) {
+                    App.treePanelBundle.getRootNode().expand()
+                }
+            });
+        },
+
+        treeCustomer_AfterRender: function (id) {
+            App.direct.OM21100GetTreeCustomer(id, {
+                success: function (result) {
+                    App.treePanelCustomer.getRootNode().expand()
+                }
+            });
+        },
+
 
         treePanelBranch_checkChange: function (node, checked, eOpts) {
             if (App.cboStatus.getValue() == _holdStatus) {

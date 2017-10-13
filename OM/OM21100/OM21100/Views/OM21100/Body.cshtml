@@ -19,7 +19,11 @@
         //.DefaultAnchor("100%")
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
-        .TopBar(Util.SetupToolbar("PO20100", "Main.Event.menuClick"))
+        //.TopBar(Util.SetupToolbar("PO20100", "Main.Event.menuClick"))
+        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{ 
+            // X.FileUploadField()
+            // .ID("btnUpload1").Hidden(true)
+        }, buttonHidden: "", isShowNavigationButtons: true, handlerName: "Main.Event.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 130; })
         .Items(
             X.TabPanel().ID("tabMain")
@@ -259,22 +263,29 @@
                                             })
                                         , 
                                         X.Container().Layout(LayoutType.HBox).Items(
-                                            X.FileUploadField().ID("btnUpload")
-                                            .MarginSpec("5 0 0 77")                                            
-                                            .Text(Util.GetLang("Upload"))                                        
+                                             X.FileUploadField()
+                                             .ID("btnUpload")//.Hidden(true)
+                                             .Name("btnUpload")
                                             .ButtonOnly(true)
-                                                    .Listeners(lst => lst.Change.Fn = "DiscDefintion.Event.btnUpload_change")
+                                            .MarginSpec("5 0 0 77")
+                                            //.ButtonText(Util.GetLang("Upload"))
                                             
+                                            .RemoveClearTrigger(false)
+                                            //.ClearOnSubmit(false)
+                                            //.AutoPostBack(false)
+                                            //.SubmitValue(false)
+                                            .Listeners(lst => lst.Change.Fn = "DiscDefintion.Event.btnUpload_change")
                                             , X.TextField()
                                             .ID("txtProfile")
                                             .DataIndex("Profile")
-                                                .MarginSpec("5 0 0 2")
-                                                .Width(130)
-                                                .ReadOnly(true).Tag("X")
+                                            .MarginSpec("5 0 0 2")
+                                            .Width(130)
+                                            .ReadOnly(true).Tag("X")
                                                 
                                             , X.Button().Icon(Icon.ImageDelete).ID("btnDelImg")
-                                                .MarginSpec("5 0 0 1")
-                                                .Listeners(l => l.Click.Fn = "DiscDefintion.Event.btnClearProfile_click")
+                                            .MarginSpec("5 0 0 1")
+                                            .ToolTip(Util.GetLang("DeleteMedia"))
+                                            .Listeners(l => l.Click.Fn = "DiscDefintion.Event.btnClearProfile_click")
                                         )
                                     ) // Container
 
@@ -663,20 +674,26 @@
                             X.Panel().ID("treeBranch")
                             .Region(Region.West).Flex(6)
                             .MinWidth(150).Split(true).AutoScroll(true)
-                            .DirectEvents(de =>
-                            {
-                                de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
-                                de.AfterRender.Url = Url.Action("OM21100GetTreeBranch");
-                                //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-                                de.AfterRender.CleanRequest = true;
-                                de.AfterRender.Method = HttpMethod.POST;
-                                de.AfterRender.Success = "App.treePanelBranch.getRootNode().expand()";
-                                de.AfterRender.Timeout = 60000;
-                                de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                                de.AfterRender.EventMask.ShowMask = true;
-                                de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                                de.AfterRender.EventMask.MinDelay = 500;
-                            })
+                            .Listeners(l => 
+                                {
+                                    l.AfterRender.Handler = "DiscDefintion.Event.treeBranch_AfterRender('treeBranch');";                   
+                                }
+                            )
+                                
+                            //.DirectEvents(de =>
+                            //{
+                            //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
+                            //    de.AfterRender.Url = Url.Action("OM21100GetTreeBranch");
+                            //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                            //    de.AfterRender.CleanRequest = true;
+                            //    de.AfterRender.Method = HttpMethod.POST;
+                            //    de.AfterRender.Success = "App.treePanelBranch.getRootNode().expand()";
+                            //    de.AfterRender.Timeout = 60000;
+                            //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                            //    de.AfterRender.EventMask.ShowMask = true;
+                            //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                            //    de.AfterRender.EventMask.MinDelay = 500;
+                            //})
                             .BottomBar(
                                 X.Toolbar()
                                 .Items(
@@ -792,20 +809,26 @@
                         X.Panel().ID("treeInventory")
                             .Region(Region.West).Flex(30)
                             .MinWidth(150).Split(true).AutoScroll(true)
-                            .DirectEvents(de =>
-                            {
-                                de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeInventory"));
-                                de.AfterRender.Url = Url.Action("OM21100LoadTreeInventory");
-                                //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-                                de.AfterRender.CleanRequest = true;
-                                de.AfterRender.Method = HttpMethod.POST;
-                                de.AfterRender.Success = "App.treePanelInvt.getRootNode().expand()";
-                                de.AfterRender.Timeout = 60000;
-                                de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                                de.AfterRender.EventMask.ShowMask = true;
-                                de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                                de.AfterRender.EventMask.MinDelay = 500;
-                            })
+                                .Listeners(l =>
+                                {
+                                    l.AfterRender.Handler = "DiscDefintion.Event.treeInventory_AfterRender('treeInventory');";
+                                }
+                            )    
+                                    
+                            //.DirectEvents(de =>
+                            //{
+                            //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeInventory"));
+                            //    de.AfterRender.Url = Url.Action("OM21100LoadTreeInventory");
+                            //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                            //    de.AfterRender.CleanRequest = true;
+                            //    de.AfterRender.Method = HttpMethod.POST;
+                            //    de.AfterRender.Success = "App.treePanelInvt.getRootNode().expand()";
+                            //    de.AfterRender.Timeout = 60000;
+                            //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                            //    de.AfterRender.EventMask.ShowMask = true;
+                            //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                            //    de.AfterRender.EventMask.MinDelay = 500;
+                            //})
                             .BottomBar(
                                 X.Toolbar()
                                 .Items(
@@ -976,20 +999,25 @@
                         X.Panel().ID("treeBundleItem")
                                 .Region(Region.West).Flex(30)
                                 .MinWidth(150).Split(true).AutoScroll(true)
-                                .DirectEvents(de =>
-                                {
-                                    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBundleItem"));
-                                    de.AfterRender.Url = Url.Action("OM21100LoadTreeBundleItem");
-                                    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-                                    de.AfterRender.CleanRequest = true;
-                                    de.AfterRender.Method = HttpMethod.POST;
-                                    de.AfterRender.Success = "App.treePanelBundle.getRootNode().expand()";
-                                    de.AfterRender.Timeout = 60000;
-                                    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                                    de.AfterRender.EventMask.ShowMask = true;
-                                    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                                    de.AfterRender.EventMask.MinDelay = 500;
-                                })
+                                    .Listeners(l =>
+                                    {
+                                        l.AfterRender.Handler = "DiscDefintion.Event.treeBundleItem_AfterRender('treeBundleItem');";
+                                    }
+                                )                                
+                                //.DirectEvents(de =>
+                                //{
+                                //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBundleItem"));
+                                //    de.AfterRender.Url = Url.Action("OM21100LoadTreeBundleItem");
+                                //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                                //    de.AfterRender.CleanRequest = true;
+                                //    de.AfterRender.Method = HttpMethod.POST;
+                                //    de.AfterRender.Success = "App.treePanelBundle.getRootNode().expand()";
+                                //    de.AfterRender.Timeout = 60000;
+                                //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                                //    de.AfterRender.EventMask.ShowMask = true;
+                                //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                                //    de.AfterRender.EventMask.MinDelay = 500;
+                                //})
                                 .BottomBar(
                                     X.Toolbar()
                                     .Items(
@@ -1237,20 +1265,26 @@
                     X.Panel().ID("treeCustomer")
                     .Region(Region.West).Flex(50)
                     .MinWidth(150).Split(true).AutoScroll(true)
-                    .DirectEvents(de =>
-                    {
-                        de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCustomer"));
-                        de.AfterRender.Url = Url.Action("OM21100GetTreeCustomer");
-                        //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-                        de.AfterRender.CleanRequest = true;
-                        de.AfterRender.Method = HttpMethod.POST;
-                        de.AfterRender.Success = "App.treePanelCustomer.getRootNode().expand()";
-                        de.AfterRender.Timeout = 60000;
-                        de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                        de.AfterRender.EventMask.ShowMask = true;
-                        de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                        de.AfterRender.EventMask.MinDelay = 500;
-                    })
+                        .MinWidth(150).Split(true).AutoScroll(true)
+                        .Listeners(l =>
+                        {
+                            l.AfterRender.Handler = "DiscDefintion.Event.treeCustomer_AfterRender('treeCustomer');";
+                        }
+                    ) 
+                    //.DirectEvents(de =>
+                    //{
+                    //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCustomer"));
+                    //    de.AfterRender.Url = Url.Action("OM21100GetTreeCustomer");
+                    //    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                    //    de.AfterRender.CleanRequest = true;
+                    //    de.AfterRender.Method = HttpMethod.POST;
+                    //    de.AfterRender.Success = "App.treePanelCustomer.getRootNode().expand()";
+                    //    de.AfterRender.Timeout = 60000;
+                    //    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                    //    de.AfterRender.EventMask.ShowMask = true;
+                    //    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                    //    de.AfterRender.EventMask.MinDelay = 500;
+                    //})
                     .BottomBar(
                         X.Toolbar()
                         .Items(
