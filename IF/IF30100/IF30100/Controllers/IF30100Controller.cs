@@ -123,7 +123,7 @@ namespace IF30100.Controllers
                     {
                         if (itm["DataType"].ToString().ToUpper().Contains("DATE"))
                             d.Format = Current.FormatDate;
-                        else d.Format = "0";
+                        else d.Format = "0,000";
                         d.IsFormat = true;
                     }
                     else
