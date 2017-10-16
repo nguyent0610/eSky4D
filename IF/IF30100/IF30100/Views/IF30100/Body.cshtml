@@ -155,7 +155,7 @@
                 
                 ,X.TabPanel().ID("pnlProc").Region(Region.Center).Layout(LayoutType.Border).Hidden(true)
                 .Items(
-                X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Fit).Title(Util.GetLang("Parameter"))
+                X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Border).Title(Util.GetLang("Parameter"))
                     .Items(
                         X.Panel().Border(false).Region(Region.North).Layout(LayoutType.Fit)
                         .Items(
@@ -213,8 +213,8 @@
                             .Listeners(lst=>lst.TabChange.Fn="tabList_TabChange")                                                                         
                             .Items(
                                                 
-                                )
-                                ,
+                            )
+                            ,
                                         
                     X.Panel()
                             .Region(Region.South)
@@ -225,10 +225,9 @@
                             .ButtonAlign(Alignment.Right)
                             .Items(
                               
-
-                                    )
-
                             )
+
+                )
                 , X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Fit).Title(Util.GetLang("ChoiceColumn"))
                     .Items(
                         X.GridPanel().ID("grdChoiceColumn")
@@ -251,8 +250,7 @@
                             )
                         .ColumnModel(
                             X.RowNumbererColumn()//.Renderer("renderRowNumber")
-                            , X.Column().Text(Util.GetLang("Column_Name")).DataIndex("ColumnName").Width(200)
-                            , X.CheckColumn().ID("ColCheckChoiceColumn").DataIndex("Checked").Editable(true).HideTitleEl(true)
+                            , X.CheckColumn().ID("ColCheckChoiceColumn").DataIndex("Checked").Editable(true).HideTitleEl(true)                                                    
                             .HeaderItems(
                                 HQ.Checkbox().ID("ColCheckChoiceColumn_Header").HQLangCode("IF30100Check")
                                 .Listeners(l =>
@@ -260,7 +258,8 @@
                                     l.Change.Fn = "ColCheckChoiceColumn_Change";
                                 })
                             )
-
+                            , X.Column().Text(Util.GetLang("Column_Name")).DataIndex("ColumnName").Width(200)
+                            , X.Column().Text(Util.GetLang("ColFormat")).ID("ColFormat").DataIndex("Format").Editor(X.TextField())                                
                         )
                         .SelectionModel(X.RowSelectionModel().ID("smlChoiceColumnDetail").Mode(SelectionMode.Single))
                         .View(X.GridView().TrackOver(false))
@@ -269,7 +268,7 @@
                             .ClicksToEdit(1)
                                 .Listeners(ls =>
                                 {
-                                    //ls.Edit.Fn = "grdDet_Edit";
+                                    ls.BeforeEdit.Fn = "grdChoiceColumn_BeforeEdit";
                                 })
                         )
                         .Features(

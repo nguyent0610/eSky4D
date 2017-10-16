@@ -41,6 +41,7 @@ namespace IF30100
             Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "ND_Test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
+            Current.FormatDate = "dd/MM/yyyy";
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;

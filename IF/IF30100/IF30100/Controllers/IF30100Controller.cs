@@ -35,6 +35,7 @@ namespace IF30100.Controllers
         private string _screenNbr = "IF30100";
         private string _userName = Current.UserName;
         private string _branchID = "";
+       
         IF30100Entities _db = Util.CreateObjectContext<IF30100Entities>(false);
         IF30100SysEntities _eBiz4DSys = Util.CreateObjectContext<IF30100SysEntities>(true,"Sys");
         private JsonResult _logMessage;
@@ -112,9 +113,25 @@ namespace IF30100.Controllers
                     {
 
                         Checked = false,
-                        ColumnName = itm["ColumnName"].ToString(),
+                        ColumnName = itm["ColumnName"].ToString()
                      
                     };
+                    if (itm["DataType"].ToString().ToUpper().Contains("DATE")
+                            || itm["DataType"].ToString().ToUpper().Contains("FLOAT")
+                            || itm["DataType"].ToString().ToUpper().Contains("DOUBLE")
+                            || itm["DataType"].ToString().ToUpper().Contains("INT"))
+                    {
+                        if (itm["DataType"].ToString().ToUpper().Contains("DATE"))
+                            d.Format = Current.FormatDate;
+                        else d.Format = "0";
+                        d.IsFormat = true;
+                    }
+                    else
+                    {
+                        d.Format = "";
+                        d.IsFormat = false;
+                    }
+
                     lst.Add(d);
                 }
             }
@@ -1402,6 +1419,19 @@ namespace IF30100.Controllers
             HQCombo StringParm02 = new HQCombo() { HQFirstDefault = isRPTDefault, Name = "StringParm02", ID = "StringParm02", Hidden = true, MarginSpec = "5,0,0,0", LabelWidth = 120, AnchorHorizontal = "100%", HQColumnShow = "*", MultiSelect = true };// this.GetCmp<ComboBox>("cboStringParm02");
             HQCombo StringParm03 = new HQCombo() { HQFirstDefault = isRPTDefault, Name = "StringParm03", ID = "StringParm03", Hidden = true, MarginSpec = "5,0,0,0", LabelWidth = 120, AnchorHorizontal = "100%", HQColumnShow = "*", MultiSelect = true };// this.GetCmp<ComboBox>("cboStringParm03");
 
+            StringParm00.Triggers.Add(new FieldTrigger() { Icon = TriggerIcon.Clear });
+            StringParm00.Listeners.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+
+            StringParm01.Triggers.Add(new FieldTrigger() { Icon = TriggerIcon.Clear });
+            StringParm01.Listeners.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+
+            StringParm02.Triggers.Add(new FieldTrigger() { Icon = TriggerIcon.Clear });
+            StringParm02.Listeners.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+
+            StringParm03.Triggers.Add(new FieldTrigger() { Icon = TriggerIcon.Clear });
+            StringParm03.Listeners.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+
+
             HQDateField cboDate00 = new HQDateField() { Name = "cboDate00", ID = "cboDate00", Hidden = true, Value = DateTime.Now, Width = 230, LabelWidth = 120 };// this.GetCmp<DateField>("cboDate00");
             HQDateField cboDate01 = new HQDateField() { Name = "cboDate01", ID = "cboDate01", Hidden = true, Value = DateTime.Now, Width = 230, LabelWidth = 120 };// this.GetCmp<DateField>("cboDate01");
             HQDateField cboDate02 = new HQDateField() { Name = "cboDate02", ID = "cboDate02", Hidden = true, Value = DateTime.Now, Width = 230, LabelWidth = 120 };//this.GetCmp<DateField>("cboDate02");
@@ -2329,6 +2359,8 @@ namespace IF30100.Controllers
                 #endregion
                 _db.SaveChanges();
                 string[] choiceColumn = data["choiceColumn"].PassNull().Split('@');
+                var detHandler = new StoreDataHandler(data["listChoice"]);
+                var _listChoice = detHandler.ObjectData<DataInfo>().Where(p=>p.Checked).ToList();
                 
                 try
                 {
@@ -2353,24 +2385,53 @@ namespace IF30100.Controllers
                     {
                         for (int x = 0; x < lstColumn.Count; x++)
                         {
-                           
-                            if(j==1)
+
+                            if (j == 1)
                                 SetCellValueGrid(SheetData.Cells.Rows[0][x], Util.GetLang(dtInvtID.Columns[lstColumn[x]].ColumnName), TextAlignmentType.Center, TextAlignmentType.Left);
                             cell = SheetData.Cells[j, x];
-                            if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("DATE"))
-                            {
+                           
 
-                                DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][lstColumn[x]].ToString());
-                                cell.PutValue(tmpValue.ToString(Current.FormatDate));
-                            }
-                            else
+                            if (_listChoice[x].Format != "")
                             {
-                                cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString());
+                                Aspose.Cells.Style style = cell.GetStyle();
+
+                                // Setting the custom display format to show date as "d-mmm-yy"
+                                style.Custom = _listChoice[x].Format;
+                                if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("DATE"))
+                                {
+                                    cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString().ToDateTime());
+                                    style.HorizontalAlignment = TextAlignmentType.Left;
+                                }
+                                else if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("INT") || dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("DOUBLE") || dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("FLOAT"))
+                                {
+                                    cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString().ToDouble());
+                                    style.HorizontalAlignment = TextAlignmentType.Right;
+                                }
+                                cell.SetStyle(style);
                             }
+                            else cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString());
                         }
                     }
 
-                    //SheetData.Cells.ImportDataTable(dtCloned, false, "A2");// du lieu Inventory
+                    //for (int x = 0; x < _listChoice.Count; x++)
+                    //{
+                    //    Aspose.Cells.Style style = SheetData.Cells[x].GetStyle();
+                    //    if (_listChoice[x].Format != "")
+                    //    {
+                    //        style = SheetData.Cells[Getcell(x) + "2"].GetStyle();
+                    //        style.Font.Color = Color.Black;
+                    //        style.Custom = _listChoice[x].Format;
+                            
+                    //        if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("DATE"))
+                    //            style.HorizontalAlignment = TextAlignmentType.Left;
+                    //        else if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("INT") || dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("DOUBLE") || dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("FLOAT"))
+                    //            style.HorizontalAlignment = TextAlignmentType.Right;
+
+                    //        var range = SheetData.Cells.CreateRange(Getcell(x) + "2", Getcell(x) + (dtInvtID.Rows.Count + 2)); //dtCustomer.Rows.Count + 5
+                    //        range.SetStyle(style);
+
+                    //    }
+                    //}
 
 
 
@@ -2481,13 +2542,40 @@ namespace IF30100.Controllers
                 cn.Close();
             }
         }
+        private string Getcell(int column) // Hàm bị sai khi lấy vị trí column AA
+        {
+            bool flag = false;
+            string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string cell = "";
+            while (column / 26 >= 1)
+            {
+                cell += ABC.Substring((column / 26) - 1, 1);
+                column = column - 26;
+                flag = true;
+            }
+            if (column % 26 != 0)
+            {
+                cell += ABC.Substring(column % 26, 1);
+            }
+            else
+            {
+                if (column % 26 == 0 && flag)
+                {
+                    cell += ABC.Substring(0, 1);
+                }
+                else if (column == 0) cell = "A";
+            }
+
+            return cell;
+        }
         #endregion
     }
     public class DataInfo
     {
         public bool Checked { get; set; }
         public string ColumnName { get; set; }
-      
+        public string Format { get; set; }
+        public bool IsFormat { get; set; }
     }
 
 }

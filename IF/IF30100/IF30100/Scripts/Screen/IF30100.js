@@ -119,6 +119,10 @@ var getView = function(){
     return '';
 }
 
+function grdChoiceColumn_BeforeEdit(sender, e) {
+    if (e.field == 'Format' && !e.record.data.IsFormat) return false;
+}
+
 var btnAdd_Click = function () {
     App.frmTemplate.submit({
         //waitMsg: HQ.common.getLang("Exporting"),
@@ -358,6 +362,11 @@ var loadParam = function (i, reportNbr, reportView) {
 
 }
 function exportExcelProc() {
+    if (checkGrid(App.stoChoiceColumn, 'Checked') == false) {
+        HQ.message.show(201710091);
+        App.pnlProc.setActiveTab(1);
+        return;
+    }
     var List0 = '';
     var List1 = '';
     var List2 = '';
@@ -412,7 +421,8 @@ function exportExcelProc() {
                 list1: List1,//App.List1.getSelectionSubmit().getSelectionModelField().getValue(),
                 list2: List2,//App.List2.getSelectionSubmit().getSelectionModelField().getValue(),
                 list3: List3,//App.List3.getSelectionSubmit().getSelectionModelField().getValue(),
-                choiceColumn:ChoiceColumn,
+                choiceColumn: ChoiceColumn,
+                listChoice: Ext.encode(App.stoChoiceColumn.getRecordsValues()),
                 proc: App.cboReport.valueModels[0].data.ReportView,
                 name: App.cboReport.valueModels[0].data.ReportName,
                 reportNbr: App.cboReport.valueModels[0].data.ReportNbr,
