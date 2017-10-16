@@ -82,6 +82,7 @@
                         .Listeners(lst =>
                         {                           
                             lst.Change.Fn = "cboKPI_Change";//khi thay doi du lieu
+                            lst.Select.Fn = "cboKPI_Change";
                             lst.TriggerClick.Fn = "cboKPI_TriggerClick";                            
                             lst.Focus.Handler = "this.forceSelection=false";
                             lst.Expand.Handler = "App.cboKPI.store.reload();";
