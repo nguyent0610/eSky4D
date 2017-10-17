@@ -155,6 +155,10 @@
                                         
                         })
                         .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "cboApplyFor_Change";                           
+                        })
 
                     , HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("Status").HQProcedure("OM25100_pcStatus").ForceSelection(true).HQAutoLoad(true).ReadOnly(true)
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
@@ -189,10 +193,10 @@
                         .LoadData()
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
-                        {
-                               
+                        {                       
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             lst.Expand.Fn = "cboTerritory_Expand";
+                            lst.Change.Fn = "cboTerritory_Change";
                         })
                     )
                 , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 5 0")
@@ -215,7 +219,7 @@
                                         
                         })
                         .LoadData()
-
+                        
                         , HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").HQProcedure("OM25100_pcHandle").ForceSelection(true).HQAutoLoad(true)
                         .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
                             .Width(250).DataIndex("Code")
@@ -235,8 +239,8 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
 
-                        
-                        , HQ.Combo().ID("cboSlsperIdHeader").Name("cboSlsperIdHeader").HQLangCode("OM25100_TypeStaff").HQProcedure("OM25100_pcSalesPerson").ForceSelection(true).HQAutoLoad(true)
+
+                        , HQ.Combo().ID("cboSlsperIdHeader").Name("cboSlsperIdHeader").HQLangCode("OM25100_TypeStaff").HQProcedure("OM25100_pcSalesPerson").HQAutoLoad(true).MultiSelect(true)
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").AllowBlank(false)
                         .Width(250).DataIndex("SlsperId")
                         .HQHeightWidth(400, 300)
@@ -250,7 +254,7 @@
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
                         {
-                                   
+                            lst.Change.Fn = "cboSlsperIdHeader_Change";
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                        
@@ -715,13 +719,14 @@
                                 , X.Column().ID("SlsperId").Text(Util.GetLang("SlsperId")).DataIndex("SlsperId")
                                     .Editor(
                                             HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQProcedure("OM25100_pcSlsperId").HQAutoLoad(true)
-                                            .HQColumnShow("SlsperId,Name,Position").DisplayField("SlsperId").ValueField("SlsperId")
+                                            .HQColumnShow("SlsperId,Name,PosDesc").DisplayField("SlsperId").ValueField("SlsperId")
                                             .Width(500).HQHeightWidth(500, 400)
                                             .HQParam(new StoreParameterCollection() 
                                         {
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@Type", Value = "joinParams(App.cboSlsperIdHeader)", Mode = ParameterMode.Raw }
                                         })
                                             .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                             .LoadData()
@@ -859,13 +864,14 @@
                                 , X.Column().ID("SlsperIdClass").Text(Util.GetLang("SlsperId")).DataIndex("SlsperId")
                                     .Editor(
                                             HQ.Combo().ID("cboSlsperIdClass").Name("cboSlsperIdClass").HQProcedure("OM25100_pcSlsperId").HQAutoLoad(true)
-                                            .HQColumnShow("SlsperId,Name,Position").DisplayField("SlsperId").ValueField("SlsperId")
+                                            .HQColumnShow("SlsperId,Name,PosDesc").DisplayField("SlsperId").ValueField("SlsperId")
                                             .Width(500).HQHeightWidth(500, 400)
                                             .HQParam(new StoreParameterCollection() 
                                         {
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@Type", Value = "joinParams(App.cboSlsperIdHeader)", Mode = ParameterMode.Raw }
                                         })
                                             .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                             .LoadData()
@@ -1025,13 +1031,14 @@
                                     , X.Column().ID("SlsperIdInvt").Text(Util.GetLang("SlsperId")).DataIndex("SlsperId")
                                         .Editor(
                                                 HQ.Combo().ID("cboSlsperIdInvt").Name("cboSlsperIdInvt").HQProcedure("OM25100_pcSlsperId").HQAutoLoad(true)
-                                                .HQColumnShow("SlsperId,Name,Position").DisplayField("SlsperId").ValueField("SlsperId")
+                                                .HQColumnShow("SlsperId,Name,PosDesc").DisplayField("SlsperId").ValueField("SlsperId")
                                                 .Width(500).HQHeightWidth(500, 400)
                                                 .HQParam(new StoreParameterCollection() 
                                             {
                                                 new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                                 new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
-                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@Type", Value = "joinParams(App.cboSlsperIdHeader)", Mode = ParameterMode.Raw }
                                             })
                                                 .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                                 .LoadData()
@@ -1192,13 +1199,14 @@
                                , X.Column().ID("SlsperIdCust").Text(Util.GetLang("SlsperId")).DataIndex("SlsperId")
                                     .Editor(
                                             HQ.Combo().ID("cboSlsperIdCust").Name("cboSlsperIdCust").HQProcedure("OM25100_pcSlsperId").HQAutoLoad(true)
-                                            .HQColumnShow("SlsperId,Name,Position").DisplayField("SlsperId").ValueField("SlsperId")
+                                            .HQColumnShow("SlsperId,Name,PosDesc").DisplayField("SlsperId").ValueField("SlsperId")
                                             .Width(500).HQHeightWidth(500, 400)
                                             .HQParam(new StoreParameterCollection() 
                                         {
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@Type", Value = "joinParams(App.cboSlsperIdHeader)", Mode = ParameterMode.Raw }
                                         })
                                             .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                             .LoadData()
@@ -1364,13 +1372,14 @@
                                 , X.Column().ID("SlsperIdClassCust").Text(Util.GetLang("SlsperId")).DataIndex("SlsperId")
                                     .Editor(
                                             HQ.Combo().ID("cboSlsperIdClassCust").Name("cboSlsperIdClassCust").HQProcedure("OM25100_pcSlsperId").HQAutoLoad(true)
-                                            .HQColumnShow("SlsperId,Name,Position").DisplayField("SlsperId").ValueField("SlsperId")
+                                            .HQColumnShow("SlsperId,Name,PosDesc").DisplayField("SlsperId").ValueField("SlsperId")
                                             .Width(500).HQHeightWidth(500, 400)
                                             .HQParam(new StoreParameterCollection() 
                                         {
                                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                             new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
-                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@Type", Value = "joinParams(App.cboSlsperIdHeader)", Mode = ParameterMode.Raw }
                                         })
                                             .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                             .LoadData()
@@ -1557,13 +1566,14 @@
                                     , X.Column().ID("SlsperIdInvtCust").Text(Util.GetLang("SlsperId")).DataIndex("SlsperId")
                                         .Editor(
                                                 HQ.Combo().ID("cboSlsperIdInvtCust").Name("cboSlsperIdInvtCust").HQProcedure("OM25100_pcSlsperId").HQAutoLoad(true)
-                                                .HQColumnShow("SlsperId,Name,Position").DisplayField("SlsperId").ValueField("SlsperId")
+                                                .HQColumnShow("SlsperId,Name,PosDesc").DisplayField("SlsperId").ValueField("SlsperId")
                                                 .Width(500).HQHeightWidth(500, 400)
                                                 .HQParam(new StoreParameterCollection() 
                                             {
                                                 new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                                 new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
-                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                                new StoreParameter() { Name = "@Type", Value = "joinParams(App.cboSlsperIdHeader)", Mode = ParameterMode.Raw }
                                             })
                                                 .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                                 .LoadData()

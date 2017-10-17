@@ -2244,14 +2244,14 @@ var grdKPICustomerInvt_Edit = function (item, e) {
             e.record.set('CustName', '');
         }
     }
-    HQ.grid.checkInsertKey(App.grdOM_KPICustomer_Invt, e, keys5);
-    HQ.isChange = HQ.store.isGridChange(App.grdOM_KPICustomer_Invt.store, keys5);
+    HQ.grid.checkInsertKey(App.grdOM_KPICustomer_Invt, e, keys8);
+    HQ.isChange = HQ.store.isGridChange(App.grdOM_KPICustomer_Invt.store, keys8);
     HQ.common.changeData(HQ.isChange, 'OM25100');
 };
 
 var grdKPICustomerinvt_ValidateEdit = function (item, e) {
     if (e.record.data.BranchID && e.record.data.BranchID != "") {
-        return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Invt, e, keys5, false);
+        return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Invt, e, keys8, false);
     }
     //return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Invt, e, keys5);
 };
@@ -2403,3 +2403,40 @@ var btnImport_Click = function (sender, e) {
         sender.reset();
     }
 };
+
+var cboApplyFor_Change = function (sender, e) {
+    if (e == "C")
+        App.cboSlsperIdHeader.allowBlank = true;
+    else
+        App.cboSlsperIdHeader.allowBlank = false;
+}
+
+var joinParams = function(multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
+    }
+    else {
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
+        }
+    }
+
+    return returnValue;
+}
+
+var cboSlsperIdHeader_Change = function (sender, e) {
+    App.cboSlsperId.getStore().reload();
+}
+
+var cboTerritory_Change = function (sender, e) {
+    App.cboCpnyID.store.reload();
+    App.cboCpnyIDClass.store.reload();
+    App.cboCpnyIDInvt.store.reload();
+    App.cboCpnyIDSalesAll.store.reload();
+    App.cboCpnyIDSalesClass.store.reload();
+    App.cboCpnyIDSalesinvt.store.reload();
+    App.cboCpnyIDCustomerAll.store.reload();
+    App.cboCpnyIDCustomerClass.store.reload();
+    App.cboCpnyIDCustomerinvt.store.reload();
+}

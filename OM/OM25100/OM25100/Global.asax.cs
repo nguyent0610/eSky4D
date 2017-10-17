@@ -31,13 +31,13 @@ namespace OM25100
            Current.Authorize = false;
            Current.Server = "TRUONGSAD";
             Current.FormatDate = "dd-MM.yyyy";
-            Current.DBSys = "JJVN_Test_eSky4DSys";
+            Current.DBSys = "FranciaBeauty_Test_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM25100"] = acc;
-            Session["DBApp"] = Current.DBApp = "JJVN_Test_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "FranciaBeauty_Test_eSky4DApp";
 			Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "00000000";
             Session["Language"] = Current.Language = "vi";
