@@ -440,12 +440,12 @@ var stoLoad = function (sto) {
 
     App.stoAR_LTTContract.reload();
 
-    if (record.data.Status == 'I')
+    if (record.data.Status == 'I' && !HQ.IsEditAllStatus)
         setAllowBank_InActive(false);
     else
         setAllowBank_InActive(true);
 
-    if (record.data.Status == 'H') {
+    if (record.data.Status == 'H' || HQ.IsEditAllStatus) {
         HQ.common.lockItem(App.frmMain, false);
         App.fupImages.setDisabled(false);
         if (readonlyShopType == 'true')
@@ -499,7 +499,7 @@ var stoAR_LTTContract_Load = function (sto) {
 };
 
 var grdAR_LTTContract_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.getValue() != 'H') return false;
+    if (App.cboStatus.getValue() != 'H' && !HQ.IsEditAllStatus) return false;
     if (e.field == 'FromDate') {
         if (e.record.data.ToDate) {
             App.dtpFromDate.setMaxValue(e.record.data.ToDate);
@@ -557,7 +557,7 @@ var stoAR_LTTContractDetail_Load = function (sto) {
 };
 
 var grdAR_LTTContractDetail_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.getValue() != 'H') return false;
+    if (App.cboStatus.getValue() != 'H' && !HQ.IsEditAllStatus) return false;
     if (App.slmAR_LTTContract.selected.items[0] == undefined) {
         HQ.message.show(2002);
         return false;
@@ -608,7 +608,7 @@ var stoAR_CustAdvTool_Load = function (sto) {
 };
 
 var grdAR_CustAdvTool_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.getValue() != 'H') return false;
+    if (App.cboStatus.getValue() != 'H' && !HQ.IsEditAllStatus) return false;
     //if (!HQ.grid.checkBeforeEdit(e, keysTab_5)) return false;
 };
 
@@ -656,7 +656,7 @@ var stoAR_CustSellingProducts_Load = function (sto) {
 };
 
 var grdAR_CustSellingProducts_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.getValue() != 'H') return false;
+    if (App.cboStatus.getValue() != 'H' && !HQ.IsEditAllStatus) return false;
     if (!HQ.grid.checkBeforeEdit(e, keysTab_7)) return false;
 };
 
@@ -695,7 +695,7 @@ var stoAR_CustDisplayMethod_Load = function (sto) {
 };
 
 var grdAR_CustDisplayMethod_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.getValue() != 'H') return false;
+    if (App.cboStatus.getValue() != 'H' && !HQ.IsEditAllStatus) return false;
     if (!HQ.grid.checkBeforeEdit(e, keysTab_6)) return false;
 };
 
@@ -738,7 +738,7 @@ var stoAR_CustomerChild_Load = function (sto) {
 };
 
 var grdAR_CustomerChild_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.getValue() != 'H') return false;
+    if (App.cboStatus.getValue() != 'H' && !HQ.IsEditAllStatus) return false;
     if (!HQ.grid.checkBeforeEdit(e, ["CustChildID"])) return false;
 };
 
@@ -1200,7 +1200,7 @@ var cboChannel_Change_Select = function (sender, e) {
 var cboStatus_Change = function (sender, e)
 {
     App.cboHandle.store.reload();
-    if (App.cboStatus.value == "H") {
+    if (App.cboStatus.value == "H" || HQ.IsEditAllStatus) {
         App.cboDistrict.allowBlank = true;
     }
     else {
@@ -1316,7 +1316,7 @@ var cboHandle_Change = function (sender, value) {
     }
     else {
         setAllowBank_InActive(true);
-        if(App.cboStatus.getValue()!='H')
+        if (App.cboStatus.getValue() != 'H' && !HQ.IsEditAllStatus)
             App.txtInActive.setReadOnly(true);
     }
 };

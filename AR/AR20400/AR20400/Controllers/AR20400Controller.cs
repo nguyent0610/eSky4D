@@ -51,7 +51,10 @@ namespace AR20400.Controllers
             var tabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
             var tabCustomerChild = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabCustomerChild");
 			var readonlyShopType = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "blockShopType");
-
+            var IsEditAllStatus = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "AR204EDITALL");
+            ViewBag.IsEditAllStatus = false;
+            if (IsEditAllStatus != null)
+                ViewBag.IsEditAllStatus = IsEditAllStatus.TextVal == "1" ? true : false;
             if (tabContract == null)
                 ViewBag.Contract = "false";
             else
