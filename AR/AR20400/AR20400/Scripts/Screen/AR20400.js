@@ -535,7 +535,7 @@ var checkInsertKey_grdAR_LTTContract = function (grd, e, keys) {
 };
 
 var grdAR_LTTContract_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdAR_LTTContract, e, keysTab_4);
+    return HQ.grid.checkValidateEdit(App.grdAR_LTTContract, e, keysTab_4, false);
 };
 
 var grdAR_LTTContract_Reject = function (record) {
@@ -674,7 +674,7 @@ var grdAR_CustSellingProducts_Edit = function (item, e) {
 };
 
 var grdAR_CustSellingProducts_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdAR_CustSellingProducts, e, keysTab_7);
+    return HQ.grid.checkValidateEdit(App.grdAR_CustSellingProducts, e, keysTab_7, false);
 };
 
 var grdAR_CustSellingProducts_Reject = function (record) {
@@ -713,7 +713,7 @@ var grdAR_CustDisplayMethod_Edit = function (item, e) {
 };
 
 var grdAR_CustDisplayMethod_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdAR_CustDisplayMethod, e, keysTab_6);
+    return HQ.grid.checkValidateEdit(App.grdAR_CustDisplayMethod, e, keysTab_6, false);
 };
 
 var grdAR_CustDisplayMethod_Reject = function (record) {
@@ -756,7 +756,7 @@ var grdAR_CustomerChild_Edit = function (item, e) {
 };
 
 var grdAR_CustomerChild_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdAR_CustomerChild, e, ["CustChildID"]);
+    return HQ.grid.checkValidateEdit(App.grdAR_CustomerChild, e, ["CustChildID"],false);
 };
 
 var grdAR_CustomerChild_Reject = function (record) {
