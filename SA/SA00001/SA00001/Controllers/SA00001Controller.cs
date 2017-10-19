@@ -168,6 +168,7 @@ namespace SA00001.Controllers
             t.Address = s.Address;
             t.Address1 = s.Address1;
             t.Address2 = s.Address2;
+            t.Status = s.Status;
             t.Tel = s.Tel;
             t.Fax = s.Fax;
             t.TaxRegNbr = s.TaxRegNbr;

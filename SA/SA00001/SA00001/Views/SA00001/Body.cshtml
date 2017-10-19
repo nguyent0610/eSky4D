@@ -59,7 +59,7 @@
                 ,X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(200)
                     
                 ,X.Column().Text(Util.GetLang("Address")).DataIndex("Address").Width(200)
-                
+                ,X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(100)
                 //,X.Column().Text(Util.GetLang("Address1")).DataIndex("Address1").Width(200)            
                   
                 //,X.Column().Text(Util.GetLang("Address2")).DataIndex("Address2").Width(200)
@@ -208,7 +208,23 @@
                                     
                                 ,X.Container().Layout(LayoutType.VBox).MarginSpec("10 0 0 0")
                                     .Items(
-                                     HQ.TextBox().ID("Address").Name("Address").HQLangCode("Addr").MarginSpec("5 0 0 0").Width(600).MaxLength(200).EnforceMaxLength(true)
+                                     HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("Status").HQProcedure("SA00001_pcStatus").HQDBSys(true)
+                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("Status")
+                                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                        ,new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                                        , new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                                    })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    .LoadData()
+                    
+                                     ,HQ.TextBox().ID("Address").Name("Address").HQLangCode("Addr").MarginSpec("5 0 0 0").Width(600).MaxLength(200).EnforceMaxLength(true)
                                     //, HQ.TextBox().ID("Address1").Name("Address1").HQLangCode("Address1").MarginSpec("5 0 0 0").Width(600).MaxLength(400).EnforceMaxLength(true)
                                  //   , HQ.TextBox().ID("Address2").Name("Address2").HQLangCode("Address2").MarginSpec("5 0 0 0").Width(600).MaxLength(400).EnforceMaxLength(true)
                                    // , HQ.TextBox().ID("tableHD").Name("tableHD").HQLangCode("TableHD").MarginSpec("5 0 0 0").Width(600).MaxLength(400).EnforceMaxLength(true)
@@ -540,7 +556,8 @@
                         X.StringFilter().DataIndex("Salut"),
                         X.StringFilter().DataIndex("Zip"),
                         X.StringFilter().DataIndex("TaxRegNbr"),
-                        X.StringFilter().DataIndex("TaxLocId")
+                        X.StringFilter().DataIndex("TaxLocId"),
+                        X.StringFilter().DataIndex("Status")
                     )
             )
         )

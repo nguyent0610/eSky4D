@@ -68,6 +68,7 @@ var menuClick = function (command) {
             App.cboCity.setValue('');
             App.cboDistrict.setValue('');
             App.cboCpnyType.setValue('');
+            App.cboStatus.setValue('');
             App.Email.setValue('');
             App.Owner.setValue('');
             App.Plant.setValue('');
@@ -168,6 +169,10 @@ var save = function () {
     }
     if (Ext.isEmpty(App.txtCpnyID.getValue())) {
         HQ.message.show(15, App.txtCpnyID.fieldLabel);
+        return;
+    }
+    if (Ext.isEmpty(App.cboStatus.getValue())) {
+        HQ.message.show(15, App.cboStatus.fieldLabel);
         return;
     }
     if (App.frmDetail.isValid()) {
