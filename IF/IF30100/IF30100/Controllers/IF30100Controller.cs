@@ -438,10 +438,10 @@ namespace IF30100.Controllers
                 System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.Text, ref pc);
 
                 Cell cell;
-                for (int j = 1; j < dtInvtID.Rows.Count; j++)
+                for (int j = 0; j < dtInvtID.Rows.Count; j++)
                 {
                     for(int x = 0; x < dtInvtID.Columns.Count; x++){
-                        cell = SheetData.Cells[j, x];
+                        cell = SheetData.Cells[j+1, x];
                         if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("DATE"))
                         {
                             DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][x].ToString());
@@ -2382,14 +2382,14 @@ namespace IF30100.Controllers
                     {
                         if (choiceColumn.Contains(dtInvtID.Columns[x].ColumnName)) lstColumn.Add(x);
                     }
-                    for (int j = 1; j < dtInvtID.Rows.Count; j++)
+                    for (int j = 0; j < dtInvtID.Rows.Count; j++)
                     {
                         for (int x = 0; x < lstColumn.Count; x++)
                         {
 
-                            if (j == 1)
+                            if (j == 0)
                                 SetCellValueGrid(SheetData.Cells.Rows[0][x], Util.GetLang(dtInvtID.Columns[lstColumn[x]].ColumnName), TextAlignmentType.Center, TextAlignmentType.Left);
-                            cell = SheetData.Cells[j, x];
+                            cell = SheetData.Cells[j+1, x];
                            
 
                             if (_listChoice[x].Format != "")
