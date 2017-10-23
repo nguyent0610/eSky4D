@@ -8223,6 +8223,30 @@ namespace AR20500
         private global::System.String _AR20500CreateDate;
         partial void OnAR20500CreateDateChanging(global::System.String value);
         partial void OnAR20500CreateDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> MinMCPDate
+        {
+            get
+            {
+                return _MinMCPDate;
+            }
+            set
+            {
+                OnMinMCPDateChanging(value);
+                ReportPropertyChanging("MinMCPDate");
+                _MinMCPDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MinMCPDate");
+                OnMinMCPDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _MinMCPDate;
+        partial void OnMinMCPDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnMinMCPDateChanged();
 
         #endregion
 

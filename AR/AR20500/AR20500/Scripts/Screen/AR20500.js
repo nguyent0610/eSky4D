@@ -106,18 +106,20 @@ var btnProcess_Click = function () {
             if (rowerror != '') {
                 return;
             }
-
-            //for (var i = 0; i < App.grdCust.store.getCount() ; i++) {
-            //    var data = App.grdCust.store.data.items[i].data;
-            //    if (data.ColCheck) {
-
-            //        if (!isValidSel(data)) rowerror += i + 1 + ',';
-            //        if(data.ClassId==''||data.ClassId==null)
-            //            isnullclass += i + 1 + ',';
-            //        if (data.PriceClass == '' || data.PriceClass == null)
-            //            isnullpriceclass += i + 1 + ',';
-            //    }
-            //}
+            var minDate = HQ.bussinessDate;
+            for (var i = 0; i < App.grdCust.store.getCount() ; i++) {
+                var data = App.grdCust.store.data.items[i].data;
+                if (data.ColCheck) {
+                    if (data.MinMCPDate < minDate) {
+                        minDate = data.MinMCPDate;
+                    }
+                    //if (!isValidSel(data)) rowerror += i + 1 + ',';
+                    //if(data.ClassId==''||data.ClassId==null)
+                    //    isnullclass += i + 1 + ',';
+                    //if (data.PriceClass == '' || data.PriceClass == null)
+                    //    isnullpriceclass += i + 1 + ',';
+                }
+            }
             //if (isnullclass != '') {
             //    HQ.message.show(1000, HQ.common.getLang('ClassId'), '');
             //    return;
@@ -133,7 +135,7 @@ var btnProcess_Click = function () {
           
             App.dteFromDate.setValue(HQ.bussinessDate);
             App.dteToDate.setValue(HQ.EndDateYear);
-            App.dteFromDate.setMinValue(HQ.bussinessDate);
+            App.dteFromDate.setMinValue(minDate);
             App.winProcess.show();
         }
         else {

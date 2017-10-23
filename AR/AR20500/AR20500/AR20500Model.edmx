@@ -474,8 +474,9 @@
           <Property Type="String" Name="Color" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="CustHT" MaxLength="30" Nullable="false" />
           <Property Type="String" Name="Salut" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="ERPCustID" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="ERPCustID" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="AR20500CreateDate" Nullable="true" MaxLength="106" />
+          <Property Type="DateTime" Name="MinMCPDate" Nullable="true" />
         </ComplexType>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -830,6 +831,7 @@
                 <ScalarProperty Name="Salut" ColumnName="Salut" />
                 <ScalarProperty Name="ERPCustID" ColumnName="ERPCustID" />
                 <ScalarProperty Name="AR20500CreateDate" ColumnName="AR20500CreateDate" />
+                <ScalarProperty Name="MinMCPDate" ColumnName="MinMCPDate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
