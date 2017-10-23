@@ -71,10 +71,13 @@ var btnLoad_Click = function () {
 
 var ColCheck_Header_Change = function (value) {
     if (value) {
+        App.stoCust.suspendEvents();
         App.stoCust.each(function (item) {
             if (item.data.Status == App.cboStatus.getValue())
                 item.set("ColCheck", value.checked);
         });
+        App.stoCust.resumeEvents();
+        App.grdCust.view.refresh();
     }
 };
 
@@ -133,9 +136,11 @@ var btnProcess_Click = function () {
             //    return;
             //}
           
-            App.dteFromDate.setValue(HQ.bussinessDate);
+            App.dteFromDate.setValue(minDate);
             App.dteToDate.setValue(HQ.EndDateYear);
             App.dteFromDate.setMinValue(minDate);
+            App.dteFromDate.validate();
+            App.dteToDate.validate();
             App.winProcess.show();
         }
         else {
