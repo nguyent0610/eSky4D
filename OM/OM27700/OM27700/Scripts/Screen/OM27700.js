@@ -302,7 +302,7 @@ var Process = {
         if (Process.checkDataBeforeSave()) {
             if (App.frmMain.isValid()) {
                 App.frmMain.updateRecord();
-
+                App.grdInvt.store.clearFilter();
                 App.frmMain.submit({
                     url: 'OM27700/SaveData',
                     waitMsg: HQ.common.getLang('Submiting') + "...",
@@ -523,6 +523,8 @@ var Store = {
             var newDisplay = Ext.create("App.mdlOM_Accumulated", {
                 FromDate: HQ.dateNow,
                 ToDate: HQ.dateNow,
+                RegisForm: HQ.dateNow,
+                RegisTo: HQ.dateNow,
                 Status: _beginStatus,
                 DisplayType: 'L'
             });
@@ -588,7 +590,7 @@ var Store = {
             App.dtpToDate.setReadOnly(false);
             App.txtDescr.setReadOnly(false);
         }
-
+        App.slmLevel.select(0);
         Event.Form.frmMain_fieldChange();
     },
 
@@ -731,6 +733,11 @@ var Event = {
             App.dtpToDate.validate();          
         },
 
+        dtpRegisForm_change: function (dtp, newValue, oldValue, eOpts) {
+            App.dtpRegisTo.setMinValue(newValue);
+            App.dtpRegisTo.validate();
+        },
+
         cboApplyType_change: function (cbo, newValue, oldValue, eOpts) {
             if (cbo.getValue()) {
                 if (cbo.getValue() == _applyType.Amount) {
@@ -837,7 +844,7 @@ var Event = {
                 if (loadTree) {
                     Process.loadTreeCustomer(_custBranches.join(','));
                 }
-                
+               
             } else if (newCard.id == 'tabSales' && App.cboObjApply.getValue() == 'S') {
                 var loadTree = false;
                 var branches = [];
@@ -1058,7 +1065,7 @@ var Event = {
                                     //var objData = HQ.store.getAll(App.stoInvt, ['LevelID','InvtID'], [item.data.LevelID]);
                                     if (filterStore(App.stoInvt, 'LevelID', item.data.LevelID) == 1) {
                                         CheckIntIDNotItems = 1;
-                                        HQ.message.show(20170725, '');
+                                        HQ.message.show(20170725, item.data.LevelID);
                                         return false;
                                     }
                                 }
@@ -1304,6 +1311,7 @@ var Event = {
                         else {
                             if (e.record.data.LevelID) {
                                 var rec = Ext.create(e.store.model.modelName, {
+                                    AccumulateID: App.cboAccumulateID.getValue(),
                                     LevelID: e.record.data.LevelID,
                                     Qty: "1"
                                 });
@@ -1311,6 +1319,7 @@ var Event = {
                             }
                             else {
                                 var rec = Ext.create(e.store.model.modelName, {
+                                    AccumulateID: App.cboAccumulateID.getValue(),
                                     LevelID: e.record.data.LevelID,
                                     Qty: "1"
                                 });
@@ -1423,12 +1432,26 @@ var Event = {
 
         , grdCustomer_BeforeEdit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-            if(e.field == "CustID")
-                if(e.value != '')
-                    return false;
+            var status = App.cboStatus.getValue();
+
+            if (status == _beginStatus) {
+                if (e.field == "CustID")
+                    if (e.value != '')
+                        return false;
+            }
+            else {
+                return false;
+            }
         }
 
         , grdSales_BeforeEdit: function (item, e) {
+            var status = App.cboStatus.getValue();
+            if (status == _beginStatus) {
+
+            }
+            else {
+                return false;
+            }
             //return false;
         },
         grdSales_validateEdit: function (item, e) {
@@ -1467,16 +1490,14 @@ var Event = {
                             App.stoCompany.suspendEvents();
                             allNodes.forEach(function (node) {
                                 if (node.data.Type == "Company") {
-                                    var idx = App.grdCompany.store.getCount();
                                     var record = HQ.store.findInStore(App.grdCompany.store,
                                         ['CpnyID'],
                                         [node.data.RecID]);
                                     if (!record) {
-                                        App.grdCompany.store.insert(idx - 1, Ext.create("App.mdlCompany", {
-                                            CpnyID: node.data.RecID,
-                                            CpnyName: node.data.text
-                                        }));
-                                    
+                                        HQ.store.insertBlank(App.grdCompany.store, ['CpnyID', 'CpnyName']);
+                                        record = App.grdCompany.store.getAt(App.grdCompany.store.getCount() - 1);
+                                        record.set('CpnyID', node.data.RecID);
+                                        record.set('CpnyName', node.data.text);
                                     }
                                 }
                             });
@@ -1835,7 +1856,19 @@ var deleteSelectedInvt = function (item) {
 
 var deleteAllInvts = function (item) {
     if (item == "yes") {
-        App.grdInvt.removeAll();
+        App.stoInvt.suspendEvents();
+        var allData = App.stoInvt.snapshot || App.stoInvt.allData || App.stoInvt.data;
+        var selRecs = allData.items;
+        for (var i = selRecs.length - 1; i >= 0; i--) {
+            App.grdInvt.getStore().remove(allData.items[i], App.grdInvt);
+            App.grdInvt.getView().focusRow(App.grdInvt.getStore().getCount() - 1);
+            App.grdInvt.getSelectionModel().select(App.grdInvt.getStore().getCount() - 1);
+        }
+        App.stoInvt.resumeEvents();
+        App.grdInvt.view.refresh();
+
+
+        //App.grdInvt.removeAll();
         Event.Form.frmMain_fieldChange();
     }
 };
@@ -1849,8 +1882,24 @@ var deleteSelectedSale = function (item) {
 
 var deleteAllSale = function (item) {
     if (item == "yes") {
-        App.grdSale.removeAll();
+        App.stoInvt.suspendEvents();
+        var allData = App.stoSale.snapshot || App.stoSale.allData || App.stoSale.data;
+        var selRecs = allData.items;
+        for (var i = selRecs.length - 1; i >= 0; i--) {
+            App.grdSale.getStore().remove(allData.items[i], App.grdSale);
+            App.grdSale.getView().focusRow(App.grdSale.getStore().getCount() - 1);
+            App.grdSale.getSelectionModel().select(App.grdSale.getStore().getCount() - 1);
+        }
+        App.stoSale.resumeEvents();
+        App.grdSale.view.refresh();
+
+
+        //App.grdInvt.removeAll();
         Event.Form.frmMain_fieldChange();
+
+
+        //App.grdSale.removeAll();
+        //Event.Form.frmMain_fieldChange();
     }
 };
 
@@ -1996,12 +2045,28 @@ var deleteSelectedCustomer = function (item) {
 
 var deleteAllCustomer = function (item) {
     if (item == "yes") {
-        App.stoCustomer.loadData([], false);
-        App.stoCustomer.submitData();
-        App.grdCustomer.view.refresh();
-        App.stoCustomer.loadPage(1);
+            App.stoCustomer.suspendEvents();
+            var allData = App.stoCustomer.snapshot || App.stoCustomer.allData || App.stoCustomer.data;
+            var selRecs = allData.items;
+            for (var i = selRecs.length - 1; i >= 0; i--) {
+                App.grdCustomer.getStore().remove(allData.items[i], App.grdCustomer);
+                App.grdCustomer.getView().focusRow(App.grdCustomer.getStore().getCount() - 1);
+                App.grdCustomer.getSelectionModel().select(App.grdCustomer.getStore().getCount() - 1);
+            }
+            App.stoCustomer.resumeEvents();
+            App.grdCustomer.view.refresh();
 
-        Event.Form.frmMain_fieldChange();
+
+            //App.grdInvt.removeAll();
+            Event.Form.frmMain_fieldChange();
+
+
+        //App.stoCustomer.loadData([], false);
+        //App.stoCustomer.submitData();
+        //App.grdCustomer.view.refresh();
+        //App.stoCustomer.loadPage(1);
+
+        //Event.Form.frmMain_fieldChange();
     }
 };
 
@@ -2421,7 +2486,6 @@ var btnDelAllSale_click = function (btn, e, eOpts) {
 
 
 var RefeshView = function (btn, e, eOpts) {
-    App.grdInvt.getStore().reload();
     App.grdSales.getStore().reload();
     App.grdCustomer.getStore().reload();
 }

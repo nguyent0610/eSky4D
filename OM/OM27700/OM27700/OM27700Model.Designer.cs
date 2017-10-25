@@ -132,22 +132,6 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_Accumulated> OM_Accumulated
-        {
-            get
-            {
-                if ((_OM_Accumulated == null))
-                {
-                    _OM_Accumulated = base.CreateObjectSet<OM_Accumulated>("OM_Accumulated");
-                }
-                return _OM_Accumulated;
-            }
-        }
-        private ObjectSet<OM_Accumulated> _OM_Accumulated;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_AccumulatedCpny> OM_AccumulatedCpny
         {
             get
@@ -240,6 +224,22 @@ namespace OM27700
             }
         }
         private ObjectSet<OM_AccumulatedInvtSetup> _OM_AccumulatedInvtSetup;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_Accumulated> OM_Accumulated
+        {
+            get
+            {
+                if ((_OM_Accumulated == null))
+                {
+                    _OM_Accumulated = base.CreateObjectSet<OM_Accumulated>("OM_Accumulated");
+                }
+                return _OM_Accumulated;
+            }
+        }
+        private ObjectSet<OM_Accumulated> _OM_Accumulated;
 
         #endregion
 
@@ -275,14 +275,6 @@ namespace OM27700
         public void AddToSI_Hierarchy(SI_Hierarchy sI_Hierarchy)
         {
             base.AddObject("SI_Hierarchy", sI_Hierarchy);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_Accumulated EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_Accumulated(OM_Accumulated oM_Accumulated)
-        {
-            base.AddObject("OM_Accumulated", oM_Accumulated);
         }
     
         /// <summary>
@@ -331,6 +323,14 @@ namespace OM27700
         public void AddToOM_AccumulatedInvtSetup(OM_AccumulatedInvtSetup oM_AccumulatedInvtSetup)
         {
             base.AddObject("OM_AccumulatedInvtSetup", oM_AccumulatedInvtSetup);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_Accumulated EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_Accumulated(OM_Accumulated oM_Accumulated)
+        {
+            base.AddObject("OM_Accumulated", oM_Accumulated);
         }
 
         #endregion
@@ -3134,6 +3134,7 @@ namespace OM27700
         /// <param name="toDate">Initial value of the ToDate property.</param>
         /// <param name="applyFor">Initial value of the ApplyFor property.</param>
         /// <param name="applyType">Initial value of the ApplyType property.</param>
+        /// <param name="objApply">Initial value of the ObjApply property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
@@ -3141,8 +3142,7 @@ namespace OM27700
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        /// <param name="objApply">Initial value of the ObjApply property.</param>
-        public static OM_Accumulated CreateOM_Accumulated(global::System.String accumulateID, global::System.String descr, global::System.DateTime fromDate, global::System.DateTime toDate, global::System.String applyFor, global::System.String applyType, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp, global::System.String objApply)
+        public static OM_Accumulated CreateOM_Accumulated(global::System.String accumulateID, global::System.String descr, global::System.DateTime fromDate, global::System.DateTime toDate, global::System.String applyFor, global::System.String applyType, global::System.String objApply, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp)
         {
             OM_Accumulated oM_Accumulated = new OM_Accumulated();
             oM_Accumulated.AccumulateID = accumulateID;
@@ -3151,6 +3151,7 @@ namespace OM27700
             oM_Accumulated.ToDate = toDate;
             oM_Accumulated.ApplyFor = applyFor;
             oM_Accumulated.ApplyType = applyType;
+            oM_Accumulated.ObjApply = objApply;
             oM_Accumulated.LUpd_DateTime = lUpd_DateTime;
             oM_Accumulated.LUpd_Prog = lUpd_Prog;
             oM_Accumulated.LUpd_User = lUpd_User;
@@ -3158,7 +3159,6 @@ namespace OM27700
             oM_Accumulated.Crtd_Prog = crtd_Prog;
             oM_Accumulated.Crtd_User = crtd_User;
             oM_Accumulated.tstamp = tstamp;
-            oM_Accumulated.ObjApply = objApply;
             return oM_Accumulated;
         }
 
@@ -3316,6 +3316,30 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ObjApply
+        {
+            get
+            {
+                return _ObjApply;
+            }
+            set
+            {
+                OnObjApplyChanging(value);
+                ReportPropertyChanging("ObjApply");
+                _ObjApply = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ObjApply");
+                OnObjApplyChanged();
+            }
+        }
+        private global::System.String _ObjApply;
+        partial void OnObjApplyChanging(global::System.String value);
+        partial void OnObjApplyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public Nullable<global::System.Boolean> Type
@@ -3336,6 +3360,54 @@ namespace OM27700
         private Nullable<global::System.Boolean> _Type;
         partial void OnTypeChanging(Nullable<global::System.Boolean> value);
         partial void OnTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> RegisForm
+        {
+            get
+            {
+                return _RegisForm;
+            }
+            set
+            {
+                OnRegisFormChanging(value);
+                ReportPropertyChanging("RegisForm");
+                _RegisForm = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RegisForm");
+                OnRegisFormChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _RegisForm;
+        partial void OnRegisFormChanging(Nullable<global::System.DateTime> value);
+        partial void OnRegisFormChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> RegisTo
+        {
+            get
+            {
+                return _RegisTo;
+            }
+            set
+            {
+                OnRegisToChanging(value);
+                ReportPropertyChanging("RegisTo");
+                _RegisTo = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RegisTo");
+                OnRegisToChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _RegisTo;
+        partial void OnRegisToChanging(Nullable<global::System.DateTime> value);
+        partial void OnRegisToChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -3528,30 +3600,6 @@ namespace OM27700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String ObjApply
-        {
-            get
-            {
-                return _ObjApply;
-            }
-            set
-            {
-                OnObjApplyChanging(value);
-                ReportPropertyChanging("ObjApply");
-                _ObjApply = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ObjApply");
-                OnObjApplyChanged();
-            }
-        }
-        private global::System.String _ObjApply;
-        partial void OnObjApplyChanging(global::System.String value);
-        partial void OnObjApplyChanged();
 
         #endregion
 

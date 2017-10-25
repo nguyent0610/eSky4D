@@ -87,9 +87,10 @@
                 // Store: stoLevel
         )
 
-        @(
+        @*@(
             X.Store().ID("stoInvt")
             .AutoLoad(false)
+            .PageSize(50)
             .Model(Util.GenerateModel(typeof(OM27700_pgInvt_Result), "mdlInvt", ""))
             .Proxy(
                 X.AjaxProxy()
@@ -112,9 +113,9 @@
                 l.Load.Fn = "Store.stoGrid_load";
             })
                 // Store: stoInvt
-        )  
+        )*@  
         
-         @(
+         @*@(
             X.Store().ID("stoSale")
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM27700_pgSalesInvt_Result), "mdlSalesInvt", ""))
@@ -139,7 +140,7 @@
                 l.Load.Fn = "Store.stoGrid_load";
             })
                 // Store: stoInvt
-        )
+        )*@
              
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->

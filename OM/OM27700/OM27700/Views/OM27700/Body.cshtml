@@ -135,6 +135,13 @@
                     })
                     
                     .LoadData()
+                    
+                    ,HQ.DateField().ID("dtpRegisForm")
+                            .HQLangCode("RegisForm").DataIndex("RegisForm")
+                            .Listeners(l =>
+                            {
+                                l.Change.Fn = "Event.Form.dtpRegisForm_change";
+                            })
                 ) // Second Column  
 
                 // Second Column
@@ -165,6 +172,9 @@
                         new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
                         new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                     }).LoadData()
+                    
+                    ,HQ.DateField().ID("dtpRegisTo")
+                            .HQLangCode("RegisTo").DataIndex("RegisTo")
                 ) // Second Column  
             )
             .Listeners(x =>
@@ -538,7 +548,25 @@
                             .Scroll(ScrollMode.Both)
                             .View(X.GridView().TrackOver(false))
                             .SortableColumns(false)
-                            .StoreID("stoInvt")
+                            .Store(
+                                X.Store()
+                                .ID("stoInvt")
+                                .PageSize(50)
+                                .Model(Util.GenerateModel(typeof(OM27700_pgInvt_Result), "mdlInvt", ""))
+                                .Parameters(ps =>
+                                {
+                                    ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
+
+                                })
+                                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetInvt"))).AutoLoad(false)
+                                .Listeners(l =>
+                                {
+                                    l.BeforeLoad.Handler = "this.HQFieldKeys=['InvtID'];";
+                                    l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                                    l.Update.Handler = "Event.Form.frmMain_fieldChange()";
+                                    l.Load.Fn = "Store.stoGrid_load";
+                                })
+                            )
                             .ColumnModel(
                                 X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
                                 , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(150)
@@ -580,6 +608,23 @@
                                 .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                             )
                             .SelectionModel(X.RowSelectionModel().ID("slmInvt").Mode(SelectionMode.Multi))
+                            .BottomBar(
+                            X.PagingToolbar()
+                                .Items(
+                                    X.Label("Page size:"),
+                                    X.ToolbarSpacer(10),
+                                    X.ComboBox()
+                                    .Width(80)
+                                    .Items("1", "2", "10", "20", "30", "50")
+                                    .SelectedItems("50")
+                                    .Listeners(l =>
+                                        {
+                                            l.Select.Fn = "HQ.grid.onPageSelect";
+                                        })
+                                )
+                                .Plugins(X.ProgressBarPager().ID("paggrdInvt"))
+                            ) 
+                            
                             .Plugins(
                                 X.CellEditing()
                                 .ClicksToEdit(1)
@@ -863,7 +908,7 @@
 
                             .Store(
                                 X.Store()
-                                    .ID("stoSales")
+                                .ID("stoSales")
                                 .PageSize(50).AutoLoad(false)
                                 .Model(Util.GenerateModel(typeof(OM27700_pgSalesPerson_Result), "mdlSales", ""))
                                 .Parameters(ps =>
@@ -1041,7 +1086,25 @@
                             .Scroll(ScrollMode.Both)
                             .View(X.GridView().TrackOver(false))
                             .SortableColumns(false)
-                            .StoreID("stoSale")
+                            .Store(
+                                X.Store()
+                                .ID("stoSale")
+                                .PageSize(50)
+                                .Model(Util.GenerateModel(typeof(OM27700_pgSalesInvt_Result), "mdlSalesInvt", ""))
+                                .Parameters(ps =>
+                                {
+                                    ps.Add(new StoreParameter("accumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
+
+                                })
+                                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSaleInvt"))).AutoLoad(false)
+                                .Listeners(l =>
+                                {
+                                    l.BeforeLoad.Handler = "this.HQFieldKeys=['InvtID'];";
+                                    l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                                    l.Update.Handler = "Event.Form.frmMain_fieldChange()";
+                                    l.Load.Fn = "Store.stoGrid_load";
+                                })
+                            )
                             .ColumnModel(
                                 X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
                                 , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(150)
@@ -1083,6 +1146,24 @@
                                 .Listeners(l => l.Command.Handler = "Event.Grid.grd_Salereject(this, record);")
                             )
                             .SelectionModel(X.RowSelectionModel().ID("slmSale").Mode(SelectionMode.Multi))
+                            .BottomBar(
+                            X.PagingToolbar()
+                            .Items(
+                                X.Label("Page size:"),
+                                X.ToolbarSpacer(10),
+                                X.ComboBox()
+                                .Width(80)
+                                .Items("1", "2", "10", "20", "30", "50")
+                                .SelectedItems("50")
+                                .Listeners(l =>
+                                    {
+                                        l.Select.Fn = "HQ.grid.onPageSelect";
+                                        
+                                    })
+                            ).HideRefresh(true)
+                            .Plugins(X.ProgressBarPager())
+                            )  
+                            
                             .Plugins(
                                 X.CellEditing()
                                 .ClicksToEdit(1)

@@ -618,6 +618,12 @@ namespace OM27700.Controllers
                     {
                         _db.OM_AccumulatedSalesPerson.DeleteObject(item);
                     }
+
+                    var lstInvtSetup = _db.OM_AccumulatedInvtSetup.Where(l => l.AccumulateID.ToUpper() == accumulateID).ToList();
+                    foreach (var item in lstInvtSetup)
+                    {
+                        _db.OM_AccumulatedInvtSetup.DeleteObject(item);
+                    }
                     _db.SaveChanges();
                     return Json(new { success = true });
                 }
@@ -726,12 +732,16 @@ namespace OM27700.Controllers
 
             foreach (var currentCust in lstDiscCust)
             {
-                var cust = (from p in _db.OM_AccumulatedCustomer
-                            where
-                                p.AccumulateID.ToUpper() == AccumulateID
+                var cust = _db.OM_AccumulatedCustomer.Where(p=> p.AccumulateID.ToUpper() == AccumulateID
                                 && p.CustID == currentCust.CustID
-                                && p.CpnyID == currentCust.CpnyID
-                            select p).FirstOrDefault();
+                                && p.CpnyID == currentCust.CpnyID).FirstOrDefault();
+
+                //var cust = (from p in _db.OM_AccumulatedCustomer
+                //            where
+                //                p.AccumulateID.ToUpper() == AccumulateID
+                //                && p.CustID == currentCust.CustID
+                //                && p.CpnyID == currentCust.CpnyID
+                //            select p).FirstOrDefault();
                 if (cust == null)
                 {
                     OM_AccumulatedCustomer newCust = new OM_AccumulatedCustomer();
@@ -1101,7 +1111,10 @@ namespace OM27700.Controllers
                 accumulate.Crtd_DateTime = DateTime.Now;
                 accumulate.Crtd_Prog = _screenNbr;
                 accumulate.Crtd_User = Current.UserName;
-            }           
+            }
+
+            accumulate.RegisForm = inputAccumulate.RegisForm;
+            accumulate.RegisTo = inputAccumulate.RegisTo;
             accumulate.Type = inputAccumulate.Type;
             accumulate.Descr = inputAccumulate.Descr;
             accumulate.ApplyFor = inputAccumulate.ApplyFor;
@@ -1141,7 +1154,7 @@ namespace OM27700.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = Current.UserName;
             }
-            t.NumRegLot = s.NumRegLot;
+            //t.NumRegLot = s.NumRegLot;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
