@@ -1193,6 +1193,8 @@ namespace OM25100.Controllers
                         List<OM_KPICustomer_All> lstOM_KPICustomer_All = new List<OM_KPICustomer_All>();
                         List<OM_KPICustomer_Class> lstOM_KPICustomer_Class = new List<OM_KPICustomer_Class>();
                         List<OM_KPICustomer_Invt> lstOM_KPICustomer_Invt = new List<OM_KPICustomer_Invt>();
+
+
                         #endregion
 
                         for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
@@ -1546,14 +1548,48 @@ namespace OM25100.Controllers
 
                             #region Import data to DB
                             var record = _db.OM_KPIHeader.FirstOrDefault(p => p.CycleNbr == CycleNbr && p.KPI == KPI);
-                            if (record != null)
+                            //if (record != null)
+                            //{
+                            //    if (record.Status != "H")
+                            //    {
+                            //        errorStatus += (i + 1).ToString() + ",";
+                            //        continue;
+                            //    }
+                            //}
+                            var CheckRecordEmpity = lstOM_KPIHeader.Where(p => p.CycleNbr == CycleNbr && p.KPI == KPI).FirstOrDefault();
+                            if (CheckRecordEmpity == null)
                             {
-                                if (record.Status != "H")
+                                if (record != null)
                                 {
-                                    errorStatus += (i + 1).ToString() + ",";
-                                    continue;
+                                    if (record.Status != "H")
+                                    {
+                                        errorStatus += (i + 1).ToString() + ",";
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_User = Current.UserName;
+                                        record.LUpd_Prog = _screenNbr;
+                                    }
                                 }
+                                else
+                                {
+                                    record = new OM_KPIHeader();
+                                    record.KPI = KPI;
+                                    record.CycleNbr = CycleNbr;
+                                    record.Status = "H";
+                                    record.Crtd_DateTime = DateTime.Now;
+                                    record.Crtd_User = Current.UserName;
+                                    record.Crtd_Prog = _screenNbr;
+                                    record.LUpd_DateTime = DateTime.Now;
+                                    record.LUpd_User = Current.UserName;
+                                    record.LUpd_Prog = _screenNbr;
+                                    _db.OM_KPIHeader.AddObject(record);
+                                }
+                                lstOM_KPIHeader.Add(record);
                             }
+
                             if (appFor == "C")
                             {
                                 #region -Company-
