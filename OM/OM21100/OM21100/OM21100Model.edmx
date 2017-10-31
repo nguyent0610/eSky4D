@@ -318,6 +318,7 @@
           <Property Name="POUse" Type="bit" Nullable="false" />
           <Property Name="Crtd_Role" Type="varchar" MaxLength="30" />
           <Property Name="Profile" Type="nvarchar" MaxLength="500" />
+          <Property Name="ExactQty" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_OrdDisc">
           <Key>
@@ -779,6 +780,7 @@
           <Property Type="Boolean" Name="POUse" Nullable="false" />
           <Property Type="String" Name="Crtd_Role" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Profile" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ExactQty" Type="Boolean" Nullable="false" />
         </EntityType>
         <ComplexType Name="OM21100_ptCompany_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -1368,6 +1370,7 @@
           <EntitySetMapping Name="OM_DiscSeq">
             <EntityTypeMapping TypeName="OM21100Model.OM_DiscSeq">
               <MappingFragment StoreEntitySet="OM_DiscSeq">
+                <ScalarProperty Name="ExactQty" ColumnName="ExactQty" />
                 <ScalarProperty Name="Profile" ColumnName="Profile" />
                 <ScalarProperty Name="Crtd_Role" ColumnName="Crtd_Role" />
                 <ScalarProperty Name="POUse" ColumnName="POUse" />

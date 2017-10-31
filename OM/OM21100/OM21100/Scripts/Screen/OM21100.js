@@ -1091,6 +1091,7 @@ var DiscDefintion = {
             for (var i = 0; i < tabNames.length; i++) {
                 App[tabNames[i]].enable();
             }
+            App.chkExactQty.setVisible(!App['pnlDPBB'].isDisabled());
         },
 
         getDeepAllLeafNodes: function (node, onlyLeaf) {
@@ -1425,7 +1426,7 @@ var DiscDefintion = {
                 App.chkAutoFreeItem.setReadOnly(false);
                 App.cboBudgetID.setReadOnly(false);
                 App.txtSeqDescr.setReadOnly(false);
-
+                App.chkExactQty.setReadOnly(false);
                 App.btnUpload.enable();
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.enable();
@@ -1438,7 +1439,7 @@ var DiscDefintion = {
                 App.chkAutoFreeItem.setReadOnly(true);
                 App.cboBudgetID.setReadOnly(true);
                 App.txtSeqDescr.setReadOnly(true);
-
+                App.chkExactQty.setReadOnly(true);
                 App.btnUpload.disable();
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.disable();
@@ -1749,8 +1750,11 @@ var DiscDefintion = {
             if (cbo.value == "W") {
                 App.grdDiscBreak.down('[dataIndex=BreakQty]').setText(HQ.common.getLang("weight"));
             }
-            else
+            else {
                 App.grdDiscBreak.down('[dataIndex=BreakQty]').setText(HQ.common.getLang("breakqty"));
+            }
+            var isEnable = (!App['pnlDPBB'].isDisabled() && cbo.value == "Q");
+            App.chkExactQty.setVisible(isEnable);
         },
 
         cboProAplForItem_change: function (cbo, newValue, oldValue, eOpts) {

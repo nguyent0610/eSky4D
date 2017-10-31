@@ -1514,20 +1514,6 @@ namespace OM21100.Controllers
         private void Submit_Data(SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
         {
             _db.SaveChanges();
-            //if (handle != null)
-            //{
-            //    HQSendMailApprove.Approve.Mail_Approve(handle.AppFolID,
-            //        inputSeq.DiscID + "-" + inputSeq.DiscSeq,
-            //        handle.RoleID,
-            //        handle.Status,
-            //        handle.Handle,
-            //        Current.LangID.ToString(),
-            //        Current.UserName,
-            //        branches,
-            //        Current.CpnyID,
-            //        string.Empty, string.Empty, string.Empty);
-            //} 
-            //ppv_DiscountAll_ResultDomainDataSource.Load();
         }
 
         private void Save_DiscItem(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
@@ -1727,14 +1713,14 @@ namespace OM21100.Controllers
                     _db.OM_DiscItemClass.AddObject(newItemClass);
                 }
             }
-
+            ////// TEST HERE
             foreach (var deleted in lstDiscItemClassChange.Deleted)
             {
-                var deletedDiscItemClass = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
-                    && p.DiscSeq == inputSeq.DiscSeq && p.InvtID == deleted.ClassID);
+                var deletedDiscItemClass = _db.OM_DiscItemClass.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.ClassID == deleted.ClassID);
                 if (deletedDiscItemClass != null)
                 {
-                    _db.OM_DiscItem.DeleteObject(deletedDiscItemClass);
+                    _db.OM_DiscItemClass.DeleteObject(deletedDiscItemClass);
                 }
             }
 
@@ -2103,7 +2089,7 @@ namespace OM21100.Controllers
             updatedDiscSeq.POUse = inputDiscSeq.POUse;
             updatedDiscSeq.POEndDate = inputDiscSeq.POEndDate.ToDateShort();
             updatedDiscSeq.POStartDate = inputDiscSeq.POStartDate.ToDateShort();
-
+            updatedDiscSeq.ExactQty = inputDiscSeq.ExactQty;
 
             if (!string.IsNullOrEmpty(handle) && handle != "N" && updatedDiscSeq.Status != handle)
             {

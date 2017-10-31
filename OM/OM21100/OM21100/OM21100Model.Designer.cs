@@ -6725,7 +6725,8 @@ namespace OM21100
         /// <param name="pOStartDate">Initial value of the POStartDate property.</param>
         /// <param name="pOEndDate">Initial value of the POEndDate property.</param>
         /// <param name="pOUse">Initial value of the POUse property.</param>
-        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse)
+        /// <param name="exactQty">Initial value of the ExactQty property.</param>
+        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty)
         {
             OM_DiscSeq oM_DiscSeq = new OM_DiscSeq();
             oM_DiscSeq.DiscID = discID;
@@ -6748,6 +6749,7 @@ namespace OM21100
             oM_DiscSeq.POStartDate = pOStartDate;
             oM_DiscSeq.POEndDate = pOEndDate;
             oM_DiscSeq.POUse = pOUse;
+            oM_DiscSeq.ExactQty = exactQty;
             return oM_DiscSeq;
         }
 
@@ -7408,6 +7410,30 @@ namespace OM21100
         private global::System.String _Profile;
         partial void OnProfileChanging(global::System.String value);
         partial void OnProfileChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean ExactQty
+        {
+            get
+            {
+                return _ExactQty;
+            }
+            set
+            {
+                OnExactQtyChanging(value);
+                ReportPropertyChanging("ExactQty");
+                _ExactQty = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ExactQty");
+                OnExactQtyChanged();
+            }
+        }
+        private global::System.Boolean _ExactQty;
+        partial void OnExactQtyChanging(global::System.Boolean value);
+        partial void OnExactQtyChanged();
 
         #endregion
 

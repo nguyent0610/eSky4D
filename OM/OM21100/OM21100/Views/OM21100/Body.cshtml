@@ -362,6 +362,15 @@
                                                     l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                                 })
                                         .Hidden(true)
+                                            , HQ.Checkbox().ID("chkExactQty")
+                                            .MarginSpec("5 5 0 10")
+                                            .Hidden(true)
+                                            .BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")
+                                            .Listeners(l =>
+                                            {
+                                                l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            })
+                                        
                                     ) // Container
                                 ),
                                 X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
