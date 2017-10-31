@@ -178,6 +178,14 @@ var Process = {
 
             deleteAllSales(item);
             deleteAllCustomer(item);
+
+            var invtBlank = HQ.store.findRecord(App.grdCompany.store, ['CpnyID'], ['']);
+            if (!invtBlank) {
+                App.grdCompany.store.insert(0, Ext.create("App.mdlCompany", {
+                    CpnyID: ''
+                }));
+            }
+
             Event.Form.frmMain_fieldChange();
         }
     },
@@ -309,13 +317,28 @@ var Process = {
                     timeout: 1800000,
                     params: {
                         lstAccumulate: Ext.encode(App.stoDisplay.getRecordsValues()),
+
+                        lstCpnySave: HQ.store.getData(App.grdCompany.store),
+                        lstCpnyDetailAll: Ext.encode(App.grdCompany.store.getRecordsValues()),
+
+                        lstInvtSave: HQ.store.getData(App.grdInvt.store),
+                        lstInvtDetailAll: Ext.encode(App.grdInvt.store.getRecordsValues()),
+
+                        lstCustomerSave: HQ.store.getData(App.grdCustomer.store),
+                        lstCustomerDetailAll: Ext.encode(App.grdCustomer.store.getRecordsValues()),
+
+                        lstSalesSave: HQ.store.getData(App.grdSales.store),
+                        lstSalesDetailAll: Ext.encode(App.grdSales.store.getRecordsValues()),
+
+                        lstProductSave: HQ.store.getData(App.grdSale.store),
+                        lstProductDetailAll: Ext.encode(App.grdSale.store.getRecordsValues()),
+
                         lstCpny: HQ.store.getData(App.stoCompany),
                         lstCpnyChange: HQ.store.getData(App.grdCompany.store),
                         lstLevelChange: HQ.store.getData(App.grdLevel.store),
-                        lstInvtChange: HQ.store.getData(App.grdInvt.store),
                         lstCustomer: Ext.encode(App.grdCustomer.store.getRecordsValues()),
                         lstSales: Ext.encode(App.grdSales.store.getRecordsValues()),
-                        lstSaleProduct: HQ.store.getData(App.grdSale.store),
+                        lstSaleProduct: Ext.encode(App.grdSale.store.getRecordsValues()),
                         isNew: HQ.isNew
                     },
                     success: function (msg, data) {
@@ -972,6 +995,9 @@ var Event = {
                         else if (HQ.focus == 'invt') {
                             HQ.grid.insert(App.grdInvt, ['InvtID']);
                         }
+                        else if (HQ.focus == 'SaleProduct') {
+                            HQ.grid.insert(App.grdSale, ['InvtID']);
+                        }
                     }
                     break;
                 case "delete":
@@ -1179,7 +1205,11 @@ var Event = {
             if (HQ.isUpdate) {
                 if (App.frmMain.isValid()) {
                     var status = App.cboStatus.getValue();
-                    if (status == _beginStatus) {
+                    if (App.slmLevel.selected.items[0] != undefined)
+                        var Level = App.slmLevel.selected.items[0].data.LevelID;
+                    else
+                        var Level = '';
+                    if (status == _beginStatus && Level != "") {
                         var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
                         return HQ.grid.checkBeforeEdit(e, keys);
                         //var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";                        
@@ -1228,6 +1258,8 @@ var Event = {
 
         grdSale_edit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+            e.record.set("AccumulateID", App.cboAccumulateID.getValue());
+            e.record.set("Qty", "1");
             AddRowDefaultOne(App.grdSale, e, keys);
         },
 
@@ -1235,7 +1267,10 @@ var Event = {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
             var record = App.cboGCpnyID.findRecord("CpnyID", e.record.data.CpnyID);
             if (record)
+            {
+                e.record.set("AccumulateID", App.cboAccumulateID.getValue())
                 e.record.set("CpnyName", record.data.CpnyName);
+            }
             else
                 e.record.set("CpnyName", '');
             HQ.grid.checkInsertKey(App.grdCompany, e, keys);
@@ -1245,6 +1280,7 @@ var Event = {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
             var record = App.cboSlsperID.findRecord("SlsperID", e.record.data.SlsperID);
             if (record) {
+                e.record.set("AccumulateID", App.cboAccumulateID.getValue());
                 e.record.set("SlsName", record.data.SlsName);
                 e.record.set("CpnyID", record.data.BranchID);
             }
@@ -1266,6 +1302,7 @@ var Event = {
 
             var record = App.cboCustID.findRecord("CustID", e.record.data.CustID);
             if (record) {
+                e.record.set("AccumulateID", App.cboAccumulateID.getValue());
                 e.record.set("CustName", record.data.CustName);
                 e.record.set("CpnyID", record.data.BranchID);
             }
@@ -1280,10 +1317,14 @@ var Event = {
         },
         grdCustID_ValidateEdit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-            return HQ.grid.checkValidateEdit(App.grdCustomer, e, keys);
+            return HQ.grid.checkValidateEditDG(App.grdCustomer, e, keys);
         },
         grd_edit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+            if (App.slmLevel.selected.items[0] != undefined)
+                var Level = App.slmLevel.selected.items[0].data.LevelID;
+            else
+                var Level = '';
             if (e.store.storeId == 'stoLevel') {
                 if (e.field == 'LevelDescr') {
                     var rec = Ext.create(e.store.model.modelName, {
@@ -1308,7 +1349,7 @@ var Event = {
                             });
                             HQ.store.insertRecord(e.store, keys, rec);
                         }
-                        else {
+                        else if (Level != "") {
                             if (e.record.data.LevelID) {
                                 var rec = Ext.create(e.store.model.modelName, {
                                     AccumulateID: App.cboAccumulateID.getValue(),
@@ -1335,7 +1376,7 @@ var Event = {
         },
         grdCpnyID_validateEdit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-            return HQ.grid.checkValidateEdit(App.grdCompany, e, keys);
+            return HQ.grid.checkValidateEditDG(App.grdCompany, e, keys);
         },
         grd_validateEdit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
@@ -1456,7 +1497,7 @@ var Event = {
         },
         grdSales_validateEdit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-            return HQ.grid.checkValidateEdit(App.grdSales, e, keys);
+            return HQ.grid.checkValidateEditDG(App.grdSales, e, keys);
         }
         , rendererLevelType: function (value) {
             var r = HQ.store.findInStore(App.cboLevelType.store, ['Code'], [value]);
@@ -1496,6 +1537,7 @@ var Event = {
                                     if (!record) {
                                         HQ.store.insertBlank(App.grdCompany.store, ['CpnyID', 'CpnyName']);
                                         record = App.grdCompany.store.getAt(App.grdCompany.store.getCount() - 1);
+                                        record.set('AccumulateID', App.cboAccumulateID.getValue());
                                         record.set('CpnyID', node.data.RecID);
                                         record.set('CpnyName', node.data.text);
                                     }
@@ -1503,6 +1545,9 @@ var Event = {
                             });
                             App.stoCompany.resumeEvents();
                             App.grdCompany.view.refresh();
+
+                            App.stoCompany.pageSize = parseInt(50, 10);
+                            App.stoCompany.loadPage(1);
                             //App.grdCompany.store.loadPage(1);
                             App.treePanelBranch.clearChecked();
 
@@ -1537,6 +1582,7 @@ var Event = {
                                         [node.attributes.RecID]);
                                     if (!record) {
                                         App.grdCompany.store.insert(idx - 1, Ext.create("App.mdlCompany", {
+                                            AccumulateID: App.cboAccumulateID.getValue(),
                                             CpnyID: node.attributes.RecID,
                                             CpnyName: node.text
                                         }));
@@ -1856,18 +1902,29 @@ var deleteSelectedInvt = function (item) {
 
 var deleteAllInvts = function (item) {
     if (item == "yes") {
-        App.stoInvt.suspendEvents();
-        var allData = App.stoInvt.snapshot || App.stoInvt.allData || App.stoInvt.data;
-        var selRecs = allData.items;
-        for (var i = selRecs.length - 1; i >= 0; i--) {
-            App.grdInvt.getStore().remove(allData.items[i], App.grdInvt);
-            App.grdInvt.getView().focusRow(App.grdInvt.getStore().getCount() - 1);
-            App.grdInvt.getSelectionModel().select(App.grdInvt.getStore().getCount() - 1);
-        }
-        App.stoInvt.resumeEvents();
+        App.stoInvt.loadData([], false);
+        App.stoInvt.submitData();
         App.grdInvt.view.refresh();
+        App.stoInvt.loadPage(1);
 
 
+        //App.stoInvt.suspendEvents();
+        //var allData = App.stoInvt.snapshot || App.stoInvt.allData || App.stoInvt.data;
+        //var selRecs = allData.items;
+        //for (var i = selRecs.length - 1; i >= 0; i--) {
+        //    App.grdInvt.getStore().remove(allData.items[i], App.grdInvt);
+        //    App.grdInvt.getView().focusRow(App.grdInvt.getStore().getCount() - 1);
+        //    App.grdInvt.getSelectionModel().select(App.grdInvt.getStore().getCount() - 1);
+        //}
+        //App.stoInvt.resumeEvents();
+        //App.grdInvt.view.refresh();
+
+        var invtBlank = HQ.store.findRecord(App.grdInvt.store, ['InvtID'], ['']);
+        if (!invtBlank) {
+            App.grdInvt.store.insert(0, Ext.create("App.mdlInvt", {
+                InvtID: ''
+            }));
+        }
         //App.grdInvt.removeAll();
         Event.Form.frmMain_fieldChange();
     }
@@ -1882,18 +1939,28 @@ var deleteSelectedSale = function (item) {
 
 var deleteAllSale = function (item) {
     if (item == "yes") {
-        App.stoInvt.suspendEvents();
-        var allData = App.stoSale.snapshot || App.stoSale.allData || App.stoSale.data;
-        var selRecs = allData.items;
-        for (var i = selRecs.length - 1; i >= 0; i--) {
-            App.grdSale.getStore().remove(allData.items[i], App.grdSale);
-            App.grdSale.getView().focusRow(App.grdSale.getStore().getCount() - 1);
-            App.grdSale.getSelectionModel().select(App.grdSale.getStore().getCount() - 1);
-        }
-        App.stoSale.resumeEvents();
+        //App.stoInvt.suspendEvents();
+        //var allData = App.stoSale.snapshot || App.stoSale.allData || App.stoSale.data;
+        //var selRecs = allData.items;
+        //for (var i = selRecs.length - 1; i >= 0; i--) {
+        //    App.grdSale.getStore().remove(allData.items[i], App.grdSale);
+        //    App.grdSale.getView().focusRow(App.grdSale.getStore().getCount() - 1);
+        //    App.grdSale.getSelectionModel().select(App.grdSale.getStore().getCount() - 1);
+        //}
+        //App.stoSale.resumeEvents();
+        //App.grdSale.view.refresh();
+
+        App.stoSale.loadData([], false);
+        App.stoSale.submitData();
         App.grdSale.view.refresh();
+        App.stoSale.loadPage(1);
 
-
+        var invtBlank = HQ.store.findRecord(App.grdSale.store, ['InvtID'], ['']);
+        if (!invtBlank) {
+            App.grdSale.store.insert(0, Ext.create("App.mdlSalesInvt", {
+                InvtID: ''
+            }));
+        }
         //App.grdInvt.removeAll();
         Event.Form.frmMain_fieldChange();
 
@@ -1944,7 +2011,9 @@ var btnCustomerAddAll_click = function (btn, e, eOpts) {
                         App.treePanelCustomer.clearChecked();
                         App.stoCustomer.resumeEvents();
                         App.grdCustomer.view.refresh();
-                        App.grdCustomer.store.loadPage(1);
+
+                        App.stoCustomer.pageSize = parseInt(50, 10);
+                        App.stoCustomer.loadPage(1);
                        // var record = App.stoCustomer.getAt(App.stoCustomer.getCount() - 1);
                         
                         Event.Form.frmMain_fieldChange();
@@ -2056,7 +2125,13 @@ var deleteAllCustomer = function (item) {
             App.stoCustomer.resumeEvents();
             App.grdCustomer.view.refresh();
 
-
+            var invtBlank = HQ.store.findRecord(App.grdCustomer.store, ['CustID'], ['']);
+            if (!invtBlank) {
+                App.grdCustomer.store.insert(0, Ext.create("App.mdlCustomer", {
+                    CustID: ''
+                }));
+            }
+            
             //App.grdInvt.removeAll();
             Event.Form.frmMain_fieldChange();
 
@@ -2101,6 +2176,7 @@ var btnSalesAddAll_click = function (btn, e, eOpts) {
                                 if (!record) {
                                     HQ.store.insertBlank(App.stoSales, ['SlsperID', 'CpnyID']);
                                     record = App.stoSales.getAt(App.stoSales.getCount() - 1);
+                                    record.set('AccumulateID', App.cboAccumulateID.getValue());
                                     record.set('SlsperID', node.data.SlsperID);
                                     record.set('SlsName', node.data.SlsName);
                                     record.set('CpnyID', node.data.CpnyID);
@@ -2161,6 +2237,7 @@ var btnSalesAdd_click = function () {
                             if (!record) {
                                 HQ.store.insertBlank(App.stoSales, ['SlsperID', 'CpnyID']);
                                 record = App.stoSales.getAt(App.stoSales.getCount() - 1);
+                                record.set('AccumulateID', App.cboAccumulateID.getValue());
                                 record.set('SlsperID', node.attributes.SlsperID);
                                 record.set('SlsName', node.attributes.SlsName);
                                 record.set('CpnyID', node.attributes.CpnyID);
@@ -2214,6 +2291,14 @@ var deleteAllSales = function (item) {
         App.stoSales.submitData();
         App.grdSales.view.refresh();
         App.stoSales.loadPage(1);
+
+        var invtBlank = HQ.store.findRecord(App.grdSales.store, ['SlsperID'], ['']);
+        if (!invtBlank) {
+            App.grdSales.store.insert(0, Ext.create("App.mdlSales", {
+                SlsperID: ''
+            }));
+        }
+
         Event.Form.frmMain_fieldChange();
     }
 };
@@ -2224,8 +2309,12 @@ var btnAddAllInvt_click = function (btn, e, eOpts) {
         if (App.frmMain.isValid()) {
             var accumulateID = App.cboAccumulateID.getValue();
             var status = App.cboStatus.value;
+            if (App.slmLevel.selected.items[0] != undefined)
+                var Level = App.slmLevel.selected.items[0].data.LevelID;
+            else
+                var Level = '';
 
-            if (accumulateID && status == _beginStatus) {
+            if (accumulateID && status == _beginStatus && Level) {
                 if (HQ.isUpdate) {
                     var allNodes = getLeafNodes(App.treePanelInvt.getRootNode());
                     if (allNodes && allNodes.length > 0) {
@@ -2237,18 +2326,20 @@ var btnAddAllInvt_click = function (btn, e, eOpts) {
                                     HQ.store.insertBlank(App.stoInvt, ['InvtID']);
                                     record = App.stoInvt.getAt(App.grdInvt.store.getCount() - 1);
                                     record.set('InvtID', node.data.InvtID);
+                                    record.set('LevelID', App.slmLevel.selected.items[0].data.LevelID);
                                     record.set('Descr', node.data.Descr);
                                     record.set('Unit', node.data.Unit);
-                                    record.set('Qty', "1");
+                                    record.set('Qty', '1');
                                 }
                             }
                         });
                         App.stoInvt.resumeEvents();
                         // App.stoSetup.loadPage(1);
                         App.grdInvt.view.refresh();
-
-                        var record = App.stoInvt.getAt(App.stoInvt.getCount() - 1);
                         App.treePanelInvt.clearChecked();
+
+                        App.stoInvt.pageSize = parseInt(50, 10);
+                        App.stoInvt.loadPage(1);
                         Event.Form.frmMain_fieldChange();
                     }
                 }
@@ -2272,7 +2363,12 @@ var btnAddInvt_click = function (btn, e, eOpts) {
             var accumulateID = App.cboAccumulateID.getValue();
             var status = App.cboStatus.value;
 
-            if (accumulateID && status == _beginStatus) {
+            if (App.slmLevel.selected.items[0] != undefined)
+                var Level = App.slmLevel.selected.items[0].data.LevelID;
+            else
+                var Level = '';
+
+            if (accumulateID && status == _beginStatus && Level) {
                 var allNodes = App.treePanelInvt.getCheckedNodes();
                 if (allNodes && allNodes.length > 0) {
                     App.stoInvt.suspendEvents();
@@ -2282,6 +2378,7 @@ var btnAddInvt_click = function (btn, e, eOpts) {
                             if (!record) {
                                 HQ.store.insertBlank(App.stoInvt, ['InvtID']);
                                 record = App.stoInvt.getAt(App.grdInvt.store.getCount() - 1);
+                                record.set('LevelID', App.slmLevel.selected.items[0].data.LevelID);
                                 record.set('InvtID', node.attributes.InvtID);
                                 record.set('Descr', node.attributes.Descr);
                                 record.set('Unit', node.attributes.Unit);
@@ -2368,6 +2465,7 @@ var btnAddAllSale_click = function (btn, e, eOpts) {
                                 if (!record) {
                                     HQ.store.insertBlank(App.stoSale, ['InvtID']);
                                     record = App.stoSale.getAt(App.grdSale.store.getCount() - 1);
+                                    record.set('AccumulateID', App.cboAccumulateID.getValue());
                                     record.set('InvtID', node.data.InvtID);
                                     record.set('Descr', node.data.Descr);
                                     record.set('Unit', node.data.Unit);
@@ -2381,6 +2479,9 @@ var btnAddAllSale_click = function (btn, e, eOpts) {
 
                         var record = App.stoSale.getAt(App.stoSale.getCount() - 1);
                         App.treeInvt.clearChecked();
+
+                        App.stoSale.pageSize = parseInt(50, 10);
+                        App.stoSale.loadPage(1);
                         Event.Form.frmMain_fieldChange();
                     }
                 }
@@ -2414,6 +2515,7 @@ var btnAddSale_click = function (btn, e, eOpts) {
                             if (!record) {
                                 HQ.store.insertBlank(App.stoSale, ['InvtID']);
                                 record = App.stoSale.getAt(App.grdSale.store.getCount() - 1);
+                                record.set('AccumulateID', App.cboAccumulateID.getValue());
                                 record.set('InvtID', node.attributes.InvtID);
                                 record.set('Descr', node.attributes.Descr);
                                 record.set('Unit', node.attributes.Unit);

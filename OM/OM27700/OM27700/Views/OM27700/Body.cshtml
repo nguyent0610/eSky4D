@@ -754,20 +754,71 @@
                             )
                             .ColumnModel(
                                 X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-
+                                
                                 , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
                                 .Editor(
-                                    HQ.Combo().ID("cboCustID")
-                                    .HQProcedure("OM27700_pcCustomer").HQColumnShow("CustID,CustName,BranchID")
-                                    .HQHeightWidth(400, 450)
-                                    .ValueField("CustID").DisplayField("CustID")
+                                     X.ComboBox()
+                                    .ID("cboCustID")
+                                    .Name("CustID")
+                                    .MinChars(1)
+                                    .PageSize(20)
+                                    .TypeAhead(false)
+                                    .ValueField("CustID")
+                                    .DisplayField("CustID")
+                                    .Width(250)
+                                    .LabelWidth(130)
                                     .ForceSelection(true)
-                                    .HQParam(new StoreParameterCollection() { 
-                                    new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
-                                    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
-                                    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
-                                })
-                                    .LoadData()
+                                    .Listeners(l =>
+                                    {
+                                        //l.Change.Fn = "cboBatNbr_Change";
+                                        //l.Focus.Handler = "HQ.focus='batch'";
+                                    })
+                                    .QueryMode(DataLoadMode.Remote)
+                                    .QueryDelay(1000)
+                                    .MatchFieldWidth(false)
+                                    .ListConfig(
+                                        X.BoundList()
+                                        .Height(500)
+                                        .ItemSelector(".x-boundlist-item")
+                                        .LoadingText(Util.GetLang("Loading"))
+                                        .Tpl(
+                                            X.XTemplate()
+                                            .Html(@"<tpl for='.'>   
+                                                        <tpl if='[xindex] == 1'>
+                                                            <table style='table-layout: fixed; width:500px !important'>
+                                                                <tr>
+                                                                    <th style='width:100px;'>" + Util.GetLang("CustID") + @"</th>
+                                                                    <th style='width:100px;'>" + Util.GetLang("CustName") + @"</th>
+                                                                    <th style='width:100px;'>" + Util.GetLang("BranchID") + @"</th>                                                
+                                                                </tr>
+                                                        </tpl>
+                                                        <tr class='x-boundlist-item'>
+                                                            <td>{CustID}</td>
+                                                            <td>{CustName}</td>
+                                                            <td>{BranchID}</td>
+                                                        </tr>
+                                                        <tpl if='[xcount-xindex] == 0'>
+                                                            </table>
+                                                        </tpl>
+                                                    </tpl>"
+                                                    )
+                                        )
+                                    )
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{txtDescr}.focus();")); }))
+                                    .StoreID("stoCustomerCombo")
+                                
+                                //    HQ.Combo().ID("cboCustID")
+                                //    .HQProcedure("OM27700_pcCustomer").HQColumnShow("CustID,CustName,BranchID")
+                                //    .HQHeightWidth(400, 450)
+                                //    .ValueField("CustID").DisplayField("CustID")
+                                //    .ForceSelection(true)
+                                //    .HQParam(new StoreParameterCollection() { 
+                                //    new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                //    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                //    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                                //})
+                                //    .LoadData()
                                 )
 
 
@@ -1191,6 +1242,10 @@
                     //    x.Render.Handler = "HQ.common.control_render(this,'saleProduct')";
                     //})// pnlInvt
                 )
+                .Listeners(x =>
+                {
+                    x.Render.Handler = "HQ.common.control_render(this,'SaleProduct')";
+                }) // tabCustomer  
             )
         )
         .Listeners(lst =>

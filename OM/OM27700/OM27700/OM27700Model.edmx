@@ -289,6 +289,9 @@
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="Query" Type="nvarchar" Mode="In" />
+          <Parameter Name="From" Type="int" Mode="In" />
+          <Parameter Name="To" Type="int" Mode="In" />
         </Function>
         <Function Name="OM27700_pcInventory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LogUserID" Type="varchar" Mode="In" />
@@ -407,11 +410,6 @@
           <EntitySet Name="OM_AccumulatedInvt" EntityType="OM27700Model.OM_AccumulatedInvt" />
           <EntitySet Name="OM_AccumulatedLevel" EntityType="OM27700Model.OM_AccumulatedLevel" />
           <EntitySet Name="OM_AccumulatedSalesPerson" EntityType="OM27700Model.OM_AccumulatedSalesPerson" />
-          <FunctionImport Name="OM27700_pcCustomer" ReturnType="Collection(OM27700Model.OM27700_pcCustomer_Result)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
           <FunctionImport Name="OM27700_pcSalesPerson" ReturnType="Collection(OM27700Model.OM27700_pcSalesPerson_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -438,6 +436,14 @@
           </FunctionImport>
           <EntitySet Name="OM_AccumulatedInvtSetup" EntityType="OM27700Model.OM_AccumulatedInvtSetup" />
           <EntitySet Name="OM_Accumulated" EntityType="OM27700Model.OM_Accumulated" />
+          <FunctionImport Name="OM27700_pcCustomer" ReturnType="Collection(OM27700Model.OM27700_pcCustomer_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="Query" Mode="In" Type="String" />
+            <Parameter Name="From" Mode="In" Type="Int32" />
+            <Parameter Name="To" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
           <Key>
@@ -704,11 +710,6 @@
           <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="OM27700_pcCustomer_Result">
-          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-        </ComplexType>
         <ComplexType Name="OM27700_pcSalesPerson_Result">
           <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="SlsName" Nullable="true" MaxLength="30" />
@@ -793,6 +794,12 @@
           <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="OM27700_pcCustomer_Result">
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1084,15 +1091,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="OM27700_pcCustomer" FunctionName="eBiz4DWebAppModel.Store.OM27700_pcCustomer">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM27700Model.OM27700_pcCustomer_Result">
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="CustName" ColumnName="CustName" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="OM27700_pcSalesPerson" FunctionName="eBiz4DWebAppModel.Store.OM27700_pcSalesPerson">
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM27700Model.OM27700_pcSalesPerson_Result">
@@ -1193,6 +1191,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM27700_pcCustomer" FunctionName="eBiz4DWebAppModel.Store.OM27700_pcCustomer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM27700Model.OM27700_pcCustomer_Result">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -37,7 +37,32 @@
     <body>
         @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
 
-        @*Make the store - the binding data of the form*@
+        @*@*Make the store - the binding data of the form*@
+
+        @(
+             X.Store().ID("stoCustomerCombo")
+                .AutoLoad(false)
+                .Model(Util.GenerateModel(typeof(OM27700_pcCustomer_Result), "mdlCustomerCombo", "CustID"))
+                .Proxy(
+                    X.AjaxProxy()
+                    .Url(Url.Action("GetCustomerCombo", "OM27700"))
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data"))
+                )
+                .Parameters(ps =>
+                {
+                })
+                .Listeners(p =>
+                {
+                    //p.Load.Fn = "stoBatch_Load";
+                    //p.BeforeLoad.Fn = "stoBatch_BeforeLoad";
+                })
+        )
+
+
         @(X.Store().ID("stoDisplay")
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM_Accumulated), "mdlOM_Accumulated", "AccumulateID"))

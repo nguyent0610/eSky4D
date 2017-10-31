@@ -162,6 +162,15 @@ namespace OM27700.Controllers
             return this.Store(lstSales);
         }
 
+        public ActionResult GetCustomerCombo(string query, int start, int limit, int page)
+        {
+            query = query ?? string.Empty;
+            if (page != 1) query = string.Empty;
+            var lstCustomer = _db.OM27700_pcCustomer(Current.UserName, Current.CpnyID, Current.LangID, query, start, start + 20).ToList();
+            var paging = new Paging<OM27700_pcCustomer_Result>(lstCustomer, lstCustomer.Count > 0 ? lstCustomer[0].TotalRecords.Value : 0);
+            return this.Store(paging.Data, paging.TotalRecords);
+        }
+
         private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, string nodeType)
         {
             var node = new Node();
@@ -250,7 +259,7 @@ namespace OM27700.Controllers
             }
             var lstTerritories = _db.OM27700_ptTerritory(Current.CpnyID, Current.UserName, Current.LangID).ToList();
             var companies = _db.OM27700_ptCompany(lstCpny, Current.CpnyID, Current.UserName, Current.LangID).ToList();
-            var lstCustomer = _db.OM27700_pcCustomer(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            var lstCustomer = _db.OM27700_pcCustomer(Current.UserName, Current.CpnyID, Current.LangID, string.Empty, 0, 0 + 20).ToList();
 
             foreach (var item in lstTerritories)
             {
@@ -291,6 +300,10 @@ namespace OM27700.Controllers
                         nodeCust.Leaf = true;
                         nodeCust.NodeID = "territory-company-customer" + item.Territory + "-" + company.CpnyID + "-" + cust.CustID;
                         nodeCompany.Children.Add(nodeCust);
+                    }
+                    if (lstCustAdd.Count() == 0)
+                    {
+                        nodeCompany.Leaf = true;
                     }
                     nodeTerritory.Children.Add(nodeCompany);
                 }
@@ -377,6 +390,11 @@ namespace OM27700.Controllers
                         nodeCust.Leaf = true;
                         nodeCust.NodeID = "territory-company-sales" + item.Territory + "-" + company.CpnyID + "-" + sales.SlsperID;
                         nodeCompany.Children.Add(nodeCust);
+                    }
+
+                    if (lstSalesAdd.Count == 0)
+                    {
+                        nodeCompany.Leaf = true;
                     }
                     nodeTerritory.Children.Add(nodeCompany);
                 }
@@ -716,96 +734,162 @@ namespace OM27700.Controllers
         private void Save_Customer(FormCollection data, string accumulateID)
         {
             string AccumulateID = accumulateID.ToUpper();
-            var discCustHandler = new StoreDataHandler(data["lstCustomer"]);
-            var lstDiscCust = discCustHandler.ObjectData<OM27700_pgCustomer_Result>()
-                        .Where(p => Util.PassNull(p.CustID) != string.Empty)
-                        .ToList();
 
-            var lstDel = _db.OM_AccumulatedCustomer.Where(p => p.AccumulateID.ToUpper() == AccumulateID).ToList();
+            StoreDataHandler dataHander4 = new StoreDataHandler(data["lstCustomerSave"]);
+            ChangeRecords<OM27700_pgCustomer_Result> lstCustDetail = dataHander4.BatchObjectData<OM27700_pgCustomer_Result>();
+            lstCustDetail.Created.AddRange(lstCustDetail.Updated);
+            foreach (OM27700_pgCustomer_Result deleted in lstCustDetail.Deleted)
+            {
+                if (lstCustDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == AccumulateID.ToUpper().Trim() && p.CpnyID == deleted.CpnyID && p.CustID == deleted.CustID).Count() > 0)
+                {
+                    lstCustDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == deleted.AccumulateID.ToUpper().Trim() && p.CpnyID == deleted.CpnyID && p.CustID == deleted.CustID).FirstOrDefault().tstamp = deleted.tstamp;
+                }
+                else
+                {
+                    var del = _db.OM_AccumulatedCustomer.FirstOrDefault(p => p.AccumulateID == deleted.AccumulateID && p.CpnyID == deleted.CpnyID && p.CustID == deleted.CustID);
+                    if (del != null)
+                    {
+                        _db.OM_AccumulatedCustomer.DeleteObject(del);
+                    }
+                }
+            }
+            var srvQuestionCpnyHandler = new StoreDataHandler(data["lstCustomerDetailAll"]);
+            var lstsrvQuestionCpny = srvQuestionCpnyHandler.ObjectData<OM27700_pgCustomer_Result>().ToList();
+
+            var lstDel = _db.OM_AccumulatedCustomer.Where(p => p.AccumulateID == accumulateID).ToList();
             for (int i = 0; i < lstDel.Count; i++)
             {
-                if (!lstDiscCust.Any(p => p.CpnyID == lstDel[i].CpnyID && p.CustID == lstDel[i].CustID))
+                var objDel = lstsrvQuestionCpny.FirstOrDefault(p => p.AccumulateID == lstDel[i].AccumulateID
+                                && p.CpnyID == lstDel[i].CpnyID
+                                && p.CustID == lstDel[i].CustID);
+                if (objDel == null)
                 {
                     _db.OM_AccumulatedCustomer.DeleteObject(lstDel[i]);
                 }
             }
 
-            foreach (var currentCust in lstDiscCust)
+            foreach (OM27700_pgCustomer_Result curBranch in lstCustDetail.Created)
             {
-                var cust = _db.OM_AccumulatedCustomer.Where(p=> p.AccumulateID.ToUpper() == AccumulateID
-                                && p.CustID == currentCust.CustID
-                                && p.CpnyID == currentCust.CpnyID).FirstOrDefault();
+                if (curBranch.CustID.PassNull() == "") continue;
 
-                //var cust = (from p in _db.OM_AccumulatedCustomer
-                //            where
-                //                p.AccumulateID.ToUpper() == AccumulateID
-                //                && p.CustID == currentCust.CustID
-                //                && p.CpnyID == currentCust.CpnyID
-                //            select p).FirstOrDefault();
-                if (cust == null)
+                var lang = _db.OM_AccumulatedCustomer.FirstOrDefault(p => p.AccumulateID.ToUpper() == AccumulateID.ToUpper() && p.CpnyID == curBranch.CpnyID && p.CustID == curBranch.CustID);
+
+                if (lang != null)
                 {
-                    OM_AccumulatedCustomer newCust = new OM_AccumulatedCustomer();
-                    newCust.AccumulateID = accumulateID;
-                    newCust.CpnyID = currentCust.CpnyID;
-                    newCust.CustID = currentCust.CustID;
+                    if (lang.tstamp.ToHex() == curBranch.tstamp.ToHex())
+                    {
+                        lang.NumRegLot = curBranch.NumRegLot;
 
-                    newCust.LUpd_DateTime = DateTime.Now;
-                    newCust.LUpd_Prog = _screenNbr;
-                    newCust.LUpd_User = Current.UserName;
-                    newCust.Crtd_DateTime = DateTime.Now;
-                    newCust.Crtd_Prog = _screenNbr;
-                    newCust.Crtd_User = Current.UserName;
-                    update_Customer(newCust, currentCust, true);
-                    _db.OM_AccumulatedCustomer.AddObject(newCust);
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+                    }
                 }
                 else
                 {
-                    if (cust.tstamp.ToHex() == currentCust.tstamp.ToHex())
+                    var temp = _db.OM_AccumulatedCustomer.FirstOrDefault(p => p.CpnyID == curBranch.CpnyID && p.AccumulateID.ToUpper() == accumulateID.ToUpper() && p.CustID == curBranch.CustID);
+                    if (temp == null)
                     {
-                        update_Customer(cust, currentCust, false);
+                        lang = new OM_AccumulatedCustomer();
+                        lang.ResetET();
+                        OM_AccumulatedCustomer newCust = new OM_AccumulatedCustomer();
+                        lang.AccumulateID = accumulateID;
+                        lang.CpnyID = curBranch.CpnyID;
+                        lang.CustID = curBranch.CustID;
+                        lang.NumRegLot = curBranch.NumRegLot;
+
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+                        lang.Crtd_DateTime = DateTime.Now;
+                        lang.Crtd_Prog = _screenNbr;
+                        lang.Crtd_User = Current.UserName;
+                        _db.OM_AccumulatedCustomer.AddObject(lang);
+                    }
+                    else
+                    {
+                        continue;
                     }
                 }
-            }
+            }              
         }
 
         private void Save_Sales(FormCollection data, string accumulateID)
         {
             string AccumulateID = accumulateID.ToUpper();
-            var discCustHandler = new StoreDataHandler(data["lstSales"]);
-            var lstDiscCust = discCustHandler.ObjectData<OM27700_pgSalesPerson_Result>()
-                        .Where(p => Util.PassNull(p.SlsperID) != string.Empty).ToList();
 
-            var lstDel = _db.OM_AccumulatedSalesPerson.Where(p => p.AccumulateID.ToUpper() == AccumulateID).ToList();
+            StoreDataHandler dataHander4 = new StoreDataHandler(data["lstSalesSave"]);
+            ChangeRecords<OM27700_pgSalesPerson_Result> lstSalesDetail = dataHander4.BatchObjectData<OM27700_pgSalesPerson_Result>();
+            lstSalesDetail.Created.AddRange(lstSalesDetail.Updated);
+            foreach (OM27700_pgSalesPerson_Result deleted in lstSalesDetail.Deleted)
+            {
+                if (lstSalesDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == AccumulateID.ToUpper().Trim() && p.CpnyID == deleted.CpnyID && p.SlsperID == deleted.SlsperID).Count() > 0)
+                {
+                    lstSalesDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == deleted.AccumulateID.ToUpper().Trim() && p.CpnyID == deleted.CpnyID && p.SlsperID == deleted.SlsperID).FirstOrDefault().tstamp = deleted.tstamp;
+                }
+                else
+                {
+                    var del = _db.OM_AccumulatedSalesPerson.FirstOrDefault(p => p.AccumulateID == deleted.AccumulateID && p.CpnyID == deleted.CpnyID && p.SlsperID == deleted.SlsperID);
+                    if (del != null)
+                    {
+                        _db.OM_AccumulatedSalesPerson.DeleteObject(del);
+                    }
+                }
+            }
+            var srvQuestionCpnyHandler = new StoreDataHandler(data["lstSalesDetailAll"]);
+            var lstsrvQuestionCpny = srvQuestionCpnyHandler.ObjectData<OM27700_pgSalesPerson_Result>().ToList();
+
+            var lstDel = _db.OM_AccumulatedSalesPerson.Where(p => p.AccumulateID == accumulateID).ToList();
             for (int i = 0; i < lstDel.Count; i++)
             {
-                if (!lstDiscCust.Any(p => p.CpnyID == lstDel[i].CpnyID && p.SlsperID == lstDel[i].SlsperID))
+                var objDel = lstsrvQuestionCpny.FirstOrDefault(p => p.AccumulateID == lstDel[i].AccumulateID
+                                && p.CpnyID == lstDel[i].CpnyID
+                                && p.SlsperID == lstDel[i].SlsperID);
+                if (objDel == null)
                 {
                     _db.OM_AccumulatedSalesPerson.DeleteObject(lstDel[i]);
                 }
             }
 
-            foreach (var currentCust in lstDiscCust)
+            foreach (OM27700_pgSalesPerson_Result curBranch in lstSalesDetail.Created)
             {
-                var sales = (from p in _db.OM_AccumulatedSalesPerson
-                             where
-                                 p.AccumulateID.ToUpper() == AccumulateID
-                                 && p.SlsperID == currentCust.SlsperID
-                                 && p.CpnyID == currentCust.CpnyID
-                             select p).FirstOrDefault();
-                if (sales == null)
-                {
-                    OM_AccumulatedSalesPerson newCust = new OM_AccumulatedSalesPerson();
-                    newCust.AccumulateID = accumulateID;
-                    newCust.CpnyID = currentCust.CpnyID;
-                    newCust.SlsperID = currentCust.SlsperID;
+                if (curBranch.SlsperID.PassNull() == "") continue;
 
-                    newCust.LUpd_DateTime = DateTime.Now;
-                    newCust.LUpd_Prog = _screenNbr;
-                    newCust.LUpd_User = Current.UserName;
-                    newCust.Crtd_DateTime = DateTime.Now;
-                    newCust.Crtd_Prog = _screenNbr;
-                    newCust.Crtd_User = Current.UserName;
-                    _db.OM_AccumulatedSalesPerson.AddObject(newCust);
+                var lang = _db.OM_AccumulatedSalesPerson.FirstOrDefault(p => p.AccumulateID.ToUpper() == AccumulateID.ToUpper() && p.CpnyID == curBranch.CpnyID && p.SlsperID == curBranch.SlsperID);
+
+                if (lang != null)
+                {
+                    if (lang.tstamp.ToHex() == curBranch.tstamp.ToHex())
+                    {
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+                    }
+                }
+                else
+                {
+                    var temp = _db.OM_AccumulatedSalesPerson.FirstOrDefault(p => p.CpnyID == curBranch.CpnyID && p.AccumulateID.ToUpper() == accumulateID.ToUpper() && p.SlsperID == curBranch.SlsperID);
+                    if (temp == null)
+                    {
+                        lang = new OM_AccumulatedSalesPerson();
+                        lang.ResetET();
+                        OM_AccumulatedSalesPerson newCust = new OM_AccumulatedSalesPerson();
+                        lang.AccumulateID = accumulateID;
+                        lang.CpnyID = curBranch.CpnyID;
+                        lang.SlsperID = curBranch.SlsperID;
+
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+                        lang.Crtd_DateTime = DateTime.Now;
+                        lang.Crtd_Prog = _screenNbr;
+                        lang.Crtd_User = Current.UserName;
+                        _db.OM_AccumulatedSalesPerson.AddObject(lang);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
         }
@@ -813,104 +897,81 @@ namespace OM27700.Controllers
         private void Save_Cpny(FormCollection data, string accumulateID)
         {
             string AccumulateID = accumulateID.ToUpper();
-            var discCustHandler = new StoreDataHandler(data["lstCpny"]);
-            var lstCpny = discCustHandler.BatchObjectData<OM27700_pgCompany_Result>();
 
-            lstCpny.Created.AddRange(lstCpny.Updated);
-            var lstDel = _db.OM_AccumulatedCustomer.Where(p => p.AccumulateID.ToUpper() == AccumulateID).ToList();
-            for (int i = 0; i < lstDel.Count; i++)
+            StoreDataHandler dataHander4 = new StoreDataHandler(data["lstCpnySave"]);
+            ChangeRecords<OM27700_pgCompany_Result> lstBranchDetail = dataHander4.BatchObjectData<OM27700_pgCompany_Result>();
+            lstBranchDetail.Created.AddRange(lstBranchDetail.Updated);
+            foreach (OM27700_pgCompany_Result deleted in lstBranchDetail.Deleted)
             {
-                if (!lstCpny.Created.Any(p => p.CpnyID == lstDel[i].CpnyID))
+                if (lstBranchDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == AccumulateID.ToUpper().Trim() && p.CpnyID == deleted.CpnyID).Count() > 0)
                 {
-                    _db.OM_AccumulatedCustomer.DeleteObject(lstDel[i]);
-                }
-            }
-
-            foreach (var deleted in lstCpny.Deleted)
-            {
-                if (lstCpny.Created.Where(x => x.AccumulateID == deleted.AccumulateID && x.CpnyID == deleted.CpnyID).Count() > 0)
-                {
-                    lstCpny.Created.Where(x => x.AccumulateID == deleted.AccumulateID && x.CpnyID == deleted.CpnyID).FirstOrDefault().tstamp = deleted.tstamp;
+                    lstBranchDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == deleted.AccumulateID.ToUpper().Trim() && p.CpnyID == deleted.CpnyID).FirstOrDefault().tstamp = deleted.tstamp;
                 }
                 else
                 {
-                    var createdLevel = _db.OM_AccumulatedCpny.FirstOrDefault(x => x.AccumulateID == deleted.AccumulateID && x.CpnyID == deleted.CpnyID);
-                    if (!string.IsNullOrWhiteSpace(deleted.AccumulateID) && createdLevel != null)
+                    var del = _db.OM_AccumulatedCpny.FirstOrDefault(p => p.AccumulateID == deleted.AccumulateID && p.CpnyID == deleted.CpnyID);
+                    if (del != null)
                     {
-                        _db.OM_AccumulatedCpny.DeleteObject(createdLevel);
+                        _db.OM_AccumulatedCpny.DeleteObject(del);
                     }
                 }
             }
-            foreach (var currentCust in lstCpny.Created)
-            {
-                var cust = (from p in _db.OM_AccumulatedCpny
-                            where
-                                p.AccumulateID.ToUpper() == AccumulateID
-                                && p.CpnyID == currentCust.CpnyID
-                            select p).FirstOrDefault();
-                if (cust == null)
-                {
-                    OM_AccumulatedCpny newCust = new OM_AccumulatedCpny();
-                    newCust.AccumulateID = accumulateID;
-                    newCust.CpnyID = currentCust.CpnyID;
+            var srvQuestionCpnyHandler = new StoreDataHandler(data["lstCpnyDetailAll"]);
+            var lstsrvQuestionCpny = srvQuestionCpnyHandler.ObjectData<OM27700_pgCompany_Result>().ToList();
 
-                    newCust.LUpd_DateTime = DateTime.Now;
-                    newCust.LUpd_Prog = _screenNbr;
-                    newCust.LUpd_User = Current.UserName;
-                    newCust.Crtd_DateTime = DateTime.Now;
-                    newCust.Crtd_Prog = _screenNbr;
-                    newCust.Crtd_User = Current.UserName;
-                    _db.OM_AccumulatedCpny.AddObject(newCust);
+            var lstDel = _db.OM_AccumulatedCpny.Where(p => p.AccumulateID == accumulateID).ToList();
+            for (int i = 0; i < lstDel.Count; i++)
+            {
+                var objDel = lstsrvQuestionCpny.FirstOrDefault(p => p.AccumulateID == lstDel[i].AccumulateID
+                                && p.CpnyID == lstDel[i].CpnyID);
+                if (objDel == null)
+                {
+                    _db.OM_AccumulatedCpny.DeleteObject(lstDel[i]);
                 }
             }
 
+            foreach (OM27700_pgCompany_Result curBranch in lstBranchDetail.Created)
+            {
+                if (curBranch.CpnyID.PassNull() == "") continue;
 
+                var lang = _db.OM_AccumulatedCpny.FirstOrDefault(p => p.AccumulateID.ToUpper() == AccumulateID.ToUpper() && p.CpnyID == curBranch.CpnyID);
 
-            //var cpnyChangeHandler = new StoreDataHandler(data["lstCpnyChange"]);
-            //var lstCpnyChange = cpnyChangeHandler.BatchObjectData<OM27700_pgCompany_Result>();
-            
-            //lstCpnyChange.Created.AddRange(lstCpnyChange.Updated);
-            //foreach (var deleted in lstCpnyChange.Deleted)
-            //{
-            //    if (lstCpnyChange.Created.Where(p => p.CpnyID == deleted.CpnyID).Count() > 0)
-            //    {
-            //        lstCpnyChange.Created.Where(p => p.CpnyID == deleted.CpnyID).FirstOrDefault().tstamp = deleted.tstamp;
-            //    }
-            //    else
-            //    {
-            //        var createdCpny = _db.OM_AccumulatedCpny.FirstOrDefault(x => x.AccumulateID.ToUpper() == accumulateID.ToUpper() && x.CpnyID == deleted.CpnyID);
-            //        if (!string.IsNullOrWhiteSpace(deleted.CpnyID) && createdCpny != null)
-            //        {
-            //            _db.OM_AccumulatedCpny.DeleteObject(createdCpny);
-            //        }
-            //    }
-            //}
+                if (lang != null)
+                {
+                    if (lang.tstamp.ToHex() == curBranch.tstamp.ToHex())
+                    {
+                        lang.CpnyID = curBranch.CpnyID;
 
-            //foreach (OM27700_pgCompany_Result created in lstCpnyChange.Created)
-            //{
-            //    if (created.CpnyID == "") continue;
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+                    }
+                }
+                else
+                {
+                    var temp = _db.OM_AccumulatedCpny.FirstOrDefault(p => p.CpnyID == curBranch.CpnyID && p.AccumulateID.ToUpper() == accumulateID.ToUpper());
+                    if (temp == null)
+                    {
+                        lang = new OM_AccumulatedCpny();
+                        lang.ResetET();
+                        OM_AccumulatedCpny newCust = new OM_AccumulatedCpny();
+                        lang.AccumulateID = accumulateID;
+                        lang.CpnyID = curBranch.CpnyID;
 
-            //    var createdCpny = _db.OM_AccumulatedCpny.FirstOrDefault(x => x.AccumulateID.ToUpper() == accumulateID.ToUpper() && x.CpnyID == created.CpnyID);
-            //    if (createdCpny != null)
-            //    {
-            //        if (createdCpny.tstamp.ToHex() == created.tstamp.ToHex())
-            //        {
-            //            update_Cpny(createdCpny, created, false);
-            //        }
-            //        else
-            //        {
-            //            throw new MessageException(MessageType.Message, "19");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        createdCpny = new OM_AccumulatedCpny();
-            //        update_Cpny(createdCpny, created, true);
-            //        createdCpny.AccumulateID = accumulateID;
-            //        createdCpny.CpnyID = created.CpnyID;
-            //        _db.OM_AccumulatedCpny.AddObject(createdCpny);
-            //    }
-            //}
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+                        lang.Crtd_DateTime = DateTime.Now;
+                        lang.Crtd_Prog = _screenNbr;
+                        lang.Crtd_User = Current.UserName;
+                        _db.OM_AccumulatedCpny.AddObject(lang);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }    
         }
 
         private void update_Cpny(OM_AccumulatedCpny createdCpny, OM27700_pgCompany_Result created, bool isNew)
@@ -975,100 +1036,262 @@ namespace OM27700.Controllers
 
         private void Save_Invt(FormCollection data, string accumulateID)
         {
-            var invtChangeHandler = new StoreDataHandler(data["lstInvtChange"]);
-            var lstInvtChange = invtChangeHandler.BatchObjectData<OM27700_pgInvt_Result>();
-            lstInvtChange.Created.AddRange(lstInvtChange.Updated);
+            string AccumulateID = accumulateID.ToUpper();
 
-            foreach (var deleted in lstInvtChange.Deleted)
+            StoreDataHandler dataHander4 = new StoreDataHandler(data["lstInvtSave"]);
+            ChangeRecords<OM27700_pgInvt_Result> lstInvtDetail = dataHander4.BatchObjectData<OM27700_pgInvt_Result>();
+            lstInvtDetail.Created.AddRange(lstInvtDetail.Updated);
+            foreach (OM27700_pgInvt_Result deleted in lstInvtDetail.Deleted)
             {
-                if (lstInvtChange.Created.Where(x => x.LevelID == deleted.LevelID && x.InvtID == deleted.InvtID).Count() > 0)
+                if (lstInvtDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == AccumulateID.ToUpper().Trim() && p.InvtID == deleted.InvtID && p.LevelID == deleted.LevelID).Count() > 0)
                 {
-                    lstInvtChange.Created.FirstOrDefault(x => x.LevelID == deleted.LevelID && x.InvtID == deleted.InvtID).tstamp = deleted.tstamp;
+                    lstInvtDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == deleted.AccumulateID.ToUpper().Trim() && p.InvtID == deleted.InvtID && p.LevelID == deleted.LevelID).FirstOrDefault().tstamp = deleted.tstamp;
                 }
                 else
                 {
-                    var deletedLevel = _db.OM_AccumulatedInvt.FirstOrDefault(x => 
-                            x.AccumulateID == accumulateID
-                            && x.LevelID == deleted.LevelID && x.InvtID == deleted.InvtID);
-                    if (!string.IsNullOrWhiteSpace(deleted.LevelID) && deletedLevel != null
-                        && !string.IsNullOrWhiteSpace(deleted.InvtID))
+                    var del = _db.OM_AccumulatedInvt.FirstOrDefault(p => p.AccumulateID == deleted.AccumulateID && p.InvtID == deleted.InvtID && p.LevelID == deleted.LevelID);
+                    if (del != null)
                     {
-                        _db.OM_AccumulatedInvt.DeleteObject(deletedLevel);
+                        _db.OM_AccumulatedInvt.DeleteObject(del);
                     }
                 }
             }
+            var srvQuestionCpnyHandler = new StoreDataHandler(data["lstInvtDetailAll"]);
+            var lstsrvQuestionCpny = srvQuestionCpnyHandler.ObjectData<OM27700_pgInvt_Result>().ToList();
 
-            foreach (var created in lstInvtChange.Created)
+            var lstDel = _db.OM_AccumulatedInvt.Where(p => p.AccumulateID == accumulateID).ToList();
+            for (int i = 0; i < lstDel.Count; i++)
             {
-                var createdInvt = _db.OM_AccumulatedInvt.FirstOrDefault(x => x.AccumulateID == accumulateID
-                    && x.LevelID == created.LevelID && x.InvtID == created.InvtID);
-                if (!string.IsNullOrWhiteSpace(created.LevelID)
-                    && !string.IsNullOrWhiteSpace(created.InvtID))
+                var objDel = lstsrvQuestionCpny.FirstOrDefault(p => p.AccumulateID == lstDel[i].AccumulateID
+                                && p.LevelID == lstDel[i].LevelID &&
+                                p.InvtID == lstDel[i].InvtID);
+                if (objDel == null)
                 {
-                    if (createdInvt != null)
+                    _db.OM_AccumulatedInvt.DeleteObject(lstDel[i]);
+                }
+            }
+
+            foreach (OM27700_pgInvt_Result currentCust in lstInvtDetail.Created)
+            {
+                if (currentCust.InvtID.PassNull() == "") continue;
+
+                var lang = _db.OM_AccumulatedInvt.FirstOrDefault(p => p.AccumulateID.ToUpper() == AccumulateID.ToUpper() && p.LevelID == currentCust.LevelID && p.InvtID == currentCust.InvtID);
+
+                if (lang != null)
+                {
+                    if (lang.tstamp.ToHex() == currentCust.tstamp.ToHex())
                     {
-                        update_Invt(ref createdInvt, created, false);
+                        lang.Qty = currentCust.Qty;
+
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+                    }
+                }
+                else
+                {
+                    var temp = _db.OM_AccumulatedInvt.FirstOrDefault(p => p.AccumulateID.ToUpper() == AccumulateID.ToUpper() && p.LevelID == currentCust.LevelID && p.InvtID == currentCust.InvtID);
+                    if (temp == null)
+                    {
+                        lang = new OM_AccumulatedInvt();
+                        lang.ResetET();
+                        OM_AccumulatedInvt newCust = new OM_AccumulatedInvt();
+                        lang.AccumulateID = accumulateID;
+
+                        lang.LevelID = currentCust.LevelID;
+                        lang.InvtID = currentCust.InvtID;
+                        lang.Qty = currentCust.Qty;
+
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+                        lang.Crtd_DateTime = DateTime.Now;
+                        lang.Crtd_Prog = _screenNbr;
+                        lang.Crtd_User = Current.UserName;
+                        _db.OM_AccumulatedInvt.AddObject(lang);
                     }
                     else
                     {
-                        createdInvt = new OM_AccumulatedInvt();
-                        createdInvt.AccumulateID= accumulateID;
-                        createdInvt.LevelID = created.LevelID;
-
-                        update_Invt(ref createdInvt, created, true);
-                        _db.OM_AccumulatedInvt.AddObject(createdInvt);
+                        continue;
                     }
-
                 }
-            }
+            }    
+
+
+
+
+            //string AccumulateID = accumulateID.ToUpper();
+            //var discCustHandler = new StoreDataHandler(data["lstInvtChange"]);
+            //var lstDiscCust = discCustHandler.ObjectData<OM27700_pgInvt_Result>()
+            //            .Where(p => Util.PassNull(p.InvtID) != string.Empty).ToList();
+
+            //var lstDel = _db.OM_AccumulatedInvt.Where(p => p.AccumulateID.ToUpper() == AccumulateID).ToList();
+            //for (int i = 0; i < lstDel.Count; i++)
+            //{
+            //    if (!lstDiscCust.Any(p => p.InvtID == lstDel[i].InvtID && p.AccumulateID == lstDel[i].AccumulateID))
+            //    {
+            //        _db.OM_AccumulatedInvt.DeleteObject(lstDel[i]);
+            //    }
+            //}
+
+            //foreach (var currentCust in lstDiscCust)
+            //{
+            //    var sales = (from p in _db.OM_AccumulatedInvt
+            //                 where
+            //                     p.AccumulateID.ToUpper() == AccumulateID
+            //                     && p.InvtID == currentCust.InvtID
+            //                 select p).FirstOrDefault();
+            //    if (sales == null)
+            //    {
+            //        OM_AccumulatedInvt newCust = new OM_AccumulatedInvt();
+            //        newCust.AccumulateID = accumulateID;
+
+            //        newCust.LevelID = currentCust.LevelID;
+            //        newCust.InvtID = currentCust.InvtID;
+            //        newCust.Qty = currentCust.Qty;
+
+            //        newCust.LUpd_DateTime = DateTime.Now;
+            //        newCust.LUpd_Prog = _screenNbr;
+            //        newCust.LUpd_User = Current.UserName;
+            //        newCust.Crtd_DateTime = DateTime.Now;
+            //        newCust.Crtd_Prog = _screenNbr;
+            //        newCust.Crtd_User = Current.UserName;
+            //        _db.OM_AccumulatedInvt.AddObject(newCust);
+            //    }
+            //    else
+            //    {
+            //        sales.Qty = currentCust.Qty;
+
+            //        sales.LUpd_DateTime = DateTime.Now;
+            //        sales.LUpd_Prog = _screenNbr;
+            //        sales.LUpd_User = Current.UserName;
+            //    }
+            //}
         }
 
         private void Save_ProductSale(FormCollection data, string accumulateID)
         {
-            var invtChangeHandler = new StoreDataHandler(data["lstSaleProduct"]);
-            var lstInvtChange = invtChangeHandler.BatchObjectData<OM27700_pgSalesInvt_Result>();
-            lstInvtChange.Created.AddRange(lstInvtChange.Updated);
+            string AccumulateID = accumulateID.ToUpper();
 
-            foreach (var deleted in lstInvtChange.Deleted)
+            StoreDataHandler dataHander4 = new StoreDataHandler(data["lstProductSave"]);
+            ChangeRecords<OM27700_pgSalesInvt_Result> lstProductDetail = dataHander4.BatchObjectData<OM27700_pgSalesInvt_Result>();
+            lstProductDetail.Created.AddRange(lstProductDetail.Updated);
+            foreach (OM27700_pgSalesInvt_Result deleted in lstProductDetail.Deleted)
             {
-                if (lstInvtChange.Created.Where(x =>x.InvtID == deleted.InvtID).Count() > 0)
+                if (lstProductDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == AccumulateID.ToUpper().Trim() && p.InvtID == deleted.InvtID).Count() > 0)
                 {
-                    lstInvtChange.Created.FirstOrDefault(x =>x.InvtID == deleted.InvtID).tstamp = deleted.tstamp;
+                    lstProductDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == deleted.AccumulateID.ToUpper().Trim() && p.InvtID == deleted.InvtID).FirstOrDefault().tstamp = deleted.tstamp;
                 }
                 else
                 {
-                    var deletedLevel = _db.OM_AccumulatedInvtSetup.FirstOrDefault(x =>
-                            x.AccumulateID == accumulateID
-                            && x.InvtID == deleted.InvtID);
-                    if (!string.IsNullOrWhiteSpace(deleted.InvtID) && deletedLevel != null
-                        && !string.IsNullOrWhiteSpace(deleted.InvtID))
+                    var del = _db.OM_AccumulatedInvtSetup.FirstOrDefault(p => p.AccumulateID == deleted.AccumulateID && p.InvtID == deleted.InvtID);
+                    if (del != null)
                     {
-                        _db.OM_AccumulatedInvtSetup.DeleteObject(deletedLevel);
+                        _db.OM_AccumulatedInvtSetup.DeleteObject(del);
                     }
                 }
             }
+            var srvQuestionCpnyHandler = new StoreDataHandler(data["lstProductDetailAll"]);
+            var lstsrvQuestionCpny = srvQuestionCpnyHandler.ObjectData<OM27700_pgSalesInvt_Result>().ToList();
 
-            foreach (var created in lstInvtChange.Created)
+            var lstDel = _db.OM_AccumulatedInvtSetup.Where(p => p.AccumulateID == accumulateID).ToList();
+            for (int i = 0; i < lstDel.Count; i++)
             {
-                var createdInvt = _db.OM_AccumulatedInvtSetup.FirstOrDefault(x => x.AccumulateID == accumulateID
-                    && x.InvtID == created.InvtID);
-                if (!string.IsNullOrWhiteSpace(created.InvtID)
-                    && !string.IsNullOrWhiteSpace(created.InvtID))
+                var objDel = lstsrvQuestionCpny.FirstOrDefault(p => p.AccumulateID == lstDel[i].AccumulateID
+                                && p.InvtID == lstDel[i].InvtID);
+                if (objDel == null)
                 {
-                    if (createdInvt != null)
+                    _db.OM_AccumulatedInvtSetup.DeleteObject(lstDel[i]);
+                }
+            }
+
+            foreach (OM27700_pgSalesInvt_Result curBranch in lstProductDetail.Created)
+            {
+                if (curBranch.InvtID.PassNull() == "") continue;
+
+                var lang = _db.OM_AccumulatedInvtSetup.FirstOrDefault(p => p.AccumulateID.ToUpper() == AccumulateID.ToUpper() && p.InvtID == curBranch.InvtID);
+
+                if (lang != null)
+                {
+                    if (lang.tstamp.ToHex() == curBranch.tstamp.ToHex())
                     {
-                        update_SaleInvt(ref createdInvt, created, false);
+                        lang.Qty = curBranch.Qty;
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+                    }
+                }
+                else
+                {
+                    var temp = _db.OM_AccumulatedInvtSetup.FirstOrDefault(p => p.InvtID == curBranch.InvtID && p.AccumulateID.ToUpper() == accumulateID.ToUpper());
+                    if (temp == null)
+                    {
+                        lang = new OM_AccumulatedInvtSetup();
+                        lang.ResetET();
+                        OM_AccumulatedInvtSetup newCust = new OM_AccumulatedInvtSetup();
+                        lang.AccumulateID = accumulateID;
+                        lang.InvtID = curBranch.InvtID;
+                        lang.Qty = curBranch.Qty;
+
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+                        lang.Crtd_DateTime = DateTime.Now;
+                        lang.Crtd_Prog = _screenNbr;
+                        lang.Crtd_User = Current.UserName;
+                        _db.OM_AccumulatedInvtSetup.AddObject(lang);
                     }
                     else
                     {
-                        createdInvt = new OM_AccumulatedInvtSetup();
-                        createdInvt.AccumulateID = accumulateID;
-                        update_SaleInvt(ref createdInvt, created, true);
-                        _db.OM_AccumulatedInvtSetup.AddObject(createdInvt);
+                        continue;
                     }
-
                 }
             }
+
+            //var invtChangeHandler = new StoreDataHandler(data["lstSaleProduct"]);
+            //var lstInvtChange = invtChangeHandler.BatchObjectData<OM27700_pgSalesInvt_Result>();
+            //lstInvtChange.Created.AddRange(lstInvtChange.Updated);
+
+            //foreach (var deleted in lstInvtChange.Deleted)
+            //{
+            //    if (lstInvtChange.Created.Where(x =>x.InvtID == deleted.InvtID).Count() > 0)
+            //    {
+            //        lstInvtChange.Created.FirstOrDefault(x =>x.InvtID == deleted.InvtID).tstamp = deleted.tstamp;
+            //    }
+            //    else
+            //    {
+            //        var deletedLevel = _db.OM_AccumulatedInvtSetup.FirstOrDefault(x =>
+            //                x.AccumulateID == accumulateID
+            //                && x.InvtID == deleted.InvtID);
+            //        if (!string.IsNullOrWhiteSpace(deleted.InvtID) && deletedLevel != null
+            //            && !string.IsNullOrWhiteSpace(deleted.InvtID))
+            //        {
+            //            _db.OM_AccumulatedInvtSetup.DeleteObject(deletedLevel);
+            //        }
+            //    }
+            //}
+
+            //foreach (var created in lstInvtChange.Created)
+            //{
+            //    var createdInvt = _db.OM_AccumulatedInvtSetup.FirstOrDefault(x => x.AccumulateID == accumulateID
+            //        && x.InvtID == created.InvtID);
+            //    if (!string.IsNullOrWhiteSpace(created.InvtID)
+            //        && !string.IsNullOrWhiteSpace(created.InvtID))
+            //    {
+            //        if (createdInvt != null)
+            //        {
+            //            update_SaleInvt(ref createdInvt, created, false);
+            //        }
+            //        else
+            //        {
+            //            createdInvt = new OM_AccumulatedInvtSetup();
+            //            createdInvt.AccumulateID = accumulateID;
+            //            update_SaleInvt(ref createdInvt, created, true);
+            //            _db.OM_AccumulatedInvtSetup.AddObject(createdInvt);
+            //        }
+
+            //    }
+            //}
         }
 
         private void update_Invt(ref OM_AccumulatedInvt createdInvt, OM27700_pgInvt_Result created, bool isNew)
