@@ -463,7 +463,7 @@
                         )
                     ).Listeners(x =>
                     {
-                        x.Render.Handler = "HQ.common.control_render(this,'level')";
+                        x.Render.Handler = "HQ.common.control_render(this,'level');";
                     }) // pnlLevel
 
                     , X.Panel().ID("pnlInvt")
@@ -771,7 +771,8 @@
                                     .Listeners(l =>
                                     {
                                         //l.Change.Fn = "cboBatNbr_Change";
-                                        //l.Focus.Handler = "HQ.focus='batch'";
+                                        l.Focus.Handler = "App.cboCustID.getStore().reload()";
+                                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();};";
                                     })
                                     .QueryMode(DataLoadMode.Remote)
                                     .QueryDelay(1000)
@@ -805,7 +806,7 @@
                                         )
                                     )
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                    .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{txtDescr}.focus();")); }))
+                                    .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{CustID}.focus();")); }))
                                     .StoreID("stoCustomerCombo")
                                 
                                 //    HQ.Combo().ID("cboCustID")

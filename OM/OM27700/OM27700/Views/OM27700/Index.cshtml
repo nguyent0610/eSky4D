@@ -54,6 +54,7 @@
                 )
                 .Parameters(ps =>
                 {
+                    ps.Add(new StoreParameter("lstCpnyID", "ListCpnyID", ParameterMode.Raw));
                 })
                 .Listeners(p =>
                 {

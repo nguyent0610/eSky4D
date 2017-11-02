@@ -833,7 +833,9 @@ namespace OM27700
         /// <param name="query">No Metadata Documentation available.</param>
         /// <param name="from">No Metadata Documentation available.</param>
         /// <param name="to">No Metadata Documentation available.</param>
-        public ObjectResult<OM27700_pcCustomer_Result> OM27700_pcCustomer(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String query, Nullable<global::System.Int32> from, Nullable<global::System.Int32> to)
+        /// <param name="listCpny">No Metadata Documentation available.</param>
+        /// <param name="type">No Metadata Documentation available.</param>
+        public ObjectResult<OM27700_pcCustomer_Result> OM27700_pcCustomer(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String query, Nullable<global::System.Int32> from, Nullable<global::System.Int32> to, global::System.String listCpny, Nullable<global::System.Int32> type)
         {
             ObjectParameter userNameParameter;
             if (userName != null)
@@ -895,7 +897,27 @@ namespace OM27700
                 toParameter = new ObjectParameter("To", typeof(global::System.Int32));
             }
     
-            return base.ExecuteFunction<OM27700_pcCustomer_Result>("OM27700_pcCustomer", userNameParameter, cpnyIDParameter, langIDParameter, queryParameter, fromParameter, toParameter);
+            ObjectParameter listCpnyParameter;
+            if (listCpny != null)
+            {
+                listCpnyParameter = new ObjectParameter("ListCpny", listCpny);
+            }
+            else
+            {
+                listCpnyParameter = new ObjectParameter("ListCpny", typeof(global::System.String));
+            }
+    
+            ObjectParameter typeParameter;
+            if (type.HasValue)
+            {
+                typeParameter = new ObjectParameter("Type", type);
+            }
+            else
+            {
+                typeParameter = new ObjectParameter("Type", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction<OM27700_pcCustomer_Result>("OM27700_pcCustomer", userNameParameter, cpnyIDParameter, langIDParameter, queryParameter, fromParameter, toParameter, listCpnyParameter, typeParameter);
         }
 
         #endregion

@@ -292,6 +292,8 @@
           <Parameter Name="Query" Type="nvarchar" Mode="In" />
           <Parameter Name="From" Type="int" Mode="In" />
           <Parameter Name="To" Type="int" Mode="In" />
+          <Parameter Name="ListCpny" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Type" Type="int" Mode="In" />
         </Function>
         <Function Name="OM27700_pcInventory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LogUserID" Type="varchar" Mode="In" />
@@ -443,6 +445,8 @@
             <Parameter Name="Query" Mode="In" Type="String" />
             <Parameter Name="From" Mode="In" Type="Int32" />
             <Parameter Name="To" Mode="In" Type="Int32" />
+            <Parameter Name="ListCpny" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
