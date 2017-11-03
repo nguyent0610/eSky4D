@@ -403,7 +403,11 @@ namespace AR20500.Controllers
             }
             catch (Exception ex)
             {
-                if (ex is MessageException)
+                 if (ex is System.Data.SqlClient.SqlException)
+                {
+                    return Json(new { success = false, type = "message", code = "2017110301" }); //return Json(new { success = true, message = GetMess(2017110301, null) });
+                }
+                else if (ex is MessageException)
                 {
                     return (ex as MessageException).ToMessage();
                 }
