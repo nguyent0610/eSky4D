@@ -24,7 +24,7 @@ namespace INProcess
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@BatNbr", DbType.String, clsCommon.GetValueDBNull(batNbr), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@TranDate", DbType.DateTime, clsCommon.GetValueDBNull(tranDate), ParameterDirection.Input,30));
                 pc.Add(new ParamStruct("@RefNbr", DbType.String, clsCommon.GetValueDBNull(refNbr), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@TrnsfrDocNbr", DbType.String, clsCommon.GetValueDBNull(transferNbr), ParameterDirection.Input, 30));
@@ -45,7 +45,7 @@ namespace INProcess
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@BatNbr", DbType.String, clsCommon.GetValueDBNull(batNbr), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
                 mDal.ExecNonQuery("IN_ReleaseBatch", CommandType.StoredProcedure,ref pc);
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace INProcess
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@BatNbr", DbType.String, clsCommon.GetValueDBNull(batNbr), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
                 mDal.ExecNonQuery("IN_CancelBatch", CommandType.StoredProcedure, ref pc);
             }
             catch (Exception ex)
@@ -71,15 +71,16 @@ namespace INProcess
                 throw ex;
             }
         }
-        public void IN10201_ReleaseBatch(string branchID, string batNbr, string prog, string user)
+        public void IN10201_ReleaseBatch(string branchID, string batNbr, string prog, string user, string transType)
         {
             try
             {
                 ParamCollection pc = new ParamCollection();
-                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));                
                 pc.Add(new ParamStruct("@BatNbr", DbType.String, clsCommon.GetValueDBNull(batNbr), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@TransType", DbType.String, clsCommon.GetValueDBNull(transType), ParameterDirection.Input, 10));
                 mDal.ExecNonQuery("IN10201_ReleaseBatch", CommandType.StoredProcedure, ref pc);
             }
             catch (Exception ex)
@@ -88,7 +89,7 @@ namespace INProcess
                 throw ex;
             }
         }
-        public void IN10201_CancelBatch(string branchID, string batNbr, string prog, string user)
+        public void IN10201_CancelBatch(string branchID, string batNbr, string prog, string user, string transType)
         {
             try
             {
@@ -96,7 +97,8 @@ namespace INProcess
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@BatNbr", DbType.String, clsCommon.GetValueDBNull(batNbr), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@TransType", DbType.String, clsCommon.GetValueDBNull(transType), ParameterDirection.Input, 10));
                 mDal.ExecNonQuery("IN10201_CancelBatch", CommandType.StoredProcedure, ref pc);
             }
             catch (Exception ex)
@@ -214,7 +216,7 @@ namespace INProcess
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@CostDate", DbType.DateTime, clsCommon.GetValueDBNull(costDate), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
                 mDal.ExecNonQuery("IN_UpdateEndingAvgCost", CommandType.StoredProcedure, ref pc);
             }
             catch (Exception ex)
@@ -230,7 +232,7 @@ namespace INProcess
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@CostDate", DbType.DateTime, clsCommon.GetValueDBNull(costDate), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
                 mDal.ExecNonQuery("IN_RecalculateAvgCost", CommandType.StoredProcedure, ref pc);
             }
             catch (Exception ex)
@@ -245,7 +247,7 @@ namespace INProcess
             {
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
                 return mDal.ExecDataTable("IN_Integrity_Validate", CommandType.StoredProcedure, ref pc);
             }
             catch (Exception ex)
@@ -260,7 +262,7 @@ namespace INProcess
             {
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@PInvtID", DbType.String, clsCommon.GetValueDBNull(invtID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@PSiteID", DbType.String, clsCommon.GetValueDBNull(siteID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@QtyDecPl", DbType.Int32, clsCommon.GetValueDBNull(qtyDecPl), ParameterDirection.Input, 10));
@@ -282,7 +284,7 @@ namespace INProcess
             {
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@PInvtID", DbType.String, clsCommon.GetValueDBNull(invtID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@PSiteID", DbType.String, clsCommon.GetValueDBNull(siteID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@QtyDecPl", DbType.Int32, clsCommon.GetValueDBNull(qtyDecPl), ParameterDirection.Input, 10));
@@ -304,7 +306,7 @@ namespace INProcess
             {
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
-                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@Posted", DbType.String, clsCommon.GetValueDBNull(posted), ParameterDirection.Input, 1));
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@BatNbr", DbType.String, clsCommon.GetValueDBNull(batNbr), ParameterDirection.Input, 30));
@@ -323,7 +325,7 @@ namespace INProcess
             { 
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@InvtID", DbType.String, clsCommon.GetValueDBNull(invtid), ParameterDirection.Input, 30));
-                pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(Siteid), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(Siteid), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@CostID", DbType.String, clsCommon.GetValueDBNull(costid), ParameterDirection.Input, 30));
                 return mDal.ExecDataTable("IN_ItemCostProcessing_GetCost", CommandType.StoredProcedure, ref pc);
             }

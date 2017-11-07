@@ -1779,7 +1779,7 @@ namespace INProcess
                             if (objBranchLot != null)
                             {
                                 double transLotQty = Math.Abs(qty);
-                                if (!objBranchLot.GetByKey(tran.String("InvtID"), toSiteID, lotRow.String("LotSerNbr")))
+                                if (!objBranchLot.GetByKey(toSiteID, tran.String("InvtID"), lotRow.String("LotSerNbr")))
                                 {
                                     Insert_IN_ItemLot(ref objBranchLot, tran.String("InvtID"), toSiteID, objItemLot.LotSerNbr, objItemLot.ExpDate, objItemLot.MfgrLotSerNbr, 0.0, transLotQty);
                                 }
@@ -1811,7 +1811,7 @@ namespace INProcess
                         }
                     }
                 }
-                sql.IN10201_ReleaseBatch(branchID, batNbr, Prog, User);
+                sql.IN10201_ReleaseBatch(branchID, batNbr, Prog, User, transType);
                 return true;
             }
             catch (Exception ex)
@@ -1869,7 +1869,6 @@ namespace INProcess
                         throw new MessageException(MessageType.Message, "606");
                     }
                     
-
                     if (objInvt.StkItem == 1)
                     {
                         if (tran.String("UnitMultDiv") == "M" || string.IsNullOrEmpty(tran.String("UnitMultDiv")))
@@ -1895,6 +1894,10 @@ namespace INProcess
                         if (!objBranchSite.GetByKey(tran.String("InvtID"), toSiteID))
                         {
                             throw new MessageException(MessageType.Message, "606"); //Insert_IN_ItemSite(ref objBranchSite, tran.String("InvtID"), objInvt.StkItem, toSiteID, tranQty);
+                        }
+                        else if ( objBranchSite.QtyAvail == 0 || objBranchSite.QtyOnHand == 0)
+                        {
+                            throw new MessageException(MessageType.Message, "608", "", new[] { tran.String("InvtID"), toSiteID });
                         }
                         else
                         {
@@ -1951,7 +1954,7 @@ namespace INProcess
                             if (objBranchLot != null)
                             {
                                 double transLotQty = Math.Abs(qty);
-                                if (!objBranchLot.GetByKey(tran.String("InvtID"), toSiteID, lotRow.String("LotSerNbr")))
+                                if (!objBranchLot.GetByKey(toSiteID, tran.String("InvtID"), lotRow.String("LotSerNbr")) || objBranchLot.QtyAvail == 0 || objBranchLot.QtyOnHand == 0)
                                 {
                                     throw new MessageException(MessageType.Message, "201508181", "", new[] { "", tran.String("InvtID") + " " + Util.GetLang("Site") + " " + toSiteID, lotRow.String("LotSerNbr"), transLotQty.ToString() }); 
                                     //throw new MessageException(MessageType.Message, "606"); //Insert_IN_ItemLot(ref objBranchLot, tran.String("InvtID"), toSiteID, objItemLot.LotSerNbr, objItemLot.ExpDate, objItemLot.MfgrLotSerNbr, 0.0, transLotQty);
@@ -2000,7 +2003,7 @@ namespace INProcess
                     }
                 }
                 if (release)
-                    sql.IN10201_CancelBatch(branchID, batNbr, Prog, User);
+                    sql.IN10201_CancelBatch(branchID, batNbr, Prog, User, transType);
                 return true;
             }
             catch (Exception ex)
