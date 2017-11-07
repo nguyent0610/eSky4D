@@ -612,6 +612,47 @@ namespace IN10300
     
             return base.ExecuteFunction<global::System.String>("IN10300_ppCheckCloseDate", branchIDParameter, dateParameter, screenNbrParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10300_pdConfig_Result> IN10300_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<IN10300_pdConfig_Result>("IN10300_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -6845,6 +6886,30 @@ namespace IN10300
         private global::System.String _PosmID;
         partial void OnPosmIDChanging(global::System.String value);
         partial void OnPosmIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> RptExpDate
+        {
+            get
+            {
+                return _RptExpDate;
+            }
+            set
+            {
+                OnRptExpDateChanging(value);
+                ReportPropertyChanging("RptExpDate");
+                _RptExpDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RptExpDate");
+                OnRptExpDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _RptExpDate;
+        partial void OnRptExpDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnRptExpDateChanged();
 
         #endregion
 
@@ -10236,6 +10301,92 @@ namespace IN10300
         private global::System.Double _CnvFact;
         partial void OnCnvFactChanging(global::System.Double value);
         partial void OnCnvFactChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10300Model", Name="IN10300_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10300_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AllowDescrBlank
+        {
+            get
+            {
+                return _AllowDescrBlank;
+            }
+            set
+            {
+                OnAllowDescrBlankChanging(value);
+                ReportPropertyChanging("AllowDescrBlank");
+                _AllowDescrBlank = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowDescrBlank");
+                OnAllowDescrBlankChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AllowDescrBlank;
+        partial void OnAllowDescrBlankChanging(Nullable<global::System.Boolean> value);
+        partial void OnAllowDescrBlankChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AllowNoteBlank
+        {
+            get
+            {
+                return _AllowNoteBlank;
+            }
+            set
+            {
+                OnAllowNoteBlankChanging(value);
+                ReportPropertyChanging("AllowNoteBlank");
+                _AllowNoteBlank = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowNoteBlank");
+                OnAllowNoteBlankChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AllowNoteBlank;
+        partial void OnAllowNoteBlankChanging(Nullable<global::System.Boolean> value);
+        partial void OnAllowNoteBlankChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsSetDefaultShipViaID
+        {
+            get
+            {
+                return _IsSetDefaultShipViaID;
+            }
+            set
+            {
+                OnIsSetDefaultShipViaIDChanging(value);
+                ReportPropertyChanging("IsSetDefaultShipViaID");
+                _IsSetDefaultShipViaID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsSetDefaultShipViaID");
+                OnIsSetDefaultShipViaIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsSetDefaultShipViaID;
+        partial void OnIsSetDefaultShipViaIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsSetDefaultShipViaIDChanged();
 
         #endregion
 

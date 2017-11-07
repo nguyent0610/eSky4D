@@ -1141,7 +1141,13 @@ var defaultOnNew = function () {
     record.data.ToCpnyID = HQ.cpnyID;
     record.data.TransferType = "1";
     record.data.TransferStatus = "P";
-    record.data.ShipViaID = "MD";
+    if (HQ.isSetDefaultShipViaID && App.cboShipViaID.store.data.length > 0) {
+        record.data.ShipViaID = App.cboShipViaID.store.data.items[0].data.ShipViaID;
+    }
+    //else {
+    //    record.data.ShipViaID = "MD";
+    //}
+    
 
     App.frmMain.validate();
     bindBatch(record);

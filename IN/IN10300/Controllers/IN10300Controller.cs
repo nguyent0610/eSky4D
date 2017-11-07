@@ -52,6 +52,13 @@ namespace IN10300.Controllers
 
             if (branchID == null) branchID = Current.CpnyID;
 
+            bool isSetDefaultShipViaID = false;
+            var objConfig = _app.IN10300_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                isSetDefaultShipViaID = objConfig.IsSetDefaultShipViaID != null ? objConfig.IsSetDefaultShipViaID.Value : false;
+            }
+            ViewBag.isSetDefaultShipViaID = isSetDefaultShipViaID;
             ViewBag.BranchID = branchID;
 
             return View();

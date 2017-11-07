@@ -8,6 +8,16 @@
     Layout = null;
     var X = Html.X();
     var HQ = Html.HQ();
+
+    bool allowDescrBlank = true;
+    bool allowNoteBlank = true;
+    IN10300Entities _app = Util.CreateObjectContext<IN10300Entities>(false);
+    var objConfig = _app.IN10300_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+    if (objConfig != null)
+    {
+        allowDescrBlank = objConfig.AllowDescrBlank.HasValue ? objConfig.AllowDescrBlank.Value : false;
+        allowNoteBlank = objConfig.AllowNoteBlank.HasValue ? objConfig.AllowNoteBlank.Value : false;
+    }
 }
 
 @(
@@ -301,7 +311,7 @@
                     .DataIndex("Descr")
                     .Name("Descr")
                     .HQLangCode("Descr")
-                    .AllowBlank(false)
+                    .AllowBlank(allowDescrBlank)
                     .MaxLength(100)
                     .LabelWidth(130)
                     .EnforceMaxLength(true)
@@ -345,6 +355,7 @@
                         .LabelWidth(120)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQControlFocus("cboShipViaID")
+                        
                         .LoadData()
                         .Listeners(lst =>
                         {
@@ -577,7 +588,7 @@
                         .DataIndex("Comment")
                         .Name("Comment")
                         .HQLangCode("Comment")
-                        .AllowBlank(false)
+                        .AllowBlank(allowNoteBlank)
                         .LabelWidth(120)
                         .MaxLength(30)
                         .EnforceMaxLength(true)
