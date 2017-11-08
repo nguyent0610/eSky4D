@@ -224,7 +224,7 @@ namespace IN10300.Controllers
                 var batch = _app.Batches.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr);
                 if (batch != null) _app.Batches.DeleteObject(batch);
 
-                var transfer = _app.IN_Transfer.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BranchID && p.RefNbr == _objBatch.RefNbr);
+                var transfer = _app.IN_Transfer.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.RefNbr == _objBatch.RefNbr);
                 if (transfer != null) _app.IN_Transfer.DeleteObject(transfer);
 
                 var lstTrans = _app.IN_Trans.Where(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.RefNbr == _objBatch.RefNbr).ToList();
