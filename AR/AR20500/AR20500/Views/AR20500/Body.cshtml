@@ -21,6 +21,7 @@
         .TopBar(Util.SetupToolbar("Print,Save,New,Delete", true, ""))
         .Layout(LayoutType.Border)
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
+        .DefaultButton("btnLoad")
         .Listeners(lst =>
         {
             lst.BoxReady.Fn = "loadSourceCombo";
@@ -107,13 +108,14 @@
 
                             , HQ.Combo().ID("cboHandle")
                                     .Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20500_pcHandle")
-                                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("ToStatus")
                                     .Width(250).HQHeightWidth(400, 300)
                                     .ForceSelection(true).HQAutoLoad(false)
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection() 
                                     { 
                                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw }  
                                     })
                                     .LoadData()

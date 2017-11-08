@@ -94,7 +94,7 @@ namespace AR20500.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -230,6 +230,9 @@ namespace AR20500.Controllers
 								objNew.ClassId = item.ClassId;
 								objNew.PriceClass = item.PriceClass;
                                 objNew.CodeHT = item.ERPCustID;
+
+                                objNew.LUpd_User = Current.UserName;
+                                objNew.LUpd_Prog = _screenNbr;
 
                                 var objCust = new AR_Customer();
                                 objCust.ResetET();
@@ -378,13 +381,15 @@ namespace AR20500.Controllers
                                     objNew.Status = "A";
                                 }
                             }
-                            else if (handle == "D")
+                            else if (handle != "N" && handle != "")
                             {
                                 var custID = item.CustID.PassNull().ToLower();
                                 if (objNew != null)
                                 {
                                     objNew.LUpd_Datetime = DateTime.Now;
-                                    objNew.Status = "D";
+                                    objNew.LUpd_Prog = _screenNbr;
+                                    objNew.LUpd_User = Current.UserName;
+                                    objNew.Status = handle;
                                 }
                             }
                             _db.SaveChanges();
