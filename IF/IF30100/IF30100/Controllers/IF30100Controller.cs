@@ -1159,6 +1159,18 @@ namespace IF30100.Controllers
             return new HttpNotFoundResult();
            
         }
+        [HttpGet]
+        [DeleteFileAttribute] //Action Filter, it will auto delete the file after download,I will explain it later
+        public ActionResult DownloadAndDelete(string name, string id)
+        {
+            //get the temp folder and file path in server
+            //string fullPath = Path.Combine(Server.MapPath("~/temp"), file);
+            string fullPath = Path.Combine(Server.MapPath("~/ExportPivot"), id);
+            //string fullPath = path + @"\" + id;
+            //return the file for download, this is an Excel 
+            //so I set the file content type to "application/vnd.ms-excel"
+            return File(fullPath, "application/vnd.ms-excel", name);
+        }
         //public ActionResult ExportPivot(FormCollection data, string view, string name)
         //{
         //    try
@@ -2570,6 +2582,19 @@ namespace IF30100.Controllers
             return cell;
         }
         #endregion
+    }
+    public class DeleteFileAttribute : ActionFilterAttribute
+    {
+        public override void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+            filterContext.HttpContext.Response.Flush();
+
+            //convert the current filter context to file and get the file path
+            string filePath = (filterContext.Result as FilePathResult).FileName;
+
+            //delete the file after download
+            System.IO.File.Delete(filePath);
+        }
     }
     public class DataInfo
     {

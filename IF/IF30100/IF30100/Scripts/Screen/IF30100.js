@@ -463,7 +463,7 @@ function exportExcelView()
                 },
                 success: function (msg, data) {
                     if (!Ext.isEmpty(data.result.name)) {
-                        window.location = 'IF30100/DownloadFile?name=' + data.result.name + '&id=' + data.result.id;
+                        window.location = 'IF30100/DownloadAndDelete?name=' + data.result.name + '&id=' + data.result.id;
                     }
 
                     HQ.message.process(msg, data, true);
