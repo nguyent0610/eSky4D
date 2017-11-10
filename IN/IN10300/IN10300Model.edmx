@@ -18,7 +18,7 @@
           <Property Name="DateEnt" Type="smalldatetime" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="100" />
           <Property Name="EditScrnNbr" Type="varchar" MaxLength="8" />
-          <Property Name="FromToSiteID" Type="varchar" MaxLength="30" />
+          <Property Name="FromToSiteID" Type="varchar" MaxLength="10" />
           <Property Name="ImpExp" Type="varchar" MaxLength="1" />
           <Property Name="IntRefNbr" Type="varchar" MaxLength="10" />
           <Property Name="JrnlType" Type="varchar" MaxLength="2" />
@@ -431,6 +431,11 @@
           <Parameter Name="InvtID" Type="varchar" Mode="In" />
           <Parameter Name="UOM" Type="nvarchar" Mode="In" />
           <Parameter Name="EffDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="ValMthd" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="IN10300_pgTransferLoad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
@@ -504,6 +509,11 @@
             <Parameter Name="InvtID" Mode="In" Type="String" />
             <Parameter Name="UOM" Mode="In" Type="String" />
             <Parameter Name="EffDate" Mode="In" Type="DateTime" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="ValMthd" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="IN10300_ppCheckCloseDate" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -529,7 +539,7 @@
           <Property Type="DateTime" Name="DateEnt" Nullable="false" Precision="0" />
           <Property Type="String" Name="Descr" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="EditScrnNbr" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="FromToSiteID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="FromToSiteID" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ImpExp" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="IntRefNbr" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="JrnlType" MaxLength="2" FixedLength="false" Unicode="false" />

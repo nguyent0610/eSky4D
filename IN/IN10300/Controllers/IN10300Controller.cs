@@ -165,9 +165,9 @@ namespace IN10300.Controllers
             var lstUnit = _app.IN10300_pcUnitConversion(Current.CpnyID).ToList();
             return this.Store(lstUnit);
         }
-        public ActionResult GetPrice(string invtID, string uom, DateTime effDate)
+        public ActionResult GetPrice(string invtID, string uom, DateTime effDate, string branchID, string valMthd)
         {
-            var lstPrice = _app.IN10300_pdPrice("", invtID, uom, DateTime.Now).ToList();
+            var lstPrice = _app.IN10300_pdPrice("", invtID, uom, DateTime.Now, branchID, valMthd, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lstPrice);
         }
         public ActionResult GetUnit(string invtID)
