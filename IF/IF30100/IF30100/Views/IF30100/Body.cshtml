@@ -79,14 +79,14 @@
         .Listeners(p=>p.BoxReady.Fn = "frmMain_BoxReady")
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar(new AbstractComponent[]{
-                X.FileUploadField().Hidden(true)
-                .ID("btnImport")
-                .ButtonText("ImportTemplate")
-                .ButtonOnly(true)
-                .Icon(Icon.BookAdd)
-                .Listeners(p=>{
-                    p.Change.Fn = "btnImport_Click";              
-                }),
+                //X.FileUploadField().Hidden(true)
+                //.ID("btnImport")
+                //.ButtonText("ImportTemplate")
+                //.ButtonOnly(true)
+                //.Icon(Icon.BookAdd)
+                //.Listeners(p=>{
+                //    p.Change.Fn = "btnImport_Click";              
+                //}),
                     
                 X.Button()
                 .ID("btnExport")
