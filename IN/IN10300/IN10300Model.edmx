@@ -433,6 +433,7 @@
           <Parameter Name="EffDate" Type="smalldatetime" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="ValMthd" Type="varchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -511,6 +512,7 @@
             <Parameter Name="EffDate" Mode="In" Type="DateTime" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="ValMthd" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />

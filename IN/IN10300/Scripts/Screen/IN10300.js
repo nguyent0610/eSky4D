@@ -613,7 +613,7 @@ var grdTrans_Edit = function (item, e) {
                     row: e
                 });
                 App.stoPrice.load({
-                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtTranDate.getValue(), branchID: App.txtBranchID.getValue(), valMthd: e.record.invt.ValMthd },
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtTranDate.getValue(), branchID: App.txtBranchID.getValue(), valMthd: e.record.invt.ValMthd, siteID: App.cboSiteID.getValue() },
                     callback: checkSourceEdit,
                     row: e
                 });
@@ -633,7 +633,7 @@ var grdTrans_Edit = function (item, e) {
                     row: e
                 });
                 App.stoPrice.load({
-                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtTranDate.getValue(), branchID: App.txtBranchID.getValue(), valMthd: e.record.invt.ValMthd },
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtTranDate.getValue(), branchID: App.txtBranchID.getValue(), valMthd: e.record.invt.ValMthd, siteID: App.cboSiteID.getValue() },
                     callback: checkSourceEdit,
                     row: e
                 });

@@ -529,10 +529,11 @@ namespace IN10300
         /// <param name="effDate">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="valMthd">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<IN10300_pdPrice_Result> IN10300_pdPrice(global::System.String vendID, global::System.String invtID, global::System.String uOM, Nullable<global::System.DateTime> effDate, global::System.String branchID, global::System.String valMthd, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        public ObjectResult<IN10300_pdPrice_Result> IN10300_pdPrice(global::System.String vendID, global::System.String invtID, global::System.String uOM, Nullable<global::System.DateTime> effDate, global::System.String branchID, global::System.String valMthd, global::System.String siteID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter vendIDParameter;
             if (vendID != null)
@@ -594,6 +595,16 @@ namespace IN10300
                 valMthdParameter = new ObjectParameter("ValMthd", typeof(global::System.String));
             }
     
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
             ObjectParameter userNameParameter;
             if (userName != null)
             {
@@ -624,7 +635,7 @@ namespace IN10300
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<IN10300_pdPrice_Result>("IN10300_pdPrice", vendIDParameter, invtIDParameter, uOMParameter, effDateParameter, branchIDParameter, valMthdParameter, userNameParameter, cpnyIDParameter, langIDParameter);
+            return base.ExecuteFunction<IN10300_pdPrice_Result>("IN10300_pdPrice", vendIDParameter, invtIDParameter, uOMParameter, effDateParameter, branchIDParameter, valMthdParameter, siteIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
