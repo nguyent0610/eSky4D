@@ -426,6 +426,12 @@
                                         X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(2)
                                     )
 
+                                    , X.NumberColumn().Text(Util.GetLang("OM21100MaxLot")).DataIndex("MaxLot")
+                                    .Align(Alignment.Right).Format("0,000")
+                                    .Editor(
+                                        X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                    )
+                                        
                                     , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
                                     .Editor(
                                         HQ.TextBox().SelectOnFocus(true).MaxLength(200).EnforceMaxLength(true)
@@ -1123,7 +1129,7 @@
                             .LoadData()
                         )
 
-                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("InvtID")
+                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Flex(1)
                         .Renderer("DiscDefintion.Process.renderGInvtName")
 
                         , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDesc").Width(70)

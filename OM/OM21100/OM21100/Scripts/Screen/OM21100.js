@@ -1176,8 +1176,8 @@ var DiscDefintion = {
             var rec = App.cboGInvtID.store.findRecord("InvtID", record.data.InvtID);
             var returnValue = value;
             if (rec) {
-                if (metaData.column.dataIndex == "Descr" && !record.data.Descr) {
-                    returnValue = rec.data.Descr;
+                if (metaData.column.dataIndex == "Descr" && !record.data.Descr1) {
+                    returnValue = rec.data.Descr1;
                 }
                 else if (metaData.column.dataIndex == "UnitDesc" && !record.data.UnitDesc) {
                     returnValue = rec.data.StkUnit;
@@ -1892,12 +1892,23 @@ var DiscDefintion = {
 
         treePanelBranch_checkChange: function (node, checked, eOpts) {
             if (App.cboStatus.getValue() == _holdStatus) {
-                node.childNodes.forEach(function (childNode) {
-                    childNode.set("checked", checked);
-                });
+                DiscDefintion.Event.checkNode(checked, node);
+                //node.childNodes.forEach(function (childNode) {
+                //    childNode.set("checked", checked);
+                //});
             } else {
                 App.treePanelBranch.clearChecked();
             }
+        },
+
+        checkNode : function (checked, node) {
+            if (node.childNodes.length > 0) {
+                for (var i = 0; i < node.childNodes.length; i++) {
+                    node.set('checked', checked)
+                    DiscDefintion.Event.checkNode(checked, node.childNodes[i]);
+                }
+            }
+            node.set('checked', checked);
         },
 
         treePanelFreeItem_checkChange: function (node, checked) {
@@ -2009,7 +2020,7 @@ var DiscDefintion = {
                     var status = App.cboStatus.value;
 
                     if (status == _holdStatus) {
-                        var allNodes = DiscDefintion.Process.getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
+                        var allNodes = DiscDefintion.Process.getLeafNodes(App.treePanelBranch.getRootNode(), true);
                         if (allNodes && allNodes.length > 0) {
                             App.grdCompany.store.suspendEvents();
                             allNodes.forEach(function (node) {
@@ -2982,7 +2993,7 @@ var DiscDefintion = {
             var totalKeys = ["BreakQty", "BreakAmt", "DiscAmt"];
 
             var keys = [];
-            if (totalKeys.indexOf(e.field)) {
+            if (totalKeys.indexOf(e.field) > -1) {
                 keys.push(e.field);
             }
             if (Ext.isEmpty(e.record.data.LineRef)) {

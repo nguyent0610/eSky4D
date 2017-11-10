@@ -33,7 +33,7 @@ namespace OM21100.Controllers
         private const string GItemChannel = "GC"; // Nhóm MH + Channel
         private const string ItemCustCate = "GI"; // Mặt Hàng + Loại KH
         private const string GItemCustCate = "GP"; // Nhóm MH + Loại KH 
-         
+        List<OM21100_ptTreeNode_Result> lstAllNode = new List<OM21100_ptTreeNode_Result>();
         // GET: /OM21100/
         public ActionResult Index()
         {
@@ -68,7 +68,7 @@ namespace OM21100.Controllers
 
         public ActionResult GetDiscBreak(string discID, string discSeq)
         {
-            var discBreaks = _db.OM21100_pgDiscBreak(discID, discSeq).ToList();
+            var discBreaks = _db.OM21100_pgDiscBreak(discID, discSeq, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(discBreaks);
         }
 
@@ -94,49 +94,47 @@ namespace OM21100.Controllers
 
             Node node = new Node();
             node.NodeID = "Root";
+
+            lstAllNode = _db.OM21100_ptTreeNode(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+
+
+            var maxLevel = lstAllNode.Max(x => x.LevelID);
+            var lstFirst = lstAllNode.Where(x => x.LevelID == maxLevel).ToList();
+            var crrLevel = maxLevel - 1;
+            if (lstFirst.Count > 0)
+            {
+                string crrParent = string.Empty;
+                Node parentNode = null;
+                bool isAddChild = false;// lstFirst.Where(x => x.ParentID != string.Empty).Count() > 0;
+                foreach (var it in lstFirst)
+                {
+                    var childNode = SetNodeValue(it, Ext.Net.Icon.UserHome);
+                    GetChildNode(ref childNode, (int)crrLevel, it.Code);
+
+                    if (it.ParentID != crrParent)
+                    {
+                        crrParent = it.ParentID;
+                        parentNode.Children.Add(childNode);
+                        isAddChild = true;
+                        node.Children.Add(parentNode);
+                    }
+                    else
+                    {
+                        if (it.ParentID != string.Empty)
+                        {
+                            parentNode.Children.Add(childNode);
+                        }
+                    }
+                    if (!isAddChild)
+                    {
+                        node.Children.Add(childNode);
+                    }
+                }
+            }
+
+            node.Icon = Ext.Net.Icon.FolderHome;
+
             tree.Root.Add(node);
-
-            var lstTerritories = _db.OM21100_ptTerritory(Current.UserName).ToList();//tam thoi
-            var companies = _db.OM21100_ptCompany(Current.UserName).ToList();
-
-            if (lstTerritories.Count == 0)
-            {
-                node.Leaf = true;
-            }
-
-            foreach (var item in lstTerritories)
-            {
-                var nodeTerritory = new Node();
-                nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = item.Territory, Mode = ParameterMode.Value });
-                nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Territory", Mode = ParameterMode.Value });
-                //nodeTerritory.Cls = "tree-node-parent";
-                nodeTerritory.Text = item.Descr;
-                nodeTerritory.Checked = false;
-                nodeTerritory.NodeID = "territory-" + item.Territory;
-                //nodeTerritory.IconCls = "tree-parent-icon";
-
-                var lstCompaniesInTerr = companies.Where(x => x.Territory == item.Territory);
-                foreach (var company in lstCompaniesInTerr)
-                {
-                    var nodeCompany = new Node();
-                    nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = company.CpnyID, Mode = ParameterMode.Value });
-                    nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Company", Mode = ParameterMode.Value });
-                    //nodeCompany.Cls = "tree-node-parent";
-                    nodeCompany.Text = company.CpnyName;
-                    nodeCompany.Checked = false;
-                    nodeCompany.Leaf = true;
-                    nodeCompany.NodeID = "territory-company-" + item.Territory + "-" + company.CpnyID;
-                    //nodeCompany.IconCls = "tree-parent-icon";
-
-                    nodeTerritory.Children.Add(nodeCompany);
-
-                }
-                if (lstCompaniesInTerr.Count() == 0)
-                {
-                    nodeTerritory.Leaf = true;
-                }
-                node.Children.Add(nodeTerritory);
-            }
 
             var treeBranch = X.GetCmp<Panel>(panelID);
 
@@ -147,7 +145,120 @@ namespace OM21100.Controllers
             
             return this.Direct();
         }
-       
+        List<string> lst = new List<string>();
+        private Node SetNodeValue(OM21100_ptTreeNode_Result objNode, Ext.Net.Icon icon)
+        {
+            Node node = new Node();
+
+            Random rand = new Random();
+            node.NodeID = objNode.Code + objNode.ParentID + (rand.Next(999, 9999) + objNode.LevelID) .ToString();
+            node.Checked = false;
+            node.Text = objNode.Descr;
+            node.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = objNode.Type, Mode = Ext.Net.ParameterMode.Value });
+            node.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = objNode.Code, Mode = Ext.Net.ParameterMode.Value });          
+            node.Icon = objNode.LevelID != 0 ? icon : Ext.Net.Icon.Folder;
+            node.Leaf = objNode.LevelID == 0;// true;
+            node.IconCls = "tree-node-noicon";
+            return node;
+        }
+        private void GetChildNode(ref Node crrNode, int level, string parrentID)
+        {
+            if (level >= 0)
+            {
+                var lstSub = lstAllNode.Where(x => x.ParentID == parrentID && x.LevelID == level).ToList();
+
+                if (lstSub.Count > 0)
+                {
+                    var crrLevel = level - 1;
+                    string crrParent = string.Empty;
+                    foreach (var it in lstSub)
+                    {
+                        var childNode = SetNodeValue(it, Ext.Net.Icon.FolderGo);
+                        GetChildNode(ref childNode, crrLevel, it.Code);
+                        crrNode.Children.Add(childNode);                        
+                    }
+                }
+                else
+                {
+                    crrNode.Leaf = true;
+                }
+            }
+            else
+            {
+                crrNode.Leaf = true;
+            }
+        }
+
+        //[DirectMethod]
+        //public ActionResult OM21100GetTreeBranch(string panelID)
+        //{
+        //    TreePanel tree = new TreePanel();
+        //    tree.ID = "treePanelBranch";
+        //    tree.ItemID = "treePanelBranch";
+
+        //    tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+        //    tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+
+        //    tree.Border = false;
+        //    tree.RootVisible = true;
+        //    tree.Animate = true;
+
+        //    Node node = new Node();
+        //    node.NodeID = "Root";
+        //    tree.Root.Add(node);
+
+        //    var lstTerritories = _db.OM21100_ptTerritory(Current.UserName).ToList();//tam thoi
+        //    var companies = _db.OM21100_ptCompany(Current.UserName).ToList();
+
+        //    if (lstTerritories.Count == 0)
+        //    {
+        //        node.Leaf = true;
+        //    }
+
+        //    foreach (var item in lstTerritories)
+        //    {
+        //        var nodeTerritory = new Node();
+        //        nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = item.Territory, Mode = ParameterMode.Value });
+        //        nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Territory", Mode = ParameterMode.Value });
+        //        //nodeTerritory.Cls = "tree-node-parent";
+        //        nodeTerritory.Text = item.Descr;
+        //        nodeTerritory.Checked = false;
+        //        nodeTerritory.NodeID = "territory-" + item.Territory;
+        //        //nodeTerritory.IconCls = "tree-parent-icon";
+
+        //        var lstCompaniesInTerr = companies.Where(x => x.Territory == item.Territory);
+        //        foreach (var company in lstCompaniesInTerr)
+        //        {
+        //            var nodeCompany = new Node();
+        //            nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = company.CpnyID, Mode = ParameterMode.Value });
+        //            nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Company", Mode = ParameterMode.Value });
+        //            //nodeCompany.Cls = "tree-node-parent";
+        //            nodeCompany.Text = company.CpnyName;
+        //            nodeCompany.Checked = false;
+        //            nodeCompany.Leaf = true;
+        //            nodeCompany.NodeID = "territory-company-" + item.Territory + "-" + company.CpnyID;
+        //            //nodeCompany.IconCls = "tree-parent-icon";
+
+        //            nodeTerritory.Children.Add(nodeCompany);
+
+        //        }
+        //        if (lstCompaniesInTerr.Count() == 0)
+        //        {
+        //            nodeTerritory.Leaf = true;
+        //        }
+        //        node.Children.Add(nodeTerritory);
+        //    }
+
+        //    var treeBranch = X.GetCmp<Panel>(panelID);
+
+        //    //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
+        //    tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelBranch_checkChange";
+
+        //    tree.AddTo(treeBranch);
+
+        //    return this.Direct();
+        //}
+
         // Tree Free Item
         [DirectMethod]
         public ActionResult OM21100LoadTreeFreeItem(string panelID)
@@ -1139,8 +1250,8 @@ namespace OM21100.Controllers
             var handle = data["cboHandle"];
             string discID = inputDisc.DiscID.ToUpper();
             string discSeq = inputSeq.DiscSeq.ToUpper();
-            if (roles.Contains("HO") || roles.Contains("DIST"))
-            {
+            //if (roles.Contains("HO") || roles.Contains("DIST"))
+            //{
                 foreach (var cnpy in lstCompany)
                 {
                     var sysCom = (from p in _db.OM_DiscCpny
@@ -1157,50 +1268,53 @@ namespace OM21100.Controllers
                         _db.OM_DiscCpny.AddObject(newComp);
                     }
                 }
-            }
-            else
-            {
-                var sysCom = (from p in _db.OM_DiscCpny
-                              where p.DiscID.ToUpper() == discID
-                                  && p.DiscSeq.ToUpper() == discSeq 
-                                  && p.CpnyID == Current.CpnyID select p).FirstOrDefault();
-                if (sysCom == null)
-                {
-                    OM_DiscCpny newComp = new OM_DiscCpny();
-                    newComp.DiscID = inputDisc.DiscID;
-                    newComp.DiscSeq = inputSeq.DiscSeq;
-                    newComp.CpnyID = Current.CpnyID;
+            //}
+            //else
+            //{
+            //    var sysCom = (from p in _db.OM_DiscCpny
+            //                  where p.DiscID.ToUpper() == discID
+            //                      && p.DiscSeq.ToUpper() == discSeq 
+            //                      && p.CpnyID == Current.CpnyID select p).FirstOrDefault();
+            //    if (sysCom == null)
+            //    {
+            //        OM_DiscCpny newComp = new OM_DiscCpny();
+            //        newComp.DiscID = inputDisc.DiscID;
+            //        newComp.DiscSeq = inputSeq.DiscSeq;
+            //        newComp.CpnyID = Current.CpnyID;
 
-                    _db.OM_DiscCpny.AddObject(newComp);
-                    if (lstCompany.Count == 0)
-                    {
-                        lstCompany.Add(new OM21100_pgCompany_Result() { 
-                            DiscID = inputDisc.DiscID,
-                            DiscSeq = inputSeq.DiscSeq,
-                            CpnyID = Current.CpnyID 
-                        });
-                    }
-                }
-            }
+            //        _db.OM_DiscCpny.AddObject(newComp);
+            //        if (lstCompany.Count == 0)
+            //        {
+            //            lstCompany.Add(new OM21100_pgCompany_Result() { 
+            //                DiscID = inputDisc.DiscID,
+            //                DiscSeq = inputSeq.DiscSeq,
+            //                CpnyID = Current.CpnyID 
+            //            });
+            //        }
+            //    }
+            //}
 
             var cpnyHandler = new StoreDataHandler(data["lstCompanyChange"]);
             var lstCompanyChange = cpnyHandler.BatchObjectData<OM21100_pgCompany_Result>();
             foreach (var deleted in lstCompanyChange.Deleted)
             {
-                var deletedCpny = _db.OM_DiscCpny.FirstOrDefault(p => p.DiscID == inputDisc.DiscID
-                    && p.DiscSeq == inputSeq.DiscSeq && p.CpnyID == deleted.CpnyID);
-                if (deletedCpny != null)
+                if (!lstCompany.Any(x => x.CpnyID == deleted.CpnyID))
                 {
-                    _db.OM_DiscCpny.DeleteObject(deletedCpny);
-                }
+                    var deletedCpny = _db.OM_DiscCpny.FirstOrDefault(p => p.DiscID == inputDisc.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.CpnyID == deleted.CpnyID);
+                    if (deletedCpny != null)
+                    {
+                        _db.OM_DiscCpny.DeleteObject(deletedCpny);
+                    }
+                }                
             }
 
-            if (handle != "N" && handle != null && (roles.Any(c => c.ToUpper() == inputSeq.Crtd_Role)
-                || roles.Any(c => c.ToUpper() == inputDisc.Crtd_Role.ToUpper()) // khong hieu cai role
-                || (inputSeq.Crtd_Role.PassNull() == "SUBDIST"
-                && roles.Any(c => c.ToUpper() == "DIST"))))
-                Save_Task(data, lstCompany, seq, inputSeq, handle);
-            else
+            //if (handle != "N" && handle != null && (roles.Any(c => c.ToUpper() == inputSeq.Crtd_Role)
+            //    || roles.Any(c => c.ToUpper() == inputDisc.Crtd_Role.ToUpper()) // khong hieu cai role
+            //    || (inputSeq.Crtd_Role.PassNull() == "SUBDIST"
+            //    && roles.Any(c => c.ToUpper() == "DIST"))))
+            //    Save_Task(data, lstCompany, seq, inputSeq, handle);
+            //else
                 Save_Break(data, null, null, inputSeq);
         }
 
@@ -1330,7 +1444,6 @@ namespace OM21100.Controllers
         {
             try
             {
-
                 if (isNew)
                 {
                     t.ResetET();
@@ -1342,7 +1455,7 @@ namespace OM21100.Controllers
                     t.Crtd_User = Current.UserName;
                     t.tstamp = new byte[1];
                 }
-
+                t.MaxLot = s.MaxLot;
                 t.BreakAmt = s.BreakAmt;
                 t.BreakQty = s.BreakQty;
                 t.DiscAmt = s.DiscAmt;
