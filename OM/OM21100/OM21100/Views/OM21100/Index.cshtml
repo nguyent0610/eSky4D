@@ -44,7 +44,7 @@
             .Model(Util.GenerateModel(typeof(OM_Discount), "mdlDiscInfo", "DiscID"))
             .Proxy(
                 X.AjaxProxy()
-                .Url(Url.Action("GetDiscInfo", "OM21100"))
+                .Url(Url.Action("GetDiscInfo", "OM21100")).Timeout(int.MaxValue)
                 .ActionMethods(action =>
                 {
                     action.Read = HttpMethod.POST;
@@ -68,7 +68,7 @@
             .Model(Util.GenerateModel(typeof(OM_DiscSeq), "mdlDiscSeqInfo", "DiscSeq",true,"Active,Promo"))
             .Proxy(
                 X.AjaxProxy()
-                .Url(Url.Action("GetDiscSeqInfo", "OM21100"))
+                .Url(Url.Action("GetDiscSeqInfo", "OM21100")).Timeout(int.MaxValue)
                 .ActionMethods(action =>
                 {
                     action.Read = HttpMethod.POST;
@@ -94,7 +94,7 @@
             .Model(Util.GenerateModel(typeof(OM21100_pgDiscBreak_Result), "mdlDiscBreak", "DiscID,DiscSeq,LineRef"))
             .Proxy(
                 X.AjaxProxy()
-                .Url(Url.Action("GetDiscBreak", "OM21100"))
+                .Url(Url.Action("GetDiscBreak", "OM21100")).Timeout(int.MaxValue)
                 .ActionMethods(action =>
                 {
                     action.Read = HttpMethod.POST;
@@ -121,7 +121,7 @@
             .Model(Util.GenerateModel(typeof(OM21100_pgFreeItem_Result), "mdlFreeItem", "DiscID,DiscSeq,LineRef,FreeItemID"))
             .Proxy(
                 X.AjaxProxy()
-                .Url(Url.Action("GetFreeItem", "OM21100"))
+                        .Url(Url.Action("GetFreeItem", "OM21100")).Timeout(int.MaxValue)
                 .ActionMethods(action =>
                 {
                     action.Read = HttpMethod.POST;
@@ -148,7 +148,7 @@
             .Model(Util.GenerateModel(typeof(OM21100_pgCompany_Result), "mdlCompany", "DiscID,DiscSeq,CpnyID"))
             .Proxy(
                 X.AjaxProxy()
-                .Url(Url.Action("GetCompany", "OM21100"))
+                        .Url(Url.Action("GetCompany", "OM21100")).Timeout(int.MaxValue)
                 .ActionMethods(action =>
                 {
                     action.Read = HttpMethod.POST;
@@ -175,7 +175,7 @@
             .Model(Util.GenerateModel(typeof(OM21100_pgDiscCustClass_Result), "mdlDiscCustClass", "DiscID,DiscSeq,ClassID"))
             .Proxy(
                 X.AjaxProxy()
-                .Url(Url.Action("GetDiscCustClass", "OM21100"))
+                        .Url(Url.Action("GetDiscCustClass", "OM21100")).Timeout(int.MaxValue)
                 .ActionMethods(action =>
                 {
                     action.Read = HttpMethod.POST;
@@ -202,7 +202,7 @@
             .Model(Util.GenerateModel(typeof(OM21100_pgDiscItemClass_Result), "mdlDiscItemClass", "DiscID,DiscSeq,ClassID"))
             .Proxy(
                 X.AjaxProxy()
-                .Url(Url.Action("GetDiscItemClass", "OM21100"))
+                        .Url(Url.Action("GetDiscItemClass", "OM21100")).Timeout(int.MaxValue)
                 .ActionMethods(action =>
                 {
                     action.Read = HttpMethod.POST;

@@ -140,7 +140,7 @@ namespace OM21100.Controllers
 
             //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
             tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelBranch_checkChange";
-
+            tree.Listeners.ItemCollapse.Fn = "tree_ItemCollapse";
             tree.AddTo(treeBranch);
             
             return this.Direct();

@@ -717,7 +717,7 @@
                                     , HQ.Button().ID("btnExpand")
                                     .HQLangCode("Expand")
                                     .Icon(Icon.BulletTogglePlus)
-                                    .Handler("DiscDefintion.Event.btnExpand_click")
+                                            .Handler("expandAll(App.treePanelBranch)")//DiscDefintion.Event.btnExpand_click")
 
                                     , X.ToolbarSpacer()
                                     , X.ToolbarSeparator()
@@ -726,7 +726,7 @@
                                     , HQ.Button().ID("btnCollapse")
                                     .HQLangCode("Collapse")
                                     .Icon(Icon.BulletToggleMinus)
-                                    .Handler("DiscDefintion.Event.btnCollapse_click")
+                                    .Handler("collapseAll(App.treePanelBranch)")// DiscDefintion.Event.btnCollapse_click")
 
                                     , X.ToolbarFill()
                                 )

@@ -1893,6 +1893,7 @@ var DiscDefintion = {
         treePanelBranch_checkChange: function (node, checked, eOpts) {
             if (App.cboStatus.getValue() == _holdStatus) {
                 DiscDefintion.Event.checkNode(checked, node);
+                DiscDefintion.Event.checkParentNode(checked, node);
                 //node.childNodes.forEach(function (childNode) {
                 //    childNode.set("checked", checked);
                 //});
@@ -1910,6 +1911,15 @@ var DiscDefintion = {
             }
             node.set('checked', checked);
         },
+        checkParentNode: function (checked, node) {
+            
+
+            if (node.parentNode != undefined) {
+                node.parentNode.set('checked', checked)
+                DiscDefintion.Event.checkParentNode(checked, node.parentNode);
+            }
+        },
+
 
         treePanelFreeItem_checkChange: function (node, checked) {
             if (App.cboStatus.getValue() == _holdStatus && App.grdDiscBreak.selModel.selected.length > 0 && Main.Process.checkAddFreeItem()) {
@@ -3053,3 +3063,61 @@ var DiscDefintion = {
         },
     }
 };
+
+/// ///////// Expand Collapse /////////////////////////////////////////////////////////////
+var expandAll = function (tree) {
+    if (tree.getRootNode() != undefined) {
+        Ext.suspendLayouts();
+        tree.getRootNode().expand();
+        var length = tree.getRootNode().childNodes.length;
+        if (length > 0) {
+            for (var i = 0; i < length; i++) {
+                if (tree.getRootNode().childNodes[i].childNodes.length > 0) {
+                    expandNode(tree.getRootNode().childNodes[i]);
+                }
+            }
+        }
+        Ext.resumeLayouts(true);
+    }
+}
+
+var expandNode = function (node) {
+    node.expand();
+    if (node.childNodes.length > 0) {
+        for (var i = 0; i < node.childNodes.length; i++) {
+            expandNode(node.childNodes[i]);
+        }
+    }
+}
+
+var collapseNode = function (node) {
+    if (node != undefined) {
+        node.collapse();
+        if (node.childNodes.length > 0) {
+            for (var i = 0; i < node.childNodes.length; i++) {
+                collapseNode(node.childNodes[i]);
+            }
+        }
+    }
+}
+
+var collapseAll = function (tree) {
+    if (tree.getRootNode() != undefined) {
+        Ext.suspendLayouts();
+        tree.getRootNode().collapse();
+        var length = tree.getRootNode().childNodes.length;
+        if (length > 0) {
+            for (var i = 0; i < length; i++) {
+                if (tree.getRootNode().childNodes[i].childNodes.length > 0) {
+                    collapseNode(tree.getRootNode().childNodes[i]);
+                }
+            }
+        }
+        Ext.resumeLayouts(true);
+    }
+}
+
+
+var tree_ItemCollapse = function (a, b) {
+    collapseNode(a);
+}
