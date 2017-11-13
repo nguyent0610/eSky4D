@@ -94,6 +94,7 @@ namespace OM21100.Controllers
 
             Node node = new Node();
             node.NodeID = "Root";
+            node.Checked = false;
 
             lstAllNode = _db.OM21100_ptTreeNode(Current.UserName, Current.CpnyID, Current.LangID).ToList();
 
