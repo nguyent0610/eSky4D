@@ -107,7 +107,7 @@
 
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
-          <input type="password" name="password" id="password" value=""  style="display:none;">
+          <input type="password" name="password" id="password" value=""  style="width: 0;height: 0;">
         <!-- Gọi hàm Body trong AR20200Controller để dựng view Body.cshtml, mục đích tạo cache. -->
         @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
     </body>
