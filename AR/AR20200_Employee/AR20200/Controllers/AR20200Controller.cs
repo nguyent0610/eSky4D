@@ -14,6 +14,7 @@ using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using HQSendMailApprove;
+
 namespace AR20200.Controllers
 {
     [DirectController]
@@ -50,6 +51,7 @@ namespace AR20200.Controllers
         // GET: /AR20200/
         public ActionResult Index()
         {
+            
             Util.InitRight(_screenNbr);
             return View();
         }

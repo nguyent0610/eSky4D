@@ -39,6 +39,7 @@
     <title>@ViewBag.Title</title>
     </head>
     <body>
+       
         @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
 
         @(X.Store().ID("stoSalesPerson").AutoLoad(false)
@@ -106,7 +107,7 @@
 
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
-
+          <input type="password" name="password" id="password" value=""  style="display:none;">
         <!-- Gọi hàm Body trong AR20200Controller để dựng view Body.cshtml, mục đích tạo cache. -->
         @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
     </body>
