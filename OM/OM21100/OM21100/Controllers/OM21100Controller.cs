@@ -841,7 +841,6 @@ namespace OM21100.Controllers
                 {
                     throw new MessageException(MessageType.Message, "1798");
                 }
-
             } 
 
             if (!roles.Contains("HO") && !roles.Contains("DIST") && isNewDiscSeq)
@@ -2204,7 +2203,7 @@ namespace OM21100.Controllers
             updatedDiscSeq.POEndDate = inputDiscSeq.POEndDate.ToDateShort();
             updatedDiscSeq.POStartDate = inputDiscSeq.POStartDate.ToDateShort();
             updatedDiscSeq.ExactQty = inputDiscSeq.ExactQty;
-
+            updatedDiscSeq.ExcludeOtherDisc = inputDiscSeq.ExcludeOtherDisc;
             if (!string.IsNullOrEmpty(handle) && handle != "N" && updatedDiscSeq.Status != handle)
             {
                 updatedDiscSeq.Status = handle;

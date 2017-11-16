@@ -84,22 +84,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_DiscSeq> OM_DiscSeq
-        {
-            get
-            {
-                if ((_OM_DiscSeq == null))
-                {
-                    _OM_DiscSeq = base.CreateObjectSet<OM_DiscSeq>("OM_DiscSeq");
-                }
-                return _OM_DiscSeq;
-            }
-        }
-        private ObjectSet<OM_DiscSeq> _OM_DiscSeq;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_DiscBreak> OM_DiscBreak
         {
             get
@@ -320,6 +304,22 @@ namespace OM21100
             }
         }
         private ObjectSet<OM_DiscCustCate> _OM_DiscCustCate;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_DiscSeq> OM_DiscSeq
+        {
+            get
+            {
+                if ((_OM_DiscSeq == null))
+                {
+                    _OM_DiscSeq = base.CreateObjectSet<OM_DiscSeq>("OM_DiscSeq");
+                }
+                return _OM_DiscSeq;
+            }
+        }
+        private ObjectSet<OM_DiscSeq> _OM_DiscSeq;
 
         #endregion
 
@@ -331,14 +331,6 @@ namespace OM21100
         public void AddToOM_Discount(OM_Discount oM_Discount)
         {
             base.AddObject("OM_Discount", oM_Discount);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_DiscSeq EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_DiscSeq(OM_DiscSeq oM_DiscSeq)
-        {
-            base.AddObject("OM_DiscSeq", oM_DiscSeq);
         }
     
         /// <summary>
@@ -451,6 +443,14 @@ namespace OM21100
         public void AddToOM_DiscCustCate(OM_DiscCustCate oM_DiscCustCate)
         {
             base.AddObject("OM_DiscCustCate", oM_DiscCustCate);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_DiscSeq EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_DiscSeq(OM_DiscSeq oM_DiscSeq)
+        {
+            base.AddObject("OM_DiscSeq", oM_DiscSeq);
         }
 
         #endregion
@@ -6826,7 +6826,8 @@ namespace OM21100
         /// <param name="pOEndDate">Initial value of the POEndDate property.</param>
         /// <param name="pOUse">Initial value of the POUse property.</param>
         /// <param name="exactQty">Initial value of the ExactQty property.</param>
-        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty)
+        /// <param name="excludeOtherDisc">Initial value of the ExcludeOtherDisc property.</param>
+        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty, global::System.Boolean excludeOtherDisc)
         {
             OM_DiscSeq oM_DiscSeq = new OM_DiscSeq();
             oM_DiscSeq.DiscID = discID;
@@ -6850,6 +6851,7 @@ namespace OM21100
             oM_DiscSeq.POEndDate = pOEndDate;
             oM_DiscSeq.POUse = pOUse;
             oM_DiscSeq.ExactQty = exactQty;
+            oM_DiscSeq.ExcludeOtherDisc = excludeOtherDisc;
             return oM_DiscSeq;
         }
 
@@ -7534,6 +7536,30 @@ namespace OM21100
         private global::System.Boolean _ExactQty;
         partial void OnExactQtyChanging(global::System.Boolean value);
         partial void OnExactQtyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean ExcludeOtherDisc
+        {
+            get
+            {
+                return _ExcludeOtherDisc;
+            }
+            set
+            {
+                OnExcludeOtherDiscChanging(value);
+                ReportPropertyChanging("ExcludeOtherDisc");
+                _ExcludeOtherDisc = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ExcludeOtherDisc");
+                OnExcludeOtherDiscChanged();
+            }
+        }
+        private global::System.Boolean _ExcludeOtherDisc;
+        partial void OnExcludeOtherDiscChanging(global::System.Boolean value);
+        partial void OnExcludeOtherDiscChanged();
 
         #endregion
 

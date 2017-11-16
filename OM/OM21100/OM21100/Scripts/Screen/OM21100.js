@@ -1176,8 +1176,8 @@ var DiscDefintion = {
             var rec = App.cboGInvtID.store.findRecord("InvtID", record.data.InvtID);
             var returnValue = value;
             if (rec) {
-                if (metaData.column.dataIndex == "Descr" && !record.data.Descr1) {
-                    returnValue = rec.data.Descr1;
+                if (metaData.column.dataIndex == "Descr" && !record.data.Descr) {
+                    returnValue = rec.data.Descr;
                 }
                 else if (metaData.column.dataIndex == "UnitDesc" && !record.data.UnitDesc) {
                     returnValue = rec.data.StkUnit;
@@ -2076,6 +2076,12 @@ var DiscDefintion = {
                         var allNodes = App.treePanelBranch.getCheckedNodes();
                         if (allNodes && allNodes.length > 0) {
                             App.grdCompany.store.suspendEvents();
+
+                            var invtBlank = HQ.store.findRecord(App.grdCompany.store, ['CpnyID'], ['']);
+                            if (invtBlank) {
+                                App.grdCompany.store.remove(invtBlank);
+                            }
+
                             allNodes.forEach(function (node) {
                                 if (node.attributes.Type == "Company") {
                                     var idx = App.grdCompany.store.getCount();
@@ -2091,6 +2097,16 @@ var DiscDefintion = {
                                     }
                                 }
                             });
+
+                            var invtBlank = HQ.store.findRecord(App.grdCompany.store, ['InvtID'], ['']);
+                            if (!invtBlank) {
+                                var idx = App.grdCompany.store.data.length > 0 ? App.grdCompany.store.data.length - 1 : 0;
+                                App.grdCompany.store.insert(idx, Ext.create("App.mdlCompany", {
+                                    DiscID: discId,
+                                    DiscSeq: discSeq,
+                                    CpnyID: ''
+                                }));
+                            }
                             App.treePanelBranch.clearChecked();
                             App.grdCompany.store.resumeEvents();
                             App.grdCompany.view.refresh();
