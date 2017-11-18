@@ -158,8 +158,27 @@
                 X.GridFilters()
                     .Local(true)
                     .Filters(
-                        X.StringFilter().DataIndex("RoleID"),
-                        X.StringFilter().DataIndex("Desc")
+                        X.StringFilter().DataIndex("CpnyID"),
+                        X.StringFilter().DataIndex("CpnyName"),
+                        X.StringFilter().DataIndex("Address"),
+                        X.StringFilter().DataIndex("Status"),
+                        X.StringFilter().DataIndex("Fax"),
+                        X.StringFilter().DataIndex("TaxRegNbr"),
+                        X.StringFilter().DataIndex("Channel"),
+                        X.StringFilter().DataIndex("Country"),
+                        X.StringFilter().DataIndex("Zone"),
+                        X.StringFilter().DataIndex("Territory"),
+                        X.StringFilter().DataIndex("Country"),
+                        X.StringFilter().DataIndex("City"),
+                        X.StringFilter().DataIndex("State"),
+                        X.StringFilter().DataIndex("District"),
+                        X.StringFilter().DataIndex("CpnyType"),
+                        X.StringFilter().DataIndex("Email"),
+                        X.StringFilter().DataIndex("Owner"),
+                        X.StringFilter().DataIndex("Plant"),
+                        X.NumericFilter().DataIndex("Deposit"),
+                        X.NumericFilter().DataIndex("CreditLimit"),
+                        X.StringFilter().DataIndex("Tel")
                     )
             )
                 
@@ -557,7 +576,11 @@
                         X.StringFilter().DataIndex("Zip"),
                         X.StringFilter().DataIndex("TaxRegNbr"),
                         X.StringFilter().DataIndex("TaxLocId"),
-                        X.StringFilter().DataIndex("Status")
+                        X.StringFilter().DataIndex("Status"),
+                        
+                        X.StringFilter().DataIndex("Country"),
+                        X.StringFilter().DataIndex("State"),
+                        X.StringFilter().DataIndex("City")
                     )
             )
         )

@@ -55,7 +55,6 @@ namespace SA00001.Controllers
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Cpny"]);
                 ChangeRecords<SA00001_pgLoadGridCompany_Result> lstSYS_Cpny = dataHandler.BatchObjectData<SA00001_pgLoadGridCompany_Result>();
                 lstSYS_Cpny.Created.AddRange(lstSYS_Cpny.Updated);
-                SYS_Company objTemp = new SYS_Company();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSys_CompanyAddr"]);
                 ChangeRecords<SA000001_pgCompanyAddr_Result> lstSys_CompanyAddr = dataHandler1.BatchObjectData<SA000001_pgCompanyAddr_Result>();
