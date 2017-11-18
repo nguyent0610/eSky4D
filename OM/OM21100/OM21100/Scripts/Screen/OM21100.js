@@ -1087,11 +1087,23 @@ var DiscDefintion = {
             for (var j = 0; j < listTabs.length; j++) {
                 App[listTabs[j]].disable();
             }
-
+            var disable = true;
             for (var i = 0; i < tabNames.length; i++) {
-                App[tabNames[i]].enable();
+                App[tabNames[i]].enable();                
             }
-            App.chkExactQty.setVisible(!App['pnlDPBB'].isDisabled());
+            if (App.pnlDPCC.isDisabled()) {
+                App.chkExcludeOtherDisc.disable();
+            } else {
+                App.chkExcludeOtherDisc.enable();
+            }
+            if (App.pnlDPBB.isDisabled()) {
+                App.chkExactQty.disable();
+            } else {
+                App.chkExactQty.enable();
+            }
+            //App.chkExcludeOtherDisc.setVisible(!App.pnlDPCC.isDisabled());
+
+            //App.chkExactQty.setVisible(!App['pnlDPBB'].isDisabled());
         },
 
         getDeepAllLeafNodes: function (node, onlyLeaf) {
