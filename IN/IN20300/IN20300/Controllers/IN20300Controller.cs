@@ -29,7 +29,7 @@ namespace IN20300.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -160,6 +160,7 @@ namespace IN20300.Controllers
             t.Zip = s.Zip;
             t.Public = s.Public;
             t.Fax = s.Fax;
+            t.SiteType = s.SiteType;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

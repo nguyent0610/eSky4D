@@ -35,6 +35,7 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="HOCreate" Type="bit" Nullable="false" />
+          <Property Name="SiteType" Type="varchar" MaxLength="2" />
         </EntityType>
         <EntityType Name="IN_SiteCpny">
           <Key>
@@ -77,8 +78,8 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="SiteID" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="IN_Site" EntityType="IN20300Model.IN_Site" />
           <EntitySet Name="IN_SiteCpny" EntityType="IN20300Model.IN_SiteCpny" />
+          <EntitySet Name="IN_Site" EntityType="IN20300Model.IN_Site" />
         </EntityContainer>
         <ComplexType Name="IN20300_pcCpnybySite_Result">
           <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" />
@@ -101,7 +102,16 @@
           <Property Type="Boolean" Name="Public" Nullable="true" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="Boolean" Name="HOCreate" Nullable="false" />
+          <Property Type="String" Name="SiteType" Nullable="true" MaxLength="2" />
         </ComplexType>
+        <EntityType Name="IN_SiteCpny">
+          <Key>
+            <PropertyRef Name="SiteId" />
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="IN_Site">
           <Key>
             <PropertyRef Name="SiteId" />
@@ -128,14 +138,7 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Boolean" Name="HOCreate" Nullable="false" />
-        </EntityType>
-        <EntityType Name="IN_SiteCpny">
-          <Key>
-            <PropertyRef Name="SiteId" />
-            <PropertyRef Name="CpnyID" />
-          </Key>
-          <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SiteType" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -170,13 +173,23 @@
                 <ScalarProperty Name="Public" ColumnName="Public" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="HOCreate" ColumnName="HOCreate" />
+                <ScalarProperty Name="SiteType" ColumnName="SiteType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN20300_ppCheckForDeleteSiteID" FunctionName="eBiz4DWebSysModel.Store.IN20300_ppCheckForDeleteSiteID" />
+          <EntitySetMapping Name="IN_SiteCpny">
+            <EntityTypeMapping TypeName="IN20300Model.IN_SiteCpny">
+              <MappingFragment StoreEntitySet="IN_SiteCpny">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="IN_Site">
             <EntityTypeMapping TypeName="IN20300Model.IN_Site">
               <MappingFragment StoreEntitySet="IN_Site">
+                <ScalarProperty Name="SiteType" ColumnName="SiteType" />
                 <ScalarProperty Name="HOCreate" ColumnName="HOCreate" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
@@ -202,14 +215,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="IN_SiteCpny">
-            <EntityTypeMapping TypeName="IN20300Model.IN_SiteCpny">
-              <MappingFragment StoreEntitySet="IN_SiteCpny">
-                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
-                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -231,8 +236,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="70" >
-        <EntityTypeShape EntityType="IN20300Model.IN_Site" Width="1.5" PointX="11.148614605492266" PointY="6.5983888537615485" />
         <EntityTypeShape EntityType="IN20300Model.IN_SiteCpny" Width="1.5" PointX="6.0195799889134154" PointY="3.2059676662115231" />
+        <EntityTypeShape EntityType="IN20300Model.IN_Site" Width="1.5" PointX="3.4275804289745073" PointY="22.198606739844479" />
       </Diagram>
     </Diagrams>
   </Designer>

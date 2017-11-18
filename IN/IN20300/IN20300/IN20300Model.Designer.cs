@@ -68,22 +68,6 @@ namespace IN20300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_Site> IN_Site
-        {
-            get
-            {
-                if ((_IN_Site == null))
-                {
-                    _IN_Site = base.CreateObjectSet<IN_Site>("IN_Site");
-                }
-                return _IN_Site;
-            }
-        }
-        private ObjectSet<IN_Site> _IN_Site;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_SiteCpny> IN_SiteCpny
         {
             get
@@ -96,18 +80,26 @@ namespace IN20300
             }
         }
         private ObjectSet<IN_SiteCpny> _IN_SiteCpny;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_Site> IN_Site
+        {
+            get
+            {
+                if ((_IN_Site == null))
+                {
+                    _IN_Site = base.CreateObjectSet<IN_Site>("IN_Site");
+                }
+                return _IN_Site;
+            }
+        }
+        private ObjectSet<IN_Site> _IN_Site;
 
         #endregion
 
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_Site EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_Site(IN_Site iN_Site)
-        {
-            base.AddObject("IN_Site", iN_Site);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the IN_SiteCpny EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -115,6 +107,14 @@ namespace IN20300
         public void AddToIN_SiteCpny(IN_SiteCpny iN_SiteCpny)
         {
             base.AddObject("IN_SiteCpny", iN_SiteCpny);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_Site EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_Site(IN_Site iN_Site)
+        {
+            base.AddObject("IN_Site", iN_Site);
         }
 
         #endregion
@@ -812,6 +812,30 @@ namespace IN20300
         private global::System.Boolean _HOCreate;
         partial void OnHOCreateChanging(global::System.Boolean value);
         partial void OnHOCreateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SiteType
+        {
+            get
+            {
+                return _SiteType;
+            }
+            set
+            {
+                OnSiteTypeChanging(value);
+                ReportPropertyChanging("SiteType");
+                _SiteType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SiteType");
+                OnSiteTypeChanged();
+            }
+        }
+        private global::System.String _SiteType;
+        partial void OnSiteTypeChanging(global::System.String value);
+        partial void OnSiteTypeChanged();
 
         #endregion
 
@@ -1399,6 +1423,30 @@ namespace IN20300
         private global::System.Boolean _HOCreate;
         partial void OnHOCreateChanging(global::System.Boolean value);
         partial void OnHOCreateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SiteType
+        {
+            get
+            {
+                return _SiteType;
+            }
+            set
+            {
+                OnSiteTypeChanging(value);
+                ReportPropertyChanging("SiteType");
+                _SiteType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SiteType");
+                OnSiteTypeChanged();
+            }
+        }
+        private global::System.String _SiteType;
+        partial void OnSiteTypeChanging(global::System.String value);
+        partial void OnSiteTypeChanged();
 
         #endregion
 

@@ -193,6 +193,7 @@ var stoLoad = function (sto) {
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "BranchID");
         record = sto.getAt(0);
+        record.set('SiteType', 'C');
         sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
