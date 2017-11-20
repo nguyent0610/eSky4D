@@ -7,23 +7,35 @@ var loadSourceCombo = function () {
     if (HQ.IsShowERPCust) HQ.grid.show(App.grdCust, ['ERPCustID'])
 
     App.stoAR20500_pdWeekofVisitAll.load(function () {
-        App.cboCpnyID.getStore().load(function () {
-            App.cboSlsperId.getStore().load(function () {
-                App.cboStatus.getStore().load(function () {
-                    App.cboHandle.getStore().load(function () {
-                        HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
-                        if (_firstLoad) {
-                            App.cboStatus.setValue("H");
-                            App.cboHandle.setValue("N");
-                            _firstLoad = false;
-                            App.FromDate.setValue(HQ.bussinessDate);
-                            App.ToDate.setValue(HQ.bussinessDate);
-                        }
+        App.cboTerritory.getStore().load(function () {
+            App.cboCpnyID.getStore().load(function () {
+                App.cboSlsperId.getStore().load(function () {
+                    App.cboStatus.getStore().load(function () {
+                        App.cboHandle.getStore().load(function () {
+                            HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                            if (_firstLoad) {
+                                App.cboStatus.setValue("H");
+                                App.cboHandle.setValue("N");
+                                _firstLoad = false;
+                                App.FromDate.setValue(HQ.bussinessDate);
+                                App.ToDate.setValue(HQ.bussinessDate);
+                            }
+                        })
                     })
                 })
             })
         })
     });
+};
+
+var cboTerritory_Change = function (sender, e) {
+    if (_Change == true) {
+        HQ.message.show(20150303, '', 'refresh');
+    } else {
+        if (sender.valueModels != null && (!App.cboCpnyID.store.loading)) {
+            App.cboCpnyID.store.reload();
+        }
+    }
 };
 
 var cboCpnyID_Change = function (sender, e) {
@@ -340,8 +352,19 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
         e.record.set("Sat", false);
         e.record.set("Sun", false);
     }
+    if (e.field == 'Phone') {
+        if (isNumeric(e.value) == true) {
+            e.record.set("Phone", oldvalue.fn.arguments[1].originalValue);
+            HQ.message.show(20171118, '');
+        }
+    }
     //HQ.grid.checkInsertKey(App.grdCust, e, keys);
 };
+
+function isNumeric(n) {
+    var regex = /^([0-9()-.;#/ ])*$/;
+    return !HQ.util.passNull(n.toString()).match(regex);
+}
 
 var grdCust_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdCust);

@@ -386,6 +386,13 @@ namespace AR20500.Controllers
                                 var custID = item.CustID.PassNull().ToLower();
                                 if (objNew != null)
                                 {
+                                    objNew.Addr1 = item.Addr1;
+                                    objNew.Addr2 = item.Addr2;
+
+                                    var objCust = new AR_Customer();
+                                    objCust.Addr1 = item.Addr1;
+                                    objCust.Addr2 = item.Addr2;
+
                                     objNew.LUpd_Datetime = DateTime.Now;
                                     objNew.LUpd_Prog = _screenNbr;
                                     objNew.LUpd_User = Current.UserName;
