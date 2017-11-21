@@ -33,8 +33,8 @@
             .AutoScroll(true)
             .Items(
         //row1     
-                X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                    .Items(
+               X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                    .Items(                  
                         HQ.Combo().ID("cboTerritory").MultiSelect(true)
                         .Name("cboTerritory").HQLangCode("AR20500Territory").HQProcedure("AR20500_pcTerritory")
                         .HQColumnShow("Territory,Descr").DisplayField("Territory").ValueField("Territory")
@@ -52,30 +52,7 @@
                         {
                             lst.Change.Fn = "cboTerritory_Change";                        
                             lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
-                        })
-                    )
-        
-                ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                    .Items(                                                              
-                        HQ.Combo().ID("cboCpnyID")
-                        .Name("cboCpnyID").HQLangCode("CpnyID").HQProcedure("AR20500_pcBranchAllByUser")
-                        .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
-                        .Width(250).HQHeightWidth(400, 300)
-                        .ForceSelection(true).HQAutoLoad(false).AllowBlank(false)
-                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        .HQParam(new StoreParameterCollection() 
-                        { 
-                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }, 
-                            new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }     
-                        })
-                        .LoadData()
-                        .Listeners(lst =>
-                        {
-                            lst.Change.Fn = "cboCpnyID_Change";
-                            lst.Select.Fn = "cboCpnyID_Select";
-                            lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
-
-                        })
+                        })                                                                    
                         
                        , HQ.DateField().ID("FromDate").HQLangCode("FromDate").Width(250)  
                         
@@ -98,7 +75,7 @@
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })                                                                           
 
-                        , HQ.Button().ID("btnLoad").HQLangCode("LoadData").Width(150).MarginSpec("0 0 0 5")
+                        , HQ.Button().ID("btnLoad").HQLangCode("LoadData").Width(150).MarginSpec("0 0 0 5").Icon(Icon.ArrowRefresh)
                             .Listeners(lst =>
                             {
                                 lst.Click.Fn = "btnLoad_Click";
@@ -110,25 +87,26 @@
                     //row 2
                     , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
                         .Items(
-                            HQ.Combo().ID("cboSlsperId")
-                                .Name("cboSlsperId").HQLangCode("SlsperId").HQProcedure("AR20500_pcSlsperIdByBranch")
-                                .HQColumnShow("SlsperId,Name").DisplayField("SlsperId").ValueField("SlsperId")
-                                .Width(250).HQHeightWidth(400, 300)
-                                .ForceSelection(true).MultiSelect(true).HQAutoLoad(false)
-                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                .HQParam(new StoreParameterCollection() 
-                                { 
-                                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                                    new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }      
-                                })
-                                .LoadData()
-                                .Listeners(lst =>
-                                {
-                                    lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
-                                    lst.Expand.Handler = "HQ.combo.expand(this,',');";
-                                })  
-                               
-                            , HQ.DateField().ID("ToDate").HQLangCode("ToDate").Width(250)                           
+                            HQ.Combo().ID("cboCpnyID")
+                        .Name("cboCpnyID").HQLangCode("CpnyID").HQProcedure("AR20500_pcBranchAllByUser")
+                        .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
+                        .Width(250).HQHeightWidth(400, 300)
+                        .ForceSelection(true).HQAutoLoad(false).AllowBlank(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }, 
+                            new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }     
+                        })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "cboCpnyID_Change";
+                            lst.Select.Fn = "cboCpnyID_Select";
+                            lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
+
+                        }),
+                            HQ.DateField().ID("ToDate").HQLangCode("ToDate").Width(250)                           
                             
                             , HQ.Combo().ID("cboHandle")
                               .Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20500_pcHandle")
@@ -149,13 +127,33 @@
                                })
                             
                             , HQ.Button().ID("btnProcess").HQLangCode("Handle").Width(150).MarginSpec("0 0 0 5")
+                            .Icon(Icon.ShapeHandles)
                                  .Listeners(p =>
                                 {
                                     p.Click.Fn = "btnProcess_Click";
                                 })
 
                         )
-                       , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
+                ,X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 5 0")
+                    .Items(
+                        HQ.Combo().ID("cboSlsperId")
+                        .Name("cboSlsperId").HQLangCode("SlsperId").HQProcedure("AR20500_pcSlsperIdByBranch")
+                        .HQColumnShow("SlsperId,Name").DisplayField("SlsperId").ValueField("SlsperId")
+                        .Width(250).HQHeightWidth(400, 300)
+                        .ForceSelection(true).MultiSelect(true).HQAutoLoad(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }      
+                        })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) {this.clearValue();}";
+                            lst.Expand.Handler = "HQ.combo.expand(this,',');";
+                        })                                                            
+                    )
             )//pnl header
             , X.GridPanel().ID("grdCust")
         //.Hidden(true)
@@ -176,6 +174,7 @@
                         {
                             ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("slsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("territory", "App.cboTerritory.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("fromDate", "App.FromDate.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("toDate", "App.ToDate.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("status", "App.cboStatus.getValue()", ParameterMode.Raw));
@@ -197,7 +196,7 @@
                         X.RowNumbererColumn().Width(40)
 
                         //Colum Check
-                        , X.CheckColumn().ID("ColCheck").DataIndex("ColCheck").Width(30).Editable(true).HideTitleEl(true)
+                        , X.CheckColumn().ID("ColCheck").DataIndex("ColCheck").Width(30).Editable(true).HideTitleEl(true).Align(Alignment.Center)
                             .HeaderItems(
                                 HQ.Checkbox().ID("ColCheck_Header")
                                     .Listeners(l =>
@@ -214,8 +213,8 @@
                         , X.Column().Text(Util.GetLang("Addr")).DataIndex("Address").Width(250) //.MaxLength(200).EnforceMaxLength(true)
                         , X.Column().Text(Util.GetLang("NumberHouse")).DataIndex("Addr1").Width(100).Editor(X.TextField())                   
                         , X.Column().Text(Util.GetLang("StreetNames")).DataIndex("Addr2").Width(100).Editor(X.TextField())
-                        , X.Column().Text(Util.GetLang("AR20500CreateDate")).DataIndex("AR20500CreateDate").Width(250)
-                        , X.Column().Text(Util.GetLang("ERPCustID")).DataIndex("ERPCustID").Width(250).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true)).Hidden(true)
+                        , X.Column().Text(Util.GetLang("AR20500CreateDate")).DataIndex("AR20500CreateDate").Width(130)
+                        , X.Column().Text(Util.GetLang("ERPCustID")).DataIndex("ERPCustID").Width(130).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true)).Hidden(true)
                         , X.Column().Text(Util.GetLang("NewCustID")).DataIndex("NewCustID").Width(100)
                         , X.Column().Text(Util.GetLang("CustHT")).DataIndex("CustHT").Width(100).Editor(X.TextField().MaxLength(30).EnforceMaxLength(true)).Hidden(true)
                         , X.Column()
@@ -282,13 +281,13 @@
                                     })
                             )
 
-                        , X.CheckColumn().ID("ColCheckMon").DataIndex("Mon").Width(120).Editable(true).Text(Util.GetLang("Mon")).Align(Alignment.Center)
-                        , X.CheckColumn().ID("ColCheckTue").DataIndex("Tue").Width(120).Editable(true).Text(Util.GetLang("Tue")).Align(Alignment.Center)
-                        , X.CheckColumn().ID("ColCheckWed").DataIndex("Wed").Width(120).Editable(true).Text(Util.GetLang("Wed")).Align(Alignment.Center)
-                        , X.CheckColumn().ID("ColCheckThu").DataIndex("Thu").Width(120).Editable(true).Text(Util.GetLang("Thu")).Align(Alignment.Center)
-                        , X.CheckColumn().ID("ColCheckFri").DataIndex("Fri").Width(120).Editable(true).Text(Util.GetLang("Fri")).Align(Alignment.Center)
-                        , X.CheckColumn().ID("ColCheckSat").DataIndex("Sat").Width(120).Editable(true).Text(Util.GetLang("Sat")).Align(Alignment.Center)
-                        , X.CheckColumn().ID("ColCheckSun").DataIndex("Sun").Width(120).Editable(true).Text(Util.GetLang("Sun")).Align(Alignment.Center)
+                        , X.CheckColumn().ID("ColCheckMon").DataIndex("Mon").Width(50).Editable(true).Text(Util.GetLang("Mon")).Align(Alignment.Center)
+                        , X.CheckColumn().ID("ColCheckTue").DataIndex("Tue").Width(50).Editable(true).Text(Util.GetLang("Tue")).Align(Alignment.Center)
+                        , X.CheckColumn().ID("ColCheckWed").DataIndex("Wed").Width(50).Editable(true).Text(Util.GetLang("Wed")).Align(Alignment.Center)
+                        , X.CheckColumn().ID("ColCheckThu").DataIndex("Thu").Width(50).Editable(true).Text(Util.GetLang("Thu")).Align(Alignment.Center)
+                        , X.CheckColumn().ID("ColCheckFri").DataIndex("Fri").Width(50).Editable(true).Text(Util.GetLang("Fri")).Align(Alignment.Center)
+                        , X.CheckColumn().ID("ColCheckSat").DataIndex("Sat").Width(50).Editable(true).Text(Util.GetLang("Sat")).Align(Alignment.Center)
+                        , X.CheckColumn().ID("ColCheckSun").DataIndex("Sun").Width(70).Editable(true).Text(Util.GetLang("Sun")).Align(Alignment.Center)
 
                         , X.CommandColumn().Width(150)
                         .Commands(

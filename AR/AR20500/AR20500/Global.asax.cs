@@ -37,15 +37,15 @@ namespace AR20500
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
 			Current.Server = "TRUONGSAD"; //"EARTHSVR\\SQL2014";//"HQDBDG";//"EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ND_Test_eSky4DSys";//"ND_eSky4DSys";//"ANVM_eSky4DSys";//"ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "KIDO_eSky4DSys";//"ND_eSky4DSys";//"ANVM_eSky4DSys";//"ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["AR20500"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_Test_eSky4DApp";//"ND_eSky4DApp";//"ANVM_eSky4DApp";//"ND_eSky4DApp";// "eBiz4DWebApp";
-            Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "ECO";
+            Session["DBApp"] = Current.DBApp = "KIDO_eSky4DApp";//"ND_eSky4DApp";//"ANVM_eSky4DApp";//"ND_eSky4DApp";// "eBiz4DWebApp";
+            Session["UserName"] = Current.UserName = "CHHCM0007";
+            Session["CpnyID"] = Current.CpnyID = "CHHCM0007";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] =1;
         }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_Customer">
           <Key>
             <PropertyRef Name="CustId" />
@@ -89,6 +89,7 @@
           <Property Name="SubTerritory" Type="varchar" MaxLength="10" />
           <Property Name="LastOrderDate" Type="datetime" />
           <Property Name="SearchName" Type="nvarchar(max)" />
+          <Property Name="AllowEdit" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -173,6 +174,7 @@
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="10" />
+          <Property Name="UpdateType" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -210,24 +212,6 @@
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="District" Type="varchar" MaxLength="10" />
-        </EntityType>
-        <EntityType Name="OM_PJP">
-          <Key>
-            <PropertyRef Name="PJPID" />
-            <PropertyRef Name="BranchID" />
-          </Key>
-          <Property Name="PJPID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Descr" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Status" Type="bit" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="StatusHandle" Type="varchar" MaxLength="2" />
         </EntityType>
         <EntityType Name="OM_SalesRouteDet">
           <Key>
@@ -321,11 +305,15 @@
         </Function>
         <Function Name="AR20500_pdIsShowCustHT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="AR20500_pgDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="StartDate" Type="smalldatetime" Mode="In" />
           <Parameter Name="EndDate" Type="smalldatetime" Mode="In" />
           <Parameter Name="SlsperID" Type="varchar(max)" Mode="In" />
           <Parameter Name="Status" Type="varchar" Mode="In" />
+          <Parameter Name="Territory" Type="varchar(max)" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="AR20500_ppCheckApprove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustName" Type="nvarchar" Mode="In" />
@@ -350,7 +338,6 @@
           <EntitySet Name="AR_CustomerLocation" EntityType="Self.AR_CustomerLocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AR_NewCustomerInfor" EntityType="Self.AR_NewCustomerInfor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AR_SOAddress" EntityType="Self.AR_SOAddress" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_PJP" EntityType="Self.OM_PJP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_SalesRouteDet" EntityType="Self.OM_SalesRouteDet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_SalesRouteMaster" EntityType="Self.OM_SalesRouteMaster" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -367,7 +354,6 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="AR_CustomerLocation" EntityType="AR20500Model.AR_CustomerLocation" />
-          <EntitySet Name="OM_PJP" EntityType="AR20500Model.OM_PJP" />
           <EntitySet Name="OM_SalesRouteMaster" EntityType="AR20500Model.OM_SalesRouteMaster" />
           <EntitySet Name="OM_SalesRouteDet" EntityType="AR20500Model.OM_SalesRouteDet" />
           <FunctionImport Name="AR20500_AfterApprove" ReturnType="Collection(String)">
@@ -419,6 +405,10 @@
             <Parameter Name="EndDate" Mode="In" Type="DateTime" />
             <Parameter Name="SlsperID" Mode="In" Type="String" />
             <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="Territory" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_CustomerLocation">
@@ -437,24 +427,6 @@
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-        </EntityType>
-        <EntityType Name="OM_PJP">
-          <Key>
-            <PropertyRef Name="PJPID" />
-            <PropertyRef Name="BranchID" />
-          </Key>
-          <Property Type="String" Name="PJPID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="Boolean" Name="Status" Nullable="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="StatusHandle" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OM_SalesRouteMaster">
           <Key>
@@ -643,6 +615,7 @@
           <Property Type="String" Name="SubTerritory" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LastOrderDate" Type="DateTime" Precision="3" />
           <Property Name="SearchName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AllowEdit" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInfor">
           <Key>
@@ -710,6 +683,7 @@
           <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_Prog" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_Prog" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateType" Type="Int32" Nullable="false" />
         </EntityType>
         <ComplexType Name="AR20500_pgDetail_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
@@ -796,24 +770,6 @@
                 <ScalarProperty Name="Lat" ColumnName="Lat" />
                 <ScalarProperty Name="CustID" ColumnName="CustID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OM_PJP">
-            <EntityTypeMapping TypeName="AR20500Model.OM_PJP">
-              <MappingFragment StoreEntitySet="OM_PJP">
-                <ScalarProperty Name="StatusHandle" ColumnName="StatusHandle" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="PJPID" ColumnName="PJPID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -925,6 +881,7 @@
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20500Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
                 <ScalarProperty Name="SearchName" ColumnName="SearchName" />
                 <ScalarProperty Name="LastOrderDate" ColumnName="LastOrderDate" />
                 <ScalarProperty Name="SubTerritory" ColumnName="SubTerritory" />
@@ -1010,6 +967,7 @@
           <EntitySetMapping Name="AR_NewCustomerInfor">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
               <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
+                <ScalarProperty Name="UpdateType" ColumnName="UpdateType" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
@@ -1163,14 +1121,13 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="81" >
-        <EntityTypeShape EntityType="AR20500Model.AR_CustomerLocation" Width="1.875" PointX="4.25" PointY="3.875" />
-        <EntityTypeShape EntityType="AR20500Model.OM_PJP" Width="1.875" PointX="4.25" PointY="0.5" />
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="90" >
+        <EntityTypeShape EntityType="AR20500Model.AR_CustomerLocation" Width="1.875" PointX="2.5" PointY="0.5" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteMaster" Width="1.875" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteDet" Width="1.875" PointX="0.5" PointY="6.375" />
-        <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.5" PointX="2.625" PointY="0.5" />
-        <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="6.25" PointY="0.5" />
-        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.875" PointX="2.5" PointY="3.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="6.5" PointY="0.5" />
+        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.875" PointX="4.5" PointY="0.5" />
       </Diagram>
     </Diagrams>
   </Designer>

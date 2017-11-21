@@ -101,6 +101,9 @@ var btnProcess_Click = function () {
             count++;
         }
     }
+    if (count == 0) {
+        HQ.message.show(718);
+    }
     if (App.cboHandle.getValue() && count > 0) {
         if (App.cboHandle.getValue() == 'A') {
             var rowerror = '';
@@ -313,7 +316,9 @@ var grdCust_BeforeEdit = function (item, e) {
     if (!HQ.isShowCustHT && e.field == 'CustHT') return false;
     if (!HQ.IsShowERPCust && e.field == 'ERPCustID') return false;
 
-    if (e.field != 'ColCheck' && App.cboStatus.getValue() != 'H') return false;
+    if (e.field != 'ColCheck' && (App.cboStatus.getValue() == 'D' || App.cboStatus.getValue() == 'A')) {
+        return false;
+    }
     if (e.field == 'WeekofVisit') {
         App.cboColWeekofVisit.getStore().reload();
     }

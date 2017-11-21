@@ -84,22 +84,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_PJP> OM_PJP
-        {
-            get
-            {
-                if ((_OM_PJP == null))
-                {
-                    _OM_PJP = base.CreateObjectSet<OM_PJP>("OM_PJP");
-                }
-                return _OM_PJP;
-            }
-        }
-        private ObjectSet<OM_PJP> _OM_PJP;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_SalesRouteMaster> OM_SalesRouteMaster
         {
             get
@@ -187,14 +171,6 @@ namespace AR20500
         public void AddToAR_CustomerLocation(AR_CustomerLocation aR_CustomerLocation)
         {
             base.AddObject("AR_CustomerLocation", aR_CustomerLocation);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_PJP EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_PJP(OM_PJP oM_PJP)
-        {
-            base.AddObject("OM_PJP", oM_PJP);
         }
     
         /// <summary>
@@ -679,7 +655,11 @@ namespace AR20500
         /// <param name="endDate">No Metadata Documentation available.</param>
         /// <param name="slsperID">No Metadata Documentation available.</param>
         /// <param name="status">No Metadata Documentation available.</param>
-        public ObjectResult<AR20500_pgDetail_Result> AR20500_pgDetail(global::System.String branchID, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate, global::System.String slsperID, global::System.String status)
+        /// <param name="territory">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20500_pgDetail_Result> AR20500_pgDetail(global::System.String branchID, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate, global::System.String slsperID, global::System.String status, global::System.String territory, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -731,7 +711,47 @@ namespace AR20500
                 statusParameter = new ObjectParameter("Status", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR20500_pgDetail_Result>("AR20500_pgDetail", branchIDParameter, startDateParameter, endDateParameter, slsperIDParameter, statusParameter);
+            ObjectParameter territoryParameter;
+            if (territory != null)
+            {
+                territoryParameter = new ObjectParameter("Territory", territory);
+            }
+            else
+            {
+                territoryParameter = new ObjectParameter("Territory", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20500_pgDetail_Result>("AR20500_pgDetail", branchIDParameter, startDateParameter, endDateParameter, slsperIDParameter, statusParameter, territoryParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -776,7 +796,8 @@ namespace AR20500
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
-        public static AR_Customer CreateAR_Customer(global::System.String custId, global::System.String custName, global::System.Double crLmt, global::System.Int16 custFillPriority, global::System.Int32 empNum, global::System.DateTime expiryDate, global::System.Int16 exported, global::System.Int16 gracePer, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double tradeDisc, global::System.Boolean giftExchange, global::System.Boolean hasPG, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp, global::System.String branchID)
+        /// <param name="allowEdit">Initial value of the AllowEdit property.</param>
+        public static AR_Customer CreateAR_Customer(global::System.String custId, global::System.String custName, global::System.Double crLmt, global::System.Int16 custFillPriority, global::System.Int32 empNum, global::System.DateTime expiryDate, global::System.Int16 exported, global::System.Int16 gracePer, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double tradeDisc, global::System.Boolean giftExchange, global::System.Boolean hasPG, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp, global::System.String branchID, global::System.Boolean allowEdit)
         {
             AR_Customer aR_Customer = new AR_Customer();
             aR_Customer.CustId = custId;
@@ -800,6 +821,7 @@ namespace AR20500
             aR_Customer.Crtd_User = crtd_User;
             aR_Customer.tstamp = tstamp;
             aR_Customer.BranchID = branchID;
+            aR_Customer.AllowEdit = allowEdit;
             return aR_Customer;
         }
 
@@ -2708,6 +2730,30 @@ namespace AR20500
         private global::System.String _SearchName;
         partial void OnSearchNameChanging(global::System.String value);
         partial void OnSearchNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean AllowEdit
+        {
+            get
+            {
+                return _AllowEdit;
+            }
+            set
+            {
+                OnAllowEditChanging(value);
+                ReportPropertyChanging("AllowEdit");
+                _AllowEdit = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowEdit");
+                OnAllowEditChanged();
+            }
+        }
+        private global::System.Boolean _AllowEdit;
+        partial void OnAllowEditChanging(global::System.Boolean value);
+        partial void OnAllowEditChanged();
 
         #endregion
 
@@ -3051,13 +3097,15 @@ namespace AR20500
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
-        public static AR_NewCustomerInfor CreateAR_NewCustomerInfor(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked)
+        /// <param name="updateType">Initial value of the UpdateType property.</param>
+        public static AR_NewCustomerInfor CreateAR_NewCustomerInfor(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.Int32 updateType)
         {
             AR_NewCustomerInfor aR_NewCustomerInfor = new AR_NewCustomerInfor();
             aR_NewCustomerInfor.ID = id;
             aR_NewCustomerInfor.BranchID = branchID;
             aR_NewCustomerInfor.CustID = custID;
             aR_NewCustomerInfor.Checked = @checked;
+            aR_NewCustomerInfor.UpdateType = updateType;
             return aR_NewCustomerInfor;
         }
 
@@ -4534,6 +4582,30 @@ namespace AR20500
         private global::System.String _LUpd_Prog;
         partial void OnLUpd_ProgChanging(global::System.String value);
         partial void OnLUpd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 UpdateType
+        {
+            get
+            {
+                return _UpdateType;
+            }
+            set
+            {
+                OnUpdateTypeChanging(value);
+                ReportPropertyChanging("UpdateType");
+                _UpdateType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UpdateType");
+                OnUpdateTypeChanged();
+            }
+        }
+        private global::System.Int32 _UpdateType;
+        partial void OnUpdateTypeChanging(global::System.Int32 value);
+        partial void OnUpdateTypeChanged();
 
         #endregion
 
@@ -5311,350 +5383,6 @@ namespace AR20500
         private global::System.String _District;
         partial void OnDistrictChanging(global::System.String value);
         partial void OnDistrictChanged();
-
-        #endregion
-
-    
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AR20500Model", Name="OM_PJP")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class OM_PJP : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new OM_PJP object.
-        /// </summary>
-        /// <param name="pJPID">Initial value of the PJPID property.</param>
-        /// <param name="descr">Initial value of the Descr property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
-        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
-        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
-        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
-        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
-        /// <param name="tstamp">Initial value of the tstamp property.</param>
-        /// <param name="branchID">Initial value of the BranchID property.</param>
-        public static OM_PJP CreateOM_PJP(global::System.String pJPID, global::System.String descr, global::System.Boolean status, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID)
-        {
-            OM_PJP oM_PJP = new OM_PJP();
-            oM_PJP.PJPID = pJPID;
-            oM_PJP.Descr = descr;
-            oM_PJP.Status = status;
-            oM_PJP.Crtd_DateTime = crtd_DateTime;
-            oM_PJP.Crtd_Prog = crtd_Prog;
-            oM_PJP.Crtd_User = crtd_User;
-            oM_PJP.LUpd_DateTime = lUpd_DateTime;
-            oM_PJP.LUpd_Prog = lUpd_Prog;
-            oM_PJP.LUpd_User = lUpd_User;
-            oM_PJP.tstamp = tstamp;
-            oM_PJP.BranchID = branchID;
-            return oM_PJP;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String PJPID
-        {
-            get
-            {
-                return _PJPID;
-            }
-            set
-            {
-                if (_PJPID != value)
-                {
-                    OnPJPIDChanging(value);
-                    ReportPropertyChanging("PJPID");
-                    _PJPID = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("PJPID");
-                    OnPJPIDChanged();
-                }
-            }
-        }
-        private global::System.String _PJPID;
-        partial void OnPJPIDChanging(global::System.String value);
-        partial void OnPJPIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Descr
-        {
-            get
-            {
-                return _Descr;
-            }
-            set
-            {
-                OnDescrChanging(value);
-                ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Descr");
-                OnDescrChanged();
-            }
-        }
-        private global::System.String _Descr;
-        partial void OnDescrChanging(global::System.String value);
-        partial void OnDescrChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean Status
-        {
-            get
-            {
-                return _Status;
-            }
-            set
-            {
-                OnStatusChanging(value);
-                ReportPropertyChanging("Status");
-                _Status = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Status");
-                OnStatusChanged();
-            }
-        }
-        private global::System.Boolean _Status;
-        partial void OnStatusChanging(global::System.Boolean value);
-        partial void OnStatusChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime Crtd_DateTime
-        {
-            get
-            {
-                return _Crtd_DateTime;
-            }
-            set
-            {
-                OnCrtd_DateTimeChanging(value);
-                ReportPropertyChanging("Crtd_DateTime");
-                _Crtd_DateTime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Crtd_DateTime");
-                OnCrtd_DateTimeChanged();
-            }
-        }
-        private global::System.DateTime _Crtd_DateTime;
-        partial void OnCrtd_DateTimeChanging(global::System.DateTime value);
-        partial void OnCrtd_DateTimeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Crtd_Prog
-        {
-            get
-            {
-                return _Crtd_Prog;
-            }
-            set
-            {
-                OnCrtd_ProgChanging(value);
-                ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Crtd_Prog");
-                OnCrtd_ProgChanged();
-            }
-        }
-        private global::System.String _Crtd_Prog;
-        partial void OnCrtd_ProgChanging(global::System.String value);
-        partial void OnCrtd_ProgChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Crtd_User
-        {
-            get
-            {
-                return _Crtd_User;
-            }
-            set
-            {
-                OnCrtd_UserChanging(value);
-                ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Crtd_User");
-                OnCrtd_UserChanged();
-            }
-        }
-        private global::System.String _Crtd_User;
-        partial void OnCrtd_UserChanging(global::System.String value);
-        partial void OnCrtd_UserChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime LUpd_DateTime
-        {
-            get
-            {
-                return _LUpd_DateTime;
-            }
-            set
-            {
-                OnLUpd_DateTimeChanging(value);
-                ReportPropertyChanging("LUpd_DateTime");
-                _LUpd_DateTime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("LUpd_DateTime");
-                OnLUpd_DateTimeChanged();
-            }
-        }
-        private global::System.DateTime _LUpd_DateTime;
-        partial void OnLUpd_DateTimeChanging(global::System.DateTime value);
-        partial void OnLUpd_DateTimeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String LUpd_Prog
-        {
-            get
-            {
-                return _LUpd_Prog;
-            }
-            set
-            {
-                OnLUpd_ProgChanging(value);
-                ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("LUpd_Prog");
-                OnLUpd_ProgChanged();
-            }
-        }
-        private global::System.String _LUpd_Prog;
-        partial void OnLUpd_ProgChanging(global::System.String value);
-        partial void OnLUpd_ProgChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String LUpd_User
-        {
-            get
-            {
-                return _LUpd_User;
-            }
-            set
-            {
-                OnLUpd_UserChanging(value);
-                ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("LUpd_User");
-                OnLUpd_UserChanged();
-            }
-        }
-        private global::System.String _LUpd_User;
-        partial void OnLUpd_UserChanging(global::System.String value);
-        partial void OnLUpd_UserChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Byte[] tstamp
-        {
-            get
-            {
-                return StructuralObject.GetValidValue(_tstamp);
-            }
-            set
-            {
-                OntstampChanging(value);
-                ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("tstamp");
-                OntstampChanged();
-            }
-        }
-        private global::System.Byte[] _tstamp;
-        partial void OntstampChanging(global::System.Byte[] value);
-        partial void OntstampChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String BranchID
-        {
-            get
-            {
-                return _BranchID;
-            }
-            set
-            {
-                if (_BranchID != value)
-                {
-                    OnBranchIDChanging(value);
-                    ReportPropertyChanging("BranchID");
-                    _BranchID = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("BranchID");
-                    OnBranchIDChanged();
-                }
-            }
-        }
-        private global::System.String _BranchID;
-        partial void OnBranchIDChanging(global::System.String value);
-        partial void OnBranchIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String StatusHandle
-        {
-            get
-            {
-                return _StatusHandle;
-            }
-            set
-            {
-                OnStatusHandleChanging(value);
-                ReportPropertyChanging("StatusHandle");
-                _StatusHandle = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("StatusHandle");
-                OnStatusHandleChanged();
-            }
-        }
-        private global::System.String _StatusHandle;
-        partial void OnStatusHandleChanging(global::System.String value);
-        partial void OnStatusHandleChanged();
 
         #endregion
 
