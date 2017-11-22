@@ -431,6 +431,7 @@ var cboSiteID_Change = function () {
     if (App.cboToSiteID.getValue() == App.cboSiteID.getValue()) {
         App.cboSiteID.setValue('');
     }
+    App.cboToSiteID.store.reload();
 }
 
 var cboTrnsferNbr_Change = function () {
