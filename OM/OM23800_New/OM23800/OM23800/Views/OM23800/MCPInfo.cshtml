@@ -15,7 +15,7 @@ X.Window().ID("winMcpInfo")
 .Icon(Icon.BookOpen).Layout(LayoutType.Fit)
 .Hidden(true).Maximizable(true)
 .Height(370)
-.Width(700)
+.Width(800)
 .Modal(true)
 .Items(
     X.FormPanel().ID("frmMcpInfo")
@@ -51,10 +51,7 @@ X.Window().ID("winMcpInfo")
                           
                      , HQ.TextBox().ID("txtPJPMcpInfo")
                     .HQLangCode("PJPID").ReadOnly(true).DataIndex("PJPID")
-                      
-                    , HQ.Checkbox().ID("chkCustStatusMcpInfo")
-                    .HQLangCode("Active").FieldLabel(Util.GetLang("Status"))
-                    .Handler("McpInfo.chkCustStatusMcpInfo_change")
+                                        
                 )
 
                 , X.Container()
@@ -67,7 +64,11 @@ X.Window().ID("winMcpInfo")
                     ,X.TextArea().ID("txtAddressMcpInfo")
                     .FieldLabel(Util.GetLang("Address"))
                     .Height(50).ReadOnly(true).DataIndex("Addr1")
-                     
+
+                    , HQ.Checkbox().ID("chkCustStatusMcpInfo")
+                    .HQLangCode("Active")
+                    .FieldLabel(Util.GetLang("Status"))
+                    .Handler("McpInfo.chkCustStatusMcpInfo_change")
                 )
             ) // fdsHeaderMcp
         )
@@ -89,7 +90,7 @@ X.Window().ID("winMcpInfo")
                 .Items(
                     HQ.Combo().ID("cboRouteIDMcpInfo").HQHeightWidth(200,300).Width(200)
                     .Flex(1).ForceSelection(true).AllowBlank(false).DataIndex("SalesRouteID")
-                    .HQAutoLoad(false).HQLangCode("RouteID").HQProcedure("OM23800_pcRouteID")
+                    .HQAutoLoad(false).HQLangCode("RouteName").HQProcedure("OM23800_pcRouteID")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
@@ -122,21 +123,40 @@ X.Window().ID("winMcpInfo")
                     })
                     .LoadData()
                 )
+                
+                              
 
                 , X.Container()
                 .Layout(LayoutType.HBox).MarginSpec("5 5 5 5")
                 .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
-                .Items(
-                    HQ.NumberField().ID("numVisitSortMcpInfo")
-                    .HQLangCode("VisitSort").DataIndex("VisitSort")
-                    .AllowBlank(false).DecimalPrecision(0).Width(150).MinValue(1)
-                    
-                    , HQ.DateField().ID("dtpStartDateMcpInfo").Width(200).MarginSpec("0 0 0 65")
-                    .HQLangCode("StartDate").Flex(1).AllowBlank(false).DataIndex("StartDate")
-                    .Listeners(lst=>lst.Change.Fn="McpInfo.dtpStartDateMcpInfo_change")
+                .Items(         
+                    HQ.Combo().ID("cboSalesAddMCP").HQHeightWidth(200,300).Width(200)
+                    .Flex(1).ForceSelection(true).AllowBlank(false).DataIndex("SalesRouteID")
+                    .HQAutoLoad(false).HQLangCode("OM23800Sales").HQProcedure("OM23800_pcRouteID")//.Hidden(true)
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        , new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        , new StoreParameter("@BranchID", "App.cboDistributorMCL.getValue()", ParameterMode.Raw)
+                    })
+                    .LoadData()
 
-                    , HQ.DateField().ID("dtpEndDateMcpInfo").DataIndex("EndDate").Width(200)
-                    .HQLangCode("EndDate").Flex(1).AllowBlank(false)
+                    , HQ.NumberField().ID("numVisitSortMcpInfo")
+                    .HQLangCode("VisitSort").DataIndex("VisitSort")
+                    .DecimalPrecision(0).Width(150).MinValue(0)
+                                            
+                    , HQ.DateField().ID("dtpStartDateMcpInfo").Width(180).MarginSpec("0 0 0 5")
+                    .HQLangCode("StartDate").Flex(1)
+                    .AllowBlank(false).DataIndex("StartDate")
+                    .Listeners(lst=>lst.Change.Fn="McpInfo.dtpStartDateMcpInfo_change")
+                    
+
+                    , HQ.DateField().ID("dtpEndDateMcpInfo").DataIndex("EndDate").Width(180)
+                    .HQLangCode("EndDate").Flex(1)
+                    .AllowBlank(false)
+                    
+                    
                 )
                 
                 , X.Container()
@@ -145,34 +165,34 @@ X.Window().ID("winMcpInfo")
                 .Items(
                     X.Container().Layout(LayoutType.HBox).Flex(1)
                     .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top, Pack = BoxPack.Center })
-                    .Items(
-                        HQ.Checkbox().ID("chkSunMcpInfo")
+                    .Items(                                                
+                         HQ.Checkbox().ID("chkSunMcpInfo")
                         .HQLangCode("Sun").DataIndex("Sun")
-                        .MarginSpec("0 0 0 10").Flex(1)
+                        .MarginSpec("0 0 0 5").Flex(1)
 
                         , HQ.Checkbox().ID("chkMonMcpInfo")
                         .HQLangCode("Mon").DataIndex("Mon")
-                        .MarginSpec("0 0 0 10").Flex(1)
+                        .MarginSpec("0 0 0 5").Flex(1)
 
                         , HQ.Checkbox().ID("chkTueMcpInfo")
                         .HQLangCode("Tue").DataIndex("Tue")
-                        .MarginSpec("0 0 0 10").Flex(1)
+                        .MarginSpec("0 0 0 5").Flex(1)
 
                         , HQ.Checkbox().ID("chkWedMcpInfo")
                         .HQLangCode("Wed").DataIndex("Wed")
-                        .MarginSpec("0 0 0 10").Flex(1)
+                        .MarginSpec("0 0 0 5").Flex(1)
 
                         , HQ.Checkbox().ID("chkThuMcpInfo")
                         .HQLangCode("Thu").DataIndex("Thu")
-                        .MarginSpec("0 0 0 10").Flex(1)
+                        .MarginSpec("0 0 0 5").Flex(1)
 
                         , HQ.Checkbox().ID("chkFriMcpInfo")
                         .HQLangCode("Fri").DataIndex("Fri")
-                        .MarginSpec("0 0 0 10").Flex(1)
+                        .MarginSpec("0 0 0 5").Flex(1)
 
                         , HQ.Checkbox().ID("chkSatMcpInfo")
                         .HQLangCode("Sat").DataIndex("Sat")
-                        .MarginSpec("0 0 0 10").Flex(1)
+                        .MarginSpec("0 0 0 5").Flex(1)
                     )
                 )  
                 

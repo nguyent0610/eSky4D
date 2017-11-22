@@ -1762,7 +1762,8 @@ var Gmap = {
 
             //	create an array of ContextMenuItem objects
             var menuItems = [];
-            menuItems.push({ className: 'ccboDistributorMCL_changeontext_menu_item', eventName: 'update_mcp', label: HQ.common.getLang('UpdateMcp') });
+            menuItems.push({ className: 'context_menu_item', eventName: 'update_mcp', label: HQ.common.getLang('UpdateMcp') });
+            menuItems.push({ className: 'context_menu_item', eventName: 'add_mcp', label: HQ.common.getLang('AddMcp') });
             menuItems.push({ className: 'context_menu_item', eventName: 'export_excel', label: HQ.common.getLang('ExportExcel') });
             menuItems.push({ className: 'context_menu_item', eventName: 'clear_zone', label: HQ.common.getLang('ClearZone') });
             //	a menuItem with no properties will be rendered as a separator
@@ -1809,6 +1810,26 @@ var Gmap = {
                             
                             Process.updateMcpCusts(listMcpCusts);
                         }
+                        contextMenu.hide();
+                        break;
+                    case 'add_mcp':
+                        //Get Array LatLng Polygon 
+                        Declare._overLays = '';
+                        if (polygon.iID != undefined)
+                            Declare._ID = polygon.iID;
+                        if (polygon.zIndex != undefined)
+                            Declare._zIndex = polygon.zIndex;
+
+                        var vertices = polygon.getPath();
+                        for (var i = 0; i < vertices.getLength() ; i++) {
+                            var xy = vertices.getAt(i);
+                            if (Declare._overLays == '')
+                                Declare._overLays += xy.lat() + ',' + xy.lng();
+                            else
+                                Declare._overLays += ',' + xy.lat() + ',' + xy.lng();
+                        }
+
+                        Process.updateMcpCusts(listMcpCusts);
                         contextMenu.hide();
                         break;
                     case 'export_excel':
@@ -1897,7 +1918,7 @@ var Gmap = {
         find_overlays_id: function(id){
             for (i = 0; i < Gmap.Declare.overlays.length; i++) {
                 if (Gmap.Declare.overlays[i] != undefined) {
-                    if (Gmap.Declare.overlays[i].iID == id && Gmap.Declare.overlays[i].H != undefined) {
+                    if (Gmap.Declare.overlays[i].iID == id ) { //&& Gmap.Declare.overlays[i].H != undefined) {
                         return Gmap.Declare.overlays[i];
                     }
                 }
