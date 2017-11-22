@@ -191,7 +191,7 @@ namespace AR20500.Controllers
                             {
                                 continue;
                             }
-                            
+                            var callAfterApprove = objNew.UpdateType == 0;
                             if (objNew == null || objNew.Status == "A" || objNew.Status == "D") continue;
                             if (handle == "A")
                             {
@@ -304,7 +304,11 @@ namespace AR20500.Controllers
                                 }
                             }
                             _db.SaveChanges();
-                            _db.AR20500_AfterApprove(objNew.NewCustID, item.CustID, item.BranchID, handle);
+                            if (callAfterApprove)
+                            {
+                                _db.AR20500_AfterApprove(objNew.NewCustID, item.CustID, item.BranchID, handle);    
+                            }
+                            
                             _db.Dispose();
                         }
                     }
