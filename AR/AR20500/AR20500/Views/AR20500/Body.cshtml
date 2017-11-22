@@ -204,6 +204,7 @@
                                         l.Change.Fn = "ColCheck_Header_Change";
                                     })
                         )
+                        , X.Column().Text(Util.GetLang("AR2050UpdateType")).DataIndex("UpdateType").Width(100).Renderer("rendererUpdateType")
                         , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID").Width(100)
                         , X.Column().Text(Util.GetLang("CustName")).DataIndex("OutletName").Width(120).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
                         , X.Column().Text(Util.GetLang("AR205ContactName")).DataIndex("ContactName").Width(120)
@@ -323,13 +324,21 @@
                             .Local(true)
                             .Filters(
                                 X.BooleanFilter().DataIndex("ColCheck"),
+                                X.BooleanFilter().DataIndex("UpdateType").YesText(Util.GetLang("AR20500UpdCust")).NoText(Util.GetLang("AR20500NewCust")), //.s.ValidateRecord(p => p.Fn = "stringFilter"),
+                                X.StringFilter().DataIndex("Address"),
                                 X.StringFilter().DataIndex("CustID"),
                                 X.StringFilter().DataIndex("OutletName"),
+                                X.StringFilter().DataIndex("ContactName"),
+                                X.StringFilter().DataIndex("Phone"),
                                 X.StringFilter().DataIndex("SlsperID"),
                                 X.StringFilter().DataIndex("Name"),
                                 X.StringFilter().DataIndex("Addr1"),
+                                X.StringFilter().DataIndex("Addr2"),
+                                X.StringFilter().DataIndex("SalesRouteID").ValidateRecord(p => p.Fn = "stringFilter"),
+                                X.DateFilter().DataIndex("AR20500CreateDate"),
                                 X.StringFilter().DataIndex("ERPCustID"),
-                                X.StringFilter().DataIndex("NewCustID")
+                                X.StringFilter().DataIndex("NewCustID"),
+                                X.StringFilter().DataIndex("SlsFreq")
                             )
                     )// grid
                      ,X.Panel().Region(Region.South).Layout(LayoutType.HBox).Height(200).Items(

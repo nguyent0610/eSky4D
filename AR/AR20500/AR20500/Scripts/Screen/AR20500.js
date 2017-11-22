@@ -505,6 +505,25 @@ function refresh(item) {
     }
 };
 
+var rendererUpdateType = function (value) {
+    if (value == 0) {
+        return HQ.common.getLang("AR20500NewCust");
+    } else if (value == 1) {
+        return HQ.common.getLang("AR20500UpdCust");
+    }
+    return value;
+};
+
+var stringFilter = function (record) {
+    if (this.dataIndex == 'Zone') {
+        return false;
+    }
+    else if (this.dataIndex == 'SalesRouteID') {
+        App.cboColSalesRouteID.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColSalesRouteID.store, "Code", "Descr");
+    }
+}
+
 var renderWeekofVisit = function (value) {
     var obj = App.stoAR20500_pdWeekofVisitAll.findRecord("Code", value);
     if (obj) {

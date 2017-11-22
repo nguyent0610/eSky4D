@@ -6639,7 +6639,8 @@ namespace AR20500
         /// <param name="color">Initial value of the Color property.</param>
         /// <param name="custHT">Initial value of the CustHT property.</param>
         /// <param name="eRPCustID">Initial value of the ERPCustID property.</param>
-        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID)
+        /// <param name="updateType">Initial value of the UpdateType property.</param>
+        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID, global::System.Int32 updateType)
         {
             AR20500_pgDetail_Result aR20500_pgDetail_Result = new AR20500_pgDetail_Result();
             aR20500_pgDetail_Result.ID = id;
@@ -6649,6 +6650,7 @@ namespace AR20500
             aR20500_pgDetail_Result.Color = color;
             aR20500_pgDetail_Result.CustHT = custHT;
             aR20500_pgDetail_Result.ERPCustID = eRPCustID;
+            aR20500_pgDetail_Result.UpdateType = updateType;
             return aR20500_pgDetail_Result;
         }
 
@@ -8143,6 +8145,30 @@ namespace AR20500
         private global::System.String _Address;
         partial void OnAddressChanging(global::System.String value);
         partial void OnAddressChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 UpdateType
+        {
+            get
+            {
+                return _UpdateType;
+            }
+            set
+            {
+                OnUpdateTypeChanging(value);
+                ReportPropertyChanging("UpdateType");
+                _UpdateType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UpdateType");
+                OnUpdateTypeChanged();
+            }
+        }
+        private global::System.Int32 _UpdateType;
+        partial void OnUpdateTypeChanging(global::System.Int32 value);
+        partial void OnUpdateTypeChanged();
 
         #endregion
 

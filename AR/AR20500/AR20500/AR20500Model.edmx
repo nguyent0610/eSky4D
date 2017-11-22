@@ -748,6 +748,7 @@
           <Property Type="String" Name="AR20500CreateDate" Nullable="true" MaxLength="106" />
           <Property Type="DateTime" Name="MinMCPDate" Nullable="true" />
           <Property Type="String" Name="Address" Nullable="true" />
+          <Property Type="Int32" Name="UpdateType" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1097,6 +1098,7 @@
                 <ScalarProperty Name="AR20500CreateDate" ColumnName="AR20500CreateDate" />
                 <ScalarProperty Name="MinMCPDate" ColumnName="MinMCPDate" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="UpdateType" ColumnName="UpdateType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
