@@ -68,8 +68,8 @@
                      )       
                     , HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("Name").AllowBlank(false)
                             .Width(500).MarginSpec("0 0 5 0").MaxLength(200).EnforceMaxLength(true).DataIndex("Name")
-                            
-                    , HQ.Combo().ID("cboSiteType").Name("cboSiteType").HQLangCode("SiteType").HQProcedure("IN20300_pcSiteType")
+
+                        , HQ.Combo().ID("cboSiteType").Name("cboSiteType").HQLangCode("IN20300SiteType").HQProcedure("IN20300_pcSiteType")
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").MarginSpec("5 0 5 0")
                         .Width(350).HQHeightWidth(400, 500).AllowBlank(true)
                         .HQDBSys(false).DataIndex("SiteType")
