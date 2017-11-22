@@ -148,22 +148,6 @@ namespace IN10300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_Trans> IN_Trans
-        {
-            get
-            {
-                if ((_IN_Trans == null))
-                {
-                    _IN_Trans = base.CreateObjectSet<IN_Trans>("IN_Trans");
-                }
-                return _IN_Trans;
-            }
-        }
-        private ObjectSet<IN_Trans> _IN_Trans;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_UnitConversion> IN_UnitConversion
         {
             get
@@ -240,6 +224,22 @@ namespace IN10300
             }
         }
         private ObjectSet<IN_LotTrans> _IN_LotTrans;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_Trans> IN_Trans
+        {
+            get
+            {
+                if ((_IN_Trans == null))
+                {
+                    _IN_Trans = base.CreateObjectSet<IN_Trans>("IN_Trans");
+                }
+                return _IN_Trans;
+            }
+        }
+        private ObjectSet<IN_Trans> _IN_Trans;
 
         #endregion
 
@@ -286,14 +286,6 @@ namespace IN10300
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the IN_Trans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_Trans(IN_Trans iN_Trans)
-        {
-            base.AddObject("IN_Trans", iN_Trans);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the IN_UnitConversion EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToIN_UnitConversion(IN_UnitConversion iN_UnitConversion)
@@ -331,6 +323,14 @@ namespace IN10300
         public void AddToIN_LotTrans(IN_LotTrans iN_LotTrans)
         {
             base.AddObject("IN_LotTrans", iN_LotTrans);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_Trans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_Trans(IN_Trans iN_Trans)
+        {
+            base.AddObject("IN_Trans", iN_Trans);
         }
 
         #endregion
@@ -6952,30 +6952,6 @@ namespace IN10300
         private global::System.String _PosmID;
         partial void OnPosmIDChanging(global::System.String value);
         partial void OnPosmIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> RptExpDate
-        {
-            get
-            {
-                return _RptExpDate;
-            }
-            set
-            {
-                OnRptExpDateChanging(value);
-                ReportPropertyChanging("RptExpDate");
-                _RptExpDate = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("RptExpDate");
-                OnRptExpDateChanged();
-            }
-        }
-        private Nullable<global::System.DateTime> _RptExpDate;
-        partial void OnRptExpDateChanging(Nullable<global::System.DateTime> value);
-        partial void OnRptExpDateChanged();
 
         #endregion
 
@@ -6998,6 +6974,7 @@ namespace IN10300
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="batNbr">Initial value of the BatNbr property.</param>
         /// <param name="trnsfrDocNbr">Initial value of the TrnsfrDocNbr property.</param>
+        /// <param name="comment">Initial value of the Comment property.</param>
         /// <param name="expectedDate">Initial value of the ExpectedDate property.</param>
         /// <param name="noteID">Initial value of the NoteID property.</param>
         /// <param name="rcptDate">Initial value of the RcptDate property.</param>
@@ -7009,12 +6986,13 @@ namespace IN10300
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static IN_Transfer CreateIN_Transfer(global::System.String branchID, global::System.String batNbr, global::System.String trnsfrDocNbr, global::System.DateTime expectedDate, global::System.Int32 noteID, global::System.DateTime rcptDate, global::System.DateTime tranDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static IN_Transfer CreateIN_Transfer(global::System.String branchID, global::System.String batNbr, global::System.String trnsfrDocNbr, global::System.String comment, global::System.DateTime expectedDate, global::System.Int32 noteID, global::System.DateTime rcptDate, global::System.DateTime tranDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             IN_Transfer iN_Transfer = new IN_Transfer();
             iN_Transfer.BranchID = branchID;
             iN_Transfer.BatNbr = batNbr;
             iN_Transfer.TrnsfrDocNbr = trnsfrDocNbr;
+            iN_Transfer.Comment = comment;
             iN_Transfer.ExpectedDate = expectedDate;
             iN_Transfer.NoteID = noteID;
             iN_Transfer.RcptDate = rcptDate;
@@ -7117,7 +7095,7 @@ namespace IN10300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Comment
         {
@@ -7129,7 +7107,7 @@ namespace IN10300
             {
                 OnCommentChanging(value);
                 ReportPropertyChanging("Comment");
-                _Comment = StructuralObject.SetValidValue(value, true);
+                _Comment = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Comment");
                 OnCommentChanged();
             }
