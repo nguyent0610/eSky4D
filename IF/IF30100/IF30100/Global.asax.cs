@@ -39,14 +39,14 @@ namespace IF30100
 
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ND_Test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "KIDO_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             Current.FormatDate = "dd/MM/yyyy";
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IF30100"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_Test_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "KIDO_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
