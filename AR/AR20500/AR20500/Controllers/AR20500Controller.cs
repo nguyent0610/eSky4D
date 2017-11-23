@@ -142,7 +142,7 @@ namespace AR20500.Controllers
                         var isCheckRefCustID = IsCheckRefCustID();
                         foreach (var item in lstCust)
                         {
-                            if (item.ColCheck == true)
+                            if (item.ColCheck == true && item.UpdateType == 0)
                             {
                                 if (isCheckRefCustID && !string.IsNullOrWhiteSpace(item.ERPCustID))
                                 {
@@ -286,7 +286,7 @@ namespace AR20500.Controllers
                                     objNew.LUpd_Datetime = DateTime.Now;
                                     objNew.NewCustID = objCust.CustId;
                                     objNew.Status = "A";
-                                    objNew.UpdateType = 0;
+                                   // objNew.UpdateType = 0;
                                 }
                                 #endregion
                             }

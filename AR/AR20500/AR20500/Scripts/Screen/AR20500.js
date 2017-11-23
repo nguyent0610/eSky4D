@@ -540,6 +540,10 @@ var renderSalesRouteID = function (value) {
     return value;
 };
 
+var renderIndex = function (value, metaData, record, rowIndex, colIndex, store) {
+    return App.stoCust.indexOf(record) + 1;
+}
+
 var slmCust_Select = function (rowModel, record, index, eOpts) {
     if (record[0]) {
         if (record[0].data.Lat && record[0].data.Lng) {

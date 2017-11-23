@@ -193,7 +193,7 @@
                     .SortableColumns(false)
         //.ColumnModel(act => { act.Listeners.HeaderClick.Fn = "grdCust_HeaderClick"; })
                     .ColumnModel(
-                        X.RowNumbererColumn().Width(40)
+                        X.RowNumbererColumn().Width(40).Renderer("renderIndex")
 
                         //Colum Check
                         , X.CheckColumn().ID("ColCheck").DataIndex("ColCheck").Width(30).Editable(true).HideTitleEl(true).Align(Alignment.Center)
