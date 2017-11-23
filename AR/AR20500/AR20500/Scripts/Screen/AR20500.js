@@ -105,7 +105,7 @@ var btnProcess_Click = function () {
         HQ.message.show(718);
     }
     if (App.cboHandle.getValue() && count > 0) {
-        if (App.cboHandle.getValue() == 'A') {
+        if (App.cboHandle.getValue() == 'A' && App.cboUpdateType.getValue() == 0) {
             var rowerror = '';
             var isnullclass = '';
             var isnullpriceclass = '';
@@ -125,13 +125,17 @@ var btnProcess_Click = function () {
                 return;
             }
             var minDate = HQ.bussinessDate;
+            var errorFreq = '';
             for (var i = 0; i < App.grdCust.store.getCount() ; i++) {
                 var data = App.grdCust.store.data.items[i].data;
                 if (data.ColCheck) {
                     if (data.MinMCPDate < minDate) {
                         minDate = data.MinMCPDate;
                     }
-                    //if (!isValidSel(data)) rowerror += i + 1 + ',';
+                    if (!isValidSel(data)) {
+                        errorFreq += i + 1 + ',';
+                    }
+                    
                     //if(data.ClassId==''||data.ClassId==null)
                     //    isnullclass += i + 1 + ',';
                     //if (data.PriceClass == '' || data.PriceClass == null)
@@ -146,10 +150,10 @@ var btnProcess_Click = function () {
             //    HQ.message.show(1000, HQ.common.getLang('PriceClass'), '');
             //    return;
             //}
-            //if (rowerror != '') {
-            //    HQ.message.show(201302071, rowerror, '');
-            //    return;
-            //}
+            if (errorFreq != '') {
+                HQ.message.show(2017022101, errorFreq, '');
+                return;
+            }
           
             App.dteFromDate.setValue(minDate);
             App.dteToDate.setValue(HQ.EndDateYear);
@@ -158,7 +162,7 @@ var btnProcess_Click = function () {
             App.dteToDate.validate();
             App.winProcess.show();
         }
-        else {
+        else if (App.cboHandle.getValue() != 'A' || App.cboHandle.getValue() == 'A' && App.cboUpdateType.getValue() == 1) {
             var d = Ext.Date.parse("01/01/1990", "m/d/Y");
             if (App.FromDate.getValue() < d || App.ToDate.getValue() < d) return;
             var flat = false;
@@ -383,6 +387,9 @@ var stoChanged = function (sto) {
     App.btnLoad.setDisabled(_Change);
     App.cboCpnyID.setReadOnly(_Change);
     App.cboSlsperId.setReadOnly(_Change);
+
+    App.cboTerritory.setReadOnly(_Change);
+    App.cboUpdateType.setReadOnly(_Change);
 };
 
 var stoBeforeLoad = function (sto) {
@@ -581,6 +588,18 @@ var pnlGridMCL_viewGetRowClass = function (record) {
         return 'hightlight-row'
 };
 
+var cboUpdateType_Change = function () {
+    Ext.suspendLayouts();
+    var hideColumn = ['SalesRouteID', 'SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    if (App.cboUpdateType.getValue() == 0) {
+        HQ.grid.show(App.grdCust, hideColumn);
+    } else if (App.cboUpdateType.getValue() == 1) {
+        HQ.grid.hide(App.grdCust, hideColumn);
+    }
+    Ext.resumeLayouts();
+    App.grdCust.view.refresh();
+
+}
 ///////////////////////////////////////////////////////////////////////
 
 var Gmap = {

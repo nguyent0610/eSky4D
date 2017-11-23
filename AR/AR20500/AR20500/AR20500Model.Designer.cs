@@ -656,10 +656,11 @@ namespace AR20500
         /// <param name="slsperID">No Metadata Documentation available.</param>
         /// <param name="status">No Metadata Documentation available.</param>
         /// <param name="territory">No Metadata Documentation available.</param>
+        /// <param name="updateType">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<AR20500_pgDetail_Result> AR20500_pgDetail(global::System.String branchID, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate, global::System.String slsperID, global::System.String status, global::System.String territory, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        public ObjectResult<AR20500_pgDetail_Result> AR20500_pgDetail(global::System.String branchID, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate, global::System.String slsperID, global::System.String status, global::System.String territory, Nullable<global::System.Int32> updateType, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -721,6 +722,16 @@ namespace AR20500
                 territoryParameter = new ObjectParameter("Territory", typeof(global::System.String));
             }
     
+            ObjectParameter updateTypeParameter;
+            if (updateType.HasValue)
+            {
+                updateTypeParameter = new ObjectParameter("UpdateType", updateType);
+            }
+            else
+            {
+                updateTypeParameter = new ObjectParameter("UpdateType", typeof(global::System.Int32));
+            }
+    
             ObjectParameter userNameParameter;
             if (userName != null)
             {
@@ -751,7 +762,7 @@ namespace AR20500
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<AR20500_pgDetail_Result>("AR20500_pgDetail", branchIDParameter, startDateParameter, endDateParameter, slsperIDParameter, statusParameter, territoryParameter, userNameParameter, cpnyIDParameter, langIDParameter);
+            return base.ExecuteFunction<AR20500_pgDetail_Result>("AR20500_pgDetail", branchIDParameter, startDateParameter, endDateParameter, slsperIDParameter, statusParameter, territoryParameter, updateTypeParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion

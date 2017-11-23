@@ -311,6 +311,7 @@
           <Parameter Name="SlsperID" Type="varchar(max)" Mode="In" />
           <Parameter Name="Status" Type="varchar" Mode="In" />
           <Parameter Name="Territory" Type="varchar(max)" Mode="In" />
+          <Parameter Name="UpdateType" Type="int" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -406,6 +407,7 @@
             <Parameter Name="SlsperID" Mode="In" Type="String" />
             <Parameter Name="Status" Mode="In" Type="String" />
             <Parameter Name="Territory" Mode="In" Type="String" />
+            <Parameter Name="UpdateType" Mode="In" Type="Int32" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />

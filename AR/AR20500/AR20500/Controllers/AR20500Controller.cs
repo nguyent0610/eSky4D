@@ -99,7 +99,7 @@ namespace AR20500.Controllers
         {
             return PartialView();
         }
-        public ActionResult GetCustList(string BranchID, DateTime fromDate, DateTime toDate, List<string> slsperID, string status, List<string> territory)
+        public ActionResult GetCustList(string BranchID, DateTime fromDate, DateTime toDate, List<string> slsperID, string status, List<string> territory, int updateType)
         {
             string sls = string.Empty;
             if (slsperID != null)
@@ -111,7 +111,7 @@ namespace AR20500.Controllers
             {
                 terr = string.Join(",", territory);
             }
-            return this.Store(_db.AR20500_pgDetail(BranchID, fromDate.PassMin(), toDate.PassMin(), sls, status, terr, Current.UserName, Current.CpnyID, Current.LangID).ToList());
+            return this.Store(_db.AR20500_pgDetail(BranchID, fromDate.PassMin(), toDate.PassMin(), sls, status, terr, updateType, Current.UserName, Current.CpnyID, Current.LangID).ToList());
         }
 
         [HttpPost]
@@ -261,23 +261,27 @@ namespace AR20500.Controllers
                                     objAR_SOAddress.CustId = objCust.CustId;
                                 }
                                 Update_SOAddress(ref objAR_SOAddress, objCust);
-                                // MCP
-                                OM_SalesRouteMaster master = _db.OM_SalesRouteMaster.Where(x => x.PJPID == item.BranchID && x.SalesRouteID == item.BranchID && x.SlsPerID == item.SlsperID && x.CustID == objCust.CustId && x.BranchID == item.BranchID).FirstOrDefault();
-                                if (master == null)
-                                {
-                                    master = new OM_SalesRouteMaster();
-                                    master.ResetET();                                    
-                                    _db.OM_SalesRouteMaster.AddObject(master);                                    
-                                    master.PJPID = item.BranchID;
-                                    master.SalesRouteID = item.BranchID;
-                                    master.SlsPerID = item.SlsperID;
-                                    master.CustID = objCust.CustId;
-                                    master.BranchID = item.BranchID;
-                                }
-                                Update_SalesRouteMaster(ref master, item, fromDate, toDate);      
-                                // Tạo tuyến bán hàng                                                  
-                                CreateRoute(master);
 
+                                // KH mới thì cập nhật MCP
+                                if (item.UpdateType == 0)
+                                {
+                                    // MCP
+                                    OM_SalesRouteMaster master = _db.OM_SalesRouteMaster.Where(x => x.PJPID == item.BranchID && x.SalesRouteID == item.BranchID && x.SlsPerID == item.SlsperID && x.CustID == objCust.CustId && x.BranchID == item.BranchID).FirstOrDefault();
+                                    if (master == null)
+                                    {
+                                        master = new OM_SalesRouteMaster();
+                                        master.ResetET();
+                                        _db.OM_SalesRouteMaster.AddObject(master);
+                                        master.PJPID = item.BranchID;
+                                        master.SalesRouteID = item.BranchID;
+                                        master.SlsPerID = item.SlsperID;
+                                        master.CustID = objCust.CustId;
+                                        master.BranchID = item.BranchID;
+                                    }
+                                    Update_SalesRouteMaster(ref master, item, fromDate, toDate);
+                                    // Tạo tuyến bán hàng                                                  
+                                    CreateRoute(master);
+                                }
                                 // Update NewCustID
                                 if (objNew != null)
                                 {
@@ -340,20 +344,23 @@ namespace AR20500.Controllers
 
         private void Update_NewCust(ref AR_NewCustomerInfor objNew, AR20500_pgDetail_Result item, DateTime fromDate, DateTime toDate)
         {
-            objNew.WeekofVisit = item.WeekofVisit;
-            objNew.Mon = item.Mon.Value ? int.Parse("1") : int.Parse("0");
-            objNew.Tue = item.Tue.Value ? int.Parse("1") : int.Parse("0");
-            objNew.Wed = item.Wed.Value ? int.Parse("1") : int.Parse("0");
-            objNew.Thu = item.Thu.Value ? int.Parse("1") : int.Parse("0");
-            objNew.Fri = item.Fri.Value ? int.Parse("1") : int.Parse("0");
-            objNew.Sat = item.Sat.Value ? int.Parse("1") : int.Parse("0");
-            objNew.Sun = item.Sun.Value ? int.Parse("1") : int.Parse("0");
-            objNew.SalesRouteID = item.SalesRouteID;
-            objNew.PJPID = item.PJPID;
-            objNew.SlsFreq = item.SlsFreq;
-            objNew.Startday = fromDate;
-            objNew.Endday = toDate;
-            objNew.VisitSort = item.VisitSort.Value;
+            if (item.UpdateType == 0)
+            {
+                objNew.WeekofVisit = item.WeekofVisit;
+                objNew.Mon = item.Mon.Value ? int.Parse("1") : int.Parse("0");
+                objNew.Tue = item.Tue.Value ? int.Parse("1") : int.Parse("0");
+                objNew.Wed = item.Wed.Value ? int.Parse("1") : int.Parse("0");
+                objNew.Thu = item.Thu.Value ? int.Parse("1") : int.Parse("0");
+                objNew.Fri = item.Fri.Value ? int.Parse("1") : int.Parse("0");
+                objNew.Sat = item.Sat.Value ? int.Parse("1") : int.Parse("0");
+                objNew.Sun = item.Sun.Value ? int.Parse("1") : int.Parse("0");
+                objNew.SalesRouteID = item.SalesRouteID;
+                objNew.PJPID = item.PJPID;
+                objNew.SlsFreq = item.SlsFreq;
+                objNew.Startday = fromDate;
+                objNew.Endday = toDate;
+                objNew.VisitSort = item.VisitSort.Value;
+            }            
             objNew.Salut = item.Salut;
             objNew.OutletName = item.OutletName;
             objNew.Phone = item.Phone;
