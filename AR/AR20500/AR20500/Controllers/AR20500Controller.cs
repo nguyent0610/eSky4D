@@ -412,7 +412,10 @@ namespace AR20500.Controllers
             objCust.Crtd_Prog = _screenNbr;
             objCust.Crtd_User = Current.UserName;
 
-            objCust.ProfilePic = objNew.ProfilePic;
+            ///thôi dị e chỉnh dùm chị AR_Customer.ProfilePic = AR_NewCustomerInfor.imageFileName
+            //objCust.ProfilePic = objNew.ProfilePic;
+            objCust.ProfilePic = objNew.ImageFileName.PassNull();
+
             objCust.SubTerritory = objNew.SubTerritory;
 
             objCust.Territory = item.Territory.PassNull();

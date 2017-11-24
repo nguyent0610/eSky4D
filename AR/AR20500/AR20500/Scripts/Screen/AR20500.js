@@ -320,7 +320,7 @@ var grdCust_BeforeEdit = function (item, e) {
     if (!HQ.isShowCustHT && e.field == 'CustHT') return false;
     if (!HQ.IsShowERPCust && e.field == 'ERPCustID') return false;
 
-    if (e.field == 'CustHT' && e.record.data.UpdateType == 1) {
+    if (e.field == 'ERPCustID' && e.record.data.UpdateType == 1) {
         return false;
     }
     if (e.field != 'ColCheck' && (App.cboStatus.getValue() == 'D' || App.cboStatus.getValue() == 'A')) {
@@ -600,6 +600,7 @@ var cboUpdateType_Change = function () {
         HQ.grid.hide(App.grdCust, hideColumn);
     }
     Ext.resumeLayouts();
+    App.grdCust.store.loadData([],false);
     App.grdCust.view.refresh();
 
 }
