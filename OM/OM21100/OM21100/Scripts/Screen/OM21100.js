@@ -1808,7 +1808,7 @@ var DiscDefintion = {
                 //}
 
                 if (cbo.value == "A") {
-                    App.chkAutoFreeItem.setDisabled(true);
+                    App.chkAutoFreeItem.setDisabled(false);
                     App.chkAutoFreeItem.setValue(false);
                 }
                 else if (cbo.value == "M") {
