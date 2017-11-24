@@ -320,6 +320,9 @@ var grdCust_BeforeEdit = function (item, e) {
     if (!HQ.isShowCustHT && e.field == 'CustHT') return false;
     if (!HQ.IsShowERPCust && e.field == 'ERPCustID') return false;
 
+    if (e.field == 'CustHT' && e.record.data.UpdateType == 1) {
+        return false;
+    }
     if (e.field != 'ColCheck' && (App.cboStatus.getValue() == 'D' || App.cboStatus.getValue() == 'A')) {
         return false;
     }

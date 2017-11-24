@@ -425,7 +425,11 @@ namespace AR20500.Controllers
             objCust.Country = objCust.BillCountry = "VN";
             objCust.District = item.District.PassNull(); ;            
             objCust.DfltShipToId = "DEFAULT";
-            objCust.LTTContractNbr = item.CustHT;
+            if (item.UpdateType == 0)
+            {
+                objCust.LTTContractNbr = item.CustHT;
+                objCust.RefCustID = item.ERPCustID.PassNull();
+            }            
             objCust.LUpd_Datetime = DateTime.Now;
             objCust.LUpd_Prog = _screenNbr;
             objCust.LUpd_User = Current.UserName;
@@ -451,7 +455,7 @@ namespace AR20500.Controllers
             objCust.CustType = "R";
             objCust.EstablishDate = new DateTime(1900, 1, 1);
             objCust.Birthdate = new DateTime(1900, 1, 1);
-            objCust.RefCustID = item.ERPCustID.PassNull();
+            
             objCust.AllowEdit = false;
         }
         private void Update_SOAddress(ref AR_SOAddress objAR_SOAddress, AR_Customer objCust)
