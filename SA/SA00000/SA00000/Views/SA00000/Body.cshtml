@@ -68,13 +68,13 @@
                 , HQ.TextBox().ID("TaxRegNbr").Name("TaxRegNbr").HQLangCode("TAXREGNBR").MarginSpec("5 0 0 0").Width(600).MaxLength(20).EnforceMaxLength(true)
                 , X.Container().ID("LatLng").Layout(LayoutType.HBox).MarginSpec("5 0 0 90")
                   .Items(
-                     HQ.TextBox().ID("txtLat").Name("txtLat").HQLangCode("Lat/Lng").LabelWidth(110).InputWidth(195).Tag("X").DataIndex("Lat").FieldStyle("text-align: right")
+                     HQ.TextBox().ID("txtLat").Name("txtLat").HQLangCode("Lat/Lng").LabelWidth(110).InputWidth(195).Tag("X").DataIndex("Lat").FieldStyle("text-align: right").SelectOnFocus(true)
                      .Listeners(lst => { 
                          lst.Change.Fn = "txtLat_Change";
                          lst.Blur.Fn = "txtLat_Blur";
                      })
                      
-                     , HQ.TextBox().ID("txtLng").Name("txtLng").HQLangCode("/").LabelSeparator("").LabelWidth(0).HideLabel(false).InputWidth(195).Tag("X").DataIndex("Lng").FieldStyle("text-align: right")
+                     , HQ.TextBox().ID("txtLng").Name("txtLng").HQLangCode("/").LabelSeparator("").LabelWidth(0).HideLabel(false).InputWidth(195).Tag("X").DataIndex("Lng").FieldStyle("text-align: right").SelectOnFocus(true)
                      .Listeners(lst => { 
                          lst.Change.Fn = "txtLng_Change";
                          lst.Blur.Fn = "txtLng_Blur"; 

@@ -606,14 +606,15 @@ function isNumeric(n) {
 }
 
 var txtLat_Change = function (sender, value) {
-    if (value != "-")
-    {
+    if (value != "-" && value != "" && value != null) {
         if (isNumeric(value) == false) {
             HQ.message.show("201711251");
             App.txtLat.setValue(sender.originalValue);
         }
     }
-
+    else {
+        App.txtLat.setValue("0");
+    }
 }
 
 var txtLat_Blur = function (sender, value) {
@@ -626,11 +627,14 @@ var txtLat_Blur = function (sender, value) {
 
 
 var txtLng_Change = function (sender, value) {
-    if (value != "-") {
+    if (value != "-" && value != "" && value != null) {
         if (isNumeric(value) == false) {
             HQ.message.show("201711252");
             App.txtLng.setValue(sender.originalValue);
         }
+    }
+    else {
+        App.txtLng.setValue("0");
     }
 }
 
