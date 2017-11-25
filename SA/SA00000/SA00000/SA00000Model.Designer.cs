@@ -186,6 +186,47 @@ namespace SA00000
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<SA00000_pgLoadUsers_Result> SA00000_pgLoadUsers(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<SA00000_pgLoadUsers_Result>("SA00000_pgLoadUsers", userIDParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
@@ -233,47 +274,6 @@ namespace SA00000
             }
     
             return base.ExecuteFunction<SA00000_pdHeader_Result>("SA00000_pdHeader", userNameParameter, cpnyIDParameter, langIDParameter, branchIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<SA00000_pgLoadUsers_Result> SA00000_pgLoadUsers(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<SA00000_pgLoadUsers_Result>("SA00000_pgLoadUsers", userIDParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -1081,6 +1081,54 @@ namespace SA00000
         private Nullable<global::System.Int16> _ReturnLimit;
         partial void OnReturnLimitChanging(Nullable<global::System.Int16> value);
         partial void OnReturnLimitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Lat
+        {
+            get
+            {
+                return _Lat;
+            }
+            set
+            {
+                OnLatChanging(value);
+                ReportPropertyChanging("Lat");
+                _Lat = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Lat");
+                OnLatChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Lat;
+        partial void OnLatChanging(Nullable<global::System.Double> value);
+        partial void OnLatChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Lng
+        {
+            get
+            {
+                return _Lng;
+            }
+            set
+            {
+                OnLngChanging(value);
+                ReportPropertyChanging("Lng");
+                _Lng = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Lng");
+                OnLngChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Lng;
+        partial void OnLngChanging(Nullable<global::System.Double> value);
+        partial void OnLngChanged();
 
         #endregion
 
@@ -2044,8 +2092,7 @@ namespace SA00000
         /// <param name="deposit">Initial value of the Deposit property.</param>
         /// <param name="creditLimit">Initial value of the CreditLimit property.</param>
         /// <param name="maxValue">Initial value of the MaxValue property.</param>
-        /// <param name="sAManager">Initial value of the SAManager property.</param>
-        public static SA00000_pdHeader_Result CreateSA00000_pdHeader_Result(global::System.String cpnyID, global::System.String tel, global::System.String fax, global::System.String databaseName, global::System.Byte[] tstamp, global::System.Double deposit, global::System.Double creditLimit, global::System.Double maxValue, global::System.String sAManager)
+        public static SA00000_pdHeader_Result CreateSA00000_pdHeader_Result(global::System.String cpnyID, global::System.String tel, global::System.String fax, global::System.String databaseName, global::System.Byte[] tstamp, global::System.Double deposit, global::System.Double creditLimit, global::System.Double maxValue)
         {
             SA00000_pdHeader_Result sA00000_pdHeader_Result = new SA00000_pdHeader_Result();
             sA00000_pdHeader_Result.CpnyID = cpnyID;
@@ -2056,7 +2103,6 @@ namespace SA00000
             sA00000_pdHeader_Result.Deposit = deposit;
             sA00000_pdHeader_Result.CreditLimit = creditLimit;
             sA00000_pdHeader_Result.MaxValue = maxValue;
-            sA00000_pdHeader_Result.SAManager = sAManager;
             return sA00000_pdHeader_Result;
         }
 
@@ -2667,7 +2713,55 @@ namespace SA00000
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Lat
+        {
+            get
+            {
+                return _Lat;
+            }
+            set
+            {
+                OnLatChanging(value);
+                ReportPropertyChanging("Lat");
+                _Lat = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Lat");
+                OnLatChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Lat;
+        partial void OnLatChanging(Nullable<global::System.Double> value);
+        partial void OnLatChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Lng
+        {
+            get
+            {
+                return _Lng;
+            }
+            set
+            {
+                OnLngChanging(value);
+                ReportPropertyChanging("Lng");
+                _Lng = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Lng");
+                OnLngChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Lng;
+        partial void OnLngChanging(Nullable<global::System.Double> value);
+        partial void OnLngChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String SAManager
         {
@@ -2679,7 +2773,7 @@ namespace SA00000
             {
                 OnSAManagerChanging(value);
                 ReportPropertyChanging("SAManager");
-                _SAManager = StructuralObject.SetValidValue(value, false);
+                _SAManager = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("SAManager");
                 OnSAManagerChanged();
             }

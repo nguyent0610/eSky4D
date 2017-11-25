@@ -600,3 +600,44 @@ var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store
         return value;
     }
 };
+
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+var txtLat_Change = function (sender, value) {
+    if (value != "-")
+    {
+        if (isNumeric(value) == false) {
+            HQ.message.show("201711251");
+            App.txtLat.setValue(sender.originalValue);
+        }
+    }
+
+}
+
+var txtLat_Blur = function (sender, value) {
+    if (App.txtLat.getValue() == "-") {
+        HQ.message.show("201711251");
+        App.txtLat.setValue(sender.originalValue);
+    }
+
+}
+
+
+var txtLng_Change = function (sender, value) {
+    if (value != "-") {
+        if (isNumeric(value) == false) {
+            HQ.message.show("201711252");
+            App.txtLng.setValue(sender.originalValue);
+        }
+    }
+}
+
+var txtLng_Blur = function (sender, value) {
+    if (App.txtLng.getValue() == "-") {
+        HQ.message.show("201711252");
+        App.txtLng.setValue(sender.originalValue);
+    }
+
+}

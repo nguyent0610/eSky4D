@@ -256,6 +256,8 @@ namespace SA00000.Controllers
             t.Type = s.Type;
             t.State = s.State;
             t.ReturnLimit = s.ReturnLimit;
+            t.Lat = s.Lat;
+            t.Lng = s.Lng;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
