@@ -493,3 +493,42 @@ var grdSys_CompanyAddr_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdSys_CompanyAddr, e, keys);
 };
 
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+var txtLat_Change = function (sender, value) {
+    if (value != "-") {
+        if (isNumeric(value) == false) {
+            HQ.message.show("201711251");
+            App.txtLat.setValue(App.stoSYS_Cpny.findRecord("CpnyID", App.txtCpnyID.getValue()).data.Lat);
+        }
+    }
+
+}
+
+var txtLat_Blur = function (sender, value) {
+    if (App.txtLat.getValue() == "-") {
+        HQ.message.show("201711251");
+        App.txtLat.setValue(App.stoSYS_Cpny.findRecord("CpnyID", App.txtCpnyID.getValue()).data.Lat);
+    }
+
+}
+
+
+var txtLng_Change = function (sender, value) {
+    if (value != "-") {
+        if (isNumeric(value) == false) {
+            HQ.message.show("201711252");
+            App.txtLng.setValue(App.stoSYS_Cpny.findRecord("CpnyID", App.txtCpnyID.getValue()).data.Lng);
+        }
+    }
+}
+
+var txtLng_Blur = function (sender, value) {
+    if (App.txtLng.getValue() == "-") {
+        HQ.message.show("201711252");
+        App.txtLng.setValue(App.stoSYS_Cpny.findRecord("CpnyID", App.txtCpnyID.getValue()).data.Lng);
+    }
+
+}

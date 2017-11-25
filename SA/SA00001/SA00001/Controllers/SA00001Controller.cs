@@ -185,6 +185,8 @@ namespace SA00001.Controllers
             t.MaxValue = s.MaxValue;
             t.State = s.State;
             t.Zone = s.Zone;
+            t.Lat = s.Lat;
+            t.Lng = s.Lng;
             //t.IP = s.IP;
             //t.Port = s.Port;
             //t.Station = s.Station;

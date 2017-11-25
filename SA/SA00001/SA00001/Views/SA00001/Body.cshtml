@@ -82,6 +82,9 @@
                 
                 ,X.Column().Text(Util.GetLang("TaxRegNbr")).DataIndex("TaxRegNbr").Width(120)//.Hidden(true)
                  
+                ,X.Column().Text(Util.GetLang("Lat")).DataIndex("Lat").Width(110)
+                ,X.Column().Text(Util.GetLang("Lng")).DataIndex("Lng").Width(110)
+                
                 ,X.Column().Text(Util.GetLang("Channel")).DataIndex("Channel")//.Hidden(true)
 
                 , X.Column().Text(Util.GetLang("Country")).DataIndex("Country").Width(110)//.Hidden(true)
@@ -256,7 +259,23 @@
                                     , HQ.TextBox().ID("Fax").Name("Fax").HQLangCode("Fax").MarginSpec("5 0 0 0").Width(600).MaxLength(20).EnforceMaxLength(true)
                                         , HQ.TextBox().ID("TaxRegNbr").Name("TaxRegNbr").HQLangCode("TAXREGNBR").MarginSpec("5 0 0 0").Width(600).MaxLength(20).EnforceMaxLength(true)//.Hidden(true)
 
+                                        , X.Container().ID("LatLng").Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
+                                          .Items(
+                                             HQ.TextBox().ID("txtLat").Name("txtLat").HQLangCode("Lat/Lng").LabelWidth(100).InputWidth(245).Tag("X").DataIndex("Lat").FieldStyle("text-align: right")
+                                             .Listeners(lst =>
+                                             {
+                                                 lst.Change.Fn = "txtLat_Change";
+                                                 lst.Blur.Fn = "txtLat_Blur";
+                                             })
 
+                                             , HQ.TextBox().ID("txtLng").Name("txtLng").HQLangCode("/").LabelSeparator("").LabelWidth(0).HideLabel(false).InputWidth(245).Tag("X").DataIndex("Lng").FieldStyle("text-align: right")
+                                             .Listeners(lst =>
+                                             {
+                                                 lst.Change.Fn = "txtLng_Change";
+                                                 lst.Blur.Fn = "txtLng_Blur";
+                                             })
+                                          )
+                                          
                                         , HQ.Combo().ID("cboChannel").Name("cboChannel").MarginSpec("5 0 0 0")//.Hidden(true)
                                             .HQLangCode("CHANNEL").HQProcedure("SA00001_pcAR_Channel")
                                             .HQColumnShow("Code,Descr").DataIndex("Channel").DisplayField("Descr").ValueField("Code")
