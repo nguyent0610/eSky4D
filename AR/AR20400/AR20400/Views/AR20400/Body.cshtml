@@ -766,7 +766,7 @@
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
-                            , HQ.Combo().ID("cboBillDistrict").Name("cboBillDistrict").DataIndex("District").HQLangCode("DISTRICT").HideLabel(true)
+                                , HQ.Combo().ID("cboBillDistrict").Name("cboBillDistrict").DataIndex("BillDistrict").HQLangCode("DISTRICT").HideLabel(true)
                                 .HQProcedure("AR20400_pcDistrictByCountryState").HQColumnShow("District,Name")
                                 .DisplayField("District").ValueField("District")
                                 .Width(200).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
