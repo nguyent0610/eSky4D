@@ -393,6 +393,7 @@ var stoLoad = function (sto) {
     App.cboCustId.forceSelection = true;
     HQ.isNew = false;
     App.cboDistrict.allowBlank = false;
+
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, ['BranchID', 'CustId']);
         record = sto.getAt(0);
@@ -427,6 +428,7 @@ var stoLoad = function (sto) {
     }
     var record = sto.getAt(0);
     App.lblName.setValue(record.data.CustName);
+
     App.frmMain.getForm().loadRecord(record);
 
     // display image
@@ -1098,6 +1100,7 @@ var btnCopytoDiffDB_Click = function () {
     App.cboBillCountry.setValue(App.cboCountry.getValue());
     App.cboBillState.setValue(App.cboState.getValue());
     App.cboBillCity.setValue(App.cboCity.getValue());
+    App.cboBillDistrict.setValue(App.cboDistrict.getValue());
     App.txtBillZip.setValue(App.txtZip.getValue());
     App.txtBillPhone.setValue(App.txtPhone.getValue());
     App.txtBillFax.setValue(App.txtFax.getValue());
@@ -1247,10 +1250,13 @@ var filterComboBillSate = function (sender, e) {
 var filterComboBillCity = function (sender, e) {
     if (sender.hasFocus) {
         App.cboBillCity.setValue('');
+        App.cboBillDistrict.setValue('');
     }
     var code = App.cboBillCountry.getValue() + App.cboBillState.getValue();
     App.cboBillCity.store.clearFilter();
     App.cboBillCity.store.filter("CountryState", code);
+    App.cboBillDistrict.store.clearFilter();
+    App.cboBillDistrict.store.filter("CountryState", code);
 };
 
 var stoCheckAutoCustID_Load = function () {
@@ -1569,3 +1575,5 @@ var displayImage = function (imgControl, fileName) {
         }
     });
 };
+
+

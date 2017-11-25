@@ -666,7 +666,7 @@
                                     //lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
                             , HQ.TextBox().ID("txtWard").Name("txtWard").DataIndex("Ward")
-                                .EnforceMaxLength(true).MaxLength(10)
+                                .EnforceMaxLength(true).MaxLength(100)
                                 .Width(200).MarginSpec("5 0 0 0")
                                 
                             , HQ.TextBox().ID("txtZip").Name("txtZip").DataIndex("Zip")
@@ -766,9 +766,27 @@
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
+                            , HQ.Combo().ID("cboBillDistrict").Name("cboBillDistrict").DataIndex("District").HQLangCode("DISTRICT").HideLabel(true)
+                                .HQProcedure("AR20400_pcDistrictByCountryState").HQColumnShow("District,Name")
+                                .DisplayField("District").ValueField("District")
+                                .Width(200).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                                .HQParam(new StoreParameterCollection() 
+                                {
+                                    new StoreParameter() { Name = "@Country", Value = "App.cboBillCountry.getValue()", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@State", Value = "App.cboBillState.getValue()", Mode = ParameterMode.Raw }
+                                })
+                                .LoadData()
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.Focus.Handler = "this.forceSelection = true;";
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    //lst.Focus.Handler = "this.forceSelection = true;";  
+                                })    
+                                
                             , HQ.TextBox().ID("txtBillWard").Name("txtBillWard").DataIndex("BillWard")
-                                .EnforceMaxLength(true).MaxLength(10)
-                                .Width(200).MarginSpec("32 0 0 0")
+                                .EnforceMaxLength(true).MaxLength(100)
+                                .Width(200).MarginSpec("5 0 0 0")
                                 
                                 
                             , HQ.TextBox().ID("txtBillZip").Name("txtBillZip").DataIndex("BillZip")

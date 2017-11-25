@@ -683,6 +683,7 @@ namespace AR20400.Controllers
             t.TaxID02 = s.TaxID02;
             t.TaxID03 = s.TaxID03;
             t.InActive = s.InActive;
+            t.BillDistrict = s.BillDistrict;
             t.SellProduct = s.SellProduct;
             t.RefCustID = s.RefCustID;
 
