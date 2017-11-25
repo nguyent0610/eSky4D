@@ -1,8 +1,8 @@
 //// Declare //////////////////////////////////////////////////////////
 
 var keys = ['Code'];
-var fieldsCheckRequire = ["Code"];
-var fieldsLangCheckRequire = ["Code"];
+var fieldsCheckRequire = ["Code", "Type"];
+var fieldsLangCheckRequire = ["Code", "Type"];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -110,11 +110,20 @@ var askClose = function (item) {
         HQ.common.close(this);
     }
 };
+var _Source = 0;
+var _maxSource = 1;
+var checkLoad = function () {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _Source = 0;
+        App.stoChannel.reload();
+    }
+};
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
-    App.stoChannel.reload();
+    App.cboChannelType.getStore().addListener('load', checkLoad);
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
@@ -138,6 +147,15 @@ var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 
+var renderTypeName = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboChannelType.findRecord("Code", value);
+    if (record) {
+        return record.data.Descr;
+    }
+    else {
+        return value;
+    }
+};
 /////////////////////////////////////////////////////////////////////////
 
 

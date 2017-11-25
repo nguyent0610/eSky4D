@@ -38,7 +38,7 @@ namespace AR21100
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
