@@ -337,6 +337,17 @@ var grdCust_BeforeEdit = function (item, e) {
     }
 };
 
+var grdCust_ValidateEdit = function (item, e) {
+    if (e.field == 'Territory') {
+        if (e.value == e.record.data.Territory) {
+            return false;
+        }
+    } else if (e.field == 'State') {
+        if (e.value == e.record.data.State) {
+            return false;
+        }
+    }
+};
 var grdCust_Edit = function (item, e, oldvalue, newvalue) {
     var det = e.record.data;
     if (e.field == 'WeekofVisit') {
@@ -369,6 +380,11 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
             e.record.set("Phone", oldvalue.fn.arguments[1].originalValue);
             HQ.message.show(20171118, '');
         }
+    } else if (e.field == 'Territory') {
+        e.record.set('State', '');
+        e.record.set('District', '');
+    } else if (e.field == 'State') {
+        e.record.set('District', '');
     }
     //HQ.grid.checkInsertKey(App.grdCust, e, keys);
 };
@@ -531,6 +547,50 @@ var stringFilter = function (record) {
     else if (this.dataIndex == 'SalesRouteID') {
         App.cboColSalesRouteID.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboColSalesRouteID.store, "Code", "Descr");
+    }
+
+    else if (this.dataIndex == 'Territory') {
+        App.cboColTerritory.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColTerritory.store, "Code", "Descr");
+    }
+    else if (this.dataIndex == 'State') {
+        App.cboColState.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColState.store, "Code", "Descr");
+    }
+    else if (this.dataIndex == 'District') {
+        App.cboColDistrict.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColDistrict.store, "Code", "Descr");
+    }
+    //else if (this.dataIndex == 'Channel') {
+    //    App.cboColChannel.store.clearFilter();
+    //    return HQ.grid.filterComboDescr(record, this, App.cboColChannel.store, "Code", "Descr");
+    //} else if (this.dataIndex == 'ClassId') {
+    //    App.cboColCustClass.store.clearFilter();
+    //    return HQ.grid.filterComboDescr(record, this, App.cboColCustClass.store, "Code", "Descr");
+    //}
+    //else if (this.dataIndex == 'Chain') {
+    //    App.cboColCustomerChain.store.clearFilter();
+    //    return HQ.grid.filterComboDescr(record, this, App.cboColCustomerChain.store, "Code", "Descr");
+    //}
+    //else if (this.dataIndex == 'ShopType') {
+    //    App.cboColShopType.store.clearFilter();
+    //    return HQ.grid.filterComboDescr(record, this, App.cboColShopType.store, "Code", "Descr");
+    //}
+    //else if (this.dataIndex == 'Classification') {
+    //    App.cboColClassification.store.clearFilter();
+    //    return HQ.grid.filterComboDescr(record, this, App.cboColClassification.store, "Code", "Descr");
+    //}
+    //else if (this.dataIndex == 'Location') {
+    //    App.cboColLocation.store.clearFilter();
+    //    return HQ.grid.filterComboDescr(record, this, App.cboColLocation.store, "Code", "Descr");
+    //}
+    else if (this.dataIndex == 'SlsFreq') {
+        App.cboColSlsFreq1.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColSlsFreq1.store, "Code", "Descr");
+    }
+    else if (this.dataIndex == 'WeekofVisit') {
+        App.cboColWeekofVisit.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColWeekofVisit.store, "Code", "Descr");
     }
 }
 
@@ -814,3 +874,83 @@ var Gmap = {
         },
     }
 };
+
+// Expand State
+var cboColState_Expand = function (combo) {
+    App.cboColState.store.clearFilter();
+    var territory = '';
+    if (App.grdCust.selModel.selected.length > 0) {
+        territory = App.grdCust.selModel.selected.items[0].data.Territory;
+    } else {
+        territory = App.cboColTerritory.getValue();
+    }
+
+    var store = App.cboColState.store;
+    // Filter data -- 
+    store.filterBy(function (record) {
+        if (record) {
+            if (record.data['Territory'].toString() == territory) {
+                return record;
+            }
+        }
+    });
+};
+var cboColState_Collapse = function (cbombo) {
+    App.cboColState.store.clearFilter();
+};
+
+// Expand District
+var cboColDistrict_Expand = function (combo) {
+    App.cboColDistrict.store.clearFilter();
+    var state = '';
+    if (App.grdCust.selModel.selected.length > 0) {
+        state = App.grdCust.selModel.selected.items[0].data.State;
+    } else {
+        state = App.cboColState.getValue();
+    }
+    var store = App.cboColDistrict.store;
+    // Filter data -- 
+    store.filterBy(function (record) {
+        if (record) {
+            if (record.data['State'].toString() == state) {
+                return record;
+            }
+        }
+    });
+};
+var cboColDistrict_Collapse = function (cbombo) {
+    App.cboColDistrict.store.clearFilter();
+};
+
+
+var renderWeekofVisit = function (value) {
+    var obj = App.stoAR20500_pdWeekofVisitAll.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+var renderTerritory = function (value) {
+    var obj = App.cboColTerritory.store.findRecord("Territory", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+var renderState = function (value) {
+    var obj = App.cboColState.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+var renderDistrict = function (value) {
+    var obj = App.cboColDistrict.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+}

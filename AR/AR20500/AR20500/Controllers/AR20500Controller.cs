@@ -231,6 +231,9 @@ namespace AR20500.Controllers
                                     objCust.ResetET();
                                     objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();//item.ERPCustID.PassNull() != "" ? item.ERPCustID.PassNull() : _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();                                    
                                     objCust.BranchID = item.BranchID.PassNull();
+                                    objCust.Crtd_Datetime = DateTime.Now;
+                                    objCust.Crtd_Prog = _screenNbr;
+                                    objCust.Crtd_User = Current.UserName;
                                     _db.AR_Customer.AddObject(objCust);
                                 }
                                 Update_AR_Customer(ref objCust, item, objNew);                                
@@ -366,6 +369,13 @@ namespace AR20500.Controllers
             objNew.Phone = item.Phone;
             objNew.Addr1 = item.Addr1;
             objNew.Addr2 = item.Addr2;
+
+            objNew.Territory = item.Territory;
+            objNew.State = item.State;
+            objNew.District = item.District;
+            objNew.Ward = item.Ward;
+           
+            
             objNew.ClassId = item.ClassId;
             objNew.PriceClass = item.PriceClass;
             objNew.CodeHT = item.ERPCustID;
@@ -397,9 +407,10 @@ namespace AR20500.Controllers
         {
             objCust.Addr1 = objCust.BillAddr1 = item.Addr1.PassNull();// item.Addr2.PassNull() + (item.Addr1.PassNull() != "" ? "," + item.Addr1.PassNull() : "");
             objCust.Addr2 = objCust.BillAddr2 = item.Addr2.PassNull();//
-           
+            objCust.District = item.District.PassNull();
             objCust.City = objCust.BillCity = item.City.PassNull();
             objCust.State = objCust.BillState = item.State.PassNull();
+//            objCust.State = item.State.PassNull();
             objCust.ClassId = item.ClassId.PassNull();
             objCust.Salut = item.Salut.PassNull();
             objCust.Phone = item.Phone.PassNull();
@@ -407,17 +418,14 @@ namespace AR20500.Controllers
             objCust.Channel = item.Channel.PassNull();
             objCust.Area = item.Area.PassNull();
             objCust.EMailAddr = item.Email.PassNull();
-            objCust.CrRule = "N";
-            objCust.Crtd_Datetime = DateTime.Now;
-            objCust.Crtd_Prog = _screenNbr;
-            objCust.Crtd_User = Current.UserName;
+            objCust.CrRule = "N";            
 
             ///thôi dị e chỉnh dùm chị AR_Customer.ProfilePic = AR_NewCustomerInfor.imageFileName
             //objCust.ProfilePic = objNew.ProfilePic;
             objCust.ProfilePic = objNew.ImageFileName.PassNull();
+            objCust.BusinessPic = objNew.BusinessPic.PassNull();
 
             objCust.SubTerritory = objNew.SubTerritory;
-
             objCust.Territory = item.Territory.PassNull();
             objCust.Attn = objCust.BillAttn = item.ContactName.PassNull();
             objCust.CustName = objCust.BillName = item.OutletName.PassNull();
@@ -426,7 +434,7 @@ namespace AR20500.Controllers
             objCust.Location = item.Location.PassNull(); ;
             objCust.DeliveryID = item.DeliveryID.PassNull(); ;
             objCust.Country = objCust.BillCountry = "VN";
-            objCust.District = item.District.PassNull(); ;            
+                        
             objCust.DfltShipToId = "DEFAULT";
             if (item.UpdateType == 0)
             {
@@ -436,14 +444,9 @@ namespace AR20500.Controllers
             objCust.LUpd_Datetime = DateTime.Now;
             objCust.LUpd_Prog = _screenNbr;
             objCust.LUpd_User = Current.UserName;
-            objCust.Phone = objCust.BillPhone = item.Phone.PassNull(); ;
-            objCust.Channel = objCust.Channel.PassNull();
-            objCust.Area = objCust.Area.PassNull();
-            if (AR20500Anova == true)
-                objCust.ShopType = "RS";
-            else
-                objCust.ShopType = item.ShopType.PassNull();
-            objCust.State = item.State.PassNull();
+            objCust.Phone = objCust.BillPhone = item.Phone.PassNull(); 
+            objCust.ShopType = AR20500Anova ? "RS" : item.ShopType.PassNull();
+            
             objCust.Status = "A";// item.IsActive == 1 ? "A" : "I";
             objCust.TaxDflt = "C";
             objCust.TaxID00 = "OVAT10-00";
@@ -457,8 +460,7 @@ namespace AR20500.Controllers
             objCust.ExpiryDate = DateTime.Now.ToDateShort();
             objCust.CustType = "R";
             objCust.EstablishDate = new DateTime(1900, 1, 1);
-            objCust.Birthdate = new DateTime(1900, 1, 1);
-            
+            objCust.Birthdate = new DateTime(1900, 1, 1);            
             objCust.AllowEdit = false;
         }
         private void Update_SOAddress(ref AR_SOAddress objAR_SOAddress, AR_Customer objCust)

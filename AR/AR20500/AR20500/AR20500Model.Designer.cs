@@ -2765,6 +2765,30 @@ namespace AR20500
         private global::System.Boolean _AllowEdit;
         partial void OnAllowEditChanging(global::System.Boolean value);
         partial void OnAllowEditChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BusinessPic
+        {
+            get
+            {
+                return _BusinessPic;
+            }
+            set
+            {
+                OnBusinessPicChanging(value);
+                ReportPropertyChanging("BusinessPic");
+                _BusinessPic = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BusinessPic");
+                OnBusinessPicChanged();
+            }
+        }
+        private global::System.String _BusinessPic;
+        partial void OnBusinessPicChanging(global::System.String value);
+        partial void OnBusinessPicChanged();
 
         #endregion
 
@@ -4617,6 +4641,30 @@ namespace AR20500
         private global::System.Int32 _UpdateType;
         partial void OnUpdateTypeChanging(global::System.Int32 value);
         partial void OnUpdateTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BusinessPic
+        {
+            get
+            {
+                return _BusinessPic;
+            }
+            set
+            {
+                OnBusinessPicChanging(value);
+                ReportPropertyChanging("BusinessPic");
+                _BusinessPic = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BusinessPic");
+                OnBusinessPicChanged();
+            }
+        }
+        private global::System.String _BusinessPic;
+        partial void OnBusinessPicChanging(global::System.String value);
+        partial void OnBusinessPicChanged();
 
         #endregion
 

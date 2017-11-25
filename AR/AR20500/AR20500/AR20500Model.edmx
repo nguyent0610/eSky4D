@@ -90,6 +90,7 @@
           <Property Name="LastOrderDate" Type="datetime" />
           <Property Name="SearchName" Type="nvarchar(max)" />
           <Property Name="AllowEdit" Type="bit" Nullable="false" />
+          <Property Name="BusinessPic" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -175,6 +176,7 @@
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="10" />
           <Property Name="UpdateType" Type="int" Nullable="false" />
+          <Property Name="BusinessPic" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -618,6 +620,7 @@
           <Property Name="LastOrderDate" Type="DateTime" Precision="3" />
           <Property Name="SearchName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AllowEdit" Type="Boolean" Nullable="false" />
+          <Property Name="BusinessPic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInfor">
           <Key>
@@ -686,6 +689,7 @@
           <Property Name="Crtd_Prog" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_Prog" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="UpdateType" Type="Int32" Nullable="false" />
+          <Property Name="BusinessPic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="AR20500_pgDetail_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
@@ -884,6 +888,7 @@
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20500Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="BusinessPic" ColumnName="BusinessPic" />
                 <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
                 <ScalarProperty Name="SearchName" ColumnName="SearchName" />
                 <ScalarProperty Name="LastOrderDate" ColumnName="LastOrderDate" />
@@ -970,6 +975,7 @@
           <EntitySetMapping Name="AR_NewCustomerInfor">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
               <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
+                <ScalarProperty Name="BusinessPic" ColumnName="BusinessPic" />
                 <ScalarProperty Name="UpdateType" ColumnName="UpdateType" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
