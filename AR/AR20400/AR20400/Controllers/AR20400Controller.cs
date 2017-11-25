@@ -658,6 +658,7 @@ namespace AR20400.Controllers
             t.State = s.State;
             t.City = s.City;
             t.District = s.District;
+            t.Ward = s.Ward;
             t.Zip = s.Zip;
             t.Phone = s.Phone;
             t.Fax = s.Fax;
@@ -670,6 +671,7 @@ namespace AR20400.Controllers
             t.BillCountry = s.BillCountry;
             t.BillState = s.BillState;
             t.BillCity = s.BillCity;
+            t.BillWard = s.BillWard;
             t.BillZip = s.BillZip;
             t.BillPhone = s.BillPhone;
             t.BillFax = s.BillFax;

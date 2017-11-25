@@ -565,6 +565,9 @@
                             , HQ.Label().HQLangCode("STATE").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("CITY").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("DISTRICT").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
+                            
+                            , HQ.Label().HQLangCode("Ward").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
+                            
                             , HQ.Label().HQLangCode("ZIP").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("PHONE").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("FAX").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
@@ -662,7 +665,10 @@
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     //lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
-
+                            , HQ.TextBox().ID("txtWard").Name("txtWard").DataIndex("Ward")
+                                .EnforceMaxLength(true).MaxLength(10)
+                                .Width(200).MarginSpec("5 0 0 0")
+                                
                             , HQ.TextBox().ID("txtZip").Name("txtZip").DataIndex("Zip")
                                 .EnforceMaxLength(true).MaxLength(10)
                                 .Width(200).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
@@ -760,10 +766,14 @@
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
-
+                            , HQ.TextBox().ID("txtBillWard").Name("txtBillWard").DataIndex("BillWard")
+                                .EnforceMaxLength(true).MaxLength(10)
+                                .Width(200).MarginSpec("32 0 0 0")
+                                
+                                
                             , HQ.TextBox().ID("txtBillZip").Name("txtBillZip").DataIndex("BillZip")
                                 .EnforceMaxLength(true).MaxLength(10)
-                                .Width(200).MarginSpec("32 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
+                                .Width(200).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
 
                             , HQ.TextBox().ID("txtBillPhone").Name("txtBillPhone").DataIndex("BillPhone")
                                 .EnforceMaxLength(true).MaxLength(30)

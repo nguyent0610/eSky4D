@@ -1101,6 +1101,7 @@ var btnCopytoDiffDB_Click = function () {
     App.txtBillZip.setValue(App.txtZip.getValue());
     App.txtBillPhone.setValue(App.txtPhone.getValue());
     App.txtBillFax.setValue(App.txtFax.getValue());
+    App.txtBillWard.setValue(App.txtWard.getValue());
 };
 
 var btnCopy = function () {
