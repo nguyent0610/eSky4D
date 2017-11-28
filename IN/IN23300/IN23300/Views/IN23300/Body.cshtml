@@ -1,0 +1,174 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN23300;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print,New,Delete", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(lst =>
+    {
+        lst.BoxReady.Fn = "loadSourceCombo";
+    })
+    
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+            .Region(Region.North)
+            .Items(
+
+                HQ.Combo().ID("cboRecType")
+                    .Name("cboRecType").HQLangCode("Type").HQProcedure("IN23300_pcLoadComboTypeMVC")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("G")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }    
+                        })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboRecType_Change";
+                    })
+
+                    , HQ.Combo().ID("cboUsr_GrByType").Text(Util.GetLang("UserID")).AllowBlank(false)
+                    .Name("cboUsr_GrByType").HQLangCode("UserID").HQProcedure("IN23300_pcUserOrGroupByTypeMVC")
+                    .HQColumnShow("ID,Descr").DisplayField("ID").ValueField("ID").HQAutoLoad(false)
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@RecType", Value = "App.cboRecType.getValue()", Mode = ParameterMode.Raw }     
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+
+                , X.Button().MarginSpec("5 0 5 160").Width(150)
+                 .Text(Util.GetLang("LoadData")).Listeners(p =>
+                     {
+                         p.Click.Fn = "LoadGrid";
+                     })
+            )//pnl Header
+
+            ,
+            X.Panel().ID("pnlgrd")
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .Listeners(l =>
+                        {
+                            l.BoxReady.Handler = "firstLoad()";
+                        })
+            .Items(
+                X.GridPanel().ID("grdSYS_AccessDetRights")
+                .Hidden(true)
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false).LoadMask(true))
+                .Region(Region.Center).Flex(1)
+                .SelectionMemory(false)
+                .Store(
+                    X.Store()
+                    .ID("stoSYS_AccessDetRights")
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(IN23300_pgAccessRightsScreen_Result), "mdlIN23300_pgAccessRightsScreen", "ScreenNumber"))
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_AccessDetRights"))).AutoLoad(false)
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("type", "App.cboRecType.value", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("userID", "App.cboUsr_GrByType.value", ParameterMode.Raw));
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "frmChange";
+                    })
+                )
+                .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_AccessDetRights');")
+                .SortableColumns(false)
+                .ColumnModel(
+                    X.RowNumbererColumn().Width(40)
+
+                    , X.Column().DataIndex("ReasonCD").Text(Util.GetLang("ReasonCD")).Width(130)
+                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(220)
+                    , X.CheckColumn().ID("txtApplyFor").StyleSpec("text-align:center;")
+                    .Text(Util.GetLang("IN23300ApplyFor")).Width(80).Editable(true).DataIndex("CheckApplyFor")//.HideTitleEl(true)
+                        .HeaderItems(
+                            HQ.Checkbox().ID("chkApplyForHeader").StyleSpec("text-align:center;")//.HQLangCode("UpdateRights").MarginSpec("0 0 0 10")
+                                .Listeners(l =>
+                                {
+                                    l.Change.Fn = "chkApplyForHeaderAll_Change";
+                                })
+                        )
+                    , X.CommandColumn().Width(130)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "grdSYS_AccessDetRights_Reject(record);")
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmSYS_AccessDetRights").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.BeforeEdit.Fn = "grdSYS_AccessDetRights_BeforeEdit";
+                            ls.Edit.Fn = "grdSYS_AccessDetRights_Edit";
+                            ls.ValidateEdit.Fn = "grdSYS_AccessDetRights_ValidateEdit";
+                        })
+                    )
+
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("ReasonCD"),
+                            X.StringFilter().DataIndex("Descr"),                         
+                            X.BooleanFilter().DataIndex("CheckApplyFor")
+                    )
+                )
+
+            )// pnl Grid
+
+    )//frm Main
+)//View port
+)
