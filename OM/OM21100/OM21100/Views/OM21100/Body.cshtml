@@ -20,10 +20,27 @@
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
         //.TopBar(Util.SetupToolbar("PO20100", "Main.Event.menuClick"))
-        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{ 
-            // X.FileUploadField()
-            // .ID("btnUpload1").Hidden(true)
-        }, buttonHidden: "", isShowNavigationButtons: true, handlerName: "Main.Event.menuClick"))
+        //.TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{ 
+        //    // X.FileUploadField()
+        //    // .ID("btnUpload1").Hidden(true)
+        //}, buttonHidden: "", isShowNavigationButtons: true, handlerName: "Main.Event.menuClick"))
+        .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("Import")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";
+            })
+            , X.Button()
+            .ID("btnExport1")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport1_Click";
+            })
+        }, "Print", true, "Main.Event.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 130; })
         .Items(
             X.TabPanel().ID("tabMain")
@@ -37,7 +54,7 @@
                     .Layout(LayoutType.HBox).Region(Region.North)
                     .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
                     .Items(
-        // First Column
+                        // First Column
                         X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0").Flex(1)
                         .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                         .MinWidth(200).MaxWidth(400)
@@ -50,9 +67,9 @@
                             .AllowBlank(false).AllowOnlyWhitespace(false).MaxLength(10).EnforceMaxLength(true)
                                  .TriggerAction(TriggerAction.All)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
-                                , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                                , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
                             })
                             .LoadData()
                             .Listeners(l =>
@@ -64,6 +81,8 @@
                                 l.Expand.Handler = "App.cboDiscID.store.clearFilter();";
                             })
 
+
+
                             , HQ.Combo().ID("cboDiscType")
                             .MarginSpec("5 5 0 5")
                             .HQLangCode("DiscType").HQProcedure("OM21100_pcDiscType").HQColumnShow("Descr")
@@ -71,7 +90,7 @@
                             .ForceSelection(true).DataIndex("DiscType")
                             .AllowBlank(false)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                             })
                             .LoadData()
@@ -80,6 +99,7 @@
                                 l.TriggerClick.Handler = "this.clearValue(); this.store.clearFilter();";
                                 l.Change.Fn = "DiscDefintion.Event.cboDiscType_change";
                             })
+                            
                         ) // Container
 
                         // Second Column
@@ -100,16 +120,18 @@
                             .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
                             .Editable(false).AllowBlank(false).DataIndex("DiscClass")//ForceSelection(true)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                 ,new StoreParameter("@DiscType", "App.cboDiscType.getValue()", ParameterMode.Raw)
                             })
                             .LoadData()
                                 .Listeners(l =>
-                                {                                    
+                                {
                                     l.Change.Fn = "DiscDefintion.Event.cboDiscClass_change";
                                     l.TriggerClick.Handler = "this.clearValue(); this.store.clearFilter();";
-                            })
+                                })
+
+
                         ) // Container
                     )
                     .Listeners(ls =>
@@ -131,11 +153,11 @@
                             .Items(
 
                                 X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")//.Flex(1)
-        // .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
+                                                                                           // .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
                                 .Items(
-        // First Column
+                                    // First Column
                                     X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.Flex(1)
-        // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                                                                                               // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                                     .MinWidth(200)//.MaxWidth(300)
                                     .Items(
 
@@ -146,10 +168,10 @@
                                         .MaxLength(10).EnforceMaxLength(true)//.HQFirstDefault(true)
                                         .AllowBlank(false).AllowOnlyWhitespace(false)
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                        .HQParam(new StoreParameterCollection() { 
+                                        .HQParam(new StoreParameterCollection() {
                                             new StoreParameter("@DiscID", "App.cboDiscID.getValue()", ParameterMode.Raw)
                                             , new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
-                                            , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                                            , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
                                         })
                                         .LoadData()
                                         .Listeners(l =>
@@ -167,7 +189,7 @@
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("DiscFor")
                                         .ForceSelection(true).AllowBlank(false)
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                        .HQParam(new StoreParameterCollection() { 
+                                        .HQParam(new StoreParameterCollection() {
                                             new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                         })
                                         .LoadData()
@@ -184,7 +206,7 @@
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("BreakBy")
                                         .ForceSelection(true).AllowBlank(false)
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                        .HQParam(new StoreParameterCollection() { 
+                                        .HQParam(new StoreParameterCollection() {
                                             new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                         })
                                         .LoadData()
@@ -201,7 +223,7 @@
                                         .HQHeightWidth(400, 300).ValueField("BudgetID").DisplayField("Descr").DataIndex("BudgetID")
                                         .ForceSelection(true)
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                        .HQParam(new StoreParameterCollection() { 
+                                        .HQParam(new StoreParameterCollection() {
                                             new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
                                         })
                                         .LoadData()
@@ -214,7 +236,7 @@
 
                                     // Second Column
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.Flex(1)
-        // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                                                                                                 // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                                     .MinWidth(200)//.MaxWidth(300)
                                     .Items(
 
@@ -224,7 +246,7 @@
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")//.LabelWidth(160)
                                         .ForceSelection(true).AllowBlank(false).DataIndex("ProAplForItem")
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                        .HQParam(new StoreParameterCollection() { 
+                                        .HQParam(new StoreParameterCollection() {
                                             new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                         })
                                         .LoadData()
@@ -234,7 +256,7 @@
                                                 l.Change.Fn = "DiscDefintion.Event.cboProAplForItem_change";
                                                 l.BeforeShow.Fn = "DiscDefintion.Event.cboProAplForItem_beforeShow";
                                                 l.Expand.Fn = "DiscDefintion.Event.cboProAplForItem_Expand";
-                                                l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";                                                                                            
+                                                l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                             })
 
                                         , HQ.DateField().ID("dteStartDatePO")
@@ -261,7 +283,7 @@
                                             {
                                                 l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                             })
-                                        , 
+                                        ,
                                         X.Container().Layout(LayoutType.HBox).Items(
                                              X.FileUploadField()
                                              .ID("btnUpload")//.Hidden(true)
@@ -269,7 +291,7 @@
                                             .ButtonOnly(true)
                                             .MarginSpec("5 0 0 77")
                                             //.ButtonText(Util.GetLang("Upload"))
-                                            
+
                                             .RemoveClearTrigger(false)
                                             //.ClearOnSubmit(false)
                                             //.AutoPostBack(false)
@@ -281,7 +303,7 @@
                                             .MarginSpec("5 0 0 2")
                                             .Width(130)
                                             .ReadOnly(true).Tag("X")
-                                                
+
                                             , X.Button().Icon(Icon.ImageDelete).ID("btnDelImg")
                                             .MarginSpec("5 0 0 1")
                                             .ToolTip(Util.GetLang("DeleteMedia"))
@@ -292,14 +314,14 @@
                                     // Third Column
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.Flex(1)
                                     .MinWidth(200)
-        //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                                    //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                                     .Items(
                                         HQ.Combo().ID("cboStatus")
                                         .MarginSpec("5 5 0 5")
                                         .HQLangCode("Status").HQProcedure("OM21100_pcStatus").HQColumnShow("Descr")
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
                                         .ReadOnly(true).DataIndex("Status")
-                                        .HQParam(new StoreParameterCollection() { 
+                                        .HQParam(new StoreParameterCollection() {
                                             new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
                                             , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                         })
@@ -311,15 +333,15 @@
                                         .HQLangCode("Handle").HQProcedure("OM21100_pcHandle").HQColumnShow("Descr")
                                         .HQHeightWidth(400, 300).ValueField("ToStatus").DisplayField("Descr")
                                         .ForceSelection(true)
-                                        .HQParam(new StoreParameterCollection() { 
+                                        .HQParam(new StoreParameterCollection() {
                                             new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
                                             , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                             , new StoreParameter("@Status", "App.cboStatus.getValue()", ParameterMode.Raw)
                                         })
-                                        .LoadData()                                        
-                                        
-                                        
-                                        
+                                        .LoadData()
+
+
+
                                         , HQ.Checkbox().ID("chkPOUse")
                                         .MarginSpec("5 5 0 160")
                                         .BoxLabel(Util.GetLang("POUse")).DataIndex("POUse")
@@ -328,7 +350,7 @@
 
                                     // Forth Column
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
-        // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                                                                                                 // .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                                     .Items(
                                         HQ.Checkbox().ID("chkActive")
                                         .MarginSpec("5 5 0 10")
@@ -342,25 +364,25 @@
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("DiscTerm")).DataIndex("Promo")
                                             .Listeners(l =>
-                                                {
-                                                    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
-                                                })
+                                            {
+                                                l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            })
 
                                         , HQ.Checkbox().ID("chkAutoFreeItem")
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("AutoFreeItem")).DataIndex("AutoFreeItem")
                                             .Listeners(l =>
-                                                {
-                                                    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
-                                                })
+                                            {
+                                                l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            })
 
                                         , HQ.Checkbox().ID("chkAllowEditDisc")
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("AllowEditDisc")).DataIndex("AllowEditDisc")
                                             .Listeners(l =>
-                                                {
-                                                    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
-                                                })
+                                            {
+                                                l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            })
                                         .Hidden(true)
                                         , HQ.Checkbox().ID("chkExcludeOtherDisc")
                                         .MarginSpec("5 5 0 10")
@@ -369,19 +391,19 @@
                                         {
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                         })
-                                        
-                                        
+
+
                                     ) // Container
                                 ),
                                 X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
-        //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.LE })
+                                //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.LE })
                                 .Items(
                                      HQ.TextBox().ID("txtSeqDescr")
                                     .MarginSpec("0 5 0 5")
                                     .HQLangCode("Descr").DataIndex("Descr")
 
                                     .StyleSpec("text-align:left").Width(880)
-        //.MaxLength(50).EnforceMaxLength(true)
+                                    //.MaxLength(50).EnforceMaxLength(true)
                                     .AllowBlank(false)
                                     .Listeners(l =>
                                     {
@@ -389,7 +411,7 @@
                                     })
                                     , HQ.Checkbox().ID("chkExactQty")
                                     .MarginSpec("0 5 5 8")
-                                 //   .Hidden(true)
+                                    //   .Hidden(true)
                                     .BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")
                                     .Listeners(l =>
                                     {
@@ -405,7 +427,7 @@
                             , X.Panel()
                             .Region(Region.Center)
                             .Layout(LayoutType.Border)
-        //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top})
+                            //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top})
                             .Items(
                                 X.GridPanel().ID("grdDiscBreak")
                                 .Title(Util.GetLang("DiscBreak")).TitleAlign(TitleAlign.Center)
@@ -439,7 +461,7 @@
                                     .Editor(
                                         X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                                     )
-                                        
+
                                     , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
                                     .Editor(
                                         HQ.TextBox().SelectOnFocus(true).MaxLength(200).EnforceMaxLength(true)
@@ -555,36 +577,36 @@
                                     ) // Container
 
                                     , X.GridPanel().ID("grdFreeItem")
-        //.Title(Util.GetLang("FreeItemList"))
-        // .Scroll(ScrollMode.Both)
-        //.Layout(LayoutType.Fit)
+                                    //.Title(Util.GetLang("FreeItemList"))
+                                    // .Scroll(ScrollMode.Both)
+                                    //.Layout(LayoutType.Fit)
                                     .Region(Region.East).Flex(60)
                                     .View(X.GridView().TrackOver(false))
                                     .SortableColumns(false)
                                     .StoreID("stoFreeItem")
 
-                                        //.Store(
-        //    X.Store().ID("stoFreeItem").AutoLoad(false)
-        //    .PageSize(50)
-        //        .Model(Util.GenerateModel(typeof(OM21100_pgFreeItem_Result), "mdlFreeItem", "DiscID,DiscSeq,LineRef,FreeItemID"))
-        //    .Listeners(l =>
-        //        {
-        //            l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];";
-        //            l.Load.Fn = "Main.Event.sto_load";
-        //            l.Update.Handler = "Main.Event.frmMain_fieldChange()";
-        //            l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
-        //        })
-        //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetFreeItem", "OM21100")))
-        //    .Parameters(ps =>
-        //        {
-        //            ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
-        //            ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
-        //        })
-        //)
+                                    //.Store(
+                                    //    X.Store().ID("stoFreeItem").AutoLoad(false)
+                                    //    .PageSize(50)
+                                    //        .Model(Util.GenerateModel(typeof(OM21100_pgFreeItem_Result), "mdlFreeItem", "DiscID,DiscSeq,LineRef,FreeItemID"))
+                                    //    .Listeners(l =>
+                                    //        {
+                                    //            l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];";
+                                    //            l.Load.Fn = "Main.Event.sto_load";
+                                    //            l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                                    //            l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                                    //        })
+                                    //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetFreeItem", "OM21100")))
+                                    //    .Parameters(ps =>
+                                    //        {
+                                    //            ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                                    //            ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                                    //        })
+                                    //)
 
 
                                     .ColumnModel(
-        //X.RowNumbererColumn().Width(40)
+                                        //X.RowNumbererColumn().Width(40)
                                         X.Column().Text(Util.GetLang("InvtID")).DataIndex("FreeItemID")
                                         .Editor(
                                             HQ.Combo().ID("cboFreeItemID")
@@ -593,11 +615,11 @@
                                             .HQHeightWidth(400, 300)
                                             .ValueField("InvtID").DisplayField("InvtID")
                                             .ForceSelection(true).SelectOnFocus(true)
-                                            .HQParam(new StoreParameterCollection() { 
+                                            .HQParam(new StoreParameterCollection() {
                                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                                                  ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
                                                 , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                                
+
                                             })
                                             .LoadData()
                                         )
@@ -614,11 +636,11 @@
                                             .HQHeightWidth(400, 300)
                                             .ValueField("FromUnit").DisplayField("FromUnit")
                                             .ForceSelection(true).SelectOnFocus(true)
-                                            .HQParam(new StoreParameterCollection() { 
+                                            .HQParam(new StoreParameterCollection() {
                                                 new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdFreeItem,'FreeItemID')",ParameterMode.Raw)//se fix lai
                                             })
                                             .LoadData()
-        //.Listeners(x => x.Expand.Handler = "this.store.reload()")
+                                        //.Listeners(x => x.Expand.Handler = "this.store.reload()")
                                         )
 
                                         , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("FreeItemQty")
@@ -635,7 +657,7 @@
                                             .ValueField("BudgetID").DisplayField("BudgetID")
                                             .ForceSelection(true).SelectOnFocus(true)
                                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                            .HQParam(new StoreParameterCollection() { 
+                                            .HQParam(new StoreParameterCollection() {
                                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                                             })
                                             .LoadData()
@@ -654,22 +676,22 @@
                                         .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
                                     )
                                     .SelectionModel(X.RowSelectionModel().ID("slmFreeItem").Mode(SelectionMode.Multi))
-        // .BottomBar(
-        //    X.PagingToolbar()
-        //    .HideRefresh(true)
-        //    .Items(
-        //        X.Label("Page size:"),
-        //        X.ToolbarSpacer(10),
-        //        X.ComboBox()
-        //        .Width(80)
-        //        .Items("1", "2", "10", "20", "30", "50")
-        //        .SelectedItems("50")
-        //        .Listeners(l =>
-        //            {
-        //                l.Select.Fn = "HQ.grid.onPageSelect";
-        //            })
-        //    )
-        //)
+                                    // .BottomBar(
+                                    //    X.PagingToolbar()
+                                    //    .HideRefresh(true)
+                                    //    .Items(
+                                    //        X.Label("Page size:"),
+                                    //        X.ToolbarSpacer(10),
+                                    //        X.ComboBox()
+                                    //        .Width(80)
+                                    //        .Items("1", "2", "10", "20", "30", "50")
+                                    //        .SelectedItems("50")
+                                    //        .Listeners(l =>
+                                    //            {
+                                    //                l.Select.Fn = "HQ.grid.onPageSelect";
+                                    //            })
+                                    //    )
+                                    //)
                                     .Plugins(
                                         X.CellEditing()
                                         .ClicksToEdit(1)
@@ -693,16 +715,16 @@
                         .Region(Region.Center)
                         .Layout(LayoutType.Border)
                         .Items(
-        // First Column
+                            // First Column
                             X.Panel().ID("treeBranch")
                             .Region(Region.West).Flex(6)
                             .MinWidth(150).Split(true).AutoScroll(true)
-                            .Listeners(l => 
-                                {
-                                    l.AfterRender.Handler = "DiscDefintion.Event.treeBranch_AfterRender('treeBranch');";                   
-                                }
+                            .Listeners(l =>
+                            {
+                                l.AfterRender.Handler = "DiscDefintion.Event.treeBranch_AfterRender('treeBranch');";
+                            }
                             )
-                                
+
                             //.DirectEvents(de =>
                             //{
                             //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
@@ -784,7 +806,7 @@
                                     .HQHeightWidth(400, 300)
                                     .ValueField("CpnyID").DisplayField("CpnyID")
                                     .ForceSelection(true).SelectOnFocus(true)
-                                    .HQParam(new StoreParameterCollection() { 
+                                    .HQParam(new StoreParameterCollection() {
                                         new StoreParameter("@UserID","HQ.userName",ParameterMode.Raw)
                                     })
                                     .LoadData()
@@ -836,8 +858,8 @@
                                 {
                                     l.AfterRender.Handler = "DiscDefintion.Event.treeInventory_AfterRender('treeInventory');";
                                 }
-                            )    
-                                    
+                            )
+
                             //.DirectEvents(de =>
                             //{
                             //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeInventory"));
@@ -911,24 +933,24 @@
                     .Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
-        // .StoreID("stoDiscItem")                   
+                    // .StoreID("stoDiscItem")                   
                     .Store(
                         X.Store().ID("stoDiscItem").AutoLoad(false)
                         .PageSize(50)
                             .Model(Util.GenerateModel(typeof(OM21100_pgDiscItem_Result), "mdlDiscItem", "DiscID,DiscSeq,InvtID", true))
                         .Listeners(l =>
-                            {
-                                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
-                                l.Load.Fn = "Main.Event.sto_load";
-                                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
-                                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
-                            })
+                        {
+                            l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
+                            l.Load.Fn = "Main.Event.sto_load";
+                            l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                            l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                        })
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDiscItem", "OM21100")))
                         .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
-                            })
+                        {
+                            ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                        })
                     )
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
@@ -940,7 +962,7 @@
                             .HQHeightWidth(400, 400)
                             .ValueField("InvtID").DisplayField("InvtID")
                             .ForceSelection(true).SelectOnFocus(true)
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                  new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                                                  ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
                                                 , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
@@ -959,11 +981,11 @@
                             .HQHeightWidth(400, 300)
                             .ValueField("FromUnit").DisplayField("FromUnit")
                             .ForceSelection(true).SelectOnFocus(true)
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdDiscItem,'InvtID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
-        //.Listeners(x => x.Expand.Handler = "this.store.reload();")
+                        //.Listeners(x => x.Expand.Handler = "this.store.reload();")
                         )
 
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
@@ -993,9 +1015,9 @@
                             .Items("1", "2", "10", "20", "30", "50")
                             .SelectedItems("50")
                             .Listeners(l =>
-                                {
-                                    l.Select.Fn = "HQ.grid.onPageSelect";
-                                })
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
                         )
                     )
                     .Plugins(
@@ -1026,7 +1048,7 @@
                                     {
                                         l.AfterRender.Handler = "DiscDefintion.Event.treeBundleItem_AfterRender('treeBundleItem');";
                                     }
-                                )                                
+                                )
                                 //.DirectEvents(de =>
                                 //{
                                 //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBundleItem"));
@@ -1100,24 +1122,24 @@
                     .Scroll(ScrollMode.Both).Flex(60)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
-        //.StoreID("stoBundle")                    
+                    //.StoreID("stoBundle")                    
                     .Store(
                         X.Store().ID("stoBundle").AutoLoad(false)
                         .PageSize(50)
                             .Model(Util.GenerateModel(typeof(OM21100_pgDiscBundle_Result), "mdlBundle", "DiscID,DiscSeq,InvtID", true))
                         .Listeners(l =>
-                            {
-                                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
-                                l.Load.Fn = "Main.Event.sto_load";
-                                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
-                                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
-                            })
+                        {
+                            l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
+                            l.Load.Fn = "Main.Event.sto_load";
+                            l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                            l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                        })
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDiscBundle", "OM21100")))
                         .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
-                            })
+                        {
+                            ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                        })
                     )
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
@@ -1129,7 +1151,7 @@
                             .HQHeightWidth(400, 300)
                             .ValueField("InvtID").DisplayField("InvtID")
                             .ForceSelection(true).SelectOnFocus(true)
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                  new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                                                  ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
                                                 , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
@@ -1148,11 +1170,11 @@
                             .HQHeightWidth(400, 300)
                             .ValueField("FromUnit").DisplayField("FromUnit")
                             .ForceSelection(true).SelectOnFocus(true)
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdBundle,'InvtID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
-        // .Listeners(x => x.Expand.Handler = "this.store.reload();")
+                        // .Listeners(x => x.Expand.Handler = "this.store.reload();")
                         )
 
                         , X.NumberColumn().Text(Util.GetLang("BreakQty")).DataIndex("BundleQty")
@@ -1194,9 +1216,9 @@
                             .Items("1", "2", "10", "20", "30", "50")
                             .SelectedItems("50")
                             .Listeners(l =>
-                                {
-                                    l.Select.Fn = "HQ.grid.onPageSelect";
-                                })
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
                         )
                     )
                     .Plugins(
@@ -1209,16 +1231,16 @@
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
                     )
-        //.Features(
-        //    X.GridFilters()
-        //    .Local(true)
-        //    .Filters(
-        //            X.StringFilter().DataIndex("InvtID"),
-        //        X.StringFilter().DataIndex("CustName"),
-        //        X.StringFilter().DataIndex("BranchID"),
-        //        X.StringFilter().DataIndex("TerritoryName")
-        //    )
-        //) // grdBundle
+                //.Features(
+                //    X.GridFilters()
+                //    .Local(true)
+                //    .Filters(
+                //            X.StringFilter().DataIndex("InvtID"),
+                //        X.StringFilter().DataIndex("CustName"),
+                //        X.StringFilter().DataIndex("BranchID"),
+                //        X.StringFilter().DataIndex("TerritoryName")
+                //    )
+                //) // grdBundle
                 )
                 .Listeners(ls =>
                 {
@@ -1274,7 +1296,7 @@
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
                     )
-        // grdDiscCustClass
+                // grdDiscCustClass
                 )
                 .Listeners(ls =>
                 {
@@ -1293,7 +1315,7 @@
                         {
                             l.AfterRender.Handler = "DiscDefintion.Event.treeCustomer_AfterRender('treeCustomer');";
                         }
-                    ) 
+                    )
                     //.DirectEvents(de =>
                     //{
                     //    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCustomer"));
@@ -1364,24 +1386,24 @@
                     .Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false))
                     .SortableColumns(false)
-        //                    .StoreID("stoDiscCust")
+                    //                    .StoreID("stoDiscCust")
                     .Store(
                         X.Store().ID("stoDiscCust").AutoLoad(false)
                         .PageSize(50)
                         .Model(Util.GenerateModel(typeof(OM21100_pgDiscCust_Result), "mdlDiscCust", "DiscID,DiscSeq,CustID,BranchID", true))
                         .Listeners(l =>
-                            {
-                                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'CustID', 'BranchID'];";
-                                l.Load.Fn = "Main.Event.sto_load";
-                                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
-                                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
-                            })
+                        {
+                            l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'CustID', 'BranchID'];";
+                            l.Load.Fn = "Main.Event.sto_load";
+                            l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                            l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                        })
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDiscCust", "OM21100")))
                         .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
-                            })
+                        {
+                            ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                        })
                     )
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
@@ -1392,7 +1414,7 @@
                             .HQHeightWidth(400, 300)
                             .ValueField("CustID").DisplayField("CustID")
                             .ForceSelection(true).SelectOnFocus(true)
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw),
                                 new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
                             })
@@ -1430,11 +1452,11 @@
                                 .Items("1", "2", "10", "20", "30", "50")
                                 .SelectedItems("50")
                                 .Listeners(l =>
-                                    {
-                                        l.Select.Fn = "HQ.grid.onPageSelect";
-                                    })
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                })
                             )
-        //.Plugins(X.ProgressBarPager().ID("paggrdPrice"))
+                        //.Plugins(X.ProgressBarPager().ID("paggrdPrice"))
                         )
                     .Plugins(
                         X.CellEditing()
@@ -1446,16 +1468,16 @@
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
                     )
-        //.Features(
-        //X.GridFilters()
-        //    .Local(true)
-        //    .Filters(
-        //        X.StringFilter().DataIndex("CustID"),
-        //        X.StringFilter().DataIndex("CustName"),
-        //        X.StringFilter().DataIndex("BranchID"),
-        //        X.StringFilter().DataIndex("TerritoryName")
-        //    )
-        //)// grdDiscCustClass
+                //.Features(
+                //X.GridFilters()
+                //    .Local(true)
+                //    .Filters(
+                //        X.StringFilter().DataIndex("CustID"),
+                //        X.StringFilter().DataIndex("CustName"),
+                //        X.StringFilter().DataIndex("BranchID"),
+                //        X.StringFilter().DataIndex("TerritoryName")
+                //    )
+                //)// grdDiscCustClass
                 )
                 .Listeners(ls =>
                 {
@@ -1491,7 +1513,7 @@
                             .HQHeightWidth(400, 300)
                             .ValueField("FromUnit").DisplayField("FromUnit")
                             .ForceSelection(true).SelectOnFocus(true)
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@ClassID","Main.Process.getParamForGridCombo(App.grdDiscItemClass,'ClassID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
@@ -1523,14 +1545,14 @@
                             ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                         })
                         )
-        //.Features(
-        //    X.GridFilters()
-        //        .Local(true)
-        //        .Filters(
-        //            X.StringFilter().DataIndex("ClassID"),
-        //            X.StringFilter().DataIndex("UnitDesc")
-        //        )
-        //) // grdDiscItemClass
+                //.Features(
+                //    X.GridFilters()
+                //        .Local(true)
+                //        .Filters(
+                //            X.StringFilter().DataIndex("ClassID"),
+                //            X.StringFilter().DataIndex("UnitDesc")
+                //        )
+                //) // grdDiscItemClass
                 )
                 .Listeners(ls =>
                 {
@@ -1551,18 +1573,18 @@
                         .PageSize(50)
                         .Model(Util.GenerateModel(typeof(OM21100_pgDiscCustCate_Result), "mdlDiscCustCate", "", true))
                         .Listeners(l =>
-                            {
-                                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'CustCateID'];";
-                                l.Load.Fn = "Main.Event.sto_load";
-                                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
-                                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
-                            })
+                        {
+                            l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'CustCateID'];";
+                            l.Load.Fn = "Main.Event.sto_load";
+                            l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                            l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                        })
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDiscCustCate", "OM21100")))
                         .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
-                            })
+                        {
+                            ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                        })
                     )
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
@@ -1573,7 +1595,7 @@
                             .HQHeightWidth(400, 300)
                             .ValueField("Code").DisplayField("Code")
                             .ForceSelection(true).SelectOnFocus(true)
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw),
                                 new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw),
                                 new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
@@ -1581,7 +1603,7 @@
                             .LoadData()
                         )
 
-                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")                                          
+                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
                         , X.CommandColumn().Width(130)
@@ -1634,18 +1656,18 @@
                             .PageSize(50)
                             .Model(Util.GenerateModel(typeof(OM21100_pgDiscChannel_Result), "mdlDiscChannel", "", true))
                             .Listeners(l =>
-                                {
-                                    l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'ChannelID'];";
-                                    l.Load.Fn = "Main.Event.sto_load";
-                                    l.Update.Handler = "Main.Event.frmMain_fieldChange()";
-                                    l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
-                                })
+                            {
+                                l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'ChannelID'];";
+                                l.Load.Fn = "Main.Event.sto_load";
+                                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
+                            })
                             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDiscChannel", "OM21100")))
                             .Parameters(ps =>
-                                {
-                                    ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
-                                    ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
-                                })
+                            {
+                                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("discSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                            })
                         )
                         .ColumnModel(
                             X.RowNumbererColumn().Width(40)
@@ -1656,7 +1678,7 @@
                                 .HQHeightWidth(400, 300)
                                 .ValueField("Code").DisplayField("Code")
                                 .ForceSelection(true).SelectOnFocus(true)
-                                .HQParam(new StoreParameterCollection() { 
+                                .HQParam(new StoreParameterCollection() {
                                     new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw),
                                     new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw),
                                     new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
@@ -1710,4 +1732,78 @@
             l.FieldChange.Fn = "Main.Event.frmMain_fieldChange";
         })// frmMain
     ) // Viewport
+)
+
+
+
+@(
+ X.Window()
+    .ID("winExport")
+    .Title("Export")
+    .Hidden(true)
+    .Layout(LayoutType.Fit)
+    .Height(150)
+    .Width(350)
+    .Maximized(false)
+    .Modal(true)
+    .Closable(true)
+    .AutoScroll(true)
+    .Buttons(
+           //X.Button().ID("btnExportTemplate").Text(Util.GetLang("Export"))
+           // .Listeners(p => p.Click.Fn = "btnExportTemplate_Click") 
+            X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p =>
+            {
+                p.Click.Fn = "btnExport_Click";
+            })
+         , X.Button().ID("btnExportCancel").Text(Util.GetLang("Cancel"))
+            .Listeners(p => p.Click.Fn = "btnExportCancel_Click")
+
+    )
+    .BottomBar(
+        X.Toolbar()
+        .Border(false)
+        .Items(
+            X.Label().ID("lblLocationQtyAvail").Width(200).MarginSpec("0 0 0 5")
+        )
+    )
+    .Items(
+        X.FormPanel().ID("frmDetail").Layout(LayoutType.Fit)
+            .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
+            .Items(
+                X.Panel().Layout(LayoutType.VBox).ID("pnlDetail").Border(false)
+                    .Items(
+                        X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
+                           .Items(
+
+                           HQ.Combo().ID("cboExport").Name("cboExport").MarginSpec("5 0 5 0").Width(300)
+                            .HQLangCode("Template_Export").HQDBSys(false).HQProcedure("OM21100_pcExport")
+                            .HQColumnShow("Code,Descr").ForceSelection(true)//.AllowBlank(false)
+                                                                            //.MultiSelect(true)
+                            .DisplayField("Code").ValueField("Code").HQHeightWidth(300, 200)
+                            .HQAutoLoad(true)
+                            .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw),
+                                new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw),
+                                new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw)
+                            })
+                            .Listeners(ls =>
+                            {
+                                ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                //ls.Change.Fn = "cboExport_Select";
+                             //ls.Select.Fn = "cboBranchID_Select";
+                            })
+
+                            .LoadData()
+
+                          )
+
+                    )
+            )
+    )
+
 )

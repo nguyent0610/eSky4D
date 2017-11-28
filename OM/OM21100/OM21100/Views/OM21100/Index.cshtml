@@ -30,6 +30,9 @@
             HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
             HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
             HQ.addSameKind = HQ.util.toBool('@ViewBag.addSameKind.ToString()');
+
+            HQ.allowExport = HQ.util.toBool('@ViewBag.allowExport');
+            HQ.allowImport = HQ.util.toBool('@ViewBag.allowImport');
             var _dateNow = new Date('@DateTime.Now.Date');
         </script>
 

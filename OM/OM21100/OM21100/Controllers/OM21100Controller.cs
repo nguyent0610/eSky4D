@@ -1,18 +1,21 @@
-﻿using System.Web.Mvc;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
-using HQ.eSkyFramework;
-using HQ.eSkySys;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System;
-//using System.Data.Metadata.Edm;
-using System.Security.Cryptography;
-using System.Text;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
-using System.Web.Script.Serialization;
+using System.IO;
+using System.Text;
+using HQ.eSkySys;
+using Aspose.Cells;
+using System.Drawing;
+using HQFramework.DAL;
+using System.Text.RegularExpressions;
+
 namespace OM21100.Controllers
 {
     [DirectController]
@@ -33,6 +36,7 @@ namespace OM21100.Controllers
         private const string GItemChannel = "GC"; // Nhóm MH + Channel
         private const string ItemCustCate = "GI"; // Mặt Hàng + Loại KH
         private const string GItemCustCate = "GP"; // Nhóm MH + Loại KH 
+        private JsonResult _logMessage;
         List<OM21100_ptTreeNode_Result> lstAllNode = new List<OM21100_ptTreeNode_Result>();
         // GET: /OM21100/
         public ActionResult Index()
@@ -44,11 +48,24 @@ namespace OM21100.Controllers
             {
                 sameKind = false;
             }
+            bool allowImport = false
+                , allowExport = false;
+
+            var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                allowExport = objConfig.AllowExport.HasValue ? objConfig.AllowExport.Value : false;
+                allowImport = objConfig.AllowImport.HasValue ? objConfig.AllowImport.Value : false;
+            }
+            //var allowExport = true;
+            //var allowImport = true;
+            ViewBag.allowExport = allowExport;
+            ViewBag.allowImport = allowImport;
             ViewBag.addSameKind = sameKind;
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -2335,7 +2352,3744 @@ namespace OM21100.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
-        }       
+        }
         #endregion
+  
+
+        #region -Export-
+        [HttpPost]
+        public ActionResult Export(FormCollection data, string templateExport)
+        {
+            try
+            {
+                Stream stream = new MemoryStream();
+                Workbook workbook = new Workbook();
+                string filename = string.Empty;
+                Worksheet SheetData = workbook.Worksheets[0];
+                SheetData.Name = "Chương trình KM";
+                workbook.Worksheets.Add();
+                Worksheet SheetData1 = workbook.Worksheets[1];
+                SheetData1.Name = "Điều Kiện";
+                workbook.Worksheets.Add();
+                Worksheet SheetData2 = workbook.Worksheets[2];
+                SheetData2.Name = "Sản phẩm bán";
+                //Chương trình Khuyến mãi
+                SetCellValueGrid(SheetData.Cells["A1"], Util.GetLang("DiscID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetData.Cells["B1"], Util.GetLang("Descr"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetData.Cells["C1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetData.Cells["D1"], Util.GetLang("Descr"), TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetData.Cells["E1"], Util.GetLang("StartDate") + " \r\n" + " (dd/MM/yyyy)", TextAlignmentType.Center, TextAlignmentType.Left);
+                SetCellValueGrid(SheetData.Cells["F1"], Util.GetLang("EndDate") + " \r\n" + " (dd/MM/yyyy)", TextAlignmentType.Center, TextAlignmentType.Left);
+
+                SheetData.Cells.SetRowHeight(0, 45);
+           
+                Style colStyle = SheetData.Cells.Columns[2].Style;
+                Style colStyle1 = SheetData.Cells.Columns[3].Style;
+                StyleFlag flag = new StyleFlag();
+                flag.NumberFormat = true;
+                //Set the formating on the as text formating 
+                colStyle.Number = 49;
+                colStyle1.Number = 49;
+                SheetData.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                SheetData.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                SheetData.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                SheetData.Cells.Columns[3].ApplyStyle(colStyle, flag);
+                SheetData.Cells.Columns[4].ApplyStyle(colStyle, flag);
+                SheetData.Cells.Columns[5].ApplyStyle(colStyle, flag);
+                SheetData.Cells.SetColumnWidth(0, 15);
+                SheetData.Cells.SetColumnWidth(1, 25);
+                SheetData.Cells.SetColumnWidth(2, 15);
+                SheetData.Cells.SetColumnWidth(3, 25);
+                SheetData.Cells.SetColumnWidth(4, 15);
+                SheetData.Cells.SetColumnWidth(5, 15);
+                var style = SheetData.Cells["E2"].GetStyle();
+                style.Custom = "dd/MM/yyyy";
+                style.Font.Color = Color.Black;
+                style.HorizontalAlignment = TextAlignmentType.Left;
+                var range = SheetData.Cells.CreateRange("E2", "E1000");
+                range.SetStyle(style);
+                range = SheetData.Cells.CreateRange("F2", "F1000");
+                range.SetStyle(style);
+                int commentIndex = SheetData.Comments.Add("N3");
+                Comment comment = SheetData.Comments[commentIndex];
+                CellArea position = new CellArea();
+                position.StartRow = 3;
+                position.EndRow = 1000;
+                position.StartColumn = 5;
+                position.EndColumn = 5;
+
+                SheetData1.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                SheetData1.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                SheetData1.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                SheetData1.Cells.Columns[3].ApplyStyle(colStyle, flag);
+                SheetData1.Cells.SetColumnWidth(0, 15);
+                SheetData1.Cells.SetColumnWidth(1, 10);
+                SheetData1.Cells.SetColumnWidth(2, 15);
+                SheetData1.Cells.SetColumnWidth(3, 15);
+
+                ////////////////////////////GIIQA///////////////////////////////////////
+                if (templateExport.ToUpper().Trim()== "GIIQA")
+                {
+                    filename = "GIIQA.xlsx";                    
+                    workbook.Worksheets.Add();
+                    Worksheet SheetData3 = workbook.Worksheets[3];
+                    SheetData3.Name = "NPP áp dụng";                
+                    //Điều Kiện
+                    SetCellValueGrid(SheetData1.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["B1"], Util.GetLang("Level"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["C1"], Util.GetLang("BreakQty"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["D1"], Util.GetLang("Discount"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["E1"], Util.GetLang("OM21100MaxLot"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["F1"], Util.GetLang("Descr"), TextAlignmentType.Center, TextAlignmentType.Left);
+
+                    SheetData1.Cells.SetRowHeight(0, 45);
+                    SheetData1.Cells.Columns[4].ApplyStyle(colStyle, flag);
+                    SheetData1.Cells.Columns[5].ApplyStyle(colStyle, flag);                    
+                    SheetData1.Cells.SetColumnWidth(4, 15);
+                    SheetData1.Cells.SetColumnWidth(5, 20);
+                    //Sản phẩm bán
+                    SetCellValueGrid(SheetData2.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["B1"], Util.GetLang("InvtID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["C1"], Util.GetLang("UOM"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData2.Cells.SetRowHeight(0, 45);
+                    SheetData2.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[3].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.SetColumnWidth(0, 15);
+                    SheetData2.Cells.SetColumnWidth(1, 15);
+                    SheetData2.Cells.SetColumnWidth(2, 15);
+                    //NPP áp dụng
+                    SetCellValueGrid(SheetData3.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["B1"], Util.GetLang("BranchID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["C1"], Util.GetLang("BranchName"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData3.Cells.SetRowHeight(0, 45);
+                    SheetData3.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[3].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.SetColumnWidth(0, 15);
+                    SheetData3.Cells.SetColumnWidth(1, 15);
+                    SheetData3.Cells.SetColumnWidth(2, 25);
+
+                }
+
+
+                //////////////////////////////////GIIQF///////////////////////////////////////////////////////
+                if (templateExport.ToUpper().Trim() == "GIIQF")
+                {
+                    filename = "GIIQF.xlsx";
+                    workbook.Worksheets.Add();
+                    Worksheet SheetData3 = workbook.Worksheets[3]; 
+                    SheetData3.Name = "Sản phẩm tặng";
+                    workbook.Worksheets.Add();
+                    Worksheet SheetData4 = workbook.Worksheets[4]; 
+                    SheetData4.Name = "NPP áp dụng";                    
+                    //Điều Kiện
+                    SetCellValueGrid(SheetData1.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["B1"], Util.GetLang("Level"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["C1"], Util.GetLang("BreakQty"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["D1"], Util.GetLang("OM21100MaxLot"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["E1"], Util.GetLang("Descr"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData1.Cells.SetRowHeight(0, 45);
+                    SheetData1.Cells.Columns[4].ApplyStyle(colStyle, flag);                    
+                    SheetData1.Cells.SetColumnWidth(4, 20);
+                    //Sản phẩm bán
+                    SetCellValueGrid(SheetData2.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["B1"], Util.GetLang("InvtID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["C1"], Util.GetLang("UOM"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData2.Cells.SetRowHeight(0, 45);
+                    SheetData2.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.SetColumnWidth(0, 15);
+                    SheetData2.Cells.SetColumnWidth(1, 15);
+                    SheetData2.Cells.SetColumnWidth(2, 15);
+                    //Sản phẩm tặng
+                    SetCellValueGrid(SheetData3.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["B1"], Util.GetLang("Level"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["C1"], Util.GetLang("FreeItemID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["D1"], Util.GetLang("UOM"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["E1"], Util.GetLang("BreakQty"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData3.Cells.SetRowHeight(0, 45);
+                    SheetData3.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[3].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[4].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.SetColumnWidth(0, 15);
+                    SheetData3.Cells.SetColumnWidth(1, 15);
+                    SheetData3.Cells.SetColumnWidth(2, 15);
+                    SheetData3.Cells.SetColumnWidth(3, 15);
+                    SheetData3.Cells.SetColumnWidth(4, 15);
+                    //NPP áp dụng
+                    SetCellValueGrid(SheetData4.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData4.Cells["B1"], Util.GetLang("BranchID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData4.Cells["C1"], Util.GetLang("BranchName"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData4.Cells.SetRowHeight(0, 45);
+                    SheetData4.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData4.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData4.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData4.Cells.SetColumnWidth(0, 15);
+                    SheetData4.Cells.SetColumnWidth(1, 15);
+                    SheetData4.Cells.SetColumnWidth(2, 25);
+                }
+
+                //////////////////////GIIQP//////////////////////////////
+                if (templateExport.ToUpper().Trim() == "GIIQP")
+                {
+                    filename = "GIIQP.xlsx";
+                    workbook.Worksheets.Add();
+                    Worksheet SheetData3 = workbook.Worksheets[3];
+                    SheetData3.Name = "NPP áp dụng";                   
+                    //Điều Kiện
+                    SetCellValueGrid(SheetData1.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["B1"], Util.GetLang("Level"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["C1"], Util.GetLang("BreakQty"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["D1"], Util.GetLang("Discount"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["E1"], Util.GetLang("Descr"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData1.Cells.SetRowHeight(0, 45);
+                    SheetData1.Cells.Columns[4].ApplyStyle(colStyle, flag);
+                    SheetData1.Cells.SetColumnWidth(4, 15);
+                    //Sản phẩm bán
+                    SetCellValueGrid(SheetData2.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["B1"], Util.GetLang("InvtID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["C1"], Util.GetLang("UOM"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData2.Cells.SetRowHeight(0, 45);
+                    SheetData2.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.SetColumnWidth(0, 15);
+                    SheetData2.Cells.SetColumnWidth(1, 15);
+                    SheetData2.Cells.SetColumnWidth(2, 15);
+                    //NPP áp dụng
+                    SetCellValueGrid(SheetData3.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["B1"], Util.GetLang("BranchID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["C1"], Util.GetLang("BranchName"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData3.Cells.SetRowHeight(0, 45);
+                    SheetData3.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.SetColumnWidth(0, 15);
+                    SheetData3.Cells.SetColumnWidth(1, 15);
+                    SheetData3.Cells.SetColumnWidth(2, 25);
+                }
+
+
+                ///////////////////////LIIQA///////////////////////////
+                if (templateExport.ToUpper().Trim() == "LIIQA")
+                {
+                    filename = "LIIQA.xlsx";
+                    workbook.Worksheets.Add();
+                    Worksheet SheetData3 = workbook.Worksheets[3];
+                    SheetData3.Name = "NPP áp dụng";
+                    
+                    //Điều Kiện
+                    SetCellValueGrid(SheetData1.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["B1"], Util.GetLang("Level"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["C1"], Util.GetLang("BreakQty"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["D1"], Util.GetLang("Discount"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["E1"], Util.GetLang("OM21100MaxLot"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["F1"], Util.GetLang("Descr"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData1.Cells.SetRowHeight(0, 45);
+                    SheetData1.Cells.Columns[4].ApplyStyle(colStyle, flag);
+                    SheetData1.Cells.Columns[5].ApplyStyle(colStyle, flag);
+                    SheetData1.Cells.SetColumnWidth(4, 15);
+                    SheetData1.Cells.SetColumnWidth(5, 20);
+
+                    //Sản phẩm bán
+                    SetCellValueGrid(SheetData2.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["B1"], Util.GetLang("InvtID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["C1"], Util.GetLang("UOM"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData2.Cells.SetRowHeight(0, 45);
+                    SheetData2.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.SetColumnWidth(0, 15);
+                    SheetData2.Cells.SetColumnWidth(1, 15);
+                    SheetData2.Cells.SetColumnWidth(2, 15);
+                    //NPP áp dụng
+                    SetCellValueGrid(SheetData3.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["B1"], Util.GetLang("BranchID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["C1"], Util.GetLang("BranchName"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData3.Cells.SetRowHeight(0, 45);
+                    SheetData3.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.SetColumnWidth(0, 15);
+                    SheetData3.Cells.SetColumnWidth(1, 25);
+                    SheetData3.Cells.SetColumnWidth(2, 25);
+                }
+                /////////////////////////////////LIIQF///////////////////////
+                if (templateExport.ToUpper().Trim() == "LIIQF")
+                {
+                    filename = "LIIQF.xlsx";
+                    workbook.Worksheets.Add();
+                    Worksheet SheetData3 = workbook.Worksheets[3];
+                    SheetData3.Name = "Sản phẩm tặng";
+                    workbook.Worksheets.Add();
+                    Worksheet SheetData4 = workbook.Worksheets[4];
+                    SheetData4.Name = "NPP áp dụng";
+                    
+                    //Điều Kiện
+                    SetCellValueGrid(SheetData1.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["B1"], Util.GetLang("Level"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["C1"], Util.GetLang("BreakQty"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["D1"], Util.GetLang("OM21100MaxLot"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["E1"], Util.GetLang("Descr"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData1.Cells.SetRowHeight(0, 45);
+                    SheetData1.Cells.Columns[4].ApplyStyle(colStyle, flag);
+                    SheetData1.Cells.SetColumnWidth(4, 15);
+                    //Sản phẩm bán
+                    SetCellValueGrid(SheetData2.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["B1"], Util.GetLang("InvtID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["C1"], Util.GetLang("UOM"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData2.Cells.SetRowHeight(0, 45);
+                    SheetData2.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.SetColumnWidth(0, 15);
+                    SheetData2.Cells.SetColumnWidth(1, 15);
+                    SheetData2.Cells.SetColumnWidth(2, 15);
+                    //Sản phẩm tặng
+                    SetCellValueGrid(SheetData3.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["B1"], Util.GetLang("Level"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["C1"], Util.GetLang("FreeItemID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["D1"], Util.GetLang("UOM"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["E1"], Util.GetLang("BreakQty"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData3.Cells.SetRowHeight(0, 45);
+                    SheetData3.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[3].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[4].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.SetColumnWidth(0, 15);
+                    SheetData3.Cells.SetColumnWidth(1, 15);
+                    SheetData3.Cells.SetColumnWidth(2, 15);
+                    SheetData3.Cells.SetColumnWidth(3, 15);
+                    SheetData3.Cells.SetColumnWidth(4, 15);
+                    //NPP áp dụng
+                    SetCellValueGrid(SheetData4.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData4.Cells["B1"], Util.GetLang("BranchID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData4.Cells["C1"], Util.GetLang("BranchName"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData4.Cells.SetRowHeight(0, 45);
+                    SheetData4.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData4.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData4.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData4.Cells.SetColumnWidth(0, 15);
+                    SheetData4.Cells.SetColumnWidth(1, 15);
+                    SheetData4.Cells.SetColumnWidth(2, 25);
+                }
+
+
+                ////////////////LIIQP////////////////////
+                if (templateExport.ToUpper().Trim() == "LIIQP")
+                {
+                    filename = "LIIQP.xlsx";
+                    workbook.Worksheets.Add();
+                    Worksheet SheetData3 = workbook.Worksheets[3];
+                    SheetData3.Name = "NPP áp dụng";
+                   
+                    //Điều Kiện
+                    SetCellValueGrid(SheetData1.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["B1"], Util.GetLang("Level"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["C1"], Util.GetLang("BreakQty"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["D1"], Util.GetLang("Discount"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData1.Cells["E1"], Util.GetLang("Descr"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData1.Cells.SetRowHeight(0, 45);
+                    SheetData1.Cells.Columns[4].ApplyStyle(colStyle, flag);
+                    SheetData1.Cells.SetColumnWidth(4, 15);
+                    //Sản phẩm bán
+                    SetCellValueGrid(SheetData2.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["B1"], Util.GetLang("InvtID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData2.Cells["C1"], Util.GetLang("UOM"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData2.Cells.SetRowHeight(0, 45);
+                    SheetData2.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData2.Cells.SetColumnWidth(0, 15);
+                    SheetData2.Cells.SetColumnWidth(1, 15);
+                    SheetData2.Cells.SetColumnWidth(2, 15);
+                    //NPP áp dụng
+                    SetCellValueGrid(SheetData3.Cells["A1"], Util.GetLang("DiscSeq"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["B1"], Util.GetLang("BranchID"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SetCellValueGrid(SheetData3.Cells["C1"], Util.GetLang("BranchName"), TextAlignmentType.Center, TextAlignmentType.Left);
+                    SheetData3.Cells.SetRowHeight(0, 45);
+                    SheetData3.Cells.Columns[0].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[1].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.Columns[2].ApplyStyle(colStyle, flag);
+                    SheetData3.Cells.SetColumnWidth(0, 15);
+                    SheetData3.Cells.SetColumnWidth(1, 25);
+                    SheetData3.Cells.SetColumnWidth(2, 25);
+                }    
+                workbook.Save(stream, SaveFormat.Xlsx);
+                stream.Flush();
+                stream.Position = 0;
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = filename.ToString() };
+
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+        #endregion
+        private void SetCellValueGridHeader(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
+        {
+            c.PutValue(" " + lang);
+            var style = c.GetStyle();
+            style.Number = 49;
+            style.Font.Name = "Times New Roman";
+            style.Font.IsBold = true;
+            style.Font.Size = 20;
+            style.Font.Color = Color.CornflowerBlue;
+            style.HorizontalAlignment = alignH;
+            style.VerticalAlignment = alignV;
+            c.SetStyle(style);
+        }
+        private void SetCellValueGrid(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
+        {
+            c.PutValue(" " + lang);
+            var style = c.GetStyle();
+            style.Number = 49;
+            style.Font.Name = "Times New Roman";
+            style.Font.IsBold = true;
+            style.Font.Size = 11;
+            style.Font.Color = Color.Black;
+            style.HorizontalAlignment = alignH;
+            style.VerticalAlignment = alignV;
+            style.IsTextWrapped = true;
+            c.SetStyle(style);
+        }
+
+
+        public bool IsNumber(string pValue)
+        {
+            foreach (Char c in pValue)
+            {
+                if (!Char.IsDigit(c))
+                    return false;
+            }
+            return true;
+        }
+
+
+        //Hàm chuyển chuổi có dấu thành không dấu
+        public static string convertToUnSign(string s)
+        {
+            Regex regex = new Regex("\\p{IsCombiningDiacriticalMarks}+");
+            string temp = s.Normalize(NormalizationForm.FormD);
+            return regex.Replace(temp, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D');
+        }
+
+
+
+
+        [HttpPost]
+        public ActionResult Import(FormCollection data)
+        {
+            try
+            {
+                var access = Session["OM21100"] as AccessRight;
+
+                FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
+                HttpPostedFile file = fileUploadField.PostedFile;
+                
+                FileInfo fileInfo = new FileInfo(file.FileName);
+                //List<AR_CustomerTD> lstAR_CustomerTD = new List<AR_CustomerTD>();
+                string message = string.Empty;
+   
+                //string okStatus = string.Empty;
+                List<OM_Discount> lstOM_Discount = new List<OM_Discount>();
+                List<OM_DiscSeq> lstOM_DiscSeq = new List<OM_DiscSeq>();
+                List<OM_DiscBreak> lstOM_DiscBreak = new List<OM_DiscBreak>();
+                List<OM_DiscItem> lstOM_DiscItem = new List<OM_DiscItem>();
+                List<OM_DiscFreeItem> lstOM_DiscFreeItem = new List<OM_DiscFreeItem>();
+                List<OM_DiscCpny> lstOM_DiscCpny = new List<OM_DiscCpny>();
+                
+
+                if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
+                {
+                    var fileImportName = file.FileName;
+                    Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+
+                    string namesheet = "Sản phẩm tặng";
+                    string namesheetNPP = "NPP áp dụng";
+                    string workt_DiscID = string.Empty;
+                    string workt_DiscIDDr = string.Empty;
+                    string workt_DiscSeq = string.Empty;
+                    string workt_DiscSeqDr = string.Empty;
+                    string workt_StartDate = string.Empty;
+                    string workt_EndDate = string.Empty;
+                    string workt1_DiscSeq = string.Empty;
+                    string workt1_Level = string.Empty;
+                    string workt1_BreakQty = string.Empty;
+                    string workt1_Discount = string.Empty;
+                    string workt1_OM21100MaxLot = string.Empty;
+                    string workt1_Descr = string.Empty;
+                    string workt2_DiscSeq = string.Empty;
+                    string workt2_InvtID = string.Empty;
+                    string workt2_UOM = string.Empty;
+                    string workt3_DiscSeq = string.Empty;
+                    string workt3_BranchID = string.Empty;
+                    Worksheet workSheet = workbook.Worksheets[0];
+                    Worksheet workSheet1 = workbook.Worksheets[1];
+                    Worksheet workSheet2 = workbook.Worksheets[2];
+                    Worksheet workSheet3 = workbook.Worksheets[3];
+
+                    /////////////////khai báo biến để bắt lỗi////////////////////
+                    string errorDiscIDNull = string.Empty;
+                    string errorDiscIDLength = string.Empty;
+                    string errorDiscID = string.Empty;
+                    string errorDiscIDDescr = string.Empty;
+                    string errorDiscSeqNull = string.Empty;
+                    string errorDiscSeqLength = string.Empty;
+                    string errorStartDate = string.Empty;
+                    string errorEndDate = string.Empty;
+                    string errorDate = string.Empty;
+                    string errorDiscSeq1Null = string.Empty;
+                    string errorDiscSeq1 = string.Empty;
+                    string errorLevelNull = string.Empty;
+                    string errorLevelLength = string.Empty;
+                    string errorLevel = string.Empty;
+                    string errorworkt1_BreakQty = string.Empty;
+                    string errorworkt1_Discount = string.Empty;
+                    string errorworkt1_OM21100MaxLot = string.Empty;
+                    string errorworkt1_Descr = string.Empty;
+                    string errorworkt2_DiscSeqNull = string.Empty;
+                    string errorworkt2_InvtIDNull = string.Empty;
+                    string errorworkt2_DiscSep = string.Empty;
+                    string errorworkt2_InvtIDLength = string.Empty;
+                    string errorworkt2_UOMNull = string.Empty;
+                    string errorworkt2_UOM = string.Empty;
+                    string errorworkt3_DiscSeq = string.Empty;
+                    string errorworkt3_BranchID = string.Empty;
+                    string errorworkt3_DiscSeqNull = string.Empty;
+                    string errorworkt3_BranchIDNull = string.Empty;
+                    string errorDiscSeqFreeItemNull = string.Empty;
+                    string errorDiscSeqFreeItem = string.Empty;
+                    string errorFreeItemNull = string.Empty;
+                    string errorFreeItem = string.Empty;
+                    string errorLevelFreeItem = string.Empty;
+                    string errorLevelFreeItemNull = string.Empty;
+                    string errorLevelFreeItemLength = string.Empty;
+                    string errorQtFreeItem = string.Empty;
+                    string errorUOMFreeItem = string.Empty;
+                    string errorUOMFreeItemNull = string.Empty;
+
+                    bool flagCheck = false;
+                    string okUOM = string.Empty;
+                    var lstIN_UnitConversion = _db.OM21100_ppIN_UnitConversion(Current.CpnyID, Current.UserName, Current.LangID).ToList();
+                    var lstBrachID = _db.OM21100_ppCompanyCheck(Current.CpnyID, Current.UserName, Current.LangID).ToList();
+                    var lstDiscSeq = _db.OM21100_ppOM_DiscSeq(Current.CpnyID, Current.UserName, Current.LangID).ToList();
+                    var lstIN_Inventory = _db.OM21100_ppIN_Inventory(Current.CpnyID, Current.UserName, Current.LangID).ToList();
+                    
+                    foreach (OM21100_ppIN_UnitConversion_Result r in lstIN_UnitConversion)
+                    {
+                        okUOM += r.FromUnit.ToString() + ", ";
+                    }
+
+                    if (fileImportName.ToUpper().Trim() == "GIIQA.XLSX" || fileImportName.ToUpper().Trim() == "GIIQA.XLS"
+                        || fileImportName.ToUpper().Trim() == "GIIQF.XLSX" || fileImportName.ToUpper().Trim() == "GIIQF.XLS"
+                        || fileImportName.ToUpper().Trim() == "GIIQP.XLSX" || fileImportName.ToUpper().Trim() == "GIIQP.XLS"
+                        || fileImportName.ToUpper().Trim() == "LIIQA.XLSX" || fileImportName.ToUpper().Trim() == "LIIQA.XLS"
+                        || fileImportName.ToUpper().Trim() == "LIIQF.XLSX" || fileImportName.ToUpper().Trim() == "LIIQF.XLS"
+                        || fileImportName.ToUpper().Trim() == "LIIQP.XLSX" || fileImportName.ToUpper().Trim() == "LIIQP.XLS")
+                    {
+
+
+
+                        #region nếu là template GIIQA
+                        if (fileImportName.ToUpper().Trim() == "GIIQA.XLSX" || fileImportName.ToUpper().Trim() == "GIIQA.XLS")
+                        {
+
+                            if (workbook.Worksheets.Count > 0)
+                            {
+                                #region kiểm tra template
+                                // kiểm tra sheet Chương trình khuyến mãi
+                                if (workSheet.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscID").ToUpper().Trim()
+                                  || workSheet.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                  || workSheet.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 4].StringValue.ToUpper().Trim() != (Util.GetLang("StartDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  || workSheet.Cells[0, 5].StringValue.ToUpper().Trim() != (Util.GetLang("EndDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                // kiểm tra sheet Điều kiện
+                                if (workSheet1.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Level").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BreakQty").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("Discount").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 4].StringValue.ToUpper().Trim() != Util.GetLang("OM21100MaxLot").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 5].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+                                // kiểm tra sản phẩm bán
+                                if (workSheet2.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("InvtID").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("UOM").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+
+                                if (workSheet3.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("BranchID").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BranchName").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+                                #endregion
+
+                                #region import vào bảng OM_DiscSeq và OM_Discount
+                                for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
+                                {
+                                    int check = 0;
+                                    workt_DiscID = workSheet.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt_DiscIDDr = workSheet.Cells[i, 1].StringValue.PassNull();
+                                    workt_DiscSeq = workSheet.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    workt_DiscSeqDr = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    workt_StartDate = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    workt_EndDate = workSheet.Cells[i, 5].StringValue.PassNull();
+                                    ///kiểm tra dữ liệu nhập vào
+                                    if (workt_DiscID == null || workt_DiscID == "")
+                                    {
+                                        errorDiscIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscID.Length > 10)
+                                        {
+                                            errorDiscIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt_DiscIDDr.Length > 50)
+                                    {
+                                        errorDiscIDDescr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (workt_DiscSeq == null || workt_DiscSeq == "")
+                                    {
+                                        errorDiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscSeq.Length > 10)
+                                        {
+                                            errorDiscSeqLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+
+                                        workt_StartDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorStartDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    try
+                                    {
+                                        workt_EndDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorEndDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    if (check == 0)
+                                    {
+                                        if (workt_EndDate.ToDateShort() < workt_StartDate.ToDateShort())
+                                        {
+                                            errorDate += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    #region import import sheet chương trình khuyến mãi vào OM_Discount
+                                    var recordOM_Discount = lstOM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID);
+                                    if (recordOM_Discount == null)
+                                    {
+                                        var record = _db.OM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID.ToUpper().Trim());
+                                        if (record == null)
+                                        {
+                                            record = new OM_Discount();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.Descr = workt_DiscIDDr;
+                                            record.DiscClass = "II";
+                                            record.DiscType = "G";
+                                            record.Crtd_Role = "HO";
+                                            record.Accumulate = false;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            record.LUpd_DateTime = DateTime.Now;
+                                            record.LUpd_Prog = _screenNbr;
+                                            record.LUpd_User = Current.UserName;
+                                            _db.OM_Discount.AddObject(record);
+                                            lstOM_Discount.Add(record);
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        lstOM_Discount.Add(recordOM_Discount);
+                                    }
+
+
+                                    #endregion
+
+                                    #region import sheet chương trình khuyến mãi vào OM_DiscSeq
+                                    var recordlstOM_DiscSeq = lstOM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                    if (recordlstOM_DiscSeq == null)
+                                    {
+                                        var record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscSeq();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt_DiscSeq;
+                                            record.Active = 1;
+                                            record.BreakBy = "Q";
+                                            record.BudgetID = null;
+                                            record.DiscClass = "II";
+                                            record.DiscFor = "A";
+                                            record.Promo = 1;
+                                            record.Crtd_Role = "HO";
+                                            record.Status = "H";
+                                            record.ExactQty = false;
+                                            record.ExcludeOtherDisc = false;
+                                            record.POStartDate = DateTime.Now;
+                                            record.POEndDate = DateTime.Now;
+                                            record.POUse = false;
+                                            record.ProAplForItem = "A";
+                                            record.AutoFreeItem = false;
+                                            record.AllowEditDisc = false;
+                                            record.StartDate = workt_StartDate.ToDateShort();
+                                            record.EndDate = workt_EndDate.ToDateShort();
+                                            record.Descr = workt_DiscSeqDr;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Profile = null;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscSeq.AddObject(record);
+                                            lstOM_DiscSeq.Add(record);
+                                        }
+                                        else
+                                        {
+                                            record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq && p.Status == "H");
+                                            if (record != null)
+                                            {
+                                                record.StartDate = workt_StartDate.ToDateShort();
+                                                record.EndDate = workt_EndDate.ToDateShort();
+                                                record.Descr = workt_DiscSeqDr;
+                                                record.LUpd_DateTime = DateTime.Now;
+                                                record.LUpd_Prog = _screenNbr;
+                                                record.LUpd_User = Current.UserName;
+                                            }
+                                        }
+
+                                    }
+                                    #endregion
+                                }
+                                //kiểm tra mã khuyến mãi thống nhất hay không
+                                if (lstOM_Discount.Where(p => p.DiscID == workt_DiscID).Count() < (lstOM_Discount.Count()))
+                                {
+                                    errorDiscID = ",";
+                                    flagCheck = true;
+                                }
+                                #endregion
+
+                                #region import Điều Kiện vào  OM_DiscBreak
+                                for (int i = 1; i <= workSheet1.Cells.MaxDataRow; i++)
+                                {
+                                    workt1_DiscSeq = workSheet1.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt1_Level = workSheet1.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt1_BreakQty = workSheet1.Cells[i, 2].StringValue.PassNull();
+                                    workt1_Discount = workSheet1.Cells[i, 3].StringValue.PassNull();
+                                    workt1_OM21100MaxLot = workSheet1.Cells[i, 4].StringValue.PassNull();
+                                    workt1_Descr = workSheet1.Cells[i, 5].StringValue.PassNull();
+
+                                    if (workt1_DiscSeq == null || workt1_DiscSeq == "")
+                                    {
+                                        errorDiscSeq1Null += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0)
+                                        {
+                                            errorDiscSeq1 += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt1_Level == null || workt1_Level == "")
+                                    {
+                                        errorLevelNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    else
+                                    {
+                                        if (workt1_Level.Length > 5)
+                                        {
+                                            errorLevelLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+                                        Convert.ToInt32(workt1_Level);
+                                    }
+                                    catch
+                                    {
+                                        errorLevel += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_BreakQty);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_BreakQty += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_Discount);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_Discount += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_OM21100MaxLot);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_OM21100MaxLot += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (workt1_Descr.Length > 200)
+                                    {
+                                        errorworkt1_Descr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    for (int l = workt1_Level.Length; workt1_Level.Length < 5;)
+                                        workt1_Level = "0" + workt1_Level;
+                                    var recordOM_DiscBreak = lstOM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                    if (recordOM_DiscBreak == null)
+                                    {
+                                        var record = _db.OM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscBreak();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt1_DiscSeq;
+                                            record.LineRef = workt1_Level;
+                                            record.BreakAmt = 0;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscBreak.AddObject(record);
+                                            lstOM_DiscBreak.Add(record);
+                                        }
+                                        record.BreakQty = Convert.ToDouble(workt1_BreakQty);
+                                        record.DiscAmt = workt1_Discount.ToDouble();
+                                        record.MaxLot = workt1_OM21100MaxLot.ToDouble();
+                                        record.Descr = workt1_Descr;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+
+                                }
+
+                                #endregion
+
+                                #region Sheet Sản Phẩm Bán => OM_DiscItem
+                                for (int i = 1; i <= workSheet2.Cells.MaxDataRow; i++)
+                                {
+                                    workt2_DiscSeq = workSheet2.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt2_InvtID = workSheet2.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt2_UOM = convertToUnSign(workSheet2.Cells[i, 2].StringValue.PassNull().ToUpper());
+                                    //var a = convertToUnSign3(workt2_UOM);
+                                    if (workt2_DiscSeq == null || workt2_DiscSeq == "")
+                                    {
+                                        errorworkt2_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt2_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt2_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt2_DiscSep += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt2_InvtID == null || workt2_InvtID == "")
+                                    {
+                                        errorworkt2_InvtIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_Inventory.Where(p => p.InvtID.ToUpper() == workt2_InvtID).Count() == 0)
+                                        {
+                                            errorworkt2_InvtIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt2_UOM == null || workt2_UOM == "")
+                                    {
+                                        errorworkt2_UOMNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_UnitConversion.Where(p => p.FromUnit.ToUpper() == workt2_UOM).Count() == 0)
+                                        {
+                                            errorworkt2_UOM += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    var recordOM_DiscItem = lstOM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                    if (recordOM_DiscItem == null)
+                                    {
+                                        var record = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscItem();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt2_DiscSeq;
+                                            record.InvtID = workt2_InvtID;
+                                            record.Active = 0;
+                                            record.BundleAmt = 0;
+                                            record.BundleNbr = 0;
+                                            record.BundleOrItem = "I";
+                                            record.BundleQty = 0;
+                                            record.DiscType = "G";
+                                            record.QtyType = "E";
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscItem.AddObject(record);
+                                            lstOM_DiscItem.Add(record);
+                                        }
+
+                                        record.UnitDesc = workt2_UOM;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+                                }
+                                #endregion
+
+                                #region Sheet NPP Áp Dụng => OM_DiscCpny
+                                for (int i = 1; i <= workSheet3.Cells.MaxDataRow; i++)
+                                {
+                                    workt3_DiscSeq = workSheet3.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt3_BranchID = workSheet3.Cells[i, 1].StringValue.PassNull().ToUpper();
+
+                                    if (workt3_DiscSeq == null || workt3_DiscSeq == "")
+                                    {
+                                        errorworkt3_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt3_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt3_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt3_DiscSeq += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt3_BranchID == null || workt3_BranchID == "")
+                                    {
+                                        errorworkt3_BranchIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstBrachID.Where(p => p.CpnyID.ToUpper() == workt3_BranchID).Count() == 0)
+                                        {
+                                            errorworkt3_BranchID += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+
+                                    var recordOM_DiscCpny = lstOM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                    if (recordOM_DiscCpny == null)
+                                    {
+                                        var record = _db.OM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscCpny();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt3_DiscSeq;
+                                            record.CpnyID = workt3_BranchID;
+                                            _db.OM_DiscCpny.AddObject(record);
+                                            lstOM_DiscCpny.Add(record);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                        }
+                        #endregion
+
+                        #region Nếu là template GIIQF
+                        if (fileImportName.ToUpper().Trim() == "GIIQF.XLSX" || fileImportName.ToUpper().Trim() == "GIIQF.XLS")
+                        {
+
+                            #region kiểm tra template
+                            if (workbook.Worksheets.Count > 0)
+                            {
+                                Worksheet workSheet4 = workbook.Worksheets[4];
+                                // kiểm tra sheet Chương trình khuyến mãi
+                                if (workSheet.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscID").ToUpper().Trim()
+                                  || workSheet.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                  || workSheet.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 4].StringValue.ToUpper().Trim() != (Util.GetLang("StartDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  || workSheet.Cells[0, 5].StringValue.ToUpper().Trim() != (Util.GetLang("EndDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                // kiểm tra sheet Điều kiện
+                                if (workSheet1.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Level").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BreakQty").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("OM21100MaxLot").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 4].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                // kiểm tra sản phẩm bán
+                                if (workSheet2.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("InvtID").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("UOM").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                //Kiểm tra sản phẩm tặng
+                                if (workSheet3.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Level").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("FreeItemID").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("UOM").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 4].StringValue.ToUpper().Trim() != Util.GetLang("BreakQty").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                // kiểm tra NPP app dung
+                                if (workSheet4.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet4.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("BranchID").ToUpper().Trim()
+                                 || workSheet4.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BranchName").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+                                #endregion
+
+                                #region import import sheet chương trình khuyến mãi vào OM_Discount và OM_DiscSeq
+                                
+                                for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
+                                {
+                                    //var keysave = 1;
+                                    int check = 0;
+                                    workt_DiscID = workSheet.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt_DiscIDDr = workSheet.Cells[i, 1].StringValue.PassNull();
+                                    workt_DiscSeq = workSheet.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    workt_DiscSeqDr = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    workt_StartDate = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    workt_EndDate = workSheet.Cells[i, 5].StringValue.PassNull();
+
+                                    ///kiểm tra dữ liệu nhập vào
+                                    if (workt_DiscID == null || workt_DiscID == "")
+                                    {
+                                        errorDiscIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscID.Length > 10)
+                                        {
+                                            errorDiscIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt_DiscIDDr.Length > 50)
+                                    {
+                                        errorDiscIDDescr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (workt_DiscSeq == null || workt_DiscSeq == "")
+                                    {
+                                        errorDiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscSeq.Length > 10)
+                                        {
+                                            errorDiscSeqLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+
+                                        workt_StartDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorStartDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    try
+                                    {
+                                        workt_EndDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorEndDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    if (check == 0)
+                                    {
+                                        if (workt_EndDate.ToDateShort() < workt_StartDate.ToDateShort())
+                                        {
+                                            errorDate += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+
+                                    #region import import sheet chương trình khuyến mãi vào OM_Discount
+                                    var recordOM_Discount = lstOM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID);
+                                    if (recordOM_Discount == null)
+                                    {
+                                        var record = _db.OM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID.ToUpper().Trim());
+                                        if (record == null)
+                                        {
+                                            record = new OM_Discount();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.Descr = workt_DiscIDDr;
+                                            record.DiscClass = "II";
+                                            record.DiscType = "G";
+                                            record.Crtd_Role = "HO";
+                                            record.Accumulate = false;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            record.LUpd_DateTime = DateTime.Now;
+                                            record.LUpd_Prog = _screenNbr;
+                                            record.LUpd_User = Current.UserName;
+                                            _db.OM_Discount.AddObject(record);
+                                            lstOM_Discount.Add(record);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lstOM_Discount.Add(recordOM_Discount);
+                                    }
+                                    #endregion
+
+                                    #region import sheet chương trình khuyến mãi vào OM_DiscSeq
+                                    var recordlstOM_DiscSeq = lstOM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                    if (recordlstOM_DiscSeq == null)
+                                    {
+                                        var record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscSeq();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt_DiscSeq;
+                                            record.Active = 1;
+                                            record.BreakBy = "Q";
+                                            record.BudgetID = null;
+                                            record.DiscClass = "II";
+                                            record.DiscFor = "P";
+                                            record.Promo = 1;
+                                            record.Crtd_Role = "HO";
+                                            record.Status = "H";
+                                            record.ExactQty = false;
+                                            record.ExcludeOtherDisc = false;
+                                            record.POStartDate = DateTime.Now;
+                                            record.POEndDate = DateTime.Now;
+                                            record.POUse = false;
+                                            record.ProAplForItem = "A";
+                                            record.AutoFreeItem = false;
+                                            record.AllowEditDisc = false;
+                                            record.StartDate = workt_StartDate.ToDateShort();
+                                            record.EndDate = workt_EndDate.ToDateShort();
+                                            record.Descr = workt_DiscSeqDr;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Profile = null;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscSeq.AddObject(record);
+                                            lstOM_DiscSeq.Add(record);
+                                        }
+                                        else
+                                        {
+                                            record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq && p.Status == "H");
+                                            if (record != null)
+                                            {
+                                                record.StartDate = workt_StartDate.ToDateShort();
+                                                record.EndDate = workt_EndDate.ToDateShort();
+                                                record.Descr = workt_DiscSeqDr;
+                                                record.LUpd_DateTime = DateTime.Now;
+                                                record.LUpd_Prog = _screenNbr;
+                                                record.LUpd_User = Current.UserName;
+                                            }
+                                        }
+                                    }
+                                    #endregion
+                                }
+                                #endregion
+
+                                #region import Điều Kiện vào  OM_DiscBreak
+                                for (int i = 1; i <= workSheet1.Cells.MaxDataRow; i++)
+                                {
+                                    workt1_DiscSeq = workSheet1.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt1_Level = workSheet1.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt1_BreakQty = workSheet1.Cells[i, 2].StringValue.PassNull();
+                                    workt1_OM21100MaxLot = workSheet1.Cells[i, 3].StringValue.PassNull();
+                                    workt1_Descr = workSheet1.Cells[i, 4].StringValue.PassNull();
+
+                                    if (workt1_DiscSeq == null || workt1_DiscSeq == "")
+                                    {
+                                        errorDiscSeq1Null += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0)
+                                        {
+                                            errorDiscSeq1 += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt1_Level == null || workt1_Level == "")
+                                    {
+                                        errorLevelNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    else
+                                    {
+                                        if (workt1_Level.Length > 5)
+                                        {
+                                            errorLevelLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+                                        Convert.ToInt32(workt1_Level);
+                                    }
+                                    catch
+                                    {
+                                        errorLevel += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_BreakQty);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_BreakQty += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_OM21100MaxLot);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_OM21100MaxLot += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (workt1_Descr.Length > 200)
+                                    {
+                                        errorworkt1_Descr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    for (int l = workt1_Level.Length; workt1_Level.Length < 5;)
+                                        workt1_Level = "0" + workt1_Level;
+                                    var recordOM_DiscBreak = lstOM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                    if (recordOM_DiscBreak == null)
+                                    {
+                                        var record = _db.OM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscBreak();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt1_DiscSeq;
+                                            record.LineRef = workt1_Level;
+                                            record.BreakAmt = 0;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscBreak.AddObject(record);
+                                            lstOM_DiscBreak.Add(record);
+                                        }
+                                        record.BreakQty = workt1_BreakQty.ToInt();
+                                        record.DiscAmt = 0;
+                                        record.MaxLot = workt1_OM21100MaxLot.ToInt();
+                                        record.Descr = workt1_Descr;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+
+                                }
+                                #endregion
+
+                                #region Sheet Sản Phẩm Bán => OM_DiscItem
+                                for (int i = 1; i <= workSheet2.Cells.MaxDataRow; i++)
+                                {
+                                    workt2_DiscSeq = workSheet2.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt2_InvtID = workSheet2.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt2_UOM = workSheet2.Cells[i, 2].StringValue.PassNull().ToUpper();
+
+                                    if (workt2_DiscSeq == null || workt2_DiscSeq == "")
+                                    {
+                                        errorworkt2_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt2_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt2_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt2_DiscSep += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt2_InvtID == null || workt2_InvtID == "")
+                                    {
+                                        errorworkt2_InvtIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_Inventory.Where(p => p.InvtID.ToUpper() == workt2_InvtID).Count() == 0)
+                                        {
+                                            errorworkt2_InvtIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt2_UOM == null || workt2_UOM == "")
+                                    {
+                                        errorworkt2_UOMNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_UnitConversion.Where(p => p.FromUnit.ToUpper() == workt2_UOM).Count() == 0)
+                                        {
+                                            errorworkt2_UOM += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    var recordOM_DiscItem = lstOM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                    if (recordOM_DiscItem == null)
+                                    {
+                                        var record = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscItem();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt2_DiscSeq;
+                                            record.InvtID = workt2_InvtID;
+                                            record.Active = 0;
+                                            record.BundleAmt = 0;
+                                            record.BundleNbr = 0;
+                                            record.BundleOrItem = "I";
+                                            record.BundleQty = 0;
+                                            record.DiscType = "G";
+                                            record.QtyType = "E";
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscItem.AddObject(record);
+                                            lstOM_DiscItem.Add(record);
+                                        }
+                                        record.UnitDesc = workt2_UOM;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+                                }
+                                #endregion
+
+
+                                #region Sheet Sản phẩm tặng => OM_DiscFreeItem
+                                for (int i = 1; i <= workSheet3.Cells.MaxDataRow; i++)
+                                {
+
+                                    string workt3_DiscSeqFreeItem = workSheet3.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    string workt3_LevelFreeItem = workSheet3.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    string workt3_InvtIDFreeItem = workSheet3.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    string workt3_UOMFreeItem = workSheet3.Cells[i, 3].StringValue.PassNull().ToUpper();
+                                    string workt3_BreakQtFreeItemy = workSheet3.Cells[i, 4].StringValue.PassNull();
+
+                                    if (workt3_DiscSeqFreeItem == null || workt3_DiscSeqFreeItem == "")
+                                    {
+                                        errorDiscSeqFreeItemNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt3_DiscSeqFreeItem).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt3_DiscSeqFreeItem).Count() == 0)
+                                        {
+                                            errorDiscSeqFreeItem += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt3_LevelFreeItem == null || workt3_LevelFreeItem == "")
+                                    {
+                                        errorLevelFreeItemNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    else
+                                    {
+                                        if (workt3_LevelFreeItem.Length > 5)
+                                        {
+                                            errorLevelFreeItemLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+                                        Convert.ToInt32(workt3_LevelFreeItem);
+                                    }
+                                    catch
+                                    {
+                                        errorLevelFreeItem += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    if (workt3_InvtIDFreeItem == null || workt3_InvtIDFreeItem == "")
+                                    {
+                                        errorFreeItemNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_Inventory.Where(p => p.InvtID.ToUpper() == workt3_InvtIDFreeItem).Count() == 0)
+                                        {
+                                            errorFreeItem += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt3_UOMFreeItem == null || workt3_UOMFreeItem == "")
+                                    {
+                                        errorUOMFreeItemNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_UnitConversion.Where(p => p.FromUnit.ToUpper() == workt3_UOMFreeItem).Count() == 0)
+                                        {
+                                            errorUOMFreeItem += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt3_BreakQtFreeItemy);
+                                    }
+                                    catch
+                                    {
+                                        errorQtFreeItem += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+                                    for (int l = workt3_LevelFreeItem.Length; workt3_LevelFreeItem.Length < 5;)
+                                        workt3_LevelFreeItem = "0" + workt3_LevelFreeItem;
+                                    var recordOM_DiscFreeItem = lstOM_DiscFreeItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeqFreeItem && p.LineRef.ToUpper().Trim() == workt3_LevelFreeItem && p.FreeItemID.ToUpper().Trim() == workt3_InvtIDFreeItem);
+                                    if (recordOM_DiscFreeItem == null)
+                                    {
+                                        var record = _db.OM_DiscFreeItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeqFreeItem && p.LineRef.ToUpper().Trim() == workt3_LevelFreeItem && p.FreeItemID.ToUpper().Trim() == workt3_InvtIDFreeItem);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscFreeItem();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt3_DiscSeqFreeItem;
+                                            record.LineRef = workt3_LevelFreeItem;
+                                            record.FreeItemID = workt3_InvtIDFreeItem;
+                                            record.FreeItemBudgetID = "";
+                                            record.FreeITemSiteID = "";
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscFreeItem.AddObject(record);
+                                            lstOM_DiscFreeItem.Add(record);
+                                        }
+                                        record.FreeItemQty = workt3_BreakQtFreeItemy.ToInt();
+                                        record.UnitDescr = workt3_UOMFreeItem;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+
+                                    }
+                                }
+                                #endregion
+
+                                #region Sheet NPP Áp Dụng => OM_DiscCpny
+                                for (int i = 1; i <= workSheet4.Cells.MaxDataRow; i++)
+                                {
+
+                                    workt3_DiscSeq = workSheet4.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt3_BranchID = workSheet4.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    if (workt3_DiscSeq == null || workt3_DiscSeq == "")
+                                    {
+                                        errorworkt3_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt3_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt3_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt3_DiscSeq += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt3_BranchID == null || workt3_BranchID == "")
+                                    {
+                                        errorworkt3_BranchIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstBrachID.Where(p => p.CpnyID.ToUpper() == workt3_BranchID).Count() == 0)
+                                        {
+                                            errorworkt3_BranchID += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+                                    var recordOM_DiscCpny = lstOM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                    if (recordOM_DiscCpny == null)
+                                    {
+                                        var record = _db.OM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscCpny();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt3_DiscSeq;
+                                            record.CpnyID = workt3_BranchID;
+                                            _db.OM_DiscCpny.AddObject(record);
+                                            lstOM_DiscCpny.Add(record);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                        }
+                        #endregion
+
+                        #region Nếu là template GIIQP
+                        if (fileImportName.ToUpper().Trim() == "GIIQP.XLSX" || fileImportName.ToUpper().Trim() == "GIIQP.XLS")
+                        {
+
+                            if (workbook.Worksheets.Count > 0)
+                            {
+                                #region kiểm tra template
+                                ///kiểm tra sheet Chương trình khuyến mãi
+                                if (workSheet.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscID").ToUpper().Trim()
+                                  || workSheet.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                  || workSheet.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 4].StringValue.ToUpper().Trim() != (Util.GetLang("StartDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  || workSheet.Cells[0, 5].StringValue.ToUpper().Trim() != (Util.GetLang("EndDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                // kiểm tra sheet Điều kiện
+                                if (workSheet1.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Level").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BreakQty").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("Discount").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 4].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+                                // kiểm tra sản phẩm bán
+                                if (workSheet2.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("InvtID").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("UOM").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+
+                                if (workSheet3.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("BranchID").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BranchName").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+                                #endregion
+
+                                #region nhập dữ liệu vào OM_Discount và OM_DiscSeq
+                                for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
+                                {
+                                    //var keysave = 1;
+                                    int check = 0;
+                                    workt_DiscID = workSheet.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt_DiscIDDr = workSheet.Cells[i, 1].StringValue.PassNull();
+                                    workt_DiscSeq = workSheet.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    workt_DiscSeqDr = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    workt_StartDate = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    workt_EndDate = workSheet.Cells[i, 5].StringValue.PassNull();
+                                    ///kiểm tra dữ liệu nhập vào
+                                    if (workt_DiscID == null || workt_DiscID == "")
+                                    {
+                                        errorDiscIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscID.Length > 10)
+                                        {
+                                            errorDiscIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt_DiscIDDr.Length > 50)
+                                    {
+                                        errorDiscIDDescr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (workt_DiscSeq == null || workt_DiscSeq == "")
+                                    {
+                                        errorDiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscSeq.Length > 10)
+                                        {
+                                            errorDiscSeqLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+
+                                        workt_StartDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorStartDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    try
+                                    {
+                                        workt_EndDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorEndDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    if (check == 0)
+                                    {
+                                        if (workt_EndDate.ToDateShort() < workt_StartDate.ToDateShort())
+                                        {
+                                            errorDate += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    #region import import sheet chương trình khuyến mãi vào OM_Discount
+                                    var recordOM_Discount = lstOM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID);
+                                    if (recordOM_Discount == null)
+                                    {
+                                        var record = _db.OM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID.ToUpper().Trim());
+                                        if (record == null)
+                                        {
+                                            record = new OM_Discount();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.Descr = workt_DiscIDDr;
+                                            record.DiscClass = "II";
+                                            record.DiscType = "G";
+                                            record.Crtd_Role = "HO";
+                                            record.Accumulate = false;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            record.LUpd_DateTime = DateTime.Now;
+                                            record.LUpd_Prog = _screenNbr;
+                                            record.LUpd_User = Current.UserName;
+                                            _db.OM_Discount.AddObject(record);
+                                            lstOM_Discount.Add(record);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lstOM_Discount.Add(recordOM_Discount);
+                                    }
+                                    #endregion
+
+                                    #region import sheet chương trình khuyến mãi vào OM_DiscSeq
+                                    var recordlstOM_DiscSeq = lstOM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                    if (recordlstOM_DiscSeq == null)
+                                    {
+                                        var record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscSeq();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt_DiscSeq;
+                                            record.Active = 1;
+                                            record.BreakBy = "Q";
+                                            record.BudgetID = null;
+                                            record.DiscClass = "II";
+                                            record.DiscFor = "P";
+                                            record.Promo = 1;
+                                            record.Crtd_Role = "HO";
+                                            record.Status = "H";
+                                            record.ExactQty = false;
+                                            record.ExcludeOtherDisc = false;
+                                            record.POStartDate = DateTime.Now;
+                                            record.POEndDate = DateTime.Now;
+                                            record.POUse = false;
+                                            record.ProAplForItem = "A";
+                                            record.AutoFreeItem = false;
+                                            record.AllowEditDisc = false;
+                                            record.StartDate = workt_StartDate.ToDateShort();
+                                            record.EndDate = workt_EndDate.ToDateShort();
+                                            record.Descr = workt_DiscSeqDr;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Profile = null;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscSeq.AddObject(record);
+                                            lstOM_DiscSeq.Add(record);
+                                        }
+                                        else
+                                        {
+                                            record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq && p.Status == "H");
+                                            if (record != null)
+                                            {
+                                                record.StartDate = workt_StartDate.ToDateShort();
+                                                record.EndDate = workt_EndDate.ToDateShort();
+                                                record.Descr = workt_DiscSeqDr;
+                                                record.LUpd_DateTime = DateTime.Now;
+                                                record.LUpd_Prog = _screenNbr;
+                                                record.LUpd_User = Current.UserName;
+                                            }
+                                        }
+                                    }
+                                    #endregion
+
+                                }
+                                //kiểm tra mã khuyến mãi thống nhất hay không
+                                if (lstOM_Discount.Where(p => p.DiscID == workt_DiscID).Count() < (lstOM_Discount.Count()))
+                                {
+                                    errorDiscID = ",";
+                                    flagCheck = true;
+                                }
+                                #endregion
+
+
+                                #region import Điều Kiện vào  OM_DiscBreak
+                                for (int i = 1; i <= workSheet1.Cells.MaxDataRow; i++)
+                                {
+                                    workt1_DiscSeq = workSheet1.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt1_Level = workSheet1.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt1_BreakQty = workSheet1.Cells[i, 2].StringValue.PassNull();
+                                    workt1_Discount = workSheet1.Cells[i, 3].StringValue.PassNull();
+                                    workt1_Descr = workSheet1.Cells[i, 4].StringValue.PassNull();
+
+                                    if (workt1_DiscSeq == null || workt1_DiscSeq == "")
+                                    {
+                                        errorDiscSeq1Null += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0)
+                                        {
+                                            errorDiscSeq1 += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt1_Level == null || workt1_Level == "")
+                                    {
+                                        errorLevelNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    else
+                                    {
+                                        if (workt1_Level.Length > 5)
+                                        {
+                                            errorLevelLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+                                        Convert.ToInt32(workt1_Level);
+                                    }
+                                    catch
+                                    {
+                                        errorLevel += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_BreakQty);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_BreakQty += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_Discount);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_Discount += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    if (workt1_Descr.Length > 200)
+                                    {
+                                        errorworkt1_Descr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    for (int l = workt1_Level.Length; workt1_Level.Length < 5;)
+                                        workt1_Level = "0" + workt1_Level;
+                                    var recordOM_DiscBreak = lstOM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                    if (recordOM_DiscBreak == null)
+                                    {
+                                        var record = _db.OM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscBreak();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt1_DiscSeq;
+                                            record.LineRef = workt1_Level;
+                                            record.BreakAmt = 0;
+                                            record.MaxLot = 0;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscBreak.AddObject(record);
+                                            lstOM_DiscBreak.Add(record);
+                                        }
+                                        record.BreakQty = workt1_BreakQty.ToInt();
+                                        record.DiscAmt = workt1_Discount.ToInt();
+                                        record.MaxLot = 0;
+                                        record.Descr = workt1_Descr;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+
+                                }
+                                #endregion
+
+                                #region Sheet Sản Phẩm Bán => OM_DiscItem
+                                for (int i = 1; i <= workSheet2.Cells.MaxDataRow; i++)
+                                {
+                                    workt2_DiscSeq = workSheet2.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt2_InvtID = workSheet2.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt2_UOM = workSheet2.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    if (workt2_DiscSeq == null || workt2_DiscSeq == "")
+                                    {
+                                        errorworkt2_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt2_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt2_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt2_DiscSep += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt2_InvtID == null || workt2_InvtID == "")
+                                    {
+                                        errorworkt2_InvtIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_Inventory.Where(p => p.InvtID.ToUpper() == workt2_InvtID).Count() == 0)
+                                        {
+                                            errorworkt2_InvtIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt2_UOM == null || workt2_UOM == "")
+                                    {
+                                        errorworkt2_UOMNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_UnitConversion.Where(p => p.FromUnit.ToUpper() == workt2_UOM).Count() == 0)
+                                        {
+                                            errorworkt2_UOM += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    var recordOM_DiscItem = lstOM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                    if (recordOM_DiscItem == null)
+                                    {
+                                        var record = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscItem();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt2_DiscSeq;
+                                            record.InvtID = workt2_InvtID;
+                                            record.Active = 0;
+                                            record.BundleAmt = 0;
+                                            record.BundleNbr = 0;
+                                            record.BundleOrItem = "I";
+                                            record.BundleQty = 0;
+                                            record.DiscType = "G";
+                                            record.QtyType = "E";
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscItem.AddObject(record);
+                                            lstOM_DiscItem.Add(record);
+                                        }
+                                        record.UnitDesc = workt2_UOM;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+                                }
+                                #endregion
+
+                                #region Sheet NPP Áp Dụng => OM_DiscCpny
+                                for (int i = 1; i <= workSheet3.Cells.MaxDataRow; i++)
+                                {
+                                    workt3_DiscSeq = workSheet3.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt3_BranchID = workSheet3.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    if (workt3_DiscSeq == null || workt3_DiscSeq == "")
+                                    {
+                                        errorworkt3_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt3_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt3_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt3_DiscSeq += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt3_BranchID == null || workt3_BranchID == "")
+                                    {
+                                        errorworkt3_BranchIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstBrachID.Where(p => p.CpnyID.ToUpper() == workt3_BranchID).Count() == 0)
+                                        {
+                                            errorworkt3_BranchID += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+                                    var recordOM_DiscCpny = lstOM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                    if (recordOM_DiscCpny == null)
+                                    {
+                                        var record = _db.OM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscCpny();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt3_DiscSeq;
+                                            record.CpnyID = workt3_BranchID;
+                                            _db.OM_DiscCpny.AddObject(record);
+                                            lstOM_DiscCpny.Add(record);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                        }
+                        #endregion
+
+                        #region nếu template là LIIQA
+                        if (fileImportName.ToUpper().Trim() == "LIIQA.XLSX" || fileImportName.ToUpper().Trim() == "LIIQA.XLS")
+                        {
+                            if (workbook.Worksheets.Count > 0)
+                            {
+                                #region kiểm tra template
+                                // kiểm tra sheet Chương trình khuyến mãi
+                                if (workSheet.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscID").ToUpper().Trim()
+                                  || workSheet.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                  || workSheet.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 4].StringValue.ToUpper().Trim() != (Util.GetLang("StartDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  || workSheet.Cells[0, 5].StringValue.ToUpper().Trim() != (Util.GetLang("EndDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                // kiểm tra sheet Điều kiện
+                                if (workSheet1.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Level").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BreakQty").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("Discount").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 4].StringValue.ToUpper().Trim() != Util.GetLang("OM21100MaxLot").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 5].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+                                // kiểm tra sản phẩm bán
+                                if (workSheet2.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("InvtID").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("UOM").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+
+                                if (workSheet3.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("BranchID").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BranchName").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+                                #endregion
+
+                                #region import vào bảng OM_Discount và OM_DiscSeq
+                                for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
+                                {
+                                    //var keysave = 1;
+                                    int check = 0;
+                                    workt_DiscID = workSheet.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt_DiscIDDr = workSheet.Cells[i, 1].StringValue.PassNull();
+                                    workt_DiscSeq = workSheet.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    workt_DiscSeqDr = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    workt_StartDate = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    workt_EndDate = workSheet.Cells[i, 5].StringValue.PassNull();
+
+                                    ///kiểm tra dữ liệu nhập vào
+                                    if (workt_DiscID == null || workt_DiscID == "")
+                                    {
+                                        errorDiscIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscID.Length > 10)
+                                        {
+                                            errorDiscIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt_DiscIDDr.Length > 50)
+                                    {
+                                        errorDiscIDDescr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (workt_DiscSeq == null || workt_DiscSeq == "")
+                                    {
+                                        errorDiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscSeq.Length > 10)
+                                        {
+                                            errorDiscSeqLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+
+                                        workt_StartDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorStartDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    try
+                                    {
+                                        workt_EndDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorEndDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    if (check == 0)
+                                    {
+                                        if (workt_EndDate.ToDateShort() < workt_StartDate.ToDateShort())
+                                        {
+                                            errorDate += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    #region import import sheet chương trình khuyến mãi vào OM_Discount
+                                    var recordOM_Discount = lstOM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID);
+                                    if (recordOM_Discount == null)
+                                    {
+                                        var record = _db.OM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID.ToUpper().Trim());
+                                        if (record == null)
+                                        {
+                                            record = new OM_Discount();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.Descr = workt_DiscIDDr;
+                                            record.DiscClass = "II";
+                                            record.DiscType = "L";
+                                            record.Crtd_Role = "HO";
+                                            record.Accumulate = false;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            record.LUpd_DateTime = DateTime.Now;
+                                            record.LUpd_Prog = _screenNbr;
+                                            record.LUpd_User = Current.UserName;
+                                            _db.OM_Discount.AddObject(record);
+                                            lstOM_Discount.Add(record);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lstOM_Discount.Add(recordOM_Discount);
+                                    }
+                                    #endregion
+
+
+                                    #region import sheet chương trình khuyến mãi vào OM_DiscSeq
+                                    var recordlstOM_DiscSeq = lstOM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                    if (recordlstOM_DiscSeq == null)
+                                    {
+                                        var record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscSeq();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt_DiscSeq;
+                                            record.Active = 1;
+                                            record.BreakBy = "Q";
+                                            record.BudgetID = null;
+                                            record.DiscClass = "II";
+                                            record.DiscFor = "A";
+                                            record.Promo = 1;
+                                            record.Crtd_Role = "HO";
+                                            record.Status = "H";
+                                            record.ExactQty = false;
+                                            record.ExcludeOtherDisc = false;
+                                            record.POStartDate = DateTime.Now;
+                                            record.POEndDate = DateTime.Now;
+                                            record.POUse = false;
+                                            record.ProAplForItem = "A";
+                                            record.AutoFreeItem = false;
+                                            record.AllowEditDisc = false;
+                                            record.StartDate = workt_StartDate.ToDateShort();
+                                            record.EndDate = workt_EndDate.ToDateShort();
+                                            record.Descr = workt_DiscSeqDr;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Profile = null;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscSeq.AddObject(record);
+                                            lstOM_DiscSeq.Add(record);
+                                        }
+                                        else
+                                        {
+                                            record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq && p.Status == "H");
+                                            if (record != null)
+                                            {
+                                                record.StartDate = workt_StartDate.ToDateShort();
+                                                record.EndDate = workt_EndDate.ToDateShort();
+                                                record.Descr = workt_DiscSeqDr;
+                                                record.LUpd_DateTime = DateTime.Now;
+                                                record.LUpd_Prog = _screenNbr;
+                                                record.LUpd_User = Current.UserName;
+                                            }
+                                        }
+                                    }
+                                    #endregion
+                                }
+                                //kiểm tra mã khuyến mãi thống nhất hay không
+                                if (lstOM_Discount.Where(p => p.DiscID == workt_DiscID).Count() < (lstOM_Discount.Count()))
+                                {
+                                    errorDiscID = ",";
+                                    flagCheck = true;
+                                }
+                                #endregion
+
+
+                                #region import Điều Kiện vào  OM_DiscBreak
+                                for (int i = 1; i <= workSheet1.Cells.MaxDataRow; i++)
+                                {
+                                    workt1_DiscSeq = workSheet1.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt1_Level = workSheet1.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt1_BreakQty = workSheet1.Cells[i, 2].StringValue.PassNull();
+                                    workt1_Discount = workSheet1.Cells[i, 3].StringValue.PassNull();
+                                    workt1_OM21100MaxLot = workSheet1.Cells[i, 4].StringValue.PassNull();
+                                    workt1_Descr = workSheet1.Cells[i, 5].StringValue.PassNull();
+                                    if (workt1_DiscSeq == null || workt1_DiscSeq == "")
+                                    {
+                                        errorDiscSeq1Null += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0)
+                                        {
+                                            errorDiscSeq1 += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt1_Level == null || workt1_Level == "")
+                                    {
+                                        errorLevelNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    else
+                                    {
+                                        if (workt1_Level.Length > 5)
+                                        {
+                                            errorLevelLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+                                        Convert.ToInt32(workt1_Level);
+                                    }
+                                    catch
+                                    {
+                                        errorLevel += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_BreakQty);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_BreakQty += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_Discount);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_Discount += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_OM21100MaxLot);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_OM21100MaxLot += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (workt1_Descr.Length > 200)
+                                    {
+                                        errorworkt1_Descr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    for (int l = workt1_Level.Length; workt1_Level.Length < 5;)
+                                        workt1_Level = "0" + workt1_Level;
+                                    var recordOM_DiscBreak = lstOM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                    if (recordOM_DiscBreak == null)
+                                    {
+                                        var record = _db.OM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscBreak();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt1_DiscSeq;
+                                            record.LineRef = workt1_Level;
+                                            record.BreakAmt = 0;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscBreak.AddObject(record);
+                                            lstOM_DiscBreak.Add(record);
+                                        }
+                                        record.BreakQty = workt1_BreakQty.ToInt();
+                                        record.DiscAmt = workt1_Discount.ToInt();
+                                        record.MaxLot = workt1_OM21100MaxLot.ToInt();
+                                        record.Descr = workt1_Descr;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+
+                                }
+                                #endregion
+
+                                #region Sheet Sản Phẩm Bán => OM_DiscItem
+                                for (int i = 1; i <= workSheet2.Cells.MaxDataRow; i++)
+                                {
+                                    workt2_DiscSeq = workSheet2.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt2_InvtID = workSheet2.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt2_UOM = workSheet2.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    if (workt2_DiscSeq == null || workt2_DiscSeq == "")
+                                    {
+                                        errorworkt2_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt2_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt2_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt2_DiscSep += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt2_InvtID == null || workt2_InvtID == "")
+                                    {
+                                        errorworkt2_InvtIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_Inventory.Where(p => p.InvtID.ToUpper() == workt2_InvtID).Count() == 0)
+                                        {
+                                            errorworkt2_InvtIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt2_UOM == null || workt2_UOM == "")
+                                    {
+                                        errorworkt2_UOMNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_UnitConversion.Where(p => p.FromUnit.ToUpper() == workt2_UOM).Count() == 0)
+                                        {
+                                            errorworkt2_UOM += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    var recordOM_DiscItem = lstOM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                    if (recordOM_DiscItem == null)
+                                    {
+                                        var record = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscItem();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt2_DiscSeq;
+                                            record.InvtID = workt2_InvtID;
+                                            record.Active = 0;
+                                            record.BundleAmt = 0;
+                                            record.BundleNbr = 0;
+                                            record.BundleOrItem = "I";
+                                            record.BundleQty = 0;
+                                            record.DiscType = "L";
+                                            record.QtyType = "E";
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscItem.AddObject(record);
+                                            lstOM_DiscItem.Add(record);
+                                        }
+                                        record.UnitDesc = workt2_UOM;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+                                }
+                                #endregion
+
+
+                                #region Sheet NPP Áp Dụng => OM_DiscCpny
+                                for (int i = 1; i <= workSheet3.Cells.MaxDataRow; i++)
+                                {
+                                    workt3_DiscSeq = workSheet3.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt3_BranchID = workSheet3.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    if (workt3_DiscSeq == null || workt3_DiscSeq == "")
+                                    {
+                                        errorworkt3_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt3_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt3_DiscSeq).Count() == 0)
+                                        {
+                                            
+                                            errorworkt3_DiscSeq += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt3_BranchID == null || workt3_BranchID == "")
+                                    {
+                                        errorworkt3_BranchIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstBrachID.Where(p => p.CpnyID.ToUpper() == workt3_BranchID).Count() == 0)
+                                        {
+                                            errorworkt3_BranchID += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+                                    var recordOM_DiscCpny = lstOM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                    if (recordOM_DiscCpny == null)
+                                    {
+                                        var record = _db.OM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscCpny();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt3_DiscSeq;
+                                            record.CpnyID = workt3_BranchID;
+                                            _db.OM_DiscCpny.AddObject(record);
+                                            lstOM_DiscCpny.Add(record);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                        }
+                        #endregion
+
+                        #region nếu chọn teamlate là LIIQF
+                        if (fileImportName.ToUpper().Trim() == "LIIQF.XLSX" || fileImportName.ToUpper().Trim() == "LIIQF.XLS")
+                        {
+
+                            if (workbook.Worksheets.Count > 0)
+                            {
+                                #region kiểm tra template
+                                Worksheet workSheet4 = workbook.Worksheets[4];
+                                // kiểm tra sheet Chương trình khuyến mãi
+                                if (workSheet.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscID").ToUpper().Trim()
+                                  || workSheet.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                  || workSheet.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 4].StringValue.ToUpper().Trim() != (Util.GetLang("StartDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  || workSheet.Cells[0, 5].StringValue.ToUpper().Trim() != (Util.GetLang("EndDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                // kiểm tra sheet Điều kiện
+                                if (workSheet1.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Level").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BreakQty").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("OM21100MaxLot").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 4].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                // kiểm tra sản phẩm bán
+                                if (workSheet2.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("InvtID").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("UOM").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                //Kiểm tra sản phẩm tặng
+                                if (workSheet3.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Level").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("FreeItemID").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("UOM").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 4].StringValue.ToUpper().Trim() != Util.GetLang("BreakQty").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                // kiểm tra NPP app dung
+                                if (workSheet4.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet4.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("BranchID").ToUpper().Trim()
+                                 || workSheet4.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BranchName").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+                                #endregion
+
+
+                                #region import import sheet chương trình khuyến mãi vào OM_Discount và OM_DiscSeq
+                                for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
+                                {
+                                    //var keysave = 1;
+                                    int check = 0;
+                                    workt_DiscID = workSheet.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt_DiscIDDr = workSheet.Cells[i, 1].StringValue.PassNull();
+                                    workt_DiscSeq = workSheet.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    workt_DiscSeqDr = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    workt_StartDate = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    workt_EndDate = workSheet.Cells[i, 5].StringValue.PassNull();
+
+                                    ///kiểm tra dữ liệu nhập vào
+                                    if (workt_DiscID == null || workt_DiscID == "")
+                                    {
+                                        errorDiscIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscID.Length > 10)
+                                        {
+                                            errorDiscIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt_DiscIDDr.Length > 50)
+                                    {
+                                        errorDiscIDDescr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (workt_DiscSeq == null || workt_DiscSeq == "")
+                                    {
+                                        errorDiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscSeq.Length > 10)
+                                        {
+                                            errorDiscSeqLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+
+                                        workt_StartDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorStartDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    try
+                                    {
+                                        workt_EndDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorEndDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    if (check == 0)
+                                    {
+                                        if (workt_EndDate.ToDateShort() < workt_StartDate.ToDateShort())
+                                        {
+                                            errorDate += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    #region import import sheet chương trình khuyến mãi vào OM_Discount
+                                    var recordOM_Discount = lstOM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID);
+                                    if (recordOM_Discount == null)
+                                    {
+                                        var record = _db.OM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID.ToUpper().Trim());
+                                        if (record == null)
+                                        {
+                                            record = new OM_Discount();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.Descr = workt_DiscIDDr;
+                                            record.DiscClass = "II";
+                                            record.DiscType = "L";
+                                            record.Crtd_Role = "HO";
+                                            record.Accumulate = false;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            record.LUpd_DateTime = DateTime.Now;
+                                            record.LUpd_Prog = _screenNbr;
+                                            record.LUpd_User = Current.UserName;
+                                            _db.OM_Discount.AddObject(record);
+                                            lstOM_Discount.Add(record);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lstOM_Discount.Add(recordOM_Discount);
+                                    }
+                                    #endregion
+
+                                    #region import sheet chương trình khuyến mãi vào OM_DiscSeq
+                                    var recordlstOM_DiscSeq = lstOM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                    if (recordlstOM_DiscSeq == null)
+                                    {
+                                        var record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscSeq();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt_DiscSeq;
+                                            record.Active = 1;
+                                            record.BreakBy = "Q";
+                                            record.BudgetID = null;
+                                            record.DiscClass = "II";
+                                            record.DiscFor = "P";
+                                            record.Promo = 1;
+                                            record.Crtd_Role = "HO";
+                                            record.Status = "H";
+                                            record.ExactQty = false;
+                                            record.ExcludeOtherDisc = false;
+                                            record.POStartDate = DateTime.Now;
+                                            record.POEndDate = DateTime.Now;
+                                            record.POUse = false;
+                                            record.ProAplForItem = "A";
+                                            record.AutoFreeItem = false;
+                                            record.AllowEditDisc = false;
+                                            record.StartDate = workt_StartDate.ToDateShort();
+                                            record.EndDate = workt_EndDate.ToDateShort();
+                                            record.Descr = workt_DiscSeqDr;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Profile = null;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscSeq.AddObject(record);
+                                            lstOM_DiscSeq.Add(record);
+                                        }
+                                        else
+                                        {
+                                            record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq && p.Status == "H");
+                                            if (record != null)
+                                            {
+                                                record.StartDate = workt_StartDate.ToDateShort();
+                                                record.EndDate = workt_EndDate.ToDateShort();
+                                                record.Descr = workt_DiscSeqDr;
+                                                record.LUpd_DateTime = DateTime.Now;
+                                                record.LUpd_Prog = _screenNbr;
+                                                record.LUpd_User = Current.UserName;
+                                            }
+                                        }
+                                    }
+                                    #endregion
+                                }
+                                //kiểm tra mã khuyến mãi thống nhất hay không
+                                if (lstOM_Discount.Where(p => p.DiscID == workt_DiscID).Count() < (lstOM_Discount.Count()))
+                                {
+                                    errorDiscID = ",";
+                                    flagCheck = true;
+                                }
+                                #endregion
+
+                                #region import Điều Kiện vào  OM_DiscBreak
+                                for (int i = 1; i <= workSheet1.Cells.MaxDataRow; i++)
+                                {
+                                    workt1_DiscSeq = workSheet1.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt1_Level = workSheet1.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt1_BreakQty = workSheet1.Cells[i, 2].StringValue.PassNull();
+                                    workt1_OM21100MaxLot = workSheet1.Cells[i, 3].StringValue.PassNull();
+                                    workt1_Descr = workSheet1.Cells[i, 4].StringValue.PassNull();
+
+                                    if (workt1_DiscSeq == null || workt1_DiscSeq == "")
+                                    {
+                                        errorDiscSeq1Null += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0)
+                                        {
+                                            errorDiscSeq1 += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt1_Level == null || workt1_Level == "")
+                                    {
+                                        errorLevelNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    else
+                                    {
+                                        if (workt1_Level.Length > 5)
+                                        {
+                                            errorLevelLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+                                        Convert.ToInt32(workt1_Level);
+                                    }
+                                    catch
+                                    {
+                                        errorLevel += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_BreakQty);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_BreakQty += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_OM21100MaxLot);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_OM21100MaxLot += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (workt1_Descr.Length > 200)
+                                    {
+                                        errorworkt1_Descr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    for (int l = workt1_Level.Length; workt1_Level.Length < 5;)
+                                        workt1_Level = "0" + workt1_Level;
+                                    var recordOM_DiscBreak = lstOM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                    if (recordOM_DiscBreak == null)
+                                    {
+                                        var record = _db.OM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscBreak();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt1_DiscSeq;
+                                            record.LineRef = workt1_Level;
+                                            record.BreakAmt = 0;
+                                            record.DiscAmt = 0;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscBreak.AddObject(record);
+                                            lstOM_DiscBreak.Add(record);
+                                        }
+                                        record.BreakQty = workt1_BreakQty.ToInt();
+                                        record.MaxLot = workt1_OM21100MaxLot.ToInt();
+                                        record.Descr = workt1_Descr;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+
+                                }
+                                #endregion
+
+                                #region Sheet Sản Phẩm Bán => OM_DiscItem
+                                for (int i = 1; i <= workSheet2.Cells.MaxDataRow; i++)
+                                {
+                                    workt2_DiscSeq = workSheet2.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt2_InvtID = workSheet2.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt2_UOM = workSheet2.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    if (workt2_DiscSeq == null || workt2_DiscSeq == "")
+                                    {
+                                        errorworkt2_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt2_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt2_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt2_DiscSep += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt2_InvtID == null || workt2_InvtID == "")
+                                    {
+                                        errorworkt2_InvtIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_Inventory.Where(p => p.InvtID.ToUpper() == workt2_InvtID).Count() == 0)
+                                        {
+                                            errorworkt2_InvtIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt2_UOM == null || workt2_UOM == "")
+                                    {
+                                        errorworkt2_UOMNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_UnitConversion.Where(p => p.FromUnit.ToUpper() == workt2_UOM).Count() == 0)
+                                        {
+                                            errorworkt2_UOM += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    var recordOM_DiscItem = lstOM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                    if (recordOM_DiscItem == null)
+                                    {
+                                        var record = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscItem();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt2_DiscSeq;
+                                            record.InvtID = workt2_InvtID;
+                                            record.Active = 0;
+                                            record.BundleAmt = 0;
+                                            record.BundleNbr = 0;
+                                            record.BundleOrItem = "I";
+                                            record.BundleQty = 0;
+                                            record.DiscType = "L";
+                                            record.QtyType = "E";
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscItem.AddObject(record);
+                                            lstOM_DiscItem.Add(record);
+                                        }
+                                        record.UnitDesc = workt2_UOM;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+                                }
+                                #endregion
+
+
+                                #region Sheet Sản phẩm tặng => OM_DiscFreeItem
+                                
+                                for (int i = 1; i <= workSheet3.Cells.MaxDataRow; i++)
+                                {
+
+                                    string workt3_DiscSeqFreeItem = workSheet3.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    string workt3_LevelFreeItem = workSheet3.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    string workt3_InvtIDFreeItem = workSheet3.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    string workt3_UOMFreeItem = workSheet3.Cells[i, 3].StringValue.PassNull().ToUpper();
+                                    string workt3_BreakQtFreeItemy = workSheet3.Cells[i, 4].StringValue.PassNull();
+
+                                    if (workt3_DiscSeqFreeItem == null || workt3_DiscSeqFreeItem == "")
+                                    {
+                                        errorDiscSeqFreeItemNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt3_DiscSeqFreeItem).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt3_DiscSeqFreeItem).Count() == 0)
+                                        {
+                                            errorDiscSeqFreeItem += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt3_LevelFreeItem == null || workt3_LevelFreeItem == "")
+                                    {
+                                        errorLevelFreeItemNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    else
+                                    {
+                                        if (workt3_LevelFreeItem.Length > 5)
+                                        {
+                                            errorLevelFreeItemLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+                                        Convert.ToInt32(workt3_LevelFreeItem);
+                                    }
+                                    catch
+                                    {
+                                        errorLevelFreeItem += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+
+                                    if (workt3_InvtIDFreeItem == null || workt3_InvtIDFreeItem == "")
+                                    {
+                                        errorFreeItemNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_Inventory.Where(p => p.InvtID.ToUpper() == workt3_InvtIDFreeItem).Count() == 0)
+                                        {
+                                            errorFreeItem += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt3_UOMFreeItem == null || workt3_UOMFreeItem == "")
+                                    {
+                                        errorUOMFreeItemNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_UnitConversion.Where(p => p.FromUnit.ToUpper() == workt3_UOMFreeItem).Count() == 0)
+                                        {
+                                            errorUOMFreeItem += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt3_BreakQtFreeItemy);
+                                    }
+                                    catch
+                                    {
+                                        errorQtFreeItem += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+
+                                    for (int l = workt3_LevelFreeItem.Length; workt3_LevelFreeItem.Length < 5;)
+                                        workt3_LevelFreeItem = "0" + workt3_LevelFreeItem;
+                                    var recordOM_DiscFreeItem = lstOM_DiscFreeItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeqFreeItem && p.LineRef.ToUpper().Trim() == workt3_LevelFreeItem && p.FreeItemID.ToUpper().Trim() == workt3_InvtIDFreeItem);
+                                    if (recordOM_DiscFreeItem == null)
+                                    {
+                                        var record = _db.OM_DiscFreeItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeqFreeItem && p.LineRef.ToUpper().Trim() == workt3_LevelFreeItem && p.FreeItemID.ToUpper().Trim() == workt3_InvtIDFreeItem);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscFreeItem();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt3_DiscSeqFreeItem;
+                                            record.LineRef = workt3_LevelFreeItem;
+                                            record.FreeItemID = workt3_InvtIDFreeItem;
+                                            record.FreeItemBudgetID = "";
+                                            record.FreeITemSiteID = "";
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscFreeItem.AddObject(record);
+                                            lstOM_DiscFreeItem.Add(record);
+                                        }
+                                        record.FreeItemQty = workt3_BreakQtFreeItemy.ToInt();
+                                        record.UnitDescr = workt3_UOMFreeItem;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+
+                                    }
+                                }
+                                #endregion
+
+                                #region Sheet NPP Áp Dụng => OM_DiscCpny
+                                for (int i = 1; i <= workSheet4.Cells.MaxDataRow; i++)
+                                {
+
+                                    workt3_DiscSeq = workSheet4.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt3_BranchID = workSheet4.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    if (workt3_DiscSeq == null || workt3_DiscSeq == "")
+                                    {
+                                        errorworkt3_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt3_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt3_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt3_DiscSeq += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt3_BranchID == null || workt3_BranchID == "")
+                                    {
+                                        errorworkt3_BranchIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstBrachID.Where(p => p.CpnyID.ToUpper() == workt3_BranchID).Count() == 0)
+                                        {
+                                            errorworkt3_BranchID += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+                                    var recordOM_DiscCpny = lstOM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                    if (recordOM_DiscCpny == null)
+                                    {
+                                        var record = _db.OM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscCpny();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt3_DiscSeq;
+                                            record.CpnyID = workt3_BranchID;
+                                            _db.OM_DiscCpny.AddObject(record);
+                                            lstOM_DiscCpny.Add(record);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                        }
+                        #endregion
+
+                        #region Nếu chon template LIIQP
+                        if (fileImportName.ToUpper().Trim() == "LIIQP.XLSX" || fileImportName.ToUpper().Trim() == "LIIQP.XLS")
+                        {
+                            if (workbook.Worksheets.Count > 0)
+                            {
+                                #region kiểm tra template
+                                // kiểm tra sheet Chương trình khuyến mãi
+                                if (workSheet.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscID").ToUpper().Trim()
+                                  || workSheet.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                  || workSheet.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                  || workSheet.Cells[0, 4].StringValue.ToUpper().Trim() != (Util.GetLang("StartDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  || workSheet.Cells[0, 5].StringValue.ToUpper().Trim() != (Util.GetLang("EndDate") + " \r\n" + " (dd/MM/yyyy)").ToUpper().Trim()
+                                  )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+                                // kiểm tra sheet Điều kiện
+                                if (workSheet1.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("Level").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BreakQty").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 3].StringValue.ToUpper().Trim() != Util.GetLang("Discount").ToUpper().Trim()
+                                 || workSheet1.Cells[0, 4].StringValue.ToUpper().Trim() != Util.GetLang("Descr").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+                                // kiểm tra sản phẩm bán
+                                if (workSheet2.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("InvtID").ToUpper().Trim()
+                                 || workSheet2.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("UOM").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+
+
+                                if (workSheet3.Cells[0, 0].StringValue.ToUpper().Trim() != Util.GetLang("DiscSeq").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 1].StringValue.ToUpper().Trim() != Util.GetLang("BranchID").ToUpper().Trim()
+                                 || workSheet3.Cells[0, 2].StringValue.ToUpper().Trim() != Util.GetLang("BranchName").ToUpper().Trim()
+                                 )
+                                {
+                                    throw new MessageException(MessageType.Message, "148");
+                                }
+                                #endregion
+
+                                #region import vào bảng OM_DiscSeq và OM_Discount
+                                for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
+                                {
+                                    int check = 0;
+                                    workt_DiscID = workSheet.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt_DiscIDDr = workSheet.Cells[i, 1].StringValue.PassNull();
+                                    workt_DiscSeq = workSheet.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    workt_DiscSeqDr = workSheet.Cells[i, 3].StringValue.PassNull();
+                                    workt_StartDate = workSheet.Cells[i, 4].StringValue.PassNull();
+                                    workt_EndDate = workSheet.Cells[i, 5].StringValue.PassNull();
+
+                                    ///kiểm tra dữ liệu nhập vào
+                                    if (workt_DiscID == null || workt_DiscID == "")
+                                    {
+                                        errorDiscIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscID.Length > 10)
+                                        {
+                                            errorDiscIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt_DiscIDDr.Length > 50)
+                                    {
+                                        errorDiscIDDescr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (workt_DiscSeq == null || workt_DiscSeq == "")
+                                    {
+                                        errorDiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (workt_DiscSeq.Length > 10)
+                                        {
+                                            errorDiscSeqLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+
+                                        workt_StartDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorStartDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    try
+                                    {
+                                        workt_EndDate.ToDateShort();
+                                    }
+                                    catch
+                                    {
+                                        errorEndDate += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                        check = 1;
+                                    }
+                                    if (check == 0)
+                                    {
+                                        if (workt_EndDate.ToDateShort() < workt_StartDate.ToDateShort())
+                                        {
+                                            errorDate += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    #region import import sheet chương trình khuyến mãi vào OM_Discount
+                                    var recordOM_Discount = lstOM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID);
+                                    if (recordOM_Discount == null)
+                                    {
+                                        var record = _db.OM_Discount.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID.ToUpper().Trim());
+                                        if (record == null)
+                                        {
+                                            record = new OM_Discount();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.Descr = workt_DiscIDDr;
+                                            record.DiscClass = "II";
+                                            record.DiscType = "L";
+                                            record.Crtd_Role = "HO";
+                                            record.Accumulate = false;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            record.LUpd_DateTime = DateTime.Now;
+                                            record.LUpd_Prog = _screenNbr;
+                                            record.LUpd_User = Current.UserName;
+                                            _db.OM_Discount.AddObject(record);
+                                            lstOM_Discount.Add(record);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lstOM_Discount.Add(recordOM_Discount);
+                                    }
+                                    #endregion
+
+                                    #region import sheet chương trình khuyến mãi vào OM_DiscSeq
+                                    var recordlstOM_DiscSeq = lstOM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                    if (recordlstOM_DiscSeq == null)
+                                    {
+                                        var record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscSeq();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt_DiscSeq;
+                                            record.Active = 1;
+                                            record.BreakBy = "Q";
+                                            record.BudgetID = null;
+                                            record.DiscClass = "II";
+                                            record.DiscFor = "P";
+                                            record.Promo = 1;
+                                            record.Crtd_Role = "HO";
+                                            record.Status = "H";
+                                            record.ExactQty = false;
+                                            record.ExcludeOtherDisc = false;
+                                            record.POStartDate = DateTime.Now;
+                                            record.POEndDate = DateTime.Now;
+                                            record.POUse = false;
+                                            record.ProAplForItem = "A";
+                                            record.AutoFreeItem = false;
+                                            record.AllowEditDisc = false;
+                                            record.StartDate = workt_StartDate.ToDateShort();
+                                            record.EndDate = workt_EndDate.ToDateShort();
+                                            record.Descr = workt_DiscSeqDr;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Profile = null;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscSeq.AddObject(record);
+                                            lstOM_DiscSeq.Add(record);
+                                        }
+                                        else
+                                        {
+                                            record = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt_DiscSeq && p.Status == "H");
+                                            if (record != null)
+                                            {
+                                                record.StartDate = workt_StartDate.ToDateShort();
+                                                record.EndDate = workt_EndDate.ToDateShort();
+                                                record.Descr = workt_DiscSeqDr;
+                                                record.LUpd_DateTime = DateTime.Now;
+                                                record.LUpd_Prog = _screenNbr;
+                                                record.LUpd_User = Current.UserName;
+                                            }
+                                        }
+                                    }
+                                    #endregion
+                                }
+                                //kiểm tra mã khuyến mãi thống nhất hay không
+                                if (lstOM_Discount.Where(p => p.DiscID == workt_DiscID).Count() < (lstOM_Discount.Count()))
+                                {
+                                    errorDiscID = ",";
+                                    flagCheck = true;
+                                }
+                                #endregion
+
+
+                                #region import Điều Kiện vào  OM_DiscBreak
+                                for (int i = 1; i <= workSheet1.Cells.MaxDataRow; i++)
+                                {
+                                    workt1_DiscSeq = workSheet1.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt1_Level = workSheet1.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt1_BreakQty = workSheet1.Cells[i, 2].StringValue.PassNull();
+                                    workt1_Discount = workSheet1.Cells[i, 3].StringValue.PassNull();
+                                    workt1_Descr = workSheet1.Cells[i, 4].StringValue.PassNull();
+
+                                    if (workt1_DiscSeq == null || workt1_DiscSeq == "")
+                                    {
+                                        errorDiscSeq1Null += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq.ToUpper() == workt1_DiscSeq).Count() == 0)
+                                        {
+                                            errorDiscSeq1 += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt1_Level == null || workt1_Level == "")
+                                    {
+                                        errorLevelNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    else
+                                    {
+                                        if (workt1_Level.Length > 5)
+                                        {
+                                            errorLevelLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    try
+                                    {
+                                        Convert.ToInt32(workt1_Level);
+                                    }
+                                    catch
+                                    {
+                                        errorLevel += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_BreakQty);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_BreakQty += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    try
+                                    {
+                                        Convert.ToDouble(workt1_Discount);
+                                    }
+                                    catch
+                                    {
+                                        errorworkt1_Discount += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+
+                                    if (workt1_Descr.Length > 200)
+                                    {
+                                        errorworkt1_Descr += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+
+                                    for (int l = workt1_Level.Length; workt1_Level.Length < 5;)
+                                        workt1_Level = "0" + workt1_Level;
+                                    var recordOM_DiscBreak = lstOM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                    if (recordOM_DiscBreak == null)
+                                    {
+                                        var record = _db.OM_DiscBreak.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt1_DiscSeq && p.LineRef.ToUpper().Trim() == workt1_Level);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscBreak();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt1_DiscSeq;
+                                            record.LineRef = workt1_Level;
+                                            record.BreakAmt = 0;
+                                            record.MaxLot = 0;
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscBreak.AddObject(record);
+                                            lstOM_DiscBreak.Add(record);
+                                        }
+                                        record.BreakQty = workt1_BreakQty.ToInt();
+                                        record.DiscAmt = workt1_Discount.ToInt();
+                                        record.Descr = workt1_Descr;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+
+                                }
+                                #endregion
+
+                                #region Sheet Sản Phẩm Bán => OM_DiscItem
+                                for (int i = 1; i <= workSheet2.Cells.MaxDataRow; i++)
+                                {
+                                    workt2_DiscSeq = workSheet2.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt2_InvtID = workSheet2.Cells[i, 1].StringValue.PassNull().ToUpper();
+                                    workt2_UOM = workSheet2.Cells[i, 2].StringValue.PassNull().ToUpper();
+                                    if (workt2_DiscSeq == null || workt2_DiscSeq == "")
+                                    {
+                                        errorworkt2_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt2_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt2_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt2_DiscSep += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (workt2_InvtID == null || workt2_InvtID == "")
+                                    {
+                                        errorworkt2_InvtIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_Inventory.Where(p => p.InvtID.ToUpper() == workt2_InvtID).Count() > 0)
+                                        {
+                                            errorworkt2_InvtIDLength += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt2_UOM == null || workt2_UOM == "")
+                                    {
+                                        errorworkt2_UOMNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstIN_UnitConversion.Where(p => p.FromUnit.ToUpper() == workt2_UOM) == null)
+                                        {
+                                            errorworkt2_UOM += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+                                    var recordOM_DiscItem = lstOM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                    if (recordOM_DiscItem == null)
+                                    {
+                                        var record = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt2_DiscSeq && p.InvtID.ToUpper().Trim() == workt2_InvtID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscItem();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt2_DiscSeq;
+                                            record.InvtID = workt2_InvtID;
+                                            record.Active = 0;
+                                            record.BundleAmt = 0;
+                                            record.BundleNbr = 0;
+                                            record.BundleOrItem = "I";
+                                            record.BundleQty = 0;
+                                            record.DiscType = "L";
+                                            record.QtyType = "E";
+                                            record.Crtd_DateTime = DateTime.Now;
+                                            record.Crtd_Prog = _screenNbr;
+                                            record.Crtd_User = Current.UserName;
+                                            _db.OM_DiscItem.AddObject(record);
+                                            lstOM_DiscItem.Add(record);
+                                        }
+                                        record.UnitDesc = workt2_UOM;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = Current.UserName;
+                                    }
+                                }
+                                #endregion
+
+                                #region Sheet NPP Áp Dụng => OM_DiscCpny
+                                for (int i = 1; i <= workSheet3.Cells.MaxDataRow; i++)
+                                {
+                                    workt3_DiscSeq = workSheet3.Cells[i, 0].StringValue.PassNull().ToUpper();
+                                    workt3_BranchID = workSheet3.Cells[i, 1].StringValue.PassNull().ToUpper();
+
+                                    if (workt3_DiscSeq == null || workt3_DiscSeq == "")
+                                    {
+                                        errorworkt3_DiscSeqNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstDiscSeq.Where(p => p.DiscSeq.ToUpper() == workt3_DiscSeq).Count() == 0 && lstOM_DiscSeq.Where(p => p.DiscSeq == workt3_DiscSeq).Count() == 0)
+                                        {
+                                            errorworkt3_DiscSeq += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+
+                                    if (workt3_BranchID == null || workt3_BranchID == "")
+                                    {
+                                        errorworkt3_BranchIDNull += (i + 1).ToString() + ",";
+                                        flagCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (lstBrachID.Where(p => p.CpnyID.ToUpper() == workt3_BranchID).Count() == 0)
+                                        {
+                                            errorworkt3_BranchID += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                    if (flagCheck)
+                                    {
+                                        continue;
+                                    }
+                                    var recordOM_DiscCpny = lstOM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                    if (recordOM_DiscCpny == null)
+                                    {
+                                        var record = _db.OM_DiscCpny.FirstOrDefault(p => p.DiscID.ToUpper().Trim() == workt_DiscID && p.DiscSeq.ToUpper().Trim() == workt3_DiscSeq && p.CpnyID.ToUpper().Trim() == workt3_BranchID);
+                                        if (record == null)
+                                        {
+                                            record = new OM_DiscCpny();
+                                            record.ResetET();
+                                            record.DiscID = workt_DiscID;//các key đều upper lên khi save
+                                            record.DiscSeq = workt3_DiscSeq;
+                                            record.CpnyID = workt3_BranchID;
+                                            _db.OM_DiscCpny.AddObject(record);
+                                            lstOM_DiscCpny.Add(record);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                        }
+                        #endregion
+
+                        #region thông báo lỗi
+
+                        message = errorDiscIDNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("DiscID"), errorDiscIDNull, workSheet.Name);
+                        message += errorDiscIDLength == "" ? "" : string.Format(Message.GetString("2017112502", null), Util.GetLang("DiscID"), errorDiscIDLength, "10", workSheet.Name);
+                        message += errorDiscID == "" ? "" : string.Format(Message.GetString("2017112503", null), Util.GetLang("DiscID"), workSheet.Name);
+                        message += errorDiscIDDescr == "" ? "" : string.Format(Message.GetString("2017112504", null), Util.GetLang("Descr"), Util.GetLang("DiscID"), errorDiscIDDescr, "50", workSheet.Name);
+                        message += errorDiscSeqNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("DiscSeq"), errorDiscSeqNull, workSheet.Name);
+                        message += errorDiscSeqLength == "" ? "" : string.Format(Message.GetString("2017112504", null), Util.GetLang("DiscSeq"), errorDiscSeqLength, "10", workSheet.Name);
+                        message += errorStartDate == "" ? "" : string.Format(Message.GetString("2017112505", null), Util.GetLang("StartDate"), errorStartDate, Util.GetLang("StartDate"), workSheet.Name);
+                        message += errorEndDate == "" ? "" : string.Format(Message.GetString("2017112505", null), Util.GetLang("EndDate"), errorEndDate, Util.GetLang("EndDate"), workSheet.Name);
+                        message += errorDate == "" ? "" : string.Format(Message.GetString("2017112509", null), errorDate, null, workSheet.Name);
+                        message += errorDiscSeq1Null == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("DiscSeq"), errorDiscSeq1Null, workSheet1.Name);
+                        message += errorDiscSeq1 == "" ? "" : string.Format(Message.GetString("2017112508", null), Util.GetLang("DiscSeq"), errorDiscSeq1, workSheet1.Name);
+                        message += errorLevelNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("Level"), errorLevelNull, workSheet1.Name);
+                        message += errorLevelLength == "" ? "" : string.Format(Message.GetString("2017112502", null), Util.GetLang("Level"), errorLevelLength, "5", workSheet1.Name);
+                        message += errorLevel == "" ? "" : string.Format(Message.GetString("2017112506", null), Util.GetLang("Level"), errorLevel, Util.GetLang("Level"), workSheet1.Name);
+                        message += errorworkt1_BreakQty == "" ? "" : string.Format(Message.GetString("2017112506", null), Util.GetLang("BreakQty"), errorworkt1_BreakQty, Util.GetLang("BreakQty"), workSheet1.Name);
+                        message += errorworkt1_Discount == "" ? "" : string.Format(Message.GetString("2017112506", null), Util.GetLang("Discount"), errorworkt1_Discount, Util.GetLang("Discount"), workSheet1.Name);
+                        message += errorworkt1_OM21100MaxLot == "" ? "" : string.Format(Message.GetString("2017112506", null), Util.GetLang("OM21100MaxLot"), errorworkt1_OM21100MaxLot, Util.GetLang("OM21100MaxLot"), workSheet1.Name);
+                        message += errorworkt1_Descr == "" ? "" : string.Format(Message.GetString("2017112502", null), Util.GetLang("Descr"), errorworkt1_Descr, "200", workSheet1.Name);
+                        message += errorworkt2_DiscSeqNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("DiscSeq"), errorworkt2_DiscSeqNull, workSheet2.Name);
+                        message += errorworkt2_DiscSep == "" ? "" : string.Format(Message.GetString("2017112508", null), Util.GetLang("DiscSeq"), errorworkt2_DiscSep, workSheet2.Name);
+                        message += errorworkt2_InvtIDNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("InvtID"), errorworkt2_InvtIDNull, workSheet2.Name);
+                        message += errorworkt2_InvtIDLength == "" ? "" : string.Format(Message.GetString("2017112508", null), Util.GetLang("InvtID"), errorworkt2_InvtIDLength, workSheet2.Name);
+                        message += errorworkt2_UOMNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("UOM"), errorworkt2_UOMNull, workSheet2.Name);
+                        message += errorworkt2_UOM == "" ? "" : string.Format(Message.GetString("2017112507", null), Util.GetLang("UOM"), errorworkt2_UOM, okUOM, workSheet2.Name);
+                        message += errorDiscSeqFreeItemNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("DiscSeq"), errorDiscSeqFreeItemNull, namesheet);
+                        message += errorDiscSeqFreeItem == "" ? "" : string.Format(Message.GetString("2017112508", null), Util.GetLang("DiscSeq"), errorDiscSeqFreeItem, namesheet);
+                        message += errorLevelFreeItemNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("Level"), errorLevelFreeItemNull, namesheet);
+                        message += errorLevelFreeItemLength == "" ? "" : string.Format(Message.GetString("2017112502", null), Util.GetLang("Level"), errorLevelFreeItemLength, "5", namesheet);
+                        message += errorLevelFreeItem == "" ? "" : string.Format(Message.GetString("2017112506", null), Util.GetLang("Level"), errorLevelFreeItem, Util.GetLang("Level"), namesheet);
+                        message += errorFreeItemNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("FreeItemID"), errorFreeItemNull, namesheet);
+                        message += errorFreeItem == "" ? "" : string.Format(Message.GetString("2017112508", null), Util.GetLang("InvtID"), errorFreeItem, namesheet);
+                        message += errorUOMFreeItemNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("UOM"), errorUOMFreeItemNull, namesheet);
+                        message += errorUOMFreeItem == "" ? "" : string.Format(Message.GetString("2017112507", null), Util.GetLang("UOM"), errorUOMFreeItem, okUOM, namesheet);
+                        message += errorQtFreeItem == "" ? "" : string.Format(Message.GetString("2017112506", null), Util.GetLang("BreakQty"), errorQtFreeItem, Util.GetLang("BreakQty"), namesheet);
+                        message += errorworkt3_DiscSeqNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("DiscSeq"), errorworkt3_DiscSeqNull, namesheetNPP);
+                        message += errorworkt3_DiscSeq == "" ? "" : string.Format(Message.GetString("2017112508", null), Util.GetLang("DiscSeq"), errorworkt3_DiscSeq, namesheetNPP);
+                        message += errorworkt3_BranchIDNull == "" ? "" : string.Format(Message.GetString("2017112501", null), Util.GetLang("BranchID"), errorworkt3_BranchIDNull, namesheetNPP);
+                        message += errorworkt3_BranchID == "" ? "" : string.Format(Message.GetString("2017112508", null), Util.GetLang("BranchID"), errorworkt3_BranchID, namesheetNPP);
+
+                        #endregion
+                        if (message == "" || message == string.Empty)
+                        {
+                            _db.SaveChanges();
+                        }
+                        Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "2017112510");
+                    }                  
+                }               
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, messid = 9991, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+            }
+            return _logMessage;
+        }
+
     }
 }

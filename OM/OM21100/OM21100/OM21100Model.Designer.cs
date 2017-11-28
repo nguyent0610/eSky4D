@@ -164,22 +164,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_DiscItem> OM_DiscItem
-        {
-            get
-            {
-                if ((_OM_DiscItem == null))
-                {
-                    _OM_DiscItem = base.CreateObjectSet<OM_DiscItem>("OM_DiscItem");
-                }
-                return _OM_DiscItem;
-            }
-        }
-        private ObjectSet<OM_DiscItem> _OM_DiscItem;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_DiscItemClass> OM_DiscItemClass
         {
             get
@@ -320,6 +304,22 @@ namespace OM21100
             }
         }
         private ObjectSet<OM_DiscSeq> _OM_DiscSeq;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_DiscItem> OM_DiscItem
+        {
+            get
+            {
+                if ((_OM_DiscItem == null))
+                {
+                    _OM_DiscItem = base.CreateObjectSet<OM_DiscItem>("OM_DiscItem");
+                }
+                return _OM_DiscItem;
+            }
+        }
+        private ObjectSet<OM_DiscItem> _OM_DiscItem;
 
         #endregion
 
@@ -371,14 +371,6 @@ namespace OM21100
         public void AddToOM_DiscFreeItem(OM_DiscFreeItem oM_DiscFreeItem)
         {
             base.AddObject("OM_DiscFreeItem", oM_DiscFreeItem);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_DiscItem EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_DiscItem(OM_DiscItem oM_DiscItem)
-        {
-            base.AddObject("OM_DiscItem", oM_DiscItem);
         }
     
         /// <summary>
@@ -451,6 +443,14 @@ namespace OM21100
         public void AddToOM_DiscSeq(OM_DiscSeq oM_DiscSeq)
         {
             base.AddObject("OM_DiscSeq", oM_DiscSeq);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_DiscItem EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_DiscItem(OM_DiscItem oM_DiscItem)
+        {
+            base.AddObject("OM_DiscItem", oM_DiscItem);
         }
 
         #endregion
@@ -1204,6 +1204,211 @@ namespace OM21100
             }
     
             return base.ExecuteFunction<OM21100_ptTreeNode_Result>("OM21100_ptTreeNode", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM21100_ppIN_UnitConversion_Result> OM21100_ppIN_UnitConversion(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM21100_ppIN_UnitConversion_Result>("OM21100_ppIN_UnitConversion", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM21100_ppCompanyCheck_Result> OM21100_ppCompanyCheck(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM21100_ppCompanyCheck_Result>("OM21100_ppCompanyCheck", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM21100_ppOM_DiscSeq_Result> OM21100_ppOM_DiscSeq(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM21100_ppOM_DiscSeq_Result>("OM21100_ppOM_DiscSeq", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM21100_ppIN_Inventory_Result> OM21100_ppIN_Inventory(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM21100_ppIN_Inventory_Result>("OM21100_ppIN_Inventory", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM21100_pdConfig_Result> OM21100_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM21100_pdConfig_Result>("OM21100_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -5664,7 +5869,8 @@ namespace OM21100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_DiscItem CreateOM_DiscItem(global::System.String discID, global::System.String discSeq, global::System.String invtID, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="qtyType">Initial value of the QtyType property.</param>
+        public static OM_DiscItem CreateOM_DiscItem(global::System.String discID, global::System.String discSeq, global::System.String invtID, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String qtyType)
         {
             OM_DiscItem oM_DiscItem = new OM_DiscItem();
             oM_DiscItem.DiscID = discID;
@@ -5681,6 +5887,7 @@ namespace OM21100
             oM_DiscItem.LUpd_Prog = lUpd_Prog;
             oM_DiscItem.LUpd_User = lUpd_User;
             oM_DiscItem.tstamp = tstamp;
+            oM_DiscItem.QtyType = qtyType;
             return oM_DiscItem;
         }
 
@@ -6104,6 +6311,30 @@ namespace OM21100
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String QtyType
+        {
+            get
+            {
+                return _QtyType;
+            }
+            set
+            {
+                OnQtyTypeChanging(value);
+                ReportPropertyChanging("QtyType");
+                _QtyType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("QtyType");
+                OnQtyTypeChanged();
+            }
+        }
+        private global::System.String _QtyType;
+        partial void OnQtyTypeChanging(global::System.String value);
+        partial void OnQtyTypeChanged();
 
         #endregion
 
@@ -7596,7 +7827,8 @@ namespace OM21100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_OrdDisc CreateOM_OrdDisc(global::System.String branchID, global::System.String discID, global::System.String discSeq, global::System.String orderNbr, global::System.String lineRef, global::System.Double discAmt, global::System.Double disctblAmt, global::System.Double disctblQty, global::System.Double freeItemQty, global::System.Double origFreeItemQty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="groupRefLineRef">Initial value of the GroupRefLineRef property.</param>
+        public static OM_OrdDisc CreateOM_OrdDisc(global::System.String branchID, global::System.String discID, global::System.String discSeq, global::System.String orderNbr, global::System.String lineRef, global::System.Double discAmt, global::System.Double disctblAmt, global::System.Double disctblQty, global::System.Double freeItemQty, global::System.Double origFreeItemQty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String groupRefLineRef)
         {
             OM_OrdDisc oM_OrdDisc = new OM_OrdDisc();
             oM_OrdDisc.BranchID = branchID;
@@ -7616,6 +7848,7 @@ namespace OM21100
             oM_OrdDisc.LUpd_Prog = lUpd_Prog;
             oM_OrdDisc.LUpd_User = lUpd_User;
             oM_OrdDisc.tstamp = tstamp;
+            oM_OrdDisc.GroupRefLineRef = groupRefLineRef;
             return oM_OrdDisc;
         }
 
@@ -8333,6 +8566,30 @@ namespace OM21100
         private global::System.String _RefLineRef;
         partial void OnRefLineRefChanging(global::System.String value);
         partial void OnRefLineRefChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String GroupRefLineRef
+        {
+            get
+            {
+                return _GroupRefLineRef;
+            }
+            set
+            {
+                OnGroupRefLineRefChanging(value);
+                ReportPropertyChanging("GroupRefLineRef");
+                _GroupRefLineRef = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("GroupRefLineRef");
+                OnGroupRefLineRefChanged();
+            }
+        }
+        private global::System.String _GroupRefLineRef;
+        partial void OnGroupRefLineRefChanging(global::System.String value);
+        partial void OnGroupRefLineRefChanged();
 
         #endregion
 
@@ -9419,6 +9676,30 @@ namespace OM21100
         private global::System.String _Descr1;
         partial void OnDescr1Changing(global::System.String value);
         partial void OnDescr1Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Sort
+        {
+            get
+            {
+                return _Sort;
+            }
+            set
+            {
+                OnSortChanging(value);
+                ReportPropertyChanging("Sort");
+                _Sort = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Sort");
+                OnSortChanged();
+            }
+        }
+        private global::System.String _Sort;
+        partial void OnSortChanging(global::System.String value);
+        partial void OnSortChanged();
 
         #endregion
 
@@ -9428,6 +9709,68 @@ namespace OM21100
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM21100Model", Name="OM21100_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM21100_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AllowImport
+        {
+            get
+            {
+                return _AllowImport;
+            }
+            set
+            {
+                OnAllowImportChanging(value);
+                ReportPropertyChanging("AllowImport");
+                _AllowImport = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowImport");
+                OnAllowImportChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AllowImport;
+        partial void OnAllowImportChanging(Nullable<global::System.Boolean> value);
+        partial void OnAllowImportChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AllowExport
+        {
+            get
+            {
+                return _AllowExport;
+            }
+            set
+            {
+                OnAllowExportChanging(value);
+                ReportPropertyChanging("AllowExport");
+                _AllowExport = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowExport");
+                OnAllowExportChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AllowExport;
+        partial void OnAllowExportChanging(Nullable<global::System.Boolean> value);
+        partial void OnAllowExportChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -12397,6 +12740,316 @@ namespace OM21100
         private global::System.String _UnitDescr;
         partial void OnUnitDescrChanging(global::System.String value);
         partial void OnUnitDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM21100Model", Name="OM21100_ppCompanyCheck_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM21100_ppCompanyCheck_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM21100_ppCompanyCheck_Result object.
+        /// </summary>
+        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
+        public static OM21100_ppCompanyCheck_Result CreateOM21100_ppCompanyCheck_Result(global::System.String cpnyID)
+        {
+            OM21100_ppCompanyCheck_Result oM21100_ppCompanyCheck_Result = new OM21100_ppCompanyCheck_Result();
+            oM21100_ppCompanyCheck_Result.CpnyID = cpnyID;
+            return oM21100_ppCompanyCheck_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyID
+        {
+            get
+            {
+                return _CpnyID;
+            }
+            set
+            {
+                OnCpnyIDChanging(value);
+                ReportPropertyChanging("CpnyID");
+                _CpnyID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CpnyID");
+                OnCpnyIDChanged();
+            }
+        }
+        private global::System.String _CpnyID;
+        partial void OnCpnyIDChanging(global::System.String value);
+        partial void OnCpnyIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyName
+        {
+            get
+            {
+                return _CpnyName;
+            }
+            set
+            {
+                OnCpnyNameChanging(value);
+                ReportPropertyChanging("CpnyName");
+                _CpnyName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CpnyName");
+                OnCpnyNameChanged();
+            }
+        }
+        private global::System.String _CpnyName;
+        partial void OnCpnyNameChanging(global::System.String value);
+        partial void OnCpnyNameChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM21100Model", Name="OM21100_ppIN_Inventory_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM21100_ppIN_Inventory_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM21100_ppIN_Inventory_Result object.
+        /// </summary>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        public static OM21100_ppIN_Inventory_Result CreateOM21100_ppIN_Inventory_Result(global::System.String invtID)
+        {
+            OM21100_ppIN_Inventory_Result oM21100_ppIN_Inventory_Result = new OM21100_ppIN_Inventory_Result();
+            oM21100_ppIN_Inventory_Result.InvtID = invtID;
+            return oM21100_ppIN_Inventory_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM21100Model", Name="OM21100_ppIN_UnitConversion_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM21100_ppIN_UnitConversion_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM21100_ppIN_UnitConversion_Result object.
+        /// </summary>
+        /// <param name="fromUnit">Initial value of the FromUnit property.</param>
+        /// <param name="classID">Initial value of the ClassID property.</param>
+        public static OM21100_ppIN_UnitConversion_Result CreateOM21100_ppIN_UnitConversion_Result(global::System.String fromUnit, global::System.String classID)
+        {
+            OM21100_ppIN_UnitConversion_Result oM21100_ppIN_UnitConversion_Result = new OM21100_ppIN_UnitConversion_Result();
+            oM21100_ppIN_UnitConversion_Result.FromUnit = fromUnit;
+            oM21100_ppIN_UnitConversion_Result.ClassID = classID;
+            return oM21100_ppIN_UnitConversion_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String FromUnit
+        {
+            get
+            {
+                return _FromUnit;
+            }
+            set
+            {
+                OnFromUnitChanging(value);
+                ReportPropertyChanging("FromUnit");
+                _FromUnit = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("FromUnit");
+                OnFromUnitChanged();
+            }
+        }
+        private global::System.String _FromUnit;
+        partial void OnFromUnitChanging(global::System.String value);
+        partial void OnFromUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ClassID
+        {
+            get
+            {
+                return _ClassID;
+            }
+            set
+            {
+                OnClassIDChanging(value);
+                ReportPropertyChanging("ClassID");
+                _ClassID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ClassID");
+                OnClassIDChanged();
+            }
+        }
+        private global::System.String _ClassID;
+        partial void OnClassIDChanging(global::System.String value);
+        partial void OnClassIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM21100Model", Name="OM21100_ppOM_DiscSeq_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM21100_ppOM_DiscSeq_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM21100_ppOM_DiscSeq_Result object.
+        /// </summary>
+        /// <param name="discSeq">Initial value of the DiscSeq property.</param>
+        public static OM21100_ppOM_DiscSeq_Result CreateOM21100_ppOM_DiscSeq_Result(global::System.String discSeq)
+        {
+            OM21100_ppOM_DiscSeq_Result oM21100_ppOM_DiscSeq_Result = new OM21100_ppOM_DiscSeq_Result();
+            oM21100_ppOM_DiscSeq_Result.DiscSeq = discSeq;
+            return oM21100_ppOM_DiscSeq_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DiscSeq
+        {
+            get
+            {
+                return _DiscSeq;
+            }
+            set
+            {
+                OnDiscSeqChanging(value);
+                ReportPropertyChanging("DiscSeq");
+                _DiscSeq = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DiscSeq");
+                OnDiscSeqChanged();
+            }
+        }
+        private global::System.String _DiscSeq;
+        partial void OnDiscSeqChanging(global::System.String value);
+        partial void OnDiscSeqChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
 
         #endregion
 

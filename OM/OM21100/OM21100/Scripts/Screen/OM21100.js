@@ -642,6 +642,8 @@ var Main = {
 
     Event: {
         frmMain_boxReady: function (frm, width, height, eOpts) {
+            App.btnExport1.setVisible(HQ.allowExport);
+            App.btnImport.setVisible(HQ.allowExport);
             App.stoDiscInfo.reload();
             App.stoDiscSeqInfo.reload();
 
@@ -3149,3 +3151,93 @@ var collapseAll = function (tree) {
 var tree_ItemCollapse = function (a, b) {
     collapseNode(a);
 }
+////////////////////////////////////////////////////////////
+////Export/////////////////////////////////////////////
+
+//var cboExport_Select = function (sender, value) {
+
+//    //HQ.isFirstLoad = true;
+//    //if (App.cboExport.valueModels) {
+//    App.txtExport.value = App.cboExport.getValue();
+//    //}
+
+//};
+
+
+var btnExport1_Click = function (record) {
+
+    App.winExport.setTitle("Export")
+    App.winExport.show();
+
+};
+var btnExportCancel_Click = function (sender, value) {
+    App.winExport.hide();
+}
+
+//btnExportTemplate_Click
+var forcuscboExport = function () {
+    App['cboExport'].focus();
+};
+var btnExport_Click = function () {
+    if (App.cboExport.getValue() != null && App.cboExport.getValue() != "") {
+        App.frmMain.submit({
+           // waitMsg: HQ.common.getLang("Exporting"),
+            url: 'OM21100/Export',
+            type: 'POST',
+            timeout: 1000000,
+            clientValidation: false,
+            params: {
+                //lstCustTD: Ext.encode(App.stoDiscBreak.getRecordsValues()),// HQ.store.getData(App.stoAR_CustomerTD)
+                //lstCustTD1: Ext.encode(App.cboExport.getValue()),
+                templateExport: App.cboExport.getValue()
+            },
+            success: function (msg, data) {
+                HQ.common.showBusy(false);
+                alert('sus');
+
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+    else {
+        HQ.message.show(1000, App.cboExport.fieldLabel, 'forcuscboExport');
+    }
+    
+};
+
+/////////////////////Import///////////////////////
+var btnImport_Click = function (sender, e) {
+    var fileName = sender.getValue();
+    var ext = fileName.split(".").pop().toLowerCase();
+    if (ext == "xls" || ext == "xlsx") {
+        App.frmMain.submit({
+            waitMsg: "Importing....",
+            url: 'OM21100/Import',
+            timeout: 18000000,
+            clientValidation: false,
+            method: 'POST',
+            params: {
+            },
+            success: function (msg, data) {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                
+                if (!Ext.isEmpty(this.result.data.message)) {
+                    HQ.message.show('2013103001', [this.result.data.message], '', true);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+    else {
+        HQ.message.show('2014070701', '', '');
+        sender.reset();
+    }
+};
