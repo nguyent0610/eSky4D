@@ -833,12 +833,10 @@ namespace IN23300
         /// Create a new IN23300_pgAccessRightsScreen_Result object.
         /// </summary>
         /// <param name="reasonCD">Initial value of the ReasonCD property.</param>
-        /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static IN23300_pgAccessRightsScreen_Result CreateIN23300_pgAccessRightsScreen_Result(global::System.String reasonCD, global::System.Byte[] tstamp)
+        public static IN23300_pgAccessRightsScreen_Result CreateIN23300_pgAccessRightsScreen_Result(global::System.String reasonCD)
         {
             IN23300_pgAccessRightsScreen_Result iN23300_pgAccessRightsScreen_Result = new IN23300_pgAccessRightsScreen_Result();
             iN23300_pgAccessRightsScreen_Result.ReasonCD = reasonCD;
-            iN23300_pgAccessRightsScreen_Result.tstamp = tstamp;
             return iN23300_pgAccessRightsScreen_Result;
         }
 
@@ -945,7 +943,7 @@ namespace IN23300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.Byte[] tstamp
         {
@@ -957,7 +955,7 @@ namespace IN23300
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, false);
+                _tstamp = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
@@ -989,6 +987,54 @@ namespace IN23300
         private Nullable<global::System.Boolean> _CheckApplyFor;
         partial void OnCheckApplyForChanging(Nullable<global::System.Boolean> value);
         partial void OnCheckApplyForChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String RecType
+        {
+            get
+            {
+                return _RecType;
+            }
+            set
+            {
+                OnRecTypeChanging(value);
+                ReportPropertyChanging("RecType");
+                _RecType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("RecType");
+                OnRecTypeChanged();
+            }
+        }
+        private global::System.String _RecType;
+        partial void OnRecTypeChanging(global::System.String value);
+        partial void OnRecTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String UserID
+        {
+            get
+            {
+                return _UserID;
+            }
+            set
+            {
+                OnUserIDChanging(value);
+                ReportPropertyChanging("UserID");
+                _UserID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("UserID");
+                OnUserIDChanged();
+            }
+        }
+        private global::System.String _UserID;
+        partial void OnUserIDChanging(global::System.String value);
+        partial void OnUserIDChanged();
 
         #endregion
 

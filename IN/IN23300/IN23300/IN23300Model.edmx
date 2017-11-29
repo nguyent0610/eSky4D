@@ -102,8 +102,10 @@
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="SiteID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
           <Property Type="Boolean" Name="CheckApplyFor" Nullable="true" />
+          <Property Type="String" Name="RecType" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="UserID" Nullable="true" MaxLength="10" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -154,6 +156,8 @@
                 <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="CheckApplyFor" ColumnName="CheckApplyFor" />
+                <ScalarProperty Name="RecType" ColumnName="RecType" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

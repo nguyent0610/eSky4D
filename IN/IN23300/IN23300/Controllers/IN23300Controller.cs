@@ -58,7 +58,7 @@ namespace IN23300.Controllers
 
                 foreach (IN23300_pgAccessRightsScreen_Result curLang in lstSYS_AccessDetRights.Created)
                 {
-                    var lang = _db.IN_ReasonCodeRight.FirstOrDefault(p => p.ReasonCD.ToLower() == curLang.ReasonCD.ToLower());
+                    var lang = _db.IN_ReasonCodeRight.FirstOrDefault(p => p.ReasonCD.ToLower() == curLang.ReasonCD.ToLower() && p.RecType.ToLower() == curLang.RecType.ToLower() && p.UserID.ToLower() == curLang.UserID.ToLower());
                     if (curLang.CheckApplyFor == false)
                     {
                         if (curLang != null)
