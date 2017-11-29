@@ -180,6 +180,12 @@ var cboRecType_Change = function (sender, e) {
     App.stoSYS_AccessDetRights.reload();
 };
 
+var cboUsr_GrByType_Change = function (sender, e) {
+    App.grdSYS_AccessDetRights.show();
+    App.stoSYS_AccessDetRights.reload();
+};
+
+
 var cboScreenNumber_Change = function (value) {
     var k = value.displayTplData[0].Descr;
     App.slmSYS_AccessDetRights.selected.items[0].set('Descr', k);

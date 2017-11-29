@@ -45,6 +45,7 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         lst.Change.Fn = "cboRecType_Change";
+                        lst.Select.Fn = "cboRecType_Change";
                     })
 
                     , HQ.Combo().ID("cboUsr_GrByType").Text(Util.GetLang("UserID")).AllowBlank(false)
@@ -61,7 +62,8 @@
                     .Listeners(lst =>
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        lst.Change.Fn = "LoadGrid";
+                        lst.Change.Fn = "cboUsr_GrByType_Change";
+                        lst.Select.Fn = "cboUsr_GrByType_Change";
                     })
 
                 //, X.Button().MarginSpec("5 0 5 160").Width(150)
