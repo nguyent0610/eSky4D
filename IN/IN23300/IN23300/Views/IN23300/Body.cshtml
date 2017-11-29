@@ -50,7 +50,7 @@
                     , HQ.Combo().ID("cboUsr_GrByType").Text(Util.GetLang("UserID")).AllowBlank(false)
                     .Name("cboUsr_GrByType").HQLangCode("UserID").HQProcedure("IN23300_pcUserOrGroupByTypeMVC")
                     .HQColumnShow("ID,Descr").DisplayField("ID").ValueField("ID").HQAutoLoad(false)
-                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
                     .ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() 
@@ -61,13 +61,14 @@
                     .Listeners(lst =>
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "LoadGrid";
                     })
 
-                , X.Button().MarginSpec("5 0 5 160").Width(150)
-                 .Text(Util.GetLang("LoadData")).Listeners(p =>
-                     {
-                         p.Click.Fn = "LoadGrid";
-                     })
+                //, X.Button().MarginSpec("5 0 5 160").Width(150)
+                // .Text(Util.GetLang("LoadData")).Listeners(p =>
+                //     {
+                //         p.Click.Fn = "LoadGrid";
+                //     })
             )//pnl Header
 
             ,

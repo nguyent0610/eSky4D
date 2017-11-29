@@ -176,6 +176,8 @@ var LoadGrid = function (sender, e) {
 
 var cboRecType_Change = function (sender, e) {
     App.cboUsr_GrByType.store.load();
+    App.grdSYS_AccessDetRights.show();
+    App.stoSYS_AccessDetRights.reload();
 };
 
 var cboScreenNumber_Change = function (value) {
