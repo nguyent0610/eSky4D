@@ -1,0 +1,162 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM31600;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM31600";
+    var acc = Session["OM31600"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/screen/OM31600.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.formatDateJS = '@Current.FormatDateJS';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.dateNow = new Date('@DateTime.Now.Date');
+            HQ.businessDate = new Date('@ViewBag.BussinessTime');//lay ngay co gio cua server trong controller
+        </script>
+
+        <style type="text/css">
+            .images-view .x-panel-body {
+                background: white;
+                font: 11px Arial, Helvetica, sans-serif;
+            }
+            .images-view .thumb {
+                background: #dddddd;
+                padding: 3px;
+                padding-bottom: 0;
+            }
+
+            .x-quirks .images-view .thumb {
+                padding-bottom: 3px;
+            }
+
+            /*.images-view .thumb img {
+                height: 60px;
+                width: 80px;
+            }*/
+
+            .images-view .thumb-wrap {
+                float: left;
+                margin: 4px;
+                margin-right: 0;
+                padding: 5px;
+            }
+
+            .images-view .thumb-wrap span {  
+                display: block;
+                overflow: hidden;
+                text-align: center;
+                /*width: 86px;*/
+            }
+
+            .images-view .x-item-over{
+                border: 1px solid #dddddd;
+                /*background: #efefef url(images/row-over.gif) repeat-x left top;*/
+                background: #efefef repeat-x left top;
+                padding: 4px;
+            }
+
+            .images-view .x-item-selected{
+                /*background: #eff5fb url(images/selected.gif) no-repeat right bottom;*/
+                background: #eff5fb no-repeat right bottom;
+                border: 1px solid #99bbe8;
+                padding: 4px;
+            }
+
+            .images-view .x-item-selected .thumb{
+                background: transparent;
+            }
+
+            .images-view .loading-indicator {
+                font-size: 11px;
+                /*background-image : url('images/loading.gif');*/
+                background-repeat: no-repeat;
+                background-position: left;
+                padding-left: 20px;
+                margin: 10px;
+            }
+
+            .x-view-selector {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 0;
+                border: 1px dotted;
+                opacity: .5;
+                -moz-opacity: .5;
+                filter: alpha(opacity=50);
+                zoom: 1;
+                background-color: #c3daf9;
+                border-color: #3399bb;
+            }
+
+            .ext-strict .ext-ie .x-tree .x-panel-bwrap {
+                position: relative;
+                overflow: hidden;
+            }
+        </style>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+        @*Make the store - the binding data of the form*@
+       
+
+        @(X.Store().ID("stoDisplayPeriod")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM31600_pgReportChecking_Result), "mdlDisplayPeriod", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetDisplayPeriod", "OM31600")).Timeout(int.MaxValue)
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "_branchID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custID", "_custID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("displayID", "_displayID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperID", "_slsperID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("periodID", "_periodID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("no", "_no", ParameterMode.Raw));
+                ps.Add(new StoreParameter("levelID", "_levelID", ParameterMode.Raw));
+                
+            })
+            .Listeners(p =>
+            {
+                p.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.waitMsg, App.frmMain);";
+                p.Load.Fn = "Store.stoDisplayPeriod_load";
+            })
+        // Store: stoImage
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gá»i hÃ m Body trong OM31600Controller Ä‘á»ƒ dá»±ng view Body.cshtml, má»¥c Ä‘Ã­ch táº¡o cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>

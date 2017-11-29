@@ -1,0 +1,393 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM31600;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Border)
+        .ID("frmMain")
+        .TrackResetOnLoad(true)
+        //.DefaultAnchor("100%")
+        .BodyPadding(10)
+        .DefaultButton("btnLoad")
+        .BodyBorder(0).AutoScroll(true)
+        .TopBar(Util.SetupToolbar("new,delete,close,print,Save", true, "Event.Form.menuClick"))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .Items(
+            X.Panel().ID("pnlHeader")
+            .Layout(LayoutType.HBox).Region(Region.North).MinWidth(1005)
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
+            .Items(
+
+                // First Column
+                X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                /*.MinWidth(200)*/
+                //  .Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                   HQ.Combo().ID("cboTerritory")
+                    .HQLangCode("Territory").HQProcedure("OM31600_pcTerritory").Width(150)
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Code")
+                    .HQHeightWidth(400, 300).MultiSelect(true).ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                        ,new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        //l.Change.Fn = "Event.Form.cboTerritory_change";
+                        l.Select.Fn = "cboTerritory_Select";
+                    })
+                    , HQ.Combo().ID("cboState")
+                    .HQLangCode("State").HQProcedure("OM31600_pcState")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Code")
+                    .HQHeightWidth(400, 300).MultiSelect(true).ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                        ,new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        ,new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        //l.Change.Fn = "Event.Form.cboState_change";
+                        l.Select.Fn = "cboState_Select";
+                    })
+                ) // First Column
+
+
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 0")
+                .MinWidth(250)//.Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    HQ.DateField().ID("dtpFromDate").Format(Current.FormatDate)
+                    .HQLangCode("FromDate").AllowBlank(false)
+                    .Listeners(l => l.Change.Fn = "Event.Form.dtpFromDate_change")
+
+                    , HQ.DateField().ID("dtpToDate").Format(Current.FormatDate)
+                    .HQLangCode("ToDate").AllowBlank(false)
+                ) // Third Column
+
+                // Forth Column
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 0")
+                .MinWidth(250)//.Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                   HQ.Combo().ID("cboBranchID")
+                    .HQLangCode("BranchID").HQProcedure("OM31600_pcBranch")
+                    .HQColumnShow("BranchID,BranchName").ValueField("BranchID").DisplayField("BranchID")
+                    .HQHeightWidth(400, 300).MultiSelect(true).ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() {
+                       new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                        ,new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        ,new StoreParameter() { Name = "@State", Value = "App.cboState.getValue().join(',')", Mode = ParameterMode.Raw }
+                        ,new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue().join(',')", Mode = ParameterMode.Raw }
+
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Fn = "Event.Form.cboBranchID_change";
+                    })
+
+                   ,HQ.Button().ID("btnLoad").MarginSpec("0 0 0 105")
+                    .HQLangCode("LoadData").Icon(Icon.ArrowRefresh)
+                    .Handler("Event.Form.btnLoad_click")
+                ) // Forth Column
+            ) // pnlHeader
+
+            , X.GridPanel().ID("grdDet")
+            .Listeners(lst => lst.Activate.Handler = "HQ.focus = 'grdDet'")
+            .Region(Region.Center)
+            .Scroll(ScrollMode.Both).MinWidth(1005)
+            .View(X.GridView().TrackOver(false))
+            .AutoScroll(true)
+            .SortableColumns(false)
+            .Store(
+                X.Store().ID("stoDet").PageSize(20)
+                .AutoLoad(false)
+                .Model(Util.GenerateModel(typeof(OM31600_pgReportChecking_Result), "mdlDet", ""))
+                .ServerProxy(
+                    X.AjaxProxy()
+                    .Url(Url.Action("GetDet", "OM31600"))
+                )
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("territory", "Process.joinParams(App.cboTerritory)", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("state", "Process.joinParams(App.cboState)", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("branch", "Process.joinParams(App.cboBranchID)", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("fromDate", "App.dtpFromDate.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("toDate", "App.dtpToDate.getValue()", ParameterMode.Raw));
+                    })
+                .Listeners(p =>
+                {
+                    p.Load.Handler = "HQ.common.showBusy( false);";
+                    p.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));";
+                })
+            )
+            .ColumnModel(
+                X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+                , X.DateColumn().Text(Util.GetLang("DayVisit")).DataIndex("DayVisit").Width(80).Format(Current.FormatDate)
+                , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(80)
+                , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(200)
+                , X.Column().Text(Util.GetLang("SlsperId")).DataIndex("SlsperId").Width(90)
+                , X.Column().Text(Util.GetLang("OM31600_SlsperName")).DataIndex("Name").Width(150)
+                , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(80)
+                , X.Column().Text(Util.GetLang("Timeserver")).DataIndex("Timeserver").Width(100).Renderer("renderColor") //.Editor(X.TimeField())
+                , X.NumberColumn().Text(Util.GetLang("TotalCustomerVisit")).DataIndex("TotalCustomerVisit").Width(100).Format("0,000").Align(Alignment.Right)
+                , X.NumberColumn().Text(Util.GetLang("ActualVisit")).DataIndex("ActualVisit").Width(100).Format("0,000").Align(Alignment.Right)
+                , X.NumberColumn().Text(Util.GetLang("PlanVisits")).DataIndex("PlanVisits").Width(100).Format("0,000").Align(Alignment.Right)
+                , X.NumberColumn().Text(Util.GetLang("TotalOrderNotInMCP")).DataIndex("TotalOrderNotInMCP").Width(100).Format("0,000").Align(Alignment.Right)
+                , X.NumberColumn().Text(Util.GetLang("TotalPointVisitNotInMCP")).DataIndex("TotalPointVisitNotInMCP").Width(100).Format("0,000").Align(Alignment.Right)
+                , X.NumberColumn().Text(Util.GetLang("Sales")).DataIndex("Sales").Width(100).Format("0,000").Align(Alignment.Right)
+                , X.NumberColumn().Text(Util.GetLang("OutputInMonth")).DataIndex("OutputInMonth").Width(100).Format("0,000").Align(Alignment.Right)
+                , X.DateColumn().Text(Util.GetLang("Check_In")).DataIndex("Check_In").Width(80).Format(Current.FormatDate)
+                , X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDate").Width(80).Format(Current.FormatDate)
+                , X.DateColumn().Text(Util.GetLang("EndDay")).DataIndex("EndDay").Width(80).Format(Current.FormatDate)
+                , X.DateColumn().Text(Util.GetLang("Check_Out")).DataIndex("Check_Out").Width(80).Format(Current.FormatDate)
+                , X.DateColumn().Text(Util.GetLang("Last_Updated_Date")).DataIndex("Last_Updated_Date").Width(80).Format(Current.FormatDate)
+            //   , X.NumberColumn().Text(Util.GetLang("isLine")).DataIndex("isLine").Width(150).Format("0,000")
+
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("20")
+                    .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";
+                    })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    //ls.BeforeEdit.Fn = "grdDet_BeforeEdit";
+                    //ls.Edit.Fn = "grdDet_Edit";
+                })
+                , X.RowExpander().ID("Rexpand")
+                    .SingleExpand(false)
+                    .Component(
+                        X.GridPanel()
+                        .Scroll(ScrollMode.Both)
+                        .AutoScroll(true)
+                        .Width(500)
+                        .View(X.GridView().TrackOver(false))
+                        .Listeners(l => l.AfterRender.Fn = "grdReportCheckingLevel1_AfterRender")
+                        .ID("grdReportCheckingLevel1")
+                        .Store(
+                             X.Store()
+                            .ID("stoReportCheckingLevel1")
+                            .PageSize(50)//.AutoLoad(true)
+                            .Model(Util.GenerateModel(typeof(OM31600_pgReportTop2_Result), "mdlReportCheckingLevel1", ""))
+                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetReportTop2"))).AutoLoad(false)
+                            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "_branchID", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("dayVisit", "_dayVisit", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("slsperID", "_slsperID", ParameterMode.Raw));
+                            })
+                            .Listeners(l =>
+                            {
+                                l.Load.Fn = "stoReportCheckingLevel1_Load";
+                            })
+                        )
+                        .Listeners(p =>
+                        {
+                            //p.BoxReady.Handler = "firstLoad();";
+                        })
+                        .SortableColumns(false)
+                        .ColumnModel(
+                         X.RowNumbererColumn()
+                            , X.DateColumn().Text(Util.GetLang("DayVisit")).DataIndex("DayVisit").Width(100).Format(Current.FormatDate)
+                            , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(100)
+                            , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(200)
+                            , X.Column().Text(Util.GetLang("SlsperId")).DataIndex("SlsperId").Width(100)
+                            , X.Column().Text(Util.GetLang("CustId")).DataIndex("CustId").Width(100)
+                            , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(150)
+                            , X.Column().Text(Util.GetLang("Attn")).DataIndex("Attn").Width(100).Editor(X.TimeField())
+                            , X.Column().Text(Util.GetLang("Addr1")).DataIndex("Addr1").Width(200)
+                            , X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDate").Width(90).Format(Current.FormatDate).Renderer("renderColorStartDate")
+                            , X.DateColumn().Text(Util.GetLang("EndDay")).DataIndex("EndDay").Width(80).Format(Current.FormatDate)
+                            , X.Column().Text(Util.GetLang("TimeVisit")).DataIndex("TimeVisit").Width(80)
+                            , X.NumberColumn().Text(Util.GetLang("NotInMCP")).DataIndex("NotInMCP").Width(100).Format("0,000").Align(Alignment.Right)
+                            , X.NumberColumn().Text(Util.GetLang("SKU_Order")).DataIndex("SKU_Order").Width(100).Format("0,000").Align(Alignment.Right)
+                            , X.NumberColumn().Text(Util.GetLang("Sales")).DataIndex("Sales").Width(100).Format("0,000").Align(Alignment.Right)
+                            , X.NumberColumn().Text(Util.GetLang("OutputInMonth")).DataIndex("OutputInMonth").Width(100).Format("0,000").Align(Alignment.Right)
+                            , X.NumberColumn().Text(Util.GetLang("KC_Start")).DataIndex("KC_Start").Width(100).Format("0,000").Align(Alignment.Right)
+                            , X.NumberColumn().Text(Util.GetLang("KC_End")).DataIndex("KC_End").Width(100).Format("0,000").Align(Alignment.Right)
+                        )
+                        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+                        .BottomBar(
+                            X.PagingToolbar()
+                            .Items(
+                                X.Label("Page size:"),
+                                X.ToolbarSpacer(10),
+                                X.ComboBox()
+                                .Width(80)
+                                .Items("1", "2", "10", "20", "30", "50")
+                                .SelectedItems("50")
+                                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                            )
+                            .Plugins(X.ProgressBarPager())
+                        )
+                        
+                        .Features(
+                            X.GridFilters().Local(true)
+                            .Filters(
+                                X.DateFilter().DataIndex("DayVisit"),
+                                X.StringFilter().DataIndex("CpnyID"),
+                                X.StringFilter().DataIndex("CpnyName"),
+                                X.StringFilter().DataIndex("SlsperId"),
+                                X.StringFilter().DataIndex("CustId"),
+                                X.StringFilter().DataIndex("CustName"),
+                                X.StringFilter().DataIndex("Attn"),
+                                X.StringFilter().DataIndex("Addr1"),
+                                X.DateFilter().DataIndex("StartDate"),
+                                X.DateFilter().DataIndex("EndDay"),
+                                X.StringFilter().DataIndex("TimeVisit"),
+                                X.NumericFilter().DataIndex("NotInMCP"),
+                                X.NumericFilter().DataIndex("SKU_Order"),
+                                X.NumericFilter().DataIndex("Sales"),
+                                X.NumericFilter().DataIndex("OutputInMonth"),
+                                X.NumericFilter().DataIndex("KC_Start"),
+                                X.NumericFilter().DataIndex("KC_End")
+                            )
+                          )
+
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                //ls.BeforeEdit.Fn = "grdDet_BeforeEdit";
+                                //ls.Edit.Fn = "grdDet_Edit";
+                            })
+                            , X.RowExpander().ID("Rexpand1")
+                                .SingleExpand(false)
+                                .Component(
+                                    X.GridPanel()
+                                    .Scroll(ScrollMode.Both)
+                                    .View(X.GridView().TrackOver(false))
+                                    .AutoScroll(true)
+                                    .Height(400)
+                                    .Listeners(l => l.AfterRender.Fn = "grdReportCheckingLevel2_AfterRender")
+                                    .ID("grdReportCheckingLevel2")
+                                    .Store(
+                                         X.Store()
+                                        .ID("stoReportCheckingLevel2")
+                                        .PageSize(50)//.AutoLoad(true)
+                                        .Model(Util.GenerateModel(typeof(OM31600_pgReportTop3_Result), "mdlReportCheckingLevel2", ""))
+                                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetReportTop3"))).AutoLoad(false)
+                                        .Parameters(ps =>
+                                        {
+                                            ps.Add(new StoreParameter("branchID", "_branchID1", ParameterMode.Raw));
+                                            ps.Add(new StoreParameter("custID", "_custID1", ParameterMode.Raw));
+                                            ps.Add(new StoreParameter("dayVisit", "_dayVisit1", ParameterMode.Raw));
+                                            ps.Add(new StoreParameter("slsperID", "_slsperID1", ParameterMode.Raw));
+                                        })
+                                        .Listeners(l =>
+                                        {
+                                            l.Load.Fn = "stoReportCheckingLevel2_Load";
+                                        })
+                                    )
+                                    .Listeners(p =>
+                                    {
+                                        //p.BoxReady.Handler = "firstLoad();";
+                                    })
+                                    .SortableColumns(false)
+                                    .ColumnModel(
+                                     X.RowNumbererColumn()
+                                        , X.Column().Text(Util.GetLang("OM31600_Time")).DataIndex("OM31600_Time").Width(150)
+                                        , X.Column().Text(Util.GetLang("Step")).DataIndex("Step").Width(250)
+                                     )
+                                     .SelectionModel(X.RowSelectionModel().ID("slmData1").Mode(SelectionMode.Multi))
+                                    .BottomBar(
+                                        X.PagingToolbar()
+                                        .Items(
+                                            X.Label("Page size:"),
+                                            X.ToolbarSpacer(10),
+                                            X.ComboBox()
+                                            .Width(80)
+                                            .Items("1", "2", "10", "20", "30", "50")
+                                            .SelectedItems("50")
+                                            .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                                        )
+                                        .Plugins(X.ProgressBarPager())
+                                    )
+                                    .Features(
+                                        X.GridFilters().Local(true)
+                                        .Filters(
+                                            X.StringFilter().DataIndex("OM31600_Time"),
+                                            X.StringFilter().DataIndex("Step")
+                                        )
+                                    )
+
+                                    )
+                                )
+
+                            )
+
+            )
+
+            .Features(
+                X.GridFilters().Local(true)
+                .Filters(
+                    X.DateFilter().DataIndex("DayVisit"),
+                    X.StringFilter().DataIndex("CpnyID"),
+                    X.StringFilter().DataIndex("CpnyName"),
+                    X.StringFilter().DataIndex("SlsperId"),
+                    X.StringFilter().DataIndex("Name"),
+                    X.StringFilter().DataIndex("Status"),
+                    X.StringFilter().DataIndex("Timeserver"),
+                    X.NumericFilter().DataIndex("TotalCustomerVisit"),
+                    X.NumericFilter().DataIndex("ActualVisit"),
+                    X.NumericFilter().DataIndex("PlanVisits"),
+                    X.NumericFilter().DataIndex("TotalOrderNotInMCP"),
+                    X.NumericFilter().DataIndex("TotalPointVisitNotInMCP"),
+                    X.NumericFilter().DataIndex("Sales"),
+                    X.NumericFilter().DataIndex("OutputInMonth"),
+                    X.DateFilter().DataIndex("Check_In"),
+                    X.DateFilter().DataIndex("StartDate"),
+                    X.DateFilter().DataIndex("EndDay"),
+                    X.DateFilter().DataIndex("Check_Out"),
+                    X.DateFilter().DataIndex("Last_Updated_Date")
+                )
+            ) // grdDet
+        )
+        .Listeners(lst =>
+        {
+            lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
+            //lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
+        })// Form: frmMain
+    )
+)
+
