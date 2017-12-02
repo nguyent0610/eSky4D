@@ -755,6 +755,7 @@
           <Property Type="DateTime" Name="MinMCPDate" Nullable="true" />
           <Property Type="String" Name="Address" Nullable="true" />
           <Property Type="Int32" Name="UpdateType" Nullable="false" />
+          <Property Type="String" Name="BusinessPic" Nullable="false" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1107,6 +1108,7 @@
                 <ScalarProperty Name="MinMCPDate" ColumnName="MinMCPDate" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="UpdateType" ColumnName="UpdateType" />
+                <ScalarProperty Name="BusinessPic" ColumnName="BusinessPic" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

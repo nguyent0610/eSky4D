@@ -6699,7 +6699,8 @@ namespace AR20500
         /// <param name="custHT">Initial value of the CustHT property.</param>
         /// <param name="eRPCustID">Initial value of the ERPCustID property.</param>
         /// <param name="updateType">Initial value of the UpdateType property.</param>
-        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID, global::System.Int32 updateType)
+        /// <param name="businessPic">Initial value of the BusinessPic property.</param>
+        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID, global::System.Int32 updateType, global::System.String businessPic)
         {
             AR20500_pgDetail_Result aR20500_pgDetail_Result = new AR20500_pgDetail_Result();
             aR20500_pgDetail_Result.ID = id;
@@ -6710,6 +6711,7 @@ namespace AR20500
             aR20500_pgDetail_Result.CustHT = custHT;
             aR20500_pgDetail_Result.ERPCustID = eRPCustID;
             aR20500_pgDetail_Result.UpdateType = updateType;
+            aR20500_pgDetail_Result.BusinessPic = businessPic;
             return aR20500_pgDetail_Result;
         }
 
@@ -8228,6 +8230,30 @@ namespace AR20500
         private global::System.Int32 _UpdateType;
         partial void OnUpdateTypeChanging(global::System.Int32 value);
         partial void OnUpdateTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BusinessPic
+        {
+            get
+            {
+                return _BusinessPic;
+            }
+            set
+            {
+                OnBusinessPicChanging(value);
+                ReportPropertyChanging("BusinessPic");
+                _BusinessPic = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BusinessPic");
+                OnBusinessPicChanged();
+            }
+        }
+        private global::System.String _BusinessPic;
+        partial void OnBusinessPicChanging(global::System.String value);
+        partial void OnBusinessPicChanged();
 
         #endregion
 
