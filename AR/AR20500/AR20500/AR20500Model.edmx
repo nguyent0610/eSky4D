@@ -15,15 +15,17 @@
           <Property Name="Addr1" Type="nvarchar(max)" />
           <Property Name="Addr2" Type="nvarchar" MaxLength="100" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
+          <Property Name="BillWard" Type="nvarchar" MaxLength="100" />
           <Property Name="BillAddr1" Type="nvarchar(max)" />
           <Property Name="BillAddr2" Type="nvarchar" MaxLength="50" />
           <Property Name="BillAttn" Type="nvarchar" MaxLength="200" />
           <Property Name="BillCity" Type="varchar" MaxLength="10" />
+          <Property Name="BillDistrict" Type="nvarchar" MaxLength="30" />
           <Property Name="BillCountry" Type="varchar" MaxLength="3" />
           <Property Name="BillFax" Type="varchar" MaxLength="30" />
           <Property Name="BillName" Type="nvarchar" MaxLength="200" />
           <Property Name="BillPhone" Type="varchar" MaxLength="30" />
-          <Property Name="BillSalut" Type="nvarchar" MaxLength="50" />
+          <Property Name="BillSalut" Type="nvarchar(max)" />
           <Property Name="BillState" Type="varchar" MaxLength="10" />
           <Property Name="BillZip" Type="varchar" MaxLength="10" />
           <Property Name="Channel" Type="varchar" MaxLength="10" />
@@ -50,10 +52,11 @@
           <Property Name="ParentRecordID" Type="int" Nullable="false" />
           <Property Name="Phone" Type="varchar" MaxLength="30" />
           <Property Name="PriceClassID" Type="varchar" MaxLength="10" />
-          <Property Name="Salut" Type="nvarchar" MaxLength="50" />
+          <Property Name="Salut" Type="nvarchar(max)" />
           <Property Name="ShopType" Type="varchar" MaxLength="10" />
           <Property Name="SiteId" Type="varchar" MaxLength="10" />
           <Property Name="SlsperId" Type="varchar" MaxLength="30" />
+          <Property Name="Ward" Type="nvarchar" MaxLength="100" />
           <Property Name="State" Type="varchar" MaxLength="10" />
           <Property Name="Status" Type="varchar" MaxLength="1" />
           <Property Name="SupID" Type="varchar" MaxLength="30" />
@@ -553,7 +556,7 @@
           <Property Type="String" Name="BillFax" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BillName" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillPhone" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillSalut" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillSalut" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BillState" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BillZip" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Channel" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -580,7 +583,7 @@
           <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
           <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="PriceClassID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Salut" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Salut" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ShopType" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SiteId" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SlsperId" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -621,6 +624,9 @@
           <Property Name="SearchName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AllowEdit" Type="Boolean" Nullable="false" />
           <Property Name="BusinessPic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BillWard" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BillDistrict" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInfor">
           <Key>
@@ -891,6 +897,9 @@
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20500Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="BillDistrict" ColumnName="BillDistrict" />
+                <ScalarProperty Name="BillWard" ColumnName="BillWard" />
                 <ScalarProperty Name="BusinessPic" ColumnName="BusinessPic" />
                 <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
                 <ScalarProperty Name="SearchName" ColumnName="SearchName" />

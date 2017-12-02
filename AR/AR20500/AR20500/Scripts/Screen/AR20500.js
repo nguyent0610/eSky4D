@@ -370,6 +370,10 @@ var grdCust_ValidateEdit = function (item, e) {
         if (e.value == e.record.data.State) {
             return false;
         }
+    } else if (e.field == 'Channel') {
+        if (e.value == e.record.data.Channel) {
+            return false;
+        }
     }
 };
 var grdCust_Edit = function (item, e, oldvalue, newvalue) {

@@ -363,7 +363,11 @@ namespace AR20500.Controllers
                 objNew.Startday = fromDate;
                 objNew.Endday = toDate;
                 objNew.VisitSort = item.VisitSort.Value;
-            }            
+            }
+            objNew.SubTerritory = item.SubTerritory;
+            objNew.Channel = item.Channel;
+            objNew.ShopType = item.ShopType;
+            objNew.Location = item.Location;
             objNew.Salut = item.Salut;
             objNew.OutletName = item.OutletName;
             objNew.Phone = item.Phone;
@@ -425,7 +429,7 @@ namespace AR20500.Controllers
             objCust.ProfilePic = objNew.ImageFileName.PassNull();
             objCust.BusinessPic = objNew.BusinessPic.PassNull();
 
-            objCust.SubTerritory = objNew.SubTerritory;
+            objCust.SubTerritory = item.SubTerritory;
             objCust.Territory = item.Territory.PassNull();
             objCust.Attn = objCust.BillAttn = item.ContactName.PassNull();
             objCust.CustName = objCust.BillName = item.OutletName.PassNull();
@@ -434,7 +438,8 @@ namespace AR20500.Controllers
             objCust.Location = item.Location.PassNull(); ;
             objCust.DeliveryID = item.DeliveryID.PassNull(); ;
             objCust.Country = objCust.BillCountry = "VN";
-                        
+            objCust.BillWard = objCust.Ward = item.Ward;
+            
             objCust.DfltShipToId = "DEFAULT";
             if (item.UpdateType == 0)
             {
