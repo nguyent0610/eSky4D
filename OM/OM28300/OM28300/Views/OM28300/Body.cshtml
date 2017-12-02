@@ -1,0 +1,169 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM28300;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    //.TopBar(Util.SetupToolbar("Print,Copy", true, ""))
+    .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("Import")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";
+            })
+            , X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            })
+        }, "Print,Copy", true, ""))
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdOM_EquipmentStatus")
+        .Store(
+             X.Store()
+            .ID("stoOM_EquipmentStatus")
+            .PageSize(50)//.AutoLoad(true)
+            .Model(Util.GenerateModel(typeof(OM28300_pgLoadGrid_Result), "mdlOM_EquipmentStatus", ""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "frmChange";
+            })
+        )
+        .Listeners(p =>
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
+        .SortableColumns(false)
+        .ColumnModel(
+         X.RowNumbererColumn()
+            , X.Column().Text(Util.GetLang("OM23800BranchID")).DataIndex("BranchID").Width(150)
+                .Editor(
+                     HQ.Combo().ID("cboBranchID").Name("cboBranchID").MarginSpec("5 0 5 0").Width(250)//.ReadOnly(true)
+                     .HQDBSys(false).HQProcedure("OM28300_pcBranch")
+                     .HQColumnShow("BranchID,BranchName").ForceSelection(true).AllowBlank(true)
+                     .DisplayField("BranchID").ValueField("BranchID").HQHeightWidth(400, 300)
+                     .HQParam(new StoreParameterCollection()
+                     {
+
+                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                         new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                     })
+                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                     .Listeners(ls =>
+                     {
+                         ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                         //ls.Change.Fn = "cboBranchID_Change";
+                     })
+                     .LoadData()
+              )
+            , X.Column().Text(Util.GetLang("OM23800BranchName")).DataIndex("BranchName").Width(250).Renderer("renderBranchName")
+            , X.Column().Text(Util.GetLang("EquipmentID")).DataIndex("EquipmentID").Width(150).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+            , X.Column().Text(Util.GetLang("OM28300IMEI")).DataIndex("IMEI").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
+            , X.DateColumn().Text(Util.GetLang("OM28300Date")).DataIndex("Date").Editor(X.DateField())
+            , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Renderer("renderStatus")
+            .Editor(
+                     HQ.Combo().ID("cboStatus").Name("cboStatus").MarginSpec("5 0 5 0").Width(250)//.ReadOnly(true)
+                     .HQDBSys(false).HQProcedure("OM28300_pcStatus")
+                     .HQColumnShow("Code,Descr").ForceSelection(true).AllowBlank(true)
+                     .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                     .HQParam(new StoreParameterCollection()
+                     {
+
+                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                         new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                     })
+                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                     .Listeners(ls =>
+                     {
+                         ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                     })
+                     .LoadData()
+              )
+            , X.CommandColumn().Width(150)
+            .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t =>
+                    {
+                        t.Text = Util.GetLang("Rejectrowchanges");
+                    })
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t =>
+            {
+                t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+            })
+            .Listeners(l =>
+            {
+                l.Command.Handler = "grdOM_EquipmentStatus_Reject(record);";
+            })
+
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdOM_EquipmentStatus_BeforeEdit";
+                ls.Edit.Fn = "grdOM_EquipmentStatus_Edit";
+                ls.ValidateEdit.Fn = "grdOM_EquipmentStatus_ValidateEdit";
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("BranchID"),
+                    X.StringFilter().DataIndex("BranchName"),
+                    X.StringFilter().DataIndex("EquipmentID"),
+                    X.StringFilter().DataIndex("IMEI"),
+                    X.DateFilter().DataIndex("Date")
+                    ,X.StringFilter().DataIndex("Status").ValidateRecord(p => p.Fn = "stringFilterStatus")
+                )
+        )
+    )
+))
