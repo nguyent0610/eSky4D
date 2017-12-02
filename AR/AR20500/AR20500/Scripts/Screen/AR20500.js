@@ -335,6 +335,30 @@ var grdCust_BeforeEdit = function (item, e) {
             return objCheck.data.IsEdit;
         }
     }
+    if (e.field == 'SubTerritory' || e.field == 'State') {
+        App.cboColSubTerritory.store.clearFilter();
+        var territory = e.record.data.Territory;
+        if (territory == '') {
+            territory = '@@';
+        }
+        App.cboColSubTerritory.store.filter('Territory', territory);
+        App.cboColState.store.clearFilter();
+        App.cboColState.store.filter('Territory', territory);
+    } else if (e.field == 'District') {
+        App.cboColDistrict.store.clearFilter();
+        var state = e.record.data.State;
+        if (state == '') {
+            state = '@@';
+        }
+        App.cboColDistrict.store.filter('State', state);
+    } else if (e.field == 'ShopType') {
+        App.cboColShopType.store.clearFilter();
+        var channel = e.record.data.Channel;
+        if (channel == '') {
+            channel = '@@';
+        }
+        App.cboColShopType.store.filter('Channel', channel);
+    }
 };
 
 var grdCust_ValidateEdit = function (item, e) {
@@ -381,10 +405,13 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
             HQ.message.show(20171118, '');
         }
     } else if (e.field == 'Territory') {
+        e.record.set('SubTerritory', '');
         e.record.set('State', '');
         e.record.set('District', '');
     } else if (e.field == 'State') {
         e.record.set('District', '');
+    } else if (e.field == 'Channel') {
+        e.record.set('ShopType', '');
     }
     //HQ.grid.checkInsertKey(App.grdCust, e, keys);
 };
@@ -540,6 +567,36 @@ var rendererUpdateType = function (value) {
     return value;
 };
 
+var renderSubTerritory = function (value) {
+    var obj = App.cboColSubTerritory.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+var renderChannel = function (value) {
+    var obj = App.cboColChannel.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+var renderLocation = function (value) {
+    var obj = App.cboColLocation.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+var renderShopType = function (value) {
+    var obj = App.cboColShopType.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+
 var stringFilter = function (record) {
     if (this.dataIndex == 'Zone') {
         return false;
@@ -561,29 +618,29 @@ var stringFilter = function (record) {
         App.cboColDistrict.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboColDistrict.store, "Code", "Descr");
     }
-    //else if (this.dataIndex == 'Channel') {
-    //    App.cboColChannel.store.clearFilter();
-    //    return HQ.grid.filterComboDescr(record, this, App.cboColChannel.store, "Code", "Descr");
-    //} else if (this.dataIndex == 'ClassId') {
-    //    App.cboColCustClass.store.clearFilter();
-    //    return HQ.grid.filterComboDescr(record, this, App.cboColCustClass.store, "Code", "Descr");
-    //}
-    //else if (this.dataIndex == 'Chain') {
-    //    App.cboColCustomerChain.store.clearFilter();
-    //    return HQ.grid.filterComboDescr(record, this, App.cboColCustomerChain.store, "Code", "Descr");
-    //}
-    //else if (this.dataIndex == 'ShopType') {
-    //    App.cboColShopType.store.clearFilter();
-    //    return HQ.grid.filterComboDescr(record, this, App.cboColShopType.store, "Code", "Descr");
-    //}
+    else if (this.dataIndex == 'Channel') {
+        App.cboColChannel.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColChannel.store, "Code", "Descr");
+    } else if (this.dataIndex == 'ClassId') {
+        App.cboColCustClass.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColCustClass.store, "Code", "Descr");
+    }
+    else if (this.dataIndex == 'SubTerritory') {
+        App.cboColSubTerritory.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColSubTerritory.store, "Code", "Descr");
+    }
+    else if (this.dataIndex == 'ShopType') {
+        App.cboColShopType.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColShopType.store, "Code", "Descr");
+    }
     //else if (this.dataIndex == 'Classification') {
     //    App.cboColClassification.store.clearFilter();
     //    return HQ.grid.filterComboDescr(record, this, App.cboColClassification.store, "Code", "Descr");
     //}
-    //else if (this.dataIndex == 'Location') {
-    //    App.cboColLocation.store.clearFilter();
-    //    return HQ.grid.filterComboDescr(record, this, App.cboColLocation.store, "Code", "Descr");
-    //}
+    else if (this.dataIndex == 'Location') {
+        App.cboColLocation.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColLocation.store, "Code", "Descr");
+    }
     else if (this.dataIndex == 'SlsFreq') {
         App.cboColSlsFreq1.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboColSlsFreq1.store, "Code", "Descr");
@@ -875,26 +932,49 @@ var Gmap = {
         },
     }
 };
+var isFirstSubTerritoryExpand = true;
+// Expand State
+var cboColSubTerritory_Expand = function (combo) {
+    //var store = App.cboColSubTerritory.store;
+    //App.cboColSubTerritory.store.clearFilter();
+    //var territory = '';
+    //if (App.grdCust.selModel.selected.length > 0) {
+    //    territory = App.grdCust.selModel.selected.items[0].data.Territory;
+    //} else {
+    //    territory = App.cboColTerritory.getValue();
+    //}
+    ////// Filter data -- 
+    //store.filterBy(function (record) {
+    //    if (record) {
+    //        if (record.data['Territory'].toString() == territory) {
+    //            return record;
+    //        }
+    //    }
+    //});
+};
+var cboColSubTerritory_Collapse = function (cbombo) {
+    //App.cboColSubTerritory.store.clearFilter();
+};
 
 // Expand State
 var cboColState_Expand = function (combo) {
-    App.cboColState.store.clearFilter();
-    var territory = '';
-    if (App.grdCust.selModel.selected.length > 0) {
-        territory = App.grdCust.selModel.selected.items[0].data.Territory;
-    } else {
-        territory = App.cboColTerritory.getValue();
-    }
+    //App.cboColState.store.clearFilter();
+    //var territory = '';
+    //if (App.grdCust.selModel.selected.length > 0) {
+    //    territory = App.grdCust.selModel.selected.items[0].data.Territory;
+    //} else {
+    //    territory = App.cboColTerritory.getValue();
+    //}
 
-    var store = App.cboColState.store;
-    // Filter data -- 
-    store.filterBy(function (record) {
-        if (record) {
-            if (record.data['Territory'].toString() == territory) {
-                return record;
-            }
-        }
-    });
+    //var store = App.cboColState.store;
+    //// Filter data -- 
+    //store.filterBy(function (record) {
+    //    if (record) {
+    //        if (record.data['Territory'].toString() == territory) {
+    //            return record;
+    //        }
+    //    }
+    //});
 };
 var cboColState_Collapse = function (cbombo) {
     App.cboColState.store.clearFilter();
@@ -902,22 +982,22 @@ var cboColState_Collapse = function (cbombo) {
 
 // Expand District
 var cboColDistrict_Expand = function (combo) {
-    App.cboColDistrict.store.clearFilter();
-    var state = '';
-    if (App.grdCust.selModel.selected.length > 0) {
-        state = App.grdCust.selModel.selected.items[0].data.State;
-    } else {
-        state = App.cboColState.getValue();
-    }
-    var store = App.cboColDistrict.store;
-    // Filter data -- 
-    store.filterBy(function (record) {
-        if (record) {
-            if (record.data['State'].toString() == state) {
-                return record;
-            }
-        }
-    });
+    //App.cboColDistrict.store.clearFilter();
+    //var state = '';
+    //if (App.grdCust.selModel.selected.length > 0) {
+    //    state = App.grdCust.selModel.selected.items[0].data.State;
+    //} else {
+    //    state = App.cboColState.getValue();
+    //}
+    //var store = App.cboColDistrict.store;
+    //// Filter data -- 
+    //store.filterBy(function (record) {
+    //    if (record) {
+    //        if (record.data['State'].toString() == state) {
+    //            return record;
+    //        }
+    //    }
+    //});
 };
 var cboColDistrict_Collapse = function (cbombo) {
     App.cboColDistrict.store.clearFilter();

@@ -8254,6 +8254,54 @@ namespace AR20500
         private global::System.String _BusinessPic;
         partial void OnBusinessPicChanging(global::System.String value);
         partial void OnBusinessPicChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SubTerritory
+        {
+            get
+            {
+                return _SubTerritory;
+            }
+            set
+            {
+                OnSubTerritoryChanging(value);
+                ReportPropertyChanging("SubTerritory");
+                _SubTerritory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SubTerritory");
+                OnSubTerritoryChanged();
+            }
+        }
+        private global::System.String _SubTerritory;
+        partial void OnSubTerritoryChanging(global::System.String value);
+        partial void OnSubTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Sales
+        {
+            get
+            {
+                return _Sales;
+            }
+            set
+            {
+                OnSalesChanging(value);
+                ReportPropertyChanging("Sales");
+                _Sales = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Sales");
+                OnSalesChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Sales;
+        partial void OnSalesChanging(Nullable<global::System.Double> value);
+        partial void OnSalesChanged();
 
         #endregion
 
