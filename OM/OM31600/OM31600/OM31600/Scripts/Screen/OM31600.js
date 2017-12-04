@@ -82,7 +82,7 @@ var Event = {
         frmMain_boxReady: function () {
             //HQ.util.checkAccessRight();
             App.dtpFromDate.setValue(HQ.dateNow);
-            App.dtpToDate.setValue(HQ.dateNow);
+            //App.dtpToDate.setValue(HQ.dateNow);
         },
 
         cboTerritory_change: function (cbo, newValue, oldValue, eOpts) {
@@ -97,7 +97,7 @@ var Event = {
 
         dtpFromDate_change: function (dtp, newValue, oldValue, eOpts) {
             App.dtpToDate.setMinValue(newValue);
-            App.dtpToDate.validate();
+            //App.dtpToDate.validate();
         },
 
         btnLoad_click: function (btn, e) {

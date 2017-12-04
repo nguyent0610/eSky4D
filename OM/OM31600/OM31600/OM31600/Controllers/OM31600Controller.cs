@@ -44,9 +44,10 @@ namespace OM31600.Controllers
         }
 
       
-        public ActionResult GetDet(string territory, string state, string branch, DateTime? fromDate, DateTime? toDate)
+        public ActionResult GetDet(string territory, string state, string branch, DateTime? fromDate)
         {
-            var dets = _db.OM31600_pgReportChecking(Current.CpnyID,Current.UserName,Current.LangID, territory, state, branch, fromDate, toDate).ToList();
+            DateTime toDate = DateTime.Now;
+            var dets = _db.OM31600_pgReportChecking(Current.CpnyID,Current.UserName,Current.LangID, branch, territory,state, fromDate, toDate).ToList();
             return this.Store(dets);
         }
 

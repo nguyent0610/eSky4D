@@ -76,20 +76,7 @@
                 .MinWidth(250)//.Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
                 .Items(
-                    HQ.DateField().ID("dtpFromDate").Format(Current.FormatDate)
-                    .HQLangCode("FromDate").AllowBlank(false)
-                    .Listeners(l => l.Change.Fn = "Event.Form.dtpFromDate_change")
-
-                    , HQ.DateField().ID("dtpToDate").Format(Current.FormatDate)
-                    .HQLangCode("ToDate").AllowBlank(false)
-                ) // Third Column
-
-                // Forth Column
-                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 0")
-                .MinWidth(250)//.Flex(1)
-                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
-                .Items(
-                   HQ.Combo().ID("cboBranchID")
+                    HQ.Combo().ID("cboBranchID")
                     .HQLangCode("BranchID").HQProcedure("OM31600_pcBranch")
                     .HQColumnShow("BranchID,BranchName").ValueField("BranchID").DisplayField("BranchID")
                     .HQHeightWidth(400, 300).MultiSelect(true).ForceSelection(true)
@@ -106,10 +93,24 @@
                     .Listeners(l =>
                     {
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                        l.Change.Fn = "Event.Form.cboBranchID_change";
+                        //l.Change.Fn = "Event.Form.cboBranchID_change";
                     })
+                    ,HQ.DateField().ID("dtpFromDate").Format(Current.FormatDate)
+                    .HQLangCode("OM31600FromDate").AllowBlank(false)
+                //.Listeners(l => l.Change.Fn = "Event.Form.dtpFromDate_change")
 
-                   ,HQ.Button().ID("btnLoad").MarginSpec("0 0 0 105")
+                //, HQ.DateField().ID("dtpToDate").Format(Current.FormatDate)
+                //.HQLangCode("ToDate").AllowBlank)
+                ) // Third Column
+
+                // Forth Column
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 0")
+                .MinWidth(250)//.Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+
+
+                   HQ.Button().ID("btnLoad").MarginSpec("0 0 0 105")
                     .HQLangCode("LoadData").Icon(Icon.ArrowRefresh)
                     .Handler("Event.Form.btnLoad_click")
                 ) // Forth Column
@@ -136,7 +137,7 @@
                         ps.Add(new StoreParameter("state", "Process.joinParams(App.cboState)", ParameterMode.Raw));
                         ps.Add(new StoreParameter("branch", "Process.joinParams(App.cboBranchID)", ParameterMode.Raw));
                         ps.Add(new StoreParameter("fromDate", "App.dtpFromDate.getValue()", ParameterMode.Raw));
-                        ps.Add(new StoreParameter("toDate", "App.dtpToDate.getValue()", ParameterMode.Raw));
+                        //ps.Add(new StoreParameter("toDate", "App.dtpToDate.getValue()", ParameterMode.Raw));
                     })
                 .Listeners(p =>
                 {
@@ -157,8 +158,9 @@
                 , X.NumberColumn().Text(Util.GetLang("ActualVisit")).DataIndex("ActualVisit").Width(100).Format("0,000").Align(Alignment.Right)
                 , X.NumberColumn().Text(Util.GetLang("PlanVisits")).DataIndex("PlanVisits").Width(100).Format("0,000").Align(Alignment.Right)
                 , X.NumberColumn().Text(Util.GetLang("TotalOrderNotInMCP")).DataIndex("TotalOrderNotInMCP").Width(100).Format("0,000").Align(Alignment.Right)
-                , X.NumberColumn().Text(Util.GetLang("TotalPointVisitNotInMCP")).DataIndex("TotalPointVisitNotInMCP").Width(100).Format("0,000").Align(Alignment.Right)
-                , X.NumberColumn().Text(Util.GetLang("Sales")).DataIndex("Sales").Width(100).Format("0,000").Align(Alignment.Right)
+                , X.NumberColumn().Text(Util.GetLang("TotalPointVisitNot")).DataIndex("TotalPointVisitNotInMCP").Width(100).Format("0,000").Align(Alignment.Right)
+                , X.NumberColumn().Text(Util.GetLang("OM31600TotalOrder")).DataIndex("TotalOrder").Width(100).Format("0,000").Align(Alignment.Right)
+                , X.NumberColumn().Text(Util.GetLang("OM31600Sales")).DataIndex("Sales").Width(100).Format("0,000").Align(Alignment.Right)
                 , X.NumberColumn().Text(Util.GetLang("OutputInMonth")).DataIndex("OutputInMonth").Width(100).Format("0,000").Align(Alignment.Right)
                 , X.DateColumn().Text(Util.GetLang("Check_In")).DataIndex("Check_In").Width(80).Format(Current.FormatDate)
                 , X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDate").Width(80).Format(Current.FormatDate)
@@ -235,12 +237,12 @@
                             , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(150)
                             , X.Column().Text(Util.GetLang("Attn")).DataIndex("Attn").Width(100).Editor(X.TimeField())
                             , X.Column().Text(Util.GetLang("Addr1")).DataIndex("Addr1").Width(200)
-                            , X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDate").Width(90).Format(Current.FormatDate).Renderer("renderColorStartDate")
+                            , X.DateColumn().Text(Util.GetLang("OM31600_StartDate")).DataIndex("StartDate").Width(90).Format(Current.FormatDate).Renderer("renderColorStartDate")
                             , X.DateColumn().Text(Util.GetLang("EndDay")).DataIndex("EndDay").Width(80).Format(Current.FormatDate)
                             , X.Column().Text(Util.GetLang("TimeVisit")).DataIndex("TimeVisit").Width(80)
                             , X.NumberColumn().Text(Util.GetLang("NotInMCP")).DataIndex("NotInMCP").Width(100).Format("0,000").Align(Alignment.Right)
                             , X.NumberColumn().Text(Util.GetLang("SKU_Order")).DataIndex("SKU_Order").Width(100).Format("0,000").Align(Alignment.Right)
-                            , X.NumberColumn().Text(Util.GetLang("Sales")).DataIndex("Sales").Width(100).Format("0,000").Align(Alignment.Right)
+                            , X.NumberColumn().Text(Util.GetLang("OM31600Sales")).DataIndex("Sales").Width(100).Format("0,000").Align(Alignment.Right)
                             , X.NumberColumn().Text(Util.GetLang("OutputInMonth")).DataIndex("OutputInMonth").Width(100).Format("0,000").Align(Alignment.Right)
                             , X.NumberColumn().Text(Util.GetLang("KC_Start")).DataIndex("KC_Start").Width(100).Format("0,000").Align(Alignment.Right)
                             , X.NumberColumn().Text(Util.GetLang("KC_End")).DataIndex("KC_End").Width(100).Format("0,000").Align(Alignment.Right)
@@ -259,7 +261,7 @@
                             )
                             .Plugins(X.ProgressBarPager())
                         )
-                        
+
                         .Features(
                             X.GridFilters().Local(true)
                             .Filters(
@@ -371,7 +373,8 @@
                     X.NumericFilter().DataIndex("TotalCustomerVisit"),
                     X.NumericFilter().DataIndex("ActualVisit"),
                     X.NumericFilter().DataIndex("PlanVisits"),
-                    X.NumericFilter().DataIndex("TotalOrderNotInMCP"),
+                    X.NumericFilter().DataIndex("TotalOrderNotInMCP"), 
+                    X.NumericFilter().DataIndex("TotalOrder"),
                     X.NumericFilter().DataIndex("TotalPointVisitNotInMCP"),
                     X.NumericFilter().DataIndex("Sales"),
                     X.NumericFilter().DataIndex("OutputInMonth"),
