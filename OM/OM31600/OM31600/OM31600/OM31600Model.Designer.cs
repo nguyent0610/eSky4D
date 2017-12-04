@@ -916,13 +916,8 @@ namespace OM31600
         /// <param name="endDay">Initial value of the EndDay property.</param>
         /// <param name="timeVisit">Initial value of the TimeVisit property.</param>
         /// <param name="notInMCP">Initial value of the NotInMCP property.</param>
-        /// <param name="sKU_Order">Initial value of the SKU_Order property.</param>
-        /// <param name="sales">Initial value of the Sales property.</param>
-        /// <param name="outputInMonth">Initial value of the OutputInMonth property.</param>
-        /// <param name="kC_Start">Initial value of the KC_Start property.</param>
-        /// <param name="kC_End">Initial value of the KC_End property.</param>
         /// <param name="color">Initial value of the Color property.</param>
-        public static OM31600_pgReportTop2_Result CreateOM31600_pgReportTop2_Result(global::System.DateTime dayVisit, global::System.String cpnyID, global::System.String custId, global::System.String custName, global::System.DateTime startDate, global::System.DateTime endDay, global::System.String timeVisit, global::System.Int32 notInMCP, global::System.Int32 sKU_Order, global::System.Int32 sales, global::System.Int32 outputInMonth, global::System.Int32 kC_Start, global::System.Int32 kC_End, global::System.String color)
+        public static OM31600_pgReportTop2_Result CreateOM31600_pgReportTop2_Result(global::System.DateTime dayVisit, global::System.String cpnyID, global::System.String custId, global::System.String custName, global::System.DateTime startDate, global::System.DateTime endDay, global::System.String timeVisit, global::System.Int32 notInMCP, global::System.String color)
         {
             OM31600_pgReportTop2_Result oM31600_pgReportTop2_Result = new OM31600_pgReportTop2_Result();
             oM31600_pgReportTop2_Result.DayVisit = dayVisit;
@@ -933,11 +928,6 @@ namespace OM31600
             oM31600_pgReportTop2_Result.EndDay = endDay;
             oM31600_pgReportTop2_Result.TimeVisit = timeVisit;
             oM31600_pgReportTop2_Result.NotInMCP = notInMCP;
-            oM31600_pgReportTop2_Result.SKU_Order = sKU_Order;
-            oM31600_pgReportTop2_Result.Sales = sales;
-            oM31600_pgReportTop2_Result.OutputInMonth = outputInMonth;
-            oM31600_pgReportTop2_Result.KC_Start = kC_Start;
-            oM31600_pgReportTop2_Result.KC_End = kC_End;
             oM31600_pgReportTop2_Result.Color = color;
             return oM31600_pgReportTop2_Result;
         }
@@ -1237,9 +1227,9 @@ namespace OM31600
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 SKU_Order
+        public Nullable<global::System.Double> SKU_Order
         {
             get
             {
@@ -1254,16 +1244,16 @@ namespace OM31600
                 OnSKU_OrderChanged();
             }
         }
-        private global::System.Int32 _SKU_Order;
-        partial void OnSKU_OrderChanging(global::System.Int32 value);
+        private Nullable<global::System.Double> _SKU_Order;
+        partial void OnSKU_OrderChanging(Nullable<global::System.Double> value);
         partial void OnSKU_OrderChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 Sales
+        public Nullable<global::System.Double> Sales
         {
             get
             {
@@ -1278,16 +1268,16 @@ namespace OM31600
                 OnSalesChanged();
             }
         }
-        private global::System.Int32 _Sales;
-        partial void OnSalesChanging(global::System.Int32 value);
+        private Nullable<global::System.Double> _Sales;
+        partial void OnSalesChanging(Nullable<global::System.Double> value);
         partial void OnSalesChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 OutputInMonth
+        public Nullable<global::System.Double> OutputInMonth
         {
             get
             {
@@ -1302,16 +1292,16 @@ namespace OM31600
                 OnOutputInMonthChanged();
             }
         }
-        private global::System.Int32 _OutputInMonth;
-        partial void OnOutputInMonthChanging(global::System.Int32 value);
+        private Nullable<global::System.Double> _OutputInMonth;
+        partial void OnOutputInMonthChanging(Nullable<global::System.Double> value);
         partial void OnOutputInMonthChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 KC_Start
+        public Nullable<global::System.Double> KC_Start
         {
             get
             {
@@ -1326,16 +1316,16 @@ namespace OM31600
                 OnKC_StartChanged();
             }
         }
-        private global::System.Int32 _KC_Start;
-        partial void OnKC_StartChanging(global::System.Int32 value);
+        private Nullable<global::System.Double> _KC_Start;
+        partial void OnKC_StartChanging(Nullable<global::System.Double> value);
         partial void OnKC_StartChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 KC_End
+        public Nullable<global::System.Double> KC_End
         {
             get
             {
@@ -1350,8 +1340,8 @@ namespace OM31600
                 OnKC_EndChanged();
             }
         }
-        private global::System.Int32 _KC_End;
-        partial void OnKC_EndChanging(global::System.Int32 value);
+        private Nullable<global::System.Double> _KC_End;
+        partial void OnKC_EndChanging(Nullable<global::System.Double> value);
         partial void OnKC_EndChanged();
     
         /// <summary>

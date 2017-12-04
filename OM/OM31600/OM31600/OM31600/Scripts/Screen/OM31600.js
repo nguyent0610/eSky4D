@@ -86,9 +86,12 @@ var Event = {
         },
 
         cboTerritory_change: function (cbo, newValue, oldValue, eOpts) {
+            App.cboState.clearValue();
+            App.cboBranchID.clearValue();
             App.cboState.store.reload();
         },
         cboState_change: function (cbo, newValue, oldValue, eOpts) {
+            App.cboBranchID.clearValue();
             App.cboBranchID.store.reload();
         },
         cboBranchID_change: function (cbo, newValue, oldValue, eOpts) {

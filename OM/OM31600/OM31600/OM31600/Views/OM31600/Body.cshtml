@@ -21,7 +21,7 @@
         .DefaultButton("btnLoad")
         .BodyBorder(0).AutoScroll(true)
         .TopBar(Util.SetupToolbar("new,delete,close,print,Save", true, "Event.Form.menuClick"))
-        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 120; })
         .Items(
             X.Panel().ID("pnlHeader")
             .Layout(LayoutType.HBox).Region(Region.North).MinWidth(1005)
@@ -48,7 +48,7 @@
                     .Listeners(l =>
                     {
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                        //l.Change.Fn = "Event.Form.cboTerritory_change";
+                        l.Change.Fn = "Event.Form.cboTerritory_change";
                         l.Select.Fn = "cboTerritory_Select";
                     })
                     , HQ.Combo().ID("cboState")
@@ -66,7 +66,7 @@
                     .Listeners(l =>
                     {
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                        //l.Change.Fn = "Event.Form.cboState_change";
+                        l.Change.Fn = "Event.Form.cboState_change";
                         l.Select.Fn = "cboState_Select";
                     })
                 ) // First Column
@@ -105,12 +105,13 @@
 
                 // Forth Column
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 0")
-                .MinWidth(250)//.Flex(1)
+                .MinWidth(130)//.Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
                 .Items(
 
 
-                   HQ.Button().ID("btnLoad").MarginSpec("0 0 0 105")
+                   HQ.Button().ID("btnLoad").MarginSpec("0 0 0 10")
+                   .Width(120)
                     .HQLangCode("LoadData").Icon(Icon.ArrowRefresh)
                     .Handler("Event.Form.btnLoad_click")
                 ) // Forth Column
@@ -166,9 +167,9 @@
                 , X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDate").Width(80).Format(Current.FormatDate)
                 , X.DateColumn().Text(Util.GetLang("EndDay")).DataIndex("EndDay").Width(80).Format(Current.FormatDate)
                 , X.DateColumn().Text(Util.GetLang("Check_Out")).DataIndex("Check_Out").Width(80).Format(Current.FormatDate)
-                , X.DateColumn().Text(Util.GetLang("Last_Updated_Date")).DataIndex("Last_Updated_Date").Width(80).Format(Current.FormatDate)
+                , X.DateColumn().Text(Util.GetLang("Last_Updated_Date")).DataIndex("Last_Updated_Date").Width(120).Format(Current.FormatDate)
             //   , X.NumberColumn().Text(Util.GetLang("isLine")).DataIndex("isLine").Width(150).Format("0,000")
-
+                 , X.CommandColumn().Width(10)
             )
             .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))
             .BottomBar(
@@ -235,8 +236,8 @@
                             , X.Column().Text(Util.GetLang("SlsperId")).DataIndex("SlsperId").Width(100)
                             , X.Column().Text(Util.GetLang("CustId")).DataIndex("CustId").Width(100)
                             , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(150)
-                            , X.Column().Text(Util.GetLang("Attn")).DataIndex("Attn").Width(100).Editor(X.TimeField())
-                            , X.Column().Text(Util.GetLang("Addr1")).DataIndex("Addr1").Width(200)
+                            , X.Column().Text(Util.GetLang("Attn")).DataIndex("Attn").Width(100)//.Editor(X.TimeField())
+                            , X.Column().Text(Util.GetLang("OM31600Addr1")).DataIndex("Addr1").Width(200)
                             , X.DateColumn().Text(Util.GetLang("OM31600_StartDate")).DataIndex("StartDate").Width(90).Format(Current.FormatDate).Renderer("renderColorStartDate")
                             , X.DateColumn().Text(Util.GetLang("EndDay")).DataIndex("EndDay").Width(80).Format(Current.FormatDate)
                             , X.Column().Text(Util.GetLang("TimeVisit")).DataIndex("TimeVisit").Width(80)
@@ -246,6 +247,7 @@
                             , X.NumberColumn().Text(Util.GetLang("OutputInMonth")).DataIndex("OutputInMonth").Width(100).Format("0,000").Align(Alignment.Right)
                             , X.NumberColumn().Text(Util.GetLang("KC_Start")).DataIndex("KC_Start").Width(100).Format("0,000").Align(Alignment.Right)
                             , X.NumberColumn().Text(Util.GetLang("KC_End")).DataIndex("KC_End").Width(100).Format("0,000").Align(Alignment.Right)
+                            , X.CommandColumn().Width(10)
                         )
                         .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
                         .BottomBar(
@@ -328,7 +330,7 @@
                                     .SortableColumns(false)
                                     .ColumnModel(
                                      X.RowNumbererColumn()
-                                        , X.Column().Text(Util.GetLang("OM31600_Time")).DataIndex("OM31600_Time").Width(150)
+                                        , X.Column().Text(Util.GetLang("OM31600_Time")).DataIndex("OM31600_Time").Width(120)
                                         , X.Column().Text(Util.GetLang("Step")).DataIndex("Step").Width(250)
                                      )
                                      .SelectionModel(X.RowSelectionModel().ID("slmData1").Mode(SelectionMode.Multi))

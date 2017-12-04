@@ -102,11 +102,11 @@
           <Property Type="DateTime" Name="EndDay" Nullable="false" Precision="23" />
           <Property Type="String" Name="TimeVisit" Nullable="false" MaxLength="7" />
           <Property Type="Int32" Name="NotInMCP" Nullable="false" />
-          <Property Type="Int32" Name="SKU_Order" Nullable="false" />
-          <Property Type="Int32" Name="Sales" Nullable="false" />
-          <Property Type="Int32" Name="OutputInMonth" Nullable="false" />
-          <Property Type="Int32" Name="KC_Start" Nullable="false" />
-          <Property Type="Int32" Name="KC_End" Nullable="false" />
+          <Property Type="Double" Name="SKU_Order" Nullable="true" />
+          <Property Type="Double" Name="Sales" Nullable="true" />
+          <Property Type="Double" Name="OutputInMonth" Nullable="true" />
+          <Property Type="Double" Name="KC_Start" Nullable="true" />
+          <Property Type="Double" Name="KC_End" Nullable="true" />
           <Property Type="String" Name="Color" Nullable="false" MaxLength="7" />
         </ComplexType>
         <ComplexType Name="OM31600_pgReportTop3_Result">
