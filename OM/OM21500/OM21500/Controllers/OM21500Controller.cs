@@ -160,7 +160,8 @@ namespace OM21500.Controllers
                 t.BudgetID = "";
             }
             t.PromoType = s.PromoType;
-			//t.ObjApply = s.ObjApply;
+			t.ObjApply = s.ObjApply;
+            t.BudgetID = s.BudgetID;
             t.Descr = s.Descr;
             t.Active = s.Active;
             t.FromDate = s.FromDate;

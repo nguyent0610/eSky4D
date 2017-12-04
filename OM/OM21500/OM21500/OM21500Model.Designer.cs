@@ -1079,7 +1079,8 @@ namespace OM21500
         /// <param name="fromDate">Initial value of the FromDate property.</param>
         /// <param name="toDate">Initial value of the ToDate property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM21500_pgLoadGrid_Result CreateOM21500_pgLoadGrid_Result(global::System.String discCode, global::System.String descr, global::System.Boolean active, global::System.DateTime fromDate, global::System.DateTime toDate, global::System.Byte[] tstamp)
+        /// <param name="budgetID">Initial value of the BudgetID property.</param>
+        public static OM21500_pgLoadGrid_Result CreateOM21500_pgLoadGrid_Result(global::System.String discCode, global::System.String descr, global::System.Boolean active, global::System.DateTime fromDate, global::System.DateTime toDate, global::System.Byte[] tstamp, global::System.String budgetID)
         {
             OM21500_pgLoadGrid_Result oM21500_pgLoadGrid_Result = new OM21500_pgLoadGrid_Result();
             oM21500_pgLoadGrid_Result.DiscCode = discCode;
@@ -1088,6 +1089,7 @@ namespace OM21500
             oM21500_pgLoadGrid_Result.FromDate = fromDate;
             oM21500_pgLoadGrid_Result.ToDate = toDate;
             oM21500_pgLoadGrid_Result.tstamp = tstamp;
+            oM21500_pgLoadGrid_Result.BudgetID = budgetID;
             return oM21500_pgLoadGrid_Result;
         }
 
@@ -1286,6 +1288,54 @@ namespace OM21500
         private global::System.String _ObjApply;
         partial void OnObjApplyChanging(global::System.String value);
         partial void OnObjApplyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BudgetID
+        {
+            get
+            {
+                return _BudgetID;
+            }
+            set
+            {
+                OnBudgetIDChanging(value);
+                ReportPropertyChanging("BudgetID");
+                _BudgetID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BudgetID");
+                OnBudgetIDChanged();
+            }
+        }
+        private global::System.String _BudgetID;
+        partial void OnBudgetIDChanging(global::System.String value);
+        partial void OnBudgetIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsEdit
+        {
+            get
+            {
+                return _IsEdit;
+            }
+            set
+            {
+                OnIsEditChanging(value);
+                ReportPropertyChanging("IsEdit");
+                _IsEdit = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsEdit");
+                OnIsEditChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsEdit;
+        partial void OnIsEditChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsEditChanged();
 
         #endregion
 

@@ -8,7 +8,7 @@ var _cpnyTitle = '';
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 var _Source = 0;
-var _maxSource = 2;
+var _maxSource = 4;
 var _isLoadMaster = false;
 var loadPage = false;
 ///////////////////////////////////////////////////////////////////////
@@ -101,12 +101,14 @@ var firstLoad = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     loadPage = false;
     App.cboPromoType.getStore().addListener('load', checkLoad);
-    //App.cboObjApply.getStore().addListener('load', checkLoad);
+    App.cboObjApply.getStore().addListener('load', checkLoad);
     App.cboCpnyID.getStore().addListener('load', checkLoad);
-
+    App.cboBudgetID.getStore().addListener('load', checkLoad);
+    
     App.cboPromoType.getStore().reload();
-    //App.cboObjApply.getStore().reload();
+    App.cboObjApply.getStore().reload();
     App.cboCpnyID.getStore().reload();
+    App.cboBudgetID.getStore().reload();
     _cpnyTitle = App.pnlAppComp.title;
 
     if (HQ.isInsert == false) {
@@ -162,7 +164,14 @@ var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 var grdOM_DiscDescr_BeforeEdit = function (editor, e) {
-    
+    if (!(e.record.data.IsEdit == true)) return false;
+    if (e.field == 'BudgetID') {
+        App.cboBudgetID.store.clearFilter();
+        if(e.record.data.PromoType!='I')
+            App.cboBudgetID.store.filter('ApplyTo', 'A')
+        else if (e.record.data.PromoType == 'I')
+            App.cboBudgetID.store.filter('ApplyTo', 'F')
+    }
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdOM_DiscDescr_Edit = function (item, e) {
@@ -183,7 +192,7 @@ var grdOM_DiscDescr_Edit = function (item, e) {
             }
         }
     }
-    else if (e.field == 'DiscCode') {
+    else if (e.field == 'DiscCode') {        
         _crrDiscCode = e.record.data.DiscCode;
         setTitle();
     }
@@ -289,10 +298,10 @@ var PromoType_render = function (value) {
     return (record) ? record.data.Descr : value;
 };
 
-//var ObjApply_render = function (value) {
-//    var record = HQ.store.findRecord(App.cboObjApply.store, ["Code"], [value]);
-//    return (record) ? record.data.Descr : value;
-//};
+var ObjApply_render = function (value) {
+    var record = HQ.store.findRecord(App.cboObjApply.store, ["Code"], [value]);
+    return (record) ? record.data.Descr : value;
+};
 
 var CpnyName_render = function (value) {
     var record = HQ.store.findRecord(App.cboCpnyID.store, ["CpnyID"], [value]);

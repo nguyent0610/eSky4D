@@ -102,6 +102,8 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="PromoType" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="ObjApply" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="BudgetID" Nullable="false" MaxLength="10" />
+          <Property Type="Boolean" Name="IsEdit" Nullable="true" />
         </ComplexType>
         <EntityType Name="OM_DiscDescCpny">
           <Key>
@@ -168,6 +170,8 @@
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="PromoType" ColumnName="PromoType" />
                 <ScalarProperty Name="ObjApply" ColumnName="ObjApply" />
+                <ScalarProperty Name="BudgetID" ColumnName="BudgetID" />
+                <ScalarProperty Name="IsEdit" ColumnName="IsEdit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
