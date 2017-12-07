@@ -764,6 +764,88 @@ namespace AR20500
     
             return base.ExecuteFunction<AR20500_pgDetail_Result>("AR20500_pgDetail", branchIDParameter, startDateParameter, endDateParameter, slsperIDParameter, statusParameter, territoryParameter, updateTypeParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20500_pdConfig_Result> AR20500_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20500_pdConfig_Result>("AR20500_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20500_pcReason_Result> AR20500_pcReason(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20500_pcReason_Result>("AR20500_pcReason", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -4737,6 +4819,30 @@ namespace AR20500
         private global::System.String _BusinessPic;
         partial void OnBusinessPicChanging(global::System.String value);
         partial void OnBusinessPicChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Reason
+        {
+            get
+            {
+                return _Reason;
+            }
+            set
+            {
+                OnReasonChanging(value);
+                ReportPropertyChanging("Reason");
+                _Reason = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Reason");
+                OnReasonChanged();
+            }
+        }
+        private global::System.String _Reason;
+        partial void OnReasonChanging(global::System.String value);
+        partial void OnReasonChanged();
 
         #endregion
 
@@ -6753,6 +6859,169 @@ namespace AR20500
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR20500Model", Name="AR20500_pcReason_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR20500_pcReason_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR20500_pcReason_Result object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        public static AR20500_pcReason_Result CreateAR20500_pcReason_Result(global::System.String code)
+        {
+            AR20500_pcReason_Result aR20500_pcReason_Result = new AR20500_pcReason_Result();
+            aR20500_pcReason_Result.Code = code;
+            return aR20500_pcReason_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR20500Model", Name="AR20500_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR20500_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsShowCustHT
+        {
+            get
+            {
+                return _IsShowCustHT;
+            }
+            set
+            {
+                OnIsShowCustHTChanging(value);
+                ReportPropertyChanging("IsShowCustHT");
+                _IsShowCustHT = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsShowCustHT");
+                OnIsShowCustHTChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsShowCustHT;
+        partial void OnIsShowCustHTChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsShowCustHTChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsShowReason
+        {
+            get
+            {
+                return _IsShowReason;
+            }
+            set
+            {
+                OnIsShowReasonChanging(value);
+                ReportPropertyChanging("IsShowReason");
+                _IsShowReason = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsShowReason");
+                OnIsShowReasonChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsShowReason;
+        partial void OnIsShowReasonChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsShowReasonChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsShowERPCust
+        {
+            get
+            {
+                return _IsShowERPCust;
+            }
+            set
+            {
+                OnIsShowERPCustChanging(value);
+                ReportPropertyChanging("IsShowERPCust");
+                _IsShowERPCust = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsShowERPCust");
+                OnIsShowERPCustChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsShowERPCust;
+        partial void OnIsShowERPCustChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsShowERPCustChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="AR20500Model", Name="AR20500_pgDetail_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -8374,6 +8643,30 @@ namespace AR20500
         private Nullable<global::System.Double> _Sales;
         partial void OnSalesChanging(Nullable<global::System.Double> value);
         partial void OnSalesChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Reason
+        {
+            get
+            {
+                return _Reason;
+            }
+            set
+            {
+                OnReasonChanging(value);
+                ReportPropertyChanging("Reason");
+                _Reason = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Reason");
+                OnReasonChanged();
+            }
+        }
+        private global::System.String _Reason;
+        partial void OnReasonChanging(global::System.String value);
+        partial void OnReasonChanged();
 
         #endregion
 

@@ -11,14 +11,14 @@
     var HQ = Html.HQ();
     ViewBag.Title = "AR20500";
     var acc = Session["AR20500"] as AccessRight;
-    eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
+   // eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
 
-   var objShowCust = _sys.SYS_Configurations.Where(p=>p.Code.ToUpper()=="AR205SHOWERPCUST").FirstOrDefault();
-   if (objShowCust != null)
-   {
-       ViewBag.IsShowERPCust = objShowCust.IntVal == 1 ? true : false;
-   }
-   else {ViewBag.IsShowERPCust = false;   }
+   //var objShowCust = _sys.SYS_Configurations.Where(p=>p.Code.ToUpper()=="AR205SHOWERPCUST").FirstOrDefault();
+   //if (objShowCust != null)
+   //{
+   //    ViewBag.IsShowERPCust = objShowCust.IntVal == 1 ? true : false;
+   //}
+   //else {ViewBag.IsShowERPCust = false;   }
     
 }
 <!DOCTYPE html>
@@ -77,6 +77,9 @@
         HQ.EndDateYear = new Date('@( new DateTime(DateTime.Now.Year,12,31))')
         HQ.isShowCustHT = HQ.util.toBool('@ViewBag.IsShowCustHT');
         HQ.IsShowERPCust = HQ.util.toBool('@ViewBag.IsShowERPCust');
+
+        HQ.isShowReason = HQ.util.toBool('@ViewBag.IsShowReason');
+      //  HQ.isRequiedReason = HQ.util.toBool('@ViewBag.IsRequiedReason');
 
         HQ.IsRequireRefCustID = HQ.util.toBool('@ViewBag.IsRequireRefCustID');
         

@@ -180,6 +180,7 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="10" />
           <Property Name="UpdateType" Type="int" Nullable="false" />
           <Property Name="BusinessPic" Type="nvarchar" MaxLength="100" />
+          <Property Name="Reason" Type="varchar" MaxLength="8000" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -308,6 +309,16 @@
           <Parameter Name="CustID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AR20500_pcReason" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="AR20500_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="AR20500_pdIsShowCustHT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="AR20500_pgDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -413,6 +424,16 @@
             <Parameter Name="Status" Mode="In" Type="String" />
             <Parameter Name="Territory" Mode="In" Type="String" />
             <Parameter Name="UpdateType" Mode="In" Type="Int32" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR20500_pdConfig" ReturnType="Collection(AR20500Model.AR20500_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR20500_pcReason" ReturnType="Collection(AR20500Model.AR20500_pcReason_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
@@ -696,6 +717,7 @@
           <Property Name="LUpd_Prog" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="UpdateType" Type="Int32" Nullable="false" />
           <Property Name="BusinessPic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Reason" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="AR20500_pgDetail_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
@@ -764,6 +786,16 @@
           <Property Type="String" Name="BusinessPic" Nullable="false" MaxLength="100" />
           <Property Type="String" Name="SubTerritory" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="Sales" Nullable="true" />
+          <Property Type="String" Name="Reason" Nullable="true" MaxLength="8000" />
+        </ComplexType>
+        <ComplexType Name="AR20500_pdConfig_Result">
+          <Property Type="Boolean" Name="IsShowCustHT" Nullable="true" />
+          <Property Type="Boolean" Name="IsShowReason" Nullable="true" />
+          <Property Type="Boolean" Name="IsShowERPCust" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="AR20500_pcReason_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -987,6 +1019,7 @@
           <EntitySetMapping Name="AR_NewCustomerInfor">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
               <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="BusinessPic" ColumnName="BusinessPic" />
                 <ScalarProperty Name="UpdateType" ColumnName="UpdateType" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -1122,6 +1155,24 @@
                 <ScalarProperty Name="BusinessPic" ColumnName="BusinessPic" />
                 <ScalarProperty Name="SubTerritory" ColumnName="SubTerritory" />
                 <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20500_pdConfig" FunctionName="eBiz4DWebSysModel.Store.AR20500_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20500Model.AR20500_pdConfig_Result">
+                <ScalarProperty Name="IsShowCustHT" ColumnName="IsShowCustHT" />
+                <ScalarProperty Name="IsShowReason" ColumnName="IsShowReason" />
+                <ScalarProperty Name="IsShowERPCust" ColumnName="IsShowERPCust" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20500_pcReason" FunctionName="eBiz4DWebSysModel.Store.AR20500_pcReason">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20500Model.AR20500_pcReason_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

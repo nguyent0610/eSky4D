@@ -72,6 +72,11 @@ var cboStatus_Change = function (value) {
         App.cboHandle.store.reload();
         //App.grdCust.removeAll();
     }
+    if (HQ.isShowReason && App.cboStatus.getValue() == 'O') {
+        HQ.grid.show(App.grdCust, ['Reason']);
+    } else {
+        HQ.grid.hide(App.grdCust, ['Reason']);
+    }
 };
 
 

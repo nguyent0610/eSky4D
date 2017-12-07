@@ -9,7 +9,6 @@
     var X = Html.X();
     var HQ = Html.HQ();
 }
-
 @(
  X.Viewport()
 .Layout(LayoutType.Fit)
@@ -454,6 +453,29 @@
                         , X.CheckColumn().ID("ColCheckSat").DataIndex("Sat").Width(50).Editable(true).Text(Util.GetLang("Sat")).Align(Alignment.Center)
                         , X.CheckColumn().ID("ColCheckSun").DataIndex("Sun").Width(70).Editable(true).Text(Util.GetLang("Sun")).Align(Alignment.Center)
 
+                        , X.Column().Text(Util.GetLang("AR20500Reason")).DataIndex("Reason").Width(200)//.Renderer("renderReason")
+                        .Editor(
+                            HQ.Combo().ID("cboColReason").HQProcedure("AR20500_pcReason")
+                            .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                            .MultiSelect(true)
+                            //.ForceSelection(true)
+                            .HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() 
+                            { 
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                            .LoadData()
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.Expand.Handler = "this.store.clearFilter(); HQ.combo.expand(this,',');";
+                                lst.Focus.Handler = "this.forceSelection = true;";
+                                lst.Blur.Handler = "this.forceSelection = false;";
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                        )   
                         , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()

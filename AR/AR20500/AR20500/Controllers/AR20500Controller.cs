@@ -90,7 +90,22 @@ namespace AR20500.Controllers
                 requireRefCustID = true;
             }
             ViewBag.IsRequireRefCustID = requireRefCustID;
-            ViewBag.IsShowCustHT = _db.AR20500_pdIsShowCustHT().FirstOrDefault();
+            var isShowCustHT = false;
+		    var isShowReason = false;
+          //  var isRequiedReason = false;
+            var isShowERPCust = false;
+            var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                isShowCustHT = objConfig.IsShowCustHT.HasValue ? objConfig.IsShowCustHT.Value : false;
+                isShowReason = objConfig.IsShowReason.HasValue ? objConfig.IsShowReason.Value : false;
+              //  isRequiedReason = objConfig.IsRequiedReason.HasValue ? objConfig.IsRequiedReason.Value : false;
+                isShowERPCust = objConfig.IsShowERPCust.HasValue ? objConfig.IsShowERPCust.Value : false;
+            }
+            ViewBag.IsShowERPCust = isShowERPCust;
+            ViewBag.IsShowCustHT = isShowCustHT;
+            ViewBag.IsShowReason = isShowReason;
+          //  ViewBag.IsRequiedReason = isRequiedReason;
             return View();
         }
 
@@ -378,8 +393,8 @@ namespace AR20500.Controllers
             objNew.State = item.State;
             objNew.District = item.District;
             objNew.Ward = item.Ward;
-           
-            
+
+            objNew.Reason = item.Reason;
             objNew.ClassId = item.ClassId;
             objNew.PriceClass = item.PriceClass;
             objNew.CodeHT = item.ERPCustID;
