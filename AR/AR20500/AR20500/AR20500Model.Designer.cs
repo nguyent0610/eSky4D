@@ -8481,7 +8481,7 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String AR20500CreateDate
+        public Nullable<global::System.DateTime> AR20500CreateDate
         {
             get
             {
@@ -8491,13 +8491,13 @@ namespace AR20500
             {
                 OnAR20500CreateDateChanging(value);
                 ReportPropertyChanging("AR20500CreateDate");
-                _AR20500CreateDate = StructuralObject.SetValidValue(value, true);
+                _AR20500CreateDate = StructuralObject.SetValidValue(value);
                 ReportPropertyChanged("AR20500CreateDate");
                 OnAR20500CreateDateChanged();
             }
         }
-        private global::System.String _AR20500CreateDate;
-        partial void OnAR20500CreateDateChanging(global::System.String value);
+        private Nullable<global::System.DateTime> _AR20500CreateDate;
+        partial void OnAR20500CreateDateChanging(Nullable<global::System.DateTime> value);
         partial void OnAR20500CreateDateChanged();
     
         /// <summary>
