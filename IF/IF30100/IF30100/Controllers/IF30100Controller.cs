@@ -19,6 +19,7 @@ using Aspose.Cells;
 using System.Runtime.InteropServices;
 using System.Globalization;
 using System.Data.SqlClient;
+using System.Threading;
 namespace IF30100.Controllers
 {
     [DirectController]
@@ -420,53 +421,54 @@ namespace IF30100.Controllers
         {
             try
             {
-                Stream stream = new MemoryStream();
-                Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook();
-                Aspose.Cells.Worksheet SheetData = workbook.Worksheets[0];
-                SheetData.Name = "Data";
+                //Stream stream = new MemoryStream();
+                //Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook();
+                //Aspose.Cells.Worksheet SheetData = workbook.Worksheets[0];
+                //SheetData.Name = "Data";
 
-                var detHandler = new StoreDataHandler(data["lstDet"]);
-                var lstDet = detHandler.ObjectData<IF30100_pgData_Result>().ToList();
-                int i = 0;
-                foreach (var obj in lstDet)
-                {
-                    SetCellValueGrid(SheetData.Cells.Rows[0][i], Util.GetLang(obj.Column_Name), TextAlignmentType.Center, TextAlignmentType.Left);
-                    i++;
-                }
-                DataAccess dal = Util.Dal(false, isReadOnly);
-                ParamCollection pc = new ParamCollection();
-                System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.Text, ref pc);
+                //var detHandler = new StoreDataHandler(data["lstDet"]);
+                //var lstDet = detHandler.ObjectData<IF30100_pgData_Result>().ToList();
+                //int i = 0;
+                //foreach (var obj in lstDet)
+                //{
+                //    SetCellValueGrid(SheetData.Cells.Rows[0][i], Util.GetLang(obj.Column_Name), TextAlignmentType.Center, TextAlignmentType.Left);
+                //    i++;
+                //}
+                //DataAccess dal = Util.Dal(false, isReadOnly);
+                //ParamCollection pc = new ParamCollection();
+                //System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.Text, ref pc);
 
-                Cell cell;
-                for (int j = 0; j < dtInvtID.Rows.Count; j++)
-                {
-                    for(int x = 0; x < dtInvtID.Columns.Count; x++){
-                        cell = SheetData.Cells[j+1, x];
-                        if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("DATE"))
-                        {
-                            DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][x].ToString());
-                            cell.PutValue(tmpValue.ToString(Current.FormatDate));
-                        }
-                        else
-                        {
-                            cell.PutValue(dtInvtID.Rows[j][x].ToString());
-                        }
-                    }
-                }
+                //Cell cell;
+                //for (int j = 0; j < dtInvtID.Rows.Count; j++)
+                //{
+                //    for(int x = 0; x < dtInvtID.Columns.Count; x++){
+                //        cell = SheetData.Cells[j+1, x];
+                //        if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("DATE"))
+                //        {
+                //            DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][x].ToString());
+                //            cell.PutValue(tmpValue.ToString(Current.FormatDate));
+                //        }
+                //        else
+                //        {
+                //            cell.PutValue(dtInvtID.Rows[j][x].ToString());
+                //        }
+                //    }
+                //}
 
-                //SheetData.Cells.ImportDataTable(dtCloned, false, "A2");// du lieu Inventory
+                ////SheetData.Cells.ImportDataTable(dtCloned, false, "A2");// du lieu Inventory
 
                            
 
-                SheetData.AutoFitColumns();
+                //SheetData.AutoFitColumns();
+                Thread.Sleep(1000 * 60 * 5);
 
-                string fileName = Guid.NewGuid().ToString() + ".xlsx";
+                string fileName = "abc.xlsx";
                 string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
               
         
-                workbook.Save(path, SaveFormat.Xlsx);
-
-                return Json(new { success = true, id = fileName, name = name + ".xlsx" }, JsonRequestBehavior.AllowGet);
+                //workbook.Save(path, SaveFormat.Xlsx);
+              
+                return Json(new { success = true, id = fileName, name =  "test.xlsx" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -1073,7 +1075,6 @@ namespace IF30100.Controllers
                 excelWorkBook.SaveAs(fullName, XlFileFormat.xlExcel12, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange);
                 //Stream stream = new MemoryStream(buffer);
                 //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsb" };
-
                 return Json(new { success = true, id = fileName, name = name + ".xlsb" }, JsonRequestBehavior.AllowGet);
 
             }
@@ -1160,7 +1161,7 @@ namespace IF30100.Controllers
            
         }
         [HttpGet]
-        [DeleteFileAttribute] //Action Filter, it will auto delete the file after download,I will explain it later
+        //[DeleteFileAttribute] //Action Filter, it will auto delete the file after download,I will explain it later
         public ActionResult DownloadAndDelete(string name, string id)
         {
             //get the temp folder and file path in server
@@ -2216,9 +2217,29 @@ namespace IF30100.Controllers
 
             return lstp;
         }
-
+        
         [HttpPost]
-        public ActionResult ExportProc(FormCollection data, string reportNbr, string name, string proc,bool isReadOnly)
+        public ActionResult CheckFile(string name, string id)
+        {
+            string path = Server.MapPath("~/ExportPivot");
+            string fullName = path + @"\" + id;
+            while (!System.IO.File.Exists(fullName))
+            {
+                Thread.Sleep(5*1000);
+            }
+
+            return Json(new { success = true, id = id, name = name }, JsonRequestBehavior.AllowGet);
+            
+        }
+        [HttpPost]
+        public ActionResult ExportProcFileName(string name)
+        {
+            string fileName = Guid.NewGuid().ToString() + ".Xlsb";
+            string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
+            return Json(new { success = true, id = fileName, name = name + ".Xlsb" }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult ExportProc(FormCollection data, string reportNbr, string name, string proc,bool isReadOnly,string id)
         {
             try
             {
@@ -2450,13 +2471,17 @@ namespace IF30100.Controllers
 
                     SheetData.AutoFitColumns();
 
-                    string fileName = Guid.NewGuid().ToString() + ".xlsx";
+                    string fileName =id;// Guid.NewGuid().ToString() + ".Xlsb";
                     string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
 
 
-                    workbook.Save(path, SaveFormat.Xlsx);
+                    workbook.Save(path, SaveFormat.Xlsb);
+                //     Thread.Sleep(1000 * 60*10);
 
-                    return Json(new { success = true, id = fileName, name = name + ".xlsx" }, JsonRequestBehavior.AllowGet);
+                //string fileName = "abc.xlsx";
+                //string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
+
+                    return Json(new { success = true, id = fileName, name = name }, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
@@ -2480,7 +2505,7 @@ namespace IF30100.Controllers
 
             //return Json(created.ReportName + created.ReportID + ".xls");
         }
-
+       
         #region other
         private string ConvertData(string data)
         {

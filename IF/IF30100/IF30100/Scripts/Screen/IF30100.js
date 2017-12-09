@@ -170,13 +170,13 @@ var cboReport_Change = function (sender, newValue, oldValue) {
     if (sender.valueModels != null ) {
         if (App.cboType.getValue() == 'E') {
             App.btnTemplate.hide();
-            if (sender.valueModels[0].data.SourceType.toUpperCase().startsWith('V'))
+            if (sender.valueModels[0].data.SourceType.toUpperCase().indexOf('V')==0)
             {
                 App.grdDet.show();
                 App.pnlProc.hide();
                 App.stoDet.reload();
             }
-            else if (sender.valueModels[0].data.SourceType.toUpperCase().startsWith('P'))
+            else if (sender.valueModels[0].data.SourceType.toUpperCase().indexOf('P')==0)
             {
                 App.grdDet.hide();
                 App.pnlProc.show();
@@ -262,10 +262,10 @@ var btnExport_Click = function () {
             });
         }
     }
-    else if (App.cboReport.valueModels[0].data.SourceType.toUpperCase().startsWith('V')) {
+    else if (App.cboReport.valueModels[0].data.SourceType.toUpperCase().indexOf('V')==0) {
         exportExcelView();
     }
-    else if (App.cboReport.valueModels[0].data.SourceType.toUpperCase().startsWith('P')) {
+    else if (App.cboReport.valueModels[0].data.SourceType.toUpperCase().indexOf('P')==0) {
         exportExcelProc();
     }
 }
@@ -361,7 +361,79 @@ var loadParam = function (i, reportNbr, reportView) {
     });
 
 }
+//function exportExcelProc() {
+//    HQ.common.showBusy(true, HQ.common.getLang("Exporting"));
+//    App.direct.IF30100ExportProc(        
+//        {
+//        timeout: 180000,
+//        success: function (msg, data) {
+//            if (!Ext.isEmpty(msg.name)) {
+//                window.location = 'IF30100/DownloadFile?name=' + msg.name + '&id=' + msg.id;
+//                HQ.common.showBusy(false);
+//            }
+//           // HQ.message.process(msg, data, true);
+//        }
+//            ,
+//            failure: function (msg, data) {
+//                //HQ.message.process(msg, data, true);
+//                HQ.common.showBusy(false);
+//            }
+//        });
+//}
 function exportExcelProc() {
+    if (checkGrid(App.stoChoiceColumn, 'Checked') == false) {
+        HQ.message.show(201710091);
+        App.pnlProc.setActiveTab(1);
+        return;
+    }
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("Exporting"),
+            method: 'POST',
+            timeout: 18000000,
+            url: 'IF30100/ExportProcFileName',
+            params: {
+                name: App.cboReport.valueModels[0].data.ReportName
+            },
+            success: function (msg, data) {
+                if (!Ext.isEmpty(data.result.id)) {
+                    exportExcelProcFile(data.result.id, data.result.name);
+                }
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+}
+function downloadFile(idfile, name) {
+    
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("CheckingFile"),
+            method: 'POST',
+            timeout: 18000000,
+            url: 'IF30100/CheckFile',
+            params: {
+                name: name,
+                id: idfile
+            },
+            success: function (msg, data) {
+                if (!Ext.isEmpty(data.result.name)) {
+                    window.location = 'IF30100/DownloadFile?name=' + data.result.name + '&id=' + data.result.id;
+                }
+                HQ.message.process(msg, data, true);
+            },
+            failure: function (msg, data) {
+                if (data.failureType == "connect")
+                    downloadFile(idfile, name);
+                else HQ.message.process(msg, data, true);                
+            }
+        });
+    }
+}
+
+function exportExcelProcFile(idfile,name) {
     if (checkGrid(App.stoChoiceColumn, 'Checked') == false) {
         HQ.message.show(201710091);
         App.pnlProc.setActiveTab(1);
@@ -414,7 +486,7 @@ function exportExcelProc() {
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("Exporting"),
             method: 'POST',
-            timeout: 180000,
+            timeout: 18000000,
             url: 'IF30100/ExportProc',
             params: {
                 list0: List0,//App.List0.getSelectionSubmit().getSelectionModelField().getValue(),
@@ -424,9 +496,10 @@ function exportExcelProc() {
                 choiceColumn: ChoiceColumn,
                 listChoice: Ext.encode(App.stoChoiceColumn.getRecordsValues()),
                 proc: App.cboReport.valueModels[0].data.ReportView,
-                name: App.cboReport.valueModels[0].data.ReportName,
+                name: name,
                 reportNbr: App.cboReport.valueModels[0].data.ReportNbr,
-                IsReadOnly: App.cboReport.valueModels[0].data.IsReadOnly
+                IsReadOnly: App.cboReport.valueModels[0].data.IsReadOnly,
+                id:idfile
 
             },
             success: function (msg, data) {
@@ -436,7 +509,9 @@ function exportExcelProc() {
                 HQ.message.process(msg, data, true);
             },
             failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
+                if(data.failureType=="connect")
+                    downloadFile(idfile, name);
+                else HQ.message.process(msg, data, true);
             }
         });
     }
