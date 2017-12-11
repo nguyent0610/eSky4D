@@ -2,6 +2,7 @@ var _Change = false;
 var keys = ['ID'];
 var _firstLoad = true;
 var loadSourceCombo = function () {
+    if (HQ.ShowExport != '1') App.btnExport.hide();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     if (HQ.isShowCustHT) HQ.grid.show(App.grdCust, ['CustHT'])
     if (HQ.IsShowERPCust) HQ.grid.show(App.grdCust, ['ERPCustID'])
@@ -1044,9 +1045,8 @@ var renderDistrict = function (value) {
     }
     return value;
 }
-
 var btnExport_Click = function () {
-    if(App.frmMain.isValid())
+    if (App.frmMain.isValid())
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("Exporting"),
             url: 'AR20500/ExportExcel',
@@ -1054,6 +1054,8 @@ var btnExport_Click = function () {
             timeout: 1000000,
             clientValidation: false,
             params: {
+                reportNbr: 'RA205',
+                ReportName: 'RA205'
                 ////lstCustTD: Ext.encode(App.stoDiscBreak.getRecordsValues()),// HQ.store.getData(App.stoAR_CustomerTD)
                 ////lstCustTD1: Ext.encode(App.cboExport.getValue()),
                 //templateExport: App.cboExport.getValue()
@@ -1066,7 +1068,7 @@ var btnExport_Click = function () {
                 HQ.message.process(msg, data, true);
             }
         });
-    
+
 
 };
 

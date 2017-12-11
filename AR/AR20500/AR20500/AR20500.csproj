@@ -49,7 +49,8 @@
     <Reference Include="Ext.Net.Utilities">
       <HintPath>..\..\EbizWebMvc\AR20500_Language\AR20500\bin\Ext.Net.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="HQ.eSky.RPT">
+    <Reference Include="HQ.eSky.RPT, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\eSky Framework\HQ.eSky.RPT\RPT\bin\HQ.eSky.RPT.dll</HintPath>
     </Reference>
     <Reference Include="HQ.eSkyFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -235,7 +236,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>AR20500Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Reports\IN_ItemList.mrt" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\hq.common.js" />
     <Content Include="Scripts\hq.language0.js" />
@@ -279,7 +279,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="temp\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
