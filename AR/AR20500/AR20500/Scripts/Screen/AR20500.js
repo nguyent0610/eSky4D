@@ -1055,7 +1055,7 @@ var btnExport_Click = function () {
             clientValidation: false,
             params: {
                 reportNbr: 'RA205',
-                ReportName: 'RA205'
+                ReportName: 'AR_ApprMCL'
                 ////lstCustTD: Ext.encode(App.stoDiscBreak.getRecordsValues()),// HQ.store.getData(App.stoAR_CustomerTD)
                 ////lstCustTD1: Ext.encode(App.cboExport.getValue()),
                 //templateExport: App.cboExport.getValue()
