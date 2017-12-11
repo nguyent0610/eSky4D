@@ -1044,3 +1044,29 @@ var renderDistrict = function (value) {
     }
     return value;
 }
+
+var btnExport_Click = function () {
+    if(App.frmMain.isValid())
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("Exporting"),
+            url: 'AR20500/ExportExcel',
+            type: 'POST',
+            timeout: 1000000,
+            clientValidation: false,
+            params: {
+                ////lstCustTD: Ext.encode(App.stoDiscBreak.getRecordsValues()),// HQ.store.getData(App.stoAR_CustomerTD)
+                ////lstCustTD1: Ext.encode(App.cboExport.getValue()),
+                //templateExport: App.cboExport.getValue()
+            },
+            success: function (msg, data) {
+                window.location = 'AR20500/DownloadAndDelete?file=' + data.result.fileName;
+
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    
+
+};
+

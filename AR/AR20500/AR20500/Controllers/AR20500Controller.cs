@@ -12,6 +12,12 @@ using System.IO;
 using System.Text;
 using HQ.eSkySys;
 using System.Globalization;
+using HQ.eSky.RPT.Controllers;
+using HQ.eSky.RPT;
+using System.Data.EntityClient;
+using Stimulsoft.Report;
+using System.Configuration;
+using Stimulsoft.Report.Dictionary;
 namespace AR20500.Controllers
 {
     [DirectController]
@@ -25,6 +31,7 @@ namespace AR20500.Controllers
         private string _userName = Current.UserName;
         AR20500Entities _db = Util.CreateObjectContext<AR20500Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
+        RPTEntities _dbRPT = Util.CreateObjectContext<RPTEntities>(false);
         private JsonResult mLogMessage;
         private FormCollection mForm;
 
@@ -41,7 +48,7 @@ namespace AR20500.Controllers
                 return _filePath;
             }
         }
-        
+
         private bool _AR20500Anova;
         internal bool AR20500Anova
         {
@@ -91,21 +98,21 @@ namespace AR20500.Controllers
             }
             ViewBag.IsRequireRefCustID = requireRefCustID;
             var isShowCustHT = false;
-		    var isShowReason = false;
-          //  var isRequiedReason = false;
+            var isShowReason = false;
+            //  var isRequiedReason = false;
             var isShowERPCust = false;
             var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
                 isShowCustHT = objConfig.IsShowCustHT.HasValue ? objConfig.IsShowCustHT.Value : false;
                 isShowReason = objConfig.IsShowReason.HasValue ? objConfig.IsShowReason.Value : false;
-              //  isRequiedReason = objConfig.IsRequiedReason.HasValue ? objConfig.IsRequiedReason.Value : false;
+                //  isRequiedReason = objConfig.IsRequiedReason.HasValue ? objConfig.IsRequiedReason.Value : false;
                 isShowERPCust = objConfig.IsShowERPCust.HasValue ? objConfig.IsShowERPCust.Value : false;
             }
             ViewBag.IsShowERPCust = isShowERPCust;
             ViewBag.IsShowCustHT = isShowCustHT;
             ViewBag.IsShowReason = isShowReason;
-          //  ViewBag.IsRequiedReason = isRequiedReason;
+            //  ViewBag.IsRequiedReason = isRequiedReason;
             return View();
         }
 
@@ -140,7 +147,7 @@ namespace AR20500.Controllers
                 StoreDataHandler custHandler = new StoreDataHandler(data["lstCust"]);
 
                 var lstCust = custHandler.ObjectData<AR20500_pgDetail_Result>();
-               
+
                 var access = Session[_screenNbr] as AccessRight;
 
                 if (!access.Update && !access.Insert)
@@ -151,7 +158,7 @@ namespace AR20500.Controllers
 
                 if (handle != "N" && handle != string.Empty)
                 {
-                    #region -Check Approve-                                        
+                    #region -Check Approve-
                     if (checkApprove == 1 && askApprove == 0 && handle == "A")
                     {
                         var isCheckRefCustID = IsCheckRefCustID();
@@ -210,15 +217,15 @@ namespace AR20500.Controllers
                             if (objNew == null || objNew.Status == "A" || objNew.Status == "D") continue;
                             if (handle == "A")
                             {
-                                #region -Duyệt update KH qua AR_Customer...-                                                                
-                                string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID,item.ID,item.OutletName,item.Phone,item.Addr1).FirstOrDefault();
+                                #region -Duyệt update KH qua AR_Customer...-
+                                string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID, item.ID, item.OutletName, item.Phone, item.Addr1).FirstOrDefault();
                                 if (cust.PassNull() != "")
                                 {
                                     custlist += cust.TrimEnd(',') + ",";
                                     _db.Dispose();
                                     continue;
                                     //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
-                                }                                         
+                                }
                                 //if (item.ERPCustID.PassNull() != "" )
                                 //{
                                 //    string custERP = item.ERPCustID.PassNull().ToUpper().Trim();
@@ -237,7 +244,7 @@ namespace AR20500.Controllers
                                 //}
 
                                 // Update AR_NewCustomerInfor
-                                Update_NewCust(ref objNew, item, fromDate, toDate);                                                                                           
+                                Update_NewCust(ref objNew, item, fromDate, toDate);
                                 // Update Customer
                                 var objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
                                 if (objCust == null)
@@ -251,17 +258,17 @@ namespace AR20500.Controllers
                                     objCust.Crtd_User = Current.UserName;
                                     _db.AR_Customer.AddObject(objCust);
                                 }
-                                Update_AR_Customer(ref objCust, item, objNew);                                
-                                                           
+                                Update_AR_Customer(ref objCust, item, objNew);
+
                                 // Customer Location
-                                AR_CustomerLocation loc = _db.AR_CustomerLocation.FirstOrDefault(x => x.BranchID == objNew.BranchID && x.CustID == objCust.CustId);                                 
+                                AR_CustomerLocation loc = _db.AR_CustomerLocation.FirstOrDefault(x => x.BranchID == objNew.BranchID && x.CustID == objCust.CustId);
                                 if (loc == null)
                                 {
                                     loc = new AR_CustomerLocation();
                                     loc.BranchID = objCust.BranchID;
                                     loc.CustID = objCust.CustId;
                                     _db.AR_CustomerLocation.AddObject(loc);
-                                }                               
+                                }
                                 loc.Crtd_Datetime = loc.LUpd_Datetime = DateTime.Now;
                                 loc.Crtd_Prog = loc.LUpd_Prog = _screenNbr;
                                 loc.Crtd_User = loc.LUpd_User = Current.UserName;
@@ -308,7 +315,7 @@ namespace AR20500.Controllers
                                     objNew.LUpd_Datetime = DateTime.Now;
                                     objNew.NewCustID = objCust.CustId;
                                     objNew.Status = "A";
-                                   // objNew.UpdateType = 0;
+                                    // objNew.UpdateType = 0;
                                 }
                                 #endregion
                             }
@@ -328,9 +335,9 @@ namespace AR20500.Controllers
                             _db.SaveChanges();
                             if (callAfterApprove)
                             {
-                                _db.AR20500_AfterApprove(objNew.NewCustID, item.CustID, item.BranchID, handle);    
+                                _db.AR20500_AfterApprove(objNew.NewCustID, item.CustID, item.BranchID, handle);
                             }
-                            
+
                             _db.Dispose();
                         }
                     }
@@ -345,7 +352,7 @@ namespace AR20500.Controllers
             }
             catch (Exception ex)
             {
-                 if (ex is System.Data.SqlClient.SqlException)
+                if (ex is System.Data.SqlClient.SqlException)
                 {
                     return Json(new { success = false, type = "message", code = "2017110301" }); //return Json(new { success = true, message = GetMess(2017110301, null) });
                 }
@@ -422,14 +429,14 @@ namespace AR20500.Controllers
             master.Sat = item.Sat.ToBool();
             master.Sun = item.Sun.ToBool();
         }
-        private void Update_AR_Customer(ref AR_Customer objCust, AR20500_pgDetail_Result  item, AR_NewCustomerInfor objNew)
+        private void Update_AR_Customer(ref AR_Customer objCust, AR20500_pgDetail_Result item, AR_NewCustomerInfor objNew)
         {
             objCust.Addr1 = objCust.BillAddr1 = item.Addr1.PassNull();// item.Addr2.PassNull() + (item.Addr1.PassNull() != "" ? "," + item.Addr1.PassNull() : "");
             objCust.Addr2 = objCust.BillAddr2 = item.Addr2.PassNull();//
             objCust.District = item.District.PassNull();
             objCust.City = objCust.BillCity = item.City.PassNull();
             objCust.State = objCust.BillState = item.State.PassNull();
-//            objCust.State = item.State.PassNull();
+            //            objCust.State = item.State.PassNull();
             objCust.ClassId = item.ClassId.PassNull();
             objCust.Salut = item.Salut.PassNull();
             objCust.Phone = item.Phone.PassNull();
@@ -437,7 +444,7 @@ namespace AR20500.Controllers
             objCust.Channel = item.Channel.PassNull();
             objCust.Area = item.Area.PassNull();
             objCust.EMailAddr = item.Email.PassNull();
-            objCust.CrRule = "N";            
+            objCust.CrRule = "N";
 
             ///thôi dị e chỉnh dùm chị AR_Customer.ProfilePic = AR_NewCustomerInfor.imageFileName
             //objCust.ProfilePic = objNew.ProfilePic;
@@ -454,19 +461,19 @@ namespace AR20500.Controllers
             objCust.DeliveryID = item.DeliveryID.PassNull(); ;
             objCust.Country = objCust.BillCountry = "VN";
             objCust.BillWard = objCust.Ward = item.Ward;
-            
+
             objCust.DfltShipToId = "DEFAULT";
             if (item.UpdateType == 0)
             {
                 objCust.LTTContractNbr = item.CustHT;
                 objCust.RefCustID = item.ERPCustID.PassNull();
-            }            
+            }
             objCust.LUpd_Datetime = DateTime.Now;
             objCust.LUpd_Prog = _screenNbr;
             objCust.LUpd_User = Current.UserName;
-            objCust.Phone = objCust.BillPhone = item.Phone.PassNull(); 
+            objCust.Phone = objCust.BillPhone = item.Phone.PassNull();
             objCust.ShopType = AR20500Anova ? "RS" : item.ShopType.PassNull();
-            
+
             objCust.Status = "A";// item.IsActive == 1 ? "A" : "I";
             objCust.TaxDflt = "C";
             objCust.TaxID00 = "OVAT10-00";
@@ -480,7 +487,7 @@ namespace AR20500.Controllers
             objCust.ExpiryDate = DateTime.Now.ToDateShort();
             objCust.CustType = "R";
             objCust.EstablishDate = new DateTime(1900, 1, 1);
-            objCust.Birthdate = new DateTime(1900, 1, 1);            
+            objCust.Birthdate = new DateTime(1900, 1, 1);
             objCust.AllowEdit = false;
         }
         private void Update_SOAddress(ref AR_SOAddress objAR_SOAddress, AR_Customer objCust)
@@ -488,13 +495,13 @@ namespace AR20500.Controllers
             objAR_SOAddress.Addr1 = objCust.Addr1.PassNull();// item.Addr2.PassNull() + (item.Addr1.PassNull() != "" ? "," + item.Addr1.PassNull() : "");
             objAR_SOAddress.Addr2 = objCust.Addr2.PassNull();//
             objAR_SOAddress.Attn = objCust.Attn.PassNull();
-            
+
             objAR_SOAddress.City = objCust.City;
             objAR_SOAddress.Country = objCust.Country;
             objAR_SOAddress.Crtd_DateTime = objCust.Crtd_Datetime;
             objAR_SOAddress.Crtd_Prog = objCust.Crtd_Prog;
             objAR_SOAddress.Crtd_User = objCust.Crtd_User;
-            
+
             objAR_SOAddress.Descr = objCust.CustName;
             objAR_SOAddress.District = objCust.District;
 
@@ -504,7 +511,7 @@ namespace AR20500.Controllers
             objAR_SOAddress.LUpd_User = objCust.LUpd_User;
 
             objAR_SOAddress.Phone = objCust.Phone;
-           
+
             objAR_SOAddress.ShipViaID = "";
             objAR_SOAddress.SiteId = objCust.SiteId;
             objAR_SOAddress.SOName = objCust.CustName;
@@ -1180,7 +1187,7 @@ namespace AR20500.Controllers
                     }
                 }
                 else
-                {                   
+                {
                     for (Int32 i = weekStart; i <= weekEnd; i++)
                     {
                         OM_SalesRouteDet det = new OM_SalesRouteDet();
@@ -1466,6 +1473,155 @@ namespace AR20500.Controllers
             }
             return _checkRefCustID;
         }
-       
+        [HttpPost]
+        public ActionResult ExportExcel(FormCollection data, string reportNbr)
+        {
+            //RPTController rpt = new RPTController();
+            //return rpt.ExportExcelDirect(185, "IN_ItemList");
+            string ReportName = "IN_ItemList";
+            int ReportID = UpdateRPT(data,reportNbr,ReportName);
+
+
+            var objRPT_peGetName = _dbRPT.RPT_peGetName(ReportID).FirstOrDefault();
+            string nameReport = objRPT_peGetName.NameExport == "" ? ReportName + ReportID : objRPT_peGetName.NameExport;
+
+            string strConnection = EntityConnectionStringHelper.Build(
+                                          Current.Server,
+                                          Current.DBApp,
+                                          "HQ.eSkySysModel");
+            EntityConnectionStringBuilder entityBuilder =
+                new EntityConnectionStringBuilder(strConnection);
+
+            var report = new StiReport();
+
+            report.Load(Server.MapPath("~/Reports/" + ReportName + ".mrt"));
+
+            string provider = ConfigurationManager.AppSettings["SQLNCLI"] ?? "SQLNCLI11.0";
+            report.Dictionary.Databases.Clear();
+            //report.Dictionary.Databases.Add(new Stimulsoft.Report.Dictionary.StiSqlDatabase("Data", entityBuilder.ProviderConnectionString + ";Connect Timeout=60000" + (objRPT_peGetName.isReadOnly != "1" ? "" : ";ApplicationIntent=ReadOnly")));//
+            report.Dictionary.Databases.Add(new Stimulsoft.Report.Dictionary.StiOleDbDatabase("Data", @"Provider=" + provider + ";" + entityBuilder.ProviderConnectionString + ";Connect Timeout=60000;General Timeout=6000" + (objRPT_peGetName.isReadOnly != "1" ? "" : ";Application Intent=ReadOnly")));//Data Source=MARSSVR\SQL2012;Initial Catalog=eBiz4DWebApp;Persist Security Info=True;User ID=sa;Password=P@ssw0rd;MultipleActiveResultSets=True;Application Name=EntityFramework"));           
+
+            for (int j = 0; j < report.Dictionary.DataSources.Count; j++)
+            {
+                ((StiOleDbSource)report.Dictionary.DataSources[j]).CommandTimeout = 600000;
+                ((StiOleDbSource)report.Dictionary.DataSources[j]).Parameters[0].Expression = ReportID.ToString();
+                ((StiOleDbSource)report.Dictionary.DataSources[j]).Parameters[0].Type = 2;
+                ((StiOleDbSource)report.Dictionary.DataSources[j]).SqlCommand = ((StiOleDbSource)report.Dictionary.DataSources[j]).ToString();
+            }
+            report.Compile();
+
+            report.Render(false);
+            //report.Dictionary.Variables.Clear();
+            Stream stream = new MemoryStream();
+            //report.ExportDocument(StiExportFormat.Excel2007, stream);
+            //stream.Flush();
+            //stream.Position = 0;
+            //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = nameReport + ".xlsx" };
+
+            var fileName = nameReport + DateTime.Now.ToString("yyyyMMddHHmm") + ".xlsx";
+            string fullPath = Path.Combine(Server.MapPath("~/temp"), fileName);
+            report.ExportDocument(StiExportFormat.Excel2007, fullPath);
+            return Json(new { success = true, fileName = fileName, errorMessage = "" });
+        }
+        [HttpGet]
+        [DeleteFileAttribute] //Action Filter, it will auto delete the file after download,I will explain it later
+        public ActionResult DownloadAndDelete(string file)
+        {
+            //get the temp folder and file path in server
+            string fullPath = Path.Combine(Server.MapPath("~/temp"), file);
+
+            //return the file for download, this is an Excel 
+            //so I set the file content type to "application/vnd.ms-excel"
+            return File(fullPath, "application/vnd.ms-excel", file);
+        }
+
+        private int UpdateRPT(FormCollection data, string reportNbr, string reportName)
+        {
+
+            DateTime DateParm00 = Convert.ToDateTime(data["FromDate"]);
+            DateTime DateParm01 = Convert.ToDateTime(data["ToDate"]);
+            string branchID = data["cboCpnyID"];
+            string TypeCust = data["cboUpdateType"];
+            string Status = data["cboStatus"];
+            string list0 = data["cboSlsperId"];
+            var created = new RPTRunning();
+            created.ResetET();
+            short bit1 = 1;
+            short bit0 = 0;
+            created.AppPath = "Reports\\";
+            created.BooleanParm00 = data["chk00"].PassNull() != "" ? bit1 : bit0;
+            created.BooleanParm01 = data["chk01"].PassNull() != "" ? bit1 : bit0;
+            created.BooleanParm02 = data["chk02"].PassNull() != "" ? bit1 : bit0;
+            created.BooleanParm03 = data["chk03"].PassNull() != "" ? bit1 : bit0;
+            created.ClientName = Current.UserName;
+            created.CpnyID = _sys.Users.Where(p => p.UserName == Current.UserName).FirstOrDefault() == null ? "@@" : _sys.Users.Where(p => p.UserName == Current.UserName).FirstOrDefault().CpnyID;
+            created.DateParm00 = new DateTime(DateParm00.Year, DateParm00.Month, DateParm00.Day, 0, 0, 0);
+            created.DateParm01 = new DateTime(DateParm01.Year, DateParm01.Month, DateParm01.Day, 0, 0, 0);
+            created.LangID = Current.LangID;
+            created.LoggedCpnyID = Current.CpnyID;
+            created.MachineName = "Web";
+            created.ReportCap = reportNbr;
+            created.ReportDate = DateTime.Now; ;
+            created.ReportID = 0;
+            created.ReportName = reportName;
+            created.ReportNbr = reportNbr;
+            created.SelectionFormular = "";
+            created.StringParm00 = branchID;// data["StringParm00"];
+            created.StringParm01 = TypeCust;// data["StringParm01"];
+            created.StringParm02 = Status;// data["StringParm02"];
+            //created.StringParm03 = data["StringParm03"];
+            created.UserID = Current.UserName;
+
+            _dbRPT.RPTRunnings.AddObject(created);
+            _dbRPT.SaveChanges();
+
+
+
+            #region//Insert RptParm0 RPTRunningParm0 parm0;luoi nhan vien
+            int i = 0;
+
+            foreach (var ID in list0.PassNull().TrimEnd(',').Split(','))
+            {
+                if (ID.PassNull() != "")
+                {
+                    i++;
+                    var parm0 = new RPTRunningParm0();
+                    parm0.ReportNbr = created.ReportNbr;
+                    parm0.ReportID = created.ReportID;
+                    parm0.MachineName = "Web";
+                    parm0.LineRef = i.ToString();
+                    parm0.StringParm = ID;
+                    parm0.DateParm = DateTime.Now;
+                    parm0.NumericParm = 0;
+                    parm0.Crtd_DateTime = DateTime.Now;
+                    parm0.Crtd_Prog = created.ReportNbr;
+                    parm0.Crtd_User = Current.UserName;
+                    parm0.LUpd_DateTime = DateTime.Now;
+                    parm0.LUpd_Prog = created.ReportNbr;
+                    parm0.LUpd_User = Current.UserName;
+                    parm0.tstamp = new byte[1];
+                    _dbRPT.RPTRunningParm0.AddObject(parm0);
+                }
+
+            }
+            #endregion
+
+            _db.SaveChanges();
+            return created.ReportID;
+        }
+
+    }
+    public class DeleteFileAttribute : ActionFilterAttribute
+    {
+        public override void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+            filterContext.HttpContext.Response.Flush();
+
+            //convert the current filter context to file and get the file path
+            string filePath = (filterContext.Result as FilePathResult).FileName;
+
+            //delete the file after download
+            System.IO.File.Delete(filePath);
+        }
     }
 }
