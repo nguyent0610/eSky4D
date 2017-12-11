@@ -23,14 +23,28 @@ namespace SA00001.Controllers
         private string _userName = Current.UserName;
         private string _cpnyID = Current.CpnyID;
         private Int16 _langID = Current.LangID;
+        string cpnyNPP = string.Empty;
         SA00001Entities _db = Util.CreateObjectContext<SA00001Entities>(true);
         public ActionResult Index()
         {
+            bool allowSalesState = false
+                , allowSalesDistrict = false;
+
+
+            var objConfig = _db.SA00001_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                allowSalesState = objConfig.AllowSalesState.HasValue ? objConfig.AllowSalesState.Value : false;
+                allowSalesDistrict = objConfig.AllowSalesDistrict.HasValue ? objConfig.AllowSalesDistrict.Value : false;
+            }
+
+            ViewBag.allowSalesState = allowSalesState;
+            ViewBag.allowSalesDistrict = allowSalesDistrict;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -46,6 +60,17 @@ namespace SA00001.Controllers
             return this.Store(_db.SA000001_pgCompanyAddr(CpnyID).ToList());
         }
 
+        public ActionResult GetState(string Country, string listState)
+        {
+            var dataState = this.Store(_db.SA00001_pgState(Current.CpnyID, Current.UserName, Current.LangID, Country, listState).ToList());
+            return dataState;
+        }
+
+        public ActionResult GetDistrict(string Country, string State, string listDistrict)
+        {
+            var dataDistrict = this.Store(_db.SA00001_pgDistrict(Current.CpnyID, Current.UserName, Current.LangID, Country, State, listDistrict).ToList());
+            return dataDistrict;
+        }
 
         [HttpPost]
         public ActionResult Save(FormCollection data)
@@ -55,7 +80,7 @@ namespace SA00001.Controllers
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Cpny"]);
                 ChangeRecords<SA00001_pgLoadGridCompany_Result> lstSYS_Cpny = dataHandler.BatchObjectData<SA00001_pgLoadGridCompany_Result>();
                 lstSYS_Cpny.Created.AddRange(lstSYS_Cpny.Updated);
-
+                cpnyNPP = data["txtCpnyID"];
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSys_CompanyAddr"]);
                 ChangeRecords<SA000001_pgCompanyAddr_Result> lstSys_CompanyAddr = dataHandler1.BatchObjectData<SA000001_pgCompanyAddr_Result>();
 
@@ -170,6 +195,8 @@ namespace SA00001.Controllers
             t.Status = s.Status;
             t.Tel = s.Tel;
             t.Fax = s.Fax;
+            t.SalesState = s.SalesState;
+            t.SalesDistrict = s.SalesDistrict;
             t.TaxRegNbr = s.TaxRegNbr;
             t.Channel = s.Channel;
             t.Territory = s.Territory;
@@ -187,14 +214,7 @@ namespace SA00001.Controllers
             t.Zone = s.Zone;
             t.Lat = s.Lat;
             t.Lng = s.Lng;
-            //t.IP = s.IP;
-            //t.Port = s.Port;
-            //t.Station = s.Station;
-            //t.tableHD = s.tableHD;
-            //t.tableTA = s.tableTA;
-            //t.BrandQSR = s.BrandQSR;
-            //t.lat = s.lat;
-            //t.lng = s.lng;
+
         }
 
         private void UpdatingSys_CompanyAddr(Sys_CompanyAddr t, SA000001_pgCompanyAddr_Result s, bool isNew)
@@ -202,6 +222,7 @@ namespace SA00001.Controllers
             if (isNew)
             {
                 t.AddrID = s.AddrID;
+                t.CpnyID = cpnyNPP;
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;

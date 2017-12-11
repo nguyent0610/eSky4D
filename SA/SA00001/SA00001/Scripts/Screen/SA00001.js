@@ -1,12 +1,13 @@
 //// Declare //////////////////////////////////////////////////////////
-var keys = ['CpnyID', 'AddrID'];
+var keys = ['AddrID'];
 var fieldsCheckRequire = [""];
 var fieldsLangCheckRequire = [""];
 
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
-
+var _listState = '';
+var _listDistrict = '';
 
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
@@ -75,6 +76,19 @@ var menuClick = function (command) {
             App.Deposit.setValue('');
             App.CreditLimit.setValue('');
             App.MaxValue.setValue('');
+            App.txtSalesDistrict.setValue('');
+            App.txtSalesDistrictDescr.setValue('');
+            App.txtSalesState.setValue('');
+            App.txtSalesStateDescr.setValue('');
+
+            App.stoSys_CompanyAddr.reload();
+            App.txtSalesStateDescr.setVisible(HQ.allowSalesState);
+            App.btnSalesState.setVisible(HQ.allowSalesState);
+            App.txtSalesDistrictDescr.setVisible(HQ.allowSalesDistrict);
+            App.btnSalesDistrict.setVisible(HQ.allowSalesDistrict);
+            App.txtSalesDistrictDescr.allowBlank = !HQ.allowSalesDistrict;
+            App.txtSalesStateDescr.allowBlank = !HQ.allowSalesState;
+            App.frmDetail.validate();
             // App.BrandQSR.setValue('');
             //App.tableHD.setValue('');
             //App.tableTA.setValue('');
@@ -111,10 +125,14 @@ var menuClick = function (command) {
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.util.checkAccessRight();
+    //App.txtSalesDistrictDescr.hide(!HQ.allowSalesState);
+    //App.txtSalesStateDescr.hide(!HQ.allowSalesDistrict);
+    
     HQ.isFirstLoad = true;
     App.frmMain.isValid();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     checkLoad();
+    
 };
 
 var frmChange = function () {
@@ -185,7 +203,8 @@ var save = function () {
             url: 'SA00001/Save',
             params: {
                 lstSYS_Cpny: HQ.store.getData(App.stoSYS_Cpny),
-                lstSys_CompanyAddr: HQ.store.getData(App.stoSys_CompanyAddr)
+                lstSys_CompanyAddr: HQ.store.getData(App.stoSys_CompanyAddr),
+                compID: App.txtCpnyID.getValue()
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
@@ -227,6 +246,14 @@ var btnEdit_Click = function (record) {
     HQ.isNew = false;
     App.winLocation.show();
     App.stoSys_CompanyAddr.reload();
+    
+    App.txtSalesStateDescr.setVisible(HQ.allowSalesState);
+    App.btnSalesState.setVisible(HQ.allowSalesState);
+    App.txtSalesDistrictDescr.setVisible(HQ.allowSalesDistrict);
+    App.btnSalesDistrict.setVisible(HQ.allowSalesDistrict);
+    App.txtSalesDistrictDescr.allowBlank = !HQ.allowSalesDistrict;
+    App.txtSalesStateDescr.allowBlank = !HQ.allowSalesState;
+    App.frmDetail.validate();
     //App.stoForm.reload();
 
 };
@@ -247,23 +274,15 @@ var btnLocationOK_Click = function () {
 };
 
 var cboCountry_Change = function (sender, e) {
-    if (sender.hasFocus) {
-        //App.cboState.getStore().load(function () {
-            //var curRecord = App.frmDetail.getRecord();
-            //if (curRecord != undefined)
-            //    if (curRecord.data.State) {
-            //        App.cboState.setValue(curRecord.data.State);
-            //    }
-            //var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
-            //if (!dt) {
-            //    curRecord.data.State = '';
-            //    App.cboState.setValue("");
-            //}
-            //if (App.cboState.value == curRecord.data.State) {
-            //    cboState_Change(App.cboState, curRecord.data.State);
-            //}
-       // });
-    }
+    var cboCountry_Change = function (sender, e, oldValue) {
+        if (!HQ.isFirstLoad && e != oldValue) {
+            App.txtSalesState.setValue("");
+            App.txtSalesStateDescr.setValue("");
+            App.txtSalesDistrict.setValue("");
+            App.txtSalesDistrictDescr.setValue("");
+        }
+    };
+    App.cboState.store.reload();
 };
 
 var cboZone_Change = function (sender, e) {
@@ -281,7 +300,7 @@ var cboZone_Change = function (sender, e) {
                 App.cboTerritory.setValue("");
 
                 curRecord.data.State = '';
-                App.cboState.setValue("");
+                //App.cboState.setValue("");
                 App.cboCity.setValue("");
                 curRecord.data.City = '';
                 App.cboDistrict.setValue("");
@@ -369,7 +388,7 @@ var cboState_Change = function (sender, e) {
     }
 };
 
-// Expand Territory
+ //Expand Territory
 var cboState_Expand = function (combo) {
     App.cboState.store.clearFilter();
     var country = App.cboCountry.getValue();
@@ -469,12 +488,12 @@ var cboDistrict_Collapse = function (cbombo) {
 
 var stoSys_CompanyAddr_Load = function (sto) {
     HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
-    if (HQ.isFirstLoad) {
+    //if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keys);
         }
         //HQ.isFirstLoad = false; //sto load cuoi se su dung
-    }
+    //}
     //App.stoSys_CompanyAddr.reload();
 };
 
@@ -490,6 +509,18 @@ var grdSys_CompanyAddr_Edit = function (item, e) {
 
 var grdSys_CompanyAddr_ValidateEdit = function (item, e) {
     //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
+
+    if (e.column.dataIndex == "Country") {
+        if (e.value != e.record.data.Country) {
+            e.record.set("State", "");
+            e.record.set("City", "");
+        }
+    }
+    if (e.column.dataIndex == "State") {
+        if (e.value != e.record.data.State) {
+            e.record.set("City", "");
+        }
+    }
     return HQ.grid.checkValidateEdit(App.grdSys_CompanyAddr, e, keys);
 };
 
@@ -532,3 +563,205 @@ var txtLng_Blur = function (sender, value) {
     }
 
 }
+
+
+/////////////////////////////////////////////////////////////////////
+
+var btnState_TriggerClick = function () {
+    _listState = App.txtSalesState.getValue();// joinParams(App.cboMailTo);
+    //App.chkActive_All.setValue(false);
+    App.winLocation.mask();
+    App.stoState.removeAll();
+    App.stoState.reload();
+    App.winState.show();
+};
+var winState_beforeShow = function () {
+    App.winLocation.mask();
+    App.winState.mask();
+    App.winState.setHeight(App.frmMain.getHeight() - 20);
+    App.winState.setWidth(App.frmMain.getWidth() - 10);
+};
+
+
+var btnOKState_Click = function () {
+    var res = "";
+    var stateName = "";
+    var store = App.stoState;
+    var allRecords = store.snapshot || store.allData || store.data;
+    store.suspendEvents();
+    allRecords.each(function (record) {
+        if (record.data.Selected == true) {
+            res += record.data.State + ',';
+            stateName += record.data.Descr + ',';
+        }
+    });
+    store.resumeEvents();
+    var selState = '';
+    var selstateName = '';
+    if (res.length > 1) {
+        selState = res.substring(0, res.length - 1);
+    }
+    if (stateName.length > 1) {
+        selstateName = stateName.substring(0, stateName.length - 1);
+    }
+    App.txtSalesState.setValue(selState);
+    App.txtSalesStateDescr.setValue(selstateName);
+    App.winState.hide();
+    App.winLocation.unmask();
+};
+
+var btnCancelState_Click = function () {
+    App.winState.hide();
+    App.winLocation.unmask();
+};
+
+var stoState_Load = function (sto) {
+    HQ.common.showBusy(false);
+    App.winState.unmask();
+};
+
+var chkActiveAll_Change = function (sender, value, oldValue) {
+    if (sender.hasFocus) {
+        var store = App.stoState;
+        var allRecords = store.snapshot || store.allData || store.data;
+        store.suspendEvents();
+        allRecords.each(function (record) {
+            record.set('Selected', value);
+        });
+        store.resumeEvents();
+        App.grdState.view.refresh();
+    }
+};
+
+var winDistrict_beforeShow = function () {
+    App.winLocation.mask();
+    App.winDistrict.mask();
+    App.winDistrict.setHeight(App.frmMain.getHeight() - 20);
+    App.winDistrict.setWidth(App.frmMain.getWidth() - 10);
+};
+
+
+var btnOKDistrict_Click = function () {
+    var res = "";
+    var resDistrictName = "";
+    var store = App.stoDistrict;
+    var allRecords = store.snapshot || store.allData || store.data;
+    store.suspendEvents();
+    allRecords.each(function (record) {
+        if (record.data.Selected == true) {
+            res += record.data.District + ',';
+            resDistrictName += record.data.DistrictName + ',';
+        }
+    });
+    store.resumeEvents();
+    var selDistrict = '';
+    var selDistrictName = '';
+    if (res.length > 1) {
+        selDistrict = res.substring(0, res.length - 1);
+    }
+    if (resDistrictName.length > 1) {
+        selDistrictName = resDistrictName.substring(0, resDistrictName.length - 1);
+    }
+    App.txtSalesDistrict.setValue(selDistrict);
+    App.txtSalesDistrictDescr.setValue(selDistrictName);
+    App.winDistrict.hide();
+    App.winLocation.unmask();
+};
+
+var btnCancelDistrict_Click = function () {
+    App.winDistrict.hide();
+    App.winLocation.unmask();
+};
+
+var btnDistrict_TriggerClick = function () {
+    _listDistrict = App.txtSalesDistrict.getValue();// joinParams(App.cboMailTo);
+    App.winLocation.mask();
+    App.stoDistrict.removeAll();
+    App.stoDistrict.reload();
+    App.winDistrict.show();
+};
+
+var stoDistrict_Load = function (sto) {
+    HQ.common.showBusy(false);
+    App.winDistrict.unmask();
+};
+
+var chkActiveDistrictAll_Change = function (sender, value, oldValue) {
+    if (sender.hasFocus) {
+        var store = App.stoDistrict;
+        var allRecords = store.snapshot || store.allData || store.data;
+        store.suspendEvents();
+        allRecords.each(function (record) {
+            record.set('Selected', value);
+        });
+        store.resumeEvents();
+        App.grdDistrict.view.refresh();
+    }
+};
+
+var txtSalesState_Change = function (sender, e, oldValue) {
+    if (!HQ.isFirstLoad && e != oldValue) {
+        App.txtSalesDistrictDescr.setValue("");
+        App.txtSalesDistrict.setValue("");
+    }
+};
+
+var renderCountry = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboCountry_grd.findRecord("CountryID", rec.data.Country);
+    if (record) {
+        return record.data.Descr;
+    }
+    else {
+        return value;
+    }
+};
+
+var stringFilterCountry = function (record) {
+
+    if (this.dataIndex == 'Country') {
+        App.cboCountry_grd.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboCountry_grd.store, "CountryID", "Descr");
+    }
+
+    return HQ.grid.filterString(record, this);
+};
+var renderState = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboState_grd.findRecord("State", rec.data.State);
+    if (record) {
+        return record.data.Descr;
+    }
+    else {
+        return value;
+    }
+};
+
+var stringFilterState = function (record) {
+
+    if (this.dataIndex == 'City') {
+        App.cboState_grd.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboState_grd.store, "State", "Descr");
+    }
+
+    return HQ.grid.filterString(record, this);
+};
+
+var renderCity = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboCity_grd.findRecord("City", rec.data.City);
+    if (record) {
+        return record.data.Name;
+    }
+    else {
+        return value;
+    }
+};
+
+var stringFilterCity = function (record) {
+
+    if (this.dataIndex == 'City') {
+        App.cboCity_grd.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboCity_grd.store, "City", "Name");
+    }
+
+    return HQ.grid.filterString(record, this);
+};
+

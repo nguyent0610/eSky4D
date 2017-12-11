@@ -25,13 +25,15 @@
         }
     </style>
     <script>
-       
+
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.allowSalesState = HQ.util.toBool('@ViewBag.allowSalesState');
+        HQ.allowSalesDistrict = HQ.util.toBool('@ViewBag.allowSalesDistrict');
         HQ.bussinessDate = new Date('@DateTime.Now.Date');
     </script>  
     <title>@ViewBag.Title</title>
@@ -41,29 +43,7 @@
     
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
-        <!-- Gọi hàm Body trong SA00001Controller để dựng view Body.cshtml, mục đích tạo cache. -->    
-        <!--
            
-            //X.Store().ID("stoForm")
-            //.AutoLoad(false)
-            //.Model(Util.GenerateModel(typeof(SYS_Company), "mdlForm", ""))       
-            //.Proxy(
-            //    X.AjaxProxy()                
-            //    .Url(Url.Action("LoadForm", "SA00001"))                
-            //    .ActionMethods(action =>
-            //    {
-            //        action.Read = HttpMethod.POST;
-            //    })
-            //    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-            //) 
-            //.Parameters(ps =>
-            //{
-            //    ps.Add(new StoreParameter("CpnyID", "App.txtCpnyID.getValue()", ParameterMode.Raw));
-            //})      
-            //.Listeners(p=>p.Load.Fn="stoForm_load" )
-        -->
-       
-                
         @{Html.RenderAction("Body", new { lang=Current.LangID});}   
     
 </body>
