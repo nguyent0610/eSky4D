@@ -420,9 +420,11 @@ function downloadFile(idfile, name) {
             },
             success: function (msg, data) {
                 if (!Ext.isEmpty(data.result.name)) {
-                    window.location = 'IF30100/DownloadFile?name=' + data.result.name + '&id=' + data.result.id;
+                    //setTimeout(function () {                       
+                        window.location = 'IF30100/DownloadAndDelete?name=' + data.result.name + '&id=' + data.result.id;
+                    //}, 5000);
                 }
-                HQ.message.process(msg, data, true);
+                //HQ.message.process(msg, data, true);
             },
             failure: function (msg, data) {
                 if (data.failureType == "connect")
@@ -432,7 +434,33 @@ function downloadFile(idfile, name) {
         });
     }
 }
-
+function downFile(idfile, name) {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("Downfile"),
+            method: 'POST',
+            timeout: 18000000,
+            url: 'IF30100/CheckFile',
+            params: {
+                name: name,
+                id: idfile
+            },
+            success: function (msg, data) {
+                if (!Ext.isEmpty(data.result.name)) {
+                    setTimeout(function () {
+                        window.location = 'IF30100/DownloadAndDelete?name=' + data.result.name + '&id=' + data.result.id;
+                    }, 5000);
+                }
+                //HQ.message.process(msg, data, true);
+            },
+            failure: function (msg, data) {
+                if (data.failureType == "connect")
+                    downloadFile(idfile, name);
+                else HQ.message.process(msg, data, true);
+            }
+        });
+    }
+}
 function exportExcelProcFile(idfile,name) {
     if (checkGrid(App.stoChoiceColumn, 'Checked') == false) {
         HQ.message.show(201710091);
@@ -504,7 +532,7 @@ function exportExcelProcFile(idfile,name) {
             },
             success: function (msg, data) {
                 if (!Ext.isEmpty(data.result.name)) {
-                    window.location = 'IF30100/DownloadFile?name=' + data.result.name + '&id=' + data.result.id;
+                    window.location = 'IF30100/DownloadAndDelete?name=' + data.result.name + '&id=' + data.result.id;
                 }
                 HQ.message.process(msg, data, true);
             },

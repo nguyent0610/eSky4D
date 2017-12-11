@@ -1161,7 +1161,7 @@ namespace IF30100.Controllers
            
         }
         [HttpGet]
-        //[DeleteFileAttribute] //Action Filter, it will auto delete the file after download,I will explain it later
+        [DeleteFileAttribute] //Action Filter, it will auto delete the file after download,I will explain it later
         public ActionResult DownloadAndDelete(string name, string id)
         {
             //get the temp folder and file path in server
@@ -2227,14 +2227,45 @@ namespace IF30100.Controllers
             {
                 Thread.Sleep(5*1000);
             }
+            //kiem tra file co dang su dung hay ko? Vi khi export dang save file, khi do da co file nhung save chua xong, file download ve loi
+            FileInfo fi = new FileInfo(fullName);
+            while (IsFileLocked(fi))
+            {
+                Thread.Sleep(5 * 1000);
+            }
 
             return Json(new { success = true, id = id, name = name }, JsonRequestBehavior.AllowGet);
             
         }
+        protected bool IsFileLocked(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
+        }
         [HttpPost]
         public ActionResult ExportProcFileName(string name)
         {
-            string fileName = Guid.NewGuid().ToString() + ".Xlsb";
+            string fileName = "A"+Guid.NewGuid().ToString("N") + ".Xlsb";
             string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
             return Json(new { success = true, id = fileName, name = name + ".Xlsb" }, JsonRequestBehavior.AllowGet);
         }
@@ -2618,6 +2649,7 @@ namespace IF30100.Controllers
             string filePath = (filterContext.Result as FilePathResult).FileName;
 
             //delete the file after download
+            
             System.IO.File.Delete(filePath);
         }
     }
