@@ -167,7 +167,8 @@
                         X.DateFilter().DataIndex("FromDate"),
                         X.DateFilter().DataIndex("ToDate"),
                         X.StringFilter().DataIndex("PromoType").ValidateRecord(p => p.Fn = "stringFilter"),
-                        X.StringFilter().DataIndex("ObjApply").ValidateRecord(p => p.Fn = "stringFilter")
+                        X.StringFilter().DataIndex("ObjApply").ValidateRecord(p => p.Fn = "stringFilter"),
+                        X.StringFilter().DataIndex("BudgetID")
                     )
             )
         )        

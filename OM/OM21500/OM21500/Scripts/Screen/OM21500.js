@@ -164,7 +164,7 @@ var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 var grdOM_DiscDescr_BeforeEdit = function (editor, e) {
-    if (!(e.record.data.IsEdit == true)) return false;
+    if (!(e.record.data.IsEdit == true) && e.record.data.tstamp) return false;
     if (e.field == 'BudgetID') {
         App.cboBudgetID.store.clearFilter();
         if(e.record.data.PromoType!='I')
