@@ -8,6 +8,7 @@ var _maxSource = 1;
 var _isLoadMaster = false;
 var _listState = '';
 var _listDistrict = '';
+var change=false;
 
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
@@ -136,7 +137,10 @@ var firstLoad = function () {
 };
 
 var frmChange = function () {
-    HQ.isChange = HQ.store.isChange(App.stoSYS_Cpny);
+    //if (HQ.store.isChange(App.stoSYS_Cpny) || change || HQ.store.isChange(App.stoSys_CompanyAddr)) {
+    //    HQ.isChange
+    //}
+    HQ.isChange = HQ.store.isChange(App.stoSYS_Cpny) || change || HQ.store.isChange(App.stoSys_CompanyAddr);
     HQ.common.changeData(HQ.isChange, 'SA00001');//co thay doi du lieu gan * tren tab title header
 };
 
@@ -239,6 +243,7 @@ function refresh(item) {
 var btnEdit_Click = function (record) {
     App.frmDetail.loadRecord(record);
 
+
     //App.txtCpnyID.setValue(record.data.CpnyID.split(','));
     //App.txtUserID.setValue(record.data.UserName);
     App.txtCpnyID.setReadOnly(true);
@@ -300,7 +305,7 @@ var cboZone_Change = function (sender, e) {
                 App.cboTerritory.setValue("");
 
                 curRecord.data.State = '';
-                //App.cboState.setValue("");
+                App.cboState.setValue("");
                 App.cboCity.setValue("");
                 curRecord.data.City = '';
                 App.cboDistrict.setValue("");
@@ -762,6 +767,14 @@ var stringFilterCity = function (record) {
         return HQ.grid.filterComboDescr(record, this, App.cboCity_grd.store, "City", "Name");
     }
 
-    return HQ.grid.filterString(record, this);
+    return record.dirty.grid.filterString(record, this);
 };
 
+var frmDetail_Change = function () {
+    var record = App.frmDetail.getRecord();
+    if (record) {
+        App.frmDetail.updateRecord();
+       // change = record.dirty;
+        frmChange();
+    }
+}
