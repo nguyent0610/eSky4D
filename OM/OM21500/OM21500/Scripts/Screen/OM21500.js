@@ -196,6 +196,10 @@ var grdOM_DiscDescr_Edit = function (item, e) {
         _crrDiscCode = e.record.data.DiscCode;
         setTitle();
     }
+    else if (e.field == 'PromoType') {
+        if (e.originalValue != e.value)
+            e.record.set('BudgetID', '');
+    }
     HQ.grid.checkInsertKey(App.grdOM_DiscDescr, e, keys);
 
 };
