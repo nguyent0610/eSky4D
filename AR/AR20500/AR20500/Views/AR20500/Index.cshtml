@@ -62,7 +62,11 @@
             }
             .hightlight-row .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
 	            background-color: #CCFF33 !important;
-            }        
+            }
+             .x-grid-with-row-lines .x-grid-td {
+                 border-bottom-width: 1px;
+                 height: 20px;
+             }  
         </style>
 
     <script>
@@ -77,12 +81,10 @@
         HQ.EndDateYear = new Date('@( new DateTime(DateTime.Now.Year,12,31))')
         HQ.isShowCustHT = HQ.util.toBool('@ViewBag.IsShowCustHT');
         HQ.IsShowERPCust = HQ.util.toBool('@ViewBag.IsShowERPCust');
-
-        HQ.isShowReason = HQ.util.toBool('@ViewBag.IsShowReason');
-      //  HQ.isRequiedReason = HQ.util.toBool('@ViewBag.IsRequiedReason');
-
+        HQ.IshowEditCust = HQ.util.toBool('@ViewBag.ShowEditCust');
+        HQ.isRequiedReason = HQ.util.toBool('@ViewBag.IsRequiedReason');
         HQ.IsRequireRefCustID = HQ.util.toBool('@ViewBag.IsRequireRefCustID');
-        HQ.ShowExport ='@ViewBag.ShowExport';
+        HQ.ShowExport = HQ.util.toBool('@ViewBag.ShowExport');
     </script>  
     <title>@ViewBag.Title</title>
 </head>

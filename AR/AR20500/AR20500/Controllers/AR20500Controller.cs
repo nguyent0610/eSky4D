@@ -84,8 +84,6 @@ namespace AR20500.Controllers
             }
         }
 
-
-
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
@@ -99,27 +97,23 @@ namespace AR20500.Controllers
             ViewBag.IsRequireRefCustID = requireRefCustID;
             var isShowCustHT = false;
 		    var isShowReason = false;
-          //  var isRequiedReason = false;
             var isShowERPCust = false;
+            bool isShowExport = false;
+            var isShowEditCust = false;
             var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
                 isShowCustHT = objConfig.IsShowCustHT.HasValue ? objConfig.IsShowCustHT.Value : false;
-                isShowReason = objConfig.IsShowReason.HasValue ? objConfig.IsShowReason.Value : false;
-              //  isRequiedReason = objConfig.IsRequiedReason.HasValue ? objConfig.IsRequiedReason.Value : false;
+                isShowReason = objConfig.IsShowReason.HasValue ? objConfig.IsShowReason.Value : false;                
                 isShowERPCust = objConfig.IsShowERPCust.HasValue ? objConfig.IsShowERPCust.Value : false;
+                isShowExport = objConfig.ShowExport.HasValue ? objConfig.ShowExport.Value : false; //an hien nut export
+                isShowEditCust = objConfig.ShowEditCust.HasValue ? objConfig.ShowEditCust.Value : false;
             }
             ViewBag.IsShowERPCust = isShowERPCust;
             ViewBag.IsShowCustHT = isShowCustHT;
             ViewBag.IsShowReason = isShowReason;
-          //  ViewBag.IsRequiedReason = isRequiedReason;
-            //an hien nut export
-            config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "AR20500HIDEEXPORT");
-            if (config != null && config.IntVal == 1)
-            {
-                ViewBag.ShowExport = "0";
-            }
-            else ViewBag.ShowExport = "1";
+            ViewBag.ShowExport = isShowExport;
+            ViewBag.ShowEditCust = isShowEditCust;
             return View();
         }
 
@@ -220,8 +214,9 @@ namespace AR20500.Controllers
                             {
                                 continue;
                             }
+                            Insert_NewCustHis(objNew);
                             var callAfterApprove = objNew.UpdateType == 0;
-                            if (objNew == null || objNew.Status == "A" || objNew.Status == "D") continue;
+                            if (objNew == null || objNew.Status == "A" || objNew.Status == "D") { continue; }
                             if (handle == "A")
                             {
                                 #region -Duyệt update KH qua AR_Customer...-                                                                
@@ -251,7 +246,9 @@ namespace AR20500.Controllers
                                 //}
 
                                 // Update AR_NewCustomerInfor
-                                Update_NewCust(ref objNew, item, fromDate, toDate);                                                                                           
+                                Update_NewCust(ref objNew, item);
+                                objNew.Startday = fromDate;
+                                objNew.Endday = toDate;                  
                                 // Update Customer
                                 var objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
                                 if (objCust == null)
@@ -298,7 +295,7 @@ namespace AR20500.Controllers
                                 if (item.UpdateType == 0)
                                 {
                                     // MCP
-                                    OM_SalesRouteMaster master = _db.OM_SalesRouteMaster.Where(x => x.PJPID == item.BranchID && x.SalesRouteID == item.BranchID && x.SlsPerID == item.SlsperID && x.CustID == objCust.CustId && x.BranchID == item.BranchID).FirstOrDefault();
+                                    OM_SalesRouteMaster master = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == item.BranchID && x.SalesRouteID == item.BranchID && x.SlsPerID == item.SlsperID && x.CustID == objCust.CustId && x.BranchID == item.BranchID);
                                     if (master == null)
                                     {
                                         master = new OM_SalesRouteMaster();
@@ -315,30 +312,21 @@ namespace AR20500.Controllers
                                     CreateRoute(master);
                                 }
                                 // Update NewCustID
-                                if (objNew != null)
-                                {
-                                    objNew.LUpd_User = Current.UserName;
-                                    objNew.LUpd_Prog = _screenNbr;
-                                    objNew.LUpd_Datetime = DateTime.Now;
-                                    objNew.NewCustID = objCust.CustId;
-                                    objNew.Status = "A";
-                                   // objNew.UpdateType = 0;
-                                }
+                                objNew.NewCustID = objCust.CustId;
+                                objNew.Status = "A";                              
                                 #endregion
                             }
                             else if (handle != "N" && handle != "")
                             {
-                                // Trạng thái trung gian 
-                                if (objNew != null)
-                                {
-                                    Update_NewCust(ref objNew, item, fromDate, toDate);
-
-                                    objNew.LUpd_Datetime = DateTime.Now;
-                                    objNew.LUpd_Prog = _screenNbr;
-                                    objNew.LUpd_User = Current.UserName;
-                                    objNew.Status = handle;
-                                }
+                                // Trạng thái trung gian                                 
+                                Update_NewCust(ref objNew, item);
+                                objNew.Startday = fromDate;
+                                objNew.Endday = toDate;                                
+                                objNew.Status = handle;                                
                             }
+                            objNew.LUpd_Datetime = DateTime.Now;
+                            objNew.LUpd_Prog = _screenNbr;
+                            objNew.LUpd_User = Current.UserName;
                             _db.SaveChanges();
                             if (callAfterApprove)
                             {
@@ -374,7 +362,7 @@ namespace AR20500.Controllers
             }
         }
 
-        private void Update_NewCust(ref AR_NewCustomerInfor objNew, AR20500_pgDetail_Result item, DateTime fromDate, DateTime toDate)
+        private void Update_NewCust(ref AR_NewCustomerInfor objNew, AR20500_pgDetail_Result item)
         {
             if (item.UpdateType == 0)
             {
@@ -389,8 +377,8 @@ namespace AR20500.Controllers
                 objNew.SalesRouteID = item.SalesRouteID;
                 objNew.PJPID = item.PJPID;
                 objNew.SlsFreq = item.SlsFreq;
-                objNew.Startday = fromDate;
-                objNew.Endday = toDate;
+                //objNew.Startday = fromDate;
+                //objNew.Endday = toDate;
                 objNew.VisitSort = item.VisitSort.Value;
             }
             objNew.SubTerritory = item.SubTerritory;
@@ -412,6 +400,89 @@ namespace AR20500.Controllers
             objNew.ClassId = item.ClassId;
             objNew.PriceClass = item.PriceClass;
             objNew.CodeHT = item.ERPCustID;
+        }
+
+        private void Insert_NewCustHis(AR_NewCustomerInfor objNew)
+        {
+            var obj = _db.AR_NewCustomerInforHis.Where(x => x.ID == objNew.ID && x.BranchID == objNew.BranchID).OrderByDescending(x => x.LineRef).FirstOrDefault();
+            var lineRefIdx = 1;
+            if (obj != null)
+            {
+                lineRefIdx = obj.LineRef + 1;
+            }
+            var objHis = new AR_NewCustomerInforHis()
+            {
+                ID = objNew.ID,
+                BranchID = objNew.BranchID,
+                LineRef = lineRefIdx,
+                CustID = objNew.CustID,
+                OutletName = objNew.OutletName,
+                ContactName = objNew.ContactName,
+                Phone = objNew.Phone,
+                Mobile = objNew.Mobile,
+                Fax = objNew.Fax,
+                Email = objNew.Email,
+                Addr1 = objNew.Addr1,
+                Addr2 = objNew.Addr2,
+                Addr3 = objNew.Addr3,
+                State = objNew.State,
+                City = objNew.City,
+                District = objNew.District,
+                Channel = objNew.Channel,
+                ClassId = objNew.ClassId,
+                Area = objNew.Area,
+                ShopType = objNew.ShopType,
+                TradeType = objNew.TradeType,
+                Lat = objNew.Lat,
+                Lng = objNew.Lng,
+                ImageFileName = objNew.ImageFileName,
+                Status = objNew.Status,
+                IsActive = objNew.IsActive,
+                NewCustCrtd_Datetime = objNew.Crtd_Datetime,
+                NewCustLUpd_Datetime = objNew.LUpd_Datetime,
+                SlsperID = objNew.SlsperID,
+                ApproveStatus = objNew.ApproveStatus,
+                NewCustID = objNew.NewCustID,
+                Checked = objNew.Checked,
+                CustType = objNew.CustType,
+                Territory = objNew.Territory,
+                Location = objNew.Location,
+                PriceClass = objNew.PriceClass,
+                Startday = objNew.Startday,
+                Endday = objNew.Endday,
+                PJPID = objNew.PJPID,
+                SlsFreq = objNew.SlsFreq,
+                WeekofVisit = objNew.WeekofVisit,
+                SalesRouteID = objNew.SalesRouteID,
+                Mon = objNew.Mon,
+                Tue = objNew.Tue,
+                Wed = objNew.Wed,
+                Thu = objNew.Thu,
+                Fri = objNew.Fri,
+                Sat = objNew.Sat,
+                Sun = objNew.Sun,
+                Ward = objNew.Ward,
+                DeliveryID = objNew.DeliveryID,
+                DateCust = objNew.DateCust,
+                TaxCode = objNew.TaxCode,
+                VisitSort = objNew.VisitSort,
+                Salut = objNew.Salut,
+                ProfilePic = objNew.ProfilePic,
+                SubTerritory = objNew.SubTerritory,
+                CodeHT = objNew.CodeHT,
+                BusinessPic = objNew.BusinessPic,
+
+                NewCustCrtd_User = objNew.Crtd_User,
+                NewCustLUpd_User = objNew.LUpd_User,
+                NewCustCrtd_Prog = objNew.Crtd_Prog,
+                NewCustLUpd_Prog = "AR20500",
+                UpdateType = objNew.UpdateType,
+                Reason = objNew.Reason,
+                Crtd_User = Current.UserName,
+                Crtd_Prog = "AR20500",
+                Crtd_Datetime = DateTime.Now
+            };
+            _db.AR_NewCustomerInforHis.AddObject(objHis);
         }
         private void Update_SalesRouteMaster(ref OM_SalesRouteMaster master, AR20500_pgDetail_Result item, DateTime fromDate, DateTime toDate)
         {
@@ -495,7 +566,7 @@ namespace AR20500.Controllers
             objCust.CustType = "R";
             objCust.EstablishDate = new DateTime(1900, 1, 1);
             objCust.Birthdate = new DateTime(1900, 1, 1);            
-            objCust.AllowEdit = false;
+            objCust.AllowEdit = 0;
         }
         private void Update_SOAddress(ref AR_SOAddress objAR_SOAddress, AR_Customer objCust)
         {
@@ -1618,6 +1689,109 @@ namespace AR20500.Controllers
             return created.ReportID;
         }
 
+       /////////////////////////////////////////////////////////////////////////////////////
+        [HttpPost]
+        public ActionResult SaveEdit(FormCollection data)
+        {
+            try
+            {
+               // _db.CommandTimeout = int.MaxValue;
+                string errorCustID = string.Empty;
+                StoreDataHandler custHandler = new StoreDataHandler(data["lstCust"]);
+
+                var lstCust = custHandler.ObjectData<AR20500_pgDetail_Result>();
+
+                var access = Session[_screenNbr] as AccessRight;
+                if (!access.Update && !access.Insert)
+                {
+                    throw new MessageException(MessageType.Message, "728");
+                }
+                foreach (var item in lstCust)
+                {
+                    if (item.ColCheck == true)
+                    {
+                        var objNew = _db.AR_NewCustomerInfor.FirstOrDefault(p => p.ID == item.ID && p.BranchID == item.BranchID);
+                        var objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
+                        if (objNew == null || objCust == null || objNew.Status == "D") 
+                        {
+                            continue; 
+                        }
+                        Insert_NewCustHis(objNew); // History                           
+                        if (objNew.Status == "A")
+                        {                                                                 
+                            // objNew.UpdateType = 0;                               
+                        }
+                        else
+                        {
+                            // Trạng thái trung gian 
+                            Update_NewCust(ref objNew, item);                                    
+                        }
+                        int editType = 0;
+                        if (item.AllowChangeEditInfo == true && item.EditInfo == true)
+                        {
+                            editType += 1; // Sửa thông tin
+                        }
+                        if (item.AllowChangeEditInfo == true && item.EditBusinessPic == true || item.AllowChangeEditInfo == true && item.EditProfilePic == true)
+                        {
+                            editType += 2; // Sửa hình ảnh
+                            if (item.AllowChangeEditInfo == true && item.EditBusinessPic == true)
+                            {
+                                objCust.BusinessPic = string.Empty;
+                                objNew.BusinessPic = string.Empty;
+                            }
+                            if (item.AllowChangeEditInfo == true && item.EditProfilePic == true)
+                            {
+                                objCust.ProfilePic = string.Empty;
+                                objNew.BusinessPic = string.Empty;
+                            }
+                        }
+                        
+                        switch (editType)
+                        {
+                            case 1:
+                                objCust.AllowEdit = 2; // Sửa hình
+                                break;
+                            case 2:
+                                objCust.AllowEdit = 3; // Sửa thông tin
+                                break;
+                            case 3:
+                                objCust.AllowEdit = 1; // Sửa hình và thông tin
+                                break;
+                            default:
+                                break;
+                        }
+                        objNew.LUpd_Datetime = DateTime.Now;
+                        objNew.LUpd_Prog = _screenNbr;
+                        objNew.LUpd_User = Current.UserName;
+                        _db.SaveChanges();
+                    }
+                }
+                
+                if (mLogMessage != null)
+                {
+                    return mLogMessage;
+                }
+                else
+                {
+                    return Json(new { success = true, type = "message", code = "8009" });
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is System.Data.SqlClient.SqlException)
+                {
+                    return Json(new { success = false, type = "message", code = "2017110301" }); //return Json(new { success = true, message = GetMess(2017110301, null) });
+                }
+                else if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
     }
     public class DeleteFileAttribute : ActionFilterAttribute
     {

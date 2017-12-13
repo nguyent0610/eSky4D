@@ -24,7 +24,7 @@
             .Icon(Icon.ArrowTurnRight)
             .Listeners(p=>{
                 p.Click.Fn = "btnExport_Click";
-            })
+            })            
         },"Print,Save,New,Delete", true, ""))
         .Layout(LayoutType.Border)
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
@@ -40,7 +40,7 @@
             .AutoScroll(true)
             .Items(
         //row1
-               X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+               X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
                     .Items(
                         HQ.Combo().ID("cboTerritory").MultiSelect(true)
                         .Name("cboTerritory").HQLangCode("AR20500Territory").HQProcedure("AR20500_pcTerritory")
@@ -92,7 +92,7 @@
                     )
 
                     //row 2
-                    , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                    , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
                         .Items(
                             HQ.Combo().ID("cboCpnyID")
                             .Name("cboCpnyID").HQLangCode("CpnyID").HQProcedure("AR20500_pcBranchAllByUser")
@@ -138,8 +138,7 @@
                                  .Listeners(p =>
                                 {
                                     p.Click.Fn = "btnProcess_Click";
-                                })
-
+                                })                            
                         )
                 ,X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 5 0")
                     .Items(
@@ -180,6 +179,15 @@
                             lst.Change.Fn = "cboUpdateType_Change";
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
+                        , X.Button().ID("btnSave")
+                            .MarginSpec("0 0 0 255")
+                                .Width(150)
+                                .Text(Util.GetLang("AR20500Save"))
+                                .Icon(Icon.TabEdit)
+                                .Listeners(p =>
+                                {
+                                    p.Click.Fn = "btnSave_Click";
+                                })
                     )
             )//pnl header
             , X.GridPanel().ID("grdCust")
@@ -196,7 +204,7 @@
                         .ID("stoCust")
                         .PageSize(50)
                         .Model(Util.GenerateModel(typeof(AR20500_pgDetail_Result), "mdlAR20500_pgDetail", "ID", true))
-                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCustList"))).AutoLoad(false)
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCustList")).Timeout(int.MaxValue)).AutoLoad(false)
                         .Parameters(ps =>
                         {
                             ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
@@ -462,10 +470,10 @@
                         , X.CheckColumn().ID("ColCheckSat").DataIndex("Sat").Width(50).Editable(true).Text(Util.GetLang("Sat")).Align(Alignment.Center)
                         , X.CheckColumn().ID("ColCheckSun").DataIndex("Sun").Width(70).Editable(true).Text(Util.GetLang("Sun")).Align(Alignment.Center)
 
-                        , X.Column().Text(Util.GetLang("AR20500Reason")).DataIndex("Reason").Width(200)//.Renderer("renderReason")
+                        , X.Column().Text(Util.GetLang("AR20500Reason")).DataIndex("Reason").Width(200).Renderer("renderReason")
                         .Editor(
                             HQ.Combo().ID("cboColReason").HQProcedure("AR20500_pcReason")
-                            .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                             .MultiSelect(true)
                             //.ForceSelection(true)
                             .HQHeightWidth(400, 300)
@@ -480,12 +488,18 @@
                             .Listeners(lst =>
                             {
                                 lst.Expand.Handler = "this.store.clearFilter(); HQ.combo.expand(this,',');";
-                                lst.Focus.Handler = "this.forceSelection = true;";
+                                lst.Focus.Fn = "cboColReason_Focus";
                                 lst.Blur.Handler = "this.forceSelection = false;";
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
                         )
-                        , X.CommandColumn().Width(150)
+                        , X.CheckColumn().ID("chkEditInfor").DataIndex("EditInfo").Width(50).Editable(true).Text(Util.GetLang("AR20500EditInfo")).Align(Alignment.Center).Width(120)
+                        , X.Column().Text(Util.GetLang("AR20500Delete"))//.Renderer("renderSummaryReportFloatColor")
+                        .Columns(                        
+                            X.CheckColumn().ID("chkUpdBussPic").DataIndex("EditBusinessPic").Width(50).Editable(true).Text(Util.GetLang("AR20500EditBussPic")).Align(Alignment.Center).Width(100)
+                            , X.CheckColumn().ID("chkUpdProfilePic").DataIndex("EditProfilePic").Width(70).Editable(true).Text(Util.GetLang("AR20500EditProPic")).Align(Alignment.Center).Width(100)
+                        )
+                        , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))
