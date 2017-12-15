@@ -9,7 +9,30 @@
     var HQ = Html.HQ();
     var formatNum = "0,000";    
 }
-
+@(
+ X.Store().ID("stoCustomerCombo")
+                .AutoLoad(false)
+                .PageSize(20)
+                .Model(Util.GenerateModel(typeof(OM27700_pcCustomer_Result), "mdlCustomerCombo", "CustID"))
+                .Proxy(
+                    X.AjaxProxy()
+                    .Url(Url.Action("GetCustomerCombo", "OM27700"))
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data"))
+                )
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("lstCpnyID", "ListCpnyID", ParameterMode.Raw));
+                })
+                .Listeners(p =>
+                {
+                    //p.Load.Fn = "stoBatch_Load";
+                    //p.BeforeLoad.Fn = "stoBatch_BeforeLoad";
+                })
+)
 @(
  Html.X().Viewport().Layout(LayoutType.Fit)
     .Items(
@@ -127,7 +150,8 @@
                     {
                         l.Change.Fn = "Event.Form.cboObjApply_change";
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";                   
-                    })  
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() {                        
                         new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
                         new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
@@ -361,6 +385,7 @@
                 )
                 .Listeners(x =>
                 {
+                    x.Activate.Handler = "HQ.focus = 'cpny'";
                     x.Render.Handler = "HQ.common.control_render(this,'cpny')";
                 }) // tabCompany
             
@@ -433,7 +458,7 @@
                             .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                         )
                         .SelectionModel(
-                            X.RowSelectionModel().ID("slmLevel").Mode(SelectionMode.Multi)
+                            X.RowSelectionModel().ID("slmLevel").Mode(SelectionMode.Single)
                             .Listeners(x =>
                             {
                                 x.SelectionChange.Fn = "Event.Grid.slmLevel_selectChange";
@@ -463,6 +488,7 @@
                         )
                     ).Listeners(x =>
                     {
+                        x.Activate.Handler = "HQ.focus = 'level'";
                         x.Render.Handler = "HQ.common.control_render(this,'level');";
                     }) // pnlLevel
 
@@ -649,6 +675,7 @@
                     )
                     .Listeners(x =>
                     {
+                        x.Activate.Handler = "HQ.focus = 'invt'";
                         x.Render.Handler = "HQ.common.control_render(this,'invt')";
                     })// pnlInvt
                 )// tabLevel 
@@ -887,6 +914,7 @@
                 )
                 .Listeners(x =>
                 {
+                    x.Activate.Handler = "HQ.focus = 'customer'";
                     x.Render.Handler = "HQ.common.control_render(this,'customer')";
                 }) // tabCustomer    
                 
@@ -986,6 +1014,8 @@
                                     .ValueField("SlsperID").DisplayField("SlsperID")
                                     .ForceSelection(true)
                                     .HQParam(new StoreParameterCollection() { 
+                                        
+                                    new StoreParameter("@ListCpnyID", "ListCpnyID", ParameterMode.Raw),
                                     new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
                                     new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
                                     new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
@@ -1051,6 +1081,7 @@
                        )
                 ).Listeners(x =>
                 {
+                    x.Activate.Handler = "App.cboSlsperID.store.reload(); HQ.focus = 'sales'";
                     x.Render.Handler = "HQ.common.control_render(this,'sales')";
                 }) // tabSales
                 
@@ -1062,6 +1093,7 @@
                     X.Panel().Layout(LayoutType.Border).ID("pnlSaleProduct").Region(Region.Center)
                     .Items(
                         X.Panel().ID("treeSaleInvt")
+                        .Flex(4)
                         .Region(Region.West)
                         .MinWidth(150).Split(true).AutoScroll(true).Width(200)                    
                         .DirectEvents(de =>
@@ -1159,7 +1191,7 @@
                             )
                             .ColumnModel(
                                 X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-                                , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(150)
+                                , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(130)
                                         .Editor(
                                             HQ.Combo().ID("cboSaleInvtID")
                                             .HQProcedure("OM27700_pcInvtID").HQColumnShow("Code,Descr")
@@ -1177,7 +1209,7 @@
                                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250)
                                 .Renderer("Process.renderInvtInfo")
 
-                                , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("Qty").Width(150)
+                                , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("Qty").Width(110)
                                 .Format("0,000").Align(Alignment.Right)
                                 .Editor(
                                     HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(1)
@@ -1245,6 +1277,7 @@
                 )
                 .Listeners(x =>
                 {
+                    x.Activate.Handler = "HQ.focus = 'SaleProduct'";
                     x.Render.Handler = "HQ.common.control_render(this,'SaleProduct')";
                 }) // tabCustomer  
             )

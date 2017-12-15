@@ -47,7 +47,7 @@ namespace OM27700.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -166,7 +166,8 @@ namespace OM27700.Controllers
         {
             query = query ?? string.Empty;
             if (page != 1) query = string.Empty;
-            var lstCustomer = _db.OM27700_pcCustomer(Current.UserName, Current.CpnyID, Current.LangID, query, start, start + 20, lstCpnyID.RemoveLast(), 1).ToList();
+            int startFromIndex = start == 0 ? 0 : start + 1;
+            var lstCustomer = _db.OM27700_pcCustomer(Current.UserName, Current.CpnyID, Current.LangID, query, startFromIndex, start + limit, lstCpnyID.RemoveLast(), 1).ToList();
             var paging = new Paging<OM27700_pcCustomer_Result>(lstCustomer, lstCustomer.Count > 0 ? lstCustomer[0].TotalRecords.Value : 0);
             return this.Store(paging.Data, paging.TotalRecords);
         }
@@ -259,7 +260,7 @@ namespace OM27700.Controllers
             }
             var lstTerritories = _db.OM27700_ptTerritory(Current.CpnyID, Current.UserName, Current.LangID).ToList();
             var companies = _db.OM27700_ptCompany(lstCpny, Current.CpnyID, Current.UserName, Current.LangID).ToList();
-            var lstCustomer = _db.OM27700_pcCustomer(Current.UserName, Current.CpnyID, Current.LangID, string.Empty, 0, 0 + 20, "", 2).ToList();
+            var lstCustomer = _db.OM27700_pcCustomer(Current.UserName, Current.CpnyID, Current.LangID, string.Empty, 0, 0 + 20, lstCpny, 2).ToList();
 
             foreach (var item in lstTerritories)
             {
@@ -349,7 +350,7 @@ namespace OM27700.Controllers
             }
             var lstTerritories = _db.OM27700_ptTerritory(Current.CpnyID, Current.UserName, Current.LangID).ToList();//tam thoi
             var companies = _db.OM27700_ptCompany(lstCpny, Current.CpnyID, Current.UserName, Current.LangID).ToList();
-            var lstSales = _db.OM27700_pcSalesPerson(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            var lstSales = _db.OM27700_pcSalesPerson(lstCpny, Current.UserName, Current.CpnyID, Current.LangID).ToList();
 
             foreach (var item in lstTerritories)
             {
@@ -460,8 +461,8 @@ namespace OM27700.Controllers
 
             var treeBranch = X.GetCmp<Panel>(panelID);
             tree.Listeners.CheckChange.Fn = "treePanelInvt_checkChange";
-            tree.Listeners.BeforeItemExpand.Handler = "App.treePanelInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
-            tree.Listeners.AfterItemExpand.Handler = "App.treePanelInvt.el.unmask();Ext.resumeLayouts(true);";
+            //tree.Listeners.BeforeItemExpand.Handler = "App.treePanelInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
+            //tree.Listeners.AfterItemExpand.Handler = "App.treePanelInvt.el.unmask();Ext.resumeLayouts(true);";
             tree.AddTo(treeBranch);
             return this.Direct();
         }

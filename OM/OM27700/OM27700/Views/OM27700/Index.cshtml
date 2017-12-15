@@ -20,7 +20,7 @@
         <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
         <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
         <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-        <script src='@Url.Content("Scripts/screen/OM27700.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/screen/OM27700.js?"+DateTime.Now.ToString("yyyyMMddHHmmss"))' type="text/javascript"></script>
 
         <script type="text/javascript">
             HQ.cpnyID = '@Current.CpnyID';
@@ -37,31 +37,7 @@
     <body>
         @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
 
-        @*@*Make the store - the binding data of the form*@
-
-        @(
-             X.Store().ID("stoCustomerCombo")
-                .AutoLoad(false)
-                .Model(Util.GenerateModel(typeof(OM27700_pcCustomer_Result), "mdlCustomerCombo", "CustID"))
-                .Proxy(
-                    X.AjaxProxy()
-                    .Url(Url.Action("GetCustomerCombo", "OM27700"))
-                    .ActionMethods(action =>
-                    {
-                        action.Read = HttpMethod.POST;
-                    })
-                    .Reader(X.JsonReader().Root("data"))
-                )
-                .Parameters(ps =>
-                {
-                    ps.Add(new StoreParameter("lstCpnyID", "ListCpnyID", ParameterMode.Raw));
-                })
-                .Listeners(p =>
-                {
-                    //p.Load.Fn = "stoBatch_Load";
-                    //p.BeforeLoad.Fn = "stoBatch_BeforeLoad";
-                })
-        )
+        @*@*Make the store - the binding data of the form*@        
 
 
         @(X.Store().ID("stoDisplay")
@@ -139,7 +115,7 @@
                 l.Load.Fn = "Store.stoGrid_load";
             })
                 // Store: stoInvt
-        )*@  
+        )*@
         
          @*@(
             X.Store().ID("stoSale")

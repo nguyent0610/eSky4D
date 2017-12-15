@@ -630,11 +630,22 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="listCpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<OM27700_pcSalesPerson_Result> OM27700_pcSalesPerson(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        public ObjectResult<OM27700_pcSalesPerson_Result> OM27700_pcSalesPerson(global::System.String listCpnyID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
+            ObjectParameter listCpnyIDParameter;
+            if (listCpnyID != null)
+            {
+                listCpnyIDParameter = new ObjectParameter("ListCpnyID", listCpnyID);
+            }
+            else
+            {
+                listCpnyIDParameter = new ObjectParameter("ListCpnyID", typeof(global::System.String));
+            }
+    
             ObjectParameter userNameParameter;
             if (userName != null)
             {
@@ -665,7 +676,7 @@ namespace OM27700
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<OM27700_pcSalesPerson_Result>("OM27700_pcSalesPerson", userNameParameter, cpnyIDParameter, langIDParameter);
+            return base.ExecuteFunction<OM27700_pcSalesPerson_Result>("OM27700_pcSalesPerson", listCpnyIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
