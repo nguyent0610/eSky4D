@@ -625,36 +625,44 @@ var Store = {
 
             if (status == _beginStatus) {
                 if (successful) {
-                    if (keys.indexOf('LevelID') > -1) {
-                        var rec = Ext.create(sto.model.modelName, {
-                            LevelID: Process.lastNbr(sto)
-                        });
-                        HQ.store.insertRecord(sto, keys, rec);
-                    }
-                    if (keys.indexOf('CpnyID') > -1) {
-                        var rec = Ext.create(sto.model.modelName, {
-                            CpnyID: ''
-                        });
-                        HQ.store.insertRecord(sto, keys, rec);
-                    }
-                    if (keys.indexOf('InvtID') > -1) {
+                    var objF = HQ.store.findRecord(sto, keys, ['', '', '']);
+                    if (!objF) {
+                        if (keys.indexOf('LevelID') > -1) {
+                            var rec = Ext.create(sto.model.modelName, {
+                                LevelID: Process.lastNbr(sto)
+                            });
+                            HQ.store.insertRecord(sto, keys, rec);
+                        }
+                        if (keys.indexOf('CpnyID') > -1) {
+                            var rec = Ext.create(sto.model.modelName, {
+                                CpnyID: ''
+                            });
+                            HQ.store.insertRecord(sto, keys, rec);
+                        }
+                        if (keys.indexOf('InvtID') > -1) {
                             var rec = Ext.create(sto.model.modelName, {
                                 InvtID: '',
                                 Qty: '1'
                             });
-                        HQ.store.insertRecord(sto, keys, rec);
-                    }
-                    if (keys.indexOf('CustID') > -1) {
-                        var rec = Ext.create(sto.model.modelName, {
-                            CustID: ''
-                        });
-                        HQ.store.insertRecord(sto, keys, rec);
-                    }
-                    if (keys.indexOf('SlsperID') > -1) {
-                        var rec = Ext.create(sto.model.modelName, {
-                            SlsperID: ''
-                        });
-                        HQ.store.insertRecord(sto, keys, rec);
+                            HQ.store.insertRecord(sto, keys, rec);
+                        }
+                        if (keys.indexOf('CustID') > -1) {
+                            var objF = HQ.store.findRecord(sto, keys, ['', '', '']);
+                            if (!objF) {
+                                var rec = Ext.create(sto.model.modelName, {
+                                    CustID: ''
+                                });
+                                HQ.store.insertRecord(sto, keys, rec);
+                            }
+
+                        }
+                        if (keys.indexOf('SlsperID') > -1) {
+
+                            var rec = Ext.create(sto.model.modelName, {
+                                SlsperID: ''
+                            });
+                            HQ.store.insertRecord(sto, keys, rec);
+                        }
                     }
                 }
             }
@@ -1293,18 +1301,18 @@ var Event = {
 
         grdSales_edit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-            var record = App.cboSlsperID.findRecord("SlsperID", e.record.data.SlsperID);
-            if (record) {
-                e.record.set("AccumulateID", App.cboAccumulateID.getValue());
-                e.record.set("SlsName", record.data.SlsName);
-                e.record.set("CpnyID", record.data.BranchID);
+            if (e.field == 'SlsperID') {
+                var record = App.cboSlsperID.findRecord("SlsperID", e.record.data.SlsperID);
+                if (record) {
+                    e.record.set("AccumulateID", App.cboAccumulateID.getValue());
+                    e.record.set("SlsName", record.data.SlsName);
+                    e.record.set("CpnyID", record.data.BranchID);
+                }
+                else {
+                    e.record.set("SlsName", '');
+                    e.record.set("CpnyID", '');
+                }
             }
-
-            else {
-                e.record.set("SlsName", '');
-                e.record.set("CpnyID",'');
-            }
-
             HQ.grid.checkInsertKey(App.grdSales, e, keys);
         },
 
@@ -1314,19 +1322,19 @@ var Event = {
         },
         grdCustID_edit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+            if (e.field == 'CustID') {
+                var record = App.cboCustID.findRecord("CustID", e.record.data.CustID);
+                if (record) {
+                    e.record.set("AccumulateID", App.cboAccumulateID.getValue());
+                    e.record.set("CustName", record.data.CustName);
+                    e.record.set("CpnyID", record.data.BranchID);
+                }
 
-            var record = App.cboCustID.findRecord("CustID", e.record.data.CustID);
-            if (record) {
-                e.record.set("AccumulateID", App.cboAccumulateID.getValue());
-                e.record.set("CustName", record.data.CustName);
-                e.record.set("CpnyID", record.data.BranchID);
+                else {
+                    e.record.set("CustName", '');
+                    e.record.set("CpnyID", '');
+                }
             }
-
-            else {
-                e.record.set("CustName", '');
-                e.record.set("CpnyID", '');
-            }
-
 
             HQ.grid.checkInsertKey(App.grdCustomer, e, keys);
         },
@@ -1557,7 +1565,7 @@ var Event = {
                             App.stoCompany.resumeEvents();
                             App.grdCompany.view.refresh();
 
-                            App.stoCompany.pageSize = parseInt(50, 10);
+                          //  App.stoCompany.pageSize = parseInt(50, 10);
                             App.stoCompany.loadPage(1);
                             //App.grdCompany.store.loadPage(1);
                             App.treePanelBranch.clearChecked();
@@ -2029,7 +2037,7 @@ var btnCustomerAddAll_click = function (btn, e, eOpts) {
                         App.grdCustomer.view.refresh();
 
                         //App.stoCustomer.pageSize = parseInt(50, 10);
-                        //App.stoCustomer.loadPage(1);
+                        App.stoCustomer.loadPage(1);
                        // var record = App.stoCustomer.getAt(App.stoCustomer.getCount() - 1);
                         
                         Event.Form.frmMain_fieldChange();

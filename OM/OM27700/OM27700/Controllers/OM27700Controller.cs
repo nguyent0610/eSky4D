@@ -745,14 +745,14 @@ namespace OM27700.Controllers
                 {
                     lstCustDetail.Created.Where(p => p.AccumulateID.ToUpper().Trim() == deleted.AccumulateID.ToUpper().Trim() && p.CpnyID == deleted.CpnyID && p.CustID == deleted.CustID).FirstOrDefault().tstamp = deleted.tstamp;
                 }
-                else
-                {
-                    var del = _db.OM_AccumulatedCustomer.FirstOrDefault(p => p.AccumulateID == deleted.AccumulateID && p.CpnyID == deleted.CpnyID && p.CustID == deleted.CustID);
-                    if (del != null)
-                    {
-                        _db.OM_AccumulatedCustomer.DeleteObject(del);
-                    }
-                }
+                //else
+                //{
+                //    var del = _db.OM_AccumulatedCustomer.FirstOrDefault(p => p.AccumulateID == deleted.AccumulateID && p.CpnyID == deleted.CpnyID && p.CustID == deleted.CustID);
+                //    if (del != null)
+                //    {
+                //        _db.OM_AccumulatedCustomer.DeleteObject(del);
+                //    }
+                //}
             }
             var srvQuestionCpnyHandler = new StoreDataHandler(data["lstCustomerDetailAll"]);
             var lstsrvQuestionCpny = srvQuestionCpnyHandler.ObjectData<OM27700_pgCustomer_Result>().ToList();
@@ -760,8 +760,8 @@ namespace OM27700.Controllers
             var lstDel = _db.OM_AccumulatedCustomer.Where(p => p.AccumulateID == accumulateID).ToList();
             for (int i = 0; i < lstDel.Count; i++)
             {
-                var objDel = lstsrvQuestionCpny.FirstOrDefault(p => p.AccumulateID == lstDel[i].AccumulateID
-                                && p.CpnyID == lstDel[i].CpnyID
+                var objDel = lstsrvQuestionCpny.FirstOrDefault(p =>// p.AccumulateID == lstDel[i].AccumulateID &&
+                                 p.CpnyID == lstDel[i].CpnyID
                                 && p.CustID == lstDel[i].CustID);
                 if (objDel == null)
                 {
