@@ -94,7 +94,14 @@ var btnLoad_Click = function () {
 };
 
 var ColCheck_Header_Change = function (value) {
+    
     if (value) {
+        if (!checkEditDet()) {
+            App.ColCheck_Header.events['change'].suspend();
+            App.ColCheck_Header.setValue(!value.checked);
+            App.ColCheck_Header.events['change'].resume();
+            return false;
+        }
         App.stoCust.suspendEvents();
 
         var allData = App.grdCust.store.snaptshot || App.grdCust.store.allData || App.grdCust.store.data;
@@ -335,32 +342,36 @@ var menuClick = function (command) {
 var grdCust_BeforeEdit = function (item, e) {
     if (!HQ.isShowCustHT && e.field == 'CustHT') return false;
     if (!HQ.IsShowERPCust && e.field == 'ERPCustID') return false;
-
+    if (!checkEditDet()) {
+        return false;
+    }
     if (e.field == 'ERPCustID' && e.record.data.UpdateType != 0) {
         return false;
     }
-    if (e.field != 'ColCheck') {
+    if (e.field == 'Reason') {
+        if (_isEditReason == false) {
+            return false;
+        }
+    }
+    else if (e.field != 'ColCheck') {
         if (e.field == 'EditInfo' && !e.record.data.AllowChangeEditInfo ||
                e.field == 'EditBusinessPic' && !e.record.data.AllowChangeEditBusinessPic ||
                e.field == 'EditProfilePic' && !e.record.data.AllowChangeEditProfilePic) {
             return false;
         }
-        if (App.cboStatus.getValue() == 'D') {
-            return false;
-        } else if (App.cboStatus.getValue() == 'A') {
-            if (e.field != 'EditInfo' && 
-                e.field != 'EditBusinessPic' &&
-                e.field != 'EditProfilePic') {
-                return false;
-            }
-            if (e.field == 'EditInfo' && !e.record.data.AllowChangeEditInfo || 
-                e.field == 'EditBusinessPic' && !e.record.data.AllowChangeEditBusinessPic || 
-                e.field == 'EditProfilePic' && !e.record.data.AllowChangeEditProfilePic) {
-                return false;
-            }
-        }
-        //else if (e.record.data.UpdateType == 3) {
+        //if (App.cboStatus.getValue() == 'D') {
         //    return false;
+        //} else if (App.cboStatus.getValue() == 'A') {
+        //    if (e.field != 'EditInfo' && 
+        //        e.field != 'EditBusinessPic' &&
+        //        e.field != 'EditProfilePic') {
+        //        return false;
+        //    }
+        //    if (e.field == 'EditInfo' && !e.record.data.AllowChangeEditInfo || 
+        //        e.field == 'EditBusinessPic' && !e.record.data.AllowChangeEditBusinessPic || 
+        //        e.field == 'EditProfilePic' && !e.record.data.AllowChangeEditProfilePic) {
+        //        return false;
+        //    }
         //}
     }
     if (e.field == 'WeekofVisit') {
@@ -396,9 +407,7 @@ var grdCust_BeforeEdit = function (item, e) {
         }
         App.cboColShopType.store.filter('Channel', channel);
     }
-    if (e.field == 'Reason' && _isEditReason == false) {
-        return false;
-    }
+    
 };
 
 var grdCust_ValidateEdit = function (item, e) {
@@ -1155,6 +1164,16 @@ var btnSave_Click = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                if (App.grdCust.selModel.selected.length > 0) {
+                    var data = App.grdCust.selModel.selected.items[0].data;
+                    if (data.EditBusinessPic == true) {
+                        App.imgImages1.setImageUrl('');
+                    } else if (data.EditProfilePic) {
+                        App.imgImages.setImageUrl('');
+                    }                                        
+                }
+                
+
                 App.stoCust.reload();
             },
             failure: function (msg, data) {
@@ -1180,6 +1199,14 @@ var confirmSave = function (item) {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                if (App.grdCust.selModel.selected.length > 0) {
+                    var data = App.grdCust.selModel.selected.items[0].data;
+                    if (data.EditBusinessPic == true) {
+                        App.imgImages1.setImageUrl('');
+                    } else if (data.EditProfilePic) {
+                        App.imgImages.setImageUrl('');
+                    }
+                }
                 App.stoCust.reload();
             },
             failure: function (msg, data) {
@@ -1209,12 +1236,30 @@ var setHideControls = function () {
     if (isShow) {
         HQ.grid.show(App.grdCust, hideEditCustColumn);
     } else {
-        HQ.grid.hide(App.grdCust, hideEditCustColumn);
+        if (HQ.AllowApproveEditCust != '') {
+            var isShow = false;
+            var value = App.cboStatus.getValue() + App.cboUpdateType.getValue() + App.cboHandle.getValue();
+            var items = HQ.AllowApproveEditCust.split(',');
+
+            for (var i = 0; i < items.length; i++) {
+                if (items[i] == value) {
+                    isShow = true;
+                    break;
+                }
+            }
+            if (isShow) {
+                HQ.grid.show(App.grdCust, hideEditCustColumn);
+            } else {
+                _isEditReason = true;
+                HQ.grid.hide(App.grdCust, hideEditCustColumn);
+            }
+        } else {
+            HQ.grid.hide(App.grdCust, hideEditCustColumn);
+        }
+        
     }
     App.btnSave.setVisible(isShow);
     checkEditReason();
-
- 
     Ext.resumeLayouts();
 };
 
@@ -1231,24 +1276,42 @@ var checkEditReason = function () {
 };
 
 var cboHandle_Change = function () {
-    if (HQ.AllowApproveEditCust != '') {
-        var isShow = false;
-        var value = App.cboStatus.getValue() + App.cboUpdateType.getValue() + App.cboHandle.getValue();
-        var items = HQ.AllowSave.split(',');
+    
+    //setHideControls();
+    //App.stoCust.rejectChanges();
+    //App.grdCust.view.refresh();
+}
 
-        for (var i = 0; i < items.length; i++) {
-            if (items[i] == value) {
-                isShow = true;
-                break;
-            }
-        }
-        if (isShow) {
-            HQ.grid.show(App.grdCust, hideEditCustColumn);
-        } else {
-            HQ.grid.hide(App.grdCust, hideEditCustColumn);
-        }
+var checkEditDet = function () {
+    if (App.cboHandle.store.data.length > 1 && Ext.isEmpty(App.cboHandle.getValue())) {
+        HQ.message.show(1000, App.cboHandle.fieldLabel);
+        return false;
     }
-    App.stoCust.rejectChanges();
-    App.grdCust.view.refresh();
+    return true;
+}
+var currentStatus = '';
+var cboHandle_BeforeChange = function () {
+    currentStatus = App.cboHandle.getValue();
+    if (HQ.store.isChange(App.stoCust)) {
+        HQ.message.show(7, '', 'confirmChangeHanle');
+    }
+}
 
+var confirmChangeHanle = function (item) {
+    if (item == 'yes') {
+        setHideControls();
+        App.stoCust.rejectChanges();
+        App.grdCust.view.refresh();
+    } else {
+        App.cboHandle.events['change'].suspend();
+        App.cboHandle.setValue(currentStatus);
+        App.cboHandle.events['change'].resume();
+        
+    }
+}
+
+var ColCheck_Header_ValidityChange = function () {
+    if (!checkEditDet()) {
+        return false;
+    }
 }

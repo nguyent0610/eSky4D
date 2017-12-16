@@ -231,9 +231,17 @@ namespace AR20500.Controllers
                             }
                             var checkApproveEditCust = CheckAllowApproveEditCust(objNew.Status, objNew.UpdateType, handle);
                             var hisLineRef = 0;
+                            var objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
                             if (objNew.Status == "H")
                             {
-                                Insert_NewCustHis(objNew, ref hisLineRef);
+                                if (objCust != null)
+                                {
+                                    Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, objCust.ProfilePic.PassNull() == string.Empty, objCust.BusinessPic.PassNull() == string.Empty);
+                                }else
+	                            {
+                                    Insert_NewCustHis(objNew, ref hisLineRef, 0, item.EditProfilePic, , objCust.ProfilePic.PassNull() == string.Empty, objCust.BusinessPic.PassNull() == string.Empty);
+	                            }
+                                
                             }
                             
                             var callAfterApprove = objNew.UpdateType == 0;
@@ -271,7 +279,7 @@ namespace AR20500.Controllers
                                 objNew.Startday = fromDate;
                                 objNew.Endday = toDate;                  
                                 // Update Customer
-                                var objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
+                               
                                 if (objCust == null)
                                 {
                                     objCust = new AR_Customer();
@@ -351,7 +359,7 @@ namespace AR20500.Controllers
                                 objNew.Status = handle;
                                 if (checkApproveEditCust)
                                 {
-                                    var objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
+                                    objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
                                     if (objCust != null)
                                     {
                                         UpdateEditType(ref objNew, ref objCust, item);
@@ -362,7 +370,8 @@ namespace AR20500.Controllers
                             objNew.LUpd_Datetime = DateTime.Now;
                             objNew.LUpd_Prog = _screenNbr;
                             objNew.LUpd_User = Current.UserName;
-                            Insert_NewCustHis(objNew, ref hisLineRef);
+                            Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, item.EditProfilePic.Value, item.EditBusinessPic.Value);
+
                             _db.SaveChanges();
                             if (callAfterApprove)
                             {
@@ -438,7 +447,7 @@ namespace AR20500.Controllers
             objNew.CodeHT = item.ERPCustID;
         }
 
-        private void Insert_NewCustHis(AR_NewCustomerInfor objNew, ref int hisLineRef)
+        private void Insert_NewCustHis(AR_NewCustomerInfor objNew, ref int hisLineRef, int allowEdit, bool isDelProfile, bool isDellBussPic)
         {            
             var lineRefIdx = 1;
             if (hisLineRef > 0)
@@ -522,6 +531,9 @@ namespace AR20500.Controllers
                 NewCustLUpd_Prog = "AR20500",
                 UpdateType = objNew.UpdateType,
                 Reason = objNew.Reason,
+                AllowEdit = allowEdit,
+                DelProfile = isDelProfile,
+                DelBusiness = isDellBussPic,
                 Crtd_User = Current.UserName,
                 Crtd_Prog = "AR20500",
                 Crtd_Datetime = DateTime.Now
@@ -1759,25 +1771,22 @@ namespace AR20500.Controllers
                         if (objNew == null || objCust == null || objNew.Status == "D") 
                         {
                             continue; 
-                        }                                                 
-                        if (objNew.Status == "A")
-                        {                                                                 
-                            // objNew.UpdateType = 0;                               
                         }
-                        else
-                        {
-                            // Trạng thái trung gian 
-                            Update_NewCust(ref objNew, item);                                    
+                        var checkApproveEditCust = CheckAllowApproveEditCust(objNew.Status, objNew.UpdateType, string.Empty);
+                        if (checkApproveEditCust)
+                        {                            
+                                // Trạng thái trung gian 
+                            Update_NewCust(ref objNew, item);                            
+                            int allowEdit = UpdateEditType(ref objNew, ref objCust, item);
+                            objNew.LUpd_Datetime = DateTime.Now;
+                            objNew.LUpd_Prog = _screenNbr;
+                            objNew.LUpd_User = Current.UserName;
+
+                            int hisLineRef = 0;
+                            Insert_NewCustHis(objNew, ref hisLineRef, allowEdit, item.EditProfilePic.Value, item.EditBusinessPic.Value); // History  
+
+                            _db.SaveChanges();
                         }
-                        UpdateEditType(ref objNew, ref objCust, item);
-                        objNew.LUpd_Datetime = DateTime.Now;
-                        objNew.LUpd_Prog = _screenNbr;
-                        objNew.LUpd_User = Current.UserName;
-
-                        int hisLineRef = 0;
-                        Insert_NewCustHis(objNew, ref hisLineRef); // History  
-
-                        _db.SaveChanges();
                     }
                 }
                 
@@ -1807,8 +1816,9 @@ namespace AR20500.Controllers
             }
         }
 
-        private void UpdateEditType(ref AR_NewCustomerInfor objNew, ref AR_Customer objCust, AR20500_pgDetail_Result item)
+        private int UpdateEditType(ref AR_NewCustomerInfor objNew, ref AR_Customer objCust, AR20500_pgDetail_Result item)
         {
+            int allowEdit = 0;
             int editType = 0;
             if (item.AllowChangeEditInfo == true && item.EditInfo == true)
             {
@@ -1833,16 +1843,20 @@ namespace AR20500.Controllers
             {
                 case 1:
                     objCust.AllowEdit = 2; // Sửa hình
+                    allowEdit = 2;
                     break;
                 case 2:
                     objCust.AllowEdit = 3; // Sửa thông tin
+                    allowEdit = 3;
                     break;
                 case 3:
                     objCust.AllowEdit = 1; // Sửa hình và thông tin
+                    allowEdit = 1;
                     break;
                 default:
                     break;
             }
+            return allowEdit;
         }
 
         private bool CheckAllowApproveEditCust(string status, int updateType, string toStatus)
@@ -1852,6 +1866,15 @@ namespace AR20500.Controllers
             if (objConfig != null)
             {
                 string[] items = objConfig.AllowApproveEditCust.PassNull().Split(',');
+                for (var i = 0; i < items.Length; i++)
+                {
+                    if (items[i] == value)
+                    {
+                        return true;
+                    }
+                }
+                value = status + updateType;
+                items = objConfig.AllowSave.PassNull().Split(',');
                 for (var i = 0; i < items.Length; i++)
                 {
                     if (items[i] == value)

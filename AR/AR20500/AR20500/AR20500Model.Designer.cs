@@ -4892,7 +4892,8 @@ namespace AR20500
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="updateType">Initial value of the UpdateType property.</param>
-        public static AR_NewCustomerInforHis CreateAR_NewCustomerInforHis(global::System.Int32 id, global::System.String branchID, global::System.Int32 lineRef, global::System.String custID, global::System.Boolean @checked, global::System.Int32 updateType)
+        /// <param name="allowEdit">Initial value of the AllowEdit property.</param>
+        public static AR_NewCustomerInforHis CreateAR_NewCustomerInforHis(global::System.Int32 id, global::System.String branchID, global::System.Int32 lineRef, global::System.String custID, global::System.Boolean @checked, global::System.Int32 updateType, global::System.Int32 allowEdit)
         {
             AR_NewCustomerInforHis aR_NewCustomerInforHis = new AR_NewCustomerInforHis();
             aR_NewCustomerInforHis.ID = id;
@@ -4901,6 +4902,7 @@ namespace AR20500
             aR_NewCustomerInforHis.CustID = custID;
             aR_NewCustomerInforHis.Checked = @checked;
             aR_NewCustomerInforHis.UpdateType = updateType;
+            aR_NewCustomerInforHis.AllowEdit = allowEdit;
             return aR_NewCustomerInforHis;
         }
 
@@ -6548,6 +6550,78 @@ namespace AR20500
         private Nullable<global::System.DateTime> _Crtd_Datetime;
         partial void OnCrtd_DatetimeChanging(Nullable<global::System.DateTime> value);
         partial void OnCrtd_DatetimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 AllowEdit
+        {
+            get
+            {
+                return _AllowEdit;
+            }
+            set
+            {
+                OnAllowEditChanging(value);
+                ReportPropertyChanging("AllowEdit");
+                _AllowEdit = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowEdit");
+                OnAllowEditChanged();
+            }
+        }
+        private global::System.Int32 _AllowEdit;
+        partial void OnAllowEditChanging(global::System.Int32 value);
+        partial void OnAllowEditChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> DelProfile
+        {
+            get
+            {
+                return _DelProfile;
+            }
+            set
+            {
+                OnDelProfileChanging(value);
+                ReportPropertyChanging("DelProfile");
+                _DelProfile = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DelProfile");
+                OnDelProfileChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _DelProfile;
+        partial void OnDelProfileChanging(Nullable<global::System.Boolean> value);
+        partial void OnDelProfileChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> DelBusiness
+        {
+            get
+            {
+                return _DelBusiness;
+            }
+            set
+            {
+                OnDelBusinessChanging(value);
+                ReportPropertyChanging("DelBusiness");
+                _DelBusiness = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DelBusiness");
+                OnDelBusinessChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _DelBusiness;
+        partial void OnDelBusinessChanging(Nullable<global::System.Boolean> value);
+        partial void OnDelBusinessChanged();
 
         #endregion
 

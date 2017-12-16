@@ -256,6 +256,9 @@
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" />
           <Property Name="Crtd_Datetime" Type="datetime" />
+          <Property Name="AllowEdit" Type="int" Nullable="false" />
+          <Property Name="DelProfile" Type="bit" />
+          <Property Name="DelBusiness" Type="bit" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -870,6 +873,9 @@
           <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_Prog" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_Datetime" Type="DateTime" Precision="3" />
+          <Property Name="AllowEdit" Type="Int32" Nullable="false" />
+          <Property Name="DelProfile" Type="Boolean" />
+          <Property Name="DelBusiness" Type="Boolean" />
         </EntityType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1265,6 +1271,9 @@
           <EntitySetMapping Name="AR_NewCustomerInforHis">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInforHis">
               <MappingFragment StoreEntitySet="AR_NewCustomerInforHis">
+                <ScalarProperty Name="DelBusiness" ColumnName="DelBusiness" />
+                <ScalarProperty Name="DelProfile" ColumnName="DelProfile" />
+                <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
                 <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />

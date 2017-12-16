@@ -131,6 +131,7 @@
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                lst.BeforeSelect.Fn = "cboHandle_BeforeChange";
                                 lst.Change.Fn = "cboHandle_Change";
                               //  lst.Select.Fn = "cboHandle_Select";
                             })
@@ -239,6 +240,7 @@
                                 HQ.Checkbox().ID("ColCheck_Header")
                                     .Listeners(l =>
                                     {
+                                        l.ValidityChange.Fn = "ColCheck_Header_ValidityChange";
                                         l.Change.Fn = "ColCheck_Header_Change";
                                     })
                         )
