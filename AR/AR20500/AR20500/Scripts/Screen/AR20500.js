@@ -2,8 +2,10 @@ var _Change = false;
 var keys = ['ID'];
 var _firstLoad = true;
 var hideColumn = ['SalesRouteID', 'SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-var hideEditCustColumn = [''];// ['EditInfo', 'EditBusinessPic', 'EditProfilePic'];
-var loadSourceCombo = function () {
+var hideEditCustColumn = ['EditInfo', 'EditBusinessPic', 'EditProfilePic'];
+var _isEditReason = false;
+
+var frmMain_BoxReady = function () {   
     if (HQ.ShowExport) App.btnExport.hide();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     if (HQ.isShowCustHT) HQ.grid.show(App.grdCust, ['CustHT'])
@@ -29,6 +31,7 @@ var loadSourceCombo = function () {
             })
         })
     });
+    setHideControls();
 };
 
 var cboTerritory_Change = function (sender, e) {
@@ -80,14 +83,7 @@ var cboStatus_Change = function (value) {
     } else {
         HQ.grid.hide(App.grdCust, ['Reason']);
     }
-    if (App.cboUpdateType.getValue() == 0) {
-        if (HQ.IshowEditCust && App.cboStatus.getValue() == 'A') {
-            HQ.grid.show(App.grdCust, hideEditCustColumn);
-        }
-        else {
-            HQ.grid.hide(App.grdCust, hideEditCustColumn);
-        }
-    }
+    setHideControls();    
 };
 
 
@@ -400,7 +396,7 @@ var grdCust_BeforeEdit = function (item, e) {
         }
         App.cboColShopType.store.filter('Channel', channel);
     }
-    if (e.field == 'Reason' && App.cboStatus.getValue() != 'O') {
+    if (e.field == 'Reason' && _isEditReason == false) {
         return false;
     }
 };
@@ -781,26 +777,7 @@ var pnlGridMCL_viewGetRowClass = function (record) {
 };
 
 var cboUpdateType_Change = function () {
-    Ext.suspendLayouts();    
-
-    if (App.cboUpdateType.getValue() == 0) {
-        HQ.grid.show(App.grdCust, hideColumn);
-        if (HQ.IshowEditCust && App.cboStatus.getValue() == 'A') {
-            HQ.grid.show(App.grdCust, hideEditCustColumn);
-        }
-        else {
-            HQ.grid.hide(App.grdCust, hideEditCustColumn);
-        }
-    } else if (App.cboUpdateType.getValue() == 1) {        
-        HQ.grid.hide(App.grdCust, hideColumn);
-        if (HQ.IshowEditCust) {
-            HQ.grid.show(App.grdCust, hideEditCustColumn);
-        } else {
-            HQ.grid.hide(App.grdCust, hideEditCustColumn);
-        }
-        
-    }
-    Ext.resumeLayouts();
+    setHideControls();
     App.grdCust.store.loadData([],false);
     App.grdCust.view.refresh();
 
@@ -1210,4 +1187,68 @@ var confirmSave = function (item) {
             }
         });
     }
+}
+
+var setHideControls = function () {
+    Ext.suspendLayouts();
+    var isShow = false;
+    if (HQ.AllowSave == '' || HQ.IshowEditCust == false) {
+        isShow = false;
+    } else {
+        var value = App.cboStatus.getValue() + App.cboUpdateType.getValue();
+        var items = HQ.AllowSave.split(',');
+        
+        for (var i = 0; i < items.length; i++) {
+            if (items[i] == value) {
+                isShow = true;
+                break;
+            }
+        }
+    }
+   
+    if (isShow) {
+        HQ.grid.show(App.grdCust, hideEditCustColumn);
+    } else {
+        HQ.grid.hide(App.grdCust, hideEditCustColumn);
+    }
+    App.btnSave.setVisible(isShow);
+    checkEditReason();
+
+ 
+    Ext.resumeLayouts();
+};
+
+var checkEditReason = function () {
+    _isEditReason = false;
+    var value = App.cboStatus.getValue() + App.cboUpdateType.getValue();
+    var items = HQ.AllowEditReason.split(',');
+    for (var i = 0; i < items.length; i++) {
+        if (items[i] == value) {
+            _isEditReason = true;
+            break;
+        }
+    }
+};
+
+var cboHandle_Change = function () {
+    if (HQ.AllowApproveEditCust != '') {
+        var isShow = false;
+        var value = App.cboStatus.getValue() + App.cboUpdateType.getValue() + App.cboHandle.getValue();
+        var items = HQ.AllowSave.split(',');
+
+        for (var i = 0; i < items.length; i++) {
+            if (items[i] == value) {
+                isShow = true;
+                break;
+            }
+        }
+        if (isShow) {
+            HQ.grid.show(App.grdCust, hideEditCustColumn);
+        } else {
+            HQ.grid.hide(App.grdCust, hideEditCustColumn);
+        }
+    }
+    App.stoCust.rejectChanges();
+    App.grdCust.view.refresh();
+
 }

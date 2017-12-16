@@ -8646,6 +8646,25 @@ namespace AR20500
     [Serializable()]
     public partial class AR20500_pdConfig_Result : ComplexObject
     {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR20500_pdConfig_Result object.
+        /// </summary>
+        /// <param name="allowSave">Initial value of the AllowSave property.</param>
+        /// <param name="allowApproveEditCust">Initial value of the AllowApproveEditCust property.</param>
+        /// <param name="allowEditReason">Initial value of the AllowEditReason property.</param>
+        public static AR20500_pdConfig_Result CreateAR20500_pdConfig_Result(global::System.String allowSave, global::System.String allowApproveEditCust, global::System.String allowEditReason)
+        {
+            AR20500_pdConfig_Result aR20500_pdConfig_Result = new AR20500_pdConfig_Result();
+            aR20500_pdConfig_Result.AllowSave = allowSave;
+            aR20500_pdConfig_Result.AllowApproveEditCust = allowApproveEditCust;
+            aR20500_pdConfig_Result.AllowEditReason = allowEditReason;
+            return aR20500_pdConfig_Result;
+        }
+
+        #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -8767,6 +8786,78 @@ namespace AR20500
         private Nullable<global::System.Boolean> _ShowEditCust;
         partial void OnShowEditCustChanging(Nullable<global::System.Boolean> value);
         partial void OnShowEditCustChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String AllowSave
+        {
+            get
+            {
+                return _AllowSave;
+            }
+            set
+            {
+                OnAllowSaveChanging(value);
+                ReportPropertyChanging("AllowSave");
+                _AllowSave = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("AllowSave");
+                OnAllowSaveChanged();
+            }
+        }
+        private global::System.String _AllowSave;
+        partial void OnAllowSaveChanging(global::System.String value);
+        partial void OnAllowSaveChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String AllowApproveEditCust
+        {
+            get
+            {
+                return _AllowApproveEditCust;
+            }
+            set
+            {
+                OnAllowApproveEditCustChanging(value);
+                ReportPropertyChanging("AllowApproveEditCust");
+                _AllowApproveEditCust = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("AllowApproveEditCust");
+                OnAllowApproveEditCustChanged();
+            }
+        }
+        private global::System.String _AllowApproveEditCust;
+        partial void OnAllowApproveEditCustChanging(global::System.String value);
+        partial void OnAllowApproveEditCustChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String AllowEditReason
+        {
+            get
+            {
+                return _AllowEditReason;
+            }
+            set
+            {
+                OnAllowEditReasonChanging(value);
+                ReportPropertyChanging("AllowEditReason");
+                _AllowEditReason = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("AllowEditReason");
+                OnAllowEditReasonChanged();
+            }
+        }
+        private global::System.String _AllowEditReason;
+        partial void OnAllowEditReasonChanging(global::System.String value);
+        partial void OnAllowEditReasonChanged();
 
         #endregion
 

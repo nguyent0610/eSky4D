@@ -788,6 +788,9 @@
           <Property Type="Boolean" Name="IsShowERPCust" Nullable="true" />
           <Property Type="Boolean" Name="ShowExport" Nullable="true" />
           <Property Type="Boolean" Name="ShowEditCust" Nullable="true" />
+          <Property Type="String" Name="AllowSave" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="AllowApproveEditCust" Nullable="false" MaxLength="11" />
+          <Property Type="String" Name="AllowEditReason" Nullable="false" MaxLength="8" />
         </ComplexType>
         <ComplexType Name="AR20500_pcReason_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
@@ -1245,6 +1248,9 @@
                 <ScalarProperty Name="IsShowERPCust" ColumnName="IsShowERPCust" />
                 <ScalarProperty Name="ShowExport" ColumnName="ShowExport" />
                 <ScalarProperty Name="ShowEditCust" ColumnName="ShowEditCust" />
+                <ScalarProperty Name="AllowSave" ColumnName="AllowSave" />
+                <ScalarProperty Name="AllowApproveEditCust" ColumnName="AllowApproveEditCust" />
+                <ScalarProperty Name="AllowEditReason" ColumnName="AllowEditReason" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
