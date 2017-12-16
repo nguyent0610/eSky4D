@@ -239,7 +239,7 @@ namespace AR20500.Controllers
                                     Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, objCust.ProfilePic.PassNull() == string.Empty, objCust.BusinessPic.PassNull() == string.Empty);
                                 }else
 	                            {
-                                    Insert_NewCustHis(objNew, ref hisLineRef, 0, item.EditProfilePic, , objCust.ProfilePic.PassNull() == string.Empty, objCust.BusinessPic.PassNull() == string.Empty);
+                                    Insert_NewCustHis(objNew, ref hisLineRef, 0, objNew.ProfilePic.PassNull() == string.Empty, objNew.BusinessPic.PassNull() == string.Empty);
 	                            }
                                 
                             }
@@ -1768,7 +1768,7 @@ namespace AR20500.Controllers
                     {
                         var objNew = _db.AR_NewCustomerInfor.FirstOrDefault(p => p.ID == item.ID && p.BranchID == item.BranchID);
                         var objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
-                        if (objNew == null || objCust == null || objNew.Status == "D") 
+                        if (objNew == null || objCust == null) 
                         {
                             continue; 
                         }

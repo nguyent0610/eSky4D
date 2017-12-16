@@ -32,6 +32,11 @@ var frmMain_BoxReady = function () {
         })
     });
     setHideControls();
+    if (HQ.isShowReason) {
+        HQ.grid.show(App.grdCust, ['Reason']);
+    } else {
+        HQ.grid.hide(App.grdCust, ['Reason']);
+    }
 };
 
 var cboTerritory_Change = function (sender, e) {
@@ -74,16 +79,18 @@ var cboStatus_Change = function (value) {
     if (_Change == true) {
         HQ.message.show(20150303, '', 'refresh');
     } else {
-        App.grdCust.store.removeAll();
+        App.stoCust.rejectChanges();
+        
+        //App.stoCust.removeAll();
+        App.stoCust.clearData();
+            App.grdCust.view.refresh();
+        
         App.cboHandle.store.reload();
         //App.grdCust.removeAll();_b
-    }
-    if (HQ.isShowReason) {
-        HQ.grid.show(App.grdCust, ['Reason']);
-    } else {
-        HQ.grid.hide(App.grdCust, ['Reason']);
-    }
-    setHideControls();    
+    }    
+    setTimeout(function () {
+        setHideControls();    
+    }, 1000);
 };
 
 
@@ -357,22 +364,19 @@ var grdCust_BeforeEdit = function (item, e) {
         if (e.field == 'EditInfo' && !e.record.data.AllowChangeEditInfo ||
                e.field == 'EditBusinessPic' && !e.record.data.AllowChangeEditBusinessPic ||
                e.field == 'EditProfilePic' && !e.record.data.AllowChangeEditProfilePic) {
-            return false;
+            return false;            
+        } else if (App.cboStatus.getValue() == 'A' || App.cboStatus.getValue() == 'D') {
+            if (e.field != 'EditInfo' && 
+                e.field != 'EditBusinessPic' &&
+                e.field != 'EditProfilePic') {
+                return false;
+            }
+            if (e.field == 'EditInfo' && !e.record.data.AllowChangeEditInfo || 
+                e.field == 'EditBusinessPic' && !e.record.data.AllowChangeEditBusinessPic || 
+                e.field == 'EditProfilePic' && !e.record.data.AllowChangeEditProfilePic) {
+                return false;
+            }
         }
-        //if (App.cboStatus.getValue() == 'D') {
-        //    return false;
-        //} else if (App.cboStatus.getValue() == 'A') {
-        //    if (e.field != 'EditInfo' && 
-        //        e.field != 'EditBusinessPic' &&
-        //        e.field != 'EditProfilePic') {
-        //        return false;
-        //    }
-        //    if (e.field == 'EditInfo' && !e.record.data.AllowChangeEditInfo || 
-        //        e.field == 'EditBusinessPic' && !e.record.data.AllowChangeEditBusinessPic || 
-        //        e.field == 'EditProfilePic' && !e.record.data.AllowChangeEditProfilePic) {
-        //        return false;
-        //    }
-        //}
     }
     if (e.field == 'WeekofVisit') {
         App.cboColWeekofVisit.getStore().reload();
@@ -571,7 +575,7 @@ var stoLoad = function (sto, records, successful, eOpts) {
     _Change = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'AR20500');
 
-    HQ.common.showBusy(false);
+   
     stoChanged(App.stoCust);
 
     var markers = [];
@@ -599,6 +603,9 @@ var stoLoad = function (sto, records, successful, eOpts) {
         }
         markers.push(marker);
     });
+    if (records.length == 0) {
+        HQ.common.showBusy(false);
+    }
     Gmap.Process.drawMCP(markers, false);
 };
 
@@ -991,11 +998,12 @@ var Gmap = {
                         Gmap.Declare.stopMarkers.push(marker);
                     }
                 }
-
+                HQ.common.showBusy(false);
                 Gmap.Declare.directionsDisplay.setMap(Gmap.Declare.map);
                 //directionsDisplay.setOptions({ suppressMarkers: true });
             }
             else {
+                HQ.common.showBusy(false);
                 Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
             }
         },
@@ -1217,7 +1225,7 @@ var confirmSave = function (item) {
 }
 
 var setHideControls = function () {
-    Ext.suspendLayouts();
+    //Ext.suspendLayouts();
     var isShow = false;
     if (HQ.AllowSave == '' || HQ.IshowEditCust == false) {
         isShow = false;
@@ -1260,7 +1268,7 @@ var setHideControls = function () {
     }
     App.btnSave.setVisible(isShow);
     checkEditReason();
-    Ext.resumeLayouts();
+    //Ext.resumeLayouts();
 };
 
 var checkEditReason = function () {
@@ -1277,9 +1285,13 @@ var checkEditReason = function () {
 
 var cboHandle_Change = function () {
     
-    //setHideControls();
-    //App.stoCust.rejectChanges();
-    //App.grdCust.view.refresh();
+    if (_Change) {
+        HQ.message.show(2017121601, '', 'confirmChangeHanle');
+    } else {
+        setHideControls();
+        App.stoCust.rejectChanges();
+        App.grdCust.view.refresh();
+    }
 }
 
 var checkEditDet = function () {
@@ -1292,9 +1304,7 @@ var checkEditDet = function () {
 var currentStatus = '';
 var cboHandle_BeforeChange = function () {
     currentStatus = App.cboHandle.getValue();
-    if (HQ.store.isChange(App.stoCust)) {
-        HQ.message.show(7, '', 'confirmChangeHanle');
-    }
+    
 }
 
 var confirmChangeHanle = function (item) {
