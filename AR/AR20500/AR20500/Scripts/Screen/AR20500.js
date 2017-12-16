@@ -80,16 +80,17 @@ var cboStatus_Change = function (value) {
         HQ.message.show(20150303, '', 'refresh');
     } else {
         App.stoCust.rejectChanges();
-        
+        Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
+
         //App.stoCust.removeAll();
-        App.stoCust.clearData();
-            App.grdCust.view.refresh();
-        
+        App.stoCust.load([], false);
+        //stoLoad(App.stoCust, []);
         App.cboHandle.store.reload();
         //App.grdCust.removeAll();_b
     }    
     setTimeout(function () {
-        setHideControls();    
+        setHideControls();
+        App.grdCust.view.refresh();
     }, 1000);
 };
 
@@ -496,7 +497,7 @@ var stoChanged = function (sto) {
 };
 
 var stoBeforeLoad = function (sto) {
-    HQ.common.showBusy(true);
+    HQ.common.showBusy(true, HQ.waitMsg);
 };
 
 var isValidSel = function (data) {
@@ -788,7 +789,7 @@ var displayImage = function (imgControl, fileName) {
 };
 
 var pnlGridMCL_viewGetRowClass = function (record) {
-    if (record.data.Color != '0')
+    if (record.data.Color != '0' && record.data.Color != '')
         return 'hightlight-row'
 };
 
