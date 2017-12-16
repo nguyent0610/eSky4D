@@ -461,8 +461,8 @@ namespace OM27700.Controllers
 
             var treeBranch = X.GetCmp<Panel>(panelID);
             tree.Listeners.CheckChange.Fn = "treePanelInvt_checkChange";
-            //tree.Listeners.BeforeItemExpand.Handler = "App.treePanelInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
-            //tree.Listeners.AfterItemExpand.Handler = "App.treePanelInvt.el.unmask();Ext.resumeLayouts(true);";
+            tree.Listeners.BeforeItemExpand.Handler = "if (App.treePanelInvt) { App.treePanelInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts(); }";
+            tree.Listeners.AfterItemExpand.Handler = "if (App.treePanelInvt) {App.treePanelInvt.view.refresh(); App.treePanelInvt.el.unmask();Ext.resumeLayouts(true); } ";
             tree.AddTo(treeBranch);
             return this.Direct();
         }
@@ -514,7 +514,7 @@ namespace OM27700.Controllers
             var treeBranch = X.GetCmp<Panel>(panelID);
             tree.Listeners.CheckChange.Fn = "treeSaleInvt_checkChange";
             tree.Listeners.BeforeItemExpand.Handler = "App.treeSaleInvt.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
-            tree.Listeners.AfterItemExpand.Handler = "App.treeSaleInvt.el.unmask();Ext.resumeLayouts(true);";
+            tree.Listeners.AfterItemExpand.Handler = "if (App.treeInvt){App.treeInvt.view.refresh(); }App.treeSaleInvt.el.unmask();Ext.resumeLayouts(true);";
             tree.AddTo(treeBranch);
             return this.Direct();
         }
