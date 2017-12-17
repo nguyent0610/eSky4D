@@ -84,14 +84,16 @@ var cboStatus_Change = function (value) {
 
         //App.stoCust.removeAll();
         App.stoCust.load([], false);
-        //stoLoad(App.stoCust, []);
+        App.stoCust.removeAll();
         App.cboHandle.store.reload();
         //App.grdCust.removeAll();_b
     }    
     setTimeout(function () {
         setHideControls();
+        
         App.grdCust.view.refresh();
-    }, 1000);
+
+    }, 10);
 };
 
 
@@ -1226,7 +1228,7 @@ var confirmSave = function (item) {
 }
 
 var setHideControls = function () {
-    //Ext.suspendLayouts();
+    Ext.suspendLayouts();
     var isShow = false;
     if (HQ.AllowSave == '' || HQ.IshowEditCust == false) {
         isShow = false;
@@ -1269,7 +1271,7 @@ var setHideControls = function () {
     }
     App.btnSave.setVisible(isShow);
     checkEditReason();
-    //Ext.resumeLayouts();
+    Ext.resumeLayouts();
 };
 
 var checkEditReason = function () {
