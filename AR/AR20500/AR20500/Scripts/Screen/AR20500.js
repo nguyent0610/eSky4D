@@ -20,7 +20,7 @@ var frmMain_BoxReady = function () {
                             HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
                             if (_firstLoad) {
                                 App.cboStatus.setValue("H");
-                                App.cboHandle.setValue("N");
+                                //App.cboHandle.setValue("N");
                                 _firstLoad = false;
                                 App.FromDate.setValue(HQ.bussinessDate);
                                 App.ToDate.setValue(HQ.bussinessDate);

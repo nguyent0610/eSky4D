@@ -44,7 +44,7 @@ namespace AR20500
             acc.Update = true;
             Session["AR20500"] = acc;
             Session["DBApp"] = Current.DBApp = "KIDO_eSky4DApp";//"ND_eSky4DApp";//"ANVM_eSky4DApp";//"ND_eSky4DApp";// "eBiz4DWebApp";
-            Session["UserName"] = Current.UserName = "admin";
+            Session["UserName"] = Current.UserName = "TA2199";
             Session["CpnyID"] = Current.CpnyID = "CHHCM0007";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] =1;

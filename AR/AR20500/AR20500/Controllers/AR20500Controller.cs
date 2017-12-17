@@ -370,7 +370,16 @@ namespace AR20500.Controllers
                             objNew.LUpd_Datetime = DateTime.Now;
                             objNew.LUpd_Prog = _screenNbr;
                             objNew.LUpd_User = Current.UserName;
-                            Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, item.EditProfilePic.Value, item.EditBusinessPic.Value);
+
+                            if (objCust != null)
+                            {
+                                Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, objCust.ProfilePic.PassNull() == string.Empty, objCust.BusinessPic.PassNull() == string.Empty);
+                            }
+                            else
+                            {
+                                Insert_NewCustHis(objNew, ref hisLineRef, 0, objNew.ProfilePic.PassNull() == string.Empty, objNew.BusinessPic.PassNull() == string.Empty);
+                            }
+                           // Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, item.EditProfilePic.Value, item.EditBusinessPic.Value);
 
                             _db.SaveChanges();
                             if (callAfterApprove)
