@@ -1243,7 +1243,7 @@ var setHideControls = function () {
             }
         }
     }
-   
+   App.btnSave.setVisible(isShow);
     if (isShow) {
         HQ.grid.show(App.grdCust, hideEditCustColumn);
     } else {
@@ -1269,7 +1269,7 @@ var setHideControls = function () {
         }
         
     }
-    App.btnSave.setVisible(isShow);
+    
     checkEditReason();
     Ext.resumeLayouts();
 };

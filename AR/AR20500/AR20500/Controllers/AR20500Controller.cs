@@ -1778,6 +1778,7 @@ namespace AR20500.Controllers
                                 // Trạng thái trung gian 
                             Update_NewCust(ref objNew, item);                            
                             int allowEdit = UpdateEditType(ref objNew, ref objCust, item);
+                            
                             objNew.LUpd_Datetime = DateTime.Now;
                             objNew.LUpd_Prog = _screenNbr;
                             objNew.LUpd_User = Current.UserName;
