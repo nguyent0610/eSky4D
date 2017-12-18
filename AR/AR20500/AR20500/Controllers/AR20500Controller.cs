@@ -98,7 +98,7 @@ namespace AR20500.Controllers
             var isShowCustHT = false;
 		    var isShowReason = false;
             var isShowERPCust = false;
-            bool isShowExport = false;
+            bool isHideExport = false;
             var isShowEditCust = false;
             string allowSave = string.Empty;
             string allowApproveEditCust = string.Empty;
@@ -109,7 +109,7 @@ namespace AR20500.Controllers
                 isShowCustHT = objConfig.IsShowCustHT.HasValue ? objConfig.IsShowCustHT.Value : false;
                 isShowReason = objConfig.IsShowReason.HasValue ? objConfig.IsShowReason.Value : false;                
                 isShowERPCust = objConfig.IsShowERPCust.HasValue ? objConfig.IsShowERPCust.Value : false;
-                isShowExport = objConfig.ShowExport.HasValue ? objConfig.ShowExport.Value : false; //an hien nut export
+                isHideExport = objConfig.ShowExport.HasValue ? objConfig.ShowExport.Value : false; //an hien nut export
                 isShowEditCust = objConfig.ShowEditCust.HasValue ? objConfig.ShowEditCust.Value : false;
                 allowSave = objConfig.AllowSave.PassNull();
                 allowApproveEditCust = objConfig.AllowApproveEditCust.PassNull();
@@ -118,7 +118,7 @@ namespace AR20500.Controllers
             ViewBag.IsShowERPCust = isShowERPCust;
             ViewBag.IsShowCustHT = isShowCustHT;
             ViewBag.IsShowReason = isShowReason;
-            ViewBag.ShowExport = isShowExport;
+            ViewBag.ShowExport = isHideExport;
             ViewBag.ShowEditCust = isShowEditCust;
             ViewBag.AllowSave = allowSave;
             ViewBag.AllowApproveEditCust = allowApproveEditCust;
