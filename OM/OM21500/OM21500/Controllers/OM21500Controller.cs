@@ -46,6 +46,7 @@ namespace OM21500.Controllers
         {
             try
             {
+
                 // List header
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_DiscDescr"]);
                 ChangeRecords<OM21500_pgLoadGrid_Result> lstHeader = dataHandler.BatchObjectData<OM21500_pgLoadGrid_Result>();
