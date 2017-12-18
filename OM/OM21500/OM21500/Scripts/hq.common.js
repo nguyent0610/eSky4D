@@ -5,6 +5,99 @@
 //window.addEventListener("online", function (e) {
 //    Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('FailedConnectServer'));
 //});
+var SummaryMess = function (mess,respone,store) {
+    Ext.Msg.show({
+        title: "Error"
+                       , buttons: { cancel: 'Ok', yes: 'ShowDetail' }
+                       , msg: 'Sorry, an error occurred while processing your request.'
+                       , fn: function (buttonId, text) {
+                           switch (buttonId) {
+                               case "yes": showDetailError(mess,respone, store)
+                           }
+                       }
+    });
+}
+var showDetailError = function (mess,response, store)
+{
+    if (store) {
+        var bodySize = Ext.getBody().getViewSize(),
+          width = (bodySize.width < 500) ? bodySize.width - 50 : 500,
+          height = (bodySize.height < 300) ? bodySize.height - 50 : 300,
+          win;
+        win = new Ext.window.Window({
+            id: "winError",
+            modal: true,
+            width: width,
+            height: height,
+            title: "Request Failure",
+            layout: "fit",
+            maximizable: false, //default is true
+            closable: true, //default is true
+            items: [{
+                xtype: "container",
+                layout: {
+                    type: "vbox",
+                    align: "stretch"
+                },
+                items: [
+                    {
+                        xtype: "container",
+                        height: 42,
+                        layout: "absolute",
+                        defaultType: "label",
+                        items: [
+                            {
+                                xtype: "component",
+                                x: 5,
+                                y: 5,
+                                html: '<div class="x-message-box-error" style="width:32px;height:32px"></div>'
+                            },
+                            {
+                                x: 42,
+                                y: 6,
+                                html: "<b>Status Code: </b>"
+                            },
+                            {
+                                x: 125,
+                                y: 6,
+                                text: response.status
+                            },
+                            {
+                                x: 42,
+                                y: 25,
+                                html: "<b>Status Text: </b>"
+                            },
+                            {
+                                x: 125,
+                                y: 25,
+                                text: response.statusText
+                            }
+                        ]
+                    },
+                    {
+                        flex: 1,
+                        itemId: "__ErrorMessageEditor",
+                        xtype: "htmleditor",
+                        value: mess,
+                        readOnly: true,
+                        enableAlignments: false,
+                        enableColors: false,
+                        enableFont: false,
+                        enableFontSize: false,
+                        enableFormat: false,
+                        enableLinks: false,
+                        enableLists: false,
+                        enableSourceEdit: false
+                    }
+                ]
+            }]
+        });
+
+        win.show();
+    } else {
+        Ext.Msg.alert(HQ.common.getLang('Error'), mess);
+    }
+}
 Ext.data.AbstractStore.override({
     onProxyException: function (proxy, response, operation) {
         if (response != undefined && response.responseText != undefined && response.responseText.indexOf('SESSIONTIMEOUT') > -1) {
@@ -30,8 +123,10 @@ Ext.data.AbstractStore.override({
             this.fireEvent("exception", proxy, response, operation);
 
             if (Ext.net.DirectEvent.fireEvent("ajaxrequestexception", response, { "errorMessage": message }, null, null, null, null, operation) !== false) {
-                if (this.showWarningOnFailure !== false) {
-                    Ext.net.DirectEvent.showFailure(response, response.responseText);
+                if (this.showWarningOnFailure !== false) {                  
+                    SummaryMess(response.responseText, response, true);
+                    //HQ.message.show('1712181724', response.responseText, '', false);
+                    //Ext.net.DirectEvent.showFailure(response, response.responseText);
                 }
             }
         }
@@ -54,9 +149,10 @@ Ext.override(Ext.net.DirectEvent, {
         else
             if (response.status == 500 || response.status == 0) {
                 //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('ErrorConnectServer'));		
-
+                SummaryMess(response.responseText, response,true);
             }
-            else {
+            else
+            {
                 win = new Ext.window.Window({
                     id: "winError",
                     modal: true,
@@ -886,7 +982,8 @@ var HQ = {
                     else if (obj.result.type == "error") {
                         if (obj.result.errorMsg.indexOf("Timeout") > -1)
                             Ext.Msg.alert('Error', HQ.common.getLang("TimeoutSQL"));
-                        else HQ.message.show('1712181724', [obj.result.errorMsg]);
+                        else SummaryMess(obj.result.errorMsg);
+                                    //HQ.message.show('1712181724', [obj.result.errorMsg]);
                             //Ext.Msg.alert('99', obj.result.errorMsg);
                     }
                     else if (obj.response.responseText.indexOf('SESSIONTIMEOUT') > -1) {
@@ -909,13 +1006,14 @@ var HQ = {
                     else if (data.type == "error") {
                         if (obj.errorMsg.indexOf("Timeout") > -1)
                             Ext.Msg.alert('Error', HQ.common.getLang("TimeoutSQL"));
-                        else
-                            HQ.message.show('1712181724', [obj.errorMsg]);
+                        else SummaryMess(obj.errorMsg);
+                            //HQ.message.show('1712181724', [obj.errorMsg]);
                             //Ext.Msg.alert('99', obj.errorMsg);
                     }
                     else {
                         //Ext.Msg.alert('Error', data);
-                        HQ.message.show('1712181724', [obj.errorMsg]);
+                        SummaryMess(obj.errorMsg);
+                        //HQ.message.show('1712181724', [obj.errorMsg]);
                     }
 
                 } else if (obj.response.responseText != undefined && obj.response.responseText != '') {
@@ -926,7 +1024,8 @@ var HQ = {
                         //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
                     }
                     else if (obj.response.responseText.indexOf('Blocked a frame with origin') > -1) {
-                        HQ.message.show('1712181724', [obj.response.responseText]);
+                        SummaryMess(obj.response.responseText);
+                        //HQ.message.show('1712181724', [obj.response.responseText]);
                         //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('FailedConnectServer'));
                     }
                     else Ext.Msg.alert('Error', obj.response.responseText);
@@ -938,8 +1037,8 @@ var HQ = {
                 }
             }
             catch (e) {
-                HQ.message.show('1712181724', [errorMsg]);
-                //Ext.Msg.alert('99', errorMsg);
+                SummaryMess(errorMsg);
+ 
             }
 
         }
