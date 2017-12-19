@@ -2498,10 +2498,25 @@ namespace IF30100.Controllers
                     //    }
                     //}
 
+                    SheetData.Cells.InsertRow(0);
+                    SheetData.Cells.InsertRow(0);
+                    SheetData.Cells.InsertRow(0);
+                    SheetData.Cells["A1"].Value = Util.GetLang("PVCreateUser");
+                    SheetData.Cells["A2"].Value = Util.GetLang("PVCreateDate");
+                    SheetData.Cells["A3"].Value = Util.GetLang("PVFromDate");
+                    SheetData.Cells["C3"].Value = Util.GetLang("PVToDate");
 
+                    SheetData.Cells["B1"].Value = created.UserID;
+                    SheetData.Cells["B2"].Value = DateTime.Now.ToString(Current.FormatDate + " " + Current.FormatTime + ":ss");
+
+                    SheetData.Cells["B3"].Value = created.DateParm00.ToString(Current.FormatDate);
+                    SheetData.Cells["D3"].Value = created.DateParm01.ToString(Current.FormatDate);
+
+                    
 
                     SheetData.AutoFitColumns();
-
+                    workbook.Worksheets[0].Protect(ProtectionType.All, "HQS0ftw@re2017", "HQS0ftw@re2017");
+                    workbook.Protect(ProtectionType.All, "HQS0ftw@re2017");
                     string fileName =id;// Guid.NewGuid().ToString() + ".Xlsb";
                     string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
 
