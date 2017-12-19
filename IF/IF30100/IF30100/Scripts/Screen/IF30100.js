@@ -287,6 +287,7 @@ var colCheck_Header_Change = function (value) {
         });
         getWhere(App.cboReport.valueModels[0].data.ReportView);
         App.stoDet.resumeEvents();
+        if (App.grdDet.view)
         App.grdDet.view.refresh();
     }
 };
@@ -297,6 +298,7 @@ var ColCheckChoiceColumn_Change = function (value) {
             item.set("Checked", value.checked);
         });
         App.stoChoiceColumn.resumeEvents();
+        if(App.grdstoChoiceColumn.view)
         App.grdstoChoiceColumn.view.refresh();
     }
 };
