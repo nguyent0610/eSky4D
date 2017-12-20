@@ -1293,6 +1293,7 @@ var Event = {
             {
                 e.record.set("AccumulateID", App.cboAccumulateID.getValue())
                 e.record.set("CpnyName", record.data.CpnyName);
+                App.cboCustID.store.loadPage(1);
             }
             else
                 e.record.set("CpnyName", '');
