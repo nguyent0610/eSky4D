@@ -76,7 +76,7 @@
         , X.FormPanel()
         .ID("frmMain")
         .BodyPadding(0)
-        .Listeners(p=>p.BoxReady.Fn = "frmMain_BoxReady")
+        .Listeners(p=>p.BoxReady.Fn = "firstLoad")
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar(new AbstractComponent[]{
                 //X.FileUploadField().Hidden(true)
@@ -102,7 +102,7 @@
             X.Panel().ID("pnlHeader").Region(Region.North).Layout(LayoutType.VBox).Border(false).AutoScroll(true)
             .Listeners(lst => {
                 lst.Render.Handler = "HQ.common.control_render(this,'header')";
-                lst.BoxReady.Handler = "firstLoad();";
+                //lst.BoxReady.Handler = "firstLoad();";
             })//focus header        
             .Items(
                 X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 5 0")

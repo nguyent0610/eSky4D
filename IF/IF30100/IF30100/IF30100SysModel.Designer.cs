@@ -191,6 +191,73 @@ namespace IF30100
 
         #endregion
 
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="type">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="screenNbr">No Metadata Documentation available.</param>
+        public ObjectResult<IF30100_pcReport_Result> IF30100_pcReport(global::System.String type, global::System.String branchID, global::System.String userID, Nullable<global::System.Int16> langID, global::System.String screenNbr)
+        {
+            ObjectParameter typeParameter;
+            if (type != null)
+            {
+                typeParameter = new ObjectParameter("Type", type);
+            }
+            else
+            {
+                typeParameter = new ObjectParameter("Type", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter screenNbrParameter;
+            if (screenNbr != null)
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", screenNbr);
+            }
+            else
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IF30100_pcReport_Result>("IF30100_pcReport", typeParameter, branchIDParameter, userIDParameter, langIDParameter, screenNbrParameter);
+        }
+
+        #endregion
+
     }
 
     #endregion
@@ -217,12 +284,10 @@ namespace IF30100
         /// <param name="textVal">Initial value of the TextVal property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SYS_Configurations CreateSYS_Configurations(global::System.String code, global::System.DateTime dateVal, global::System.Double floatVal, global::System.Int32 intVal, global::System.String textVal, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static SYS_Configurations CreateSYS_Configurations(global::System.String code, global::System.DateTime dateVal, global::System.Double floatVal, global::System.Int32 intVal, global::System.String textVal, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.Byte[] tstamp)
         {
             SYS_Configurations sYS_Configurations = new SYS_Configurations();
             sYS_Configurations.Code = code;
@@ -232,10 +297,8 @@ namespace IF30100
             sYS_Configurations.TextVal = textVal;
             sYS_Configurations.Crtd_DateTime = crtd_DateTime;
             sYS_Configurations.Crtd_Prog = crtd_Prog;
-            sYS_Configurations.Crtd_User = crtd_User;
             sYS_Configurations.LUpd_DateTime = lUpd_DateTime;
             sYS_Configurations.LUpd_Prog = lUpd_Prog;
-            sYS_Configurations.LUpd_User = lUpd_User;
             sYS_Configurations.tstamp = tstamp;
             return sYS_Configurations;
         }
@@ -418,7 +481,7 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -430,7 +493,7 @@ namespace IF30100
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -490,7 +553,7 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -502,7 +565,7 @@ namespace IF30100
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -558,18 +621,15 @@ namespace IF30100
         /// <param name="tableView">Initial value of the TableView property.</param>
         /// <param name="crtd_Datetime">Initial value of the Crtd_Datetime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="lUpd_Datetime">Initial value of the LUpd_Datetime property.</param>
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="type">Initial value of the Type property.</param>
         /// <param name="proc">Initial value of the Proc property.</param>
         /// <param name="sourceType">Initial value of the SourceType property.</param>
         /// <param name="screenNbr">Initial value of the ScreenNbr property.</param>
-        /// <param name="exportImage">Initial value of the ExportImage property.</param>
         /// <param name="isReadOnly">Initial value of the IsReadOnly property.</param>
-        public static SYS_ReportExport CreateSYS_ReportExport(global::System.String reportNbr, global::System.String name, global::System.String tableView, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String type, global::System.String proc, global::System.String sourceType, global::System.String screenNbr, global::System.Boolean exportImage, global::System.Boolean isReadOnly)
+        public static SYS_ReportExport CreateSYS_ReportExport(global::System.String reportNbr, global::System.String name, global::System.String tableView, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.Byte[] tstamp, global::System.String type, global::System.String proc, global::System.String sourceType, global::System.String screenNbr, global::System.Boolean isReadOnly)
         {
             SYS_ReportExport sYS_ReportExport = new SYS_ReportExport();
             sYS_ReportExport.ReportNbr = reportNbr;
@@ -577,16 +637,13 @@ namespace IF30100
             sYS_ReportExport.TableView = tableView;
             sYS_ReportExport.Crtd_Datetime = crtd_Datetime;
             sYS_ReportExport.Crtd_Prog = crtd_Prog;
-            sYS_ReportExport.Crtd_User = crtd_User;
             sYS_ReportExport.LUpd_Datetime = lUpd_Datetime;
             sYS_ReportExport.LUpd_Prog = lUpd_Prog;
-            sYS_ReportExport.LUpd_User = lUpd_User;
             sYS_ReportExport.tstamp = tstamp;
             sYS_ReportExport.Type = type;
             sYS_ReportExport.Proc = proc;
             sYS_ReportExport.SourceType = sourceType;
             sYS_ReportExport.ScreenNbr = screenNbr;
-            sYS_ReportExport.ExportImage = exportImage;
             sYS_ReportExport.IsReadOnly = isReadOnly;
             return sYS_ReportExport;
         }
@@ -721,7 +778,7 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -733,7 +790,7 @@ namespace IF30100
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -793,7 +850,7 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -805,7 +862,7 @@ namespace IF30100
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -937,9 +994,9 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Boolean ExportImage
+        public Nullable<global::System.Boolean> ExportImage
         {
             get
             {
@@ -954,8 +1011,8 @@ namespace IF30100
                 OnExportImageChanged();
             }
         }
-        private global::System.Boolean _ExportImage;
-        partial void OnExportImageChanging(global::System.Boolean value);
+        private Nullable<global::System.Boolean> _ExportImage;
+        partial void OnExportImageChanging(Nullable<global::System.Boolean> value);
         partial void OnExportImageChanged();
     
         /// <summary>
@@ -1818,21 +1875,17 @@ namespace IF30100
         /// <param name="reportNbr">Initial value of the ReportNbr property.</param>
         /// <param name="crtd_Datetime">Initial value of the Crtd_Datetime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="lUpd_Datetime">Initial value of the LUpd_Datetime property.</param>
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SYS_ReportOLAPFilter CreateSYS_ReportOLAPFilter(global::System.String reportNbr, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static SYS_ReportOLAPFilter CreateSYS_ReportOLAPFilter(global::System.String reportNbr, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.Byte[] tstamp)
         {
             SYS_ReportOLAPFilter sYS_ReportOLAPFilter = new SYS_ReportOLAPFilter();
             sYS_ReportOLAPFilter.ReportNbr = reportNbr;
             sYS_ReportOLAPFilter.Crtd_Datetime = crtd_Datetime;
             sYS_ReportOLAPFilter.Crtd_Prog = crtd_Prog;
-            sYS_ReportOLAPFilter.Crtd_User = crtd_User;
             sYS_ReportOLAPFilter.LUpd_Datetime = lUpd_Datetime;
             sYS_ReportOLAPFilter.LUpd_Prog = lUpd_Prog;
-            sYS_ReportOLAPFilter.LUpd_User = lUpd_User;
             sYS_ReportOLAPFilter.tstamp = tstamp;
             return sYS_ReportOLAPFilter;
         }
@@ -1943,7 +1996,7 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -1955,7 +2008,7 @@ namespace IF30100
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -2015,7 +2068,7 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -2027,7 +2080,7 @@ namespace IF30100
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -2088,18 +2141,15 @@ namespace IF30100
         /// <param name="filterBy">Initial value of the FilterBy property.</param>
         /// <param name="crtd_Datetime">Initial value of the Crtd_Datetime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="lUpd_Datetime">Initial value of the LUpd_Datetime property.</param>
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="measureFunc">Initial value of the MeasureFunc property.</param>
         /// <param name="dataFormat">Initial value of the DataFormat property.</param>
         /// <param name="pivotOrder">Initial value of the PivotOrder property.</param>
         /// <param name="pivotShow">Initial value of the PivotShow property.</param>
         /// <param name="rPTParm">Initial value of the RPTParm property.</param>
-        /// <param name="showFilterInExcel">Initial value of the ShowFilterInExcel property.</param>
-        public static SYS_ReportOLAPTemplate CreateSYS_ReportOLAPTemplate(global::System.String reportNbr, global::System.String columnName, global::System.String pivotType, global::System.String columnDescr, global::System.String parmType, global::System.String parmData, global::System.String parmOperator, global::System.String filterBy, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String measureFunc, global::System.String dataFormat, global::System.Int16 pivotOrder, global::System.Boolean pivotShow, global::System.String rPTParm, global::System.Boolean showFilterInExcel)
+        public static SYS_ReportOLAPTemplate CreateSYS_ReportOLAPTemplate(global::System.String reportNbr, global::System.String columnName, global::System.String pivotType, global::System.String columnDescr, global::System.String parmType, global::System.String parmData, global::System.String parmOperator, global::System.String filterBy, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.Byte[] tstamp, global::System.String measureFunc, global::System.String dataFormat, global::System.Int16 pivotOrder, global::System.Boolean pivotShow, global::System.String rPTParm)
         {
             SYS_ReportOLAPTemplate sYS_ReportOLAPTemplate = new SYS_ReportOLAPTemplate();
             sYS_ReportOLAPTemplate.ReportNbr = reportNbr;
@@ -2112,17 +2162,14 @@ namespace IF30100
             sYS_ReportOLAPTemplate.FilterBy = filterBy;
             sYS_ReportOLAPTemplate.Crtd_Datetime = crtd_Datetime;
             sYS_ReportOLAPTemplate.Crtd_Prog = crtd_Prog;
-            sYS_ReportOLAPTemplate.Crtd_User = crtd_User;
             sYS_ReportOLAPTemplate.LUpd_Datetime = lUpd_Datetime;
             sYS_ReportOLAPTemplate.LUpd_Prog = lUpd_Prog;
-            sYS_ReportOLAPTemplate.LUpd_User = lUpd_User;
             sYS_ReportOLAPTemplate.tstamp = tstamp;
             sYS_ReportOLAPTemplate.MeasureFunc = measureFunc;
             sYS_ReportOLAPTemplate.DataFormat = dataFormat;
             sYS_ReportOLAPTemplate.PivotOrder = pivotOrder;
             sYS_ReportOLAPTemplate.PivotShow = pivotShow;
             sYS_ReportOLAPTemplate.RPTParm = rPTParm;
-            sYS_ReportOLAPTemplate.ShowFilterInExcel = showFilterInExcel;
             return sYS_ReportOLAPTemplate;
         }
 
@@ -2382,7 +2429,7 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -2394,7 +2441,7 @@ namespace IF30100
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -2454,7 +2501,7 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -2466,7 +2513,7 @@ namespace IF30100
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -2622,9 +2669,9 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Boolean ShowFilterInExcel
+        public Nullable<global::System.Boolean> ShowFilterInExcel
         {
             get
             {
@@ -2639,13 +2686,200 @@ namespace IF30100
                 OnShowFilterInExcelChanged();
             }
         }
-        private global::System.Boolean _ShowFilterInExcel;
-        partial void OnShowFilterInExcelChanging(global::System.Boolean value);
+        private Nullable<global::System.Boolean> _ShowFilterInExcel;
+        partial void OnShowFilterInExcelChanging(Nullable<global::System.Boolean> value);
         partial void OnShowFilterInExcelChanged();
 
         #endregion
 
     
+    }
+
+    #endregion
+
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IF30100SysModel", Name="IF30100_pcReport_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IF30100_pcReport_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IF30100_pcReport_Result object.
+        /// </summary>
+        /// <param name="type">Initial value of the Type property.</param>
+        /// <param name="reportNbr">Initial value of the ReportNbr property.</param>
+        /// <param name="reportName">Initial value of the ReportName property.</param>
+        /// <param name="reportView">Initial value of the ReportView property.</param>
+        /// <param name="sourceType">Initial value of the SourceType property.</param>
+        /// <param name="isReadOnly">Initial value of the IsReadOnly property.</param>
+        public static IF30100_pcReport_Result CreateIF30100_pcReport_Result(global::System.String type, global::System.String reportNbr, global::System.String reportName, global::System.String reportView, global::System.String sourceType, global::System.Boolean isReadOnly)
+        {
+            IF30100_pcReport_Result iF30100_pcReport_Result = new IF30100_pcReport_Result();
+            iF30100_pcReport_Result.Type = type;
+            iF30100_pcReport_Result.ReportNbr = reportNbr;
+            iF30100_pcReport_Result.ReportName = reportName;
+            iF30100_pcReport_Result.ReportView = reportView;
+            iF30100_pcReport_Result.SourceType = sourceType;
+            iF30100_pcReport_Result.IsReadOnly = isReadOnly;
+            return iF30100_pcReport_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Type
+        {
+            get
+            {
+                return _Type;
+            }
+            set
+            {
+                OnTypeChanging(value);
+                ReportPropertyChanging("Type");
+                _Type = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Type");
+                OnTypeChanged();
+            }
+        }
+        private global::System.String _Type;
+        partial void OnTypeChanging(global::System.String value);
+        partial void OnTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ReportNbr
+        {
+            get
+            {
+                return _ReportNbr;
+            }
+            set
+            {
+                OnReportNbrChanging(value);
+                ReportPropertyChanging("ReportNbr");
+                _ReportNbr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ReportNbr");
+                OnReportNbrChanged();
+            }
+        }
+        private global::System.String _ReportNbr;
+        partial void OnReportNbrChanging(global::System.String value);
+        partial void OnReportNbrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ReportName
+        {
+            get
+            {
+                return _ReportName;
+            }
+            set
+            {
+                OnReportNameChanging(value);
+                ReportPropertyChanging("ReportName");
+                _ReportName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ReportName");
+                OnReportNameChanged();
+            }
+        }
+        private global::System.String _ReportName;
+        partial void OnReportNameChanging(global::System.String value);
+        partial void OnReportNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ReportView
+        {
+            get
+            {
+                return _ReportView;
+            }
+            set
+            {
+                OnReportViewChanging(value);
+                ReportPropertyChanging("ReportView");
+                _ReportView = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ReportView");
+                OnReportViewChanged();
+            }
+        }
+        private global::System.String _ReportView;
+        partial void OnReportViewChanging(global::System.String value);
+        partial void OnReportViewChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SourceType
+        {
+            get
+            {
+                return _SourceType;
+            }
+            set
+            {
+                OnSourceTypeChanging(value);
+                ReportPropertyChanging("SourceType");
+                _SourceType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SourceType");
+                OnSourceTypeChanged();
+            }
+        }
+        private global::System.String _SourceType;
+        partial void OnSourceTypeChanging(global::System.String value);
+        partial void OnSourceTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsReadOnly
+        {
+            get
+            {
+                return _IsReadOnly;
+            }
+            set
+            {
+                OnIsReadOnlyChanging(value);
+                ReportPropertyChanging("IsReadOnly");
+                _IsReadOnly = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsReadOnly");
+                OnIsReadOnlyChanged();
+            }
+        }
+        private global::System.Boolean _IsReadOnly;
+        partial void OnIsReadOnlyChanging(global::System.Boolean value);
+        partial void OnIsReadOnlyChanged();
+
+        #endregion
+
     }
 
     #endregion

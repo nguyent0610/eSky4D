@@ -29,24 +29,48 @@ var menuClick = function (command) {
 
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
-
+    if (HQ.screenNbr != 'IF30100') {//Nếu là gọi màn hình từ mã khác
+        //ẩn combo type đi
+        App.cboType.hide();
+    }
     HQ.isFirstLoad = true;
 
     HQ.common.showBusy(true, HQ.waitMsg);
-    App.cboType.store.addListener('load', function () {
-        HQ.common.showBusy(false);
-        if (HQ.screenNbr != 'IF30100') {
-            App.cboType.setValue('P');
-        } else {
-            App.cboType.setValue('E');
-        }
-        App.btnTemplate.hide();
-        App.cboReport.store.reload();
-    });
-
+    App.cboType.store.addListener('load', stocboType_load);
+    App.cboReport.store.addListener('load', stocboReport_load);
   
+    App.cboType.store.reload();
+    App.cboReport.events['change'].suspend();
 };
 
+var stocboReport_load = function (sto) {
+    if(sto.data.items.length>0)
+        if (HQ.screenNbr != 'IF30100') {//Nếu là gọi màn hình từ mã khác
+            //ẩn combo type đi
+            App.cboType.hide();
+            App.cboType.setValue(sto.data.items[0].data.Type);
+            setTimeout(function () {
+                App.cboReport.events['change'].resume();
+                App.cboReport.setValue(sto.data.items[0].data.ReportNbr);
+            }, 100);
+        } else {
+            App.cboType.show();
+            App.cboReport.events['change'].resume();
+            App.cboReport.setValue(sto.data.items[0].data.ReportNbr);
+        }
+}
+var stocboType_load = function (sto) {
+    HQ.common.showBusy(false);
+    //if (HQ.screenNbr != 'IF30100') {
+    //    App.cboType.setValue('P');
+    //} else {
+    App.cboType.setValue(HQ.type);
+    //}
+    App.btnTemplate.hide();
+    if (HQ.screenNbr != 'IF30100') {
+        App.cboReport.store.reload();
+    }
+}
 var getComboValue = function (val) {
     if (val == null) return '';
 
@@ -157,17 +181,20 @@ var cboType_Change = function (sender, newValue, oldValue) {
         App.pnlFilterHeader.items.clear();
         App.tabFilterGrid.hide();
         App.tabFilterGrid.items.clear();
-        App.cboReport.events['change'].suspend();
-        App.cboReport.setValue('');
-        App.cboReport.events['change'].resume();
-        App.cboReport.store.reload();
+        if (HQ.screenNbr == 'IF30100') {//Nếu là gọi màn hình từ IF30100
+            App.cboReport.events['change'].suspend();
+            App.cboReport.setValue('');
+            App.cboReport.events['change'].resume();
+            App.cboReport.store.reload();
+        } else {
+        }
     }
 
 };
 
 var cboReport_Change = function (sender, newValue, oldValue) {
     HQ.parm = [];
-    if (sender.valueModels != null ) {
+    if (sender.valueModels != null && App.cboReport.value) {
         if (App.cboType.getValue() == 'E') {
             App.btnTemplate.hide();
             if (sender.valueModels[0].data.SourceType.toUpperCase().indexOf('V')==0)

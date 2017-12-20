@@ -43,11 +43,15 @@ namespace IF30100.Controllers
 
         public ActionResult Index(string screenNbr)
         {
+            string type = "E";
             if (screenNbr.PassNull() != string.Empty)
             {
                 _screenNbr = screenNbr;
+                var obj = _eBiz4DSys.IF30100_pcReport("", Current.CpnyID, Current.UserName, Current.LangID, screenNbr).FirstOrDefault();
+                if (obj != null) type = obj.Type;
             }
             ViewBag.ScreenNbr = _screenNbr;
+            ViewBag.Type = type;
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -799,13 +803,13 @@ namespace IF30100.Controllers
                 var lstFilter = lstColumn.Where(p => p.PivotType == "F").OrderByDescending(p => p.PivotOrder).ToList();
 
                 dataSheet.Columns.AutoFit();
-                dataSheet.Protect("Hqs0ft20062099", true, true, true, true, true, true);
+                dataSheet.Protect("HQS0ftw@re2017", true, true, true, true, true, true);
                 dataSheet.Visible = XlSheetVisibility.xlSheetHidden;
 
                 pivotData = dataSheet.Range[dataSheet.Cells[1, 1], dataSheet.Cells[dt.Rows.Count + 1, dt.Columns.Count]];
 
 
-                var lstControlFilter = lstColReport.Where(p =>p.ShowFilterInExcel).OrderBy(p => p.PivotOrder).ToList();
+                var lstControlFilter = lstColReport.Where(p =>p.ShowFilterInExcel.Value).OrderBy(p => p.PivotOrder).ToList();
 
                 var lstFilterShow = lstFilter.Where(p => p.PivotShow).ToList();
                 pivotDestination = targetSheet.Range["A" + (lstControlFilter.Count + 7 + lstFilterShow.Count() / 2).ToString()];
@@ -936,7 +940,7 @@ namespace IF30100.Controllers
                 pivotTable.RefreshTable();
                 //pivotTable.CalculateData();
 
-                if (report.ExportImage)
+                if (report.ExportImage.Value)
                 {
                     string pathImage = Server.MapPath("~/Content/Images/logo.png");
 
@@ -1066,9 +1070,9 @@ namespace IF30100.Controllers
                     Directory.CreateDirectory(path);
                 }
                 string fullName =   path + @"\" + fileName;
-             
 
-                targetSheet.Protect("Hqs0ft20062099", true, false, true, true, true, true, true, true, true, true, true, true, true, true, true);
+
+                targetSheet.Protect("HQS0ftw@re2017", true, false, true, true, true, true, true, true, true, true, true, true, true, true, true);
                 excelApplication.DisplayAlerts = false;
 
 
