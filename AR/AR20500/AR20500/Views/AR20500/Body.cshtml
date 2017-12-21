@@ -411,7 +411,10 @@
                                 .ForceSelection(true).HQHeightWidth(400, 300)
                                 .HQParam(new StoreParameterCollection()
                                 {
-                                    new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
+                                    new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                 })
                                 .LoadData()
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -421,7 +424,25 @@
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     })
                             )
+                            , X.Column().Text(Util.GetLang("SubRouteID")).DataIndex("SubRouteID")
+                            .Editor(
+                                HQ.Combo().ID("cboColSubRoute").HQProcedure("AR20500_pcSubRoute")
+                                .HQColumnShow("SubRouteID,SlsFreqID,WeekOfVisit,Descr").DisplayField("SubRouteID").ValueField("SubRouteID")
+                                .ForceSelection(false).HQHeightWidth(400, 500)
+                                .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                                .LoadData()
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
 
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                            ) 
                         , X.Column().Text(Util.GetLang("SlsFreq")).DataIndex("SlsFreq")
                             .Editor(
                                 HQ.Combo().ID("cboColSlsFreq1").HQProcedure("AR20500_pcSlsFreq")

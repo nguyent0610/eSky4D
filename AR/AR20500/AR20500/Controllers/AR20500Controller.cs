@@ -87,6 +87,7 @@ namespace AR20500.Controllers
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            #region -Check config-                        
             var requireRefCustID = false;
             // IntVal = 0 khong check dieu kien - IntVal = 1 co check dieu kien trùng RefCustID
             var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "AR20500CheckRefCust");
@@ -103,6 +104,7 @@ namespace AR20500.Controllers
             string allowSave = string.Empty;
             string allowApproveEditCust = string.Empty;
             var allowEditReason = string.Empty;
+            var showSubRoute = false;
             var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -114,6 +116,7 @@ namespace AR20500.Controllers
                 allowSave = objConfig.AllowSave.PassNull();
                 allowApproveEditCust = objConfig.AllowApproveEditCust.PassNull();
                 allowEditReason = objConfig.AllowEditReason.PassNull();
+                showSubRoute = objConfig.ShowSubRouteID.HasValue ? objConfig.ShowSubRouteID.Value : false;
             }
             ViewBag.IsShowERPCust = isShowERPCust;
             ViewBag.IsShowCustHT = isShowCustHT;
@@ -123,6 +126,8 @@ namespace AR20500.Controllers
             ViewBag.AllowSave = allowSave;
             ViewBag.AllowApproveEditCust = allowApproveEditCust;
             ViewBag.AllowEditReason = allowEditReason;
+            ViewBag.showSubRoute = showSubRoute;
+            #endregion
             return View();
         }
 
@@ -240,8 +245,7 @@ namespace AR20500.Controllers
                                 }else
 	                            {
                                     Insert_NewCustHis(objNew, ref hisLineRef, 0, objNew.ProfilePic.PassNull() == string.Empty, objNew.BusinessPic.PassNull() == string.Empty);
-	                            }
-                                
+	                            }                                
                             }
                             
                             var callAfterApprove = objNew.UpdateType == 0;
@@ -324,17 +328,18 @@ namespace AR20500.Controllers
                                 if (item.UpdateType == 0)
                                 {
                                     // MCP
-                                    OM_SalesRouteMaster master = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == item.BranchID && x.SalesRouteID == item.BranchID && x.SlsPerID == item.SlsperID && x.CustID == objCust.CustId && x.BranchID == item.BranchID);
+                                    OM_SalesRouteMaster master = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == item.PJPID && x.SalesRouteID == item.SubRouteID && x.SlsPerID == item.SlsperID && x.CustID == objCust.CustId && x.BranchID == item.BranchID);
                                     if (master == null)
                                     {
                                         master = new OM_SalesRouteMaster();
                                         master.ResetET();
                                         _db.OM_SalesRouteMaster.AddObject(master);
-                                        master.PJPID = item.BranchID;
-                                        master.SalesRouteID = item.BranchID;
+                                        master.PJPID = item.PJPID;
+
+                                        master.SalesRouteID = item.SalesRouteID;
                                         master.SlsPerID = item.SlsperID;
                                         master.CustID = objCust.CustId;
-                                        master.BranchID = item.BranchID;
+                                        master.BranchID = item.BranchRouteID;
                                     }
                                     Update_SalesRouteMaster(ref master, item, fromDate, toDate);
                                     // Tạo tuyến bán hàng                                                  
@@ -347,8 +352,7 @@ namespace AR20500.Controllers
                                 if (checkApproveEditCust)
                                 {
                                     UpdateEditType(ref objNew, ref objCust, item);
-                                }
-                               
+                                }                               
                             }
                             else if (handle != "N" && handle != "")
                             {
@@ -415,7 +419,8 @@ namespace AR20500.Controllers
                 }
             }
         }
-
+        
+        #region -Update data-                
         private void Update_NewCust(ref AR_NewCustomerInfor objNew, AR20500_pgDetail_Result item)
         {
             if (item.UpdateType == 0)
@@ -431,6 +436,7 @@ namespace AR20500.Controllers
                 objNew.SalesRouteID = item.SalesRouteID;
                 objNew.PJPID = item.PJPID;
                 objNew.SlsFreq = item.SlsFreq;
+                objNew.SubRouteID = item.SubRouteID.PassNull();
                 //objNew.Startday = fromDate;
                 //objNew.Endday = toDate;
                 objNew.VisitSort = item.VisitSort.Value;
@@ -543,6 +549,7 @@ namespace AR20500.Controllers
                 AllowEdit = allowEdit,
                 DelProfile = isDelProfile,
                 DelBusiness = isDellBussPic,
+                SubRouteID = objNew.SubRouteID,
                 Crtd_User = Current.UserName,
                 Crtd_Prog = "AR20500",
                 Crtd_Datetime = DateTime.Now
@@ -571,6 +578,8 @@ namespace AR20500.Controllers
             master.Fri = item.Fri.ToBool();
             master.Sat = item.Sat.ToBool();
             master.Sun = item.Sun.ToBool();
+            master.SubRouteID = item.SubRouteID;
+            master.DelRouteDet = false;
         }
         private void Update_AR_Customer(ref AR_Customer objCust, AR20500_pgDetail_Result  item, AR_NewCustomerInfor objNew)
         {
@@ -667,6 +676,8 @@ namespace AR20500.Controllers
             objAR_SOAddress.TaxRegNbr = objCust.TaxRegNbr;
             objAR_SOAddress.Zip = objCust.Zip;
         }
+        #endregion
+
         public void CreateRoute(OM_SalesRouteMaster master)//(clsOM_SalesRouteMaster objSaleMaster)
         {
             Int32 weekStart = default(Int32);
@@ -1617,6 +1628,148 @@ namespace AR20500.Controllers
             return _checkRefCustID;
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        [HttpPost]
+        public ActionResult SaveEdit(FormCollection data)
+        {
+            try
+            {
+                // _db.CommandTimeout = int.MaxValue;
+                string errorCustID = string.Empty;
+                StoreDataHandler custHandler = new StoreDataHandler(data["lstCust"]);
+
+                var lstCust = custHandler.ObjectData<AR20500_pgDetail_Result>();
+
+                var access = Session[_screenNbr] as AccessRight;
+                if (!access.Update && !access.Insert)
+                {
+                    throw new MessageException(MessageType.Message, "728");
+                }
+                foreach (var item in lstCust)
+                {
+                    if (item.ColCheck == true)
+                    {
+                        var objNew = _db.AR_NewCustomerInfor.FirstOrDefault(p => p.ID == item.ID && p.BranchID == item.BranchID);
+                        var objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
+                        if (objNew == null || objCust == null)
+                        {
+                            continue;
+                        }
+                        var checkApproveEditCust = CheckAllowApproveEditCust(objNew.Status, objNew.UpdateType, string.Empty);
+                        if (checkApproveEditCust)
+                        {
+                            // Trạng thái trung gian 
+                            Update_NewCust(ref objNew, item);
+                            int allowEdit = UpdateEditType(ref objNew, ref objCust, item);
+
+                            objNew.LUpd_Datetime = DateTime.Now;
+                            objNew.LUpd_Prog = _screenNbr;
+                            objNew.LUpd_User = Current.UserName;
+
+                            int hisLineRef = 0;
+                            Insert_NewCustHis(objNew, ref hisLineRef, allowEdit, item.EditProfilePic.Value, item.EditBusinessPic.Value); // History  
+
+                            _db.SaveChanges();
+                        }
+                    }
+                }
+
+                if (mLogMessage != null)
+                {
+                    return mLogMessage;
+                }
+                else
+                {
+                    return Json(new { success = true, type = "message", code = "8009" });
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is System.Data.SqlClient.SqlException)
+                {
+                    return Json(new { success = false, type = "message", code = "2017110301" }); //return Json(new { success = true, message = GetMess(2017110301, null) });
+                }
+                else if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+
+        private int UpdateEditType(ref AR_NewCustomerInfor objNew, ref AR_Customer objCust, AR20500_pgDetail_Result item)
+        {
+            int allowEdit = 0;
+            int editType = 0;
+            if (item.AllowChangeEditInfo == true && item.EditInfo == true)
+            {
+                editType += 1; // Sửa thông tin
+            }
+            if (item.AllowChangeEditInfo == true && item.EditBusinessPic == true || item.AllowChangeEditInfo == true && item.EditProfilePic == true)
+            {
+                editType += 2; // Sửa hình ảnh
+                if (item.AllowChangeEditInfo == true && item.EditBusinessPic == true)
+                {
+                    objCust.BusinessPic = string.Empty;
+                    objNew.BusinessPic = string.Empty;
+                }
+                if (item.AllowChangeEditInfo == true && item.EditProfilePic == true)
+                {
+                    objCust.ProfilePic = string.Empty;
+                    objNew.ImageFileName = string.Empty;
+                }
+            }
+
+            switch (editType)
+            {
+                case 1:
+                    objCust.AllowEdit = 2; // Sửa hình
+                    allowEdit = 2;
+                    break;
+                case 2:
+                    objCust.AllowEdit = 3; // Sửa thông tin
+                    allowEdit = 3;
+                    break;
+                case 3:
+                    objCust.AllowEdit = 1; // Sửa hình và thông tin
+                    allowEdit = 1;
+                    break;
+                default:
+                    break;
+            }
+            return allowEdit;
+        }
+
+        private bool CheckAllowApproveEditCust(string status, int updateType, string toStatus)
+        {
+            string value = status + updateType + toStatus;
+            var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                string[] items = objConfig.AllowApproveEditCust.PassNull().Split(',');
+                for (var i = 0; i < items.Length; i++)
+                {
+                    if (items[i] == value)
+                    {
+                        return true;
+                    }
+                }
+                value = status + updateType;
+                items = objConfig.AllowSave.PassNull().Split(',');
+                for (var i = 0; i < items.Length; i++)
+                {
+                    if (items[i] == value)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         [HttpPost]
         public ActionResult ExportExcel(FormCollection data, string reportNbr, string ReportName)
         {
@@ -1754,147 +1907,7 @@ namespace AR20500.Controllers
             return created.ReportID;
         }
 
-       /////////////////////////////////////////////////////////////////////////////////////
-        [HttpPost]
-        public ActionResult SaveEdit(FormCollection data)
-        {
-            try
-            {
-               // _db.CommandTimeout = int.MaxValue;
-                string errorCustID = string.Empty;
-                StoreDataHandler custHandler = new StoreDataHandler(data["lstCust"]);
-
-                var lstCust = custHandler.ObjectData<AR20500_pgDetail_Result>();
-
-                var access = Session[_screenNbr] as AccessRight;
-                if (!access.Update && !access.Insert)
-                {
-                    throw new MessageException(MessageType.Message, "728");
-                }
-                foreach (var item in lstCust)
-                {
-                    if (item.ColCheck == true)
-                    {
-                        var objNew = _db.AR_NewCustomerInfor.FirstOrDefault(p => p.ID == item.ID && p.BranchID == item.BranchID);
-                        var objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
-                        if (objNew == null || objCust == null) 
-                        {
-                            continue; 
-                        }
-                        var checkApproveEditCust = CheckAllowApproveEditCust(objNew.Status, objNew.UpdateType, string.Empty);
-                        if (checkApproveEditCust)
-                        {                            
-                                // Trạng thái trung gian 
-                            Update_NewCust(ref objNew, item);                            
-                            int allowEdit = UpdateEditType(ref objNew, ref objCust, item);
-                            
-                            objNew.LUpd_Datetime = DateTime.Now;
-                            objNew.LUpd_Prog = _screenNbr;
-                            objNew.LUpd_User = Current.UserName;
-
-                            int hisLineRef = 0;
-                            Insert_NewCustHis(objNew, ref hisLineRef, allowEdit, item.EditProfilePic.Value, item.EditBusinessPic.Value); // History  
-
-                            _db.SaveChanges();
-                        }
-                    }
-                }
-                
-                if (mLogMessage != null)
-                {
-                    return mLogMessage;
-                }
-                else
-                {
-                    return Json(new { success = true, type = "message", code = "8009" });
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex is System.Data.SqlClient.SqlException)
-                {
-                    return Json(new { success = false, type = "message", code = "2017110301" }); //return Json(new { success = true, message = GetMess(2017110301, null) });
-                }
-                else if (ex is MessageException)
-                {
-                    return (ex as MessageException).ToMessage();
-                }
-                else
-                {
-                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-                }
-            }
-        }
-
-        private int UpdateEditType(ref AR_NewCustomerInfor objNew, ref AR_Customer objCust, AR20500_pgDetail_Result item)
-        {
-            int allowEdit = 0;
-            int editType = 0;
-            if (item.AllowChangeEditInfo == true && item.EditInfo == true)
-            {
-                editType += 1; // Sửa thông tin
-            }
-            if (item.AllowChangeEditInfo == true && item.EditBusinessPic == true || item.AllowChangeEditInfo == true && item.EditProfilePic == true)
-            {
-                editType += 2; // Sửa hình ảnh
-                if (item.AllowChangeEditInfo == true && item.EditBusinessPic == true)
-                {
-                    objCust.BusinessPic = string.Empty;
-                    objNew.BusinessPic = string.Empty;
-                }
-                if (item.AllowChangeEditInfo == true && item.EditProfilePic == true)
-                {
-                    objCust.ProfilePic = string.Empty;
-                    objNew.ImageFileName = string.Empty;
-                }
-            }
-
-            switch (editType)
-            {
-                case 1:
-                    objCust.AllowEdit = 2; // Sửa hình
-                    allowEdit = 2;
-                    break;
-                case 2:
-                    objCust.AllowEdit = 3; // Sửa thông tin
-                    allowEdit = 3;
-                    break;
-                case 3:
-                    objCust.AllowEdit = 1; // Sửa hình và thông tin
-                    allowEdit = 1;
-                    break;
-                default:
-                    break;
-            }
-            return allowEdit;
-        }
-
-        private bool CheckAllowApproveEditCust(string status, int updateType, string toStatus)
-        {
-            string value = status + updateType + toStatus;
-            var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-            if (objConfig != null)
-            {
-                string[] items = objConfig.AllowApproveEditCust.PassNull().Split(',');
-                for (var i = 0; i < items.Length; i++)
-                {
-                    if (items[i] == value)
-                    {
-                        return true;
-                    }
-                }
-                value = status + updateType;
-                items = objConfig.AllowSave.PassNull().Split(',');
-                for (var i = 0; i < items.Length; i++)
-                {
-                    if (items[i] == value)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
+       
     }
     public class DeleteFileAttribute : ActionFilterAttribute
     {

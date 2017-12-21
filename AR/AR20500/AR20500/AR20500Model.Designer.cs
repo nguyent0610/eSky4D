@@ -84,22 +84,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_SalesRouteMaster> OM_SalesRouteMaster
-        {
-            get
-            {
-                if ((_OM_SalesRouteMaster == null))
-                {
-                    _OM_SalesRouteMaster = base.CreateObjectSet<OM_SalesRouteMaster>("OM_SalesRouteMaster");
-                }
-                return _OM_SalesRouteMaster;
-            }
-        }
-        private ObjectSet<OM_SalesRouteMaster> _OM_SalesRouteMaster;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_SalesRouteDet> OM_SalesRouteDet
         {
             get
@@ -132,6 +116,38 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<AR_Customer> AR_Customer
+        {
+            get
+            {
+                if ((_AR_Customer == null))
+                {
+                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
+                }
+                return _AR_Customer;
+            }
+        }
+        private ObjectSet<AR_Customer> _AR_Customer;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_SalesRouteMaster> OM_SalesRouteMaster
+        {
+            get
+            {
+                if ((_OM_SalesRouteMaster == null))
+                {
+                    _OM_SalesRouteMaster = base.CreateObjectSet<OM_SalesRouteMaster>("OM_SalesRouteMaster");
+                }
+                return _OM_SalesRouteMaster;
+            }
+        }
+        private ObjectSet<OM_SalesRouteMaster> _OM_SalesRouteMaster;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<AR_NewCustomerInfor> AR_NewCustomerInfor
         {
             get
@@ -160,22 +176,6 @@ namespace AR20500
             }
         }
         private ObjectSet<AR_NewCustomerInforHis> _AR_NewCustomerInforHis;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<AR_Customer> AR_Customer
-        {
-            get
-            {
-                if ((_AR_Customer == null))
-                {
-                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
-                }
-                return _AR_Customer;
-            }
-        }
-        private ObjectSet<AR_Customer> _AR_Customer;
 
         #endregion
 
@@ -187,14 +187,6 @@ namespace AR20500
         public void AddToAR_CustomerLocation(AR_CustomerLocation aR_CustomerLocation)
         {
             base.AddObject("AR_CustomerLocation", aR_CustomerLocation);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_SalesRouteMaster EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_SalesRouteMaster(OM_SalesRouteMaster oM_SalesRouteMaster)
-        {
-            base.AddObject("OM_SalesRouteMaster", oM_SalesRouteMaster);
         }
     
         /// <summary>
@@ -214,6 +206,22 @@ namespace AR20500
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Customer(AR_Customer aR_Customer)
+        {
+            base.AddObject("AR_Customer", aR_Customer);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_SalesRouteMaster EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_SalesRouteMaster(OM_SalesRouteMaster oM_SalesRouteMaster)
+        {
+            base.AddObject("OM_SalesRouteMaster", oM_SalesRouteMaster);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the AR_NewCustomerInfor EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToAR_NewCustomerInfor(AR_NewCustomerInfor aR_NewCustomerInfor)
@@ -227,14 +235,6 @@ namespace AR20500
         public void AddToAR_NewCustomerInforHis(AR_NewCustomerInforHis aR_NewCustomerInforHis)
         {
             base.AddObject("AR_NewCustomerInforHis", aR_NewCustomerInforHis);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Customer(AR_Customer aR_Customer)
-        {
-            base.AddObject("AR_Customer", aR_Customer);
         }
 
         #endregion
@@ -4867,6 +4867,30 @@ namespace AR20500
         private global::System.String _Reason;
         partial void OnReasonChanging(global::System.String value);
         partial void OnReasonChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SubRouteID
+        {
+            get
+            {
+                return _SubRouteID;
+            }
+            set
+            {
+                OnSubRouteIDChanging(value);
+                ReportPropertyChanging("SubRouteID");
+                _SubRouteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SubRouteID");
+                OnSubRouteIDChanged();
+            }
+        }
+        private global::System.String _SubRouteID;
+        partial void OnSubRouteIDChanging(global::System.String value);
+        partial void OnSubRouteIDChanged();
 
         #endregion
 
@@ -6622,6 +6646,30 @@ namespace AR20500
         private Nullable<global::System.Boolean> _DelBusiness;
         partial void OnDelBusinessChanging(Nullable<global::System.Boolean> value);
         partial void OnDelBusinessChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SubRouteID
+        {
+            get
+            {
+                return _SubRouteID;
+            }
+            set
+            {
+                OnSubRouteIDChanging(value);
+                ReportPropertyChanging("SubRouteID");
+                _SubRouteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SubRouteID");
+                OnSubRouteIDChanged();
+            }
+        }
+        private global::System.String _SubRouteID;
+        partial void OnSubRouteIDChanging(global::System.String value);
+        partial void OnSubRouteIDChanged();
 
         #endregion
 
@@ -7978,7 +8026,8 @@ namespace AR20500
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
-        public static OM_SalesRouteMaster CreateOM_SalesRouteMaster(global::System.String pJPID, global::System.String salesRouteID, global::System.String custID, global::System.String slsPerID, global::System.String slsFreq, global::System.String slsFreqType, global::System.Int32 visitSort, global::System.String weekofVisit, global::System.Boolean mon, global::System.Boolean tue, global::System.Boolean wed, global::System.Boolean thu, global::System.Boolean fri, global::System.Boolean sat, global::System.Boolean sun, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID)
+        /// <param name="delRouteDet">Initial value of the DelRouteDet property.</param>
+        public static OM_SalesRouteMaster CreateOM_SalesRouteMaster(global::System.String pJPID, global::System.String salesRouteID, global::System.String custID, global::System.String slsPerID, global::System.String slsFreq, global::System.String slsFreqType, global::System.Int32 visitSort, global::System.String weekofVisit, global::System.Boolean mon, global::System.Boolean tue, global::System.Boolean wed, global::System.Boolean thu, global::System.Boolean fri, global::System.Boolean sat, global::System.Boolean sun, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID, global::System.Boolean delRouteDet)
         {
             OM_SalesRouteMaster oM_SalesRouteMaster = new OM_SalesRouteMaster();
             oM_SalesRouteMaster.PJPID = pJPID;
@@ -8004,6 +8053,7 @@ namespace AR20500
             oM_SalesRouteMaster.LUpd_User = lUpd_User;
             oM_SalesRouteMaster.tstamp = tstamp;
             oM_SalesRouteMaster.BranchID = branchID;
+            oM_SalesRouteMaster.DelRouteDet = delRouteDet;
             return oM_SalesRouteMaster;
         }
 
@@ -8625,6 +8675,54 @@ namespace AR20500
         private Nullable<global::System.DateTime> _EndDate;
         partial void OnEndDateChanging(Nullable<global::System.DateTime> value);
         partial void OnEndDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SubRouteID
+        {
+            get
+            {
+                return _SubRouteID;
+            }
+            set
+            {
+                OnSubRouteIDChanging(value);
+                ReportPropertyChanging("SubRouteID");
+                _SubRouteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SubRouteID");
+                OnSubRouteIDChanged();
+            }
+        }
+        private global::System.String _SubRouteID;
+        partial void OnSubRouteIDChanging(global::System.String value);
+        partial void OnSubRouteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean DelRouteDet
+        {
+            get
+            {
+                return _DelRouteDet;
+            }
+            set
+            {
+                OnDelRouteDetChanging(value);
+                ReportPropertyChanging("DelRouteDet");
+                _DelRouteDet = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DelRouteDet");
+                OnDelRouteDetChanged();
+            }
+        }
+        private global::System.Boolean _DelRouteDet;
+        partial void OnDelRouteDetChanging(global::System.Boolean value);
+        partial void OnDelRouteDetChanged();
 
         #endregion
 
@@ -8932,6 +9030,30 @@ namespace AR20500
         private global::System.String _AllowEditReason;
         partial void OnAllowEditReasonChanging(global::System.String value);
         partial void OnAllowEditReasonChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowSubRouteID
+        {
+            get
+            {
+                return _ShowSubRouteID;
+            }
+            set
+            {
+                OnShowSubRouteIDChanging(value);
+                ReportPropertyChanging("ShowSubRouteID");
+                _ShowSubRouteID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowSubRouteID");
+                OnShowSubRouteIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowSubRouteID;
+        partial void OnShowSubRouteIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowSubRouteIDChanged();
 
         #endregion
 
@@ -8953,24 +9075,28 @@ namespace AR20500
         /// <param name="id">Initial value of the ID property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
+        /// <param name="slsperID">Initial value of the SlsperID property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="color">Initial value of the Color property.</param>
         /// <param name="custHT">Initial value of the CustHT property.</param>
         /// <param name="eRPCustID">Initial value of the ERPCustID property.</param>
         /// <param name="updateType">Initial value of the UpdateType property.</param>
         /// <param name="businessPic">Initial value of the BusinessPic property.</param>
-        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID, global::System.Int32 updateType, global::System.String businessPic)
+        /// <param name="branchRouteID">Initial value of the BranchRouteID property.</param>
+        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.String slsperID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID, global::System.Int32 updateType, global::System.String businessPic, global::System.String branchRouteID)
         {
             AR20500_pgDetail_Result aR20500_pgDetail_Result = new AR20500_pgDetail_Result();
             aR20500_pgDetail_Result.ID = id;
             aR20500_pgDetail_Result.BranchID = branchID;
             aR20500_pgDetail_Result.CustID = custID;
+            aR20500_pgDetail_Result.SlsperID = slsperID;
             aR20500_pgDetail_Result.Checked = @checked;
             aR20500_pgDetail_Result.Color = color;
             aR20500_pgDetail_Result.CustHT = custHT;
             aR20500_pgDetail_Result.ERPCustID = eRPCustID;
             aR20500_pgDetail_Result.UpdateType = updateType;
             aR20500_pgDetail_Result.BusinessPic = businessPic;
+            aR20500_pgDetail_Result.BranchRouteID = branchRouteID;
             return aR20500_pgDetail_Result;
         }
 
@@ -9653,7 +9779,7 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SlsperID
         {
@@ -9665,7 +9791,7 @@ namespace AR20500
             {
                 OnSlsperIDChanging(value);
                 ReportPropertyChanging("SlsperID");
-                _SlsperID = StructuralObject.SetValidValue(value, true);
+                _SlsperID = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("SlsperID");
                 OnSlsperIDChanged();
             }
@@ -10753,6 +10879,54 @@ namespace AR20500
         private Nullable<global::System.Int32> _AllowEdit;
         partial void OnAllowEditChanging(Nullable<global::System.Int32> value);
         partial void OnAllowEditChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchRouteID
+        {
+            get
+            {
+                return _BranchRouteID;
+            }
+            set
+            {
+                OnBranchRouteIDChanging(value);
+                ReportPropertyChanging("BranchRouteID");
+                _BranchRouteID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchRouteID");
+                OnBranchRouteIDChanged();
+            }
+        }
+        private global::System.String _BranchRouteID;
+        partial void OnBranchRouteIDChanging(global::System.String value);
+        partial void OnBranchRouteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SubRouteID
+        {
+            get
+            {
+                return _SubRouteID;
+            }
+            set
+            {
+                OnSubRouteIDChanging(value);
+                ReportPropertyChanging("SubRouteID");
+                _SubRouteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SubRouteID");
+                OnSubRouteIDChanged();
+            }
+        }
+        private global::System.String _SubRouteID;
+        partial void OnSubRouteIDChanging(global::System.String value);
+        partial void OnSubRouteIDChanged();
 
         #endregion
 

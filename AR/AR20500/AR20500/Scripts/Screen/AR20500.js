@@ -1,7 +1,9 @@
 var _Change = false;
 var keys = ['ID'];
 var _firstLoad = true;
-var hideColumn = ['SalesRouteID', 'SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+var _hideColumn = ['SalesRouteID', 'SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+var _lockColumn = ['SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
 var hideEditCustColumn = ['EditInfo', 'EditBusinessPic', 'EditProfilePic'];
 var _isEditReason = false;
 
@@ -10,7 +12,7 @@ var frmMain_BoxReady = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     if (HQ.isShowCustHT) HQ.grid.show(App.grdCust, ['CustHT'])
     if (HQ.IsShowERPCust) HQ.grid.show(App.grdCust, ['ERPCustID'])
-
+    showSubRoute(0);
     App.stoAR20500_pdWeekofVisitAll.load(function () {
         App.cboTerritory.getStore().load(function () {
             App.cboCpnyID.getStore().load(function () {
@@ -165,6 +167,11 @@ var btnProcess_Click = function () {
                     if (data.MinMCPDate < minDate) {
                         minDate = data.MinMCPDate;
                     }
+                    if (HQ.showSubRoute && Ext.isEmpty(data.SubRouteID)) {
+                        rowerror = 'err';
+                        HQ.message.show(1000, HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID'));
+                        break;
+                    }
                     if (!isValidSel(data)) {
                         errorFreq += i + 1 + ',';
                     }
@@ -174,6 +181,9 @@ var btnProcess_Click = function () {
                     //if (data.PriceClass == '' || data.PriceClass == null)
                     //    isnullpriceclass += i + 1 + ',';
                 }
+            }
+            if (rowerror != '') {
+                return;
             }
             //if (isnullclass != '') {
             //    HQ.message.show(1000, HQ.common.getLang('ClassId'), '');
@@ -380,6 +390,9 @@ var grdCust_BeforeEdit = function (item, e) {
                 return false;
             }
         }
+        if (HQ.showSubRoute && _lockColumn.indexOf(e.field) != -1) {
+            return false;
+        }
     }
     if (e.field == 'WeekofVisit') {
         App.cboColWeekofVisit.getStore().reload();
@@ -430,6 +443,15 @@ var grdCust_ValidateEdit = function (item, e) {
         if (e.value == e.record.data.Channel) {
             return false;
         }
+    } else if (e.field == 'SubRouteID') {
+        if (e.value == e.record.data.SubRouteID) {
+            return false;
+        }
+    }
+    else if (e.field == 'SalesRouteID') {
+        if (e.value == e.record.data.SalesRouteID) {
+            return false;
+        }
     }
 };
 var grdCust_Edit = function (item, e, oldvalue, newvalue) {
@@ -472,6 +494,37 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
         e.record.set('District', '');
     } else if (e.field == 'Channel') {
         e.record.set('ShopType', '');
+    } else if (e.field == 'SubRouteID') {
+        if (App.cboColSubRoute.valueModels != undefined && App.cboColSubRoute.valueModels.length > 0) {
+            e.record.set('SlsFreq', App.cboColSubRoute.valueModels[0].data.SlsFreqID);
+            e.record.set('WeekofVisit', App.cboColSubRoute.valueModels[0].data.WeekOfVisit);
+
+            e.record.set('Mon', App.cboColSubRoute.valueModels[0].data.Mon);
+            e.record.set('Tue', App.cboColSubRoute.valueModels[0].data.Tue);
+            e.record.set('Wed', App.cboColSubRoute.valueModels[0].data.Wed);
+            e.record.set('Thu', App.cboColSubRoute.valueModels[0].data.Thu);
+            e.record.set('Fri', App.cboColSubRoute.valueModels[0].data.Fri);
+            e.record.set('Sat', App.cboColSubRoute.valueModels[0].data.Sat);
+            e.record.set('Sun', App.cboColSubRoute.valueModels[0].data.Sun);
+        } else {
+            e.record.set('SlsFreq', '');
+            e.record.set('WeekofVisit', '');
+            e.record.set('Mon', false);
+            e.record.set('Tue', false);
+            e.record.set('Wed', false);
+            e.record.set('Thu', false);
+            e.record.set('Fri', false);
+            e.record.set('Sun', false);
+            e.record.set('Sat', false);
+        }
+    } else if (e.field == 'SalesRouteID') {
+        if (App.cboColSalesRouteID.valueModels != undefined && App.cboColSalesRouteID.valueModels.length > 0) {
+            e.record.set('BranchRouteID', App.cboColSalesRouteID.valueModels[0].data.BranchRouteID);
+            e.record.set('PJPID', App.cboColSalesRouteID.valueModels[0].data.PJPID);
+        } else {
+            e.record.set('BranchRouteID', '');
+            e.record.set('PJPID', '');
+        }
     }
     //HQ.grid.checkInsertKey(App.grdCust, e, keys);
 };
@@ -796,6 +849,17 @@ var pnlGridMCL_viewGetRowClass = function (record) {
 };
 
 var cboUpdateType_Change = function () {
+
+    Ext.suspendLayouts();
+
+    if (App.cboUpdateType.getValue() == 0) {
+        HQ.grid.show(App.grdCust, _hideColumn);
+    } else if (App.cboUpdateType.getValue() == 1) {
+        HQ.grid.hide(App.grdCust, _hideColumn);
+    }
+    showSubRoute(App.cboUpdateType.getValue());
+    Ext.resumeLayouts();
+
     setHideControls();
     App.grdCust.store.loadData([],false);
     App.grdCust.view.refresh();
@@ -975,7 +1039,8 @@ var Gmap = {
                             position: myLatlng,
                             map: Gmap.Declare.map,
                             title: data.title,
-                            icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i + 1, pinColor)
+                            icon: Ext.String.format('https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.6|0|{1}|10|_|{0}', i + 1, pinColor)
+                           // icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i + 1, pinColor)
                         });
 
                         // Set info display of the marker
@@ -1286,9 +1351,8 @@ var checkEditReason = function () {
     }
 };
 
-var cboHandle_Change = function () {
-    
-    if (_Change) {
+var cboHandle_Change = function () {    
+    if (_Change && App.cboHandle.store.data.length > 1) {
         HQ.message.show(2017121601, '', 'confirmChangeHanle');
     } else {
         setHideControls();
@@ -1326,5 +1390,12 @@ var confirmChangeHanle = function (item) {
 var ColCheck_Header_ValidityChange = function () {
     if (!checkEditDet()) {
         return false;
+    }
+}
+var showSubRoute = function (updateType) {
+    if (HQ.showSubRoute && updateType == 0) {
+        HQ.grid.show(App.grdCust, ['SubRouteID']);
+    } else {
+        HQ.grid.hide(App.grdCust, ['SubRouteID']);
     }
 }
