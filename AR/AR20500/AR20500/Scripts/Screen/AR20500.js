@@ -6,7 +6,7 @@ var _lockColumn = ['SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 
 
 var hideEditCustColumn = ['EditInfo', 'EditBusinessPic', 'EditProfilePic'];
 var _isEditReason = false;
-
+var _slsperID = '';
 var frmMain_BoxReady = function () {   
     if (HQ.ShowExport) App.btnExport.hide();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
@@ -169,7 +169,8 @@ var btnProcess_Click = function () {
                     }
                     if (HQ.showSubRoute && Ext.isEmpty(data.SubRouteID)) {
                         rowerror = 'err';
-                        HQ.message.show(1000, HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID'));
+                        HQ.message.show(201302071, (i + 1) + ' (' + HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID') + ')', '', false);
+                        //HQ.message.show(1000, HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID'));
                         break;
                     }
                     if (!isValidSel(data)) {
@@ -427,7 +428,10 @@ var grdCust_BeforeEdit = function (item, e) {
         }
         App.cboColShopType.store.filter('Channel', channel);
     }
-    
+    else if (e.field == 'SalesRouteID') {
+        _slsperID = e.record.data.SlsperID;
+        App.cboColSalesRouteID.store.reload();
+    }
 };
 
 var grdCust_ValidateEdit = function (item, e) {
