@@ -140,7 +140,7 @@ var btnProcess_Click = function () {
         HQ.message.show(718);
     }
     if (App.cboHandle.getValue() && count > 0) {
-        if (App.cboHandle.getValue() == 'A' && App.cboUpdateType.getValue() == 0) {
+        if ((App.cboHandle.getValue() == 'A' || App.cboHandle.getValue() == 'O') && App.cboUpdateType.getValue() == 0) {
             var rowerror = '';
             var isnullclass = '';
             var isnullpriceclass = '';
