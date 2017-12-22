@@ -141,6 +141,7 @@ var btnProcess_Click = function () {
     }
     if (App.cboHandle.getValue() && count > 0) {
         if ((App.cboHandle.getValue() == 'A' || App.cboHandle.getValue() == 'O') && App.cboUpdateType.getValue() == 0) {
+            
             var rowerror = '';
             var isnullclass = '';
             var isnullpriceclass = '';
@@ -186,25 +187,51 @@ var btnProcess_Click = function () {
             if (rowerror != '') {
                 return;
             }
-            //if (isnullclass != '') {
-            //    HQ.message.show(1000, HQ.common.getLang('ClassId'), '');
-            //    return;
-            //}
-            //if (isnullpriceclass != '') {
-            //    HQ.message.show(1000, HQ.common.getLang('PriceClass'), '');
-            //    return;
-            //}
             if (errorFreq != '') {
                 HQ.message.show(2017022101, errorFreq, '');
                 return;
             }
-          
-            App.dteFromDate.setValue(minDate);
-            App.dteToDate.setValue(HQ.EndDateYear);
-            App.dteFromDate.setMinValue(minDate);
-            App.dteFromDate.validate();
-            App.dteToDate.validate();
-            App.winProcess.show();
+            if (App.cboHandle.getValue() == 'A') {
+                App.dteFromDate.setValue(minDate);
+                App.dteToDate.setValue(HQ.EndDateYear);
+                App.dteFromDate.setMinValue(minDate);
+                App.dteFromDate.validate();
+                App.dteToDate.validate();
+                App.winProcess.show();
+            } else {
+                var d = Ext.Date.parse("01/01/1990", "m/d/Y");
+                if (App.FromDate.getValue() < d || App.ToDate.getValue() < d) return;
+                var flat = false;
+                App.stoCust.data.each(function (item) {
+                    if (item.data.ColCheck) {
+                        flat = true;
+                        return false;
+                    }
+                });
+                if (flat && !Ext.isEmpty(App.cboHandle.getValue()) && App.cboHandle.getValue() != 'N') {
+                    App.frmMain.submit({
+                        clientValidation: false,
+                        waitMsg: HQ.common.getLang("Handle"),
+                        method: 'POST',
+                        url: 'AR20500/Process',
+                        timeout: 180000,
+                        params: {
+                            lstCust: HQ.store.getAllData(App.grdCust.store, ['ColCheck'], [true]),
+                            fromDate: HQ.bussinessDate,
+                            toDate: HQ.bussinessDate,
+                            askApprove: 0
+                        },
+                        success: function (msg, data) {
+                            HQ.message.show(201405071);
+                            App.stoCust.reload();
+                        },
+                        failure: function (msg, data) {
+                            HQ.message.process(msg, data, true);
+                        }
+                    });
+                }
+            }
+            
         }
         else if (App.cboHandle.getValue() != 'A' || App.cboHandle.getValue() == 'A' && App.cboUpdateType.getValue() != 0) {
             var d = Ext.Date.parse("01/01/1990", "m/d/Y");
