@@ -1,4 +1,4 @@
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Ext.Net;
 using Ext.Net.MVC;
 using System.Collections;
@@ -124,6 +124,9 @@ namespace OM24100.Controllers
                             {
                                 if (custLoc.Lat != 0 && custLoc.Lng != 0)
                                 {
+                                    // Lưu lịch sử
+                                    InsertCustLocationHis(custLoc, 0, 0);
+
                                     custLoc.Lat = 0;
                                     custLoc.Lng = 0;
 
@@ -262,6 +265,8 @@ namespace OM24100.Controllers
                     {
                         if (custLoc.tstamp.ToHex() == selCust.tstamp.ToHex())
                         {
+                            // Lưu lịch sử
+                            InsertCustLocationHis(custLoc, double.Parse(newLat, format), double.Parse(newLng, format));
                             custLoc.Lat = double.Parse(newLat, format);
                             custLoc.Lng = double.Parse(newLng, format);
                             custLoc.LUpd_Datetime = DateTime.Now;
@@ -309,6 +314,16 @@ namespace OM24100.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
+        }
+
+        private int InsertCustLocationHis(AR_CustomerLocation custLoc, double newLat, double newLng)
+        {
+            var obj = _db.OM24100_ppInsertCustLocationHis(custLoc.BranchID, custLoc.CustID, custLoc.Lat, custLoc.Lng, newLat, newLng
+                                                        , custLoc.LUpd_Datetime, custLoc.LUpd_Prog, custLoc.LUpd_User
+                                                        , custLoc.Crtd_Datetime, custLoc.Crtd_Prog, custLoc.Crtd_User
+                                                        , Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            var lineRef = obj.HasValue ? obj.Value : 0;
+            return lineRef;
         }
 
         [DirectMethod]
