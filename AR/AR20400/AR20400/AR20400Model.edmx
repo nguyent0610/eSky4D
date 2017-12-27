@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_CustAdvTool">
           <Key>
             <PropertyRef Name="CustID" />
@@ -110,7 +110,7 @@
           <Property Name="BillFax" Type="varchar" MaxLength="30" />
           <Property Name="BillName" Type="nvarchar" MaxLength="200" />
           <Property Name="BillPhone" Type="varchar" MaxLength="30" />
-          <Property Name="BillSalut" Type="nvarchar" MaxLength="50" />
+          <Property Name="BillSalut" Type="nvarchar(max)" />
           <Property Name="BillState" Type="varchar" MaxLength="10" />
           <Property Name="BillZip" Type="varchar" MaxLength="10" />
           <Property Name="Channel" Type="varchar" MaxLength="10" />
@@ -137,7 +137,7 @@
           <Property Name="ParentRecordID" Type="int" Nullable="false" />
           <Property Name="Phone" Type="varchar" MaxLength="30" />
           <Property Name="PriceClassID" Type="varchar" MaxLength="10" />
-          <Property Name="Salut" Type="nvarchar" MaxLength="50" />
+          <Property Name="Salut" Type="nvarchar(max)" />
           <Property Name="ShopType" Type="varchar" MaxLength="10" />
           <Property Name="SiteId" Type="varchar" MaxLength="10" />
           <Property Name="SlsperId" Type="varchar" MaxLength="30" />
@@ -177,7 +177,7 @@
           <Property Name="SubTerritory" Type="varchar" MaxLength="10" />
           <Property Name="LastOrderDate" Type="datetime" />
           <Property Name="SearchName" Type="nvarchar(max)" />
-          <Property Name="AllowEdit" Type="bit" Nullable="false" />
+          <Property Name="AllowEdit" Type="int" Nullable="false" />
           <Property Name="BusinessPic" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="AR_CustomerChild">
@@ -1035,7 +1035,7 @@
           <Property Type="String" Name="SubTerritory" Nullable="true" MaxLength="10" />
           <Property Type="DateTime" Name="LastOrderDate" Nullable="true" Precision="23" />
           <Property Type="String" Name="SearchName" Nullable="true" />
-          <Property Type="Boolean" Name="AllowEdit" Nullable="false" />
+          <Property Type="Int32" Name="AllowEdit" Nullable="false" />
           <Property Type="String" Name="BusinessPic" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="BillDistrict" Nullable="true" MaxLength="30" />
         </ComplexType>
@@ -1059,7 +1059,7 @@
           <Property Name="BillFax" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="BillName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="BillPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BillSalut" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BillSalut" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BillState" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="BillZip" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Channel" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -1086,7 +1086,7 @@
           <Property Name="ParentRecordID" Type="Int32" Nullable="false" />
           <Property Name="Phone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="PriceClassID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Salut" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Salut" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ShopType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="SiteId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="SlsperId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -1126,7 +1126,7 @@
           <Property Name="SubTerritory" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LastOrderDate" Type="DateTime" Precision="3" />
           <Property Name="SearchName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AllowEdit" Type="Boolean" Nullable="false" />
+          <Property Name="AllowEdit" Type="Int32" Nullable="false" />
           <Property Name="BusinessPic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>

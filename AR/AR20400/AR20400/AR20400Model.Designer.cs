@@ -2634,7 +2634,7 @@ namespace AR20400
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="allowEdit">Initial value of the AllowEdit property.</param>
-        public static AR_Customer CreateAR_Customer(global::System.String custId, global::System.String custName, global::System.Double crLmt, global::System.Int16 custFillPriority, global::System.Int32 empNum, global::System.DateTime expiryDate, global::System.Int16 exported, global::System.Int16 gracePer, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double tradeDisc, global::System.Boolean giftExchange, global::System.Boolean hasPG, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp, global::System.String branchID, global::System.Boolean allowEdit)
+        public static AR_Customer CreateAR_Customer(global::System.String custId, global::System.String custName, global::System.Double crLmt, global::System.Int16 custFillPriority, global::System.Int32 empNum, global::System.DateTime expiryDate, global::System.Int16 exported, global::System.Int16 gracePer, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double tradeDisc, global::System.Boolean giftExchange, global::System.Boolean hasPG, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp, global::System.String branchID, global::System.Int32 allowEdit)
         {
             AR_Customer aR_Customer = new AR_Customer();
             aR_Customer.CustId = custId;
@@ -4645,7 +4645,7 @@ namespace AR20400
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean AllowEdit
+        public global::System.Int32 AllowEdit
         {
             get
             {
@@ -4660,8 +4660,8 @@ namespace AR20400
                 OnAllowEditChanged();
             }
         }
-        private global::System.Boolean _AllowEdit;
-        partial void OnAllowEditChanging(global::System.Boolean value);
+        private global::System.Int32 _AllowEdit;
+        partial void OnAllowEditChanging(global::System.Int32 value);
         partial void OnAllowEditChanged();
     
         /// <summary>
@@ -9427,7 +9427,7 @@ namespace AR20400
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="allowEdit">Initial value of the AllowEdit property.</param>
-        public static AR20400_pdHeader_Result CreateAR20400_pdHeader_Result(global::System.String custId, global::System.String custName, global::System.Double crLmt, global::System.Int16 custFillPriority, global::System.Int32 empNum, global::System.DateTime expiryDate, global::System.Int16 exported, global::System.Int16 gracePer, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double tradeDisc, global::System.Boolean giftExchange, global::System.Boolean hasPG, global::System.Byte[] tstamp, global::System.String branchID, global::System.Boolean allowEdit)
+        public static AR20400_pdHeader_Result CreateAR20400_pdHeader_Result(global::System.String custId, global::System.String custName, global::System.Double crLmt, global::System.Int16 custFillPriority, global::System.Int32 empNum, global::System.DateTime expiryDate, global::System.Int16 exported, global::System.Int16 gracePer, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double tradeDisc, global::System.Boolean giftExchange, global::System.Boolean hasPG, global::System.Byte[] tstamp, global::System.String branchID, global::System.Int32 allowEdit)
         {
             AR20400_pdHeader_Result aR20400_pdHeader_Result = new AR20400_pdHeader_Result();
             aR20400_pdHeader_Result.CustId = custId;
@@ -11258,7 +11258,7 @@ namespace AR20400
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean AllowEdit
+        public global::System.Int32 AllowEdit
         {
             get
             {
@@ -11273,8 +11273,8 @@ namespace AR20400
                 OnAllowEditChanged();
             }
         }
-        private global::System.Boolean _AllowEdit;
-        partial void OnAllowEditChanging(global::System.Boolean value);
+        private global::System.Int32 _AllowEdit;
+        partial void OnAllowEditChanging(global::System.Int32 value);
         partial void OnAllowEditChanged();
     
         /// <summary>
