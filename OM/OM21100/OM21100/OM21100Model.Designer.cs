@@ -9767,6 +9767,30 @@ namespace OM21100
         private Nullable<global::System.Boolean> _AllowExport;
         partial void OnAllowExportChanging(Nullable<global::System.Boolean> value);
         partial void OnAllowExportChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AllowAddDiscount
+        {
+            get
+            {
+                return _AllowAddDiscount;
+            }
+            set
+            {
+                OnAllowAddDiscountChanging(value);
+                ReportPropertyChanging("AllowAddDiscount");
+                _AllowAddDiscount = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowAddDiscount");
+                OnAllowAddDiscountChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AllowAddDiscount;
+        partial void OnAllowAddDiscountChanging(Nullable<global::System.Boolean> value);
+        partial void OnAllowAddDiscountChanged();
 
         #endregion
 

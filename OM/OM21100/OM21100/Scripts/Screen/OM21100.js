@@ -247,7 +247,7 @@ var Main = {
                         hasData = false;
                         return hasData;
                     }
-                    if (App.grdCompany.store.getCount() > 0) {
+                    if (App.grdCompany.store.getCount() > 0 && App.grdCompany.store.data.items[0].data.CpnyID) {
                         // 0: {Code: "BB", Descr: "Item Bundle"}
                         if (App.cboDiscClass.value == "BB") {
                             if (App.grdBundle.store.getCount() > 1) {
@@ -458,71 +458,78 @@ var Main = {
                     //var status = App.cboStatus.value;
 
                     //if (status == _holdStatus) {
-                    if (Main.Process.checkHasData()) {
-                        if (Main.Process.checkEntireRequire()) {
-                            App.frmDiscDefintionTop.updateRecord();
-                            App.frmDiscSeqInfo.updateRecord();
+                    if (App.cboDiscID.valueModels == null && !HQ.allowAddDiscount) {
+                        HQ.message.show(2017113005, '', '');
+                    }
+                    else {
+                        if (Main.Process.checkHasData()) {
+                            if (Main.Process.checkEntireRequire()) {
+                                App.frmDiscDefintionTop.updateRecord();
+                                App.frmDiscSeqInfo.updateRecord();
+                                App.frmMain.submit({
+                                    waitMsg: HQ.common.getLang("SavingData"),
+                                    url: 'OM21100/SaveData',
+                                    timeout: 10000000,
+                                    params: {
+                                        isAddDiscount: HQ.allowAddDiscount,
+                                        isNewDiscID: _isNewDisc,
+                                        isNewDiscSeq: _isNewSeq,
 
-                            App.frmMain.submit({
-                                waitMsg: HQ.common.getLang("SavingData"),
-                                url: 'OM21100/SaveData',
-                                timeout: 10000000,
-                                params: {
-                                    isNewDiscID: _isNewDisc,
-                                    isNewDiscSeq: _isNewSeq,
+                                        lstDiscInfo: Ext.encode([App.frmDiscDefintionTop.getRecord().data]),
+                                        lstDiscBreakChange: HQ.store.getData(App.grdDiscBreak.store),
+                                        lstFreeItemChange: Main.Process.getChangedFilteredData(App.grdFreeItem.store),
+                                        lstCompanyChange: HQ.store.getData(App.grdCompany.store),
+                                        lstDiscItemChange: HQ.store.getData(App.grdDiscItem.store),
+                                        lstBundleChange: HQ.store.getData(App.grdBundle.store),
+                                        lstDiscCustClassChange: HQ.store.getData(App.grdDiscCustClass.store),
+                                        lstDiscCustChange: HQ.store.getData(App.grdDiscCust.store),
+                                        lstDiscItemClassChange: HQ.store.getData(App.grdDiscItemClass.store),
 
-                                    lstDiscInfo: Ext.encode([App.frmDiscDefintionTop.getRecord().data]),
-                                    lstDiscBreakChange: HQ.store.getData(App.grdDiscBreak.store),
-                                    lstFreeItemChange: Main.Process.getChangedFilteredData(App.grdFreeItem.store),
-                                    lstCompanyChange: HQ.store.getData(App.grdCompany.store),
-                                    lstDiscItemChange: HQ.store.getData(App.grdDiscItem.store),
-                                    lstBundleChange: HQ.store.getData(App.grdBundle.store),
-                                    lstDiscCustClassChange: HQ.store.getData(App.grdDiscCustClass.store),
-                                    lstDiscCustChange: HQ.store.getData(App.grdDiscCust.store),
-                                    lstDiscItemClassChange: HQ.store.getData(App.grdDiscItemClass.store),
+                                        lstDiscSeqInfo: (function () {
+                                            App.stoDiscSeqInfo.each(function (item) {
+                                                item.data.Active = App.chkActive.value ? 1 : 0;
+                                                item.data.Promo = App.chkDiscTerm.value ? 1 : 0;
+                                            });
+                                            return Ext.encode(App.stoDiscSeqInfo.getRecordsValues());
+                                        })(),
+                                        lstDiscBreak: Ext.encode(App.grdDiscBreak.store.getRecordsValues()), // data
+                                        lstFreeItem: Ext.encode(Main.Process.getRecordValues(App.grdFreeItem.store.snapshot.getRange())), // record.data
+                                        lstCompany: Ext.encode(App.grdCompany.store.getRecordsValues()),
+                                        lstDiscItem: Ext.encode(App.grdDiscItem.store.getRecordsValues()),
+                                        lstBundle: Ext.encode(App.grdBundle.store.getRecordsValues()),
+                                        lstDiscCustClass: Ext.encode(App.grdDiscCustClass.store.getRecordsValues()),
+                                        lstDiscCust: Ext.encode(App.grdDiscCust.store.getRecordsValues()),
+                                        lstDiscItemClass: Ext.encode(App.grdDiscItemClass.store.getRecordsValues()),
 
-                                    lstDiscSeqInfo: (function () {
-                                        App.stoDiscSeqInfo.each(function (item) {
-                                            item.data.Active = App.chkActive.value ? 1 : 0;
-                                            item.data.Promo = App.chkDiscTerm.value ? 1 : 0;
-                                        });
-                                        return Ext.encode(App.stoDiscSeqInfo.getRecordsValues());
-                                    })(),
-                                    lstDiscBreak: Ext.encode(App.grdDiscBreak.store.getRecordsValues()), // data
-                                    lstFreeItem: Ext.encode(Main.Process.getRecordValues(App.grdFreeItem.store.snapshot.getRange())), // record.data
-                                    lstCompany: Ext.encode(App.grdCompany.store.getRecordsValues()),
-                                    lstDiscItem: Ext.encode(App.grdDiscItem.store.getRecordsValues()),
-                                    lstBundle: Ext.encode(App.grdBundle.store.getRecordsValues()),
-                                    lstDiscCustClass: Ext.encode(App.grdDiscCustClass.store.getRecordsValues()),
-                                    lstDiscCust: Ext.encode(App.grdDiscCust.store.getRecordsValues()),
-                                    lstDiscItemClass: Ext.encode(App.grdDiscItemClass.store.getRecordsValues()),
+                                        lstDiscCustCate: Ext.encode(App.grdDiscCustCate.store.getRecordsValues()),
+                                        lstDiscChannel: Ext.encode(App.grdDiscChannel.store.getRecordsValues()),
 
-                                    lstDiscCustCate: Ext.encode(App.grdDiscCustCate.store.getRecordsValues()),
-                                    lstDiscChannel: Ext.encode(App.grdDiscChannel.store.getRecordsValues()),
-
-                                    lstDiscCustCateChange: HQ.store.getData(App.grdDiscCustCate.store),
-                                    lstDiscChannelChange: HQ.store.getData(App.grdDiscChannel.store),
-                                },
-                                success: function (msg, data) {
-                                    if (data.result.msgCode) {
-                                        HQ.message.show(data.result.msgCode);
+                                        lstDiscCustCateChange: HQ.store.getData(App.grdDiscCustCate.store),
+                                        lstDiscChannelChange: HQ.store.getData(App.grdDiscChannel.store),
+                                    },
+                                    success: function (msg, data) {
+                                        if (data.result.msgCode) {
+                                            HQ.message.show(data.result.msgCode);
+                                        }
+                                        else {
+                                            HQ.message.show(201405071);
+                                        }
+                                        Main.Process.reloadAllData();
+                                    },
+                                    failure: function (msg, data) {
+                                        if (data.result.msgCode) {
+                                            HQ.message.show(data.result.msgCode);
+                                        }
+                                        else {
+                                            HQ.message.process(msg, data, true);
+                                        }
                                     }
-                                    else {
-                                        HQ.message.show(201405071);
-                                    }
-                                    Main.Process.reloadAllData();
-                                },
-                                failure: function (msg, data) {
-                                    if (data.result.msgCode) {
-                                        HQ.message.show(data.result.msgCode);
-                                    }
-                                    else {
-                                        HQ.message.process(msg, data, true);
-                                    }
-                                }
-                            });
+                                });
+                            }
                         }
                     }
+
+                    
                     //}
                 }
                 else {
@@ -643,7 +650,8 @@ var Main = {
     Event: {
         frmMain_boxReady: function (frm, width, height, eOpts) {
             App.btnExport1.setVisible(HQ.allowExport);
-            App.btnImport.setVisible(HQ.allowExport);
+            App.btnImport.setVisible(HQ.allowImport);
+            App.cboDiscID.forceSelection = !HQ.allowAddDiscount;
             App.stoDiscInfo.reload();
             App.stoDiscSeqInfo.reload();
 
@@ -1008,13 +1016,21 @@ var Main = {
 
                     break;
                 case "new":
+
                     if (HQ.isInsert) {
                         if (HQ.isChange || HQ.isChange0) {
                             HQ.message.show(20150303, '', 'Main.Process.refresh');
                         }
                         else {
                             if (HQ.focus == 'frmDiscDefintionTop') {
-                                App.cboDiscID.clearValue();
+                                if (HQ.allowAddDiscount) {
+                                    App.cboDiscID.clearValue();
+                                }
+                                else {
+                                    HQ.message.show(2017113005, '', '');
+                                }
+                                
+                                
                             }
                             else if (HQ.focus == 'frmDiscSeqInfo') {
                                 App.cboDiscSeq.clearValue();
@@ -3223,7 +3239,8 @@ var btnImport_Click = function (sender, e) {
             success: function (msg, data) {
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
-                
+                App.cboDiscID.store.reload();
+                App.cboDiscSeq.store.reload();
                 if (!Ext.isEmpty(this.result.data.message)) {
                     HQ.message.show('2013103001', [this.result.data.message], '', true);
                 }
@@ -3237,7 +3254,7 @@ var btnImport_Click = function (sender, e) {
         });
     }
     else {
-        HQ.message.show('2014070701', '', '');
+        HQ.message.show('2014070701', ext, '');
         sender.reset();
     }
 };

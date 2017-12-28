@@ -1297,6 +1297,7 @@
         <ComplexType Name="OM21100_pdConfig_Result">
           <Property Type="Boolean" Name="AllowImport" Nullable="true" />
           <Property Type="Boolean" Name="AllowExport" Nullable="true" />
+          <Property Type="Boolean" Name="AllowAddDiscount" Nullable="true" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1985,6 +1986,7 @@
               <ComplexTypeMapping TypeName="OM21100Model.OM21100_pdConfig_Result">
                 <ScalarProperty Name="AllowImport" ColumnName="AllowImport" />
                 <ScalarProperty Name="AllowExport" ColumnName="AllowExport" />
+                <ScalarProperty Name="AllowAddDiscount" ColumnName="AllowAddDiscount" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -110,7 +110,7 @@
 
                             HQ.TextBox().ID("txtDescr")
                             .MarginSpec("5 5 0 5")
-                            .HQLangCode("Descr").DataIndex("Descr")
+                            .HQLangCode("DescrDiscID").DataIndex("Descr")
                             .MaxLength(50).EnforceMaxLength(true)
                             .AllowBlank(false)
 
@@ -172,6 +172,7 @@
                                             new StoreParameter("@DiscID", "App.cboDiscID.getValue()", ParameterMode.Raw)
                                             , new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
                                             , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                            ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                         })
                                         .LoadData()
                                         .Listeners(l =>
@@ -400,7 +401,7 @@
                                 .Items(
                                      HQ.TextBox().ID("txtSeqDescr")
                                     .MarginSpec("0 5 0 5")
-                                    .HQLangCode("Descr").DataIndex("Descr")
+                                    .HQLangCode("DescrDiscSeq").DataIndex("Descr")
 
                                     .StyleSpec("text-align:left").Width(880)
                                     //.MaxLength(50).EnforceMaxLength(true)
@@ -1783,7 +1784,7 @@
                             .HQLangCode("Template_Export").HQDBSys(false).HQProcedure("OM21100_pcExport")
                             .HQColumnShow("Code,Descr").ForceSelection(true)//.AllowBlank(false)
                                                                             //.MultiSelect(true)
-                            .DisplayField("Code").ValueField("Code").HQHeightWidth(300, 200)
+                            .DisplayField("Descr").ValueField("Code").HQHeightWidth(300, 200)
                             .HQAutoLoad(true)
                             .HQParam(new StoreParameterCollection()
                             {
