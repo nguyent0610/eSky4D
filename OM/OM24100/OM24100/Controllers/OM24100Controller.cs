@@ -35,6 +35,7 @@ namespace OM24100.Controllers
         // GET: /OM24100/
         public ActionResult Index(string data)
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             if (data != null)//dung cho PVN lay du lieu tu silverlight goi len
             {
                 // user;company;langid => ?data=admin;100024;1
