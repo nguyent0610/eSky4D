@@ -39,13 +39,13 @@ namespace AP10100
             Current.FormatDate = "dd-MM-yyyy";
             Current.Authorize = false;
             Current.Server = "HOANGSAD";//"MARSSVR\\SQL2012";
-			Current.DBSys = "ND_eSky4DSys";//"eSky4DSys";
+			Current.DBSys = "ND_test_eSky4DSys";//"eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["AP10100"] = acc;
-			Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
+			Session["DBApp"] = Current.DBApp = "ND_test_eSky4DApp";
 			Session["UserName"] = Current.UserName = "admin";//"040100001";//
 			Session["CpnyID"] = Current.CpnyID = "040100001";//"HQHD1120"; //
             Session["Language"] = Current.Language = "vi";

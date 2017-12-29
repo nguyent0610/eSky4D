@@ -46,6 +46,8 @@ namespace AP10100.Controllers
 		
         public ActionResult Index(string branchID)
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+            
             Util.InitRight(_screenNbr);
 
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
