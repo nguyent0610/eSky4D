@@ -66,7 +66,7 @@ namespace OM21300.Controllers
         }
         public ActionResult Index(string data)
         {
-           
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             if (data != null)
             {
             

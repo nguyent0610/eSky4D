@@ -39,13 +39,13 @@ namespace OM21300
 
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ANVM_Test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "ND_Test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM23800"] = acc;
-            Session["DBApp"] = Current.DBApp = "ANVM_Test_eSky4DApp";//eBiz4DCloudAppJFV
+            Session["DBApp"] = Current.DBApp = "ND_Test_eSky4DApp";//eBiz4DCloudAppJFV
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "NPP0001";
             Session["Language"] = Current.Language = "vi";
