@@ -42,6 +42,7 @@ namespace OM21100.Controllers
         // GET: /OM21100/
         public ActionResult Index()
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             var objCheck = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM21100SAMEPROMOKIND");
             var sameKind = true;
