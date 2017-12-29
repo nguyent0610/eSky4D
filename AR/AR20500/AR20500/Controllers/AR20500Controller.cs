@@ -86,6 +86,7 @@ namespace AR20500.Controllers
 
         public ActionResult Index()
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             #region -Check config-                        
             var requireRefCustID = false;
