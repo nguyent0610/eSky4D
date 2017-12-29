@@ -33,6 +33,7 @@ namespace OM25300.Controllers
 
         public ActionResult Index()
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -192,7 +193,7 @@ namespace OM25300.Controllers
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
                 Worksheet sheetDet = workbook.Worksheets[0];
-                sheetDet.Name = Util.GetLang("OM23500");
+                sheetDet.Name = "OM25300";
                 int numMaxRow = 10010;
                 Range range;
                 Cell cell;
@@ -217,26 +218,7 @@ namespace OM25300.Controllers
                     cell = sheetDet.Cells["AB" + iRow];
                     cell.PutValue(dtBranch.Rows[i]["CpnyName"].ToString());
                     iRow++;
-                }
-                //// CustID
-                //pc = new ParamCollection();
-                //pc.Add(new ParamStruct("@PosmID", DbType.String, clsCommon.GetValueDBNull(posmID), ParameterDirection.Input, 30));
-                //pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
-                //pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
-                //pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
-
-                //DataTable dtCust = dal.ExecDataTable("OM23600_pdExpCustId", CommandType.StoredProcedure, ref pc);
-                //iRow = 1;
-                //for (int i = 0; i < dtCust.Rows.Count; i++)
-                //{
-                //    cell = sheetDet.Cells["AD" + iRow];
-                //    cell.PutValue(dtCust.Rows[i]["CustId"].ToString());
-                //    cell = sheetDet.Cells["AE" + iRow];
-                //    cell.PutValue(dtCust.Rows[i]["BranchID"].ToString() + dtCust.Rows[i]["CustId"].ToString());
-                //    cell = sheetDet.Cells["AF" + iRow];
-                //    cell.PutValue(dtCust.Rows[i]["CustName"].ToString());
-                //    iRow++;
-                //}
+                }                
                 // Class ID
                 pc = new ParamCollection();
                 pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
@@ -271,13 +253,13 @@ namespace OM25300.Controllers
                     iRow++;
                 }
 
-                #endregion
+                #endregion               
 
                 #region -Header++-
 
                 this.SetRequireCellValueHeader(sheetDet, "C1", Util.GetLang("POSMID"));
                 this.SetCellValue(sheetDet, "D1", posmID);
-                this.SetRequireCellValueHeader(sheetDet, "B2", Util.GetLang("FromDate"));
+                this.SetRequireCellValueHeader(sheetDet, "B2", Util.GetLang("FromDate"), true);
                 this.SetCellValue(sheetDet, "C2", fromDate);
                 this.SetRequireCellValueHeader(sheetDet, "D2", Util.GetLang("ToDate"));
                 this.SetCellValue(sheetDet, "E2", toDate);
@@ -401,7 +383,7 @@ namespace OM25300.Controllers
                 style.IsLocked = true;
                 range = sheetDet.Cells.CreateRange("B4", "B" + numMaxRow);
                 range.SetStyle(style);
-                #endregion
+                #endregion                
 
                 #region -Fomular-
                 // BranchID
@@ -417,20 +399,6 @@ namespace OM25300.Controllers
                 area.StartColumn = 0;
                 area.EndColumn = 0;
                 validation.AddArea(area);
-
-                //// CustID
-                //validation = sheetDet.Validations[sheetDet.Validations.Add()];
-                //validation.Type = Aspose.Cells.ValidationType.List;
-                //validation.Operator = OperatorType.Between;
-                //validation.InCellDropDown = true;
-                //validation.Formula1 = "=$AD$1:$AD$" + (dtCust.Rows.Count);
-                //validation.AlertStyle = ValidationAlertType.Stop;
-
-                //area.StartRow = 3;
-                //area.EndRow = numMaxRow;
-                //area.StartColumn = 1;
-                //area.EndColumn = 1;
-                //validation.AddArea(area);
 
                 // ClassID
                 validation = sheetDet.Validations[sheetDet.Validations.Add()];
@@ -464,17 +432,63 @@ namespace OM25300.Controllers
 
                 #endregion
 
+                #region -Main data-
+                pc = new ParamCollection();
+                pc.Add(new ParamStruct("@PosmID", DbType.String, clsCommon.GetValueDBNull(posmID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+
+                DataTable dtCust = dal.ExecDataTable("OM25300_pdPosmIDExp", CommandType.StoredProcedure, ref pc);
+                for (int i = 0; i < dtCust.Rows.Count; i++)
+                {
+                    iRow = i + 4;
+                    cell = sheetDet.Cells["A" + iRow];
+                    cell.PutValue(dtCust.Rows[i]["BranchID"].ToString());
+                    cell = sheetDet.Cells["C" + iRow];
+                    cell.PutValue(dtCust.Rows[i]["ClassID"].ToString());
+                    cell = sheetDet.Cells["D" + iRow];
+                    cell.PutValue(dtCust.Rows[i]["SiteID"].ToString());
+                    if (progType == "D3")
+                    {
+                        cell = sheetDet.Cells["E" + iRow];
+                        cell.PutValue(dtCust.Rows[i]["InvtID"].ToString());
+                        cell = sheetDet.Cells["G" + iRow];
+                        cell.PutValue(dtCust.Rows[i]["ExpDate"].ToString());
+                        
+                        //cell = sheetDet.Cells["H" + iRow];
+                        var fcsStyle = sheetDet.Cells["H" + iRow].GetStyle();
+                        fcsStyle.VerticalAlignment = TextAlignmentType.Center;
+                        fcsStyle.HorizontalAlignment = TextAlignmentType.Right;
+                        sheetDet.Cells["H" + iRow].SetStyle(fcsStyle);
+                        sheetDet.Cells["H" + iRow].PutValue(dtCust.Rows[i]["FCS"].ToString());
+                    }
+                    else
+                    {
+                        var fcsStyle = sheetDet.Cells["E" + iRow].GetStyle();
+                        fcsStyle.VerticalAlignment = TextAlignmentType.Center;
+                        fcsStyle.HorizontalAlignment = TextAlignmentType.Right;
+                        sheetDet.Cells["E" + iRow].SetStyle(fcsStyle);
+                        sheetDet.Cells["E" + iRow].PutValue(dtCust.Rows[i]["FCS"].ToString());
+                    }
+                    
+
+                    // cell.PutValue(dtCust.Rows[i]["FCS"].ToString());
+
+                }
+                #endregion
+
                 sheetDet.AutoFitColumns();
-                sheetDet.Cells.SetColumnWidth(0, 15);
-                sheetDet.Cells.SetColumnWidth(1, 30);
+                sheetDet.Cells.SetColumnWidth(0, 12);
+                sheetDet.Cells.SetColumnWidth(1, 35);
                 sheetDet.Cells.SetColumnWidth(2, 15);
                 sheetDet.Cells.SetColumnWidth(3, 15);
                 sheetDet.Cells.SetColumnWidth(4, 15);                
                 if (progType == "D3")
                 {
                     sheetDet.Cells.SetColumnWidth(5, 30);
-                    sheetDet.Cells.SetColumnWidth(6, 25);
-                    sheetDet.Cells.SetColumnWidth(7, 15);
+                    sheetDet.Cells.SetColumnWidth(6, 22);
+                    sheetDet.Cells.SetColumnWidth(7, 12);
                 }
                 sheetDet.Protect(ProtectionType.All, "HQP@ssw0rd", "HQP@ssw0rd");
                 workbook.Save(stream, SaveFormat.Excel97To2003);
@@ -496,18 +510,21 @@ namespace OM25300.Controllers
             }
         }
 
-        private void SetRequireCellValueHeader(Worksheet sheet, string cell, object value)
+        private void SetRequireCellValueHeader(Worksheet sheet, string cell, object value, bool isAlignRight = false)
         {
-            var style = sheet.Cells[cell].GetStyle();
-
+            var style = sheet.Cells[cell].GetStyle();            
             style.VerticalAlignment = TextAlignmentType.Center;
             style.HorizontalAlignment = TextAlignmentType.Center;
+            if (isAlignRight)
+            {
+                style.HorizontalAlignment = TextAlignmentType.Right;
+            }
+            
             style.Font.IsBold = true;
             style.Font.Size = 10;
             style.Pattern = BackgroundType.Solid;
             //style.ForegroundColor = Color.Yellow;
             style.Font.Color = Color.DarkBlue;
-
             sheet.Cells[cell].SetStyle(style);
             sheet.Cells[cell].PutValue(value);
             sheet.Cells.SetRowHeight(0, 22);

@@ -28,7 +28,7 @@ namespace OM25300
         {
             Current.Authorize = false;
 
-            Current.Server = "EARTHSVR\\SQL2012";
+            Current.Server = "HOANGSAD";
             Current.FormatDate = "dd.MM.yyyy";            
             Current.DBSys = "ND_eSky4DSys";
             AccessRight acc = new AccessRight();
