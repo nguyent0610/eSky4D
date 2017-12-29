@@ -38,6 +38,7 @@ namespace IN22000.Controllers
         // GET: /IN22000/
         public ActionResult Index()
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             return View();
         }
