@@ -32,6 +32,7 @@ namespace OM25100.Controllers
 
         public ActionResult Index()
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             var objConfig = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "OM25100TabCondition");
             if (objConfig != null)
@@ -1612,22 +1613,17 @@ namespace OM25100.Controllers
                                             recordItem.CycleNbr = CycleNbr;
                                             recordItem.KPI = KPI;
                                             recordItem.BranchID = BranchID;
-                                            //recordItem.CpnyName = BranchName;
-                                            recordItem.Target = Convert.ToDouble(Target);
 
-                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            recordItem.Crtd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = _userName;
                                             _db.OM_KPICpny_All.AddObject(recordItem);
                                             lstOM_KPICpny_All.Add(recordItem);
                                         }
-                                        else
-                                        {
-                                            recordItem.Target = Convert.ToDouble(Target);
-                                            recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.LUpd_User = _userName;
-                                        }
+                                        recordItem.Target = Convert.ToDouble(Target);
+                                        recordItem.LUpd_DateTime = DateTime.Now;
+                                        recordItem.LUpd_Prog = _screenNbr;
+                                        recordItem.LUpd_User = _userName;                                        
                                     }
                                 }
                                 else if (appTo == "I")
@@ -1651,23 +1647,18 @@ namespace OM25100.Controllers
                                             recordItem.CycleNbr = CycleNbr;
                                             recordItem.KPI = KPI;
                                             recordItem.BranchID = BranchID;
-                                            //recordItem.CpnyName = BranchName;
                                             recordItem.InvtID = InvtID;
-                                            recordItem.Target = Convert.ToDouble(Target);
 
-                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            recordItem.Crtd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = _screenNbr;
+                                            recordItem.Crtd_User =  _userName;
                                             _db.OM_KPICpny_Invt.AddObject(recordItem);
                                             lstOM_KPICpny_Invt.Add(recordItem);
                                         }
-                                        else
-                                        {
-                                            recordItem.Target = Convert.ToDouble(Target);
-                                            recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.LUpd_User = _userName;
-                                        }
+                                        recordItem.Target = Convert.ToDouble(Target);
+                                        recordItem.LUpd_DateTime = DateTime.Now;
+                                        recordItem.LUpd_Prog = _screenNbr;
+                                        recordItem.LUpd_User = _userName;
                                     }
                                 }
                                 else if (appTo == "G")
@@ -1691,23 +1682,19 @@ namespace OM25100.Controllers
                                             recordItem.CycleNbr = CycleNbr;
                                             recordItem.KPI = KPI;
                                             recordItem.BranchID = BranchID;
-                                            //recordItem.CpnyName = BranchName;
                                             recordItem.ClassID = ClassID;
-                                            recordItem.Target = Convert.ToDouble(Target);
 
-                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            recordItem.Crtd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = _userName;
                                             _db.OM_KPICpny_Class.AddObject(recordItem);
                                             lstOM_KPICpny_Class.Add(recordItem);
-                                        }
-                                        else
-                                        {
-                                            recordItem.Target = Convert.ToDouble(Target);
-                                            recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.LUpd_User = _userName;
-                                        }
+                                        }                                        
+                                        recordItem.Target = Convert.ToDouble(Target);
+                                        recordItem.LUpd_DateTime = DateTime.Now;
+                                        recordItem.LUpd_Prog = _screenNbr;
+                                        recordItem.LUpd_User = _userName;
+                                        
                                     }
                                 }
                                 #endregion
@@ -1736,25 +1723,20 @@ namespace OM25100.Controllers
                                             recordItem.CycleNbr = CycleNbr;
                                             recordItem.KPI = KPI;
                                             recordItem.BranchID = BranchID;
-                                           // recordItem.CpnyName = BranchName;
                                             recordItem.SlsperId = SlsperID;
-                                            //recordItem.SlsperName = SlsperName;
-                                            recordItem.Target = Convert.ToDouble(Target);
                                             recordItem.Position = lstSlsper.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperId == SlsperID).Position;
 
-                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            recordItem.Crtd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = _userName;
                                             _db.OM_KPISales_All.AddObject(recordItem);
                                             lstOM_KPISales_All.Add(recordItem);
                                         }
-                                        else
-                                        {
-                                            recordItem.Target = Convert.ToDouble(Target);
-                                            recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.LUpd_User = _userName;
-                                        }
+                                        recordItem.Target = Convert.ToDouble(Target);
+                                        recordItem.LUpd_DateTime = DateTime.Now;
+                                        recordItem.LUpd_Prog = _screenNbr;
+                                        recordItem.LUpd_User = _userName;
+                                       
                                     }
                                 }
                                 else if (appTo == "I")
@@ -1780,26 +1762,21 @@ namespace OM25100.Controllers
                                             recordItem.CycleNbr = CycleNbr;
                                             recordItem.KPI = KPI;
                                             recordItem.BranchID = BranchID;
-                                           // recordItem.CpnyName = BranchName;
                                             recordItem.SlsperId = SlsperID;
-                                           // recordItem.SlsperName = SlsperName;
                                             recordItem.InvtID = InvtID;
-                                            recordItem.Target = Convert.ToDouble(Target);
                                             recordItem.Position = lstSlsper.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperId == SlsperID).Position;
 
-                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            recordItem.Crtd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = _userName;
                                             _db.OM_KPISales_Invt.AddObject(recordItem);
                                             lstOM_KPISales_Invt.Add(recordItem);
                                         }
-                                        else
-                                        {
-                                            recordItem.Target = Convert.ToDouble(Target);
-                                            recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.LUpd_User = _userName;
-                                        }
+                                        recordItem.Target = Convert.ToDouble(Target);
+                                        recordItem.LUpd_DateTime = DateTime.Now;
+                                        recordItem.LUpd_Prog = _screenNbr;
+                                        recordItem.LUpd_User = _userName;
+                                       
                                     }
                                 }
                                 else if (appTo == "G")
@@ -1825,26 +1802,21 @@ namespace OM25100.Controllers
                                             recordItem.CycleNbr = CycleNbr;
                                             recordItem.KPI = KPI;
                                             recordItem.BranchID = BranchID;
-                                            //recordItem.CpnyName = BranchName;
                                             recordItem.SlsperId = SlsperID;
-                                           // recordItem.SlsperName = SlsperName;
                                             recordItem.ClassID = ClassID;
-                                            recordItem.Target = Convert.ToDouble(Target);
                                             recordItem.Position = lstSlsper.FirstOrDefault(p => p.BranchID == BranchID && p.SlsperId == SlsperID).Position;
 
-                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            recordItem.Crtd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = _userName;
                                             _db.OM_KPISales_Class.AddObject(recordItem);
                                             lstOM_KPISales_Class.Add(recordItem);
                                         }
-                                        else
-                                        {
                                             recordItem.Target = Convert.ToDouble(Target);
                                             recordItem.LUpd_DateTime = DateTime.Now;
                                             recordItem.LUpd_Prog = _screenNbr;
                                             recordItem.LUpd_User = _userName;
-                                        }
+                                       
                                     }
                                 }
                                 #endregion
@@ -1875,26 +1847,19 @@ namespace OM25100.Controllers
                                             recordItem.CycleNbr = CycleNbr;
                                             recordItem.KPI = KPI;
                                             recordItem.BranchID = BranchID;
-                                            //recordItem.CpnyName = BranchName;
                                             recordItem.SlsperId = SlsperID;
-                                            //recordItem.SlsperName = SlsperName;
                                             recordItem.CustID = CustID;
-                                           // recordItem.CustName = CustName;
-                                            recordItem.Target = Convert.ToDouble(Target);
 
-                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            recordItem.Crtd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = _userName;
                                             _db.OM_KPICustomer_All.AddObject(recordItem);
                                             lstOM_KPICustomer_All.Add(recordItem);
-                                        }
-                                        else
-                                        {
-                                            recordItem.Target = Convert.ToDouble(Target);
-                                            recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.LUpd_User = _userName;
-                                        }
+                                        }                                        
+                                        recordItem.Target = Convert.ToDouble(Target);
+                                        recordItem.LUpd_DateTime = DateTime.Now;
+                                        recordItem.LUpd_Prog = _screenNbr;
+                                        recordItem.LUpd_User = _userName;                                       
                                     }
                                 }
                                 else if (appTo == "I")
@@ -1922,27 +1887,20 @@ namespace OM25100.Controllers
                                             recordItem.CycleNbr = CycleNbr;
                                             recordItem.KPI = KPI;
                                             recordItem.BranchID = BranchID;
-                                            //recordItem.CpnyName = BranchName;
                                             recordItem.SlsperId = SlsperID;
-                                            //recordItem.SlsperName = SlsperName;
                                             recordItem.CustID = CustID;
-                                           // recordItem.CustName = CustName;
                                             recordItem.InvtID = InvtID;
-                                            recordItem.Target = Convert.ToDouble(Target);
 
-                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            recordItem.Crtd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = _userName;
                                             _db.OM_KPICustomer_Invt.AddObject(recordItem);
                                             lstOM_KPICustomer_Invt.Add(recordItem);
-                                        }
-                                        else
-                                        {
-                                            recordItem.Target = Convert.ToDouble(Target);
-                                            recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.LUpd_User = _userName;
-                                        }
+                                        }                                        
+                                        recordItem.Target = Convert.ToDouble(Target);
+                                        recordItem.LUpd_DateTime = DateTime.Now;
+                                        recordItem.LUpd_Prog = _screenNbr;
+                                        recordItem.LUpd_User = _userName;                                        
                                     }
                                 }
                                 else if (appTo == "G")
@@ -1970,27 +1928,20 @@ namespace OM25100.Controllers
                                             recordItem.CycleNbr = CycleNbr;
                                             recordItem.KPI = KPI;
                                             recordItem.BranchID = BranchID;
-                                           // recordItem.CpnyName = BranchName;
                                             recordItem.SlsperId = SlsperID;
-                                          //  recordItem.SlsperName = SlsperName;
                                             recordItem.CustID = CustID;
-                                           // recordItem.CustName = CustName;
                                             recordItem.ClassID = ClassID;
-                                            recordItem.Target = Convert.ToDouble(Target);
 
-                                            recordItem.Crtd_DateTime = recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.Crtd_Prog = recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.Crtd_User = recordItem.LUpd_User = _userName;
+                                            recordItem.Crtd_DateTime = DateTime.Now;
+                                            recordItem.Crtd_Prog = _screenNbr;
+                                            recordItem.Crtd_User = _userName;
                                             _db.OM_KPICustomer_Class.AddObject(recordItem);
                                             lstOM_KPICustomer_Class.Add(recordItem);
                                         }
-                                        else
-                                        {
-                                            recordItem.Target = Convert.ToDouble(Target);
-                                            recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.LUpd_User = _userName;
-                                        }
+                                        recordItem.Target = Convert.ToDouble(Target);
+                                        recordItem.LUpd_DateTime = DateTime.Now;
+                                        recordItem.LUpd_Prog = _screenNbr;
+                                        recordItem.LUpd_User = _userName;                                        
                                     }
                                 }
                                 #endregion
