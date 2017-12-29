@@ -30,7 +30,7 @@ namespace OM23102.Controllers
         private JsonResult _logMessage;
         public ActionResult Index()
         {
-           
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             return View();
         }
