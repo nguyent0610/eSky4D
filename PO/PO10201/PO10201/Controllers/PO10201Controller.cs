@@ -47,6 +47,7 @@ namespace PO10201.Controllers
 
         public ActionResult Index()
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(ScreenNbr);
             ViewBag.BussinessDate = DateTime.Now.ToDateShort();
             ViewBag.BussinessTime = DateTime.Now;
