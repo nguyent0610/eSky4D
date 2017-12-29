@@ -42,6 +42,7 @@ namespace IN10200.Controllers
         #region Action
         public ActionResult Index(string branchID)
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             var showFromSite = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "IN10200ShowFromSite");
             if (showFromSite == null)
