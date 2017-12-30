@@ -4,24 +4,16 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="OM_SalesPrice" EntityType="eBiz4DWebSysModel.Store.OM_SalesPrice" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_SalesPriceCust" EntityType="eBiz4DWebSysModel.Store.OM_SalesPriceCust" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_SalesPriceHeader" EntityType="eBiz4DWebSysModel.Store.OM_SalesPriceHeader" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_SlsPriceCpny" EntityType="eBiz4DWebSysModel.Store.OM_SlsPriceCpny" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="SI_ApprovalFlowHandle" EntityType="eBiz4DWebSysModel.Store.SI_ApprovalFlowHandle" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="SI_ApprovalFlowStatus" EntityType="eBiz4DWebSysModel.Store.SI_ApprovalFlowStatus" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="OM_SalesPrice">
           <Key>
             <PropertyRef Name="PriceID" />
             <PropertyRef Name="InvtID" />
             <PropertyRef Name="SlsUnit" />
           </Key>
-          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="SlsUnit" Type="nvarchar" Nullable="false" MaxLength="15" />
+          <Property Name="PriceID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SlsUnit" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="QtyBreak" Type="float" />
           <Property Name="Price" Type="float" />
           <Property Name="Crtd_DateTime" Type="datetime" />
@@ -38,17 +30,17 @@
             <PropertyRef Name="CustID" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="PriceID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CustID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_SalesPriceHeader">
           <Key>
             <PropertyRef Name="PriceID" />
           </Key>
-          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="PriceID" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="CustClassID" Type="varchar" MaxLength="20" />
-          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="200" />
           <Property Name="FromDate" Type="smalldatetime" Nullable="false" />
           <Property Name="PriceCat" Type="varchar" MaxLength="2" />
@@ -70,8 +62,8 @@
             <PropertyRef Name="PriceID" />
             <PropertyRef Name="CpnyID" />
           </Key>
-          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="CpnyID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="PriceID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CpnyID" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -80,10 +72,10 @@
             <PropertyRef Name="Status" />
             <PropertyRef Name="Handle" />
           </Key>
-          <Property Name="AppFolID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="RoleID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Handle" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="AppFolID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="RoleID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Handle" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="LangHandle" Type="varchar" MaxLength="50" />
           <Property Name="ToStatus" Type="varchar" MaxLength="10" />
           <Property Name="ProcName" Type="nvarchar" MaxLength="250" />
@@ -98,12 +90,12 @@
           <Property Name="Param04" Type="nvarchar" MaxLength="500" />
           <Property Name="Param05" Type="nvarchar" MaxLength="500" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="MailApprove" Type="varchar" MaxLength="100" />
           <Property Name="ProcContent" Type="varchar" MaxLength="100" />
         </EntityType>
@@ -113,21 +105,26 @@
             <PropertyRef Name="RoleID" />
             <PropertyRef Name="Status" />
           </Key>
-          <Property Name="AppFolID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="RoleID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="AppFolID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="RoleID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="400" />
           <Property Name="LangStatus" Type="varchar" MaxLength="50" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <Function Name="OM20700_pcBranchAllByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM20700_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="OM20700_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -150,6 +147,14 @@
           <Parameter Name="PriceID" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="OM_SalesPrice" EntityType="Self.OM_SalesPrice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_SalesPriceCust" EntityType="Self.OM_SalesPriceCust" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_SalesPriceHeader" EntityType="Self.OM_SalesPriceHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_SlsPriceCpny" EntityType="Self.OM_SlsPriceCpny" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SI_ApprovalFlowHandle" EntityType="Self.SI_ApprovalFlowHandle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SI_ApprovalFlowStatus" EntityType="Self.SI_ApprovalFlowStatus" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -184,6 +189,11 @@
           <FunctionImport Name="OM20700_pgPriceCust" ReturnType="Collection(OM20700Model.OM20700_pgPriceCust_Result)">
             <Parameter Name="PriceID" Mode="In" Type="String" />
             <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM20700_pdConfig" ReturnType="Collection(OM20700Model.OM20700_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="OM_SalesPrice">
@@ -343,6 +353,9 @@
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="OM20700_pdConfig_Result">
+          <Property Type="Int32" Name="DecimalPrecision" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -528,6 +541,13 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20700_pdConfig" FunctionName="eBiz4DWebSysModel.Store.OM20700_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20700Model.OM20700_pdConfig_Result">
+                <ScalarProperty Name="DecimalPrecision" ColumnName="DecimalPrecision" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -544,6 +564,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

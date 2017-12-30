@@ -25,6 +25,7 @@ namespace OM20700.Controllers
 
         public ActionResult Index()
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             return View();
         }

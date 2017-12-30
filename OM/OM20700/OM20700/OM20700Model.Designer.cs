@@ -396,6 +396,47 @@ namespace OM20700
     
             return base.ExecuteFunction<OM20700_pgPriceCust_Result>("OM20700_pgPriceCust", priceIDParameter, userIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM20700_pdConfig_Result> OM20700_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM20700_pdConfig_Result>("OM20700_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -2593,6 +2634,44 @@ namespace OM20700
         private global::System.String _Territory;
         partial void OnTerritoryChanging(global::System.String value);
         partial void OnTerritoryChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM20700Model", Name="OM20700_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM20700_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> DecimalPrecision
+        {
+            get
+            {
+                return _DecimalPrecision;
+            }
+            set
+            {
+                OnDecimalPrecisionChanging(value);
+                ReportPropertyChanging("DecimalPrecision");
+                _DecimalPrecision = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DecimalPrecision");
+                OnDecimalPrecisionChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _DecimalPrecision;
+        partial void OnDecimalPrecisionChanging(Nullable<global::System.Int32> value);
+        partial void OnDecimalPrecisionChanged();
 
         #endregion
 

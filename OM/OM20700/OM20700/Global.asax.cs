@@ -38,14 +38,14 @@ namespace OM20700
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "HOANGSAD";
-            Current.DBSys = "eSky4DSys";
+            Current.Server = "TRUONGSAD";
+            Current.DBSys = "ND_TEST_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM20700"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "ND_TEST_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
