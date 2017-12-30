@@ -2,6 +2,23 @@
     Layout = null;
     var X = Html.X();
     var HQ = Html.HQ();
+    var decimalPrecision = 0;
+
+    PO10201Entities _db = Util.CreateObjectContext<PO10201Entities>(false);
+    var obj = _db.PO10201_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+    if (obj != null && obj.DecimalPrecision.HasValue && obj.DecimalPrecision.Value > 0)
+    {
+        decimalPrecision = obj.DecimalPrecision.Value;
+    }
+    string formatNumber = "0,000";
+    if (decimalPrecision > 0)
+    {
+        formatNumber += ".";
+        for (int i = 0; i < decimalPrecision; i++)
+        {
+            formatNumber += "0";
+        }
+    }
 }
 @using Ext.Net;
 @using Ext.Net.MVC;
@@ -340,20 +357,25 @@
                                                                                                 .LoadData()
                                                                                                 )
                                                     , Html.X().Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID")
-                                                                                        .Editor(HQ.Combo().ID("cboInvtID").Name("InvtID").HideLabel(true).LabelWidth(0).ForceSelection(true)
-                                                                                                .HQDBSys(false).HQProcedure("PO10201_pcInventoryActive")
-                                                                                                .HQColumnShow("InvtID,Descr")
-                                                                                                .DisplayField("InvtID")
-                                                                                                .ValueField("InvtID")
-                                                                                                .HQHeightWidth(400, 300).Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                                                                .Listeners(lst =>
-                                                                                                    {
-                                                                                                        lst.Change.Fn = "cboGInvtID_Change";
-                                                                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                                                                        lst.Focus.Handler = "this.forceSelection=true;";
-                                                                                                    })
-                                                                                                .LoadData()
-                                                                                                )
+                                                    .Editor(HQ.Combo().ID("cboInvtID").Name("InvtID").HideLabel(true).LabelWidth(0).ForceSelection(true)
+                                                    .HQDBSys(false).HQProcedure("PO10201_pcInventoryActive")
+                                                    .HQColumnShow("InvtID,Descr")
+                                                    .DisplayField("InvtID")
+                                                    .ValueField("InvtID")
+                                                    .HQHeightWidth(400, 300).Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                    .HQParam(new StoreParameterCollection(){
+                                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                                    })
+                                                    .Listeners(lst =>
+                                                        {
+                                                            lst.Change.Fn = "cboGInvtID_Change";
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Focus.Handler = "this.forceSelection=true;";
+                                                        })
+                                                    .LoadData()
+                                                    )
                                                     , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("TranDesc").Width(150).Editor(Html.X().TextField().MaxLength(100100))
                                                     , Html.X().Column().Text(Util.GetLang("SiteID")).DataIndex("SiteID").Renderer("renderSiteID")
                                                                                         .Editor(HQ.Combo().ID("cboSiteID").Name("SiteID").HideLabel(true).LabelWidth(0)
@@ -412,7 +434,7 @@
                                                                                                 })
                                                                                                 .LoadData()
                                                                                                 )
-                                                    , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Price")).DataIndex("UnitCost").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
+                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Price")).DataIndex("UnitCost").Width(150).Format(formatNumber).Editor(Html.X().NumberField().DecimalPrecision(decimalPrecision))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("DiscPct")).DataIndex("DiscPct").Width(150).Format("0,000,000.00").Editor(Html.X().NumberField().DecimalPrecision(2))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Discount")).DataIndex("DocDiscAmt").Width(150).Format("0,000,000.00").Editor(Html.X().NumberField().DecimalPrecision(2))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TranAmt")).DataIndex("TranAmt").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
@@ -721,7 +743,7 @@
                 .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(0))
 
 
-                , X.NumberColumn().Format("##,###").ID("colLotPrice").DataIndex("UnitPrice").Text(Util.GetLang("Price"))
+                , X.NumberColumn().Format(formatNumber).ID("colLotPrice").DataIndex("UnitPrice").Text(Util.GetLang("Price"))
                 .Width(75)
                 .Align(Alignment.Right)
         //.Renderer("renderQtyAmt") 

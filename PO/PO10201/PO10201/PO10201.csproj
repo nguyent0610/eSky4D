@@ -45,6 +45,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aspose.Cells, Version=8.3.2.1, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
@@ -332,7 +333,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

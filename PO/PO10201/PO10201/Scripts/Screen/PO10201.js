@@ -694,7 +694,7 @@ var grdPO_Trans_Edit = function (item, e) {
         }
         else if (_objPO_Setup.DfltLstUnitCost == "I") {
             var UnitCost = objIN_Inventory.POPrice;
-            UnitCost = Math.round((objDetail.RcptMultDiv == "D" ? (UnitCost / objDetail.RcptConvFact) : (UnitCost * objDetail.RcptConvFact)));
+            UnitCost = (objDetail.RcptMultDiv == "D" ? (UnitCost / objDetail.RcptConvFact) : (UnitCost * objDetail.RcptConvFact));
             e.record.set("UnitCost", UnitCost);
             e.record.set("DocDiscAmt", HQ.util.mathRound((UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));
             e.record.set("TranAmt", UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
@@ -767,7 +767,7 @@ var cboGInvtID_Change = function (item, newValue, oldValue) {
                   var Qty = objdet.data.RcptMultDiv == "M" ? Math.floor(_objIN_ItemSite.QtyAvail / objdet.data.RcptConvFact, 0) : _objIN_ItemSite.QtyAvail * objdet.data.RcptConvFact;
 
                   if (!Ext.isEmpty(_objIN_ItemSite)) {
-                      App.lblQtyAvail.setText(newValue + " - " + HQ.common.getLang('qtyavail') + ":" + _objIN_ItemSite.Qty + ' ' + objdet.data.RcptUnitDescr);
+                      App.lblQtyAvail.setText(newValue + " - " + HQ.common.getLang('qtyavail') + ":" + Qty + ' ' + objdet.data.RcptUnitDescr);
                   }
                   else {
                       App.lblQtyAvail.setText(newValue + " - " + HQ.common.getLang('qtyavail') + ":" + 0 + ' ' + objdet.data.RcptUnitDescr);

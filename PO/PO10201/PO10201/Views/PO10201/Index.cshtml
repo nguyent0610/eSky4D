@@ -144,7 +144,9 @@
 						                            }).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10201_pdSI_Tax()"; }).AutoLoad(true)
 
         @HQ.Store().ID("stoPO10201_pdIN_Inventory").HQProcedure("PO10201_pdIN_Inventory").HQDBSys(false).HQParam(new StoreParameterCollection() {
-											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                                                        new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                                                                        new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                                                                 
 						                            }).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10201_pdIN_Inventory()"; }).AutoLoad(true)
 
