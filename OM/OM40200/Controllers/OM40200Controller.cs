@@ -80,11 +80,10 @@ namespace OM40200.Controllers
                     foreach (var item in _lstOrder)
                     {
 
-                        if (_app.OM40200_ppCheckCloseDate(item.BranchID, item.OrderDate.ToDateShort()).FirstOrDefault() == "0")
+                        if (_app.OM40200_ppCheckCloseDate(item.BranchID, item.OrderDate.ToDateShort(), item.OrderNbr, type, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault() == "0")
                         {
                             errorOrderNbr += item.OrderNbr + ",";
                             // new MessageException(MessageType.Message, "301");
-
                         }
                         else
                         {

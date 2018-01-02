@@ -20,6 +20,7 @@
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
         .KeyMap(Util.SetupKeyMap())
+        .DefaultButton("btnLoad")
         .TopBar(Util.SetupToolbar("New,Save,Delete,Print,Refresh", true, ""))
         //.TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{ }))
         .FieldDefaults(a => { a.LabelAlign = LabelAlign.Right; a.LabelWidth = 120; })
@@ -51,7 +52,8 @@
                     .HQHeightWidth(400, 300)
                     .BlankText(Util.GetLangPrefix("Input","Type"))
                     .AllowBlank(false)
-                    .ForceSelection(true)               
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })      
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                     })
@@ -60,18 +62,21 @@
                     .Listeners(lst =>
                     {
                         lst.Change.Fn = "cboProcessType_Change";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     }),   
                     
                     HQ.Combo().ID("cboBranchID").Name("BranchID").HQLangCode("BranchName")
                     .HQProcedure("OM40200_pcBranch").HQColumnShow("BranchID,BranchName,Addr")
                     .DisplayField("BranchName").ValueField("BranchID")
                     .Width(300).LabelWidth(120).HQHeightWidth(400, 300)
-                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "BranchID"))                    
+                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "BranchID"))
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })                   
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                     })
                     .Listeners(p => {
                         p.Change.Fn = "cboBranchID_Change";
+                        p.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
                     .ForceSelection(true)
                     .LoadData()
@@ -175,14 +180,16 @@
                      X.Button()
                     .ID("btnLoad")
                     .Text(Util.GetLang("LoadData"))
-                    .Width(90)
-                    .MarginSpec("0 0 0 115")
+                    .Width(110)
+                    .Icon(Icon.ArrowRefresh)
+                    .MarginSpec("0 0 0 75")
                     .Listeners(l=> l.Click.Fn = "btnLoad_Click"),
                     
                     X.Button()
                     .ID("btnProcess")
                     .Text(Util.GetLang("Handle"))
-                    .Width(90)
+                    .Width(110)
+                    .Icon(Icon.Disk)
                     .MarginSpec("0 0 10 5")
                     .Listeners(l=> l.Click.Fn = "btnProcess_Click")
                 )
@@ -215,6 +222,7 @@
                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOrder"))).AutoLoad(false)
                     .Listeners(l =>
                     {
+                        l.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.waitMsg);";
                         l.Load.Fn = "stoOrder_Load";     
                     })
             )

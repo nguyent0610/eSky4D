@@ -88,6 +88,7 @@ var btnProcess_Click = function () {
     });
 
     if (!flat) {
+        HQ.message.show(718);
         return;
     }
 

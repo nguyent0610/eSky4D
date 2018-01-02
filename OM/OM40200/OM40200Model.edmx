@@ -4,22 +4,27 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer" />
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <Function Name="OM40200_pgOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
-          <Parameter Name="CustID" Type="varchar" Mode="In" />
-          <Parameter Name="SlsPerID" Type="varchar" Mode="In" />
-          <Parameter Name="DeliveryID" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="SlsPerID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DeliveryID" Type="varchar(max)" Mode="In" />
           <Parameter Name="FromDate" Type="smalldatetime" Mode="In" />
           <Parameter Name="ToDate" Type="smalldatetime" Mode="In" />
           <Parameter Name="Type" Type="varchar" Mode="In" />
           <Parameter Name="CrtdUser" Type="varchar" Mode="In" />
         </Function>
         <Function Name="OM40200_ppCheckCloseDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="OrderDate" Type="date" Mode="In" />
+          <Parameter Name="OrderNbr" Type="varchar" Mode="In" />
+          <Parameter Name="ProcessType" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -38,6 +43,11 @@
           <FunctionImport Name="OM40200_ppCheckCloseDate" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="OrderNbr" Mode="In" Type="String" />
+            <Parameter Name="ProcessType" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM40200_pgOrder_Result">
@@ -103,6 +113,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

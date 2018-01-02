@@ -166,7 +166,12 @@ namespace OM40200
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="orderDate">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> OM40200_ppCheckCloseDate(global::System.String branchID, Nullable<global::System.DateTime> orderDate)
+        /// <param name="orderNbr">No Metadata Documentation available.</param>
+        /// <param name="processType">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> OM40200_ppCheckCloseDate(global::System.String branchID, Nullable<global::System.DateTime> orderDate, global::System.String orderNbr, global::System.String processType, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -188,7 +193,57 @@ namespace OM40200
                 orderDateParameter = new ObjectParameter("OrderDate", typeof(global::System.DateTime));
             }
     
-            return base.ExecuteFunction<global::System.String>("OM40200_ppCheckCloseDate", branchIDParameter, orderDateParameter);
+            ObjectParameter orderNbrParameter;
+            if (orderNbr != null)
+            {
+                orderNbrParameter = new ObjectParameter("OrderNbr", orderNbr);
+            }
+            else
+            {
+                orderNbrParameter = new ObjectParameter("OrderNbr", typeof(global::System.String));
+            }
+    
+            ObjectParameter processTypeParameter;
+            if (processType != null)
+            {
+                processTypeParameter = new ObjectParameter("ProcessType", processType);
+            }
+            else
+            {
+                processTypeParameter = new ObjectParameter("ProcessType", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("OM40200_ppCheckCloseDate", branchIDParameter, orderDateParameter, orderNbrParameter, processTypeParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
