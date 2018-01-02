@@ -2731,11 +2731,18 @@ namespace OM21100.Controllers
                     SheetData3.Cells.SetColumnWidth(0, 15);
                     SheetData3.Cells.SetColumnWidth(1, 25);
                     SheetData3.Cells.SetColumnWidth(2, 25);
-                }    
-                workbook.Save(stream, SaveFormat.Xlsx);
-                stream.Flush();
-                stream.Position = 0;
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = filename.ToString() };
+                }
+                //workbook.Save(stream, SaveFormat.Xlsx);
+                //stream.Flush();
+                //stream.Position = 0;
+                //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = filename.ToString() };
+                var fileName = filename ;
+                string fullPath = Path.Combine(Server.MapPath("~/temp"), fileName);
+
+                workbook.Settings.AutoRecover = true;
+
+                workbook.Save(fullPath, SaveFormat.Xlsx);
+                return Json(new { success = true, fileName = fileName, errorMessage = "" });
 
             }
             catch (Exception ex)
@@ -2749,6 +2756,15 @@ namespace OM21100.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
+        }
+
+        [HttpGet]
+        [DeleteFileAttribute] //Action Filter, it will auto delete the file after download,I will explain it later
+        public ActionResult DownloadAndDelete(string file)
+        {
+            //get the temp folder and file path in server
+            string fullPath = Path.Combine(Server.MapPath("~/temp"), file);
+            return File(fullPath, "application/vnd.ms-excel", file);
         }
         #endregion
         private void SetCellValueGridHeader(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
@@ -6216,5 +6232,18 @@ namespace OM21100.Controllers
             return _logMessage;
         }
 
+    }
+    public class DeleteFileAttribute : ActionFilterAttribute
+    {
+        public override void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+            filterContext.HttpContext.Response.Flush();
+
+            //convert the current filter context to file and get the file path
+            string filePath = (filterContext.Result as FilePathResult).FileName;
+
+            //delete the file after download
+            System.IO.File.Delete(filePath);
+        }
     }
 }

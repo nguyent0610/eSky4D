@@ -3197,7 +3197,7 @@ var forcuscboExport = function () {
 var btnExport_Click = function () {
     if (App.cboExport.getValue() != null && App.cboExport.getValue() != "") {
         App.frmMain.submit({
-           // waitMsg: HQ.common.getLang("Exporting"),
+           waitMsg: HQ.common.getLang("Exporting"),
             url: 'OM21100/Export',
             type: 'POST',
             timeout: 1000000,
@@ -3208,9 +3208,12 @@ var btnExport_Click = function () {
                 templateExport: App.cboExport.getValue()
             },
             success: function (msg, data) {
-                HQ.common.showBusy(false);
-                alert('sus');
-
+                window.location = 'OM21100/DownloadAndDelete?file=' + data.result.fileName;
+                App.winExport.hide();
+                App.cboExport.setValue('');
+                //setTimeout(function () {
+                //    HQ.message.show(5);
+                //}, 5000);
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
