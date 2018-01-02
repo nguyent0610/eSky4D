@@ -955,7 +955,7 @@ namespace IN10200.Controllers
             _handle = data["Handle"].PassNull();
             _objBatch.Status = _objBatch.Status.PassNull() == string.Empty ? "H" : _objBatch.Status;
 
-            if (_app.IN10200_ppCheckCloseDate(_objBatch.BranchID, _objBatch.DateEnt.ToDateShort(), "IN10200").FirstOrDefault() == "0")
+            if (_app.IN10200_ppCheckCloseDate(Current.CpnyID,Current.UserName,Current.LangID,_objBatch.BranchID, _objBatch.DateEnt.ToDateShort(), "IN10200").FirstOrDefault() == "0")
                 throw new MessageException(MessageType.Message, "301");
 
             Batch batch = _app.Batches.FirstOrDefault(p => p.BatNbr == _objBatch.BatNbr && p.BranchID == _objBatch.BranchID);

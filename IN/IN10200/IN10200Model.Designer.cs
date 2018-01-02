@@ -471,47 +471,6 @@ namespace IN10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="date">No Metadata Documentation available.</param>
-        /// <param name="screenNbr">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> IN10200_ppCheckCloseDate(global::System.String branchID, Nullable<global::System.DateTime> date, global::System.String screenNbr)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter dateParameter;
-            if (date.HasValue)
-            {
-                dateParameter = new ObjectParameter("Date", date);
-            }
-            else
-            {
-                dateParameter = new ObjectParameter("Date", typeof(global::System.DateTime));
-            }
-    
-            ObjectParameter screenNbrParameter;
-            if (screenNbr != null)
-            {
-                screenNbrParameter = new ObjectParameter("ScreenNbr", screenNbr);
-            }
-            else
-            {
-                screenNbrParameter = new ObjectParameter("ScreenNbr", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("IN10200_ppCheckCloseDate", branchIDParameter, dateParameter, screenNbrParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="query">No Metadata Documentation available.</param>
@@ -644,6 +603,80 @@ namespace IN10200
             }
     
             return base.ExecuteFunction<IN10200_pdPrice_Result>("IN10200_pdPrice", vendIDParameter, invtIDParameter, uOMParameter, effDateParameter, valMthdParameter, siteIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="date">No Metadata Documentation available.</param>
+        /// <param name="screenNbr">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> IN10200_ppCheckCloseDate(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String branchID, Nullable<global::System.DateTime> date, global::System.String screenNbr)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter dateParameter;
+            if (date.HasValue)
+            {
+                dateParameter = new ObjectParameter("Date", date);
+            }
+            else
+            {
+                dateParameter = new ObjectParameter("Date", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter screenNbrParameter;
+            if (screenNbr != null)
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", screenNbr);
+            }
+            else
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("IN10200_ppCheckCloseDate", cpnyIDParameter, userNameParameter, langIDParameter, branchIDParameter, dateParameter, screenNbrParameter);
         }
 
         #endregion
@@ -8508,6 +8541,30 @@ namespace IN10200
         private global::System.String _DiscSite;
         partial void OnDiscSiteChanging(global::System.String value);
         partial void OnDiscSiteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String POSMSite
+        {
+            get
+            {
+                return _POSMSite;
+            }
+            set
+            {
+                OnPOSMSiteChanging(value);
+                ReportPropertyChanging("POSMSite");
+                _POSMSite = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("POSMSite");
+                OnPOSMSiteChanged();
+            }
+        }
+        private global::System.String _POSMSite;
+        partial void OnPOSMSiteChanging(global::System.String value);
+        partial void OnPOSMSiteChanged();
 
         #endregion
 
