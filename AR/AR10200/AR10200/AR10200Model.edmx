@@ -4,13 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
-          <EntitySet Name="AR_Adjust" EntityType="eBiz4DWebAppModel.Store.AR_Adjust" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="AR_Balances" EntityType="eBiz4DWebAppModel.Store.AR_Balances" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="AR_Doc" EntityType="eBiz4DWebAppModel.Store.AR_Doc" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Batch" EntityType="eBiz4DWebAppModel.Store.Batch" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_Adjust">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -18,9 +12,9 @@
             <PropertyRef Name="AdjdRefNbr" />
             <PropertyRef Name="AdjgRefNbr" />
           </Key>
-          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="AdjdRefNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="BatNbr" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="AdjdRefNbr" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="AdjdBatNbr" Type="varchar" MaxLength="10" />
           <Property Name="AdjAmt" Type="float" Nullable="false" />
           <Property Name="AdjdDocType" Type="varchar" MaxLength="2" />
@@ -29,23 +23,23 @@
           <Property Name="AdjgDocType" Type="varchar" MaxLength="2" />
           <Property Name="AdjgPerPost" Type="varchar" MaxLength="6" />
           <Property Name="AdjgBatNbr" Type="varchar" MaxLength="10" />
-          <Property Name="AdjgRefNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="AdjgRefNbr" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="CustID" Type="varchar" MaxLength="50" />
           <Property Name="Reversal" Type="varchar" MaxLength="2" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="AR_Balances">
           <Key>
             <PropertyRef Name="CustID" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CustID" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="AccruedRevAgeBal01" Type="float" Nullable="false" />
           <Property Name="AccruedRevAgeBal02" Type="float" Nullable="false" />
           <Property Name="AccruedRevAgeBal03" Type="float" Nullable="false" />
@@ -71,13 +65,13 @@
           <Property Name="TotPrePay" Type="float" Nullable="false" />
           <Property Name="TotShipped" Type="float" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="AR_Doc">
           <Key>
@@ -85,9 +79,9 @@
             <PropertyRef Name="BatNbr" />
             <PropertyRef Name="RefNbr" />
           </Key>
-          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="RefNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="BatNbr" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="RefNbr" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="CustId" Type="varchar" MaxLength="50" />
           <Property Name="DiscBal" Type="float" Nullable="false" />
           <Property Name="DiscDate" Type="smalldatetime" Nullable="false" />
@@ -117,12 +111,12 @@
           <Property Name="TxblTot02" Type="float" Nullable="false" />
           <Property Name="TxblTot03" Type="float" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="DeliveryID" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="Batch">
@@ -131,9 +125,9 @@
             <PropertyRef Name="Module" />
             <PropertyRef Name="BatNbr" />
           </Key>
-          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="Module" Type="varchar" Nullable="false" MaxLength="2" />
-          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Module" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="BatNbr" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="TotAmt" Type="float" Nullable="false" />
           <Property Name="DateEnt" Type="smalldatetime" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="100" />
@@ -144,7 +138,7 @@
           <Property Name="JrnlType" Type="varchar" MaxLength="2" />
           <Property Name="NoteID" Type="int" Nullable="false" />
           <Property Name="OrigBatNbr" Type="varchar" MaxLength="10" />
-          <Property Name="OrigBranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="OrigBranchID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="OrigScrnNbr" Type="varchar" MaxLength="5" />
           <Property Name="ReasonCD" Type="varchar" MaxLength="10" />
           <Property Name="RefNbr" Type="varchar" MaxLength="10" />
@@ -152,12 +146,12 @@
           <Property Name="Rlsed" Type="smallint" Nullable="false" />
           <Property Name="Status" Type="varchar" MaxLength="1" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <Function Name="AR10200_pgBindingGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
@@ -176,6 +170,9 @@
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="AR10200_ppCheckCloseDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
@@ -184,6 +181,12 @@
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="GetType" Type="varchar" Mode="In" />
         </Function>
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="AR_Adjust" EntityType="Self.AR_Adjust" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AR_Balances" EntityType="Self.AR_Balances" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AR_Doc" EntityType="Self.AR_Doc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Batch" EntityType="Self.Batch" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -212,12 +215,15 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="AR_Balances" EntityType="AR10200Model.AR_Balances" />
           <FunctionImport Name="AR10200_ppCheckCloseDate" ReturnType="Collection(String)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="ScreenNbr" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="AR_Balances" EntityType="AR10200Model.AR_Balances" />
         </EntityContainer>
         <EntityType Name="Batch">
           <Key>
@@ -535,7 +541,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="ARNumbering" FunctionName="eBiz4DWebAppModel.Store.ARNumbering" />
-          <FunctionImportMapping FunctionImportName="AR10200_ppCheckCloseDate" FunctionName="eBiz4DWebAppModel.Store.AR10200_ppCheckCloseDate" />
           <EntitySetMapping Name="AR_Balances">
             <EntityTypeMapping TypeName="AR10200Model.AR_Balances">
               <MappingFragment StoreEntitySet="AR_Balances">
@@ -575,6 +580,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR10200_ppCheckCloseDate" FunctionName="eBiz4DWebAppModel.Store.AR10200_ppCheckCloseDate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -592,6 +598,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

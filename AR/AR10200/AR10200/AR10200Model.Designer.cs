@@ -350,11 +350,44 @@ namespace AR10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="date">No Metadata Documentation available.</param>
         /// <param name="screenNbr">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR10200_ppCheckCloseDate(global::System.String branchID, Nullable<global::System.DateTime> date, global::System.String screenNbr)
+        public ObjectResult<global::System.String> AR10200_ppCheckCloseDate(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String branchID, Nullable<global::System.DateTime> date, global::System.String screenNbr)
         {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
             ObjectParameter branchIDParameter;
             if (branchID != null)
             {
@@ -385,7 +418,7 @@ namespace AR10200
                 screenNbrParameter = new ObjectParameter("ScreenNbr", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("AR10200_ppCheckCloseDate", branchIDParameter, dateParameter, screenNbrParameter);
+            return base.ExecuteFunction<global::System.String>("AR10200_ppCheckCloseDate", cpnyIDParameter, userNameParameter, langIDParameter, branchIDParameter, dateParameter, screenNbrParameter);
         }
 
         #endregion

@@ -138,7 +138,7 @@ namespace AR10200.Controllers
                 var refHandler = new StoreDataHandler(data["lstRefNbr"]);
                 var inputRefNbr = refHandler.ObjectData<AR_Doc>().FirstOrDefault();
 
-                if (_db.AR10200_ppCheckCloseDate(branchID, inputRefNbr.DocDate.ToDateShort(), "AR10200").FirstOrDefault() == "0")
+                if (_db.AR10200_ppCheckCloseDate(Current.CpnyID,Current.UserName,Current.LangID,branchID, inputRefNbr.DocDate.ToDateShort(), "AR10200").FirstOrDefault() == "0")
                     throw new MessageException(MessageType.Message, "301");
                 
                 inputBatNbr.Descr = txtDescr;
