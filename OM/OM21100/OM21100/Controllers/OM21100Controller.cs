@@ -3273,7 +3273,15 @@ namespace OM21100.Controllers
                                         }
                                         record.BreakQty = Convert.ToDouble(workt1_BreakQty);
                                         record.DiscAmt = workt1_Discount.ToDouble();
-                                        record.MaxLot = workt1_OM21100MaxLot.ToDouble();
+                                        //record.MaxLot = workt1_OM21100MaxLot.ToDouble();
+                                        if (workt1_OM21100MaxLot == null || workt1_OM21100MaxLot == "")
+                                        {
+                                            record.MaxLot = 0;
+                                        }
+                                        else
+                                        {
+                                            record.MaxLot = workt1_OM21100MaxLot.ToInt();
+                                        }
                                         record.Descr = workt1_Descr;
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
@@ -3760,7 +3768,15 @@ namespace OM21100.Controllers
                                                                                
                                         record.BreakQty = workt1_BreakQty.ToInt();
                                         record.DiscAmt = 0;
-                                        record.MaxLot = workt1_OM21100MaxLot.ToInt();
+                                        //record.MaxLot = workt1_OM21100MaxLot.ToInt();
+                                        if (workt1_OM21100MaxLot == null || workt1_OM21100MaxLot == "")
+                                        {
+                                            record.MaxLot = 0;
+                                        }
+                                        else
+                                        {
+                                            record.MaxLot = workt1_OM21100MaxLot.ToInt();
+                                        }
                                         record.Descr = workt1_Descr;
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
@@ -5319,6 +5335,11 @@ namespace OM21100.Controllers
                                         flagCheck = true;
                                     }
 
+                                    //if (workt1_OM21100MaxLot=)
+                                    //{
+                                    //    errorworkt1_OM21100MaxLot += (i + 1).ToString() + ",";
+                                    //    flagCheck = true;
+                                    //}
 
                                     if (!IsNumber(workt1_OM21100MaxLot))
                                     {
@@ -5357,7 +5378,15 @@ namespace OM21100.Controllers
                                             lstOM_DiscBreak.Add(record);
                                         }
                                         record.BreakQty = workt1_BreakQty.ToInt();
-                                        record.MaxLot = workt1_OM21100MaxLot.ToInt();
+                                        if(workt1_OM21100MaxLot==null|| workt1_OM21100MaxLot=="")
+                                        {
+                                            record.MaxLot = 0;
+                                        }
+                                        else
+                                        {
+                                            record.MaxLot = workt1_OM21100MaxLot.ToInt();
+                                        }
+                                        
                                         record.Descr = workt1_Descr;
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
