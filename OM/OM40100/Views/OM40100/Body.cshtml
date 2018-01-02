@@ -20,7 +20,8 @@
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[] { }))
+        .DefaultButton("btnLoad")
+        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[] { }, buttonHidden: "print,new,save,delete,refresh", isShowNavigationButtons: true, handlerName: "menuClick"))
         .FieldDefaults(a => { a.LabelAlign = LabelAlign.Right; a.LabelWidth = 120; })
         .Listeners(p =>
         {
@@ -133,6 +134,7 @@
                     .ID("btnLoad")
                     .Text(Util.GetLang("LoadData"))
                     .Width(105)
+                    .Icon(Icon.ArrowRefresh)
                     .MarginSpec("0 0 0 95")
                     .Listeners(l => l.Click.Fn = "btnLoad_Click")
                 ),
@@ -174,6 +176,7 @@
                     .Text(Util.GetLang("Handle"))
                     .Width(105)
                     .MarginSpec("0 0 10 95")
+                    .Icon(Icon.Disk)
                     .Listeners(l => l.Click.Fn = "btnProcess_Click")
                 )
             ),

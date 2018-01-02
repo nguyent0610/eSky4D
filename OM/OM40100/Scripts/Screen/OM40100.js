@@ -1,1 +1,225 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('p a=["\\n\\u\\q\\E\\h\\u\\f\\j\\b","\\q\\g\\U\\E\\h\\u\\f\\j\\b","\\k\\h\\g\\m","\\g\\m\\m\\1g\\l\\e\\d\\b\\n\\b\\f","\\P\\b\\d\\E\\d\\h\\f\\b","\\j\\r\\h\\1b\\f\\h\\j\\b\\e\\e\\O\\B\\y\\b","\\j\\r\\h\\Q\\f\\g\\n\\j\\v\\G\\x","\\j\\r\\h\\1x\\u\\e\\d\\h\\q\\b\\f","\\j\\r\\h\\x\\b\\k\\l\\H\\b\\f\\B\\G\\x","\\j\\r\\h\\E\\k\\e\\y\\b\\f\\G\\x","\\j\\v\\I\\1e\\b\\g\\m\\b\\f","\\T\\g\\l\\d\\1h\\e\\P","\\e\\v\\h\\T\\Q\\u\\e\\B","\\j\\h\\q\\q\\h\\n","\\P\\f\\m\\L\\f\\m\\b\\f","\\N\\l\\f\\e\\d","\\P\\f\\l\\m","\\n\\b\\U\\d","\\y\\f\\b\\H","\\k\\g\\e\\d","\\e\\g\\H\\b","\\m\\b\\k\\b\\d\\b","\\j\\k\\h\\e\\b","\\n\\b\\T","\\f\\b\\N\\f\\b\\e\\v","\\y\\f\\l\\n\\d","\\E\\b\\k","\\m\\g\\d\\g","\\y\\u\\e\\v","\\b\\g\\j\\v","\\e\\d\\h\\L\\f\\m\\b\\f","\\l\\e\\S\\b\\k\\b\\g\\e\\b","","\\e\\v\\h\\T","\\q\\b\\e\\e\\g\\P\\b","\\l\\e\\1w\\g\\k\\l\\m","\\N\\f\\q\\1h\\g\\l\\n","\\1b\\L\\E\\O","\\L\\1h\\1S\\F\\1X\\F\\F\\1R\\1b\\f\\h\\j\\b\\e\\e","\\b\\n\\j\\h\\m\\b","\\y\\f\\h\\j\\b\\e\\e","\\j\\k\\l\\j\\I","\\N\\l\\f\\b\\1D\\H\\b\\n\\d","\\r\\d\\n\\1g\\h\\g\\m","\\e\\u\\r\\q\\l\\d","\\j\\v\\b\\j\\I\\b\\m","\\f\\b\\k\\h\\g\\m","\\j\\k\\b\\g\\f\\x\\g\\d\\g","\\H\\l\\b\\T","\\e\\b\\d\\1w\\g\\k\\u\\b","\\e\\d\\h\\f\\b","\\q\\B\\1v\\v\\b\\g\\m\\b\\f\\1v\\j\\v\\b\\j\\I\\r\\h\\U","\\v\\g\\e\\1x\\k\\e","\\N\\k\\B","\\j\\y\\n\\B\\G\\x","\\S","\\r\\u\\e\\l\\n\\b\\e\\e\\x\\g\\d\\b","\\d\\U\\d\\1G\\f\\h\\q\\x\\g\\d\\b","\\d\\U\\d\\O\\h\\x\\g\\d\\b","\\H\\g\\k\\l\\m\\g\\d\\b","\\F\\1Z\\F\\F\\F","\\n\\u\\q\\r\\b\\f","\\1G\\h\\f\\q\\g\\d","\\u\\d\\l\\k","\\h\\r\\1U\\Q\\g\\d\\j\\v","\\l\\e\\1D\\q\\y\\d\\B","\\1Q\\f\\n\\k\\O\\B\\y\\b","\\1b\\L","\\E\\d\\g\\d\\u\\e","\\1e","\\e\\b\\d\\x\\l\\e\\g\\r\\k\\b\\m","\\r\\d\\n\\G\\q\\y\\h\\f\\d","\\l\\e\\G\\n\\e\\b\\f\\d","\\k\\h\\j\\I\\G\\d\\b\\q","\\l\\e\\1g\\h\\j\\I","\\e\\b\\d\\S\\b\\g\\m\\L\\n\\k\\B","\\Q\\g\\d\\1c\\r\\f","\\1e\\g\\n\\m\\k\\b","\\S\\H\\m\\Q\\g\\d\\1c\\r\\f","\\S\\b\\N\\1c\\r\\f","\\O\\h\\d\\1V\\d\\B","\\O\\h\\d\\1J\\q\\d","\\n\\h","\\h\\I"];p 1W=o(){1y()};p M=o(){i[a[0]]++;1r()};p 1r=o(){t(i[a[0]]==i[a[1]]){1B()}};p 2a=o(){i[a[0]]=0;i[a[1]]=5;c[a[5]][a[4]]()[a[3]](a[2],M);c[a[6]][a[4]]()[a[3]](a[2],M);c[a[7]][a[4]]()[a[3]](a[2],M);c[a[8]][a[4]]()[a[3]](a[2],M);c[a[9]][a[4]]()[a[3]](a[2],M);c[a[10]]=1n;i[a[13]][a[12]](s,i[a[11]])};p 1T=o(1q){1Y(1q){z a[15]:i[a[16]][a[15]](c[a[14]]);A;z a[17]:i[a[16]][a[17]](c[a[14]]);A;z a[18]:i[a[16]][a[18]](c[a[14]]);A;z a[19]:i[a[16]][a[19]](c[a[14]]);A;z a[20]:A;z a[21]:A;z a[22]:i[a[13]][a[22]](1p);A;z a[23]:A;z a[24]:A;z a[25]:A;1I:}};p 1H=o(){p 1d=w;p 1i=[];c[a[30]][a[27]][a[29]](o(C){t(C[a[27]][a[26]]==s){1d=s;1i[a[28]](C[a[27]])}});t(!1d){1m};t(!i[a[31]]){i[a[1k]][a[1L]](1P,a[R],a[R],s);1m};t(c[a[W]][a[1O]]()){c[a[W]][a[1N]]({1M:i[a[11]],1K:a[2p],2X:a[2Y],2Z:2W,2T:{2N:1a[a[2U]](1i)},2M:o(Y,Z){i[a[1k]][a[1t]](Y,Z,s);c[a[2L]][a[2b]](a[2R])},2S:o(Y,Z){i[a[1k]][a[1t]](Y,Z,s)}})}};p 2P=o(){t(c[a[10]]!=1n){c[a[10]][a[1j]]=w};c[a[30]][a[X]]()};p 1u=o(){t(c[a[10]]!=1n){c[a[10]][a[1j]]=w};c[a[30]][a[2O]]();c[a[14]][a[1E]][a[24]]()};p 2V=o(){1u();c[a[7]][a[D]](a[R]);c[a[8]][a[D]](a[R]);c[a[9]][a[D]](a[R]);c[a[7]][a[1f]][a[X]]();c[a[8]][a[1f]][a[X]]();c[a[9]][a[1f]][a[X]]()};p 2Q=o(2J,2n,2m,V){t(1a[a[2l]](V)[a[2o]](a[2K])){c[a[10]]=V;c[a[30]][a[27]][a[29]](o(C){C[a[27]][a[26]]=V[a[1j]]?s:w});c[a[14]][a[1E]][a[24]]()}};p 1y=o(){i[a[13]][a[12]](w,i[a[11]])};p 1B=o(){c[a[6]][a[D]](i[a[2r]]);c[a[5]][a[D]](a[2q]);c[a[2k]][a[D]](i[a[1C]]);c[a[2j]][a[D]](i[a[1C]]);c[a[W]][a[2e]]();i[a[13]][a[12]](w)};p 2d=o(1s){1m 1a[a[2c]][a[2f]][a[2g]](1s,a[2i])};p 2h=o(){p K=s;t(!1a[a[2s]](i[a[1l]][a[27]].2t)){t(i[a[1l]][a[27]][a[2E]]==a[2D]){K=s}1F{t(i[a[1l]][a[27]][a[1o]]==a[2F]){K=w}};c[a[1A]][a[1z]](s)}1F{K=!i[a[2G]];c[a[1A]][a[1z]](w)};i[a[13]][a[2I]](c[a[W]],K);c[a[14]][a[2H]]=K;c[a[2C]][a[J]](w);c[a[2B]][a[J]](w);c[a[2w]][a[J]](s);c[a[1o]][a[J]](s);c[a[2v]][a[J]](s);c[a[2u]][a[J]](s);c[a[2x]][a[J]](s)};p 2y=o(C){t(C==a[2A]||C==a[2z]){i[a[13]][a[22]](1p)}};', 62, 188, '||||||||||_0x47f8|x65|App|x74|x73|x72|x61|x6F|HQ|x63|x6C|x69|x64|x6E|function|var|x6D|x62|true|if|x75|x68|false|x44|x70|case|break|x79|_0xf7a1xa|49|x53|x30|x49|x76|x6B|75|_0xf7a1x1a|x4F|store_Load|x66|x54|x67|x42|32|x52|x77|x78|_0xf7a1x14|36|46|_0xf7a1xb|_0xf7a1xc|||||||||||Ext|x50|x4E|_0xf7a1x8|x48|50|x4C|x4D|_0xf7a1x9|45|34|64|return|null|68|this|_0xf7a1x6|checkSetDefault|_0xf7a1x18|40|cboProcessType_Change|x2D|x56|x43|bindOrder|70|71|defaultOnNew|56|x45|48|else|x46|btnProcess_Click|default|x41|method|33|waitMsg|44|35|728|x4A|x2F|x34|menuClick|x6A|x51|stoOrder_Load|x31|switch|x2C|||||||||||frmMain_BoxReady|42|63|rdrTrans_QtyAmt|59|62|61|setStatusForm|60|58|57|53|_0xf7a1x13|_0xf7a1x12|52|37|55|54|65|BatNbr|80|79|78|81|askClose|83|82|77|76|67|66|69|72|74|73|_0xf7a1x11|51|43|success|lstOrder|47|btnLoad_Click|grdOrder_HeaderClick|41|failure|params|39|cboBranchID_Change|180000|url|38|timeout||'.split('|'), 0, {}))
+
+//// Store ///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+var stoOrder_Load = function () {
+    bindOrder();
+}
+
+var store_Load = function () {
+    HQ.numSource++;
+    checkSetDefault();
+}
+
+var checkSetDefault = function () {
+    if (HQ.numSource == HQ.maxSource) {
+        defaultOnNew();
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+
+//// Event ///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+var frmMain_BoxReady = function () {
+    HQ.numSource = 0;
+    HQ.maxSource = 5;
+
+
+
+    App.cboProcessType.getStore().addListener('load', store_Load);
+    App.cboBranchID.getStore().addListener('load', store_Load);
+    App.cboCustomer.getStore().addListener('load', store_Load);
+    App.cboDeliveryID.getStore().addListener('load', store_Load);
+    App.cboSlsperID.getStore().addListener('load', store_Load);
+    App.chkHeader = null;
+    HQ.common.showBusy(true, HQ.waitMsg);
+}
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+
+            HQ.grid.first(App.grdOrder);
+
+            break;
+        case "next":
+            HQ.grid.next(App.grdOrder);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdOrder);
+            break;
+        case "last":
+            HQ.grid.last(App.grdOrder);
+            break;
+        case "save":
+            break;
+        case "delete":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+        case "new":
+            break;
+        case "refresh":
+            break;
+        case "print":
+            break;
+        default:
+    }
+}
+
+var btnProcess_Click = function () {
+    var flat = false;
+    var lstOrd = [];
+    App.stoOrder.data.each(function (item) {
+        if (item.data.Sel == true) {
+            flat = true;
+            lstOrd.push(item.data);
+        }
+    });
+
+    if (!flat) {
+        HQ.message.show(718);
+        return;
+    }
+
+    if (!HQ.isRelease) {
+        HQ.message.show(728, '', '', true);
+        return;
+    }
+
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.waitMsg,
+            method: 'POST',
+            url: 'OM40100/Process',
+            timeout: 180000,
+            params: {
+                lstOrder: Ext.encode(lstOrd),
+            },
+            success: function (msg, data) {
+
+                HQ.message.process(msg, data, true);
+
+                App.btnLoad.fireEvent('click');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+}
+var btnLoad_Click = function () {
+    if (App.chkHeader != null) App.chkHeader.checked = false;
+
+    App.stoOrder.reload();
+}
+
+var cboProcessType_Change = function () {
+    if (App.chkHeader != null) App.chkHeader.checked = false;
+    App.stoOrder.clearData();
+    App.grdOrder.view.refresh();
+}
+var cboBranchID_Change = function () {
+    cboProcessType_Change();
+    App.cboCustomer.setValue('');
+    App.cboDeliveryID.setValue('');
+    App.cboSlsperID.setValue('');
+    App.cboCustomer.store.reload();
+    App.cboDeliveryID.store.reload();
+    App.cboSlsperID.store.reload();
+}
+var grdOrder_HeaderClick = function (ct, column, e, t) {
+    if (Ext.fly(t).hasCls("my-header-checkbox")) {
+        App.chkHeader = t;
+        App.stoOrder.data.each(function (item) {
+            item.data.Sel = t.checked ? true : false;
+        });
+        App.grdOrder.view.refresh();
+    }
+};
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+//// Function ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+///// data ///////////////////////
+
+var bindOrder = function () {
+    HQ.common.showBusy(false, HQ.waitMsg);
+}
+
+//////////////////////////////////
+
+
+var defaultOnNew = function () {
+    App.cboBranchID.setValue(HQ.cpnyID);
+    App.cboProcessType.setValue('R');
+    App.txtFromDate.setValue(HQ.businessDate);
+    App.txtToDate.setValue(HQ.businessDate);
+    App.frmMain.validate();
+
+    HQ.common.showBusy(false);
+}
+
+var rdrTrans_QtyAmt = function (value) {
+    return Ext.util.Format.number(value, '0,000');
+}
+
+var setStatusForm = function () {
+
+    var lock = true;
+
+    if (!Ext.isEmpty(HQ.objBatch.data.BatNbr)) {
+        if (HQ.objBatch.data.JrnlType == 'PO') {
+            lock = true;
+        } else if (HQ.objBatch.data.Status == 'H') {
+            lock = false;
+        }
+        App.btnImport.setDisabled(true);
+    } else {
+        lock = !HQ.isInsert;
+        App.btnImport.setDisabled(false);
+    }
+
+    HQ.common.lockItem(App.frmMain, lock);
+    App.grdOrder.isLock = lock;
+    App.BatNbr.setReadOnly(false);
+    App.Handle.setReadOnly(false);
+    App.RvdBatNbr.setReadOnly(true);
+    App.Status.setReadOnly(true);
+    App.RefNbr.setReadOnly(true);
+    App.TotQty.setReadOnly(true);
+    App.TotAmt.setReadOnly(true);
+}
+
+var askClose = function (item) {
+    if (item == "no" || item == "ok") {
+        HQ.common.close(this);
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+
+
+
