@@ -66,6 +66,8 @@
                             .HQColumnShow("InvtID,Descr").ForceSelection(true)//.AllowBlank(false)
                             .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
                             .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw},
                                 new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
                             })
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })

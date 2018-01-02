@@ -38,7 +38,7 @@ namespace IN40300
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString(); eBiz4DCloudSysKAO
             AccessRight acc = new AccessRight();
             acc.Delete = true;
