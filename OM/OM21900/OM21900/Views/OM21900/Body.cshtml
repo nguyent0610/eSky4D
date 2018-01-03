@@ -158,7 +158,9 @@
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() {
-                        new StoreParameter() { Name = "@BranchID", Value ="HQ.cnpyID", Mode = ParameterMode.Raw}
+                        new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
                     })
                     .Listeners(lst =>
                     {
