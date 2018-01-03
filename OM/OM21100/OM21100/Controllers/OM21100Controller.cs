@@ -3284,8 +3284,7 @@ namespace OM21100.Controllers
                                             record.Crtd_DateTime = DateTime.Now;
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
-                                            _db.OM_DiscBreak.AddObject(record);
-                                            lstOM_DiscBreak.Add(record);
+                                            _db.OM_DiscBreak.AddObject(record);                                            
                                         }
                                         record.BreakQty = Convert.ToDouble(workt1_BreakQty);
                                         record.DiscAmt = workt1_Discount.ToDouble();
@@ -3302,6 +3301,7 @@ namespace OM21100.Controllers
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscBreak.Add(record);
                                     }
 
                                 }
@@ -3383,12 +3383,13 @@ namespace OM21100.Controllers
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
                                             _db.OM_DiscItem.AddObject(record);
-                                            lstOM_DiscItem.Add(record);
+                                            
                                         }
                                         record.UnitDesc = workt2_UOM;
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscItem.Add(record);
                                     }
                                 }
                                 #endregion
@@ -3444,8 +3445,9 @@ namespace OM21100.Controllers
                                             record.DiscSeq = workt3_DiscSeq;
                                             record.CpnyID = workt3_BranchID;
                                             _db.OM_DiscCpny.AddObject(record);
-                                            lstOM_DiscCpny.Add(record);
+                                            
                                         }
+                                        lstOM_DiscCpny.Add(record);
 
                                     }
                                 }
@@ -4061,8 +4063,9 @@ namespace OM21100.Controllers
                                             record.DiscSeq = workt3_DiscSeq;
                                             record.CpnyID = workt3_BranchID;
                                             _db.OM_DiscCpny.AddObject(record);
-                                            lstOM_DiscCpny.Add(record);
+                                            
                                         }
+                                        lstOM_DiscCpny.Add(record);
 
                                     }
                                 }
@@ -4406,7 +4409,7 @@ namespace OM21100.Controllers
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
                                             _db.OM_DiscBreak.AddObject(record);
-                                            lstOM_DiscBreak.Add(record);
+                                            
                                         }
                                         record.BreakQty = workt1_BreakQty.ToInt();
                                         record.DiscAmt = workt1_Discount.ToInt();
@@ -4415,6 +4418,7 @@ namespace OM21100.Controllers
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscBreak.Add(record);
                                     }
 
                                 }
@@ -4494,12 +4498,13 @@ namespace OM21100.Controllers
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
                                             _db.OM_DiscItem.AddObject(record);
-                                            lstOM_DiscItem.Add(record);
+                                            
                                         }
                                         record.UnitDesc = workt2_UOM;
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscItem.Add(record);
                                     }
                                 }
                                 #endregion
@@ -4552,9 +4557,9 @@ namespace OM21100.Controllers
                                             record.DiscSeq = workt3_DiscSeq;
                                             record.CpnyID = workt3_BranchID;
                                             _db.OM_DiscCpny.AddObject(record);
-                                            lstOM_DiscCpny.Add(record);
+                                            
                                         }
-
+                                        lstOM_DiscCpny.Add(record);
                                     }
                                 }
                                 #endregion
@@ -4900,7 +4905,7 @@ namespace OM21100.Controllers
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
                                             _db.OM_DiscBreak.AddObject(record);
-                                            lstOM_DiscBreak.Add(record);
+                                            
                                         }
                                         record.BreakQty = workt1_BreakQty.ToInt();
                                         record.DiscAmt = workt1_Discount.ToInt();
@@ -4909,6 +4914,7 @@ namespace OM21100.Controllers
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscBreak.Add(record);
                                     }
 
                                 }
@@ -4988,12 +4994,13 @@ namespace OM21100.Controllers
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
                                             _db.OM_DiscItem.AddObject(record);
-                                            lstOM_DiscItem.Add(record);
+                                            
                                         }
                                         record.UnitDesc = workt2_UOM;
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscItem.Add(record);
                                     }
                                 }
                                 #endregion
@@ -5048,8 +5055,9 @@ namespace OM21100.Controllers
                                             record.DiscSeq = workt3_DiscSeq;
                                             record.CpnyID = workt3_BranchID;
                                             _db.OM_DiscCpny.AddObject(record);
-                                            lstOM_DiscCpny.Add(record);
+                                            
                                         }
+                                        lstOM_DiscCpny.Add(record);
 
                                     }
                                 }
@@ -5390,8 +5398,7 @@ namespace OM21100.Controllers
                                             record.Crtd_DateTime = DateTime.Now;
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
-                                            _db.OM_DiscBreak.AddObject(record);
-                                            lstOM_DiscBreak.Add(record);
+                                            _db.OM_DiscBreak.AddObject(record);                                            
                                         }
                                         record.BreakQty = workt1_BreakQty.ToInt();
                                         if(workt1_OM21100MaxLot==null|| workt1_OM21100MaxLot=="")
@@ -5407,6 +5414,7 @@ namespace OM21100.Controllers
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscBreak.Add(record);
                                     }
 
                                 }
@@ -5486,12 +5494,13 @@ namespace OM21100.Controllers
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
                                             _db.OM_DiscItem.AddObject(record);
-                                            lstOM_DiscItem.Add(record);
+                                            
                                         }
                                         record.UnitDesc = workt2_UOM;
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscItem.Add(record);
                                     }
                                 }
                                 #endregion
@@ -5610,13 +5619,14 @@ namespace OM21100.Controllers
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
                                             _db.OM_DiscFreeItem.AddObject(record);
-                                            lstOM_DiscFreeItem.Add(record);
+                                            
                                         }
                                         record.FreeItemQty = workt3_BreakQtFreeItemy.ToInt();
                                         record.UnitDescr = workt3_UOMFreeItem;
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscFreeItem.Add(record);
 
                                     }
                                 }
@@ -5671,8 +5681,9 @@ namespace OM21100.Controllers
                                             record.DiscSeq = workt3_DiscSeq;
                                             record.CpnyID = workt3_BranchID;
                                             _db.OM_DiscCpny.AddObject(record);
-                                            lstOM_DiscCpny.Add(record);
+                                            
                                         }
+                                        lstOM_DiscCpny.Add(record);
 
                                     }
                                 }
@@ -6015,7 +6026,7 @@ namespace OM21100.Controllers
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
                                             _db.OM_DiscBreak.AddObject(record);
-                                            lstOM_DiscBreak.Add(record);
+                                            
                                         }
                                         record.BreakQty = workt1_BreakQty.ToInt();
                                         record.DiscAmt = workt1_Discount.ToDouble();
@@ -6023,6 +6034,7 @@ namespace OM21100.Controllers
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscBreak.Add(record);
                                     }
 
                                 }
@@ -6101,12 +6113,13 @@ namespace OM21100.Controllers
                                             record.Crtd_Prog = _screenNbr;
                                             record.Crtd_User = Current.UserName;
                                             _db.OM_DiscItem.AddObject(record);
-                                            lstOM_DiscItem.Add(record);
+                                            
                                         }
                                         record.UnitDesc = workt2_UOM;
                                         record.LUpd_DateTime = DateTime.Now;
                                         record.LUpd_Prog = _screenNbr;
                                         record.LUpd_User = Current.UserName;
+                                        lstOM_DiscItem.Add(record);
                                     }
                                 }
                                 #endregion
@@ -6160,8 +6173,9 @@ namespace OM21100.Controllers
                                             record.DiscSeq = workt3_DiscSeq;
                                             record.CpnyID = workt3_BranchID;
                                             _db.OM_DiscCpny.AddObject(record);
-                                            lstOM_DiscCpny.Add(record);
+                                            
                                         }
+                                        lstOM_DiscCpny.Add(record);
 
                                     }
                                 }
