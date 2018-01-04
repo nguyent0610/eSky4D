@@ -2967,6 +2967,30 @@ namespace AR20500
         private global::System.String _BusinessPic;
         partial void OnBusinessPicChanging(global::System.String value);
         partial void OnBusinessPicChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TypeCabinets
+        {
+            get
+            {
+                return _TypeCabinets;
+            }
+            set
+            {
+                OnTypeCabinetsChanging(value);
+                ReportPropertyChanging("TypeCabinets");
+                _TypeCabinets = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TypeCabinets");
+                OnTypeCabinetsChanged();
+            }
+        }
+        private global::System.String _TypeCabinets;
+        partial void OnTypeCabinetsChanging(global::System.String value);
+        partial void OnTypeCabinetsChanged();
 
         #endregion
 
@@ -3311,7 +3335,8 @@ namespace AR20500
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="updateType">Initial value of the UpdateType property.</param>
-        public static AR_NewCustomerInfor CreateAR_NewCustomerInfor(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.Int32 updateType)
+        /// <param name="visitsPerDay">Initial value of the VisitsPerDay property.</param>
+        public static AR_NewCustomerInfor CreateAR_NewCustomerInfor(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.Int32 updateType, global::System.Int32 visitsPerDay)
         {
             AR_NewCustomerInfor aR_NewCustomerInfor = new AR_NewCustomerInfor();
             aR_NewCustomerInfor.ID = id;
@@ -3319,6 +3344,7 @@ namespace AR20500
             aR_NewCustomerInfor.CustID = custID;
             aR_NewCustomerInfor.Checked = @checked;
             aR_NewCustomerInfor.UpdateType = updateType;
+            aR_NewCustomerInfor.VisitsPerDay = visitsPerDay;
             return aR_NewCustomerInfor;
         }
 
@@ -4891,6 +4917,54 @@ namespace AR20500
         private global::System.String _SubRouteID;
         partial void OnSubRouteIDChanging(global::System.String value);
         partial void OnSubRouteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 VisitsPerDay
+        {
+            get
+            {
+                return _VisitsPerDay;
+            }
+            set
+            {
+                OnVisitsPerDayChanging(value);
+                ReportPropertyChanging("VisitsPerDay");
+                _VisitsPerDay = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("VisitsPerDay");
+                OnVisitsPerDayChanged();
+            }
+        }
+        private global::System.Int32 _VisitsPerDay;
+        partial void OnVisitsPerDayChanging(global::System.Int32 value);
+        partial void OnVisitsPerDayChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TypeCabinets
+        {
+            get
+            {
+                return _TypeCabinets;
+            }
+            set
+            {
+                OnTypeCabinetsChanging(value);
+                ReportPropertyChanging("TypeCabinets");
+                _TypeCabinets = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TypeCabinets");
+                OnTypeCabinetsChanged();
+            }
+        }
+        private global::System.String _TypeCabinets;
+        partial void OnTypeCabinetsChanging(global::System.String value);
+        partial void OnTypeCabinetsChanged();
 
         #endregion
 
@@ -4917,7 +4991,8 @@ namespace AR20500
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="updateType">Initial value of the UpdateType property.</param>
         /// <param name="allowEdit">Initial value of the AllowEdit property.</param>
-        public static AR_NewCustomerInforHis CreateAR_NewCustomerInforHis(global::System.Int32 id, global::System.String branchID, global::System.Int32 lineRef, global::System.String custID, global::System.Boolean @checked, global::System.Int32 updateType, global::System.Int32 allowEdit)
+        /// <param name="visitsPerDay">Initial value of the VisitsPerDay property.</param>
+        public static AR_NewCustomerInforHis CreateAR_NewCustomerInforHis(global::System.Int32 id, global::System.String branchID, global::System.Int32 lineRef, global::System.String custID, global::System.Boolean @checked, global::System.Int32 updateType, global::System.Int32 allowEdit, global::System.Int32 visitsPerDay)
         {
             AR_NewCustomerInforHis aR_NewCustomerInforHis = new AR_NewCustomerInforHis();
             aR_NewCustomerInforHis.ID = id;
@@ -4927,6 +5002,7 @@ namespace AR20500
             aR_NewCustomerInforHis.Checked = @checked;
             aR_NewCustomerInforHis.UpdateType = updateType;
             aR_NewCustomerInforHis.AllowEdit = allowEdit;
+            aR_NewCustomerInforHis.VisitsPerDay = visitsPerDay;
             return aR_NewCustomerInforHis;
         }
 
@@ -6670,6 +6746,54 @@ namespace AR20500
         private global::System.String _SubRouteID;
         partial void OnSubRouteIDChanging(global::System.String value);
         partial void OnSubRouteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 VisitsPerDay
+        {
+            get
+            {
+                return _VisitsPerDay;
+            }
+            set
+            {
+                OnVisitsPerDayChanging(value);
+                ReportPropertyChanging("VisitsPerDay");
+                _VisitsPerDay = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("VisitsPerDay");
+                OnVisitsPerDayChanged();
+            }
+        }
+        private global::System.Int32 _VisitsPerDay;
+        partial void OnVisitsPerDayChanging(global::System.Int32 value);
+        partial void OnVisitsPerDayChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TypeCabinets
+        {
+            get
+            {
+                return _TypeCabinets;
+            }
+            set
+            {
+                OnTypeCabinetsChanging(value);
+                ReportPropertyChanging("TypeCabinets");
+                _TypeCabinets = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TypeCabinets");
+                OnTypeCabinetsChanged();
+            }
+        }
+        private global::System.String _TypeCabinets;
+        partial void OnTypeCabinetsChanging(global::System.String value);
+        partial void OnTypeCabinetsChanged();
 
         #endregion
 
@@ -8027,7 +8151,8 @@ namespace AR20500
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="delRouteDet">Initial value of the DelRouteDet property.</param>
-        public static OM_SalesRouteMaster CreateOM_SalesRouteMaster(global::System.String pJPID, global::System.String salesRouteID, global::System.String custID, global::System.String slsPerID, global::System.String slsFreq, global::System.String slsFreqType, global::System.Int32 visitSort, global::System.String weekofVisit, global::System.Boolean mon, global::System.Boolean tue, global::System.Boolean wed, global::System.Boolean thu, global::System.Boolean fri, global::System.Boolean sat, global::System.Boolean sun, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID, global::System.Boolean delRouteDet)
+        /// <param name="visitsPerDay">Initial value of the VisitsPerDay property.</param>
+        public static OM_SalesRouteMaster CreateOM_SalesRouteMaster(global::System.String pJPID, global::System.String salesRouteID, global::System.String custID, global::System.String slsPerID, global::System.String slsFreq, global::System.String slsFreqType, global::System.Int32 visitSort, global::System.String weekofVisit, global::System.Boolean mon, global::System.Boolean tue, global::System.Boolean wed, global::System.Boolean thu, global::System.Boolean fri, global::System.Boolean sat, global::System.Boolean sun, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID, global::System.Boolean delRouteDet, global::System.Int32 visitsPerDay)
         {
             OM_SalesRouteMaster oM_SalesRouteMaster = new OM_SalesRouteMaster();
             oM_SalesRouteMaster.PJPID = pJPID;
@@ -8054,6 +8179,7 @@ namespace AR20500
             oM_SalesRouteMaster.tstamp = tstamp;
             oM_SalesRouteMaster.BranchID = branchID;
             oM_SalesRouteMaster.DelRouteDet = delRouteDet;
+            oM_SalesRouteMaster.VisitsPerDay = visitsPerDay;
             return oM_SalesRouteMaster;
         }
 
@@ -8723,6 +8849,30 @@ namespace AR20500
         private global::System.Boolean _DelRouteDet;
         partial void OnDelRouteDetChanging(global::System.Boolean value);
         partial void OnDelRouteDetChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 VisitsPerDay
+        {
+            get
+            {
+                return _VisitsPerDay;
+            }
+            set
+            {
+                OnVisitsPerDayChanging(value);
+                ReportPropertyChanging("VisitsPerDay");
+                _VisitsPerDay = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("VisitsPerDay");
+                OnVisitsPerDayChanged();
+            }
+        }
+        private global::System.Int32 _VisitsPerDay;
+        partial void OnVisitsPerDayChanging(global::System.Int32 value);
+        partial void OnVisitsPerDayChanged();
 
         #endregion
 
@@ -8826,12 +8976,14 @@ namespace AR20500
         /// <param name="allowSave">Initial value of the AllowSave property.</param>
         /// <param name="allowApproveEditCust">Initial value of the AllowApproveEditCust property.</param>
         /// <param name="allowEditReason">Initial value of the AllowEditReason property.</param>
-        public static AR20500_pdConfig_Result CreateAR20500_pdConfig_Result(global::System.String allowSave, global::System.String allowApproveEditCust, global::System.String allowEditReason)
+        /// <param name="maxVisitsPerDay">Initial value of the MaxVisitsPerDay property.</param>
+        public static AR20500_pdConfig_Result CreateAR20500_pdConfig_Result(global::System.String allowSave, global::System.String allowApproveEditCust, global::System.String allowEditReason, global::System.Int32 maxVisitsPerDay)
         {
             AR20500_pdConfig_Result aR20500_pdConfig_Result = new AR20500_pdConfig_Result();
             aR20500_pdConfig_Result.AllowSave = allowSave;
             aR20500_pdConfig_Result.AllowApproveEditCust = allowApproveEditCust;
             aR20500_pdConfig_Result.AllowEditReason = allowEditReason;
+            aR20500_pdConfig_Result.MaxVisitsPerDay = maxVisitsPerDay;
             return aR20500_pdConfig_Result;
         }
 
@@ -9054,6 +9206,102 @@ namespace AR20500
         private Nullable<global::System.Boolean> _ShowSubRouteID;
         partial void OnShowSubRouteIDChanging(Nullable<global::System.Boolean> value);
         partial void OnShowSubRouteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowVisitsPerDay
+        {
+            get
+            {
+                return _ShowVisitsPerDay;
+            }
+            set
+            {
+                OnShowVisitsPerDayChanging(value);
+                ReportPropertyChanging("ShowVisitsPerDay");
+                _ShowVisitsPerDay = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowVisitsPerDay");
+                OnShowVisitsPerDayChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowVisitsPerDay;
+        partial void OnShowVisitsPerDayChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowVisitsPerDayChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 MaxVisitsPerDay
+        {
+            get
+            {
+                return _MaxVisitsPerDay;
+            }
+            set
+            {
+                OnMaxVisitsPerDayChanging(value);
+                ReportPropertyChanging("MaxVisitsPerDay");
+                _MaxVisitsPerDay = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MaxVisitsPerDay");
+                OnMaxVisitsPerDayChanged();
+            }
+        }
+        private global::System.Int32 _MaxVisitsPerDay;
+        partial void OnMaxVisitsPerDayChanging(global::System.Int32 value);
+        partial void OnMaxVisitsPerDayChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequireRefCustID
+        {
+            get
+            {
+                return _RequireRefCustID;
+            }
+            set
+            {
+                OnRequireRefCustIDChanging(value);
+                ReportPropertyChanging("RequireRefCustID");
+                _RequireRefCustID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequireRefCustID");
+                OnRequireRefCustIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequireRefCustID;
+        partial void OnRequireRefCustIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnRequireRefCustIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowTypeCabinets
+        {
+            get
+            {
+                return _ShowTypeCabinets;
+            }
+            set
+            {
+                OnShowTypeCabinetsChanging(value);
+                ReportPropertyChanging("ShowTypeCabinets");
+                _ShowTypeCabinets = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowTypeCabinets");
+                OnShowTypeCabinetsChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowTypeCabinets;
+        partial void OnShowTypeCabinetsChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowTypeCabinetsChanged();
 
         #endregion
 
@@ -9075,7 +9323,6 @@ namespace AR20500
         /// <param name="id">Initial value of the ID property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
-        /// <param name="slsperID">Initial value of the SlsperID property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="color">Initial value of the Color property.</param>
         /// <param name="custHT">Initial value of the CustHT property.</param>
@@ -9083,13 +9330,13 @@ namespace AR20500
         /// <param name="updateType">Initial value of the UpdateType property.</param>
         /// <param name="businessPic">Initial value of the BusinessPic property.</param>
         /// <param name="branchRouteID">Initial value of the BranchRouteID property.</param>
-        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.String slsperID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID, global::System.Int32 updateType, global::System.String businessPic, global::System.String branchRouteID)
+        /// <param name="visitsPerDay">Initial value of the VisitsPerDay property.</param>
+        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID, global::System.Int32 updateType, global::System.String businessPic, global::System.String branchRouteID, global::System.Int32 visitsPerDay)
         {
             AR20500_pgDetail_Result aR20500_pgDetail_Result = new AR20500_pgDetail_Result();
             aR20500_pgDetail_Result.ID = id;
             aR20500_pgDetail_Result.BranchID = branchID;
             aR20500_pgDetail_Result.CustID = custID;
-            aR20500_pgDetail_Result.SlsperID = slsperID;
             aR20500_pgDetail_Result.Checked = @checked;
             aR20500_pgDetail_Result.Color = color;
             aR20500_pgDetail_Result.CustHT = custHT;
@@ -9097,6 +9344,7 @@ namespace AR20500
             aR20500_pgDetail_Result.UpdateType = updateType;
             aR20500_pgDetail_Result.BusinessPic = businessPic;
             aR20500_pgDetail_Result.BranchRouteID = branchRouteID;
+            aR20500_pgDetail_Result.VisitsPerDay = visitsPerDay;
             return aR20500_pgDetail_Result;
         }
 
@@ -9779,7 +10027,7 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String SlsperID
         {
@@ -9791,7 +10039,7 @@ namespace AR20500
             {
                 OnSlsperIDChanging(value);
                 ReportPropertyChanging("SlsperID");
-                _SlsperID = StructuralObject.SetValidValue(value, false);
+                _SlsperID = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("SlsperID");
                 OnSlsperIDChanged();
             }
@@ -10927,6 +11175,78 @@ namespace AR20500
         private global::System.String _SubRouteID;
         partial void OnSubRouteIDChanging(global::System.String value);
         partial void OnSubRouteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 VisitsPerDay
+        {
+            get
+            {
+                return _VisitsPerDay;
+            }
+            set
+            {
+                OnVisitsPerDayChanging(value);
+                ReportPropertyChanging("VisitsPerDay");
+                _VisitsPerDay = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("VisitsPerDay");
+                OnVisitsPerDayChanged();
+            }
+        }
+        private global::System.Int32 _VisitsPerDay;
+        partial void OnVisitsPerDayChanging(global::System.Int32 value);
+        partial void OnVisitsPerDayChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TypeCabinets
+        {
+            get
+            {
+                return _TypeCabinets;
+            }
+            set
+            {
+                OnTypeCabinetsChanging(value);
+                ReportPropertyChanging("TypeCabinets");
+                _TypeCabinets = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TypeCabinets");
+                OnTypeCabinetsChanged();
+            }
+        }
+        private global::System.String _TypeCabinets;
+        partial void OnTypeCabinetsChanging(global::System.String value);
+        partial void OnTypeCabinetsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TypeCabinetsDescr
+        {
+            get
+            {
+                return _TypeCabinetsDescr;
+            }
+            set
+            {
+                OnTypeCabinetsDescrChanging(value);
+                ReportPropertyChanging("TypeCabinetsDescr");
+                _TypeCabinetsDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TypeCabinetsDescr");
+                OnTypeCabinetsDescrChanged();
+            }
+        }
+        private global::System.String _TypeCabinetsDescr;
+        partial void OnTypeCabinetsDescrChanging(global::System.String value);
+        partial void OnTypeCabinetsDescrChanged();
 
         #endregion
 

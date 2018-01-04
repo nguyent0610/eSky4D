@@ -94,6 +94,7 @@
           <Property Name="SearchName" Type="nvarchar(max)" />
           <Property Name="AllowEdit" Type="int" Nullable="false" />
           <Property Name="BusinessPic" Type="nvarchar" MaxLength="100" />
+          <Property Name="TypeCabinets" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -118,7 +119,7 @@
             <PropertyRef Name="BranchID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="CustID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="OutletName" Type="nvarchar" MaxLength="200" />
           <Property Name="ContactName" Type="nvarchar" MaxLength="200" />
@@ -182,6 +183,8 @@
           <Property Name="BusinessPic" Type="nvarchar" MaxLength="100" />
           <Property Name="Reason" Type="varchar" MaxLength="8000" />
           <Property Name="SubRouteID" Type="varchar" MaxLength="30" />
+          <Property Name="VisitsPerDay" Type="int" Nullable="false" />
+          <Property Name="TypeCabinets" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInforHis">
           <Key>
@@ -261,6 +264,8 @@
           <Property Name="DelProfile" Type="bit" />
           <Property Name="DelBusiness" Type="bit" />
           <Property Name="SubRouteID" Type="varchar" MaxLength="30" />
+          <Property Name="VisitsPerDay" Type="int" Nullable="false" />
+          <Property Name="TypeCabinets" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -362,6 +367,7 @@
           <Property Name="EndDate" Type="date" />
           <Property Name="SubRouteID" Type="varchar" MaxLength="30" />
           <Property Name="DelRouteDet" Type="bit" Nullable="false" />
+          <Property Name="VisitsPerDay" Type="int" Nullable="false" />
         </EntityType>
         <Function Name="AR20500_AfterApprove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NewcustID" Type="varchar" Mode="In" />
@@ -613,7 +619,7 @@
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="OutletName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="ContactName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Phone" Nullable="true" MaxLength="30" />
@@ -633,12 +639,12 @@
           <Property Type="String" Name="TradeType" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="Lat" Nullable="true" />
           <Property Type="Double" Name="Lng" Nullable="true" />
-          <Property Type="String" Name="ImageFileName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ImageFileName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Status" Nullable="true" MaxLength="2" />
           <Property Type="Int32" Name="IsActive" Nullable="true" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="true" Precision="23" />
-          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="ApproveStatus" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="NewCustID" Nullable="true" MaxLength="50" />
           <Property Type="Boolean" Name="Checked" Nullable="false" />
@@ -686,6 +692,9 @@
           <Property Type="Int32" Name="AllowEdit" Nullable="true" />
           <Property Type="String" Name="BranchRouteID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="SubRouteID" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="VisitsPerDay" Nullable="false" />
+          <Property Type="String" Name="TypeCabinets" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="TypeCabinetsDescr" Nullable="true" MaxLength="100" />
         </ComplexType>
         <ComplexType Name="AR20500_pdConfig_Result">
           <Property Type="Boolean" Name="IsShowCustHT" Nullable="true" />
@@ -697,6 +706,10 @@
           <Property Type="String" Name="AllowApproveEditCust" Nullable="false" MaxLength="11" />
           <Property Type="String" Name="AllowEditReason" Nullable="false" MaxLength="14" />
           <Property Type="Boolean" Name="ShowSubRouteID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowVisitsPerDay" Nullable="true" />
+          <Property Type="Int32" Name="MaxVisitsPerDay" Nullable="false" />
+          <Property Type="Boolean" Name="RequireRefCustID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowTypeCabinets" Nullable="true" />
         </ComplexType>
         <ComplexType Name="AR20500_pcReason_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
@@ -791,6 +804,7 @@
           <Property Name="SearchName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AllowEdit" Type="Int32" Nullable="false" />
           <Property Name="BusinessPic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TypeCabinets" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OM_SalesRouteMaster">
           <Key>
@@ -827,6 +841,7 @@
           <Property Name="EndDate" Type="DateTime" Precision="0" />
           <Property Name="SubRouteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DelRouteDet" Type="Boolean" Nullable="false" />
+          <Property Name="VisitsPerDay" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInfor">
           <Key>
@@ -834,7 +849,7 @@
             <PropertyRef Name="BranchID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="CustID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="OutletName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="ContactName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -898,6 +913,8 @@
           <Property Name="BusinessPic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Reason" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
           <Property Name="SubRouteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="VisitsPerDay" Type="Int32" Nullable="false" />
+          <Property Name="TypeCabinets" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInforHis">
           <Key>
@@ -977,6 +994,8 @@
           <Property Name="DelProfile" Type="Boolean" />
           <Property Name="DelBusiness" Type="Boolean" />
           <Property Name="SubRouteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="VisitsPerDay" Type="Int32" Nullable="false" />
+          <Property Name="TypeCabinets" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1155,6 +1174,9 @@
                 <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
                 <ScalarProperty Name="BranchRouteID" ColumnName="BranchRouteID" />
                 <ScalarProperty Name="SubRouteID" ColumnName="SubRouteID" />
+                <ScalarProperty Name="VisitsPerDay" ColumnName="VisitsPerDay" />
+                <ScalarProperty Name="TypeCabinets" ColumnName="TypeCabinets" />
+                <ScalarProperty Name="TypeCabinetsDescr" ColumnName="TypeCabinetsDescr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1170,6 +1192,10 @@
                 <ScalarProperty Name="AllowApproveEditCust" ColumnName="AllowApproveEditCust" />
                 <ScalarProperty Name="AllowEditReason" ColumnName="AllowEditReason" />
                 <ScalarProperty Name="ShowSubRouteID" ColumnName="ShowSubRouteID" />
+                <ScalarProperty Name="ShowVisitsPerDay" ColumnName="ShowVisitsPerDay" />
+                <ScalarProperty Name="MaxVisitsPerDay" ColumnName="MaxVisitsPerDay" />
+                <ScalarProperty Name="RequireRefCustID" ColumnName="RequireRefCustID" />
+                <ScalarProperty Name="ShowTypeCabinets" ColumnName="ShowTypeCabinets" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1184,6 +1210,7 @@
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20500Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="TypeCabinets" ColumnName="TypeCabinets" />
                 <ScalarProperty Name="BusinessPic" ColumnName="BusinessPic" />
                 <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
                 <ScalarProperty Name="SearchName" ColumnName="SearchName" />
@@ -1274,6 +1301,7 @@
           <EntitySetMapping Name="OM_SalesRouteMaster">
             <EntityTypeMapping TypeName="AR20500Model.OM_SalesRouteMaster">
               <MappingFragment StoreEntitySet="OM_SalesRouteMaster">
+                <ScalarProperty Name="VisitsPerDay" ColumnName="VisitsPerDay" />
                 <ScalarProperty Name="DelRouteDet" ColumnName="DelRouteDet" />
                 <ScalarProperty Name="SubRouteID" ColumnName="SubRouteID" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
@@ -1307,6 +1335,8 @@
           <EntitySetMapping Name="AR_NewCustomerInfor">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
               <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
+                <ScalarProperty Name="TypeCabinets" ColumnName="TypeCabinets" />
+                <ScalarProperty Name="VisitsPerDay" ColumnName="VisitsPerDay" />
                 <ScalarProperty Name="SubRouteID" ColumnName="SubRouteID" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="BusinessPic" ColumnName="BusinessPic" />
@@ -1378,6 +1408,8 @@
           <EntitySetMapping Name="AR_NewCustomerInforHis">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInforHis">
               <MappingFragment StoreEntitySet="AR_NewCustomerInforHis">
+                <ScalarProperty Name="TypeCabinets" ColumnName="TypeCabinets" />
+                <ScalarProperty Name="VisitsPerDay" ColumnName="VisitsPerDay" />
                 <ScalarProperty Name="SubRouteID" ColumnName="SubRouteID" />
                 <ScalarProperty Name="DelBusiness" ColumnName="DelBusiness" />
                 <ScalarProperty Name="DelProfile" ColumnName="DelProfile" />
@@ -1481,7 +1513,7 @@
         <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteMaster" Width="2" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="7.375" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInforHis" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInforHis" Width="2.375" PointX="9.375" PointY="0.75" />
         </Diagram>
     </Diagrams>
   </Designer>

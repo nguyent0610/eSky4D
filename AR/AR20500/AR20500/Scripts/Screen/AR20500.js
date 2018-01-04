@@ -10,8 +10,14 @@ var _slsperID = '';
 var frmMain_BoxReady = function () {   
     if (HQ.ShowExport) App.btnExport.hide();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    if (HQ.isShowCustHT) HQ.grid.show(App.grdCust, ['CustHT'])
-    if (HQ.IsShowERPCust) HQ.grid.show(App.grdCust, ['ERPCustID'])
+    if (HQ.isShowCustHT) HQ.grid.show(App.grdCust, ['CustHT']);
+    if (HQ.IsShowERPCust) HQ.grid.show(App.grdCust, ['ERPCustID']);
+    if (HQ.showTypeCabinnets) {
+        HQ.grid.show(App.grdCust, ['TypeCabinetsDescr']);
+    }
+    if (HQ.showVisitsPerDay) {
+        HQ.grid.show(App.grdCust, ['VisitsPerDay']);
+    }
     showSubRoute(0);
     App.stoAR20500_pdWeekofVisitAll.load(function () {
         App.cboTerritory.getStore().load(function () {
@@ -177,7 +183,11 @@ var btnProcess_Click = function () {
                     if (!isValidSel(data)) {
                         errorFreq += i + 1 + ',';
                     }
-                    
+                    if (HQ.showVisitsPerDay && (data.VisitsPerDay > HQ.maxVisitPerDay || data.VisitsPerDay == 0)) {
+                        HQ.message.show(2018010101, [(i + 1), HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'VisitsPerDay'), HQ.maxVisitPerDay], '', true);
+                        rowerror = 'err';
+                        break;
+                    }
                     //if(data.ClassId==''||data.ClassId==null)
                     //    isnullclass += i + 1 + ',';
                     //if (data.PriceClass == '' || data.PriceClass == null)
@@ -483,6 +493,11 @@ var grdCust_ValidateEdit = function (item, e) {
         if (e.value == e.record.data.SalesRouteID) {
             return false;
         }
+    } else if (e.field == 'VisitsPerDay') {
+        if (HQ.showVisitsPerDay && (e.value > HQ.maxVisitPerDay || e.value == 0)) {
+            HQ.message.show(2018010101, [(e.rowIdx + 1), HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'VisitsPerDay'), HQ.maxVisitPerDay], '', true);
+            return false;
+        }        
     }
 };
 var grdCust_Edit = function (item, e, oldvalue, newvalue) {

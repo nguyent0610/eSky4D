@@ -89,14 +89,8 @@ namespace AR20500.Controllers
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             #region -Check config-                        
+            
             var requireRefCustID = false;
-            // IntVal = 0 khong check dieu kien - IntVal = 1 co check dieu kien trùng RefCustID
-            var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "AR20500CheckRefCust");
-            if (config != null && config.FloatVal == 1)
-            {
-                requireRefCustID = true;
-            }
-            ViewBag.IsRequireRefCustID = requireRefCustID;
             var isShowCustHT = false;
 		    var isShowReason = false;
             var isShowERPCust = false;
@@ -106,18 +100,25 @@ namespace AR20500.Controllers
             string allowApproveEditCust = string.Empty;
             var allowEditReason = string.Empty;
             var showSubRoute = false;
+            var showVisitsPerDay = false;
+            var maxVisitPerDay = 0;
+            var showTypeCabinnets = false;
             var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
-                isShowCustHT = objConfig.IsShowCustHT.HasValue ? objConfig.IsShowCustHT.Value : false;
-                isShowReason = objConfig.IsShowReason.HasValue ? objConfig.IsShowReason.Value : false;                
-                isShowERPCust = objConfig.IsShowERPCust.HasValue ? objConfig.IsShowERPCust.Value : false;
-                isHideExport = objConfig.ShowExport.HasValue ? objConfig.ShowExport.Value : false; //an hien nut export
-                isShowEditCust = objConfig.ShowEditCust.HasValue ? objConfig.ShowEditCust.Value : false;
+                isShowCustHT = objConfig.IsShowCustHT.HasValue && objConfig.IsShowCustHT.Value;
+                isShowReason = objConfig.IsShowReason.HasValue && objConfig.IsShowReason.Value;                
+                isShowERPCust = objConfig.IsShowERPCust.HasValue && objConfig.IsShowERPCust.Value;
+                isHideExport = objConfig.ShowExport.HasValue && objConfig.ShowExport.Value; //an hien nut export
+                isShowEditCust = objConfig.ShowEditCust.HasValue && objConfig.ShowEditCust.Value;
                 allowSave = objConfig.AllowSave.PassNull();
                 allowApproveEditCust = objConfig.AllowApproveEditCust.PassNull();
                 allowEditReason = objConfig.AllowEditReason.PassNull();
-                showSubRoute = objConfig.ShowSubRouteID.HasValue ? objConfig.ShowSubRouteID.Value : false;
+                showSubRoute = objConfig.ShowSubRouteID.HasValue && objConfig.ShowSubRouteID.Value;
+                showVisitsPerDay = objConfig.ShowVisitsPerDay.HasValue && objConfig.ShowVisitsPerDay.Value;
+                maxVisitPerDay = objConfig.MaxVisitsPerDay;
+                requireRefCustID = objConfig.RequireRefCustID.HasValue && objConfig.RequireRefCustID.Value;
+                showTypeCabinnets = objConfig.ShowTypeCabinets.HasValue && objConfig.ShowTypeCabinets.Value;
             }
             ViewBag.IsShowERPCust = isShowERPCust;
             ViewBag.IsShowCustHT = isShowCustHT;
@@ -128,6 +129,10 @@ namespace AR20500.Controllers
             ViewBag.AllowApproveEditCust = allowApproveEditCust;
             ViewBag.AllowEditReason = allowEditReason;
             ViewBag.showSubRoute = showSubRoute;
+            ViewBag.IsRequireRefCustID = requireRefCustID;
+            ViewBag.showVisitsPerDay = showVisitsPerDay;
+            ViewBag.maxVisitPerDay = maxVisitPerDay;
+            ViewBag.showTypeCabinnets = showTypeCabinnets;
             #endregion
             return View();
         }
@@ -461,6 +466,8 @@ namespace AR20500.Controllers
             objNew.ClassId = item.ClassId;
             objNew.PriceClass = item.PriceClass;
             objNew.CodeHT = item.ERPCustID;
+            objNew.TypeCabinets = item.TypeCabinets;
+            objNew.VisitsPerDay = item.VisitsPerDay;
         }
 
         private void Insert_NewCustHis(AR_NewCustomerInfor objNew, ref int hisLineRef, int allowEdit, bool isDelProfile, bool isDellBussPic)
@@ -553,7 +560,9 @@ namespace AR20500.Controllers
                 SubRouteID = objNew.SubRouteID,
                 Crtd_User = Current.UserName,
                 Crtd_Prog = "AR20500",
-                Crtd_Datetime = DateTime.Now
+                Crtd_Datetime = DateTime.Now,
+                VisitsPerDay = objNew.VisitsPerDay,
+                TypeCabinets = objNew.TypeCabinets
             };
             _db.AR_NewCustomerInforHis.AddObject(objHis);
         }
@@ -581,6 +590,7 @@ namespace AR20500.Controllers
             master.Sun = item.Sun.ToBool();
             master.SubRouteID = item.SubRouteID;
             master.DelRouteDet = false;
+            master.VisitsPerDay = item.VisitsPerDay;
         }
         private void Update_AR_Customer(ref AR_Customer objCust, AR20500_pgDetail_Result  item, AR_NewCustomerInfor objNew)
         {
@@ -642,6 +652,7 @@ namespace AR20500.Controllers
             objCust.EstablishDate = new DateTime(1900, 1, 1);
             objCust.Birthdate = new DateTime(1900, 1, 1);            
             objCust.AllowEdit = 0;
+            objCust.TypeCabinets = item.TypeCabinets;
         }
         private void Update_SOAddress(ref AR_SOAddress objAR_SOAddress, AR_Customer objCust)
         {

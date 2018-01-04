@@ -403,7 +403,7 @@
                         , X.Column().Text(Util.GetLang("ERPCustID")).DataIndex("ERPCustID").Width(130).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true)).Hidden(true)
                         , X.Column().Text(Util.GetLang("NewCustID")).DataIndex("NewCustID").Width(100)
                         , X.Column().Text(Util.GetLang("CustHT")).DataIndex("CustHT").Width(100).Editor(X.TextField().MaxLength(30).EnforceMaxLength(true)).Hidden(true)
-
+                            , X.Column().Text(Util.GetLang("TypeCabinetsDescr")).DataIndex("TypeCabinetsDescr").Width(120).Hidden(true)
                         , X.Column().Text(Util.GetLang("SalesRouteID")).DataIndex("SalesRouteID").Renderer("renderSalesRouteID")
                             .Editor(
                                 HQ.Combo().ID("cboColSalesRouteID").HQProcedure("AR20500_pcSalesRouteID")
@@ -495,7 +495,9 @@
                         , X.CheckColumn().ID("ColCheckFri").DataIndex("Fri").Width(50).Editable(true).Text(Util.GetLang("Fri")).Align(Alignment.Center)
                         , X.CheckColumn().ID("ColCheckSat").DataIndex("Sat").Width(50).Editable(true).Text(Util.GetLang("Sat")).Align(Alignment.Center)
                         , X.CheckColumn().ID("ColCheckSun").DataIndex("Sun").Width(70).Editable(true).Text(Util.GetLang("Sun")).Align(Alignment.Center)
-
+                        , X.NumberColumn().Text(Util.GetLang("VisitsPerDay")).DataIndex("VisitsPerDay").Format("0,000").Align(Alignment.Right).StyleSpec("text-align:left").Hidden(true)
+                        .Editor(X.NumberField().DecimalPrecision(0).MinValue(0)).Width(150)
+                        
                         , X.Column().Text(Util.GetLang("AR20500Reason")).DataIndex("Reason").Width(200).Renderer("renderReason")
                         .Editor(
                             HQ.Combo().ID("cboColReason").HQProcedure("AR20500_pcReason")
@@ -599,7 +601,9 @@
                                 X.StringFilter().DataIndex("Channel").ValidateRecord(p => p.Fn = "stringFilter"),
                                 X.StringFilter().DataIndex("ShopType").ValidateRecord(p => p.Fn = "stringFilter"),
                                 X.StringFilter().DataIndex("Location").ValidateRecord(p => p.Fn = "stringFilter"),
-                                X.StringFilter().DataIndex("District").ValidateRecord(p => p.Fn = "stringFilter")
+                                X.StringFilter().DataIndex("District").ValidateRecord(p => p.Fn = "stringFilter"),
+                                X.NumericFilter().DataIndex("VisitsPerDay"),
+                                X.StringFilter().DataIndex("TypeCabinetsDescr")
                             )
                     )// grid
                      ,X.Panel().Region(Region.South).Layout(LayoutType.HBox).Height(200)
