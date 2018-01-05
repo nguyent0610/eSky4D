@@ -1,7 +1,7 @@
 var _Change = false;
 var keys = ['ID'];
 var _firstLoad = true;
-var _hideColumn = ['SalesRouteID', 'SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+var _hideColumn = ['SalesRouteID', 'SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'VisitsPerDay'];
 var _lockColumn = ['SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 var hideEditCustColumn = ['EditInfo', 'EditBusinessPic', 'EditProfilePic'];
