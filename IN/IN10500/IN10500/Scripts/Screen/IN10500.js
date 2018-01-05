@@ -613,3 +613,111 @@ var btnShowReport_Click = function () {
 
 }
 ///////////////////////////////////
+
+var btnImport_Click = function (c, e) {
+    if (Ext.isEmpty(App.cboSiteID.getValue())) {
+        HQ.message.show('1000', [HQ.common.getLang('siteid')], '', true);
+        App.btnImport.reset();
+        return;
+    }
+    if (Ext.isEmpty(App.cboBranchID.getValue())) {
+        HQ.message.show('1000', [HQ.common.getLang('BranchID')], '', true);
+        App.btnImport.reset();
+        return;
+    }
+    if (!App.cboTagID.getValue()) {
+        App.direct.IN10500_pdCheckCreateIN_Tag(
+            App.cboBranchID.getValue(), App.cboSiteID.getValue(),
+            {
+                success: function (result) {
+                    if (result == '') {
+                        importData();
+                    }
+                    else {
+                        result = "<div style ='overflow: auto !important; max-height:400px !important'> " + result + " </div>";
+                        HQ.message.show(2015070801, result, '', false);
+                        HQ.common.showBusy(false);
+                    }
+                },
+                failure: function (result) {
+                    HQ.common.showBusy(false);
+                }
+            });
+    } else {
+        importData();
+    }
+};
+function importData()
+{
+    var fileName = c.getValue();
+    var ext = fileName.split(".").pop().toLowerCase();
+    if (ext == "xls" || ext == "xlsx") {
+        App.frmMain.submit({
+            waitMsg: HQ.waitMsg,
+            clientValidation: false,
+            method: 'POST',
+            url: 'IN10500/Import',
+            timeout: 1000000,
+            params: {
+            },
+            success: function (msg, data) {
+                if (this.result.data.lstData != undefined) {
+
+                    this.result.data.lstData.forEach(function (item) {
+                        var objTrans = HQ.store.findRecord(App.stoIN_TagDetail, ['InvtID'], [item.InvtID]);
+                        var record = HQ.store.findInStore(App.cboInvtID.store, ['InvtID'], [item.InvtID]);
+                        if (!objTrans) {
+                            if (record) {
+                                HQ.store.insertRecord(App.stoIN_TagDetail, "InvtID", Ext.create('App.mdlIN10500_pgLoadGrid'), true);
+                                var newTrans = App.stoIN_TagDetail.data.items[App.stoIN_TagDetail.getCount() - 1];
+                                newTrans.set('BranchID', App.cboBranchID.getValue());
+                                newTrans.set('InvtID', record.InvtID);
+                                newTrans.set('InvtName', record.InvtName);
+                                newTrans.set('SiteID', App.cboSiteID.getValue());
+                                newTrans.set('EAUnit', record.EAUnit);
+                                newTrans.set('BookEAQty', record.BookEAQty);
+                                newTrans.set("OffsetEAQty", item.ActualEAQty);
+                                newTrans.set('ReasonCD', App.cboReasonCD.getValue());
+                                newTrans.set('ActualEAQty', item.ActualEAQty);
+                                newTrans.set('StkItem', record.StkItem);
+                            }
+                        }
+                        else {
+                            objTrans.set('ActualEAQty', item.ActualEAQty);
+                            objTrans.set('OffsetEAQty', item.ActualEAQty - objTrans.data.BookEAQty);
+                        }
+                    });
+                    if (!Ext.isEmpty(this.result.data.message)) {
+                        HQ.message.show('2013103001', [this.result.data.message], '', true);
+                    } else {
+                        HQ.message.process(msg, data, true);
+                    }
+                } else {
+                    HQ.message.process(msg, data, true);
+                }
+                App.btnImport.reset();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+                App.btnImport.reset();
+            }
+        });
+    } else {
+        HQ.message.show('2014070701', [ext], '', true);
+        App.btnImport.reset();
+    }
+}
+var btnExport_Click = function () {
+    App.frmMain.submit({
+        url: 'IN10500/Export',
+        timeout: 1000000,
+        clientValidation: false,
+        success: function (msg, data) {
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
+
+
+};

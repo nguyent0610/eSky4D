@@ -19,11 +19,21 @@
     .ID("frmMain")  
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar(new AbstractComponent[]{            
-            X.Button().Hidden(true)
+            X.FileUploadField()
             .ID("btnImport")
-            .Text(Util.GetLang("Import"))
+            .ButtonText("ImportTemplate")
+            .ButtonOnly(true)
             .Icon(Icon.BookAdd)
-            .Listeners(p=>{               
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";
+            }),
+                    
+            X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("ExportTemplate"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
             })},"", true, ""))
     .Layout(LayoutType.Border)
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 110; })
@@ -91,7 +101,7 @@
                         .LoadData()
                         .Listeners(lst =>
                         {
-                            lst.Change.Handler = "App.cboHandle.store.reload();";
+                            lst.Change.Handler = "App.cboHandle.store.reload();if(this.getValue()=='H') App.btnImport.enable(); else App.btnImport.disable();";
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                 
@@ -170,8 +180,20 @@
             )
            , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
             .Items(
-                HQ.TextBox().ID("txtDescr").MarginSpec("5 0 0 0").Width(600).HQLangCode("DESCR").DataIndex("Descr").AllowBlank(false).MaxLength(250).EnforceMaxLength(true)                          
-                    , X.Button().ID("btnLoad").Text(Util.GetLang("LoadData")).MarginSpec("5 0 0 115").Width(185).Icon(Icon.ArrowRefresh)
+                HQ.TextBox().ID("txtDescr").MarginSpec("5 0 0 0").Width(300).HQLangCode("DESCR").DataIndex("Descr").AllowBlank(false).MaxLength(250).EnforceMaxLength(true)  
+                ,HQ.Combo().ID("cboClassID").Name("cboClassID").MarginSpec("5 0 0 0").Width(300)
+                .HQLangCode("ClassID").HQDBSys(false).HQProcedure("IN10500_pcClassID")
+                .HQColumnShow("Code,Descr").ForceSelection(true)
+                .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                    , new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                    , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .LoadData()
+                                        
+                , X.Button().ID("btnLoad").Text(Util.GetLang("LoadData")).MarginSpec("5 0 0 115").Width(185).Icon(Icon.ArrowRefresh)
                                                                 .Listeners(p => p.Click.Fn = "btnLoad_Click")
             )           
         )
@@ -201,6 +223,7 @@
                     ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
                     ps.Add(new StoreParameter("SiteID", "App.cboTagID.valueModels[0] == undefined ? App.cboSiteID.getValue() : App.cboTagID.valueModels[0].data.SiteID", ParameterMode.Raw));
                     ps.Add(new StoreParameter("ReasonCD", "App.cboReasonCD.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("ClassID", "App.cboClassID.getValue()", ParameterMode.Raw));
                 })
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetIN_TagDetail")))
                 .Listeners(p => p.Load.Fn = "stoLoadIN_TagDetail")

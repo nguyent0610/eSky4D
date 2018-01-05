@@ -13,6 +13,9 @@ using System.Text;
 using HQFramework.DAL;
 using HQ.eSkySys;
 using HQSendMailApprove;
+using Aspose.Cells;
+using HQFramework.Common;
+using System.Drawing;
 
 namespace IN10500.Controllers
 {
@@ -24,7 +27,7 @@ namespace IN10500.Controllers
         private string _screenNbr = "IN10500";
         private string _userName = Current.UserName;
         private string _cpnyID = Current.CpnyID;
-        IN10500Entities _db = Util.CreateObjectContext<IN10500Entities>(false);
+        IN10500Entities _app = Util.CreateObjectContext<IN10500Entities>(false);
         private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);    
         private JsonResult _logMessage;
 
@@ -38,7 +41,7 @@ namespace IN10500.Controllers
                 return View("Popup");
             }
             if (BranchID == null) BranchID = Current.CpnyID;
-            var dftSiteID = _db.IN10500_pdDefaultSite(Current.UserName, BranchID, Current.LangID).FirstOrDefault().PassNull();
+            var dftSiteID = _app.IN10500_pdDefaultSite(Current.UserName, BranchID, Current.LangID).FirstOrDefault().PassNull();
             bool allowAddNewInvtID = false;
             var right = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "ALLOWADDNEWINVTID");
             if (right != null)
@@ -63,19 +66,19 @@ namespace IN10500.Controllers
 
         public ActionResult GetIN_TagHeader(string tagID, string branchID, string siteID)
         {
-            var data = _db.IN_TagHeader.FirstOrDefault(x => x.TAGID == tagID && x.BranchID == branchID && x.SiteID == siteID);
+            var data = _app.IN_TagHeader.FirstOrDefault(x => x.TAGID == tagID && x.BranchID == branchID && x.SiteID == siteID);
             return this.Store(data);
         }
 
-        public ActionResult GetIN_TagDetail(string TagID, string BranchID, string SiteID, string ReasonCD)
+        public ActionResult GetIN_TagDetail(string TagID, string BranchID, string SiteID, string ReasonCD,string ClassID)
         {
-            var data = _db.IN10500_pgLoadGrid(TagID, BranchID, SiteID, ReasonCD, Current.UserName, Current.CpnyID, Current.LangID);
+            var data = _app.IN10500_pgLoadGrid(TagID, BranchID, SiteID, ReasonCD,ClassID, Current.UserName, Current.CpnyID, Current.LangID);
             return this.Store(data);
         }
         [DirectMethod]
         public ActionResult IN10500_pdCheckCreateIN_Tag(string BranchID, string SiteID)
         {
-            var chkINTag = _db.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();            
+            var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();            
             return this.Direct(chkINTag);
         }
 
@@ -86,7 +89,7 @@ namespace IN10500.Controllers
         {
             try
             {
-                _db.CommandTimeout = int.MaxValue;                
+                _app.CommandTimeout = int.MaxValue;                
                 string ReasonCD = data["cboReasonCD"].PassNull();
                 string Status = data["cboStatus"].PassNull();
                 string Handle = data["cboHandle"].PassNull();
@@ -116,7 +119,7 @@ namespace IN10500.Controllers
                 
                 #region Save Header
 
-                var header = _db.IN_TagHeader.FirstOrDefault(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID);
+                var header = _app.IN_TagHeader.FirstOrDefault(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID);
                 
                 if (header != null)
                 {
@@ -131,12 +134,12 @@ namespace IN10500.Controllers
                 }
                 else
                 {
-                    var chkINTag = _db.IN10500_pdCheckCreateIN_Tag(curHeader.BranchID, curHeader.SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                    var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(curHeader.BranchID, curHeader.SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                     if (!string.IsNullOrWhiteSpace(chkINTag)) // KHi không đc tạo thẻ kho
                     {
                         throw new MessageException(MessageType.Message, "2015070801", "", parm: new string[] { chkINTag });
                     }
-                    var tagID = _db.IN10500_ppGetLastTagHeader(curHeader.BranchID, curHeader.SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                    var tagID = _app.IN10500_ppGetLastTagHeader(curHeader.BranchID, curHeader.SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                     header = new IN_TagHeader();
                     header.TAGID = tagID;
                     header.BranchID = curHeader.BranchID;
@@ -147,7 +150,7 @@ namespace IN10500.Controllers
                     header.tstamp = new byte[1];
                     UpdatingHeader(ref header, curHeader, Status, Handle);
 
-                    _db.IN_TagHeader.AddObject(header);
+                    _app.IN_TagHeader.AddObject(header);
                 }
 
             #endregion
@@ -163,10 +166,10 @@ namespace IN10500.Controllers
                     }
                     else
                     {
-                        var objDel = _db.IN_TagDetail.FirstOrDefault(x => x.TAGID == item.TAGID && x.BranchID == item.BranchID && x.SiteID == item.SiteID && x.InvtID == item.InvtID);
+                        var objDel = _app.IN_TagDetail.FirstOrDefault(x => x.TAGID == item.TAGID && x.BranchID == item.BranchID && x.SiteID == item.SiteID && x.InvtID == item.InvtID);
                         if (objDel != null)
                         {
-                            _db.IN_TagDetail.DeleteObject(objDel);
+                            _app.IN_TagDetail.DeleteObject(objDel);
                         }
                     }
                 }
@@ -175,7 +178,7 @@ namespace IN10500.Controllers
                 {
                     if (currDet.InvtID.PassNull() == "") continue;
 
-                    var tagDet = _db.IN_TagDetail.FirstOrDefault(p => p.TAGID == header.TAGID
+                    var tagDet = _app.IN_TagDetail.FirstOrDefault(p => p.TAGID == header.TAGID
                                                                     && p.BranchID == header.BranchID
                                                                     && p.SiteID == header.SiteID
                                                                     && p.InvtID == currDet.InvtID);
@@ -203,9 +206,9 @@ namespace IN10500.Controllers
                         tagDet.Crtd_DateTime = DateTime.Now;
                         tagDet.Crtd_Prog = _screenNbr;
                         tagDet.Crtd_User = _userName;
-                        _db.IN_TagDetail.AddObject(tagDet);
+                        _app.IN_TagDetail.AddObject(tagDet);
                     }
-                    if (!_db.IN_ItemSite.Any(x => x.SiteID == header.SiteID && x.InvtID == tagDet.InvtID))
+                    if (!_app.IN_ItemSite.Any(x => x.SiteID == header.SiteID && x.InvtID == tagDet.InvtID))
                     {
                         var objItemSite = new IN_ItemSite();
                         Insert_IN_ItemSite(ref objItemSite, header.SiteID, tagDet.InvtID, currDet.StkItem);
@@ -214,9 +217,9 @@ namespace IN10500.Controllers
                 curHeader.TAGID = header.TAGID;
                 #endregion
 
-                _db.SaveChanges();
+                _app.SaveChanges();
              
-                var lstIN_Tag = _db.IN_TagDetail.Where(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID).ToList();
+                var lstIN_Tag = _app.IN_TagDetail.Where(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID).ToList();
                 if (Handle == "C" && lstIN_Tag.Where(p => p.OffsetEAQty != 0).Count() > 0)
                 {
                     DataAccess dal = Util.Dal();
@@ -246,9 +249,9 @@ namespace IN10500.Controllers
                 }
                 else if (Handle == "C")
                 {
-                    header = _db.IN_TagHeader.FirstOrDefault(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID);
+                    header = _app.IN_TagHeader.FirstOrDefault(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID);
                     header.Status = "C";
-                    _db.SaveChanges();
+                    _app.SaveChanges();
                 }
                 #region -Send mail approve-
                 string userID = Current.UserName.ToUpper();
@@ -325,19 +328,19 @@ namespace IN10500.Controllers
             {
                 string BranchID = data["cboBranchID"].PassNull();
                 string TagID = data["cboTagID"].PassNull();
-                var header = _db.IN_TagHeader.FirstOrDefault(p => p.TAGID == TagID);
+                var header = _app.IN_TagHeader.FirstOrDefault(p => p.TAGID == TagID);
                 if (header != null)
                 {
-                    _db.IN_TagHeader.DeleteObject(header);
+                    _app.IN_TagHeader.DeleteObject(header);
                 }
                 // Delete detail
-                var lstIN_TagDetail = _db.IN_TagDetail.Where(p => p.TAGID == TagID).ToList();
+                var lstIN_TagDetail = _app.IN_TagDetail.Where(p => p.TAGID == TagID).ToList();
                 foreach (var item in lstIN_TagDetail)
                 {
-                    _db.IN_TagDetail.DeleteObject(item);
+                    _app.IN_TagDetail.DeleteObject(item);
                 }
 
-                _db.SaveChanges();
+                _app.SaveChanges();
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -351,7 +354,7 @@ namespace IN10500.Controllers
         public void Mail_Approve(string objID, string role, string status, string handle, string langID, string userName, string lstBranch, string currentBranch, string parm00, string parm01, string parm02,
           string branchID,  string branchName, string siteID, string siteName)
         {
-            var approvehandle = _db.SI_ApprovalFlowHandle.Where(p => p.AppFolID == _screenNbr && p.RoleID == role && p.Status == status && p.Handle == handle).FirstOrDefault();
+            var approvehandle = _app.SI_ApprovalFlowHandle.Where(p => p.AppFolID == _screenNbr && p.RoleID == role && p.Status == status && p.Handle == handle).FirstOrDefault();
             if (approvehandle != null && approvehandle.MailSubject.PassNull() != string.Empty)
             {
                 Dictionary<string, string> dic = new Dictionary<string, string>();
@@ -416,7 +419,7 @@ namespace IN10500.Controllers
                 objIN_ItemSite.LUpd_User = Current.UserName;
                 objIN_ItemSite.tstamp = new byte[0];
 
-                _db.IN_ItemSite.AddObject(objIN_ItemSite);
+                _app.IN_ItemSite.AddObject(objIN_ItemSite);
 
             }
             catch (Exception ex)
@@ -425,6 +428,191 @@ namespace IN10500.Controllers
             }
         }
 
+        public ActionResult Export(FormCollection data)
+        {
+            try
+            {
+                LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+                Stream stream = new MemoryStream();
+                Workbook workbook = new Workbook();
+                Worksheet sheetTrans = workbook.Worksheets[0];
+
+                sheetTrans.Name = "Details";
+
+                DataAccess dal = Util.Dal();
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@CpnyID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@LangID", DbType.Int16, clsCommon.GetValueDBNull(Current.LangID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@TagID", DbType.String, clsCommon.GetValueDBNull(data["cboTagID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["cboBranchID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(data["cboSiteID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@ReasonCD", DbType.String, clsCommon.GetValueDBNull(data["cboReasonCD"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@ClassID", DbType.String, clsCommon.GetValueDBNull(data["cboClassID"].PassNull()), ParameterDirection.Input, 30));
+                DataTable dt = dal.ExecDataTable("IN10500_peExport", CommandType.StoredProcedure, ref pc);
+                sheetTrans.Cells.ImportDataTable(dt, false, "A2");
+
+
+          
+                Style style = workbook.GetStyleInPool(0);
+                style.Font.Color = Color.Transparent;
+                style.IsLocked = true;
+                StyleFlag flag = new StyleFlag();
+                flag.FontColor = true;
+                flag.NumberFormat = true;
+                flag.Locked = true;
+              
+                style = sheetTrans.Cells["A1"].GetStyle();
+                style.Font.IsBold = true;
+
+                sheetTrans.Cells["A1"].PutValue(Util.GetLang("InvtID"));
+                sheetTrans.Cells["B1"].PutValue(Util.GetLang("InvtName"));
+                sheetTrans.Cells["C1"].PutValue(Util.GetLang("UOM"));
+                sheetTrans.Cells["D1"].PutValue(Util.GetLang("IN10500ActInventory"));
+                sheetTrans.Cells["E1"].PutValue(Util.GetLang("IN10500Inventory"));
+
+                sheetTrans.Cells["A1"].SetStyle(style);
+                sheetTrans.Cells["B1"].SetStyle(style);
+                sheetTrans.Cells["C1"].SetStyle(style);
+                sheetTrans.Cells["D1"].SetStyle(style);
+                sheetTrans.Cells["E1"].SetStyle(style);
+
+                style = sheetTrans.Cells["D2"].GetStyle();
+                style.Custom = "#,##0";
+                Range range = sheetTrans.Cells.CreateRange("D2", "E" + (dt.Rows.Count+2));
+                range.ApplyStyle(style, flag);
+                sheetTrans.AutoFitColumns();
+
+                workbook.Save(stream, SaveFormat.Xlsx);
+                stream.Position = 0;
+
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "Data.xlsx" };
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+
+        public ActionResult Import(FormCollection data)
+        {
+            try
+            {
+
+                FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
+                HttpPostedFile file = fileUploadField.PostedFile; // or: HttpPostedFileBase file = this.HttpContext.Request.Files[0];
+                FileInfo fileInfo = new FileInfo(file.FileName);
+                string message = string.Empty;
+                //List<object> lstTrans = new List<object>();
+                List<IN10500_pgLoadGrid_Result> lstData = new List<IN10500_pgLoadGrid_Result>();
+                if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
+                {
+                    try
+                    {
+                        Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+                        int lineRef = data["lineRef"].ToInt();
+                        if (workbook.Worksheets.Count > 0)
+                        {
+
+                            Worksheet workSheet = workbook.Worksheets[0];
+                            string invtID = string.Empty;
+
+                            for (int i = 1; i < workSheet.Cells.MaxDataRow+1; i++)
+                            {
+
+                                invtID = workSheet.Cells[i, 0].StringValue;
+                                if (invtID == string.Empty) break;
+                                var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                                if (objInvt == null)
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
+                                    continue;
+                                }
+                                if (workSheet.Cells[i, 2].StringValue.PassNull() == string.Empty)
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} không có đơn vị<br/>", (i + 1).ToString(), invtID);
+                                    continue;
+                                }
+                                else if (workSheet.Cells[i, 2].StringValue.PassNull() != objInvt.StkUnit)
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} sai đơn vị<br/>", (i + 1).ToString(), invtID);
+                                }
+
+                                if (workSheet.Cells[i, 3].StringValue.PassNull() == "")
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} không có số lượng<br/>", (i + 1).ToString(), invtID);
+                                    continue;
+                                }
+                                else
+                                {
+                                    float n;
+                                    bool isNumeric = float.TryParse(workSheet.Cells[i, 3].StringValue, out n);
+                                    if (isNumeric == true)
+                                    {
+                                        if (workSheet.Cells[i, 3].FloatValue == 0)
+                                        {
+                                            message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số lượng<br/>", (i + 1).ToString(), invtID);
+                                            continue;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        message += string.Format("Dòng {0} sai định dạng Số Lượng<br/>", (i + 1).ToString());
+                                        continue;
+                                    }
+                                }
+
+                                lstData.Add(new IN10500_pgLoadGrid_Result() {
+                                    ActualEAQty = workSheet.Cells[i, 3].FloatValue,
+                                    BookEAQty=0,
+                                    BranchID="",
+                                    EAUnit="",
+                                    InvtID = objInvt.InvtID,
+                                    InvtName = objInvt.Descr,
+                                    Notes="",
+                                    OffsetEAQty=0,
+                                    ReasonCD="",
+                                    SiteID="",
+                                    StkItem=0,
+                                    StkQtyUnder1Month=0,
+                                    TAGID=""
+                                    
+                                });
+                            }
+
+                            Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstData });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+                else
+                {
+                    Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
+                }
+                return _logMessage;
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
         [HttpPost]
         public ActionResult Report(FormCollection data)
         {
@@ -468,8 +656,8 @@ namespace IN10500.Controllers
                 rpt.CpnyID = user.CpnyID;
                 rpt.LangID = Current.LangID;
 
-                _db.RPTRunnings.AddObject(rpt);
-                _db.SaveChanges();
+                _app.RPTRunnings.AddObject(rpt);
+                _app.SaveChanges();
 
                 if (_logMessage != null)
                 {
