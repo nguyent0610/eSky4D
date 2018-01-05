@@ -4,12 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="PO_Price" EntityType="eBiz4DWebSysModel.Store.PO_Price" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="PO_PriceCpny" EntityType="eBiz4DWebSysModel.Store.PO_PriceCpny" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="PO_PriceHeader" EntityType="eBiz4DWebSysModel.Store.PO_PriceHeader" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="PO_Price">
           <Key>
             <PropertyRef Name="VendID" />
@@ -17,19 +12,19 @@
             <PropertyRef Name="UOM" />
             <PropertyRef Name="PriceID" />
           </Key>
-          <Property Name="VendID" Type="varchar" Nullable="false" MaxLength="15" />
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="UOM" Type="nvarchar" Nullable="false" MaxLength="10" />
+          <Property Name="VendID" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="UOM" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="Price" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="Descr" Type="nvarchar" Nullable="false" MaxLength="400" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="PriceID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="400" Nullable="false" />
           <Property Name="QtyBreak" Type="float" Nullable="false" />
           <Property Name="Disc" Type="float" />
         </EntityType>
@@ -38,14 +33,14 @@
             <PropertyRef Name="PriceID" />
             <PropertyRef Name="CpnyID" />
           </Key>
-          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="CpnyID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="PriceID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CpnyID" Type="nvarchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="PO_PriceHeader">
           <Key>
             <PropertyRef Name="PriceID" />
           </Key>
-          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="PriceID" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Status" Type="bit" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="200" />
           <Property Name="EffDate" Type="smalldatetime" Nullable="false" />
@@ -60,12 +55,22 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
           <Property Name="Disc" Type="float" />
         </EntityType>
+        <Function Name="PO20100_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="PO20100_pgGetPOPrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PriceID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="PO20100_pgGetPOPriceCpny" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PriceID" Type="varchar" Mode="In" />
         </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="PO_Price" EntityType="Self.PO_Price" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PO_PriceCpny" EntityType="Self.PO_PriceCpny" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PO_PriceHeader" EntityType="Self.PO_PriceHeader" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -78,6 +83,11 @@
           </FunctionImport>
           <FunctionImport Name="PO20100_pgGetPOPriceCpny" ReturnType="Collection(PO20100Model.PO20100_pgGetPOPriceCpny_Result)">
           <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pdConfig" ReturnType="Collection(PO20100Model.PO20100_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="PO_PriceCpny" EntityType="PO20100Model.PO_PriceCpny" />
         </EntityContainer>
@@ -139,13 +149,16 @@
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
         </ComplexType>
+        <ComplexType Name="PO20100_pdConfig_Result">
+          <Property Type="Int32" Name="DecimalPrecision" Nullable="true" />
+        </ComplexType>
         <EntityType Name="PO_PriceCpny">
           <Key>
             <PropertyRef Name="PriceID" />
             <PropertyRef Name="CpnyID" />
           </Key>
-          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="PriceID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CpnyID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -218,6 +231,13 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pdConfig" FunctionName="eBiz4DWebSysModel.Store.PO20100_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pdConfig_Result">
+                <ScalarProperty Name="DecimalPrecision" ColumnName="DecimalPrecision" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="PO_PriceCpny">
             <EntityTypeMapping TypeName="PO20100Model.PO_PriceCpny">
               <MappingFragment StoreEntitySet="PO_PriceCpny">
@@ -242,6 +262,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
@@ -249,7 +270,7 @@
       <Diagram Name="eBiz4DWebSysModel" >
         <EntityTypeShape EntityType="PO20100Model.PO_Price" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO20100Model.PO_PriceHeader" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PO20100Model.PO_PriceCpny" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PO20100Model.PO_PriceCpny" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

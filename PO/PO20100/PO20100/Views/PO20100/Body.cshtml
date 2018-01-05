@@ -7,6 +7,23 @@
     Layout = null;
     var X = Html.X();
     var HQ = Html.HQ();
+
+    var decimalPrecision = 0;
+    PO20100Entities _db = Util.CreateObjectContext<PO20100Entities>(false);
+    var obj = _db.PO20100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+    if (obj != null && obj.DecimalPrecision.HasValue && obj.DecimalPrecision.Value > 0)
+    {
+        decimalPrecision = obj.DecimalPrecision.Value;
+    }
+    string formatNumber = "0,000";
+    if (decimalPrecision > 0)
+    {
+        formatNumber += ".";
+        for (int i = 0; i < decimalPrecision; i++)
+        {
+            formatNumber += "0";
+        }
+    }
 }
 
 @(X.Viewport()
@@ -46,20 +63,20 @@
                     lst.Expand.Fn = "cboPriceID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
                 })
 
-                , HQ.TextBox().ID("Descr").Name("Descr").HQLangCode("Descr").Width(300).MaxLength(200).EnforceMaxLength(true).AllowBlank(false).MarginSpec("0 0 0 20").HQControlFocus("LastPONbr").HideLabel(true).Listeners(lst => { })
+                , HQ.TextBox().ID("Descr").Name("Descr").HQLangCode("Descr").Width(350).MaxLength(200).EnforceMaxLength(true).AllowBlank(false).MarginSpec("0 0 0 10").HQControlFocus("LastPONbr").HideLabel(true).Listeners(lst => { })
                 , HQ.Checkbox().ID("Status").Name("Status").HQLangCode("ACTIVE").MarginSpec("0 0 0 5")
                   
             ),
             X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
             .Items(
-                HQ.NumberField().ID("txtFill").Name("txtFill").HQLangCode("Fill").MaskRe(@"/[0-9-,-/ ]/").Width(210)
-                , HQ.Button().ID("btnFill").HQLangCode("Fill").Width(80).MarginSpec("0 0 0 10")
+                HQ.NumberField().ID("txtFill").Name("txtFill").HQLangCode("Fill").Width(180)/// .MaskRe(@"/[0-9-,-/ ]/")
+                , HQ.Button().ID("btnFill").HQLangCode("Fill").Width(110).Icon(Icon.TabEdit).MarginSpec("0 0 0 10")
                 .Listeners(lst =>
                 {
                     lst.Click.Handler = "btnFill_Click()";
                 })
-                , HQ.DateField().ID("EffDate").Name("EffDate").HQLangCode("EffDate").Width(320).AllowBlank(false).LabelWidth(120)
-                .Format("dd-MM-yyyy")
+                , HQ.DateField().ID("EffDate").Name("EffDate").HQLangCode("EffDate").Width(360).AllowBlank(false).LabelWidth(120)
+                .Format(Current.FormatDate)
                 , HQ.Checkbox().ID("Public").Name("Public").HQLangCode("Public").MarginSpec("0 0 0 5")
                 .Listeners(lst =>
                 {
@@ -111,9 +128,11 @@
                         .HQColumnShow("InvtID,Descr").DisplayField("InvtID").ValueField("InvtID")
                         .Width(200).HQHeightWidth(500, 400)
                         .AllowBlank(true).ForceSelection(true).HQDBSys(false).HQAutoLoad(false)
-                        .HQParam(new StoreParameterCollection()
-                        {//Param
-                        })
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw}
+                                ,new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                                ,new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}											                                              
+                            })
                         .LoadData()
                         .Listeners(lst =>
                         {
@@ -121,7 +140,7 @@
                         })
                     )
                     , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250)
-                    , X.Column().Text(Util.GetLang("UOM")).DataIndex("UOM").Width(150)
+                    , X.Column().Text(Util.GetLang("UOM")).DataIndex("UOM").Width(100)
                     .Editor(
                         HQ.Combo().ID("cboUOM").Name("cboUOM").HQProcedure("PO20100_pcUOM_InvtID")
                         .HQParam(new StoreParameterCollection()
@@ -133,14 +152,14 @@
                         .HQDBSys(false).AllowBlank(true).ForceSelection(true).HQAutoLoad(false)
                         .LoadData()
                     )
-                    , X.NumberColumn().Text(Util.GetLang("QtyBreak")).DataIndex("QtyBreak").Width(150).Format("0,000,000").Editor(X.NumberField().MaskRe(@"/[\d]/").MinValue(0)).Align(Alignment.Right)
-                    , X.NumberColumn().Text(Util.GetLang("Price")).DataIndex("Price").Width(150).Format("0,000,000").Editor(X.NumberField().MaskRe(@"/[\d]/").MinValue(0)).Align(Alignment.Right)
-                    , X.NumberColumn().Text(Util.GetLang("Disc")).DataIndex("Disc").Width(150).Format("00.00").Editor(X.NumberField().MaskRe(@"/[0-9-,-/ ]/")).Align(Alignment.Right)
+                    , X.NumberColumn().Text(Util.GetLang("QtyBreak")).DataIndex("QtyBreak").Width(120).Format("0,000,000").Editor(X.NumberField().MaskRe(@"/[\d]/").MinValue(0).DecimalPrecision(0).AllowExponential(false)).Align(Alignment.Right).StyleSpec("text-align:left")
+                    , X.NumberColumn().Text(Util.GetLang("Price")).DataIndex("Price").Width(120).Format(formatNumber).Editor(X.NumberField().MaskRe(@"/[\d]/").MinValue(0).AllowExponential(false).DecimalPrecision(decimalPrecision)).Align(Alignment.Right).StyleSpec("text-align:left")
+                    , X.NumberColumn().Text(Util.GetLang("Disc")).DataIndex("Disc").Width(150).Format("00.00").Editor(X.NumberField().MaskRe(@"/[0-9-,-/ ]/")).Align(Alignment.Right).StyleSpec("text-align:left")
 
                     , X.CommandColumn().Width(150)
                     .Commands(
                         X.GridCommand()
-                        .Text(("Reject"))
+                        .Text(Util.GetLang("Reject"))
                         .ToolTip(t =>
                         {
                             t.Text = ("Rejectrowchanges");
@@ -247,11 +266,11 @@
                         })
                         .LoadData()
                     )
-                    , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(150)
-                    , X.CommandColumn().Width(150)
+                    , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Flex(1)
+                    , X.CommandColumn().Width(130)
                     .Commands(
                         X.GridCommand()
-                        .Text(("Reject"))
+                        .Text(Util.GetLang("Reject"))
                         .ToolTip(t =>
                         {
                             t.Text = ("Rejectrowchanges");

@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -58,29 +58,34 @@ namespace PO20100.Controllers
             {
                 string PriceID = data["cboPriceID"];
 
+                //var discInfoHandler = new StoreDataHandler(data["lstDiscInfo"]);
+                //var inputDisc = discInfoHandler.ObjectData<OM_Discount>()
+                //            .FirstOrDefault(p => p.DiscID == discID);
+
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstPOPriceHeader"]);
-                ChangeRecords<PO_PriceHeader> lstPOPriceHeader = dataHandler.BatchObjectData<PO_PriceHeader>();
+                var curHeader = dataHandler.ObjectData<PO_PriceHeader>().FirstOrDefault();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstPO_Price"]);
                 ChangeRecords<PO20100_pgGetPOPrice_Result> lstPO_Price = dataHandler1.BatchObjectData<PO20100_pgGetPOPrice_Result>();
 
                 StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstPO_PriceCpny"]);
                 ChangeRecords<PO20100_pgGetPOPriceCpny_Result> lstPO_PriceCpny = dataHandler2.BatchObjectData<PO20100_pgGetPOPriceCpny_Result>();
-                
-                #region Save header
-                lstPOPriceHeader.Created.AddRange(lstPOPriceHeader.Updated);
 
-                foreach (PO_PriceHeader curHeader in lstPOPriceHeader.Created)
-                {
-                   if (PriceID.PassNull() == "") continue;
+                #region Save header
+               // lstPOPriceHeader.Created.AddRange(lstPOPriceHeader.Updated);
+
+                //foreach (PO_PriceHeader curHeader in lstPOPriceHeader.Created)
+                //{
+                 //  if (PriceID.PassNull() == "") continue;
 
                     var header = _db.PO_PriceHeader.FirstOrDefault(p => p.PriceID == PriceID);
-
+                    bool isNew = false;
                     if (header != null)
                     {
                         if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                         {
-                            UpdatingHeader(header, curHeader, false);
+                            isNew = false;
+                            //UpdatingHeader(header, curHeader, false);
                         }
                         else
                         {
@@ -91,11 +96,64 @@ namespace PO20100.Controllers
                     {
                         header = new PO_PriceHeader();
                         header.PriceID = PriceID;
-
-                        UpdatingHeader(header, curHeader, true);
+                        isNew = true;
+                        
                         _db.PO_PriceHeader.AddObject(header);
                     }
-                }
+                    UpdatingHeader(header, curHeader, isNew);
+                    #region Save PO_PriceCpny
+                    if (header.Public)
+                    {
+                        var lstDelCpny = _db.PO_PriceCpny.Where(p => p.PriceID == PriceID).ToList();
+                        foreach (var objDelete in lstDelCpny)
+                        {
+                            if (objDelete != null)
+                            {
+                                _db.PO_PriceCpny.DeleteObject(objDelete);
+                            }
+                        }                        
+                    }
+                    else
+                    {
+                        lstPO_PriceCpny.Created.AddRange(lstPO_PriceCpny.Updated);
+                        foreach (var deleted in lstPO_PriceCpny.Deleted)
+                        {
+                            //neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                            if (lstPO_PriceCpny.Created.Where(p => p.CpnyID == deleted.CpnyID).Count() > 0)
+                            {
+                                // lstPO_PriceCpny.Created.Where(p => p.CpnyID == deleted.CpnyID).FirstOrDefault().tt = del.tstamp;
+                            }
+                            else
+                            {
+                                var objDelete = _db.PO_PriceCpny.Where(p => p.PriceID == header.PriceID && p.CpnyID == deleted.CpnyID).FirstOrDefault();
+                                if (objDelete != null)
+                                {
+                                    _db.PO_PriceCpny.DeleteObject(objDelete);
+                                }
+                            }
+                        }
+
+                        foreach (PO20100_pgGetPOPriceCpny_Result curLang in lstPO_PriceCpny.Created)
+                        {
+                            if (curLang.CpnyID.PassNull() == "" || PriceID.ToLower() != header.PriceID.ToLower()) continue;
+
+                            var lang = _db.PO_PriceCpny.FirstOrDefault(p => p.PriceID.ToLower() == header.PriceID.ToLower() && p.CpnyID.ToLower() == curLang.CpnyID.ToLower());
+
+                            if (lang != null)
+                            {
+                                lang.CpnyID = curLang.CpnyID;
+                            }
+                            else
+                            {
+                                lang = new PO_PriceCpny();
+                                lang.PriceID = PriceID;
+                                lang.CpnyID = curLang.CpnyID;
+                                _db.PO_PriceCpny.AddObject(lang);
+                            }
+                        }
+                    }
+                    #endregion
+                //}
                 #endregion
 
                 #region Save PO_Price
@@ -137,37 +195,7 @@ namespace PO20100.Controllers
                 }
                 #endregion
 
-                #region Save PO_PriceCpny
-                foreach (PO20100_pgGetPOPriceCpny_Result deleted in lstPO_PriceCpny.Deleted)
-                {
-                    var objDelete = _db.PO_PriceCpny.Where(p => p.PriceID == deleted.PriceID && p.CpnyID == deleted.CpnyID).FirstOrDefault();
-                    if (objDelete != null)
-                    {
-                        _db.PO_PriceCpny.DeleteObject(objDelete);
-                    }
-                }
-
-                lstPO_PriceCpny.Created.AddRange(lstPO_PriceCpny.Updated);
-
-                foreach (PO20100_pgGetPOPriceCpny_Result curLang in lstPO_PriceCpny.Created)
-                {
-                    if (curLang.CpnyID.PassNull() == "") continue;
-
-                    var lang = _db.PO_PriceCpny.FirstOrDefault(p => p.PriceID.ToLower() == curLang.PriceID.ToLower()  && p.CpnyID.ToLower()  == curLang.CpnyID.ToLower());
-
-                    if (lang != null)
-                    {
-                        lang.CpnyID = curLang.CpnyID;
-                    }
-                    else
-                    {
-                        lang = new PO_PriceCpny();
-                        lang.PriceID = PriceID;
-                        lang.CpnyID=curLang.CpnyID;
-                        _db.PO_PriceCpny.AddObject(lang);
-                    }
-                }
-                #endregion
+                
 
                 _db.SaveChanges();
                 return Json(new { success = true });

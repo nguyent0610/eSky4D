@@ -296,16 +296,17 @@ var stoLoad = function (sto) {
 
 // =====================Grd PO_Price =======================//
 var stoPO_Price_Load = function (sto) {
-    if (HQ.isFirstLoad) {
+    //if (HQ.isFirstLoad) {
+   
         if (HQ.isInsert) {
-            
-               // HQ.common.lockItem(App.frmMain, true);
+            var record = HQ.store.findRecord(sto, keys, ['']);
+            if (!record) {
+                // HQ.common.lockItem(App.frmMain, true);
                 HQ.store.insertBlank(sto, keys);
-            
-
+            }
         }
         //HQ.isFirstLoad = false;
-    }
+    //}
     frmChange();
     HQ.common.showBusy(false);
 };
@@ -316,6 +317,8 @@ var grdPO_Price_BeforeEdit = function (editor, e) {
     {
         if (!HQ.isUpdate)
         {
+            return false;
+        } else if (e.field == 'UOM' && e.record.data.tstamp != '') {
             return false;
         }
     }
@@ -361,15 +364,16 @@ var grdPO_Price_Reject = function (record) {
 
 // =====================Grd PO_PriceCpny =======================//
 var stoPO_PriceCpny_Load = function (sto) {
-    if (HQ.isFirstLoad) {
+   // if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-           
+            var record = HQ.store.findRecord(sto, keys1, ['']);
+            if (!record) {
                 // HQ.common.lockItem(App.frmMain, true);
-                HQ.store.insertBlank(sto, keys);
-            
+                HQ.store.insertBlank(sto, keys1);
+            }
         }
       //  HQ.isFirstLoad = false;
-    }
+   // }
     frmChange();
     HQ.common.showBusy(false);
 };
@@ -441,16 +445,17 @@ var save = function () {
             url: 'PO20100/Save',
             timeout: 1800000,
             params: {
-                lstPOPriceHeader: HQ.store.getData(App.frmMain.getRecord().store),
+                lstPOPriceHeader: Ext.encode([App.frmMain.getRecord().data]),
+                //lstPOPriceHeader: HQ.store.getData(App.frmMain.getRecord().store),
                 lstPO_Price: HQ.store.getData(App.stoPO_Price),
                 lstPO_PriceCpny: HQ.store.getData(App.stoPO_PriceCpny)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 App.cboPriceID.getStore().reload();
-                 //refresh("yes");
-                App.stoPO_Price.reload();
-                App.stoPO_PriceCpny.reload();
+                 refresh("yes");
+                //App.stoPO_Price.reload();
+                //App.stoPO_PriceCpny.reload();
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
