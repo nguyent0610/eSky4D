@@ -88,6 +88,11 @@
 	                   HQ.Combo().ID("cboInvtID").Name("cboInvtID").ForceSelection(true)
 		                    .HQDBSys(false).HQProcedure("OM23300_pcInvtID").HQHeightWidth(400, 300)
 		                    .HQColumnShow("InvtID,Descr,SlsPrice").DisplayField("InvtID").ValueField("InvtID")
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                                new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                            })
 		                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
 		                    .Listeners(lst =>
 		                    {
