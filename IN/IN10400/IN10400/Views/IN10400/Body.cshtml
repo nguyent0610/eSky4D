@@ -14,7 +14,7 @@
 .Items(
     X.FormPanel()
         .ID("frmMain")
-        .BodyPadding(0) 
+        .BodyPadding(0)
         .TrackResetOnLoad(true)
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar("Print", true, ""))
@@ -43,7 +43,7 @@
                     .Items(
                         HQ.TextBox().ID("txtBranchID").Name("BranchID").HQLangCode("BranchID").ReadOnly(true).Tag("X").Width(300).DataIndex("BranchID")
                             .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
-                           
+
                         ,X.ComboBox()
                             .ID("cboBatNbr").Tag("X")
                             .Name("BatNbr")
@@ -102,13 +102,13 @@
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{cboSiteID}.focus();")); }))
                             .StoreID("stoBatch")
-                    
+
                         ,HQ.Combo().ID("cboStatus").Name("Status").HQLangCode("Status").ReadOnly(true).Tag("X").Width(300).DataIndex("Status")
                             .HQProcedure("IN10400_pcStatus")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                             .Width(300).HQHeightWidth(400, 200).HQAutoLoad(true)
-                            .HQParam(new StoreParameterCollection() 
-                            { 
+                            .HQParam(new StoreParameterCollection()
+                            {
                                  new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
                             })
                             .HQDBSys(false).ForceSelection(true)
@@ -125,8 +125,8 @@
                             .HQColumnShow("ReasonCD,Descr").DisplayField("Descr").ValueField("ReasonCD")
                             .Width(300).HQHeightWidth(400, 300).HQAutoLoad(true)
                             .HQDBSys(false).ForceSelection(true)
-                            .HQParam(new StoreParameterCollection() 
-                            { 
+                            .HQParam(new StoreParameterCollection()
+                            {
                                  new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                  new StoreParameter() { Name = "@SiteID", Value = "HQ.inSite", Mode = ParameterMode.Raw },
                             })
@@ -138,17 +138,17 @@
                                 lst.Focus.Handler = "HQ.focus='batch';";
 
                             })
-                        
+
                         ,HQ.DateField().ID("txtDateEnt").Name("DateEnt").HQLangCode("TranDate").Width(300).DataIndex("DateEnt")
-                            
-                       
+
+
                         ,HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").Width(300)//.Tag("X")
                             .HQProcedure("IN10400_pcHandle")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                             .Width(300).HQHeightWidth(400, 200).HQAutoLoad(true)
                             .HQDBSys(false).ForceSelection(true)
-                            .HQParam(new StoreParameterCollection() 
-                            { 
+                            .HQParam(new StoreParameterCollection()
+                            {
                                  new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
                             })
                             .LoadData()
@@ -157,23 +157,23 @@
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 lst.Focus.Handler = "HQ.focus='batch';";
-                            })         
+                            })
                     )
                 ,X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 3 0")
                     .Items(
                        HQ.NumberField().ID("txtTotQty").Name("TotQty").HQLangCode("TotQ").DecimalPrecision(0).Width(300).Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
-                       
+
                       ,HQ.NumberField().ID("txtTotAmt").Name("TotAmt").HQLangCode("TotAmt").DecimalPrecision(0).Width(300).Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
-                        
+
                       ,HQ.Combo().ID("cboSiteID").Name("SiteID").HQLangCode("SiteID").AllowBlank(false)
                             .HQProcedure("IN10400_pcSiteAll")//.DataIndex("SiteID")
                             .HQColumnShow("SiteID,Name").DisplayField("Name").ValueField("SiteID")
                             .Width(300).HQHeightWidth(400, 200).HQAutoLoad(true)
                             .HQDBSys(false).ForceSelection(true)
-                             .HQParam(new StoreParameterCollection() 
-                            { 
+                             .HQParam(new StoreParameterCollection()
+                            {
                                 new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                                
+
                             })
                             .LoadData()
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -182,18 +182,18 @@
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 //lst.Change.Fn = "cboSiteID_Change";
                                 lst.Focus.Handler = "HQ.focus='batch';";
-                            })                                          
+                            })
                     )
                  ,X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 3 0")
                     .Items(
                        HQ.TextBox().ID("txtDescr").Name("Descr").HQLangCode("Descr").Width(600).DataIndex("Descr").AllowBlank(false).Listeners(p => p.Focus.Handler = "HQ.focus='batch';").MaxLength(100).EnforceMaxLength(true)
-                       
-                        ,X.Hidden().ID("tstamp")                     
+
+                        ,X.Hidden().ID("tstamp")
                     )
             )
             .Listeners(lss =>
             {
-            lss.Render.Handler = "HQ.common.control_render(this,'batch')";
+                lss.Render.Handler = "HQ.common.control_render(this,'batch')";
             })
         ,X.Panel().ID("pnlDet") ////////////////Grid////////////////
         .Region(Region.Center).Border(false)
@@ -215,10 +215,10 @@
                         ps.Add(new StoreParameter("BranchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
                     })
                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetTrans")))
-                    .Listeners(l =>    
+                    .Listeners(l =>
                     {
                         l.Load.Fn = "stoDetail_Load";
-                       // l.BeforeLoad.Fn = "stoTrans_BeforeLoad";
+                        // l.BeforeLoad.Fn = "stoTrans_BeforeLoad";
                     })
                 )
             .ColumnModel(
@@ -229,8 +229,10 @@
                             .HQColumnShow("InvtID,Descr1,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID").HQProcedure("IN10400_pcInventoryActiveByBranch")
                             .Width(300).HQHeightWidth(400, 600)
                             .HQDBSys(false).ForceSelection(true).HQAutoLoad(true)
-                            .HQParam(new StoreParameterCollection() 
-                            { 
+                            .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw},
                                 new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                             })
                             .LoadData()
@@ -238,12 +240,12 @@
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                
+
                             })
                     )
-                    
+
                ,X.Column().Text(Util.GetLang("TranDesc")).DataIndex("TranDesc").Width(200)
-                   
+
                    ,X.Column().Text(Util.GetLang("UnitDesc")).DataIndex("UnitDesc").Width(100)
                     .Editor(
                         X.ComboBox()
@@ -264,36 +266,36 @@
 
 
                     , X.ComponentColumn()
-                         //.Hidden(true)
+                        //.Hidden(true)
                         .Text("")
                         .Width(26)
                         .Component(X.Button()
                                     .MarginSpec("1 4 1 3").Height(18).Text("")
                                     .Listeners(p => p.Click.Fn = "btnLot_Click")
                         )
-                
-           
-               
+
+
+
                ,X.NumberColumn().ID("colUnitPrice").Text(Util.GetLang("UnitPrice")).DataIndex("UnitPrice").Format("0,000").Align(Alignment.Right).Width(100)
-                    
-               ,X.NumberColumn().ID("colTransAmt").Text(Util.GetLang("TranAmt")).DataIndex("TranAmt").Align(Alignment.Right).Width(100).Format("0,000").Renderer("renderQtyAmt") 
+
+               ,X.NumberColumn().ID("colTransAmt").Text(Util.GetLang("TranAmt")).DataIndex("TranAmt").Align(Alignment.Right).Width(100).Format("0,000").Renderer("renderQtyAmt")
                     .Editor(
                         HQ.NumberField().MaxValue(9999999999999999999).DecimalPrecision(0)
                     )
-                   
+
                ,X.Column().Text(Util.GetLang("RefNbr")).DataIndex("RefNbr").Align(Alignment.Right).Width(100)
-                   
-                
+
+
             )
              .Listeners(ls =>
-            {
-                ls.SelectionChange.Fn = "grdTrans_SelectionChange";
-                ls.BeforeEdit.Fn = "grdTrans_BeforeEdit";
-                ls.Edit.Fn = "grdTrans_Edit";
-                ls.ValidateEdit.Fn = "grdTrans_ValidateEdit";
-            })
+             {
+                 ls.SelectionChange.Fn = "grdTrans_SelectionChange";
+                 ls.BeforeEdit.Fn = "grdTrans_BeforeEdit";
+                 ls.Edit.Fn = "grdTrans_Edit";
+                 ls.ValidateEdit.Fn = "grdTrans_ValidateEdit";
+             })
             .SelectionModel(X.RowSelectionModel().ID("smlTrans").Mode(SelectionMode.Single))
-            .View(X.GridView().TrackOver(false))         
+            .View(X.GridView().TrackOver(false))
             .BottomBar(
                 X.PagingToolbar()
                     .Items(
@@ -304,9 +306,9 @@
                         .Items("1", "2", "10", "20", "30", "50")
                         .SelectedItems("50")
                         .Listeners(l =>
-                            {
-                                l.Select.Fn = "HQ.grid.onPageSelect";
-                            })
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
                         )
                     .Plugins(X.ProgressBarPager())
                 )
@@ -318,18 +320,18 @@
                         X.StringFilter().DataIndex("InvtID")
                        ,X.StringFilter().DataIndex("TranDesc")
                        ,X.StringFilter().DataIndex("UnitDesc")
-                       ,X.NumericFilter().DataIndex("Qty")   
-                       ,X.NumericFilter().DataIndex("UnitPrice")  
-                       ,X.NumericFilter().DataIndex("TranAmt") 
-                       ,X.StringFilter().DataIndex("RefNbr")                  
+                       ,X.NumericFilter().DataIndex("Qty")
+                       ,X.NumericFilter().DataIndex("UnitPrice")
+                       ,X.NumericFilter().DataIndex("TranAmt")
+                       ,X.StringFilter().DataIndex("RefNbr")
                     )
-            )         
-                
+            )
+
         )
         .Listeners(lss =>
         {
             lss.Render.Handler = "HQ.common.control_render(this,'trans')";
-        }) 
+        })
     )// frmMain
 )
 )

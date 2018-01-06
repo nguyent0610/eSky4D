@@ -39,7 +39,7 @@ namespace IN10400
             Current.FormatDate = "dd-MM-yyyy";
             Current.FormatDateJS = "d-m-Y";
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";
+            Current.Server = "HOANGSAD";
             Current.DBSys = "ND_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
