@@ -47,24 +47,26 @@
                             //lst.Change.Fn = "cboBranchID_Change";
                             lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                             lst.Focus.Handler = "this.forceSelection=true;";
-                           
-                        })  
+
+                        })
                         .LoadData()
-               
+
                     , HQ.Combo().ID("cboInvtID").Name("cboInvtID").MarginSpec("5 0 0 0").Width(300)
                         .HQLangCode("InvtID").HQDBSys(false).HQProcedure("OM30200_pcInventoryActiveByBranch")
                         .HQColumnShow("InvtID,Descr").ForceSelection(true)
                         .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
                         .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw},
                             new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
                         })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
                         {
-                            //lst.Change.Fn = "cboInvtID_Change";
-                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
-                            lst.Focus.Handler = "this.forceSelection=true;";
-                        })  
+        //lst.Change.Fn = "cboInvtID_Change";
+        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+        lst.Focus.Handler = "this.forceSelection=true;";
+    })  
                         .LoadData()
                         
                     , HQ.Combo().ID("cboSiteID").Name("cboSiteID").MarginSpec("5 0 5 0").Width(300)
@@ -72,17 +74,17 @@
                         .HQColumnShow("SiteID,Name").ForceSelection(true)
                         .DisplayField("SiteID").ValueField("SiteID").HQHeightWidth(400, 300)
                         .HQParam(new StoreParameterCollection() {
-                            new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+        new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
                             new StoreParameter() { Name = "@ScreenNbr", Value ="OM30200", Mode = ParameterMode.Value},
                             new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
                         })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
                         {
-                            //lst.Change.Fn = "cboInvtID_Change";
-                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
-                            lst.Focus.Handler = "this.forceSelection=true;";
-                        })  
+        //lst.Change.Fn = "cboInvtID_Change";
+        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+        lst.Focus.Handler = "this.forceSelection=true;";
+    })  
                         .LoadData()
                         
                     
@@ -98,15 +100,15 @@
                         .HQColumnShow("Descr").ForceSelection(true).HQValue("%",false)
                         .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
                         .HQParam(new StoreParameterCollection() {
-                            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+        new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                         })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
                         {
-                            //lst.Change.Fn = "cboInvtID_Change";
-                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
-                            lst.Focus.Handler = "this.forceSelection=true;";
-                        })  
+        //lst.Change.Fn = "cboInvtID_Change";
+        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+        lst.Focus.Handler = "this.forceSelection=true;";
+    })  
                         .LoadData()
                         
                         , HQ.TextBox().ID("txtCusPO").Name("txtCusPO").HQLangCode("CUSTORDERNBR").MarginSpec("5 0 0 0").Width(300)
@@ -121,14 +123,14 @@
                         .HQColumnShow("Territory,Descr").ForceSelection(true)
                         .DisplayField("Territory").ValueField("Territory").HQHeightWidth(400, 300)
                         .HQParam(new StoreParameterCollection() {
-                        })
+    })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
                         {
-                            //lst.Change.Fn = "cboInvtID_Change";
-                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
-                            lst.Focus.Handler = "this.forceSelection=true;";
-                        })  
+        //lst.Change.Fn = "cboInvtID_Change";
+        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+        lst.Focus.Handler = "this.forceSelection=true;";
+    })  
                         .LoadData()
                     
                     , HQ.TextBox().ID("txtInvoiceNbr").Name("txtInvoiceNbr").HQLangCode("INVOICENBR").MarginSpec("5 0 0 0").Width(300)
@@ -156,17 +158,17 @@
                             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetHeader"))).AutoLoad(false)
                             .Parameters(ps =>
                             {
-                                ps.Add(new StoreParameter("CustID", "App.cboCustID.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("InvtID", "App.cboInvtID.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("SiteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("CustPO", "App.txtCusPO.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("invoice", "App.txtInvoiceNbr.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("Status", "App.cboStatus.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("BranchID", "HQ.cpnyID", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("FromDate", "App.lblOrderDate.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("ToDate", "App.lblTo.getValue()", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("SlsRoute", "App.cboTerritory.getValue()", ParameterMode.Raw));
-                            })
+        ps.Add(new StoreParameter("CustID", "App.cboCustID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("InvtID", "App.cboInvtID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("SiteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("CustPO", "App.txtCusPO.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("invoice", "App.txtInvoiceNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("Status", "App.cboStatus.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("BranchID", "HQ.cpnyID", ParameterMode.Raw));
+        ps.Add(new StoreParameter("FromDate", "App.lblOrderDate.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("ToDate", "App.lblTo.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("SlsRoute", "App.cboTerritory.getValue()", ParameterMode.Raw));
+    })
                         )
                     .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdHeader');")
                     .SortableColumns(false)
@@ -209,7 +211,7 @@
                         .Listeners(l=>l.Expand.Fn="Ctrl_Expand")
                         .Component(
                             X.FormPanel()
-                            .Items(                           
+                            .Items(
                                 X.GridPanel().Height(300).ID("grdDetail")
                                 .Store(
                                     X.Store()
@@ -219,17 +221,17 @@
                                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDetail"))).AutoLoad(false)
                                     .Parameters(ps =>
                                         {
-                                            ps.Add(new StoreParameter("CustID", "App.cboCustID.getValue()", ParameterMode.Raw));
-                                            ps.Add(new StoreParameter("InvtID", "HQ_InvtID", ParameterMode.Raw));
-                                            ps.Add(new StoreParameter("SiteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
-                                            ps.Add(new StoreParameter("CustPO", "App.txtCusPO.getValue()", ParameterMode.Raw));
-                                            ps.Add(new StoreParameter("invoice", "App.txtInvoiceNbr.getValue()", ParameterMode.Raw));
-                                            ps.Add(new StoreParameter("Status", "App.cboStatus.getValue()", ParameterMode.Raw));
-                                            ps.Add(new StoreParameter("BranchID", "HQ.cpnyID", ParameterMode.Raw));
-                                            ps.Add(new StoreParameter("FromDate", "App.lblOrderDate.getValue()", ParameterMode.Raw));
-                                            ps.Add(new StoreParameter("ToDate", "App.lblTo.getValue()", ParameterMode.Raw));
-                                            ps.Add(new StoreParameter("SlsRoute", "App.cboTerritory.getValue()", ParameterMode.Raw));
-                                        })
+        ps.Add(new StoreParameter("CustID", "App.cboCustID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("InvtID", "HQ_InvtID", ParameterMode.Raw));
+        ps.Add(new StoreParameter("SiteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("CustPO", "App.txtCusPO.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("invoice", "App.txtInvoiceNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("Status", "App.cboStatus.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("BranchID", "HQ.cpnyID", ParameterMode.Raw));
+        ps.Add(new StoreParameter("FromDate", "App.lblOrderDate.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("ToDate", "App.lblTo.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("SlsRoute", "App.cboTerritory.getValue()", ParameterMode.Raw));
+    })
                                 )
                                 .ColumnModel(
                                     X.Column().Text(Util.GetLang("OrderNbr")).DataIndex("OrderNbr")
