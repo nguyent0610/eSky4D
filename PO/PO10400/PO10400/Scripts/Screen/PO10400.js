@@ -316,7 +316,9 @@ var Other = {
        App.txtBranchID.setValue(_recordEdit.BranchID);
        App.txtPONbr.setValue(_recordEdit.PONbr);
        App.txtVendID.setValue(_recordEdit.VendID);
-       App.txtBranchName.setValue(_recordEdit.BranchName);     
+       App.txtBranchName.setValue(_recordEdit.BranchName);
+       App.winDetail.loader.url = 'PO10100?BranchID=' + _recordEdit.BranchID + '&PONbr=' + _recordEdit.PONbr;
+       App.winDetail.loader.load();
        App.winDetail.show();
    }
 };

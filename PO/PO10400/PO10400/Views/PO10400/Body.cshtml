@@ -331,9 +331,29 @@
         .Delegate(".x-grid-cell")
         .TrackMouse(true)
         .Listeners(lst => lst.Show.Handler = "onShowTooltip(this, App.grdDet,true);") )
-
 @(X.Window()
         .ID("winDetail")
+        .Title(Util.GetLang("EditPONbr"))
+        .Icon(Icon.Application)
+        .Maximized(true)
+        .Modal(true)
+        .Hidden(true)
+        .Layout(LayoutType.Fit)
+        .Listeners(p =>
+            {
+                p.Show.Fn = "Popup.loadSourcePopup";
+                p.Close.Fn = "Popup.close";
+                p.BeforeClose.Fn = "Popup.winDetail_BeforeClose";
+            })
+        .Loader(X.ComponentLoader()
+            .Url("")
+            .Mode(LoadMode.Frame)
+            .LoadMask(lm => lm.ShowMask = true)
+        )
+)
+        
+@(X.Window()
+        .ID("winDetailold")
         .Title(Util.GetLang("EditPONbr"))
         .Icon(Icon.Application)
         .Maximized(true)
