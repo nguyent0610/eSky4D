@@ -133,7 +133,9 @@
                     .ValueField("Code").DisplayField("Descr")
                     .HQProcedure("OM20300_pcStatus")
                     .HQParam(new StoreParameterCollection() {
-                        new StoreParameter("langID", "HQ.langID", ParameterMode.Raw)
+                        new StoreParameter("langID", "HQ.langID", ParameterMode.Raw),
+                         new StoreParameter("CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                        new StoreParameter("UserName", "HQ.userName", ParameterMode.Raw),
                     })
                     .LoadData()
 
@@ -146,6 +148,8 @@
                     .HQProcedure("OM20300_pcHandle")
                     .HQParam(new StoreParameterCollection() {
                         new StoreParameter("langID", "HQ.langID", ParameterMode.Raw),
+                        new StoreParameter("CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                        new StoreParameter("UserName", "HQ.userName", ParameterMode.Raw),
                         new StoreParameter("status", "App.cboStatus.getValue()", ParameterMode.Raw),
                         new StoreParameter("roles", "HQ.roles", ParameterMode.Raw)
                     })
@@ -313,11 +317,11 @@
                         .Renderer("renderQtyAmt").Align(Alignment.Right)
                         
                         , X.Column().DataIndex("QtyAmtSpent").Sortable(false)
-                        .Width(150).Text(Util.GetLang("Spent"))
+                        .Width(120).Text(Util.GetLang("Spent"))
                         .Renderer("renderQtyAmt").Align(Alignment.Right)
                         
                         , X.Column().DataIndex("QtyAmtAvail").Sortable(false).Renderer("renderQtyAmt")
-                        .Width(110).Text(Util.GetLang("BudgetResidual")).Align(Alignment.Right)
+                        .Width(110).Text(Util.GetLang("BudgetResidual")).Align(Alignment.Right).Width(120)
                     )
                     .Listeners(lst =>
                     {
@@ -559,22 +563,28 @@
 @(X.Window()
     .ID("winDetailFileNameExport")
     .Hidden(true).Resizable(true).Maximizable(true)
-    .Width(200).Height(150)
+    .Width(300).Height(160)
     .Layout(LayoutType.VBox)
     .AutoScroll(true).Closable(true)
+    .Listeners(l => 
+        {
+            l.BeforeShow.Handler = "App.frmMain.mask();";
+            l.BeforeHide.Handler = "App.frmMain.unmask();";
+            l.BeforeClose.Handler = "App.frmMain.unmask();";
+    })
     .Buttons(
         X.Button().ID("btnFileNameCancel").Text(Util.GetLang("Cancel"))
         .Listeners(p => p.Click.Fn = "btnFileNameCancel_Click")
     )
     .Items(
-      X.Container().Layout(LayoutType.HBox)
+          X.Container().Layout(LayoutType.VBox).MarginSpec("5 20 5 15")
       .Items(
-        HQ.Checkbox().ID("chkAmount").HQLangCode("Amount").MarginSpec("5 20 5 5")
-        ,HQ.Checkbox().ID("chkQuantity").HQLangCode("Quantity").MarginSpec("5 0 5 5")      
+        HQ.Checkbox().ID("chkAmount").HQLangCode("Amount")
+        ,HQ.Checkbox().ID("chkQuantity").HQLangCode("Quantity")  
           )
      ,X.Container().Layout(LayoutType.HBox)
      .Items(
-        X.Button().ID("btnFileNameExport").Text(Util.GetLang("Export")).Icon(Icon.ArrowTurnRight).MarginSpec("5 0 0 50").Width(100)
+        X.Button().ID("btnFileNameExport").Text(Util.GetLang("Export")).Icon(Icon.ArrowTurnRight).MarginSpec("0 0 0 50").Width(120)
         .Listeners(p => p.Click.Fn = "btnFileNameExport_Click")
         )
     )    

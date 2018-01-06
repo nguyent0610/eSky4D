@@ -33,6 +33,7 @@ namespace OM20300.Controllers
         #region Action
         public ActionResult Index()
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             var user = _sys.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
             ViewBag.BeginStatus = "H";
             ViewBag.EndStatus = "C";
@@ -398,11 +399,11 @@ namespace OM20300.Controllers
             int type = 0;
             if (query == string.Empty)
             {
-                lstBudget = _app.OM20300_pcBudget(user.CpnyID, type).ToList();
+                lstBudget = _app.OM20300_pcBudget(user.CpnyID, type, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             }
             else
             {
-                lstBudget = _app.OM20300_pcBudget(user.CpnyID, type).ToList().Where(p => p.Descr.ToLower().Contains(query.ToLower()) || p.BudgetID.ToLower().Contains(query.ToLower())).ToList();
+                lstBudget = _app.OM20300_pcBudget(user.CpnyID, type, Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(p => p.Descr.ToLower().Contains(query.ToLower()) || p.BudgetID.ToLower().Contains(query.ToLower())).ToList();
             }
             var result = lstBudget.Skip(start).Take(limit);
             Paging<OM20300_pcBudget_Result> paging = new Paging<OM20300_pcBudget_Result>(result, lstBudget.Count);
@@ -427,7 +428,7 @@ namespace OM20300.Controllers
         }
         public ActionResult GetListBudgetCompany(string budgetID)
         {
-            var lstCpny = _app.OM20300_pgCpny(budgetID).ToList();
+            var lstCpny = _app.OM20300_pgCpny(budgetID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lstCpny, lstCpny.Count);
         }
        
@@ -464,9 +465,9 @@ namespace OM20300.Controllers
                             {
                                 if (workSheet.Cells[0, 0].StringValue.ToUpper().Trim() == "BUDGET ID"
                                    && workSheet.Cells[0, 1].StringValue.ToUpper().Trim() == "BRANCH ID"
-                                   && workSheet.Cells[0, 2].StringValue.ToUpper().Trim() == "TOTAL"
+                                   && workSheet.Cells[0, 2].StringValue.ToUpper().Trim().StartsWith("TOTAL")
                                    && workSheet.Cells[0, 3].StringValue.ToUpper().Trim() == "FREE ITEM ID"
-                                   && workSheet.Cells[0, 4].StringValue.ToUpper().Trim() == "UNIT"
+                                   && workSheet.Cells[0, 4].StringValue.ToUpper().Trim().StartsWith("UNIT")
                                    && workSheet.Cells[0, 5].StringValue.ToUpper().Trim() == "ALLOCATED"
                                    && workSheet.Cells[0, 6].StringValue.ToUpper().Trim() == "DESCRIPTION"
                                    )
@@ -475,7 +476,7 @@ namespace OM20300.Controllers
                                 }
                                 else if (workSheet.Cells[0, 0].StringValue.ToUpper().Trim() == "BUDGET ID"
                                    && workSheet.Cells[0, 1].StringValue.ToUpper().Trim() == "BRANCH ID"
-                                   && workSheet.Cells[0, 2].StringValue.ToUpper().Trim() == "TOTAL"
+                                   && workSheet.Cells[0, 2].StringValue.ToUpper().Trim().StartsWith("TOTAL")
                                    && workSheet.Cells[0, 3].StringValue.ToUpper().Trim() == "ALLOCATED"
                                    && workSheet.Cells[0, 4].StringValue.ToUpper().Trim() == "DESCRIPTION"
                                 )
@@ -484,7 +485,7 @@ namespace OM20300.Controllers
                                 }
                                 if (!isFormatQuantity && !isFormatAmount)
                                 {
-                                    throw new MessageException(MessageType.Message, "1005", parm: new[] { fileInfo.Name });
+                                    throw new MessageException(MessageType.Message, "20407", parm: new[] { fileInfo.Name });
                                 }
                                 var _lstcpnyCheck = _app.OM20300_pcBranchID(Current.UserName,Current.CpnyID,Current.LangID).ToList();
                                 List<OM_PPCpny> lstppcpny = new List<OM_PPCpny>();

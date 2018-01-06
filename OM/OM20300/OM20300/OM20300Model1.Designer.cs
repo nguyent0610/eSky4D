@@ -312,7 +312,10 @@ namespace OM20300
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="budgetID">No Metadata Documentation available.</param>
-        public ObjectResult<OM20300_pgCpny_Result> OM20300_pgCpny(global::System.String budgetID)
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM20300_pgCpny_Result> OM20300_pgCpny(global::System.String budgetID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter budgetIDParameter;
             if (budgetID != null)
@@ -324,7 +327,37 @@ namespace OM20300
                 budgetIDParameter = new ObjectParameter("BudgetID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM20300_pgCpny_Result>("OM20300_pgCpny", budgetIDParameter);
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM20300_pgCpny_Result>("OM20300_pgCpny", budgetIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
@@ -381,7 +414,10 @@ namespace OM20300
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="type">No Metadata Documentation available.</param>
-        public ObjectResult<OM20300_pcBudget_Result> OM20300_pcBudget(global::System.String branchID, Nullable<global::System.Int32> type)
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM20300_pcBudget_Result> OM20300_pcBudget(global::System.String branchID, Nullable<global::System.Int32> type, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -403,7 +439,37 @@ namespace OM20300
                 typeParameter = new ObjectParameter("Type", typeof(global::System.Int32));
             }
     
-            return base.ExecuteFunction<OM20300_pcBudget_Result>("OM20300_pcBudget", branchIDParameter, typeParameter);
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM20300_pcBudget_Result>("OM20300_pcBudget", branchIDParameter, typeParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
@@ -2814,30 +2880,6 @@ namespace OM20300
         private global::System.String _ProType;
         partial void OnProTypeChanging(global::System.String value);
         partial void OnProTypeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Channel
-        {
-            get
-            {
-                return _Channel;
-            }
-            set
-            {
-                OnChannelChanging(value);
-                ReportPropertyChanging("Channel");
-                _Channel = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Channel");
-                OnChannelChanged();
-            }
-        }
-        private global::System.String _Channel;
-        partial void OnChannelChanging(global::System.String value);
-        partial void OnChannelChanged();
 
         #endregion
 
