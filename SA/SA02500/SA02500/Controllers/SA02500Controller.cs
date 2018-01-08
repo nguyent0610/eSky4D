@@ -13,8 +13,8 @@ using System.Text;
 namespace SA02500.Controllers
 {
     [DirectController]
-    [CustomAuthorize]
-    [CheckSessionOut]
+    //[CustomAuthorize]
+    //[CheckSessionOut]
     public class SA02500Controller : Controller
     {
         private string _screenNbr = "SA02500";
