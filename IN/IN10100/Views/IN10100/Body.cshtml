@@ -461,7 +461,7 @@
                     .Text(Util.GetLang("Qty"))
                     .Align(Alignment.Right)
                     .Width(100)
-                    .Editor(HQ.NumberField().ID("txtTransQty").MaxValue(100000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
+                    .Editor(HQ.NumberField().ID("txtTransQty").MaxValue(1000000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
                     .Renderer("rdrTrans_QtyAmt")
                 
                 
@@ -638,7 +638,7 @@
             .Width(75)
             .Align(Alignment.Right)
             .Renderer("renderQtyAmt") 
-            .Editor(Html.X().NumberField().MaxValue(10000).MinValue(0).DecimalPrecision(0))
+            .Editor(Html.X().NumberField().MaxValue(1000000).MinValue(0).DecimalPrecision(0))
                 
                 
             , X.Column().ID("colLotPrice").DataIndex("UnitPrice").Text(Util.GetLang("Price"))
