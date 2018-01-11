@@ -103,6 +103,8 @@ namespace AR20500.Controllers
             var showVisitsPerDay = false;
             var maxVisitPerDay = 0;
             var showTypeCabinnets = false;
+            bool _editApproved1 = false;
+            bool _editApproved2 = false;
             var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -119,7 +121,10 @@ namespace AR20500.Controllers
                 maxVisitPerDay = objConfig.MaxVisitsPerDay;
                 requireRefCustID = objConfig.RequireRefCustID.HasValue && objConfig.RequireRefCustID.Value;
                 showTypeCabinnets = objConfig.ShowTypeCabinets.HasValue && objConfig.ShowTypeCabinets.Value;
+                _editApproved1 = objConfig.EditApproved1.HasValue ? objConfig.EditApproved1.Value : false;
+                _editApproved2 = objConfig.EditApproved2.HasValue ? objConfig.EditApproved2.Value : false;
             }
+
             ViewBag.IsShowERPCust = isShowERPCust;
             ViewBag.IsShowCustHT = isShowCustHT;
             ViewBag.IsShowReason = isShowReason;
@@ -133,11 +138,13 @@ namespace AR20500.Controllers
             ViewBag.showVisitsPerDay = showVisitsPerDay;
             ViewBag.maxVisitPerDay = maxVisitPerDay;
             ViewBag.showTypeCabinnets = showTypeCabinnets;
+            ViewBag._editApproved1 = _editApproved1;
+            ViewBag._editApproved2 = _editApproved2;
             #endregion
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

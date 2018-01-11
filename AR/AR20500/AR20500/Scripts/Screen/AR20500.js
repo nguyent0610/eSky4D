@@ -403,6 +403,23 @@ var grdCust_BeforeEdit = function (item, e) {
     if (!checkEditDet()) {
         return false;
     }
+    if (e.field == 'ContactName') {
+        if (App.cboStatus.getValue() == 'H') {
+            if (!HQ._editApproved1) {
+                return false;
+            }
+        }
+        else {
+            if (App.cboStatus.getValue() == 'O') {
+                if (!HQ._editApproved2) {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+    }
     if (e.field == 'ERPCustID' && e.record.data.UpdateType != 0) {
         return false;
     }
@@ -469,6 +486,9 @@ var grdCust_BeforeEdit = function (item, e) {
         _slsperID = e.record.data.SlsperID;
         App.cboColSalesRouteID.store.reload();
     }
+
+
+
 };
 
 var grdCust_ValidateEdit = function (item, e) {

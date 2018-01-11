@@ -9302,6 +9302,54 @@ namespace AR20500
         private Nullable<global::System.Boolean> _ShowTypeCabinets;
         partial void OnShowTypeCabinetsChanging(Nullable<global::System.Boolean> value);
         partial void OnShowTypeCabinetsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> EditApproved1
+        {
+            get
+            {
+                return _EditApproved1;
+            }
+            set
+            {
+                OnEditApproved1Changing(value);
+                ReportPropertyChanging("EditApproved1");
+                _EditApproved1 = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EditApproved1");
+                OnEditApproved1Changed();
+            }
+        }
+        private Nullable<global::System.Boolean> _EditApproved1;
+        partial void OnEditApproved1Changing(Nullable<global::System.Boolean> value);
+        partial void OnEditApproved1Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> EditApproved2
+        {
+            get
+            {
+                return _EditApproved2;
+            }
+            set
+            {
+                OnEditApproved2Changing(value);
+                ReportPropertyChanging("EditApproved2");
+                _EditApproved2 = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EditApproved2");
+                OnEditApproved2Changed();
+            }
+        }
+        private Nullable<global::System.Boolean> _EditApproved2;
+        partial void OnEditApproved2Changing(Nullable<global::System.Boolean> value);
+        partial void OnEditApproved2Changed();
 
         #endregion
 
