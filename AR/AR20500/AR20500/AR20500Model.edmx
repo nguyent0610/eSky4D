@@ -710,9 +710,8 @@
           <Property Type="Int32" Name="MaxVisitsPerDay" Nullable="false" />
           <Property Type="Boolean" Name="RequireRefCustID" Nullable="true" />
           <Property Type="Boolean" Name="ShowTypeCabinets" Nullable="true" />
-          <Property Type="Boolean" Name="EditApproved1" Nullable="true" />
-          <Property Type="Boolean" Name="EditApproved2" Nullable="true" />
-        </ComplexType>
+          <Property Type="String" Name="AllowEditContactName" Nullable="false" MaxLength="11" />
+          </ComplexType>
         <ComplexType Name="AR20500_pcReason_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
@@ -1198,9 +1197,8 @@
                 <ScalarProperty Name="MaxVisitsPerDay" ColumnName="MaxVisitsPerDay" />
                 <ScalarProperty Name="RequireRefCustID" ColumnName="RequireRefCustID" />
                 <ScalarProperty Name="ShowTypeCabinets" ColumnName="ShowTypeCabinets" />
-                <ScalarProperty Name="EditApproved1" ColumnName="EditApproved1" />
-                <ScalarProperty Name="EditApproved2" ColumnName="EditApproved2" />
-              </ComplexTypeMapping>
+                <ScalarProperty Name="AllowEditContactName" ColumnName="AllowEditContactName" />
+                </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AR20500_pcReason" FunctionName="eBiz4DWebSysModel.Store.AR20500_pcReason">

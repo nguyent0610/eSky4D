@@ -8977,13 +8977,15 @@ namespace AR20500
         /// <param name="allowApproveEditCust">Initial value of the AllowApproveEditCust property.</param>
         /// <param name="allowEditReason">Initial value of the AllowEditReason property.</param>
         /// <param name="maxVisitsPerDay">Initial value of the MaxVisitsPerDay property.</param>
-        public static AR20500_pdConfig_Result CreateAR20500_pdConfig_Result(global::System.String allowSave, global::System.String allowApproveEditCust, global::System.String allowEditReason, global::System.Int32 maxVisitsPerDay)
+        /// <param name="allowEditContactName">Initial value of the AllowEditContactName property.</param>
+        public static AR20500_pdConfig_Result CreateAR20500_pdConfig_Result(global::System.String allowSave, global::System.String allowApproveEditCust, global::System.String allowEditReason, global::System.Int32 maxVisitsPerDay, global::System.String allowEditContactName)
         {
             AR20500_pdConfig_Result aR20500_pdConfig_Result = new AR20500_pdConfig_Result();
             aR20500_pdConfig_Result.AllowSave = allowSave;
             aR20500_pdConfig_Result.AllowApproveEditCust = allowApproveEditCust;
             aR20500_pdConfig_Result.AllowEditReason = allowEditReason;
             aR20500_pdConfig_Result.MaxVisitsPerDay = maxVisitsPerDay;
+            aR20500_pdConfig_Result.AllowEditContactName = allowEditContactName;
             return aR20500_pdConfig_Result;
         }
 
@@ -9306,50 +9308,26 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> EditApproved1
+        public global::System.String AllowEditContactName
         {
             get
             {
-                return _EditApproved1;
+                return _AllowEditContactName;
             }
             set
             {
-                OnEditApproved1Changing(value);
-                ReportPropertyChanging("EditApproved1");
-                _EditApproved1 = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("EditApproved1");
-                OnEditApproved1Changed();
+                OnAllowEditContactNameChanging(value);
+                ReportPropertyChanging("AllowEditContactName");
+                _AllowEditContactName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("AllowEditContactName");
+                OnAllowEditContactNameChanged();
             }
         }
-        private Nullable<global::System.Boolean> _EditApproved1;
-        partial void OnEditApproved1Changing(Nullable<global::System.Boolean> value);
-        partial void OnEditApproved1Changed();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> EditApproved2
-        {
-            get
-            {
-                return _EditApproved2;
-            }
-            set
-            {
-                OnEditApproved2Changing(value);
-                ReportPropertyChanging("EditApproved2");
-                _EditApproved2 = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("EditApproved2");
-                OnEditApproved2Changed();
-            }
-        }
-        private Nullable<global::System.Boolean> _EditApproved2;
-        partial void OnEditApproved2Changing(Nullable<global::System.Boolean> value);
-        partial void OnEditApproved2Changed();
+        private global::System.String _AllowEditContactName;
+        partial void OnAllowEditContactNameChanging(global::System.String value);
+        partial void OnAllowEditContactNameChanged();
 
         #endregion
 

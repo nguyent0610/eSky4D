@@ -103,8 +103,7 @@ namespace AR20500.Controllers
             var showVisitsPerDay = false;
             var maxVisitPerDay = 0;
             var showTypeCabinnets = false;
-            bool _editApproved1 = false;
-            bool _editApproved2 = false;
+            var allowEditContactName = string.Empty;
             var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -115,14 +114,14 @@ namespace AR20500.Controllers
                 isShowEditCust = objConfig.ShowEditCust.HasValue && objConfig.ShowEditCust.Value;
                 allowSave = objConfig.AllowSave.PassNull();
                 allowApproveEditCust = objConfig.AllowApproveEditCust.PassNull();
+                allowEditContactName = objConfig.AllowEditContactName.PassNull();
                 allowEditReason = objConfig.AllowEditReason.PassNull();
                 showSubRoute = objConfig.ShowSubRouteID.HasValue && objConfig.ShowSubRouteID.Value;
                 showVisitsPerDay = objConfig.ShowVisitsPerDay.HasValue && objConfig.ShowVisitsPerDay.Value;
                 maxVisitPerDay = objConfig.MaxVisitsPerDay;
                 requireRefCustID = objConfig.RequireRefCustID.HasValue && objConfig.RequireRefCustID.Value;
                 showTypeCabinnets = objConfig.ShowTypeCabinets.HasValue && objConfig.ShowTypeCabinets.Value;
-                _editApproved1 = objConfig.EditApproved1.HasValue ? objConfig.EditApproved1.Value : false;
-                _editApproved2 = objConfig.EditApproved2.HasValue ? objConfig.EditApproved2.Value : false;
+
             }
 
             ViewBag.IsShowERPCust = isShowERPCust;
@@ -132,14 +131,13 @@ namespace AR20500.Controllers
             ViewBag.ShowEditCust = isShowEditCust;
             ViewBag.AllowSave = allowSave;
             ViewBag.AllowApproveEditCust = allowApproveEditCust;
+            ViewBag.AllowEditContactName = allowEditContactName;
             ViewBag.AllowEditReason = allowEditReason;
             ViewBag.showSubRoute = showSubRoute;
             ViewBag.IsRequireRefCustID = requireRefCustID;
             ViewBag.showVisitsPerDay = showVisitsPerDay;
             ViewBag.maxVisitPerDay = maxVisitPerDay;
             ViewBag.showTypeCabinnets = showTypeCabinnets;
-            ViewBag._editApproved1 = _editApproved1;
-            ViewBag._editApproved2 = _editApproved2;
             #endregion
             return View();
         }

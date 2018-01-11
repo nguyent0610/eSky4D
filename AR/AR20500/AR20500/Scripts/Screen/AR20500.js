@@ -5,8 +5,9 @@ var _hideColumn = ['SalesRouteID', 'SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed'
 var _lockColumn = ['SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 var hideEditCustColumn = ['EditInfo', 'EditBusinessPic', 'EditProfilePic'];
-var _isEditReason = false;
+var _isEditReason = 0;
 var _slsperID = '';
+var _isditContactName = false;
 var frmMain_BoxReady = function () {   
     if (HQ.ShowExport) App.btnExport.hide();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
@@ -404,20 +405,9 @@ var grdCust_BeforeEdit = function (item, e) {
         return false;
     }
     if (e.field == 'ContactName') {
-        if (App.cboStatus.getValue() == 'H') {
-            if (!HQ._editApproved1) {
-                return false;
-            }
-        }
-        else {
-            if (App.cboStatus.getValue() == 'O') {
-                if (!HQ._editApproved2) {
-                    return false;
-                }
-            }
-            else {
-                return false;
-            }
+        checkEditContactName();
+        if (_isditContactName == 0) {
+            return false;
         }
     }
     if (e.field == 'ERPCustID' && e.record.data.UpdateType != 0) {
@@ -487,7 +477,7 @@ var grdCust_BeforeEdit = function (item, e) {
         App.cboColSalesRouteID.store.reload();
     }
 
-
+    
 
 };
 
@@ -1416,6 +1406,23 @@ var checkEditReason = function () {
         }
     }
 };
+
+
+
+
+var checkEditContactName = function () {
+    _isditContactName = false;
+    var value = App.cboStatus.getValue() + App.cboUpdateType.getValue();
+    var items = HQ.AllowEditContactName.split(',');
+    for (var i = 0; i < items.length; i++) {
+        if (items[i] == value) {
+            _isditContactName = 1;
+            break;
+        }
+    }
+};
+
+
 
 var cboHandle_Change = function () {    
     if (_Change && App.cboHandle.store.data.length > 1) {
