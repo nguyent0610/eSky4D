@@ -191,6 +191,10 @@
                     , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                 })
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); App.cboClassID.store.clearFilter();}";
+                })
                 .LoadData()
                                         
                 , X.Button().ID("btnLoad").Text(Util.GetLang("LoadData")).MarginSpec("5 0 0 115").Width(185).Icon(Icon.ArrowRefresh)

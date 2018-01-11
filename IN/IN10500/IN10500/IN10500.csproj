@@ -51,7 +51,7 @@
     </Reference>
     <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Cty\DLL MVC NEW\eBiz4DApp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\DLL MVC\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net">
       <HintPath>..\..\EbizWebMvc\IN10500_Language\IN10500\bin\Ext.Net.dll</HintPath>
@@ -81,7 +81,7 @@
     </Reference>
     <Reference Include="INProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\INProcess.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Hao\20170504\NhuHao\DLL MVC moi\ND\INProcess.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
       <SpecificVersion>False</SpecificVersion>
@@ -329,7 +329,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

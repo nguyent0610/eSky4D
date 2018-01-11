@@ -16,6 +16,7 @@ using HQSendMailApprove;
 using Aspose.Cells;
 using HQFramework.Common;
 using System.Drawing;
+using System.Threading;
 
 namespace IN10500.Controllers
 {
@@ -427,8 +428,55 @@ namespace IN10500.Controllers
                 throw (ex);
             }
         }
+        [HttpPost]
+        public ActionResult ExportFileName()
+        {
 
-        public ActionResult Export(FormCollection data)
+            string fileName = "A" + Guid.NewGuid().ToString("N") + ".xlsx";
+            string path = Server.MapPath("~/temp") + @"\" + fileName;
+            return Json(new { success = true, id = fileName, name = Util.GetLang("IN10500") + ".xlsx" }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult CheckFile(string name, string id)
+        {
+            string path = Server.MapPath("~/temp");
+            string fullName = path + @"\" + id;
+            while (!System.IO.File.Exists(fullName))
+            {
+                Thread.Sleep(5 * 1000);
+            }
+            //kiem tra file co dang su dung hay ko? Vi khi export dang save file, khi do da co file nhung save chua xong, file download ve loi
+            FileInfo fi = new FileInfo(fullName);
+            while (IsFileLocked(fi))
+            {
+                Thread.Sleep(5 * 1000);
+            }
+
+            return Json(new { success = true, id = id, name = name }, JsonRequestBehavior.AllowGet);
+
+        }
+        protected bool IsFileLocked(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
+        }
+        public ActionResult Export(FormCollection data, string id, string name)
         {
             try
             {
@@ -486,7 +534,11 @@ namespace IN10500.Controllers
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Position = 0;
 
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "Data.xlsx" };
+                var fileName = id;
+                string fullPath = Path.Combine(Server.MapPath("~/temp"), fileName);
+                workbook.Save(fullPath, SaveFormat.Xlsx);
+                return Json(new { success = true, id = id, name = name, errorMessage = "" });
+                //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "Data.xlsx" };
             }
             catch (Exception ex)
             {
@@ -612,6 +664,13 @@ namespace IN10500.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
+        }
+        [HttpGet]
+        //[DeleteFileAttribute] //Action Filter, it will auto delete the file after download,I will explain it later
+        public ActionResult DownloadAndDelete(string name, string id)
+        {
+            string fullPath = Path.Combine(Server.MapPath("~/temp"), id);
+            return File(fullPath, "application/vnd.ms-excel", name);
         }
         [HttpPost]
         public ActionResult Report(FormCollection data)

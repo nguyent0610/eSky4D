@@ -191,6 +191,14 @@ var stoIN_TagHeader_Load = function (sto) {
     } else {
         lockControl(false);
     }
+    if (App.cboTagID.getValue() != null) {
+        App.cboClassID.setReadOnly(true);
+        App.btnLoad.disable();
+    }
+    else {
+        App.cboClassID.setReadOnly(false);
+        App.btnLoad.enable();
+    }
     App.frmMain.getForm().loadRecord(record);
     if (_isLoadStoreTag) {
         App.stoIN_TagDetail.reload();
@@ -631,7 +639,7 @@ var btnImport_Click = function (c, e) {
             {
                 success: function (result) {
                     if (result == '') {
-                        importData();
+                        importData(c);
                     }
                     else {
                         result = "<div style ='overflow: auto !important; max-height:400px !important'> " + result + " </div>";
@@ -644,10 +652,10 @@ var btnImport_Click = function (c, e) {
                 }
             });
     } else {
-        importData();
+        importData(c);
     }
 };
-function importData()
+function importData(c)
 {
     var fileName = c.getValue();
     var ext = fileName.split(".").pop().toLowerCase();
@@ -708,16 +716,75 @@ function importData()
     }
 }
 var btnExport_Click = function () {
+    //App.frmMain.submit({
+    //    url: 'IN10500/Export',
+    //    timeout: 1000000,
+    //    clientValidation: false,
+    //    success: function (msg, data) {
+    //    },
+    //    failure: function (msg, data) {
+    //        HQ.message.process(msg, data, true);
+    //    }
+    //});
     App.frmMain.submit({
-        url: 'IN10500/Export',
+        waitMsg: HQ.common.getLang("Exporting"),
         timeout: 1000000,
+        url: 'IN10500/ExportFileName',
         clientValidation: false,
-        success: function (msg, data) {
+        success: function (returnValue, data) {
+            if (!Ext.isEmpty(data.result.id)) {
+                exportExcelFile(data.result.id, data.result.name);
+            }
         },
         failure: function (msg, data) {
+
             HQ.message.process(msg, data, true);
         }
     });
-
-
 };
+function exportExcelFile(idfile, name) {
+    App.frmMain.submit({
+        waitMsg: HQ.common.getLang("Exporting"),
+        url: 'IN10500/Export',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        params: {
+            id: idfile,
+            name: name
+        },
+        success: function (returnValue, data) {
+            window.location = 'IN10500/DownloadAndDelete?name=' + data.result.name + '&id=' + data.result.id;
+        },
+        failure: function (msg, data) {
+            if (data.failureType == "connect")
+                downloadFile(idfile, name);
+            else HQ.message.process(msg, data, true);
+        }
+    });
+}
+function downloadFile(idfile, name) {
+
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("CheckingFile"),
+            method: 'POST',
+            timeout: 18000000,
+            url: 'IN10500/CheckFile',
+            params: {
+                name: name,
+                id: idfile
+            },
+            success: function (msg, data) {
+                if (!Ext.isEmpty(data.result.name)) {
+                    window.location = 'RPT/DownloadAndDelete?name=' + data.result.name + '&id=' + data.result.id;
+                }
+            },
+            failure: function (msg, data) {
+                if (data.failureType == "connect")
+                    downloadFile(idfile, name);
+                else HQ.message.process(msg, data, true);
+            }
+        });
+    }
+}
