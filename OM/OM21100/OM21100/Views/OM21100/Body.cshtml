@@ -41,7 +41,7 @@
                 p.Click.Fn = "btnExport1_Click";
             })
         }, "Print", true, "Main.Event.menuClick"))
-        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 130; })
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 110; })
         .Items(
             X.TabPanel().ID("tabMain")
             .Layout(LayoutType.Fit)
@@ -290,7 +290,7 @@
                                              .ID("btnUpload")//.Hidden(true)
                                              .Name("btnUpload")
                                             .ButtonOnly(true)
-                                            .MarginSpec("5 0 0 77")
+                                            .MarginSpec("5 0 0 55")
                                             //.ButtonText(Util.GetLang("Upload"))
 
                                             .RemoveClearTrigger(false)
@@ -390,10 +390,34 @@
                                         .BoxLabel(Util.GetLang("ExcludeOtherDisc")).DataIndex("ExcludeOtherDisc")
                                         .Listeners(l =>
                                         {
-                                            l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";                                            
                                         })
 
 
+                                    ) // Container
+                                    , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
+                                    .Items(
+                                        HQ.Checkbox().ID("chkRequiredType")
+                                        .MarginSpec("5 5 0 10")
+                                        .BoxLabel(Util.GetLang("RequiredType"))
+                                        .Listeners(l =>
+                                        {
+                                            l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            l.Change.Fn = "chkRequiredType_Change";
+                                        })
+                                        , X.Hidden().ID("txtRequiredType").DataIndex("RequiredType")
+                                        .Listeners(l =>
+                                        {
+
+                                            l.Change.Fn = "txtRequiredType_Change";
+                                        })
+                                        , HQ.Checkbox().ID("chkExactQty")
+                                        .MarginSpec("5 5 0 10")
+                                        .BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")
+                                        .Listeners(l =>
+                                        {
+                                            l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                        })
                                     ) // Container
                                 ),
                                 X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
@@ -403,21 +427,20 @@
                                     .MarginSpec("0 5 0 5")
                                     .HQLangCode("DescrDiscSeq").DataIndex("Descr")
 
-                                    .StyleSpec("text-align:left").Width(880)
+                                    .StyleSpec("text-align:left").Width(820)
                                     //.MaxLength(50).EnforceMaxLength(true)
                                     .AllowBlank(false)
                                     .Listeners(l =>
                                     {
                                         l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                     })
-                                    , HQ.Checkbox().ID("chkExactQty")
-                                    .MarginSpec("0 5 5 8")
-                                    //   .Hidden(true)
-                                    .BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")
-                                    .Listeners(l =>
-                                    {
-                                        l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
-                                    })
+                                    //, HQ.Checkbox().ID("chkExactQty")
+                                    //.MarginSpec("0 5 5 8")
+                                    //.BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")
+                                    //.Listeners(l =>
+                                    //{
+                                    //    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                    //})
                                 )
                             )
                             .Listeners(ls =>
@@ -988,7 +1011,11 @@
                             .LoadData()
                         //.Listeners(x => x.Expand.Handler = "this.store.reload();")
                         )
-
+                        , X.NumberColumn().Text(Util.GetLang("RequiredValue")).DataIndex("RequiredValue").Hidden(true)
+                        .Align(Alignment.Right).Format("0,000")
+                        .Editor(
+                            X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                        )
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")

@@ -44,33 +44,34 @@ namespace OM21100.Controllers
         {
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
-            var objCheck = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM21100SAMEPROMOKIND");
-            var sameKind = true;
-            if (objCheck != null && objCheck.IntVal == 0)
-            {
-                sameKind = false;
-            }
+           // var objCheck = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "OM21100SAMEPROMOKIND");            
+            //if (objCheck != null && objCheck.IntVal == 0)
+            //{
+            //    sameKind = false;
+            //}
             bool allowImport = false
-                , allowExport = false;
-            
+                , allowExport = false
+                , addSameKind = true
+                , showRequiredType = false;             
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
-                allowExport = objConfig.AllowExport.HasValue ? objConfig.AllowExport.Value : false;
-                allowImport = objConfig.AllowImport.HasValue ? objConfig.AllowImport.Value : false;
-                allowAddDiscount = objConfig.AllowAddDiscount.HasValue ? objConfig.AllowAddDiscount.Value : false;
+                allowExport = objConfig.AllowExport.HasValue && objConfig.AllowExport.Value;
+                allowImport = objConfig.AllowImport.HasValue && objConfig.AllowImport.Value;
+                allowAddDiscount = objConfig.AllowAddDiscount.HasValue && objConfig.AllowAddDiscount.Value;
+                addSameKind = objConfig.AllowAddSameKind == 0;
+                showRequiredType = objConfig.ShowRequiredType.HasValue && objConfig.ShowRequiredType.Value;
             }
-            //var allowExport = true;
-            //var allowImport = true;
             ViewBag.allowExport = allowExport;
             ViewBag.allowImport = allowImport;
             ViewBag.allowAddDiscount = allowAddDiscount;
-            ViewBag.addSameKind = sameKind;
+            ViewBag.addSameKind = addSameKind;
+            ViewBag.showRequiredType = showRequiredType;
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -538,7 +539,7 @@ namespace OM21100.Controllers
 
         public ActionResult GetDiscItem(string discID, string discSeq)
         {
-            var discDiscItems = _db.OM21100_pgDiscItem(discID, discSeq).ToList();
+            var discDiscItems = _db.OM21100_pgDiscItem(discID, discSeq, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(discDiscItems);
         }
 
@@ -1710,11 +1711,12 @@ namespace OM21100.Controllers
                 }
                 else
                 {
-                    OM_DiscItem newItem = new OM_DiscItem();
+                    discItem = new OM_DiscItem();
                     currentItem.DiscType = discType;
-                    Update_DiscItem(newItem, currentItem, true);
-                    _db.OM_DiscItem.AddObject(newItem);
+                    Update_DiscItem(discItem, currentItem, true);
+                    _db.OM_DiscItem.AddObject(discItem);
                 }
+                discItem.RequiredValue = inputSeq.RequiredType == "Q" ? currentItem.RequiredValue : 0;
             }            
 
             if (inputSeq.DiscClass == "II")
@@ -2096,11 +2098,10 @@ namespace OM21100.Controllers
                 t.BundleOrItem = "I";
                 t.BundleQty = 0;
                 t.DiscType = s.DiscType;
-
-
                 t.LUpd_DateTime = DateTime.Now;
                 t.LUpd_Prog = _screenNbr;
                 t.LUpd_User = Current.UserName;
+
             }
             catch (Exception ex)
             {
@@ -2237,6 +2238,7 @@ namespace OM21100.Controllers
             {
                 updatedDiscSeq.Status = handle;
             }
+            updatedDiscSeq.RequiredType = inputDiscSeq.RequiredType;
 
             updatedDiscSeq.LUpd_DateTime = DateTime.Now;
             updatedDiscSeq.LUpd_Prog = _screenNbr;

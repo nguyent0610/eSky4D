@@ -440,6 +440,24 @@ var Main = {
             return hasData;
         },
 
+        checkExistRequiredValue: function(){
+            if (App.chkRequiredType.getValue()) {
+                var hasData = false;
+                App.grdDiscItem.store.data.each(function (item) {                    
+                    if (!Ext.isEmpty(item.data.InvtID) && item.data.RequiredValue > 0) {
+                        hasData = true;
+                        return false;                        
+                    }                
+                });
+                if (!hasData) {
+                    App.tabMain.setActiveTab(1);
+                    HQ.message.show(2018011101, [HQ.grid.findColumnNameByIndex(App.grdDiscItem.columns , 'RequiredValue'), HQ.common.getLang('DPII')],'', true);
+                    return false;
+                }
+            }
+            return true;
+        },
+
         getChangedFilteredData: function (store) {
             var data = store.data,
                 changedData
@@ -464,72 +482,73 @@ var Main = {
                     else {
                         if (Main.Process.checkHasData()) {
                             if (Main.Process.checkEntireRequire()) {
-                                App.frmDiscDefintionTop.updateRecord();
-                                App.frmDiscSeqInfo.updateRecord();
-                                App.frmMain.submit({
-                                    waitMsg: HQ.common.getLang("SavingData"),
-                                    url: 'OM21100/SaveData',
-                                    timeout: 10000000,
-                                    params: {
-                                        isAddDiscount: HQ.allowAddDiscount,
-                                        isNewDiscID: _isNewDisc,
-                                        isNewDiscSeq: _isNewSeq,
+                                if (Main.Process.checkExistRequiredValue()) {
+                                    App.frmDiscDefintionTop.updateRecord();
+                                    App.frmDiscSeqInfo.updateRecord();
+                                    App.frmMain.submit({
+                                        waitMsg: HQ.common.getLang("SavingData"),
+                                        url: 'OM21100/SaveData',
+                                        timeout: 10000000,
+                                        params: {
+                                            isAddDiscount: HQ.allowAddDiscount,
+                                            isNewDiscID: _isNewDisc,
+                                            isNewDiscSeq: _isNewSeq,
 
-                                        lstDiscInfo: Ext.encode([App.frmDiscDefintionTop.getRecord().data]),
-                                        lstDiscBreakChange: HQ.store.getData(App.grdDiscBreak.store),
-                                        lstFreeItemChange: Main.Process.getChangedFilteredData(App.grdFreeItem.store),
-                                        lstCompanyChange: HQ.store.getData(App.grdCompany.store),
-                                        lstDiscItemChange: HQ.store.getData(App.grdDiscItem.store),
-                                        lstBundleChange: HQ.store.getData(App.grdBundle.store),
-                                        lstDiscCustClassChange: HQ.store.getData(App.grdDiscCustClass.store),
-                                        lstDiscCustChange: HQ.store.getData(App.grdDiscCust.store),
-                                        lstDiscItemClassChange: HQ.store.getData(App.grdDiscItemClass.store),
+                                            lstDiscInfo: Ext.encode([App.frmDiscDefintionTop.getRecord().data]),
+                                            lstDiscBreakChange: HQ.store.getData(App.grdDiscBreak.store),
+                                            lstFreeItemChange: Main.Process.getChangedFilteredData(App.grdFreeItem.store),
+                                            lstCompanyChange: HQ.store.getData(App.grdCompany.store),
+                                            lstDiscItemChange: HQ.store.getData(App.grdDiscItem.store),
+                                            lstBundleChange: HQ.store.getData(App.grdBundle.store),
+                                            lstDiscCustClassChange: HQ.store.getData(App.grdDiscCustClass.store),
+                                            lstDiscCustChange: HQ.store.getData(App.grdDiscCust.store),
+                                            lstDiscItemClassChange: HQ.store.getData(App.grdDiscItemClass.store),
 
-                                        lstDiscSeqInfo: (function () {
-                                            App.stoDiscSeqInfo.each(function (item) {
-                                                item.data.Active = App.chkActive.value ? 1 : 0;
-                                                item.data.Promo = App.chkDiscTerm.value ? 1 : 0;
-                                            });
-                                            return Ext.encode(App.stoDiscSeqInfo.getRecordsValues());
-                                        })(),
-                                        lstDiscBreak: Ext.encode(App.grdDiscBreak.store.getRecordsValues()), // data
-                                        lstFreeItem: Ext.encode(Main.Process.getRecordValues(App.grdFreeItem.store.snapshot.getRange())), // record.data
-                                        lstCompany: Ext.encode(App.grdCompany.store.getRecordsValues()),
-                                        lstDiscItem: Ext.encode(App.grdDiscItem.store.getRecordsValues()),
-                                        lstBundle: Ext.encode(App.grdBundle.store.getRecordsValues()),
-                                        lstDiscCustClass: Ext.encode(App.grdDiscCustClass.store.getRecordsValues()),
-                                        lstDiscCust: Ext.encode(App.grdDiscCust.store.getRecordsValues()),
-                                        lstDiscItemClass: Ext.encode(App.grdDiscItemClass.store.getRecordsValues()),
+                                            lstDiscSeqInfo: (function () {
+                                                App.stoDiscSeqInfo.each(function (item) {
+                                                    item.data.Active = App.chkActive.value ? 1 : 0;
+                                                    item.data.Promo = App.chkDiscTerm.value ? 1 : 0;
+                                                });
+                                                return Ext.encode(App.stoDiscSeqInfo.getRecordsValues());
+                                            })(),
+                                            lstDiscBreak: Ext.encode(App.grdDiscBreak.store.getRecordsValues()), // data
+                                            lstFreeItem: Ext.encode(Main.Process.getRecordValues(App.grdFreeItem.store.snapshot.getRange())), // record.data
+                                            lstCompany: Ext.encode(App.grdCompany.store.getRecordsValues()),
+                                            lstDiscItem: Ext.encode(App.grdDiscItem.store.getRecordsValues()),
+                                            lstBundle: Ext.encode(App.grdBundle.store.getRecordsValues()),
+                                            lstDiscCustClass: Ext.encode(App.grdDiscCustClass.store.getRecordsValues()),
+                                            lstDiscCust: Ext.encode(App.grdDiscCust.store.getRecordsValues()),
+                                            lstDiscItemClass: Ext.encode(App.grdDiscItemClass.store.getRecordsValues()),
 
-                                        lstDiscCustCate: Ext.encode(App.grdDiscCustCate.store.getRecordsValues()),
-                                        lstDiscChannel: Ext.encode(App.grdDiscChannel.store.getRecordsValues()),
+                                            lstDiscCustCate: Ext.encode(App.grdDiscCustCate.store.getRecordsValues()),
+                                            lstDiscChannel: Ext.encode(App.grdDiscChannel.store.getRecordsValues()),
 
-                                        lstDiscCustCateChange: HQ.store.getData(App.grdDiscCustCate.store),
-                                        lstDiscChannelChange: HQ.store.getData(App.grdDiscChannel.store),
-                                    },
-                                    success: function (msg, data) {
-                                        if (data.result.msgCode) {
-                                            HQ.message.show(data.result.msgCode);
+                                            lstDiscCustCateChange: HQ.store.getData(App.grdDiscCustCate.store),
+                                            lstDiscChannelChange: HQ.store.getData(App.grdDiscChannel.store),
+                                        },
+                                        success: function (msg, data) {
+                                            if (data.result.msgCode) {
+                                                HQ.message.show(data.result.msgCode);
+                                            }
+                                            else {
+                                                HQ.message.show(201405071);
+                                            }
+                                            Main.Process.reloadAllData();
+                                        },
+                                        failure: function (msg, data) {
+                                            if (data.result.msgCode) {
+                                                HQ.message.show(data.result.msgCode);
+                                            }
+                                            else {
+                                                HQ.message.process(msg, data, true);
+                                            }
                                         }
-                                        else {
-                                            HQ.message.show(201405071);
-                                        }
-                                        Main.Process.reloadAllData();
-                                    },
-                                    failure: function (msg, data) {
-                                        if (data.result.msgCode) {
-                                            HQ.message.show(data.result.msgCode);
-                                        }
-                                        else {
-                                            HQ.message.process(msg, data, true);
-                                        }
-                                    }
-                                });
+                                    });
+                                }
                             }
                         }
-                    }
 
-                    
+                    }
                     //}
                 }
                 else {
@@ -656,6 +675,7 @@ var Main = {
             App.stoDiscSeqInfo.reload();
 
             HQ.common.setRequire(App.frmMain);
+            App.chkRequiredType.setVisible(HQ.showRequiredType);
         },
 
         frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {
@@ -1385,6 +1405,7 @@ var DiscDefintion = {
         }
 
         , stoDiscInfo_load: function (sto, records, successful, eOpts) {
+            
             if (sto.getCount() > 0) {
                 _isNewDisc = false;
             }
@@ -1408,7 +1429,7 @@ var DiscDefintion = {
                 App.cboDiscClass.setReadOnly(false);
                 App.cboDiscType.setReadOnly(false);
             }
-
+            
             Main.Event.frmMain_fieldChange();
         },
 
@@ -1417,6 +1438,7 @@ var DiscDefintion = {
                 _isNewSeq = false;
             }
             else {
+                App.cboBreakBy.setValue('');
                 _isNewSeq = true;
                 var discSeqRec = Ext.create("App.mdlDiscSeqInfo", {
                     DiscID: App.cboDiscID.getValue(),
@@ -1430,7 +1452,8 @@ var DiscDefintion = {
                     Active: false,
                     Promo: false,
                     AutoFreeItem: false,
-                    AllowEditDisc: false
+                    AllowEditDisc: false,
+                    RequiredType: ''
                 });
                 sto.insert(0, discSeqRec);
             }
@@ -1457,6 +1480,7 @@ var DiscDefintion = {
                 App.cboBudgetID.setReadOnly(false);
                 App.txtSeqDescr.setReadOnly(false);
                 App.chkExactQty.setReadOnly(false);
+                App.chkRequiredType.setReadOnly(false);
                 App.btnUpload.enable();
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.enable();
@@ -1470,6 +1494,7 @@ var DiscDefintion = {
                 App.cboBudgetID.setReadOnly(true);
                 App.txtSeqDescr.setReadOnly(true);
                 App.chkExactQty.setReadOnly(true);
+                App.chkRequiredType.setReadOnly(true);
                 App.btnUpload.disable();
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.disable();
@@ -1525,6 +1550,7 @@ var DiscDefintion = {
                     }
                 });
             }
+            
             //}
         },
 
@@ -1785,6 +1811,18 @@ var DiscDefintion = {
             }
             var isEnable = (!App['pnlDPBB'].isDisabled() && cbo.value == "Q");
             App.chkExactQty.setVisible(isEnable);
+
+            var isEnableRequiredType = (!App['pnlDPII'].isDisabled() && cbo.value == "Q");
+            if (!isEnableRequiredType) {
+                //App.chkRequiredType.setValue(false);
+                //App.txtRequiredType.setValue('');
+                // HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
+                App.chkRequiredType.disable();
+            } else {
+                App.chkRequiredType.enable();
+                //HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
+            }
+           // App.chkRequiredType.setVisible(isEnableRequiredType);
         },
 
         cboProAplForItem_change: function (cbo, newValue, oldValue, eOpts) {
@@ -1887,34 +1925,42 @@ var DiscDefintion = {
             }
         },
 
-        treeBranch_AfterRender : function(id) {
+        treeBranch_AfterRender: function (id) {
+            HQ.common.showBusy(true, HQ.waitMsg);
             App.direct.OM21100GetTreeBranch( id, {
                 success: function (result) {
-                    App.treePanelBranch.getRootNode().expand()
+                    App.treePanelBranch.getRootNode().expand();
+                    HQ.common.showBusy(false, HQ.waitMsg);
                 }
             });
         },
 
-        treeInventory_AfterRender : function (id) {
+        treeInventory_AfterRender: function (id) {
+            HQ.common.showBusy(true, HQ.waitMsg);
             App.direct.OM21100LoadTreeInventory(id, {
                 success: function (result) {
-                    App.treePanelInvt.getRootNode().expand()
+                    App.treePanelInvt.getRootNode().expand();
+                    HQ.common.showBusy(false, HQ.waitMsg);
                 }
             });
         },
 
         treeBundleItem_AfterRender: function (id) {
+            HQ.common.showBusy(true, HQ.waitMsg);
             App.direct.OM21100LoadTreeBundleItem(id, {
                 success: function (result) {
-                    App.treePanelBundle.getRootNode().expand()
+                    App.treePanelBundle.getRootNode().expand();
+                    HQ.common.showBusy(false, HQ.waitMsg);
                 }
             });
         },
 
         treeCustomer_AfterRender: function (id) {
+            HQ.common.showBusy(true, HQ.waitMsg);
             App.direct.OM21100GetTreeCustomer(id, {
                 success: function (result) {
-                    App.treePanelCustomer.getRootNode().expand()
+                    App.treePanelCustomer.getRootNode().expand();
+                    HQ.common.showBusy(false, HQ.waitMsg);
                 }
             });
         },
@@ -3261,3 +3307,42 @@ var btnImport_Click = function (sender, e) {
         sender.reset();
     }
 };
+
+var chkRequiredType_Change = function () {
+    var reqType = '';
+    
+    if (App.chkRequiredType.getValue()) {
+        reqType = 'Q';
+        HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
+    } else {
+        HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
+    }
+
+    //var isEnableRequiredType = (!App['pnlDPII'].isDisabled() && cbo.value == "Q");
+    //if (!isEnableRequiredType) {
+    //    App.chkRequiredType.setValue(false);
+    //    //App.txtRequiredType.setValue('');
+    //    HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
+    //} else {
+    //    HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
+    //}
+
+
+    App.txtRequiredType.events['change'].suspend();
+    App.txtRequiredType.setValue(reqType);
+    App.txtRequiredType.events['change'].resume();
+}
+
+var txtRequiredType_Change = function () {
+    var isCheck = false;
+    if (!Ext.isEmpty(App.txtRequiredType.getValue())) {
+        isCheck = true;
+        HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
+    } else {
+        HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
+    }
+
+    App.chkRequiredType.events['change'].suspend();
+    App.chkRequiredType.setValue(isCheck);
+    App.chkRequiredType.events['change'].resume();
+}

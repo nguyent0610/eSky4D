@@ -228,22 +228,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<SI_Hierarchy> SI_Hierarchy
-        {
-            get
-            {
-                if ((_SI_Hierarchy == null))
-                {
-                    _SI_Hierarchy = base.CreateObjectSet<SI_Hierarchy>("SI_Hierarchy");
-                }
-                return _SI_Hierarchy;
-            }
-        }
-        private ObjectSet<SI_Hierarchy> _SI_Hierarchy;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_Inventory> IN_Inventory
         {
             get
@@ -403,14 +387,6 @@ namespace OM21100
         public void AddToOM_OrdDisc(OM_OrdDisc oM_OrdDisc)
         {
             base.AddObject("OM_OrdDisc", oM_OrdDisc);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the SI_Hierarchy EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSI_Hierarchy(SI_Hierarchy sI_Hierarchy)
-        {
-            base.AddObject("SI_Hierarchy", sI_Hierarchy);
         }
     
         /// <summary>
@@ -626,7 +602,10 @@ namespace OM21100
         /// </summary>
         /// <param name="discID">No Metadata Documentation available.</param>
         /// <param name="discSeq">No Metadata Documentation available.</param>
-        public ObjectResult<OM21100_pgDiscItem_Result> OM21100_pgDiscItem(global::System.String discID, global::System.String discSeq)
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM21100_pgDiscItem_Result> OM21100_pgDiscItem(global::System.String discID, global::System.String discSeq, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter discIDParameter;
             if (discID != null)
@@ -648,7 +627,37 @@ namespace OM21100
                 discSeqParameter = new ObjectParameter("DiscSeq", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM21100_pgDiscItem_Result>("OM21100_pgDiscItem", discIDParameter, discSeqParameter);
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM21100_pgDiscItem_Result>("OM21100_pgDiscItem", discIDParameter, discSeqParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
@@ -5870,7 +5879,8 @@ namespace OM21100
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="qtyType">Initial value of the QtyType property.</param>
-        public static OM_DiscItem CreateOM_DiscItem(global::System.String discID, global::System.String discSeq, global::System.String invtID, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String qtyType)
+        /// <param name="requiredValue">Initial value of the RequiredValue property.</param>
+        public static OM_DiscItem CreateOM_DiscItem(global::System.String discID, global::System.String discSeq, global::System.String invtID, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String qtyType, global::System.Int32 requiredValue)
         {
             OM_DiscItem oM_DiscItem = new OM_DiscItem();
             oM_DiscItem.DiscID = discID;
@@ -5888,6 +5898,7 @@ namespace OM21100
             oM_DiscItem.LUpd_User = lUpd_User;
             oM_DiscItem.tstamp = tstamp;
             oM_DiscItem.QtyType = qtyType;
+            oM_DiscItem.RequiredValue = requiredValue;
             return oM_DiscItem;
         }
 
@@ -6335,6 +6346,30 @@ namespace OM21100
         private global::System.String _QtyType;
         partial void OnQtyTypeChanging(global::System.String value);
         partial void OnQtyTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 RequiredValue
+        {
+            get
+            {
+                return _RequiredValue;
+            }
+            set
+            {
+                OnRequiredValueChanging(value);
+                ReportPropertyChanging("RequiredValue");
+                _RequiredValue = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequiredValue");
+                OnRequiredValueChanged();
+            }
+        }
+        private global::System.Int32 _RequiredValue;
+        partial void OnRequiredValueChanging(global::System.Int32 value);
+        partial void OnRequiredValueChanged();
 
         #endregion
 
@@ -7058,7 +7093,8 @@ namespace OM21100
         /// <param name="pOUse">Initial value of the POUse property.</param>
         /// <param name="exactQty">Initial value of the ExactQty property.</param>
         /// <param name="excludeOtherDisc">Initial value of the ExcludeOtherDisc property.</param>
-        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty, global::System.Boolean excludeOtherDisc)
+        /// <param name="pctDiscountByLevel">Initial value of the PctDiscountByLevel property.</param>
+        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty, global::System.Boolean excludeOtherDisc, global::System.Boolean pctDiscountByLevel)
         {
             OM_DiscSeq oM_DiscSeq = new OM_DiscSeq();
             oM_DiscSeq.DiscID = discID;
@@ -7083,6 +7119,7 @@ namespace OM21100
             oM_DiscSeq.POUse = pOUse;
             oM_DiscSeq.ExactQty = exactQty;
             oM_DiscSeq.ExcludeOtherDisc = excludeOtherDisc;
+            oM_DiscSeq.PctDiscountByLevel = pctDiscountByLevel;
             return oM_DiscSeq;
         }
 
@@ -7791,6 +7828,54 @@ namespace OM21100
         private global::System.Boolean _ExcludeOtherDisc;
         partial void OnExcludeOtherDiscChanging(global::System.Boolean value);
         partial void OnExcludeOtherDiscChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean PctDiscountByLevel
+        {
+            get
+            {
+                return _PctDiscountByLevel;
+            }
+            set
+            {
+                OnPctDiscountByLevelChanging(value);
+                ReportPropertyChanging("PctDiscountByLevel");
+                _PctDiscountByLevel = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PctDiscountByLevel");
+                OnPctDiscountByLevelChanged();
+            }
+        }
+        private global::System.Boolean _PctDiscountByLevel;
+        partial void OnPctDiscountByLevelChanging(global::System.Boolean value);
+        partial void OnPctDiscountByLevelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String RequiredType
+        {
+            get
+            {
+                return _RequiredType;
+            }
+            set
+            {
+                OnRequiredTypeChanging(value);
+                ReportPropertyChanging("RequiredType");
+                _RequiredType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("RequiredType");
+                OnRequiredTypeChanged();
+            }
+        }
+        private global::System.String _RequiredType;
+        partial void OnRequiredTypeChanging(global::System.String value);
+        partial void OnRequiredTypeChanged();
 
         #endregion
 
@@ -9281,430 +9366,6 @@ namespace OM21100
 
     
     }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="OM21100Model", Name="SI_Hierarchy")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class SI_Hierarchy : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new SI_Hierarchy object.
-        /// </summary>
-        /// <param name="nodeID">Initial value of the NodeID property.</param>
-        /// <param name="nodeLevel">Initial value of the NodeLevel property.</param>
-        /// <param name="type">Initial value of the Type property.</param>
-        /// <param name="parentRecordID">Initial value of the ParentRecordID property.</param>
-        /// <param name="recordID">Initial value of the RecordID property.</param>
-        /// <param name="crtd_Datetime">Initial value of the Crtd_Datetime property.</param>
-        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
-        /// <param name="lUpd_Datetime">Initial value of the LUpd_Datetime property.</param>
-        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
-        /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_Hierarchy CreateSI_Hierarchy(global::System.String nodeID, global::System.Int16 nodeLevel, global::System.String type, global::System.Int32 parentRecordID, global::System.Int32 recordID, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
-        {
-            SI_Hierarchy sI_Hierarchy = new SI_Hierarchy();
-            sI_Hierarchy.NodeID = nodeID;
-            sI_Hierarchy.NodeLevel = nodeLevel;
-            sI_Hierarchy.Type = type;
-            sI_Hierarchy.ParentRecordID = parentRecordID;
-            sI_Hierarchy.RecordID = recordID;
-            sI_Hierarchy.Crtd_Datetime = crtd_Datetime;
-            sI_Hierarchy.Crtd_Prog = crtd_Prog;
-            sI_Hierarchy.Crtd_User = crtd_User;
-            sI_Hierarchy.LUpd_Datetime = lUpd_Datetime;
-            sI_Hierarchy.LUpd_Prog = lUpd_Prog;
-            sI_Hierarchy.LUpd_User = lUpd_User;
-            sI_Hierarchy.tstamp = tstamp;
-            return sI_Hierarchy;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String NodeID
-        {
-            get
-            {
-                return _NodeID;
-            }
-            set
-            {
-                if (_NodeID != value)
-                {
-                    OnNodeIDChanging(value);
-                    ReportPropertyChanging("NodeID");
-                    _NodeID = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("NodeID");
-                    OnNodeIDChanged();
-                }
-            }
-        }
-        private global::System.String _NodeID;
-        partial void OnNodeIDChanging(global::System.String value);
-        partial void OnNodeIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int16 NodeLevel
-        {
-            get
-            {
-                return _NodeLevel;
-            }
-            set
-            {
-                if (_NodeLevel != value)
-                {
-                    OnNodeLevelChanging(value);
-                    ReportPropertyChanging("NodeLevel");
-                    _NodeLevel = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("NodeLevel");
-                    OnNodeLevelChanged();
-                }
-            }
-        }
-        private global::System.Int16 _NodeLevel;
-        partial void OnNodeLevelChanging(global::System.Int16 value);
-        partial void OnNodeLevelChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Type
-        {
-            get
-            {
-                return _Type;
-            }
-            set
-            {
-                if (_Type != value)
-                {
-                    OnTypeChanging(value);
-                    ReportPropertyChanging("Type");
-                    _Type = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("Type");
-                    OnTypeChanged();
-                }
-            }
-        }
-        private global::System.String _Type;
-        partial void OnTypeChanging(global::System.String value);
-        partial void OnTypeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 ParentRecordID
-        {
-            get
-            {
-                return _ParentRecordID;
-            }
-            set
-            {
-                if (_ParentRecordID != value)
-                {
-                    OnParentRecordIDChanging(value);
-                    ReportPropertyChanging("ParentRecordID");
-                    _ParentRecordID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("ParentRecordID");
-                    OnParentRecordIDChanged();
-                }
-            }
-        }
-        private global::System.Int32 _ParentRecordID;
-        partial void OnParentRecordIDChanging(global::System.Int32 value);
-        partial void OnParentRecordIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Descr
-        {
-            get
-            {
-                return _Descr;
-            }
-            set
-            {
-                OnDescrChanging(value);
-                ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Descr");
-                OnDescrChanged();
-            }
-        }
-        private global::System.String _Descr;
-        partial void OnDescrChanging(global::System.String value);
-        partial void OnDescrChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 RecordID
-        {
-            get
-            {
-                return _RecordID;
-            }
-            set
-            {
-                OnRecordIDChanging(value);
-                ReportPropertyChanging("RecordID");
-                _RecordID = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("RecordID");
-                OnRecordIDChanged();
-            }
-        }
-        private global::System.Int32 _RecordID;
-        partial void OnRecordIDChanging(global::System.Int32 value);
-        partial void OnRecordIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime Crtd_Datetime
-        {
-            get
-            {
-                return _Crtd_Datetime;
-            }
-            set
-            {
-                OnCrtd_DatetimeChanging(value);
-                ReportPropertyChanging("Crtd_Datetime");
-                _Crtd_Datetime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Crtd_Datetime");
-                OnCrtd_DatetimeChanged();
-            }
-        }
-        private global::System.DateTime _Crtd_Datetime;
-        partial void OnCrtd_DatetimeChanging(global::System.DateTime value);
-        partial void OnCrtd_DatetimeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Crtd_Prog
-        {
-            get
-            {
-                return _Crtd_Prog;
-            }
-            set
-            {
-                OnCrtd_ProgChanging(value);
-                ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Crtd_Prog");
-                OnCrtd_ProgChanged();
-            }
-        }
-        private global::System.String _Crtd_Prog;
-        partial void OnCrtd_ProgChanging(global::System.String value);
-        partial void OnCrtd_ProgChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Crtd_User
-        {
-            get
-            {
-                return _Crtd_User;
-            }
-            set
-            {
-                OnCrtd_UserChanging(value);
-                ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Crtd_User");
-                OnCrtd_UserChanged();
-            }
-        }
-        private global::System.String _Crtd_User;
-        partial void OnCrtd_UserChanging(global::System.String value);
-        partial void OnCrtd_UserChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime LUpd_Datetime
-        {
-            get
-            {
-                return _LUpd_Datetime;
-            }
-            set
-            {
-                OnLUpd_DatetimeChanging(value);
-                ReportPropertyChanging("LUpd_Datetime");
-                _LUpd_Datetime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("LUpd_Datetime");
-                OnLUpd_DatetimeChanged();
-            }
-        }
-        private global::System.DateTime _LUpd_Datetime;
-        partial void OnLUpd_DatetimeChanging(global::System.DateTime value);
-        partial void OnLUpd_DatetimeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String LUpd_Prog
-        {
-            get
-            {
-                return _LUpd_Prog;
-            }
-            set
-            {
-                OnLUpd_ProgChanging(value);
-                ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("LUpd_Prog");
-                OnLUpd_ProgChanged();
-            }
-        }
-        private global::System.String _LUpd_Prog;
-        partial void OnLUpd_ProgChanging(global::System.String value);
-        partial void OnLUpd_ProgChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String LUpd_User
-        {
-            get
-            {
-                return _LUpd_User;
-            }
-            set
-            {
-                OnLUpd_UserChanging(value);
-                ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("LUpd_User");
-                OnLUpd_UserChanged();
-            }
-        }
-        private global::System.String _LUpd_User;
-        partial void OnLUpd_UserChanging(global::System.String value);
-        partial void OnLUpd_UserChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Byte[] tstamp
-        {
-            get
-            {
-                return StructuralObject.GetValidValue(_tstamp);
-            }
-            set
-            {
-                OntstampChanging(value);
-                ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("tstamp");
-                OntstampChanged();
-            }
-        }
-        private global::System.Byte[] _tstamp;
-        partial void OntstampChanging(global::System.Byte[] value);
-        partial void OntstampChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Descr1
-        {
-            get
-            {
-                return _Descr1;
-            }
-            set
-            {
-                OnDescr1Changing(value);
-                ReportPropertyChanging("Descr1");
-                _Descr1 = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Descr1");
-                OnDescr1Changed();
-            }
-        }
-        private global::System.String _Descr1;
-        partial void OnDescr1Changing(global::System.String value);
-        partial void OnDescr1Changed();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Sort
-        {
-            get
-            {
-                return _Sort;
-            }
-            set
-            {
-                OnSortChanging(value);
-                ReportPropertyChanging("Sort");
-                _Sort = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Sort");
-                OnSortChanged();
-            }
-        }
-        private global::System.String _Sort;
-        partial void OnSortChanging(global::System.String value);
-        partial void OnSortChanged();
-
-        #endregion
-
-    
-    }
 
     #endregion
 
@@ -9791,6 +9452,54 @@ namespace OM21100
         private Nullable<global::System.Boolean> _AllowAddDiscount;
         partial void OnAllowAddDiscountChanging(Nullable<global::System.Boolean> value);
         partial void OnAllowAddDiscountChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowRequiredType
+        {
+            get
+            {
+                return _ShowRequiredType;
+            }
+            set
+            {
+                OnShowRequiredTypeChanging(value);
+                ReportPropertyChanging("ShowRequiredType");
+                _ShowRequiredType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowRequiredType");
+                OnShowRequiredTypeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowRequiredType;
+        partial void OnShowRequiredTypeChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowRequiredTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> AllowAddSameKind
+        {
+            get
+            {
+                return _AllowAddSameKind;
+            }
+            set
+            {
+                OnAllowAddSameKindChanging(value);
+                ReportPropertyChanging("AllowAddSameKind");
+                _AllowAddSameKind = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AllowAddSameKind");
+                OnAllowAddSameKindChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _AllowAddSameKind;
+        partial void OnAllowAddSameKindChanging(Nullable<global::System.Int32> value);
+        partial void OnAllowAddSameKindChanged();
 
         #endregion
 
@@ -11597,115 +11306,33 @@ namespace OM21100
         /// <summary>
         /// Create a new OM21100_pgDiscItem_Result object.
         /// </summary>
-        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
-        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="discID">Initial value of the DiscID property.</param>
         /// <param name="discSeq">Initial value of the DiscSeq property.</param>
-        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
-        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="active">Initial value of the Active property.</param>
         /// <param name="bundleAmt">Initial value of the BundleAmt property.</param>
         /// <param name="bundleNbr">Initial value of the BundleNbr property.</param>
         /// <param name="bundleQty">Initial value of the BundleQty property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
-        public static OM21100_pgDiscItem_Result CreateOM21100_pgDiscItem_Result(global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.String discID, global::System.String discSeq, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.String invtID)
+        /// <param name="requiredValue">Initial value of the RequiredValue property.</param>
+        public static OM21100_pgDiscItem_Result CreateOM21100_pgDiscItem_Result(global::System.String discID, global::System.String discSeq, global::System.Byte[] tstamp, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.String invtID, global::System.Int32 requiredValue)
         {
             OM21100_pgDiscItem_Result oM21100_pgDiscItem_Result = new OM21100_pgDiscItem_Result();
-            oM21100_pgDiscItem_Result.Crtd_DateTime = crtd_DateTime;
-            oM21100_pgDiscItem_Result.Crtd_Prog = crtd_Prog;
-            oM21100_pgDiscItem_Result.Crtd_User = crtd_User;
             oM21100_pgDiscItem_Result.DiscID = discID;
             oM21100_pgDiscItem_Result.DiscSeq = discSeq;
-            oM21100_pgDiscItem_Result.LUpd_DateTime = lUpd_DateTime;
-            oM21100_pgDiscItem_Result.LUpd_Prog = lUpd_Prog;
-            oM21100_pgDiscItem_Result.LUpd_User = lUpd_User;
             oM21100_pgDiscItem_Result.tstamp = tstamp;
             oM21100_pgDiscItem_Result.Active = active;
             oM21100_pgDiscItem_Result.BundleAmt = bundleAmt;
             oM21100_pgDiscItem_Result.BundleNbr = bundleNbr;
             oM21100_pgDiscItem_Result.BundleQty = bundleQty;
             oM21100_pgDiscItem_Result.InvtID = invtID;
+            oM21100_pgDiscItem_Result.RequiredValue = requiredValue;
             return oM21100_pgDiscItem_Result;
         }
 
         #endregion
 
         #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime Crtd_DateTime
-        {
-            get
-            {
-                return _Crtd_DateTime;
-            }
-            set
-            {
-                OnCrtd_DateTimeChanging(value);
-                ReportPropertyChanging("Crtd_DateTime");
-                _Crtd_DateTime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Crtd_DateTime");
-                OnCrtd_DateTimeChanged();
-            }
-        }
-        private global::System.DateTime _Crtd_DateTime;
-        partial void OnCrtd_DateTimeChanging(global::System.DateTime value);
-        partial void OnCrtd_DateTimeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Crtd_Prog
-        {
-            get
-            {
-                return _Crtd_Prog;
-            }
-            set
-            {
-                OnCrtd_ProgChanging(value);
-                ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Crtd_Prog");
-                OnCrtd_ProgChanged();
-            }
-        }
-        private global::System.String _Crtd_Prog;
-        partial void OnCrtd_ProgChanging(global::System.String value);
-        partial void OnCrtd_ProgChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Crtd_User
-        {
-            get
-            {
-                return _Crtd_User;
-            }
-            set
-            {
-                OnCrtd_UserChanging(value);
-                ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Crtd_User");
-                OnCrtd_UserChanged();
-            }
-        }
-        private global::System.String _Crtd_User;
-        partial void OnCrtd_UserChanging(global::System.String value);
-        partial void OnCrtd_UserChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -11754,78 +11381,6 @@ namespace OM21100
         private global::System.String _DiscSeq;
         partial void OnDiscSeqChanging(global::System.String value);
         partial void OnDiscSeqChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime LUpd_DateTime
-        {
-            get
-            {
-                return _LUpd_DateTime;
-            }
-            set
-            {
-                OnLUpd_DateTimeChanging(value);
-                ReportPropertyChanging("LUpd_DateTime");
-                _LUpd_DateTime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("LUpd_DateTime");
-                OnLUpd_DateTimeChanged();
-            }
-        }
-        private global::System.DateTime _LUpd_DateTime;
-        partial void OnLUpd_DateTimeChanging(global::System.DateTime value);
-        partial void OnLUpd_DateTimeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String LUpd_Prog
-        {
-            get
-            {
-                return _LUpd_Prog;
-            }
-            set
-            {
-                OnLUpd_ProgChanging(value);
-                ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("LUpd_Prog");
-                OnLUpd_ProgChanged();
-            }
-        }
-        private global::System.String _LUpd_Prog;
-        partial void OnLUpd_ProgChanging(global::System.String value);
-        partial void OnLUpd_ProgChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String LUpd_User
-        {
-            get
-            {
-                return _LUpd_User;
-            }
-            set
-            {
-                OnLUpd_UserChanging(value);
-                ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("LUpd_User");
-                OnLUpd_UserChanged();
-            }
-        }
-        private global::System.String _LUpd_User;
-        partial void OnLUpd_UserChanging(global::System.String value);
-        partial void OnLUpd_UserChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -12042,6 +11597,30 @@ namespace OM21100
         private global::System.String _UnitDesc;
         partial void OnUnitDescChanging(global::System.String value);
         partial void OnUnitDescChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 RequiredValue
+        {
+            get
+            {
+                return _RequiredValue;
+            }
+            set
+            {
+                OnRequiredValueChanging(value);
+                ReportPropertyChanging("RequiredValue");
+                _RequiredValue = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequiredValue");
+                OnRequiredValueChanged();
+            }
+        }
+        private global::System.Int32 _RequiredValue;
+        partial void OnRequiredValueChanging(global::System.Int32 value);
+        partial void OnRequiredValueChanged();
 
         #endregion
 
