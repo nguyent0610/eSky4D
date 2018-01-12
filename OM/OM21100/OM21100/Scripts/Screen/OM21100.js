@@ -673,7 +673,7 @@ var Main = {
             App.cboDiscID.forceSelection = !HQ.allowAddDiscount;
             App.stoDiscInfo.reload();
             App.stoDiscSeqInfo.reload();
-
+            App.chkPctDiscountByLevel.disable();
             HQ.common.setRequire(App.frmMain);
             App.chkRequiredType.setVisible(HQ.showRequiredType);
         },
@@ -1575,6 +1575,18 @@ var DiscDefintion = {
 
         cboDiscType_change: function (cbo, newValue, oldValue, eOpts) {
             var frmRec = App.frmDiscDefintionTop.getRecord();
+            if (App.cboDiscType.getValue() == 'L') {
+                App.chkPctDiscountByLevel.enable();
+            }
+            else {
+                App.chkPctDiscountByLevel.disable();
+                if (App.cboDiscType.getValue() == 'G' && App.cboDiscClass.getValue() == 'II' && App.cboBreakBy.getValue() == 'Q') {
+                    App.chkRequiredType.enable();
+                }
+                else {
+                    App.chkRequiredType.disable();
+                }
+            }
             //if (!frmRec.data.tstamp) {
             //    if (cbo.value) {
             //        if (oldValue) {
@@ -1689,6 +1701,15 @@ var DiscDefintion = {
             else {
                 DiscDefintion.Process.enableATabInList([]);
             }
+
+
+            if (App.cboDiscType.getValue() == 'G' && App.cboDiscClass.getValue() == 'II' && App.cboBreakBy.getValue() == 'Q') {
+                App.chkRequiredType.enable();
+            }
+            else {
+                App.chkRequiredType.disable();
+            }
+
 
             //if (App.cboProAplForItem.value == "M"
             //        && cbo.value
@@ -1813,16 +1834,23 @@ var DiscDefintion = {
             App.chkExactQty.setVisible(isEnable);
 
             var isEnableRequiredType = (!App['pnlDPII'].isDisabled() && cbo.value == "Q");
-            if (!isEnableRequiredType || App.cboDiscType.getValue() != 'G') {
-                //App.chkRequiredType.setValue(false);
-                //App.txtRequiredType.setValue('');
-                // HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
-                App.chkRequiredType.disable();
-            } else {
+           // if (!isEnableRequiredType || App.cboDiscType.getValue() != 'G') {
+           //     //App.chkRequiredType.setValue(false);
+           //     //App.txtRequiredType.setValue('');
+           //     // HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
+           //     App.chkRequiredType.disable();
+           // } else {
+           //     App.chkRequiredType.enable();
+           //     //HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
+           // }
+            //// App.chkRequiredType.setVisible(isEnableRequiredType);
+
+            if (App.cboDiscType.getValue() == 'G' && App.cboDiscClass.getValue() == 'II' && App.cboBreakBy.getValue() == 'Q') {
                 App.chkRequiredType.enable();
-                //HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
             }
-           // App.chkRequiredType.setVisible(isEnableRequiredType);
+            else {
+                App.chkRequiredType.disable();
+            }
         },
 
         cboProAplForItem_change: function (cbo, newValue, oldValue, eOpts) {

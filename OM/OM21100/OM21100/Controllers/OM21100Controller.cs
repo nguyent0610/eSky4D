@@ -71,7 +71,7 @@ namespace OM21100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -2234,6 +2234,7 @@ namespace OM21100.Controllers
             updatedDiscSeq.POStartDate = inputDiscSeq.POStartDate.ToDateShort();
             updatedDiscSeq.ExactQty = inputDiscSeq.ExactQty;
             updatedDiscSeq.ExcludeOtherDisc = inputDiscSeq.ExcludeOtherDisc;
+            updatedDiscSeq.PctDiscountByLevel = inputDiscSeq.PctDiscountByLevel;
             if (!string.IsNullOrEmpty(handle) && handle != "N" && updatedDiscSeq.Status != handle)
             {
                 updatedDiscSeq.Status = handle;
