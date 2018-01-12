@@ -418,6 +418,13 @@
                                         {
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                         })
+                                        , HQ.Checkbox().ID("chkPctDiscountByLevel")
+                                        .MarginSpec("5 5 0 10")
+                                        .BoxLabel(Util.GetLang("PctDiscountByLevel")).DataIndex("PctDiscountByLevel")
+                                        .Listeners(l =>
+                                        {
+                                            l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                        })
                                     ) // Container
                                 ),
                                 X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")

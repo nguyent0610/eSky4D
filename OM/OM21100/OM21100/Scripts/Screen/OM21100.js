@@ -1813,7 +1813,7 @@ var DiscDefintion = {
             App.chkExactQty.setVisible(isEnable);
 
             var isEnableRequiredType = (!App['pnlDPII'].isDisabled() && cbo.value == "Q");
-            if (!isEnableRequiredType) {
+            if (!isEnableRequiredType || App.cboDiscType.getValue() != 'G') {
                 //App.chkRequiredType.setValue(false);
                 //App.txtRequiredType.setValue('');
                 // HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
