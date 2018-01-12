@@ -1,1 +1,159 @@
-﻿var _0xd61b = ["\x66\x69\x72\x73\x74", "\x6E\x65\x78\x74", "\x70\x72\x65\x76", "\x6C\x61\x73\x74", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x63\x68\x65\x63\x6B\x52\x65\x71\x75\x69\x72\x65\x50\x61\x73\x73", "\x66\x6F\x72\x6D", "\x73\x61\x76\x65", "\x63\x6C\x6F\x73\x65", "\x63\x6F\x6D\x6D\x6F\x6E", "\x6E\x65\x77", "\x64\x65\x6C\x65\x74\x65", "\x69\x73\x43\x68\x61\x6E\x67\x65", "", "\x72\x65\x66\x72\x65\x73\x68", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x73\x65\x74\x56\x61\x6C\x75\x65", "\x74\x78\x74\x4E\x65\x77\x50\x61\x73\x73\x77\x6F\x72\x64", "\x74\x78\x74\x4F\x6C\x64\x50\x61\x73\x73\x77\x6F\x72\x64", "\x74\x78\x74\x52\x65\x4E\x65\x77\x50\x61\x73\x73\x77\x6F\x72\x64", "\x69\x73\x56\x61\x6C\x69\x64", "\x53\x41\x30\x32\x35\x30\x30\x2F\x53\x41\x30\x32\x35\x30\x30\x52\x65\x6E\x64\x65\x72", "\x74\x6F\x74\x61\x6C\x70\x61\x73\x73\x52\x75\x6C\x65", "\x72\x65\x73\x75\x6C\x74", "\x74\x78\x74\x50\x61\x73\x73\x52\x75\x6C\x65", "\x73\x65\x74\x52\x65\x61\x64\x4F\x6E\x6C\x79", "\x73\x75\x62\x6D\x69\x74", "\x6C\x6F\x63\x61\x74\x69\x6F\x6E", "\x4C\x6F\x67\x69\x6E", "\x76\x61\x6C\x75\x65", "\x66\x6F\x63\x75\x73", "\x54\x65\x78\x74\x56\x61\x6C", "\x31", "\x6D\x61\x74\x63\x68", "\x53\x75\x62\x6D\x69\x74\x69\x6E\x67\x2E\x2E\x2E", "\x53\x41\x30\x32\x35\x30\x30\x2F\x53\x41\x30\x32\x35\x30\x30\x53\x61\x76\x65", "\x63\x6F\x64\x65", "\x79\x65\x73"]; var menuClick = function (_0xbd5fx2) { switch (_0xbd5fx2) { case _0xd61b[0]: break;; case _0xd61b[1]: break;; case _0xd61b[2]: break;; case _0xd61b[3]: break;; case _0xd61b[10]: if (HQ[_0xd61b[4]] || HQ[_0xd61b[5]] || HQ[_0xd61b[6]]) { if (HQ[_0xd61b[9]][_0xd61b[8]](App[_0xd61b[7]])) { Check() } }; break;; case _0xd61b[11]: HQ[_0xd61b[12]][_0xd61b[11]](this); break;; case _0xd61b[13]: break;; case _0xd61b[14]: break;; case _0xd61b[17]: if (HQ[_0xd61b[15]]) { HQ[_0xd61b[19]][_0xd61b[18]](20150303, _0xd61b[16], _0xd61b[17]) } else { HQ[_0xd61b[15]] = false; App[_0xd61b[21]][_0xd61b[20]](_0xd61b[16]); App[_0xd61b[22]][_0xd61b[20]](_0xd61b[16]); App[_0xd61b[23]][_0xd61b[20]](_0xd61b[16]); frmMain_afterRender(); }; break;; default:; } }; var frmMain_afterRender = function () { if (App[_0xd61b[7]][_0xd61b[24]]()) { App[_0xd61b[7]][_0xd61b[30]]({ url: _0xd61b[25], success: function (_0xbd5fx4, _0xbd5fx5) { App[_0xd61b[28]][_0xd61b[20]](_0xbd5fx5[_0xd61b[27]][_0xd61b[26]]); App[_0xd61b[28]][_0xd61b[29]](true); }, failure: function (_0xbd5fx6, _0xbd5fx5) { } }) } }; var LoginPage_Click = function () { if (parent != undefined) { parent[_0xd61b[31]] = _0xd61b[32] } else { window[_0xd61b[31]] = _0xd61b[32] } }; function Check() { var _0xbd5fx9 = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/; if (App[_0xd61b[22]][_0xd61b[33]] == _0xd61b[16]) { HQ[_0xd61b[19]][_0xd61b[18]](1500, _0xd61b[16], null); App[_0xd61b[22]][_0xd61b[34]](); return; } else { if (App[_0xd61b[23]][_0xd61b[33]] == _0xd61b[16]) { HQ[_0xd61b[19]][_0xd61b[18]](1501, _0xd61b[16], null); App[_0xd61b[23]][_0xd61b[34]](); return; } else { if (HQ[_0xd61b[35]] == _0xd61b[36]) { if (!App[_0xd61b[21]][_0xd61b[33]][_0xd61b[37]](_0xbd5fx9)) { HQ[_0xd61b[19]][_0xd61b[18]](998, _0xd61b[16], null); App[_0xd61b[21]][_0xd61b[34]](); return; } } else { if (App[_0xd61b[23]][_0xd61b[33]] != App[_0xd61b[21]][_0xd61b[33]]) { HQ[_0xd61b[19]][_0xd61b[18]](1503, _0xd61b[16], null); App[_0xd61b[23]][_0xd61b[34]](); return; } } } }; save(); } function save() { if (App[_0xd61b[7]][_0xd61b[24]]()) { App[_0xd61b[7]][_0xd61b[30]]({ waitMsg: _0xd61b[38], url: _0xd61b[39], params: {}, success: function (_0xbd5fx4, _0xbd5fx5) { HQ[_0xd61b[19]][_0xd61b[18]](1504, _0xd61b[16], null); menuClick(_0xd61b[17]); }, failure: function (_0xbd5fx6, _0xbd5fx5) { if (_0xbd5fx5[_0xd61b[27]][_0xd61b[40]]) { HQ[_0xd61b[19]][_0xd61b[18]](_0xbd5fx5[_0xd61b[27]][_0xd61b[40]], _0xd61b[16], _0xd61b[16]); menuClick(_0xd61b[17]); } else { processMessage(_0xbd5fx6, _0xbd5fx5) } } }) } } var txtNewPassword_Change = function (_0xbd5fxc, _0xbd5fxd) { }; var txtReNewPassword_Change = function (_0xbd5fxc, _0xbd5fxd) { }; var txtOldPassword_Change = function (_0xbd5fxc, _0xbd5fxd) { }; function refresh(_0xbd5fx11) { if (_0xbd5fx11 == _0xd61b[41]) { App[_0xd61b[21]][_0xd61b[20]](_0xd61b[16]); App[_0xd61b[22]][_0xd61b[20]](_0xd61b[16]); App[_0xd61b[23]][_0xd61b[20]](_0xd61b[16]); frmMain_afterRender(); } }
+﻿
+// Command of the topbar on screen
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            break;
+        case "next":
+            break;
+        case "prev":
+            break;
+        case "last":
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain))//check require truoc khi save
+                    Check();
+            }
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+        case "new":
+            break;
+        case "delete":
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                App.txtNewPassword.setValue("");
+                App.txtOldPassword.setValue("");
+                App.txtReNewPassword.setValue("");
+                frmMain_afterRender();
+            }
+            break;
+        default:
+    }
+};
+
+var frmMain_afterRender = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            url: 'SA02500/SA02500Render',
+            success: function (result, data) {
+                App.txtPassRule.setValue(data.result.totalpassRule);
+                App.txtPassRule.setReadOnly(true);
+            },
+            failure: function (errorMsg, data) {
+            }
+        });
+    }
+};
+
+var LoginPage_Click = function () {
+
+    if (parent != undefined)
+        parent.location = 'Login';
+    else window.location = 'Login';
+};
+
+
+function Check() {
+    //var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+    if (App.txtOldPassword.value == "") {
+        HQ.message.show(1500, '', null);
+        App.txtOldPassword.focus();
+        return;
+    }
+    else if (App.txtReNewPassword.value == "") {
+        HQ.message.show(1501, '', null);
+        App.txtReNewPassword.focus();
+        return;
+    }
+    else if (HQ.TextValAdmin != '0') {
+        var decimal = new RegExp("^(?=.*\\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\\s).{" + HQ.TextValAdmin + ",}$", "");
+
+        if (!App.txtNewPassword.value.match(decimal)) {
+            HQ.message.show(20180111, [HQ.TextValAdmin],null,true);
+            App.txtNewPassword.focus();
+            return;
+        }
+    }
+    else if (HQ.TextVal != '0') {
+        //var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+        var decimal = new RegExp("^(?=.*\\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\\s).{" + HQ.TextVal + ",}$", "");
+
+        if (!App.txtNewPassword.value.match(decimal)) {
+            HQ.message.show(998, [HQ.TextVal], null, true);
+            App.txtNewPassword.focus();
+            return;
+        }
+    }
+    //if (HQ.TextVal == '1') {
+    //    if (!App.txtNewPassword.value.match(decimal)) {
+    //        HQ.message.show(998, '', null);
+    //        App.txtNewPassword.focus();
+    //        return;
+    //    }
+    //}
+    else if (App.txtReNewPassword.value != App.txtNewPassword.value) {
+        HQ.message.show(1503, '', null);
+        App.txtReNewPassword.focus();
+        return;
+    }
+    save();
+};
+
+function save() {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: 'Submiting...',
+            url: 'SA02500/SA02500Save',
+            params: {
+            },
+            success: function (result, data) {
+                HQ.message.show(1504, '', null);
+                menuClick("refresh");
+
+            }
+            , failure: function (errorMsg, data) {
+
+                if (data.result.code) {
+                    HQ.message.show(data.result.code, '', '');
+                    menuClick("refresh");
+                }
+                else {
+                    processMessage(errorMsg, data);
+                }
+            }
+        });
+    }
+};
+var txtNewPassword_Change = function (sender, e) {
+
+};
+
+var txtReNewPassword_Change = function (sender, e) {
+
+
+};
+
+var txtOldPassword_Change = function (sender, e) {
+
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        App.txtNewPassword.setValue("");
+        App.txtOldPassword.setValue("");
+        App.txtReNewPassword.setValue("");
+        frmMain_afterRender();
+    }
+};
+///////////////////////////////////
