@@ -42,7 +42,10 @@ namespace SA00300.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.TextVal = _db.SYS_Configurations.FirstOrDefault(p => p.Code == "SA02500Check").TextVal;
+            var objSA02500Check = _db.SYS_Configurations.FirstOrDefault(p => p.Code == "SA02500Check");
+            var objSA02500CheckAdmin = _db.SYS_Configurations.FirstOrDefault(p => p.Code == "SA02500CheckAdmin");
+            ViewBag.TextVal = objSA02500Check == null ? "0" : objSA02500Check.TextVal;
+            ViewBag.TextValAdmin = objSA02500CheckAdmin == null ? "0" : objSA02500CheckAdmin.TextVal;
             Util.InitRight(_screenNbr);
             return View();
         }

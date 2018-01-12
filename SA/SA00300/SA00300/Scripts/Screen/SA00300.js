@@ -158,10 +158,21 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.TextVal == '1') {
-                    var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+                if (HQ.store.findInStore(App.grdSYS_UserGroup.store, ['GroupID'], ['Admin'])!=undefined && HQ.TextValAdmin != '0') {
+                    var decimal = new RegExp("^(?=.*\\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\\s).{" + HQ.TextValAdmin + ",}$", "");
+
                     if (!App.Password.value.match(decimal)) {
-                        HQ.message.show(998, '', null);
+                        HQ.message.show(20180111, [HQ.TextValAdmin],null,true);
+                        App.Password.focus();
+                        break;
+                    }
+                }
+                else if (HQ.TextVal != '0') {
+                    //var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+                    var decimal = new RegExp("^(?=.*\\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\\s).{" + HQ.TextVal + ",}$", "");
+
+                    if (!App.Password.value.match(decimal)) {
+                        HQ.message.show(998, [HQ.TextVal], null, true);
                         App.Password.focus();
                         break;
                     }

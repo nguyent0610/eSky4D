@@ -1,3 +1,229 @@
+// Add event listener offline to detect network loss.
+
+
+//// Add event listener online to detect network recovery.
+//window.addEventListener("online", function (e) {
+//    Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('FailedConnectServer'));
+//});
+var SummaryMess = function (mess, respone, store) {
+    Ext.Msg.show({
+        title: "Error"
+                       , buttons: { cancel: 'Ok', yes: 'ShowDetail' }
+                       , msg: 'Sorry, an error occurred while processing your request.'
+                       , fn: function (buttonId, text) {
+                           switch (buttonId) {
+                               case "yes": showDetailError(mess, respone, store)
+                           }
+                       }
+    });
+}
+var showDetailError = function (mess, response, store) {
+    if (store) {
+        var bodySize = Ext.getBody().getViewSize(),
+          width = (bodySize.width < 500) ? bodySize.width - 50 : 500,
+          height = (bodySize.height < 300) ? bodySize.height - 50 : 300,
+          win;
+        win = new Ext.window.Window({
+            id: "winError",
+            modal: true,
+            width: width,
+            height: height,
+            title: "Request Failure",
+            layout: "fit",
+            maximizable: false, //default is true
+            closable: true, //default is true
+            items: [{
+                xtype: "container",
+                layout: {
+                    type: "vbox",
+                    align: "stretch"
+                },
+                items: [
+                    {
+                        xtype: "container",
+                        height: 42,
+                        layout: "absolute",
+                        defaultType: "label",
+                        items: [
+                            {
+                                xtype: "component",
+                                x: 5,
+                                y: 5,
+                                html: '<div class="x-message-box-error" style="width:32px;height:32px"></div>'
+                            },
+                            {
+                                x: 42,
+                                y: 6,
+                                html: "<b>Status Code: </b>"
+                            },
+                            {
+                                x: 125,
+                                y: 6,
+                                text: response.status
+                            },
+                            {
+                                x: 42,
+                                y: 25,
+                                html: "<b>Status Text: </b>"
+                            },
+                            {
+                                x: 125,
+                                y: 25,
+                                text: response.statusText
+                            }
+                        ]
+                    },
+                    {
+                        flex: 1,
+                        itemId: "__ErrorMessageEditor",
+                        xtype: "htmleditor",
+                        value: mess,
+                        readOnly: true,
+                        enableAlignments: false,
+                        enableColors: false,
+                        enableFont: false,
+                        enableFontSize: false,
+                        enableFormat: false,
+                        enableLinks: false,
+                        enableLists: false,
+                        enableSourceEdit: false
+                    }
+                ]
+            }]
+        });
+
+        win.show();
+    } else {
+        Ext.Msg.alert(HQ.common.getLang('Error'), mess);
+    }
+}
+Ext.data.AbstractStore.override({
+    onProxyException: function (proxy, response, operation) {
+        if (response != undefined && response.responseText != undefined && response.responseText.indexOf('SESSIONTIMEOUT') > -1) {
+            if (parent != null) {
+                parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                if (App.frmMain) App.frmMain.unmask();
+            }
+            else {
+                Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                if (App.frmMain) App.frmMain.unmask();
+            }
+        }
+        else {
+            var error = operation.getError(),
+                message;
+
+            if (!Ext.isDefined(error)) {
+                error = Ext.decode(response.responseText).message;
+            }
+
+            message = Ext.isString(error) ? error : ("(" + error.status + ")" + error.statusText);
+
+            this.fireEvent("exception", proxy, response, operation);
+
+            if (Ext.net.DirectEvent.fireEvent("ajaxrequestexception", response, { "errorMessage": message }, null, null, null, null, operation) !== false) {
+                if (this.showWarningOnFailure !== false) {
+                    SummaryMess(response.responseText, response, true);
+                    //HQ.message.show('1712181724', response.responseText, '', false);
+                    //Ext.net.DirectEvent.showFailure(response, response.responseText);
+                }
+            }
+        }
+    }
+});
+Ext.override(Ext.net.DirectEvent, {
+    showFailure: function (response, errorMsg) {
+        var bodySize = Ext.getBody().getViewSize(),
+            width = (bodySize.width < 500) ? bodySize.width - 50 : 500,
+            height = (bodySize.height < 300) ? bodySize.height - 50 : 300,
+            win;
+        if (Ext.isEmpty(errorMsg)) {
+            errorMsg = response.responseText;
+        }
+        if (response.responseText.indexOf('SESSIONTIMEOUT') > -1) {
+            if (parent != null)
+                parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+            else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+        }
+        else
+            if (response.status == 500 || response.status == 0) {
+                //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('ErrorConnectServer'));		
+                SummaryMess(response.responseText, response, true);
+            }
+            else {
+                win = new Ext.window.Window({
+                    id: "winError",
+                    modal: true,
+                    width: width,
+                    height: height,
+                    title: "Request Failure",
+                    layout: "fit",
+                    maximizable: false, //default is true
+                    closable: true, //default is true
+                    items: [{
+                        xtype: "container",
+                        layout: {
+                            type: "vbox",
+                            align: "stretch"
+                        },
+                        items: [
+                            {
+                                xtype: "container",
+                                height: 42,
+                                layout: "absolute",
+                                defaultType: "label",
+                                items: [
+                                    {
+                                        xtype: "component",
+                                        x: 5,
+                                        y: 5,
+                                        html: '<div class="x-message-box-error" style="width:32px;height:32px"></div>'
+                                    },
+                                    {
+                                        x: 42,
+                                        y: 6,
+                                        html: "<b>Status Code: </b>"
+                                    },
+                                    {
+                                        x: 125,
+                                        y: 6,
+                                        text: response.status
+                                    },
+                                    {
+                                        x: 42,
+                                        y: 25,
+                                        html: "<b>Status Text: </b>"
+                                    },
+                                    {
+                                        x: 125,
+                                        y: 25,
+                                        text: response.statusText
+                                    }
+                                ]
+                            },
+                            {
+                                flex: 1,
+                                itemId: "__ErrorMessageEditor",
+                                xtype: "htmleditor",
+                                value: errorMsg,
+                                readOnly: true,
+                                enableAlignments: false,
+                                enableColors: false,
+                                enableFont: false,
+                                enableFontSize: false,
+                                enableFormat: false,
+                                enableLinks: false,
+                                enableLists: false,
+                                enableSourceEdit: false
+                            }
+                        ]
+                    }]
+                });
+
+                win.show();
+            }
+    }
+});
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
@@ -23,11 +249,13 @@ if (typeof String.prototype.trim !== 'function') {
         return this.replace(/^\s+|\s+$/g, '');
     }
 }
+
 if (typeof String.prototype.unsign !== 'function') {
     String.prototype.unsign = function () {
-        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ĩ/g, "e").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
+        return this.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/\ /g, '-').replace(/đ/g, "d").replace(/đ/g, "d").replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y").replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u").replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e").replace(/ì|í|ị|ỉ|ĩ/g, "i").replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a").replace(/ý|ỳ|ỷ|ỹ|ỵ/g, "y").replace(/ú|ù|ủ|ũ|ụ|ứ|ừ|ử|ữ|ự/g, "u").replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/g, "o")
     }
 }
+
 if (!('forEach' in Array.prototype)) {
     Array.prototype.forEach = function (action, that /*opt*/) {
         for (var i = 0, n = this.length; i < n; i++)
@@ -40,6 +268,7 @@ Date.prototype.addDays = function (days) {
     this.setDate(this.getDate() + days);
     return this;
 };
+
 Date.prototype.getFromFormat = function (format) {
     var yyyy = this.getFullYear().toString();
     format = format.replace(/yyyy/g, yyyy)
@@ -55,6 +284,7 @@ Date.prototype.getFromFormat = function (format) {
     format = format.replace(/ss/g, (ss[1] ? ss : "0" + ss[0]));
     return format;
 };
+
 Number.prototype.format = function (n, x, s, c) {
     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
         num = this.toFixed(Math.max(0, ~~n));
@@ -69,10 +299,15 @@ var HQ = {
     store: {
         isChange: function (store) {
             if ((store.getChangedData().Created != undefined && store.getChangedData().Created.length > 1)
-                || store.getChangedData().Updated != undefined
-                || store.getChangedData().Deleted != undefined) {
+                || store.getChangedData().Updated != undefined) {
                 return true;
-            } else {
+            } else if (store.getChangedData().Deleted != undefined) {
+                for (var i = 0; i < store.getChangedData().Deleted.length; i++) {
+                    if (store.getChangedData().Deleted[i].tstamp != '') return true;
+                }
+                return false;
+            }
+            else {
                 return false;
             }
         },
@@ -278,6 +513,7 @@ var HQ = {
                                     return false;
                                 }
                             }
+                            break; // Check data one time
                         }
                     }
                 }
@@ -294,6 +530,7 @@ var HQ = {
                                     return false;
                                 }
                             }
+                            break; // Check data one time
                         }
                     }
                 }
@@ -523,7 +760,7 @@ var HQ = {
             var found = false;
             var store = grd.getStore();
             if (keys == undefined) keys = row.record.idProperty.split(',');
-            var allData = store.snapshot || store.allData || store.data;
+            var allData = grd.store.allData || grd.store.data;
             for (var i = 0; i < allData.items.length; i++) {
                 var record = allData.items[i];
                 var data = '';
@@ -534,7 +771,7 @@ var HQ = {
                         if (row.field == keys[jkey])
                             rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
                         else
-                            rowdata += (row.record.data[keys[jkey]] ? row.record.data[keys[jkey]].toString().toLowerCase() : '') + ',';
+                            rowdata += (row.record.data[keys[jkey]] != undefined ? row.record.data[keys[jkey]].toString().toLowerCase() : '') + ',';
                     }
                 }
                 if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
@@ -657,6 +894,11 @@ var HQ = {
             }
             return index == columns.length ? -1 : index;
         },
+        // Get column text by dataIndex
+        findColumnNameByIndex: function (columns, dataIndex) {
+            var index = HQ.grid.findColumnIndex(columns, dataIndex);
+            return index != -1 ? columns[index].text : dataIndex;
+        },
 
         filterStore: function (store, field, value) {
             store.filterBy(function (record) {
@@ -673,6 +915,15 @@ var HQ = {
                 return (item.getValue().length === 0);
             }
             return val.toLowerCase().unsign().indexOf(item.getValue().toLowerCase().unsign()) > -1;
+        },
+        filterStringExact: function (record, item) {
+            if (item) {
+                var val = record.get(item.dataIndex);
+                if (typeof val != 'string') {
+                    return (item.getValue().length === 0);
+                }
+                return val.toLowerCase().unsign() == (item.getValue().toLowerCase().unsign());
+            } return false;
         },
         filterComboDescr: function (record, item, store, code, descr) {
             var val = record.get(item.dataIndex);
@@ -695,6 +946,12 @@ var HQ = {
                     success: function (result) {
                     },
                     failure: function (msg, data) {
+                        if (msg.indexOf('SESSIONTIMEOUT') > -1) {
+                            if (parent != null)
+                                parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                            else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                            //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        }
                     }
                 });
             } else {
@@ -702,6 +959,12 @@ var HQ = {
                     success: function (result) {
                     },
                     failure: function (msg, data) {
+                        if (msg.indexOf('SESSIONTIMEOUT') > -1) {
+                            if (parent != null)
+                                parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                            else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                            //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        }
                     }
                 });
             }
@@ -715,30 +978,65 @@ var HQ = {
                         HQ.message.show(obj.result.code, obj.result.parm, obj.result.fn, array);
                     }
                     else if (obj.result.type == "error") {
-                        Ext.Msg.alert('Error', obj.result.errorMsg);
+                        if (obj.result.errorMsg.indexOf("Timeout") > -1)
+                            Ext.Msg.alert('Error', HQ.common.getLang("TimeoutSQL"));
+                        else SummaryMess(obj.result.errorMsg);
+                        //HQ.message.show('1712181724', [obj.result.errorMsg]);
+                        //Ext.Msg.alert('99', obj.result.errorMsg);
+                    }
+                    else if (obj.response.responseText.indexOf('SESSIONTIMEOUT') > -1) {
+                        if (parent != null)
+                            parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
                     }
                 } else if (obj.responseText != undefined) {
                     var data = Ext.decode(obj.responseText);
-                    if (data.type == 'message') {
+                    if (obj.responseText.indexOf('SESSIONTIMEOUT') > -1) {
+                        if (parent != null)
+                            parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                    }
+                    else if (data.type == 'message') {
                         HQ.message.show(data.code, data.parm, data.fn, array);
                     }
                     else if (data.type == "error") {
-                        Ext.Msg.alert('Error', obj.errorMsg);
+                        if (obj.errorMsg.indexOf("Timeout") > -1)
+                            Ext.Msg.alert('Error', HQ.common.getLang("TimeoutSQL"));
+                        else SummaryMess(obj.errorMsg);
+                        //HQ.message.show('1712181724', [obj.errorMsg]);
+                        //Ext.Msg.alert('99', obj.errorMsg);
                     }
                     else {
-                        Ext.Msg.alert('Error', data);
+                        //Ext.Msg.alert('Error', data);
+                        SummaryMess(obj.errorMsg);
+                        //HQ.message.show('1712181724', [obj.errorMsg]);
                     }
 
-                } else if (obj.response.responseText != undefined) {
-                    Ext.Msg.alert('Error', obj.response.responseText);
+                } else if (obj.response.responseText != undefined && obj.response.responseText != '') {
+                    if (obj.response.responseText.indexOf('SESSIONTIMEOUT') > -1) {
+                        if (parent != null)
+                            parent.Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        else Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                        //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('SESSIONTIMEOUT'));
+                    }
+                    else if (obj.response.responseText.indexOf('Blocked a frame with origin') > -1) {
+                        SummaryMess(obj.response.responseText);
+                        //HQ.message.show('1712181724', [obj.response.responseText]);
+                        //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('FailedConnectServer'));
+                    }
+                    else Ext.Msg.alert('Error', obj.response.responseText);
                 } else {
                     if (obj.failureType != undefined) {
-                        Ext.Msg.alert('Error', HQ.common.getLang("FailedConnectServer"));
+                        //Ext.Msg.alert('99', obj.response.responseText);
+                        //HQ.message.show('99', obj.response.responseText);
                     }
                 }
             }
             catch (e) {
-                Ext.Msg.alert('Error', errorMsg);
+                SummaryMess(errorMsg);
+
             }
 
         }
@@ -895,11 +1193,11 @@ var HQ = {
             return true;
         },
         checkAccessRight: function () {
-            if (HQ.isInsert == false)
+            if (HQ.isInsert == false && App.menuClickbtnNew)
                 App.menuClickbtnNew.disable();
-            if (HQ.isDelete == false)
+            if (HQ.isDelete == false && App.menuClickbtnDelete)
                 App.menuClickbtnDelete.disable();
-            if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false)
+            if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false && App.menuClickbtnSave)
                 App.menuClickbtnSave.disable();
         },
         toBool: function (parm) {
@@ -1003,6 +1301,17 @@ var HQ = {
                                     isValid = false;
                                     return false;
                                 }
+                                else {//PhucHD check value có chứa mã HTML
+                                    if (item.value) {
+                                        var regex = /<[/a-zA-Z][\s\S]*>/
+                                        if (HQ.util.passNull(item.value.toString()).match(regex)) {
+                                            invalidField = item.id;
+                                            HQ.message.show(2016101010, item.fieldLabel, 'HQ.util.focusControl');
+                                            isValid = false;
+                                            return false;
+                                        }
+                                    }
+                                }
                             })
             return isValid;
         },
@@ -1043,17 +1352,18 @@ HQ.waitMsg = HQ.common.getLang('waitMsg');
 var FilterCombo = function (control, stkeyFilter) {
     var filtersAux = [];
     if (control) {
+        control.suspendEvents();
         var store = control.getStore();
         store.suspendEvents();
-        var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
-        if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
+        var valueArray = HQ.util.passNull(control.getRawValue()).toString().split(control.delimiter);
+        var value = '';
+        if (valueArray.length > 0) value = valueArray[valueArray.length - 1];//value.split(',')[value.split(',').length-1];
         if (store) {
-
             // get filter
             store.filters.items.forEach(function (item) {
                 if (item.id != control.id + '-query-filter') {
-                    filtersAux.push(item);
+                    if (item.property && item.value)
+                        filtersAux.push(item);
                 }
             });
             store.clearFilter();
@@ -1063,20 +1373,26 @@ var FilterCombo = function (control, stkeyFilter) {
             if (control.valueModels == null || control.valueModels.length == 0) {
                 store.filter(function (record, id) {
                     var isMap = false;
+                    var strFind = '';
                     if (record) {
                         stkeyFilter.split(',').forEach(function (key) {
                             if (key) {
                                 if ((typeof HQ.util.passNull(value)) == "string") {
                                     if (record.data[key]) {
-                                        var fieldData = record.data[key].toString().toLowerCase().unsign().indexOf(HQ.util.passNull(value).toLowerCase().unsign());
-                                        if (fieldData > -1) {
-                                            isMap = true;
-                                            return;
-                                        }
+                                        strFind += record.data[key].toString().toLowerCase().unsign();
                                     }
                                 }
                             }
                         });
+                        var valuearr = value.split(':');
+                        isMap = true;
+                        for (var i = 0; i < valuearr.length; i++) {
+                            var fieldData = strFind.indexOf(HQ.util.passNull(valuearr[i]).toLowerCase().unsign());
+                            if (fieldData < 0) {
+                                isMap = false;
+                                return;
+                            }
+                        }
                         return isMap;
                     }
                     else return false;
@@ -1085,8 +1401,45 @@ var FilterCombo = function (control, stkeyFilter) {
 
         }
         store.resumeEvents();
+        control.resumeEvents();
+        control.getPicker().refresh();
+        control.expand();
     }
 };
+
+function FilterCombo_BeforeSelect(control, itemselect) {
+    if (control.multiSelect && control.hasFocus)//gán lại giá trị đã chọn
+    {
+        var filtersAux = [];
+        var store = control.store;
+        store.suspendEvents();
+        // get filter
+        if (store.filters)
+            store.filters.items.forEach(function (item) {
+                if (item.id != control.id + '-query-filter') {
+                    filtersAux.push(item);
+                }
+            });
+        store.clearFilter();
+        filtersAux.forEach(function (item) {
+            store.filter(item._id, item._filterValue);
+        });
+        var allData = store.allData || store.data;
+        var valueArray = HQ.util.passNull(control.getRawValue()).toString().split(control.delimiter);
+        var lstRecordSelect = [];
+        allData.each(function (item) {
+            var index = valueArray.indexOf(item.data[control.displayField]);
+            if (index > -1) {
+                lstRecordSelect.push(item.data[control.valueField]);
+                valueArray.splice(index, 1);
+                if (valueArray.length == 0) return;
+            }
+        });
+        lstRecordSelect.push(itemselect.data[control.valueField]);
+        control.setValue(lstRecordSelect);
+        store.resumeEvents();
+    }
+}
 var loadDefault = function (fileNameStore, cbo) {
     if (fileNameStore.data.items.length > 0) {
         cbo.setValue(fileNameStore.getAt(0).get(cbo.valueField));
@@ -1196,7 +1549,7 @@ Ext.define("ThousandSeparatorNumberField", {
         value = me.parseValue(Ext.util.Format.number(value, format));
         value = me.fixPrecision(value);
         value = Ext.isNumber(value) ? value : parseFloat(me.toRawNumber(value));
-        value = isNaN(value) ? '' : String(Ext.util.Format.number(value, format)).replace('.', me.decimalSeparator);
+        value = isNaN(value) ? '' : String((value < 0 ? '-' : '') + Ext.util.Format.number(value < 0 ? value * -1 : value, format)).replace('.', me.decimalSeparator);
         return value;
     },
 
