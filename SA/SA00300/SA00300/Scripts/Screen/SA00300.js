@@ -167,7 +167,7 @@ var menuClick = function (command) {
                         break;
                     }
                 }
-                else if (HQ.TextVal != '0') {
+                else if (HQ.store.findInStore(App.grdSYS_UserGroup.store, ['GroupID'], ['Admin']) == undefined && HQ.TextVal != '0') {
                     //var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
                     var decimal = new RegExp("^(?=.*\\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\\s).{" + HQ.TextVal + ",}$", "");
 
