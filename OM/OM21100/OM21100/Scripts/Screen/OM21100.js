@@ -1460,6 +1460,7 @@ var DiscDefintion = {
 
             var discSeqRec = sto.getAt(0);
             App.frmDiscSeqInfo.loadRecord(discSeqRec);
+            txtRequiredType_Change();
             _seqLoad = discSeqRec.data.DiscSeq;
 
             if (discSeqRec.data.tstamp) {
@@ -1585,6 +1586,7 @@ var DiscDefintion = {
                 }
                 else {
                     App.chkRequiredType.disable();
+                    App.chkRequiredType.setValue(false);
                 }
             }
             //if (!frmRec.data.tstamp) {
@@ -1708,6 +1710,7 @@ var DiscDefintion = {
             }
             else {
                 App.chkRequiredType.disable();
+                App.chkRequiredType.setValue(false);
             }
 
 
@@ -1850,6 +1853,7 @@ var DiscDefintion = {
             }
             else {
                 App.chkRequiredType.disable();
+                App.chkRequiredType.setValue(false);
             }
         },
 
@@ -3339,7 +3343,7 @@ var btnImport_Click = function (sender, e) {
 var chkRequiredType_Change = function () {
     var reqType = '';
     
-    if (App.chkRequiredType.getValue()) {
+    if (App.chkRequiredType.getValue() && App.cboDiscType.getValue() == 'G') {
         reqType = 'Q';
         HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
     } else {
@@ -3363,13 +3367,12 @@ var chkRequiredType_Change = function () {
 
 var txtRequiredType_Change = function () {
     var isCheck = false;
-    if (!Ext.isEmpty(App.txtRequiredType.getValue())) {
+    if (App.txtRequiredType.getValue() == 'Q' && App.cboDiscType.getValue() == 'G') {
         isCheck = true;
         HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
     } else {
         HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
     }
-
     App.chkRequiredType.events['change'].suspend();
     App.chkRequiredType.setValue(isCheck);
     App.chkRequiredType.events['change'].resume();
