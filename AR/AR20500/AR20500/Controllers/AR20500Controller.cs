@@ -385,7 +385,7 @@ namespace AR20500.Controllers
                             objNew.LUpd_Datetime = DateTime.Now;
                             objNew.LUpd_Prog = _screenNbr;
                             objNew.LUpd_User = Current.UserName;
-
+  
                             if (objCust != null)
                             {
                                 Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, objCust.ProfilePic.PassNull() == string.Empty, objCust.BusinessPic.PassNull() == string.Empty);
@@ -466,7 +466,7 @@ namespace AR20500.Controllers
             objNew.State = item.State;
             objNew.District = item.District;
             objNew.Ward = item.Ward;
-
+            objNew.ContactName = item.ContactName;
             objNew.Reason = item.Reason;
             objNew.ClassId = item.ClassId;
             objNew.PriceClass = item.PriceClass;
