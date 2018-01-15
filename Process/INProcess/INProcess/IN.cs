@@ -961,7 +961,7 @@ namespace INProcess
                     {
                         lineRef = "0" + lineRef;
                     }
-                    if (!objItem.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID")))
+                    if (objItem.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID")))
                     {
                         objItem.QtyOnHand = objItem.QtyOnHand + tagDetail.Double("OffsetEAQty");
                         objItem.QtyAvail = objItem.QtyAvail + tagDetail.Double("OffsetEAQty");
