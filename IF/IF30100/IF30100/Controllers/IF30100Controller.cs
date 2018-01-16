@@ -43,6 +43,7 @@ namespace IF30100.Controllers
 
         public ActionResult Index(string screenNbr)
         {
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             string type = "E";
             if (screenNbr.PassNull() != string.Empty)
             {
@@ -425,54 +426,62 @@ namespace IF30100.Controllers
         {
             try
             {
-                //Stream stream = new MemoryStream();
-                //Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook();
-                //Aspose.Cells.Worksheet SheetData = workbook.Worksheets[0];
-                //SheetData.Name = "Data";
+                LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+                Stream stream = new MemoryStream();
+                Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook();
+                Aspose.Cells.Worksheet SheetData = workbook.Worksheets[0];
+                SheetData.Name = "Data";
 
-                //var detHandler = new StoreDataHandler(data["lstDet"]);
-                //var lstDet = detHandler.ObjectData<IF30100_pgData_Result>().ToList();
-                //int i = 0;
-                //foreach (var obj in lstDet)
-                //{
-                //    SetCellValueGrid(SheetData.Cells.Rows[0][i], Util.GetLang(obj.Column_Name), TextAlignmentType.Center, TextAlignmentType.Left);
-                //    i++;
-                //}
-                //DataAccess dal = Util.Dal(false, isReadOnly);
-                //ParamCollection pc = new ParamCollection();
-                //System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.Text, ref pc);
+                var detHandler = new StoreDataHandler(data["lstDet"]);
+                var lstDet = detHandler.ObjectData<IF30100_pgData_Result>().ToList();
+                int i = 0;
+               
+                DataAccess dal = Util.Dal(false, isReadOnly);
+                ParamCollection pc = new ParamCollection();
+                System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.Text, ref pc);
 
-                //Cell cell;
-                //for (int j = 0; j < dtInvtID.Rows.Count; j++)
-                //{
-                //    for(int x = 0; x < dtInvtID.Columns.Count; x++){
-                //        cell = SheetData.Cells[j+1, x];
-                //        if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("DATE"))
-                //        {
-                //            DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][x].ToString());
-                //            cell.PutValue(tmpValue.ToString(Current.FormatDate));
-                //        }
-                //        else
-                //        {
-                //            cell.PutValue(dtInvtID.Rows[j][x].ToString());
-                //        }
-                //    }
-                //}
+                Cell cell;
 
-                ////SheetData.Cells.ImportDataTable(dtCloned, false, "A2");// du lieu Inventory
+                for (int x = 0; x < dtInvtID.Columns.Count; x++)
+                {
+                    SetCellValueGrid(SheetData.Cells.Rows[0][x], Util.GetLang(dtInvtID.Columns[x].ColumnName), TextAlignmentType.Center, TextAlignmentType.Left);           
+                }
 
-                           
+                for (int j = 0; j < dtInvtID.Rows.Count; j++)
+                {
+                    for (int x = 0; x < dtInvtID.Columns.Count; x++)
+                    {
+                        cell = SheetData.Cells[j + 1, x];
+                        if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("DATE"))
+                        {
+                            DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][x].ToString());
+                            cell.PutValue(tmpValue.ToString(Current.FormatDate));
+                        }
+                        else
+                        {
+                            cell.PutValue(dtInvtID.Rows[j][x].ToString());
+                        }
+                    }
+                }
 
-                //SheetData.AutoFitColumns();
-                Thread.Sleep(1000 * 60 * 5);
+                //SheetData.Cells.ImportDataTable(dtCloned, false, "A2");// du lieu Inventory
 
-                string fileName = "abc.xlsx";
+                SheetData.Protection.AllowFiltering = true;
+                SheetData.Protection.AllowUsingPivotTable = true;
+                SheetData.Protection.Password = "HQS0ftw@re2017";
+
+                workbook.Worksheets[0].Protect(ProtectionType.All, "HQS0ftw@re2017", "HQS0ftw@re2017");
+                workbook.Protect(ProtectionType.Objects, "HQS0ftw@re2017");
+
+                SheetData.AutoFitColumns();
+                //Thread.Sleep(1000 * 60 * 5);
+                string fileName = Guid.NewGuid().ToString() + ".xlsx";
                 string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
-              
-        
-                //workbook.Save(path, SaveFormat.Xlsx);
-              
-                return Json(new { success = true, id = fileName, name =  "test.xlsx" }, JsonRequestBehavior.AllowGet);
+
+
+                workbook.Save(path, SaveFormat.Xlsx);
+
+                return Json(new { success = true, id = fileName, name = name + ".xlsx" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -2278,6 +2287,7 @@ namespace IF30100.Controllers
         {
             try
             {
+                LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
                 //SelectedRowCollection List0 = JSON.Deserialize<SelectedRowCollection>(data["list0"]);
                 //SelectedRowCollection List1 = JSON.Deserialize<SelectedRowCollection>(data["list1"]);
                 //SelectedRowCollection List2 = JSON.Deserialize<SelectedRowCollection>(data["list2"]);
@@ -2519,8 +2529,12 @@ namespace IF30100.Controllers
                     
 
                     SheetData.AutoFitColumns();
+                    SheetData.Protection.AllowFiltering = true;
+                    SheetData.Protection.AllowUsingPivotTable = true;
+                    SheetData.Protection.Password = "HQS0ftw@re2017";
+
                     workbook.Worksheets[0].Protect(ProtectionType.All, "HQS0ftw@re2017", "HQS0ftw@re2017");
-                    workbook.Protect(ProtectionType.All, "HQS0ftw@re2017");
+                    workbook.Protect(ProtectionType.Objects, "HQS0ftw@re2017");
                     string fileName =id;// Guid.NewGuid().ToString() + ".Xlsb";
                     string path = Server.MapPath("~/ExportPivot") + @"\" + fileName;
 
