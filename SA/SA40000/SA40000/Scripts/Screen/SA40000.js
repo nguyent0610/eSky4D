@@ -344,8 +344,10 @@ var grdSYS_CloseDateSetUp_BeforeEdit = function (editor, e) {
 var grdSYS_CloseDateSetUp_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdSYS_CloseDateSetUp, e, keys);
     var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount() - 1);
-    record.set('WrkAdjDate', new Date(_dateServer));
-    record.set('WrkOpenDate', new Date(_dateServer));
+    if (Ext.isEmpty(record.data.BranchID)) {
+        record.set('WrkAdjDate', new Date(_dateServer));
+        record.set('WrkOpenDate', new Date(_dateServer));
+    }
 
     //if (e.field == "BranchID") {
     //    var selectedRecord = App.cboBranchID.store.findRecord('CpnyID', e.value);
