@@ -673,7 +673,10 @@ var Main = {
             App.cboDiscID.forceSelection = !HQ.allowAddDiscount;
             App.stoDiscInfo.reload();
             App.stoDiscSeqInfo.reload();
-            App.chkPctDiscountByLevel.disable();
+            if (App.chkPctDiscountByLevel != undefined) {
+                App.chkPctDiscountByLevel.disable();
+            }
+            
             HQ.common.setRequire(App.frmMain);
             App.chkRequiredType.setVisible(HQ.showRequiredType);
         },
@@ -1060,44 +1063,47 @@ var Main = {
                     break;
                 case "delete":
 
-                    if (HQ.isUpdate) {
-                        if (HQ.focus == 'frmDiscDefintionTop') {
-                            // Xoa discount
-                            HQ.message.show(11, '', 'Main.Process.deleteDisc', true);
-                            //Main.Process.deleteDisc();
-                        }
-                        else if (HQ.focus == 'frmDiscSeqInfo') {
-                            // Xoa disc seq
-                            HQ.message.show(11, '', 'Main.Process.deleteDiscSeq', true);
-                            // Main.Process.deleteDiscSeq();
-                        }
-                        else if (focusGrid) {
-                            var selected = focusGrid.getSelectionModel().selected.items;
-                            if (selected.length > 0) {
-                                _gridForDel = focusGrid;
+                    if (App.cboStatus.getValue() != "C") {
+                        if (HQ.isUpdate) {
+                            if (HQ.focus == 'frmDiscDefintionTop') {
+                                // Xoa discount
+                                HQ.message.show(11, '', 'Main.Process.deleteDisc', true);
+                                //Main.Process.deleteDisc();
+                            }
+                            else if (HQ.focus == 'frmDiscSeqInfo') {
+                                // Xoa disc seq
+                                HQ.message.show(11, '', 'Main.Process.deleteDiscSeq', true);
+                                // Main.Process.deleteDiscSeq();
+                            }
+                            else if (focusGrid) {
+                                var selected = focusGrid.getSelectionModel().selected.items;
+                                if (selected.length > 0) {
+                                    _gridForDel = focusGrid;
 
-                                if (HQ.focus == 'grdFreeItem') {
-                                    HQ.message.show(2015020807, DiscDefintion.Process.indexSelect(App.grdFreeItem), 'Main.Process.deleteSelectedInGrid');
-                                } else {
-                                    if (selected[0].index != undefined) {
-                                        var rowIdx = '';
-                                        for (var i = 0; i < selected.length; i++) {
-                                            rowIdx += (focusGrid.getSelectionModel().selected.items[i].index + 1) + ' & ';
+                                    if (HQ.focus == 'grdFreeItem') {
+                                        HQ.message.show(2015020807, DiscDefintion.Process.indexSelect(App.grdFreeItem), 'Main.Process.deleteSelectedInGrid');
+                                    } else {
+                                        if (selected[0].index != undefined) {
+                                            var rowIdx = '';
+                                            for (var i = 0; i < selected.length; i++) {
+                                                rowIdx += (focusGrid.getSelectionModel().selected.items[i].index + 1) + ' & ';
+                                            }
+                                            var params = rowIdx.length > 3 ? rowIdx.substring(0, rowIdx.length - 3) : '';// + title;
+                                            HQ.message.show(2015020807, params, 'Main.Process.deleteSelectedInGrid');
                                         }
-                                        var params = rowIdx.length > 3 ? rowIdx.substring(0, rowIdx.length - 3) : '';// + title;
-                                        HQ.message.show(2015020807, params, 'Main.Process.deleteSelectedInGrid');
+                                        else {
+                                            HQ.message.show(11, '', 'Main.Process.deleteSelectedInGrid');
+                                        }
                                     }
-                                    else {
-                                        HQ.message.show(11, '', 'Main.Process.deleteSelectedInGrid');
-                                    }
-                                }
 
+                                }
                             }
                         }
+                        else {
+                            HQ.message.show(4, '', '');
+                        }
                     }
-                    else {
-                        HQ.message.show(4, '', '');
-                    }
+                    
                     break;
                 case "save":
                     Main.Process.saveData();
@@ -1577,10 +1583,15 @@ var DiscDefintion = {
         cboDiscType_change: function (cbo, newValue, oldValue, eOpts) {
             var frmRec = App.frmDiscDefintionTop.getRecord();
             if (App.cboDiscType.getValue() == 'L') {
-                App.chkPctDiscountByLevel.enable();
+                if (App.chkPctDiscountByLevel != undefined) {
+                    App.chkPctDiscountByLevel.enable();
+                }
+                
             }
             else {
-                App.chkPctDiscountByLevel.disable();
+                if (App.chkPctDiscountByLevel != undefined) {
+                    App.chkPctDiscountByLevel.disable();
+                }                
                 if (App.cboDiscType.getValue() == 'G' && App.cboDiscClass.getValue() == 'II' && App.cboBreakBy.getValue() == 'Q') {
                     App.chkRequiredType.enable();
                 }
@@ -1834,7 +1845,11 @@ var DiscDefintion = {
                 App.grdDiscBreak.down('[dataIndex=BreakQty]').setText(HQ.common.getLang("breakqty"));
             }
             var isEnable = (!App['pnlDPBB'].isDisabled() && cbo.value == "Q");
-            App.chkExactQty.setVisible(isEnable);
+            if (App.pnlDPBB.isDisabled() && cbo.value == "Q") {
+                App.chkExactQty.disable();
+            } else {
+                App.chkExactQty.enable();
+            }
 
             var isEnableRequiredType = (!App['pnlDPII'].isDisabled() && cbo.value == "Q");
            // if (!isEnableRequiredType || App.cboDiscType.getValue() != 'G') {
@@ -3376,4 +3391,14 @@ var txtRequiredType_Change = function () {
     App.chkRequiredType.events['change'].suspend();
     App.chkRequiredType.setValue(isCheck);
     App.chkRequiredType.events['change'].resume();
+}
+var Status_Change = function () {
+    if (App.cboStatus.getValue() == "C") {
+        App.chkRequiredType.setReadOnly(true);
+        App.chkPctDiscountByLevel.setReadOnly(true);
+    }
+    else {
+        App.chkRequiredType.setReadOnly(false);
+        App.chkPctDiscountByLevel.setReadOnly(false);
+    }
 }
