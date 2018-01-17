@@ -11,6 +11,7 @@
           </Key>
           <Property Name="SizeID" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="SizeType" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
@@ -32,19 +33,26 @@
     <edmx:ConceptualModels>
       <Schema Namespace="SI23600Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SI23600Entities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="SI_Size" EntityType="SI23600Model.SI_Size" />
           <FunctionImport Name="SI23600_pgSI_Size" ReturnType="Collection(SI23600Model.SI23600_pgSI_Size_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="SI_Size" EntityType="SI23600Model.SI_Size" />
         </EntityContainer>
+        <ComplexType Name="SI23600_pgSI_Size_Result">
+          <Property Type="String" Name="SizeID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="SizeType" Nullable="false" MaxLength="2" />
+        </ComplexType>
         <EntityType Name="SI_Size">
           <Key>
             <PropertyRef Name="SizeID" />
           </Key>
           <Property Name="SizeID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Descr" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SizeType" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -53,17 +61,22 @@
           <Property Name="Lupd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="SI23600_pgSI_Size_Result">
-          <Property Type="String" Name="SizeID" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SI23600Entities" >
+          <FunctionImportMapping FunctionImportName="SI23600_pgSI_Size" FunctionName="eBiz4DWebSysModel.Store.SI23600_pgSI_Size">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI23600Model.SI23600_pgSI_Size_Result">
+                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="SizeType" ColumnName="SizeType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="SI_Size">
             <EntityTypeMapping TypeName="SI23600Model.SI_Size">
               <MappingFragment StoreEntitySet="SI_Size">
@@ -74,20 +87,12 @@
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
                 <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="SizeType" ColumnName="SizeType" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="SizeID" ColumnName="SizeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SI23600_pgSI_Size" FunctionName="eBiz4DWebSysModel.Store.SI23600_pgSI_Size">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SI23600Model.SI23600_pgSI_Size_Result">
-                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

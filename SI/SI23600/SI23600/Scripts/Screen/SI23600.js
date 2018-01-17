@@ -1,7 +1,7 @@
 //// Declare //////////////////////////////////////////////////////////
 var keys = ['SizeID'];
-var fieldsCheckRequire = ["SizeID", "Descr"];
-var fieldsLangCheckRequire = ["SizeID", "Descr"];
+var fieldsCheckRequire = ["SizeID", "Descr", "SizeType"];
+var fieldsLangCheckRequire = ["SizeID", "Descr", "SizeType"];
 
 var _Source = 0;
 var _maxSource = 1;
@@ -15,6 +15,7 @@ var checkLoad = function (sto) {
     if (_Source == _maxSource) {
         _isLoadMaster = true;
         _Source = 0;
+        App.cboSizeType.store.reload();
         App.stoSI_Size.reload();
         HQ.common.showBusy(false);
     }
@@ -159,3 +160,24 @@ function refresh(item) {
         App.stoSI_Size.reload();
     }
 };
+
+
+var renderSizeType = function (value) {
+    var obj = App.cboSizeType.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+
+
+var stringFilterSizeType = function (record) {
+
+    if (this.dataIndex == 'SizeType') {
+        App.cboSizeType.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboSizeType.store, "Code", "Descr");
+    }
+
+    return HQ.grid.filterString(record, this);
+}

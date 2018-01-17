@@ -161,6 +161,7 @@ namespace SI23600
         /// </summary>
         /// <param name="sizeID">Initial value of the SizeID property.</param>
         /// <param name="descr">Initial value of the Descr property.</param>
+        /// <param name="sizeType">Initial value of the SizeType property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
@@ -168,11 +169,12 @@ namespace SI23600
         /// <param name="lupd_Prog">Initial value of the Lupd_Prog property.</param>
         /// <param name="lupd_User">Initial value of the Lupd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_Size CreateSI_Size(global::System.String sizeID, global::System.String descr, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lupd_DateTime, global::System.String lupd_Prog, global::System.String lupd_User, global::System.Byte[] tstamp)
+        public static SI_Size CreateSI_Size(global::System.String sizeID, global::System.String descr, global::System.String sizeType, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lupd_DateTime, global::System.String lupd_Prog, global::System.String lupd_User, global::System.Byte[] tstamp)
         {
             SI_Size sI_Size = new SI_Size();
             sI_Size.SizeID = sizeID;
             sI_Size.Descr = descr;
+            sI_Size.SizeType = sizeType;
             sI_Size.Crtd_DateTime = crtd_DateTime;
             sI_Size.Crtd_Prog = crtd_Prog;
             sI_Size.Crtd_User = crtd_User;
@@ -237,6 +239,30 @@ namespace SI23600
         private global::System.String _Descr;
         partial void OnDescrChanging(global::System.String value);
         partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SizeType
+        {
+            get
+            {
+                return _SizeType;
+            }
+            set
+            {
+                OnSizeTypeChanging(value);
+                ReportPropertyChanging("SizeType");
+                _SizeType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SizeType");
+                OnSizeTypeChanged();
+            }
+        }
+        private global::System.String _SizeType;
+        partial void OnSizeTypeChanging(global::System.String value);
+        partial void OnSizeTypeChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -431,12 +457,14 @@ namespace SI23600
         /// <param name="sizeID">Initial value of the SizeID property.</param>
         /// <param name="descr">Initial value of the Descr property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI23600_pgSI_Size_Result CreateSI23600_pgSI_Size_Result(global::System.String sizeID, global::System.String descr, global::System.Byte[] tstamp)
+        /// <param name="sizeType">Initial value of the SizeType property.</param>
+        public static SI23600_pgSI_Size_Result CreateSI23600_pgSI_Size_Result(global::System.String sizeID, global::System.String descr, global::System.Byte[] tstamp, global::System.String sizeType)
         {
             SI23600_pgSI_Size_Result sI23600_pgSI_Size_Result = new SI23600_pgSI_Size_Result();
             sI23600_pgSI_Size_Result.SizeID = sizeID;
             sI23600_pgSI_Size_Result.Descr = descr;
             sI23600_pgSI_Size_Result.tstamp = tstamp;
+            sI23600_pgSI_Size_Result.SizeType = sizeType;
             return sI23600_pgSI_Size_Result;
         }
 
@@ -515,6 +543,30 @@ namespace SI23600
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SizeType
+        {
+            get
+            {
+                return _SizeType;
+            }
+            set
+            {
+                OnSizeTypeChanging(value);
+                ReportPropertyChanging("SizeType");
+                _SizeType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SizeType");
+                OnSizeTypeChanged();
+            }
+        }
+        private global::System.String _SizeType;
+        partial void OnSizeTypeChanging(global::System.String value);
+        partial void OnSizeTypeChanged();
 
         #endregion
 

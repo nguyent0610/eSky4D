@@ -115,6 +115,7 @@ namespace SI23600.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
+            t.SizeType = s.SizeType;
             t.Descr = s.Descr;
             t.Lupd_DateTime = DateTime.Now;
             t.Lupd_Prog = _screenNbr;
