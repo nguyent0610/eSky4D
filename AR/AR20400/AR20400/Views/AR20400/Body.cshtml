@@ -428,7 +428,7 @@
                             
                     )
 
-                    , X.Container().Layout(LayoutType.VBox).MarginSpec("0 10 0 20")
+                    , X.Container().Layout(LayoutType.VBox).MarginSpec("0 5 0 20")
                     .Items(                               
                         X.FieldSet().Title(Util.GetLang("CUSTCLASSIFY")).Layout(LayoutType.VBox)
                             .Items(
@@ -480,6 +480,98 @@
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                         lst.Focus.Handler = "this.forceSelection = true;";  
                                     })
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
+                                    ,HQ.Combo().ID("cboAddStand").Name("cboAddStand").HQLangCode("AR20400Stand").DataIndex("StandID")
+                                    .HQProcedure("AR20400_pcSI_Stand").HQColumnShow("Code,Descr")
+                                    .DisplayField("Descr").ValueField("Code")
+                                   // .HQAutoLoad(false)
+                                        .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                                    .AllowBlank(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    {
+                                       new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }   
+                                    })
+                                    .LoadData()
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Focus.Handler = "this.forceSelection = true;";
+                                        lst.Blur.Handler = "this.forceSelection = false;";
+                                    })
+
+                                    , HQ.Combo().ID("cboAddBrand").Name("cboAddBrand").HQLangCode("AR20400Brand").DataIndex("BrandID")
+                                    .HQProcedure("AR20400_pcSI_Brand").HQColumnShow("Code,Descr")
+                                    .DisplayField("Descr").ValueField("Code")
+                                    .MultiSelect(true)
+                                          //  .HQAutoLoad(false)
+                                         .Width(260).LabelWidth(140)
+                                        .AllowBlank(true)
+                                    .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                                    .HQParam(new StoreParameterCollection() 
+                                    {
+                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    })
+                                    .LoadData()
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.Expand.Handler = "HQ.combo.expand(this, ',');App.cboAddBrand.store.clearFilter();";
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Focus.Handler = "this.forceSelection = true;";
+                                        lst.Blur.Handler = "this.forceSelection = false;";
+                                    })
+                                    ,
+
+                                    HQ.Combo().ID("cboAddSize").Name("cboAddSize").HQLangCode("AR20400Size").DataIndex("SizeID")
+                                    .HQProcedure("AR20400_pcSI_Size").HQColumnShow("Code,Descr")
+                                    .DisplayField("Descr").ValueField("Code")
+                                    //.HQAutoLoad(false)
+                                        .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                                    .AllowBlank(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    {
+                                       new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }   
+                                    })
+                                    .LoadData()
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Focus.Handler = "this.forceSelection = true;";
+                                        lst.Blur.Handler = "this.forceSelection = false;";
+                                    })
+
+                                    , HQ.Combo().ID("cboAddDisplayID").Name("cboAddDisplayID").HQLangCode("AR20400Display").DataIndex("DisplayID")
+                                    .HQProcedure("AR20400_pcSI_Display").HQColumnShow("Code,Descr")
+                                    .DisplayField("Descr").ValueField("Code")
+                                          //  .HQAutoLoad(false)
+                                            .Width(260).LabelWidth(140)
+                                        .AllowBlank(true)
+                                    .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                                    .HQParam(new StoreParameterCollection() 
+                                    {
+                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    })
+                                    .LoadData()
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Focus.Handler = "this.forceSelection = true;";
+                                        lst.Blur.Handler = "this.forceSelection = false;";
+                                    })
+                
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////            
+                                    
 
                                 , HQ.Combo().ID("cboChannel").Name("cboChannel").HQLangCode("SALESCHNL").DataIndex("Channel")
                                     .HQProcedure("AR20400_pcSalesChannel").HQColumnShow("Code,Descr")
@@ -530,7 +622,7 @@
                                 )
                             )
                             ,X.Hidden().ID("hdnImages").DataIndex("ProfilePic")
-                            , X.Image().ID("imgImages").Width(280).Height(280).MarginSpec("10 0 5 0")//.Listeners(l=>l.ResizerResize.Handler="App.imgImages.setWidth(App.imgImages.getWidth());")
+                            , X.Image().ID("imgImages").Width(280).Height(200).MarginSpec("5 0 5 0")//.Listeners(l=>l.ResizerResize.Handler="App.imgImages.setWidth(App.imgImages.getWidth());")
 
                             , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 50")
                             .Items(

@@ -113,6 +113,13 @@ namespace AR20400.Controllers
 				else
 					ViewBag.ReadonlyShopType = "false";
 			}
+            string hideColumn = string.Empty;
+            var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null && !string.IsNullOrWhiteSpace(objConfig.hideColumn))
+            {
+                hideColumn = objConfig.hideColumn.PassNull();
+            }
+            ViewBag.hideColumn = hideColumn;
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -125,7 +132,7 @@ namespace AR20400.Controllers
 
         public ActionResult GetAR_Customer(string CpnyID, string CustId)
         {
-            return this.Store(_db.AR20400_pdHeader(CpnyID, CustId).FirstOrDefault());
+            return this.Store(_db.AR20400_pdHeader(CpnyID, CustId, Current.UserName, Current.LangID).FirstOrDefault());
         }
 
         public ActionResult GetAR_CustAdvTool(string CustId)
@@ -686,6 +693,11 @@ namespace AR20400.Controllers
             t.BillDistrict = s.BillDistrict;
             t.SellProduct = s.SellProduct;
             t.RefCustID = s.RefCustID;
+
+            t.StandID = s.StandID;
+            t.SizeID = s.SizeID;
+            t.DisplayID = s.DisplayID;
+            t.BrandID = s.BrandID;
 
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

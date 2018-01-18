@@ -108,7 +108,20 @@ var firstLoad = function () {
     App.cboSellingProd1.getStore().addListener('load', checkLoad);
     App.cboSubTerritory.getStore().addListener('load', checkLoad);
     //App.cboCustId.getStore().addListener('load', stoCustId_Load);
-
+    if (!Ext.isEmpty(HQ.hideColumn)) {
+        var lstHide = HQ.hideColumn.split(',');
+        for (var i = 0; i < lstHide.length; i++) {
+            if (lstHide[i] == 'StandID') {
+                App.cboAddStand.setVisible(false);
+            } else if (lstHide[i] == 'BrandID') {
+                App.cboAddBrand.setVisible(false);
+            } else if (lstHide[i] == 'SizeID') {
+                App.cboAddSize.setVisible(false);
+            } else if (lstHide[i] == 'DisplayID') {
+                App.cboAddDisplayID.setVisible(false);
+            }
+        }
+    }
 };
 
 
@@ -430,7 +443,7 @@ var stoLoad = function (sto) {
     App.lblName.setValue(record.data.CustName);
 
     App.frmMain.getForm().loadRecord(record);
-
+    HQ.combo.expand(App.cboAddBrand, ',');
     // display image
     App.fupImages.reset();
     if (record.data.ProfilePic) {

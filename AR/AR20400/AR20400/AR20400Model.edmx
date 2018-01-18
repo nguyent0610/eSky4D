@@ -179,6 +179,11 @@
           <Property Name="SearchName" Type="nvarchar(max)" />
           <Property Name="AllowEdit" Type="int" Nullable="false" />
           <Property Name="BusinessPic" Type="nvarchar" MaxLength="100" />
+          <Property Name="TypeCabinets" Type="varchar" MaxLength="100" />
+          <Property Name="StandID" Type="varchar" MaxLength="10" />
+          <Property Name="DisplayID" Type="varchar" MaxLength="10" />
+          <Property Name="SizeID" Type="varchar" MaxLength="10" />
+          <Property Name="BrandID" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="AR_CustomerChild">
           <Key>
@@ -415,9 +420,16 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Descr1" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <Function Name="AR20400_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="AR20400_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="CustId" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="AR20400_pgAR_CustAdvTool" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustId" Type="varchar" Mode="In" />
@@ -574,8 +586,15 @@
           <FunctionImport Name="AR20400_pdHeader" ReturnType="Collection(AR20400Model.AR20400_pdHeader_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="CustId" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
+          <FunctionImport Name="AR20400_pdConfig" ReturnType="Collection(AR20400Model.AR20400_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_CustAdvTool">
           <Key>
@@ -1038,6 +1057,10 @@
           <Property Type="Int32" Name="AllowEdit" Nullable="false" />
           <Property Type="String" Name="BusinessPic" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="BillDistrict" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="StandID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="BrandID" Nullable="true" />
+          <Property Type="String" Name="SizeID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DisplayID" Nullable="true" MaxLength="10" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1128,7 +1151,15 @@
           <Property Name="SearchName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AllowEdit" Type="Int32" Nullable="false" />
           <Property Name="BusinessPic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TypeCabinets" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StandID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="BrandID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="AR20400_pdConfig_Result">
+          <Property Type="String" Name="hideColumn" Nullable="false" MaxLength="32" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1630,12 +1661,21 @@
                 <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
                 <ScalarProperty Name="BusinessPic" ColumnName="BusinessPic" />
                 <ScalarProperty Name="BillDistrict" ColumnName="BillDistrict" />
+                <ScalarProperty Name="StandID" ColumnName="StandID" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+                <ScalarProperty Name="StandID" ColumnName="StandID" />
+                <ScalarProperty Name="TypeCabinets" ColumnName="TypeCabinets" />
                 <ScalarProperty Name="BusinessPic" ColumnName="BusinessPic" />
                 <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
                 <ScalarProperty Name="SearchName" ColumnName="SearchName" />
@@ -1723,6 +1763,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pdConfig" FunctionName="eBiz4DWebSysModel.Store.AR20400_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pdConfig_Result">
+                <ScalarProperty Name="hideColumn" ColumnName="hideColumn" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

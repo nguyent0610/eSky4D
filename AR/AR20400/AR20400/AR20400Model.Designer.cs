@@ -880,7 +880,9 @@ namespace AR20400
         /// </summary>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="custId">No Metadata Documentation available.</param>
-        public ObjectResult<AR20400_pdHeader_Result> AR20400_pdHeader(global::System.String cpnyID, global::System.String custId)
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20400_pdHeader_Result> AR20400_pdHeader(global::System.String cpnyID, global::System.String custId, global::System.String userName, Nullable<global::System.Int16> langID)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -902,7 +904,68 @@ namespace AR20400
                 custIdParameter = new ObjectParameter("CustId", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR20400_pdHeader_Result>("AR20400_pdHeader", cpnyIDParameter, custIdParameter);
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20400_pdHeader_Result>("AR20400_pdHeader", cpnyIDParameter, custIdParameter, userNameParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20400_pdConfig_Result> AR20400_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20400_pdConfig_Result>("AR20400_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -4687,6 +4750,126 @@ namespace AR20400
         private global::System.String _BusinessPic;
         partial void OnBusinessPicChanging(global::System.String value);
         partial void OnBusinessPicChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TypeCabinets
+        {
+            get
+            {
+                return _TypeCabinets;
+            }
+            set
+            {
+                OnTypeCabinetsChanging(value);
+                ReportPropertyChanging("TypeCabinets");
+                _TypeCabinets = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TypeCabinets");
+                OnTypeCabinetsChanged();
+            }
+        }
+        private global::System.String _TypeCabinets;
+        partial void OnTypeCabinetsChanging(global::System.String value);
+        partial void OnTypeCabinetsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StandID
+        {
+            get
+            {
+                return _StandID;
+            }
+            set
+            {
+                OnStandIDChanging(value);
+                ReportPropertyChanging("StandID");
+                _StandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StandID");
+                OnStandIDChanged();
+            }
+        }
+        private global::System.String _StandID;
+        partial void OnStandIDChanging(global::System.String value);
+        partial void OnStandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayID
+        {
+            get
+            {
+                return _DisplayID;
+            }
+            set
+            {
+                OnDisplayIDChanging(value);
+                ReportPropertyChanging("DisplayID");
+                _DisplayID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DisplayID");
+                OnDisplayIDChanged();
+            }
+        }
+        private global::System.String _DisplayID;
+        partial void OnDisplayIDChanging(global::System.String value);
+        partial void OnDisplayIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SizeID
+        {
+            get
+            {
+                return _SizeID;
+            }
+            set
+            {
+                OnSizeIDChanging(value);
+                ReportPropertyChanging("SizeID");
+                _SizeID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SizeID");
+                OnSizeIDChanged();
+            }
+        }
+        private global::System.String _SizeID;
+        partial void OnSizeIDChanging(global::System.String value);
+        partial void OnSizeIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BrandID
+        {
+            get
+            {
+                return _BrandID;
+            }
+            set
+            {
+                OnBrandIDChanging(value);
+                ReportPropertyChanging("BrandID");
+                _BrandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BrandID");
+                OnBrandIDChanged();
+            }
+        }
+        private global::System.String _BrandID;
+        partial void OnBrandIDChanging(global::System.String value);
+        partial void OnBrandIDChanged();
 
         #endregion
 
@@ -9401,6 +9584,59 @@ namespace AR20400
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="AR20400_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR20400_pdConfig_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR20400_pdConfig_Result object.
+        /// </summary>
+        /// <param name="hideColumn">Initial value of the hideColumn property.</param>
+        public static AR20400_pdConfig_Result CreateAR20400_pdConfig_Result(global::System.String hideColumn)
+        {
+            AR20400_pdConfig_Result aR20400_pdConfig_Result = new AR20400_pdConfig_Result();
+            aR20400_pdConfig_Result.hideColumn = hideColumn;
+            return aR20400_pdConfig_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String hideColumn
+        {
+            get
+            {
+                return _hideColumn;
+            }
+            set
+            {
+                OnhideColumnChanging(value);
+                ReportPropertyChanging("hideColumn");
+                _hideColumn = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("hideColumn");
+                OnhideColumnChanged();
+            }
+        }
+        private global::System.String _hideColumn;
+        partial void OnhideColumnChanging(global::System.String value);
+        partial void OnhideColumnChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="AR20400_pdHeader_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -11324,6 +11560,102 @@ namespace AR20400
         private global::System.String _BillDistrict;
         partial void OnBillDistrictChanging(global::System.String value);
         partial void OnBillDistrictChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StandID
+        {
+            get
+            {
+                return _StandID;
+            }
+            set
+            {
+                OnStandIDChanging(value);
+                ReportPropertyChanging("StandID");
+                _StandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StandID");
+                OnStandIDChanged();
+            }
+        }
+        private global::System.String _StandID;
+        partial void OnStandIDChanging(global::System.String value);
+        partial void OnStandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BrandID
+        {
+            get
+            {
+                return _BrandID;
+            }
+            set
+            {
+                OnBrandIDChanging(value);
+                ReportPropertyChanging("BrandID");
+                _BrandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BrandID");
+                OnBrandIDChanged();
+            }
+        }
+        private global::System.String _BrandID;
+        partial void OnBrandIDChanging(global::System.String value);
+        partial void OnBrandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SizeID
+        {
+            get
+            {
+                return _SizeID;
+            }
+            set
+            {
+                OnSizeIDChanging(value);
+                ReportPropertyChanging("SizeID");
+                _SizeID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SizeID");
+                OnSizeIDChanged();
+            }
+        }
+        private global::System.String _SizeID;
+        partial void OnSizeIDChanging(global::System.String value);
+        partial void OnSizeIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayID
+        {
+            get
+            {
+                return _DisplayID;
+            }
+            set
+            {
+                OnDisplayIDChanging(value);
+                ReportPropertyChanging("DisplayID");
+                _DisplayID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DisplayID");
+                OnDisplayIDChanged();
+            }
+        }
+        private global::System.String _DisplayID;
+        partial void OnDisplayIDChanging(global::System.String value);
+        partial void OnDisplayIDChanged();
 
         #endregion
 
