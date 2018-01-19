@@ -684,7 +684,7 @@ function importData(c)
                                 newTrans.set('SiteID', App.cboSiteID.getValue());
                                 newTrans.set('EAUnit', record.EAUnit);
                                 newTrans.set('BookEAQty', record.BookEAQty);
-                                newTrans.set("OffsetEAQty", item.ActualEAQty);
+                                newTrans.set("OffsetEAQty",item.ActualEAQty - record.BookEAQty );
                                 newTrans.set('ReasonCD', App.cboReasonCD.getValue());
                                 newTrans.set('ActualEAQty', item.ActualEAQty);
                                 newTrans.set('StkItem', record.StkItem);

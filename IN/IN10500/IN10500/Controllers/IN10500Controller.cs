@@ -34,7 +34,7 @@ namespace IN10500.Controllers
 
         public ActionResult Index(string BranchID,string TagID,string SiteID)
         {
-            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+            //LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
             if (BranchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
@@ -480,7 +480,7 @@ namespace IN10500.Controllers
         {
             try
             {
-                LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+                //LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
                 Worksheet sheetTrans = workbook.Worksheets[0];
@@ -562,6 +562,7 @@ namespace IN10500.Controllers
                 HttpPostedFile file = fileUploadField.PostedFile; // or: HttpPostedFileBase file = this.HttpContext.Request.Files[0];
                 FileInfo fileInfo = new FileInfo(file.FileName);
                 string message = string.Empty;
+               
                 //List<object> lstTrans = new List<object>();
                 List<IN10500_pgLoadGrid_Result> lstData = new List<IN10500_pgLoadGrid_Result>();
                 if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
@@ -575,11 +576,13 @@ namespace IN10500.Controllers
 
                             Worksheet workSheet = workbook.Worksheets[0];
                             string invtID = string.Empty;
-
+                             string unit = string.Empty;
                             for (int i = 1; i < workSheet.Cells.MaxDataRow+1; i++)
                             {
 
                                 invtID = workSheet.Cells[i, 0].StringValue;
+                                unit = workSheet.Cells[i, 2].StringValue.PassNull();
+                                double cnfv = 1;
                                 if (invtID == string.Empty) break;
                                 var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
                                 if (objInvt == null)
@@ -592,9 +595,28 @@ namespace IN10500.Controllers
                                     message += string.Format("Dòng {0} mặt hàng {1} không có đơn vị<br/>", (i + 1).ToString(), invtID);
                                     continue;
                                 }
-                                else if (workSheet.Cells[i, 2].StringValue.PassNull() != objInvt.StkUnit)
+                                else if (unit != objInvt.StkUnit)
                                 {
-                                    message += string.Format("Dòng {0} mặt hàng {1} sai đơn vị<br/>", (i + 1).ToString(), invtID);
+                                        IN_UnitConversion uomTo = SetUOM(invtID, objInvt.ClassID, objInvt.StkUnit, unit);
+                                        if (uomTo != null)
+                                        {
+                                            cnfv=uomTo.MultDiv=="M"?uomTo.CnvFact:(1/uomTo.CnvFact);
+                                        }else 
+                                        {
+                                            IN_UnitConversion uomfrom = SetUOM(invtID, objInvt.ClassID, unit, objInvt.StkUnit);
+                                            if (uomfrom != null)
+                                            {
+                                                cnfv = uomfrom.MultDiv == "M" ? (1 / uomfrom.CnvFact) : uomfrom.CnvFact;
+                                            }
+                                            else
+                                            {
+                                                message += string.Format("Dòng {0} mặt hàng {1} sai đơn vị<br/>", (i + 1).ToString(), invtID);
+                                                continue;
+                                            }
+                                        }
+                                        unit = objInvt.StkUnit;
+
+                                   
                                 }
 
                                 if (workSheet.Cells[i, 3].StringValue.PassNull() == "")
@@ -622,7 +644,7 @@ namespace IN10500.Controllers
                                 }
 
                                 lstData.Add(new IN10500_pgLoadGrid_Result() {
-                                    ActualEAQty = workSheet.Cells[i, 3].FloatValue,
+                                    ActualEAQty = workSheet.Cells[i, 3].FloatValue * cnfv,
                                     BookEAQty=0,
                                     BranchID="",
                                     EAUnit="",
@@ -638,8 +660,13 @@ namespace IN10500.Controllers
                                     
                                 });
                             }
-
-                            Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstData });
+                            if (message == "")
+                                Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstData });
+                            else
+                            {
+                                lstData = new List<IN10500_pgLoadGrid_Result>();
+                                Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstData });
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -732,6 +759,36 @@ namespace IN10500.Controllers
                 }
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
+        }
+
+        private IN_UnitConversion SetUOM(string invtID, string classID, string stkUnit, string fromUnit)
+        {
+            if (!string.IsNullOrEmpty(fromUnit))
+            {
+                IN_UnitConversion data = _app.IN_UnitConversion.FirstOrDefault(p =>
+                        p.UnitType == "3" && p.ClassID == "*" && p.InvtID == invtID && p.FromUnit == fromUnit &&
+                        p.ToUnit == stkUnit);
+                if (data != null)
+                {
+                    return data;
+                }
+                data = _app.IN_UnitConversion.FirstOrDefault(p =>
+                        p.UnitType == "2" && p.ClassID == classID && p.InvtID == "*" && p.FromUnit == fromUnit &&
+                        p.ToUnit == stkUnit);
+                if (data != null)
+                {
+                    return data;
+                }
+                data = _app.IN_UnitConversion.FirstOrDefault(p =>
+                        p.UnitType == "1" && p.ClassID == "*" && p.InvtID == "*" && p.FromUnit == fromUnit &&
+                        p.ToUnit == stkUnit);
+                if (data != null)
+                {
+                    return data;
+                }              
+                return null;
+            }
+            return null;
         }
     }
 }
