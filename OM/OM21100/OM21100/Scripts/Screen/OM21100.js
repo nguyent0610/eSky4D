@@ -3393,6 +3393,7 @@ var txtRequiredType_Change = function () {
     App.chkRequiredType.events['change'].resume();
 }
 var Status_Change = function () {
+    App.cboHandle.store.reload();
     if (App.cboStatus.getValue() == "C") {
         App.chkRequiredType.setReadOnly(true);
         App.chkPctDiscountByLevel.setReadOnly(true);
@@ -3402,3 +3403,6 @@ var Status_Change = function () {
         App.chkPctDiscountByLevel.setReadOnly(false);
     }
 }
+
+
+

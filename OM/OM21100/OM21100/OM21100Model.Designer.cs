@@ -84,22 +84,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_DiscBreak> OM_DiscBreak
-        {
-            get
-            {
-                if ((_OM_DiscBreak == null))
-                {
-                    _OM_DiscBreak = base.CreateObjectSet<OM_DiscBreak>("OM_DiscBreak");
-                }
-                return _OM_DiscBreak;
-            }
-        }
-        private ObjectSet<OM_DiscBreak> _OM_DiscBreak;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_DiscCpny> OM_DiscCpny
         {
             get
@@ -304,6 +288,22 @@ namespace OM21100
             }
         }
         private ObjectSet<OM_DiscItem> _OM_DiscItem;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_DiscBreak> OM_DiscBreak
+        {
+            get
+            {
+                if ((_OM_DiscBreak == null))
+                {
+                    _OM_DiscBreak = base.CreateObjectSet<OM_DiscBreak>("OM_DiscBreak");
+                }
+                return _OM_DiscBreak;
+            }
+        }
+        private ObjectSet<OM_DiscBreak> _OM_DiscBreak;
 
         #endregion
 
@@ -315,14 +315,6 @@ namespace OM21100
         public void AddToOM_Discount(OM_Discount oM_Discount)
         {
             base.AddObject("OM_Discount", oM_Discount);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_DiscBreak EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_DiscBreak(OM_DiscBreak oM_DiscBreak)
-        {
-            base.AddObject("OM_DiscBreak", oM_DiscBreak);
         }
     
         /// <summary>
@@ -427,6 +419,14 @@ namespace OM21100
         public void AddToOM_DiscItem(OM_DiscItem oM_DiscItem)
         {
             base.AddObject("OM_DiscItem", oM_DiscItem);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_DiscBreak EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_DiscBreak(OM_DiscBreak oM_DiscBreak)
+        {
+            base.AddObject("OM_DiscBreak", oM_DiscBreak);
         }
 
         #endregion
@@ -3664,6 +3664,54 @@ namespace OM21100
         private global::System.String _ProType;
         partial void OnProTypeChanging(global::System.String value);
         partial void OnProTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> ImageModifiedDate
+        {
+            get
+            {
+                return _ImageModifiedDate;
+            }
+            set
+            {
+                OnImageModifiedDateChanging(value);
+                ReportPropertyChanging("ImageModifiedDate");
+                _ImageModifiedDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ImageModifiedDate");
+                OnImageModifiedDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _ImageModifiedDate;
+        partial void OnImageModifiedDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnImageModifiedDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> VideoModifiedDate
+        {
+            get
+            {
+                return _VideoModifiedDate;
+            }
+            set
+            {
+                OnVideoModifiedDateChanging(value);
+                ReportPropertyChanging("VideoModifiedDate");
+                _VideoModifiedDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("VideoModifiedDate");
+                OnVideoModifiedDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _VideoModifiedDate;
+        partial void OnVideoModifiedDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnVideoModifiedDateChanged();
 
         #endregion
 
@@ -9379,6 +9427,21 @@ namespace OM21100
     [Serializable()]
     public partial class OM21100_pdConfig_Result : ComplexObject
     {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM21100_pdConfig_Result object.
+        /// </summary>
+        /// <param name="defaultStatus">Initial value of the DefaultStatus property.</param>
+        public static OM21100_pdConfig_Result CreateOM21100_pdConfig_Result(global::System.String defaultStatus)
+        {
+            OM21100_pdConfig_Result oM21100_pdConfig_Result = new OM21100_pdConfig_Result();
+            oM21100_pdConfig_Result.DefaultStatus = defaultStatus;
+            return oM21100_pdConfig_Result;
+        }
+
+        #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -9500,6 +9563,30 @@ namespace OM21100
         private Nullable<global::System.Int32> _AllowAddSameKind;
         partial void OnAllowAddSameKindChanging(Nullable<global::System.Int32> value);
         partial void OnAllowAddSameKindChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DefaultStatus
+        {
+            get
+            {
+                return _DefaultStatus;
+            }
+            set
+            {
+                OnDefaultStatusChanging(value);
+                ReportPropertyChanging("DefaultStatus");
+                _DefaultStatus = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DefaultStatus");
+                OnDefaultStatusChanged();
+            }
+        }
+        private global::System.String _DefaultStatus;
+        partial void OnDefaultStatusChanging(global::System.String value);
+        partial void OnDefaultStatusChanged();
 
         #endregion
 
