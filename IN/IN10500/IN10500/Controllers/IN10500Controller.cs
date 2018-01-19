@@ -34,7 +34,7 @@ namespace IN10500.Controllers
 
         public ActionResult Index(string BranchID,string TagID,string SiteID)
         {
-            //LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
             if (BranchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
@@ -480,7 +480,7 @@ namespace IN10500.Controllers
         {
             try
             {
-                //LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+                LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
                 Worksheet sheetTrans = workbook.Worksheets[0];
