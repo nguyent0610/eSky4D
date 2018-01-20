@@ -440,7 +440,7 @@
                         )
 
 
-                        , X.Column().Text(Util.GetLang("AR20500StandID")).DataIndex("SizeID").Width(150).Renderer("renderSizeID").Hidden(true)
+                        , X.Column().Text(Util.GetLang("AR20500SizeID")).DataIndex("SizeID").Width(150).Renderer("renderSizeID").Hidden(true)
                         .Editor(
                             HQ.Combo().ID("cboSizeID").HQProcedure("AR20500_pcSizeID")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
