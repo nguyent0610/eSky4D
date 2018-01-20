@@ -116,22 +116,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_Customer> AR_Customer
-        {
-            get
-            {
-                if ((_AR_Customer == null))
-                {
-                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
-                }
-                return _AR_Customer;
-            }
-        }
-        private ObjectSet<AR_Customer> _AR_Customer;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_SalesRouteMaster> OM_SalesRouteMaster
         {
             get
@@ -144,6 +128,22 @@ namespace AR20500
             }
         }
         private ObjectSet<OM_SalesRouteMaster> _OM_SalesRouteMaster;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_Customer> AR_Customer
+        {
+            get
+            {
+                if ((_AR_Customer == null))
+                {
+                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
+                }
+                return _AR_Customer;
+            }
+        }
+        private ObjectSet<AR_Customer> _AR_Customer;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -206,19 +206,19 @@ namespace AR20500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Customer(AR_Customer aR_Customer)
-        {
-            base.AddObject("AR_Customer", aR_Customer);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the OM_SalesRouteMaster EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_SalesRouteMaster(OM_SalesRouteMaster oM_SalesRouteMaster)
         {
             base.AddObject("OM_SalesRouteMaster", oM_SalesRouteMaster);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Customer(AR_Customer aR_Customer)
+        {
+            base.AddObject("AR_Customer", aR_Customer);
         }
     
         /// <summary>
@@ -674,6 +674,88 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20500_pdConfig_Result> AR20500_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20500_pdConfig_Result>("AR20500_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20500_pcReason_Result> AR20500_pcReason(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20500_pcReason_Result>("AR20500_pcReason", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="startDate">No Metadata Documentation available.</param>
         /// <param name="endDate">No Metadata Documentation available.</param>
@@ -787,88 +869,6 @@ namespace AR20500
             }
     
             return base.ExecuteFunction<AR20500_pgDetail_Result>("AR20500_pgDetail", branchIDParameter, startDateParameter, endDateParameter, slsperIDParameter, statusParameter, territoryParameter, updateTypeParameter, userNameParameter, cpnyIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<AR20500_pdConfig_Result> AR20500_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<AR20500_pdConfig_Result>("AR20500_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<AR20500_pcReason_Result> AR20500_pcReason(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<AR20500_pcReason_Result>("AR20500_pcReason", userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -2991,6 +2991,102 @@ namespace AR20500
         private global::System.String _TypeCabinets;
         partial void OnTypeCabinetsChanging(global::System.String value);
         partial void OnTypeCabinetsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StandID
+        {
+            get
+            {
+                return _StandID;
+            }
+            set
+            {
+                OnStandIDChanging(value);
+                ReportPropertyChanging("StandID");
+                _StandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StandID");
+                OnStandIDChanged();
+            }
+        }
+        private global::System.String _StandID;
+        partial void OnStandIDChanging(global::System.String value);
+        partial void OnStandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayID
+        {
+            get
+            {
+                return _DisplayID;
+            }
+            set
+            {
+                OnDisplayIDChanging(value);
+                ReportPropertyChanging("DisplayID");
+                _DisplayID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DisplayID");
+                OnDisplayIDChanged();
+            }
+        }
+        private global::System.String _DisplayID;
+        partial void OnDisplayIDChanging(global::System.String value);
+        partial void OnDisplayIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SizeID
+        {
+            get
+            {
+                return _SizeID;
+            }
+            set
+            {
+                OnSizeIDChanging(value);
+                ReportPropertyChanging("SizeID");
+                _SizeID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SizeID");
+                OnSizeIDChanged();
+            }
+        }
+        private global::System.String _SizeID;
+        partial void OnSizeIDChanging(global::System.String value);
+        partial void OnSizeIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BrandID
+        {
+            get
+            {
+                return _BrandID;
+            }
+            set
+            {
+                OnBrandIDChanging(value);
+                ReportPropertyChanging("BrandID");
+                _BrandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BrandID");
+                OnBrandIDChanged();
+            }
+        }
+        private global::System.String _BrandID;
+        partial void OnBrandIDChanging(global::System.String value);
+        partial void OnBrandIDChanged();
 
         #endregion
 
@@ -4965,6 +5061,102 @@ namespace AR20500
         private global::System.String _TypeCabinets;
         partial void OnTypeCabinetsChanging(global::System.String value);
         partial void OnTypeCabinetsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StandID
+        {
+            get
+            {
+                return _StandID;
+            }
+            set
+            {
+                OnStandIDChanging(value);
+                ReportPropertyChanging("StandID");
+                _StandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StandID");
+                OnStandIDChanged();
+            }
+        }
+        private global::System.String _StandID;
+        partial void OnStandIDChanging(global::System.String value);
+        partial void OnStandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SizeID
+        {
+            get
+            {
+                return _SizeID;
+            }
+            set
+            {
+                OnSizeIDChanging(value);
+                ReportPropertyChanging("SizeID");
+                _SizeID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SizeID");
+                OnSizeIDChanged();
+            }
+        }
+        private global::System.String _SizeID;
+        partial void OnSizeIDChanging(global::System.String value);
+        partial void OnSizeIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayID
+        {
+            get
+            {
+                return _DisplayID;
+            }
+            set
+            {
+                OnDisplayIDChanging(value);
+                ReportPropertyChanging("DisplayID");
+                _DisplayID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DisplayID");
+                OnDisplayIDChanged();
+            }
+        }
+        private global::System.String _DisplayID;
+        partial void OnDisplayIDChanging(global::System.String value);
+        partial void OnDisplayIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BrandID
+        {
+            get
+            {
+                return _BrandID;
+            }
+            set
+            {
+                OnBrandIDChanging(value);
+                ReportPropertyChanging("BrandID");
+                _BrandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BrandID");
+                OnBrandIDChanged();
+            }
+        }
+        private global::System.String _BrandID;
+        partial void OnBrandIDChanging(global::System.String value);
+        partial void OnBrandIDChanged();
 
         #endregion
 
@@ -6794,6 +6986,102 @@ namespace AR20500
         private global::System.String _TypeCabinets;
         partial void OnTypeCabinetsChanging(global::System.String value);
         partial void OnTypeCabinetsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StandID
+        {
+            get
+            {
+                return _StandID;
+            }
+            set
+            {
+                OnStandIDChanging(value);
+                ReportPropertyChanging("StandID");
+                _StandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StandID");
+                OnStandIDChanged();
+            }
+        }
+        private global::System.String _StandID;
+        partial void OnStandIDChanging(global::System.String value);
+        partial void OnStandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SizeID
+        {
+            get
+            {
+                return _SizeID;
+            }
+            set
+            {
+                OnSizeIDChanging(value);
+                ReportPropertyChanging("SizeID");
+                _SizeID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SizeID");
+                OnSizeIDChanged();
+            }
+        }
+        private global::System.String _SizeID;
+        partial void OnSizeIDChanging(global::System.String value);
+        partial void OnSizeIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayID
+        {
+            get
+            {
+                return _DisplayID;
+            }
+            set
+            {
+                OnDisplayIDChanging(value);
+                ReportPropertyChanging("DisplayID");
+                _DisplayID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DisplayID");
+                OnDisplayIDChanged();
+            }
+        }
+        private global::System.String _DisplayID;
+        partial void OnDisplayIDChanging(global::System.String value);
+        partial void OnDisplayIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BrandID
+        {
+            get
+            {
+                return _BrandID;
+            }
+            set
+            {
+                OnBrandIDChanging(value);
+                ReportPropertyChanging("BrandID");
+                _BrandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BrandID");
+                OnBrandIDChanged();
+            }
+        }
+        private global::System.String _BrandID;
+        partial void OnBrandIDChanging(global::System.String value);
+        partial void OnBrandIDChanged();
 
         #endregion
 
@@ -9328,6 +9616,102 @@ namespace AR20500
         private global::System.String _AllowEditContactName;
         partial void OnAllowEditContactNameChanging(global::System.String value);
         partial void OnAllowEditContactNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowStandID
+        {
+            get
+            {
+                return _ShowStandID;
+            }
+            set
+            {
+                OnShowStandIDChanging(value);
+                ReportPropertyChanging("ShowStandID");
+                _ShowStandID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowStandID");
+                OnShowStandIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowStandID;
+        partial void OnShowStandIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowStandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowBrandID
+        {
+            get
+            {
+                return _ShowBrandID;
+            }
+            set
+            {
+                OnShowBrandIDChanging(value);
+                ReportPropertyChanging("ShowBrandID");
+                _ShowBrandID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowBrandID");
+                OnShowBrandIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowBrandID;
+        partial void OnShowBrandIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowBrandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowSizeID
+        {
+            get
+            {
+                return _ShowSizeID;
+            }
+            set
+            {
+                OnShowSizeIDChanging(value);
+                ReportPropertyChanging("ShowSizeID");
+                _ShowSizeID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowSizeID");
+                OnShowSizeIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowSizeID;
+        partial void OnShowSizeIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowSizeIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowDisplayID
+        {
+            get
+            {
+                return _ShowDisplayID;
+            }
+            set
+            {
+                OnShowDisplayIDChanging(value);
+                ReportPropertyChanging("ShowDisplayID");
+                _ShowDisplayID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowDisplayID");
+                OnShowDisplayIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowDisplayID;
+        partial void OnShowDisplayIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowDisplayIDChanged();
 
         #endregion
 
@@ -9617,6 +10001,30 @@ namespace AR20500
         private global::System.String _Email;
         partial void OnEmailChanging(global::System.String value);
         partial void OnEmailChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Address
+        {
+            get
+            {
+                return _Address;
+            }
+            set
+            {
+                OnAddressChanging(value);
+                ReportPropertyChanging("Address");
+                _Address = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Address");
+                OnAddressChanged();
+            }
+        }
+        private global::System.String _Address;
+        partial void OnAddressChanging(global::System.String value);
+        partial void OnAddressChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -10845,30 +11253,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Address
-        {
-            get
-            {
-                return _Address;
-            }
-            set
-            {
-                OnAddressChanging(value);
-                ReportPropertyChanging("Address");
-                _Address = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Address");
-                OnAddressChanged();
-            }
-        }
-        private global::System.String _Address;
-        partial void OnAddressChanging(global::System.String value);
-        partial void OnAddressChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 UpdateType
@@ -11273,6 +11657,102 @@ namespace AR20500
         private global::System.String _TypeCabinetsDescr;
         partial void OnTypeCabinetsDescrChanging(global::System.String value);
         partial void OnTypeCabinetsDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StandID
+        {
+            get
+            {
+                return _StandID;
+            }
+            set
+            {
+                OnStandIDChanging(value);
+                ReportPropertyChanging("StandID");
+                _StandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StandID");
+                OnStandIDChanged();
+            }
+        }
+        private global::System.String _StandID;
+        partial void OnStandIDChanging(global::System.String value);
+        partial void OnStandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BrandID
+        {
+            get
+            {
+                return _BrandID;
+            }
+            set
+            {
+                OnBrandIDChanging(value);
+                ReportPropertyChanging("BrandID");
+                _BrandID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BrandID");
+                OnBrandIDChanged();
+            }
+        }
+        private global::System.String _BrandID;
+        partial void OnBrandIDChanging(global::System.String value);
+        partial void OnBrandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SizeID
+        {
+            get
+            {
+                return _SizeID;
+            }
+            set
+            {
+                OnSizeIDChanging(value);
+                ReportPropertyChanging("SizeID");
+                _SizeID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SizeID");
+                OnSizeIDChanged();
+            }
+        }
+        private global::System.String _SizeID;
+        partial void OnSizeIDChanging(global::System.String value);
+        partial void OnSizeIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayID
+        {
+            get
+            {
+                return _DisplayID;
+            }
+            set
+            {
+                OnDisplayIDChanging(value);
+                ReportPropertyChanging("DisplayID");
+                _DisplayID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DisplayID");
+                OnDisplayIDChanged();
+            }
+        }
+        private global::System.String _DisplayID;
+        partial void OnDisplayIDChanging(global::System.String value);
+        partial void OnDisplayIDChanged();
 
         #endregion
 

@@ -95,6 +95,11 @@ namespace AR20500.Controllers
 		    var isShowReason = false;
             var isShowERPCust = false;
             bool isHideExport = false;
+            bool showDisplayID = false;
+            bool showStandID = false;
+            bool showBrandID = false;
+            bool showSizeID = false;
+
             var isShowEditCust = false;
             string allowSave = string.Empty;
             string allowApproveEditCust = string.Empty;
@@ -121,9 +126,17 @@ namespace AR20500.Controllers
                 maxVisitPerDay = objConfig.MaxVisitsPerDay;
                 requireRefCustID = objConfig.RequireRefCustID.HasValue && objConfig.RequireRefCustID.Value;
                 showTypeCabinnets = objConfig.ShowTypeCabinets.HasValue && objConfig.ShowTypeCabinets.Value;
+                showDisplayID = objConfig.ShowDisplayID.HasValue && objConfig.ShowDisplayID.Value;
+                showStandID = objConfig.ShowStandID.HasValue && objConfig.ShowStandID.Value;
+                showBrandID = objConfig.ShowBrandID.HasValue && objConfig.ShowBrandID.Value;
+                showSizeID = objConfig.ShowSizeID.HasValue && objConfig.ShowSizeID.Value;
 
             }
 
+            ViewBag.showDisplayID = showDisplayID;
+            ViewBag.showStandID = showStandID;
+            ViewBag.showBrandID = showBrandID;
+            ViewBag.showSizeID = showSizeID;
             ViewBag.IsShowERPCust = isShowERPCust;
             ViewBag.IsShowCustHT = isShowCustHT;
             ViewBag.IsShowReason = isShowReason;
@@ -461,7 +474,10 @@ namespace AR20500.Controllers
             objNew.Phone = item.Phone;
             objNew.Addr1 = item.Addr1;
             objNew.Addr2 = item.Addr2;
-
+            objNew.BrandID = item.BrandID;
+            objNew.StandID = item.StandID;
+            objNew.SizeID = item.SizeID;
+            objNew.DisplayID = item.DisplayID;
             objNew.Territory = item.Territory;
             objNew.State = item.State;
             objNew.District = item.District;
@@ -552,7 +568,10 @@ namespace AR20500.Controllers
                 SubTerritory = objNew.SubTerritory,
                 CodeHT = objNew.CodeHT,
                 BusinessPic = objNew.BusinessPic,
-
+                BrandID=objNew.BrandID,
+                SizeID=objNew.SizeID,
+                DisplayID=objNew.DisplayID,
+                StandID=objNew.StandID,
                 NewCustCrtd_User = objNew.Crtd_User,
                 NewCustLUpd_User = objNew.LUpd_User,
                 NewCustCrtd_Prog = objNew.Crtd_Prog,
@@ -629,7 +648,10 @@ namespace AR20500.Controllers
             objCust.DeliveryID = item.DeliveryID.PassNull(); ;
             objCust.Country = objCust.BillCountry = "VN";
             objCust.BillWard = objCust.Ward = item.Ward;
-            
+            objCust.StandID = item.StandID;
+            objCust.SizeID = item.SizeID;
+            objCust.DisplayID = item.DisplayID;
+            objCust.BrandID = item.BrandID;
             objCust.DfltShipToId = "DEFAULT";
             if (item.UpdateType == 0)
             {

@@ -8,11 +8,20 @@ var hideEditCustColumn = ['EditInfo', 'EditBusinessPic', 'EditProfilePic'];
 var _isEditReason = 0;
 var _slsperID = '';
 var _isditContactName = false;
-var frmMain_BoxReady = function () {   
+var frmMain_BoxReady = function () {
+    App.cboBrandID.store.reload();
+    App.cboSizeID.store.reload();
+    App.cboDisplayID.store.reload();
+    App.cboStandID.store.reload();
     if (HQ.ShowExport) App.btnExport.hide();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     if (HQ.isShowCustHT) HQ.grid.show(App.grdCust, ['CustHT']);
     if (HQ.IsShowERPCust) HQ.grid.show(App.grdCust, ['ERPCustID']);
+    if (HQ.showDisplayID) HQ.grid.show(App.grdCust, ['DisplayID']);
+    if (HQ.showStandID) HQ.grid.show(App.grdCust, ['StandID']);
+    if (HQ.showBrandID) HQ.grid.show(App.grdCust, ['BrandID']);
+    if (HQ.showSizeID) HQ.grid.show(App.grdCust, ['SizeID']);
+
     if (HQ.showTypeCabinnets) {
         HQ.grid.show(App.grdCust, ['TypeCabinetsDescr']);
     }
@@ -761,6 +770,55 @@ var renderLocation = function (value) {
     }
     return value;
 };
+
+var renderStandID = function (value) {
+    var obj = App.cboStandID.store.findRecord("StandID", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+
+
+
+var renderBrandID = function (value, metaData, record, rowIndex, colIndex, store) {
+    return getDescriptionByCode1(value); 
+}
+var getDescriptionByCode1 = function (value) {
+    var lstBrandID = value.split(',');
+    var description = '';
+    for (var i = 0; i < lstBrandID.length; i++) {
+        var rec = HQ.store.findRecord(App.cboBrandID.store, ['Code'], [lstBrandID[i]]);
+        if (rec) {
+            description += rec.data.Descr + ',';
+        } else {
+            description += value;
+        }
+    }
+    return description;
+}
+
+
+
+var renderSizeID = function (value) {
+    var obj = App.cboSizeID.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+var renderDisplayID = function (value) {
+    var obj = App.cboDisplayID.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
+
+
+
 var renderShopType = function (value) {
     var obj = App.cboColShopType.store.findRecord("Code", value);
     if (obj) {
@@ -840,6 +898,25 @@ var stringFilter = function (record) {
         App.cboColSlsFreq1.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboColSlsFreq1.store, "Code", "Descr");
     }
+    
+    else if (this.dataIndex == 'BrandID') {
+            App.cboBrandID.store.clearFilter();
+            return HQ.grid.filterComboDescr(record, this, App.cboBrandID.store, "Code", "Descr");
+    }
+    else if (this.dataIndex == 'StandID') {
+        App.cboStandID.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboStandID.store, "StandID", "Descr");
+    }
+    else if (this.dataIndex == 'SizeID') {
+        App.cboSizeID.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboSizeID.store, "Code", "Descr");
+    }
+    
+    else if (this.dataIndex == 'DisplayID') {
+        App.cboDisplayID.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboDisplayID.store, "Code", "Descr");
+    }
+    
     else if (this.dataIndex == 'WeekofVisit') {
         App.cboColWeekofVisit.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboColWeekofVisit.store, "Code", "Descr");
@@ -1470,5 +1547,11 @@ var showSubRoute = function (updateType) {
         HQ.grid.show(App.grdCust, ['SubRouteID']);
     } else {
         HQ.grid.hide(App.grdCust, ['SubRouteID']);
+    }
+}
+var cboBrandID_Focus = function () {
+    if (App.grdCust.selModel.selected.length > 0) {
+        HQ.combo.expand(this, ',');
+        this.forceSelection = true;
     }
 }
