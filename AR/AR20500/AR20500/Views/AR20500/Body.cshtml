@@ -421,7 +421,8 @@
                         .Editor(
                             HQ.Combo().ID("cboBrandID").HQProcedure("AR20500_pcBrandID")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                            .ForceSelection(true).HQHeightWidth(400, 300).HQAutoLoad(true).MultiSelect(true)
+                            //.ForceSelection(true)
+                            .HQHeightWidth(400, 300).HQAutoLoad(true).MultiSelect(true)
                             .HQParam(new StoreParameterCollection()
                             {
                                 new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
@@ -437,6 +438,8 @@
                                 lst.Blur.Handler = "this.forceSelection = false;";
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
+
+
                         )
 
 
