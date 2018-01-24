@@ -2,14 +2,16 @@ var _Change = false;
 var keys = ['ID'];
 var _firstLoad = true;
 var _hideColumn = ['SalesRouteID', 'SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'VisitsPerDay'];
-var _lockColumn = ['SlsFreq', 'WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+var _lockColumn = ['WeekofVisit', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 var hideEditCustColumn = ['EditInfo', 'EditBusinessPic', 'EditProfilePic'];
 var _isEditReason = 0;
 var _slsperID = '';
+var _slsFreq = '';
 var _isditContactName = false;
 var frmMain_BoxReady = function () {
     App.cboBrandID.store.reload();
+    App.cboColSlsFreq1.store.reload();
     App.cboSizeID.store.reload();
     App.cboDisplayID.store.reload();
     App.cboStandID.store.reload();
@@ -29,6 +31,7 @@ var frmMain_BoxReady = function () {
         HQ.grid.show(App.grdCust, ['VisitsPerDay']);
     }
     showSubRoute(0);
+    App.stoAR20500_pdSubRoute.reload();
     App.stoAR20500_pdWeekofVisitAll.load(function () {
         App.cboTerritory.getStore().load(function () {
             App.cboCpnyID.getStore().load(function () {
@@ -448,6 +451,10 @@ var grdCust_BeforeEdit = function (item, e) {
             return false;
         }
     }
+    if (e.field == 'SubRouteID') {
+        _slsFreq = e.record.data.SlsFreq;
+        App.cboColSubRoute.store.reload();
+    }
     if (e.field == 'WeekofVisit') {
         App.cboColWeekofVisit.getStore().reload();
     }
@@ -545,6 +552,10 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
         e.record.set("Fri", false);
         e.record.set("Sat", false);
         e.record.set("Sun", false);
+        if (HQ.showSubRoute) {
+            e.record.set("SubRouteID", '');
+        }
+        
     }
     if (e.field == 'Phone') {
         if (isNumeric(e.value) == true) {
@@ -561,7 +572,7 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
         e.record.set('ShopType', '');
     } else if (e.field == 'SubRouteID') {
         if (App.cboColSubRoute.valueModels != undefined && App.cboColSubRoute.valueModels.length > 0) {
-            e.record.set('SlsFreq', App.cboColSubRoute.valueModels[0].data.SlsFreqID);
+            //e.record.set('SlsFreq', App.cboColSubRoute.valueModels[0].data.SlsFreqID);
             e.record.set('WeekofVisit', App.cboColSubRoute.valueModels[0].data.WeekOfVisit);
 
             e.record.set('Mon', App.cboColSubRoute.valueModels[0].data.Mon);
@@ -572,7 +583,7 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
             e.record.set('Sat', App.cboColSubRoute.valueModels[0].data.Sat);
             e.record.set('Sun', App.cboColSubRoute.valueModels[0].data.Sun);
         } else {
-            e.record.set('SlsFreq', '');
+            //e.record.set('SlsFreq', '');
             e.record.set('WeekofVisit', '');
             e.record.set('Mon', false);
             e.record.set('Tue', false);
@@ -778,6 +789,13 @@ var renderStandID = function (value) {
     }
     return value;
 };
+var renderSlsFreq = function (value) {
+    var obj = App.cboColSlsFreq1.store.findRecord("Code", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
 
 
 
@@ -798,7 +816,13 @@ var getDescriptionByCode1 = function (value) {
     }
     return description;
 }
-
+var renderSubRouteID = function (value) {
+    var obj = App.stoAR20500_pdSubRoute.findRecord("SubRouteID", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+};
 
 
 var renderSizeID = function (value) {
@@ -911,7 +935,10 @@ var stringFilter = function (record) {
         App.cboSizeID.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboSizeID.store, "Code", "Descr");
     }
-    
+    else if (this.dataIndex == 'SubRouteID') {
+        App.cboColSubRoute.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboColSubRoute.store, "SubRouteID", "Descr");
+    }
     else if (this.dataIndex == 'DisplayID') {
         App.cboDisplayID.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboDisplayID.store, "Code", "Descr");

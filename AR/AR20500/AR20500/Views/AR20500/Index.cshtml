@@ -106,6 +106,9 @@
      @HQ.Store().ID("stoAR20500_pdWeekofVisitAll").HQProcedure("AR20500_pdWeekofVisitAll").AutoLoad(false).HQDBSys(false).HQParam(new StoreParameterCollection() {
 											                            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}                                                                        
 						                            }).LoadData()
+    @HQ.Store().ID("stoAR20500_pdSubRoute").HQProcedure("AR20500_pdSubRoute").AutoLoad(false).HQDBSys(false).HQParam(new StoreParameterCollection() {
+                                                                        new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                                                    }).LoadData()
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         <!-- Gọi hàm Body trong AR20500Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
