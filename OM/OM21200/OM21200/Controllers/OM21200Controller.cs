@@ -27,7 +27,7 @@ namespace OM21200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -35,7 +35,7 @@ namespace OM21200.Controllers
 
         public ActionResult GetUserDefault()
         {
-            var UserDefaults = _db.OM21200_pgLoadUserDefault().ToList();
+            var UserDefaults = _db.OM21200_pgLoadUserDefault(Current.UserName,Current.CpnyID,Current.LangID).ToList();
             return this.Store(UserDefaults);
         }
 
@@ -131,7 +131,7 @@ namespace OM21200.Controllers
             t.DfltOrderType = s.DfltOrderType;
             t.DfltSlsPerID = s.DfltSlsPerID;
             t.DfltSupID = s.DfltSupID;
-
+            t.BranchSiteID = s.BranchSiteID;
             t.LastInvcNbr = s.LastInvcNbr;
             t.InvcNote = s.InvcNote;
             t.WorkingDate = s.WorkingDate;

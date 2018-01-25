@@ -38,7 +38,7 @@ namespace OM21200
             //Session["LangID"] = 1;
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";
+            Current.Server = "HOANGSAD";
             Current.DBSys = "eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
@@ -48,7 +48,7 @@ namespace OM21200
             Session["DBApp"] = Current.DBApp = "eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "en";
+            Session["Language"] = Current.Language = "vn";
             Session["LangID"] = 0;
         }
     }

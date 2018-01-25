@@ -203,9 +203,42 @@ namespace OM21200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<OM21200_pgLoadUserDefault_Result> OM21200_pgLoadUserDefault()
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM21200_pgLoadUserDefault_Result> OM21200_pgLoadUserDefault(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
-            return base.ExecuteFunction<OM21200_pgLoadUserDefault_Result>("OM21200_pgLoadUserDefault");
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM21200_pgLoadUserDefault_Result>("OM21200_pgLoadUserDefault", userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -718,6 +751,30 @@ namespace OM21200
         private global::System.String _DiscSite;
         partial void OnDiscSiteChanging(global::System.String value);
         partial void OnDiscSiteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BranchSiteID
+        {
+            get
+            {
+                return _BranchSiteID;
+            }
+            set
+            {
+                OnBranchSiteIDChanging(value);
+                ReportPropertyChanging("BranchSiteID");
+                _BranchSiteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchSiteID");
+                OnBranchSiteIDChanged();
+            }
+        }
+        private global::System.String _BranchSiteID;
+        partial void OnBranchSiteIDChanging(global::System.String value);
+        partial void OnBranchSiteIDChanged();
 
         #endregion
 
@@ -1934,6 +1991,30 @@ namespace OM21200
         private global::System.String _DiscSite;
         partial void OnDiscSiteChanging(global::System.String value);
         partial void OnDiscSiteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BranchSiteID
+        {
+            get
+            {
+                return _BranchSiteID;
+            }
+            set
+            {
+                OnBranchSiteIDChanging(value);
+                ReportPropertyChanging("BranchSiteID");
+                _BranchSiteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchSiteID");
+                OnBranchSiteIDChanged();
+            }
+        }
+        private global::System.String _BranchSiteID;
+        partial void OnBranchSiteIDChanging(global::System.String value);
+        partial void OnBranchSiteIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
