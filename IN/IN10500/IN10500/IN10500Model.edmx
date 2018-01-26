@@ -273,6 +273,7 @@
         <Function Name="IN10500_pdCheckCreateIN_Tag" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -314,13 +315,6 @@
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="IN10500Model.SI_ApprovalFlowHandle" />
           <EntitySet Name="IN_TagDetail" EntityType="IN10500Model.IN_TagDetail" />
           <EntitySet Name="IN_TagHeader" EntityType="IN10500Model.IN_TagHeader" />
-          <FunctionImport Name="IN10500_pdCheckCreateIN_Tag" ReturnType="Collection(String)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="SiteID" Mode="In" Type="String" />
-            <Parameter Name="UserID" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
           <FunctionImport Name="IN10500_pdDefaultSite" ReturnType="Collection(String)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -345,6 +339,14 @@
           </FunctionImport>
           <EntitySet Name="IN_Inventory" EntityType="IN10500Model.IN_Inventory" />
           <EntitySet Name="IN_UnitConversion" EntityType="IN10500Model.IN_UnitConversion" />
+          <FunctionImport Name="IN10500_pdCheckCreateIN_Tag" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -709,7 +711,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN10500_pdCheckCreateIN_Tag" FunctionName="eBiz4DWebSysModel.Store.IN10500_pdCheckCreateIN_Tag" />
           <FunctionImportMapping FunctionImportName="IN10500_pdDefaultSite" FunctionName="eBiz4DWebSysModel.Store.IN10500_pdDefaultSite" />
           <EntitySetMapping Name="IN_ItemSite">
             <EntityTypeMapping TypeName="IN10500Model.IN_ItemSite">
@@ -895,6 +896,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN10500_pdCheckCreateIN_Tag" FunctionName="eBiz4DWebSysModel.Store.IN10500_pdCheckCreateIN_Tag" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

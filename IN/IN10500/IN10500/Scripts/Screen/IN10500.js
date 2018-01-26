@@ -209,7 +209,7 @@ var stoIN_TagHeader_Load = function (sto) {
         if (App.frmMain.isValid()) {
             if (!App.cboTagID.getValue()) {
                 App.direct.IN10500_pdCheckCreateIN_Tag(
-                App.cboBranchID.getValue(), App.cboSiteID.getValue(),
+                App.cboBranchID.getValue(), App.cboSiteID.getValue(),App.cboClassID.getValue(),
                 {
                     success: function (result) {
                         if (result == '') {
@@ -439,7 +439,7 @@ var btnLoad_Click = function () {
             HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
             if (!App.cboTagID.getValue()) {
                 App.direct.IN10500_pdCheckCreateIN_Tag(
-                    App.cboBranchID.getValue(), App.cboSiteID.getValue(),
+                    App.cboBranchID.getValue(), App.cboSiteID.getValue(),App.cboClassID.getValue(),
                     {
                         success: function (result) {
                             if (result == '') {
@@ -635,7 +635,7 @@ var btnImport_Click = function (c, e) {
     }
     if (!App.cboTagID.getValue()) {
         App.direct.IN10500_pdCheckCreateIN_Tag(
-            App.cboBranchID.getValue(), App.cboSiteID.getValue(),
+            App.cboBranchID.getValue(), App.cboSiteID.getValue(), App.cboClassID.getValue(),
             {
                 success: function (result) {
                     if (result == '') {

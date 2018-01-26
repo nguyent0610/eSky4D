@@ -77,9 +77,9 @@ namespace IN10500.Controllers
             return this.Store(data);
         }
         [DirectMethod]
-        public ActionResult IN10500_pdCheckCreateIN_Tag(string BranchID, string SiteID)
+        public ActionResult IN10500_pdCheckCreateIN_Tag(string BranchID, string SiteID, string ClassID)
         {
-            var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();            
+            var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID,ClassID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();            
             return this.Direct(chkINTag);
         }
 
@@ -93,6 +93,7 @@ namespace IN10500.Controllers
                 _app.CommandTimeout = int.MaxValue;                
                 string ReasonCD = data["cboReasonCD"].PassNull();
                 string Status = data["cboStatus"].PassNull();
+                string ClassID = data["cboClassID"].PassNull();
                 string Handle = data["cboHandle"].PassNull();
                 string BranchID = data["cboBranchID"].PassNull();
                 string descr = data["txtDescr"].PassNull();
@@ -135,7 +136,7 @@ namespace IN10500.Controllers
                 }
                 else
                 {
-                    var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(curHeader.BranchID, curHeader.SiteID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                    var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(curHeader.BranchID, curHeader.SiteID,ClassID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                     if (!string.IsNullOrWhiteSpace(chkINTag)) // KHi không đc tạo thẻ kho
                     {
                         throw new MessageException(MessageType.Message, "2015070801", "", parm: new string[] { chkINTag });
