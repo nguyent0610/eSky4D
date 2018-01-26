@@ -114,17 +114,20 @@ namespace AR20400.Controllers
 					ViewBag.ReadonlyShopType = "false";
 			}
             string hideColumn = string.Empty;
+            bool hideCity = false;
             var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null && !string.IsNullOrWhiteSpace(objConfig.hideColumn))
             {
                 hideColumn = objConfig.hideColumn.PassNull();
+                hideCity= objConfig.hideCity.HasValue && objConfig.hideCity.Value;
             }
+            ViewBag.hideCity = hideCity;
             ViewBag.hideColumn = hideColumn;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

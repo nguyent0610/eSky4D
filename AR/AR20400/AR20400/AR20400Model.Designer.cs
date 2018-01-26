@@ -9629,6 +9629,30 @@ namespace AR20400
         private global::System.String _hideColumn;
         partial void OnhideColumnChanging(global::System.String value);
         partial void OnhideColumnChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> hideCity
+        {
+            get
+            {
+                return _hideCity;
+            }
+            set
+            {
+                OnhideCityChanging(value);
+                ReportPropertyChanging("hideCity");
+                _hideCity = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("hideCity");
+                OnhideCityChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _hideCity;
+        partial void OnhideCityChanging(Nullable<global::System.Boolean> value);
+        partial void OnhideCityChanged();
 
         #endregion
 

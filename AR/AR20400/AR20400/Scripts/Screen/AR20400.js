@@ -39,6 +39,17 @@ var _Flag;
 var _treeExpandAll = false;
 var value1 = '';
 var value2 = '';
+var _addr = '';
+var _country = '';
+var _state = '';
+var _district = '';
+var _ward = '';
+var _addr1 = '';
+var _countryBill = '';
+var _stateBill = '';
+var _districtBill = '';
+var _wardBill = '';
+var _addr1Bill = '';
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -76,6 +87,7 @@ var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     App.frmMain.isValid();
+
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboStatus.getStore().addListener('load', checkLoad);
     App.cboCpnyID.getStore().addListener('load', checkLoad);
@@ -122,6 +134,9 @@ var firstLoad = function () {
             }
         }
     }
+    App.cboCity.setVisible(!HQ.hideCity);
+    App.cboBillCity.setVisible(!HQ.hideCity);
+    App.lblCITY.setVisible(!HQ.hideCity);
 };
 
 
@@ -1230,11 +1245,24 @@ var filterComboSate = function (sender, e) {
         App.cboState.setValue('');
         App.cboCity.setValue('');
         App.cboDistrict.setValue('');
+        App.txtAddr.setValue('');
     }
-        
+    
     var code = App.cboCountry.getValue();
     App.cboState.store.clearFilter();
     App.cboState.store.filter("Country", code);
+    if (sender.valueModels != null) {
+        if (sender.valueModels.length > 0) {
+            _country = sender.valueModels[0].data.Descr;
+        }
+        else {
+            _country = "";
+        }
+    }    
+    var tam = _addr1 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
+    App.txtAddr.setValue(tam);
+    
+    
 };
 
 var filterComboCityDistrict = function (sender, e) {
@@ -1247,7 +1275,55 @@ var filterComboCityDistrict = function (sender, e) {
     App.cboCity.store.filter("CountryState", code);
     App.cboDistrict.store.clearFilter();
     App.cboDistrict.store.filter("CountryState", code);
+    if (sender.valueModels != null) {
+        if (sender.valueModels.length > 0) {
+            _state = sender.valueModels[0].data.Descr;
+        }
+        else {
+            _state = '';
+        }
+    }
+    
+    var tam = _addr1 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
+    App.txtAddr.setValue(tam);
 };
+
+var cboDistrict_Change = function (sender, e) {
+    if (sender.valueModels != null) {
+        if (sender.valueModels.length > 0) {
+            _district = sender.valueModels[0].data.Name;
+        }
+        else {
+            _district = '';
+        }
+    }    
+    var tam = _addr1 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
+    App.txtAddr.setValue(tam);
+}
+var txtAddr1_Change = function (sender, e) {
+    _addr1 = App.txtAddr1.getValue();
+    var tam = _addr1 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
+    App.txtAddr.setValue(tam);
+}
+var txtBillAddr1_Change = function (sender, e) {
+    _addr1Bill = App.txtBillAddr1.getValue();
+    var tam = _addr1Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    App.txtBillAddr.setValue(tam);
+}
+
+var txtWard_Change = function (sender, e) {
+    _ward = App.txtWard.getValue();
+    var tam = _addr1 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
+    App.txtAddr.setValue(tam);
+    
+}
+
+var txtBillWard_Change = function (sender, e) {
+    _wardBill = App.txtBillWard.getValue();
+    var tam = _addr1Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    App.txtBillAddr.setValue(tam);
+
+}
 
 var filterComboBillSate = function (sender, e) {
     if (sender.hasFocus) {
@@ -1258,6 +1334,17 @@ var filterComboBillSate = function (sender, e) {
     var code = App.cboBillCountry.getValue();
     App.cboBillState.store.clearFilter();
     App.cboBillState.store.filter("Country", code);
+    if (sender.valueModels != null) {
+        if (sender.valueModels.length > 0) {
+            _countryBill = sender.valueModels[0].data.Descr;
+        }
+        else {
+            _countryBill = "";
+        }
+    }
+    var tam = _addr1Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    App.txtBillAddr.setValue(tam);
+
 };
 
 var filterComboBillCity = function (sender, e) {
@@ -1270,7 +1357,31 @@ var filterComboBillCity = function (sender, e) {
     App.cboBillCity.store.filter("CountryState", code);
     App.cboBillDistrict.store.clearFilter();
     App.cboBillDistrict.store.filter("CountryState", code);
+    if (sender.valueModels != null) {
+        if (sender.valueModels.length > 0) {
+            _stateBill = sender.valueModels[0].data.Descr;
+        }
+        else {
+            _stateBill = "";
+        }
+    }
+    var tam = _addr1Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    App.txtBillAddr.setValue(tam);
 };
+
+
+var cboBillDistrict_Change = function (sender, e) {
+    if (sender.valueModels != null) {
+        if (sender.valueModels.length > 0) {
+            _districtBill = sender.valueModels[0].data.Name;
+        }
+        else {
+            _districtBill = '';
+        }
+    }
+    var tam = _addr1Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    App.txtBillAddr.setValue(tam);
+}
 
 var stoCheckAutoCustID_Load = function () {
     if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1') {

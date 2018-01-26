@@ -49,7 +49,7 @@
                 X.Toolbar()
                 .Items(
                     X.ToolbarFill()
-                    
+
                     , HQ.Button().ID("btnExpand")
                     .HQLangCode("Expand")
                     .Icon(Icon.BulletTogglePlus)
@@ -71,7 +71,7 @@
         {
             lss.Render.Handler = "HQ.common.control_render(this,'header')";
         })
-        
+
         , X.Panel().Region(Region.Center)
         .Layout(LayoutType.Border).Flex(4).Split(true)
         .Items(
@@ -84,10 +84,10 @@
                     .Items(
                         HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").Tag("X")
                             .HQProcedure("AR20400_pcCustomer").HQColumnShow("CustId,CustName,Addr1,Addr2")
-                            .DisplayField("CustId").ValueField("CustId").MaxLength(50).EnforceMaxLength(true)
+                            .DisplayField("CustName").ValueField("CustId").MaxLength(50).EnforceMaxLength(true)
                             .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
                             .ForceSelection(true).HQisPaging(true).PageSize(20)
-                            .HQParam(new StoreParameterCollection() 
+                            .HQParam(new StoreParameterCollection()
                             {
                                 new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
@@ -101,13 +101,13 @@
                                 lst.TriggerClick.Fn = "cboCustId_TriggerClick";
                                 lst.Focus.Fn = "cboCustId_Focus";
                             })
-                            
+
                         , HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQLangCode("BRANCHID").Tag("X")
                             .HQProcedure("AR20400_pcCpnyID").HQColumnShow("CpnyID,CpnyName")
-                            .DisplayField("CpnyID").ValueField("CpnyID")
+                            .DisplayField("CpnyName").ValueField("CpnyID")
                             .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                             .AllowBlank(false).ForceSelection(true)
-                            .HQParam(new StoreParameterCollection() 
+                            .HQParam(new StoreParameterCollection()
                             {
                                 new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                             })
@@ -119,16 +119,16 @@
                                 lst.Select.Fn = "cboCpnyID_Select";
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
-                            
+
                         , HQ.Combo().ID("cboStatus").ReadOnly(true).Tag("X").DataIndex("Status")
                             .Name("cboStatus").HQLangCode("Status").HQProcedure("AR20400_pcStatus")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQValue("H", false)
                             .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                             .ForceSelection(true)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                            .HQParam(new StoreParameterCollection() 
+                            .HQParam(new StoreParameterCollection()
                             {
-                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }   
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                             })
                             .LoadData()
                             .Listeners(lst =>
@@ -154,7 +154,7 @@
                                 lst.Change.Fn = "cboClassId_Change";
                                 lst.Select.Fn = "cboClassId_Select";
                                 lst.TriggerClick.Fn = "cboClassId_TriggerClick";
-                                lst.Focus.Handler = "this.forceSelection = true;";  
+                                lst.Focus.Handler = "this.forceSelection = true;";
                             })
 
                         , HQ.Combo().ID("cboCustType").Name("cboCustType").HQLangCode("CUSTTYPE").DataIndex("CustType")
@@ -162,7 +162,7 @@
                             .DisplayField("Descr").ValueField("Code")
                             .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
                             .AllowBlank(false)
-                            .HQParam(new StoreParameterCollection() 
+                            .HQParam(new StoreParameterCollection()
                             {
                                 new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                             })
@@ -171,7 +171,7 @@
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Focus.Handler = "this.forceSelection = true;";  
+                                lst.Focus.Handler = "this.forceSelection = true;";
                             })
 
                         , HQ.Combo().ID("cboHandle")
@@ -217,7 +217,7 @@
                             .Listeners(p=>p.Change.Fn ="txtCustName_Change")
                         , HQ.TextBox().ID("txtRefCustID").Name("txtRefCustID").HQLangCode("RefCustID").DataIndex("RefCustID")
                             .AllowBlank(true).EnforceMaxLength(true).MaxLength(50)
-                            .Width(675).MarginSpec("5 0 0 0")   
+                            .Width(675).MarginSpec("5 0 0 0")
                         , HQ.TextBox().ID("txtInActive").Name("txtInActive").HQLangCode("InActiveAR20400").DataIndex("InActive")
                             .AllowBlank(true).EnforceMaxLength(true).MaxLength(100)
                             .Width(675).MarginSpec("5 0 0 0")
@@ -225,26 +225,26 @@
 
                     , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
                     .Items(
-                    
+
                         X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
                         .Items(
                             X.FieldSet().Title(Util.GetLang("DKTG")).Layout(LayoutType.VBox).MarginSpec("0 10 0 20")
                                 .Items(
                                     HQ.Combo().ID("cboPriceClassID").Name("cboPriceClassID").HQLangCode("PRICECLASSID").DataIndex("PriceClassID")
                                         .HQProcedure("AR20400_pcPriceClass").HQColumnShow("PriceClassID,Descr")
-                                        .DisplayField("PriceClassID").ValueField("PriceClassID")
+                                        .DisplayField("Descr").ValueField("PriceClassID")
                                         .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                         .LoadData()
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                         .Listeners(lst =>
                                         {
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                            lst.Focus.Handler = "this.forceSelection = true;";  
+                                            lst.Focus.Handler = "this.forceSelection = true;";
                                         })
 
                                     , HQ.Combo().ID("cboTerms").Name("cboTerms").HQLangCode("TERM").DataIndex("Terms")
                                         .HQProcedure("AR20400_pcTerms_Cust").HQColumnShow("TermsID,Descr")
-                                        .DisplayField("TermsID").ValueField("TermsID")
+                                        .DisplayField("Descr").ValueField("TermsID")
                                         .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                         .AllowBlank(false)
                                         .LoadData()
@@ -252,7 +252,7 @@
                                         .Listeners(lst =>
                                         {
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                            lst.Focus.Handler = "this.forceSelection = true;";  
+                                            lst.Focus.Handler = "this.forceSelection = true;";
                                         })
 
                                     , HQ.NumberField().ID("txtTradeDisc").Name("txtTradeDisc").HQLangCode("TRADEDISC").DataIndex("TradeDisc")
@@ -268,7 +268,7 @@
                                         .DisplayField("Descr").ValueField("Code")
                                         .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                         .AllowBlank(false)
-                                        .HQParam(new StoreParameterCollection() 
+                                        .HQParam(new StoreParameterCollection()
                                         {
                                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                         })
@@ -277,7 +277,7 @@
                                         .Listeners(lst =>
                                         {
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                            lst.Focus.Handler = "this.forceSelection = true;";  
+                                            lst.Focus.Handler = "this.forceSelection = true;";
                                         })
 
                                     , HQ.NumberField().ID("txtCrLmt").Name("txtCrLmt").HQLangCode("LIMIT").DataIndex("CrLmt")
@@ -291,12 +291,12 @@
                             )
                             ,X.FieldSet().Title(Util.GetLang("CDK")).Layout(LayoutType.VBox).MarginSpec("5 10 0 20")
                             .Items(
-                                
+
                                 HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQLangCode("SALESPERSON").DataIndex("SlsperId")
                                     .HQProcedure("AR20400_pcSalesPerson").HQColumnShow("Slsperid,Name")
-                                    .DisplayField("Slsperid").ValueField("Slsperid")
+                                    .DisplayField("Name").ValueField("Slsperid")
                                     .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                         new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
                                     })
@@ -305,14 +305,14 @@
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
                                 , HQ.Combo().ID("cboDeliveryID").Name("cboDeliveryID").HQLangCode("DELIVERYMAN").DataIndex("DeliveryID")
                                     .HQProcedure("AR20400_pcDeliveryPerson").HQColumnShow("Slsperid,Name")
-                                    .DisplayField("Slsperid").ValueField("Slsperid")
+                                    .DisplayField("Name").ValueField("Slsperid")
                                     .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                         new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
                                     })
@@ -321,14 +321,14 @@
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
                                 , HQ.Combo().ID("cboSupID").Name("cboSupID").HQLangCode("SALESSUP").DataIndex("SupID")
                                     .HQProcedure("AR20400_pcSalesSup").HQColumnShow("Slsperid,Name")
-                                    .DisplayField("Slsperid").ValueField("Slsperid")
+                                    .DisplayField("Name").ValueField("Slsperid")
                                     .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                         new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
                                     })
@@ -337,14 +337,14 @@
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
                                 , HQ.Combo().ID("cboSiteId").Name("cboSiteId").HQLangCode("SITEID").DataIndex("SiteId")
                                     .HQProcedure("AR20400_pcSiteAll").HQColumnShow("SiteID,Name")
-                                    .DisplayField("SiteID").ValueField("SiteID")
+                                    .DisplayField("Name").ValueField("SiteID")
                                     .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                         new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
                                     })
@@ -353,14 +353,14 @@
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
                                 , HQ.Combo().ID("cboDfltShipToId").Name("cboDfltShipToId").HQLangCode("SHIPTOID1").DataIndex("DfltShipToId")
                                     .HQProcedure("AR20400_pcShipToId").HQColumnShow("ShipToId,Descr,SOName")
-                                    .DisplayField("ShipToId").ValueField("ShipToId")
+                                    .DisplayField("Descr").ValueField("ShipToId")
                                     .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                         new StoreParameter() { Name = "@CustId", Value = "App.cboCustId.getValue()", Mode = ParameterMode.Raw }
                                     })
@@ -369,7 +369,7 @@
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
                                 , HQ.NumberField().ID("txtCustFillPriority").Name("txtCustFillPriority").HQLangCode("CUSTFILLPRIORITY").DataIndex("CustFillPriority")
@@ -380,7 +380,7 @@
                                     .HQProcedure("AR20400_pcLTTContractActive").HQColumnShow("LTTConNbr,FromDate,ToDate")
                                     .DisplayField("LTTConNbr").ValueField("LTTConNbr")
                                     .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                         new StoreParameter() { Name = "@CustId", Value = "App.cboCustId.getValue()", Mode = ParameterMode.Raw }
                                     })
@@ -389,14 +389,14 @@
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
                                 , HQ.Combo().ID("cboDfltSalesRouteID").Name("cboDfltSalesRouteID").HQLangCode("SALESROUTE").DataIndex("DflSaleRouteID")
                                     .HQProcedure("AR20400_pcSalesRouteID").HQColumnShow("SalesRoute,Descr")
-                                    .DisplayField("SalesRoute").ValueField("SalesRoute")
+                                    .DisplayField("Descr").ValueField("SalesRoute")
                                     .Width(320).LabelWidth(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                         new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
                                     })
@@ -405,7 +405,7 @@
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
                                 , HQ.NumberField().ID("txtEmpNum").Name("txtEmpNum").HQLangCode("EMPNUM").DataIndex("EmpNum")
@@ -419,23 +419,23 @@
                                 , HQ.DateField().ID("calEstablishDate").HQLangCode("ESTABLISHDATE").DataIndex("EstablishDate")
                                     .AllowBlank(false)
                                     .Width(320).LabelWidth(150).MarginSpec("5 0 0 0")
-                                    
+
                                 , HQ.DateField().ID("calBirthday").HQLangCode("BIRTHDAY").DataIndex("Birthdate")
                                     .AllowBlank(false)
                                     .Width(320).LabelWidth(150).MarginSpec("5 0 5 0")
                             )
-                                              
-                            
+
+
                     )
 
                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 5 0 20")
-                    .Items(                               
+                    .Items(
                         X.FieldSet().Title(Util.GetLang("CUSTCLASSIFY")).Layout(LayoutType.VBox)
                             .Items(
-  
+
                                 HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQLangCode("TERRITORY").DataIndex("Territory")
                                     .HQProcedure("AR20400_pcTerritory").HQColumnShow("Territory,Descr")
-                                    .DisplayField("Territory").ValueField("Territory").AllowBlank(false)
+                                    .DisplayField("Descr").ValueField("Territory").AllowBlank(false)
                                     .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .LoadData()
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -444,54 +444,60 @@
                                         lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus; this.clearValue();}";
                                         lst.Change.Fn = "cboTerritory_Change_Select";
                                         lst.Select.Fn = "cboTerritory_Change_Select";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
                                 ,HQ.Combo().ID("cboSubTerritory").Name("cboSubTerritory").HQLangCode("SubTERRITORY").DataIndex("SubTerritory")
                                     .HQProcedure("AR20400_pcSubTerritory").HQColumnShow("Code,Descr")
-                                    .DisplayField("Code").ValueField("Code")
+                                    .DisplayField("Descr").ValueField("Code")
                                     .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .LoadData()
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus; this.clearValue();}";
-                                        lst.Focus.Fn = "cboSubTerritory_Focus";   
+                                        lst.Focus.Fn = "cboSubTerritory_Focus";
                                     })
                                 , HQ.Combo().ID("cboArea").Name("cboArea").HQLangCode("AREA").DataIndex("Area")
                                     .HQProcedure("AR20400_pcArea").HQColumnShow("Area,Descr")
-                                    .DisplayField("Area").ValueField("Area")
+                                    .DisplayField("Descr").ValueField("Area")
                                     .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .LoadData()
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
-                                , HQ.Combo().ID("cboLocation").Name("cboLocation").HQLangCode("LOCATION").DataIndex("Location")
-                                    .HQProcedure("AR20400_pcLocation").HQColumnShow("Location,Descr")
-                                    .DisplayField("Location").ValueField("Location")
+                                , HQ.Combo().ID("cboLocation").Name("cboLocation").HQLangCode("AR20400LOCATION").DataIndex("Location")
+                                    .HQProcedure("AR20400_pcLocation").HQColumnShow("Code,Descr")
+                                    .DisplayField("Descr").ValueField("Location")
                                     .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .LoadData()
+
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                    .Listeners(lst =>
-                                    {
-                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
-                                    })
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
-                                    ,HQ.Combo().ID("cboAddStand").Name("cboAddStand").HQLangCode("AR20400Stand").DataIndex("StandID")
-                                    .HQProcedure("AR20400_pcSI_Stand").HQColumnShow("Code,Descr")
-                                    .DisplayField("Descr").ValueField("Code")
-                                   // .HQAutoLoad(false)
-                                        .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .AllowBlank(true)
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }   
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    }).LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Focus.Handler = "this.forceSelection = true;";
+                                    })
+                                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
+                                    ,HQ.Combo().ID("cboAddStand").Name("cboAddStand").HQLangCode("AR20400Stand").DataIndex("StandID")
+                                    .HQProcedure("AR20400_pcSI_Stand").HQColumnShow("Code,Descr")
+                                    .DisplayField("Descr").ValueField("Code")
+                                        // .HQAutoLoad(false)
+                                        .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                                    .AllowBlank(true)
+                                    .HQParam(new StoreParameterCollection()
+                                    {
+                                       new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                     })
                                     .LoadData()
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -506,11 +512,11 @@
                                     .HQProcedure("AR20400_pcSI_Brand").HQColumnShow("Code,Descr")
                                     .DisplayField("Descr").ValueField("Code")
                                     .MultiSelect(true)
-                                          //  .HQAutoLoad(false)
+                                         //  .HQAutoLoad(false)
                                          .Width(260).LabelWidth(140)
                                         .AllowBlank(true)
                                     .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                         new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
@@ -530,14 +536,14 @@
                                     HQ.Combo().ID("cboAddSize").Name("cboAddSize").HQLangCode("AR20400Size").DataIndex("SizeID")
                                     .HQProcedure("AR20400_pcSI_Size").HQColumnShow("Code,Descr")
                                     .DisplayField("Descr").ValueField("Code")
-                                    //.HQAutoLoad(false)
+                                        //.HQAutoLoad(false)
                                         .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .AllowBlank(true)
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }   
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                     })
                                     .LoadData()
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -551,11 +557,11 @@
                                     , HQ.Combo().ID("cboAddDisplayID").Name("cboAddDisplayID").HQLangCode("AR20400Display").DataIndex("DisplayID")
                                     .HQProcedure("AR20400_pcSI_Display").HQColumnShow("Code,Descr")
                                     .DisplayField("Descr").ValueField("Code")
-                                          //  .HQAutoLoad(false)
+                                            //  .HQAutoLoad(false)
                                             .Width(260).LabelWidth(140)
                                         .AllowBlank(true)
                                     .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                         new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
@@ -569,13 +575,13 @@
                                         lst.Focus.Handler = "this.forceSelection = true;";
                                         lst.Blur.Handler = "this.forceSelection = false;";
                                     })
-                
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////            
-                                    
+
+                                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////            
+
 
                                 , HQ.Combo().ID("cboChannel").Name("cboChannel").HQLangCode("SALESCHNL").DataIndex("Channel")
                                     .HQProcedure("AR20400_pcSalesChannel").HQColumnShow("Code,Descr")
-                                    .DisplayField("Code").ValueField("Code")
+                                    .DisplayField("Descr").ValueField("Code")
                                     .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .LoadData()
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -584,31 +590,31 @@
                                         lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus; this.clearValue();}";
                                         lst.Change.Fn = "cboChannel_Change_Select";
                                         lst.Select.Fn = "cboChannel_Change_Select";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
                                 , HQ.Combo().ID("cboShopType").Name("cboShopType").HQLangCode("SHOPTYPE").DataIndex("ShopType")
                                     .HQProcedure("AR20400_pcShopType").HQColumnShow("Code,Descr")
-                                    .DisplayField("Code").ValueField("Code")
+                                    .DisplayField("Descr").ValueField("Code")
                                     .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .LoadData()
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Fn = "cboShopType_Focus";  
+                                        lst.Focus.Fn = "cboShopType_Focus";
                                     })
 
                                 , HQ.Combo().ID("cboSellingProd").Name("cboSellingProd").HQLangCode("SELLINGPROD").DataIndex("SellProduct")
                                     .HQProcedure("AR20400_pcSellingProducts").HQColumnShow("SellingProd,Descr")
-                                    .DisplayField("SellingProd").ValueField("SellingProd")
+                                    .DisplayField("Descr").ValueField("SellingProd")
                                     .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .LoadData()
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                        lst.Focus.Handler = "this.forceSelection = true;";  
+                                        lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
                                 , X.Container().Layout(LayoutType.HBox)
@@ -650,16 +656,17 @@
                         .Items(
                             HQ.Label().HQLangCode("CUSTNAME").MarginSpec("5 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("ATTN").MarginSpec("10 0 0 0").StyleSpec("text-align:right;").Width(120)
-                            , HQ.Label().HQLangCode("SALUT").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
+                            , HQ.Label().HQLangCode("AR20500ADDR").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
+                            , HQ.Label().HQLangCode("SALUT").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120).Hidden(true)
                             , HQ.Label().HQLangCode("ADDR1").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("ADDR2").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("COUNTRY").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("STATE").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
-                            , HQ.Label().HQLangCode("CITY").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
+                            , HQ.Label().HQLangCode("CITY").ID("lblCITY").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("DISTRICT").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
-                            
+
                             , HQ.Label().HQLangCode("Ward").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
-                            
+
                             , HQ.Label().HQLangCode("ZIP").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("PHONE").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("FAX").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
@@ -676,13 +683,20 @@
                                 .EnforceMaxLength(true).MaxLength(200).AllowBlank(false).HideLabel(true)
                                 .Width(250).MarginSpec("5 0 0 0")
 
-                            , HQ.TextBox().ID("txtSalut").Name("txtSalut").DataIndex("Salut")
-                                .EnforceMaxLength(true).MaxLength(50)
+                            , HQ.TextBox().ID("txtSalut").Name("txtSalut").DataIndex("Salut").Tag("X")//.ReadOnly(true)
+                                .EnforceMaxLength(true).MaxLength(50).HideLabel(true).Hidden(true)
+                                .Width(250).MarginSpec("5 0 0 0")
+                            , HQ.TextBox().ID("txtAddr").Name("txtAddr").Tag("X").ReadOnly(true)
+                                .HideLabel(true)//.Hidden(true)
                                 .Width(250).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtAddr1").Name("txtAddr1").DataIndex("Addr1").HQLangCode("ADDR1")
                                 .EnforceMaxLength(true).MaxLength(200).AllowBlank(false).HideLabel(true)
                                 .Width(250).MarginSpec("5 0 0 0")
+                                .Listeners(lst =>
+                                {
+                                    lst.Change.Fn = "txtAddr1_Change";
+                                })
 
                             , HQ.TextBox().ID("txtAddr2").Name("txtAddr2").DataIndex("Addr2")
                                 .EnforceMaxLength(true).MaxLength(200)
@@ -690,7 +704,7 @@
 
                             , HQ.Combo().ID("cboCountry").Name("cboCountry").DataIndex("Country").HQLangCode("COUNTRY").HideLabel(true)
                                 .HQProcedure("AR20400_pcCountryID").HQColumnShow("CountryID,Descr")
-                                .DisplayField("CountryID").ValueField("CountryID").AllowBlank(false)
+                                .DisplayField("Descr").ValueField("CountryID").AllowBlank(false)
                                 .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                 .LoadData()
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -700,14 +714,15 @@
                                     lst.Change.Fn = "filterComboSate";
                                     lst.Focus.Handler = "this.forceSelection = true;";
                                     lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue(); }";
-                                    
+                                    lst.Expand.Handler = "App.cboCountry.store.clearFilter();";
+
                                 })
 
                             , HQ.Combo().ID("cboState").Name("cboState").DataIndex("State").HQLangCode("STATE").HideLabel(true)
                                 .HQProcedure("AR20400_pcStateByCountry").HQColumnShow("State,Descr")
-                                .DisplayField("State").ValueField("State").AllowBlank(false)
+                                .DisplayField("Descr").ValueField("State").AllowBlank(false)
                                 .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                .HQParam(new StoreParameterCollection() 
+                                .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw }
                                 })
@@ -719,14 +734,15 @@
                                     lst.Change.Fn = "filterComboCityDistrict";
                                     lst.Focus.Handler = "this.forceSelection = true;";
                                     lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
+
                                     //lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
 
-                            , HQ.Combo().ID("cboCity").Name("cboCity").DataIndex("City")
+                            , HQ.Combo().ID("cboCity").Name("cboCity").DataIndex("City").HideLabel(true).Tag("X")
                                 .HQProcedure("AR20400_pcCityByCountryState").HQColumnShow("City,Name")
-                                .DisplayField("City").ValueField("City")
+                                .DisplayField("Name").ValueField("City")
                                 .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                .HQParam(new StoreParameterCollection() 
+                                .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@State", Value = "App.cboState.getValue()", Mode = ParameterMode.Raw }
@@ -742,9 +758,9 @@
 
                             , HQ.Combo().ID("cboDistrict").Name("cboDistrict").DataIndex("District").HQLangCode("DISTRICT").HideLabel(true)
                                 .HQProcedure("AR20400_pcDistrictByCountryState").HQColumnShow("District,Name")
-                                .DisplayField("District").ValueField("District")
+                                .DisplayField("Name").ValueField("District")
                                 .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                .HQParam(new StoreParameterCollection() 
+                                .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@State", Value = "App.cboState.getValue()", Mode = ParameterMode.Raw }
@@ -755,12 +771,17 @@
                                 {
                                     lst.Focus.Handler = "this.forceSelection = true;";
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.Change.Fn = "cboDistrict_Change";
                                     //lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
                             , HQ.TextBox().ID("txtWard").Name("txtWard").DataIndex("Ward")
                                 .EnforceMaxLength(true).MaxLength(100)
                                 .Width(250).MarginSpec("5 0 0 0")
-                                
+                                .Listeners(lst =>
+                                {
+                                    lst.Change.Fn = "txtWard_Change";
+                                })
+
                             , HQ.TextBox().ID("txtZip").Name("txtZip").DataIndex("Zip")
                                 .EnforceMaxLength(true).MaxLength(10)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
@@ -781,7 +802,7 @@
                                 .Width(250).MarginSpec("5 0 5 0")
                                 .Listeners(lst =>
                                 {
-                                    lst.Click.Fn = "btnCopytoDiffDB_Click"; 
+                                    lst.Click.Fn = "btnCopytoDiffDB_Click";
                                 })
 
                         )
@@ -797,12 +818,20 @@
                                 .Width(250).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtBillSalut").Name("txtBillSalut").DataIndex("BillSalut")
-                                .EnforceMaxLength(true).MaxLength(50)
+                                .EnforceMaxLength(true).MaxLength(50).HideLabel(true).Hidden(true)
+                                .Width(250).MarginSpec("5 0 0 0")
+
+                            , HQ.TextBox().ID("txtBillAddr").Name("txtBillAddr").Tag("X")
+                                .HideLabel(true).ReadOnly(true)
                                 .Width(250).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtBillAddr1").Name("txtBillAddr1").DataIndex("BillAddr1").HQLangCode("ADDR1")
                                 .EnforceMaxLength(true).MaxLength(200).AllowBlank(false).HideLabel(true)
                                 .Width(250).MarginSpec("5 0 0 0")
+                                .Listeners(lst =>
+                                {
+                                    lst.Change.Fn = "txtBillAddr1_Change";
+                                })
 
                             , HQ.TextBox().ID("txtBillAddr2").Name("txtBillAddr2").DataIndex("BillAddr2")
                                 .EnforceMaxLength(true).MaxLength(200)
@@ -810,7 +839,7 @@
 
                             , HQ.Combo().ID("cboBillCountry").Name("cboBillCountry").DataIndex("BillCountry")
                                 .HQProcedure("AR20400_pcCountryID").HQColumnShow("CountryID,Descr")
-                                .DisplayField("CountryID").ValueField("CountryID")
+                                .DisplayField("Descr").ValueField("CountryID")
                                 .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                 .LoadData()
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -819,14 +848,14 @@
                                     lst.Select.Fn = "filterComboBillSate";
                                     lst.Change.Fn = "filterComboBillSate";
                                     lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
-                                    lst.Focus.Handler = "this.forceSelection = true;";  
+                                    lst.Focus.Handler = "this.forceSelection = true;";
                                 })
 
                             , HQ.Combo().ID("cboBillState").Name("cboBillState").DataIndex("BillState")
                                 .HQProcedure("AR20400_pcStateByCountry").HQColumnShow("State,Descr")
-                                .DisplayField("State").ValueField("State")
+                                .DisplayField("Descr").ValueField("State")
                                 .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                .HQParam(new StoreParameterCollection() 
+                                .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@Country", Value = "App.cboBillCountry.getValue()", Mode = ParameterMode.Raw }
                                 })
@@ -838,14 +867,14 @@
                                     lst.Change.Fn = "filterComboBillCity";
                                     lst.Focus.Handler = "this.forceSelection = true;";
                                     lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
-                                    lst.Focus.Handler = "this.forceSelection = true;";  
+                                    lst.Focus.Handler = "this.forceSelection = true;";
                                 })
 
                             , HQ.Combo().ID("cboBillCity").Name("cboBillCity").DataIndex("BillCity")
                                 .HQProcedure("AR20400_pcCityByCountryState").HQColumnShow("City,Name")
-                                .DisplayField("City").ValueField("City")
+                                .DisplayField("Name").ValueField("City")
                                 .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                .HQParam(new StoreParameterCollection() 
+                                .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@Country", Value = "App.cboBillCountry.getValue()", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@State", Value = "App.cboBillState.getValue()", Mode = ParameterMode.Raw }
@@ -856,13 +885,13 @@
                                 {
                                     lst.Focus.Handler = "this.forceSelection = true;";
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    lst.Focus.Handler = "this.forceSelection = true;";  
+                                    lst.Focus.Handler = "this.forceSelection = true;";
                                 })
                                 , HQ.Combo().ID("cboBillDistrict").Name("cboBillDistrict").DataIndex("BillDistrict").HQLangCode("DISTRICT").HideLabel(true)
                                 .HQProcedure("AR20400_pcDistrictByCountryState").HQColumnShow("District,Name")
-                                .DisplayField("District").ValueField("District")
+                                .DisplayField("Name").ValueField("District")
                                 .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                .HQParam(new StoreParameterCollection() 
+                                .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@Country", Value = "App.cboBillCountry.getValue()", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@State", Value = "App.cboBillState.getValue()", Mode = ParameterMode.Raw }
@@ -874,13 +903,18 @@
                                     lst.Focus.Handler = "this.forceSelection = true;";
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     //lst.Focus.Handler = "this.forceSelection = true;";  
-                                })    
-                                
+                                    lst.Change.Fn = "cboBillDistrict_Change";
+                                })
+
                             , HQ.TextBox().ID("txtBillWard").Name("txtBillWard").DataIndex("BillWard")
                                 .EnforceMaxLength(true).MaxLength(100)
                                 .Width(250).MarginSpec("5 0 0 0")
-                                
-                                
+                                .Listeners(lst =>
+                                {
+                                    lst.Change.Fn = "txtBillWard_Change";
+                                })
+
+
                             , HQ.TextBox().ID("txtBillZip").Name("txtBillZip").DataIndex("BillZip")
                                 .EnforceMaxLength(true).MaxLength(10)
                                 .Width(250).MarginSpec("5 0 0 0").MaskRe(@"/[0-9-,;.*#()+/ ]/")
@@ -910,7 +944,7 @@
                                 .HQProcedure("AR20400_pcTaxDf").HQColumnShow("Code,Descr")
                                 .DisplayField("Descr").ValueField("Code").AllowBlank(false)
                                 .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                                .HQParam(new StoreParameterCollection() 
+                                .HQParam(new StoreParameterCollection()
                                 {
                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                 })
@@ -919,7 +953,7 @@
                                 .Listeners(lst =>
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    lst.Focus.Handler = "this.forceSelection = true;";  
+                                    lst.Focus.Handler = "this.forceSelection = true;";
                                 })
 
                             , HQ.TextBox().ID("txtTaxRegNbr").Name("txtTaxRegNbr").HQLangCode("TAXREGNBR").DataIndex("TaxRegNbr")
@@ -933,7 +967,7 @@
 
                             , HQ.Combo().ID("cboTaxID00").Name("cboTaxID00").HQLangCode("TAXID01").DataIndex("TaxID00")
                                 .HQProcedure("AR20400_pcTaxAll").HQColumnShow("TaxID,Descr")
-                                .DisplayField("TaxID").ValueField("TaxID")
+                                .DisplayField("Descr").ValueField("TaxID")
                                 .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                 .AllowBlank(false)
                                 .LoadData()
@@ -941,12 +975,12 @@
                                 .Listeners(lst =>
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    lst.Focus.Handler = "this.forceSelection = true;";  
+                                    lst.Focus.Handler = "this.forceSelection = true;";
                                 })
 
                             , HQ.Combo().ID("cboTaxID01").Name("cboTaxID01").HQLangCode("TAXID02").DataIndex("TaxID01")
                                 .HQProcedure("AR20400_pcTaxAll").HQColumnShow("TaxID,Descr")
-                                .DisplayField("TaxID").ValueField("TaxID")
+                                .DisplayField("Descr").ValueField("TaxID")
                                 .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                 .AllowBlank(false)
                                 .LoadData()
@@ -954,12 +988,12 @@
                                 .Listeners(lst =>
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    lst.Focus.Handler = "this.forceSelection = true;";  
+                                    lst.Focus.Handler = "this.forceSelection = true;";
                                 })
 
                             , HQ.Combo().ID("cboTaxID02").Name("cboTaxID02").HQLangCode("TAXID03").DataIndex("TaxID02")
                                 .HQProcedure("AR20400_pcTaxAll").HQColumnShow("TaxID,Descr")
-                                .DisplayField("TaxID").ValueField("TaxID")
+                                .DisplayField("Descr").ValueField("TaxID")
                                 .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                 .AllowBlank(false)
                                 .LoadData()
@@ -967,12 +1001,12 @@
                                 .Listeners(lst =>
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    lst.Focus.Handler = "this.forceSelection = true;";  
+                                    lst.Focus.Handler = "this.forceSelection = true;";
                                 })
 
                             , HQ.Combo().ID("cboTaxID03").Name("cboTaxID03").HQLangCode("TAXID04").DataIndex("TaxID03")
                                 .HQProcedure("AR20400_pcTaxAll").HQColumnShow("TaxID,Descr")
-                                .DisplayField("TaxID").ValueField("TaxID")
+                                .DisplayField("Descr").ValueField("TaxID")
                                 .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
                                 .AllowBlank(false)
                                 .LoadData()
@@ -980,7 +1014,7 @@
                                 .Listeners(lst =>
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    lst.Focus.Handler = "this.forceSelection = true;";  
+                                    lst.Focus.Handler = "this.forceSelection = true;";
                                 })
 
                         )
@@ -1100,9 +1134,9 @@
                                     .Items("1", "2", "10", "20", "30", "50")
                                     .SelectedItems("50")
                                     .Listeners(l =>
-                                        {
-                                            l.Select.Fn = "HQ.grid.onPageSelect";
-                                        })
+                                    {
+                                        l.Select.Fn = "HQ.grid.onPageSelect";
+                                    })
                                 )
                                 .Plugins(X.ProgressBarPager())
                             )
@@ -1178,9 +1212,9 @@
                                            .ForceSelection(true)
                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                            .HQParam(new StoreParameterCollection()
-		                                    {
-			                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-		                                    })
+                                            {
+                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                            })
                                             .Listeners(lst =>
                                             {
                                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
@@ -1221,9 +1255,9 @@
                                     .Items("1", "2", "10", "20", "30", "50")
                                     .SelectedItems("50")
                                     .Listeners(l =>
-                                        {
-                                            l.Select.Fn = "HQ.grid.onPageSelect";
-                                        })
+                                    {
+                                        l.Select.Fn = "HQ.grid.onPageSelect";
+                                    })
                                 )
                                 .Plugins(X.ProgressBarPager())
                             )
@@ -1252,10 +1286,10 @@
                         )
 
                 )//Tab Hop Dong Dau Tu
-                //.Listeners(lss =>
-                //{
-                //    lss.Render.Handler = "HQ.common.control_render(this,'grdAR_LTTContract')";
-                //})
+                 //.Listeners(lss =>
+                 //{
+                 //    lss.Render.Handler = "HQ.common.control_render(this,'grdAR_LTTContract')";
+                 //})
 
                 , X.Panel().ID("pnlADV")     //////////////Tab Vat Dung Quang Cao Trung Bay //////////////
                 .Title(Util.GetLang("BRDADVTOOL"))
@@ -1299,9 +1333,9 @@
                                     .ForceSelection(true)
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection()
-		                            {
-			                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-		                            })
+                                    {
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    })
                                     .Listeners(lst =>
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
@@ -1348,9 +1382,9 @@
                             .Items("1", "2", "10", "20", "30", "50")
                             .SelectedItems("50")
                             .Listeners(l =>
-                                {
-                                    l.Select.Fn = "HQ.grid.onPageSelect";
-                                })
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
                         )
                         .Plugins(X.ProgressBarPager())
                     )
@@ -1455,9 +1489,9 @@
                             .Items("1", "2", "10", "20", "30", "50")
                             .SelectedItems("50")
                             .Listeners(l =>
-                                {
-                                    l.Select.Fn = "HQ.grid.onPageSelect";
-                                })
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
                         )
                         .Plugins(X.ProgressBarPager())
                     )
@@ -1485,7 +1519,7 @@
                 {
                     lss.Render.Handler = "HQ.common.control_render(this,'grdAR_CustSellingProducts')";
                 })
-                
+
                 , X.Panel().ID("pnlDispMethod")     //////////////Tab Hinh Thuc Trung Bay //////////////
                 .Title(Util.GetLang("DISPMETHOD"))
                 .Layout(LayoutType.Border)
@@ -1557,9 +1591,9 @@
                             .Items("1", "2", "10", "20", "30", "50")
                             .SelectedItems("50")
                             .Listeners(l =>
-                                {
-                                    l.Select.Fn = "HQ.grid.onPageSelect";
-                                })
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
                         )
                         .Plugins(X.ProgressBarPager())
                     )
@@ -1630,7 +1664,7 @@
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     })
-                                    .HQParam(new StoreParameterCollection() 
+                                    .HQParam(new StoreParameterCollection()
                                     {
                                         new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
@@ -1639,7 +1673,7 @@
                             )
 
                         , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(300)
-                            //.Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
+                        //.Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
 
                         , X.CommandColumn().Width(150)
                         .Commands(
@@ -1663,9 +1697,9 @@
                             .Items("1", "2", "10", "20", "30", "50")
                             .SelectedItems("50")
                             .Listeners(l =>
-                                {
-                                    l.Select.Fn = "HQ.grid.onPageSelect";
-                                })
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
                         )
                         .Plugins(X.ProgressBarPager())
                     )

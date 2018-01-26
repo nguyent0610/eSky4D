@@ -1159,6 +1159,7 @@
         </EntityType>
         <ComplexType Name="AR20400_pdConfig_Result">
           <Property Type="String" Name="hideColumn" Nullable="false" MaxLength="32" />
+          <Property Type="Boolean" Name="hideCity" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1767,6 +1768,7 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="AR20400Model.AR20400_pdConfig_Result">
                 <ScalarProperty Name="hideColumn" ColumnName="hideColumn" />
+                <ScalarProperty Name="hideCity" ColumnName="hideCity" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
