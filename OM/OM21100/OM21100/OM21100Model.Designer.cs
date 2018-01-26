@@ -12584,6 +12584,54 @@ namespace OM21100
         private global::System.String _Descr;
         partial void OnDescrChanging(global::System.String value);
         partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DfltPOUnit
+        {
+            get
+            {
+                return _DfltPOUnit;
+            }
+            set
+            {
+                OnDfltPOUnitChanging(value);
+                ReportPropertyChanging("DfltPOUnit");
+                _DfltPOUnit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DfltPOUnit");
+                OnDfltPOUnitChanged();
+            }
+        }
+        private global::System.String _DfltPOUnit;
+        partial void OnDfltPOUnitChanging(global::System.String value);
+        partial void OnDfltPOUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DfltSOUnit
+        {
+            get
+            {
+                return _DfltSOUnit;
+            }
+            set
+            {
+                OnDfltSOUnitChanging(value);
+                ReportPropertyChanging("DfltSOUnit");
+                _DfltSOUnit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DfltSOUnit");
+                OnDfltSOUnitChanged();
+            }
+        }
+        private global::System.String _DfltSOUnit;
+        partial void OnDfltSOUnitChanging(global::System.String value);
+        partial void OnDfltSOUnitChanged();
 
         #endregion
 

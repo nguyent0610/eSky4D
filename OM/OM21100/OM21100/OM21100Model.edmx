@@ -1208,6 +1208,8 @@
         <ComplexType Name="OM21100_ppIN_Inventory_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DfltPOUnit" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="DfltSOUnit" Nullable="true" MaxLength="15" />
         </ComplexType>
         <ComplexType Name="OM21100_pdConfig_Result">
           <Property Type="Boolean" Name="AllowImport" Nullable="true" />
@@ -1877,6 +1879,8 @@
               <ComplexTypeMapping TypeName="OM21100Model.OM21100_ppIN_Inventory_Result">
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="DfltPOUnit" ColumnName="DfltPOUnit" />
+                <ScalarProperty Name="DfltSOUnit" ColumnName="DfltSOUnit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
