@@ -116,6 +116,8 @@ var grdUserDefault_BeforeEdit = function (editor, e) {
         App.cboDfltSlsPerID.store.reload();
     else if (e.field == 'DfltSupID')
         App.cboDfltSupID.store.reload();
+    else if (e.field == 'BranchSiteID')
+        App.cboBranchSiteID.store.reload();
 
     return HQ.grid.checkBeforeEdit(e, keys);
 };

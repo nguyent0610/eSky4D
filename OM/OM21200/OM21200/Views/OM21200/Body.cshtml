@@ -199,12 +199,14 @@
                  {
                      new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                      new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                     new StoreParameter() { Name = "@BranchID", Value = "App.slmUserDefault.selected.items[0]==undefined?'':App.slmUserDefault.selected.items[0].data.DfltBranchID" , Mode = ParameterMode.Raw }
                  })
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst =>
                 {
                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    //lst.Expand.Handler = "App.cboBranchSiteID.store.reload();";
                 })
                 .LoadData()
             ),
