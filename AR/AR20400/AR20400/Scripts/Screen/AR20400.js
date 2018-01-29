@@ -45,11 +45,13 @@ var _state = '';
 var _district = '';
 var _ward = '';
 var _addr1 = '';
+var _addr2 = '';
 var _countryBill = '';
 var _stateBill = '';
 var _districtBill = '';
 var _wardBill = '';
 var _addr1Bill = '';
+var _addr2Bill = '';
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -1284,7 +1286,7 @@ var filterComboCityDistrict = function (sender, e) {
         }
     }
     
-    var tam = _addr1 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
+    var tam = _addr1 + ", " + _addr2 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
     App.txtAddr.setValue(tam);
 };
 
@@ -1297,30 +1299,42 @@ var cboDistrict_Change = function (sender, e) {
             _district = '';
         }
     }    
-    var tam = _addr1 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
+    var tam = _addr1 + ", " + _addr2 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
     App.txtAddr.setValue(tam);
 }
 var txtAddr1_Change = function (sender, e) {
     _addr1 = App.txtAddr1.getValue();
-    var tam = _addr1 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
+    var tam = _addr1 + ", " + _addr2 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
+    App.txtAddr.setValue(tam);
+}
+
+var txtAddr2_Change = function (sender, e) {
+    _addr2 = App.txtAddr2.getValue();
+    var tam = _addr1 + ", " + _addr2 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
     App.txtAddr.setValue(tam);
 }
 var txtBillAddr1_Change = function (sender, e) {
     _addr1Bill = App.txtBillAddr1.getValue();
-    var tam = _addr1Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    var tam = _addr1Bill + ", " + _addr2Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    App.txtBillAddr.setValue(tam);
+}
+var txtBillAddr2_Change = function (sender, e) {
+    _addr1Bill = App.txtBillAddr2.getValue();
+    var tam = _addr1Bill + ", " + _addr2Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
     App.txtBillAddr.setValue(tam);
 }
 
+
 var txtWard_Change = function (sender, e) {
     _ward = App.txtWard.getValue();
-    var tam = _addr1 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
+    var tam = _addr1 + ", " + _addr2 + ", " + _ward + ", " + _district + ", " + _state + ", " + _country;
     App.txtAddr.setValue(tam);
     
 }
 
 var txtBillWard_Change = function (sender, e) {
     _wardBill = App.txtBillWard.getValue();
-    var tam = _addr1Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    var tam = _addr1Bill + ", " + _addr2Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
     App.txtBillAddr.setValue(tam);
 
 }
@@ -1342,7 +1356,7 @@ var filterComboBillSate = function (sender, e) {
             _countryBill = "";
         }
     }
-    var tam = _addr1Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    var tam = _addr1Bill + ", " + _addr2Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
     App.txtBillAddr.setValue(tam);
 
 };
@@ -1365,7 +1379,7 @@ var filterComboBillCity = function (sender, e) {
             _stateBill = "";
         }
     }
-    var tam = _addr1Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    var tam = _addr1Bill + ", " + _addr2Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
     App.txtBillAddr.setValue(tam);
 };
 
@@ -1379,7 +1393,7 @@ var cboBillDistrict_Change = function (sender, e) {
             _districtBill = '';
         }
     }
-    var tam = _addr1Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
+    var tam = _addr1Bill + ", " + _addr2Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
     App.txtBillAddr.setValue(tam);
 }
 
