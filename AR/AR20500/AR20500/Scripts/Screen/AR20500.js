@@ -187,6 +187,12 @@ var btnProcess_Click = function () {
                     if (data.MinMCPDate < minDate) {
                         minDate = data.MinMCPDate;
                     }
+                    if (Ext.isEmpty(data.SlsFreq)) {
+                        rowerror = 'err';
+                        HQ.message.show(201302071, (i + 1) + ' (' + HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SlsFreq') + ')', '', false);
+                        //HQ.message.show(1000, HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID'));
+                        break;
+                    }
                     if (HQ.showSubRoute && Ext.isEmpty(data.SubRouteID)) {
                         rowerror = 'err';
                         HQ.message.show(201302071, (i + 1) + ' (' + HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'SubRouteID') + ')', '', false);
