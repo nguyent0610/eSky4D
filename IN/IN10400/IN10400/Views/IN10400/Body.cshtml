@@ -226,7 +226,7 @@
                ,X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(100)
                     .Editor(
                         HQ.Combo().ID("cboInventory").Name("cboInventory")
-                            .HQColumnShow("InvtID,Descr1,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID").HQProcedure("IN10400_pcInventoryActiveByBranch")
+                            .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID").HQProcedure("IN10400_pcInventoryActiveByBranch")
                             .Width(300).HQHeightWidth(400, 600)
                             .HQDBSys(false).ForceSelection(true).HQAutoLoad(true)
                             .HQParam(new StoreParameterCollection()

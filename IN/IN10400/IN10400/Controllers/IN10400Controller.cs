@@ -59,7 +59,7 @@ namespace IN10400.Controllers
 
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -498,27 +498,37 @@ namespace IN10400.Controllers
             //        _objBatch.DateEnt = Convert.ToDateTime(data["txtDateEnt"]);
             //    }
             //}
-            _decAmt = _app.vs_Configurations.FirstOrDefault(p => p.Code.ToLower() == "DecPlTranAmt".ToLower()).IntVal;
-            _decPrice = _app.vs_Configurations.FirstOrDefault(p => p.Code.ToLower() == "DecPlUnitPrice".ToLower()).IntVal;
-            _decQty = _app.vs_Configurations.FirstOrDefault(p => p.Code.ToLower() == "DecPlQty".ToLower()).IntVal;
+            _decAmt = _sys.SYS_Configurations.FirstOrDefault(p => p.Code.ToLower() == "DecPlTranAmt".ToLower()).IntVal;
+            _decPrice = _sys.SYS_Configurations.FirstOrDefault(p => p.Code.ToLower() == "DecPlUnitPrice".ToLower()).IntVal;
+            _decQty = _sys.SYS_Configurations.FirstOrDefault(p => p.Code.ToLower() == "DecPlQty".ToLower()).IntVal;
 
             _handle = data["cboHandle"].PassNull();
             _objBatch.Status = _objBatch.Status.PassNull() == string.Empty ? "H" : _objBatch.Status;
 
-            var cfgWrkDateChk = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
-            if (cfgWrkDateChk != null && cfgWrkDateChk.WrkDateChk)
+            var tam = _app.IN10400_pdCheckCloseDateSetUp(Current.CpnyID, Current.UserName, Current.LangID, _objBatch.BranchID, _objBatch.DateEnt.ToDateShort(), _objBatch.BatNbr).FirstOrDefault();
+            if(tam!=null)
+            if (tam.CheckCloseDateSetUp == false)
             {
-                DateTime tranDate = _objBatch.DateEnt;
-                if (!((DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate.AddDays(-1 * cfgWrkDateChk.WrkLowerDays)) >=
-                       0 && DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate) <= 0)
-                      ||
-                      (DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate.AddDays(cfgWrkDateChk.WrkUpperDays)) <=
-                       0 && DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate) >= 0)
-                      || DateTime.Compare(tranDate, cfgWrkDateChk.WrkAdjDate) == 0))
-                {
-                    throw new MessageException(MessageType.Message, "301");
-                }
+                throw new MessageException(MessageType.Message, "301");
             }
+                
+
+
+
+            //var cfgWrkDateChk = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
+            //if (cfgWrkDateChk != null && cfgWrkDateChk.WrkDateChk)
+            //{
+            //    DateTime tranDate = _objBatch.DateEnt;
+            //    if (!((DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate.AddDays(-1 * cfgWrkDateChk.WrkLowerDays)) >=
+            //           0 && DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate) <= 0)
+            //          ||
+            //          (DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate.AddDays(cfgWrkDateChk.WrkUpperDays)) <=
+            //           0 && DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate) >= 0)
+            //          || DateTime.Compare(tranDate, cfgWrkDateChk.WrkAdjDate) == 0))
+            //    {
+            //        throw new MessageException(MessageType.Message, "301");
+            //    }
+            //}
             Batch batch = _app.Batches.FirstOrDefault(p => p.BatNbr == _objBatch.BatNbr && p.BranchID == _objBatch.BranchID);
             if ((_objBatch.Status == "U" || _objBatch.Status == "C") && (_handle == "C" || _handle == "V"))
             {

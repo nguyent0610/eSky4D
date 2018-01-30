@@ -979,6 +979,7 @@ var defaultOnNew = function () {
     var record = Ext.create('App.mdlBatch');
     record.data.BranchID = HQ.cpnyID;
     record.data.Status = 'H';
+    App.cboStatus.setValue('H');
     record.data.DateEnt = HQ.businessDate;
     App.cboSiteID.setValue(HQ.inSite);
     //App.cboSlsperID.setValue('');
