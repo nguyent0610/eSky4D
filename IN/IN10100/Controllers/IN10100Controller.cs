@@ -939,6 +939,8 @@ namespace IN10100.Controllers
                 {
                     try
                     {
+                        var lstInvtID = new List<IN_Inventory>();
+
                         Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
                         int lineRef = data["lineRef"].ToInt();
                         if (workbook.Worksheets.Count > 0)
@@ -957,6 +959,10 @@ namespace IN10100.Controllers
                                 {
                                     message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
                                     continue;
+                                }
+                                if (!lstInvtID.Any(x => x.InvtID == invtID))
+                                {
+                                    lstInvtID.Add(objInvt);
                                 }
                                 if (workSheet.Cells[i, 2].StringValue.PassNull() == string.Empty)
                                 {
@@ -1072,7 +1078,7 @@ namespace IN10100.Controllers
                         var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
                         foreach (var item in lstInvt)
                         {
-                            var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
+                            var objInvt = lstInvtID.FirstOrDefault(p => p.InvtID == item.InvtID);// _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
                             
                             var newTrans = new IN10100_pgReceiptLoad_Result();
                             newTrans.InvtID = item.InvtID;

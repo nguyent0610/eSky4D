@@ -416,7 +416,7 @@ var btnImport_Click = function (c, e) {
             },
             success: function (msg, data) {
                 if (this.result.data.lstTrans != undefined) {
-
+                    App.stoTrans.suspendEvents();
                     this.result.data.lstTrans.forEach(function (item) {
                         var objTrans = HQ.store.findRecord(App.stoTrans, ['InvtID'], [item.InvtID]);
                         if (!objTrans) {
@@ -445,7 +445,8 @@ var btnImport_Click = function (c, e) {
                             objTrans.set('Qty', (objTrans.data.Qty + item.Qty));
                         }
                     });
-
+                    App.stoTrans.resumeEvents();
+                    App.grdTrans.view.refresh();
 
                     App.stoLotTrans.clearFilter();
                     App.stoLotTrans.suspendEvents();
@@ -483,7 +484,9 @@ var btnImport_Click = function (c, e) {
                     checkTransAdd();
 
                     if (!Ext.isEmpty(this.result.data.message)) {
-                        HQ.message.show('2013103001', [this.result.data.message], '', true);
+                       var result = "<div style ='overflow: auto !important; min-width:400px !important; max-height:400px !important'> " + this.result.data.message + " </div>";
+                        HQ.message.show('2013103001', [result], '', true);
+                      //  HQ.message.show('2013103001', [this.result.data.message], '', true);
                     } else {
                         HQ.message.process(msg, data, true);
                     }
