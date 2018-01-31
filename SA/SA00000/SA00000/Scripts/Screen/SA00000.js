@@ -10,7 +10,10 @@ var CpnyID = '';
 var _Source = 0;
 var _maxSource = 12;
 var _isLoadMaster = false;
-
+var _country = '';
+var _countryOld = '';
+var _state = '';
+var _stateOld = '';
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -25,6 +28,9 @@ var checkLoad = function (sto) {
 var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
+    if (HQ.showSalesStateSalesDistrict) {
+        //App.cbo
+    }
     App.frmMain.isValid();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
 
@@ -40,59 +46,67 @@ var firstLoad = function () {
     App.cboTaxId02.getStore().addListener('load', checkLoad);
     App.cboTaxId03.getStore().addListener('load', checkLoad);
     App.cboSubCpnyID.getStore().addListener('load', checkLoad);
-
+    App.cboState_grd.getStore().addListener('load', checkLoad);
+    //App.cboState_grd.store.reload();
+    App.cboSalesDistrict.setVisible(HQ.showSalesState);
+    App.cboSalesState.setVisible(HQ.showSalesState);
+    App.cboSalesState.allowBlank = !HQ.showSalesState;
+    App.cboSalesDistrict.allowBlank = !HQ.showSalesState;
+    App.cboOwner.allowBlank = !HQ.allowOwer;
+    App.Address2.allowBlank = !HQ.allowAddress2;
+    App.frmMain.isValid();
     if (HQ.SA00000PP != '1') {
-        App.tabDetail.child('#pnlHandle').tab.hide();      
+        App.tabDetail.child('#pnlHandle').tab.hide();
     }
 };
 
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            if (HQ.focus  == 'header') {
+            if (HQ.focus == 'header') {
                 HQ.isFirstLoad = true;
                 HQ.combo.first(App.cboCpnyID, HQ.isChange);
             }
-            else if (HQ.focus  == 'grdSys_CompanyAddr') {
+            else if (HQ.focus == 'grdSys_CompanyAddr') {
                 HQ.grid.first(App.grdSys_CompanyAddr);
             }
-            else if (HQ.focus  == 'grdSYS_SubCompany') {
+            else if (HQ.focus == 'grdSYS_SubCompany') {
                 HQ.grid.first(App.grdSYS_SubCompany);
             }
             break;
         case "prev":
-            if (HQ.focus  == 'header') {
+            if (HQ.focus == 'header') {
                 HQ.isFirstLoad = true;
                 HQ.combo.prev(App.cboCpnyID, HQ.isChange);
             }
-            else if (HQ.focus  == 'grdSys_CompanyAddr') {
+            else if (HQ.focus == 'grdSys_CompanyAddr') {
                 HQ.grid.prev(App.grdSys_CompanyAddr);
             }
-            else if (HQ.focus  == 'grdSYS_SubCompany') {
+            else if (HQ.focus == 'grdSYS_SubCompany') {
                 HQ.grid.prev(App.grdSYS_SubCompany);
             }
             break;
         case "next":
-            if (HQ.focus  == 'header') {
+            if (HQ.focus == 'header') {
                 HQ.isFirstLoad = true;
                 HQ.combo.next(App.cboCpnyID, HQ.isChange);
             }
-            else if (HQ.focus  == 'grdSys_CompanyAddr') {
+            else if (HQ.focus == 'grdSys_CompanyAddr') {
                 HQ.grid.next(App.grdSys_CompanyAddr);
             }
-            else if (HQ.focus  == 'grdSYS_SubCompany') {
+            else if (HQ.focus == 'grdSYS_SubCompany') {
                 HQ.grid.next(App.grdSYS_SubCompany);
             }
             break;
         case "last":
-            if (HQ.focus  == 'header') {
+            if (HQ.focus == 'header') {
                 HQ.isFirstLoad = true;
                 HQ.combo.last(App.cboCpnyID, HQ.isChange);
             }
-            else if (HQ.focus  == 'grdSys_CompanyAddr') {
+            else if (HQ.focus == 'grdSys_CompanyAddr') {
                 HQ.grid.last(App.grdSys_CompanyAddr);
             }
-            else if (HQ.focus  == 'grdSYS_SubCompany') {
+            else if (HQ.focus == 'grdSYS_SubCompany') {
                 HQ.grid.last(App.grdSYS_SubCompany);
             }
             break;
@@ -106,7 +120,7 @@ var menuClick = function (command) {
             break;
         case "new":
             if (HQ.isInsert) {
-                if (HQ.focus  == 'header') {
+                if (HQ.focus == 'header') {
                     if (HQ.isChange) {
                         HQ.message.show(150, '', 'refresh');
                     } else {
@@ -114,10 +128,10 @@ var menuClick = function (command) {
                         App.stoSYS_Company.reload();
                     }
                 }
-                else if (HQ.focus  == 'grdSys_CompanyAddr') {
+                else if (HQ.focus == 'grdSys_CompanyAddr') {
                     HQ.grid.insert(App.grdSys_CompanyAddr, keys);
                 }
-                else if (HQ.focus  == 'grdSYS_SubCompany') {
+                else if (HQ.focus == 'grdSYS_SubCompany') {
                     HQ.grid.insert(App.grdSYS_SubCompany, keys1);
                 }
             }
@@ -205,8 +219,8 @@ var cboCpnyID_TriggerClick = function (sender, value) {
 };
 var cboType_Change = function (sender, e) {
     App.cboTerritory.store.clearFilter();
-    if(App.cboType.getValue())
-    App.cboTerritory.store.filter('Zone', App.cboType.getValue());
+    if (App.cboType.getValue())
+        App.cboTerritory.store.filter('Zone', App.cboType.getValue());
 }
 
 
@@ -228,6 +242,23 @@ var cboTerritory_Change = function (sender, e) {
             cboState_Change(App.cboState, curRecord.data.State);
         }
     });
+
+    App.cboOwner.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.Owner) {
+                App.cboOwner.setValue(curRecord.data.Owner);
+            }
+        var dt = HQ.store.findInStore(App.cboOwner.getStore(), ["Owner"], [App.cboOwner.getValue()]);
+        if (!dt) {
+            if (sender.hasfocus) {
+                curRecord.data.Owner = '';
+                App.cboOwner.setValue("");
+            }
+        }
+        
+    });
+
 };
 
 var cboCountry_Change = function (sender, e) {
@@ -246,7 +277,45 @@ var cboCountry_Change = function (sender, e) {
             cboState_Change(App.cboState, curRecord.data.State);
         }
     });
+    App.cboSalesState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord && curRecord.data.SalesState) {
+            App.cboSalesState.setValue(curRecord.data.SalesState);
+            HQ.combo.expand(App.cboSalesState, ',');
+        }
+        var dt = HQ.store.findInStore(App.cboSalesState.getStore(), ["State"], App.cboSalesState.getValue());
+        if (!dt) {
+            curRecord.data.SalesState = '';
+            App.cboSalesState.setValue("");
+        }
+        else {
+            HQ.combo.expand(App.cboSalesState, ',');
+        }
+        if (App.cboSalesState.value == curRecord.data.SalesState) {
+            //cboSalesState_Change(App.cboSalesState, curRecord.data.SalesState);
+        }
+    });
 };
+
+var cboSalesState_Change = function (sender, e) {
+    App.cboSalesDistrict.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord && curRecord.data.SalesDistrict) {
+            App.cboSalesDistrict.setValue(curRecord.data.SalesDistrict);
+            HQ.combo.expand(App.cboSalesDistrict, ',');
+        }
+        var dt = HQ.store.findInStore(App.cboSalesDistrict.getStore(), ["District"], App.cboSalesDistrict.getValue());
+        if (!dt) {
+            curRecord.data.SalesDistrict = '';
+            App.cboSalesDistrict.setValue("");
+        }
+        else {
+            HQ.combo.expand(App.cboSalesDistrict, ',');
+        }
+    });
+};
+
+
 
 var cboState_Change = function (sender, e) {
     App.cboCity.getStore().load(function () {
@@ -281,6 +350,7 @@ var cboState_Change = function (sender, e) {
 
 var cboCountry_grd_Change = function (sender, e) {
     App.cboState_grd.getStore().load(function () {
+
         var curRecord = App.frmMain.getRecord();
         if (curRecord != undefined)
             if (curRecord.data.State) {
@@ -364,7 +434,7 @@ var frmChange = function () {
         App.frmMain.getForm().updateRecord();
     }
     HQ.isChange = HQ.store.isChange(App.stoSYS_Company) == false ? (HQ.store.isChange(App.stoSys_CompanyAddr)
-                                                            == false ? (HQ.store.isChange(App.stoSYS_SubCompany)):true ): true;
+                                                            == false ? (HQ.store.isChange(App.stoSYS_SubCompany)) : true) : true;
     HQ.common.changeData(HQ.isChange, 'SA00000');
     if (App.cboCpnyID.valueModels == null || HQ.isNew == true) {
         App.cboCpnyID.setReadOnly(false);
@@ -389,6 +459,8 @@ var stoLoad = function (sto) {
     App.cboState.forceSelection = false;
     App.cboCity.forceSelection = false;
     App.cboDistrict.forceSelection = false;
+    App.cboSalesState.forceSelection = false;
+    App.cboSalesDistrict.forceSelection = false;
     App.cboCountry.store.clearFilter();
     App.cboState.store.clearFilter();
     if (sto.data.length == 0) {
@@ -428,12 +500,16 @@ var stoLoad = function (sto) {
 /////////////////////////////// GIRD Sys_CompanyAddr /////////////////////////////////
 var stoSys_CompanyAddr_Load = function (sto) {
     HQ.common.showBusy(false, HQ.common.getLang('loadingData'));
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
+
+    if (HQ.isInsert) {
+        var record = HQ.store.findRecord(App.stoSys_CompanyAddr, keys, ['']);
+        if (!record) {
             HQ.store.insertBlank(sto, keys);
         }
-        //HQ.isFirstLoad = false; //sto load cuoi se su dung
     }
+
+    //HQ.isFirstLoad = false; //sto load cuoi se su dung
+
     App.stoSYS_SubCompany.reload();
     frmChange();
     //sto load cuoi se su dung
@@ -443,11 +519,36 @@ var stoSys_CompanyAddr_Load = function (sto) {
 };
 
 var grdSys_CompanyAddr_BeforeEdit = function (editor, e) {
+    if (e.field == 'State') {
+        _country = e.record.data.Country;
+        App.cboState_grd.store.reload();
+        _stateOld = e.record.data.State;
+    }
+    if (e.field == 'Country') {
+        _countryOld = e.record.data.Country;
+    }
+    if (e.field == 'City') {
+        _state = e.record.data.State;
+        App.cboCity_grd.store.reload();
+    }
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
 };
 
-var grdSys_CompanyAddr_Edit = function (item, e) {
+var grdSys_CompanyAddr_Edit = function (item, e,old) {
     //Kiem tra cac key da duoc nhap se insert them dong moi
+
+    if (e.field == 'Country') {
+        if (_countryOld != e.record.data.Country) {
+            e.record.set('State', "");
+            e.record.set('City', "");
+        }
+    }
+    if (e.field == 'State') {
+        if (_stateOld != e.record.data.State) {
+            e.record.set('City', "");
+        }
+    }
+
     HQ.grid.checkInsertKey(App.grdSys_CompanyAddr, e, keys);
     frmChange();
 };
@@ -511,37 +612,37 @@ var grdSYS_SubCompany_Reject = function (record) {
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.updateRecord();
-        
-            App.frmMain.submit({
-                waitMsg: HQ.common.getLang("WaitMsg"),
-                url: 'SA00000/Save',
-                params: {
-                    lstSYS_Company: Ext.encode(App.stoSYS_Company.getRecordsValues()),
-                    lstSys_CompanyAddr: HQ.store.getData(App.stoSys_CompanyAddr),
-                    lstSYS_SubCompany: HQ.store.getData(App.stoSYS_SubCompany),
-                },
-                success: function (msg, data) {
-                    HQ.message.show(201405071);
-                    CpnyID = data.result.CpnyID;
-                    HQ.isChange = false;
-                    HQ.isFirstLoad = true;
-                    App.cboCpnyID.getStore().load({
-                        callback: function () {
-                            if (Ext.isEmpty(App.cboCpnyID.getValue())) {
-                                App.cboCpnyID.setValue(CpnyID);
-                                App.stoSYS_Company.reload();
-                            }
-                            else {
-                                App.cboCpnyID.setValue(CpnyID);
-                                App.stoSYS_Company.reload();
-                            }
+
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'SA00000/Save',
+            params: {
+                lstSYS_Company: Ext.encode(App.stoSYS_Company.getRecordsValues()),
+                lstSys_CompanyAddr: HQ.store.getData(App.stoSys_CompanyAddr),
+                lstSYS_SubCompany: HQ.store.getData(App.stoSYS_SubCompany),
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                CpnyID = data.result.CpnyID;
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.cboCpnyID.getStore().load({
+                    callback: function () {
+                        if (Ext.isEmpty(App.cboCpnyID.getValue())) {
+                            App.cboCpnyID.setValue(CpnyID);
+                            App.stoSYS_Company.reload();
                         }
-                    });
-                },
-                failure: function (msg, data) {
-                    HQ.message.process(msg, data, true);
-                }
-            });
+                        else {
+                            App.cboCpnyID.setValue(CpnyID);
+                            App.stoSYS_Company.reload();
+                        }
+                    }
+                });
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
 
     }
 };
@@ -601,47 +702,40 @@ var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store
     }
 };
 
-function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
-}
+var renderCountry = function (value, metaData, record, row, col, store, gridView) {
+    var r = HQ.store.findRecord(App.cboCountry_grd.store, ['CountryID'], [record.data.Country]);
+    if (Ext.isEmpty(r))
+        return value;
+    else
+        return r.data.Descr;
+};
 
-var txtLat_Change = function (sender, value) {
-    if (value != "-" && value != "" && value != null) {
-        if (isNumeric(value) == false) {
-            HQ.message.show("201711251");
-            App.txtLat.setValue(sender.originalValue);
-        }
+var renderState = function (value, metaData, record, row, col, store, gridView) {
+    var r = HQ.store.findRecord(App.cboState_grd.store, ['State'], [record.data.State]);
+    if (Ext.isEmpty(r))
+        return value;
+    else
+        return r.data.Descr;
+};
+var joinParams = function (multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
     }
     else {
-        App.txtLat.setValue("0");
-    }
-}
-
-var txtLat_Blur = function (sender, value) {
-    if (App.txtLat.getValue() == "-") {
-        HQ.message.show("201711251");
-        App.txtLat.setValue(sender.originalValue);
-    }
-
-}
-
-
-var txtLng_Change = function (sender, value) {
-    if (value != "-" && value != "" && value != null) {
-        if (isNumeric(value) == false) {
-            HQ.message.show("201711252");
-            App.txtLng.setValue(sender.originalValue);
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
         }
     }
-    else {
-        App.txtLng.setValue("0");
-    }
+    return returnValue;
 }
 
-var txtLng_Blur = function (sender, value) {
-    if (App.txtLng.getValue() == "-") {
-        HQ.message.show("201711252");
-        App.txtLng.setValue(sender.originalValue);
+var stringCountry = function (record) {
+
+    if (this.dataIndex == 'Country') {
+        App.cboCountry_grd.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboCountry_grd.store, "CountryID", "Descr");
     }
 
+    return HQ.grid.filterString(record, this);
 }

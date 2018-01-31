@@ -25,20 +25,33 @@ namespace SA00000.Controllers
         public ActionResult Index()
         {
             var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "SA00000PP");
-            if (config != null )
+            if (config != null)
             {
-                 ViewBag.SA00000PP = config.IntVal;
+                ViewBag.SA00000PP = config.IntVal;
             }
             else
             {
                 ViewBag.SA00000PP = 0;
             }
+            bool showSalesState = false;
+            bool allowAddress2 = false;
+            bool allowOwer = false;
+            var objConfig = _db.SA00000_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                showSalesState = objConfig.Show.HasValue && objConfig.Show.Value;
+                allowAddress2 = objConfig.allowAddress2.HasValue && objConfig.allowAddress2.Value;
+                allowOwer = objConfig.allowOwer.HasValue && objConfig.allowOwer.Value;
+            }
 
+            ViewBag.showSalesState = showSalesState;
+            ViewBag.allowAddress2 = allowAddress2;
+            ViewBag.allowOwer = allowOwer;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -52,7 +65,7 @@ namespace SA00000.Controllers
         #region Get information Company
         public ActionResult GetSYS_Company(string CpnyID)
         {
-            return this.Store(_db.SA00000_pdHeader(Current.UserName,Current.CpnyID,Current.LangID,CpnyID).FirstOrDefault());
+            return this.Store(_db.SA00000_pdHeader(Current.UserName, Current.CpnyID, Current.LangID, CpnyID).FirstOrDefault());
         }
 
         public ActionResult GetSys_CompanyAddr(string CpnyID)
@@ -214,10 +227,10 @@ namespace SA00000.Controllers
                 _db.SaveChanges();
                 // sau khi save xong gọi tới hàm tạo user hoặc chuyển save, truyền xuống danh sách
                 Dictionary<string, string> dicData = new Dictionary<string, string>();
-                dicData.Add("@BranchID",header.CpnyID);
+                dicData.Add("@BranchID", header.CpnyID);
                 dicData.Add("@UserManger", data["txtManager"]);
-                dicData.Add("@BranchOld",data["cboBranchOld"]);
-                dicData.Add("@SlsperID",data["cboSlsperID"]);
+                dicData.Add("@BranchOld", data["cboBranchOld"]);
+                dicData.Add("@SlsperID", data["cboSlsperID"]);
 
                 Util.getDataTableFromProc("SA00000_ppUserSales", dicData, true);
                 return Json(new { success = true, CpnyID = CpnyID }, "text/html");
@@ -231,7 +244,7 @@ namespace SA00000.Controllers
         #endregion
 
         //Update Header Company
-        private void UpdatingHeader(ref SYS_Company t,SA00000_pdHeader_Result s)
+        private void UpdatingHeader(ref SYS_Company t, SA00000_pdHeader_Result s)
         {
             t.CpnyName = s.CpnyName;
             t.Address = s.Address;
@@ -258,7 +271,8 @@ namespace SA00000.Controllers
             t.ReturnLimit = s.ReturnLimit;
             t.Lat = s.Lat;
             t.Lng = s.Lng;
-
+            t.SalesDistrict = s.SalesDistrict;
+            t.SalesState = s.SalesState;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
@@ -274,7 +288,7 @@ namespace SA00000.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
-          
+
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
@@ -311,7 +325,7 @@ namespace SA00000.Controllers
             t.TaxLocId = s.TaxLocId;
             t.TaxRegNbr = s.TaxRegNbr;
             t.Zip = s.Zip;
-          
+
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;

@@ -40,8 +40,12 @@
           <Property Name="Type" Type="varchar" MaxLength="50" />
           <Property Name="State" Type="varchar" MaxLength="10" />
           <Property Name="ReturnLimit" Type="smallint" />
+          <Property Name="Zone" Type="varchar" MaxLength="10" />
+          <Property Name="Status" Type="varchar" MaxLength="2" />
           <Property Name="Lat" Type="float" />
           <Property Name="Lng" Type="float" />
+          <Property Name="SalesState" Type="varchar(max)" />
+          <Property Name="SalesDistrict" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Sys_CompanyAddr">
           <Key>
@@ -90,6 +94,11 @@
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <Function Name="SA00000_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="SA00000_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -98,11 +107,6 @@
         </Function>
         <Function Name="SA00000_pgCompanyAddr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="nchar" Mode="In" />
-        </Function>
-        <Function Name="SA00000_pgLoadUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UserID" Type="varchar" Mode="In" />
-          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
-          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="SA00000_pgSubCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -136,6 +140,11 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA00000_pdConfig" ReturnType="Collection(SA00000Model.SA00000_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="SA00000_pgCompanyAddr_Result">
@@ -252,8 +261,12 @@
           <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="State" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="ReturnLimit" Type="Int16" />
+          <Property Name="Zone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="Lat" Type="Double" />
           <Property Name="Lng" Type="Double" />
+          <Property Name="SalesState" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SalesDistrict" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="SA00000_pdHeader_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -283,7 +296,14 @@
           <Property Type="Int16" Name="ReturnLimit" Nullable="true" />
           <Property Type="Double" Name="Lat" Nullable="true" />
           <Property Type="Double" Name="Lng" Nullable="true" />
+          <Property Type="String" Name="SalesState" Nullable="true" />
+          <Property Type="String" Name="SalesDistrict" Nullable="true" />
           <Property Type="String" Name="SAManager" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SA00000_pdConfig_Result">
+          <Property Type="Boolean" Name="Show" Nullable="true" />
+          <Property Type="Boolean" Name="allowAddress2" Nullable="true" />
+          <Property Type="Boolean" Name="allowOwer" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -373,20 +393,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA00000_pgLoadUsers" FunctionName="eBiz4DWebSysModel.Store.SA00000_pgLoadUsers">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA00000Model.SA00000_pgLoadUsers_Result">
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CheckUser" ColumnName="CheckUser" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="SYS_Company">
             <EntityTypeMapping TypeName="SA00000Model.SYS_Company">
               <MappingFragment StoreEntitySet="SYS_Company">
+                <ScalarProperty Name="SalesDistrict" ColumnName="SalesDistrict" />
+                <ScalarProperty Name="SalesState" ColumnName="SalesState" />
                 <ScalarProperty Name="Lng" ColumnName="Lng" />
                 <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
                 <ScalarProperty Name="ReturnLimit" ColumnName="ReturnLimit" />
                 <ScalarProperty Name="State" ColumnName="State" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
@@ -421,7 +436,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA00000_pdHeader" FunctionName="eBiz4DWebSysModel.Store.SA00000_pdHeader" >
+          <FunctionImportMapping FunctionImportName="SA00000_pdHeader" FunctionName="eBiz4DWebSysModel.Store.SA00000_pdHeader">
             <ResultMapping>
               <ComplexTypeMapping TypeName="SA00000Model.SA00000_pdHeader_Result">
                 <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
@@ -451,7 +466,18 @@
                 <ScalarProperty Name="ReturnLimit" ColumnName="ReturnLimit" />
                 <ScalarProperty Name="Lat" ColumnName="Lat" />
                 <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="SalesState" ColumnName="SalesState" />
+                <ScalarProperty Name="SalesDistrict" ColumnName="SalesDistrict" />
                 <ScalarProperty Name="SAManager" ColumnName="SAManager" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00000_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SA00000_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00000Model.SA00000_pdConfig_Result">
+                <ScalarProperty Name="Show" ColumnName="Show" />
+                <ScalarProperty Name="allowAddress2" ColumnName="allowAddress2" />
+                <ScalarProperty Name="allowOwer" ColumnName="allowOwer" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
