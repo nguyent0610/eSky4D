@@ -2564,6 +2564,54 @@ namespace SA00001
         private Nullable<global::System.Boolean> _AllowSalesDistrict;
         partial void OnAllowSalesDistrictChanging(Nullable<global::System.Boolean> value);
         partial void OnAllowSalesDistrictChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> allowAddress2
+        {
+            get
+            {
+                return _allowAddress2;
+            }
+            set
+            {
+                OnallowAddress2Changing(value);
+                ReportPropertyChanging("allowAddress2");
+                _allowAddress2 = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("allowAddress2");
+                OnallowAddress2Changed();
+            }
+        }
+        private Nullable<global::System.Boolean> _allowAddress2;
+        partial void OnallowAddress2Changing(Nullable<global::System.Boolean> value);
+        partial void OnallowAddress2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> allowOwer
+        {
+            get
+            {
+                return _allowOwer;
+            }
+            set
+            {
+                OnallowOwerChanging(value);
+                ReportPropertyChanging("allowOwer");
+                _allowOwer = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("allowOwer");
+                OnallowOwerChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _allowOwer;
+        partial void OnallowOwerChanging(Nullable<global::System.Boolean> value);
+        partial void OnallowOwerChanged();
 
         #endregion
 

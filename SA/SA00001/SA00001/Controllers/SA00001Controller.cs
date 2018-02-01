@@ -29,6 +29,8 @@ namespace SA00001.Controllers
         {
             bool allowSalesState = false
                 , allowSalesDistrict = false;
+            bool allowAddress2 = false;
+            bool allowOwer = false;
 
 
             var objConfig = _db.SA00001_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
@@ -36,10 +38,14 @@ namespace SA00001.Controllers
             {
                 allowSalesState = objConfig.AllowSalesState.HasValue ? objConfig.AllowSalesState.Value : false;
                 allowSalesDistrict = objConfig.AllowSalesDistrict.HasValue ? objConfig.AllowSalesDistrict.Value : false;
+                allowAddress2= objConfig.allowAddress2.HasValue ? objConfig.allowAddress2.Value : false;
+                allowOwer = objConfig.allowOwer.HasValue ? objConfig.allowOwer.Value : false;
             }
 
             ViewBag.allowSalesState = allowSalesState;
             ViewBag.allowSalesDistrict = allowSalesDistrict;
+            ViewBag.allowAddress2 = allowAddress2;
+            ViewBag.allowOwer = allowOwer;
             Util.InitRight(_screenNbr);
             return View();
         }

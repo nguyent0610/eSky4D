@@ -292,6 +292,8 @@
         <ComplexType Name="SA00001_pdConfig_Result">
           <Property Type="Boolean" Name="AllowSalesState" Nullable="true" />
           <Property Type="Boolean" Name="AllowSalesDistrict" Nullable="true" />
+          <Property Type="Boolean" Name="allowAddress2" Nullable="true" />
+          <Property Type="Boolean" Name="allowOwer" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -463,6 +465,8 @@
               <ComplexTypeMapping TypeName="SA00001Model.SA00001_pdConfig_Result">
                 <ScalarProperty Name="AllowSalesState" ColumnName="AllowSalesState" />
                 <ScalarProperty Name="AllowSalesDistrict" ColumnName="AllowSalesDistrict" />
+                <ScalarProperty Name="allowAddress2" ColumnName="allowAddress2" />
+                <ScalarProperty Name="allowOwer" ColumnName="allowOwer" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
