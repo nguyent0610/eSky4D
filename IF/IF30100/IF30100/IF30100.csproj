@@ -47,7 +47,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aspose.Cells">
-      <HintPath>..\..\..\..\PNG\OM30400\bin\Aspose.Cells.dll</HintPath>
+      <HintPath>..\..\..\..\..\DLL MVC moi\OLD\Aspose.Cells.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net">
       <HintPath>..\..\..\..\Kowil\IN\IN10100\bin\Ext.Net.dll</HintPath>
@@ -323,7 +323,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="0" />
+      <UserProperties Reactor_Enabled="0" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
