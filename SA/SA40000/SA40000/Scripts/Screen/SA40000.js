@@ -3,6 +3,7 @@
 var keys = ['BranchID'];
 var fieldsCheckRequire = ["BranchID","WrkOpenDate", "WrkAdjDate"];
 var fieldsLangCheckRequire = ["BranchID"];
+var _territory = '';
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -312,10 +313,11 @@ var firstLoad = function () {
     if (!HQ.isUpdate) {
         App.btnUpdate.disable();
     }
-    App.cboBranchID.store.load(function () {
-        App.stoSYS_CloseDateSetUp.reload();
+    App.stoSYS_CloseDateSetUp.reload();
+    //App.cboBranchID.store.load(function () {
+    //    //App.stoSYS_CloseDateSetUp.reload();
 
-    });
+    //});
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
@@ -327,19 +329,41 @@ var stoLoad = function (sto) {
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'SA40000');
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            HQ.store.insertRecord(sto, keys, { WrkAdjDate: new Date(_dateServer), WrkOpenDate: new Date(_dateServer) });
+    if (HQ.isInsert) {
+        var record = HQ.store.findRecord(App.stoSYS_CloseDateSetUp, keys, ['']);
+        if (!record) {
+            HQ.store.insertBlank(sto, keys);
         }
         HQ.isFirstLoad = false;
     }
+    //if (HQ.isFirstLoad) {
+    //    if (HQ.isInsert) {
+    //        HQ.store.insertRecord(sto, keys, { WrkAdjDate: new Date(_dateServer), WrkOpenDate: new Date(_dateServer) });
+    //    }
+    //    HQ.isFirstLoad = false;
+    //}
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 var grdSYS_CloseDateSetUp_BeforeEdit = function (editor, e) {
-    return HQ.grid.checkBeforeEdit(e, keys);
+    if (e.field == "BranchID") {
+        _territory = e.record.data.Territory;
+        App.cboBranchID.store.reload();
+    }
+    else {
+        _territory = '';
+    }
+
+    if (e.field == "Territory")
+    {
+        return true;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys);
+    }
+    
 };
 var grdSYS_CloseDateSetUp_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdSYS_CloseDateSetUp, e, keys);

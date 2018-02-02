@@ -37,7 +37,7 @@
                 de.AfterRender.EventMask.ShowMask = true;
                 de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
                 de.AfterRender.EventMask.MinDelay = 500;
-                
+
                 de.Expand.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
                 de.Expand.Url = Url.Action("SA40000GetTreeBranch");
                 de.Expand.CleanRequest = true;
@@ -48,7 +48,7 @@
                 de.Expand.EventMask.ShowMask = true;
                 de.Expand.EventMask.Msg = Util.GetLang("LoadingData");
                 de.Expand.EventMask.MinDelay = 500;
-                
+
             })
         .BottomBar(
             X.Toolbar()
@@ -117,9 +117,9 @@
                         X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                         .Items(
                             HQ.DateField().ID("lblWrkAdjDate").MarginSpec("5 0 0 0").HQLangCode("WRKADJDATE").Width(250).Value(DateTime.Now)
-                          //  .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
+                            //  .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
                             , HQ.DateField().ID("lblWrkOpenDate").MarginSpec("5 0 10 0").HQLangCode("WRKOPENDATE").Width(250).Value(DateTime.Now)
-                           // .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
+                        // .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
                         )
                         , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                         .Items(
@@ -127,15 +127,15 @@
                             , HQ.NumberField().ID("lblWrkUpperDays").Name("WRKUPPERDAYS").HQLangCode("WRKUPPERDAYS").MarginSpec("5 0 10 0").Width(250).MinValue(0).DecimalPrecision(0)
                         )
                         , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
-     
+
                         .Items(
                             HQ.Checkbox().ID("chkWrkDateChk").Name("WRKDATECHK").HQLangCode("WRKDATECHK").MarginSpec("5 0 0 10")
-                         
+
                             , HQ.Button().ID("btnUpdate").HQLangCode("SA40000_Update").MarginSpec("5 0 0 10").Width(150)
                             .Listeners(p =>
-                                {
-                                    p.Click.Fn = "btnUpdate_Click";
-                                })
+                            {
+                                p.Click.Fn = "btnUpdate_Click";
+                            })
                             )
 
                     )//
@@ -169,12 +169,25 @@
                     p.BoxReady.Handler = "firstLoad();";
                 })
                 .ViewConfig(X.GridView().Plugins(X.GridDragDrop().EnableDrag(true).DDGroup("BranchID")).Listeners(l=>l.BeforeDrop.Fn="beforenodedrop"))
-                
+
                 .SortableColumns(false)
                 .ColumnModel(
                     X.RowNumbererColumn().Width(40)
 
                     , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(90).Renderer("renderTerritory")
+                        .Editor(
+                            HQ.Combo().ID("cboTerritory")
+                            .Name("cboTerritory").HQProcedure("SA40000_pcTerritory").HQDBSys(false).DataIndex("Territory")
+                            .HQColumnShow("Territory,Descr").DisplayField("Territory").ValueField("Territory")
+                            .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(true)
+                            .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                            .LoadData()
+                        )
 
                     , X.Column().DataIndex("BranchID").Text(Util.GetLang("BranchID")).Width(100)
                     .Editor(
@@ -182,9 +195,12 @@
                         .Name("cboBranchID").HQProcedure("SA40000_pcCompany").HQDBSys(true)
                         .HQColumnShow("CpnyID,CpnyName,Territory,Address").DisplayField("CpnyID").ValueField("CpnyID")
                         .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
-                        .HQParam(new StoreParameterCollection() 
-                        { 
-                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@Territory", Value = "_territory", Mode = ParameterMode.Raw }
                         })
                         .LoadData()
                     )
@@ -198,14 +214,14 @@
                             HQ.Checkbox().ID("chkSelectHeaderkWrkDateChk").HQLangCode("WrkDateChk")
                             .Handler("chkSelectHeaderkWrkDateChk_change")
                         )
-                    
+
                     , HQ.DateColumn().Text(Util.GetLang("WrkAdjDate")).DataIndex("WrkAdjDate")
                     .Width(150).ID("txtWrkAdjDate").Editor(HQ.DateField())
-                  //   ,HQ.DateColumn().DataIndex("WrkAdjDate").Width(150).ID("txtWrkAdjDate").Editor(HQ.DateField())
+                    //   ,HQ.DateColumn().DataIndex("WrkAdjDate").Width(150).ID("txtWrkAdjDate").Editor(HQ.DateField())
 
                     , HQ.DateColumn().Text(Util.GetLang("WrkOpenDate")).DataIndex("WrkOpenDate")
                     .Width(150).ID("txtWrkOpenDate").Editor(HQ.DateField())
-                   
+
                     , X.NumberColumn().ID("WrkLowerDays").Text(Util.GetLang("WrkLowerDays")).DataIndex("WrkLowerDays").Format("0")
                     .Width(150).Align(Alignment.Right)
                     .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
@@ -235,9 +251,9 @@
                         .Items("1", "2", "10", "20", "30", "50")
                         .SelectedItems("50")
                         .Listeners(l =>
-                            {
-                                l.Select.Fn = "HQ.grid.onPageSelect";
-                            })
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
                     )
                     .Plugins(X.ProgressBarPager())
                 )
