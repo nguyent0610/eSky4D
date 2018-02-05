@@ -47,7 +47,7 @@ namespace OM27700.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -1366,6 +1366,7 @@ namespace OM27700.Controllers
             createdLevel.LevelFrom = created.LevelFrom;
             createdLevel.LevelTo = created.LevelTo;
             createdLevel.LevelType = created.LevelType;
+            createdLevel.Point = created.Point;
             createdLevel.LUpd_DateTime = DateTime.Now;
             createdLevel.LUpd_Prog = _screenNbr;
             createdLevel.LUpd_User = Current.UserName;

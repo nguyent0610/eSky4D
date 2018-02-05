@@ -417,12 +417,17 @@
                                 HQ.TextBox().SelectOnFocus(true).MaxLength(200).EnforceMaxLength(true)
                             )
 
-                                , X.NumberColumn().Text(Util.GetLang("OM27700LevelFrom")).DataIndex("LevelFrom")
+                            , X.NumberColumn().ID("colPoint").Text(Util.GetLang("OM27700Point")).DataIndex("Point").Hidden(true)
                                 .StyleSpec("text-align:right;").Format(formatNum).Align(Alignment.Right)
                             .Editor(
                                 HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
                             )
-                            , X.NumberColumn().Text(Util.GetLang("OM27700LevelTo")).DataIndex("LevelTo")
+                            , X.NumberColumn().ID("colLevelFrom").Text(Util.GetLang("OM27700LevelFrom")).DataIndex("LevelFrom")
+                                .StyleSpec("text-align:right;").Format(formatNum).Align(Alignment.Right)
+                            .Editor(
+                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                            )
+                            , X.NumberColumn().ID("colLevelTo").Text(Util.GetLang("OM27700LevelTo")).DataIndex("LevelTo")
                             .StyleSpec("text-align:right;").Format(formatNum).Align(Alignment.Right)
                             .Editor(
                                 HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
@@ -483,7 +488,8 @@
                                 X.NumericFilter().DataIndex("LevelFrom"),
                                 X.NumericFilter().DataIndex("LevelTo"),
                                 X.StringFilter().DataIndex("LevelType"),
-                                X.NumericFilter().DataIndex("PercentBonus")
+                                X.NumericFilter().DataIndex("PercentBonus"),
+                                X.NumericFilter().DataIndex("Point")
                             )
                         )
                     ).Listeners(x =>

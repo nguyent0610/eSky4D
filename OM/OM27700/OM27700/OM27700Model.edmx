@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="HO_PendingTasks">
           <Key>
             <PropertyRef Name="TaskID" />
@@ -211,6 +211,7 @@
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Point" Type="float" />
         </EntityType>
         <EntityType Name="OM_AccumulatedSalesPerson">
           <Key>
@@ -278,10 +279,10 @@
           <Property Name="RecordID" Type="int" Nullable="false" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Descr1" Type="nvarchar" MaxLength="200" />
         </EntityType>
@@ -411,7 +412,6 @@
           </FunctionImport>
           <EntitySet Name="OM_AccumulatedCpny" EntityType="OM27700Model.OM_AccumulatedCpny" />
           <EntitySet Name="OM_AccumulatedInvt" EntityType="OM27700Model.OM_AccumulatedInvt" />
-          <EntitySet Name="OM_AccumulatedLevel" EntityType="OM27700Model.OM_AccumulatedLevel" />
           <EntitySet Name="OM_AccumulatedSalesPerson" EntityType="OM27700Model.OM_AccumulatedSalesPerson" />
           <FunctionImport Name="OM27700_pcSalesPerson" ReturnType="Collection(OM27700Model.OM27700_pcSalesPerson_Result)">
             <Parameter Name="ListCpnyID" Mode="In" Type="String" />
@@ -450,6 +450,7 @@
             <Parameter Name="ListCpny" Mode="In" Type="String" />
             <Parameter Name="Type" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="OM_AccumulatedLevel" EntityType="OM27700Model.OM_AccumulatedLevel" />
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
           <Key>
@@ -597,10 +598,10 @@
           <Property Type="Int32" Name="RecordID" Nullable="false" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="Descr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
@@ -628,6 +629,7 @@
           <Property Type="Double" Name="LevelFrom" Nullable="false" />
           <Property Type="Double" Name="LevelTo" Nullable="false" />
           <Property Type="String" Name="LevelType" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="Point" Nullable="true" />
         </ComplexType>
         <ComplexType Name="OM27700_pgInvt_Result">
           <Property Type="String" Name="AccumulateID" Nullable="false" MaxLength="50" />
@@ -671,26 +673,6 @@
           <Property Name="LevelID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Qty" Type="Double" Nullable="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-        </EntityType>
-        <EntityType Name="OM_AccumulatedLevel">
-          <Key>
-            <PropertyRef Name="AccumulateID" />
-            <PropertyRef Name="LevelID" />
-          </Key>
-          <Property Name="AccumulateID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LevelID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LevelDescr" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="LevelFrom" Type="Double" Nullable="false" />
-          <Property Name="LevelTo" Type="Double" Nullable="false" />
-          <Property Name="PercentBonus" Type="Double" Nullable="false" />
-          <Property Name="LevelType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -806,6 +788,27 @@
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="Int32" Name="TotalRecords" Nullable="true" />
         </ComplexType>
+        <EntityType Name="OM_AccumulatedLevel">
+          <Key>
+            <PropertyRef Name="AccumulateID" />
+            <PropertyRef Name="LevelID" />
+          </Key>
+          <Property Name="AccumulateID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LevelID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LevelDescr" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LevelFrom" Type="Double" Nullable="false" />
+          <Property Name="LevelTo" Type="Double" Nullable="false" />
+          <Property Name="PercentBonus" Type="Double" Nullable="false" />
+          <Property Name="LevelType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Name="Point" Type="Double" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1001,6 +1004,7 @@
                 <ScalarProperty Name="LevelFrom" ColumnName="LevelFrom" />
                 <ScalarProperty Name="LevelTo" ColumnName="LevelTo" />
                 <ScalarProperty Name="LevelType" ColumnName="LevelType" />
+                <ScalarProperty Name="Point" ColumnName="Point" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1056,26 +1060,6 @@
                 <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
-                <ScalarProperty Name="AccumulateID" ColumnName="AccumulateID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OM_AccumulatedLevel">
-            <EntityTypeMapping TypeName="OM27700Model.OM_AccumulatedLevel">
-              <MappingFragment StoreEntitySet="OM_AccumulatedLevel">
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="LevelType" ColumnName="LevelType" />
-                <ScalarProperty Name="PercentBonus" ColumnName="PercentBonus" />
-                <ScalarProperty Name="LevelTo" ColumnName="LevelTo" />
-                <ScalarProperty Name="LevelFrom" ColumnName="LevelFrom" />
-                <ScalarProperty Name="LevelDescr" ColumnName="LevelDescr" />
                 <ScalarProperty Name="LevelID" ColumnName="LevelID" />
                 <ScalarProperty Name="AccumulateID" ColumnName="AccumulateID" />
               </MappingFragment>
@@ -1207,6 +1191,27 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="OM_AccumulatedLevel">
+            <EntityTypeMapping TypeName="OM27700Model.OM_AccumulatedLevel">
+              <MappingFragment StoreEntitySet="OM_AccumulatedLevel">
+                <ScalarProperty Name="Point" ColumnName="Point" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LevelType" ColumnName="LevelType" />
+                <ScalarProperty Name="PercentBonus" ColumnName="PercentBonus" />
+                <ScalarProperty Name="LevelTo" ColumnName="LevelTo" />
+                <ScalarProperty Name="LevelFrom" ColumnName="LevelFrom" />
+                <ScalarProperty Name="LevelDescr" ColumnName="LevelDescr" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="AccumulateID" ColumnName="AccumulateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1236,11 +1241,11 @@
         <EntityTypeShape EntityType="OM27700Model.SI_Hierarchy" Width="1.5" PointX="0.75" PointY="5.125" />
         <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedCpny" Width="1.5" PointX="4.375" PointY="4.625" />
         <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedInvt" Width="1.5" PointX="8" PointY="0.5" />
-        <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedLevel" Width="1.5" PointX="6.25" PointY="0.5" />
         <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedSalesPerson" Width="1.5" PointX="8" PointY="4.625" />
         <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedCustomer" Width="1.5" PointX="8.2197027766237518" PointY="10.523176093829411" />
         <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedInvtSetup" Width="1.5" PointX="3.375" PointY="8.75" />
         <EntityTypeShape EntityType="OM27700Model.OM_Accumulated" Width="1.5" PointX="5.375" PointY="8.75" />
+        <EntityTypeShape EntityType="OM27700Model.OM_AccumulatedLevel" Width="1.5" PointX="0.75" PointY="9.75" />
       </Diagram>
     </Diagrams>
   </Designer>

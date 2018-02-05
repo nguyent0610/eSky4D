@@ -164,22 +164,6 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_AccumulatedLevel> OM_AccumulatedLevel
-        {
-            get
-            {
-                if ((_OM_AccumulatedLevel == null))
-                {
-                    _OM_AccumulatedLevel = base.CreateObjectSet<OM_AccumulatedLevel>("OM_AccumulatedLevel");
-                }
-                return _OM_AccumulatedLevel;
-            }
-        }
-        private ObjectSet<OM_AccumulatedLevel> _OM_AccumulatedLevel;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_AccumulatedSalesPerson> OM_AccumulatedSalesPerson
         {
             get
@@ -240,6 +224,22 @@ namespace OM27700
             }
         }
         private ObjectSet<OM_Accumulated> _OM_Accumulated;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_AccumulatedLevel> OM_AccumulatedLevel
+        {
+            get
+            {
+                if ((_OM_AccumulatedLevel == null))
+                {
+                    _OM_AccumulatedLevel = base.CreateObjectSet<OM_AccumulatedLevel>("OM_AccumulatedLevel");
+                }
+                return _OM_AccumulatedLevel;
+            }
+        }
+        private ObjectSet<OM_AccumulatedLevel> _OM_AccumulatedLevel;
 
         #endregion
 
@@ -294,14 +294,6 @@ namespace OM27700
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_AccumulatedLevel EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_AccumulatedLevel(OM_AccumulatedLevel oM_AccumulatedLevel)
-        {
-            base.AddObject("OM_AccumulatedLevel", oM_AccumulatedLevel);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the OM_AccumulatedSalesPerson EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_AccumulatedSalesPerson(OM_AccumulatedSalesPerson oM_AccumulatedSalesPerson)
@@ -331,6 +323,14 @@ namespace OM27700
         public void AddToOM_Accumulated(OM_Accumulated oM_Accumulated)
         {
             base.AddObject("OM_Accumulated", oM_Accumulated);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_AccumulatedLevel EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_AccumulatedLevel(OM_AccumulatedLevel oM_AccumulatedLevel)
+        {
+            base.AddObject("OM_AccumulatedLevel", oM_AccumulatedLevel);
         }
 
         #endregion
@@ -5270,6 +5270,30 @@ namespace OM27700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Point
+        {
+            get
+            {
+                return _Point;
+            }
+            set
+            {
+                OnPointChanging(value);
+                ReportPropertyChanging("Point");
+                _Point = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Point");
+                OnPointChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Point;
+        partial void OnPointChanging(Nullable<global::System.Double> value);
+        partial void OnPointChanged();
 
         #endregion
 
@@ -6279,12 +6303,10 @@ namespace OM27700
         /// <param name="recordID">Initial value of the RecordID property.</param>
         /// <param name="crtd_Datetime">Initial value of the Crtd_Datetime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="lUpd_Datetime">Initial value of the LUpd_Datetime property.</param>
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_Hierarchy CreateSI_Hierarchy(global::System.String nodeID, global::System.Int16 nodeLevel, global::System.String type, global::System.Int32 parentRecordID, global::System.Int32 recordID, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static SI_Hierarchy CreateSI_Hierarchy(global::System.String nodeID, global::System.Int16 nodeLevel, global::System.String type, global::System.Int32 parentRecordID, global::System.Int32 recordID, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.Byte[] tstamp)
         {
             SI_Hierarchy sI_Hierarchy = new SI_Hierarchy();
             sI_Hierarchy.NodeID = nodeID;
@@ -6294,10 +6316,8 @@ namespace OM27700
             sI_Hierarchy.RecordID = recordID;
             sI_Hierarchy.Crtd_Datetime = crtd_Datetime;
             sI_Hierarchy.Crtd_Prog = crtd_Prog;
-            sI_Hierarchy.Crtd_User = crtd_User;
             sI_Hierarchy.LUpd_Datetime = lUpd_Datetime;
             sI_Hierarchy.LUpd_Prog = lUpd_Prog;
-            sI_Hierarchy.LUpd_User = lUpd_User;
             sI_Hierarchy.tstamp = tstamp;
             return sI_Hierarchy;
         }
@@ -6513,7 +6533,7 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -6525,7 +6545,7 @@ namespace OM27700
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -6585,7 +6605,7 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -6597,7 +6617,7 @@ namespace OM27700
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -7819,6 +7839,30 @@ namespace OM27700
         private global::System.String _LevelType;
         partial void OnLevelTypeChanging(global::System.String value);
         partial void OnLevelTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Point
+        {
+            get
+            {
+                return _Point;
+            }
+            set
+            {
+                OnPointChanging(value);
+                ReportPropertyChanging("Point");
+                _Point = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Point");
+                OnPointChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Point;
+        partial void OnPointChanging(Nullable<global::System.Double> value);
+        partial void OnPointChanged();
 
         #endregion
 

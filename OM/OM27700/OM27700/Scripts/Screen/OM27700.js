@@ -9,7 +9,8 @@ var _displayType = {
 var CheckIntIDNotItems = 0;
 var _applyType = {
     Amount: "A",
-    Qty: "Q"
+    Qty: "Q",
+    Point: "P"
 };
 
 var ListCpnyID;
@@ -622,7 +623,16 @@ var Store = {
         if (HQ.isUpdate) {
             var status = App.cboStatus.getValue();
             var keys = sto.HQFieldKeys ? sto.HQFieldKeys : "";
-
+            if (App.cboApplyType.getValue() == "P") {
+                App.colPoint.show();
+                App.colLevelFrom.hide();
+                App.colLevelTo.hide();
+            }
+            else {
+                App.colPoint.hide();
+                App.colLevelFrom.show();
+                App.colLevelTo.show();
+            }
             if (status == _beginStatus) {
                 if (successful) {
                     var objF = HQ.store.findRecord(sto, keys, ['', '', '']);
@@ -786,14 +796,42 @@ var Event = {
                 if (cbo.getValue() == _applyType.Amount) {
                     App.pnlInvt.hide();
                     App.stoLevel.reload();
+                    App.colLevelFrom.show();
+                    App.colLevelTo.show();
+                    App.colPoint.hide();
                 }
                 else if (cbo.getValue() == _applyType.Qty) {
                     App.pnlInvt.show();
+                    App.colLevelFrom.show();
+                    App.colLevelTo.show();
+                    App.colPoint.hide();
+                }
+                else if (cbo.getValue() == _applyType.Point) {
+                    App.pnlInvt.hide();
+                    App.colPoint.show();
+                    App.colLevelFrom.hide();
+                    App.colLevelTo.hide();
+
                 }
             }
             else {
                 App.pnlInvt.hide();
+                App.colPoint.hide();
+                App.colLevelFrom.show();
+                App.colLevelTo.show();
             }
+            //if (App.cboApplyType.getValue() == 'P') {
+            //    App.colPoint.show();
+            //    App.colLevelFrom.hide();
+            //    App.colLevelTo.hide();
+            //    App.pnlInvt.hide();
+            //    //App.stoLevel.reload();
+            //}
+            //else {
+            //    App.colPoint.hide();
+            //    App.colLevelFrom.show();
+            //    App.colLevelTo.show();
+            //}
         },
 
         cboApplyType_Expand: function (s, e) {
@@ -853,6 +891,17 @@ var Event = {
         },
 
         tabInfo_Change: function (tabPanel, newCard, oldCard, eOpts) {
+            var _firstSelTabHis = true;
+            if (_firstSelTabHis && newCard.id == "tabLevel") {
+                _firstSelTabHis = false;
+                if (App.cboApplyType.getValue()=='P') {
+                    HQ.grid.hide(App.grdLevel, ['LevelFrom', 'LevelTo']);
+                    HQ.grid.show(App.grdLevel, ['Point']);
+                } else {
+                    HQ.grid.show(App.grdLevel, ['LevelFrom', 'LevelTo']);
+                    HQ.grid.hide(App.grdLevel, ['Point']);
+                }
+            }
             if (newCard.id == 'tabCustomer' && App.cboObjApply.getValue() == 'C') {
                 var loadTree = false;
                 var branches = [];
