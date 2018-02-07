@@ -154,8 +154,16 @@ var save = function () {
 
 var deleteData = function (item) {
     if (item == "yes") {
-        App.grdOM_PriceClass.deleteSelected();
-        frmChange();
+        var lstPriceClassID = App.grdOM_PriceClass.selModel.selected;
+        var lstSel = '';
+        var indexcolum = '';
+        for (var i = 0; i < lstPriceClassID.length; i++) {
+            indexcolum = indexcolum + (lstPriceClassID.items[i].index + 1) + ",";
+            lstSel = lstSel + lstPriceClassID.items[i].data.PriceClassID + ',';
+        }
+        checkDelData(indexcolum, lstSel);
+        //App.grdOM_PriceClass.deleteSelected();
+        //frmChange();
     }
 };
 
@@ -182,5 +190,25 @@ var checkRequire = function (items)
         return true;
     }
 }
+var checkDelData = function (indexcolum, lstSel) {
 
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'OM20100/CheckDelete',
+            params: {
+                indexcolum:indexcolum,
+                lstSel: lstSel
+            },
+            success: function (msg, data) {
+                App.grdOM_PriceClass.deleteSelected();
+                frmChange();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
 ///////////////////////////////////

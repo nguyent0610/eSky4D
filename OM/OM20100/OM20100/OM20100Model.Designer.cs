@@ -126,6 +126,25 @@ namespace OM20100
     
             return base.ExecuteFunction<OM20100_pgPriceClass_Result>("OM20100_pgPriceClass", userNameParameter, cpnyIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="priceClassID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> OM20100_ppCheckDeletePriceClassID(global::System.String priceClassID)
+        {
+            ObjectParameter priceClassIDParameter;
+            if (priceClassID != null)
+            {
+                priceClassIDParameter = new ObjectParameter("PriceClassID", priceClassID);
+            }
+            else
+            {
+                priceClassIDParameter = new ObjectParameter("PriceClassID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("OM20100_ppCheckDeletePriceClassID", priceClassIDParameter);
+        }
 
         #endregion
 

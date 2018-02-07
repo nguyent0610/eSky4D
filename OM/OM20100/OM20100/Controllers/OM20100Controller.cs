@@ -26,7 +26,7 @@ namespace OM20100.Controllers
             return View();
         }
         
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -56,7 +56,7 @@ namespace OM20100.Controllers
                     {
                         var objDel = _db.OM_PriceClass.ToList().Where(p => p.PriceClassID == del.PriceClassID).FirstOrDefault();
                         if (objDel != null)
-                        {
+                        {                         
                             _db.OM_PriceClass.DeleteObject(objDel);
                         }
                     }
@@ -97,6 +97,44 @@ namespace OM20100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
+          [HttpPost]
+        public ActionResult CheckDelete(FormCollection data)
+        {
+            try
+            {
+                string errorDelete = "";
+                string rowError = "";
+                int key = 0;
+                string lstSel = data["lstSel"];
+                string lstIndexRow = data["indexcolum"];
+                string[] lstDel = lstSel.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lstRow = lstIndexRow.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < lstDel.Count(); i++)
+                {
+                    if (_db.OM20100_ppCheckDeletePriceClassID(lstDel[i]).FirstOrDefault() == "1")
+                    {
+                        errorDelete = errorDelete + lstDel[i] + ",";
+                        rowError = rowError + lstRow[i] + ",";
+                        key = 1;
+                    }
+                }
+                if (key == 0)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    string message = string.Format(Message.GetString("2018013102", null), errorDelete, rowError);
+                    throw new MessageException(MessageType.Message, "20410", "", new string[] { message });
+                    return null;
+                }
+            }
+            catch(Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+          }
         private void Update_Language(OM_PriceClass t, OM20100_pgPriceClass_Result s, bool isNew)
         {
             if (isNew)

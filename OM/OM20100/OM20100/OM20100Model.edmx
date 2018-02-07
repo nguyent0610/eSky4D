@@ -28,6 +28,9 @@
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="OM20100_ppCheckDeletePriceClassID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PriceClassID" Type="varchar" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -37,6 +40,9 @@
           <FunctionImport Name="OM20100_pgPriceClass" ReturnType="Collection(OM20100Model.OM20100_pgPriceClass_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM20100_ppCheckDeletePriceClassID" ReturnType="Collection(String)">
+            <Parameter Name="PriceClassID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="OM_PriceClass">
@@ -91,6 +97,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20100_ppCheckDeletePriceClassID" FunctionName="eBiz4DWebSysModel.Store.OM20100_ppCheckDeletePriceClassID" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
