@@ -14,6 +14,8 @@ var _country = '';
 var _countryOld = '';
 var _state = '';
 var _stateOld = '';
+var _listState = '';
+var _listDistrict = '';
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -48,10 +50,12 @@ var firstLoad = function () {
     App.cboSubCpnyID.getStore().addListener('load', checkLoad);
     App.cboState_grd.getStore().addListener('load', checkLoad);
     //App.cboState_grd.store.reload();
-    App.cboSalesDistrict.setVisible(HQ.showSalesState);
-    App.cboSalesState.setVisible(HQ.showSalesState);
-    App.cboSalesState.allowBlank = !HQ.showSalesState;
-    App.cboSalesDistrict.allowBlank = !HQ.showSalesState;
+    App.txtSalesDistrictDescr.setVisible(HQ.showSalesState);
+    App.btnSalesState.setVisible(HQ.showSalesState);
+    App.btnSalesDistrict.setVisible(HQ.showSalesState);
+    App.txtSalesStateDescr.setVisible(HQ.showSalesState);
+    App.txtSalesDistrictDescr.allowBlank = !HQ.showSalesState;
+    App.txtSalesStateDescr.allowBlank = !HQ.showSalesState;
     App.cboOwner.allowBlank = !HQ.allowOwer;
     App.Address2.allowBlank = !HQ.allowAddress2;
     App.frmMain.isValid();
@@ -261,7 +265,7 @@ var cboTerritory_Change = function (sender, e) {
 
 };
 
-var cboCountry_Change = function (sender, e) {
+var cboCountry_Change = function (sender, e, oldValue) {
     App.cboState.getStore().load(function () {
         var curRecord = App.frmMain.getRecord();
         if (curRecord != undefined)
@@ -277,24 +281,34 @@ var cboCountry_Change = function (sender, e) {
             cboState_Change(App.cboState, curRecord.data.State);
         }
     });
-    App.cboSalesState.getStore().load(function () {
-        var curRecord = App.frmMain.getRecord();
-        if (curRecord && curRecord.data.SalesState) {
-            App.cboSalesState.setValue(curRecord.data.SalesState);
-            HQ.combo.expand(App.cboSalesState, ',');
+
+    if ((oldValue != undefined) || sender.hasFocus) {
+        if (e != oldValue) {            
+            App.txtSalesDistrict.setValue("");
+            App.txtSalesDistrictDescr.setValue("");
+            App.txtSalesState.setValue("");
+            App.txtSalesStateDescr.setValue("");
         }
-        var dt = HQ.store.findInStore(App.cboSalesState.getStore(), ["State"], App.cboSalesState.getValue());
-        if (!dt) {
-            curRecord.data.SalesState = '';
-            App.cboSalesState.setValue("");
-        }
-        else {
-            HQ.combo.expand(App.cboSalesState, ',');
-        }
-        if (App.cboSalesState.value == curRecord.data.SalesState) {
-            //cboSalesState_Change(App.cboSalesState, curRecord.data.SalesState);
-        }
-    });
+    }
+
+    //App.cboSalesState.getStore().load(function () {
+    //    var curRecord = App.frmMain.getRecord();
+    //    if (curRecord && curRecord.data.SalesState) {
+    //        App.cboSalesState.setValue(curRecord.data.SalesState);
+    //        HQ.combo.expand(App.cboSalesState, ',');
+    //    }
+    //    var dt = HQ.store.findInStore(App.cboSalesState.getStore(), ["State"], App.cboSalesState.getValue());
+    //    if (!dt) {
+    //        curRecord.data.SalesState = '';
+    //        App.cboSalesState.setValue("");
+    //    }
+    //    else {
+    //        HQ.combo.expand(App.cboSalesState, ',');
+    //    }
+    //    if (App.cboSalesState.value == curRecord.data.SalesState) {
+    //        //cboSalesState_Change(App.cboSalesState, curRecord.data.SalesState);
+    //    }
+    //});
 };
 
 var cboSalesState_Change = function (sender, e) {
@@ -459,8 +473,8 @@ var stoLoad = function (sto) {
     App.cboState.forceSelection = false;
     App.cboCity.forceSelection = false;
     App.cboDistrict.forceSelection = false;
-    App.cboSalesState.forceSelection = false;
-    App.cboSalesDistrict.forceSelection = false;
+    //App.cboSalesState.forceSelection = false;
+    //App.cboSalesDistrict.forceSelection = false;
     App.cboCountry.store.clearFilter();
     App.cboState.store.clearFilter();
     if (sto.data.length == 0) {
@@ -610,40 +624,42 @@ var grdSYS_SubCompany_Reject = function (record) {
 /////////////////////////////// PROCESS ///////////////////////////////////////////////
 
 var save = function () {
-    if (App.frmMain.isValid()) {
-        App.frmMain.updateRecord();
+    if (HQ.util.checkEmail(App.Email.getValue())) {
+        if (App.frmMain.isValid()) {
+            App.frmMain.updateRecord();
 
-        App.frmMain.submit({
-            waitMsg: HQ.common.getLang("WaitMsg"),
-            url: 'SA00000/Save',
-            params: {
-                lstSYS_Company: Ext.encode(App.stoSYS_Company.getRecordsValues()),
-                lstSys_CompanyAddr: HQ.store.getData(App.stoSys_CompanyAddr),
-                lstSYS_SubCompany: HQ.store.getData(App.stoSYS_SubCompany),
-            },
-            success: function (msg, data) {
-                HQ.message.show(201405071);
-                CpnyID = data.result.CpnyID;
-                HQ.isChange = false;
-                HQ.isFirstLoad = true;
-                App.cboCpnyID.getStore().load({
-                    callback: function () {
-                        if (Ext.isEmpty(App.cboCpnyID.getValue())) {
-                            App.cboCpnyID.setValue(CpnyID);
-                            App.stoSYS_Company.reload();
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang("WaitMsg"),
+                url: 'SA00000/Save',
+                params: {
+                    lstSYS_Company: Ext.encode(App.stoSYS_Company.getRecordsValues()),
+                    lstSys_CompanyAddr: HQ.store.getData(App.stoSys_CompanyAddr),
+                    lstSYS_SubCompany: HQ.store.getData(App.stoSYS_SubCompany),
+                },
+                success: function (msg, data) {
+                    HQ.message.show(201405071);
+                    CpnyID = data.result.CpnyID;
+                    HQ.isChange = false;
+                    HQ.isFirstLoad = true;
+                    App.cboCpnyID.getStore().load({
+                        callback: function () {
+                            if (Ext.isEmpty(App.cboCpnyID.getValue())) {
+                                App.cboCpnyID.setValue(CpnyID);
+                                App.stoSYS_Company.reload();
+                            }
+                            else {
+                                App.cboCpnyID.setValue(CpnyID);
+                                App.stoSYS_Company.reload();
+                            }
                         }
-                        else {
-                            App.cboCpnyID.setValue(CpnyID);
-                            App.stoSYS_Company.reload();
-                        }
-                    }
-                });
-            },
-            failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
-            }
-        });
+                    });
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
 
+        }
     }
 };
 
@@ -738,4 +754,185 @@ var stringCountry = function (record) {
     }
 
     return HQ.grid.filterString(record, this);
+}
+
+
+//////////////////////////
+var btnState_TriggerClick = function () {
+    _listState = App.txtSalesState.getValue();// joinParams(App.cboMailTo);
+    //App.chkActive_All.setValue(false);
+    App.frmMain.mask();
+    App.stoState.removeAll();
+    App.stoState.reload();
+    App.winState.show();
+}
+
+//var winState_beforeShow = function () {
+//    App.frmMain.mask();
+//    App.winState.mask();
+//    App.winState.setHeight(App.frmMain.getHeight() - 20);
+//    App.winState.setWidth(App.frmMain.getWidth() - 10);
+//};
+var winState_beforeShow = function () {
+    App.frmMain.mask();
+    App.winState.mask();
+}
+
+
+var btnOKState_Click = function () {
+    var res = "";
+    var stateName = "";
+    var store = App.stoState;
+    var allRecords = store.snapshot || store.allData || store.data;
+    store.suspendEvents();
+    allRecords.each(function (record) {
+        if (record.data.Selected == true) {
+            res += record.data.State + ',';
+            stateName += record.data.Descr + ',';
+        }
+    });
+    store.resumeEvents();
+    var selState = '';
+    var selstateName = '';
+    if (res.length > 1) {
+        selState = res.substring(0, res.length - 1);
+    }
+    if (stateName.length > 1) {
+        selstateName = stateName.substring(0, stateName.length - 1);
+    }
+    App.txtSalesState.setValue(selState);
+    App.txtSalesStateDescr.setValue(selstateName);
+    App.winState.hide();
+    App.frmMain.unmask();
+};
+
+var btnCancelState_Click = function () {
+    App.winState.hide();
+    App.frmMain.unmask();
+};
+
+var stoState_Load = function (sto) {
+    HQ.common.showBusy(false);
+    App.winState.unmask();
+};
+
+var chkActiveAll_Change = function (sender, value, oldValue) {
+    if (sender.hasFocus) {
+        var store = App.stoState;
+        var allRecords = store.snapshot || store.allData || store.data;
+        store.suspendEvents();
+        allRecords.each(function (record) {
+            record.set('Selected', value);
+        });
+        store.resumeEvents();
+        App.grdState.view.refresh();
+    }
+};
+
+var btnDistrict_TriggerClick = function () {
+    _listDistrict = App.txtSalesDistrict.getValue();// joinParams(App.cboMailTo);
+    App.frmMain.mask();
+    App.stoDistrict.removeAll();
+    App.stoDistrict.reload();
+    App.winDistrict.show();
+};
+
+
+var btnOKDistrict_Click = function () {
+    var res = "";
+    var resDistrictName = "";
+    var store = App.stoDistrict;
+    var allRecords = store.snapshot || store.allData || store.data;
+    store.suspendEvents();
+    allRecords.each(function (record) {
+        if (record.data.Selected == true) {
+            res += record.data.District + ',';
+            resDistrictName += record.data.DistrictName + ',';
+        }
+    });
+    store.resumeEvents();
+    var selDistrict = '';
+    var selDistrictName = '';
+    if (res.length > 1) {
+        selDistrict = res.substring(0, res.length - 1);
+    }
+    if (resDistrictName.length > 1) {
+        selDistrictName = resDistrictName.substring(0, resDistrictName.length - 1);
+    }
+    App.txtSalesDistrict.setValue(selDistrict);
+    App.txtSalesDistrictDescr.setValue(selDistrictName);
+    App.winDistrict.hide();
+    App.frmMain.unmask();
+};
+
+var btnCancelDistrict_Click = function () {
+    App.winDistrict.hide();
+    App.frmMain.unmask();
+};
+
+var chkActiveDistrictAll_Change = function (sender, value, oldValue) {
+    if (sender.hasFocus) {
+        var store = App.stoDistrict;
+        var allRecords = store.snapshot || store.allData || store.data;
+        store.suspendEvents();
+        allRecords.each(function (record) {
+            record.set('Selected', value);
+        });
+        store.resumeEvents();
+        App.grdDistrict.view.refresh();
+    }
+};
+var stoDistrict_Load = function (sto) {
+    HQ.common.showBusy(false);
+    App.winDistrict.unmask();
+};
+
+var winDistrict_beforeShow = function () {
+    App.frmMain.mask();
+    App.winDistrict.mask();
+    App.winDistrict.setHeight(App.frmMain.getHeight() - 20);
+    App.winDistrict.setWidth(App.frmMain.getWidth() - 10);
+};
+
+var txtSalesState_Change = function (sender, e, oldValue) {
+    if (!HQ.isFirstLoad && e != oldValue) {
+        App.txtSalesDistrictDescr.setValue("");
+        App.txtSalesDistrict.setValue("");
+    }
+};
+
+
+var txtLat_Change = function (sender, value) {
+    if (value != "-") {
+        if (isNumeric(value) == false) {
+            HQ.message.show("201711251");
+            App.txtLat.setValue(App.stoSYS_Cpny.findRecord("CpnyID", App.txtCpnyID.getValue()).data.Lat);
+        }
+    }
+
+}
+
+var txtLat_Blur = function (sender, value) {
+    if (App.txtLat.getValue() == "-") {
+        HQ.message.show("201711251");
+        App.txtLat.setValue(App.stoSYS_Cpny.findRecord("CpnyID", App.txtCpnyID.getValue()).data.Lat);
+    }
+
+}
+
+var txtLng_Change = function (sender, value) {
+    if (value != "-") {
+        if (isNumeric(value) == false) {
+            HQ.message.show("201711252");
+            App.txtLng.setValue(App.stoSYS_Cpny.findRecord("CpnyID", App.txtCpnyID.getValue()).data.Lng);
+        }
+    }
+}
+
+var txtLng_Blur = function (sender, value) {
+    if (App.txtLng.getValue() == "-") {
+        HQ.message.show("201711252");
+        App.txtLng.setValue(App.stoSYS_Cpny.findRecord("CpnyID", App.txtCpnyID.getValue()).data.Lng);
+    }
+
 }

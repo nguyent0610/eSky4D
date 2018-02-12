@@ -108,6 +108,21 @@
         <Function Name="SA00000_pgCompanyAddr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="nchar" Mode="In" />
         </Function>
+        <Function Name="SA00000_pgDistrict" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="Country" Type="varchar" Mode="In" />
+          <Parameter Name="State" Type="varchar(max)" Mode="In" />
+          <Parameter Name="lstDistrict" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SA00000_pgState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="Country" Type="varchar" Mode="In" />
+          <Parameter Name="lstState" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="SA00000_pgSubCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
         </Function>
@@ -121,13 +136,7 @@
     <edmx:ConceptualModels>
       <Schema Namespace="SA00000Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SA00000Entities" annotation:LazyLoadingEnabled="true" >
-          <FunctionImport Name="SA00000_pgCompanyAddr" ReturnType="Collection(SA00000Model.SA00000_pgCompanyAddr_Result)">
-          <Parameter Name="CpnyID" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="SYS_SubCompany" EntityType="SA00000Model.SYS_SubCompany" />
-          <FunctionImport Name="SA00000_pgSubCompany" ReturnType="Collection(SA00000Model.SA00000_pgSubCompany_Result)">
-          <Parameter Name="CpnyID" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="Sys_CompanyAddr" EntityType="SA00000Model.Sys_CompanyAddr" />
           <FunctionImport Name="SA00000_pgLoadUsers" ReturnType="Collection(SA00000Model.SA00000_pgLoadUsers_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
@@ -146,29 +155,28 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <FunctionImport Name="SA00000_pgCompanyAddr" ReturnType="Collection(SA00000Model.SA00000_pgCompanyAddr_Result)">
+          <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA00000_pgSubCompany" ReturnType="Collection(SA00000Model.SA00000_pgSubCompany_Result)">
+          <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA00000_pgDistrict" ReturnType="Collection(SA00000Model.SA00000_pgDistrict_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="Country" Mode="In" Type="String" />
+            <Parameter Name="State" Mode="In" Type="String" />
+            <Parameter Name="lstDistrict" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA00000_pgState" ReturnType="Collection(SA00000Model.SA00000_pgState_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="Country" Mode="In" Type="String" />
+            <Parameter Name="lstState" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
-        <ComplexType Name="SA00000_pgCompanyAddr_Result">
-          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="AddrID" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="250" />
-          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="250" />
-          <Property Type="String" Name="Attn" Nullable="true" MaxLength="250" />
-          <Property Type="String" Name="City" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="Country" Nullable="true" MaxLength="3" />
-          <Property Type="String" Name="Fax" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
-          <Property Type="String" Name="Phone" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="Salut" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="State" Nullable="true" MaxLength="4" />
-          <Property Type="String" Name="TaxId00" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="TaxId01" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="TaxId02" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="TaxId03" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="TaxLocId" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="TaxRegNbr" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="Zip" Nullable="true" MaxLength="10" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-        </ComplexType>
         <EntityType Name="SYS_SubCompany">
           <Key>
             <PropertyRef Name="CpnyID" />
@@ -184,11 +192,6 @@
           <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="SA00000_pgSubCompany_Result">
-          <Property Type="String" Name="SubCpnyID" Nullable="false" MaxLength="30" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-          <Property Type="String" Name="SubCpnyName" Nullable="false" MaxLength="200" />
-        </ComplexType>
         <EntityType Name="Sys_CompanyAddr">
           <Key>
             <PropertyRef Name="CpnyID" />
@@ -299,11 +302,55 @@
           <Property Type="String" Name="SalesState" Nullable="true" />
           <Property Type="String" Name="SalesDistrict" Nullable="true" />
           <Property Type="String" Name="SAManager" Nullable="true" />
+          <Property Type="String" Name="SalesStateDescr" Nullable="true" />
+          <Property Type="String" Name="SalesDistrictDescr" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="2" />
         </ComplexType>
         <ComplexType Name="SA00000_pdConfig_Result">
           <Property Type="Boolean" Name="Show" Nullable="true" />
           <Property Type="Boolean" Name="allowAddress2" Nullable="true" />
           <Property Type="Boolean" Name="allowOwer" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SA00000_pgCompanyAddr_Result">
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="AddrID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Attn" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="Fax" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Salut" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="TaxId00" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxId01" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxId02" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxId03" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxLocId" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="TaxRegNbr" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="Zip" Nullable="true" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="SA00000_pgSubCompany_Result">
+          <Property Type="String" Name="SubCpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SubCpnyName" Nullable="false" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="SA00000_pgDistrict_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="District" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="DistrictName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="State" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="SA00000_pgState_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="TerritoryName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="State" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -311,32 +358,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SA00000Entities" >
-          <FunctionImportMapping FunctionImportName="SA00000_pgCompanyAddr" FunctionName="eBiz4DWebSysModel.Store.SA00000_pgCompanyAddr">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA00000Model.SA00000_pgCompanyAddr_Result">
-                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
-                <ScalarProperty Name="AddrID" ColumnName="AddrID" />
-                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
-                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
-                <ScalarProperty Name="Attn" ColumnName="Attn" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Salut" ColumnName="Salut" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="TaxId00" ColumnName="TaxId00" />
-                <ScalarProperty Name="TaxId01" ColumnName="TaxId01" />
-                <ScalarProperty Name="TaxId02" ColumnName="TaxId02" />
-                <ScalarProperty Name="TaxId03" ColumnName="TaxId03" />
-                <ScalarProperty Name="TaxLocId" ColumnName="TaxLocId" />
-                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
-                <ScalarProperty Name="Zip" ColumnName="Zip" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="SYS_SubCompany">
             <EntityTypeMapping TypeName="SA00000Model.SYS_SubCompany">
               <MappingFragment StoreEntitySet="SYS_SubCompany">
@@ -352,15 +373,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA00000_pgSubCompany" FunctionName="eBiz4DWebSysModel.Store.SA00000_pgSubCompany">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA00000Model.SA00000_pgSubCompany_Result">
-                <ScalarProperty Name="SubCpnyID" ColumnName="SubCpnyID" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="SubCpnyName" ColumnName="SubCpnyName" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="Sys_CompanyAddr">
             <EntityTypeMapping TypeName="SA00000Model.Sys_CompanyAddr">
               <MappingFragment StoreEntitySet="Sys_CompanyAddr">
@@ -469,6 +481,9 @@
                 <ScalarProperty Name="SalesState" ColumnName="SalesState" />
                 <ScalarProperty Name="SalesDistrict" ColumnName="SalesDistrict" />
                 <ScalarProperty Name="SAManager" ColumnName="SAManager" />
+                <ScalarProperty Name="SalesStateDescr" ColumnName="SalesStateDescr" />
+                <ScalarProperty Name="SalesDistrictDescr" ColumnName="SalesDistrictDescr" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -478,6 +493,63 @@
                 <ScalarProperty Name="Show" ColumnName="Show" />
                 <ScalarProperty Name="allowAddress2" ColumnName="allowAddress2" />
                 <ScalarProperty Name="allowOwer" ColumnName="allowOwer" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00000_pgCompanyAddr" FunctionName="eBiz4DWebSysModel.Store.SA00000_pgCompanyAddr">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00000Model.SA00000_pgCompanyAddr_Result">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="AddrID" ColumnName="AddrID" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Attn" ColumnName="Attn" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Salut" ColumnName="Salut" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="TaxId00" ColumnName="TaxId00" />
+                <ScalarProperty Name="TaxId01" ColumnName="TaxId01" />
+                <ScalarProperty Name="TaxId02" ColumnName="TaxId02" />
+                <ScalarProperty Name="TaxId03" ColumnName="TaxId03" />
+                <ScalarProperty Name="TaxLocId" ColumnName="TaxLocId" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00000_pgSubCompany" FunctionName="eBiz4DWebSysModel.Store.SA00000_pgSubCompany">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00000Model.SA00000_pgSubCompany_Result">
+                <ScalarProperty Name="SubCpnyID" ColumnName="SubCpnyID" />
+                <ScalarProperty Name="SubCpnyName" ColumnName="SubCpnyName" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00000_pgDistrict" FunctionName="eBiz4DWebSysModel.Store.SA00000_pgDistrict">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00000Model.SA00000_pgDistrict_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00000_pgState" FunctionName="eBiz4DWebSysModel.Store.SA00000_pgState">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00000Model.SA00000_pgState_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="TerritoryName" ColumnName="TerritoryName" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -73,6 +73,18 @@ namespace SA00000.Controllers
             return this.Store(_db.SA00000_pgCompanyAddr(CpnyID).ToList());
         }
 
+        public ActionResult GetState(string Country, string listState)
+        {
+            var dataState = this.Store(_db.SA00000_pgState(Current.CpnyID, Current.UserName, Current.LangID, Country, listState).ToList());
+            return dataState;
+        }
+
+        public ActionResult GetDistrict(string Country, string State, string listDistrict)
+        {
+            var dataDistrict = this.Store(_db.SA00000_pgDistrict(Current.CpnyID, Current.UserName, Current.LangID, Country, State, listDistrict).ToList());
+            return dataDistrict;
+        }
+
         public ActionResult GetSYS_SubCompany(string CpnyID)
         {
             return this.Store(_db.SA00000_pgSubCompany(CpnyID).ToList());
@@ -270,6 +282,7 @@ namespace SA00000.Controllers
             t.State = s.State;
             t.ReturnLimit = s.ReturnLimit;
             t.Lat = s.Lat;
+            t.Status = s.Status;
             t.Lng = s.Lng;
             t.SalesDistrict = s.SalesDistrict;
             t.SalesState = s.SalesState;
