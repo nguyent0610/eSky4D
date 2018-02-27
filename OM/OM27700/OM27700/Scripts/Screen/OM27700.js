@@ -752,7 +752,44 @@ var Event = {
                 HQ.common.changeData(HQ.isChange, 'OM27700');//co thay doi du lieu gan * tren tab title header
                 //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
                 App.cboAccumulateID.setReadOnly(HQ.isChange && App.cboAccumulateID.getValue());
-
+                var check = false;
+                if (App.grdCompany.store.data.items.length > 0) {
+                    if (App.grdCompany.store.data.items[0].data.CpnyID != "") {
+                        check = true;
+                    }
+                }
+                else {
+                    if (App.grdLevel.store.data.items.length > 0) {
+                        if (App.grdLevel.store.data.items[0].data.LevelDescr != "") {
+                            check = true;
+                        }
+                    }
+                    else {
+                        if (App.grdCustomer.store.data.items.length > 0) {
+                            if (App.grdCustomer.store.data.items[0].data.CustID != "") {
+                                check = true;
+                            }
+                        }
+                        else {
+                            if (App.grdSale.store.data.items.length > 0) {
+                                if (App.grdSale.store.data.items[0].data.InvtID != "") {
+                                    check = true;
+                                }
+                            }
+                            else {
+                                if (App.grdSales.store.data.items.length > 0) {
+                                    if (App.grdSales.store.data.items[0].data.SlsperID != "") {
+                                        check = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                App.cboApplyFor.setReadOnly(check);
+                App.cboApplyType.setReadOnly(check);
+                
                 var frmRecord = App.frmMain.getRecord();
                 if (!frmRecord.data.tstamp) {
                     if (HQ.isChange
@@ -1158,10 +1195,11 @@ var Event = {
                                 }
                                 else {
                                     //var objData = HQ.store.getAll(App.stoInvt, ['LevelID','InvtID'], [item.data.LevelID]);
-                                    if (filterStore(App.stoInvt, 'LevelID', item.data.LevelID) == 1) {
+
+                                    if (filterStore(App.stoInvt.snapshot, 'LevelID', item.data.LevelID) == 1) {
                                         CheckIntIDNotItems = 1;
                                         HQ.message.show(20170725, item.data.LevelID);
-                                        return false;
+                                        return;
                                     }
                                 }
                             });
@@ -2695,18 +2733,31 @@ var checkDuplicateInvtIDOfLevel = function (grd, row, keys) {
 }
 
 var filterStore = function (store, field, value) {
-    store.clearFilter();
-    store.filterBy(function (record) {
-        if (record) {
-            if (record.data[field].toString().toLowerCase() == (HQ.util.passNull(value).toLowerCase())) {
-                return record;
+    //store.clearFilter();
+    //store.filterBy(function (record) {
+    //    if (record) {
+    //        if (record.data[field].toString().toLowerCase() == (HQ.util.passNull(value).toLowerCase())) {
+    //            return record;
+    //        }
+    //    }
+    //});
+    if (store.items.length > 0) {
+        var dem=0;
+        for (var i = 0; i < store.items.length; i++) {
+            if (store.items[i].data.LevelID == value && store.items[i].data.InvtID != "") {
+                dem++;
             }
         }
-    });
-    if (store.data.length <= 1 && store.data.items[0].data.InvtID == "")
+        if (dem == 0) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+    else {
         return 1;
-    else
-        return 0;
+    }
 }
 
 
