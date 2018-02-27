@@ -99,6 +99,7 @@ namespace AR20500.Controllers
             bool showStandID = false;
             bool showBrandID = false;
             bool showSizeID = false;
+            var showTaxCode = false;
 
             var isShowEditCust = false;
             string allowSave = string.Empty;
@@ -109,6 +110,7 @@ namespace AR20500.Controllers
             var maxVisitPerDay = 0;
             var showTypeCabinnets = false;
             var allowEditContactName = string.Empty;
+            showTaxCode = _db.AR20500_ppCheckHideTaxCode(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().ToBool();
             var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -132,7 +134,6 @@ namespace AR20500.Controllers
                 showSizeID = objConfig.ShowSizeID.HasValue && objConfig.ShowSizeID.Value;
 
             }
-
             ViewBag.showDisplayID = showDisplayID;
             ViewBag.showStandID = showStandID;
             ViewBag.showBrandID = showBrandID;
@@ -151,11 +152,12 @@ namespace AR20500.Controllers
             ViewBag.showVisitsPerDay = showVisitsPerDay;
             ViewBag.maxVisitPerDay = maxVisitPerDay;
             ViewBag.showTypeCabinnets = showTypeCabinnets;
+            ViewBag.showTaxCode = showTaxCode;
             #endregion
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -489,6 +491,7 @@ namespace AR20500.Controllers
             objNew.CodeHT = item.ERPCustID;
             objNew.TypeCabinets = item.TypeCabinets;
             objNew.VisitsPerDay = item.VisitsPerDay;
+            objNew.TaxCode = item.TaxCode;
         }
 
         private void Insert_NewCustHis(AR_NewCustomerInfor objNew, ref int hisLineRef, int allowEdit, bool isDelProfile, bool isDellBussPic)

@@ -23,6 +23,7 @@ var frmMain_BoxReady = function () {
     if (HQ.showStandID) HQ.grid.show(App.grdCust, ['StandID']);
     if (HQ.showBrandID) HQ.grid.show(App.grdCust, ['BrandID']);
     if (HQ.showSizeID) HQ.grid.show(App.grdCust, ['SizeID']);
+    if (HQ.showTaxCode) HQ.grid.show(App.grdCust, ['TaxCode']);
 
     if (HQ.showTypeCabinnets) {
         HQ.grid.show(App.grdCust, ['TypeCabinetsDescr']);
@@ -566,7 +567,10 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
     if (e.field == 'Phone') {
         if (isNumeric(e.value) == true) {
             e.record.set("Phone", oldvalue.fn.arguments[1].originalValue);
-            HQ.message.show(20171118, '');
+            if (!HQ.showTaxCode)
+                HQ.message.show(20171118, '');
+            else
+                HQ.message.show(2018022701, '');
         }
     } else if (e.field == 'Territory') {
         e.record.set('SubTerritory', '');
@@ -612,8 +616,15 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
 };
 
 function isNumeric(n) {
-    var regex = /^([0-9()-.;#/ ])*$/;
-    return !HQ.util.passNull(n.toString()).match(regex);
+    if (!HQ.showTaxCode) {
+        var regex = /^([0-9()-.;#/ ])*$/;
+        return !HQ.util.passNull(n.toString()).match(regex);
+    }
+    else {
+        var regex = /\D/;
+        if (HQ.util.passNull(n.toString()).match(regex))
+            return true;
+    }
 }
 
 var grdCust_Reject = function (record) {
