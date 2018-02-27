@@ -30,7 +30,7 @@ var frmMain_BoxReady = function () {
     }
     if (HQ.showVisitsPerDay) {
         HQ.grid.show(App.grdCust, ['VisitsPerDay']);
-    }
+    }    
     showSubRoute(0);
     App.stoAR20500_pdSubRoute.reload();
     App.stoAR20500_pdWeekofVisitAll.load(function () {
@@ -59,6 +59,8 @@ var frmMain_BoxReady = function () {
     } else {
         HQ.grid.hide(App.grdCust, ['Reason']);
     }
+    if (!HQ.showVisitsPerDay)
+        HQ.grid.hide(App.grdCust, ['VisitsPerDay']);
 };
 
 var cboTerritory_Change = function (sender, e) {
@@ -1035,6 +1037,9 @@ var cboUpdateType_Change = function () {
         HQ.grid.show(App.grdCust, _hideColumn);
     } else if (App.cboUpdateType.getValue() == 1) {
         HQ.grid.hide(App.grdCust, _hideColumn);
+    }
+    if (!HQ.showVisitsPerDay) {
+        HQ.grid.hide(App.grdCust, ['VisitsPerDay']);
     }
     showSubRoute(App.cboUpdateType.getValue());
     Ext.resumeLayouts();

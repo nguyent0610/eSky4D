@@ -685,6 +685,7 @@ namespace AR20500.Controllers
             objCust.Birthdate = new DateTime(1900, 1, 1);            
             objCust.AllowEdit = 0;
             objCust.TypeCabinets = item.TypeCabinets;
+            objCust.TaxRegNbr = item.TaxCode;
         }
         private void Update_SOAddress(ref AR_SOAddress objAR_SOAddress, AR_Customer objCust)
         {
