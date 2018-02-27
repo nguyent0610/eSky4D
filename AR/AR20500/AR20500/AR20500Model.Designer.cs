@@ -870,47 +870,6 @@ namespace AR20500
     
             return base.ExecuteFunction<AR20500_pgDetail_Result>("AR20500_pgDetail", branchIDParameter, startDateParameter, endDateParameter, slsperIDParameter, statusParameter, territoryParameter, updateTypeParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Int32>> AR20500_ppCheckHideTaxCode(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<Nullable<global::System.Int32>>("AR20500_ppCheckHideTaxCode", userNameParameter, cpnyIDParameter, langIDParameter);
-        }
 
         #endregion
 
@@ -10041,6 +10000,54 @@ namespace AR20500
         private Nullable<global::System.Boolean> _ShowDisplayID;
         partial void OnShowDisplayIDChanging(Nullable<global::System.Boolean> value);
         partial void OnShowDisplayIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowTaxCode
+        {
+            get
+            {
+                return _ShowTaxCode;
+            }
+            set
+            {
+                OnShowTaxCodeChanging(value);
+                ReportPropertyChanging("ShowTaxCode");
+                _ShowTaxCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowTaxCode");
+                OnShowTaxCodeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowTaxCode;
+        partial void OnShowTaxCodeChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowTaxCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> EditPhone
+        {
+            get
+            {
+                return _EditPhone;
+            }
+            set
+            {
+                OnEditPhoneChanging(value);
+                ReportPropertyChanging("EditPhone");
+                _EditPhone = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EditPhone");
+                OnEditPhoneChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _EditPhone;
+        partial void OnEditPhoneChanging(Nullable<global::System.Boolean> value);
+        partial void OnEditPhoneChanged();
 
         #endregion
 

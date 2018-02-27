@@ -471,11 +471,6 @@
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="CustID" Type="varchar(max)" Mode="In" />
         </Function>
-        <Function Name="AR20500_ppCheckHideTaxCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UserName" Type="varchar" Mode="In" />
-          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
-          <Parameter Name="LangID" Type="smallint" Mode="In" />
-        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -552,11 +547,6 @@
             <Parameter Name="Status" Mode="In" Type="String" />
             <Parameter Name="Territory" Mode="In" Type="String" />
             <Parameter Name="UpdateType" Mode="In" Type="Int32" />
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
-          <FunctionImport Name="AR20500_ppCheckHideTaxCode" ReturnType="Collection(Int32)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
@@ -668,6 +658,8 @@
           <Property Type="Boolean" Name="ShowBrandID" Nullable="true" />
           <Property Type="Boolean" Name="ShowSizeID" Nullable="true" />
           <Property Type="Boolean" Name="ShowDisplayID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowTaxCode" Nullable="true" />
+          <Property Type="Boolean" Name="EditPhone" Nullable="true" />
           </ComplexType>
         <ComplexType Name="AR20500_pcReason_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
@@ -1183,6 +1175,8 @@
                 <ScalarProperty Name="ShowBrandID" ColumnName="ShowBrandID" />
                 <ScalarProperty Name="ShowSizeID" ColumnName="ShowSizeID" />
                 <ScalarProperty Name="ShowDisplayID" ColumnName="ShowDisplayID" />
+                <ScalarProperty Name="ShowTaxCode" ColumnName="ShowTaxCode" />
+                <ScalarProperty Name="EditPhone" ColumnName="EditPhone" />
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1501,7 +1495,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="AR20500_ppCheckHideTaxCode" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckHideTaxCode" />
           <EntitySetMapping Name="AR_NewCustomerInforHis">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInforHis">
               <MappingFragment StoreEntitySet="AR_NewCustomerInforHis">

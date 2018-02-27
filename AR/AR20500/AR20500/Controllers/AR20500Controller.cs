@@ -99,7 +99,8 @@ namespace AR20500.Controllers
             bool showStandID = false;
             bool showBrandID = false;
             bool showSizeID = false;
-            var showTaxCode = false;
+            bool showTaxCode = false;
+            bool editPhone = false;
 
             var isShowEditCust = false;
             string allowSave = string.Empty;
@@ -110,7 +111,6 @@ namespace AR20500.Controllers
             var maxVisitPerDay = 0;
             var showTypeCabinnets = false;
             var allowEditContactName = string.Empty;
-            showTaxCode = _db.AR20500_ppCheckHideTaxCode(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().ToBool();
             var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -132,7 +132,8 @@ namespace AR20500.Controllers
                 showStandID = objConfig.ShowStandID.HasValue && objConfig.ShowStandID.Value;
                 showBrandID = objConfig.ShowBrandID.HasValue && objConfig.ShowBrandID.Value;
                 showSizeID = objConfig.ShowSizeID.HasValue && objConfig.ShowSizeID.Value;
-
+                showTaxCode = objConfig.ShowTaxCode.HasValue && objConfig.ShowTaxCode.Value;
+                editPhone = objConfig.EditPhone.HasValue && objConfig.EditPhone.Value;
             }
             ViewBag.showDisplayID = showDisplayID;
             ViewBag.showStandID = showStandID;
@@ -153,11 +154,12 @@ namespace AR20500.Controllers
             ViewBag.maxVisitPerDay = maxVisitPerDay;
             ViewBag.showTypeCabinnets = showTypeCabinnets;
             ViewBag.showTaxCode = showTaxCode;
+            ViewBag.editPhone = editPhone;
             #endregion
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

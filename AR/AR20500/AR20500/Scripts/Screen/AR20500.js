@@ -567,7 +567,7 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
     if (e.field == 'Phone') {
         if (isNumeric(e.value) == true) {
             e.record.set("Phone", oldvalue.fn.arguments[1].originalValue);
-            if (!HQ.showTaxCode)
+            if (!HQ.editPhone)
                 HQ.message.show(20171118, '');
             else
                 HQ.message.show(2018022701, '');
@@ -616,7 +616,7 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
 };
 
 function isNumeric(n) {
-    if (!HQ.showTaxCode) {
+    if (!HQ.editPhone) {
         var regex = /^([0-9()-.;#/ ])*$/;
         return !HQ.util.passNull(n.toString()).match(regex);
     }
