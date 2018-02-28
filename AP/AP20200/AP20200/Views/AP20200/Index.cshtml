@@ -16,9 +16,9 @@
  <!--Không thay đổi phần head Đổi mã màn hình AP20200.js tùy theo màn hình đổi lại-->
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/screen/AP20200.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddHHss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddHHss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/AP20200.js?"+DateTime.Now.ToString("yyyyMMddHHss"))' type="text/javascript"></script>
 
     <style>
         .x-grid-row-over .x-grid-cell-inner {
@@ -38,7 +38,7 @@
     <title>@ViewBag.Title</title>
 </head>
     <body>
-        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
 
         @*Make the store - the binding data of the form*@
         @(

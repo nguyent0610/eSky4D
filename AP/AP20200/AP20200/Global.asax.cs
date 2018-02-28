@@ -29,7 +29,7 @@ namespace AP20200
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";
+            Current.Server = "HOANGSAD";
             Current.DBSys = "ND_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;

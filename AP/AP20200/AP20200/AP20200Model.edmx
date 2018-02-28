@@ -396,7 +396,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="38">
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="73">
         <EntityTypeShape EntityType="AP20200Model.AP_Vendor" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
