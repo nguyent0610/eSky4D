@@ -328,7 +328,7 @@ namespace IN20500.Controllers
         {
             t.NodeID = NodeID;
             t.NodeLevel = short.Parse(NodeLevel.PassNull() == "" ? "0" : NodeLevel);
-            t.ParentRecordID = short.Parse(ParentRecordID.PassNull() == "" ? "0" : ParentRecordID);
+            t.ParentRecordID = ParentRecordID.PassNull() == "" ? 0 : ParentRecordID.ToInt();
 
             if (t.Public == false && s.Public == true)
             {

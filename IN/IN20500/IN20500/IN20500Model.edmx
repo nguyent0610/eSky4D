@@ -691,7 +691,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="85" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="121" >
         <EntityTypeShape EntityType="IN20500Model.IN_Inventory" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN20500Model.SI_Hierarchy" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN20500Model.IN_InvtCpny" Width="1.5" PointX="4.75" PointY="0.75" />
