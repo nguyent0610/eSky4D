@@ -635,6 +635,7 @@ var save = function () {
                     lstSYS_Company: Ext.encode(App.stoSYS_Company.getRecordsValues()),
                     lstSys_CompanyAddr: HQ.store.getData(App.stoSys_CompanyAddr),
                     lstSYS_SubCompany: HQ.store.getData(App.stoSYS_SubCompany),
+                    status: App.cboStatus.getValue(),
                 },
                 success: function (msg, data) {
                     HQ.message.show(201405071);

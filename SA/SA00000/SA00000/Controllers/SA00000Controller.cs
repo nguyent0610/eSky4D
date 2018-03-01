@@ -99,12 +99,11 @@ namespace SA00000.Controllers
         #region Save & Update information Company
         //Save information Company
         [HttpPost]
-        public ActionResult Save(FormCollection data)
+        public ActionResult Save(FormCollection data,string status)
         {
             try
             {
                 string CpnyID = data["cboCpnyID"].PassNull();
-
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Company"]);
                 var curHeader = dataHandler.ObjectData<SA00000_pdHeader_Result>().FirstOrDefault();
 
@@ -120,7 +119,7 @@ namespace SA00000.Controllers
                 {
                     if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        UpdatingHeader(ref header, curHeader);
+                        UpdatingHeader(ref header, curHeader, status);
                     }
                     else
                     {
@@ -135,7 +134,7 @@ namespace SA00000.Controllers
                     header.Crtd_DateTime = DateTime.Now;
                     header.Crtd_Prog = _screenNbr;
                     header.Crtd_User = Current.UserName;
-                    UpdatingHeader(ref header, curHeader);
+                    UpdatingHeader(ref header, curHeader, status);
                     _db.SYS_Company.AddObject(header);
                 }
                 #endregion
@@ -256,7 +255,7 @@ namespace SA00000.Controllers
         #endregion
 
         //Update Header Company
-        private void UpdatingHeader(ref SYS_Company t, SA00000_pdHeader_Result s)
+        private void UpdatingHeader(ref SYS_Company t, SA00000_pdHeader_Result s,string status)
         {
             t.CpnyName = s.CpnyName;
             t.Address = s.Address;
@@ -282,7 +281,7 @@ namespace SA00000.Controllers
             t.State = s.State;
             t.ReturnLimit = s.ReturnLimit;
             t.Lat = s.Lat;
-            t.Status = s.Status;
+            t.Status = status;
             t.Lng = s.Lng;
             t.SalesDistrict = s.SalesDistrict;
             t.SalesState = s.SalesState;
