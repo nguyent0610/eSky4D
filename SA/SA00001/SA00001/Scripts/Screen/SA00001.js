@@ -91,6 +91,10 @@ var menuClick = function (command) {
             App.btnSalesDistrict.setVisible(HQ.allowSalesDistrict);
             App.txtSalesDistrictDescr.allowBlank = !HQ.allowSalesDistrict;
             App.txtSalesStateDescr.allowBlank = !HQ.allowSalesState;
+            App.cboOwner.allowBlank = !HQ.allowOwer;
+            App.cboOwner.isValid();
+            App.Address2.allowBlank = !HQ.allowAddress2;
+            App.Address2.isValid();
             App.frmDetail.validate();
             // App.BrandQSR.setValue('');
             //App.tableHD.setValue('');
@@ -168,6 +172,32 @@ var grdSYS_Cpny_Edit = function (item, e) {
     frmChange();
 };
 
+var grdState_Edit = function (item, e,value) {
+    //if (e.field == "Selected") {
+    //    if (e.value==true) {
+    //        App.chkActive_All.events['change'].suspend();
+    //        App.chkActive_All.setValue(true);
+    //        App.chkActive_All.events['change'].resume();
+    //    }
+    //    else {
+    //        var store = App.stoState;
+    //        var allRecords = store.snapshot;
+    //        var check1 = false;
+    //        store.suspendEvents();
+    //        for (var i = 0; i < allRecords.items.length; i++) {
+    //            if (allRecords.items[i].data.Selected) {
+    //                check1 = true;
+    //                break;
+    //            }
+    //        }
+    //        App.chkActive_All.events['change'].suspend();
+    //        App.chkActive_All.setValue(check1);
+    //        App.chkActive_All.events['change'].resume();
+    //    }
+    //    App.grdState.view.refresh();
+    //}
+    
+};
 var grdSYS_Cpny_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdSYS_Cpny, e, keys);
 };
@@ -268,7 +298,9 @@ var btnEdit_Click = function (record) {
     App.winLocation.show();
     App.stoSys_CompanyAddr.reload();
     App.cboOwner.allowBlank = !HQ.allowOwer;
+    App.cboOwner.isValid();
     App.Address2.allowBlank = !HQ.allowAddress2;
+    App.Address2.isValid();
     App.txtSalesStateDescr.setVisible(HQ.allowSalesState);
     App.btnSalesState.setVisible(HQ.allowSalesState);
     App.txtSalesDistrictDescr.setVisible(HQ.allowSalesDistrict);
@@ -415,19 +447,6 @@ var cboTerritory_Collapse = function (cbombo) {
 //       //     }
 //       //// });
 
-//        App.cboCity.getStore().load(function () {
-//            var curRecord = App.frmDetail.getRecord();
-//            if (curRecord && curRecord.data.City) {
-//                App.cboCity.setValue(curRecord.data.City);
-//            }
-//            var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
-//            if (!dt) {
-//                curRecord.data.City = '';
-//                App.cboCity.setValue("");
-//            }            
-//        });
-//    }
-//};
 
  //Expand Territory
 var cboState_Expand = function (combo) {
@@ -623,7 +642,7 @@ var btnState_TriggerClick = function () {
     _listState = App.txtSalesState.getValue();// joinParams(App.cboMailTo);
     //App.chkActive_All.setValue(false);
     App.winLocation.mask();
-    App.stoState.removeAll();
+    //App.stoState.removeAll();
     App.stoState.reload();
     App.winState.show();
 };
@@ -669,13 +688,18 @@ var btnCancelState_Click = function () {
 
 var stoState_Load = function (sto) {
     HQ.common.showBusy(false);
+    //if (App.txtSalesState.getValue != "" && App.txtSalesState.getValue != null) {
+    //    App.chkActive_All.events['change'].suspend();
+    //    App.chkActive_All.setValue(true);
+    //    App.chkActive_All.events['change'].resume();
+    //}    
     App.winState.unmask();
 };
 
 var chkActiveAll_Change = function (sender, value, oldValue) {
     if (sender.hasFocus) {
         var store = App.stoState;
-        var allRecords = store.snapshot || store.allData || store.data;
+        var allRecords = App.grdState.store.allData;
         store.suspendEvents();
         allRecords.each(function (record) {
             record.set('Selected', value);
@@ -684,6 +708,22 @@ var chkActiveAll_Change = function (sender, value, oldValue) {
         App.grdState.view.refresh();
     }
 };
+
+//var stoState_FilterChange = function (sender, value, oldValue) {
+        //var store = App.stoState;
+        //var allRecords = store.allData;
+        //var check=false;
+        //for (var i = 0; i < allRecords.items.length; i++) {
+        //    if(allRecords.items[i].data.Selected){
+        //        check = true;
+        //        break;
+        //    }
+        //}
+        //App.chkActive_All.events['change'].suspend();
+        //App.chkActive_All.setValue(check);
+        //App.chkActive_All.events['change'].resume();
+        //App.grdState.view.refresh();
+//};
 
 var winDistrict_beforeShow = function () {
     App.winLocation.mask();
@@ -728,9 +768,14 @@ var btnCancelDistrict_Click = function () {
 var btnDistrict_TriggerClick = function () {
     _listDistrict = App.txtSalesDistrict.getValue();// joinParams(App.cboMailTo);
     App.winLocation.mask();
-    App.stoDistrict.removeAll();
+    //App.stoDistrict.removeAll();
     App.stoDistrict.reload();
     App.winDistrict.show();
+};
+
+var grdSys_CompanyAddr_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSys_CompanyAddr);
+    frmChange();
 };
 
 var stoDistrict_Load = function (sto) {
@@ -741,7 +786,7 @@ var stoDistrict_Load = function (sto) {
 var chkActiveDistrictAll_Change = function (sender, value, oldValue) {
     if (sender.hasFocus) {
         var store = App.stoDistrict;
-        var allRecords = store.snapshot || store.allData || store.data;
+        var allRecords = store.allData;
         store.suspendEvents();
         allRecords.each(function (record) {
             record.set('Selected', value);
@@ -866,33 +911,44 @@ function cboTerritory_Focus(items) {
     App.cboTerritory.store.filter('Zone', zone);
 }
 
-function cboTerritory_Change(items, newValue, oldValue) {
-    //Có chọn có giá trị
-    //if (items.hasFocus && (items.valueModels.length > 0 || (items.valueModels == null && items.rawValue == "" && items.allowBlank)))//newValue=null là trường hợp combo trống
-    //{
-    //    //App.cboDistrict.store.clearFilter();
-    //    //App.cboState.store.clearFilter();
-    //    App.cboState.setValue('');
-    //    App.cboCity.setValue('');
-    //    App.cboDistrict.setValue('');
-    //}
- 
-    App.cboOwner.getStore().load(function () {
-        var curRecord = App.frmDetail.getRecord();
-        if (curRecord != undefined)
-            if (curRecord.data.Owner) {
-                App.cboOwner.setValue(curRecord.data.Owner);
-            }
-        var dt = HQ.store.findInStore(App.cboOwner.getStore(), ["Owner"], [App.cboOwner.getValue()]);
-        if (!dt) {
-            if (items.hasFocus) {
-                curRecord.data.Owner = '';
-                App.cboOwner.setValue("");
-            }
+var cboTerritory_Change = function (sender, e, oldValue) {
+    if ((oldValue != undefined) || sender.hasFocus) {
+        if (e != oldValue) {
+            App.cboDistrict.setValue("");
+            App.cboState.setValue("");
+            App.cboOwner.setValue("");
         }
+    }
+    App.cboOwner.store.reload();
+};
 
-    });
-}
+//function cboTerritory_Change(items, newValue, oldValue) {
+//    //Có chọn có giá trị
+//    //if (items.hasFocus && (items.valueModels.length > 0 || (items.valueModels == null && items.rawValue == "" && items.allowBlank)))//newValue=null là trường hợp combo trống
+//    //{
+//    //    //App.cboDistrict.store.clearFilter();
+//    //    //App.cboState.store.clearFilter();
+//    //    App.cboState.setValue('');
+//    //    App.cboCity.setValue('');
+//    //    App.cboDistrict.setValue('');
+//    //}
+ 
+//    App.cboOwner.getStore().load(function () {
+//        var curRecord = App.frmDetail.getRecord();
+//        if (curRecord != undefined)
+//            if (curRecord.data.Owner) {
+//                App.cboOwner.setValue(curRecord.data.Owner);
+//            }
+            
+//        var dt = HQ.store.findInStore(App.cboOwner.getStore(), ["Owner"], [App.cboOwner.getValue()]);
+//        if (!dt) {
+//            if (items.hasFocus) {
+//                curRecord.data.Owner = '';
+//                App.cboOwner.setValue("");
+//            }
+//        }
+//    });
+//}
 
 
 
@@ -970,4 +1026,8 @@ var frmDetail_CheckChange = function () {
     return isChange;
 }
 
+var stringFilter = function (record) {
+    return HQ.grid.filterString(record, this);
+
+};
 
