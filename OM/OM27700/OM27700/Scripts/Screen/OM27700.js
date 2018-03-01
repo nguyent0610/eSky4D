@@ -415,6 +415,13 @@ var Process = {
         Event.Form.frmMain_fieldChange();
     },
 
+    deleteSaleProduct: function (item) {
+        if (item == "yes") {
+            App.grdSale.deleteSelected();
+        }
+        Event.Form.frmMain_fieldChange();
+    },
+
     lastNbr: function (store) {
         var num = 0;
         for (var j = 0; j < store.data.length; j++) {
@@ -789,7 +796,7 @@ var Event = {
                 
                 App.cboApplyFor.setReadOnly(check);
                 App.cboApplyType.setReadOnly(check);
-                
+                App.cboObjApply.setReadOnly(check);
                 var frmRecord = App.frmMain.getRecord();
                 if (!frmRecord.data.tstamp) {
                     if (HQ.isChange
@@ -1149,7 +1156,14 @@ var Event = {
                                         HQ.common.getLang('InvtID') + " " + App.slmInvt.selected.items[0].data.InvtID,
                                         'Process.deleteInvt');
                                 }
-                            } else if (HQ.focus == 'customer') {
+                            } else if (HQ.focus == 'SaleProduct') {
+                                if (App.cboAccumulateID.getValue() && App.slmSale.getCount()) {
+                                    HQ.message.show(2015020806,
+                                        HQ.common.getLang('InvtID') + " " + App.slmSale.selected.items[0].data.InvtID,
+                                        'Process.deleteSaleProduct');
+                                }
+                            }
+                            else if (HQ.focus == 'customer') {
                                 if (App.cboAccumulateID.getValue() && App.slmCustomer.getCount()) {
                                     var selRecs = App.grdCustomer.selModel.selected.items;
                                     if (selRecs.length > 0) {
