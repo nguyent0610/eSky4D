@@ -4,30 +4,39 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="SI_State" EntityType="eBiz4DWebSysModel.Store.SI_State" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="SI_State">
           <Key>
             <PropertyRef Name="Country" />
             <PropertyRef Name="State" />
           </Key>
-          <Property Name="Country" Type="varchar" Nullable="false" MaxLength="3" />
-          <Property Name="State" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Descr" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="Territory" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Country" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="State" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Territory" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <Function Name="SI20700_pcLoadCountryAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SI20700_pcLoadTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="SI20700_pgLoadState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SI20700_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="SI20700_pgLoadState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SI_State" EntityType="Self.SI_State" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -36,7 +45,16 @@
           <EntitySet Name="SI_State" EntityType="SI20700Model.SI_State" />
           <FunctionImport Name="SI20700_pcLoadCountryAll" ReturnType="Collection(SI20700Model.SI20700_pcLoadCountryAll_Result)" />
           <FunctionImport Name="SI20700_pcLoadTerritory" ReturnType="Collection(SI20700Model.SI20700_pcLoadTerritory_Result)" />
-          <FunctionImport Name="SI20700_pgLoadState" ReturnType="Collection(SI20700Model.SI20700_pgLoadState_Result)" />
+          <FunctionImport Name="SI20700_pdConfig" ReturnType="Collection(Boolean)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="SI20700_pgLoadState" ReturnType="Collection(SI20700Model.SI20700_pgLoadState_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_State">
           <Key>
@@ -70,6 +88,7 @@
           <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="Province" Nullable="false" MaxLength="10" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -111,6 +130,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI20700_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SI20700_pdConfig" />
           <FunctionImportMapping FunctionImportName="SI20700_pgLoadState" FunctionName="eBiz4DWebSysModel.Store.SI20700_pgLoadState">
             <ResultMapping>
               <ComplexTypeMapping TypeName="SI20700Model.SI20700_pgLoadState_Result">
@@ -119,6 +139,7 @@
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="Territory" ColumnName="Territory" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -138,6 +159,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

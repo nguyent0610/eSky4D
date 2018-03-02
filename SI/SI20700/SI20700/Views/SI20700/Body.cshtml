@@ -58,10 +58,13 @@
                                 })
                                 .LoadData()
                             ),
+                            
             X.Column().ID("State").Text(Util.GetLang("State")).DataIndex("State").Width(150)
                     .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
+                    
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
                     .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),
+                    
             X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(150)
                     .Editor(
                         HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQProcedure("SI20700_pcLoadTerritory")
@@ -75,6 +78,9 @@
                             })
                         .LoadData()
                     ),
+                    X.Column().ID("Province").Text(Util.GetLang("SI20700Province")).DataIndex("Province").Width(150)
+                       // .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true))
+                       ,  
             X.CommandColumn()
             .Width(150)
             .Commands(

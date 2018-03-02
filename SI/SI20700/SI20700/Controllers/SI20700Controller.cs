@@ -24,17 +24,19 @@ namespace SI20700.Controllers
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            ViewBag.ProvinceView =
+                _db.SI20700_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
         public ActionResult GetData()
         {           
-            return this.Store(_db.SI20700_pgLoadState().ToList());
+            return this.Store(_db.SI20700_pgLoadState(Current.UserName,Current.CpnyID,Current.LangID).ToList());
         }
         public ActionResult Save(FormCollection data)
         {
@@ -46,7 +48,7 @@ namespace SI20700.Controllers
                 lstData.Created.AddRange(lstData.Updated);
                 foreach (SI20700_pgLoadState_Result del in lstData.Deleted)
                 {
-                    if (lstData.Created.Where(p => p.Country.ToLower().Trim() == del.Country.ToLower().Trim() && p.State.ToLower().Trim() == del.State.ToLower().Trim()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstData.Created.Any(p => p.Country.ToLower().Trim() == del.Country.ToLower().Trim() && p.State.ToLower().Trim() == del.State.ToLower().Trim()))// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
                         lstData.Created.Where(p => p.Country.ToLower().Trim() == del.Country.ToLower().Trim() && p.State.ToLower().Trim() == del.State.ToLower().Trim()).FirstOrDefault().tstamp = del.tstamp;
                     }

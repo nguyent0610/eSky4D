@@ -116,9 +116,83 @@ namespace SI20700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SI20700_pgLoadState_Result> SI20700_pgLoadState()
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Boolean>> SI20700_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
-            return base.ExecuteFunction<SI20700_pgLoadState_Result>("SI20700_pgLoadState");
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("SI20700_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<SI20700_pgLoadState_Result> SI20700_pgLoadState(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<SI20700_pgLoadState_Result>("SI20700_pgLoadState", userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -651,7 +725,8 @@ namespace SI20700
         /// <param name="descr">Initial value of the Descr property.</param>
         /// <param name="territory">Initial value of the Territory property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI20700_pgLoadState_Result CreateSI20700_pgLoadState_Result(global::System.String country, global::System.String state, global::System.String descr, global::System.String territory, global::System.Byte[] tstamp)
+        /// <param name="province">Initial value of the Province property.</param>
+        public static SI20700_pgLoadState_Result CreateSI20700_pgLoadState_Result(global::System.String country, global::System.String state, global::System.String descr, global::System.String territory, global::System.Byte[] tstamp, global::System.String province)
         {
             SI20700_pgLoadState_Result sI20700_pgLoadState_Result = new SI20700_pgLoadState_Result();
             sI20700_pgLoadState_Result.Country = country;
@@ -659,6 +734,7 @@ namespace SI20700
             sI20700_pgLoadState_Result.Descr = descr;
             sI20700_pgLoadState_Result.Territory = territory;
             sI20700_pgLoadState_Result.tstamp = tstamp;
+            sI20700_pgLoadState_Result.Province = province;
             return sI20700_pgLoadState_Result;
         }
 
@@ -785,6 +861,30 @@ namespace SI20700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Province
+        {
+            get
+            {
+                return _Province;
+            }
+            set
+            {
+                OnProvinceChanging(value);
+                ReportPropertyChanging("Province");
+                _Province = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Province");
+                OnProvinceChanged();
+            }
+        }
+        private global::System.String _Province;
+        partial void OnProvinceChanging(global::System.String value);
+        partial void OnProvinceChanged();
 
         #endregion
 

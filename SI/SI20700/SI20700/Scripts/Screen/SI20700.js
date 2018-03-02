@@ -82,6 +82,10 @@ var firstLoad = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboCountry.getStore().addListener('load', checkLoad);
     App.cboTerritory.getStore().addListener('load', checkLoad);
+
+    if (HQ.provinceView === false) {
+        App.Province.hide();
+    }
     //checkLoad();
 };
 
@@ -111,6 +115,9 @@ var stoData_Load = function (sto) {
 
 var grdDet_BeforeEdit = function (editor, e) {
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
+    if (e.field === 'Province') {
+        return false;
+    }
 };
 
 var grdDet_Edit = function (item, e) {
