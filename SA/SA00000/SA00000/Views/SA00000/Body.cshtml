@@ -889,7 +889,7 @@
     .Listeners(l =>
     {
         l.BeforeShow.Fn = "winDistrict_beforeShow";
-        l.Close.Handler = "App.winLocation.unmask();App.winDistrict.unmask();";
+        l.Close.Handler = "App.frmMain.unmask();App.winDistrict.unmask();";
     })
     .Buttons(
      X.Button().Text(Util.GetLang("OK"))

@@ -763,7 +763,7 @@ var btnState_TriggerClick = function () {
     _listState = App.txtSalesState.getValue();// joinParams(App.cboMailTo);
     //App.chkActive_All.setValue(false);
     App.frmMain.mask();
-    App.stoState.removeAll();
+    //App.stoState.removeAll();
     App.stoState.reload();
     App.winState.show();
 }
@@ -820,7 +820,7 @@ var stoState_Load = function (sto) {
 var chkActiveAll_Change = function (sender, value, oldValue) {
     if (sender.hasFocus) {
         var store = App.stoState;
-        var allRecords = store.snapshot || store.allData || store.data;
+        var allRecords = store.allData ;
         store.suspendEvents();
         allRecords.each(function (record) {
             record.set('Selected', value);
@@ -833,7 +833,7 @@ var chkActiveAll_Change = function (sender, value, oldValue) {
 var btnDistrict_TriggerClick = function () {
     _listDistrict = App.txtSalesDistrict.getValue();// joinParams(App.cboMailTo);
     App.frmMain.mask();
-    App.stoDistrict.removeAll();
+    //App.stoDistrict.removeAll();
     App.stoDistrict.reload();
     App.winDistrict.show();
 };
@@ -874,7 +874,7 @@ var btnCancelDistrict_Click = function () {
 var chkActiveDistrictAll_Change = function (sender, value, oldValue) {
     if (sender.hasFocus) {
         var store = App.stoDistrict;
-        var allRecords = store.snapshot || store.allData || store.data;
+        var allRecords = store.allData;
         store.suspendEvents();
         allRecords.each(function (record) {
             record.set('Selected', value);
