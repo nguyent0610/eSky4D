@@ -4870,6 +4870,30 @@ namespace AR20400
         private global::System.String _BrandID;
         partial void OnBrandIDChanging(global::System.String value);
         partial void OnBrandIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String OUnit
+        {
+            get
+            {
+                return _OUnit;
+            }
+            set
+            {
+                OnOUnitChanging(value);
+                ReportPropertyChanging("OUnit");
+                _OUnit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("OUnit");
+                OnOUnitChanged();
+            }
+        }
+        private global::System.String _OUnit;
+        partial void OnOUnitChanging(global::System.String value);
+        partial void OnOUnitChanged();
 
         #endregion
 
@@ -9653,6 +9677,30 @@ namespace AR20400
         private Nullable<global::System.Boolean> _hideCity;
         partial void OnhideCityChanging(Nullable<global::System.Boolean> value);
         partial void OnhideCityChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> hideOUnit
+        {
+            get
+            {
+                return _hideOUnit;
+            }
+            set
+            {
+                OnhideOUnitChanging(value);
+                ReportPropertyChanging("hideOUnit");
+                _hideOUnit = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("hideOUnit");
+                OnhideOUnitChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _hideOUnit;
+        partial void OnhideOUnitChanging(Nullable<global::System.Boolean> value);
+        partial void OnhideOUnitChanged();
 
         #endregion
 
@@ -11680,6 +11728,30 @@ namespace AR20400
         private global::System.String _DisplayID;
         partial void OnDisplayIDChanging(global::System.String value);
         partial void OnDisplayIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String OUnit
+        {
+            get
+            {
+                return _OUnit;
+            }
+            set
+            {
+                OnOUnitChanging(value);
+                ReportPropertyChanging("OUnit");
+                _OUnit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("OUnit");
+                OnOUnitChanged();
+            }
+        }
+        private global::System.String _OUnit;
+        partial void OnOUnitChanging(global::System.String value);
+        partial void OnOUnitChanged();
 
         #endregion
 

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_CustAdvTool">
           <Key>
             <PropertyRef Name="CustID" />
@@ -184,6 +184,7 @@
           <Property Name="DisplayID" Type="varchar" MaxLength="10" />
           <Property Name="SizeID" Type="varchar" MaxLength="10" />
           <Property Name="BrandID" Type="varchar(max)" />
+          <Property Name="OUnit" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="AR_CustomerChild">
           <Key>
@@ -589,12 +590,12 @@
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
           <FunctionImport Name="AR20400_pdConfig" ReturnType="Collection(AR20400Model.AR20400_pdConfig_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
         </EntityContainer>
         <EntityType Name="AR_CustAdvTool">
           <Key>
@@ -1061,6 +1062,12 @@
           <Property Type="String" Name="BrandID" Nullable="true" />
           <Property Type="String" Name="SizeID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="DisplayID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="OUnit" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="AR20400_pdConfig_Result">
+          <Property Type="String" Name="hideColumn" Nullable="false" MaxLength="32" />
+          <Property Type="Boolean" Name="hideCity" Nullable="true" />
+          <Property Type="Boolean" Name="hideOUnit" Nullable="true" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1156,11 +1163,8 @@
           <Property Name="DisplayID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="BrandID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OUnit" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="AR20400_pdConfig_Result">
-          <Property Type="String" Name="hideColumn" Nullable="false" MaxLength="32" />
-          <Property Type="Boolean" Name="hideCity" Nullable="true" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1666,12 +1670,23 @@
                 <ScalarProperty Name="BrandID" ColumnName="BrandID" />
                 <ScalarProperty Name="SizeID" ColumnName="SizeID" />
                 <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+                <ScalarProperty Name="OUnit" ColumnName="OUnit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pdConfig" FunctionName="eBiz4DWebSysModel.Store.AR20400_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pdConfig_Result">
+                <ScalarProperty Name="hideColumn" ColumnName="hideColumn" />
+                <ScalarProperty Name="hideCity" ColumnName="hideCity" />
+                <ScalarProperty Name="hideOUnit" ColumnName="hideOUnit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="OUnit" ColumnName="OUnit" />
                 <ScalarProperty Name="BrandID" ColumnName="BrandID" />
                 <ScalarProperty Name="SizeID" ColumnName="SizeID" />
                 <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
@@ -1764,14 +1779,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AR20400_pdConfig" FunctionName="eBiz4DWebSysModel.Store.AR20400_pdConfig" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pdConfig_Result">
-                <ScalarProperty Name="hideColumn" ColumnName="hideColumn" />
-                <ScalarProperty Name="hideCity" ColumnName="hideCity" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

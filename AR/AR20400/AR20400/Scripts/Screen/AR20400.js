@@ -139,6 +139,9 @@ var firstLoad = function () {
     App.cboCity.setVisible(!HQ.hideCity);
     App.cboBillCity.setVisible(!HQ.hideCity);
     App.lblCITY.setVisible(!HQ.hideCity);
+    App.cboOunit.setVisible(!HQ.hideOUnit);
+    App.cboOunit.allowBlank = HQ.hideOUnit;
+    App.cboOunit.isValid();
 };
 
 
@@ -409,7 +412,8 @@ var frmChange = function () {
     else {
         App.cboCustId.setReadOnly(HQ.isChange);
         App.cboCpnyID.setReadOnly(HQ.isChange);
-    }
+    }    
+    
 };
 
 var stoBeforeLoad = function (sto) {
@@ -498,9 +502,15 @@ var stoLoad = function (sto) {
     }
     if (!HQ.isNew && _hiddenTree == 'false' ) searchNode();
     
+
     HQ.common.showBusy(false);
 
-    
+    var curRecord = App.frmMain.getRecord();
+    if (curRecord != undefined) {
+        if (curRecord.data.OUnit) {
+            HQ.combo.expand(App.cboOunit, ',');
+        }
+    }
 
 };
 

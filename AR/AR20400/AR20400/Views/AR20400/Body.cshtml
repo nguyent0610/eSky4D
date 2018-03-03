@@ -617,6 +617,29 @@
                                         lst.Focus.Handler = "this.forceSelection = true;";
                                     })
 
+                                 , HQ.Combo().ID("cboOunit").Name("cboOunit").HQLangCode("AR20400Ounit").DataIndex("OUnit")
+                                    .HQProcedure("AR20400_pcOunit").HQColumnShow("Code,Descr")//.ForceSelection(false)
+                                    .DisplayField("Descr").ValueField("Code").MultiSelect(true)
+                                    .HQAutoLoad(true)
+                                    .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                                    .HQParam(new StoreParameterCollection()
+                                    {
+                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    })
+                                    .LoadData()
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        //lst.Expand.Handler = "HQ.combo.expand(this, ',');App.cboOunit.store.clearFilter();";
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Focus.Handler = "this.forceSelection = true;";
+                                        lst.Blur.Handler = "this.forceSelection = false;";
+                                    })
+
+
+
                                 , X.Container().Layout(LayoutType.HBox)
                                     .Items(
                                         HQ.Checkbox().ID("chkGiftExch").BoxLabel(Util.GetLang("GIFTEXCHANGE")).DataIndex("GiftExchange")

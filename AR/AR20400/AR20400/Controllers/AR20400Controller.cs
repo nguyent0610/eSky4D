@@ -115,19 +115,22 @@ namespace AR20400.Controllers
 			}
             string hideColumn = string.Empty;
             bool hideCity = false;
+            bool hideOUnit = false;
             var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null && !string.IsNullOrWhiteSpace(objConfig.hideColumn))
             {
                 hideColumn = objConfig.hideColumn.PassNull();
                 hideCity= objConfig.hideCity.HasValue && objConfig.hideCity.Value;
+                hideOUnit = objConfig.hideOUnit.HasValue && objConfig.hideOUnit.Value;
             }
             ViewBag.hideCity = hideCity;
             ViewBag.hideColumn = hideColumn;
+            ViewBag.hideOUnit = hideOUnit;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -696,7 +699,7 @@ namespace AR20400.Controllers
             t.BillDistrict = s.BillDistrict;
             t.SellProduct = s.SellProduct;
             t.RefCustID = s.RefCustID;
-
+            t.OUnit = s.OUnit;
             t.StandID = s.StandID;
             t.SizeID = s.SizeID;
             t.DisplayID = s.DisplayID;
