@@ -39,6 +39,11 @@ var fieldsLangCheckRequire8 = ["BranchID", "CustID", "InvtID", "Target"];
 var keys9 = ['LineRef'];
 var fieldsCheckRequire9 = ["LineRef", "Descr"];
 var fieldsLangCheckRequire9 = ["LineRef", "Descr"];
+
+
+var keys10 = ['ClassID']; // grid Class detail
+var fieldsCheckRequire10 = ["ClassID"];
+var fieldsLangCheckRequire10 = ["ListProdType"];
 //// Declare ///////////////////////////////////////////////////////////
 var _beginStatus = 'H';
 
@@ -49,7 +54,7 @@ var CycleNbr = '';
 var _branchID = '';
 
 var _stoSource = 0;
-var _st0MaxSoucre = 10;
+var _st0MaxSoucre = 11;
 /////////////////////////////////////////////////////////////////
 var checkLoad = function (sto) {
     _Source += 1;
@@ -485,7 +490,7 @@ var menuClick = function (command) {
                         if (HQ.store.checkRequirePass(App.stoOM_KPICondition, keys9, fieldsCheckRequire9, fieldsLangCheckRequire9))
                             save();
                         else return;
-                    else
+                    else 
                         save();
                 }               
             }
@@ -511,7 +516,8 @@ var frmChange = function () {
         App.btnLoad.enable(true);      
         App.cboHandle.setReadOnly(false);
         App.cboZone.setReadOnly(false);
-        App.cboTerritory.setReadOnly(false); 
+        App.cboTerritory.setReadOnly(false);
+        App.cboSlsperIdHeader.setReadOnly(false);
 
     }
 
@@ -613,10 +619,15 @@ var stoCycleNbr_Load = function (sto) {
     }
     if (!Ext.isEmpty(App.cboTerritory.getValue()) && !Ext.isEmpty(App.cboZone.getValue())) {
         App.grdOM_KPICondition.store.reload();
+        App.grdSalesClassDetail.store.reload();
     } else {
         App.grdOM_KPICondition.store.clearData();
         App.grdOM_KPICondition.view.refresh();
         stoKPICondition_Load(App.grdOM_KPICondition.store);
+
+        App.grdSalesClassDetail.store.clearData();
+        App.grdSalesClassDetail.view.refresh();
+        stoSalesClassDetail_Load(App.grdSalesClassDetail.store);
     }
    
 };
@@ -929,11 +940,24 @@ var stoKPISalesInvtLoad = function (sto) {
 
 var stoKPICondition_Load = function (sto) {
     HQ.common.showBusy(false);
-    HQ.isChange = HQ.store.isGridChange(sto, keys2);
+    HQ.isChange = HQ.store.isGridChange(sto, keys9);
     HQ.common.changeData(HQ.isChange, 'OM25100');
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
+    if (HQ.isInsert) {
+        var record = HQ.store.findRecord(sto, keys9, ['']);
+        if (!record) {
             HQ.store.insertBlank(sto, keys9);
+        }
+    }
+}
+
+var stoSalesClassDetail_Load = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isGridChange(sto, keys10);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+    if (HQ.isInsert) {
+        var record = HQ.store.findRecord(sto, keys10, ['']);
+        if (!record) {
+            HQ.store.insertBlank(sto, keys10);
         }
     }
 }
@@ -1107,7 +1131,7 @@ var stoKPISalesInvtChanged = function (sto) {
 };
 
 var stoOM_KPICondition_Changed = function (sto) {
-    HQ.isChange = HQ.store.isGridChange(sto, keys8);
+    HQ.isChange = HQ.store.isGridChange(sto, keys9);
     HQ.common.changeData(HQ.isChange, 'OM25100');
     if (HQ.isChange) {
         App.cboCycleNbr.setReadOnly(true);
@@ -1125,6 +1149,24 @@ var stoOM_KPICondition_Changed = function (sto) {
     }
 };
 
+var stoSalesClassDetail_Changed = function (sto) {
+    HQ.isChange = HQ.store.isGridChange(sto, keys10);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+    if (HQ.isChange) {
+        App.cboCycleNbr.setReadOnly(true);
+        App.cboKPI.setReadOnly(true);
+        App.cboZone.setReadOnly(true);
+        App.cboTerritory.setReadOnly(true);
+        App.btnLoad.disable(true);
+    }
+    else {
+        App.cboCycleNbr.setReadOnly(false);
+        App.cboKPI.setReadOnly(false);
+        App.cboZone.setReadOnly(false);
+        App.cboTerritory.setReadOnly(false);
+        App.btnLoad.disable(false);
+    }
+};
 ///////////////////////////////////////////////////
 var cboCycleNbr_Change = function (sender, value) {
     HQ.isFirstLoad = true;
@@ -1310,7 +1352,16 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPICustomer_All.hide();
                 App.grdOM_KPICustomer_Invt.show();
             }
-
+            if (obj.data.ApplyFor == 'S'
+                && obj.data.ApplyTo == 'G') {
+                if (HQ.showTabSalesClassDetail == 0)
+                    App.tabInfo.child('#pnlSalesClassDetail').tab.hide();
+                else {
+                    App.tabInfo.child('#pnlSalesClassDetail').tab.show();
+                }
+            } else {                
+                App.tabInfo.child('#pnlSalesClassDetail').tab.hide();
+            }
         }
         App.stoCycleNbr.reload();
         App.stoOM_KPICpny_All.addListener('load', checkStoLoad);
@@ -1324,6 +1375,7 @@ var cboKPI_Change = function (sender, value) {
         App.stoOM_KPICustomer_Invt.addListener('load', checkStoLoad);
 
         App.stoOM_KPICondition.addListener('load', checkStoLoad);
+        App.stoSalesClassDetail.addListener('load', checkStoLoad);
     }
 };
 
@@ -1505,7 +1557,8 @@ var save = function () {
                 stoOM_KPICustomer_All: HQ.store.getData(App.stoOM_KPICustomer_All),
                 stoOM_KPICustomer_Class: HQ.store.getData(App.stoOM_KPICustomer_Class),
                 stoOM_KPICustomer_Invt: HQ.store.getData(App.stoOM_KPICustomer_Invt),
-                stoOM_KPICondition: HQ.store.getData(App.stoOM_KPICondition)
+                stoOM_KPICondition: HQ.store.getData(App.stoOM_KPICondition),
+                stoSalesClassDetail: HQ.store.getData(App.stoSalesClassDetail)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
@@ -2065,12 +2118,23 @@ var grdKPISalesClass_BeforeEdit = function (editor, e) {
         return false;
     }
     else {
+        if (HQ.showTabSalesClassDetail == 1) {
+            if (e.record.data.ClassID == '') {
+                e.record.set('ClassID', '*');
+                e.record.commit();
+            }
+            if (e.field == 'ClassID') {
+                return false;
+            }
+        }
         if (e.field == 'SlsperId') {
             _branchID = e.record.data.BranchID;
             App.cboSlsperIdClass.store.reload();
         }
         return HQ.grid.checkBeforeEdit(e, keys4);
     }
+
+   
     //return HQ.grid.checkBeforeEdit(e, keys4);
     //return true;
 };
@@ -2377,6 +2441,48 @@ var grdOM_KPICondition_ValidateEdit = function (item, e) {
 
 var grdOM_KPICondition_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdOM_KPICondition);
+};
+
+
+////////////////////////////
+var grdSalesClassDetail_BeforeEdit = function (editor, e) {
+    if (!HQ.form.checkRequirePass(App.frmMain)) {
+        return false;
+    }
+
+    if (checkCancelEdit()) //(App.cboStatus.getValue() == 'C' || App.cboStatus.getValue() == 'E') 
+    {
+        return false;
+    }
+    if (HQ.isUpdate == false && HQ.isInsert == false) {
+        return false;
+    }
+    return HQ.grid.checkBeforeEdit(e, keys10);
+};
+
+var grdSalesClassDetail_Edit = function (item, e) {
+    HQ.isChange = true;
+    HQ.grid.checkInsertKey(App.grdSalesClassDetail, e, 'ClassID');
+    HQ.isChange = HQ.store.isGridChange(App.grdSalesClassDetail.store, keys10);
+    HQ.common.changeData(HQ.isChange, 'OM25100');
+
+    if (e.field == 'ClassID') {
+        var descr = '';
+        if (!Ext.isEmpty(e.record.data.ClassID && App.cboGroupClassID.valueModels.length > 0)) {
+            descr = App.cboGroupClassID.valueModels[0].data.Descr;
+        }
+        e.record.set('Descr', descr);
+    }
+};
+
+var grdSalesClassDetail_ValidateEdit = function (item, e) {
+    if (e.record.data.ClassID && e.record.data.ClassID != "") {
+        return HQ.grid.checkValidateEdit(App.grdSalesClassDetail, e, keys10, false);
+    }
+};
+
+var grdSalesClassDetail_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSalesClassDetail);
 };
 
 var stringFilter = function (record) {

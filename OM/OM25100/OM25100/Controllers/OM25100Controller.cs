@@ -34,15 +34,20 @@ namespace OM25100.Controllers
         {
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
-            var objConfig = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "OM25100TabCondition");
+            var showTabCondition = 0;
+            var showTabSalesClassDetail = false;
+            var objConfig = _db.OM25100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
-                ViewBag.ShowTabCondition = objConfig.IntVal;
-            else
-                ViewBag.ShowTabCondition = 0;
+            {
+                showTabCondition = objConfig.ShowTabCondition.HasValue ? objConfig.ShowTabCondition.Value : 0;
+                showTabSalesClassDetail = objConfig.ShowTabSalesClassDetail.HasValue && objConfig.ShowTabSalesClassDetail.Value;
+            }
+            ViewBag.showTabCondition = showTabCondition;
+            ViewBag.showTabSalesClassDetail = showTabSalesClassDetail;
             return View();
         }
         
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -72,19 +77,16 @@ namespace OM25100.Controllers
         {
             var lstKPISales_All = _db.OM25100_pgKPISales_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory, TypeStaff).ToList();
             return this.Store(lstKPISales_All);
-            //return this.Store(_db.OM25100_pgKPISales_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList());
         }
 		public ActionResult GetKPICustomer_All(string CycleNbr, string KPI, string Zone, string Territory)
 		{
 			var lstKPISales_All = _db.OM25100_pgKPICustomer_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
 			return this.Store(lstKPISales_All);
-			//return this.Store(_db.OM25100_pgKPISales_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList());
 		}
 		public ActionResult GetKPICustomer_Class(string CycleNbr, string KPI, string Zone, string Territory)
 		{
 			var lstKPISales_Class = _db.OM25100_pgKPICustomer_Class(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
 			return this.Store(lstKPISales_Class);
-			//return this.Store(_db.OM25100_pgKPISales_Class(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList());
 		}
 		public ActionResult GetKPICustomer_Invt(string CycleNbr, string KPI, string Zone, string Territory)
 		{
@@ -95,7 +97,6 @@ namespace OM25100.Controllers
         {
             var lstKPISales_Class = _db.OM25100_pgKPISales_Class(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
             return this.Store(lstKPISales_Class);
-            //return this.Store(_db.OM25100_pgKPISales_Class(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList());
         }
         public ActionResult GetKPISales_Invt(string CycleNbr, string KPI, string Zone, string Territory)
         {
@@ -105,6 +106,11 @@ namespace OM25100.Controllers
         public ActionResult GetKPICondition(string CycleNbr, string KPI)
         {
             var lstKPICondition = _db.OM25100_pgKPICondition(CycleNbr, KPI, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            return this.Store(lstKPICondition);
+        }
+         public ActionResult GetKPISalesClassDetail(string CycleNbr, string KPI)
+        {
+            var lstKPICondition = _db.OM25100_pgSalesClassDetail(CycleNbr, KPI, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lstKPICondition);
         }
         #endregion
@@ -118,7 +124,8 @@ namespace OM25100.Controllers
                 string CycleNbr = data["cboCycleNbr"].PassNull();
                 string KPI = data["cboKPI"].PassNull();
 				string handle = data["cboHandle"].PassNull();
-
+                string appFor = data["cboApplyFor"].PassNull();
+                string appTo = data["cboApplyTo"].PassNull();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstMCCode"]);
                 var curHeader = dataHandler1.ObjectData<OM_KPIHeader>().FirstOrDefault();
@@ -162,6 +169,11 @@ namespace OM25100.Controllers
                 StoreDataHandler dataHander_gridCondition = new StoreDataHandler(data["stoOM_KPICondition"]);
                 ChangeRecords<OM25100_pgKPICondition_Result> stoOM_KPICondition = dataHander_gridCondition.BatchObjectData<OM25100_pgKPICondition_Result>();
                 stoOM_KPICondition.Created.AddRange(stoOM_KPICondition.Updated);
+
+
+                StoreDataHandler dataHander_gridSalesClassDetail = new StoreDataHandler(data["stoSalesClassDetail"]);
+                ChangeRecords<OM25100_pgSalesClassDetail_Result> stoSalesClassDetail = dataHander_gridSalesClassDetail.BatchObjectData<OM25100_pgSalesClassDetail_Result>();
+                stoSalesClassDetail.Created.AddRange(stoSalesClassDetail.Updated);
 
                 #region OM_KPIHeader
                 var header = _db.OM_KPIHeader.FirstOrDefault(p => p.CycleNbr == CycleNbr && p.KPI == KPI);
@@ -730,6 +742,70 @@ namespace OM25100.Controllers
                 }
                 #endregion
 
+                var showTabSalesClassDetail = false;
+                var objConfig = _db.OM25100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                if (objConfig != null)
+                {
+                    showTabSalesClassDetail = objConfig.ShowTabSalesClassDetail.HasValue && objConfig.ShowTabSalesClassDetail.Value;
+                }
+
+                if (appFor == "S" && appTo == "G" && showTabSalesClassDetail)
+                {
+                    #region OM_KPISalesClassDetail
+                    foreach (var del in stoSalesClassDetail.Deleted)
+                    {
+                        if (stoSalesClassDetail.Created.Where(p => p.ClassID == del.ClassID).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                        {
+                            stoSalesClassDetail.Created.Where(p => p.ClassID == del.ClassID).FirstOrDefault().tstamp = del.tstamp;
+                        }
+                        else
+                        {
+                            var objDel = _db.OM_KPISalesClassDetail.FirstOrDefault(p => p.CycleNbr == header.CycleNbr
+                                && p.KPI.ToUpper() == header.KPI.ToUpper() && p.ClassID == del.ClassID);
+                            if (objDel != null)
+                            {
+                                _db.OM_KPISalesClassDetail.DeleteObject(objDel);
+                            }
+                        }
+                    }
+
+                    foreach (var curItem in stoSalesClassDetail.Created)
+                    {
+                        if (curItem.ClassID.PassNull() == "") continue;
+
+                        var objCondition = _db.OM_KPISalesClassDetail.Where(p => p.CycleNbr == header.CycleNbr
+                            && p.KPI == header.KPI && p.ClassID == curItem.ClassID).FirstOrDefault();
+
+                        if (objCondition != null)
+                        {
+                            if (objCondition.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
+                            {
+                                Update_OM_KPISalesClassDetail(ref objCondition, curItem, false);
+                            }
+                            else
+                            {
+                                throw new MessageException(MessageType.Message, "19");
+                            }
+                        }
+                        else
+                        {
+                            objCondition = new OM_KPISalesClassDetail();
+                            Update_OM_KPISalesClassDetail(ref objCondition, curItem, true);
+                            objCondition.CycleNbr = CycleNbr;
+                            objCondition.KPI = KPI;
+                            _db.OM_KPISalesClassDetail.AddObject(objCondition);
+                        }
+                    }
+                    #endregion
+                }
+                else
+                {
+                    var lstOM_KPISalesClassDetail = _db.OM_KPISalesClassDetail.Where(p => p.CycleNbr == CycleNbr && p.KPI == KPI).ToList();
+                    foreach (var objCondition in lstOM_KPISalesClassDetail)
+                    {
+                        _db.OM_KPISalesClassDetail.DeleteObject(objCondition);
+                    }
+                }
                 _db.SaveChanges();
                 return Json(new { success = true, CycleNbr = CycleNbr }, "text/html");
             }
@@ -794,6 +870,12 @@ namespace OM25100.Controllers
                 foreach (var objCondition in lstOM_KPICondition)
                 {
                     _db.OM_KPICondition.DeleteObject(objCondition);
+                }
+
+                var lstOM_KPISalesClassDetail = _db.OM_KPISalesClassDetail.Where(p => p.CycleNbr == CycleNbr && p.KPI == KPI).ToList();
+                foreach (var objCondition in lstOM_KPISalesClassDetail)
+                {
+                    _db.OM_KPISalesClassDetail.DeleteObject(objCondition);
                 }
                 _db.SaveChanges();
                 return Json(new { success = true }, "text/html");
@@ -1004,6 +1086,21 @@ namespace OM25100.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
+
+        private void Update_OM_KPISalesClassDetail(ref OM_KPISalesClassDetail t, OM25100_pgSalesClassDetail_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.ClassID = s.ClassID;
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = Current.UserName;
+            }
+
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
         #endregion
 
         [HttpPost]
@@ -1026,40 +1123,36 @@ namespace OM25100.Controllers
                     {
                         Worksheet workSheet = workbook.Worksheets[0];
 
+
                         #region Check Template
                         if (appFor == "C")
                         {
+                            if (!workSheet.Cells[0, 0].StringValue.Trim().StartsWith("Cycle")
+                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID")
+                            {
+                                throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                            }
+
                             if (appTo == "A")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
-                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
-                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
-                                  || workSheet.Cells[0, 3].StringValue.Trim() != "Target"
-                                  )
+                                if (workSheet.Cells[0, 3].StringValue.Trim() != "Target")
                                 {
                                     throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
                                 }
                             }
                             else if (appTo == "I")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
-                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
-                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
-                                  || workSheet.Cells[0, 3].StringValue.Trim() != "InvtID"
-                                  || workSheet.Cells[0, 4].StringValue.Trim() != "Target"
-                                  )
+                                if (workSheet.Cells[0, 3].StringValue.Trim() != "InvtID"
+                                  || workSheet.Cells[0, 4].StringValue.Trim() != "Target")
                                 {
                                     throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
                                 }
                             }
                             else if (appTo == "G")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
-                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
-                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
-                                  || workSheet.Cells[0, 3].StringValue.Trim() != "ClassID"
-                                  || workSheet.Cells[0, 4].StringValue.Trim() != "Target"
-                                  )
+                                if (workSheet.Cells[0, 3].StringValue.Trim() != "ClassID"
+                                  || workSheet.Cells[0, 4].StringValue.Trim() != "Target")
                                 {
                                     throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
                                 }
@@ -1067,40 +1160,33 @@ namespace OM25100.Controllers
                         }
                         else if (appFor == "S")
                         {
+                            if (!workSheet.Cells[0, 0].StringValue.Trim().StartsWith("Cycle")
+                                 || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
+                                 || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
+                                 || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID")
+                            {
+                                throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                            }
+
                             if (appTo == "A")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
-                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
-                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
-                                  || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
-                                  || workSheet.Cells[0, 4].StringValue.Trim() != "Target"
-                                  )
+                                if (workSheet.Cells[0, 4].StringValue.Trim() != "Target")
                                 {
                                     throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
                                 }
                             }
                             else if (appTo == "I")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
-                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
-                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
-                                  || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
-                                  || workSheet.Cells[0, 4].StringValue.Trim() != "InvtID"
-                                  || workSheet.Cells[0, 5].StringValue.Trim() != "Target"
-                                  )
+                                if (workSheet.Cells[0, 4].StringValue.Trim() != "InvtID"
+                                  || workSheet.Cells[0, 5].StringValue.Trim() != "Target")
                                 {
                                     throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
                                 }
                             }
                             else if (appTo == "G")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
-                                  || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
-                                  || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
-                                  || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
-                                  || workSheet.Cells[0, 4].StringValue.Trim() != "ClassID"
-                                  || workSheet.Cells[0, 5].StringValue.Trim() != "Target"
-                                  )
+                                if (workSheet.Cells[0, 4].StringValue.Trim() != "ClassID"
+                                  || workSheet.Cells[0, 5].StringValue.Trim() != "Target")
                                 {
                                     throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
                                 }
@@ -1108,14 +1194,17 @@ namespace OM25100.Controllers
                         }
                         else if (appFor == "CUS")
                         {
-                            if (appTo == "A")
-                            {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
+                            if (!workSheet.Cells[0, 0].StringValue.Trim().StartsWith("Cycle")
                                   || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
                                   || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
                                   || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
-                                  || workSheet.Cells[0, 4].StringValue.Trim() != "CustID"
-                                  || workSheet.Cells[0, 5].StringValue.Trim() != "Target"
+                                  || workSheet.Cells[0, 4].StringValue.Trim() != "CustID")
+                            {
+                                throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
+                            }
+                            if (appTo == "A")
+                            {
+                                if (workSheet.Cells[0, 5].StringValue.Trim() != "Target"
                                   )
                                 {
                                     throw new MessageException(MessageType.Message, "2017011710", "", parm: new string[] { KPIheader });
@@ -1123,12 +1212,7 @@ namespace OM25100.Controllers
                             }
                             else if (appTo == "I")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
-                                     || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
-                                     || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
-                                     || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
-                                     || workSheet.Cells[0, 4].StringValue.Trim() != "CustID"
-                                     || workSheet.Cells[0, 5].StringValue.Trim() != "InvtID"
+                                if (workSheet.Cells[0, 5].StringValue.Trim() != "InvtID"
                                      || workSheet.Cells[0, 6].StringValue.Trim() != "Target"
                                      )
                                 {
@@ -1137,12 +1221,7 @@ namespace OM25100.Controllers
                             }
                             else if (appTo == "G")
                             {
-                                if (workSheet.Cells[0, 0].StringValue.Trim() != "Cycle\r\n(yyyymm)"
-                                     || workSheet.Cells[0, 1].StringValue.Trim() != "KPI"
-                                     || workSheet.Cells[0, 2].StringValue.Trim() != "BranchID"
-                                     || workSheet.Cells[0, 3].StringValue.Trim() != "SlsperID"
-                                     || workSheet.Cells[0, 4].StringValue.Trim() != "CustID"
-                                     || workSheet.Cells[0, 5].StringValue.Trim() != "ClassID"
+                                if (workSheet.Cells[0, 5].StringValue.Trim() != "ClassID"
                                      || workSheet.Cells[0, 6].StringValue.Trim() != "Target"
                                      )
                                 {
@@ -1197,6 +1276,13 @@ namespace OM25100.Controllers
 
 
                         #endregion
+
+                        var showTabSalesClassDetail = false;
+                        var objConfig = _db.OM25100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                        if (objConfig != null)
+                        {
+                            showTabSalesClassDetail = objConfig.ShowTabSalesClassDetail.HasValue && objConfig.ShowTabSalesClassDetail.Value;
+                        }
 
                         for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
                         {
@@ -1446,19 +1532,27 @@ namespace OM25100.Controllers
                                 }
                                 else if (appTo == "G")
                                 {
-                                    if (ClassID == "")
+                                    if (showTabSalesClassDetail)
                                     {
-                                        errorClassID += (i + 1).ToString() + ",";
-                                        flagCheck = true;
+                                        ClassID = "*";
                                     }
                                     else
                                     {
-                                        if (lstClass.FirstOrDefault(p => p.ClassID == ClassID) == null)
+                                        if (ClassID == "")
                                         {
-                                            errorClassIDnotExists += (i + 1).ToString() + ",";
+                                            errorClassID += (i + 1).ToString() + ",";
                                             flagCheck = true;
                                         }
+                                        else
+                                        {
+                                            if (lstClass.FirstOrDefault(p => p.ClassID == ClassID) == null)
+                                            {
+                                                errorClassIDnotExists += (i + 1).ToString() + ",";
+                                                flagCheck = true;
+                                            }
+                                        }
                                     }
+                                    
                                 }
                             }
                             else if (appFor == "CUS")
@@ -1812,10 +1906,10 @@ namespace OM25100.Controllers
                                             _db.OM_KPISales_Class.AddObject(recordItem);
                                             lstOM_KPISales_Class.Add(recordItem);
                                         }
-                                            recordItem.Target = Convert.ToDouble(Target);
-                                            recordItem.LUpd_DateTime = DateTime.Now;
-                                            recordItem.LUpd_Prog = _screenNbr;
-                                            recordItem.LUpd_User = _userName;
+                                        recordItem.Target = Convert.ToDouble(Target);
+                                        recordItem.LUpd_DateTime = DateTime.Now;
+                                        recordItem.LUpd_Prog = _screenNbr;
+                                        recordItem.LUpd_User = _userName;
                                        
                                     }
                                 }

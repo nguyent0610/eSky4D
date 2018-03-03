@@ -31,7 +31,8 @@
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-        HQ.ShowTabCondition = Number('@ViewBag.ShowTabCondition');
+        HQ.ShowTabCondition = Number('@ViewBag.showTabCondition');
+        HQ.showTabSalesClassDetail = HQ.util.toBool('@ViewBag.showTabSalesClassDetail');
         HQ.bussinessDate = new Date('@DateTime.Now.Date');
 
     </script>  

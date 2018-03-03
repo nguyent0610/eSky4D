@@ -1825,6 +1825,114 @@
                                             lst.Activate.Handler = "HQ.focus = 'grdOM_KPICondition';";
                                         })
                 )//.Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdOM_KPICondition')")
+                , X.Panel().ID("pnlSalesClassDetail").Title(Util.GetLang("OM25100ClassDetail")).Hidden(true)
+                    .Region(Region.Center).Layout(LayoutType.Border)
+                    .PaddingSpec("5 0 0 0")
+                    .Items(
+                        X.GridPanel().ID("grdSalesClassDetail")
+                        .Region(Region.Center)
+                        .Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false))
+                        .Height(300)
+                        .Weight(900)
+                        .Store(
+                            X.Store()
+                            .ID("stoSalesClassDetail")
+                            .PageSize(50)
+                            .Model(Util.GenerateModel(typeof(OM25100_pgSalesClassDetail_Result), "mdlOM25100_pgKPISalesClassDetail", ""))
+                            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("CycleNbr", "App.cboCycleNbr.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
+                            })
+                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetKPISalesClassDetail"))).AutoLoad(false)
+                            .Listeners(l =>
+                            {
+                                l.BeforeLoad.Fn = "stoBeforeLoad";
+                                l.Load.Fn = "stoSalesClassDetail_Load";
+                                l.Update.Fn = "stoSalesClassDetail_Changed";
+                            })
+                        )
+
+                        .SortableColumns(false)
+                        .ColumnModel(
+                        X.RowNumbererColumn().Width(40)
+                        , X.Column().Text(Util.GetLang("ListProdType")).DataIndex("ClassID").Width(150)
+                            .Editor(
+                                HQ.Combo().ID("cboGroupClassID").Name("cboGroupClassID").HQProcedure("OM25100_pcClassID").HQAutoLoad(true)
+                                .HQColumnShow("ClassID,Descr").DisplayField("ClassID").ValueField("ClassID").DataIndex("ClassID")
+                                .Width(500).HQHeightWidth(500, 400)
+                                .HQParam(new StoreParameterCollection() 
+                            {
+                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                            .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                            .LoadData()
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                        )
+                                            
+                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(300)
+                                                                                  
+                        , X.CommandColumn()
+                        .Width(150)
+                        .Commands(
+                            X.GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                        )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                      .Listeners(l => l.Command.Handler = "grdSalesClassDetail_Reject(record);")
+                    )
+                    .SelectionModel(X.RowSelectionModel().ID("slmSalesClassDetail").Mode(SelectionMode.Multi))
+                    .BottomBar(
+                        X.PagingToolbar().HideRefresh(true)
+                        .Items(
+                            X.Label("Page size:"),
+                            X.ToolbarSpacer(10),
+                            X.ComboBox()
+                            .Width(80)
+                            .Items("1", "2", "10", "20", "30", "50")
+                            .SelectedItems("50")
+                            .Listeners(l =>
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                })
+                        )
+                        .Plugins(X.ProgressBarPager())
+                    )
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.BeforeEdit.Fn = "grdSalesClassDetail_BeforeEdit";
+                            ls.Edit.Fn = "grdSalesClassDetail_Edit";
+                            ls.ValidateEdit.Fn = "grdSalesClassDetail_ValidateEdit";
+                        })
+                    )
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("Descr"),
+                                X.NumericFilter().DataIndex("ClassID")
+                            )
+                    )
+                    .Listeners(lst =>
+                    {
+                        lst.Render.Handler = "HQ.common.control_render(this,'grdSalesClassDetail')";
+                        lst.Activate.Handler = "HQ.focus = 'grdSalesClassDetail';";
+                    }
+                )
+            )
         )// End tab Info
         
      ) // End TabPanel
