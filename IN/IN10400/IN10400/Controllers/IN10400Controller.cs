@@ -700,7 +700,7 @@ namespace IN10400.Controllers
                 {
                     throw new MessageException(MessageType.Message, "19");
                 }
-
+                _objBatch.RefNbr = batch.RefNbr;
                 Update_Batch(batch, false);
 
             }

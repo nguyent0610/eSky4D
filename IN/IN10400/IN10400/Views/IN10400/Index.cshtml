@@ -71,7 +71,7 @@
 @(
     X.Store().ID("stoBatch")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof(IN10400_pcINAdjustmentBatch_Result), "mdlBatch","BatNbr"))
+        .Model(Util.GenerateModel(typeof(IN10400_pcBatch_Result), "mdlBatch", "BatNbr"))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetBatch", "IN10400"))
