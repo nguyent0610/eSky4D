@@ -489,7 +489,10 @@ var menuClick = function (command) {
                     if (App.grdOM_KPICondition.isHidden() == false)
                         if (HQ.store.checkRequirePass(App.stoOM_KPICondition, keys9, fieldsCheckRequire9, fieldsLangCheckRequire9))
                             save();
-                        else return;
+                        else {
+                            App.tabInfo.setActiveTab(1);
+                            return;
+                        }
                     else 
                         save();
                 }               
@@ -560,6 +563,18 @@ var stoCycleNbr_Load = function (sto) {
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboCycleNbr.focus(true); //focus ma khi tao moi
         sto.commitChanges();
+
+        //App.stoOM_KPICpny_All.reload();
+        //App.stoOM_KPICpny_Class.reload();
+        //App.stoOM_KPICpny_Invt.reload();
+
+        //App.stoOM_KPISales_All.reload();
+        //App.stoOM_KPISales_Class.reload();
+        //App.stoOM_KPISales_Invt.reload();
+
+        //App.stoOM_KPICustomer_All.reload();
+        //App.stoOM_KPICustomer_Class.reload();
+        //App.stoOM_KPICustomer_Invt.reload();
     }
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
@@ -1240,6 +1255,7 @@ var cboKPI_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoCycleNbr.loading) {
         var obj = App.cboKPI.getStore().findRecord("KPI", App.cboKPI.getValue());
+        var allowBlank = true;
         if (obj != null) {
             App.cboApplyFor.setValue(obj.data.ApplyFor);
             App.cboApplyTo.setValue(obj.data.ApplyTo);
@@ -1255,6 +1271,7 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPICustomer_Invt.hide();
                 App.grdOM_KPICustomer_Class.hide();
                 App.grdOM_KPICustomer_All.hide();
+                
                 
             }else if (obj.data.ApplyFor == 'C'
                 && obj.data.ApplyTo == 'G') {
@@ -1291,6 +1308,7 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPICustomer_Class.hide();
                 App.grdOM_KPICustomer_All.hide();
                 App.grdOM_KPISales_All.show();
+                allowBlank = false;
             }
             else if (obj.data.ApplyFor == 'S'
                 && obj.data.ApplyTo == 'G') {
@@ -1303,6 +1321,7 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPICustomer_Class.hide();
                 App.grdOM_KPICustomer_All.hide();
                 App.grdOM_KPISales_Class.show();
+                allowBlank = false;
             }
             else if (obj.data.ApplyFor == 'S'
                 && obj.data.ApplyTo == 'I') {
@@ -1314,7 +1333,8 @@ var cboKPI_Change = function (sender, value) {
                 App.grdOM_KPICustomer_Invt.hide();
                 App.grdOM_KPICustomer_Class.hide();
                 App.grdOM_KPICustomer_All.hide();
-               App.grdOM_KPISales_Invt.show();
+                App.grdOM_KPISales_Invt.show();
+                allowBlank = false;
             }
             else if (obj.data.ApplyFor == 'CUS'
                && obj.data.ApplyTo == 'A') {
@@ -1362,7 +1382,11 @@ var cboKPI_Change = function (sender, value) {
             } else {                
                 App.tabInfo.child('#pnlSalesClassDetail').tab.hide();
             }
+        } else {
+
         }
+        App.cboSlsperIdHeader.allowBlank = allowBlank;
+        App.cboSlsperIdHeader.validate();
         App.stoCycleNbr.reload();
         App.stoOM_KPICpny_All.addListener('load', checkStoLoad);
         App.stoOM_KPICpny_Class.addListener('load', checkStoLoad);
