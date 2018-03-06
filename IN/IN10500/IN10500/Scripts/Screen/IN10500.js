@@ -171,6 +171,7 @@ var stoChanged = function (sto) {
 
 //load store khi co su thay doi TagID
 var stoIN_TagHeader_Load = function (sto) {
+    App.txtTotQty.setValue(0);
     HQ.isFirstLoad = true;
     HQ.isNew = false;
     if (sto.data.length == 0) {
@@ -250,7 +251,7 @@ var lockControl = function (value) {
 };
 
 var stoLoadIN_TagDetail = function (sto) {
-
+    App.txtTotQty.setValue(0);
     if (HQ.isFirstLoad) {
         //if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
         //    HQ.store.insertBlank(sto, keys);
