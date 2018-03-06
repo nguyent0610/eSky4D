@@ -73,6 +73,7 @@ namespace IN10500.Controllers
 
         public ActionResult GetIN_TagDetail(string TagID, string BranchID, string SiteID, string ReasonCD,string ClassID)
         {
+            _app.CommandTimeout = int.MaxValue;
             var data = _app.IN10500_pgLoadGrid(TagID, BranchID, SiteID, ReasonCD,ClassID, Current.UserName, Current.CpnyID, Current.LangID);
             return this.Store(data);
         }
@@ -631,9 +632,9 @@ namespace IN10500.Controllers
                                     bool isNumeric = float.TryParse(workSheet.Cells[i, 3].StringValue, out n);
                                     if (isNumeric == true)
                                     {
-                                        if (workSheet.Cells[i, 3].FloatValue == 0)
+                                        if (workSheet.Cells[i, 3].FloatValue < 0)
                                         {
-                                            message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số lượng<br/>", (i + 1).ToString(), invtID);
+                                            message += string.Format("Dòng {0} mặt hàng {1} số lượng không được phép nhỏ hơn 0<br/>", (i + 1).ToString(), invtID);
                                             continue;
                                         }
                                     }
