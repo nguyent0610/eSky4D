@@ -906,7 +906,8 @@ namespace INProcess
                     ReasonCD = objTagHeader.ReasonCD,
                     Status = "C",
                     Rlsed = 1,
-                    DateEnt = DateTime.Now.Short(),
+                    DateEnt = objTagHeader.TranDate,
+                    //DateTime.Now.Short(),
                     JrnlType = "IN",
                     EditScrnNbr = "IN10500",
                     BranchID = branchID,
@@ -938,7 +939,7 @@ namespace INProcess
                     {
                         BatNbr = batNbr,
                         BranchID = branchID,
-                        TranDate = DateTime.Now.Short(),
+                        TranDate =objTagHeader.TranDate,// DateTime.Now.Short(),
                         Crtd_DateTime = DateTime.Now,
                         Crtd_Prog = tagDetail.String("Crtd_Prog"),
                         Crtd_User = tagDetail.String("Crtd_User"),
