@@ -218,7 +218,7 @@
             .SelectionMemory(false)
             .Store(
                 X.Store()
-                .ID("stoIN_TagDetail")
+                .ID("stoIN_TagDetail")                
                 .PageSize(50).AutoLoad(false)
                 .Model(Util.GenerateModel(typeof(IN10500_pgLoadGrid_Result), "mdlIN10500_pgLoadGrid", ""))
                 .Parameters(ps =>
@@ -229,7 +229,7 @@
                     ps.Add(new StoreParameter("ReasonCD", "App.cboReasonCD.getValue()", ParameterMode.Raw));
                     ps.Add(new StoreParameter("ClassID", "App.cboClassID.getValue()", ParameterMode.Raw));
                 })
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetIN_TagDetail")))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetIN_TagDetail")).Timeout(int.MaxValue))
                 .Listeners(p => p.Load.Fn = "stoLoadIN_TagDetail")
                 
             )
