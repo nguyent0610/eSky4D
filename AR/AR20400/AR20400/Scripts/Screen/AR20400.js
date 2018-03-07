@@ -88,7 +88,7 @@ var stoAR20400_ppGetTerritoryForUser_load = function (sto) {
 var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
-    App.frmMain.isValid();
+    
 
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboStatus.getStore().addListener('load', checkLoad);
@@ -140,8 +140,13 @@ var firstLoad = function () {
     App.cboBillCity.setVisible(!HQ.hideCity);
     App.lblCITY.setVisible(!HQ.hideCity);
     App.cboOunit.setVisible(!HQ.hideOUnit);
-    App.cboOunit.allowBlank = HQ.hideOUnit;
-    App.cboOunit.isValid();
+
+    
+    App.cboPriceClassID.allowBlank = !HQ.reqChannel;
+    App.cboChannel.allowBlank = !HQ.reqPriceClassID;
+    App.cboSlsperId.allowBlank = !HQ.reqSlsperson;
+    App.cboOunit.allowBlank = !HQ.reqOUnit;    
+    App.frmMain.isValid();
 };
 
 
@@ -445,7 +450,7 @@ var stoLoad = function (sto) {
         record.set('Area', value2);
         HQ.isNew = true;
         App.cboCustId.forceSelection = false;
-        App.cboDistrict.allowBlank = true;
+       // App.cboDistrict.allowBlank = true;
         //if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1')
         if (_Flag == "1")
             App.cboCustId.forceSelection = true;
@@ -490,6 +495,7 @@ var stoLoad = function (sto) {
     else {
         HQ.common.lockItem(App.frmMain, true);
         App.fupImages.setDisabled(true);
+        App.cboDistrict.allowBlank = true;
     }
     if (!HQ.isInsert && HQ.isNew) {
         App.cboCustId.forceSelection = true;
@@ -1210,6 +1216,12 @@ var cboClassId_TriggerClick = function (sender, e) {
     App.cboTaxID03.setValue('');
 }
 
+var cboSlsperId_Change = function (sender, e) {
+    App.cboOunit.store.reload();
+    if (sender.hasFocus) {
+        App.cboOunit.setValue('');
+    }
+}
 
 var cboTerritory_Change_Select = function (sender, e) {
     if (sender.hasFocus) {
@@ -1329,7 +1341,7 @@ var txtBillAddr1_Change = function (sender, e) {
     App.txtBillAddr.setValue(tam);
 }
 var txtBillAddr2_Change = function (sender, e) {
-    _addr1Bill = App.txtBillAddr2.getValue();
+    _addr2Bill = App.txtBillAddr2.getValue();
     var tam = _addr1Bill + ", " + _addr2Bill + ", " + _wardBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
     App.txtBillAddr.setValue(tam);
 }

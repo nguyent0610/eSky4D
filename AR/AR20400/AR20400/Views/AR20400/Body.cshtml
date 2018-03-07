@@ -306,6 +306,7 @@
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                         lst.Focus.Handler = "this.forceSelection = true;";
+                                        lst.Change.Fn = "cboSlsperId_Change";
                                     })
 
                                 , HQ.Combo().ID("cboDeliveryID").Name("cboDeliveryID").HQLangCode("DELIVERYMAN").DataIndex("DeliveryID")
@@ -624,6 +625,7 @@
                                     .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .HQParam(new StoreParameterCollection()
                                     {
+                                        new StoreParameter() { Name = "@SlsperID", Value = "App.cboSlsperId.getValue()", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -881,7 +883,6 @@
                                     lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
                                     lst.Focus.Handler = "this.forceSelection = true;";
                                 })
-
                             , HQ.Combo().ID("cboBillState").Name("cboBillState").DataIndex("BillState")
                                 .HQProcedure("AR20400_pcStateByCountry").HQColumnShow("State,Descr")
                                 .DisplayField("Descr").ValueField("State")

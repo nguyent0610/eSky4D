@@ -9701,6 +9701,102 @@ namespace AR20400
         private Nullable<global::System.Boolean> _hideOUnit;
         partial void OnhideOUnitChanging(Nullable<global::System.Boolean> value);
         partial void OnhideOUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequiredChannel
+        {
+            get
+            {
+                return _RequiredChannel;
+            }
+            set
+            {
+                OnRequiredChannelChanging(value);
+                ReportPropertyChanging("RequiredChannel");
+                _RequiredChannel = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequiredChannel");
+                OnRequiredChannelChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequiredChannel;
+        partial void OnRequiredChannelChanging(Nullable<global::System.Boolean> value);
+        partial void OnRequiredChannelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequiredPriceClassID
+        {
+            get
+            {
+                return _RequiredPriceClassID;
+            }
+            set
+            {
+                OnRequiredPriceClassIDChanging(value);
+                ReportPropertyChanging("RequiredPriceClassID");
+                _RequiredPriceClassID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequiredPriceClassID");
+                OnRequiredPriceClassIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequiredPriceClassID;
+        partial void OnRequiredPriceClassIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnRequiredPriceClassIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequiredOUnit
+        {
+            get
+            {
+                return _RequiredOUnit;
+            }
+            set
+            {
+                OnRequiredOUnitChanging(value);
+                ReportPropertyChanging("RequiredOUnit");
+                _RequiredOUnit = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequiredOUnit");
+                OnRequiredOUnitChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequiredOUnit;
+        partial void OnRequiredOUnitChanging(Nullable<global::System.Boolean> value);
+        partial void OnRequiredOUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> RequiredSlsperID
+        {
+            get
+            {
+                return _RequiredSlsperID;
+            }
+            set
+            {
+                OnRequiredSlsperIDChanging(value);
+                ReportPropertyChanging("RequiredSlsperID");
+                _RequiredSlsperID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RequiredSlsperID");
+                OnRequiredSlsperIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _RequiredSlsperID;
+        partial void OnRequiredSlsperIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnRequiredSlsperIDChanged();
 
         #endregion
 

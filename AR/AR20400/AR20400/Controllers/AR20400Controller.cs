@@ -116,21 +116,33 @@ namespace AR20400.Controllers
             string hideColumn = string.Empty;
             bool hideCity = false;
             bool hideOUnit = false;
+            var reqChannel = false;
+            var reqPriceClassID = false;
+            var reqOUnit = false;
+            var reqSlsperson = false;
             var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null && !string.IsNullOrWhiteSpace(objConfig.hideColumn))
             {
                 hideColumn = objConfig.hideColumn.PassNull();
                 hideCity= objConfig.hideCity.HasValue && objConfig.hideCity.Value;
                 hideOUnit = objConfig.hideOUnit.HasValue && objConfig.hideOUnit.Value;
+                reqChannel = objConfig.RequiredChannel.HasValue && objConfig.RequiredChannel.Value;
+                reqPriceClassID = objConfig.RequiredPriceClassID.HasValue && objConfig.RequiredPriceClassID.Value;
+                reqSlsperson = objConfig.RequiredSlsperID.HasValue && objConfig.RequiredSlsperID.Value;
+                reqOUnit = !hideOUnit && objConfig.RequiredOUnit.HasValue && objConfig.RequiredOUnit.Value;
             }
             ViewBag.hideCity = hideCity;
             ViewBag.hideColumn = hideColumn;
             ViewBag.hideOUnit = hideOUnit;
+            ViewBag.reqChannel = reqChannel;
+            ViewBag.reqPriceClassID = reqPriceClassID;
+            ViewBag.reqSlsperson = reqSlsperson;
+            ViewBag.reqOUnit = reqOUnit;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -221,7 +233,7 @@ namespace AR20400.Controllers
                         if (objAR_Setup.AutoCustID == true)
                         {
                             isNew = "true";
-                            var objCustID = _db.AR20400_ppCustID(BranchID, "", "", "", "", "", "", "", "", "", ClassId, curHeader.CustName,curHeader.State, curHeader.District).FirstOrDefault();
+                            var objCustID = _db.AR20400_ppCustID(BranchID, "", "", "", "", "", "", "", "", curHeader.Channel, ClassId, curHeader.CustName, curHeader.State, curHeader.District).FirstOrDefault();
                             header = new AR_Customer();
                             header.ResetET();
                             header.CustId = objCustID.PassNull();
