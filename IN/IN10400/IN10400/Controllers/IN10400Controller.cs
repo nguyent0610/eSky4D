@@ -721,7 +721,10 @@ namespace IN10400.Controllers
             if (_objIN == null) _objIN = new IN_Setup();
             foreach (var trans in _lstTrans)
             {
-
+                if (string.IsNullOrWhiteSpace(trans.InvtID))
+                {
+                    continue;
+                }
                 var transDB = _app.IN_Trans.FirstOrDefault(p =>
                                 p.BatNbr == _objBatch.BatNbr && p.RefNbr == trans.RefNbr &&
                                 p.BranchID == _objBatch.BranchID && p.LineRef == trans.LineRef);

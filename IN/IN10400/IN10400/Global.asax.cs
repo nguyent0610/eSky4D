@@ -40,13 +40,13 @@ namespace IN10400
             Current.FormatDateJS = "d-m-Y";
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";
-            Current.DBSys = "ND_TEST_eSky4DSys";
+            Current.DBSys = "JJVN_TEST_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN10400"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_TEST_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "JJVN_TEST_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
