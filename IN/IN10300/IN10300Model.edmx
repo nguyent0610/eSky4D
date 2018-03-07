@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="Batch">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -18,7 +18,7 @@
           <Property Name="DateEnt" Type="smalldatetime" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="100" />
           <Property Name="EditScrnNbr" Type="varchar" MaxLength="8" />
-          <Property Name="FromToSiteID" Type="varchar" MaxLength="10" />
+          <Property Name="FromToSiteID" Type="varchar" MaxLength="30" />
           <Property Name="ImpExp" Type="varchar" MaxLength="1" />
           <Property Name="IntRefNbr" Type="varchar" MaxLength="10" />
           <Property Name="JrnlType" Type="varchar" MaxLength="2" />
@@ -113,6 +113,8 @@
           <Property Name="Brand" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ProGroup" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ProType" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ImageModifiedDate" Type="datetime" />
+          <Property Name="VideoModifiedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="IN_ItemLot">
           <Key>
@@ -196,18 +198,18 @@
           <Property Name="KitID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="MfgrLotSerNbr" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="Qty" Type="float" Nullable="false" />
-          <Property Name="SiteID" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="ToSiteID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ToSiteID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="TranDate" Type="smalldatetime" Nullable="false" />
           <Property Name="TranType" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="UnitCost" Type="float" Nullable="false" />
           <Property Name="UnitPrice" Type="float" Nullable="false" />
           <Property Name="WarrantyDate" Type="smalldatetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="UnitDesc" Type="varchar" MaxLength="10" />
@@ -230,15 +232,15 @@
           <Property Name="LastIssueNbr" Type="varchar" MaxLength="10" />
           <Property Name="LastRcptNbr" Type="varchar" MaxLength="10" />
           <Property Name="DfltValMthd" Type="varchar" MaxLength="1" />
-          <Property Name="DfltSite" Type="varchar" MaxLength="10" />
+          <Property Name="DfltSite" Type="varchar" MaxLength="30" />
           <Property Name="PreFixBat" Type="varchar" MaxLength="2" />
           <Property Name="UseBarCode" Type="bit" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CheckINVal" Type="bit" Nullable="false" />
           <Property Name="LastStkOutNbr" Type="varchar" MaxLength="10" />
@@ -266,9 +268,9 @@
           <Property Name="Rlsed" Type="smallint" Nullable="false" />
           <Property Name="ShipperID" Type="varchar" MaxLength="15" />
           <Property Name="ShipperLineRef" Type="varchar" MaxLength="5" />
-          <Property Name="SiteID" Type="varchar" MaxLength="10" />
+          <Property Name="SiteID" Type="varchar" MaxLength="30" />
           <Property Name="SlsperID" Type="varchar" MaxLength="30" />
-          <Property Name="ToSiteID" Type="varchar" MaxLength="10" />
+          <Property Name="ToSiteID" Type="varchar" MaxLength="30" />
           <Property Name="TranAmt" Type="float" Nullable="false" />
           <Property Name="TranFee" Type="float" Nullable="false" />
           <Property Name="TranDate" Type="smalldatetime" Nullable="false" />
@@ -280,14 +282,15 @@
           <Property Name="UnitPrice" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CostID" Type="varchar" MaxLength="30" />
           <Property Name="QtyUncosted" Type="float" Nullable="false" />
           <Property Name="PosmID" Type="varchar" MaxLength="30" />
+          <Property Name="RptExpDate" Type="datetime" />
         </EntityType>
         <EntityType Name="IN_Transfer">
           <Key>
@@ -298,7 +301,7 @@
           <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="BatNbr" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="TrnsfrDocNbr" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Comment" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="30" />
           <Property Name="ExpectedDate" Type="smalldatetime" Nullable="false" />
           <Property Name="NoteID" Type="int" Nullable="false" />
           <Property Name="ReasonCD" Type="varchar" MaxLength="10" />
@@ -308,20 +311,21 @@
           <Property Name="RcptNbr" Type="varchar" MaxLength="10" />
           <Property Name="ShipperID" Type="varchar" MaxLength="15" />
           <Property Name="ShipViaID" Type="varchar" MaxLength="15" />
-          <Property Name="SiteID" Type="varchar" MaxLength="10" />
+          <Property Name="SiteID" Type="varchar" MaxLength="30" />
           <Property Name="Source" Type="varchar" MaxLength="2" />
           <Property Name="Status" Type="varchar" MaxLength="1" />
-          <Property Name="ToSiteID" Type="varchar" MaxLength="10" />
+          <Property Name="ToSiteID" Type="varchar" MaxLength="30" />
           <Property Name="TranDate" Type="smalldatetime" Nullable="false" />
           <Property Name="TransferType" Type="varchar" MaxLength="1" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="ToCpnyID" Type="varchar" MaxLength="30" />
+          <Property Name="AdvanceType" Type="varchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="IN_UnitConversion">
           <Key>
@@ -332,9 +336,9 @@
             <PropertyRef Name="ToUnit" />
           </Key>
           <Property Name="UnitType" Type="char" MaxLength="1" Nullable="false" />
-          <Property Name="ClassID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ClassID" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="FromUnit" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="FromUnit" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ToUnit" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="MultDiv" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="CnvFact" Type="float" Nullable="false" />
@@ -351,7 +355,7 @@
             <PropertyRef Name="UserID" />
             <PropertyRef Name="DfltBranchID" />
           </Key>
-          <Property Name="UserID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="UserID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="OMSite" Type="varchar" MaxLength="30" />
           <Property Name="INSite" Type="varchar" MaxLength="30" />
           <Property Name="POSite" Type="varchar" MaxLength="30" />
@@ -359,10 +363,10 @@
           <Property Name="DfltBranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="DfltSlsPerID" Type="varchar" MaxLength="30" />
           <Property Name="DfltSupID" Type="varchar" MaxLength="30" />
@@ -370,6 +374,8 @@
           <Property Name="InvcNote" Type="varchar" MaxLength="50" />
           <Property Name="WorkingDate" Type="smalldatetime" />
           <Property Name="DiscSite" Type="varchar" MaxLength="30" />
+          <Property Name="POSMSite" Type="varchar" MaxLength="10" />
+          <Property Name="BranchSiteID" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="RPTRunning">
           <Key>
@@ -425,17 +431,38 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="IN10300_pdOM_UserDefault" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="IN10300_pdPrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="VendID" Type="varchar" Mode="In" />
           <Parameter Name="InvtID" Type="varchar" Mode="In" />
           <Parameter Name="UOM" Type="nvarchar" Mode="In" />
           <Parameter Name="EffDate" Type="smalldatetime" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
-          <Parameter Name="ValMthd" Type="varchar" Mode="In" />
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
+          <Parameter Name="ValMthd" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="IN10300_pgIN_ItemSite" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN10300_pgLotTransVanSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
+          <Parameter Name="ToSiteID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN10300_pgTransferLoad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
@@ -444,6 +471,9 @@
           <Parameter Name="RefNbr" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN10300_ppCheckCloseDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
@@ -477,7 +507,6 @@
           <EntitySet Name="IN_Setup" EntityType="IN10300Model.IN_Setup" />
           <EntitySet Name="IN_UnitConversion" EntityType="IN10300Model.IN_UnitConversion" />
           <EntitySet Name="OM_UserDefault" EntityType="IN10300Model.OM_UserDefault" />
-          <EntitySet Name="IN_Transfer" EntityType="IN10300Model.IN_Transfer" />
           <EntitySet Name="RPTRunnings" EntityType="IN10300Model.RPTRunning" />
           <FunctionImport Name="IN10300_pcBatch" ReturnType="Collection(IN10300Model.IN10300_pcBatch_Result)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -503,29 +532,54 @@
             <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="IN_LotTrans" EntityType="IN10300Model.IN_LotTrans" />
+          <EntitySet Name="IN_Trans" EntityType="IN10300Model.IN_Trans" />
+          <FunctionImport Name="IN10300_pdConfig" ReturnType="Collection(IN10300Model.IN10300_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="IN10300_pgIN_ItemSite" ReturnType="Collection(IN10300Model.IN10300_pgIN_ItemSite_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN10300_pgLotTransVanSale" ReturnType="Collection(IN10300Model.IN10300_pgLotTransVanSale_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="ToSiteID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN10300_ppCheckCloseDate" ReturnType="Collection(String)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="ScreenNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN10300_pdOM_UserDefault" ReturnType="Collection(IN10300Model.IN10300_pdOM_UserDefault_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="IN_Transfer" EntityType="IN10300Model.IN_Transfer" />
           <FunctionImport Name="IN10300_pdPrice" ReturnType="Collection(IN10300Model.IN10300_pdPrice_Result)">
             <Parameter Name="VendID" Mode="In" Type="String" />
             <Parameter Name="InvtID" Mode="In" Type="String" />
             <Parameter Name="UOM" Mode="In" Type="String" />
             <Parameter Name="EffDate" Mode="In" Type="DateTime" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="ValMthd" Mode="In" Type="String" />
             <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="ValMthd" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <FunctionImport Name="IN10300_ppCheckCloseDate" ReturnType="Collection(String)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
-            <Parameter Name="ScreenNbr" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="IN10300_pdConfig" ReturnType="Collection(IN10300Model.IN10300_pdConfig_Result)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
-          <EntitySet Name="IN_Trans" EntityType="IN10300Model.IN_Trans" />
         </EntityContainer>
         <EntityType Name="Batch">
           <Key>
@@ -540,7 +594,7 @@
           <Property Type="DateTime" Name="DateEnt" Nullable="false" Precision="0" />
           <Property Type="String" Name="Descr" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="EditScrnNbr" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="FromToSiteID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="FromToSiteID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ImpExp" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="IntRefNbr" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="JrnlType" MaxLength="2" FixedLength="false" Unicode="false" />
@@ -635,6 +689,8 @@
           <Property Type="String" Name="Brand" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProGroup" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProType" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ImageModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="VideoModifiedDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="IN_ItemLot">
           <Key>
@@ -715,15 +771,15 @@
           <Property Type="String" Name="LastIssueNbr" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LastRcptNbr" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DfltValMthd" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltSite" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltSite" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="PreFixBat" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="UseBarCode" Nullable="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Boolean" Name="CheckINVal" Nullable="false" />
           <Property Type="String" Name="LastStkOutNbr" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -737,9 +793,9 @@
             <PropertyRef Name="ToUnit" />
           </Key>
           <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ToUnit" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="MultDiv" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="CnvFact" Nullable="false" />
@@ -756,7 +812,7 @@
             <PropertyRef Name="UserID" />
             <PropertyRef Name="DfltBranchID" />
           </Key>
-          <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="OMSite" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="INSite" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="POSite" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -764,10 +820,10 @@
           <Property Type="String" Name="DfltBranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="DfltSlsPerID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DfltSupID" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -775,40 +831,8 @@
           <Property Type="String" Name="InvcNote" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="WorkingDate" Precision="0" />
           <Property Type="String" Name="DiscSite" MaxLength="30" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="IN_Transfer">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="BatNbr" />
-            <PropertyRef Name="TrnsfrDocNbr" />
-          </Key>
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TrnsfrDocNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Comment" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Type="DateTime" Name="ExpectedDate" Nullable="false" Precision="0" />
-          <Property Type="Int32" Name="NoteID" Nullable="false" />
-          <Property Type="String" Name="ReasonCD" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RefNbr" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RcptBatNbr" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="RcptDate" Nullable="false" Precision="0" />
-          <Property Type="String" Name="RcptNbr" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipperID" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipViaID" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SiteID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Source" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Status" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ToSiteID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="TranDate" Nullable="false" Precision="0" />
-          <Property Type="String" Name="TransferType" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" ConcurrencyMode="Fixed" />
-          <Property Type="String" Name="ToCpnyID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="POSMSite" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="BranchSiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="RPTRunning">
           <Key>
@@ -862,8 +886,8 @@
           <Property Type="Int32" Name="TotalRecords" Nullable="true" />
           <Property Type="String" Name="TrnsfrDocNbr" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Comment" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="SiteID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="ToSiteID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SiteID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ToSiteID" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="RcptNbr" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="TransferType" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="ShipViaID" Nullable="true" MaxLength="15" />
@@ -873,6 +897,7 @@
           <Property Type="DateTime" Name="RcptDate" Nullable="false" Precision="16" />
           <Property Type="String" Name="TransferStatus" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="ToCpnyID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="AdvanceType" Nullable="true" MaxLength="5" />
         </ComplexType>
         <ComplexType Name="IN10300_pgTransferLoad_Result">
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
@@ -891,8 +916,8 @@
           <Property Type="Int16" Name="Rlsed" Nullable="false" />
           <Property Type="String" Name="ShipperID" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="ShipperLineRef" Nullable="true" MaxLength="5" />
-          <Property Type="String" Name="SiteID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SiteID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="ToSiteID" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="TranAmt" Nullable="false" />
           <Property Type="Double" Name="TranFee" Nullable="false" />
@@ -910,8 +935,9 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="true" MaxLength="8" />
           <Property Type="String" Name="LUpd_User" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="tstamp" Nullable="true" />
-          <Property Type="String" Name="BarCode" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="BarCode" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="IsChanged" Nullable="false" MaxLength="1" />
+          <Property Type="DateTime" Name="RptExpDate" Nullable="true" Precision="23" />
         </ComplexType>
         <ComplexType Name="IN10300_pcUnit_Result">
           <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" />
@@ -947,31 +973,23 @@
           <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="MfgrLotSerNbr" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="Qty" Nullable="false" />
-          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ToSiteID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ToSiteID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="TranDate" Nullable="false" Precision="0" />
           <Property Type="String" Name="TranType" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="UnitCost" Nullable="false" />
           <Property Type="Double" Name="UnitPrice" Nullable="false" />
           <Property Type="DateTime" Name="WarrantyDate" Nullable="false" Precision="0" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Double" Name="CnvFact" Nullable="false" />
           <Property Type="String" Name="UnitMultDiv" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="IN10300_pdPrice_Result">
-          <Property Type="Double" Name="Price" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="IN10300_pdConfig_Result">
-          <Property Type="Boolean" Name="AllowDescrBlank" Nullable="true" />
-          <Property Type="Boolean" Name="AllowNoteBlank" Nullable="true" />
-          <Property Type="Boolean" Name="IsSetDefaultShipViaID" Nullable="true" />
-        </ComplexType>
         <EntityType Name="IN_Trans">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -995,9 +1013,9 @@
           <Property Name="Rlsed" Type="Int16" Nullable="false" />
           <Property Name="ShipperID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="ShipperLineRef" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="SiteID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="SlsperID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ToSiteID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ToSiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="TranAmt" Type="Double" Nullable="false" />
           <Property Name="TranFee" Type="Double" Nullable="false" />
           <Property Name="TranDate" Type="DateTime" Nullable="false" Precision="0" />
@@ -1009,15 +1027,141 @@
           <Property Name="UnitPrice" Type="Double" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="CostID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="QtyUncosted" Type="Double" Nullable="false" />
           <Property Name="PosmID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="RptExpDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <ComplexType Name="IN10300_pdConfig_Result">
+          <Property Type="Boolean" Name="AllowDescrBlank" Nullable="true" />
+          <Property Type="Boolean" Name="AllowNoteBlank" Nullable="true" />
+          <Property Type="Boolean" Name="IsSetDefaultShipViaID" Nullable="true" />
+          <Property Type="Boolean" Name="HideRptExpDate" Nullable="true" />
+          <Property Type="Boolean" Name="HideWarehous" Nullable="true" />
+          <Property Type="Boolean" Name="ReadOnlyReasonCD" Nullable="true" />
+          <Property Type="Boolean" Name="IsSetDefaultSiteID" Nullable="true" />
+          <Property Type="Boolean" Name="HideExpectedDateRcptDate" Nullable="true" />
+          <Property Type="Boolean" Name="DflReasonCD" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN10300_pgIN_ItemSite_Result">
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="CnvFact" Nullable="true" />
+          <Property Type="String" Name="CostID" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="ExtCost" Nullable="true" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="Double" Name="InvtMult" Nullable="true" />
+          <Property Type="String" Name="JrnlType" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="ObjID" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="Qty" Nullable="true" />
+          <Property Type="String" Name="ReasonCD" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="Rlsed" Nullable="true" />
+          <Property Type="String" Name="ShipperID" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="ShipperLineRef" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="ToSiteID" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="TranAmt" Nullable="true" />
+          <Property Type="Double" Name="TranFee" Nullable="true" />
+          <Property Type="DateTime" Name="TranDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="TranDesc" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="TranType" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="UnitCost" Nullable="true" />
+          <Property Type="String" Name="UnitDesc" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="UnitMultDiv" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="UnitPrice" Nullable="true" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="23" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="tstamp" Nullable="false" MaxLength="1" />
+          <Property Type="DateTime" Name="RptExpDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="BarCode" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="IsChanged" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="IN10300_pgLotTransVanSale_Result">
+          <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="LotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="INTranLineRef" Nullable="false" MaxLength="1" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="InvtMult" Nullable="false" />
+          <Property Type="String" Name="KitID" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="MfgrLotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ToSiteID" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="TranDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="TranType" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="UnitCost" Nullable="true" />
+          <Property Type="Double" Name="UnitPrice" Nullable="true" />
+          <Property Type="DateTime" Name="WarrantyDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="UnitDesc" Nullable="true" MaxLength="15" />
+          <Property Type="Double" Name="CnvFact" Nullable="true" />
+          <Property Type="String" Name="UnitMultDiv" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="IN10300_pdOM_UserDefault_Result">
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="OMSite" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="INSite" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="POSite" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="DfltOrderType" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="DfltBranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="DfltSlsPerID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="DfltSupID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="WorkingDate" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="InvcNote" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastInvcNbr" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="IN_Transfer">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="TrnsfrDocNbr" />
+          </Key>
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="BatNbr" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TrnsfrDocNbr" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Comment" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ExpectedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NoteID" Type="Int32" Nullable="false" />
+          <Property Name="ReasonCD" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="RefNbr" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="RcptBatNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="RcptDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RcptNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ShipperID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="ShipViaID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="SiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Source" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ToSiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="TranDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="TransferType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ToCpnyID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="AdvanceType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="IN10300_pdPrice_Result">
+          <Property Type="Double" Name="Price" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1060,6 +1204,8 @@
           <EntitySetMapping Name="IN_Inventory">
             <EntityTypeMapping TypeName="IN10300Model.IN_Inventory">
               <MappingFragment StoreEntitySet="IN_Inventory">
+                <ScalarProperty Name="VideoModifiedDate" ColumnName="VideoModifiedDate" />
+                <ScalarProperty Name="ImageModifiedDate" ColumnName="ImageModifiedDate" />
                 <ScalarProperty Name="ProType" ColumnName="ProType" />
                 <ScalarProperty Name="ProGroup" ColumnName="ProGroup" />
                 <ScalarProperty Name="Brand" ColumnName="Brand" />
@@ -1247,6 +1393,8 @@
           <EntitySetMapping Name="OM_UserDefault">
             <EntityTypeMapping TypeName="IN10300Model.OM_UserDefault">
               <MappingFragment StoreEntitySet="OM_UserDefault">
+                <ScalarProperty Name="BranchSiteID" ColumnName="BranchSiteID" />
+                <ScalarProperty Name="POSMSite" ColumnName="POSMSite" />
                 <ScalarProperty Name="DiscSite" ColumnName="DiscSite" />
                 <ScalarProperty Name="WorkingDate" ColumnName="WorkingDate" />
                 <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
@@ -1266,39 +1414,6 @@
                 <ScalarProperty Name="INSite" ColumnName="INSite" />
                 <ScalarProperty Name="OMSite" ColumnName="OMSite" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IN_Transfer">
-            <EntityTypeMapping TypeName="IN10300Model.IN_Transfer">
-              <MappingFragment StoreEntitySet="IN_Transfer">
-                <ScalarProperty Name="ToCpnyID" ColumnName="ToCpnyID" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="TransferType" ColumnName="TransferType" />
-                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
-                <ScalarProperty Name="ToSiteID" ColumnName="ToSiteID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Source" ColumnName="Source" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="ShipViaID" ColumnName="ShipViaID" />
-                <ScalarProperty Name="ShipperID" ColumnName="ShipperID" />
-                <ScalarProperty Name="RcptNbr" ColumnName="RcptNbr" />
-                <ScalarProperty Name="RcptDate" ColumnName="RcptDate" />
-                <ScalarProperty Name="RcptBatNbr" ColumnName="RcptBatNbr" />
-                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
-                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
-                <ScalarProperty Name="NoteID" ColumnName="NoteID" />
-                <ScalarProperty Name="ExpectedDate" ColumnName="ExpectedDate" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="TrnsfrDocNbr" ColumnName="TrnsfrDocNbr" />
-                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1366,6 +1481,7 @@
                 <ScalarProperty Name="RcptDate" ColumnName="RcptDate" />
                 <ScalarProperty Name="TransferStatus" ColumnName="TransferStatus" />
                 <ScalarProperty Name="ToCpnyID" ColumnName="ToCpnyID" />
+                <ScalarProperty Name="AdvanceType" ColumnName="AdvanceType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1409,6 +1525,7 @@
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="BarCode" ColumnName="BarCode" />
                 <ScalarProperty Name="IsChanged" ColumnName="IsChanged" />
+                <ScalarProperty Name="RptExpDate" ColumnName="RptExpDate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1469,26 +1586,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN10300_pdPrice" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdPrice" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdPrice_Result">
-                <ScalarProperty Name="Price" ColumnName="Price" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN10300_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.IN10300_ppCheckCloseDate" />
-          <FunctionImportMapping FunctionImportName="IN10300_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdConfig">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdConfig_Result">
-                <ScalarProperty Name="AllowDescrBlank" ColumnName="AllowDescrBlank" />
-                <ScalarProperty Name="AllowNoteBlank" ColumnName="AllowNoteBlank" />
-                <ScalarProperty Name="IsSetDefaultShipViaID" ColumnName="IsSetDefaultShipViaID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="IN_Trans">
             <EntityTypeMapping TypeName="IN10300Model.IN_Trans">
               <MappingFragment StoreEntitySet="IN_Trans">
+                <ScalarProperty Name="RptExpDate" ColumnName="RptExpDate" />
                 <ScalarProperty Name="PosmID" ColumnName="PosmID" />
                 <ScalarProperty Name="QtyUncosted" ColumnName="QtyUncosted" />
                 <ScalarProperty Name="CostID" ColumnName="CostID" />
@@ -1530,6 +1631,151 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN10300_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdConfig_Result">
+                <ScalarProperty Name="AllowDescrBlank" ColumnName="AllowDescrBlank" />
+                <ScalarProperty Name="AllowNoteBlank" ColumnName="AllowNoteBlank" />
+                <ScalarProperty Name="IsSetDefaultShipViaID" ColumnName="IsSetDefaultShipViaID" />
+                <ScalarProperty Name="HideRptExpDate" ColumnName="HideRptExpDate" />
+                <ScalarProperty Name="HideWarehous" ColumnName="HideWarehous" />
+                <ScalarProperty Name="ReadOnlyReasonCD" ColumnName="ReadOnlyReasonCD" />
+                <ScalarProperty Name="IsSetDefaultSiteID" ColumnName="IsSetDefaultSiteID" />
+                <ScalarProperty Name="HideExpectedDateRcptDate" ColumnName="HideExpectedDateRcptDate" />
+                <ScalarProperty Name="DflReasonCD" ColumnName="DflReasonCD" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10300_pgIN_ItemSite" FunctionName="eBiz4DWebSysModel.Store.IN10300_pgIN_ItemSite">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pgIN_ItemSite_Result">
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+                <ScalarProperty Name="CostID" ColumnName="CostID" />
+                <ScalarProperty Name="ExtCost" ColumnName="ExtCost" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="InvtMult" ColumnName="InvtMult" />
+                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
+                <ScalarProperty Name="ObjID" ColumnName="ObjID" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
+                <ScalarProperty Name="Rlsed" ColumnName="Rlsed" />
+                <ScalarProperty Name="ShipperID" ColumnName="ShipperID" />
+                <ScalarProperty Name="ShipperLineRef" ColumnName="ShipperLineRef" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="ToSiteID" ColumnName="ToSiteID" />
+                <ScalarProperty Name="TranAmt" ColumnName="TranAmt" />
+                <ScalarProperty Name="TranFee" ColumnName="TranFee" />
+                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
+                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
+                <ScalarProperty Name="TranType" ColumnName="TranType" />
+                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="RptExpDate" ColumnName="RptExpDate" />
+                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
+                <ScalarProperty Name="IsChanged" ColumnName="IsChanged" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10300_pgLotTransVanSale" FunctionName="eBiz4DWebSysModel.Store.IN10300_pgLotTransVanSale">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pgLotTransVanSale_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="LotSerNbr" ColumnName="LotSerNbr" />
+                <ScalarProperty Name="INTranLineRef" ColumnName="INTranLineRef" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="InvtMult" ColumnName="InvtMult" />
+                <ScalarProperty Name="KitID" ColumnName="KitID" />
+                <ScalarProperty Name="MfgrLotSerNbr" ColumnName="MfgrLotSerNbr" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="ToSiteID" ColumnName="ToSiteID" />
+                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
+                <ScalarProperty Name="TranType" ColumnName="TranType" />
+                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="WarrantyDate" ColumnName="WarrantyDate" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+                <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10300_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.IN10300_ppCheckCloseDate" />
+          <FunctionImportMapping FunctionImportName="IN10300_pdOM_UserDefault" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdOM_UserDefault">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdOM_UserDefault_Result">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="OMSite" ColumnName="OMSite" />
+                <ScalarProperty Name="INSite" ColumnName="INSite" />
+                <ScalarProperty Name="POSite" ColumnName="POSite" />
+                <ScalarProperty Name="DfltOrderType" ColumnName="DfltOrderType" />
+                <ScalarProperty Name="DfltBranchID" ColumnName="DfltBranchID" />
+                <ScalarProperty Name="DfltSlsPerID" ColumnName="DfltSlsPerID" />
+                <ScalarProperty Name="DfltSupID" ColumnName="DfltSupID" />
+                <ScalarProperty Name="WorkingDate" ColumnName="WorkingDate" />
+                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
+                <ScalarProperty Name="LastInvcNbr" ColumnName="LastInvcNbr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="IN_Transfer">
+            <EntityTypeMapping TypeName="IN10300Model.IN_Transfer">
+              <MappingFragment StoreEntitySet="IN_Transfer">
+                <ScalarProperty Name="AdvanceType" ColumnName="AdvanceType" />
+                <ScalarProperty Name="ToCpnyID" ColumnName="ToCpnyID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="TransferType" ColumnName="TransferType" />
+                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
+                <ScalarProperty Name="ToSiteID" ColumnName="ToSiteID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="ShipViaID" ColumnName="ShipViaID" />
+                <ScalarProperty Name="ShipperID" ColumnName="ShipperID" />
+                <ScalarProperty Name="RcptNbr" ColumnName="RcptNbr" />
+                <ScalarProperty Name="RcptDate" ColumnName="RcptDate" />
+                <ScalarProperty Name="RcptBatNbr" ColumnName="RcptBatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="ReasonCD" ColumnName="ReasonCD" />
+                <ScalarProperty Name="NoteID" ColumnName="NoteID" />
+                <ScalarProperty Name="ExpectedDate" ColumnName="ExpectedDate" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="TrnsfrDocNbr" ColumnName="TrnsfrDocNbr" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN10300_pdPrice" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdPrice" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdPrice_Result">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1551,7 +1797,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="65" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="38" >
         <EntityTypeShape EntityType="IN10300Model.Batch" Width="1.5" PointX="7.625" PointY="0.5" />
         <EntityTypeShape EntityType="IN10300Model.IN_Inventory" Width="1.5" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="IN10300Model.IN_ItemLot" Width="1.5" PointX="5.75" PointY="0.5" />
@@ -1559,10 +1805,10 @@
         <EntityTypeShape EntityType="IN10300Model.IN_Setup" Width="1.5" PointX="7.625" PointY="7.125" />
         <EntityTypeShape EntityType="IN10300Model.IN_UnitConversion" Width="1.5" PointX="2.125" PointY="8.75" />
         <EntityTypeShape EntityType="IN10300Model.OM_UserDefault" Width="1.5" PointX="3.75" PointY="7.25" />
-        <EntityTypeShape EntityType="IN10300Model.IN_Transfer" Width="1.5" PointX="2.3698065161564417" PointY="30.2927671960987" />
         <EntityTypeShape EntityType="IN10300Model.RPTRunning" Width="1.5" PointX="1.0111313653230347" PointY="21.278797338380851" />
         <EntityTypeShape EntityType="IN10300Model.IN_LotTrans" Width="1.5" PointX="9.9887962350569648" PointY="30.48878568340502" />
-        <EntityTypeShape EntityType="IN10300Model.IN_Trans" Width="1.5" PointX="2.125" PointY="0.5" />
+        <EntityTypeShape EntityType="IN10300Model.IN_Trans" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="IN10300Model.IN_Transfer" Width="1.5" PointX="10.375" PointY="10.75" />
       </Diagram>
     </Diagrams>
   </Designer>

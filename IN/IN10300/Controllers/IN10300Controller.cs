@@ -38,10 +38,11 @@ namespace IN10300.Controllers
         private List<IN10300_pgTransferLoad_Result> _lstTrans;
         private List<IN_LotTrans> _lstLot;
         private IN_Setup _objIN;
-      
+        private string _branch = "";
+        private string _advanceType = "";
         public ActionResult Index(string branchID)
         {
-            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+            //LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
 
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
@@ -53,19 +54,39 @@ namespace IN10300.Controllers
 
             if (branchID == null) branchID = Current.CpnyID;
 
-            bool isSetDefaultShipViaID = false;
+            bool hideRptExpDate = false
+                , hideWarehouss = false, readOnlyReasonCD = false, hideExpectedDateRcptDate = false
+                , allowDescrBlank = false, allowNoteBlank=false, isSetDefaultShipViaID=false, isSetDefaultSiteID=false, dflReasonCD=false;
+
+
             var objConfig = _app.IN10300_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
-                isSetDefaultShipViaID = objConfig.IsSetDefaultShipViaID != null ? objConfig.IsSetDefaultShipViaID.Value : false;
-            }
+                hideRptExpDate = objConfig.HideRptExpDate.HasValue ? objConfig.HideRptExpDate.Value : false;
+                hideWarehouss = objConfig.HideWarehous.HasValue ? objConfig.HideWarehous.Value : false;
+                readOnlyReasonCD = objConfig.ReadOnlyReasonCD.HasValue ? objConfig.ReadOnlyReasonCD.Value : false;
+                hideExpectedDateRcptDate = objConfig.HideExpectedDateRcptDate.HasValue ? objConfig.HideExpectedDateRcptDate.Value : false;
+                allowDescrBlank = objConfig.AllowDescrBlank.HasValue ? objConfig.AllowDescrBlank.Value : false;
+                allowNoteBlank = objConfig.AllowNoteBlank.HasValue ? objConfig.AllowNoteBlank.Value : false;
+                isSetDefaultShipViaID = objConfig.IsSetDefaultShipViaID.HasValue ? objConfig.IsSetDefaultShipViaID.Value : false;
+                isSetDefaultSiteID = objConfig.IsSetDefaultSiteID.HasValue ? objConfig.IsSetDefaultSiteID.Value : false;
+                dflReasonCD = objConfig.DflReasonCD.HasValue ? objConfig.DflReasonCD.Value : false;
+            }           
+            ViewBag.hideRptExpDate = hideRptExpDate;
+            ViewBag.hideWarehouss = hideWarehouss;
+            ViewBag.readOnlyReasonCD = readOnlyReasonCD;
+            ViewBag.hideExpectedDateRcptDate = hideExpectedDateRcptDate;
+            ViewBag.allowDescrBlank = allowDescrBlank;
+            ViewBag.allowNoteBlank = allowNoteBlank;
             ViewBag.isSetDefaultShipViaID = isSetDefaultShipViaID;
+            ViewBag.isSetDefaultSiteID = isSetDefaultSiteID;
+            ViewBag.dflReasonCD = dflReasonCD;
             ViewBag.BranchID = branchID;
 
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+       //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -79,11 +100,16 @@ namespace IN10300.Controllers
             var paging = new Paging<IN10300_pcBatch_Result>(lstBatch, lstBatch.Count > 0 ? lstBatch[0].TotalRecords.Value : 0);
             return this.Store(paging.Data, paging.TotalRecords);
         }
-        public ActionResult GetUserDefault()
+
+        
+
+
+        public ActionResult GetUserDefault(string BranchID)
         {
-            string userName = Current.UserName;
-            string cpnyID = Current.CpnyID;
-            var objUser = _app.OM_UserDefault.FirstOrDefault(p => p.UserID == userName && p.DfltBranchID == cpnyID);
+            //string tam = BranchID;
+            //int bd = tam.LastIndexOf("=");
+            //_branch = tam.Substring(bd+1);
+            var objUser = _app.IN10300_pdOM_UserDefault(Current.CpnyID,Current.UserName,Current.LangID, BranchID).FirstOrDefault();
             return this.Store(objUser);
         }
         public ActionResult GetSetup()
@@ -94,9 +120,11 @@ namespace IN10300.Controllers
         }
         public ActionResult GetTrans(string batNbr, string branchID, string refNbr)
         {
+            
             var lstTrans = _app.IN10300_pgTransferLoad(batNbr, branchID, "%", refNbr).ToList();
             return this.Store(lstTrans);
         }
+
         public ActionResult GetLot(string invtID, string siteID, string batNbr, string branchID)
         {
             List<IN_ItemLot> lstLot = new List<IN_ItemLot>();
@@ -166,9 +194,9 @@ namespace IN10300.Controllers
             var lstUnit = _app.IN10300_pcUnitConversion(Current.CpnyID).ToList();
             return this.Store(lstUnit);
         }
-        public ActionResult GetPrice(string invtID, string uom, DateTime effDate, string branchID, string valMthd, string siteID)
+        public ActionResult GetPrice(string invtID, string uom, DateTime effDate,string branchID,string siteID,string valMthd)
         {
-            var lstPrice = _app.IN10300_pdPrice("", invtID, uom, DateTime.Now, branchID, valMthd, siteID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            var lstPrice = _app.IN10300_pdPrice("", invtID, uom, DateTime.Now,branchID,siteID,valMthd,Current.UserName,Current.CpnyID,Current.LangID).ToList();
             return this.Store(lstPrice);
         }
         public ActionResult GetUnit(string invtID)
@@ -179,11 +207,26 @@ namespace IN10300.Controllers
             return this.Store(lstUnit, lstUnit.Count);
         }
 
+        public ActionResult GetAllInvtINSite(string branchID, string SiteID)
+        {
+            var lstTrans = _app.IN10300_pgIN_ItemSite(Current.UserName, Current.CpnyID, Current.LangID, branchID, SiteID).ToList();
+            return this.Store(lstTrans);
+        }
+        public ActionResult GetLotTransVanSale(string BranchID, string SiteID,string ToSiteID)
+        {
+            var lstTransVanSale = _app.IN10300_pgLotTransVanSale(Current.UserName, Current.CpnyID, Current.LangID, BranchID, SiteID,ToSiteID).ToList();
+            return this.Store(lstTransVanSale);
+        }
+
+
+
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
+                _advanceType = data["cboAdvanceType"];
                 _form = data;
                 SaveData(data);
 
@@ -361,7 +404,7 @@ namespace IN10300.Controllers
             if (_lstTrans == null)
             {
                 var transHandler = new StoreDataHandler(data["lstTrans"]);
-                _lstTrans = transHandler.ObjectData<IN10300_pgTransferLoad_Result>().Where(p => Util.PassNull(p.LineRef) != string.Empty).ToList();
+                _lstTrans = transHandler.ObjectData<IN10300_pgTransferLoad_Result>().Where(p => Util.PassNull(p.LineRef) != string.Empty && Util.PassNull(p.InvtID)!=string.Empty).ToList();
             }
             if (_lstLot == null)
             {
@@ -374,7 +417,7 @@ namespace IN10300.Controllers
             _handle = data["Handle"].PassNull();
             _objBatch.Status = _objBatch.Status.PassNull() == string.Empty ? "H" : _objBatch.Status;
 
-            if (_app.IN10300_ppCheckCloseDate(_objBatch.BranchID, _objBatch.TranDate.ToDateShort(), "IN10300").FirstOrDefault() == "0")
+            if (_app.IN10300_ppCheckCloseDate(Current.UserName,Current.CpnyID,Current.LangID,_objBatch.BranchID, _objBatch.TranDate.ToDateShort(), "IN10300").FirstOrDefault() == "0")
                 throw new MessageException(MessageType.Message, "301");
 
             //var cfgWrkDateChk = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
@@ -665,8 +708,8 @@ namespace IN10300.Controllers
                 t.Crtd_User = _userName;
                 t.Crtd_DateTime = DateTime.Now;
             }
-
             t.NoteID = 0;
+            t.AdvanceType = _advanceType;
             t.Comment = _objBatch.Comment.PassNull();
             t.ReasonCD = _objBatch.ReasonCD.PassNull();
             t.RcptDate = _objBatch.RcptDate.ToDateShort();
@@ -721,6 +764,7 @@ namespace IN10300.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
 
+            t.RptExpDate = s.RptExpDate;
             t.CnvFact = s.CnvFact;
             t.ExtCost = s.ExtCost;
             t.InvtID = s.InvtID;

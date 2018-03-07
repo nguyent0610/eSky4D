@@ -1,13 +1,13 @@
+using HQ.eSkyFramework;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using HQ.eSkyFramework;
-using System.Configuration;
 
 namespace IN10300
 {
@@ -24,33 +24,22 @@ namespace IN10300
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-
         }
+
         protected void Session_Start(object sender, EventArgs e)
         {
-            //Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
-            //Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
-            //Session["DBApp"] = Current.DBApp = "eBiz4DWebApp";
-            //Session["UserName"] = Current.UserName = "admin";
-            //Session["CpnyID"] = Current.CpnyID = "HQH00000";
-            //Session["Language"] = Current.Language = "vi";
-            //Session["LangID"] = 1;
-
+            Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
-            //Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.Server = "TRUONGSAD";
-            Current.DBSys = "KIDO_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
-            Current.FormatDate = "yyyy/MM/dd";
-            Current.FormatDateJS = "yyyy.MM.dd";
+            Current.Server = "TRUONGSAD";////192.168.130.4//EARTHSVR
+            Current.DBSys = "KidoKEM_eSky4DSys";////eBiz4DCloudSysJFV
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN10300"] = acc;
-            Session["DBApp"] = Current.DBApp = "KIDO_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "KidoKEM_eSky4DApp";//eBiz4DCloudAppJFV
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "1000658";
+            Session["CpnyID"] = Current.CpnyID = "CHHCM0007";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }

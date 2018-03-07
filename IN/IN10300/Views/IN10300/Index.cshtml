@@ -18,7 +18,7 @@
     <meta name="viewport" content="width=device-width" />
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/screen/IN10300.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/IN10300.js?"+DateTime.Now.ToString("yyyyMMddHHss"))' type="text/javascript"></script>
 
     <style>
         .x-grid-row-over .x-grid-cell-inner {
@@ -26,16 +26,22 @@
         }
     </style>
     <script>
-
-    HQ.cpnyID = '@ViewBag.BranchID';
-    HQ.langID = '@Current.LangID';
-    HQ.userName = '@Current.UserName';
-    HQ.businessDate = new Date();
-    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-    HQ.isSetDefaultShipViaID = HQ.util.toBool('@ViewBag.isSetDefaultShipViaID');
-
+        HQ.cpnyID = '@ViewBag.BranchID';
+        HQ.hideRptExpDate = HQ.util.toBool('@ViewBag.hideRptExpDate');
+        HQ.hideWarehouss = HQ.util.toBool('@ViewBag.hideWarehouss');
+        HQ.readOnlyReasonCD = HQ.util.toBool('@ViewBag.readOnlyReasonCD');
+        HQ.hideExpectedDateRcptDate = HQ.util.toBool('@ViewBag.hideExpectedDateRcptDate');
+        HQ.allowDescrBlank = HQ.util.toBool('@ViewBag.allowDescrBlank');
+        HQ.allowNoteBlank = HQ.util.toBool('@ViewBag.allowNoteBlank');
+        HQ.isSetDefaultShipViaID = HQ.util.toBool('@ViewBag.isSetDefaultShipViaID');
+        HQ.isSetDefaultSiteID = HQ.util.toBool('@ViewBag.isSetDefaultSiteID');
+        HQ.dflReasonCD = HQ.util.toBool('@ViewBag.dflReasonCD');
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.businessDate = new Date();
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
     </script>  
     <title>@ViewBag.Title</title>
 </head>
@@ -70,12 +76,16 @@
     X.Store()
     .ID("stoUserDefault")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (OM_UserDefault),"mdlUserDefault",""))
+    .Model(Util.GenerateModel(typeof (IN10300_pdOM_UserDefault_Result),"mdlUserDefault",""))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetUserDefault", "IN10300"))
         .ActionMethods(action => { action.Read = HttpMethod.POST; })
         .Reader(X.JsonReader().Root("data")))
+        .Parameters(ps =>
+        {
+            ps.Add(new StoreParameter("BranchID", "HQ.cpnyID", ParameterMode.Raw));
+        })
 )
 
 @(
@@ -124,6 +134,11 @@
     })
 )
 
+
+
+
+
+
 @(
     X.Store()
     .ID("stoItemLot")
@@ -149,12 +164,12 @@
         .Reader(X.JsonReader().Root("data"))
     )
 )
-@*@(X.Store().ID("stoTrans")
+@(X.Store().ID("stoAllInvtINSite")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof(IN10300_pgTransferLoad_Result), "mdlTrans", ""))
+    .Model(Util.GenerateModel(typeof(IN10300_pgTransferLoad_Result), "mdlAllInvtINSite", ""))
     .Proxy(
         X.AjaxProxy()
-        .Url(Url.Action("GetTrans", "IN10300"))
+        .Url(Url.Action("GetAllInvtINSite", "IN10300"))
         .ActionMethods(action =>
         {
             action.Read = HttpMethod.POST;
@@ -163,15 +178,17 @@
     )
     .Parameters(ps =>
     {
-        ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("UserID", "HQ.userName", ParameterMode.Raw));
+        ps.Add(new StoreParameter("CpnyID", "HQ.cpnyID", ParameterMode.Raw));
+        ps.Add(new StoreParameter("LangID", "HQ.langID", ParameterMode.Raw));
         ps.Add(new StoreParameter("BranchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
-        ps.Add(new StoreParameter("RefNbr", "App.txtRefNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("SiteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
     })
     .Listeners(p => {
-        p.Load.Fn = "stoDetail_Load";
-        p.BeforeLoad.Fn= "stoTrans_BeforeLoad";
+        p.Load.Fn = "stoAllInvtINSite_Load";
+        p.BeforeLoad.Fn= "stoAllInvtINSite_BeforeLoad";
     })
-)*@
+)
 
 @(
     X.Store().ID("stoOldTrans")
@@ -224,6 +241,36 @@
         .ActionMethods(action => { action.Read = HttpMethod.POST; })
         .Reader(X.JsonReader().Root("data")))
 )
+
+
+
+@(
+X.Store()
+.ID("stoLotTransVanSale")
+.AutoLoad(false)
+.Model(Util.GenerateModel(typeof(IN10300_pgLotTransVanSale_Result), "mdlLotTransVanSale", "", true))
+.Proxy(
+    X.AjaxProxy()
+    .Url(Url.Action("GetLotTransVanSale", "IN10300"))
+    .ActionMethods(action => action.Read = HttpMethod.POST)
+    .Reader(X.JsonReader().Root("data"))
+)
+.Listeners(p =>
+{
+    p.Load.Fn = "stoDetail_Load";
+})
+.Parameters(ps =>
+{
+    
+    ps.Add(new StoreParameter("BranchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
+    ps.Add(new StoreParameter("SiteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
+    ps.Add(new StoreParameter("ToSiteID", "App.cboToSiteID.getValue()", ParameterMode.Raw));
+})
+)
+
+
+
+
 @(
     X.Store()
     .ID("stoPrice")
