@@ -263,7 +263,7 @@
 
                 , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500Inventory")).DataIndex("BookEAQty").Width(110).Align(Alignment.Right).StyleSpec("text-align:left")
                 , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500ActInventory")).DataIndex("ActualEAQty").Width(110).Align(Alignment.Right)
-                        .Editor(X.NumberField().DecimalPrecision(numDecimal)).StyleSpec("text-align:left")
+                        .Editor(X.NumberField().MinValue(0).DecimalPrecision(numDecimal)).StyleSpec("text-align:left")
 
                 , X.NumberColumn().Format(format).Text(Util.GetLang("IN10500Inventory1M")).DataIndex("StkQtyUnder1Month").Width(120).Align(Alignment.Right)
                     .Editor(X.NumberField().DecimalPrecision(numDecimal)).StyleSpec("text-align:left")
