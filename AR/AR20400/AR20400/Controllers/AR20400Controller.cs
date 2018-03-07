@@ -121,7 +121,7 @@ namespace AR20400.Controllers
             var reqOUnit = false;
             var reqSlsperson = false;
             var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-            if (objConfig != null && !string.IsNullOrWhiteSpace(objConfig.hideColumn))
+            if (objConfig != null)
             {
                 hideColumn = objConfig.hideColumn.PassNull();
                 hideCity= objConfig.hideCity.HasValue && objConfig.hideCity.Value;
@@ -181,7 +181,7 @@ namespace AR20400.Controllers
         {
             return this.Store(_db.AR20400_pgAR_LTTContractDetail(CustId).ToList());
         }
-
+         
         [HttpPost]
         public ActionResult Save(FormCollection data, string NodeID, string NodeLevel, string ParentRecordID, string HiddenTree)
         {
@@ -899,7 +899,6 @@ namespace AR20400.Controllers
                             _db.AR_Customer.DeleteObject(objAR_Customer);
                             if (!string.IsNullOrWhiteSpace(objAR_Customer.ProfilePic))
                             {
-
                                 Util.UploadFile(FilePath, objAR_Customer.ProfilePic, null);
 
                             }

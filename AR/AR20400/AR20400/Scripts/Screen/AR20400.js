@@ -140,7 +140,6 @@ var firstLoad = function () {
     App.cboBillCity.setVisible(!HQ.hideCity);
     App.lblCITY.setVisible(!HQ.hideCity);
     App.cboOunit.setVisible(!HQ.hideOUnit);
-
     
     App.cboPriceClassID.allowBlank = !HQ.reqChannel;
     App.cboChannel.allowBlank = !HQ.reqPriceClassID;
@@ -148,8 +147,6 @@ var firstLoad = function () {
     App.cboOunit.allowBlank = !HQ.reqOUnit;    
     App.frmMain.isValid();
 };
-
-
 
 var menuClick = function (command) {
     switch (command) {
