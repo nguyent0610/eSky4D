@@ -273,7 +273,7 @@ namespace AR20500.Controllers
                                 }else
 	                            {
                                     Insert_NewCustHis(objNew, ref hisLineRef, 0, objNew.ProfilePic.PassNull() == string.Empty, objNew.BusinessPic.PassNull() == string.Empty);
-	                            }                                
+	                            }                                 
                             }
                             
                             var callAfterApprove = objNew.UpdateType == 0;
@@ -316,7 +316,7 @@ namespace AR20500.Controllers
                                 {
                                     objCust = new AR_Customer();
                                     objCust.ResetET();
-                                    objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();//item.ERPCustID.PassNull() != "" ? item.ERPCustID.PassNull() : _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();                                    
+                                    objCust.CustId = _db.AR20500_CustID(item.BranchID, "", item.Territory, item.District, "", "", "", "", "", item.Channel, item.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();//item.ERPCustID.PassNull() != "" ? item.ERPCustID.PassNull() : _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull(), objCust.CustName).FirstOrDefault();                                    
                                     objCust.BranchID = item.BranchID.PassNull();
                                     objCust.Crtd_Datetime = DateTime.Now;
                                     objCust.Crtd_Prog = _screenNbr;
