@@ -141,8 +141,8 @@ var firstLoad = function () {
     App.lblCITY.setVisible(!HQ.hideCity);
     App.cboOunit.setVisible(!HQ.hideOUnit);
     
-    App.cboPriceClassID.allowBlank = !HQ.reqChannel;
-    App.cboChannel.allowBlank = !HQ.reqPriceClassID;
+    App.cboPriceClassID.allowBlank = !HQ.reqPriceClassID;
+    App.cboChannel.allowBlank = !HQ.reqChannel;
     App.cboSlsperId.allowBlank = !HQ.reqSlsperson;
     App.cboOunit.allowBlank = !HQ.reqOUnit;    
     App.frmMain.isValid();
