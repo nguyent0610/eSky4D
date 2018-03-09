@@ -249,6 +249,7 @@
                         , X.Column().Text(Util.GetLang("CustName")).DataIndex("OutletName").Width(120).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
                         , X.Column().Text(Util.GetLang("AR205ContactName")).DataIndex("ContactName").Width(120).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
                         , X.Column().Text(Util.GetLang("Phone")).DataIndex("Phone").Width(90).Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
+                        , X.Column().Text(Util.GetLang("AR20500Mobile")).DataIndex("Mobile").Width(90).Editor(X.TextField().MaxLength(30).EnforceMaxLength(true)).ID("clmMobile").Hidden(true)
                         , X.Column().Text(Util.GetLang("TaxCode")).DataIndex("TaxCode").Width(100).Editor(X.TextField().MaxLength(15).EnforceMaxLength(true)).Hidden(true)
                         , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(90)
                         , X.Column().Text(Util.GetLang("SlsName")).DataIndex("Name").Width(120)
@@ -483,7 +484,31 @@
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
                         )
-
+                             , X.Column().Text(Util.GetLang("AR20500OUnit")).DataIndex("OUnit").Width(200).Renderer("renderOUnit").ID("clmOUnit").Hidden(true)
+                            .Editor(
+                                HQ.Combo().ID("cboColOUnit").HQProcedure("AR20200_pcOunit")
+                                .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                                .MultiSelect(true)
+                                .HQHeightWidth(400, 300)
+                                .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@SlsperID", Value = "_slsperID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                
+                            })
+                                .LoadData()
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.Expand.Handler = "this.store.clearFilter(); HQ.combo.expand(this,',');";
+                                    lst.Focus.Fn = "cboColOUnit_Focus";
+                                    lst.Blur.Handler = "this.forceSelection = false;";
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                            )
 
 
                         , X.NumberColumn().Text(Util.GetLang("AR20500Sales")).DataIndex("Sales").Format("0,000").Align(Alignment.Right).StyleSpec("text-align:left")

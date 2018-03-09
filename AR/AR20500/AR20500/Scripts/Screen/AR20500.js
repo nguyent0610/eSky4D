@@ -61,6 +61,8 @@ var frmMain_BoxReady = function () {
     }
     if (!HQ.showVisitsPerDay)
         HQ.grid.hide(App.grdCust, ['VisitsPerDay']);
+    App.clmOUnit.setVisible(HQ.showOUnit > 0);
+    App.clmMobile.setVisible(HQ.showMobile > 0);
 };
 
 var cboTerritory_Change = function (sender, e) {
@@ -207,6 +209,16 @@ var btnProcess_Click = function () {
                     }
                     if (HQ.showVisitsPerDay && (data.VisitsPerDay > HQ.maxVisitPerDay || data.VisitsPerDay == 0)) {
                         HQ.message.show(2018010101, [(i + 1), HQ.grid.findColumnNameByIndex(App.grdCust.columns, 'VisitsPerDay'), HQ.maxVisitPerDay], '', true);
+                        rowerror = 'err';
+                        break;
+                    }
+                    if (HQ.showOUnit == 2 && (data.OUnit == '')) {
+                        HQ.message.show(201302071, (i + 1) + ' (' + App.clmOUnit.text + ')', '', false);
+                        rowerror = 'err';
+                        break;
+                    }
+                    if (HQ.showMobile == 2 && (data.Mobile == '')) {
+                        HQ.message.show(201302071, (i + 1) + ' (' + App.clmMobile.text + ')', '', false);
                         rowerror = 'err';
                         break;
                     }
@@ -501,7 +513,10 @@ var grdCust_BeforeEdit = function (item, e) {
         _slsperID = e.record.data.SlsperID;
         App.cboColSalesRouteID.store.reload();
     }
-
+    else if (e.field == 'SalesRouteID') {
+        _slsperID = e.record.data.SlsperID;
+        App.cboColOUnit.store.reload();
+    }
     
 
 };
@@ -563,12 +578,19 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
         e.record.set("Sun", false);
         if (HQ.showSubRoute) {
             e.record.set("SubRouteID", '');
-        }
-        
+        }        
     }
     if (e.field == 'Phone') {
         if (isNumeric(e.value) == true) {
             e.record.set("Phone", oldvalue.fn.arguments[1].originalValue);
+            if (!HQ.editPhone)
+                HQ.message.show(20171118, '');
+            else
+                HQ.message.show(2018022701, '');
+        }
+    } else if (e.field == 'Mobile') {
+        if (isNumeric(e.value) == true) {
+            e.record.set("Mobile", oldvalue.fn.arguments[1].originalValue);
             if (!HQ.editPhone)
                 HQ.message.show(20171118, '');
             else
@@ -820,13 +842,13 @@ var renderSlsFreq = function (value) {
 
 
 var renderBrandID = function (value, metaData, record, rowIndex, colIndex, store) {
-    return getDescriptionByCode1(value); 
+    return getDescriptionByCode1(value, App.cboBrandID.store);
 }
-var getDescriptionByCode1 = function (value) {
+var getDescriptionByCode1 = function (value, sto) {
     var lstBrandID = value.split(',');
     var description = '';
     for (var i = 0; i < lstBrandID.length; i++) {
-        var rec = HQ.store.findRecord(App.cboBrandID.store, ['Code'], [lstBrandID[i]]);
+        var rec = HQ.store.findRecord(sto, ['Code'], [lstBrandID[i]]);
         if (rec) {
             description += rec.data.Descr + ',';
         } else {
@@ -871,13 +893,13 @@ var renderShopType = function (value) {
 };
 
 var renderReason = function (value, metaData, record, rowIndex, colIndex, store) {
-    return getDescriptionByCode(value); 
+    return getDescriptionByCode(value, App.cboColReason.store);
 }
-var getDescriptionByCode = function (value) {
+var getDescriptionByCode = function (value, sto) {
     var lstReason = value.split(',');
     var description = '';
     for (var i = 0; i < lstReason.length; i++) {
-        var rec = HQ.store.findRecord(App.cboColReason.store, ['Code'], [lstReason[i]]);
+        var rec = HQ.store.findRecord(sto, ['Code'], [lstReason[i]]);
         if (rec) {
             description += rec.data.Descr + ',';
         } else {
@@ -1606,6 +1628,16 @@ var cboBrandID_Focus = function () {
         this.forceSelection = true;
     }
 }
+var cboColOUnit_Focus = function () {
+    if (App.grdCust.selModel.selected.length > 0) {
+        HQ.combo.expand(this, ',');
+        this.forceSelection = true;
+    }
+}
 
+
+var renderOUnit = function (value, metaData, record, rowIndex, colIndex, store) {
+    return getDescriptionByCode(value, App.cboColOUnit.store);
+}
 
 

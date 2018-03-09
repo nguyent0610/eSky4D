@@ -111,6 +111,8 @@ namespace AR20500.Controllers
             var maxVisitPerDay = 0;
             var showTypeCabinnets = false;
             var allowEditContactName = string.Empty;
+            var showOUnit = 0;
+            var showMobile = 0;
             var objConfig = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -134,6 +136,12 @@ namespace AR20500.Controllers
                 showSizeID = objConfig.ShowSizeID.HasValue && objConfig.ShowSizeID.Value;
                 showTaxCode = objConfig.ShowTaxCode.HasValue && objConfig.ShowTaxCode.Value;
                 editPhone = objConfig.EditPhone.HasValue && objConfig.EditPhone.Value;
+                showOUnit = objConfig.ShowOUnit;
+                showMobile = objConfig.ShowMobile;
+            }
+            else
+            {
+                objConfig = new AR20500_pdConfig_Result();
             }
             ViewBag.showDisplayID = showDisplayID;
             ViewBag.showStandID = showStandID;
@@ -155,6 +163,9 @@ namespace AR20500.Controllers
             ViewBag.showTypeCabinnets = showTypeCabinnets;
             ViewBag.showTaxCode = showTaxCode;
             ViewBag.editPhone = editPhone;
+            ViewBag.config = objConfig;
+            ViewBag.showOUnit = showOUnit;
+            ViewBag.showMobile = showMobile;
             #endregion
             return View();
         }
@@ -310,8 +321,7 @@ namespace AR20500.Controllers
                                 Update_NewCust(ref objNew, item);
                                 objNew.Startday = fromDate;
                                 objNew.Endday = toDate;                  
-                                // Update Customer
-                               
+                                // Update Customer                               
                                 if (objCust == null)
                                 {
                                     objCust = new AR_Customer();
@@ -494,6 +504,8 @@ namespace AR20500.Controllers
             objNew.TypeCabinets = item.TypeCabinets;
             objNew.VisitsPerDay = item.VisitsPerDay;
             objNew.TaxCode = item.TaxCode;
+            objNew.OUnit = item.OUnit;
+
         }
 
         private void Insert_NewCustHis(AR_NewCustomerInfor objNew, ref int hisLineRef, int allowEdit, bool isDelProfile, bool isDellBussPic)
@@ -591,7 +603,8 @@ namespace AR20500.Controllers
                 Crtd_Prog = "AR20500",
                 Crtd_Datetime = DateTime.Now,
                 VisitsPerDay = objNew.VisitsPerDay,
-                TypeCabinets = objNew.TypeCabinets
+                TypeCabinets = objNew.TypeCabinets,
+                OUnit = objNew.OUnit
             };
             _db.AR_NewCustomerInforHis.AddObject(objHis);
         }
@@ -686,6 +699,8 @@ namespace AR20500.Controllers
             objCust.AllowEdit = 0;
             objCust.TypeCabinets = item.TypeCabinets;
             objCust.TaxRegNbr = item.TaxCode;
+            objCust.OUnit = item.OUnit;
+            objCust.Mobile = item.Mobile;
         }
         private void Update_SOAddress(ref AR_SOAddress objAR_SOAddress, AR_Customer objCust)
         {
