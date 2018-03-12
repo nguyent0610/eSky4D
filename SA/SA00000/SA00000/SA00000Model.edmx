@@ -29,10 +29,10 @@
           <Property Name="DatabaseName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Deposit" Type="float" Nullable="false" />
           <Property Name="CreditLimit" Type="float" Nullable="false" />
@@ -73,10 +73,10 @@
           <Property Name="Zip" Type="varchar" MaxLength="10" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="SYS_SubCompany">
@@ -116,6 +116,11 @@
           <Parameter Name="State" Type="varchar(max)" Mode="In" />
           <Parameter Name="lstDistrict" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="SA00000_pgLoadUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="SA00000_pgState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -138,11 +143,6 @@
         <EntityContainer Name="SA00000Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SYS_SubCompany" EntityType="SA00000Model.SYS_SubCompany" />
           <EntitySet Name="Sys_CompanyAddr" EntityType="SA00000Model.Sys_CompanyAddr" />
-          <FunctionImport Name="SA00000_pgLoadUsers" ReturnType="Collection(SA00000Model.SA00000_pgLoadUsers_Result)">
-            <Parameter Name="UserID" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
           <EntitySet Name="SYS_Company" EntityType="SA00000Model.SYS_Company" />
           <FunctionImport Name="SA00000_pdHeader" ReturnType="Collection(SA00000Model.SA00000_pdHeader_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -175,6 +175,11 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="Country" Mode="In" Type="String" />
             <Parameter Name="lstState" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA00000_pgLoadUsers" ReturnType="Collection(SA00000Model.SA00000_pgLoadUsers_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="SYS_SubCompany">
@@ -218,17 +223,12 @@
           <Property Type="String" Name="Zip" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="SA00000_pgLoadUsers_Result">
-          <Property Type="String" Name="UserName" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="503" />
-          <Property Type="Boolean" Name="CheckUser" Nullable="true" />
-        </ComplexType>
         <EntityType Name="SYS_Company">
           <Key>
             <PropertyRef Name="CpnyID" />
@@ -253,10 +253,10 @@
           <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Deposit" Type="Double" Nullable="false" />
           <Property Name="CreditLimit" Type="Double" Nullable="false" />
@@ -351,6 +351,11 @@
           <Property Type="String" Name="TerritoryName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="State" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="SA00000_pgLoadUsers_Result">
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="503" />
+          <Property Type="Boolean" Name="CheckUser" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -550,6 +555,15 @@
                 <ScalarProperty Name="TerritoryName" ColumnName="TerritoryName" />
                 <ScalarProperty Name="State" ColumnName="State" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00000_pgLoadUsers" FunctionName="eBiz4DWebSysModel.Store.SA00000_pgLoadUsers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00000Model.SA00000_pgLoadUsers_Result">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CheckUser" ColumnName="CheckUser" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
