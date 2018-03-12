@@ -18,8 +18,8 @@
     <head>
         <meta name="viewport" content="width=device-width" />
         <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
-        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-        <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddHHss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddHHmmss"))' type="text/javascript"></script>
         <script src='@Url.Content("Scripts/screen/OM27700.js?"+DateTime.Now.ToString("yyyyMMddHHmmss"))' type="text/javascript"></script>
 
         <script type="text/javascript">
@@ -30,6 +30,7 @@
             HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
             HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
             HQ.dateNow = new Date('@ViewBag.dateNow');
+            HQ.showPoint = parseInt('@ViewBag.showPoint');
         </script>
 
         <title>@ViewBag.Title</title>

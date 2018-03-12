@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="HO_PendingTasks">
           <Key>
             <PropertyRef Name="TaskID" />
@@ -101,6 +101,8 @@
           <Property Name="Brand" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ProGroup" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ProType" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ImageModifiedDate" Type="datetime" />
+          <Property Name="VideoModifiedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="OM_Accumulated">
           <Key>
@@ -191,6 +193,7 @@
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Point" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_AccumulatedLevel">
           <Key>
@@ -305,6 +308,11 @@
           <Parameter Name="ListCpnyID" Type="varchar(max)" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM27700_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="OM27700_pgCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -451,6 +459,11 @@
             <Parameter Name="Type" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="OM_AccumulatedLevel" EntityType="OM27700Model.OM_AccumulatedLevel" />
+          <FunctionImport Name="OM27700_pdConfig" ReturnType="Collection(OM27700Model.OM27700_pdConfig_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
           <Key>
@@ -582,6 +595,8 @@
           <Property Type="String" Name="Brand" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProGroup" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProType" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ImageModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="VideoModifiedDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="SI_Hierarchy">
           <Key>
@@ -742,6 +757,7 @@
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
           <Property Type="Double" Name="Qty" Nullable="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Double" Name="Point" Nullable="false" />
         </ComplexType>
         <EntityType Name="OM_AccumulatedInvtSetup">
           <Key>
@@ -758,6 +774,7 @@
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Name="Point" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_Accumulated">
           <Key>
@@ -809,6 +826,9 @@
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="Point" Type="Double" />
         </EntityType>
+        <ComplexType Name="OM27700_pdConfig_Result">
+          <Property Type="Int32" Name="ShowPoint" Nullable="false" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -873,6 +893,8 @@
           <EntitySetMapping Name="IN_Inventory">
             <EntityTypeMapping TypeName="OM27700Model.IN_Inventory">
               <MappingFragment StoreEntitySet="IN_Inventory">
+                <ScalarProperty Name="VideoModifiedDate" ColumnName="VideoModifiedDate" />
+                <ScalarProperty Name="ImageModifiedDate" ColumnName="ImageModifiedDate" />
                 <ScalarProperty Name="ProType" ColumnName="ProType" />
                 <ScalarProperty Name="ProGroup" ColumnName="ProGroup" />
                 <ScalarProperty Name="Brand" ColumnName="Brand" />
@@ -1138,12 +1160,14 @@
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Point" ColumnName="Point" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="OM_AccumulatedInvtSetup">
             <EntityTypeMapping TypeName="OM27700Model.OM_AccumulatedInvtSetup">
               <MappingFragment StoreEntitySet="OM_AccumulatedInvtSetup">
+                <ScalarProperty Name="Point" ColumnName="Point" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
@@ -1212,6 +1236,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM27700_pdConfig" FunctionName="eBiz4DWebAppModel.Store.OM27700_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM27700Model.OM27700_pdConfig_Result">
+                <ScalarProperty Name="ShowPoint" ColumnName="ShowPoint" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

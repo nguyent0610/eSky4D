@@ -854,8 +854,7 @@ var Event = {
                     App.pnlInvt.hide();
                     App.colPoint.show();
                     App.colLevelFrom.hide();
-                    App.colLevelTo.hide();
-
+                    App.colLevelTo.hide();                    
                 }
             }
             else {
@@ -863,6 +862,11 @@ var Event = {
                 App.colPoint.hide();
                 App.colLevelFrom.show();
                 App.colLevelTo.show();
+            }
+            if (App.cboApplyType.getValue() == 'P' && HQ.showPoint > 0) {
+                HQ.grid.show(App.grdSale, ['Point']);
+            } else {
+                HQ.grid.hide(App.grdSale, ['Point']);
             }
             //if (App.cboApplyType.getValue() == 'P') {
             //    App.colPoint.show();
@@ -944,6 +948,13 @@ var Event = {
                 } else {
                     HQ.grid.show(App.grdLevel, ['LevelFrom', 'LevelTo']);
                     HQ.grid.hide(App.grdLevel, ['Point']);
+                }
+            }
+            if (newCard.id == "tabSaleProduct") {
+                if (App.cboApplyType.getValue() == 'P' && HQ.showPoint > 0) {
+                    HQ.grid.show(App.grdSale, ['Point']);
+                } else {
+                    HQ.grid.hide(App.grdSale, ['Point']);
                 }
             }
             if (newCard.id == 'tabCustomer' && App.cboObjApply.getValue() == 'C') {
@@ -1202,6 +1213,21 @@ var Event = {
                     break;
                 case "save":
                     if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                        var record;
+                        if (App.cboApplyType.value == "P" && HQ.showPoint == 2) {
+                            App.stoSale.data.items.forEach(function (item) {                                
+                                if (item.data.Point == 0 && item.data.InvtID != '') {
+                                    App.tabInfo.setActiveTab(4);
+                                    HQ.message.show(1235, App.colInvtID.text + ': ' + item.data.InvtID);
+                                    record = item;                                   
+                                    return;
+                                }                                
+                            });
+                        }
+                        if (record) {
+                            App.slmSale.select(App.stoSale.indexOf(record));
+                            return;
+                        }
                         if (App.cboApplyType.value == "Q") {
                             App.stoLevel.data.items.forEach(function (item) {
                                 if (item.data.LevelDescr == "") {

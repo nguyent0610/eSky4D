@@ -1197,7 +1197,7 @@
                             )
                             .ColumnModel(
                                 X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-                                , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(130)
+                                , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(130).ID("colInvtID")
                                         .Editor(
                                             HQ.Combo().ID("cboSaleInvtID")
                                             .HQProcedure("OM27700_pcInvtID").HQColumnShow("Code,Descr")
@@ -1224,6 +1224,11 @@
                                 , X.Column().Text(Util.GetLang("StkUnit")).DataIndex("StkUnit")
                                 .Renderer("Process.renderInvtInfo")
 
+                                , X.NumberColumn().Text(Util.GetLang("Point")).DataIndex("Point").Width(110).Hidden(true).ID("colPoint1")
+                                .Format("0,000").Align(Alignment.Right)
+                                .Editor(
+                                    HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0).AllowExponential(false)
+                                )
                                 , X.CommandColumn().Width(150)
                                 .Commands(
                                     X.GridCommand()

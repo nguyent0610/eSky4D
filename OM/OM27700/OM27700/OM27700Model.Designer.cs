@@ -930,6 +930,47 @@ namespace OM27700
     
             return base.ExecuteFunction<OM27700_pcCustomer_Result>("OM27700_pcCustomer", userNameParameter, cpnyIDParameter, langIDParameter, queryParameter, fromParameter, toParameter, listCpnyParameter, typeParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM27700_pdConfig_Result> OM27700_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM27700_pdConfig_Result>("OM27700_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -3175,6 +3216,54 @@ namespace OM27700
         private global::System.String _ProType;
         partial void OnProTypeChanging(global::System.String value);
         partial void OnProTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> ImageModifiedDate
+        {
+            get
+            {
+                return _ImageModifiedDate;
+            }
+            set
+            {
+                OnImageModifiedDateChanging(value);
+                ReportPropertyChanging("ImageModifiedDate");
+                _ImageModifiedDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ImageModifiedDate");
+                OnImageModifiedDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _ImageModifiedDate;
+        partial void OnImageModifiedDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnImageModifiedDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> VideoModifiedDate
+        {
+            get
+            {
+                return _VideoModifiedDate;
+            }
+            set
+            {
+                OnVideoModifiedDateChanging(value);
+                ReportPropertyChanging("VideoModifiedDate");
+                _VideoModifiedDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("VideoModifiedDate");
+                OnVideoModifiedDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _VideoModifiedDate;
+        partial void OnVideoModifiedDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnVideoModifiedDateChanged();
 
         #endregion
 
@@ -4607,7 +4696,8 @@ namespace OM27700
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_AccumulatedInvtSetup CreateOM_AccumulatedInvtSetup(global::System.String accumulateID, global::System.String invtID, global::System.Double qty, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp)
+        /// <param name="point">Initial value of the Point property.</param>
+        public static OM_AccumulatedInvtSetup CreateOM_AccumulatedInvtSetup(global::System.String accumulateID, global::System.String invtID, global::System.Double qty, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp, global::System.Double point)
         {
             OM_AccumulatedInvtSetup oM_AccumulatedInvtSetup = new OM_AccumulatedInvtSetup();
             oM_AccumulatedInvtSetup.AccumulateID = accumulateID;
@@ -4620,6 +4710,7 @@ namespace OM27700
             oM_AccumulatedInvtSetup.Crtd_Prog = crtd_Prog;
             oM_AccumulatedInvtSetup.Crtd_User = crtd_User;
             oM_AccumulatedInvtSetup.tstamp = tstamp;
+            oM_AccumulatedInvtSetup.Point = point;
             return oM_AccumulatedInvtSetup;
         }
 
@@ -4872,6 +4963,30 @@ namespace OM27700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Point
+        {
+            get
+            {
+                return _Point;
+            }
+            set
+            {
+                OnPointChanging(value);
+                ReportPropertyChanging("Point");
+                _Point = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Point");
+                OnPointChanged();
+            }
+        }
+        private global::System.Double _Point;
+        partial void OnPointChanging(global::System.Double value);
+        partial void OnPointChanged();
 
         #endregion
 
@@ -7121,6 +7236,59 @@ namespace OM27700
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM27700Model", Name="OM27700_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM27700_pdConfig_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM27700_pdConfig_Result object.
+        /// </summary>
+        /// <param name="showPoint">Initial value of the ShowPoint property.</param>
+        public static OM27700_pdConfig_Result CreateOM27700_pdConfig_Result(global::System.Int32 showPoint)
+        {
+            OM27700_pdConfig_Result oM27700_pdConfig_Result = new OM27700_pdConfig_Result();
+            oM27700_pdConfig_Result.ShowPoint = showPoint;
+            return oM27700_pdConfig_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ShowPoint
+        {
+            get
+            {
+                return _ShowPoint;
+            }
+            set
+            {
+                OnShowPointChanging(value);
+                ReportPropertyChanging("ShowPoint");
+                _ShowPoint = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowPoint");
+                OnShowPointChanged();
+            }
+        }
+        private global::System.Int32 _ShowPoint;
+        partial void OnShowPointChanging(global::System.Int32 value);
+        partial void OnShowPointChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="OM27700Model", Name="OM27700_pgCompany_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -7885,13 +8053,15 @@ namespace OM27700
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="qty">Initial value of the Qty property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM27700_pgSalesInvt_Result CreateOM27700_pgSalesInvt_Result(global::System.String accumulateID, global::System.String invtID, global::System.Double qty, global::System.Byte[] tstamp)
+        /// <param name="point">Initial value of the Point property.</param>
+        public static OM27700_pgSalesInvt_Result CreateOM27700_pgSalesInvt_Result(global::System.String accumulateID, global::System.String invtID, global::System.Double qty, global::System.Byte[] tstamp, global::System.Double point)
         {
             OM27700_pgSalesInvt_Result oM27700_pgSalesInvt_Result = new OM27700_pgSalesInvt_Result();
             oM27700_pgSalesInvt_Result.AccumulateID = accumulateID;
             oM27700_pgSalesInvt_Result.InvtID = invtID;
             oM27700_pgSalesInvt_Result.Qty = qty;
             oM27700_pgSalesInvt_Result.tstamp = tstamp;
+            oM27700_pgSalesInvt_Result.Point = point;
             return oM27700_pgSalesInvt_Result;
         }
 
@@ -8018,6 +8188,30 @@ namespace OM27700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Point
+        {
+            get
+            {
+                return _Point;
+            }
+            set
+            {
+                OnPointChanging(value);
+                ReportPropertyChanging("Point");
+                _Point = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Point");
+                OnPointChanged();
+            }
+        }
+        private global::System.Double _Point;
+        partial void OnPointChanging(global::System.Double value);
+        partial void OnPointChanged();
 
         #endregion
 

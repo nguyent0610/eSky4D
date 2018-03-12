@@ -37,12 +37,19 @@ namespace OM27700.Controllers
         private string _applyTypeQty = "Q";
         OM27700Entities _db = Util.CreateObjectContext<OM27700Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-        List<OM27700_pcInventory_Result> lstInventory = new List<OM27700_pcInventory_Result>();
-        //
+        List<OM27700_pcInventory_Result> _lstInventory = new List<OM27700_pcInventory_Result>();
+        List<SI_Hierarchy> _lstSI_Hierarchy = new List<SI_Hierarchy>();
         // GET: /OM27700/
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            var showPoint = 0;
+            var objConfig = _db.OM27700_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                showPoint = objConfig.ShowPoint;
+            }
+            ViewBag.showPoint = showPoint;
             ViewBag.dateNow = DateTime.Now.ToDateShort();
             return View();
         }
@@ -187,7 +194,7 @@ namespace OM27700.Controllers
                 node.Checked = false;
             }
 
-            var childrenInactiveHierachies = _db.SI_Hierarchy
+            var childrenInactiveHierachies = _lstSI_Hierarchy
                 .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
                     && p.Type == nodeType
                     && p.NodeLevel == level).ToList();
@@ -203,7 +210,7 @@ namespace OM27700.Controllers
             {
                 if (childrenInactiveHierachies.Count == 0)
                 {
-                    var invts = _db.OM27700_pcInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList().Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();// _db.OM27700_pcInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList()
+                    var invts = _lstInventory.Where(i => i.NodeID == inactiveHierachy.NodeID && i.NodeLevel == inactiveHierachy.NodeLevel && i.ParentRecordID == inactiveHierachy.ParentRecordID).ToList();// _db.OM27700_pcInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList()
                     if (invts.Count > 0)
                     {
                         foreach (var invt in invts)
@@ -507,6 +514,8 @@ namespace OM27700.Controllers
                 Descr = "Root",
                 Type = "I"
             };
+            _lstInventory = _db.OM27700_pcInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            _lstSI_Hierarchy = _db.SI_Hierarchy.ToList();
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
             tree.Root.Add(node);
 
@@ -1217,6 +1226,7 @@ namespace OM27700.Controllers
                     if (lang.tstamp.ToHex() == curBranch.tstamp.ToHex())
                     {
                         lang.Qty = curBranch.Qty;
+                        lang.Point = curBranch.Point;
                         lang.LUpd_DateTime = DateTime.Now;
                         lang.LUpd_Prog = _screenNbr;
                         lang.LUpd_User = Current.UserName;
@@ -1224,28 +1234,20 @@ namespace OM27700.Controllers
                 }
                 else
                 {
-                    var temp = _db.OM_AccumulatedInvtSetup.FirstOrDefault(p => p.InvtID == curBranch.InvtID && p.AccumulateID.ToUpper() == accumulateID.ToUpper());
-                    if (temp == null)
-                    {
-                        lang = new OM_AccumulatedInvtSetup();
-                        lang.ResetET();
-                        OM_AccumulatedInvtSetup newCust = new OM_AccumulatedInvtSetup();
-                        lang.AccumulateID = accumulateID;
-                        lang.InvtID = curBranch.InvtID;
-                        lang.Qty = curBranch.Qty;
-
-                        lang.LUpd_DateTime = DateTime.Now;
-                        lang.LUpd_Prog = _screenNbr;
-                        lang.LUpd_User = Current.UserName;
-                        lang.Crtd_DateTime = DateTime.Now;
-                        lang.Crtd_Prog = _screenNbr;
-                        lang.Crtd_User = Current.UserName;
-                        _db.OM_AccumulatedInvtSetup.AddObject(lang);
-                    }
-                    else
-                    {
-                        continue;
-                    }
+                    lang = new OM_AccumulatedInvtSetup();
+                    lang.ResetET();
+                    OM_AccumulatedInvtSetup newCust = new OM_AccumulatedInvtSetup();
+                    lang.AccumulateID = accumulateID;
+                    lang.InvtID = curBranch.InvtID;
+                    lang.Qty = curBranch.Qty;
+                    lang.Point = curBranch.Point;
+                    lang.LUpd_DateTime = DateTime.Now;
+                    lang.LUpd_Prog = _screenNbr;
+                    lang.LUpd_User = Current.UserName;
+                    lang.Crtd_DateTime = DateTime.Now;
+                    lang.Crtd_Prog = _screenNbr;
+                    lang.Crtd_User = Current.UserName;
+                    _db.OM_AccumulatedInvtSetup.AddObject(lang);
                 }
             }
 
