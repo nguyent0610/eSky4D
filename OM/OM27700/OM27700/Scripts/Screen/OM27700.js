@@ -1214,17 +1214,23 @@ var Event = {
                 case "save":
                     if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                         var record;
+                        var rowError = '';
+                        var index = 0;
                         if (App.cboApplyType.value == "P" && HQ.showPoint == 2) {
-                            App.stoSale.data.items.forEach(function (item) {                                
+                            App.stoSale.data.items.forEach(function (item) {
+                                index++;
                                 if (item.data.Point == 0 && item.data.InvtID != '') {
-                                    App.tabInfo.setActiveTab(4);
-                                    HQ.message.show(1235, App.colInvtID.text + ': ' + item.data.InvtID);
-                                    record = item;                                   
-                                    return;
+                                    
+                                    rowError += index + ',';
+                                    if (!record) {
+                                        record = item;
+                                    }
                                 }                                
                             });
                         }
                         if (record) {
+                            App.tabInfo.setActiveTab(4);
+                            HQ.message.show(2018031201, [rowError, App.colPoint1.text], '', true);
                             App.slmSale.select(App.stoSale.indexOf(record));
                             return;
                         }

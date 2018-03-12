@@ -462,6 +462,8 @@ namespace OM27700.Controllers
                 Descr = "Root",
                 Type = "I"
             };
+            _lstInventory = _db.OM27700_pcInventory(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            _lstSI_Hierarchy = _db.SI_Hierarchy.ToList();
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, "I");
             tree.Root.Add(node);
 
