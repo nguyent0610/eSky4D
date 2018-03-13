@@ -452,7 +452,13 @@ namespace IF30100.Controllers
                     for (int x = 0; x < dtInvtID.Columns.Count; x++)
                     {
                         cell = SheetData.Cells[j + 1, x];
-                        if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("DATE"))
+                        if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("STRING"))
+                        {
+                            if (dtInvtID.Rows[j][x].ToString().ToUpper().StartsWith("HTTP"))
+                                SheetData.Hyperlinks.Add(cell.Name, 1, 1, dtInvtID.Rows[j][x].ToString());
+                            else cell.PutValue(dtInvtID.Rows[j][x].ToString());
+                        }
+                        else if (dtInvtID.Columns[x].DataType.ToString().ToUpper().Contains("DATE"))
                         {
                             DateTime tmpValue = DateTime.Parse(dtInvtID.Rows[j][x].ToString());
                             cell.PutValue(tmpValue.ToString(Current.FormatDate));
@@ -2476,7 +2482,13 @@ namespace IF30100.Controllers
 
                                 // Setting the custom display format to show date as "d-mmm-yy"
                                 style.Custom = _listChoice[x].Format;
-                                if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("DATE"))
+                                if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("STRING"))
+                                {
+                                    if(dtInvtID.Rows[j][lstColumn[x]].ToString().ToUpper().StartsWith("HTTP"))
+                                    SheetData.Hyperlinks.Add(cell.Name, 1, 1, dtInvtID.Rows[j][lstColumn[x]].ToString());
+                                    else cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString());
+                                }
+                                else if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("DATE"))
                                 {
                                     cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString().ToDateTime());
                                     style.HorizontalAlignment = TextAlignmentType.Left;
