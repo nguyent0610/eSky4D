@@ -43,7 +43,7 @@ namespace IF30100.Controllers
 
         public ActionResult Index(string screenNbr)
         {
-            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+            //LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             string type = "E";
             if (screenNbr.PassNull() != string.Empty)
             {
@@ -426,7 +426,7 @@ namespace IF30100.Controllers
         {
             try
             {
-                LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+                //LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
                 Stream stream = new MemoryStream();
                 Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook();
                 Aspose.Cells.Worksheet SheetData = workbook.Worksheets[0];
@@ -2293,7 +2293,7 @@ namespace IF30100.Controllers
         {
             try
             {
-                LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
+                //LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
                 //SelectedRowCollection List0 = JSON.Deserialize<SelectedRowCollection>(data["list0"]);
                 //SelectedRowCollection List1 = JSON.Deserialize<SelectedRowCollection>(data["list1"]);
                 //SelectedRowCollection List2 = JSON.Deserialize<SelectedRowCollection>(data["list2"]);
