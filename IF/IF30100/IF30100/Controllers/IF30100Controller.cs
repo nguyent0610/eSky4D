@@ -2500,7 +2500,12 @@ namespace IF30100.Controllers
                                 }
                                 cell.SetStyle(style);
                             }
-                            else cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString());
+                            else if (dtInvtID.Columns[lstColumn[x]].DataType.ToString().ToUpper().Contains("STRING"))
+                            {
+                                if (dtInvtID.Rows[j][lstColumn[x]].ToString().ToUpper().StartsWith("HTTP"))
+                                    SheetData.Hyperlinks.Add(cell.Name, 1, 1, dtInvtID.Rows[j][lstColumn[x]].ToString());
+                                else cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString());
+                            } else cell.PutValue(dtInvtID.Rows[j][lstColumn[x]].ToString());
                         }
                     }
 
