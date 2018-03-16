@@ -1,4 +1,4 @@
-@using Ext.Net;
+﻿@using Ext.Net;
 @using Ext.Net.MVC;
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
@@ -18,6 +18,7 @@
             .TrackResetOnLoad(true)
             //.DefaultAnchor("100%")
             .BodyPadding(10)
+            .AutoScroll(true)
             .BodyBorder(0).AutoScroll(true)
             //.TopBar(Util.SetupToolbar("PO20100", "Main.Event.menuClick"))
             //.TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{ 
@@ -51,6 +52,7 @@
                     .Layout(LayoutType.Border)
                     .Items(
                         X.FormPanel().ID("frmDiscDefintionTop")
+                        .AutoScroll(true)
                         .Layout(LayoutType.HBox).Region(Region.North)
                         .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
                         .Items(
@@ -149,6 +151,7 @@
                                 X.FormPanel().ID("frmDiscSeqInfo")
                                 .Layout(LayoutType.VBox)
                                 .Region(Region.North)
+                                .AutoScroll(true)
                                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Left }).Border(false)
                                 .Items(
 
@@ -275,6 +278,7 @@
                                             .HQLangCode("StartDate").DataIndex("StartDate")
                                             .Listeners(l => {
                                                 l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                                l.Change.Fn = "dteStartDate_Change";
                                             })
 
                                             , HQ.DateField().ID("dteEndDate")
@@ -282,7 +286,9 @@
                                             .HQLangCode("EndDate").DataIndex("EndDate")
                                                 .Listeners(l =>
                                                 {
-                                                    l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                                    //l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                                    l.Focus.Fn = "dteEndDate_Focus";
+
                                                 })
                                             ,
                                             X.Container().Layout(LayoutType.HBox).Items(
@@ -344,7 +350,7 @@
                                         })
                                         .LoadData()
 
-                                        
+
 
                                         , HQ.Checkbox().ID("chkPOUse")
                                         .MarginSpec("5 5 0 160")
@@ -378,6 +384,7 @@
                                             .Listeners(l =>
                                             {
                                                 l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                                l.Change.Fn = "DiscDefintion.Event.chkAutoFreeItem_Change";
                                             })
 
                                         , HQ.Checkbox().ID("chkAllowEditDisc")
@@ -426,8 +433,17 @@
                                         .BoxLabel(Util.GetLang("PctDiscountByLevel")).DataIndex("PctDiscountByLevel")
                                         .Listeners(l =>
                                         {
-                                            
+
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                        })
+
+                                        , HQ.Checkbox().ID("chkDonateGroupProduct")//.Hidden(true)
+                                        .MarginSpec("5 5 0 10")
+                                        .BoxLabel(Util.GetLang("DonateGroupProduct")).DataIndex("DonateGroupProduct")
+                                        .Listeners(l =>
+                                        {
+                                            l.Focus.Fn = "DiscDefintion.Event.chkDonateGroupProduct";
+                                            l.Change.Fn = "chkDonateGroupProduct_Change";
                                         })
                                     ) // Container
                                 ),
@@ -455,9 +471,9 @@
                                 )
                             )
                             .Listeners(ls =>
-                             {
-                                 ls.Render.Handler = "HQ.common.control_render(this,'frmDiscSeqInfo');";
-                             }) // frmDiscSeqInfo
+                            {
+                                ls.Render.Handler = "HQ.common.control_render(this,'frmDiscSeqInfo');";
+                            }) // frmDiscSeqInfo
 
                             , X.Panel()
                             .Region(Region.Center)
@@ -666,22 +682,26 @@
                                         .Renderer("DiscDefintion.Process.renderFreeItemName")
                                         .Editor(
                                             HQ.Combo().ID("cboGUnitDescr")
-                                            .HQProcedure("OM21100_pcClassUnitDescrByInvtID")//ok
+                                            .HQProcedure("OM21100_pcClassUnitDescrByInvtID_Free")//ok
                                             .HQColumnShow("FromUnit,ClassID")
                                             .HQHeightWidth(400, 300)
                                             .ValueField("FromUnit").DisplayField("FromUnit")
                                             .ForceSelection(true).SelectOnFocus(true)
                                             .HQParam(new StoreParameterCollection() {
-                                                new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdFreeItem,'FreeItemID')",ParameterMode.Raw)//se fix lai
+                                                new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdFreeItem,'FreeItemID')",ParameterMode.Raw)//se fix lai                                                
+                                                ,new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                                ,new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw)
+                                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                             })
                                             .LoadData()
                                         //.Listeners(x => x.Expand.Handler = "this.store.reload()")
                                         )
 
+
                                         , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("FreeItemQty")
                                         .Align(Alignment.Right).Format("0,000")
                                         .Editor(
-                                            HQ.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                            HQ.NumberField().SelectOnFocus(true).MinValue(1).DecimalPrecision(0)
                                         )
 
                                         , X.Column().Text(Util.GetLang("BudgetID")).DataIndex("FreeItemBudgetID")
@@ -699,6 +719,27 @@
                                             .Listeners(l => l.TriggerClick.Handler = "this.clearValue();")
                                         )
 
+                                        , X.Column().Text(Util.GetLang("OM21100GroupItem")).ID("GroupItem").DataIndex("GroupItem").Hidden(true)
+                                            //.Width(250)
+                                            .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
+
+                                        //, X.Column().Text(Util.GetLang("OM21100Prioritize")).DataIndex("Prioritize")//.Width(250)
+                                        //    .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
+
+                                        , X.NumberColumn().Text(Util.GetLang("OM21100Prioritize")).ID("Prioritize").DataIndex("Prioritize").Hidden(true)
+                                            .Align(Alignment.Right).Format("0,000")
+                                            .Editor(
+                                                X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                            )
+
+                                        , X.NumberColumn().Text(Util.GetLang("OM21100TypeUnit")).DataIndex("TypeUnit").Hidden(true)
+                                            .Renderer("DiscDefintion.Process.renderFreeItemName")
+
+                                        .Align(Alignment.Right).Format("0,000")
+                                        .Editor(
+                                            HQ.NumberField().SelectOnFocus(true).MinValue(1).DecimalPrecision(0)
+                                        )
+
                                         , X.CommandColumn()
                                         .Commands(
                                             X.GridCommand()
@@ -708,7 +749,7 @@
                                             .Icon(Icon.ArrowUndo)
                                         )
                                         .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                                        .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
+                                        .Listeners(l => l.Command.Handler = "Main.Event.grd_rejectFreeItem(this, record);")
                                     )
                                     .SelectionModel(X.RowSelectionModel().ID("slmFreeItem").Mode(SelectionMode.Multi))
                                     // .BottomBar(
@@ -1766,10 +1807,10 @@
             ) // tabMain
         )
         .Listeners(l =>
-         {
-             l.BoxReady.Fn = "Main.Event.frmMain_boxReady";
-             l.FieldChange.Fn = "Main.Event.frmMain_fieldChange";
-         })// frmMain
+        {
+            l.BoxReady.Fn = "Main.Event.frmMain_boxReady";
+            l.FieldChange.Fn = "Main.Event.frmMain_fieldChange";
+        })// frmMain
     ) // Viewport
 )
 
