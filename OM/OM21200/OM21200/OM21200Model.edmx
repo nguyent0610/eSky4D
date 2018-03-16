@@ -13,7 +13,7 @@
             <PropertyRef Name="UserID" />
             <PropertyRef Name="DfltBranchID" />
           </Key>
-          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="OMSite" Type="varchar" MaxLength="10" />
           <Property Name="INSite" Type="varchar" MaxLength="10" />
           <Property Name="POSite" Type="varchar" MaxLength="10" />
@@ -21,18 +21,18 @@
           <Property Name="DfltBranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="DfltSlsPerID" Type="varchar" MaxLength="30" />
           <Property Name="DfltSupID" Type="varchar" MaxLength="30" />
           <Property Name="LastInvcNbr" Type="varchar" MaxLength="50" />
           <Property Name="InvcNote" Type="varchar" MaxLength="50" />
           <Property Name="WorkingDate" Type="smalldatetime" />
-          <Property Name="DiscSite" Type="varchar" MaxLength="10" />
-          <Property Name="POSMSite" Type="varchar" MaxLength="10" />
+          <Property Name="DiscSite" Type="varchar" MaxLength="30" />
+          <Property Name="POSMSite" Type="varchar" MaxLength="30" />
           <Property Name="BranchSiteID" Type="varchar" MaxLength="30" />
         </EntityType>
         <Function Name="OM21200_pcLoadBranchAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -143,7 +143,7 @@
             <PropertyRef Name="UserID" />
             <PropertyRef Name="DfltBranchID" />
           </Key>
-          <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="OMSite" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="INSite" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="POSite" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -151,18 +151,18 @@
           <Property Type="String" Name="DfltBranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="DfltSlsPerID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DfltSupID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LastInvcNbr" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="InvcNote" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="WorkingDate" Precision="0" />
-          <Property Type="String" Name="DiscSite" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="POSMSite" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DiscSite" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="POSMSite" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BranchSiteID" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
@@ -306,7 +306,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="82" >
-        <EntityTypeShape EntityType="OM21200Model.OM_UserDefault" Width="1.5" PointX="3.1682516705096937" PointY="2.6176556211978457" />
+        <EntityTypeShape EntityType="OM21200Model.OM_UserDefault" Width="1.5" PointX="11.174782130482971" PointY="12.433813860841941" />
       </Diagram>
     </Diagrams>
   </Designer>
