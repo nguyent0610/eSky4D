@@ -112,6 +112,8 @@ var grdUserDefault_BeforeEdit = function (editor, e) {
         App.cboPOSite.store.reload();
     else if (e.field == 'DiscSite')
         App.cboDiscSite.store.reload();
+    else if (e.field == 'POSMSite')
+        App.cboPOSMSite.store.reload();
     else if (e.field == 'DfltSlsPerID')
         App.cboDfltSlsPerID.store.reload();
     else if (e.field == 'DfltSupID')

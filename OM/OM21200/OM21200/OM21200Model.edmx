@@ -4,31 +4,35 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="OM_UserDefault" EntityType="eBiz4DWebSysModel.Store.OM_UserDefault" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
         <EntityType Name="OM_UserDefault">
           <Key>
             <PropertyRef Name="UserID" />
             <PropertyRef Name="DfltBranchID" />
           </Key>
-          <Property Name="UserID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="OMSite" Type="varchar" MaxLength="10" />
           <Property Name="INSite" Type="varchar" MaxLength="10" />
           <Property Name="POSite" Type="varchar" MaxLength="10" />
           <Property Name="DfltOrderType" Type="varchar" MaxLength="2" />
-          <Property Name="DfltBranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="DfltBranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="DfltSlsPerID" Type="varchar" MaxLength="30" />
           <Property Name="DfltSupID" Type="varchar" MaxLength="30" />
           <Property Name="LastInvcNbr" Type="varchar" MaxLength="50" />
           <Property Name="InvcNote" Type="varchar" MaxLength="50" />
           <Property Name="WorkingDate" Type="smalldatetime" />
           <Property Name="DiscSite" Type="varchar" MaxLength="10" />
+          <Property Name="POSMSite" Type="varchar" MaxLength="10" />
           <Property Name="BranchSiteID" Type="varchar" MaxLength="30" />
         </EntityType>
         <Function Name="OM21200_pcLoadBranchAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -50,9 +54,6 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="OM_UserDefault" EntityType="Self.OM_UserDefault" Schema="dbo" store:Type="Tables" />
-        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -72,12 +73,12 @@
           <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="OM21200_pcLoadUser" ReturnType="Collection(OM21200Model.OM21200_pcLoadUser_Result)" />
-          <EntitySet Name="OM_UserDefault" EntityType="OM21200Model.OM_UserDefault" />
           <FunctionImport Name="OM21200_pgLoadUserDefault" ReturnType="Collection(OM21200Model.OM21200_pgLoadUserDefault_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="OM_UserDefault" EntityType="OM21200Model.OM_UserDefault" />
         </EntityContainer>
         <ComplexType Name="OM21200_pcLoadBranchAll_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -120,32 +121,6 @@
           <Property Type="String" Name="FirstName" Nullable="true" MaxLength="250" />
           <Property Type="String" Name="LastName" Nullable="true" MaxLength="250" />
         </ComplexType>
-        <EntityType Name="OM_UserDefault">
-          <Key>
-            <PropertyRef Name="UserID" />
-            <PropertyRef Name="DfltBranchID" />
-          </Key>
-          <Property Name="UserID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="OMSite" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="INSite" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="POSite" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DfltOrderType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="DfltBranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="DfltSlsPerID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="DfltSupID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LastInvcNbr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvcNote" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="WorkingDate" Type="DateTime" Precision="0" />
-          <Property Name="DiscSite" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="BranchSiteID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-        </EntityType>
         <ComplexType Name="OM21200_pgLoadUserDefault_Result">
           <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="OMSite" Nullable="true" MaxLength="10" />
@@ -161,7 +136,35 @@
           <Property Type="String" Name="DiscSite" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="BranchSiteID" Nullable="true" MaxLength="30" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="POSMSite" Nullable="true" MaxLength="10" />
         </ComplexType>
+        <EntityType Name="OM_UserDefault">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="DfltBranchID" />
+          </Key>
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OMSite" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="INSite" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="POSite" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltOrderType" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltBranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="DfltSlsPerID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltSupID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastInvcNbr" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvcNote" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="WorkingDate" Precision="0" />
+          <Property Type="String" Name="DiscSite" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="POSMSite" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BranchSiteID" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -233,10 +236,32 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21200_pgLoadUserDefault" FunctionName="eBiz4DWebSysModel.Store.OM21200_pgLoadUserDefault">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21200Model.OM21200_pgLoadUserDefault_Result">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="OMSite" ColumnName="OMSite" />
+                <ScalarProperty Name="INSite" ColumnName="INSite" />
+                <ScalarProperty Name="POSite" ColumnName="POSite" />
+                <ScalarProperty Name="DfltOrderType" ColumnName="DfltOrderType" />
+                <ScalarProperty Name="DfltBranchID" ColumnName="DfltBranchID" />
+                <ScalarProperty Name="DfltSlsPerID" ColumnName="DfltSlsPerID" />
+                <ScalarProperty Name="DfltSupID" ColumnName="DfltSupID" />
+                <ScalarProperty Name="LastInvcNbr" ColumnName="LastInvcNbr" />
+                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
+                <ScalarProperty Name="WorkingDate" ColumnName="WorkingDate" />
+                <ScalarProperty Name="DiscSite" ColumnName="DiscSite" />
+                <ScalarProperty Name="BranchSiteID" ColumnName="BranchSiteID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="POSMSite" ColumnName="POSMSite" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="OM_UserDefault">
             <EntityTypeMapping TypeName="OM21200Model.OM_UserDefault">
               <MappingFragment StoreEntitySet="OM_UserDefault">
                 <ScalarProperty Name="BranchSiteID" ColumnName="BranchSiteID" />
+                <ScalarProperty Name="POSMSite" ColumnName="POSMSite" />
                 <ScalarProperty Name="DiscSite" ColumnName="DiscSite" />
                 <ScalarProperty Name="WorkingDate" ColumnName="WorkingDate" />
                 <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
@@ -259,26 +284,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="OM21200_pgLoadUserDefault" FunctionName="eBiz4DWebSysModel.Store.OM21200_pgLoadUserDefault">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM21200Model.OM21200_pgLoadUserDefault_Result">
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="OMSite" ColumnName="OMSite" />
-                <ScalarProperty Name="INSite" ColumnName="INSite" />
-                <ScalarProperty Name="POSite" ColumnName="POSite" />
-                <ScalarProperty Name="DfltOrderType" ColumnName="DfltOrderType" />
-                <ScalarProperty Name="DfltBranchID" ColumnName="DfltBranchID" />
-                <ScalarProperty Name="DfltSlsPerID" ColumnName="DfltSlsPerID" />
-                <ScalarProperty Name="DfltSupID" ColumnName="DfltSupID" />
-                <ScalarProperty Name="LastInvcNbr" ColumnName="LastInvcNbr" />
-                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
-                <ScalarProperty Name="WorkingDate" ColumnName="WorkingDate" />
-                <ScalarProperty Name="DiscSite" ColumnName="DiscSite" />
-                <ScalarProperty Name="BranchSiteID" ColumnName="BranchSiteID" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -301,7 +306,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="82" >
-        <EntityTypeShape EntityType="OM21200Model.OM_UserDefault" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM21200Model.OM_UserDefault" Width="1.5" PointX="3.1682516705096937" PointY="2.6176556211978457" />
       </Diagram>
     </Diagrams>
   </Designer>

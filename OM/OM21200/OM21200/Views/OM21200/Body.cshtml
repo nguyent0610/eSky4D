@@ -135,7 +135,21 @@
                 })
                 .LoadData()
             ),
-
+             X.Column().Text(Util.GetLang("POSMSite")).DataIndex("POSMSite").Width(150)
+            .Editor(
+                HQ.Combo().ID("cboPOSMSite").Name("cboPOSMSite").HQProcedure("OM21200_pcLoadSiteAll")
+                .HQColumnShow("SiteID,Name").DisplayField("SiteID").ValueField("SiteID").MaxLength(10).EnforceMaxLength(true)
+                .Width(300).HQHeightWidth(500, 400).HQAutoLoad(false)
+                .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter() { Name = "@BranchID", Value = "App.slmUserDefault.selected.items[0]==undefined?'':App.slmUserDefault.selected.items[0].data.DfltBranchID" , Mode = ParameterMode.Raw }
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+                .LoadData()
+            ),
             X.Column().Text(Util.GetLang("DfltOrderType")).DataIndex("DfltOrderType").Width(150)
             .Editor(
                 HQ.Combo().ID("cboDfltOrderType").Name("cboDfltOrderType").HQProcedure("OM21200_pcLoadOrderTypeActive")
@@ -265,6 +279,7 @@
                     X.StringFilter().DataIndex("INSite"),
                     X.StringFilter().DataIndex("POSite"),
                     X.StringFilter().DataIndex("DiscSite"),
+                    X.StringFilter().DataIndex("POSMSite"),
                     X.StringFilter().DataIndex("DfltOrderType"),
                     X.StringFilter().DataIndex("DfltSlsPerID"),
                     X.StringFilter().DataIndex("DfltSupID"),

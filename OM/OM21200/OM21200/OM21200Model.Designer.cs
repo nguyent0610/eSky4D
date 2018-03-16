@@ -757,6 +757,30 @@ namespace OM21200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public global::System.String POSMSite
+        {
+            get
+            {
+                return _POSMSite;
+            }
+            set
+            {
+                OnPOSMSiteChanging(value);
+                ReportPropertyChanging("POSMSite");
+                _POSMSite = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("POSMSite");
+                OnPOSMSiteChanged();
+            }
+        }
+        private global::System.String _POSMSite;
+        partial void OnPOSMSiteChanging(global::System.String value);
+        partial void OnPOSMSiteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.String BranchSiteID
         {
             get
@@ -2039,6 +2063,30 @@ namespace OM21200
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String POSMSite
+        {
+            get
+            {
+                return _POSMSite;
+            }
+            set
+            {
+                OnPOSMSiteChanging(value);
+                ReportPropertyChanging("POSMSite");
+                _POSMSite = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("POSMSite");
+                OnPOSMSiteChanged();
+            }
+        }
+        private global::System.String _POSMSite;
+        partial void OnPOSMSiteChanging(global::System.String value);
+        partial void OnPOSMSiteChanged();
 
         #endregion
 

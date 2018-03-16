@@ -27,7 +27,7 @@ namespace OM21200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -136,6 +136,7 @@ namespace OM21200.Controllers
             t.InvcNote = s.InvcNote;
             t.WorkingDate = s.WorkingDate;
             t.DiscSite = s.DiscSite;
+            t.POSMSite = s.POSMSite;
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
