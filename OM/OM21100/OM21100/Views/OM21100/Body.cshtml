@@ -661,7 +661,7 @@
                                         X.Column().Text(Util.GetLang("InvtID")).DataIndex("FreeItemID")
                                         .Editor(
                                             HQ.Combo().ID("cboFreeItemID")
-                                            .HQProcedure("OM21100_pcInventoryActiveByBranch")
+                                            .HQProcedure("OM21100_pcInventoryActiveByBranchFree")
                                             .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color")
                                             .HQHeightWidth(400, 300)
                                             .ValueField("InvtID").DisplayField("InvtID")
@@ -697,7 +697,7 @@
                                         //.Listeners(x => x.Expand.Handler = "this.store.reload()")
                                         )
 
-
+                                       
                                         , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("FreeItemQty")
                                         .Align(Alignment.Right).Format("0,000")
                                         .Editor(
@@ -749,7 +749,7 @@
                                             .Icon(Icon.ArrowUndo)
                                         )
                                         .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                                        .Listeners(l => l.Command.Handler = "Main.Event.grd_rejectFreeItem(this, record);")
+                                        .Listeners(l => l.Command.Handler = "Main.Event.grdFreeItem_reject(this, record);")
                                     )
                                     .SelectionModel(X.RowSelectionModel().ID("slmFreeItem").Mode(SelectionMode.Multi))
                                     // .BottomBar(

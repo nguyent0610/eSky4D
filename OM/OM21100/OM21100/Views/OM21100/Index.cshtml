@@ -142,7 +142,7 @@
             .Listeners(l =>
             {
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];";
-                l.Load.Fn = "Main.Event.sto_load";
+                l.Load.Fn = "Main.Event.stoFreeItem_Load";
                 l.Update.Handler = "Main.Event.frmMain_fieldChange()";
                 l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
