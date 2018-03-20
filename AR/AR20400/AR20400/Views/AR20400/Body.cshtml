@@ -1,4 +1,4 @@
-@using Ext.Net;
+﻿@using Ext.Net;
 @using Ext.Net.MVC;
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
@@ -1760,6 +1760,98 @@
                     lss.Render.Handler = "HQ.common.control_render(this,'grdAR_CustomerChild')";
                 })
 
+                    , X.Panel().ID("pnlCompetitor")     //////////////Tab Thông tin đối thủ //////////////
+                    .Title(Util.GetLang("AR20400Competitor"))
+                    .Layout(LayoutType.Border)
+                    .CloseAction(CloseAction.Hide)
+                    .Items(
+                        X.GridPanel()
+                        .Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false))
+                        .ID("grdCompetitor")
+        //.SelectionMemory(false)
+                        .Region(Region.Center).Flex(1)
+                        .Store(
+                            X.Store()
+                            .ID("stoCompetitor").AutoLoad(false)
+                            .PageSize(50)
+                            .Model(Util.GenerateModel(typeof(AR20400_pgCompetitor_Result), "mdlCompetitor", ""))
+                            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("CustID", "App.cboCustId.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                            })
+                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCompetitor")))
+                            .Listeners(l =>
+                            {
+                            //    l.Load.Fn = "stoAR_CustomerChild_Load";
+                              //  l.Update.Fn = "frmChange";
+                            })
+                        )
+                        .SortableColumns(false)
+                        .ColumnModel(
+                            X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true;")
+                            //Colum thiet ke o day
+                            , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(130)
+                            , X.Column().Text(Util.GetLang("InvtName")).DataIndex("InvtName").Width(200)
+                            , X.NumberColumn().Text(Util.GetLang("AR20400Mass")).DataIndex("Mass").Width(120).Format("0,000").Align(Alignment.Right)
+                            , X.Column().Text(Util.GetLang("AR20400Pack")).DataIndex("Pack").Width(150)
+                            , X.NumberColumn().Text(Util.GetLang("AR20400Price")).DataIndex("Price").Width(120).Format("0,000").Align(Alignment.Right)
+                            //, X.CommandColumn().Width(150)
+                            //.Commands(
+                            //    X.GridCommand()
+                            //    .Text(Util.GetLang("Reject"))
+                            //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                            //    .CommandName("reject")
+                            //    .Icon(Icon.ArrowUndo)
+                            //)
+                            //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                            //    .Listeners(l => l.Command.Handler = "grdAR_CustomerChild_Reject(record);")
+                        )
+                        .SelectionModel(X.RowSelectionModel().ID("slmCompetitor").Mode(SelectionMode.Multi))
+                        .BottomBar(
+                            X.PagingToolbar()
+                            .Items(
+                                X.Label("Page size:"),
+                                X.ToolbarSpacer(10),
+                                X.ComboBox()
+                                .Width(80)
+                                .Items("1", "2", "10", "20", "30", "50")
+                                .SelectedItems("50")
+                                .Listeners(l =>
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                })
+                            )
+                            .Plugins(X.ProgressBarPager())
+                        )
+                        //.Plugins(
+                        //    X.CellEditing()
+                        //    .ClicksToEdit(1)
+                        //    .Listeners(ls =>
+                        //    {
+                        //        ls.BeforeEdit.Fn = "grdAR_CustomerChild_BeforeEdit";
+                        //        ls.Edit.Fn = "grdAR_CustomerChild_Edit";
+                        //        ls.ValidateEdit.Fn = "grdAR_CustomerChild_ValidateEdit";
+                        //    })
+                        //)
+
+                        .Features(
+                            X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("InvtID"),
+                                X.StringFilter().DataIndex("InvtName"),
+                                X.StringFilter().DataIndex("Weight"),
+                                X.StringFilter().DataIndex("Packing"),
+                                X.StringFilter().DataIndex("Price")
+                            )
+                        )
+                    )//Tab Hinh Thuc Trung Bay
+                    .Listeners(lss =>
+                    {
+                        lss.Render.Handler = "HQ.common.control_render(this,'grdCompetitor')";
+                    })
             )//xtab
         )
     )// frmMain

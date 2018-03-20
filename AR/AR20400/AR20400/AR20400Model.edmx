@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_CustAdvTool">
           <Key>
             <PropertyRef Name="CustID" />
@@ -185,6 +185,7 @@
           <Property Name="SizeID" Type="varchar" MaxLength="10" />
           <Property Name="BrandID" Type="varchar(max)" />
           <Property Name="OUnit" Type="varchar(max)" />
+          <Property Name="Mobile" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="AR_CustomerChild">
           <Key>
@@ -451,6 +452,13 @@
         <Function Name="AR20400_pgAR_LTTContractDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustId" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="AR20400_pgCompetitor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="AR20400_ppARNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="GetType" Type="varchar" Mode="In" />
@@ -596,6 +604,13 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
+          <FunctionImport Name="AR20400_pgCompetitor" ReturnType="Collection(AR20400Model.AR20400_pgCompetitor_Result)">
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_CustAdvTool">
           <Key>
@@ -1072,6 +1087,7 @@
           <Property Type="Boolean" Name="RequiredPriceClassID" Nullable="true" />
           <Property Type="Boolean" Name="RequiredOUnit" Nullable="true" />
           <Property Type="Boolean" Name="RequiredSlsperID" Nullable="true" />
+          <Property Type="Boolean" Name="ShowCompetitor" Nullable="true" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1168,7 +1184,17 @@
           <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="BrandID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="OUnit" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="AR20400_pgCompetitor_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Competitor" Nullable="false" MaxLength="200" />
+          <Property Type="Double" Name="Mass" Nullable="false" />
+          <Property Type="String" Name="Pack" Nullable="false" MaxLength="200" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="DateTime" Name="DateCompetitor" Nullable="false" Precision="23" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1688,12 +1714,14 @@
                 <ScalarProperty Name="RequiredPriceClassID" ColumnName="RequiredPriceClassID" />
                 <ScalarProperty Name="RequiredOUnit" ColumnName="RequiredOUnit" />
                 <ScalarProperty Name="RequiredSlsperID" ColumnName="RequiredSlsperID" />
+                <ScalarProperty Name="ShowCompetitor" ColumnName="ShowCompetitor" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
                 <ScalarProperty Name="OUnit" ColumnName="OUnit" />
                 <ScalarProperty Name="BrandID" ColumnName="BrandID" />
                 <ScalarProperty Name="SizeID" ColumnName="SizeID" />
@@ -1787,6 +1815,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pgCompetitor" FunctionName="eBiz4DWebSysModel.Store.AR20400_pgCompetitor">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pgCompetitor_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="InvtName" ColumnName="InvtName" />
+                <ScalarProperty Name="Competitor" ColumnName="Competitor" />
+                <ScalarProperty Name="Mass" ColumnName="Mass" />
+                <ScalarProperty Name="Pack" ColumnName="Pack" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="DateCompetitor" ColumnName="DateCompetitor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

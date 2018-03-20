@@ -146,6 +146,12 @@ var firstLoad = function () {
     App.cboSlsperId.allowBlank = !HQ.reqSlsperson;
     App.cboOunit.allowBlank = !HQ.reqOUnit;    
     App.frmMain.isValid();
+
+    if (!HQ.showCompetitor) {
+        App.tabDetail.child('#pnlCompetitor').tab.hide();
+    } else {
+        App.tabDetail.child('#pnlCompetitor').tab.show();
+    }
 };
 
 var menuClick = function (command) {
@@ -780,6 +786,7 @@ var stoAR_CustomerChild_Load = function (sto) {
     if (_isLoadMaster) {
         HQ.common.showBusy(false);
     }
+    App.stoCompetitor.reload();
 };
 
 var grdAR_CustomerChild_BeforeEdit = function (editor, e) {

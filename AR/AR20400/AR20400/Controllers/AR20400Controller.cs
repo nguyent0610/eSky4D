@@ -120,6 +120,7 @@ namespace AR20400.Controllers
             var reqPriceClassID = false;
             var reqOUnit = false;
             var reqSlsperson = false;
+            var showCompetitor = false;
             var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -130,6 +131,7 @@ namespace AR20400.Controllers
                 reqPriceClassID = objConfig.RequiredPriceClassID.HasValue && objConfig.RequiredPriceClassID.Value;
                 reqSlsperson = objConfig.RequiredSlsperID.HasValue && objConfig.RequiredSlsperID.Value;
                 reqOUnit = !hideOUnit && objConfig.RequiredOUnit.HasValue && objConfig.RequiredOUnit.Value;
+                showCompetitor = objConfig.ShowCompetitor.HasValue && objConfig.ShowCompetitor.Value;
             }
             ViewBag.hideCity = hideCity;
             ViewBag.hideColumn = hideColumn;
@@ -138,6 +140,7 @@ namespace AR20400.Controllers
             ViewBag.reqPriceClassID = reqPriceClassID;
             ViewBag.reqSlsperson = reqSlsperson;
             ViewBag.reqOUnit = reqOUnit;
+            ViewBag.showCompetitor = showCompetitor;
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -181,7 +184,12 @@ namespace AR20400.Controllers
         {
             return this.Store(_db.AR20400_pgAR_LTTContractDetail(CustId).ToList());
         }
-         
+
+        public ActionResult GetCompetitor(string BranchID, string CustID)
+        {
+            return this.Store(_db.AR20400_pgCompetitor(BranchID, CustID, Current.UserName, Current.CpnyID, Current.LangID).ToList());
+        }
+
         [HttpPost]
         public ActionResult Save(FormCollection data, string NodeID, string NodeLevel, string ParentRecordID, string HiddenTree)
         {

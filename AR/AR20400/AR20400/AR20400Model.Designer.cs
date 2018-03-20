@@ -967,6 +967,69 @@ namespace AR20400
     
             return base.ExecuteFunction<AR20400_pdConfig_Result>("AR20400_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20400_pgCompetitor_Result> AR20400_pgCompetitor(global::System.String custID, global::System.String branchID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20400_pgCompetitor_Result>("AR20400_pgCompetitor", custIDParameter, branchIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -4894,6 +4957,30 @@ namespace AR20400
         private global::System.String _OUnit;
         partial void OnOUnitChanging(global::System.String value);
         partial void OnOUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Mobile
+        {
+            get
+            {
+                return _Mobile;
+            }
+            set
+            {
+                OnMobileChanging(value);
+                ReportPropertyChanging("Mobile");
+                _Mobile = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Mobile");
+                OnMobileChanged();
+            }
+        }
+        private global::System.String _Mobile;
+        partial void OnMobileChanging(global::System.String value);
+        partial void OnMobileChanged();
 
         #endregion
 
@@ -9797,6 +9884,30 @@ namespace AR20400
         private Nullable<global::System.Boolean> _RequiredSlsperID;
         partial void OnRequiredSlsperIDChanging(Nullable<global::System.Boolean> value);
         partial void OnRequiredSlsperIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowCompetitor
+        {
+            get
+            {
+                return _ShowCompetitor;
+            }
+            set
+            {
+                OnShowCompetitorChanging(value);
+                ReportPropertyChanging("ShowCompetitor");
+                _ShowCompetitor = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowCompetitor");
+                OnShowCompetitorChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowCompetitor;
+        partial void OnShowCompetitorChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowCompetitorChanged();
 
         #endregion
 
@@ -13085,6 +13196,213 @@ namespace AR20400
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="AR20400_pgCompetitor_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR20400_pgCompetitor_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR20400_pgCompetitor_Result object.
+        /// </summary>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        /// <param name="competitor">Initial value of the Competitor property.</param>
+        /// <param name="mass">Initial value of the Mass property.</param>
+        /// <param name="pack">Initial value of the Pack property.</param>
+        /// <param name="price">Initial value of the Price property.</param>
+        /// <param name="dateCompetitor">Initial value of the DateCompetitor property.</param>
+        public static AR20400_pgCompetitor_Result CreateAR20400_pgCompetitor_Result(global::System.String invtID, global::System.String competitor, global::System.Double mass, global::System.String pack, global::System.Double price, global::System.DateTime dateCompetitor)
+        {
+            AR20400_pgCompetitor_Result aR20400_pgCompetitor_Result = new AR20400_pgCompetitor_Result();
+            aR20400_pgCompetitor_Result.InvtID = invtID;
+            aR20400_pgCompetitor_Result.Competitor = competitor;
+            aR20400_pgCompetitor_Result.Mass = mass;
+            aR20400_pgCompetitor_Result.Pack = pack;
+            aR20400_pgCompetitor_Result.Price = price;
+            aR20400_pgCompetitor_Result.DateCompetitor = dateCompetitor;
+            return aR20400_pgCompetitor_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String InvtName
+        {
+            get
+            {
+                return _InvtName;
+            }
+            set
+            {
+                OnInvtNameChanging(value);
+                ReportPropertyChanging("InvtName");
+                _InvtName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("InvtName");
+                OnInvtNameChanged();
+            }
+        }
+        private global::System.String _InvtName;
+        partial void OnInvtNameChanging(global::System.String value);
+        partial void OnInvtNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Competitor
+        {
+            get
+            {
+                return _Competitor;
+            }
+            set
+            {
+                OnCompetitorChanging(value);
+                ReportPropertyChanging("Competitor");
+                _Competitor = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Competitor");
+                OnCompetitorChanged();
+            }
+        }
+        private global::System.String _Competitor;
+        partial void OnCompetitorChanging(global::System.String value);
+        partial void OnCompetitorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Mass
+        {
+            get
+            {
+                return _Mass;
+            }
+            set
+            {
+                OnMassChanging(value);
+                ReportPropertyChanging("Mass");
+                _Mass = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Mass");
+                OnMassChanged();
+            }
+        }
+        private global::System.Double _Mass;
+        partial void OnMassChanging(global::System.Double value);
+        partial void OnMassChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Pack
+        {
+            get
+            {
+                return _Pack;
+            }
+            set
+            {
+                OnPackChanging(value);
+                ReportPropertyChanging("Pack");
+                _Pack = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Pack");
+                OnPackChanged();
+            }
+        }
+        private global::System.String _Pack;
+        partial void OnPackChanging(global::System.String value);
+        partial void OnPackChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Price
+        {
+            get
+            {
+                return _Price;
+            }
+            set
+            {
+                OnPriceChanging(value);
+                ReportPropertyChanging("Price");
+                _Price = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Price");
+                OnPriceChanged();
+            }
+        }
+        private global::System.Double _Price;
+        partial void OnPriceChanging(global::System.Double value);
+        partial void OnPriceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime DateCompetitor
+        {
+            get
+            {
+                return _DateCompetitor;
+            }
+            set
+            {
+                OnDateCompetitorChanging(value);
+                ReportPropertyChanging("DateCompetitor");
+                _DateCompetitor = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DateCompetitor");
+                OnDateCompetitorChanged();
+            }
+        }
+        private global::System.DateTime _DateCompetitor;
+        partial void OnDateCompetitorChanging(global::System.DateTime value);
+        partial void OnDateCompetitorChanged();
 
         #endregion
 
