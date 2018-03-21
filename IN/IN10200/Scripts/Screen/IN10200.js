@@ -103,7 +103,7 @@ var checkSelectLot = function (records, options, success) {
 
 var frmMain_BoxReady = function () {
     HQ.util.checkAccessRight();
-    if (showFromSite == 'true') {
+    if (showFromSite) {
         App.cboFromToSiteID.show();
         App.hideLabel.hide();
     }
@@ -151,6 +151,12 @@ var frmMain_BoxReady = function () {
     }
     
     HQ.common.showBusy(true, HQ.waitMsg);
+    if (HQ.showQtyOnhand) {
+        App.colQtyOnHand.show();
+        if (App.colLotQtyOnHand) {
+            App.colLotQtyOnHand.show();
+        }
+    }
 }
 
 var origEditorTab = function(instance, self){
@@ -522,6 +528,7 @@ var btnCopyOK_Click = function () {
                         newTrans.data.InvtMult = -1;
                         newTrans.data.LineRef = item.LineRef;
                         newTrans.data.Qty = item.Qty;
+                        newTrans.data.QtyOnHand = item.QtyOnHand;
                         newTrans.data.SiteID = item.SiteID;
                         newTrans.data.TranDate = App.txtDateEnt.getValue();
                         newTrans.data.TranDesc = item.TranDesc;
@@ -545,6 +552,7 @@ var btnCopyOK_Click = function () {
                         newLot.data.InvtMult = -1;
                         newLot.data.MfgrLotSerNbr = '';
                         newLot.data.Qty = item.Qty;
+                        newLot.data.QtyOnHand = item.QtyOnHand;
                         newLot.data.SiteID = item.SiteID;
                         newLot.data.SlsperID = '';
                         newLot.data.TranDate = App.txtDateEnt.getValue();
@@ -678,6 +686,7 @@ var btnImport_Click = function (c, e) {
                                 newTrans.data.InvtMult = -1;
                                 newTrans.data.LineRef = item.LineRef;
                                 newTrans.data.Qty = item.Qty;
+                                newTrans.data.QtyOnHand = item.QtyOnHand;
                                 newTrans.data.SiteID = item.SiteID;
                                 newTrans.data.TranDate = App.txtDateEnt.getValue();
                                 newTrans.data.TranDesc = item.TranDesc;
@@ -728,6 +737,7 @@ var btnImport_Click = function (c, e) {
                                 newLot.data.InvtMult = -1;
                                 newLot.data.MfgrLotSerNbr = '';
                                 newLot.data.Qty = item.Qty;
+                                newLot.data.QtyOnHand = item.QtyOnHand;
                                 newLot.data.SiteID = item.SiteID;
                                 newLot.data.SlsperID = '';
                                 newLot.data.TranDate = App.txtDateEnt.getValue();
@@ -796,6 +806,9 @@ var btnImport_Click = function (c, e) {
 
 var grdTrans_BeforeEdit = function (item, e) {
     if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
+    if (App.cboStatus.getValue() != 'H') {
+        return false;
+    }
     //if (App.grdTrans.isLock) {
     //    return false;
     //}
@@ -1372,7 +1385,7 @@ var calcLot = function (record) {
                                 newLot.data.UnitCost = det.UnitPrice;
                                 newLot.data.UnitDesc = det.UnitDesc;
                             }
-
+                            newLot.data.QtyOnHand = item.data.QtyOnHand;
                             newLot.commit();
                             App.stoLotTrans.insert(App.stoLotTrans.getCount(), newLot);
                         }
@@ -1384,6 +1397,7 @@ var calcLot = function (record) {
                     App.stoLotTrans.commitChanges();
                     HQ.common.showBusy(false);
                     showLot(options.row, false);
+                   
                 }
             });
         } else {
@@ -1422,6 +1436,14 @@ var showLot = function (record, loadCombo) {
     App.grdLot.view.refresh();
     App.winLot.setTitle(record.data.InvtID + ' ' + (record.data.UnitMultDiv == "M" ? record.data.Qty * record.data.CnvFact : record.data.Qty / record.data.CnvFact) + ' ' + record.invt.StkUnit);
     App.winLot.show();
+    setTimeout(function () {
+        //App.winLot.toFront();
+        if (HQ.showQtyOnhand) {
+            if (App.colLotQtyOnHand) {
+                App.colLotQtyOnHand.show();
+            }
+        }
+    }, 50);
 };
 
 var calculate = function () {
@@ -1726,7 +1748,7 @@ var checkExitEditLot = function (row) {
     var record = row.record;
     var lot = row.record.data;
     if (key == "Qty") {
-        getLotQtyAvail(record);
+       // getLotQtyAvail(record);
     } else if (key == "UnitDesc") {
         var price = 0;
         var cnvFact = 0;
@@ -1756,7 +1778,7 @@ var checkExitEditLot = function (row) {
             lot.UnitPrice = lot.UnitCost = 0
         }
 
-        getLotQtyAvail(record);
+       // getLotQtyAvail(record);
     } else if (key == "LotSerNbr") {
         var flat = false;
         App.stoLotTrans.data.each(function (item) {
@@ -1788,6 +1810,7 @@ var checkExitEditLot = function (row) {
         }
         getLotQtyAvail(record);
     }
+    getLotQtyAvail(row.record);
     record.commit();
     HQ.common.showBusy(false);
 };
@@ -1819,21 +1842,23 @@ var checkTransAdd = function () {
 };
 
 var getQtyAvail = function (row) {
-
+    var qtyOnhand = 0;
     var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [row.data.InvtID, row.data.SiteID]);
     if (!Ext.isEmpty(site)) {
         App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + (site.QtyAvail - calculateInvtTotal(row.data.InvtID, row.data.SiteID, "")));
+        qtyOnhand = site.QtyOnHand;
     }
     else {
         App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + (0 - calculateInvtTotal(row.data.InvtID, row.data.SiteID, "")));
     }
+    row.set('QtyOnHand', qtyOnhand);
 };
 
 var getLotQtyAvail = function (row) {
     var lot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', ['LotSerNbr']], [row.data.InvtID, row.data.SiteID, row.data.LotSerNbr]);
     var qty = 0;
     var qtyAvail = 0;
-
+    var qtyOnhand = 0;
     App.stoLotTrans.snapshot.each(function (item2) {
         if (item2.data.LotSerNbr == row.data.LotSerNbr && item2.data.InvtID == row.data.InvtID && item2.data.SiteID == row.data.SiteID) {
             qty += item2.data.UnitMultDiv == "M" ? item2.data.Qty * item2.data.CnvFact : item2.data.Qty * item2.data.CnvFact;
@@ -1842,6 +1867,7 @@ var getLotQtyAvail = function (row) {
     var det = App.winLot.record;
 
     if (!Ext.isEmpty(lot)) {
+        qtyOnhand = lot.QtyOnHand;
         qtyAvail = lot.QtyAvail - qty;
         if (qtyAvail < 0) {
             HQ.message.show(1043, [row.data.InvtID + " " + row.data.LotSerNbr, row.data.SiteID], "", true);
@@ -1873,6 +1899,7 @@ var getLotQtyAvail = function (row) {
         }
     }
     App.lblLotQtyAvail.setText("Lot " + row.data.LotSerNbr + " - " + HQ.common.getLang('qtyavail') + ": " + qtyAvail);
+    row.set('QtyOnHand', qtyOnhand);
 };
 
 var calculateInvtTotal = function (invtID, siteID, lineRef) {

@@ -34,7 +34,8 @@
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
         HQ.inSite = '@ViewBag.INSite';
-        showFromSite = '@ViewBag.showFromSite';
+        showFromSite = HQ.util.toBool('@ViewBag.showFromSite');
+        HQ.showQtyOnhand = HQ.util.toBool('@ViewBag.showQtyOnhand');
     </script>  
     <title>@ViewBag.Title</title>
 </head>
@@ -107,7 +108,7 @@
     X.Store()
     .ID("stoLotTrans")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN_LotTrans),"mdlLotTrans","",true))
+        .Model(Util.GenerateModel(typeof(IN10200_pgIN_LotTrans_Result), "mdlLotTrans", "", true))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetLotTrans", "IN10200"))
@@ -140,7 +141,7 @@
     X.Store()
     .ID("stoOldLotTrans")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN_LotTrans),"mdlOldLotTrans","",true))
+        .Model(Util.GenerateModel(typeof(IN10200_pgIN_LotTrans_Result), "mdlOldLotTrans", "", true))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetLotTrans", "IN10200"))

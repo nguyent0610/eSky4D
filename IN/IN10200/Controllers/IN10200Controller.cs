@@ -36,7 +36,7 @@ namespace IN10200.Controllers
         private IN10200_pcBatch_Result _objBatch;
         private JsonResult _logMessage;
         private List<IN10200_pgIssueLoad_Result> _lstTrans;
-        private List<IN_LotTrans> _lstLot;
+        private List<IN10200_pgIN_LotTrans_Result> _lstLot;
         private IN_Setup _objIN;
 
         #region Action
@@ -44,29 +44,39 @@ namespace IN10200.Controllers
         {
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
-            var showFromSite = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "IN10200ShowFromSite");
-            if (showFromSite == null)
-                ViewBag.showFromSite = "false";
-            else
-            {
-                if (showFromSite.IntVal == 1)
-                    ViewBag.showFromSite = "true";
-                else
-                    ViewBag.showFromSite = "false";
-            }
 
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
-
             if (branchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
             {
                 return View("Popup");
             }
+            var showFromSite = false;
+            var showQtyOnhand = false;
+            var objConfig = _app.IN10200_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                showFromSite = objConfig.ShowFromSite.HasValue && objConfig.ShowFromSite.Value;
+                showQtyOnhand = objConfig.ShowQtyOnhand.HasValue && objConfig.ShowQtyOnhand.Value;
+            }
+            //var showFromSite = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "IN10200ShowFromSite");
+
+            //if (showFromSite != null && showFromSite.IntVal == 1)
+            //{
+            //    ViewBag.showFromSite = "true";
+            //}
+            //else
+            //{
+            //    
+            //}
+            
 
             if (branchID == null) branchID = Current.CpnyID;
 
             var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID && p.UserID == Current.UserName);
 
             ViewBag.INSite = userDft == null ? "" : userDft.INSite;
+            ViewBag.showFromSite = showFromSite;
+            ViewBag.showOnHand = showQtyOnhand;
             ViewBag.BranchID = branchID;
 
             
@@ -74,7 +84,7 @@ namespace IN10200.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -321,7 +331,7 @@ namespace IN10200.Controllers
                 pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(data["SiteID"].PassNull()), ParameterDirection.Input, 30));
                 DataTable dt = dal.ExecDataTable("IN10200_pdExport", CommandType.StoredProcedure, ref pc);
 
-                List<IN10200_pgIssueLoad_Result> lstDetail = _app.IN10200_pgIssueLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(), "%", "%").ToList();
+                List<IN10200_pgIssueLoad_Result> lstDetail = _app.IN10200_pgIssueLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(), "%", "%", Current.UserName, Current.CpnyID, Current.LangID).ToList();
 
                 sheetTrans.Cells.ImportDataTable(dt, false, "AA2");
 
@@ -781,7 +791,7 @@ namespace IN10200.Controllers
         }
         public ActionResult GetTrans(string batNbr, string branchID)
         {
-            var lstTrans = _app.IN10200_pgIssueLoad(batNbr, branchID, "%", "%").ToList();
+            var lstTrans = _app.IN10200_pgIssueLoad(batNbr, branchID, "%", "%", Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lstTrans);
         }
         public ActionResult GetPrice(string invtID, string uom, DateTime effDate, string siteID, string valMthd)
@@ -840,7 +850,7 @@ namespace IN10200.Controllers
         }
         public ActionResult GetLotTrans(string branchID, string batNbr)
         {
-            List<IN_LotTrans> lstLotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
+            List<IN10200_pgIN_LotTrans_Result> lstLotTrans = _app.IN10200_pgIN_LotTrans(batNbr, branchID, Current.UserName, Current.CpnyID, Current.LangID).ToList();  //.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
             return this.Store(lstLotTrans.OrderBy(p => p.ExpDate).ThenBy(p => p.LotSerNbr).ToList(), lstLotTrans.Count);
         }
         public ActionResult GetItemLot(string invtID, string siteID, string lotSerNbr, string branchID, string batNbr)
@@ -947,7 +957,7 @@ namespace IN10200.Controllers
             if (_lstLot == null)
             {
                 var lotHandler = new StoreDataHandler(data["lstLot"]);
-                _lstLot = lotHandler.ObjectData<IN_LotTrans>().Where(p => Util.PassNull(p.INTranLineRef) != string.Empty && Util.PassNull(p.LotSerNbr) != string.Empty && Util.PassNull(p.InvtID) != string.Empty).ToList();
+                _lstLot = lotHandler.ObjectData<IN10200_pgIN_LotTrans_Result>().Where(p => Util.PassNull(p.INTranLineRef) != string.Empty && Util.PassNull(p.LotSerNbr) != string.Empty && Util.PassNull(p.InvtID) != string.Empty).ToList();
             }
 
             _objBatch = data.ConvertToObject<IN10200_pcBatch_Result>();
@@ -955,7 +965,7 @@ namespace IN10200.Controllers
             _handle = data["Handle"].PassNull();
             _objBatch.Status = _objBatch.Status.PassNull() == string.Empty ? "H" : _objBatch.Status;
 
-            if (_app.IN10200_ppCheckCloseDate(Current.CpnyID,Current.UserName,Current.LangID,_objBatch.BranchID, _objBatch.DateEnt.ToDateShort(), "IN10200").FirstOrDefault() == "0")
+            if (_app.IN10200_ppCheckCloseDate(_objBatch.BranchID, _objBatch.DateEnt.ToDateShort(), "IN10200",Current.UserName,Current.CpnyID, Current.LangID).FirstOrDefault() == "0")
                 throw new MessageException(MessageType.Message, "301");
 
             Batch batch = _app.Batches.FirstOrDefault(p => p.BatNbr == _objBatch.BatNbr && p.BranchID == _objBatch.BranchID);
@@ -1206,7 +1216,7 @@ namespace IN10200.Controllers
             t.SlsperID = _form["SlsperID"].PassNull();
             t.PosmID = s.PosmID;
         }
-        private bool Update_Lot(IN_LotTrans t, IN_LotTrans s, Batch batch, IN_Trans tran, bool isNew)
+        private bool Update_Lot(IN_LotTrans t, IN10200_pgIN_LotTrans_Result s, Batch batch, IN_Trans tran, bool isNew)
         {
 
             if (isNew)

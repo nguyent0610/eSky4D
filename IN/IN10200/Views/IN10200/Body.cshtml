@@ -39,7 +39,7 @@
         .Hidden(true)
         .Layout(LayoutType.Fit)
         .Height(300)
-        .Width(550)
+        .Width(650)
         .Modal(true)
         .Closable(false)
         .Buttons(
@@ -89,18 +89,20 @@
                                                     <th>" + Util.GetLang("LotSerNbr") + @"</th>
                                                     <th>" + Util.GetLang("ExpDate") + @"</th>
                                                     <th>" + Util.GetLang("QtyAvail") + @"</th>
+                                                    <th>" + Util.GetLang("QtyOnHand") + @"</th>
                                                 </tr>
                                         </tpl>
                                         <tr class='x-boundlist-item'>
                                             <td style='width:100px;'>{LotSerNbr}</td>
-                                            <td>{ExpDate:date("""+Current.FormatDateJS+@""")}</td>
+                                            <td>{ExpDate:date(""" +Current.FormatDateJS+ @""")}</td>
                                             <td>{QtyAvail}</td>
+                                            <td>{QtyOnHand}</td>
                                         </tr>
                                         <tpl if='[xcount-xindex] == 0'>
                                             </table>
                                         </tpl>
                                     </tpl>"
-                            )
+                                )
                         )
                     )
                     .StoreID("stoCalcLot")
@@ -109,7 +111,7 @@
                                      
                
                 , X.Column().ID("colLotUnitDesc").DataIndex("UnitDesc").Text(Util.GetLang("Unit"))
-                .Width(100)
+                .Width(70)
                 //.Editor(
                 //    X.ComboBox().ID("cboLotUnitDesc")
                 //    .DisplayField("FromUnit").ValueField("FromUnit")
@@ -127,10 +129,13 @@
                 .Align(Alignment.Right)
                 .Renderer("renderQtyAmt") 
                 .Editor(Html.X().NumberField().MaxValue(1000000).MinValue(0).DecimalPrecision(0))
-                
+                , X.Column().ID("colLotQtyOnHand").DataIndex("QtyOnHand").Text(Util.GetLang("QtyOnHand"))
+                .Width(110)
+                .Align(Alignment.Right)
+                .Renderer("renderQtyAmt").Hidden(true)
                 
                 , X.Column().ID("colLotPrice").DataIndex("UnitPrice").Text(Util.GetLang("IN10200UnitPrice"))
-                .Width(75)
+                .Width(110)
                 .Align(Alignment.Right)
                 .Renderer("renderQtyAmt") 
                 
@@ -147,7 +152,7 @@
             .Plugins(X.CellEditing().ClicksToEdit(1))
         )
         
-        , X.FormPanel().ID("frmMain")
+    , X.FormPanel().ID("frmMain")
         .Layout(LayoutType.Border)
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
@@ -198,7 +203,7 @@
                     HQ.TextBox().ID("txtBranchID")
                     .Name("BranchID")
                     .DataIndex("BranchID")
-                    .HQLangCode("IN10201BranchID")
+                    .HQLangCode("BranchID")
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "BranchID"))
                     .MaxLength(30)
@@ -220,7 +225,7 @@
                     .Width(250)
                     .ForceSelection(true)
                     .MaxLength(20)
-                    .FieldLabel(Util.GetLang("IN10201BatNbr"))
+                    .FieldLabel(Util.GetLang("BatNbr"))
                     .TriggerAction(TriggerAction.All)
                     .Listeners(l =>
                     {
@@ -270,7 +275,7 @@
                     HQ.Combo().ID("cboSiteID")
                     .Name("SiteID")
                     .DataIndex("SiteID")
-                    .HQLangCode("IN10201Site")
+                    .HQLangCode("SiteID")
                     .HQProcedure("IN10200_pcSite")
                     .HQColumnShow("SiteID,Name")
                     .DisplayField("SiteID")
@@ -337,7 +342,7 @@
                     HQ.DateField().ID("txtDateEnt")
                     .DataIndex("DateEnt")
                     .Name("DateEnt")
-                    .HQLangCode("IN10201TranDate")
+                    .HQLangCode("TranDate")
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "TranDate"))
                     .Width(250)
@@ -348,7 +353,7 @@
                     HQ.Combo().ID("cboFromToSiteID")
                     .Name("FromToSiteID")
                     .DataIndex("FromToSiteID")
-                    .HQLangCode("IN10201FromSite")
+                    .HQLangCode("FromSite")
                     .HQProcedure("IN10200_pcSite")
                     .HQColumnShow("SiteID,Name")
                     .DisplayField("SiteID")
@@ -531,6 +536,7 @@
             .RowLines(true)
             .ColumnLines(true)
             .BorderSpec("1 0 0 0")
+            .SortableColumns(false)
             .Store(
                 X.Store()
                 .ID("stoTrans")
@@ -613,7 +619,7 @@
                 .Width(100)
                 .Editor(HQ.NumberField().ID("txtTransQty").MaxValue(1000000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
                 .Renderer("rdrTrans_QtyAmt")
-                
+                                
                 , X.ComponentColumn()
                 .Text("")
                 .Width(26)
@@ -621,20 +627,25 @@
                     X.Button()
                     .MarginSpec("1 4 1 3").Height(18).Text("")
                     .Listeners(p=>p.Click.Fn="btnLot_Click")   
-                ),
+                )
                 
-                X.Column()
+                , X.Column().ID("colQtyOnHand").DataIndex("QtyOnHand").Text(Util.GetLang("QtyOnHand"))
+                .Width(110)
+                .Align(Alignment.Right)
+                .Renderer("renderQtyAmt").Hidden(true)
+                
+               , X.Column()
                 .DataIndex("UnitPrice")
                 .Text(Util.GetLang("IN10200UnitPrice"))
                 .Align(Alignment.Right)
-                .Width(100)
+                .Width(110)
                 .Renderer("rdrTrans_QtyAmt")
                 
                 , X.Column()
                 .DataIndex("TranAmt")
                 .Text(Util.GetLang("ExtAmt"))
                 .Align(Alignment.Right)
-                .Width(100)
+                .Width(110)
                 .Renderer("rdrTrans_QtyAmt")
                 
                 , X.Column().Text(Util.GetLang("PosmID")).DataIndex("PosmID").Width(120)
@@ -687,6 +698,7 @@
                         X.StringFilter().DataIndex("TranDesc"),
                         X.StringFilter().DataIndex("UnitDesc"),
                         X.NumericFilter().DataIndex("Qty"),
+                        X.NumericFilter().DataIndex("QtyOnHand"),
                         X.NumericFilter().DataIndex("UnitPrice"),
                         X.NumericFilter().DataIndex("TranAmt"),
                         X.StringFilter().DataIndex("PosmID")
