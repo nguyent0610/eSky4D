@@ -51,7 +51,7 @@ namespace IN10100.Controllers
         private IN10100_pcBatch_Result _objBatch;
         private JsonResult _logMessage;
         private List<IN10100_pgReceiptLoad_Result> _lstTrans;
-        private List<IN_LotTrans> _lstLot;
+        private List<IN10100_pgLotTrans_Result> _lstLot;
         private IN_Setup _objIN;
         public ActionResult Index(string branchID)
         {
@@ -65,16 +65,20 @@ namespace IN10100.Controllers
             }
 
             if (branchID == null) branchID = Current.CpnyID;
-
+            var showQtyOnhand = false;
             var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID && p.UserID == Current.UserName);
-
+            var objConfig = _app.IN10100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                showQtyOnhand = objConfig.ShowQtyOnhand.HasValue && objConfig.ShowQtyOnhand.Value;
+            }
             ViewBag.INSite = userDft == null ? "" : userDft.INSite;
             ViewBag.BranchID = branchID;
-
+            ViewBag.showQtyOnhand = showQtyOnhand;
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -90,7 +94,7 @@ namespace IN10100.Controllers
         }
         public ActionResult GetTrans(string batNbr, string branchID)
         {
-            var lstTrans = _app.IN10100_pgReceiptLoad(batNbr, branchID, "%", "%").ToList();
+            var lstTrans = _app.IN10100_pgReceiptLoad(batNbr, branchID, "%", "%", Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lstTrans);
         }
         public ActionResult GetTransfer(string branchID, DateTime tranDate, string trnsfrDocNbr)
@@ -100,7 +104,7 @@ namespace IN10100.Controllers
         }
         public ActionResult GetLotTransfer(string branchID, DateTime tranDate, string trnsfrDocNbr)
         {
-            var lstLotTransfer = _app.IN10100_pdLotTrnsfer(branchID, trnsfrDocNbr, tranDate).ToList();
+            var lstLotTransfer = _app.IN10100_pdLotTrnsfer(branchID, trnsfrDocNbr, tranDate, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lstLotTransfer);
         }
         public ActionResult GetItemSite(string invtID, string siteID)
@@ -144,7 +148,7 @@ namespace IN10100.Controllers
         }
         public ActionResult GetLotTrans(string branchID, string batNbr)
         {
-            List<IN_LotTrans> lstLotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
+            List<IN10100_pgLotTrans_Result> lstLotTrans = _app.IN10100_pgLotTrans(batNbr, branchID, Current.UserName, Current.CpnyID,Current.LangID).ToList(); //_app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
             return this.Store(lstLotTrans.OrderBy(p => p.LotSerNbr).ToList(), lstLotTrans.Count);
         }
         public ActionResult GetItemLot(string invtID, string siteID, string lotSerNbr, string branchID, string batNbr)
@@ -197,7 +201,7 @@ namespace IN10100.Controllers
                     return (ex as MessageException).ToMessage();
                 }
                 return Util.CreateError(ex.ToString());
-            }
+            } 
         }
         [HttpPost]
         public ActionResult Delete(FormCollection data)
@@ -328,7 +332,7 @@ namespace IN10100.Controllers
             var lotHandler = new StoreDataHandler(data["lstLot"]);
             if (_lstLot == null)
             {
-                _lstLot = lotHandler.ObjectData<IN_LotTrans>().Where(p => Util.PassNull(p.INTranLineRef) != string.Empty && p.InvtID.PassNull() != string.Empty && p.LotSerNbr.PassNull() != string.Empty).ToList();
+                _lstLot = lotHandler.ObjectData<IN10100_pgLotTrans_Result>().Where(p => Util.PassNull(p.INTranLineRef) != string.Empty && p.InvtID.PassNull() != string.Empty && p.LotSerNbr.PassNull() != string.Empty).ToList();
             }
 
             _objBatch = data.ConvertToObject<IN10100_pcBatch_Result>();
@@ -657,7 +661,7 @@ namespace IN10100.Controllers
             t.SlsperID = _form["SlsperID"].PassNull();
             t.PosmID = s.PosmID;
         }
-        private bool Update_Lot(IN_LotTrans t, IN_LotTrans s, Batch batch, IN_Trans tran, bool isNew)
+        private bool Update_Lot(IN_LotTrans t, IN10100_pgLotTrans_Result s, Batch batch, IN_Trans tran, bool isNew)
         {
 
             if (isNew)
@@ -727,7 +731,7 @@ namespace IN10100.Controllers
                 pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(data["SiteID"].PassNull()), ParameterDirection.Input, 30));
                 DataTable dt = dal.ExecDataTable("IN10100_pdImportInventory", CommandType.StoredProcedure, ref pc);
 
-                List<IN10100_pgReceiptLoad_Result> lstDetail = _app.IN10100_pgReceiptLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(), "%", "%").ToList();
+                List<IN10100_pgReceiptLoad_Result> lstDetail = _app.IN10100_pgReceiptLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(), "%", "%", Current.UserName, Current.CpnyID, Current.LangID).ToList();
 
                 sheetTrans.Cells.ImportDataTable(dt, false, "AA2");
 

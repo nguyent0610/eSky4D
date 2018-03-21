@@ -44,7 +44,7 @@
             X.Toolbar()
             .Items(
                 X.ToolbarFill(),
-                X.Label().ID("lblQtyAvail").Width(200).MarginSpec("0 0 0 30")
+                X.Label().ID("lblQtyAvail").Width(300).StyleSpec("text-align:right;margin-right: 10px !important;")
             )
         )
         .FieldDefaults(a => { a.LabelAlign = LabelAlign.Right; a.LabelWidth = 120; })
@@ -382,6 +382,7 @@
                 .ColumnLines(true)
                 .Border(true)
                 .BorderSpec("1 0 0 0")
+                .SortableColumns(false)
                 .Store(
                     X.Store()
                     .ID("stoTrans")
@@ -472,12 +473,17 @@
                                 .MarginSpec("1 4 1 3").Height(18).Text("")
                                 .Listeners(p=>p.Click.Fn="btnLot_Click")
                     )
+
+                    , X.Column().ID("colQtyOnHand").DataIndex("QtyOnHand").Text(Util.GetLang("QtyOnHand")).Hidden(true)
+                    .Width(110)
+                    .Align(Alignment.Right)
+                    .Renderer("renderQtyAmt")  
                 
                     , X.Column()
                     .DataIndex("UnitPrice")
                     .Text(Util.GetLang("UnitPrice"))
                     .Align(Alignment.Right)
-                    .Width(100)
+                    .Width(110)
                     .Editor(HQ.NumberField().MinValue(0).MaxValue(100000000).DecimalPrecision(0).SpinUpEnabled(true))
                     .Renderer("rdrTrans_QtyAmt")
 
@@ -485,7 +491,7 @@
                     .DataIndex("TranAmt")
                     .Text(Util.GetLang("ExtAmt"))
                     .Align(Alignment.Right)
-                    .Width(100)
+                    .Width(110)
                     .Renderer("rdrTrans_QtyAmt")
                     
                     
@@ -541,6 +547,7 @@
                             X.StringFilter().DataIndex("TranDesc"),
                             X.StringFilter().DataIndex("UnitDesc"),
                             X.NumericFilter().DataIndex("Qty"),
+                            X.NumericFilter().DataIndex("QtyOnHand"),
                             X.NumericFilter().DataIndex("UnitPrice"),
                             X.NumericFilter().DataIndex("TranAmt"),
                             X.StringFilter().DataIndex("PosmID")
@@ -560,8 +567,8 @@
     .ID("winLot")
     .Hidden(true)
     .Layout(LayoutType.Fit)
-    .Height(300)
-    .Width(550)
+    .Height(350)
+    .Width(650)
     .Modal(true)
     .Closable(false)
     .Buttons(
@@ -575,13 +582,14 @@
         X.Toolbar()
         .Border(false)
         .Items(
-            X.Label().ID("lblLotQtyAvail").Width(200).MarginSpec("0 0 0 5")
+                X.Label().ID("lblLotQtyAvail").Width(300).StyleSpec("text-align:left;margin-left: 10px !important;")
         )
     )
     .Items(
         X.GridPanel().ID("grdLot")
         .Border(true).BorderSpec("1 0 0 0")
         .StoreID("stoLotTrans")
+        .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Renderer("renderRowNumber")
 
@@ -612,18 +620,20 @@
                                                 <th>" + Util.GetLang("LotSerNbr") + @"</th>
                                                 <th>" + Util.GetLang("ExpDate") + @"</th>
                                                 <th>" + Util.GetLang("QtyAvail") + @"</th>
+                                                <th>" + Util.GetLang("QtyOnHand") + @"</th>
                                             </tr>
                                     </tpl>
                                     <tr class='x-boundlist-item'>
                                         <td style='width:100px;'>{LotSerNbr}</td>
-                                        <td>{ExpDate:date("""+Current.FormatDateJS+@""")}</td>
+                                        <td>{ExpDate:date(""" +Current.FormatDateJS+ @""")}</td>
                                         <td>{QtyAvail}</td>
+                                        <td>{QtyOnHand}</td>
                                     </tr>
                                     <tpl if='[xcount-xindex] == 0'>
                                         </table>
                                     </tpl>
                                 </tpl>"
-                        )
+                            )
                     )
                 )
                 .StoreID("stoCalcLot")
@@ -632,17 +642,21 @@
                                      
                
             , X.Column().ID("colLotUnitDesc").DataIndex("UnitDesc").Text(Util.GetLang("Unit"))
-            .Width(100)
+            .Width(70)
                   
-                , X.Column().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("Qty"))
+            , X.Column().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("Qty"))
             .Width(75)
             .Align(Alignment.Right)
             .Renderer("renderQtyAmt") 
             .Editor(Html.X().NumberField().MaxValue(1000000).MinValue(0).DecimalPrecision(0))
-                
+
+            , X.Column().ID("colLotQtyOnHand").DataIndex("QtyOnHand").Text(Util.GetLang("QtyOnHand")).Hidden(true)
+            .Width(110)
+            .Align(Alignment.Right)
+            .Renderer("renderQtyAmt")     
                 
             , X.Column().ID("colLotPrice").DataIndex("UnitPrice").Text(Util.GetLang("Price"))
-            .Width(75)
+            .Width(110)
             .Align(Alignment.Right)
             .Renderer("renderQtyAmt") 
                 

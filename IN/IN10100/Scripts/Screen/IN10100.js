@@ -177,6 +177,7 @@ var checkExitEditLot = function (row) {
             lot.ExpDate = App.DateEnt.getValue();//HQ.businessDate;
         }
     }
+    getLotQtyAvail(row.record);
     record.commit();
     HQ.common.showBusy(false);
 };
@@ -219,6 +220,12 @@ var frmMain_BoxReady = function () {
     App.stoSetup.load();
 
     HQ.common.showBusy(true, HQ.waitMsg);
+    if (HQ.showQtyOnhand) {
+        App.colQtyOnHand.show();
+        if (App.colLotQtyOnHand) {
+            App.colLotQtyOnHand.show();
+        }
+    }
 };
 var frmMain_FieldChange = function (item, field, newValue, oldValue) {
     if (field.key != undefined) {
@@ -674,6 +681,9 @@ var cboTrnsferNbr_Change = function () {
 
 var grdTrans_BeforeEdit = function (item, e) {
     if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
+    if (App.Status.getValue() != 'H') {
+        return false;
+    }
     //if (App.grdTrans.isLock) {
     //    return false;
     //}
@@ -1264,6 +1274,7 @@ var calcLot = function (record, show) {
                 item.data.UnitDesc = record.data.UnitDesc;
                 item.data.CnvFact = record.data.CnvFact;
                 item.data.UnitMultDiv = record.data.UnitMultDiv;
+                item.data.QtyOnHand = record.data.QtyOnHand;
                 item.data.UnitCost = item.data.UnitPrice = record.data.UnitPrice;
                 item.commit();
             }
@@ -1306,7 +1317,14 @@ var showLot = function (record, loadCombo) {
     App.winLot.setTitle(record.data.InvtID + ' ' + (record.data.UnitMultDiv == "M" ? record.data.Qty * record.data.CnvFact : record.data.Qty / record.data.CnvFact) + ' ' + record.invt.StkUnit);
     HQ.focus = '';
     App.winLot.show();
-    setTimeout(function () { App.winLot.toFront(); }, 50);
+    setTimeout(function () {
+        App.winLot.toFront();
+        if (HQ.showQtyOnhand) {
+            if (App.colLotQtyOnHand) {
+                App.colLotQtyOnHand.show();
+            }
+        }
+    }, 50);
 };
 //////////////////////////////////
 var calculate = function () {
@@ -1565,23 +1583,27 @@ var checkTransAdd = function () {
 
 var getQtyAvail = function (row) {
     var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [row.data.InvtID, row.data.SiteID]);
-
+    var qtyOnhand = 0;
     if (!Ext.isEmpty(site)) {
         App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + site.QtyAvail);
+        qtyOnhand = site.QtyOnHand;
     }
     else {
         App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + 0);
     }
+    row.set('QtyOnHand', qtyOnhand);
 };
 var getLotQtyAvail = function (row) {
     var lot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', ['LotSerNbr']], [row.data.InvtID, row.data.SiteID, row.data.LotSerNbr]);
-
+    var qtyOnhand = 0;
     if (!Ext.isEmpty(lot)) {
         App.lblLotQtyAvail.setText("Lot " + row.data.LotSerNbr + " - " + HQ.common.getLang('qtyavail') + ": " + lot.QtyAvail);
+        qtyOnhand = lot.QtyOnHand;
     }
     else {
         App.lblLotQtyAvail.setText("Lot " + row.data.LotSerNbr + " - " + HQ.common.getLang('qtyavail') + ": " + 0);
     }
+    row.set('QtyOnHand', qtyOnhand);
 };
 
 var askClose = function (item) {
