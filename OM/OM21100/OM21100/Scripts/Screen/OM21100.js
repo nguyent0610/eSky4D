@@ -1942,6 +1942,7 @@ var DiscDefintion = {
                 App.chkExactQty.setReadOnly(false);
                 App.chkRequiredType.setReadOnly(false);
                 App.btnUpload.enable();
+                App.chkStockPromotion.setReadOnly(false);
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.enable();
             }
@@ -1957,6 +1958,7 @@ var DiscDefintion = {
                 App.chkExactQty.setReadOnly(true);
                 App.chkRequiredType.setReadOnly(true);
                 App.btnUpload.disable();
+                App.chkStockPromotion.setReadOnly(true);
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.disable();
             }

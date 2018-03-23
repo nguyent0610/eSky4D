@@ -42,6 +42,7 @@ namespace OM21100.Controllers
         List<IN_Trans> _lstIN_Trans = new List<IN_Trans>();
         List<IN_LotTrans> _lstIN_LotTrans = new List<IN_LotTrans>();
         private OM_DiscSeq _objOM_DiscSeq;
+        bool checkEdit =false;
         private const string ItemChannel = "IC"; // Mặt hàng + Channel
         private const string GItemChannel = "GC"; // Nhóm MH + Channel
         private const string ItemCustCate = "GI"; // Mặt Hàng + Loại KH
@@ -614,6 +615,11 @@ namespace OM21100.Controllers
 
                 var discID = data["cboDiscID"];
                 var discSeq = data["cboDiscSeq"];
+                //var tam= _db.OM_DiscSeq.Where(p=>p.DiscID==discID && p.DiscSeq==discSeq && p.Active==1).FirstOrDefault();
+                if(_db.OM_DiscSeq.Where(p => p.DiscID == discID && p.DiscSeq == discSeq && p.Active == 1 && p.Status=="C").FirstOrDefault() != null)
+                {
+                    checkEdit = true;
+                }
                 _discID = discID;
                 _discSeq = discSeq;                
                 var handle = data["cboHandle"];
@@ -1039,8 +1045,10 @@ namespace OM21100.Controllers
             t.NoteID = 0;
             t.ReasonCD = objTrans.ReasonCD;
             t.TotAmt = tong;
-            t.Rlsed = -1;
+            t.Rlsed = 0;
             t.Status = "H";
+            t.DiscID = inputDiscSeq.DiscID;
+            t.DiscSeq = inputDiscSeq.DiscSeq;
         }
 
 
@@ -2038,16 +2046,20 @@ namespace OM21100.Controllers
         {
             if (inputSeq != null)
             {
-                if (inputSeq.Active == 1 && inputSeq.StockPromotion == true && (_handle == "C" || (inputSeq.Status == "C" && _handle == "")))
+
+                
+
+                    if (inputSeq.Active == 1 && inputSeq.StockPromotion == true && (_handle == "C" || (inputSeq.Status == "C" && _handle == "")) && (inputSeq.EndDate.ToDateShort()>= DateTime.Now.ToDateShort()))
                 {
                     var obj = _db.OM_DiscSeq.Where(p => p.Active == 1 && p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq && p.Status == "C" && p.StockPromotion == true).FirstOrDefault();
+                    #region
                     if (obj == null)
                     {
                         string cpny = "";
                         string lstinvt = "";
                         foreach (OM21100_pgDiscItem_Result objInvt in _lstInvt)
                         {
-                            lstinvt = lstinvt + objInvt.InvtID + ",";
+                            lstinvt = lstinvt + objInvt.InvtID + "@#@#"+ objInvt.QtyStockAdvance+",";
                         }
 
                         foreach (OM21100_pgCompany_Result item in _lstCpny)
@@ -2066,6 +2078,7 @@ namespace OM21100.Controllers
                                 {
                                     lsterror = lsterror + cur.BranchID + ",";
                                 }
+
                             }
                             if (lsterror != "")
                             {
@@ -2073,18 +2086,19 @@ namespace OM21100.Controllers
                             }
                             else
                             {
-                                var keycheck = "";
+                                var message = "";
                                 foreach (OM21100_pdGetcheckSite_Result item in lstobj)
                                 {
-                                    var check = _db.OM21100_pdGetcheckQty(lstinvt, item.SiteID, _discID, _discSeq, item.BranchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-                                    if (check == false)
+                                    var check = _db.OM21100_pdGetcheckQty(lstinvt, item.SiteID, item.BranchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                                    if (check !=null)
                                     {
-                                        keycheck = keycheck + item.BranchID + ",";
+                                        //message = keycheck + item.BranchID + ",";
+                                        message += string.Format(Message.GetString("2018032311", null), item.SiteID, item.BranchID, check.InvtID);
                                     }
                                 }
-                                if (keycheck != "")
+                                if (message != "")
                                 {
-                                    throw new MessageException(MessageType.Message, "2018032212", "", new string[] { keycheck });
+                                    throw new MessageException(MessageType.Message, "20410", "", new string[] { message });
                                 }
                                 else
                                 {
@@ -2092,19 +2106,36 @@ namespace OM21100.Controllers
                                     SaveTrans(_objOM_DiscSeq);
                                     _db.SaveChanges();
 
-
                                     DataAccess dal = Util.Dal();
                                     INProcess.IN inventory = new INProcess.IN(Current.UserName, _screenNbr, dal);
+
                                     try
                                     {
                                         dal.BeginTrans(IsolationLevel.ReadCommitted);
                                         foreach (Batch objBatch in _lstBatch)
                                         {                                            
-                                            inventory.IN10300_Release(objBatch.BranchID, objBatch.BatNbr);                                            
-                                            inventory = null;
+                                            inventory.IN10300_Release(objBatch.BranchID, objBatch.BatNbr);
                                         }
+                                        inventory = null;
                                         dal.CommitTrans();
 
+                                        
+                                        try
+                                        {
+                                            inventory = new INProcess.IN(Current.UserName, _screenNbr, dal);
+                                            dal.BeginTrans(IsolationLevel.ReadCommitted);
+                                            foreach (Batch objBatch in _lstBatch)
+                                            {
+
+                                                inventory.Receipt_Cancel(objBatch.BranchID, objBatch.BatNbr, string.Empty, true, objBatch.RefNbr, true);
+                                            }
+                                            inventory = null;
+                                            dal.CommitTrans();
+                                        }
+                                        catch (Exception)
+                                        {
+                                            dal.RollbackTrans();
+                                        }
                                     }
                                     catch (Exception)
                                     {
@@ -2116,6 +2147,7 @@ namespace OM21100.Controllers
                                             if (batch != null)
                                             {
                                                 batch.Status = "V";
+                                                batch.Rlsed = -1;
                                             }
                                         }
                                         foreach(IN_Transfer objIN_Transfer in _lstIN_Transfer)
@@ -2129,12 +2161,11 @@ namespace OM21100.Controllers
 
                                         foreach(IN_Trans objIN_Trans in _lstIN_Trans)
                                         {
-                                            double oldQty = 0;
-
+                                            double oldQty = 0;                                            
                                             oldQty = objIN_Trans.UnitMultDiv == "D" ? objIN_Trans.Qty / objIN_Trans.CnvFact : objIN_Trans.Qty * objIN_Trans.CnvFact;
+                                            objIN_Trans.Rlsed = -1;
                                             UpdateINAlloc(objIN_Trans.InvtID, objIN_Trans.SiteID, oldQty, 0);
                                         }
-
 
                                         //var lstLot = _db.IN_LotTrans.Where(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr).ToList();
                                         foreach (var lot in _lstIN_LotTrans)
@@ -2145,9 +2176,7 @@ namespace OM21100.Controllers
 
                                             UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
                                         }
-
                                         _db.SaveChanges();
-
                                         throw;
                                     }
                                     finally
@@ -2160,10 +2189,46 @@ namespace OM21100.Controllers
                             }
                         }
                     }
+                    #endregion
                 }
                 else
                 {
-                    _db.SaveChanges();
+                    if (checkEdit)
+                    {
+                        var lstBatch = _db.Batches.Where(p => p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq).ToList();
+                        string batnbr = string.Empty;
+                        foreach (var objbatch in lstBatch)
+                        {
+                            batnbr = batnbr + objbatch.BatNbr + ",";
+                        }
+
+                        if (inputSeq.Active == 0)
+                        {
+                            var objOM_OrdDisc = _db.OM_OrdDisc.Where(p => p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq).ToList();
+                            if (objOM_OrdDisc != null)
+                            {
+                                throw new MessageException(MessageType.Message, "2018032313", "", new string[] { batnbr, null });
+                            }
+                        }
+                        else
+                        {
+                            foreach (OM21100_pgCompany_Result item in _lstCpny)
+                            {
+
+                            }
+
+                            foreach (var objbatch in lstBatch)
+                            {
+                                objbatch.Rlsed = -1;
+                                objbatch.Status = "V";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _db.SaveChanges();
+                    }
+                    
                 }
             }            
             else
