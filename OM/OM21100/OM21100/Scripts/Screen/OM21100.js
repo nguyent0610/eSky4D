@@ -571,10 +571,8 @@ var Main = {
                                             lstDiscCustClass: Ext.encode(App.grdDiscCustClass.store.getRecordsValues()),
                                             lstDiscCust: Ext.encode(App.grdDiscCust.store.getRecordsValues()),
                                             lstDiscItemClass: Ext.encode(App.grdDiscItemClass.store.getRecordsValues()),
-
                                             lstDiscCustCate: Ext.encode(App.grdDiscCustCate.store.getRecordsValues()),
                                             lstDiscChannel: Ext.encode(App.grdDiscChannel.store.getRecordsValues()),
-
                                             lstDiscCustCateChange: HQ.store.getData(App.grdDiscCustCate.store),
                                             lstDiscChannelChange: HQ.store.getData(App.grdDiscChannel.store),
                                         },
@@ -725,12 +723,21 @@ var Main = {
             App.cboDiscID.forceSelection = !HQ.allowAddDiscount;
             App.stoDiscInfo.reload();
             App.stoDiscSeqInfo.reload();
+            if (!HQ.hideQtyType) {
+                HQ.grid.show(App.grdDiscItem, ['QtyType']);
+            }
             if (App.chkPctDiscountByLevel != undefined) {
                 App.chkPctDiscountByLevel.disable();
             }
             
             HQ.common.setRequire(App.frmMain);
             App.chkRequiredType.setVisible(HQ.showRequiredType);
+            if (!HQ.hidechkPctDiscountByLevel) {
+                App.chkPctDiscountByLevel.hide();
+            }
+            if (!HQ.hidechkStockPromotion) {
+                App.chkStockPromotion.hide();
+            }
         },
 
         frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {
@@ -811,7 +818,7 @@ var Main = {
                 var status = App.cboStatus.getValue();
                 var keys = sto.HQFieldKeys ? sto.HQFieldKeys : "";
                 var idxLref = keys.indexOf("LineRef");
-
+                
                 if (discId && discSeq && status == _holdStatus) {
                     if (successful) {
                         var newData = {
@@ -823,11 +830,23 @@ var Main = {
                             newData.LineRef = HQ.store.lastLineRef(sto);
                             keys.splice(idxLref, 1);
                         }
-                        if (sto.storeId == 'stoDiscCust' || sto.storeId == 'stoDiscItem' || sto.storeId == 'stoBundle') {
+                        if (sto.storeId == 'stoDiscCust' || sto.storeId == 'stoBundle') {// || sto.storeId == 'stoDiscItem'
                             if (sto.data.length < sto.pageSize ||
                                 sto.currentPage == (sto.totalCount / sto.pageSize)
                                 ) {
                                 var obj = HQ.store.findRecord(sto, keys, [discId, discSeq, '', '', '', '', '']);
+                                if (!obj) {
+                                    var newRec = Ext.create(sto.model.modelName, newData);
+                                    HQ.store.insertRecord(sto, keys, newRec, false);
+                                }
+                            }
+                        }
+                        else if (sto.storeId == 'stoDiscItem') {
+                            newData.PerStockAdvance = 100;
+                            if (sto.data.length < sto.pageSize ||
+                                sto.currentPage == (sto.totalCount / sto.pageSize)
+                                ) {
+                                var obj = HQ.store.findRecord(sto, keys, [discId, discSeq, '', '', '', '', '','','']);
                                 if (!obj) {
                                     var newRec = Ext.create(sto.model.modelName, newData);
                                     HQ.store.insertRecord(sto, keys, newRec, false);
@@ -987,6 +1006,46 @@ var Main = {
             }
         },
 
+
+        grdDiscItem_edit: function (item, e, oldvalue) {
+            var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+            if (e.field == "PerStockAdvance" || e.field == "QtyLimit") {
+                var tam = 0;
+                tam = (e.record.data.QtyLimit * e.record.data.PerStockAdvance) / 100;
+                e.record.set("QtyStockAdvance", tam);
+            }
+
+            if (keys.indexOf(e.field) != -1) {
+                if (e.value != ''
+                    && Main.Process.isAllValidKey(e.store.getChangedData().Created, keys)
+                    && Main.Process.isAllValidKey(e.store.getChangedData().Updated, keys)) {
+                    var discId = App.cboDiscID.getValue();
+                    var discSeq = App.cboDiscSeq.getValue();
+                    var idxLref = keys.indexOf("LineRef")
+
+                    var newData = {
+                        DiscID: discId,
+                        DiscSeq: discSeq,
+                        PerStockAdvance:100
+                    };
+                    if (idxLref != -1) {
+                        newData.LineRef = HQ.store.lastLineRef(e.store);
+                        keys.splice(idxLref, 1);
+                    }
+
+                    var newRec = Ext.create(e.store.model.modelName, newData);
+                    HQ.store.insertRecord(e.store, keys, newRec, false);
+
+                    if (!App.cboDiscClass.readOnly) {
+                        App.cboDiscClass.setReadOnly(true);
+                        App.cboDiscType.setReadOnly(true);
+                    }
+                }                
+            }
+            
+        },
+
+
         grd_validateEdit: function (item, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
 
@@ -1021,6 +1080,57 @@ var Main = {
             }
         },
 
+        grdDiscItem_validateEdit: function (item, e) {
+            var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+
+            //if (e.field == "PerStockAdvance" || e.field == "QtyLimit") {
+            //    if (e.field == "PerStockAdvance" && (e.value == 0 || e.value == null || e.value == "")) {
+            //        HQ.message.show(2018032011, e.column.text);
+            //        return false;
+            //    }
+            //}
+
+            if (e.field == "QtyLimit") {
+                if (e.field == "QtyLimit" && (e.value == 0 || e.value == null || e.value == "")) {
+                    HQ.message.show(2018032011, e.column.text);
+                    return false;
+                }
+            }
+
+            if (keys.indexOf(e.field) != -1) {
+                //var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+                //if (e.value && !e.value.match(regex)) {
+                //    HQ.message.show(20140811, e.column.text);
+                //    return false;
+                //}
+                if (e.store.storeId == 'stoFreeItem') {
+                    keys = ['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];
+                }
+                if (e.store.storeId == 'stoDiscCust') {
+                    e.record.set('BranchID', _selBranchID);
+                    if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
+                        e.record.set('BranchID', '');
+                        HQ.message.show(1112, e.value);
+                        return false;
+                    }
+                    e.record.set('TerritoryName', _selTerritory);
+                } else {
+                    if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
+                        HQ.message.show(1112, e.value);
+                        return false;
+                    }
+                }
+                if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
+                    HQ.message.show(1112, e.value);
+                    return false;
+                }
+
+            }
+        },
+
+
+
+
         grd_reject: function (col, record) {
             var store = record.store;
 
@@ -1048,7 +1158,7 @@ var Main = {
                 var check = true;
                 if (lstAlldata.items.length > 0) {
                     for (var i = 0; i < lstAlldata.items.length; i++) {
-                        if (lstAlldata.items[i].data.FreeItemID != "" && (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)) {
+                        if (lstAlldata.items[i].data.FreeItemID != "") {///&& (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)
                             check = false;
                         }
                     }
@@ -1061,7 +1171,7 @@ var Main = {
                     var check = true;
                     if (lstAlldata.items.length > 0) {
                         for (var i = 0; i < lstAlldata.items.length; i++) {
-                            if (lstAlldata.items[i].data.FreeItemID != "" && (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)) {
+                            if (lstAlldata.items[i].data.FreeItemID != "") {// && (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)
                                 check = false;
                             }
                         }
@@ -1187,6 +1297,9 @@ var Main = {
                                     App.cboDiscID.clearValue();
                                     App.GroupItem.hide();
                                     App.Prioritize.hide();
+                                    App.colPerStockAdvance.hide();
+                                    App.colQtyLimit.hide();
+                                    App.colQtyStockAdvance.hide();
                                 }
                                 else {
                                     HQ.message.show(2017113005, '', '');
@@ -1198,6 +1311,9 @@ var Main = {
                                 App.cboDiscSeq.clearValue();
                                 App.GroupItem.hide();
                                 App.Prioritize.hide();
+                                App.colPerStockAdvance.hide();
+                                App.colQtyLimit.hide();
+                                App.colQtyStockAdvance.hide();
                             }
                         }
                     }
@@ -1265,48 +1381,41 @@ var Main = {
                             }
                         }
                         if (keycheck) {
-                            if (App.chkDonateGroupProduct.getValue()) {
-                                var lsterror1 = '';
-                                for (var i = 0; i < allDataFreeItem.items.length; i++) {
-                                    item = allDataFreeItem.items[i];
-                                    if (item.data.GroupItem == "" && item.data.FreeItemID != "") {
-                                        keycheck = false;
-                                        lsterror1 += item.data.FreeItemID + ",";
-                                    }
-                                }
-                                if (keycheck) {
-                                    var lsterror2 = '';
-                                    for (var i = 0; i < allDataFreeItem.items.length; i++) {
-                                        item = allDataFreeItem.items[i];
-                                        if ((item.data.Prioritize == "" || item.data.Prioritize <= 0) && item.data.FreeItemID != "") {
-                                            keycheck = false;
-                                            lsterror2 += item.data.FreeItemID + ",";
+                            if (App.chkStockPromotion.getValue()) {
+                                var erro = '';
+                                var idx = '';
+                                var lstdiscItem = App.stoDiscItem.allData.items;
+                                if (lstdiscItem.length > 0) {
+                                    for (var i = 0; i < lstdiscItem.length; i++) {
+                                        if (lstdiscItem[i].data.InvtID != '' && lstdiscItem[i].data.InvtID != null && (lstdiscItem[i].data.QtyLimit == 0 || lstdiscItem[i].data.QtyLimit == '')) {
+                                            erro = erro + lstdiscItem[i].data.InvtID + ',';
+                                            idx = idx + (i+1) + ',';
                                         }
                                     }
-                                    if (keycheck) { 
-                                        for (var j = 0; j < allDataFreeItem.items.length; j++) {
-                                            item = allDataFreeItem.items[j];
-                                            var check = 0;
-                                            var lstinvtID = '';
-                                            for (var k = 0; k < allDataFreeItem.items.length; k++) {
-                                                if (item.data.GroupItem == allDataFreeItem.items[k].data.GroupItem && item.data.Prioritize == allDataFreeItem.items[k].data.Prioritize && item.data.FreeItemID != "" && item.data.LineRef==allDataFreeItem.items[k].data.LineRef) {
-                                                    lstinvtID = lstinvtID + allDataFreeItem.items[k].data.FreeItemID + ',';
-                                                    check++;
-                                                }
-                                            }
-                                            if (check > 1) {
-                                                var rec = HQ.store.findRecord(App.stoDiscBreak, ['LineRef'], [item.data.LineRef]);
-                                                if (rec) {
-                                                    HQ.message.show(2018031712, [(App.stoDiscBreak.indexOf(rec) + 1),lstinvtID, item.data.GroupItem, item.data.Prioritize], '', true);
-                                                }
-                                                else {
-                                                    HQ.message.show(2018031511, [lstinvtID, item.data.GroupItem, item.data.Prioritize], '', true);
-                                                }
+                                    if (erro != '') {
+                                        keycheck = false;
+                                        HQ.message.show(2018032012, [erro, idx], '', true);
+                                    }
+                                }
+                            }
+                            if (keycheck) {
+                                if (App.chkDonateGroupProduct.getValue()) {
+                                    var lsterror1 = '';
+                                    for (var i = 0; i < allDataFreeItem.items.length; i++) {
+                                        item = allDataFreeItem.items[i];
+                                        if (item.data.GroupItem == "" && item.data.FreeItemID != "") {
+                                            keycheck = false;
+                                            lsterror1 += item.data.FreeItemID + ",";
+                                        }
+                                    }
+                                    if (keycheck) {
+                                        var lsterror2 = '';
+                                        for (var i = 0; i < allDataFreeItem.items.length; i++) {
+                                            item = allDataFreeItem.items[i];
+                                            if ((item.data.Prioritize == "" || item.data.Prioritize <= 0) && item.data.FreeItemID != "") {
                                                 keycheck = false;
-                                                
-                                                break;
+                                                lsterror2 += item.data.FreeItemID + ",";
                                             }
-
                                         }
                                         if (keycheck) {
                                             for (var j = 0; j < allDataFreeItem.items.length; j++) {
@@ -1314,39 +1423,65 @@ var Main = {
                                                 var check = 0;
                                                 var lstinvtID = '';
                                                 for (var k = 0; k < allDataFreeItem.items.length; k++) {
-                                                    if (item.data.GroupItem == allDataFreeItem.items[k].data.GroupItem && item.data.FreeItemQty != allDataFreeItem.items[k].data.FreeItemQty && item.data.FreeItemID != "" && item.data.LineRef == allDataFreeItem.items[k].data.LineRef) {
+                                                    if (item.data.GroupItem == allDataFreeItem.items[k].data.GroupItem && item.data.Prioritize == allDataFreeItem.items[k].data.Prioritize && item.data.FreeItemID != "" && item.data.LineRef == allDataFreeItem.items[k].data.LineRef) {
                                                         lstinvtID = lstinvtID + allDataFreeItem.items[k].data.FreeItemID + ',';
+                                                        check++;
                                                     }
                                                 }
-                                                if (lstinvtID != '') {
-                                                    lstinvtID = lstinvtID + item.data.FreeItemID;
+                                                if (check > 1) {
                                                     var rec = HQ.store.findRecord(App.stoDiscBreak, ['LineRef'], [item.data.LineRef]);
                                                     if (rec) {
-                                                        HQ.message.show(2018031713, [(App.stoDiscBreak.indexOf(rec) + 1), lstinvtID, item.data.GroupItem], '', true);
+                                                        HQ.message.show(2018031712, [(App.stoDiscBreak.indexOf(rec) + 1), lstinvtID, item.data.GroupItem, item.data.Prioritize], '', true);
                                                     }
                                                     else {
-                                                        HQ.message.show(2018031711, [lstinvtID, item.data.GroupItem], '', true);
+                                                        HQ.message.show(2018031511, [lstinvtID, item.data.GroupItem, item.data.Prioritize], '', true);
                                                     }
                                                     keycheck = false;
+
                                                     break;
                                                 }
 
                                             }
                                             if (keycheck) {
-                                                Main.Process.saveData();
+                                                for (var j = 0; j < allDataFreeItem.items.length; j++) {
+                                                    item = allDataFreeItem.items[j];
+                                                    var check = 0;
+                                                    var lstinvtID = '';
+                                                    for (var k = 0; k < allDataFreeItem.items.length; k++) {
+                                                        if (item.data.GroupItem == allDataFreeItem.items[k].data.GroupItem && item.data.FreeItemQty != allDataFreeItem.items[k].data.FreeItemQty && item.data.FreeItemID != "" && item.data.LineRef == allDataFreeItem.items[k].data.LineRef) {
+                                                            lstinvtID = lstinvtID + allDataFreeItem.items[k].data.FreeItemID + ',';
+                                                        }
+                                                    }
+                                                    if (lstinvtID != '') {
+                                                        lstinvtID = lstinvtID + item.data.FreeItemID;
+                                                        var rec = HQ.store.findRecord(App.stoDiscBreak, ['LineRef'], [item.data.LineRef]);
+                                                        if (rec) {
+                                                            HQ.message.show(2018031713, [(App.stoDiscBreak.indexOf(rec) + 1), lstinvtID, item.data.GroupItem], '', true);
+                                                        }
+                                                        else {
+                                                            HQ.message.show(2018031711, [lstinvtID, item.data.GroupItem], '', true);
+                                                        }
+                                                        keycheck = false;
+                                                        break;
+                                                    }
+
+                                                }
+                                                if (keycheck) {
+                                                    Main.Process.saveData();
+                                                }
                                             }
+                                        }
+                                        else {
+                                            HQ.message.show(2018022214, lsterror2, '', false);
                                         }
                                     }
                                     else {
-                                        HQ.message.show(2018022214, lsterror2, '', false);
+                                        HQ.message.show(2018022213, lsterror1, '', false);
                                     }
                                 }
                                 else {
-                                    HQ.message.show(2018022213, lsterror1, '', false);
+                                    Main.Process.saveData();
                                 }
-                            }
-                            else {
-                                Main.Process.saveData();
                             }
                             //Main.Process.saveData();
                         }
@@ -1443,7 +1578,7 @@ var DiscDefintion = {
         },
 
         renderFreeItemName: function (value, metaData, record, rowIndex, colIndex, store) {
-            var rec = App.cboFreeItemID.store.findRecord("InvtID", record.data.FreeItemID);
+            var rec = HQ.store.findRecord(App.cboFreeItemID.store, ["InvtID"], [record.data.FreeItemID]);
             var returnValue = value;
             if (rec) {
                 if (metaData.column.dataIndex == "Descr" && !record.data.Descr) {
@@ -1453,6 +1588,15 @@ var DiscDefintion = {
                     returnValue = rec.data.StkUnit;
                     //record.set("UnitDescr", rec.data.StkUnit);
                     record.data.UnitDescr = returnValue;
+                    //if (!record.data.TypeUnit) {
+                    //    if (rec.data.OtherUnit != null && rec.data.OtherUnit != "" && rec.data.OtherUnit==rec.data.StkUnit) {
+                    //        record.set("TypeUnit",3);
+                    //    }
+                    //    else {
+                    //        record.set("TypeUnit", 1);
+                    //    }
+                    //}
+
                 }
                 else if (metaData.column.dataIndex == "TypeUnit" && !record.data.TypeUnit) {
                     if (rec.data.OtherUnit != null && rec.data.OtherUnit != "" && rec.data.OtherUnit==rec.data.StkUnit) {
@@ -1469,7 +1613,8 @@ var DiscDefintion = {
         },
 
         renderDpiiInvtName: function (value, metaData, record, rowIndex, colIndex, store) {
-            var rec = App.cboDpiiInvtID.store.findRecord("InvtID", record.data.InvtID);
+            //var rec = App.cboDpiiInvtID.store.findRecord("InvtID", record.data.InvtID);
+            var rec = HQ.store.findRecord(App.cboDpiiInvtID.store, ["InvtID"], [record.data.InvtID]);
             var returnValue = value;
             if (rec) {
                 if (metaData.column.dataIndex == "Descr" && !record.data.Descr) {
@@ -1556,7 +1701,7 @@ var DiscDefintion = {
                         var check = true;
                         if (lstAlldata.items.length > 0) {
                             for (var i = 0; i < lstAlldata.items.length; i++) {
-                                if (lstAlldata.items[i].data.FreeItemID != "" && (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)) {
+                                if (lstAlldata.items[i].data.FreeItemID != "") {//&& (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)
                                     check = false;
                                 }
                             }
@@ -1962,66 +2107,83 @@ var DiscDefintion = {
             if (cbo.value == "BB") {
                 DiscDefintion.Process.enableATabInList(["pnlDPBB"]);
                 isbb = true;
+                App.chkStockPromotion.disable();
             }
                 // 1: {Code: "CB", Descr: "Customer and Item Bundle"}
             else if (cbo.value == "CB") {
                 DiscDefintion.Process.enableATabInList(["pnlDPBB", "pnlDPCC"]);
                 isbb = true;
+                App.chkStockPromotion.disable();
             }
                 // 2: {Code: "CC", Descr: "Customer"}
             else if (cbo.value == "CC") {
                 DiscDefintion.Process.enableATabInList(["pnlDPCC"]);
+                App.chkStockPromotion.disable();
             }
                 // 3: {Code: "CI", Descr: "Customer and Invt. Item"}
             else if (cbo.value == "CI") {
                 DiscDefintion.Process.enableATabInList(["pnlDPCC", "pnlDPII"]);
+                App.chkStockPromotion.enable();
             }
                 // 4: {Code: "II", Descr: "Inventory Item"}
             else if (cbo.value == "II") {
                 DiscDefintion.Process.enableATabInList(["pnlDPII"]);
+                App.chkStockPromotion.enable();
             }
                 // 5: {Code: "PP", Descr: "Product Group"}
             else if (cbo.value == "PP") {
                 DiscDefintion.Process.enableATabInList(["pnlDPPP"]);
+                App.chkStockPromotion.disable();
             }
                 // 6: {Code: "TB", Descr: "Shop Type and Item Bundle"}
             else if (cbo.value == "TB") {
                 DiscDefintion.Process.enableATabInList(["pnlDPTT", "pnlDPBB"]);
+                App.chkStockPromotion.disable();
                 isbb = true;
             }
                 // 7: {Code: "TI", Descr: "Shop Type and Invt. Item"}
             else if (cbo.value == "TI") {
                 DiscDefintion.Process.enableATabInList(["pnlDPTT", "pnlDPII"]);
+                App.chkStockPromotion.enable();
             }
                 // 8: {Code: "TP", Descr: "Prod. Group and Shop Type"}
             else if (cbo.value == "TP") {
                 DiscDefintion.Process.enableATabInList(["pnlDPTT", "pnlDPPP"]);
+                App.chkStockPromotion.disable();
             }
                 // 9: {Code: "TT", Descr: "Shop Type"}
             else if (cbo.value == "TT") {
                 DiscDefintion.Process.enableATabInList(["pnlDPTT"]);
+                App.chkStockPromotion.disable();
             }
 
             else if (cbo.value == "CL") {
                 DiscDefintion.Process.enableATabInList(["pnlDPCL"]);
+                App.chkStockPromotion.disable();
             }
             else if (cbo.value == "CT") {
                 DiscDefintion.Process.enableATabInList(["pnlDPCT"]);
+                App.chkStockPromotion.disable();
             }
             else if (cbo.value == "GC") {
                 DiscDefintion.Process.enableATabInList(["pnlDPCT", "pnlDPPP"]);
+                App.chkStockPromotion.disable();
             }
             else if (cbo.value == "GP") {
                 DiscDefintion.Process.enableATabInList(["pnlDPPP", "pnlDPCL"]);
+                App.chkStockPromotion.disable();
             }
             else if (cbo.value == "GI") {
                 DiscDefintion.Process.enableATabInList(["pnlDPII", "pnlDPCL"]);
+                App.chkStockPromotion.enable();
             }
             else if (cbo.value == "IC") {
-                DiscDefintion.Process.enableATabInList(["pnlDPCT","pnlDPII"]);
+                DiscDefintion.Process.enableATabInList(["pnlDPCT", "pnlDPII"]);
+                App.chkStockPromotion.enable();
             }
             else {
                 DiscDefintion.Process.enableATabInList([]);
+                App.chkStockPromotion.disable();
             }
 
 
@@ -2066,10 +2228,10 @@ var DiscDefintion = {
                 App.chkAutoFreeItem.enable();
                 App.chkDonateGroupProduct.enable();
                 App.stoDiscSeqInfo.reload();
-               
+                var enddate = new Date(1900, 01, 1);
+                App.dteEndDate.setMinValue(enddate);
                 //App.chkDonateGroupProduct.enable();
-            }
-           
+            }           
         },
 
         cboDiscSeq_select: function (cbo, newValue, oldValue, eOpts) {
@@ -2278,6 +2440,32 @@ var DiscDefintion = {
             }
         },
 
+        chkStockPromotion_Change: function (chk, newValue, oldValue, eOpts) {
+            if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
+                if (chk.hasFocus) {
+                    HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+                }                
+                chk.suspendEvents();
+                chk.setValue(false);
+                chk.resumeEvents();
+                return false;
+            }
+            else {
+                if (newValue) {
+                    //HQ.grd.show(App.grdDiscItem, ['QtyStockAdvance', 'QtyLimit', 'PerStockAdvance']);
+                    App.colPerStockAdvance.show();
+                    App.colQtyLimit.show();
+                    App.colQtyStockAdvance.show();
+                }
+                else {
+                    //HQ.grd.hide(App.grdDiscItem, ['QtyStockAdvance', 'QtyLimit', 'PerStockAdvance']);
+                    App.colPerStockAdvance.hide();
+                    App.colQtyLimit.hide();
+                    App.colQtyStockAdvance.hide();
+                }
+            }
+        },
+
         chkAutoFreeItem_Change: function (chk, newValue, oldValue, eOpts) {
             if (newValue) {
                 App.chkDonateGroupProduct.disable();
@@ -2302,7 +2490,9 @@ var DiscDefintion = {
 
         chkDonateGroupProduct: function (chk, newValue, oldValue, eOpts) {
             if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
-                HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+                if (chk.hasFocus) {
+                    HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+                }               
                 chk.suspendEvents();
                 App.chkDonateGroupProduct.setValue(false);
                 chk.resumeEvents();
@@ -2769,6 +2959,52 @@ var DiscDefintion = {
                         }
                     }
 
+                    if (App.chkDonateGroupProduct.getValue()) {
+                        var lstAlldata = App.stoFreeItem.snapshot;
+                        var check = true;
+                        if (lstAlldata.items.length > 0) {
+                            for (var i = 0; i < lstAlldata.items.length; i++) {
+                                if (lstAlldata.items[i].data.FreeItemID != "") {///&& (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)
+                                    check = false;
+                                }
+                            }
+                        }
+                        App.chkDonateGroupProduct.setReadOnly(!check);
+                    }
+                    else {
+                        if (!App.chkAutoFreeItem.getValue() && !App.chkDonateGroupProduct.getValue()) {
+                            var lstAlldata = App.stoFreeItem.snapshot;
+                            var check = true;
+                            if (lstAlldata.items.length > 0) {
+                                for (var i = 0; i < lstAlldata.items.length; i++) {
+                                    if (lstAlldata.items[i].data.FreeItemID != "") {// && (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)
+                                        check = false;
+                                    }
+                                }
+                            }
+                            if (check) {
+                                App.chkDonateGroupProduct.enable();
+                            }
+                            else {
+                                App.chkDonateGroupProduct.disable();
+                            }
+                        }
+                        if (!App.chkDonateGroupProduct.getValue()) {
+                            var lstAlldata = App.stoFreeItem.snapshot;
+                            var check = true;
+                            if (lstAlldata.items.length > 0) {
+                                for (var i = 0; i < lstAlldata.items.length; i++) {
+                                    if (lstAlldata.items[i].data.FreeItemID != "" && (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)) {
+                                        check = false;
+                                    }
+                                }
+                            }
+                            if (check) {
+                                App.chkAutoFreeItem.enable();
+                            }
+                        }
+                    }
+
                 }
                 else {
                     if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
@@ -2889,7 +3125,51 @@ var DiscDefintion = {
                         }
                     }
 
-
+                    if (App.chkDonateGroupProduct.getValue()) {
+                        var lstAlldata = App.stoFreeItem.snapshot;
+                        var check = true;
+                        if (lstAlldata.items.length > 0) {
+                            for (var i = 0; i < lstAlldata.items.length; i++) {
+                                if (lstAlldata.items[i].data.FreeItemID != "") {///&& (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)
+                                    check = false;
+                                }
+                            }
+                        }
+                        App.chkDonateGroupProduct.setReadOnly(!check);
+                    }
+                    else {
+                        if (!App.chkAutoFreeItem.getValue()&& !App.chkDonateGroupProduct.getValue()) {
+                            var lstAlldata = App.stoFreeItem.snapshot;
+                            var check = true;
+                            if (lstAlldata.items.length > 0) {
+                                for (var i = 0; i < lstAlldata.items.length; i++) {
+                                    if (lstAlldata.items[i].data.FreeItemID != "") {// && (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)
+                                        check = false;
+                                    }
+                                }
+                            }
+                            if (check) {
+                                App.chkDonateGroupProduct.enable();
+                            }
+                            else {
+                                App.chkDonateGroupProduct.disable();
+                            }
+                        }
+                        if (!App.chkDonateGroupProduct.getValue()) {
+                            var lstAlldata = App.stoFreeItem.snapshot;
+                            var check = true;
+                            if (lstAlldata.items.length > 0) {
+                                for (var i = 0; i < lstAlldata.items.length; i++) {
+                                    if (lstAlldata.items[i].data.FreeItemID != "" && (lstAlldata.items[i].data.GroupItem != "" || lstAlldata.items[i].data.Prioritize > 0)) {
+                                        check = false;
+                                    }
+                                }
+                            }
+                            if (check) {
+                                App.chkAutoFreeItem.enable();
+                            }
+                        }
+                    }
                     
                 }
                 else {
@@ -2897,6 +3177,9 @@ var DiscDefintion = {
                         Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
                     }
                 }
+
+
+
             }
             else {
                 HQ.message.show(4, '', '');

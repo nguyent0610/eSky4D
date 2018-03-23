@@ -445,6 +445,17 @@
                                             l.Focus.Fn = "DiscDefintion.Event.chkDonateGroupProduct";
                                             l.Change.Fn = "chkDonateGroupProduct_Change";
                                         })
+
+                                        , HQ.Checkbox().ID("chkStockPromotion")//.Hidden(true)
+                                        .MarginSpec("5 5 0 10")
+                                        .BoxLabel(Util.GetLang("StockPromotion")).DataIndex("StockPromotion")
+                                        .Listeners(l =>
+                                        {
+                                            l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            l.Change.Fn = "DiscDefintion.Event.chkStockPromotion_Change";
+                                        })
+
+
                                     ) // Container
                                 ),
                                 X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
@@ -697,7 +708,7 @@
                                         //.Listeners(x => x.Expand.Handler = "this.store.reload()")
                                         )
 
-                                       
+
                                         , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("FreeItemQty")
                                         .Align(Alignment.Right).Format("0,000")
                                         .Editor(
@@ -732,7 +743,7 @@
                                                 X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                                             )
 
-                                        , X.NumberColumn().Text(Util.GetLang("OM21100TypeUnit")).DataIndex("TypeUnit").Hidden(true)
+                                        , X.NumberColumn().Text(Util.GetLang("OM21100TypeUnit")).DataIndex("TypeUnit").Width(1)//.Hidden(true)
                                             .Renderer("DiscDefintion.Process.renderFreeItemName")
 
                                         .Align(Alignment.Right).Format("0,000")
@@ -1068,10 +1079,43 @@
                         .Editor(
                             X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                         )
+
+                        , X.NumberColumn().Text(Util.GetLang("OM21100QtyLimit")).DataIndex("QtyLimit").ID("colQtyLimit").Hidden(true)
+                        .Align(Alignment.Right).Format("0,000")
+                        .Editor(
+                            X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                        )
+
+                        , X.NumberColumn().Text(Util.GetLang("PerStockAdvance")).DataIndex("PerStockAdvance").ID("colPerStockAdvance").Hidden(true)
+                        .Align(Alignment.Right).Format("0,000.00")
+                        .Editor(
+                            X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(2).MaxValue(100)
+                        )
+
+                        , X.NumberColumn().Text(Util.GetLang("QtyStockAdvance")).DataIndex("QtyStockAdvance").ID("colQtyStockAdvance").Hidden(true)
+                        .Align(Alignment.Right).Format("0,000")
+                        //.Editor(
+                        //    X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                        //)
+
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
 
+                        , X.Column().Text(Util.GetLang("OM21100QtyType")).DataIndex("QtyType").ID("colQtyType").Hidden(true)
+                        .Editor(
+                            HQ.Combo().ID("cboQtyType").HQAutoLoad(true)
+                            .HQProcedure("OM21100_pcQtyType").HQColumnShow("Code,Descr")//ok
+                            .HQHeightWidth(400, 300)
+                            .ValueField("Code").DisplayField("Descr")
+                            .ForceSelection(true).SelectOnFocus(true)
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw)
+                                ,new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                            })
+                            .LoadData()
+                        )
                         , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()
@@ -1106,8 +1150,8 @@
                         .Listeners(ls =>
                         {
                             ls.BeforeEdit.Fn = "Main.Event.grd_beforeEdit";
-                            ls.Edit.Fn = "Main.Event.grd_edit";
-                            ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
+                            ls.Edit.Fn = "Main.Event.grdDiscItem_edit";
+                            ls.ValidateEdit.Fn = "Main.Event.grdDiscItem_validateEdit";
                         })
                     ) // grdDiscItem
                 )

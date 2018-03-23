@@ -28,16 +28,33 @@ namespace OM21100.Controllers
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         List<OM21100_ptInventory_Result> _lstPtInventory = new List<OM21100_ptInventory_Result>();
         List<OM21100_pdSI_Hierarchy_Result> _lstSI_HierarchyI = new List<OM21100_pdSI_Hierarchy_Result>();
-
         private const string Channel = "CT"; // Cho Chứng Từ
         private const string CustCate = "CL"; // Loại KH cho Chứng Từ
 
+        List<OM21100_pdGetDataShipment_Result> _lstGetDataShipment = new List<OM21100_pdGetDataShipment_Result>();
+
+        private List<OM21100_pgCompany_Result> _lstCpny;
+        private List<OM21100_pgDiscItem_Result> _lstInvt;
+        private List<OM21100_pdGetDataItemTrans_Result> _lstGetDataItemTrans;
+        private IN_Setup _objIN;
+        List<Batch> _lstBatch = new List<Batch>();
+        List<IN_Transfer> _lstIN_Transfer = new List<IN_Transfer>();
+        List<IN_Trans> _lstIN_Trans = new List<IN_Trans>();
+        List<IN_LotTrans> _lstIN_LotTrans = new List<IN_LotTrans>();
+        private OM_DiscSeq _objOM_DiscSeq;
         private const string ItemChannel = "IC"; // Mặt hàng + Channel
         private const string GItemChannel = "GC"; // Nhóm MH + Channel
         private const string ItemCustCate = "GI"; // Mặt Hàng + Loại KH
         private const string GItemCustCate = "GP"; // Nhóm MH + Loại KH 
         private JsonResult _logMessage;
         bool allowAddDiscount = false;
+        private string _batNbr = string.Empty;
+        private string _discID = string.Empty;
+        private string _discSeq = string.Empty;
+        private string _lstInvtID = string.Empty;
+        private string _LineRef = string.Empty;
+        private string _handle = string.Empty;
+        private int _lineRefnumber = 0;
         List<OM21100_ptTreeNode_Result> lstAllNode = new List<OM21100_ptTreeNode_Result>();
         // GET: /OM21100/
         public ActionResult Index()
@@ -52,7 +69,10 @@ namespace OM21100.Controllers
             bool allowImport = false
                 , allowExport = false
                 , addSameKind = true
-                , showRequiredType = false;
+                , showRequiredType = false
+                , hidechkPctDiscountByLevel = false
+                , hideQtyType = false
+                , hidechkStockPromotion = false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -62,6 +82,9 @@ namespace OM21100.Controllers
                 allowAddDiscount = objConfig.AllowAddDiscount.HasValue && objConfig.AllowAddDiscount.Value;
                 addSameKind = objConfig.AllowAddSameKind.HasValue && objConfig.AllowAddSameKind.Value;
                 showRequiredType = objConfig.ShowRequiredType.HasValue && objConfig.ShowRequiredType.Value;
+                hideQtyType = objConfig.HideQtyType.HasValue && objConfig.HideQtyType.Value;
+                hidechkPctDiscountByLevel = objConfig.HidechkPctDiscountByLevel.HasValue && objConfig.HidechkPctDiscountByLevel.Value;
+                hidechkStockPromotion = objConfig.HidechkStockPromotion.HasValue && objConfig.HidechkStockPromotion.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -69,10 +92,13 @@ namespace OM21100.Controllers
             ViewBag.allowAddDiscount = allowAddDiscount;
             ViewBag.addSameKind = addSameKind;
             ViewBag.showRequiredType = showRequiredType;
+            ViewBag.hideQtyType = hideQtyType;
+            ViewBag.hidechkPctDiscountByLevel = hidechkPctDiscountByLevel;
+            ViewBag.hidechkStockPromotion = hidechkStockPromotion;
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -584,8 +610,22 @@ namespace OM21100.Controllers
         {
             try
             {
+
+
                 var discID = data["cboDiscID"];
                 var discSeq = data["cboDiscSeq"];
+                _discID = discID;
+                _discSeq = discSeq;                
+                var handle = data["cboHandle"];
+                _handle = handle;
+                var companyHandler = new StoreDataHandler(data["lstCompany"]);
+                _lstCpny = companyHandler.ObjectData<OM21100_pgCompany_Result>()
+                        .Where(p => Util.PassNull(p.CpnyID) != string.Empty)
+                        .ToList();
+                var companyHandler1 = new StoreDataHandler(data["lstDiscItem"]);
+                _lstInvt = companyHandler1.ObjectData<OM21100_pgDiscItem_Result>()
+                        .Where(p => Util.PassNull(p.InvtID) != string.Empty)
+                        .ToList();
 
                 if (!string.IsNullOrWhiteSpace(discID) && !string.IsNullOrWhiteSpace(discSeq))
                 {
@@ -604,6 +644,8 @@ namespace OM21100.Controllers
                         inputDiscSeq.DiscClass = inputDisc.DiscClass;
                     }
 
+
+
                     var roles = _sys.Users.FirstOrDefault(x => x.UserName == Current.UserName).UserTypes.Split(',');
 
                     if (disc != null)
@@ -616,6 +658,10 @@ namespace OM21100.Controllers
                         {
                             updateDiscount(ref disc, inputDisc, false, roles);
                             saveDiscSeq(data, disc, inputDiscSeq, isNewDiscSeq);
+                            
+
+
+
                             return Json(new { success = true, msgCode = 201405071, tstamp = disc.tstamp.ToHex() });
                         }
                     }
@@ -819,6 +865,294 @@ namespace OM21100.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
+        }
+
+        public void SaveTrans(OM_DiscSeq _objOM_DiscSeq)
+        {
+            _lstGetDataShipment = _db.OM21100_pdGetDataShipment(_objOM_DiscSeq.DiscID, _objOM_DiscSeq.DiscSeq,Current.UserName,Current.CpnyID,Current.LangID).ToList();
+            foreach (OM21100_pdGetDataShipment_Result items in _lstGetDataShipment)
+            {
+                if(items.BranchID!=null && items.BranchID != "")
+                {
+                    Batch batch = null;
+                    Save_Batch(batch, _objOM_DiscSeq, items.BranchID, items);
+                }                
+            }
+        }
+
+        private void Save_Batch(Batch batch,OM_DiscSeq inputDiscSeq,string branchID,OM21100_pdGetDataShipment_Result items)
+        {
+            if (batch != null)
+            {
+                Update_Batch(batch, items, inputDiscSeq, branchID, false);
+            }
+            else
+            {
+                _lstGetDataItemTrans = _db.OM21100_pdGetDataItemTrans(items.SiteID, branchID, inputDiscSeq.DiscID, inputDiscSeq.DiscSeq, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+                inputDiscSeq.BatNbr = _db.INNumbering(branchID, "BatNbr").FirstOrDefault();
+                batch = new Batch();
+                Update_Batch(batch, items, inputDiscSeq, branchID, true);
+                _lstBatch.Add(batch);
+                _db.Batches.AddObject(batch);
+            }
+            Save_Transfer(batch, branchID, inputDiscSeq, items);
+        }
+
+        private void Save_Transfer(Batch batch,string branchID,OM_DiscSeq inputDiscSeq,OM21100_pdGetDataShipment_Result objTrans)
+        {
+             var transfer = new IN_Transfer();
+             transfer.ResetET();
+             transfer.TrnsfrDocNbr = _db.INNumbering(branchID, "TrnsNbr").FirstOrDefault();
+             transfer.RefNbr = _db.INNumbering(branchID, "RefNbr").FirstOrDefault();
+             Update_Transfer(transfer, branchID, inputDiscSeq, objTrans, true);
+             _db.IN_Transfer.AddObject(transfer);
+            _lstIN_Transfer.Add(transfer);
+             Save_Trans(transfer, objTrans);
+        }
+
+        private void Save_Trans(IN_Transfer transfer, OM21100_pdGetDataShipment_Result objTrans)
+        {
+            _objIN = _db.IN_Setup.FirstOrDefault(p => p.BranchID == objTrans.BranchID);
+            if (_objIN == null)
+            {
+                _objIN = new IN_Setup();
+            }
+            var obj = _db.OM21100_pdGetLineRef(transfer.BatNbr, transfer.BranchID, transfer.RefNbr, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (obj != null && obj != "")
+            {
+                _lineRefnumber = Convert.ToInt32(obj);
+            }
+            else
+            {
+                _lineRefnumber = 0;
+            }
+
+            foreach (OM21100_pdGetDataItemTrans_Result trans in _lstGetDataItemTrans)
+            {
+                _lineRefnumber = _lineRefnumber + 1;
+                var transDB = _db.IN_Trans.FirstOrDefault(p =>
+                                p.BatNbr == transfer.BatNbr && p.RefNbr == transfer.RefNbr &&
+                                p.BranchID == transfer.BranchID);
+
+                _LineRef = string.Empty;
+                for (var i = 0; i < (5 - (_lineRefnumber.ToString().Length)); i++)
+                {
+                    _LineRef = _LineRef + '0';
+                }
+                _LineRef = _LineRef + _lineRefnumber;
+                transDB = new IN_Trans();
+                transDB.SiteID = objTrans.SiteID;
+                Update_Trans(transfer, transDB, trans, true);
+                _db.IN_Trans.AddObject(transDB);
+                _lstIN_Trans.Add(transDB);
+                Save_Lot(transfer, transDB);
+            }
+
+        }
+
+        private bool Save_Lot(IN_Transfer transfer, IN_Trans tran)
+        {
+            //var lots = _db.IN_LotTrans.Where(p => p.BranchID == transfer.BranchID && p.BatNbr == transfer.BatNbr).ToList();
+            //foreach (var item in lots)
+            //{
+            //    if (item.EntityState == EntityState.Deleted || item.EntityState == EntityState.Detached) continue;
+            //    if (!_lstLot.Any(p => p.INTranLineRef == item.INTranLineRef && p.LotSerNbr == item.LotSerNbr))
+            //    {
+            //        var oldQty = item.UnitMultDiv == "D" ? item.Qty / item.CnvFact : item.Qty * item.CnvFact;
+
+            //        UpdateAllocLot(item.InvtID, item.SiteID, item.LotSerNbr, oldQty, 0, 0);
+
+            //        _app.IN_LotTrans.DeleteObject(item);
+            //    }
+            //}
+
+            //var lstLotTmp = _lstLot.Where(p => p.INTranLineRef == tran.LineRef).ToList();
+            //foreach (var lotCur in lstLotTmp)
+            //{
+            //    var lot = _app.IN_LotTrans.FirstOrDefault(p => p.BranchID == transfer.BranchID && p.BatNbr == transfer.BatNbr && p.INTranLineRef == lotCur.INTranLineRef && p.LotSerNbr == lotCur.LotSerNbr);
+            //    if (lot == null || lot.EntityState == EntityState.Deleted || lot.EntityState == EntityState.Detached)
+            //    {
+            //        lot = new IN_LotTrans();
+            //        Update_Lot(lot, lotCur, transfer, tran, true);
+            //        _app.IN_LotTrans.AddObject(lot);
+            //    }
+            //    else
+            //    {
+            //        Update_Lot(lot, lotCur, transfer, tran, false);
+            //    }
+            //}
+            return true;
+        }
+
+        private void Update_Transfer(IN_Transfer t,string branchID,OM_DiscSeq inputDiscSeq,OM21100_pdGetDataShipment_Result objTrans, bool isNew)
+        {
+            if (isNew)
+            {
+                t.BranchID = branchID;
+                t.BatNbr = inputDiscSeq.BatNbr;
+                t.TrnsfrDocNbr = t.TrnsfrDocNbr;
+                t.RefNbr = t.RefNbr;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = Current.UserName;
+                t.Crtd_DateTime = DateTime.Now;
+            }
+            t.NoteID = 0;
+            t.AdvanceType = null;
+            t.Comment = objTrans.Comment.PassNull();
+            t.ReasonCD = objTrans.ReasonCD.PassNull();
+            t.RcptDate = objTrans.RcptDate.ToDateShort();
+            t.SiteID = objTrans.SiteID.PassNull();
+            t.Status = "H";
+            t.ToSiteID = objTrans.ToSiteID.PassNull();
+            t.TranDate = objTrans.TranDate.ToDateShort();
+            t.TransferType = "1";
+            t.ShipViaID = objTrans.ShipViaID.PassNull();
+            t.Source = "IN";
+            t.ToCpnyID = branchID;
+            t.ExpectedDate = objTrans.ExpectedDate.ToDateShort();
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = Current.UserName;
+        }
+
+
+        private void Update_Batch(Batch t, OM21100_pdGetDataShipment_Result objTrans, OM_DiscSeq inputDiscSeq, string branchID, bool isNew)
+        {
+            if (isNew)
+            {
+                t.ResetET();
+                t.BranchID = branchID;
+                t.BatNbr = inputDiscSeq.BatNbr;
+                t.Module = "IN";
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = Current.UserName;
+                t.Crtd_DateTime = DateTime.Now;
+            }
+            Double tong = _lstGetDataItemTrans.Sum(x => x.Qty * x.Price);
+            t.JrnlType = "IN";
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = Current.UserName;
+            t.DateEnt = objTrans.TranDate.ToDateShort();
+            t.Descr = objTrans.Descr;
+            t.EditScrnNbr = t.EditScrnNbr.PassNull() == string.Empty ? _screenNbr : t.EditScrnNbr;
+            t.NoteID = 0;
+            t.ReasonCD = objTrans.ReasonCD;
+            t.TotAmt = tong;
+            t.Rlsed = -1;
+            t.Status = "H";
+        }
+
+
+        private void Update_Trans(IN_Transfer transfer, IN_Trans t, OM21100_pdGetDataItemTrans_Result s, bool isNew)
+        {
+            double oldQty, newQty;
+
+
+            if (!isNew)
+                oldQty = t.UnitMultDiv == "D" ? t.Qty / t.CnvFact : t.Qty * t.CnvFact;
+            else
+                oldQty = 0;
+
+            newQty = s.UnitMultDiv == "D" ? s.Qty / s.CnvFact : s.Qty * s.CnvFact;
+
+            UpdateINAlloc(t.InvtID, t.SiteID, oldQty, 0);
+
+            UpdateINAlloc(s.InvtID, t.SiteID, 0, newQty);
+
+
+
+            if (isNew)
+            {
+                t.ResetET();
+                t.LineRef = _LineRef;
+                t.BranchID = transfer.BranchID;
+                t.BatNbr = transfer.BatNbr;
+                t.RefNbr = transfer.RefNbr;
+
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = Current.UserName;
+            }
+
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = Current.UserName;
+            t.RptExpDate = transfer.RcptDate;
+            t.CnvFact = s.CnvFact;
+            t.ExtCost = s.ExtCost;
+            t.InvtID = s.InvtID;
+            t.InvtMult = s.InvtMult;
+            t.JrnlType = s.JrnlType;
+            t.ObjID = s.ObjID;
+            t.ReasonCD = transfer.ReasonCD;
+            t.Qty = Math.Round(s.Qty, 0);
+            t.Rlsed = s.Rlsed;
+            t.ShipperID = s.ShipperID;
+            t.ShipperLineRef = s.ShipperLineRef;
+            t.SiteID = transfer.SiteID;
+            t.ToSiteID = transfer.ToSiteID;
+            t.TranAmt = Math.Round(s.TranAmt, 0);
+            t.TranFee = s.TranFee;
+            t.TranDate = transfer.TranDate;
+            t.TranDesc = s.TranDesc;
+            t.TranType = s.TranType;
+            t.UnitCost = s.UnitCost;
+            t.UnitDesc = s.UnitDesc;
+            t.UnitMultDiv = s.UnitMultDiv;
+            t.UnitPrice = Math.Round(s.UnitPrice, 0);
+        }
+
+
+
+        private bool UpdateINAlloc(string invtID, string siteID, double oldQty, double newQty)
+        {
+            try
+            {
+                var objInvt = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                if (objInvt != null && objInvt.StkItem == 1)
+                {
+                    var objSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
+                    if (objSite == null) objSite = new IN_ItemSite() { InvtID = invtID, SiteID = siteID };
+
+                    if (!_objIN.NegQty && newQty > 0 && objSite.QtyAvail + oldQty - newQty < 0)
+                    {
+                        throw new MessageException(MessageType.Message, "608", "", new string[] { invtID, siteID });
+                    }
+                    objSite.QtyAllocIN = Math.Round(objSite.QtyAllocIN + newQty - oldQty, 0);
+                    objSite.QtyAvail = Math.Round(objSite.QtyAvail - newQty + oldQty, 0);
+
+                    return true;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private bool UpdateAllocLot(string invtID, string siteID, string lotSerNbr, double oldQty, double newQty, int decQty)
+        {
+            IN_Inventory objInvt = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+            if (objInvt == null) objInvt = new IN_Inventory();
+            if (objInvt.StkItem == 1)
+            {
+                var objItemLot = _db.IN_ItemLot.FirstOrDefault(p => p.SiteID == siteID && p.InvtID == invtID && p.LotSerNbr == lotSerNbr);
+                if (objItemLot != null)
+                {
+                    if (!_objIN.NegQty && newQty > 0 && objItemLot.QtyAvail + oldQty - newQty < 0)
+                    {
+
+                        //Util.AppendLog(ref _logMessage, "608", parm: new[] { objItemLot.InvtID + " " objItemLot.LotSerNbr , objItemSite.SiteID });
+                        return false;
+                    }
+                    objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + newQty - oldQty, decQty);
+                    objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail - newQty + oldQty, decQty);
+                }
+                return true;
+            }
+            return true;
         }
 
         private void saveDiscSeq(FormCollection data, OM_Discount inputDisc, OM_DiscSeq inputDiscSeq, bool isNewDiscSeq)
@@ -1302,7 +1636,6 @@ namespace OM21100.Controllers
                 }
 
             }
-
             saveCompany(data, inputDisc, inputDiscSeq, seq, roles, lstCompany);
         }
 
@@ -1542,6 +1875,27 @@ namespace OM21100.Controllers
             var freeItemChangeHandler = new StoreDataHandler(data["lstFreeItemChange"]);
             var lstFreeItemChange = freeItemChangeHandler.BatchObjectData<OM21100_pgFreeItem_Result>();
 
+            foreach (var currentFree in lstFreeItemChange.Deleted)
+            {
+                // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                if (lstFreeItemChange.Created.Where(p => p.DiscID == currentFree.DiscID && p.DiscSeq == inputSeq.DiscSeq && p.LineRef == currentFree.LineRef && p.FreeItemID == currentFree.FreeItemID).Count() > 0)
+                {
+                    lstFreeItemChange.Created.Where(p => p.DiscID == currentFree.DiscID && p.DiscSeq == inputSeq.DiscSeq && p.LineRef == currentFree.LineRef && p.FreeItemID == currentFree.FreeItemID).FirstOrDefault().tstamp = currentFree.tstamp;
+                }
+                else
+                {
+                    var free = (from p in _db.OM_DiscFreeItem
+                                where
+                                    p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq &&
+                                    p.LineRef == currentFree.LineRef && p.FreeItemID == currentFree.FreeItemID
+                                select p).FirstOrDefault();
+                    if (free != null)
+                    {
+                        _db.OM_DiscFreeItem.DeleteObject(free);
+                    }
+                }
+            }
+
             foreach (var currentFree in lstFreeItemChange.Created)
             {
                 var free = (from p in _db.OM_DiscFreeItem
@@ -1584,16 +1938,6 @@ namespace OM21100.Controllers
 
             }
 
-            foreach (var currentFree in lstFreeItemChange.Deleted)
-            {
-                var free = (from p in _db.OM_DiscFreeItem
-                            where
-                                p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq &&
-                                p.LineRef == currentFree.LineRef && p.FreeItemID == currentFree.FreeItemID
-                            select p).FirstOrDefault();
-                if (free != null)
-                    _db.OM_DiscFreeItem.DeleteObject(free);
-            }
             if (inputSeq.DiscClass == "II")
                 Save_DiscItem(data, handle, branches, inputSeq);
             else if (inputSeq.DiscClass == "BB")
@@ -1692,7 +2036,140 @@ namespace OM21100.Controllers
 
         private void Submit_Data(SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
         {
-            _db.SaveChanges();
+            if (inputSeq != null)
+            {
+                if (inputSeq.Active == 1 && inputSeq.StockPromotion == true && (_handle == "C" || (inputSeq.Status == "C" && _handle == "")))
+                {
+                    var obj = _db.OM_DiscSeq.Where(p => p.Active == 1 && p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq && p.Status == "C" && p.StockPromotion == true).FirstOrDefault();
+                    if (obj == null)
+                    {
+                        string cpny = "";
+                        string lstinvt = "";
+                        foreach (OM21100_pgDiscItem_Result objInvt in _lstInvt)
+                        {
+                            lstinvt = lstinvt + objInvt.InvtID + ",";
+                        }
+
+                        foreach (OM21100_pgCompany_Result item in _lstCpny)
+                        {
+                            cpny = cpny + item.CpnyID + ",";
+                        }
+
+                        var lstobj = _db.OM21100_pdGetcheckSite(cpny, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+
+                        if (lstobj != null)
+                        {
+                            var lsterror = "";
+                            foreach (OM21100_pdGetcheckSite_Result cur in lstobj)
+                            {
+                                if (cur.SiteID == null || cur.SiteID == "" || cur.ToSiteID == null || cur.ToSiteID == "")
+                                {
+                                    lsterror = lsterror + cur.BranchID + ",";
+                                }
+                            }
+                            if (lsterror != "")
+                            {
+                                throw new MessageException(MessageType.Message, "2018032211", "", new string[] { lsterror });
+                            }
+                            else
+                            {
+                                var keycheck = "";
+                                foreach (OM21100_pdGetcheckSite_Result item in lstobj)
+                                {
+                                    var check = _db.OM21100_pdGetcheckQty(lstinvt, item.SiteID, _discID, _discSeq, item.BranchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                                    if (check == false)
+                                    {
+                                        keycheck = keycheck + item.BranchID + ",";
+                                    }
+                                }
+                                if (keycheck != "")
+                                {
+                                    throw new MessageException(MessageType.Message, "2018032212", "", new string[] { keycheck });
+                                }
+                                else
+                                {
+                                    _db.SaveChanges();
+                                    SaveTrans(_objOM_DiscSeq);
+                                    _db.SaveChanges();
+
+
+                                    DataAccess dal = Util.Dal();
+                                    INProcess.IN inventory = new INProcess.IN(Current.UserName, _screenNbr, dal);
+                                    try
+                                    {
+                                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                                        foreach (Batch objBatch in _lstBatch)
+                                        {                                            
+                                            inventory.IN10300_Release(objBatch.BranchID, objBatch.BatNbr);                                            
+                                            inventory = null;
+                                        }
+                                        dal.CommitTrans();
+
+                                    }
+                                    catch (Exception)
+                                    {
+                                        _db.OM21100_pdUpdataDiscSeqAfter(_discID,_discSeq,Current.UserName,Current.CpnyID,Current.LangID);
+                                        dal.RollbackTrans();
+                                        foreach (Batch objBatch in _lstBatch)
+                                        {
+                                            var batch = _db.Batches.FirstOrDefault(p => p.BranchID == objBatch.BranchID && p.BatNbr == objBatch.BatNbr);
+                                            if (batch != null)
+                                            {
+                                                batch.Status = "V";
+                                            }
+                                        }
+                                        foreach(IN_Transfer objIN_Transfer in _lstIN_Transfer)
+                                        {
+                                            var objTransfer = _db.IN_Transfer.FirstOrDefault(p => p.BranchID == objIN_Transfer.BranchID && p.BatNbr == objIN_Transfer.BatNbr && p.TrnsfrDocNbr== objIN_Transfer.TrnsfrDocNbr);
+                                            if (objTransfer != null)
+                                            {
+                                                objTransfer.Status = "V";
+                                            }
+                                        }
+
+                                        foreach(IN_Trans objIN_Trans in _lstIN_Trans)
+                                        {
+                                            double oldQty = 0;
+
+                                            oldQty = objIN_Trans.UnitMultDiv == "D" ? objIN_Trans.Qty / objIN_Trans.CnvFact : objIN_Trans.Qty * objIN_Trans.CnvFact;
+                                            UpdateINAlloc(objIN_Trans.InvtID, objIN_Trans.SiteID, oldQty, 0);
+                                        }
+
+
+                                        //var lstLot = _db.IN_LotTrans.Where(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr).ToList();
+                                        foreach (var lot in _lstIN_LotTrans)
+                                        {
+                                            double oldQty = 0;
+
+                                            oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
+
+                                            UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
+                                        }
+
+                                        _db.SaveChanges();
+
+                                        throw;
+                                    }
+                                    finally
+                                    {
+                                        dal = null;
+                                        inventory = null;
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    _db.SaveChanges();
+                }
+            }            
+            else
+            {
+                _db.SaveChanges();
+            }           
         }
 
         private void Save_DiscItem(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
@@ -2134,6 +2611,9 @@ namespace OM21100.Controllers
                 t.BundleOrItem = "I";
                 t.QtyType = "E";
                 t.BundleQty = 0;
+                t.QtyLimit = s.QtyLimit;
+                t.QtyStockAdvance = s.QtyStockAdvance;
+                t.PerStockAdvance=s.PerStockAdvance;
                 t.DiscType = s.DiscType;
                 t.LUpd_DateTime = DateTime.Now;
                 t.LUpd_Prog = _screenNbr;
@@ -2193,7 +2673,7 @@ namespace OM21100.Controllers
                     t.Crtd_DateTime = DateTime.Now;
                     t.Crtd_Prog = _screenNbr;
                     t.Crtd_User = Current.UserName;
-                    t.tstamp = new byte[1];
+                    //t.tstamp = new byte[1];
                 }
                 t.TypeUnit = s.TypeUnit;
                 t.GroupItem = s.GroupItem;
@@ -2262,6 +2742,7 @@ namespace OM21100.Controllers
             {
                 updatedDiscSeq.Crtd_Role = roles.Contains("HO") ? "HO" : roles.Contains("DIST") ? "DIST" : roles.Contains("SUBDIST") ? "SUBDIST" : string.Empty;
             }
+            updatedDiscSeq.StockPromotion = inputDiscSeq.StockPromotion;
             updatedDiscSeq.DonateGroupProduct = inputDiscSeq.DonateGroupProduct;
             updatedDiscSeq.DiscFor = inputDiscSeq.DiscFor;
             updatedDiscSeq.DiscClass = inputDiscSeq.DiscClass;
@@ -2290,6 +2771,8 @@ namespace OM21100.Controllers
             updatedDiscSeq.LUpd_DateTime = DateTime.Now;
             updatedDiscSeq.LUpd_Prog = _screenNbr;
             updatedDiscSeq.LUpd_User = Current.UserName;
+            _batNbr = inputDiscSeq.BatNbr;
+            _objOM_DiscSeq = inputDiscSeq;
         }
 
         private void updateDiscount(ref OM_Discount updatedDiscount, OM_Discount inputedDiscount, bool isNew, string[] roles)
@@ -2934,8 +3417,6 @@ namespace OM21100.Controllers
             string temp = s.Normalize(NormalizationForm.FormD);
             return regex.Replace(temp, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D');
         }
-
-
 
 
         [HttpPost]

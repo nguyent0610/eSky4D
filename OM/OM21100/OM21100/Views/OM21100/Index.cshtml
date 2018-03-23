@@ -30,12 +30,14 @@
             HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
             HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
             HQ.addSameKind = HQ.util.toBool('@ViewBag.addSameKind');
-
             HQ.allowExport = HQ.util.toBool('@ViewBag.allowExport');
             HQ.allowImport = HQ.util.toBool('@ViewBag.allowImport');
             HQ.allowAddDiscount = HQ.util.toBool('@ViewBag.allowAddDiscount');
+            HQ.hideQtyType = HQ.util.toBool('@ViewBag.hideQtyType');
             var _dateNow = new Date('@DateTime.Now.Date');
             HQ.showRequiredType = HQ.util.toBool('@ViewBag.showRequiredType');
+            HQ.hidechkPctDiscountByLevel = HQ.util.toBool('@ViewBag.hidechkPctDiscountByLevel');
+            HQ.hidechkStockPromotion = HQ.util.toBool('@ViewBag.hidechkStockPromotion');
 
         </script>
 
