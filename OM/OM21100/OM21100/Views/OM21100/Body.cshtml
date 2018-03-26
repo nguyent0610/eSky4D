@@ -333,7 +333,7 @@
                                             , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                             })
                                             .LoadData()
-                                            .Listeners(
+                                            .Listeners( 
                                                 l =>
                                                     l.Change.Fn = "Status_Change"
                                             )
@@ -451,7 +451,7 @@
                                         .BoxLabel(Util.GetLang("StockPromotion")).DataIndex("StockPromotion")
                                         .Listeners(l =>
                                         {
-                                            l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            l.Focus.Fn = "DiscDefintion.Event.chkStockPromotion_Focus";
                                             l.Change.Fn = "DiscDefintion.Event.chkStockPromotion_Change";
                                         })
 
@@ -732,12 +732,9 @@
 
                                         , X.Column().Text(Util.GetLang("OM21100GroupItem")).ID("GroupItem").DataIndex("GroupItem").Hidden(true)
                                             //.Width(250)
-                                            .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
+                                            .Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
 
-                                        //, X.Column().Text(Util.GetLang("OM21100Prioritize")).DataIndex("Prioritize")//.Width(250)
-                                        //    .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
-
-                                        , X.NumberColumn().Text(Util.GetLang("OM21100Prioritize")).ID("Prioritize").DataIndex("Prioritize").Hidden(true)
+                                        , X.NumberColumn().Text(Util.GetLang("OM21100Prioritize")).ID("Priority").DataIndex("Priority").Hidden(true)
                                             .Align(Alignment.Right).Format("0,000")
                                             .Editor(
                                                 X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
@@ -786,7 +783,7 @@
                                         {
                                             ls.BeforeEdit.Fn = "DiscDefintion.Event.grdFreeItem_beforeEdit";
                                             ls.Edit.Fn = "DiscDefintion.Event.grdFreeItem_edit";
-                                            ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
+                                            ls.ValidateEdit.Fn = "Main.Event.grdFreeItem_validateEdit";
                                         })
                                     )
                                     .Listeners(ls =>
@@ -1028,7 +1025,7 @@
                         .Listeners(l =>
                         {
                             l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
-                            l.Load.Fn = "Main.Event.sto_load";
+                            l.Load.Fn = "Main.Event.stoDiscItem_load";
                             l.Update.Handler = "Main.Event.frmMain_fieldChange()";
                             l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
                         })
@@ -1125,7 +1122,7 @@
                             .Icon(Icon.ArrowUndo)
                         )
                         .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
+                            .Listeners(l => l.Command.Handler = "Main.Event.grdDiscItem_reject(this, record);")
                     )
                     .SelectionModel(X.RowSelectionModel().ID("slmDiscItem").Mode(SelectionMode.Multi))
                         .BottomBar(
