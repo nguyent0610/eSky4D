@@ -1194,6 +1194,7 @@
           <Property Type="String" Name="Pack" Nullable="false" MaxLength="200" />
           <Property Type="Double" Name="Price" Nullable="false" />
           <Property Type="DateTime" Name="DateCompetitor" Nullable="false" Precision="23" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1825,6 +1826,7 @@
                 <ScalarProperty Name="Pack" ColumnName="Pack" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="DateCompetitor" ColumnName="DateCompetitor" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

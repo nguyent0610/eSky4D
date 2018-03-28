@@ -1792,6 +1792,8 @@
                         .ColumnModel(
                             X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true;")
                             //Colum thiet ke o day
+                            , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(130)
+                            , X.Column().Text(Util.GetLang("Competitor")).DataIndex("Competitor").Width(130)
                             , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(130)
                             , X.Column().Text(Util.GetLang("InvtName")).DataIndex("InvtName").Width(200)
                             , X.NumberColumn().Text(Util.GetLang("AR20400Mass")).DataIndex("Mass").Width(120).Format("0,000").Align(Alignment.Right)

@@ -187,7 +187,9 @@ namespace AR20400.Controllers
 
         public ActionResult GetCompetitor(string BranchID, string CustID)
         {
-            return this.Store(_db.AR20400_pgCompetitor(BranchID, CustID, Current.UserName, Current.CpnyID, Current.LangID).ToList());
+            var lstCompetitor =
+                _db.AR20400_pgCompetitor(CustID, BranchID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            return this.Store(lstCompetitor);
         }
 
         [HttpPost]

@@ -13220,7 +13220,8 @@ namespace AR20400
         /// <param name="pack">Initial value of the Pack property.</param>
         /// <param name="price">Initial value of the Price property.</param>
         /// <param name="dateCompetitor">Initial value of the DateCompetitor property.</param>
-        public static AR20400_pgCompetitor_Result CreateAR20400_pgCompetitor_Result(global::System.String invtID, global::System.String competitor, global::System.Double mass, global::System.String pack, global::System.Double price, global::System.DateTime dateCompetitor)
+        /// <param name="slsperID">Initial value of the SlsperID property.</param>
+        public static AR20400_pgCompetitor_Result CreateAR20400_pgCompetitor_Result(global::System.String invtID, global::System.String competitor, global::System.Double mass, global::System.String pack, global::System.Double price, global::System.DateTime dateCompetitor, global::System.String slsperID)
         {
             AR20400_pgCompetitor_Result aR20400_pgCompetitor_Result = new AR20400_pgCompetitor_Result();
             aR20400_pgCompetitor_Result.InvtID = invtID;
@@ -13229,6 +13230,7 @@ namespace AR20400
             aR20400_pgCompetitor_Result.Pack = pack;
             aR20400_pgCompetitor_Result.Price = price;
             aR20400_pgCompetitor_Result.DateCompetitor = dateCompetitor;
+            aR20400_pgCompetitor_Result.SlsperID = slsperID;
             return aR20400_pgCompetitor_Result;
         }
 
@@ -13403,6 +13405,30 @@ namespace AR20400
         private global::System.DateTime _DateCompetitor;
         partial void OnDateCompetitorChanging(global::System.DateTime value);
         partial void OnDateCompetitorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SlsperID
+        {
+            get
+            {
+                return _SlsperID;
+            }
+            set
+            {
+                OnSlsperIDChanging(value);
+                ReportPropertyChanging("SlsperID");
+                _SlsperID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SlsperID");
+                OnSlsperIDChanged();
+            }
+        }
+        private global::System.String _SlsperID;
+        partial void OnSlsperIDChanging(global::System.String value);
+        partial void OnSlsperIDChanged();
 
         #endregion
 
