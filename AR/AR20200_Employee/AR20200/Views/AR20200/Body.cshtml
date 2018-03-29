@@ -107,6 +107,7 @@
                     .Listeners(lst =>
                     {
                         lst.Expand.Fn = "cboProductGroup_Expand";
+                        lst.Change.Fn = "cboProductGroup_Change";
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
 

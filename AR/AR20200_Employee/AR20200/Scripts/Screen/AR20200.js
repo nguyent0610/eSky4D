@@ -331,7 +331,9 @@ var cboBranchID_Select = function (sender, value) {
         App.stoAR20200_pdCheckAutoSales.reload();
     }
 };
-
+var cboProductGroup_Change = function (sender, e) {
+    App.cboSupID.store.reload();
+};
 var cboSlsperid_change = function (sender, e) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoSalesPerson.loading) {
