@@ -92,6 +92,7 @@
                         .Listeners(lst =>
                         {                           
                             lst.Change.Fn = "cboKPI_Change";//khi thay doi du lieu
+                            lst.Select.Fn = "cboKPI_Change";//khi thay doi du lieu
                             lst.TriggerClick.Fn = "cboKPI_TriggerClick";                            
                             lst.Focus.Handler = "this.forceSelection=false";
                         })
@@ -1652,7 +1653,7 @@
                                         .Icon(Icon.ArrowUndo)
                                     )
                                     .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                                    .Listeners(l => l.Command.Handler = " (record);")
+                                        .Listeners(l => l.Command.Handler = "grdKPICustomerInvt_Reject(record);")
                                                         )
                                     .SelectionModel(X.RowSelectionModel().ID("slmgrdOMKPICustomer_Invt").Mode(SelectionMode.Multi))
                                     .BottomBar(

@@ -348,6 +348,17 @@ var menuClick = function (command) {
                             HQ.message.show(2015020807, [rowindex, ''], 'deleteData_GridCondition', true);
                         }
                     }
+                } else if (HQ.focus == 'grdSalesClassDetail') {
+                    if (App.slmSalesClassDetail.selected.items[0] != undefined) {
+                        var rowindex = '';
+                        if (!Ext.isEmpty(App.slmSalesClassDetail.selected.items[0].data.ClassID)) {
+                            for (var i = 0; i < App.slmSalesClassDetail.selected.length; i++) {
+                                rowindex += (App.stoSalesClassDetail.indexOf(App.slmSalesClassDetail.selected.items[i]) + 1) + ',';
+                            }
+                            rowindex = rowindex.substring(0, rowindex.length - 1);
+                            HQ.message.show(2015020807, [rowindex, ''], 'deleteData_GridSalesClassDetail', true);
+                        }
+                    }
                 }
             }
             break;
@@ -1811,6 +1822,14 @@ var deleteData_GridCondition = function (item) {
     }
 };
 
+var deleteData_GridSalesClassDetail = function (item) {
+    if (item == "yes") {
+        App.grdSalesClassDetail.deleteSelected();
+        HQ.isChange = HQ.store.isGridChange(App.grdSalesClassDetail.store, keys10);
+        HQ.common.changeData(HQ.isChange, 'OM25100');
+    }
+};
+
 //grd OM_KPICpny_All/////////////////////////////////////
 var grdKPICpnyAll_BeforeEdit = function (editor, e) {
     if (!HQ.form.checkRequirePass(App.frmMain)) {
@@ -2215,11 +2234,12 @@ var grdKPICustomerClass_BeforeEdit = function (editor, e) {
         _branchID = e.record.data.BranchID;
         if (e.field == 'SlsperId') {
             if (e.record.data.BranchID != '' && e.record.data.CustID == '') {
+                App.cboSlsperIdClassCust.store.reload();
                 return true;
             }
             if (e.record.data.BranchID == '' || e.record.data.BranchID != '' && e.record.data.CustID != '') {
                 return false;
-            }
+            }            
             App.cboSlsperIdClassCust.store.reload();
         }
         if (e.field == 'CustID') {
@@ -2300,6 +2320,7 @@ var grdKPICustomerInvt_BeforeEdit = function (editor, e) {
         _branchID = e.record.data.BranchID;
         if (e.field == 'SlsperId') {
             if (e.record.data.BranchID != '' && e.record.data.CustID == '') {
+                App.cboSlsperIdInvtCust.store.reload();
                 return true;
             }
             if (e.record.data.BranchID == '' || e.record.data.BranchID != '' && e.record.data.CustID != '') {
@@ -2500,9 +2521,9 @@ var grdSalesClassDetail_Edit = function (item, e) {
 };
 
 var grdSalesClassDetail_ValidateEdit = function (item, e) {
-    if (e.record.data.ClassID && e.record.data.ClassID != "") {
+   // if (e.record.data.ClassID && e.record.data.ClassID != "") {
         return HQ.grid.checkValidateEdit(App.grdSalesClassDetail, e, keys10, false);
-    }
+    //}
 };
 
 var grdSalesClassDetail_Reject = function (record) {
