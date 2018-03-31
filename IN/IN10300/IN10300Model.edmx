@@ -489,6 +489,7 @@
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
           <Parameter Name="ToSiteID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="PeriodID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -708,15 +709,6 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <FunctionImport Name="IN10300_pdGetcheckQtyInvt" ReturnType="Collection(IN10300Model.IN10300_pdGetcheckQtyInvt_Result)">
-            <Parameter Name="lstInvtID" Mode="In" Type="String" />
-            <Parameter Name="SiteID" Mode="In" Type="String" />
-            <Parameter Name="ToSiteID" Mode="In" Type="String" />
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
           <FunctionImport Name="IN10300_pdGetDataItemTrans" ReturnType="Collection(IN10300Model.IN10300_pdGetDataItemTrans_Result)">
             <Parameter Name="SiteID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -749,6 +741,16 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="IN10300_pdCheckQtyInvtInGrd" ReturnType="Collection(IN10300Model.IN10300_pdCheckQtyInvtInGrd_Result)">
+            <Parameter Name="lstInvtID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="ToSiteID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="PeriodID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="IN10300_pdGetcheckQtyInvt" ReturnType="Collection(IN10300Model.IN10300_pdGetcheckQtyInvt_Result)">
             <Parameter Name="lstInvtID" Mode="In" Type="String" />
             <Parameter Name="SiteID" Mode="In" Type="String" />
             <Parameter Name="ToSiteID" Mode="In" Type="String" />
@@ -1398,10 +1400,6 @@
           <Property Type="String" Name="ToBranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="ToSiteID" Nullable="true" MaxLength="30" />
         </ComplexType>
-        <ComplexType Name="IN10300_pdGetcheckQtyInvt_Result">
-          <Property Type="Boolean" Name="CheckQty" Nullable="true" />
-          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="1" />
-        </ComplexType>
         <ComplexType Name="IN10300_pdGetDataItemTrans_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
           <Property Type="Double" Name="CnvFact" Nullable="false" />
@@ -1441,6 +1439,10 @@
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="1" />
         </ComplexType>
         <ComplexType Name="IN10300_pdCheckQtyInvtInGrd_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="IN10300_pdGetcheckQtyInvt_Result">
+          <Property Type="Boolean" Name="CheckQty" Nullable="true" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="1" />
         </ComplexType>
       </Schema>
@@ -2134,14 +2136,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN10300_pdGetcheckQtyInvt" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdGetcheckQtyInvt">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdGetcheckQtyInvt_Result">
-                <ScalarProperty Name="CheckQty" ColumnName="CheckQty" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN10300_pdGetDataItemTrans" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdGetDataItemTrans">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdGetDataItemTrans_Result">
@@ -2196,6 +2190,14 @@
           <FunctionImportMapping FunctionImportName="IN10300_pdCheckQtyInvtInGrd" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdCheckQtyInvtInGrd" >
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdCheckQtyInvtInGrd_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10300_pdGetcheckQtyInvt" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdGetcheckQtyInvt" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdGetcheckQtyInvt_Result">
+                <ScalarProperty Name="CheckQty" ColumnName="CheckQty" />
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
               </ComplexTypeMapping>
             </ResultMapping>
