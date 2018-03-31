@@ -31,13 +31,13 @@ namespace IN10300
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";////192.168.130.4//EARTHSVR
-            Current.DBSys = "KidoKEM_eSky4DSys";////eBiz4DCloudSysJFV
+            Current.DBSys = "ND_Test_eSky4DSys";////eBiz4DCloudSysJFV
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN10300"] = acc;
-            Session["DBApp"] = Current.DBApp = "KidoKEM_eSky4DApp";//eBiz4DCloudAppJFV
+            Session["DBApp"] = Current.DBApp = "ND_Test_eSky4DApp";//eBiz4DCloudAppJFV
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "CHHCM0007";
             Session["Language"] = Current.Language = "vi";

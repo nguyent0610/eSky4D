@@ -219,6 +219,8 @@ var frmMain_BoxReady = function () {
     App.txtRcptDate.setVisible(!HQ.hideExpectedDateRcptDate);
     App.txtDescr.allowBlank = !HQ.allowDescrBlank;
     App.txtComment.allowBlank = !HQ.allowNoteBlank;
+    App.btnImport.setVisible(HQ.showImprtExprt);
+    App.btnExport.setVisible(HQ.showImprtExprt);
     App.frmMain.isValid();
     HQ.common.showBusy(true, HQ.waitMsg);
 }
@@ -972,8 +974,11 @@ var bindBatch = function (record) {
     }
     if (App.cboBatNbr.getValue() == null || App.cboBatNbr.getValue() == "") {
         if (HQ.dflReasonCD) {
-            var a = App.cboReasonCD.store.filter('Dfl', '1');
-            var tamReasonCD = App.cboReasonCD.store.data.items[0].data.ReasonCD;
+            App.cboReasonCD.store.filter('Dfl', '1');
+            var tamReasonCD = '';
+            if (App.cboReasonCD.store.data.items.length > 0) {                
+                tamReasonCD = App.cboReasonCD.store.data.items[0].data.ReasonCD;
+            }
             App.cboReasonCD.setValue(tamReasonCD);
             App.cboReasonCD.store.clearFilter();
         }
@@ -1868,4 +1873,59 @@ var showHideControll = function (key) {
         App.frmMain.isValid();
     }
     
+}
+
+var btnExport_Click = function () { 
+   App.frmMain.submit({
+       waitMsg: HQ.common.getLang("Exporting"),
+       url: 'IN10300/Export',
+       type: 'POST',
+       timeout: 1000000,
+       clientValidation: false,
+       params: {
+           //lstCustTD: Ext.encode(App.stoDiscBreak.getRecordsValues()),// HQ.store.getData(App.stoAR_CustomerTD)
+           //lstCustTD1: Ext.encode(App.cboExport.getValue()),
+           //templateExport: App.cboExport.getValue()
+       },
+       success: function (msg, data) {
+           window.location = 'IN10300/DownloadAndDelete?file=' + data.result.fileName;
+       },
+       failure: function (msg, data) {
+           HQ.message.process(msg, data, true);
+       }
+   });
+};
+
+
+var btnImport_Click = function (sender, e) {
+    var fileName = sender.getValue();
+    var ext = fileName.split(".").pop().toLowerCase();
+    if (ext == "xls" || ext == "xlsx") {
+        App.frmMain.submit({
+            waitMsg: "Importing....",
+            url: 'IN10300/Import',
+            timeout: 18000000,
+            clientValidation: false,
+            method: 'POST',
+            params: {
+            },
+            success: function (msg, data) {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                if (!Ext.isEmpty(this.result.data.message)) {
+                    HQ.message.show('2013103001', [this.result.data.message], '', true);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+    else {
+        HQ.message.show('2014070701', ext, '');
+        sender.reset();
+    }
 }

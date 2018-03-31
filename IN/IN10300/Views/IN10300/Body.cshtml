@@ -142,9 +142,27 @@
         .DefaultAnchor("100%")
         .Listeners(p => p.FieldChange.Fn = "frmMain_FieldChange")
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{
+        //.TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{
 
-        }))
+        //}))
+        .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("Import")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";
+            })
+            , X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            })
+            }, "Print", true, "menuClick"))
+
         .BottomBar(
             X.Toolbar()
             .Items(
@@ -310,10 +328,8 @@
                     .DataIndex("Descr")
                     .Name("Descr")
                     .HQLangCode("Descr")
-                    .AllowBlank(false)
-                    .MaxLength(100)
+                    .AllowBlank(false)                    
                     .LabelWidth(130)
-                    .EnforceMaxLength(true)
                     .HQControlFocus("cboSiteID")
                     .BlankText(Util.GetLangPrefix("Input", "Descr"))
                     .Width(500)
@@ -459,6 +475,11 @@
                                 .LabelWidth(120)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQControlFocus("cboShipViaID")
+                                .HQParam(new StoreParameterCollection() {
+                                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                })
                                 .LoadData()
                                 .Listeners(lst =>
                                 {
@@ -607,7 +628,7 @@
                                     {
                                         p.Click.Fn = "btnLoad_Click";
                                     })
-                    )  
+                    )
 
                     ),
 
@@ -645,9 +666,7 @@
                         .Name("Comment")
                         .HQLangCode("Comment")
                         .AllowBlank(false)
-                        .LabelWidth(120)
-                        .MaxLength(30)
-                        .EnforceMaxLength(true)
+                        .LabelWidth(120)                       
                         .HQControlFocus("txtBranchID")
                         .BlankText(Util.GetLangPrefix("Input", "Comment"))
                         .Width(490)
