@@ -1477,91 +1477,6 @@ namespace IN10300
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<IN10300_pdCheckQtyInvtInGrd_Result> IN10300_pdCheckQtyInvtInGrd(global::System.String lstInvtID, global::System.String siteID, global::System.String toSiteID, global::System.String branchID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter lstInvtIDParameter;
-            if (lstInvtID != null)
-            {
-                lstInvtIDParameter = new ObjectParameter("lstInvtID", lstInvtID);
-            }
-            else
-            {
-                lstInvtIDParameter = new ObjectParameter("lstInvtID", typeof(global::System.String));
-            }
-    
-            ObjectParameter siteIDParameter;
-            if (siteID != null)
-            {
-                siteIDParameter = new ObjectParameter("SiteID", siteID);
-            }
-            else
-            {
-                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
-            }
-    
-            ObjectParameter toSiteIDParameter;
-            if (toSiteID != null)
-            {
-                toSiteIDParameter = new ObjectParameter("ToSiteID", toSiteID);
-            }
-            else
-            {
-                toSiteIDParameter = new ObjectParameter("ToSiteID", typeof(global::System.String));
-            }
-    
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<IN10300_pdCheckQtyInvtInGrd_Result>("IN10300_pdCheckQtyInvtInGrd", lstInvtIDParameter, siteIDParameter, toSiteIDParameter, branchIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="lstInvtID">No Metadata Documentation available.</param>
-        /// <param name="siteID">No Metadata Documentation available.</param>
-        /// <param name="toSiteID">No Metadata Documentation available.</param>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
         public ObjectResult<IN10300_pdCheckQty_Result> IN10300_pdCheckQty(global::System.String lstInvtID, global::System.String siteID, global::System.String toSiteID, global::System.String branchID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter lstInvtIDParameter;
@@ -1635,6 +1550,102 @@ namespace IN10300
             }
     
             return base.ExecuteFunction<IN10300_pdCheckQty_Result>("IN10300_pdCheckQty", lstInvtIDParameter, siteIDParameter, toSiteIDParameter, branchIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="lstInvtID">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
+        /// <param name="toSiteID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="periodID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10300_pdCheckQtyInvtInGrd_Result> IN10300_pdCheckQtyInvtInGrd(global::System.String lstInvtID, global::System.String siteID, global::System.String toSiteID, global::System.String branchID, global::System.String periodID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter lstInvtIDParameter;
+            if (lstInvtID != null)
+            {
+                lstInvtIDParameter = new ObjectParameter("lstInvtID", lstInvtID);
+            }
+            else
+            {
+                lstInvtIDParameter = new ObjectParameter("lstInvtID", typeof(global::System.String));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            ObjectParameter toSiteIDParameter;
+            if (toSiteID != null)
+            {
+                toSiteIDParameter = new ObjectParameter("ToSiteID", toSiteID);
+            }
+            else
+            {
+                toSiteIDParameter = new ObjectParameter("ToSiteID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter periodIDParameter;
+            if (periodID != null)
+            {
+                periodIDParameter = new ObjectParameter("PeriodID", periodID);
+            }
+            else
+            {
+                periodIDParameter = new ObjectParameter("PeriodID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<IN10300_pdCheckQtyInvtInGrd_Result>("IN10300_pdCheckQtyInvtInGrd", lstInvtIDParameter, siteIDParameter, toSiteIDParameter, branchIDParameter, periodIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion

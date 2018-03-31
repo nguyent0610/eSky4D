@@ -469,6 +469,7 @@
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
           <Parameter Name="ToSiteID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="PeriodID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -738,7 +739,7 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <FunctionImport Name="IN10300_pdCheckQtyInvtInGrd" ReturnType="Collection(IN10300Model.IN10300_pdCheckQtyInvtInGrd_Result)">
+          <FunctionImport Name="IN10300_pdCheckQty" ReturnType="Collection(IN10300Model.IN10300_pdCheckQty_Result)">
             <Parameter Name="lstInvtID" Mode="In" Type="String" />
             <Parameter Name="SiteID" Mode="In" Type="String" />
             <Parameter Name="ToSiteID" Mode="In" Type="String" />
@@ -747,11 +748,12 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <FunctionImport Name="IN10300_pdCheckQty" ReturnType="Collection(IN10300Model.IN10300_pdCheckQty_Result)">
+          <FunctionImport Name="IN10300_pdCheckQtyInvtInGrd" ReturnType="Collection(IN10300Model.IN10300_pdCheckQtyInvtInGrd_Result)">
             <Parameter Name="lstInvtID" Mode="In" Type="String" />
             <Parameter Name="SiteID" Mode="In" Type="String" />
             <Parameter Name="ToSiteID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="PeriodID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
@@ -1435,10 +1437,10 @@
           <Property Type="DateTime" Name="TranDate" Nullable="true" />
           <Property Type="DateTime" Name="RcptDate" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="IN10300_pdCheckQtyInvtInGrd_Result">
+        <ComplexType Name="IN10300_pdCheckQty_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="1" />
         </ComplexType>
-        <ComplexType Name="IN10300_pdCheckQty_Result">
+        <ComplexType Name="IN10300_pdCheckQtyInvtInGrd_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="1" />
         </ComplexType>
       </Schema>
@@ -2184,16 +2186,16 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN10300_pdCheckQtyInvtInGrd" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdCheckQtyInvtInGrd" >
-          <ResultMapping>
-              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdCheckQtyInvtInGrd_Result">
+          <FunctionImportMapping FunctionImportName="IN10300_pdCheckQty" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdCheckQty" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdCheckQty_Result">
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN10300_pdCheckQty" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdCheckQty" >
+          <FunctionImportMapping FunctionImportName="IN10300_pdCheckQtyInvtInGrd" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdCheckQtyInvtInGrd" >
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdCheckQty_Result">
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdCheckQtyInvtInGrd_Result">
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
               </ComplexTypeMapping>
             </ResultMapping>

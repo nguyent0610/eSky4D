@@ -466,12 +466,22 @@ namespace IN10300.Controllers
             {
                 if (_handle == "R")
                 {
+                    string periodID = "";
+
+                    if (_objBatch.RcptDate.Month.ToString().Length == 1)
+                    {
+                        periodID = _objBatch.RcptDate.Year.ToString() + "0" + _objBatch.RcptDate.Month.ToString();
+                    }
+                    else
+                    {
+                        periodID = _objBatch.RcptDate.Year.ToString() + _objBatch.RcptDate.Month.ToString();
+                    }
                     string lstInvtID = "";
                     foreach (var item in _lstTrans)
                     {
                         lstInvtID = lstInvtID + item.InvtID + "@#@#" + item.Qty + "@#@#" + item.UnitDesc;
                     }
-                    var checkQty = _app.IN10300_pdCheckQtyInvtInGrd(lstInvtID, _objBatch.SiteID,_objBatch.ToSiteID,_objBatch.BranchID,Current.UserName,Current.CpnyID,Current.LangID).ToList();
+                    var checkQty = _app.IN10300_pdCheckQtyInvtInGrd(lstInvtID, _objBatch.SiteID, _objBatch.ToSiteID, _objBatch.BranchID, periodID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
                     if (checkQty != null)
                     {
                         string invt = string.Empty;
