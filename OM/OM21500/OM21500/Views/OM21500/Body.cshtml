@@ -57,7 +57,7 @@
             .ColumnModel(
                 X.RowNumbererColumn().Width(40).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
                 , X.Column().Text(Util.GetLang("DiscCode")).DataIndex("DiscCode").Width(130).Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
-                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true))
+                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Flex(1).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true))
                 , X.CheckColumn().Text(Util.GetLang("Active")).DataIndex("Active").Width(90).Editable(true)
                 , HQ.DateColumn().ID("txtFromDate").DataIndex("FromDate").Text("FromDate").Editor(HQ.DateField()).Width(100)
                     //.Listeners(lst => { lst.Blur.Fn = "checkFromDate"; })
@@ -86,35 +86,54 @@
                         .HQDBSys(false).HQProcedure("OM21500_pcObjApply").ForceSelection(true).HQAutoLoad(false)
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 200)
                         .HQParam(new StoreParameterCollection() {       
-                        new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },  
-                    })
+                            new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },  
+                        })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                         .LoadData()
-                    )  
-                , X.Column().Text(Util.GetLang("OM21500BudgetID")).DataIndex("BudgetID").Width(140)
+                    )    
+             , X.Column().Text(Util.GetLang("OM21500DiscType")).DataIndex("DiscType").Width(140).Renderer("DiscType_render")
                     .Editor(
-                        HQ.Combo().ID("cboBudgetID").Name("cboBudgetID")
-                        .HQDBSys(false).HQProcedure("OM21500_pcBudGet").ForceSelection(true).HQAutoLoad(false).MaxLength(10)
-                        .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code").HQHeightWidth(400, 200)
+                        HQ.Combo().ID("cboDiscType").Name("cboDiscType")
+                        .HQDBSys(false).HQProcedure("OM21500_pcDiscType").ForceSelection(true).HQAutoLoad(false)
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 200)
                         .HQParam(new StoreParameterCollection() {       
-                        new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },  
-                    })
+                            new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },  
+                        })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                         .LoadData()
-                    )                                
-                , X.CommandColumn().Width(130)
+                    )
+                     , X.Column().Text(Util.GetLang("ApplyFor")).DataIndex("ApplyFor").Width(130).Renderer("ApplyFor_render")
+                     .Editor(HQ.Combo().ID("cboApplyFor").Name("cboApplyFor")
+                            .HQDBSys(false).HQProcedure("OM21500_pcApplyFor").ForceSelection(true).HQAutoLoad(false)
+                            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 200)
+                            .HQParam(new StoreParameterCollection() {       
+                            new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }, 
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                            .LoadData()
+                       )
+                            
+                 , HQ.DateColumn().ID("txtPODate").DataIndex("POTime").Text("POTime").Editor(HQ.DateField()).Width(120)
+                 , HQ.DateColumn().ID("txtOMDate").DataIndex("OMTime").Text("OMTime").Editor(HQ.DateField()).Width(120)
+                 , X.CommandColumn().Width(130)
                 .Commands(
                     X.GridCommand()
                     .Text(Util.GetLang("Reject"))
@@ -168,7 +187,11 @@
                         X.DateFilter().DataIndex("ToDate"),
                         X.StringFilter().DataIndex("PromoType").ValidateRecord(p => p.Fn = "stringFilter"),
                         X.StringFilter().DataIndex("ObjApply").ValidateRecord(p => p.Fn = "stringFilter"),
-                        X.StringFilter().DataIndex("BudgetID")
+                        X.StringFilter().DataIndex("DiscType").ValidateRecord(p => p.Fn = "stringFilter"),
+                        X.StringFilter().DataIndex("ApplayFor"),
+                        X.StringFilter().DataIndex("POTime"),
+                        X.StringFilter().DataIndex("OMTime")
+                         
                     )
             )
         )        
@@ -202,7 +225,7 @@
                                     .Items(
                                         X.ToolbarFill()
 
-                                        , HQ.Button().ID("btnExpand")
+                                        , HQ.Button()
                                         .HQLangCode("Expand")
                                         .Icon(Icon.BulletTogglePlus)
                                         .Handler("App.treePanelBranch.expandAll();")
@@ -211,7 +234,7 @@
                                         , X.ToolbarSeparator()
                                         , X.ToolbarSpacer()
 
-                                        , HQ.Button().ID("btnCollapse")
+                                        , HQ.Button()
                                         .HQLangCode("Collapse")
                                         .Icon(Icon.BulletToggleMinus)
                                         .Handler("App.treePanelBranch.collapseAll();")
@@ -227,25 +250,25 @@
                                 .MinWidth(50)
                                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
                                 .Items(
-                                    HQ.Button().ID("btnAddAll")
+                                    HQ.Button().ID("btnCpnyAddAll")
                                     .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
                                     .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
-                                    .Handler("btnAddAll_click")
+                                    .Handler("btnCpnyAddAll_click")
 
-                                    , HQ.Button().ID("btnAdd")
+                                    , HQ.Button().ID("btnCpnyAdd")
                                     .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
                                     .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
-                                    .Handler("btnAdd_click")
+                                    .Handler("btnCpnyAdd_click")
 
-                                    , HQ.Button().ID("btnDel")
+                                    , HQ.Button().ID("btnCpnyDel")
                                     .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
                                     .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
-                                    .Handler("btnDel_click")
+                                    .Handler("btnCpnyDel_click")
 
-                                    , HQ.Button().ID("btnDelAll")
+                                    , HQ.Button().ID("btnCpnyDelAll")
                                     .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
                                     .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
-                                    .Handler("btnDelAll_click")
+                                    .Handler("btnCpnyDelAll_click")
                                 ) // Container
                                 
                                 // Third column
@@ -259,22 +282,22 @@
                                     X.Store()
                                     .ID("stoDescCpny")
                                     .PageSize(50)
-                                        .Model(Util.GenerateModel(typeof(OM21500_pgDiscCompany_Result), "mdlCompany", ""))
-                                            .Parameters(ps =>
-                                            {
-                                                ps.Add(new StoreParameter("discCode", "", ParameterMode.Value));
+                                    .Model(Util.GenerateModel(typeof(OM21500_pgDiscCompany_Result), "mdlCompany", ""))
+                                        .Parameters(ps =>
+                                        {
+                                            ps.Add(new StoreParameter("discCode", "", ParameterMode.Value));
 
-                                            })
-                                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_DiscDescrCpny"))).AutoLoad(false)
-                                        .Listeners(l =>
-                                            {
-                                                l.Load.Fn = "stoDescCpny_Load";
-                                                l.Update.Fn = "frmChange";
-                                            })
+                                        })
+                                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_DiscDescrCpny"))).AutoLoad(false)
+                                    .Listeners(l =>
+                                        {
+                                            l.Load.Fn = "stoDescCpny_Load";
+                                            l.Update.Fn = "frmChange";
+                                        })
                                 )           
                                 .ColumnModel(
                                     X.RowNumbererColumn().Width(40)
-                                    , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
+                                    , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(65)
                                         .Editor(
                                             HQ.Combo().ID("cboCpnyID").Name("cboCpnyID")
                                             .HQDBSys(false).HQProcedure("OM21500_pcCompany").ForceSelection(true).HQAutoLoad(false)
@@ -348,6 +371,198 @@
                                 ls.Activate.Handler = "HQ.focus = 'cpny';";
                                 ls.Render.Handler = "HQ.common.control_render(this,'cpny')";
                             })// pnlAppComp      
+                        , X.Panel().ID("tabInvt")
+                    .Title(Util.GetLang("OM21500TabInvt"))
+                    .Region(Region.Center)
+                    .Layout(LayoutType.Fit)
+                    .Listeners(x =>
+                            {
+                                x.Activate.Handler = "HQ.focus = 'invt';";
+                                x.Render.Handler = "HQ.common.control_render(this,'invt')";
+                            })// pnlInvt
+                    .Items(
+                        X.Panel().ID("pnlInvt")
+                    .Region(Region.Center)
+                    .Layout(LayoutType.Border)
+                    .Items(
+                        X.Panel().ID("treeInvtID")
+                        .Region(Region.West).Flex(3)
+                        .MinWidth(150).Split(true).AutoScroll(true)
+                        .DirectEvents(de =>
+                        {
+                            de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeInvtID"));
+                            de.AfterRender.Url = Url.Action("OM22001GetInvt");
+                            //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                            de.AfterRender.CleanRequest = true;
+                            de.AfterRender.Method = HttpMethod.POST;
+                            de.AfterRender.Success = "App.treePanelInvt.getRootNode().expand();";
+
+                            de.AfterRender.Timeout = 60000;
+                            de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                            de.AfterRender.EventMask.ShowMask = true;
+                            de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                            de.AfterRender.EventMask.MinDelay = 500;
+                        })
+                        .BottomBar(
+                            X.Toolbar()
+                            .Items(
+                                X.ToolbarFill()
+
+                                , HQ.Button().ID("btnExpandInvt")
+                                .HQLangCode("Expand")
+                                .Icon(Icon.BulletTogglePlus)
+                                .Handler("btnInvtExpand_click")
+
+                                , X.ToolbarSpacer()
+                                , X.ToolbarSeparator()
+                                , X.ToolbarSpacer()
+
+                                , HQ.Button().ID("btnCollapseInvt")
+                                .HQLangCode("Collapse")
+                                .Icon(Icon.BulletToggleMinus)
+                                .Handler("btnInvtCollapse_click")
+
+                                , X.ToolbarFill()
+                            )
+                        ) // treeBranch
+
+                        , X.Panel()
+                        .Region(Region.Center).Flex(1)
+                        .Layout(LayoutType.VBox)
+                        .MinWidth(50)
+                        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                        .Items(
+                            HQ.Button().ID("btnAddAllInvt")
+                            .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                            .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnAddAllInvt_click")
+
+                            , HQ.Button().ID("btnAddInvt")
+                            .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                            .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnAddInvt_click")
+
+                            , HQ.Button().ID("btnDelInvt")
+                            .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                            .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnDelInvt_click")
+
+                            , HQ.Button().ID("btnDelAllInvt")
+                            .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                            .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                            .Handler("btnDelAllInvt_click")
+                        ) // Panel
+                        , 
+        //                X.Panel().ID("pnlGrdInvt")
+        //                .Region(Region.East).Flex(6)
+        //                .Layout(LayoutType.Fit)
+        //                .MinWidth(50)
+        //// .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+        //                .Items(
+                            X.GridPanel().ID("grdInvt")
+                            .Region(Region.East)
+                            .Layout(LayoutType.Fit)
+                            .Scroll(ScrollMode.Both)
+                            .Flex(6)
+                            .View(X.GridView().TrackOver(false))
+                            .ViewConfig(X.GridView())//.Plugins(X.GridDragDrop().EnableDrag(false).DDGroup("InvtID")).Listeners(l=>l.BeforeDrop.Fn="beforenodedrop"))
+                            .SortableColumns(true)
+     
+                                .Store(
+                                    X.Store()
+                                    .ID("stoInvt")
+                                    .PageSize(50)
+                                    .Model(Util.GenerateModel(typeof(OM21500_pgDiscDescItem_Result), "mdlInvt", ""))
+                                    .Parameters(ps =>
+                                        {
+                                            ps.Add(new StoreParameter("discCode", "", ParameterMode.Value));
+                                        })
+                                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_DiscDescrInvt"))).AutoLoad(false)
+                                    .Listeners(l =>
+                                    {
+                                        l.Load.Fn = "stoInvt_load";
+                                        l.Update.Fn = "frmChange";
+                                        //l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                                    })
+                                )
+                            .ColumnModel(
+                                X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(100).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+                                , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(75)
+                                , X.Column().Text(Util.GetLang("InvtName")).DataIndex("InvtName").MinWidth(100).Flex(1)
+                                , X.Column().Text(Util.GetLang("OM21500InvtType")).DataIndex("InvtType").Width(100).Renderer("InvtType_render")
+                                    .Editor(
+                                        HQ.Combo().ID("cboInvtType").Name("cboInvtType")
+                                        .HQDBSys(false).HQProcedure("OM21500_pcInvtType").ForceSelection(true).HQAutoLoad(false)
+                                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 200)
+                                        .HQParam(new StoreParameterCollection() {       
+                                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },  
+                                        })
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    .LoadData()
+                                )
+                                , X.NumberColumn().Text(Util.GetLang("Mark")).DataIndex("Mark").Width(100)
+                                .Format("0,000.0").Align(Alignment.Right).StyleSpec("text-align:left")
+                                .Editor(HQ.NumberField().DecimalPrecision(1).SelectOnFocus(true))
+
+                                , X.CommandColumn().Width(130)
+                                .Commands(
+                                    X.GridCommand()
+                                    .Text(Util.GetLang("Reject"))
+                                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                    .CommandName("reject")
+                                    .Icon(Icon.ArrowUndo)
+                                )
+                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                    .Listeners(l => l.Command.Handler = "grdInvt_reject(record);")
+                            )
+                            .SelectionModel(X.RowSelectionModel().ID("slmInvt").Mode(SelectionMode.Multi))
+                            .Features(
+                                X.GridFilters()
+                                    .Local(true)
+                                        .Filters(
+                                            X.ListFilter().DataIndex("DiscCode"),
+                                            X.StringFilter().DataIndex("InvtID"),
+                                            X.StringFilter().DataIndex("InvtName"),
+                                            X.StringFilter().DataIndex("InvtType").ValidateRecord(p => p.Fn = "stringFilter"),
+                                            X.NumericFilter().DataIndex("Mark")
+                                        )
+                                )
+                            .BottomBar(
+                                X.PagingToolbar()
+                                .HideRefresh(true)
+                                .Items(
+                                    X.Label("Page size:"),
+                                    X.ToolbarSpacer(10),
+                                    X.ComboBox()
+                                    .Width(80)
+                                    .Items("1", "2", "10", "20", "30", "50")
+                                    .SelectedItems("50")
+                                    .Listeners(l =>
+                                        {
+                                            l.Select.Fn = "HQ.grid.onPageSelect";
+                                        })
+                                )
+                                .Plugins(X.ProgressBarPager())
+                            )
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "grdInvt_beforeEdit";
+                                    ls.ValidateEdit.Fn = "grdInvt_ValidateEdit";
+                                })
+                            ) // grdInvt
+                            
+                        )                        
+                        //)
+                    )  // Tab Invt
             )        
         // End new
         )
