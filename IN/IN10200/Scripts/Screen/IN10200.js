@@ -1358,7 +1358,7 @@ var calcLot = function (record) {
                         if (newQty != 0) {
                             var newLot = Ext.create('App.mdlLotTrans');
                             newLot.data.BranchID = App.txtBranchID.getValue();
-                            newLot.data.BatNbr = App.cboBatNbr.getValue();
+                            newLot.data.BatNbr = HQ.util.passNull(App.cboBatNbr.getValue());
                             newLot.data.LotSerNbr = item.data.LotSerNbr;
                             newLot.data.ExpDate = item.data.ExpDate;
 

@@ -38,6 +38,10 @@ namespace IN10200.Controllers
         private List<IN10200_pgIssueLoad_Result> _lstTrans;
         private List<IN10200_pgIN_LotTrans_Result> _lstLot;
         private IN_Setup _objIN;
+        public class IN_LotTransExt : IN_LotTrans
+        {
+            public double QtyOnHand { get; set; }
+        }
 
         #region Action
         public ActionResult Index(string branchID)
@@ -76,7 +80,7 @@ namespace IN10200.Controllers
 
             ViewBag.INSite = userDft == null ? "" : userDft.INSite;
             ViewBag.showFromSite = showFromSite;
-            ViewBag.showOnHand = showQtyOnhand;
+            ViewBag.showQtyOnhand = showQtyOnhand;
             ViewBag.BranchID = branchID;
 
             
@@ -539,7 +543,7 @@ namespace IN10200.Controllers
                 FileInfo fileInfo = new FileInfo(file.FileName);
                 string message = string.Empty;
                 List<IN_Trans> lstTrans = new List<IN_Trans>();
-                List<IN_LotTrans> lstLot = new List<IN_LotTrans>();
+                List<IN_LotTransExt> lstLot = new List<IN_LotTransExt>();
 
                 string siteID = data["SiteID"].PassNull();
                 string branchID = data["BranchID"].PassNull();
@@ -663,7 +667,7 @@ namespace IN10200.Controllers
 
                                         if (newQty != 0)
                                         {
-                                            var newLot = new IN_LotTrans();
+                                            var newLot = new IN_LotTransExt();
                                             newLot.LotSerNbr = itemLot.LotSerNbr;
                                             newLot.ExpDate = itemLot.ExpDate;
                                             newLot.WarrantyDate = DateTime.Now;
@@ -695,10 +699,13 @@ namespace IN10200.Controllers
                                                 newLot.UnitMultDiv = newTran.UnitMultDiv;
                                                 newLot.UnitPrice = newTran.UnitPrice;
                                                 newLot.UnitCost = newTran.UnitPrice;
-                                                newLot.UnitDesc = newTran.UnitDesc;
+                                                newLot.UnitDesc = newTran.UnitDesc;                                                
                                             }
-
-
+                                            var objOnHand = _app.IN_ItemLot.Where(x => x.InvtID == newLot.InvtID && x.SiteID == newLot.SiteID && x.LotSerNbr == newLot.LotSerNbr).FirstOrDefault();
+                                            if (objOnHand != null)
+                                            {
+                                                newLot.QtyOnHand = objOnHand.QtyOnHand;
+                                            }                                           
                                             lstLot.Add(newLot);
                                         }
 
