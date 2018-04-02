@@ -486,7 +486,7 @@
                         )
                              , X.Column().Text(Util.GetLang("AR20500OUnit")).DataIndex("OUnit").Width(200).Renderer("renderOUnit").ID("clmOUnit").Hidden(true)
                             .Editor(
-                                HQ.Combo().ID("cboColOUnit").HQProcedure("AR20200_pcOunit")
+                                HQ.Combo().ID("cboColOUnit").HQProcedure("AR20500_pcOunit")
                                 .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                                 .MultiSelect(true)
                                 .HQHeightWidth(400, 300)
