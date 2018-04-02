@@ -293,7 +293,9 @@ var cboRecType_Change = function (sender, e) {
 
 var cboScreenNumber_Change = function (value) {
     var k = value.displayTplData[0].Descr;
+    var l = value.displayTplData[0].ScreenNumberCmt;
     App.slmSYS_AccessDetRights.selected.items[0].set('Descr', k);
+    App.slmSYS_AccessDetRights.selected.items[0].set('ScreenNumberCmt', l);
 };
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////

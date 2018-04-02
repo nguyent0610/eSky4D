@@ -1207,6 +1207,30 @@ namespace SA00700
         private global::System.String _IsChanged;
         partial void OnIsChangedChanging(global::System.String value);
         partial void OnIsChangedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ScreenNumberCmt
+        {
+            get
+            {
+                return _ScreenNumberCmt;
+            }
+            set
+            {
+                OnScreenNumberCmtChanging(value);
+                ReportPropertyChanging("ScreenNumberCmt");
+                _ScreenNumberCmt = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ScreenNumberCmt");
+                OnScreenNumberCmtChanged();
+            }
+        }
+        private global::System.String _ScreenNumberCmt;
+        partial void OnScreenNumberCmtChanging(global::System.String value);
+        partial void OnScreenNumberCmtChanged();
 
         #endregion
 

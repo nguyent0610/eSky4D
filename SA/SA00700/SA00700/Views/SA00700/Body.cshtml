@@ -23,7 +23,7 @@
     {
         lst.BoxReady.Fn = "loadSourceCombo";
     })
-    
+
     .Items(
         ////Thiet ke giao dien o day
         X.Panel().ID("pnlHeader")
@@ -36,9 +36,9 @@
                     .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("G")
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection() 
-                        { 
-                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }    
+                    .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                         })
                     .LoadData()
                     .Listeners(lst =>
@@ -53,9 +53,9 @@
                     .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection() 
-                    { 
-                        new StoreParameter() { Name = "@RecType", Value = "App.cboRecType.getValue()", Mode = ParameterMode.Raw }     
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@RecType", Value = "App.cboRecType.getValue()", Mode = ParameterMode.Raw }
                     })
                     .LoadData()
                     .Listeners(lst =>
@@ -77,9 +77,9 @@
 
                 , X.Button().MarginSpec("5 0 5 160").Width(150)
                  .Text(Util.GetLang("LoadData")).Listeners(p =>
-                     {
-                         p.Click.Fn = "LoadGrid";
-                     })
+                 {
+                     p.Click.Fn = "LoadGrid";
+                 })
             )//pnl Header
 
             ,
@@ -87,9 +87,9 @@
             .Region(Region.Center)
             .Layout(LayoutType.Border)
             .Listeners(l =>
-                        {
-                            l.BoxReady.Handler = "firstLoad()";
-                        })
+            {
+                l.BoxReady.Handler = "firstLoad()";
+            })
             .Items(
                 X.GridPanel().ID("grdSYS_AccessDetRights")
                 .Hidden(true)
@@ -133,8 +133,10 @@
                         })
                         .LoadData()
                     )
-                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(220)
-                    
+                    , X.Column().Text(Util.GetLang("DescrScreen")).DataIndex("Descr").Width(220)
+
+                    , X.Column().Text(Util.GetLang("SA00700ScreenName")).DataIndex("ScreenNumberCmt").Width(220)
+
                     //Colum Init
                     , X.CheckColumn().ID("txtInitRights").StyleSpec("text-align:center;")
                      .DataIndex("InitRights").Text(Util.GetLang("InitRights")).Width(80).Editable(true)//.HideTitleEl(true)
@@ -178,7 +180,7 @@
                                     l.Change.Fn = "DeleteRightsCheckAll_Change";
                                 })
                         )
-                        
+
                     //Colum View
                     , X.CheckColumn().ID("txtViewRights")
                     .DataIndex("ViewRights").Text(Util.GetLang("ViewRights")).Width(80).Editable(true).StyleSpec("text-align:center;")//.HideTitleEl(true)
@@ -223,9 +225,9 @@
                     .Items("1", "2", "10", "20", "30", "50")
                     .SelectedItems("50")
                     .Listeners(l =>
-                        {
-                            l.Select.Fn = "HQ.grid.onPageSelect";
-                        })
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";
+                    })
                 )
                 .Plugins(X.ProgressBarPager())
             )
@@ -246,7 +248,8 @@
                         .Local(true)
                         .Filters(
                             X.StringFilter().DataIndex("ScreenNumber"),
-                            X.StringFilter().DataIndex("Descr"),                         
+                            X.StringFilter().DataIndex("Descr"),
+                            X.StringFilter().DataIndex("ScreenNumberCmt"),
                             X.BooleanFilter().DataIndex("InitRights"),
                             X.BooleanFilter().DataIndex("InsertRights"), //.YesText(Util.GetLang(""))
                             X.BooleanFilter().DataIndex("UpdateRights"),

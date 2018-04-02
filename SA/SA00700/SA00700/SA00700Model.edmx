@@ -104,6 +104,7 @@
           <Property Type="String" Name="LUpd_User" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="tstamp" Nullable="true" />
           <Property Type="String" Name="IsChanged" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="ScreenNumberCmt" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -158,6 +159,7 @@
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="IsChanged" ColumnName="IsChanged" />
+                <ScalarProperty Name="ScreenNumberCmt" ColumnName="ScreenNumberCmt" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
