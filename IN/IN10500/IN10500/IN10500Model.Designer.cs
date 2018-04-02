@@ -148,22 +148,6 @@ namespace IN10500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_Inventory> IN_Inventory
-        {
-            get
-            {
-                if ((_IN_Inventory == null))
-                {
-                    _IN_Inventory = base.CreateObjectSet<IN_Inventory>("IN_Inventory");
-                }
-                return _IN_Inventory;
-            }
-        }
-        private ObjectSet<IN_Inventory> _IN_Inventory;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_UnitConversion> IN_UnitConversion
         {
             get
@@ -176,6 +160,22 @@ namespace IN10500
             }
         }
         private ObjectSet<IN_UnitConversion> _IN_UnitConversion;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_Inventory> IN_Inventory
+        {
+            get
+            {
+                if ((_IN_Inventory == null))
+                {
+                    _IN_Inventory = base.CreateObjectSet<IN_Inventory>("IN_Inventory");
+                }
+                return _IN_Inventory;
+            }
+        }
+        private ObjectSet<IN_Inventory> _IN_Inventory;
 
         #endregion
 
@@ -222,19 +222,19 @@ namespace IN10500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the IN_Inventory EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_Inventory(IN_Inventory iN_Inventory)
-        {
-            base.AddObject("IN_Inventory", iN_Inventory);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the IN_UnitConversion EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToIN_UnitConversion(IN_UnitConversion iN_UnitConversion)
         {
             base.AddObject("IN_UnitConversion", iN_UnitConversion);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_Inventory EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_Inventory(IN_Inventory iN_Inventory)
+        {
+            base.AddObject("IN_Inventory", iN_Inventory);
         }
 
         #endregion
@@ -554,6 +554,14 @@ namespace IN10500
             }
     
             return base.ExecuteFunction<global::System.String>("IN10500_pdCheckCreateIN_Tag", branchIDParameter, siteIDParameter, classIDParameter, userIDParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<global::System.String> IN10500_peUnit()
+        {
+            return base.ExecuteFunction<global::System.String>("IN10500_peUnit");
         }
 
         #endregion

@@ -482,6 +482,8 @@ namespace IN10500.Controllers
         {
             try
             {
+                string siteID = data["cboSiteID"].PassNull();
+                int numberRow = 3000;
                 LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
@@ -500,9 +502,15 @@ namespace IN10500.Controllers
                 pc.Add(new ParamStruct("@ReasonCD", DbType.String, clsCommon.GetValueDBNull(data["cboReasonCD"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@ClassID", DbType.String, clsCommon.GetValueDBNull(data["cboClassID"].PassNull()), ParameterDirection.Input, 30));
                 DataTable dt = dal.ExecDataTable("IN10500_peExport", CommandType.StoredProcedure, ref pc);
-                sheetTrans.Cells.ImportDataTable(dt, false, "A2");
+                sheetTrans.Cells.ImportDataTable(dt, false, "A3");
 
+                DataTable dtUnit = dal.ExecDataTable("IN10500_peUnit", CommandType.StoredProcedure, "");
+                sheetTrans.Cells.ImportDataTable(dtUnit, true, 0, 26, false);// du lieu IN_UnitConversion
 
+                //Header
+                SetCellValue(sheetTrans.Cells["A1"], Util.GetLang("SiteID"), TextAlignmentType.Center, TextAlignmentType.Right, true, 10, true);
+                SetCellValue(sheetTrans.Cells["B1"], siteID, TextAlignmentType.Center, TextAlignmentType.Left, false, 10, true);
+                //
           
                 Style style = workbook.GetStyleInPool(0);
                 style.Font.Color = Color.Transparent;
@@ -512,27 +520,70 @@ namespace IN10500.Controllers
                 flag.NumberFormat = true;
                 flag.Locked = true;
               
-                style = sheetTrans.Cells["A1"].GetStyle();
+                style = sheetTrans.Cells["A2"].GetStyle();
                 style.Font.IsBold = true;
 
-                sheetTrans.Cells["A1"].PutValue(Util.GetLang("InvtID"));
-                sheetTrans.Cells["B1"].PutValue(Util.GetLang("InvtName"));
-                sheetTrans.Cells["C1"].PutValue(Util.GetLang("UOM"));
-                sheetTrans.Cells["D1"].PutValue(Util.GetLang("IN10500ActInventory"));
-                sheetTrans.Cells["E1"].PutValue(Util.GetLang("IN10500Inventory"));
+                Style colSiteID = sheetTrans.Cells.Columns[0].Style;
+                StyleFlag flag1 = new StyleFlag();
+                flag1.Locked = true;
+                colSiteID.IsLocked = true;
+                sheetTrans.Cells.Columns[0] .ApplyStyle(colSiteID, flag1);               
 
-                sheetTrans.Cells["A1"].SetStyle(style);
-                sheetTrans.Cells["B1"].SetStyle(style);
-                sheetTrans.Cells["C1"].SetStyle(style);
-                sheetTrans.Cells["D1"].SetStyle(style);
-                sheetTrans.Cells["E1"].SetStyle(style);
+                sheetTrans.Cells["A2"].PutValue(Util.GetLang("InvtID"));
+                sheetTrans.Cells["B2"].PutValue(Util.GetLang("InvtName"));
+                sheetTrans.Cells["C2"].PutValue(Util.GetLang("UOM"));
+                sheetTrans.Cells["D2"].PutValue(Util.GetLang("IN10500Inventory"));
+                sheetTrans.Cells["E2"].PutValue(Util.GetLang("IN10500ActInventory"));
 
-                style = sheetTrans.Cells["D2"].GetStyle();
+                sheetTrans.Cells["A2"].SetStyle(style);
+                sheetTrans.Cells["B2"].SetStyle(style);
+                sheetTrans.Cells["C2"].SetStyle(style);
+                sheetTrans.Cells["D2"].SetStyle(style);
+                sheetTrans.Cells["E2"].SetStyle(style);
+
+                style = sheetTrans.Cells["D3"].GetStyle();
                 style.Custom = "#,##0";
-                Range range = sheetTrans.Cells.CreateRange("D2", "E" + (dt.Rows.Count+2));
+                Range range = sheetTrans.Cells.CreateRange("D3", "E" + (dt.Rows.Count+1000));
                 range.ApplyStyle(style, flag);
                 sheetTrans.AutoFitColumns();
 
+                //Unit
+                Validation validation = sheetTrans.Validations[sheetTrans.Validations.Add()];
+                string formulaCustomer = "=$AA$2:$AA$" + (dtUnit.Rows.Count + 2);
+                validation = sheetTrans.Validations[sheetTrans.Validations.Add()];
+                validation.IgnoreBlank = true;
+                validation.Type = Aspose.Cells.ValidationType.List;
+                validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                validation.Operator = OperatorType.Between;
+                validation.Formula1 = formulaCustomer;
+                validation.InputTitle = "";
+                validation.InputMessage = "Chọn đơn vị ";
+                validation.ErrorMessage = "Đơn vị này không tồn tại";
+
+                CellArea area;
+                area = new CellArea();
+                area.StartRow = 2;
+                area.EndRow = numberRow;
+                area.StartColumn = 2;
+                area.EndColumn = 2;
+                validation.AddArea(area);
+
+                var style1 = sheetTrans.Cells["D3"].GetStyle();
+                style1.IsLocked = false;
+                var range1 = sheetTrans.Cells.CreateRange("D3", "E" + (dt.Rows.Count + 1000));
+                range1.SetStyle(style1);
+
+                style1 = sheetTrans.Cells["A3"].GetStyle();
+                style1.IsLocked = false;
+                range1 = sheetTrans.Cells.CreateRange("A3", "B"+ (dt.Rows.Count + 1000));
+                range1.SetStyle(style1);
+
+                style1 = sheetTrans.Cells["B3"].GetStyle();
+                style1.IsLocked = false;
+                range1 = sheetTrans.Cells.CreateRange("B3", "C"+ (dt.Rows.Count + 1000));
+                range1.SetStyle(style1);
+
+                sheetTrans.Protect(ProtectionType.All);
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Position = 0;
 
@@ -559,7 +610,7 @@ namespace IN10500.Controllers
         {
             try
             {
-
+                string siteID = data["cboSiteID"].PassNull();
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
                 HttpPostedFile file = fileUploadField.PostedFile; // or: HttpPostedFileBase file = this.HttpContext.Request.Files[0];
                 FileInfo fileInfo = new FileInfo(file.FileName);
@@ -577,9 +628,11 @@ namespace IN10500.Controllers
                         {
 
                             Worksheet workSheet = workbook.Worksheets[0];
+                            if(workSheet.Cells[0,1].StringValue.PassNull() != siteID)
+                                throw new MessageException(MessageType.Message, "2018040201");
                             string invtID = string.Empty;
                              string unit = string.Empty;
-                            for (int i = 1; i < workSheet.Cells.MaxDataRow+1; i++)
+                            for (int i = 2; i < workSheet.Cells.MaxDataRow+1; i++)
                             {
 
                                 invtID = workSheet.Cells[i, 0].StringValue;
@@ -621,7 +674,7 @@ namespace IN10500.Controllers
                                    
                                 }
 
-                                if (workSheet.Cells[i, 3].StringValue.PassNull() == "")
+                                if (workSheet.Cells[i, 4].StringValue.PassNull() == "")
                                 {
                                     message += string.Format("Dòng {0} mặt hàng {1} không có số lượng<br/>", (i + 1).ToString(), invtID);
                                     continue;
@@ -629,10 +682,10 @@ namespace IN10500.Controllers
                                 else
                                 {
                                     float n;
-                                    bool isNumeric = float.TryParse(workSheet.Cells[i, 3].StringValue, out n);
+                                    bool isNumeric = float.TryParse(workSheet.Cells[i, 4].StringValue, out n);
                                     if (isNumeric == true)
                                     {
-                                        if (workSheet.Cells[i, 3].FloatValue < 0)
+                                        if (workSheet.Cells[i, 4].FloatValue < 0)
                                         {
                                             message += string.Format("Dòng {0} mặt hàng {1} số lượng không được phép nhỏ hơn 0<br/>", (i + 1).ToString(), invtID);
                                             continue;
@@ -646,7 +699,7 @@ namespace IN10500.Controllers
                                 }
 
                                 lstData.Add(new IN10500_pgLoadGrid_Result() {
-                                    ActualEAQty = workSheet.Cells[i, 3].FloatValue * cnfv,
+                                    ActualEAQty = workSheet.Cells[i, 4].FloatValue * cnfv,
                                     BookEAQty=0,
                                     BranchID="",
                                     EAUnit="",
@@ -791,6 +844,18 @@ namespace IN10500.Controllers
                 return null;
             }
             return null;
+        }
+        private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size, bool isTitle = false)
+        {
+            c.PutValue(" " + lang);
+            var style = c.GetStyle();
+            style.Font.IsBold = isBold;
+            style.Font.Size = size;
+            style.HorizontalAlignment = alignH;
+            style.VerticalAlignment = alignV;
+            if (isTitle)
+                style.Font.Color = Color.Red;
+            c.SetStyle(style);
         }
     }
 }
