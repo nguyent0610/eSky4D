@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_Customer">
           <Key>
             <PropertyRef Name="CustId" />
@@ -101,6 +101,8 @@
           <Property Name="BrandID" Type="varchar(max)" />
           <Property Name="OUnit" Type="varchar(max)" />
           <Property Name="Mobile" Type="varchar" MaxLength="20" />
+          <Property Name="Market" Type="varchar" MaxLength="10" />
+          <Property Name="BillMarket" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -445,6 +447,8 @@
         <Function Name="AR20500_ppCheckCustomerApprove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="CustID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+          <Parameter Name="Handle" Type="varchar" Mode="In" />
           <Parameter Name="ID" Type="int" Mode="In" />
           <Parameter Name="OutletName" Type="nvarchar" Mode="In" />
           <Parameter Name="Phone" Type="varchar" Mode="In" />
@@ -510,14 +514,6 @@
             <Parameter Name="Addr" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <FunctionImport Name="AR20500_ppCheckCustomerApprove" ReturnType="Collection(String)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="CustID" Mode="In" Type="String" />
-            <Parameter Name="ID" Mode="In" Type="Int32" />
-            <Parameter Name="OutletName" Mode="In" Type="String" />
-            <Parameter Name="Phone" Mode="In" Type="String" />
-            <Parameter Name="Addr1" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="AR20500_pdConfig" ReturnType="Collection(AR20500Model.AR20500_pdConfig_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -544,6 +540,16 @@
           <EntitySet Name="AR_NewCustomerInforHis" EntityType="AR20500Model.AR_NewCustomerInforHis" />
           <EntitySet Name="AR_Customer" EntityType="AR20500Model.AR_Customer" />
           <EntitySet Name="AR_NewCustomerInfor" EntityType="AR20500Model.AR_NewCustomerInfor" />
+          <FunctionImport Name="AR20500_ppCheckCustomerApprove" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="Handle" Mode="In" Type="String" />
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="OutletName" Mode="In" Type="String" />
+            <Parameter Name="Phone" Mode="In" Type="String" />
+            <Parameter Name="Addr1" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -964,6 +970,8 @@
           <Property Name="BrandID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="OUnit" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Market" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="BillMarket" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInfor">
           <Key>
@@ -1140,7 +1148,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerApprove" />
           <FunctionImportMapping FunctionImportName="AR20500_pdConfig" FunctionName="eBiz4DWebSysModel.Store.AR20500_pdConfig">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AR20500Model.AR20500_pdConfig_Result">
@@ -1389,6 +1396,8 @@
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20500Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="BillMarket" ColumnName="BillMarket" />
+                <ScalarProperty Name="Market" ColumnName="Market" />
                 <ScalarProperty Name="Mobile" ColumnName="Mobile" />
                 <ScalarProperty Name="OUnit" ColumnName="OUnit" />
                 <ScalarProperty Name="BrandID" ColumnName="BrandID" />
@@ -1561,6 +1570,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerApprove" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

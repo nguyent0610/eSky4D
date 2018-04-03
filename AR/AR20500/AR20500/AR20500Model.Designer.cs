@@ -600,80 +600,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="custID">No Metadata Documentation available.</param>
-        /// <param name="iD">No Metadata Documentation available.</param>
-        /// <param name="outletName">No Metadata Documentation available.</param>
-        /// <param name="phone">No Metadata Documentation available.</param>
-        /// <param name="addr1">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR20500_ppCheckCustomerApprove(global::System.String branchID, global::System.String custID, Nullable<global::System.Int32> iD, global::System.String outletName, global::System.String phone, global::System.String addr1)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter custIDParameter;
-            if (custID != null)
-            {
-                custIDParameter = new ObjectParameter("CustID", custID);
-            }
-            else
-            {
-                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
-            }
-    
-            ObjectParameter iDParameter;
-            if (iD.HasValue)
-            {
-                iDParameter = new ObjectParameter("ID", iD);
-            }
-            else
-            {
-                iDParameter = new ObjectParameter("ID", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter outletNameParameter;
-            if (outletName != null)
-            {
-                outletNameParameter = new ObjectParameter("OutletName", outletName);
-            }
-            else
-            {
-                outletNameParameter = new ObjectParameter("OutletName", typeof(global::System.String));
-            }
-    
-            ObjectParameter phoneParameter;
-            if (phone != null)
-            {
-                phoneParameter = new ObjectParameter("Phone", phone);
-            }
-            else
-            {
-                phoneParameter = new ObjectParameter("Phone", typeof(global::System.String));
-            }
-    
-            ObjectParameter addr1Parameter;
-            if (addr1 != null)
-            {
-                addr1Parameter = new ObjectParameter("Addr1", addr1);
-            }
-            else
-            {
-                addr1Parameter = new ObjectParameter("Addr1", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("AR20500_ppCheckCustomerApprove", branchIDParameter, custIDParameter, iDParameter, outletNameParameter, phoneParameter, addr1Parameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
@@ -869,6 +795,102 @@ namespace AR20500
             }
     
             return base.ExecuteFunction<AR20500_pgDetail_Result>("AR20500_pgDetail", branchIDParameter, startDateParameter, endDateParameter, slsperIDParameter, statusParameter, territoryParameter, updateTypeParameter, userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="status">No Metadata Documentation available.</param>
+        /// <param name="handle">No Metadata Documentation available.</param>
+        /// <param name="iD">No Metadata Documentation available.</param>
+        /// <param name="outletName">No Metadata Documentation available.</param>
+        /// <param name="phone">No Metadata Documentation available.</param>
+        /// <param name="addr1">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20500_ppCheckCustomerApprove(global::System.String branchID, global::System.String custID, global::System.String status, global::System.String handle, Nullable<global::System.Int32> iD, global::System.String outletName, global::System.String phone, global::System.String addr1)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter statusParameter;
+            if (status != null)
+            {
+                statusParameter = new ObjectParameter("Status", status);
+            }
+            else
+            {
+                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
+            }
+    
+            ObjectParameter handleParameter;
+            if (handle != null)
+            {
+                handleParameter = new ObjectParameter("Handle", handle);
+            }
+            else
+            {
+                handleParameter = new ObjectParameter("Handle", typeof(global::System.String));
+            }
+    
+            ObjectParameter iDParameter;
+            if (iD.HasValue)
+            {
+                iDParameter = new ObjectParameter("ID", iD);
+            }
+            else
+            {
+                iDParameter = new ObjectParameter("ID", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter outletNameParameter;
+            if (outletName != null)
+            {
+                outletNameParameter = new ObjectParameter("OutletName", outletName);
+            }
+            else
+            {
+                outletNameParameter = new ObjectParameter("OutletName", typeof(global::System.String));
+            }
+    
+            ObjectParameter phoneParameter;
+            if (phone != null)
+            {
+                phoneParameter = new ObjectParameter("Phone", phone);
+            }
+            else
+            {
+                phoneParameter = new ObjectParameter("Phone", typeof(global::System.String));
+            }
+    
+            ObjectParameter addr1Parameter;
+            if (addr1 != null)
+            {
+                addr1Parameter = new ObjectParameter("Addr1", addr1);
+            }
+            else
+            {
+                addr1Parameter = new ObjectParameter("Addr1", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20500_ppCheckCustomerApprove", branchIDParameter, custIDParameter, statusParameter, handleParameter, iDParameter, outletNameParameter, phoneParameter, addr1Parameter);
         }
 
         #endregion
@@ -3135,6 +3157,54 @@ namespace AR20500
         private global::System.String _Mobile;
         partial void OnMobileChanging(global::System.String value);
         partial void OnMobileChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Market
+        {
+            get
+            {
+                return _Market;
+            }
+            set
+            {
+                OnMarketChanging(value);
+                ReportPropertyChanging("Market");
+                _Market = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Market");
+                OnMarketChanged();
+            }
+        }
+        private global::System.String _Market;
+        partial void OnMarketChanging(global::System.String value);
+        partial void OnMarketChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BillMarket
+        {
+            get
+            {
+                return _BillMarket;
+            }
+            set
+            {
+                OnBillMarketChanging(value);
+                ReportPropertyChanging("BillMarket");
+                _BillMarket = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BillMarket");
+                OnBillMarketChanged();
+            }
+        }
+        private global::System.String _BillMarket;
+        partial void OnBillMarketChanging(global::System.String value);
+        partial void OnBillMarketChanged();
 
         #endregion
 

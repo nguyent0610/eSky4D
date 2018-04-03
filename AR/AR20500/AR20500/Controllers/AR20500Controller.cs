@@ -170,7 +170,7 @@ namespace AR20500.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -208,6 +208,7 @@ namespace AR20500.Controllers
                 if (!access.Update && !access.Insert)
                     throw new MessageException(MessageType.Message, "728");
                 string handle = data["cboHandle"];
+                string status = data["cboStatus"];
                 string custlist = "";
                 List<string> lstCustHT = new List<string>();
 
@@ -288,18 +289,27 @@ namespace AR20500.Controllers
                             }
                             
                             var callAfterApprove = objNew.UpdateType == 0;
+
+                            string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID, status, handle, item.ID, item.OutletName, item.Phone, item.Addr1).FirstOrDefault();
+                            if (cust.PassNull() != "")
+                            {
+                                custlist += cust.TrimEnd(',') + ",";
+                                _db.Dispose();
+                                continue;
+                                //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
+                            }
                             
                             if (handle == "A")
                             {
                                 #region -Duyệt update KH qua AR_Customer...-                                                                
-                                string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID,item.ID,item.OutletName,item.Phone,item.Addr1).FirstOrDefault();
-                                if (cust.PassNull() != "")
-                                {
-                                    custlist += cust.TrimEnd(',') + ",";
-                                    _db.Dispose();
-                                    continue;
-                                    //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
-                                }                                         
+                                //string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID,item.ID,item.OutletName,item.Phone,item.Addr1).FirstOrDefault();
+                                //if (cust.PassNull() != "")
+                                //{
+                                //    custlist += cust.TrimEnd(',') + ",";
+                                //    _db.Dispose();
+                                //    continue;
+                                //    //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
+                                //}                                         
                                 //if (item.ERPCustID.PassNull() != "" )
                                 //{
                                 //    string custERP = item.ERPCustID.PassNull().ToUpper().Trim();
