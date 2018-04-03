@@ -1,6 +1,6 @@
 //// Declare //////////////////////////////////////////////////////////
 var keys = ['ScreenNumber'];
-var fieldsCheckRequire = ["ScreenNumber"];
+var fieldsCheckRequire = ["ScreenNumber", "Descr"];
 var fieldsLangCheckRequire = ["ScreenNumber", "Descr"];
 
 var _Source = 0;
@@ -62,6 +62,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                
                 if (HQ.store.checkRequirePass(App.stoApp_ScreenSummary, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
@@ -171,5 +172,28 @@ function refresh(item) {
         HQ.isChange = false;
         HQ.isFirstLoad = true;
         App.stoApp_ScreenSummary.reload();
+    }
+};
+
+
+var onShow = function (toolTip, grid, isHtmlEncode) {
+    var view = grid.getView(),
+        store = grid.getStore(),
+        record = view.getRecord(view.findItemByChild(toolTip.triggerElement)),
+        column = view.getHeaderByCell(toolTip.triggerElement),
+        data = record.get(column.dataIndex);
+
+    if (data) {
+        var viewData = data;
+
+        if (isHtmlEncode) {
+            toolTip.update(Ext.util.Format.htmlEncode(viewData));
+        }
+        else {
+            toolTip.update(viewData);
+        }
+    }
+    else {
+        toolTip.hide();
     }
 };

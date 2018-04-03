@@ -48,9 +48,8 @@
             .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdApp_ScreenSummary');")
             .SortableColumns(false)
             .ColumnModel(
-                X.RowNumbererColumn().Width(40)
-                ,
-                X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(200)
+                X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+                ,X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(200)
                 .Editor(HQ.Combo().ID("cboScreen").Name("cboScreen").HQDBSys(false).HQProcedure("SA03600_pcScreen").HQAutoLoad(true)
                     .HQColumnShow("ScreenNumber,Descr")
                     .DisplayField("ScreenNumber")
@@ -72,7 +71,7 @@
                     X.Column().Text(Util.GetLang("DescrScreen")).DataIndex("Descr_Screen").Width(200)
                     //.Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
                     ,
-                    X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
+                    X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(500)
                     .Editor(X.TextField())//.MaxLength().EnforceMaxLength(true))
                 , X.CommandColumn().Width(150)
                 .Commands(
@@ -126,7 +125,14 @@
 
         ).Listeners(lst =>
         {
-            lst.Render.Handler = "HQ.common.control_render(this,'grdApp_Territory')";
+            lst.Render.Handler = "HQ.common.control_render(this,'grdApp_ScreenSummary')";
         })
     )
 ))
+
+@(X.ToolTip().Target("App.grdApp_ScreenSummary.getView().el")
+    .Delegate(".x-grid-cell")
+    .TrackMouse(true)
+    .Listeners(lst => lst.Show.Handler = "onShow(this, App.grdApp_ScreenSummary);"))
+
+
