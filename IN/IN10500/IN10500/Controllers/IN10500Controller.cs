@@ -59,7 +59,7 @@ namespace IN10500.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -80,6 +80,7 @@ namespace IN10500.Controllers
         [DirectMethod]
         public ActionResult IN10500_pdCheckCreateIN_Tag(string BranchID, string SiteID, string ClassID)
         {
+            _app.CommandTimeout = int.MaxValue;
             var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID,ClassID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();            
             return this.Direct(chkINTag);
         }
