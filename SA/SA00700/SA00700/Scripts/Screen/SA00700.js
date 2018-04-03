@@ -359,3 +359,38 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
+
+var onShow = function (toolTip, grid, isHtmlEncode) {
+    var view = grid.getView(),
+        store = grid.getStore(),
+        record = view.getRecord(view.findItemByChild(toolTip.triggerElement)),
+        column = view.getHeaderByCell(toolTip.triggerElement),
+        data = record.get(column.dataIndex);
+
+    if (data) {
+        var viewData = data;
+        //if (column.dataIndex == 'VisitDate' || column.dataIndex == 'SyncDate') {
+        //    viewData = Ext.Date.format(data, HQ.formatDateJS + ' H:i');
+        //} else if (column.dataIndex == 'Distance') {
+        //    viewData = Ext.util.Format.number(data, '0,000');
+        //}
+        //else if (column.dataIndex == 'TGCICO') {
+        //    viewData = Ext.util.Format.number(data, '0,000');
+        //}
+        //else if (column.dataIndex == 'Amt') {
+        //    viewData = Ext.util.Format.number(data, '0,000');
+        //}
+        //else if (column.dataIndex == "TGCICO") {
+        //    return Ext.util.Format.number(value, '0,000');
+        //}
+        if (isHtmlEncode) {
+            toolTip.update(Ext.util.Format.htmlEncode(viewData));
+        }
+        else {
+            toolTip.update(viewData);
+        }
+    }
+    else {
+        toolTip.hide();
+    }
+};

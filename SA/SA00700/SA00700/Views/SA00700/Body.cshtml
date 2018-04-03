@@ -264,3 +264,7 @@
     )//frm Main
 )//View port
 )
+@(X.ToolTip().Target("App.grdSYS_AccessDetRights.getView().el")
+    .Delegate(".x-grid-cell")
+    .TrackMouse(true)
+        .Listeners(lst => lst.Show.Handler = "onShow(this, App.grdSYS_AccessDetRights);"))
