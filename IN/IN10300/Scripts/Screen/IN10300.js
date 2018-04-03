@@ -575,13 +575,16 @@ var cboReasonCD_Change = function (item, newValue, oldValue) {
         App.btnLoad.setVisible(true);
         App.cboAdvanceType.allowBlank = false;
         App.btnLoad.disable();
+        App.frmMain.isValid();
     }
     else {
         App.cboAdvanceType.setVisible(false);
         App.btnLoad.setVisible(false);
         App.cboAdvanceType.allowBlank = true;
+        App.frmMain.isValid();
     }
-    App.frmMain.isValid();
+    App.cboAdvanceType.isValid();
+   // App.frmMain.isValid();
 
 }
 
@@ -991,7 +994,7 @@ var bindBatch = function (record) {
         //App.cboReasonCD.setValue('');
         App.cboReasonCD.setReadOnly(HQ.readOnlyReasonCD);
     }
-    if (App.cboReasonCD.getValue() == 'TU') {
+    if (App.cboReasonCD.getValue() == 'TU' && !HQ.hideWarehouss) {
         App.cboAdvanceType.allowBlank = false;
     }
     if (App.cboReasonCD.getValue() != 'TU') {
@@ -1519,12 +1522,12 @@ var checkExitEdit = function (row) {
             site.InvtID = trans.InvtID;
         }
 
-        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
-            trans.UnitPrice = site.AvgCost;
-        }
-        else {
+        //if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+        //    trans.UnitPrice = site.AvgCost;
+        //}
+        //else {
             trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
-        }
+        //}
         trans.TranAmt = trans.Qty * trans.UnitPrice;
 
         getQtyAvail(row.record);
@@ -1913,14 +1916,24 @@ var btnImport_Click = function (sender, e) {
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
                 if (!Ext.isEmpty(this.result.data.message)) {
-                    HQ.message.show('2013103001', [this.result.data.message], '', true);
+                    var result = "<div style ='overflow: auto !important; min-width:400px !important; max-height:400px !important'> " + this.result.data.message + " </div>";
+                    HQ.message.show(20410, [result], '', true);
+                    //HQ.message.show('2013103001', [this.result.data.message], '', true);
                 }
                 else {
                     HQ.message.process(msg, data, true);
                 }
             },
             failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
+                if (data.res) {
+                    //HQ.message.show(20410, [message], "", true);
+                    var result = "<div style ='overflow: auto !important; min-width:400px !important; max-height:400px !important'> " + data.result.message + " </div>";
+
+                    HQ.message.show(20410, [result], '', true);
+                } else {
+                    HQ.message.show(8009, [message], "", true);
+                }
+               // HQ.message.process(msg, data, true);
             }
         });
     }

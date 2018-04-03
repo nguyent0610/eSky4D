@@ -476,7 +476,7 @@ namespace IN10300.Controllers
                     string lstInvtID = "";
                     foreach (var item in _lstTrans)
                     {
-                        lstInvtID = lstInvtID + item.InvtID + "@#@#" + item.Qty + "@#@#" + item.UnitDesc;
+                        lstInvtID = lstInvtID + item.InvtID + "@#@#" + item.Qty + "@#@#" + item.UnitDesc +",";
                     }
                     string messageerorr="";
                     var checkQty = _app.IN10300_pdCheckQtyInvtInGrd(lstInvtID, _objBatch.SiteID, _objBatch.ToSiteID, _objBatch.BranchID, periodID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
@@ -1249,18 +1249,18 @@ namespace IN10300.Controllers
                     {
                         Worksheet workSheet = workbook.Worksheets[0];
 
-                        if (workSheet.Cells[0, 0].StringValue.Trim() != Util.GetLang("IN10300ListDiscSeq")
-                          || workSheet.Cells[0, 1].StringValue.Trim() != Util.GetLang("IN10300BranchID")
-                          || workSheet.Cells[0, 2].StringValue.Trim() != Util.GetLang("IN10300RefBatNbr")
-                          || workSheet.Cells[0, 3].StringValue.Trim() != Util.GetLang("IN10300BatchDr")
-                          || workSheet.Cells[0, 4].StringValue.Trim() != Util.GetLang("IN10300Comment")
-                          || workSheet.Cells[0, 8].StringValue.Trim() != Util.GetLang("IN10300InvtID")
-                          || workSheet.Cells[0, 9].StringValue.Trim() != Util.GetLang("IN10300QtyMaximum")
-                          || workSheet.Cells[0, 10].StringValue.Trim() != Util.GetLang("IN10300QtyTU")
-                          )
-                        {
-                            throw new MessageException(MessageType.Message, "148");
-                        }
+                        //if (workSheet.Cells[0, 0].StringValue.Trim() != Util.GetLang("IN10300ListDiscSeq")
+                        //  || workSheet.Cells[0, 1].StringValue.Trim() != Util.GetLang("IN10300BranchID")
+                        //  || workSheet.Cells[0, 2].StringValue.Trim() != Util.GetLang("IN10300RefBatNbr")
+                        //  || workSheet.Cells[0, 3].StringValue.Trim() != Util.GetLang("IN10300BatchDr")
+                        //  || workSheet.Cells[0, 4].StringValue.Trim() != Util.GetLang("IN10300Comment")
+                        //  || workSheet.Cells[0, 8].StringValue.Trim() != Util.GetLang("IN10300InvtID")
+                        //  || workSheet.Cells[0, 9].StringValue.Trim() != Util.GetLang("IN10300QtyMaximum")
+                        //  || workSheet.Cells[0, 10].StringValue.Trim() != Util.GetLang("IN10300QtyTU")
+                        //  )
+                        //{
+                        //    throw new MessageException(MessageType.Message, "148");
+                        //}
 
                         string listDiscSeq = string.Empty;
                         string branchID = string.Empty;
@@ -1279,6 +1279,7 @@ namespace IN10300.Controllers
                         for (int i = 1; i <= workSheet.Cells.MaxDataRow; i++)
                         {
                             bool flagCheck = false;
+                            bool checkTU = false;
                             listDiscSeq = workSheet.Cells[i, 0].StringValue.PassNull();
                             branchID = workSheet.Cells[i, 1].StringValue.PassNull();
                             refBatNbr = workSheet.Cells[i, 2].StringValue.PassNull();
@@ -1289,6 +1290,7 @@ namespace IN10300.Controllers
                                 && workSheet.Cells[i, 7].StringValue.PassNull() == "" && workSheet.Cells[i, 10].StringValue.PassNull() == "" && workSheet.Cells[i, 11].StringValue.PassNull() == "")
                                 continue;
                             //check ngày chuyển kho
+
                             try
                             {
                                 RcptDate = workSheet.Cells[i, 5].DateTimeValue;
@@ -1296,6 +1298,25 @@ namespace IN10300.Controllers
                             catch
                             {
                                 errorRcptDate += (i + 1).ToString() + ",";
+                                flagCheck = true;
+                            }
+
+                            try
+                            {
+                                qtyTU = workSheet.Cells[i, 10].DoubleValue;
+                                if (qtyTU < 0)
+                                {
+                                    errorqtyTU += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                }
+                                else
+                                {
+                                    checkTU = true;
+                                }
+                            }
+                            catch
+                            {
+                                errorqtyTU += (i + 1).ToString() + ",";
                                 flagCheck = true;
                             }
                             //check từ ngày
@@ -1310,37 +1331,44 @@ namespace IN10300.Controllers
                             }
 
                             //check đến ngày
-                            try
+
+                            if (checkTU)
                             {
-                                toDate = workSheet.Cells[i, 7].DateTimeValue;
-                                if ((toDate.Month < DateTime.Now.Month) && toDate.Year<=DateTime.Now.Year)
+                                if (qtyTU > 0)
                                 {
-                                    errortoDate += (i + 1).ToString() + ",";
-                                    flagCheck = true;
-                                }
-                                else
-                                {
-                                    if (fromDate.ToDateShort() > toDate.ToDateShort())
+                                    try
+                                    {
+                                        toDate = workSheet.Cells[i, 7].DateTimeValue;
+                                        if ((toDate.Month < DateTime.Now.Month) && toDate.Year <= DateTime.Now.Year)
+                                        {
+                                            errortoDate += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                        else
+                                        {
+                                            if (fromDate.ToDateShort() > toDate.ToDateShort())
+                                            {
+                                                errortoDate += (i + 1).ToString() + ",";
+                                                flagCheck = true;
+                                            }
+                                        }
+                                    }
+                                    catch
                                     {
                                         errortoDate += (i + 1).ToString() + ",";
                                         flagCheck = true;
                                     }
-                                }
-                            }
-                            catch
-                            {
-                                errortoDate += (i + 1).ToString() + ",";
-                                flagCheck = true;
-                            }
 
-                            if (flagCheck == false)
-                            {
-                                if (RcptDate.ToDateShort() > toDate.ToDateShort() || RcptDate.ToDateShort() < fromDate.ToDateShort())
-                                {
-                                    errorRcptDate += (i + 1).ToString() + ",";
-                                    flagCheck = true;
-                                }
-                            }
+                                    if (flagCheck == false)
+                                    {
+                                        if (RcptDate.ToDateShort() > toDate.ToDateShort() || RcptDate.ToDateShort() < fromDate.ToDateShort())
+                                        {
+                                            errorRcptDate += (i + 1).ToString() + ",";
+                                            flagCheck = true;
+                                        }
+                                    }
+                                }                                
+                            }                            
 
                             try
                             {
@@ -1357,20 +1385,7 @@ namespace IN10300.Controllers
                                 flagCheck = true;
                             }
 
-                            try
-                            {
-                                qtyTU = workSheet.Cells[i, 10].DoubleValue;
-                                if (qtyTU < 0)
-                                {
-                                    errorqtyTU += (i + 1).ToString() + ",";
-                                    flagCheck = true;
-                                }
-                            }
-                            catch
-                            {
-                                errorqtyTU += (i + 1).ToString() + ",";
-                                flagCheck = true;
-                            }
+                            
 
                             //Kiểm tra tính đúng đắng của dữ liệu
                             if (lstBranchID != null)
@@ -1484,7 +1499,17 @@ namespace IN10300.Controllers
                                                 lstHeader[j].LstDiscSep = listDiscSeq;
                                             }
                                         }
-                                    }                                    
+                                    }
+                                    if (tam.RefBatNbr == "" && refBatNbr != "")
+                                    {
+                                        for (int j = 0; j < lstHeader.Count; j++)
+                                        {
+                                            if (lstHeader[j].RcptDate == RcptDate.ToDateShort() && lstHeader[j].BranchID == branchID && lstHeader[j].ToDate.ToDateShort() == toDate.ToDateShort() && lstHeader[j].FromDate.ToDateShort() == fromDate.ToDateShort())
+                                            {
+                                                lstHeader[j].RefBatNbr = refBatNbr;
+                                            }
+                                        }
+                                    } 
                                 }
                                 var objtem = lstDeatail2.FirstOrDefault(p => p.InvtID == invtID && p.BranchID == branchID);
                                 if (objtem != null)
@@ -1546,7 +1571,7 @@ namespace IN10300.Controllers
                         message = errorBranch == "" ? "" : string.Format(Message.GetString("2018003314", null), Util.GetLang("IN10300BranchID"), errorBranch,errorbranchID,Current.UserName, null);
                         message += errorbatchDr == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("IN10300BatchDr"), errorbatchDr);
                         message += errorcomment == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("IN10300Comment"), errorcomment);
-                        message += errorRcptDate == "" ? "" : string.Format(Message.GetString("2018032912", null), Util.GetLang("Warehousetransfer"), errorRcptDate);
+                        message += errorRcptDate == "" ? "" : string.Format(Message.GetString("2018032912", null), Util.GetLang("IN10300RcptDate"), errorRcptDate);
                         message += errorfromDate == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("IN10300FromDate"), errorfromDate);
                         message += errortoDate == "" ? "" : string.Format(Message.GetString("2018003313", null), Util.GetLang("IN10300ToDate"), errortoDate);
                         message += errorinvtID == "" ? "" : string.Format(Message.GetString("2018032911", null), Util.GetLang("IN10300InvtID"), errorinvtID);                       
@@ -1584,8 +1609,8 @@ namespace IN10300.Controllers
                                 {
                                    
                                     var itemsite = lstGetcheckSite.Where(p => p.BranchID == item.BranchID).FirstOrDefault();
-                                    var lstItem = lstDeatail.Where(p => p.LineRef == item.LineRef && p.BranchID == item.BranchID && p.Qty>0).ToList();
-                                    if (lstItem != null)
+                                    var lstItem = lstDeatail.Where(p => p.LineRef == item.LineRef && p.BranchID == item.BranchID).ToList();
+                                    if (lstItem.Count > 0)
                                     {
                                         var lstinvtid = "";
                                         var lstinvtidqty = "";
@@ -1618,33 +1643,44 @@ namespace IN10300.Controllers
                                             messageerorr += string.Format(Message.GetString("2018033018", null), check.InvtID,itemsite.BranchID , itemsite.ToSiteID);
                                             throw new MessageException(MessageType.Message, "20410", "", new string[] { messageerorr });
                                         }
-                                        _app = Util.CreateObjectContext<IN10300Entities>(false);
-                                        Save_BatchImport(itemsite, item, lstinvtid);
-                                        _app.SaveChanges();
+                                        var tam = lstItem.Where(p => p.BranchID == item.BranchID && p.LineRef == item.LineRef && p.Qty > 0).ToList();
 
-                                        DataAccess dal = Util.Dal();
-                                        INProcess.IN inventory = new INProcess.IN(Current.UserName, _screenNbr, dal);
-                                        try
+                                        if (tam.Count > 0)
                                         {
-                                            dal.BeginTrans(IsolationLevel.ReadCommitted);
-                                            inventory.IN10300_Release(item.BranchID, _batNbr);
-                                            inventory = null;
-                                            dal.CommitTrans();
-                                        }
-                                        catch (Exception)
-                                        {
-                                            var lstIN_Transfer = _app.IN_Transfer.Where(p => p.BranchID == item.BranchID && p.BatNbr == _batNbr).ToList();
-                                            var lstIN_Trans = _app.IN_Trans.Where(p => p.BranchID == item.BranchID && p.BatNbr == _batNbr).ToList();
-                                            var lstIN_LotTrans = _app.IN_LotTrans.Where(p => p.BranchID == item.BranchID && p.BatNbr == _batNbr).ToList();
-                                            UpdateDataErroReleas(item.BranchID, _batNbr, lstIN_Transfer, lstIN_Trans, lstIN_LotTrans, true);
+                                            string lstinvtid1 = string.Empty;
+                                            foreach (var cur in tam)
+                                            {
+                                                lstinvtid1 = lstinvtid1 + cur.InvtID + "@#@#" + cur.QtyMax + "@#@#" + cur.Qty + "@#@#" + cur.UOM + ",";
+                                            }
+                                            _app = Util.CreateObjectContext<IN10300Entities>(false);
+                                            Save_BatchImport(itemsite, item, lstinvtid1);
                                             _app.SaveChanges();
-                                            throw;
+
+                                            DataAccess dal = Util.Dal();
+                                            INProcess.IN inventory = new INProcess.IN(Current.UserName, _screenNbr, dal);
+                                            try
+                                            {
+                                                dal.BeginTrans(IsolationLevel.ReadCommitted);
+                                                inventory.IN10300_Release(item.BranchID, _batNbr);
+                                                inventory = null;
+                                                dal.CommitTrans();
+                                            }
+                                            catch (Exception)
+                                            {
+                                                var lstIN_Transfer = _app.IN_Transfer.Where(p => p.BranchID == item.BranchID && p.BatNbr == _batNbr).ToList();
+                                                var lstIN_Trans = _app.IN_Trans.Where(p => p.BranchID == item.BranchID && p.BatNbr == _batNbr).ToList();
+                                                var lstIN_LotTrans = _app.IN_LotTrans.Where(p => p.BranchID == item.BranchID && p.BatNbr == _batNbr).ToList();
+                                                UpdateDataErroReleas(item.BranchID, _batNbr, lstIN_Transfer, lstIN_Trans, lstIN_LotTrans, true);
+                                                _app.SaveChanges();
+                                                throw;
+                                            }
+                                            finally
+                                            {
+                                                dal = null;
+                                                inventory = null;
+                                            } 
                                         }
-                                        finally
-                                        {
-                                            dal = null;
-                                            inventory = null;
-                                        } 
+                                        
                                     }
                                                                        
                                 }                             
@@ -1847,12 +1883,12 @@ namespace IN10300.Controllers
                 t.Crtd_User = Current.UserName;
                 t.Crtd_DateTime = DateTime.Now;
             }
-            Double tong = 100;// _lstItemTrans.Sum(x => x.Qty * x.Price);
+            Double tong = _lstItemTrans.Sum(x => x.Qty * x.Price);
             t.JrnlType = "IN";
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = Current.UserName;
-            t.DateEnt = DateTime.Now.ToDateShort();
+            t.DateEnt = inputHeader.RcptDate.ToDateShort();
             t.Descr = inputHeader.Descr;
             t.EditScrnNbr = t.EditScrnNbr.PassNull() == string.Empty ? _screenNbr : t.EditScrnNbr;
             t.NoteID = 0;
@@ -1877,7 +1913,8 @@ namespace IN10300.Controllers
                 t.Crtd_User = Current.UserName;
                 t.Crtd_DateTime = DateTime.Now;
             }
-            t.RcptBatNbr = itemHeader.RefBatNbr;
+            t.RcptBatNbr = "";
+            t.RefBatNbr = itemHeader.RefBatNbr;
             t.ListDiscSeq = itemHeader.LstDiscSep;
             t.NoteID = 0;
             t.AdvanceType = null;
@@ -1977,7 +2014,7 @@ namespace IN10300.Controllers
                     var objTransfer = _app.IN_Transfer.FirstOrDefault(p => p.BranchID == objIN_Transfer.BranchID && p.BatNbr == objIN_Transfer.BatNbr && p.TrnsfrDocNbr == objIN_Transfer.TrnsfrDocNbr);
                     if (objTransfer != null)
                     {
-                        objTransfer.Status = "V";
+                        objTransfer.Status = "R";
                     }
                 }
 
