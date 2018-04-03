@@ -1085,7 +1085,7 @@ var Main = {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
             if (e.field == "PerStockAdvance" || e.field == "QtyLimit") {
                 var tam = 0;
-                tam = (e.record.data.QtyLimit * e.record.data.PerStockAdvance) / 100;
+                tam = Math.floor((e.record.data.QtyLimit * e.record.data.PerStockAdvance) / 100);
                 e.record.set("QtyStockAdvance", tam);
             }
 
@@ -1178,17 +1178,17 @@ var Main = {
                 }
 
             }
-            if (e.field == "GroupItem") {
-                var regex = / ^(\w*(\d|[a-zA-Z]))[\_\-\(\)]*$/
-                if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
-                if (isCheckSpecialChar) {
-                    if (e.value)
-                        if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
-                            HQ.message.show(2018032517, e.column.text);
-                            return false;
-                        }
-                }
-            }            
+            //if (e.field == "GroupItem") {
+            //    //var regex = / ^(\w*(\d|[a-zA-Z]))[\_\-\(\)]*$/
+            //    if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
+            //    if (isCheckSpecialChar) {
+            //        if (e.value)
+            //            if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+            //                HQ.message.show(2018032517, e.column.text);
+            //                return false;
+            //            }
+            //    }
+            //}            
         },
 
         grdDiscItem_validateEdit: function (item, e) {

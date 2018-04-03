@@ -3483,7 +3483,7 @@ namespace OM21100.Controllers
             SetCellValueGrid(SheetData2.Cells["E1"], Util.GetLang("PerStockAdvance"), TextAlignmentType.Center, TextAlignmentType.Left);
             SetCellValueGrid(SheetData2.Cells["F1"], Util.GetLang("QtyStockAdvance"), TextAlignmentType.Center, TextAlignmentType.Left);
 
-            string formulaQtyStockAdvance = string.Format("={0}*{1}", "D2", "E2");
+            string formulaQtyStockAdvance = string.Format("=Int(({0}*{1})/1)", "D2", "E2");
             SheetData2.Cells["F2"].SetSharedFormula(formulaQtyStockAdvance, 1, 1);
 
             SheetData2.Cells.SetRowHeight(0, 45);
@@ -3532,7 +3532,7 @@ namespace OM21100.Controllers
             {
                 a = "D" + i;
                 b = "E" + i;
-                var formulaQtyStockAdvance1 = string.Format("={0}*{1}", a, b);
+                var formulaQtyStockAdvance1 = string.Format("=Int({0}*{1})", a, b);
                 SheetData2.Cells["F"+i].SetSharedFormula(formulaQtyStockAdvance1, 1, 1);
             }
 
@@ -3540,7 +3540,7 @@ namespace OM21100.Controllers
 
             style = SheetData2.Cells["F2"].GetStyle();
             style.IsLocked = true;
-            style.Number = 2;
+            style.Number = 3;
             range = SheetData2.Cells.CreateRange("F2", "F" + (1000));
             range.SetStyle(style);
         }
