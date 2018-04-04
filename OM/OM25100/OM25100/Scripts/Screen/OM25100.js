@@ -452,7 +452,7 @@ var menuClick = function (command) {
                         if (HQ.store.checkRequirePass(App.stoOM_KPICustomer_All, keys6, fieldsCheckRequire6, fieldsLangCheckRequire6)) {
                             if (App.stoOM_KPICustomer_All.data.length > 0) {
                                 if (!Ext.isEmpty(App.stoOM_KPICustomer_All.data.items[0].data.BranchID)
-                                   // && !Ext.isEmpty(App.stoOM_KPICustomer_All.data.items[0].data.SlsperId)
+                                   //&& !Ext.isEmpty(App.stoOM_KPICustomer_All.data.items[0].data.SlsperId)
                                     && !Ext.isEmpty(App.stoOM_KPICustomer_All.data.items[0].data.CustID)) {
                                     isError = false;
                                 }
@@ -2097,7 +2097,11 @@ var grdOM_KPICustomer_All_Edit = function (item, e) {
 
 var grdOM_KPICustomer_All_ValidateEdit = function (item, e) {
     if (e.record.data.BranchID && e.record.data.BranchID != "") {
-        return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_All, e, keys6, false);
+        if (e.field == "CustID" && e.value != "") {
+            var obj = HQ.store.findInStore(App.stoOM_KPICustomer_All, ['BranchID', 'SlsperId', 'CustID'], [e.record.data.BranchID, e.record.data.SlsperId, e.value]);
+            if(obj != undefined)
+                return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_All, e, keys6, false);
+        }
     }
     
 };
@@ -2124,6 +2128,7 @@ var grdOM_KPICustomer_All_BeforeEdit = function (editor, e) {
         _branchID = e.record.data.BranchID;
         if (e.field == 'SlsperId') {
             if (e.record.data.BranchID != '' && e.record.data.CustID == '') {
+                App.cboSlsperIdCust.store.reload();
                 return true;
             }
             if (e.record.data.BranchID == '' || e.record.data.BranchID != '' && e.record.data.CustID != '') {
@@ -2285,7 +2290,16 @@ var grdKPICustomerClass_Edit = function (item, e) {
 
 var grdKPICustomerClass_ValidateEdit = function (item, e) {
     if (e.record.data.BranchID && e.record.data.BranchID != "") {
-        return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Class, e, keys7, false);
+        if (e.record.data.CustID != "" && e.field == "ClassID") {
+            var obj = HQ.store.findInStore(App.stoOM_KPICustomer_Class, ['BranchID', 'SlsperId', 'CustID', 'ClassID'], [e.record.data.BranchID, e.record.data.SlsperId, e.record.data.CustID, e.value]);
+            if (obj != undefined)
+                return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Class, e, keys7, false);
+        }
+        if (e.record.data.ClassID != "" && e.field == "CustID") {
+            var obj = HQ.store.findInStore(App.stoOM_KPICustomer_Class, ['BranchID', 'SlsperId', 'CustID', 'ClassID'], [e.record.data.BranchID, e.record.data.SlsperId, e.value, e.record.data.ClassID]);
+            if (obj != undefined)
+                return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Class, e, keys7, false);
+        }
     }
     //return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Class, e, keys7);
 };
@@ -2374,7 +2388,16 @@ var grdKPICustomerInvt_Edit = function (item, e) {
 
 var grdKPICustomerinvt_ValidateEdit = function (item, e) {
     if (e.record.data.BranchID && e.record.data.BranchID != "") {
-        return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Invt, e, keys8, false);
+        if (e.record.data.CustID != "" && e.field == "InvtID") {
+            var obj = HQ.store.findInStore(App.stoOM_KPICustomer_Invt, ['BranchID', 'SlsperId', 'CustID', 'InvtID'], [e.record.data.BranchID, e.record.data.SlsperId, e.record.data.CustID, e.value]);
+            if (obj != undefined)
+                return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Invt, e, keys8, false);
+        }
+        if (e.record.data.InvtID != "" && e.field == "CustID") {
+            var obj = HQ.store.findInStore(App.stoOM_KPICustomer_Invt, ['BranchID', 'SlsperId', 'CustID', 'InvtID'], [e.record.data.BranchID, e.record.data.SlsperId, e.value, e.record.data.InvtID]);
+            if (obj != undefined)
+                return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Invt, e, keys8, false);
+        }
     }
     //return HQ.grid.checkValidateEdit(App.grdOM_KPICustomer_Invt, e, keys5);
 };

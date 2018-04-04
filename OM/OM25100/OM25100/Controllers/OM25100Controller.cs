@@ -47,7 +47,7 @@ namespace OM25100.Controllers
             return View();
         }
         
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -547,15 +547,15 @@ namespace OM25100.Controllers
 				foreach (OM25100_pgKPICustomer_All_Result del in stoOM_KPICustomer_All.Deleted)
 				{
 					if (stoOM_KPICustomer_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == del.KPI.ToUpper()&&p.CustID.ToUpper()==del.CustID.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+						&& p.KPI.ToUpper() == del.KPI.ToUpper()&&p.CustID.ToUpper()==del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
 					{
 						stoOM_KPICustomer_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
 					}
 					else
 					{
 						var objDel = _db.OM_KPICustomer_All.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper()).FirstOrDefault();
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
 						if (objDel != null)
 						{
 							_db.OM_KPICustomer_All.DeleteObject(objDel);
@@ -570,7 +570,7 @@ namespace OM25100.Controllers
 					if (curItem.BranchID.PassNull() == "" || curItem.CustID == "") continue;
 
 					var objCountry = _db.OM_KPICustomer_All.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper()).FirstOrDefault();
+						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
 
 					if (objCountry != null)
 					{
@@ -599,15 +599,15 @@ namespace OM25100.Controllers
 				foreach (OM25100_pgKPICustomer_Class_Result del in stoOM_KPICustomer_Class.Deleted)
 				{
 					if (stoOM_KPICustomer_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+						&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
 					{
 						stoOM_KPICustomer_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
 					}
 					else
 					{
 						var objDel = _db.OM_KPICustomer_Class.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).FirstOrDefault();
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
 						if (objDel != null)
 						{
 							_db.OM_KPICustomer_Class.DeleteObject(objDel);
@@ -620,7 +620,7 @@ namespace OM25100.Controllers
                     if (curItem.BranchID.PassNull() == "" || curItem.CustID == "" || curItem.ClassID == "") continue;
 
 					var objCountry = _db.OM_KPICustomer_Class.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.ClassID.ToUpper() == curItem.ClassID.ToUpper()).FirstOrDefault();
+						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.ClassID.ToUpper() == curItem.ClassID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
 
 					if (objCountry != null)
 					{
@@ -649,15 +649,15 @@ namespace OM25100.Controllers
 				foreach (OM25100_pgKPICustomer_Invt_Result del in stoOM_KPICustomer_Invt.Deleted)
 				{
 					if (stoOM_KPICustomer_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+						&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper() && p.SlsperId.ToUpper() == p.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
 					{
 						stoOM_KPICustomer_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
 					}
 					else
 					{
 						var objDel = _db.OM_KPICustomer_Invt.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).FirstOrDefault();
+							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
 						if (objDel != null)
 						{
 							_db.OM_KPICustomer_Invt.DeleteObject(objDel);
@@ -670,7 +670,7 @@ namespace OM25100.Controllers
 					if (curItem.BranchID.PassNull() == "" || curItem.CustID == "" || curItem.InvtID == "") continue;
 
 					var objCountry = _db.OM_KPICustomer_Invt.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.InvtID.ToUpper() == curItem.InvtID.ToUpper()).FirstOrDefault();
+						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.InvtID.ToUpper() == curItem.InvtID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
 
 					if (objCountry != null)
 					{
@@ -976,11 +976,12 @@ namespace OM25100.Controllers
 				t.KPI = s.KPI;
 				t.BranchID = s.BranchID;				
 				t.CustID = s.CustID;
+                t.SlsperId = s.SlsperId;
 				t.Crtd_DateTime = DateTime.Now;
 				t.Crtd_Prog = _screenNbr;
 				t.Crtd_User = _userName;
 			}
-            t.SlsperId = s.SlsperId;
+
 			t.Target = s.Target;
 			t.LUpd_DateTime = DateTime.Now;
 			t.LUpd_Prog = _screenNbr;
@@ -1036,11 +1037,12 @@ namespace OM25100.Controllers
 				t.BranchID = s.BranchID;
 				t.CustID = s.CustID;				
 				t.ClassID = s.ClassID;
+                t.SlsperId = s.SlsperId;
 				t.Crtd_DateTime = DateTime.Now;
 				t.Crtd_Prog = _screenNbr;
 				t.Crtd_User = _userName;
 			}
-            t.SlsperId = s.SlsperId;
+
 			t.Target = s.Target;
 			t.LUpd_DateTime = DateTime.Now;
 			t.LUpd_Prog = _screenNbr;
@@ -1056,11 +1058,12 @@ namespace OM25100.Controllers
 				t.BranchID = s.BranchID;
 				t.CustID = s.CustID;				
 				t.InvtID = s.InvtID;
+                t.SlsperId = s.SlsperId;
 				t.Crtd_DateTime = DateTime.Now;
 				t.Crtd_Prog = _screenNbr;
 				t.Crtd_User = _userName;
 			}
-            t.SlsperId = s.SlsperId;
+
 			t.Target = s.Target;
 			t.LUpd_DateTime = DateTime.Now;
 			t.LUpd_Prog = _screenNbr;
@@ -1924,14 +1927,14 @@ namespace OM25100.Controllers
                                     var recordExists_OM_KPICustomer_All = lstOM_KPICustomer_All.FirstOrDefault(p => p.CycleNbr == CycleNbr
                                                                                                                 && p.KPI == KPI
                                                                                                                 && p.BranchID == BranchID
-                                                                                                              //  && p.SlsperId == SlsperID
+                                                                                                                && p.SlsperId == SlsperID
                                                                                                                 && p.CustID == CustID);
                                     if (recordExists_OM_KPICustomer_All == null)
                                     {
                                         var recordItem = _db.OM_KPICustomer_All.FirstOrDefault(p => p.CycleNbr == CycleNbr
                                                                                                 && p.KPI == KPI
                                                                                                 && p.BranchID == BranchID
-                                                                                             //   && p.SlsperId == SlsperID
+                                                                                                && p.SlsperId == SlsperID
                                                                                                 && p.CustID == CustID);
 
                                         if (recordItem == null)
@@ -1962,7 +1965,7 @@ namespace OM25100.Controllers
                                     var recordExists_OM_KPICustomer_Invt = lstOM_KPICustomer_Invt.FirstOrDefault(p => p.CycleNbr == CycleNbr
                                                                                                                 && p.KPI == KPI
                                                                                                                 && p.BranchID == BranchID
-                                                                                                               // && p.SlsperId == SlsperID
+                                                                                                                && p.SlsperId == SlsperID
                                                                                                                 && p.CustID == CustID
                                                                                                                 && p.InvtID == InvtID);
                                     if (recordExists_OM_KPICustomer_Invt == null)
@@ -1970,7 +1973,7 @@ namespace OM25100.Controllers
                                         var recordItem = _db.OM_KPICustomer_Invt.FirstOrDefault(p => p.CycleNbr == CycleNbr
                                                                                                 && p.KPI == KPI
                                                                                                 && p.BranchID == BranchID
-                                                                                               // && p.SlsperId == SlsperID
+                                                                                                && p.SlsperId == SlsperID
                                                                                                 && p.CustID == CustID
                                                                                                 && p.InvtID == InvtID);
 
@@ -2003,7 +2006,7 @@ namespace OM25100.Controllers
                                     var recordExists_OM_KPICustomer_Class = lstOM_KPICustomer_Class.FirstOrDefault(p => p.CycleNbr == CycleNbr
                                                                                                                 && p.KPI == KPI
                                                                                                                 && p.BranchID == BranchID
-                                                                                                              //  && p.SlsperId == SlsperID
+                                                                                                                && p.SlsperId == SlsperID
                                                                                                                 && p.CustID == CustID
                                                                                                                 && p.ClassID == ClassID);
                                     if (recordExists_OM_KPICustomer_Class == null)
@@ -2011,7 +2014,7 @@ namespace OM25100.Controllers
                                         var recordItem = _db.OM_KPICustomer_Class.FirstOrDefault(p => p.CycleNbr == CycleNbr
                                                                                                 && p.KPI == KPI
                                                                                                 && p.BranchID == BranchID
-                                                                                             //   && p.SlsperId == SlsperID
+                                                                                                && p.SlsperId == SlsperID
                                                                                                 && p.CustID == CustID
                                                                                                 && p.ClassID == ClassID);
 

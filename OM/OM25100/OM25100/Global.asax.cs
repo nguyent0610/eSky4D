@@ -31,15 +31,15 @@ namespace OM25100
            Current.Authorize = false;
            Current.Server = "TRUONGSAD";
             Current.FormatDate = "dd-MM.yyyy";
-            Current.DBSys = "nd_Test_eSky4DSys";
+            Current.DBSys = "CauDatFarm_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM25100"] = acc;
-            Session["DBApp"] = Current.DBApp = "nd_Test_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "CauDatFarm_eSky4DApp";
 			Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "00000000";
+            Session["CpnyID"] = Current.CpnyID = "XPDNA0001";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
 

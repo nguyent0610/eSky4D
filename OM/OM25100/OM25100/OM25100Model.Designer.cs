@@ -116,38 +116,6 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_KPICustomer_Class> OM_KPICustomer_Class
-        {
-            get
-            {
-                if ((_OM_KPICustomer_Class == null))
-                {
-                    _OM_KPICustomer_Class = base.CreateObjectSet<OM_KPICustomer_Class>("OM_KPICustomer_Class");
-                }
-                return _OM_KPICustomer_Class;
-            }
-        }
-        private ObjectSet<OM_KPICustomer_Class> _OM_KPICustomer_Class;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<OM_KPICustomer_Invt> OM_KPICustomer_Invt
-        {
-            get
-            {
-                if ((_OM_KPICustomer_Invt == null))
-                {
-                    _OM_KPICustomer_Invt = base.CreateObjectSet<OM_KPICustomer_Invt>("OM_KPICustomer_Invt");
-                }
-                return _OM_KPICustomer_Invt;
-            }
-        }
-        private ObjectSet<OM_KPICustomer_Invt> _OM_KPICustomer_Invt;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_KPICpny_All> OM_KPICpny_All
         {
             get
@@ -256,6 +224,38 @@ namespace OM25100
             }
         }
         private ObjectSet<OM_KPICustomer_All> _OM_KPICustomer_All;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_KPICustomer_Class> OM_KPICustomer_Class
+        {
+            get
+            {
+                if ((_OM_KPICustomer_Class == null))
+                {
+                    _OM_KPICustomer_Class = base.CreateObjectSet<OM_KPICustomer_Class>("OM_KPICustomer_Class");
+                }
+                return _OM_KPICustomer_Class;
+            }
+        }
+        private ObjectSet<OM_KPICustomer_Class> _OM_KPICustomer_Class;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_KPICustomer_Invt> OM_KPICustomer_Invt
+        {
+            get
+            {
+                if ((_OM_KPICustomer_Invt == null))
+                {
+                    _OM_KPICustomer_Invt = base.CreateObjectSet<OM_KPICustomer_Invt>("OM_KPICustomer_Invt");
+                }
+                return _OM_KPICustomer_Invt;
+            }
+        }
+        private ObjectSet<OM_KPICustomer_Invt> _OM_KPICustomer_Invt;
 
         #endregion
 
@@ -283,22 +283,6 @@ namespace OM25100
         public void AddToOM_KPISalesClassDetail(OM_KPISalesClassDetail oM_KPISalesClassDetail)
         {
             base.AddObject("OM_KPISalesClassDetail", oM_KPISalesClassDetail);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_KPICustomer_Class EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_KPICustomer_Class(OM_KPICustomer_Class oM_KPICustomer_Class)
-        {
-            base.AddObject("OM_KPICustomer_Class", oM_KPICustomer_Class);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_KPICustomer_Invt EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_KPICustomer_Invt(OM_KPICustomer_Invt oM_KPICustomer_Invt)
-        {
-            base.AddObject("OM_KPICustomer_Invt", oM_KPICustomer_Invt);
         }
     
         /// <summary>
@@ -355,6 +339,22 @@ namespace OM25100
         public void AddToOM_KPICustomer_All(OM_KPICustomer_All oM_KPICustomer_All)
         {
             base.AddObject("OM_KPICustomer_All", oM_KPICustomer_All);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_KPICustomer_Class EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_KPICustomer_Class(OM_KPICustomer_Class oM_KPICustomer_Class)
+        {
+            base.AddObject("OM_KPICustomer_Class", oM_KPICustomer_Class);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_KPICustomer_Invt EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_KPICustomer_Invt(OM_KPICustomer_Invt oM_KPICustomer_Invt)
+        {
+            base.AddObject("OM_KPICustomer_Invt", oM_KPICustomer_Invt);
         }
 
         #endregion
@@ -3067,6 +3067,7 @@ namespace OM25100
         /// <param name="cycleNbr">Initial value of the CycleNbr property.</param>
         /// <param name="kPI">Initial value of the KPI property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="slsperId">Initial value of the SlsperId property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="target">Initial value of the Target property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
@@ -3076,12 +3077,13 @@ namespace OM25100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_KPICustomer_All CreateOM_KPICustomer_All(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String custID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static OM_KPICustomer_All CreateOM_KPICustomer_All(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String slsperId, global::System.String custID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_KPICustomer_All oM_KPICustomer_All = new OM_KPICustomer_All();
             oM_KPICustomer_All.CycleNbr = cycleNbr;
             oM_KPICustomer_All.KPI = kPI;
             oM_KPICustomer_All.BranchID = branchID;
+            oM_KPICustomer_All.SlsperId = slsperId;
             oM_KPICustomer_All.CustID = custID;
             oM_KPICustomer_All.Target = target;
             oM_KPICustomer_All.Crtd_DateTime = crtd_DateTime;
@@ -3182,7 +3184,7 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SlsperId
         {
@@ -3192,11 +3194,14 @@ namespace OM25100
             }
             set
             {
-                OnSlsperIdChanging(value);
-                ReportPropertyChanging("SlsperId");
-                _SlsperId = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SlsperId");
-                OnSlsperIdChanged();
+                if (_SlsperId != value)
+                {
+                    OnSlsperIdChanging(value);
+                    ReportPropertyChanging("SlsperId");
+                    _SlsperId = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("SlsperId");
+                    OnSlsperIdChanged();
+                }
             }
         }
         private global::System.String _SlsperId;
@@ -3443,6 +3448,7 @@ namespace OM25100
         /// <param name="cycleNbr">Initial value of the CycleNbr property.</param>
         /// <param name="kPI">Initial value of the KPI property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="slsperId">Initial value of the SlsperId property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="classID">Initial value of the ClassID property.</param>
         /// <param name="target">Initial value of the Target property.</param>
@@ -3453,12 +3459,13 @@ namespace OM25100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_KPICustomer_Class CreateOM_KPICustomer_Class(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String custID, global::System.String classID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static OM_KPICustomer_Class CreateOM_KPICustomer_Class(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String slsperId, global::System.String custID, global::System.String classID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_KPICustomer_Class oM_KPICustomer_Class = new OM_KPICustomer_Class();
             oM_KPICustomer_Class.CycleNbr = cycleNbr;
             oM_KPICustomer_Class.KPI = kPI;
             oM_KPICustomer_Class.BranchID = branchID;
+            oM_KPICustomer_Class.SlsperId = slsperId;
             oM_KPICustomer_Class.CustID = custID;
             oM_KPICustomer_Class.ClassID = classID;
             oM_KPICustomer_Class.Target = target;
@@ -3560,7 +3567,7 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SlsperId
         {
@@ -3570,11 +3577,14 @@ namespace OM25100
             }
             set
             {
-                OnSlsperIdChanging(value);
-                ReportPropertyChanging("SlsperId");
-                _SlsperId = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SlsperId");
-                OnSlsperIdChanged();
+                if (_SlsperId != value)
+                {
+                    OnSlsperIdChanging(value);
+                    ReportPropertyChanging("SlsperId");
+                    _SlsperId = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("SlsperId");
+                    OnSlsperIdChanged();
+                }
             }
         }
         private global::System.String _SlsperId;
@@ -3848,6 +3858,7 @@ namespace OM25100
         /// <param name="cycleNbr">Initial value of the CycleNbr property.</param>
         /// <param name="kPI">Initial value of the KPI property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="slsperId">Initial value of the SlsperId property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="target">Initial value of the Target property.</param>
@@ -3858,12 +3869,13 @@ namespace OM25100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_KPICustomer_Invt CreateOM_KPICustomer_Invt(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String custID, global::System.String invtID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static OM_KPICustomer_Invt CreateOM_KPICustomer_Invt(global::System.String cycleNbr, global::System.String kPI, global::System.String branchID, global::System.String slsperId, global::System.String custID, global::System.String invtID, global::System.Double target, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_KPICustomer_Invt oM_KPICustomer_Invt = new OM_KPICustomer_Invt();
             oM_KPICustomer_Invt.CycleNbr = cycleNbr;
             oM_KPICustomer_Invt.KPI = kPI;
             oM_KPICustomer_Invt.BranchID = branchID;
+            oM_KPICustomer_Invt.SlsperId = slsperId;
             oM_KPICustomer_Invt.CustID = custID;
             oM_KPICustomer_Invt.InvtID = invtID;
             oM_KPICustomer_Invt.Target = target;
@@ -3965,7 +3977,7 @@ namespace OM25100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SlsperId
         {
@@ -3975,11 +3987,14 @@ namespace OM25100
             }
             set
             {
-                OnSlsperIdChanging(value);
-                ReportPropertyChanging("SlsperId");
-                _SlsperId = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SlsperId");
-                OnSlsperIdChanged();
+                if (_SlsperId != value)
+                {
+                    OnSlsperIdChanging(value);
+                    ReportPropertyChanging("SlsperId");
+                    _SlsperId = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("SlsperId");
+                    OnSlsperIdChanged();
+                }
             }
         }
         private global::System.String _SlsperId;

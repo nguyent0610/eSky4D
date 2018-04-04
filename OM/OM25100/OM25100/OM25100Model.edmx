@@ -4,27 +4,41 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="OM_KPICondition" EntityType="eBiz4DWebAppModel.Store.OM_KPICondition" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPICpny_All" EntityType="eBiz4DWebAppModel.Store.OM_KPICpny_All" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPICpny_Class" EntityType="eBiz4DWebAppModel.Store.OM_KPICpny_Class" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPICpny_Invt" EntityType="eBiz4DWebAppModel.Store.OM_KPICpny_Invt" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPICustomer_All" EntityType="eBiz4DWebAppModel.Store.OM_KPICustomer_All" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPICustomer_Class" EntityType="eBiz4DWebAppModel.Store.OM_KPICustomer_Class" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPICustomer_Invt" EntityType="eBiz4DWebAppModel.Store.OM_KPICustomer_Invt" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPIHeader" EntityType="eBiz4DWebAppModel.Store.OM_KPIHeader" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPISales_All" EntityType="eBiz4DWebAppModel.Store.OM_KPISales_All" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPISales_Class" EntityType="eBiz4DWebAppModel.Store.OM_KPISales_Class" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPISales_Invt" EntityType="eBiz4DWebAppModel.Store.OM_KPISales_Invt" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_KPISalesClassDetail" EntityType="eBiz4DWebAppModel.Store.OM_KPISalesClassDetail" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
         <EntityType Name="OM_KPICondition">
           <Key>
             <PropertyRef Name="CycleNbr" />
             <PropertyRef Name="KPI" />
             <PropertyRef Name="LineRef" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="LineRef" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Type" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Type" Type="varchar" Nullable="false" MaxLength="6" />
           <Property Name="Value1" Type="float" Nullable="false" />
           <Property Name="Value2" Type="float" Nullable="false" />
           <Property Name="Value3" Type="float" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="Descr" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="OM_KPICpny_All">
@@ -33,17 +47,17 @@
             <PropertyRef Name="KPI" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Target" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_KPICpny_Class">
           <Key>
@@ -52,18 +66,18 @@
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="ClassID" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="ClassID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Target" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_KPICpny_Invt">
           <Key>
@@ -72,101 +86,104 @@
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="InvtID" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Target" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_KPICustomer_All">
           <Key>
             <PropertyRef Name="CycleNbr" />
             <PropertyRef Name="KPI" />
             <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperId" />
             <PropertyRef Name="CustID" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SlsperId" Type="varchar" MaxLength="30" />
-          <Property Name="CustID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Target" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_KPICustomer_Class">
           <Key>
             <PropertyRef Name="CycleNbr" />
             <PropertyRef Name="KPI" />
             <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperId" />
             <PropertyRef Name="CustID" />
             <PropertyRef Name="ClassID" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SlsperId" Type="varchar" MaxLength="30" />
-          <Property Name="CustID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="ClassID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Target" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_KPICustomer_Invt">
           <Key>
             <PropertyRef Name="CycleNbr" />
             <PropertyRef Name="KPI" />
             <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperId" />
             <PropertyRef Name="CustID" />
             <PropertyRef Name="InvtID" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SlsperId" Type="varchar" MaxLength="30" />
-          <Property Name="CustID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Target" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_KPIHeader">
           <Key>
             <PropertyRef Name="CycleNbr" />
             <PropertyRef Name="KPI" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Status" Type="varchar" MaxLength="1" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_KPISales_All">
           <Key>
@@ -175,19 +192,19 @@
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="SlsperId" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SlsperId" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Position" Type="varchar" MaxLength="2" />
           <Property Name="Target" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_KPISales_Class">
           <Key>
@@ -197,20 +214,20 @@
             <PropertyRef Name="SlsperId" />
             <PropertyRef Name="ClassID" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SlsperId" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Position" Type="varchar" MaxLength="2" />
-          <Property Name="ClassID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Target" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_KPISales_Invt">
           <Key>
@@ -220,20 +237,20 @@
             <PropertyRef Name="SlsperId" />
             <PropertyRef Name="InvtID" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SlsperId" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Position" Type="varchar" MaxLength="2" />
-          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Target" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_KPISalesClassDetail">
           <Key>
@@ -241,16 +258,16 @@
             <PropertyRef Name="KPI" />
             <PropertyRef Name="ClassID" />
           </Key>
-          <Property Name="CycleNbr" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="KPI" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="ClassID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CycleNbr" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="KPI" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <Function Name="OM25100_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -388,20 +405,6 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
-        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
-          <EntitySet Name="OM_KPICondition" EntityType="Self.OM_KPICondition" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPICpny_All" EntityType="Self.OM_KPICpny_All" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPICpny_Class" EntityType="Self.OM_KPICpny_Class" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPICpny_Invt" EntityType="Self.OM_KPICpny_Invt" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPICustomer_All" EntityType="Self.OM_KPICustomer_All" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPICustomer_Class" EntityType="Self.OM_KPICustomer_Class" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPICustomer_Invt" EntityType="Self.OM_KPICustomer_Invt" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPIHeader" EntityType="Self.OM_KPIHeader" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPISales_All" EntityType="Self.OM_KPISales_All" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPISales_Class" EntityType="Self.OM_KPISales_Class" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPISales_Invt" EntityType="Self.OM_KPISales_Invt" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OM_KPISalesClassDetail" EntityType="Self.OM_KPISalesClassDetail" Schema="dbo" store:Type="Tables" />
-        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -541,8 +544,6 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <EntitySet Name="OM_KPICustomer_Class" EntityType="OM25100Model.OM_KPICustomer_Class" />
-          <EntitySet Name="OM_KPICustomer_Invt" EntityType="OM25100Model.OM_KPICustomer_Invt" />
           <FunctionImport Name="OM25100_pdConfig" ReturnType="Collection(OM25100Model.OM25100_pdConfig_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -555,6 +556,8 @@
           <EntitySet Name="OM_KPISales_Class" EntityType="OM25100Model.OM_KPISales_Class" />
           <EntitySet Name="OM_KPISales_Invt" EntityType="OM25100Model.OM_KPISales_Invt" />
           <EntitySet Name="OM_KPICustomer_All" EntityType="OM25100Model.OM_KPICustomer_All" />
+          <EntitySet Name="OM_KPICustomer_Class" EntityType="OM25100Model.OM_KPICustomer_Class" />
+          <EntitySet Name="OM_KPICustomer_Invt" EntityType="OM25100Model.OM_KPICustomer_Invt" />
           </EntityContainer>
         <ComplexType Name="OM25100_pgKPICpny_Class_Result">
           <Property Type="String" Name="CycleNbr" Nullable="false" MaxLength="6" />
@@ -762,52 +765,6 @@
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="50" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
-        <EntityType Name="OM_KPICustomer_Class">
-          <Key>
-            <PropertyRef Name="CycleNbr" />
-            <PropertyRef Name="KPI" />
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="CustID" />
-            <PropertyRef Name="ClassID" />
-          </Key>
-          <Property Name="CycleNbr" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="KPI" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="SlsperId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="CustID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ClassID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Target" Type="Double" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-        </EntityType>
-        <EntityType Name="OM_KPICustomer_Invt">
-          <Key>
-            <PropertyRef Name="CycleNbr" />
-            <PropertyRef Name="KPI" />
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="CustID" />
-            <PropertyRef Name="InvtID" />
-          </Key>
-          <Property Name="CycleNbr" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="KPI" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="SlsperId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="CustID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Target" Type="Double" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-        </EntityType>
         <ComplexType Name="OM25100_pdConfig_Result">
           <Property Type="Boolean" Name="ShowTabSalesClassDetail" Nullable="true" />
           <Property Type="Int32" Name="ShowTabCondition" Nullable="true" />
@@ -942,21 +899,70 @@
             <PropertyRef Name="CycleNbr" />
             <PropertyRef Name="KPI" />
             <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperId" />
             <PropertyRef Name="CustID" />
           </Key>
-          <Property Name="CycleNbr" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="KPI" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="SlsperId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="CustID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Target" Type="Double" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="CycleNbr" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="KPI" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="Target" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_KPICustomer_Class">
+          <Key>
+            <PropertyRef Name="CycleNbr" />
+            <PropertyRef Name="KPI" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperId" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Type="String" Name="CycleNbr" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="KPI" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="Target" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_KPICustomer_Invt">
+          <Key>
+            <PropertyRef Name="CycleNbr" />
+            <PropertyRef Name="KPI" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperId" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Type="String" Name="CycleNbr" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="KPI" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="Target" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1240,46 +1246,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="OM_KPICustomer_Class">
-            <EntityTypeMapping TypeName="OM25100Model.OM_KPICustomer_Class">
-              <MappingFragment StoreEntitySet="OM_KPICustomer_Class">
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Target" ColumnName="Target" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="KPI" ColumnName="KPI" />
-                <ScalarProperty Name="CycleNbr" ColumnName="CycleNbr" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OM_KPICustomer_Invt">
-            <EntityTypeMapping TypeName="OM25100Model.OM_KPICustomer_Invt">
-              <MappingFragment StoreEntitySet="OM_KPICustomer_Invt">
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Target" ColumnName="Target" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="KPI" ColumnName="KPI" />
-                <ScalarProperty Name="CycleNbr" ColumnName="CycleNbr" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="OM25100_pdConfig" FunctionName="eBiz4DWebAppModel.Store.OM25100_pdConfig" >
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM25100Model.OM25100_pdConfig_Result">
@@ -1419,6 +1385,46 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OM_KPICustomer_Class">
+            <EntityTypeMapping TypeName="OM25100Model.OM_KPICustomer_Class">
+              <MappingFragment StoreEntitySet="OM_KPICustomer_Class">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Target" ColumnName="Target" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="KPI" ColumnName="KPI" />
+                <ScalarProperty Name="CycleNbr" ColumnName="CycleNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_KPICustomer_Invt">
+            <EntityTypeMapping TypeName="OM25100Model.OM_KPICustomer_Invt">
+              <MappingFragment StoreEntitySet="OM_KPICustomer_Invt">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Target" ColumnName="Target" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="KPI" ColumnName="KPI" />
+                <ScalarProperty Name="CycleNbr" ColumnName="CycleNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1445,15 +1451,15 @@
         <EntityTypeShape EntityType="OM25100Model.OM_KPIHeader" Width="1.5" PointX="8.25" PointY="4.625" />
         <EntityTypeShape EntityType="OM25100Model.OM_KPICondition" Width="1.625" PointX="6.5" PointY="4.125" />
         <EntityTypeShape EntityType="OM25100Model.OM_KPISalesClassDetail" Width="2.125" PointX="11.625" PointY="0.75" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_Class" Width="1.5" PointX="2.75" PointY="5.75" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_Invt" Width="1.5" PointX="4.75" PointY="9.75" />
         <EntityTypeShape EntityType="OM25100Model.OM_KPICpny_All" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM25100Model.OM_KPICpny_Class" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM25100Model.OM_KPICpny_Invt" Width="1.5" PointX="7.75" PointY="9.75" />
         <EntityTypeShape EntityType="OM25100Model.OM_KPISales_All" Width="1.5" PointX="9.75" PointY="8.75" />
         <EntityTypeShape EntityType="OM25100Model.OM_KPISales_Class" Width="1.5" PointX="0.75" PointY="10.75" />
         <EntityTypeShape EntityType="OM25100Model.OM_KPISales_Invt" Width="1.5" PointX="11.75" PointY="4.75" />
-        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_All" Width="1.5" PointX="12.375" PointY="9.75" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_All" Width="1.5" PointX="5.0469344114171966" PointY="4.266868876417572" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_Class" Width="1.5" PointX="5.2449745988682723" PointY="31.215680941574128" />
+        <EntityTypeShape EntityType="OM25100Model.OM_KPICustomer_Invt" Width="1.5" PointX="4.2995506545061017" PointY="6.4931449175314722" />
         </Diagram>
     </Diagrams>
   </Designer>
