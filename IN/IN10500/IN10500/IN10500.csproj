@@ -77,7 +77,7 @@
     </Reference>
     <Reference Include="HQSendMailApprove, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\DLL MVC moi\HQSendMailApprove.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Hao\20170504\NhuHao\DLLPVN\HQSendMailApprove.dll</HintPath>
     </Reference>
     <Reference Include="INProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -318,7 +318,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52406</DevelopmentServerPort>
+          <DevelopmentServerPort>5207</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
