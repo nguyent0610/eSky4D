@@ -29,10 +29,10 @@ namespace IN10500.Controllers
         private string _userName = Current.UserName;
         private string _cpnyID = Current.CpnyID;
         IN10500Entities _app = Util.CreateObjectContext<IN10500Entities>(false);
-        private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);    
+        private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private JsonResult _logMessage;
 
-        public ActionResult Index(string BranchID,string TagID,string SiteID)
+        public ActionResult Index(string BranchID, string TagID, string SiteID)
         {
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
@@ -49,8 +49,8 @@ namespace IN10500.Controllers
             {
                 allowAddNewInvtID = right.IntVal == 1 ? true : false;
             }
-           // var right = _db.IN10500_pdAddNewInvtRight(Current.UserName, BranchID, Current.LangID).FirstOrDefault();
-            
+            // var right = _db.IN10500_pdAddNewInvtRight(Current.UserName, BranchID, Current.LangID).FirstOrDefault();
+
             ViewBag.BranchID = BranchID;
             ViewBag.DftSiteID = dftSiteID;
             ViewBag.TagID = TagID.PassNull();
@@ -59,7 +59,7 @@ namespace IN10500.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -71,17 +71,16 @@ namespace IN10500.Controllers
             return this.Store(data);
         }
 
-        public ActionResult GetIN_TagDetail(string TagID, string BranchID, string SiteID, string ReasonCD,string ClassID)
+        public ActionResult GetIN_TagDetail(string TagID, string BranchID, string SiteID, string ReasonCD, string ClassID)
         {
             _app.CommandTimeout = int.MaxValue;
-            var data = _app.IN10500_pgLoadGrid(TagID, BranchID, SiteID, ReasonCD,ClassID, Current.UserName, Current.CpnyID, Current.LangID);
+            var data = _app.IN10500_pgLoadGrid(TagID, BranchID, SiteID, ReasonCD, ClassID, Current.UserName, Current.CpnyID, Current.LangID);
             return this.Store(data);
         }
         [DirectMethod]
         public ActionResult IN10500_pdCheckCreateIN_Tag(string BranchID, string SiteID, string ClassID)
         {
-            _app.CommandTimeout = int.MaxValue;
-            var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID,ClassID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();            
+            var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(BranchID, SiteID, ClassID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault().PassNull();
             return this.Direct(chkINTag);
         }
 
@@ -92,7 +91,7 @@ namespace IN10500.Controllers
         {
             try
             {
-                _app.CommandTimeout = int.MaxValue;                
+                _app.CommandTimeout = int.MaxValue;
                 string ReasonCD = data["cboReasonCD"].PassNull();
                 string Status = data["cboStatus"].PassNull();
                 string ClassID = data["cboClassID"].PassNull();
@@ -120,11 +119,11 @@ namespace IN10500.Controllers
                 {
                     throw new MessageException(MessageType.Message, "20405");
                 }
-                
+
                 #region Save Header
 
                 var header = _app.IN_TagHeader.FirstOrDefault(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID);
-                
+
                 if (header != null)
                 {
                     if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
@@ -138,7 +137,7 @@ namespace IN10500.Controllers
                 }
                 else
                 {
-                    var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(curHeader.BranchID, curHeader.SiteID,ClassID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                    var chkINTag = _app.IN10500_pdCheckCreateIN_Tag(curHeader.BranchID, curHeader.SiteID, ClassID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                     if (!string.IsNullOrWhiteSpace(chkINTag)) // KHi không đc tạo thẻ kho
                     {
                         throw new MessageException(MessageType.Message, "2015070801", "", parm: new string[] { chkINTag });
@@ -157,7 +156,7 @@ namespace IN10500.Controllers
                     _app.IN_TagHeader.AddObject(header);
                 }
 
-            #endregion
+                #endregion
 
                 #region Save IN_TagDetail
                 // Delete item
@@ -222,7 +221,7 @@ namespace IN10500.Controllers
                 #endregion
 
                 _app.SaveChanges();
-             
+
                 var lstIN_Tag = _app.IN_TagDetail.Where(p => p.TAGID == curHeader.TAGID && p.BranchID == curHeader.BranchID && p.SiteID == curHeader.SiteID).ToList();
                 if (Handle == "C" && lstIN_Tag.Where(p => p.OffsetEAQty != 0).Count() > 0)
                 {
@@ -276,7 +275,7 @@ namespace IN10500.Controllers
                         Mail_Approve(header.TAGID, role, Status, Handle, Current.LangID.PassNull(), Current.UserName, header.BranchID, Current.CpnyID, header.TAGID, header.BranchID, header.SiteID,
                             header.BranchID, branchName, header.SiteID, siteName);
                     }
-                } 
+                }
                 #endregion
                 return Json(new { success = true, TagID = header.TAGID });
             }
@@ -297,7 +296,7 @@ namespace IN10500.Controllers
                 t.Status = Handle == "C" ? Status : Handle;
             t.Descr = s.Descr;
             t.ReasonCD = s.ReasonCD;
-            t.INBatNbr = s.INBatNbr;            
+            t.INBatNbr = s.INBatNbr;
             t.TranDate = s.TranDate;
             t.Note = s.Note;
             t.LUpd_DateTime = DateTime.Now;
@@ -309,13 +308,13 @@ namespace IN10500.Controllers
         #region Update IN_TagDetail
         private void UpdatingIN_TagDetail(IN_TagDetail t, IN10500_pgLoadGrid_Result s)
         {
-            t.InvtName = s.InvtName;            
-            t.EAUnit = s.EAUnit;            
+            t.InvtName = s.InvtName;
+            t.EAUnit = s.EAUnit;
             t.ActualEAQty = s.ActualEAQty;
             t.BookEAQty = s.BookEAQty;
             t.OffsetEAQty = s.OffsetEAQty;
             t.StkQtyUnder1Month = s.StkQtyUnder1Month;
-            t.ReasonCD = s.ReasonCD;            
+            t.ReasonCD = s.ReasonCD;
             t.Notes = s.Notes;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
@@ -353,10 +352,10 @@ namespace IN10500.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        #endregion     
+        #endregion
 
         public void Mail_Approve(string objID, string role, string status, string handle, string langID, string userName, string lstBranch, string currentBranch, string parm00, string parm01, string parm02,
-          string branchID,  string branchName, string siteID, string siteName)
+          string branchID, string branchName, string siteID, string siteName)
         {
             var approvehandle = _app.SI_ApprovalFlowHandle.Where(p => p.AppFolID == _screenNbr && p.RoleID == role && p.Status == status && p.Handle == handle).FirstOrDefault();
             if (approvehandle != null && approvehandle.MailSubject.PassNull() != string.Empty)
@@ -382,7 +381,7 @@ namespace IN10500.Controllers
                         .Replace("@p3", siteID)
                         .Replace("@p4", siteName);
                 var mail = Approve.GetMail(approvehandle.MailApprove.PassNull() == string.Empty ? "MailSend" : approvehandle.MailApprove, dic);
-               foreach (var item in mail)
+                foreach (var item in mail)
                 {
                     string content = string.Format("<html><body><p>{0}</p></body></html>", item.Content.PassNull());
                     Approve.SendMail(item.To.PassNull(), item.CC.PassNull(), mailSubject, content);
@@ -483,8 +482,6 @@ namespace IN10500.Controllers
         {
             try
             {
-                string siteID = data["cboSiteID"].PassNull();
-                int numberRow = 3000;
                 LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
@@ -503,16 +500,10 @@ namespace IN10500.Controllers
                 pc.Add(new ParamStruct("@ReasonCD", DbType.String, clsCommon.GetValueDBNull(data["cboReasonCD"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@ClassID", DbType.String, clsCommon.GetValueDBNull(data["cboClassID"].PassNull()), ParameterDirection.Input, 30));
                 DataTable dt = dal.ExecDataTable("IN10500_peExport", CommandType.StoredProcedure, ref pc);
-                sheetTrans.Cells.ImportDataTable(dt, false, "A3");
+                sheetTrans.Cells.ImportDataTable(dt, false, "A2");
 
-                DataTable dtUnit = dal.ExecDataTable("IN10500_peUnit", CommandType.StoredProcedure, "");
-                sheetTrans.Cells.ImportDataTable(dtUnit, true, 0, 26, false);// du lieu IN_UnitConversion
 
-                //Header
-                SetCellValue(sheetTrans.Cells["A1"], Util.GetLang("SiteID"), TextAlignmentType.Center, TextAlignmentType.Right, true, 10, true);
-                SetCellValue(sheetTrans.Cells["B1"], siteID, TextAlignmentType.Center, TextAlignmentType.Left, false, 10, true);
-                //
-          
+
                 Style style = workbook.GetStyleInPool(0);
                 style.Font.Color = Color.Transparent;
                 style.IsLocked = true;
@@ -520,71 +511,28 @@ namespace IN10500.Controllers
                 flag.FontColor = true;
                 flag.NumberFormat = true;
                 flag.Locked = true;
-              
-                style = sheetTrans.Cells["A2"].GetStyle();
+
+                style = sheetTrans.Cells["A1"].GetStyle();
                 style.Font.IsBold = true;
 
-                Style colSiteID = sheetTrans.Cells.Columns[0].Style;
-                StyleFlag flag1 = new StyleFlag();
-                flag1.Locked = true;
-                colSiteID.IsLocked = true;
-                sheetTrans.Cells.Columns[0] .ApplyStyle(colSiteID, flag1);               
+                sheetTrans.Cells["A1"].PutValue(Util.GetLang("InvtID"));
+                sheetTrans.Cells["B1"].PutValue(Util.GetLang("InvtName"));
+                sheetTrans.Cells["C1"].PutValue(Util.GetLang("UOM"));
+                sheetTrans.Cells["D1"].PutValue(Util.GetLang("IN10500ActInventory"));
+                sheetTrans.Cells["E1"].PutValue(Util.GetLang("IN10500Inventory"));
 
-                sheetTrans.Cells["A2"].PutValue(Util.GetLang("InvtID"));
-                sheetTrans.Cells["B2"].PutValue(Util.GetLang("InvtName"));
-                sheetTrans.Cells["C2"].PutValue(Util.GetLang("UOM"));
-                sheetTrans.Cells["D2"].PutValue(Util.GetLang("IN10500Inventory"));
-                sheetTrans.Cells["E2"].PutValue(Util.GetLang("IN10500ActInventory"));
+                sheetTrans.Cells["A1"].SetStyle(style);
+                sheetTrans.Cells["B1"].SetStyle(style);
+                sheetTrans.Cells["C1"].SetStyle(style);
+                sheetTrans.Cells["D1"].SetStyle(style);
+                sheetTrans.Cells["E1"].SetStyle(style);
 
-                sheetTrans.Cells["A2"].SetStyle(style);
-                sheetTrans.Cells["B2"].SetStyle(style);
-                sheetTrans.Cells["C2"].SetStyle(style);
-                sheetTrans.Cells["D2"].SetStyle(style);
-                sheetTrans.Cells["E2"].SetStyle(style);
-
-                style = sheetTrans.Cells["D3"].GetStyle();
+                style = sheetTrans.Cells["D2"].GetStyle();
                 style.Custom = "#,##0";
-                Range range = sheetTrans.Cells.CreateRange("D3", "E" + (dt.Rows.Count+1000));
+                Range range = sheetTrans.Cells.CreateRange("D2", "E" + (dt.Rows.Count + 2));
                 range.ApplyStyle(style, flag);
                 sheetTrans.AutoFitColumns();
 
-                //Unit
-                Validation validation = sheetTrans.Validations[sheetTrans.Validations.Add()];
-                string formulaCustomer = "=$AA$2:$AA$" + (dtUnit.Rows.Count + 2);
-                validation = sheetTrans.Validations[sheetTrans.Validations.Add()];
-                validation.IgnoreBlank = true;
-                validation.Type = Aspose.Cells.ValidationType.List;
-                validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
-                validation.Operator = OperatorType.Between;
-                validation.Formula1 = formulaCustomer;
-                validation.InputTitle = "";
-                validation.InputMessage = "Chọn đơn vị ";
-                validation.ErrorMessage = "Đơn vị này không tồn tại";
-
-                CellArea area;
-                area = new CellArea();
-                area.StartRow = 2;
-                area.EndRow = numberRow;
-                area.StartColumn = 2;
-                area.EndColumn = 2;
-                validation.AddArea(area);
-
-                var style1 = sheetTrans.Cells["D3"].GetStyle();
-                style1.IsLocked = false;
-                var range1 = sheetTrans.Cells.CreateRange("D3", "E" + (dt.Rows.Count + 1000));
-                range1.SetStyle(style1);
-
-                style1 = sheetTrans.Cells["A3"].GetStyle();
-                style1.IsLocked = false;
-                range1 = sheetTrans.Cells.CreateRange("A3", "B"+ (dt.Rows.Count + 1000));
-                range1.SetStyle(style1);
-
-                style1 = sheetTrans.Cells["B3"].GetStyle();
-                style1.IsLocked = false;
-                range1 = sheetTrans.Cells.CreateRange("B3", "C"+ (dt.Rows.Count + 1000));
-                range1.SetStyle(style1);
-
-                sheetTrans.Protect(ProtectionType.All);
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Position = 0;
 
@@ -611,12 +559,12 @@ namespace IN10500.Controllers
         {
             try
             {
-                string siteID = data["cboSiteID"].PassNull();
+
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
                 HttpPostedFile file = fileUploadField.PostedFile; // or: HttpPostedFileBase file = this.HttpContext.Request.Files[0];
                 FileInfo fileInfo = new FileInfo(file.FileName);
                 string message = string.Empty;
-               
+
                 //List<object> lstTrans = new List<object>();
                 List<IN10500_pgLoadGrid_Result> lstData = new List<IN10500_pgLoadGrid_Result>();
                 if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
@@ -629,11 +577,9 @@ namespace IN10500.Controllers
                         {
 
                             Worksheet workSheet = workbook.Worksheets[0];
-                            if(workSheet.Cells[0,1].StringValue.PassNull() != siteID)
-                                throw new MessageException(MessageType.Message, "2018040201");
                             string invtID = string.Empty;
-                             string unit = string.Empty;
-                            for (int i = 2; i < workSheet.Cells.MaxDataRow+1; i++)
+                            string unit = string.Empty;
+                            for (int i = 1; i < workSheet.Cells.MaxDataRow + 1; i++)
                             {
 
                                 invtID = workSheet.Cells[i, 0].StringValue;
@@ -653,29 +599,30 @@ namespace IN10500.Controllers
                                 }
                                 else if (unit != objInvt.StkUnit)
                                 {
-                                        IN_UnitConversion uomTo = SetUOM(invtID, objInvt.ClassID, objInvt.StkUnit, unit);
-                                        if (uomTo != null)
+                                    IN_UnitConversion uomTo = SetUOM(invtID, objInvt.ClassID, objInvt.StkUnit, unit);
+                                    if (uomTo != null)
+                                    {
+                                        cnfv = uomTo.MultDiv == "M" ? uomTo.CnvFact : (1 / uomTo.CnvFact);
+                                    }
+                                    else
+                                    {
+                                        IN_UnitConversion uomfrom = SetUOM(invtID, objInvt.ClassID, unit, objInvt.StkUnit);
+                                        if (uomfrom != null)
                                         {
-                                            cnfv=uomTo.MultDiv=="M"?uomTo.CnvFact:(1/uomTo.CnvFact);
-                                        }else 
-                                        {
-                                            IN_UnitConversion uomfrom = SetUOM(invtID, objInvt.ClassID, unit, objInvt.StkUnit);
-                                            if (uomfrom != null)
-                                            {
-                                                cnfv = uomfrom.MultDiv == "M" ? (1 / uomfrom.CnvFact) : uomfrom.CnvFact;
-                                            }
-                                            else
-                                            {
-                                                message += string.Format("Dòng {0} mặt hàng {1} sai đơn vị<br/>", (i + 1).ToString(), invtID);
-                                                continue;
-                                            }
+                                            cnfv = uomfrom.MultDiv == "M" ? (1 / uomfrom.CnvFact) : uomfrom.CnvFact;
                                         }
-                                        unit = objInvt.StkUnit;
+                                        else
+                                        {
+                                            message += string.Format("Dòng {0} mặt hàng {1} sai đơn vị<br/>", (i + 1).ToString(), invtID);
+                                            continue;
+                                        }
+                                    }
+                                    unit = objInvt.StkUnit;
 
-                                   
+
                                 }
 
-                                if (workSheet.Cells[i, 4].StringValue.PassNull() == "")
+                                if (workSheet.Cells[i, 3].StringValue.PassNull() == "")
                                 {
                                     message += string.Format("Dòng {0} mặt hàng {1} không có số lượng<br/>", (i + 1).ToString(), invtID);
                                     continue;
@@ -683,10 +630,10 @@ namespace IN10500.Controllers
                                 else
                                 {
                                     float n;
-                                    bool isNumeric = float.TryParse(workSheet.Cells[i, 4].StringValue, out n);
+                                    bool isNumeric = float.TryParse(workSheet.Cells[i, 3].StringValue, out n);
                                     if (isNumeric == true)
                                     {
-                                        if (workSheet.Cells[i, 4].FloatValue < 0)
+                                        if (workSheet.Cells[i, 3].FloatValue < 0)
                                         {
                                             message += string.Format("Dòng {0} mặt hàng {1} số lượng không được phép nhỏ hơn 0<br/>", (i + 1).ToString(), invtID);
                                             continue;
@@ -699,21 +646,22 @@ namespace IN10500.Controllers
                                     }
                                 }
 
-                                lstData.Add(new IN10500_pgLoadGrid_Result() {
-                                    ActualEAQty = workSheet.Cells[i, 4].FloatValue * cnfv,
-                                    BookEAQty=0,
-                                    BranchID="",
-                                    EAUnit="",
+                                lstData.Add(new IN10500_pgLoadGrid_Result()
+                                {
+                                    ActualEAQty = workSheet.Cells[i, 3].FloatValue * cnfv,
+                                    BookEAQty = 0,
+                                    BranchID = "",
+                                    EAUnit = "",
                                     InvtID = objInvt.InvtID,
                                     InvtName = objInvt.Descr,
-                                    Notes="",
-                                    OffsetEAQty=0,
-                                    ReasonCD="",
-                                    SiteID="",
-                                    StkItem=0,
-                                    StkQtyUnder1Month=0,
-                                    TAGID=""
-                                    
+                                    Notes = "",
+                                    OffsetEAQty = 0,
+                                    ReasonCD = "",
+                                    SiteID = "",
+                                    StkItem = 0,
+                                    StkQtyUnder1Month = 0,
+                                    TAGID = ""
+
                                 });
                             }
                             if (message == "")
@@ -760,13 +708,13 @@ namespace IN10500.Controllers
         {
             try
             {
-                string BranchID = data["cboBranchID"].PassNull();             
+                string BranchID = data["cboBranchID"].PassNull();
                 StoreDataHandler detHeader = new StoreDataHandler(data["lstIN_TagHeader"]);
                 IN_TagHeader curHeader = detHeader.ObjectData<IN_TagHeader>().FirstOrDefault();
                 curHeader.BranchID = BranchID;
-               
 
-               
+
+
                 User user = _sys.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
                 string reportName = "";
                 string reportNbr = "";
@@ -841,22 +789,10 @@ namespace IN10500.Controllers
                 if (data != null)
                 {
                     return data;
-                }              
+                }
                 return null;
             }
             return null;
-        }
-        private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size, bool isTitle = false)
-        {
-            c.PutValue(" " + lang);
-            var style = c.GetStyle();
-            style.Font.IsBold = isBold;
-            style.Font.Size = size;
-            style.HorizontalAlignment = alignH;
-            style.VerticalAlignment = alignV;
-            if (isTitle)
-                style.Font.Color = Color.Red;
-            c.SetStyle(style);
         }
     }
 }
