@@ -51,7 +51,7 @@ namespace SA00000.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+       // [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -242,6 +242,8 @@ namespace SA00000.Controllers
                 dicData.Add("@UserManger", data["txtManager"]);
                 dicData.Add("@BranchOld", data["cboBranchOld"]);
                 dicData.Add("@SlsperID", data["cboSlsperID"]);
+                dicData.Add("@DisplayID", data["cboTDisplayID"]);
+                dicData.Add("@AccumulateID", data["cboAccumulatedID"]);
 
                 Util.getDataTableFromProc("SA00000_ppUserSales", dicData, true);
                 return Json(new { success = true, CpnyID = CpnyID }, "text/html");

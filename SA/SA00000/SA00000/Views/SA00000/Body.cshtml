@@ -693,10 +693,10 @@
                     .Listeners(lst =>
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        lst.Change.Handler = "App.cboSlsperID.store.reload();";
+                        lst.Change.Fn = "cboBranchOld_Change";
                     })
 
-
+                    
                     , HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").HQProcedure("SA00000_pcSlsperID").HQLangCode("SA00000SlsperID")
                     .HQColumnShow("SlsperID,Name").DisplayField("SlsperID").ValueField("SlsperID").MultiSelect(true)
                     .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").ForceSelection(true)
@@ -710,6 +710,41 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
+
+                    , HQ.Combo().ID("cboTDisplayID").Name("cboTDisplayID").HQProcedure("SA00000_pcTDisplay").HQLangCode("TDisplay")
+                        .HQColumnShow("DisplayID,Descr,FromDate,ToDate").DisplayField("DisplayID").ValueField("DisplayID").MultiSelect(true)
+                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchOld.getValue()", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData().ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+
+                    , HQ.Combo().ID("cboAccumulatedID").Name("cboAccumulatedID").HQProcedure("SA00000_pcAccumulated").HQLangCode("SA00000_Accumulated")
+                    .HQColumnShow("AccumulateID,Descr,FromDate,ToDate").DisplayField("AccumulateID").ValueField("AccumulateID").MultiSelect(true)
+                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchOld.getValue()", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData().ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })   
+                        
                  )
             )//xtab
         )// frmMain

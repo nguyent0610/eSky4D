@@ -937,3 +937,9 @@ var txtLng_Blur = function (sender, value) {
     }
 
 }
+
+var cboBranchOld_Change = function() {
+    App.cboSlsperID.store.reload();
+    App.cboTDisplayID.store.reload();
+    App.cboAccumulatedID.store.reload();
+}
