@@ -187,6 +187,7 @@ namespace AR20500.Controllers
             {
                 terr = string.Join(",", territory);
             }
+            _db.CommandTimeout = int.MaxValue;
             var data = _db.AR20500_pgDetail(BranchID, fromDate.PassMin(), toDate.PassMin(), sls, status, terr, updateType, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(data);
         }
@@ -274,6 +275,7 @@ namespace AR20500.Controllers
                         if (item.ColCheck == true)
                         {
                             _db = Util.CreateObjectContext<AR20500Entities>(false);
+                            _db.CommandTimeout = int.MaxValue;
                             AR_NewCustomerInfor objNew = _db.AR_NewCustomerInfor.FirstOrDefault(p => p.ID == item.ID && p.BranchID == item.BranchID);
                             if (objNew == null || objNew.Status == "A" || objNew.Status == "D") 
                             {
