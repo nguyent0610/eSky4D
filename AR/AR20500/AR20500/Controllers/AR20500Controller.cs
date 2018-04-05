@@ -542,7 +542,7 @@ namespace AR20500.Controllers
             var lineRefIdx = 1;
             if (hisLineRef > 0)
 	        {
-                lineRefIdx = lineRefIdx + 1;
+                lineRefIdx = hisLineRef + 1;
             }
             else
             {
@@ -559,6 +559,7 @@ namespace AR20500.Controllers
                 BranchID = objNew.BranchID,
                 LineRef = lineRefIdx,
                 CustID = objNew.CustID,
+
                 OutletName = objNew.OutletName,
                 ContactName = objNew.ContactName,
                 Phone = objNew.Phone,

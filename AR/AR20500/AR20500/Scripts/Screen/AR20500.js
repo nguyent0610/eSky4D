@@ -331,6 +331,8 @@ var btnOKMCP_Click = function () {
                 return false;
             }
         });
+        _fromDate = App.dteFromDate.getValue();
+        _toDate = App.dteToDate.getValue();
         if (flat && !Ext.isEmpty(App.cboHandle.getValue()) && App.cboHandle.getValue() != 'N') {
             App.frmMain.submit({
                 clientValidation: false,
@@ -373,8 +375,21 @@ var dteToDate_change = function (dtp, newValue, oldValue, eOpts) {
 };
 
 var askApprove = function (item) {
-    if (item == 'yes') {
-     ///   App.dteFromDate.setValue()
+    if (item == 'yes') {     
+        if (App.dteFromDate.getValue() == null) {
+            _fromDate = HQ.bussinessDate;
+        }
+        else {
+            _fromDate = App.dteFromDate.getValue();
+        }
+
+        if (App.dteToDate.getValue() == null) {
+            _toDate = HQ.bussinessDate;
+        }
+        else {
+            _toDate = App.dteToDate.getValue();
+        }
+        
         App.frmMain.submit({
             clientValidation: false,
             waitMsg: HQ.common.getLang("Handle"),
@@ -383,8 +398,8 @@ var askApprove = function (item) {
             timeout: 180000,
             params: {
                 lstCust: Ext.encode(App.grdCust.store.getRecordsValues()),
-                fromDate: App.dteFromDate.getValue(),
-                toDate: App.dteToDate.getValue(),
+                fromDate: _fromDate,
+                toDate: _toDate,
                 askApprove: 1
             },
             success: function (msg, data) {
