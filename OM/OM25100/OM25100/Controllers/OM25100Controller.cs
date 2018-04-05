@@ -47,7 +47,7 @@ namespace OM25100.Controllers
             return View();
         }
         
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -1587,7 +1587,7 @@ namespace OM25100.Controllers
                                 {
                                     if (flagBranchID == false)
                                     {
-                                        objCust = lstCust.FirstOrDefault(p => p.BranchID == BranchID && p.CustId == CustID); // && p.SlsperID == SlsperID
+                                        objCust = lstCust.FirstOrDefault(p => p.BranchID == BranchID && p.CustId == CustID && p.SlsperID == SlsperID); // && p.SlsperID == SlsperID
                                         if (objCust == null)
                                         {
                                             errorCustIDnotExists += (i + 1).ToString() + ",";
