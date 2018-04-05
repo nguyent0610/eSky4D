@@ -148,22 +148,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_Customer> AR_Customer
-        {
-            get
-            {
-                if ((_AR_Customer == null))
-                {
-                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
-                }
-                return _AR_Customer;
-            }
-        }
-        private ObjectSet<AR_Customer> _AR_Customer;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<AR_NewCustomerInfor> AR_NewCustomerInfor
         {
             get
@@ -176,6 +160,22 @@ namespace AR20500
             }
         }
         private ObjectSet<AR_NewCustomerInfor> _AR_NewCustomerInfor;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_Customer> AR_Customer
+        {
+            get
+            {
+                if ((_AR_Customer == null))
+                {
+                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
+                }
+                return _AR_Customer;
+            }
+        }
+        private ObjectSet<AR_Customer> _AR_Customer;
 
         #endregion
 
@@ -222,19 +222,19 @@ namespace AR20500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Customer(AR_Customer aR_Customer)
-        {
-            base.AddObject("AR_Customer", aR_Customer);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the AR_NewCustomerInfor EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToAR_NewCustomerInfor(AR_NewCustomerInfor aR_NewCustomerInfor)
         {
             base.AddObject("AR_NewCustomerInfor", aR_NewCustomerInfor);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Customer(AR_Customer aR_Customer)
+        {
+            base.AddObject("AR_Customer", aR_Customer);
         }
 
         #endregion
@@ -548,58 +548,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="custName">No Metadata Documentation available.</param>
-        /// <param name="phone">No Metadata Documentation available.</param>
-        /// <param name="addr">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<AR20500_ppCheckApprove_Result> AR20500_ppCheckApprove(global::System.String custName, global::System.String phone, global::System.String addr, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter custNameParameter;
-            if (custName != null)
-            {
-                custNameParameter = new ObjectParameter("CustName", custName);
-            }
-            else
-            {
-                custNameParameter = new ObjectParameter("CustName", typeof(global::System.String));
-            }
-    
-            ObjectParameter phoneParameter;
-            if (phone != null)
-            {
-                phoneParameter = new ObjectParameter("Phone", phone);
-            }
-            else
-            {
-                phoneParameter = new ObjectParameter("Phone", typeof(global::System.String));
-            }
-    
-            ObjectParameter addrParameter;
-            if (addr != null)
-            {
-                addrParameter = new ObjectParameter("Addr", addr);
-            }
-            else
-            {
-                addrParameter = new ObjectParameter("Addr", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<AR20500_ppCheckApprove_Result>("AR20500_ppCheckApprove", custNameParameter, phoneParameter, addrParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
@@ -801,6 +749,69 @@ namespace AR20500
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="slsPerID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20500_pdSalesRouteID_Result> AR20500_pdSalesRouteID(global::System.String branchID, global::System.String slsPerID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter slsPerIDParameter;
+            if (slsPerID != null)
+            {
+                slsPerIDParameter = new ObjectParameter("SlsPerID", slsPerID);
+            }
+            else
+            {
+                slsPerIDParameter = new ObjectParameter("SlsPerID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<AR20500_pdSalesRouteID_Result>("AR20500_pdSalesRouteID", branchIDParameter, slsPerIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="custID">No Metadata Documentation available.</param>
         /// <param name="status">No Metadata Documentation available.</param>
         /// <param name="handle">No Metadata Documentation available.</param>
@@ -808,7 +819,8 @@ namespace AR20500
         /// <param name="outletName">No Metadata Documentation available.</param>
         /// <param name="phone">No Metadata Documentation available.</param>
         /// <param name="addr1">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR20500_ppCheckCustomerApprove(global::System.String branchID, global::System.String custID, global::System.String status, global::System.String handle, Nullable<global::System.Int32> iD, global::System.String outletName, global::System.String phone, global::System.String addr1)
+        /// <param name="updateType">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20500_ppCheckCustomerApprove(global::System.String branchID, global::System.String custID, global::System.String status, global::System.String handle, Nullable<global::System.Int32> iD, global::System.String outletName, global::System.String phone, global::System.String addr1, global::System.String updateType)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -890,7 +902,17 @@ namespace AR20500
                 addr1Parameter = new ObjectParameter("Addr1", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("AR20500_ppCheckCustomerApprove", branchIDParameter, custIDParameter, statusParameter, handleParameter, iDParameter, outletNameParameter, phoneParameter, addr1Parameter);
+            ObjectParameter updateTypeParameter;
+            if (updateType != null)
+            {
+                updateTypeParameter = new ObjectParameter("UpdateType", updateType);
+            }
+            else
+            {
+                updateTypeParameter = new ObjectParameter("UpdateType", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20500_ppCheckCustomerApprove", branchIDParameter, custIDParameter, statusParameter, handleParameter, iDParameter, outletNameParameter, phoneParameter, addr1Parameter, updateTypeParameter);
         }
 
         #endregion
@@ -3205,6 +3227,174 @@ namespace AR20500
         private global::System.String _BillMarket;
         partial void OnBillMarketChanging(global::System.String value);
         partial void OnBillMarketChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Classification
+        {
+            get
+            {
+                return _Classification;
+            }
+            set
+            {
+                OnClassificationChanging(value);
+                ReportPropertyChanging("Classification");
+                _Classification = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Classification");
+                OnClassificationChanged();
+            }
+        }
+        private global::System.String _Classification;
+        partial void OnClassificationChanging(global::System.String value);
+        partial void OnClassificationChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Chain
+        {
+            get
+            {
+                return _Chain;
+            }
+            set
+            {
+                OnChainChanging(value);
+                ReportPropertyChanging("Chain");
+                _Chain = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Chain");
+                OnChainChanged();
+            }
+        }
+        private global::System.String _Chain;
+        partial void OnChainChanging(global::System.String value);
+        partial void OnChainChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DeliveryUnit
+        {
+            get
+            {
+                return _DeliveryUnit;
+            }
+            set
+            {
+                OnDeliveryUnitChanging(value);
+                ReportPropertyChanging("DeliveryUnit");
+                _DeliveryUnit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DeliveryUnit");
+                OnDeliveryUnitChanged();
+            }
+        }
+        private global::System.String _DeliveryUnit;
+        partial void OnDeliveryUnitChanging(global::System.String value);
+        partial void OnDeliveryUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SalesProvince
+        {
+            get
+            {
+                return _SalesProvince;
+            }
+            set
+            {
+                OnSalesProvinceChanging(value);
+                ReportPropertyChanging("SalesProvince");
+                _SalesProvince = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SalesProvince");
+                OnSalesProvinceChanged();
+            }
+        }
+        private global::System.String _SalesProvince;
+        partial void OnSalesProvinceChanging(global::System.String value);
+        partial void OnSalesProvinceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BusinessName
+        {
+            get
+            {
+                return _BusinessName;
+            }
+            set
+            {
+                OnBusinessNameChanging(value);
+                ReportPropertyChanging("BusinessName");
+                _BusinessName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BusinessName");
+                OnBusinessNameChanged();
+            }
+        }
+        private global::System.String _BusinessName;
+        partial void OnBusinessNameChanging(global::System.String value);
+        partial void OnBusinessNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PhotoCode
+        {
+            get
+            {
+                return _PhotoCode;
+            }
+            set
+            {
+                OnPhotoCodeChanging(value);
+                ReportPropertyChanging("PhotoCode");
+                _PhotoCode = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PhotoCode");
+                OnPhotoCodeChanged();
+            }
+        }
+        private global::System.String _PhotoCode;
+        partial void OnPhotoCodeChanging(global::System.String value);
+        partial void OnPhotoCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PPCPassword
+        {
+            get
+            {
+                return _PPCPassword;
+            }
+            set
+            {
+                OnPPCPasswordChanging(value);
+                ReportPropertyChanging("PPCPassword");
+                _PPCPassword = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PPCPassword");
+                OnPPCPasswordChanged();
+            }
+        }
+        private global::System.String _PPCPassword;
+        partial void OnPPCPasswordChanging(global::System.String value);
+        partial void OnPPCPasswordChanged();
 
         #endregion
 
@@ -3547,15 +3737,17 @@ namespace AR20500
         /// <param name="id">Initial value of the ID property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
+        /// <param name="slsperID">Initial value of the SlsperID property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="updateType">Initial value of the UpdateType property.</param>
         /// <param name="visitsPerDay">Initial value of the VisitsPerDay property.</param>
-        public static AR_NewCustomerInfor CreateAR_NewCustomerInfor(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.Int32 updateType, global::System.Int32 visitsPerDay)
+        public static AR_NewCustomerInfor CreateAR_NewCustomerInfor(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.String slsperID, global::System.Boolean @checked, global::System.Int32 updateType, global::System.Int32 visitsPerDay)
         {
             AR_NewCustomerInfor aR_NewCustomerInfor = new AR_NewCustomerInfor();
             aR_NewCustomerInfor.ID = id;
             aR_NewCustomerInfor.BranchID = branchID;
             aR_NewCustomerInfor.CustID = custID;
+            aR_NewCustomerInfor.SlsperID = slsperID;
             aR_NewCustomerInfor.Checked = @checked;
             aR_NewCustomerInfor.UpdateType = updateType;
             aR_NewCustomerInfor.VisitsPerDay = visitsPerDay;
@@ -4223,7 +4415,7 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SlsperID
         {
@@ -4235,7 +4427,7 @@ namespace AR20500
             {
                 OnSlsperIDChanging(value);
                 ReportPropertyChanging("SlsperID");
-                _SlsperID = StructuralObject.SetValidValue(value, true);
+                _SlsperID = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("SlsperID");
                 OnSlsperIDChanged();
             }
@@ -5299,6 +5491,126 @@ namespace AR20500
         private global::System.String _OUnit;
         partial void OnOUnitChanging(global::System.String value);
         partial void OnOUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Classification
+        {
+            get
+            {
+                return _Classification;
+            }
+            set
+            {
+                OnClassificationChanging(value);
+                ReportPropertyChanging("Classification");
+                _Classification = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Classification");
+                OnClassificationChanged();
+            }
+        }
+        private global::System.String _Classification;
+        partial void OnClassificationChanging(global::System.String value);
+        partial void OnClassificationChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Chain
+        {
+            get
+            {
+                return _Chain;
+            }
+            set
+            {
+                OnChainChanging(value);
+                ReportPropertyChanging("Chain");
+                _Chain = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Chain");
+                OnChainChanged();
+            }
+        }
+        private global::System.String _Chain;
+        partial void OnChainChanging(global::System.String value);
+        partial void OnChainChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BusinessName
+        {
+            get
+            {
+                return _BusinessName;
+            }
+            set
+            {
+                OnBusinessNameChanging(value);
+                ReportPropertyChanging("BusinessName");
+                _BusinessName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BusinessName");
+                OnBusinessNameChanged();
+            }
+        }
+        private global::System.String _BusinessName;
+        partial void OnBusinessNameChanging(global::System.String value);
+        partial void OnBusinessNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DeliveryUnit
+        {
+            get
+            {
+                return _DeliveryUnit;
+            }
+            set
+            {
+                OnDeliveryUnitChanging(value);
+                ReportPropertyChanging("DeliveryUnit");
+                _DeliveryUnit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DeliveryUnit");
+                OnDeliveryUnitChanged();
+            }
+        }
+        private global::System.String _DeliveryUnit;
+        partial void OnDeliveryUnitChanging(global::System.String value);
+        partial void OnDeliveryUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DoNotPicReason
+        {
+            get
+            {
+                return _DoNotPicReason;
+            }
+            set
+            {
+                OnDoNotPicReasonChanging(value);
+                ReportPropertyChanging("DoNotPicReason");
+                _DoNotPicReason = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DoNotPicReason");
+                OnDoNotPicReasonChanged();
+            }
+        }
+        private global::System.String _DoNotPicReason;
+        partial void OnDoNotPicReasonChanging(global::System.String value);
+        partial void OnDoNotPicReasonChanged();
 
         #endregion
 
@@ -9986,6 +10298,163 @@ namespace AR20500
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR20500Model", Name="AR20500_pdSalesRouteID_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR20500_pdSalesRouteID_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR20500_pdSalesRouteID_Result object.
+        /// </summary>
+        /// <param name="salesRouteID">Initial value of the SalesRouteID property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        /// <param name="branchRouteID">Initial value of the BranchRouteID property.</param>
+        /// <param name="pJPID">Initial value of the PJPID property.</param>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static AR20500_pdSalesRouteID_Result CreateAR20500_pdSalesRouteID_Result(global::System.String salesRouteID, global::System.String descr, global::System.String branchRouteID, global::System.String pJPID, global::System.String branchID)
+        {
+            AR20500_pdSalesRouteID_Result aR20500_pdSalesRouteID_Result = new AR20500_pdSalesRouteID_Result();
+            aR20500_pdSalesRouteID_Result.SalesRouteID = salesRouteID;
+            aR20500_pdSalesRouteID_Result.Descr = descr;
+            aR20500_pdSalesRouteID_Result.BranchRouteID = branchRouteID;
+            aR20500_pdSalesRouteID_Result.PJPID = pJPID;
+            aR20500_pdSalesRouteID_Result.BranchID = branchID;
+            return aR20500_pdSalesRouteID_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SalesRouteID
+        {
+            get
+            {
+                return _SalesRouteID;
+            }
+            set
+            {
+                OnSalesRouteIDChanging(value);
+                ReportPropertyChanging("SalesRouteID");
+                _SalesRouteID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SalesRouteID");
+                OnSalesRouteIDChanged();
+            }
+        }
+        private global::System.String _SalesRouteID;
+        partial void OnSalesRouteIDChanging(global::System.String value);
+        partial void OnSalesRouteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchRouteID
+        {
+            get
+            {
+                return _BranchRouteID;
+            }
+            set
+            {
+                OnBranchRouteIDChanging(value);
+                ReportPropertyChanging("BranchRouteID");
+                _BranchRouteID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchRouteID");
+                OnBranchRouteIDChanged();
+            }
+        }
+        private global::System.String _BranchRouteID;
+        partial void OnBranchRouteIDChanging(global::System.String value);
+        partial void OnBranchRouteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PJPID
+        {
+            get
+            {
+                return _PJPID;
+            }
+            set
+            {
+                OnPJPIDChanging(value);
+                ReportPropertyChanging("PJPID");
+                _PJPID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PJPID");
+                OnPJPIDChanged();
+            }
+        }
+        private global::System.String _PJPID;
+        partial void OnPJPIDChanging(global::System.String value);
+        partial void OnPJPIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="AR20500Model", Name="AR20500_pgDetail_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -12043,68 +12512,6 @@ namespace AR20500
         private global::System.String _OUnit;
         partial void OnOUnitChanging(global::System.String value);
         partial void OnOUnitChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AR20500Model", Name="AR20500_ppCheckApprove_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class AR20500_ppCheckApprove_Result : ComplexObject
-    {
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> Result
-        {
-            get
-            {
-                return _Result;
-            }
-            set
-            {
-                OnResultChanging(value);
-                ReportPropertyChanging("Result");
-                _Result = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Result");
-                OnResultChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _Result;
-        partial void OnResultChanging(Nullable<global::System.Boolean> value);
-        partial void OnResultChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Lang
-        {
-            get
-            {
-                return _Lang;
-            }
-            set
-            {
-                OnLangChanging(value);
-                ReportPropertyChanging("Lang");
-                _Lang = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Lang");
-                OnLangChanged();
-            }
-        }
-        private global::System.String _Lang;
-        partial void OnLangChanging(global::System.String value);
-        partial void OnLangChanged();
 
         #endregion
 

@@ -209,13 +209,14 @@ namespace AR20500.Controllers
                     throw new MessageException(MessageType.Message, "728");
                 string handle = data["cboHandle"];
                 string status = data["cboStatus"];
+                string updateType = data["cboUpdateType"];
                 string custlist = "";
                 List<string> lstCustHT = new List<string>();
 
                 if (handle != "N" && handle != string.Empty)
                 {
                     #region -Check Approve-                                        
-                    if (checkApprove == 1 && askApprove == 0 && handle == "A")
+                    if (checkApprove == 1 && askApprove == 0)//&& handle == "A"
                     {
                         var isCheckRefCustID = IsCheckRefCustID();
                         foreach (var item in lstCust)
@@ -243,12 +244,21 @@ namespace AR20500.Controllers
                                     }
                                 }
                                 //Check dieu kien Name/Addr/Phone
-                                var objCheck = _db.AR20500_ppCheckApprove(item.OutletName, item.Phone, item.Addr1, Current.LangID).FirstOrDefault();
-                                if (objCheck != null)
+                                //var objCheck = _db.AR20500_ppCheckApprove(item.OutletName, item.Phone, item.Addr1, Current.LangID).FirstOrDefault();
+                                //if (objCheck != null)
+                                //{
+                                //    if (objCheck.Result == true)
+                                //        errorCustID += item.CustID + ",";
+                                //}
+                                string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID, status, handle, item.ID, item.OutletName, item.Phone, item.Addr1, updateType).FirstOrDefault();
+                                if (cust.PassNull() != "")
                                 {
-                                    if (objCheck.Result == true)
-                                        errorCustID += item.CustID + ",";
+                                    errorCustID += cust.TrimEnd(',') + ",";
+                                    //_db.Dispose();
+                                    //continue;
+                                    //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
                                 }
+
                             }
                         }
                     }
@@ -290,15 +300,15 @@ namespace AR20500.Controllers
                             
                             var callAfterApprove = objNew.UpdateType == 0;
 
-                            string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID, status, handle, item.ID, item.OutletName, item.Phone, item.Addr1).FirstOrDefault();
-                            if (cust.PassNull() != "")
-                            {
-                                custlist += cust.TrimEnd(',') + ",";
-                                _db.Dispose();
-                                continue;
-                                //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
-                            }
-                            
+                            //string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID, status, handle, item.ID, item.OutletName, item.Phone, item.Addr1, updateType).FirstOrDefault();
+                            //if (cust.PassNull() != "")
+                            //{
+                            //    custlist += cust.TrimEnd(',') + ",";
+                            //    _db.Dispose();
+                            //    continue;
+                            //    //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
+                            //}
+
                             if (handle == "A")
                             {
                                 #region -Duyệt update KH qua AR_Customer...-                                                                
@@ -387,7 +397,16 @@ namespace AR20500.Controllers
                                         master.SalesRouteID = item.SalesRouteID;
                                         master.SlsPerID = item.SlsperID;
                                         master.CustID = objCust.CustId;
-                                        master.BranchID = item.BranchRouteID;
+                                        var tam = _db.AR20500_pdSalesRouteID(item.BranchID,item.SlsperID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault(p=>p.SalesRouteID==item.SalesRouteID);
+                                        if (tam != null)
+                                        {
+                                            master.BranchID = tam.BranchRouteID;
+                                        }
+                                        else
+                                        {
+                                            master.BranchID = item.BranchRouteID;
+                                        }
+                                        
                                     }
                                     Update_SalesRouteMaster(ref master, item, fromDate, toDate);
                                     // Tạo tuyến bán hàng                                                  

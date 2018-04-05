@@ -9,6 +9,8 @@ var _isEditReason = 0;
 var _slsperID = '';
 var _slsFreq = '';
 var _isditContactName = false;
+var _fromDate;
+var _toDate;
 var frmMain_BoxReady = function () {
     App.cboBrandID.store.reload();
     App.cboColSlsFreq1.store.reload();
@@ -372,6 +374,7 @@ var dteToDate_change = function (dtp, newValue, oldValue, eOpts) {
 
 var askApprove = function (item) {
     if (item == 'yes') {
+     ///   App.dteFromDate.setValue()
         App.frmMain.submit({
             clientValidation: false,
             waitMsg: HQ.common.getLang("Handle"),
