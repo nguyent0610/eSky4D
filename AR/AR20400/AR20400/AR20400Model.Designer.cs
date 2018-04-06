@@ -1030,6 +1030,58 @@ namespace AR20400
     
             return base.ExecuteFunction<AR20400_pgCompetitor_Result>("AR20400_pgCompetitor", custIDParameter, branchIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="district">No Metadata Documentation available.</param>
+        public ObjectResult<AR20400_pcMarket_Result> AR20400_pcMarket(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String district)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter districtParameter;
+            if (district != null)
+            {
+                districtParameter = new ObjectParameter("District", district);
+            }
+            else
+            {
+                districtParameter = new ObjectParameter("District", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<AR20400_pcMarket_Result>("AR20400_pcMarket", userNameParameter, cpnyIDParameter, langIDParameter, districtParameter);
+        }
 
         #endregion
 
@@ -4981,6 +5033,54 @@ namespace AR20400
         private global::System.String _Mobile;
         partial void OnMobileChanging(global::System.String value);
         partial void OnMobileChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Market
+        {
+            get
+            {
+                return _Market;
+            }
+            set
+            {
+                OnMarketChanging(value);
+                ReportPropertyChanging("Market");
+                _Market = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Market");
+                OnMarketChanged();
+            }
+        }
+        private global::System.String _Market;
+        partial void OnMarketChanging(global::System.String value);
+        partial void OnMarketChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BillMarket
+        {
+            get
+            {
+                return _BillMarket;
+            }
+            set
+            {
+                OnBillMarketChanging(value);
+                ReportPropertyChanging("BillMarket");
+                _BillMarket = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BillMarket");
+                OnBillMarketChanged();
+            }
+        }
+        private global::System.String _BillMarket;
+        partial void OnBillMarketChanging(global::System.String value);
+        partial void OnBillMarketChanged();
 
         #endregion
 
@@ -9695,6 +9795,85 @@ namespace AR20400
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="AR20400_pcMarket_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR20400_pcMarket_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR20400_pcMarket_Result object.
+        /// </summary>
+        /// <param name="market">Initial value of the Market property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        public static AR20400_pcMarket_Result CreateAR20400_pcMarket_Result(global::System.String market, global::System.String descr)
+        {
+            AR20400_pcMarket_Result aR20400_pcMarket_Result = new AR20400_pcMarket_Result();
+            aR20400_pcMarket_Result.Market = market;
+            aR20400_pcMarket_Result.Descr = descr;
+            return aR20400_pcMarket_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Market
+        {
+            get
+            {
+                return _Market;
+            }
+            set
+            {
+                OnMarketChanging(value);
+                ReportPropertyChanging("Market");
+                _Market = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Market");
+                OnMarketChanged();
+            }
+        }
+        private global::System.String _Market;
+        partial void OnMarketChanging(global::System.String value);
+        partial void OnMarketChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="AR20400_pdConfig_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -11959,6 +12138,54 @@ namespace AR20400
         private global::System.String _OUnit;
         partial void OnOUnitChanging(global::System.String value);
         partial void OnOUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Market
+        {
+            get
+            {
+                return _Market;
+            }
+            set
+            {
+                OnMarketChanging(value);
+                ReportPropertyChanging("Market");
+                _Market = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Market");
+                OnMarketChanged();
+            }
+        }
+        private global::System.String _Market;
+        partial void OnMarketChanging(global::System.String value);
+        partial void OnMarketChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BillMarket
+        {
+            get
+            {
+                return _BillMarket;
+            }
+            set
+            {
+                OnBillMarketChanging(value);
+                ReportPropertyChanging("BillMarket");
+                _BillMarket = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BillMarket");
+                OnBillMarketChanged();
+            }
+        }
+        private global::System.String _BillMarket;
+        partial void OnBillMarketChanging(global::System.String value);
+        partial void OnBillMarketChanged();
 
         #endregion
 

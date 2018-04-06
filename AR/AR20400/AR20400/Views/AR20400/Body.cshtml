@@ -559,7 +559,7 @@
                                     .HQProcedure("AR20400_pcSI_Display").HQColumnShow("Code,Descr")
                                     .DisplayField("Descr").ValueField("Code")
                                             //  .HQAutoLoad(false)
-                                            .Width(260).LabelWidth(140)
+                                            .Width(250)
                                         .AllowBlank(true)
                                     .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .HQParam(new StoreParameterCollection()
@@ -689,7 +689,7 @@
                             , HQ.Label().HQLangCode("STATE").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("CITY").ID("lblCITY").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("DISTRICT").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
-
+                            , HQ.Label().HQLangCode("SI23900_MarketName").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
                             , HQ.Label().HQLangCode("Ward").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
 
                             , HQ.Label().HQLangCode("ZIP").MarginSpec("11 0 0 0").StyleSpec("text-align:right;").Width(120)
@@ -803,6 +803,30 @@
                                     lst.Change.Fn = "cboDistrict_Change";
                                     //lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
+                                        , HQ.Combo().ID("cboMarket").Name("cboMarket").HQLangCode("SI23900_MarketName").DataIndex("Market").HideLabel(true)
+                                        .HQProcedure("AR20400_pcMarket").HQColumnShow("Market,Descr")
+                                        .DisplayField("Descr").ValueField("Market").ForceSelection(true)
+                                            //  .HQAutoLoad(false)
+                                            .Width(250)//.LabelWidth(140)
+                                        //.AllowBlank(true)
+                                    .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                                    .HQParam(new StoreParameterCollection()
+                                    {
+                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@District", Value = "App.cboDistrict.getValue()", Mode = ParameterMode.Raw }
+                                    })
+                                    .LoadData()
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Focus.Handler = "this.forceSelection = true;";
+                                        lst.Blur.Handler = "this.forceSelection = false;";
+                                        lst.Change.Fn = "cboMarket_Chang";
+                                    })
+
                             , HQ.TextBox().ID("txtWard").Name("txtWard").DataIndex("Ward")
                                 .EnforceMaxLength(true).MaxLength(100)
                                 .Width(250).MarginSpec("5 0 0 0")
@@ -937,7 +961,29 @@
                                     //lst.Focus.Handler = "this.forceSelection = true;";  
                                     lst.Change.Fn = "cboBillDistrict_Change";
                                 })
-
+                                    , HQ.Combo().ID("cboBillMarket").Name("cboBillMarket").HQLangCode("SI23900_MarketName").DataIndex("BillMarket").HideLabel(true)
+                                        .HQProcedure("AR20400_pcMarket").HQColumnShow("Market,Descr")
+                                    .DisplayField("Descr").ValueField("Market").ForceSelection(true)
+                                            //  .HQAutoLoad(false)
+                                            .Width(250)
+                                       // .AllowBlank(true)
+                                    .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                                    .HQParam(new StoreParameterCollection()
+                                    {
+                                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                        new StoreParameter() { Name = "@District", Value = "App.cboBillDistrict.getValue()", Mode = ParameterMode.Raw }
+                                    })
+                                    .LoadData()
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Focus.Handler = "this.forceSelection = true;";
+                                        lst.Blur.Handler = "this.forceSelection = false;";
+                                        lst.Change.Fn = "cboBillMarket_Chang";
+                                    })
                             , HQ.TextBox().ID("txtBillWard").Name("txtBillWard").DataIndex("BillWard")
                                 .EnforceMaxLength(true).MaxLength(100)
                                 .Width(250).MarginSpec("5 0 0 0")

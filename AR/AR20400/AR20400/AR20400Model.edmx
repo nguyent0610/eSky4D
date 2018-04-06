@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_CustAdvTool">
           <Key>
             <PropertyRef Name="CustID" />
@@ -186,6 +186,8 @@
           <Property Name="BrandID" Type="varchar(max)" />
           <Property Name="OUnit" Type="varchar(max)" />
           <Property Name="Mobile" Type="varchar" MaxLength="20" />
+          <Property Name="Market" Type="varchar" MaxLength="30" />
+          <Property Name="BillMarket" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="AR_CustomerChild">
           <Key>
@@ -422,6 +424,12 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Descr1" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <Function Name="AR20400_pcMarket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="District" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="AR20400_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -610,6 +618,12 @@
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_pcMarket" ReturnType="Collection(AR20400Model.AR20400_pcMarket_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="District" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_CustAdvTool">
@@ -1078,6 +1092,8 @@
           <Property Type="String" Name="SizeID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="DisplayID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="OUnit" Nullable="true" />
+          <Property Type="String" Name="Market" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BillMarket" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="AR20400_pdConfig_Result">
           <Property Type="String" Name="hideColumn" Nullable="false" MaxLength="32" />
@@ -1185,6 +1201,8 @@
           <Property Name="BrandID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="OUnit" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Market" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="BillMarket" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="AR20400_pgCompetitor_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
@@ -1195,6 +1213,10 @@
           <Property Type="Double" Name="Price" Nullable="false" />
           <Property Type="DateTime" Name="DateCompetitor" Nullable="false" Precision="23" />
           <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="AR20400_pcMarket_Result">
+          <Property Type="String" Name="Market" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="100" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1702,6 +1724,8 @@
                 <ScalarProperty Name="SizeID" ColumnName="SizeID" />
                 <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
                 <ScalarProperty Name="OUnit" ColumnName="OUnit" />
+                <ScalarProperty Name="Market" ColumnName="Market" />
+                <ScalarProperty Name="BillMarket" ColumnName="BillMarket" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1722,6 +1746,8 @@
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="BillMarket" ColumnName="BillMarket" />
+                <ScalarProperty Name="Market" ColumnName="Market" />
                 <ScalarProperty Name="Mobile" ColumnName="Mobile" />
                 <ScalarProperty Name="OUnit" ColumnName="OUnit" />
                 <ScalarProperty Name="BrandID" ColumnName="BrandID" />
@@ -1827,6 +1853,14 @@
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="DateCompetitor" ColumnName="DateCompetitor" />
                 <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pcMarket" FunctionName="eBiz4DWebSysModel.Store.AR20400_pcMarket">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pcMarket_Result">
+                <ScalarProperty Name="Market" ColumnName="Market" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

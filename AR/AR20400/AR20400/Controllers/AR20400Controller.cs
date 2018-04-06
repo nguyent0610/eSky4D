@@ -726,6 +726,8 @@ namespace AR20400.Controllers
             t.SizeID = s.SizeID;
             t.DisplayID = s.DisplayID;
             t.BrandID = s.BrandID;
+            t.Market = s.Market;
+            t.BillMarket = s.BillMarket;
 
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
