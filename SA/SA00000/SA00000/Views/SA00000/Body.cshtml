@@ -711,8 +711,8 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
 
-                    , HQ.Combo().ID("cboTDisplayID").Name("cboTDisplayID").HQProcedure("SA00000_pcTDisplay").HQLangCode("TDisplay")
-                        .HQColumnShow("DisplayID,Descr,FromDate,ToDate").DisplayField("DisplayID").ValueField("DisplayID").MultiSelect(true)
+                        , HQ.Combo().ID("cboTDisplayID").Name("cboTDisplayID").HQProcedure("SA00000_pcTDisplay").HQLangCode("SA00000_TDisplay")
+                    .HQColumnShow("DisplayID,Descr,FromDate,ToDate").DisplayField("DisplayID").ValueField("DisplayID").MultiSelect(true)
                     .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").ForceSelection(true)
                     .HQParam(new StoreParameterCollection()
                     {
@@ -729,7 +729,7 @@
                     })
 
                     , HQ.Combo().ID("cboAccumulatedID").Name("cboAccumulatedID").HQProcedure("SA00000_pcAccumulated").HQLangCode("SA00000_Accumulated")
-                    .HQColumnShow("AccumulateID,Descr,FromDate,ToDate").DisplayField("AccumulateID").ValueField("AccumulateID").MultiSelect(true)
+                    .HQColumnShow("SA00000_Accumulate,Descr,FromDate,ToDate").DisplayField("SA00000_Accumulate").ValueField("SA00000_Accumulate").MultiSelect(true)
                     .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").ForceSelection(true)
                     .HQParam(new StoreParameterCollection()
                     {
