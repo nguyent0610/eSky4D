@@ -84,7 +84,15 @@ var menuClick = function (command) {
             App.txtSalesState.setValue('');
             App.txtSalesStateDescr.setValue('');
 
+            App.txtSAManager.setValue('');
+            App.txtManager.setValue('');
+            App.cboBranchOld.setValue('');
+            App.cboSlsperID.setValue('');
+            App.cboTDisplayID.setValue('');
+            App.cboAccumulatedID.setValue('');
+
             App.stoSys_CompanyAddr.reload();
+            App.cboBranchOld.store.reload();
             App.txtSalesStateDescr.setVisible(HQ.allowSalesState);
             App.btnSalesState.setVisible(HQ.allowSalesState);
             App.txtSalesDistrictDescr.setVisible(HQ.allowSalesDistrict);
@@ -96,6 +104,10 @@ var menuClick = function (command) {
             App.Address2.allowBlank = !HQ.allowAddress2;
             App.Address2.isValid();
             App.frmDetail.validate();
+
+            if (HQ.allowProccess !== 1) {
+                App.tabDetail.child('#pnlProcess').tab.hide();
+            }
             // App.BrandQSR.setValue('');
             //App.tableHD.setValue('');
             //App.tableTA.setValue('');
@@ -134,7 +146,7 @@ var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     App.frmMain.isValid();
-    
+
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     checkLoad();    
 };
@@ -243,7 +255,15 @@ var save = function () {
                 params: {
                     lstSYS_Cpny: HQ.store.getData(App.stoSYS_Cpny),
                     lstSys_CompanyAddr: HQ.store.getData(App.stoSys_CompanyAddr),
-                    compID: App.txtCpnyID.getValue()
+                    compID: App.txtCpnyID.getValue(),
+                    txtManager: App.txtManager.getValue(),
+                    cboBranchOld: App.cboBranchOld.getValue(),
+                    SlsperID: App.cboSlsperID.getValue(),
+                    DisplayID: App.cboTDisplayID.getValue(),
+                    AccumulateID: App.cboAccumulatedID.getValue(),
+   
+
+                   
                 },
                 success: function (msg, data) {
                     HQ.message.show(201405071);
@@ -288,10 +308,14 @@ function closewin(item) {
     }
 };
 var btnEdit_Click = function (record) {
+ 
     App.frmDetail.loadRecord(record);
     keycheckChange = record;
     //App.txtCpnyID.setValue(record.data.CpnyID.split(','));
     //App.txtUserID.setValue(record.data.UserName);
+
+   
+
     App.txtCpnyID.setReadOnly(true);
     App.winLocation.setTitle("Edit");
     HQ.isNew = false;
@@ -308,7 +332,21 @@ var btnEdit_Click = function (record) {
     App.txtSalesDistrictDescr.allowBlank = !HQ.allowSalesDistrict;
     App.txtSalesStateDescr.allowBlank = !HQ.allowSalesState;
     App.frmDetail.validate();
+
+    App.txtSAManager.setValue(record.data.SAManager);
+    App.txtManager.setValue('');
+    App.cboBranchOld.setValue('');
+    App.cboSlsperID.setValue('');
+    App.cboTDisplayID.setValue('');
+    App.cboAccumulatedID.setValue('');
+    App.cboBranchOld.store.reload();
+
     HQ.isChange = false;
+
+    if (HQ.allowProccess !== 1) {
+        App.tabDetail.child('#pnlProcess').tab.hide();
+    }
+
     //App.stoForm.reload();
     //HQ.isFirstLoad = true;
     //frmChange();
@@ -1031,3 +1069,45 @@ var stringFilter = function (record) {
 
 };
 
+var cboBranchOld_Change = function () {
+    App.cboSlsperID.store.reload();
+    App.cboTDisplayID.store.reload();
+    App.cboAccumulatedID.store.reload();
+}
+
+var btnAddSAManager_Click = function () {
+    App.winUsers.show();
+    App.stoUsers.reload();
+};
+
+var CheckUser_Change = function () {
+    var allData = App.stoUsers.snapshot || App.stoUsers.allData || App.stoUsers.data;
+    App.stoUsers.suspendEvents();
+    for (var i = 0; i < allData.items.length; i++) {
+        item = allData.items[i];
+        if (App.CheckUser_All.getValue() == true) {
+            item.set('CheckUser', true);
+        }
+        else
+            item.set('CheckUser', false);
+    }
+    App.stoUsers.resumeEvents();
+    App.grdUsers.view.refresh();
+};
+
+var btnAdd_Click = function () {
+    var listUSers = '';
+    var allData = App.stoUsers.snapshot || App.stoUsers.allData || App.stoUsers.data;
+    for (var i = 0; i < allData.length; i++) {
+        if (allData.items[i].data.CheckUser == true) {
+            listUSers += allData.items[i].data.UserName + ', ';
+        }
+    }
+    App.txtManager.setValue(listUSers);
+    App.winUsers.hide();
+};
+
+
+var btnCancel_Click = function () {
+    App.winUsers.hide();
+};

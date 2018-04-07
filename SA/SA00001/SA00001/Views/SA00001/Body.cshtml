@@ -1,4 +1,4 @@
-@using Ext.Net;
+﻿@using Ext.Net;
 @using Ext.Net.MVC;
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
@@ -63,9 +63,9 @@
                 ,X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(100)
                 //,X.Column().Text(Util.GetLang("Address1")).DataIndex("Address1").Width(200)            
 
-                ,X.Column().Text(Util.GetLang("SA00001Address2")).DataIndex("Address2").Width(200)
+                    , X.Column().DataIndex("SAManager").Hidden(true)
 
-                //,X.Column().Text(Util.GetLang("tableHD")).DataIndex("tableHD").Width(200)  
+                    , X.Column().Text(Util.GetLang("tableHD")).DataIndex("tableHD").Width(200)  
 
                 //,X.Column().Text(Util.GetLang("tableTA")).DataIndex("tableTA").Width(200)  
 
@@ -505,7 +505,7 @@
                        )
             )//form panel
 
-
+              
 
             ,X.GridPanel().ID("grdSys_CompanyAddr")
             .Scroll(ScrollMode.Both)
@@ -678,15 +678,175 @@
                         X.StringFilter().DataIndex("City").ValidateRecord(p => p.Fn = "stringFilterCity")
                     )
             )
+
+
+                    , X.Panel().ID("pnlProcess")      //////////////Tab Xử lý/////////////
+                    .Title(Util.GetLang("SA00001Process"))
+                    .Layout(LayoutType.VBox).AutoScroll(true)
+                    .Items(
+
+                          HQ.TextArea().ID("txtSAManager").HQLangCode("SAManager").DataIndex("SAManager").Width(600).Tag("X").ReadOnly(true).MarginSpec("5 0 0 5")
+                          .LabelWidth(160).StyleSpec("text-align:right")
+
+
+
+                          , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")
+                          .Items(
+
+                            HQ.TextBox().ID("txtManager").HQLangCode("SA00001Manager").Width(572).Tag("X").ReadOnly(true).MarginSpec("5 0 0 5")
+                                .LabelWidth(160).StyleSpec("text-align:right")
+                                
+                            , X.Button().ID("btnAddSAManager").Icon(Icon.Add)
+                            .Listeners(p => p.Click.Fn = "btnAddSAManager_Click")
+                            .Width(23)
+                            .MarginSpec("5 0 0 5")
+                            
+                          )
+                            , HQ.Combo().ID("cboBranchOld").Name("cboBranchOld").HQProcedure("SA00001_pcCompanyAll").HQDBSys(true).HQLangCode("SA00001BranchOld").HQAutoLoad(false)
+                           .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
+                           .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 5")
+                               .LabelWidth(160)
+                           .LoadData().ForceSelection(true)                           
+                           .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.Change.Fn = "cboBranchOld_Change";
+                                })
+
+                        , HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").HQProcedure("SA00001_pcSlsperID").HQLangCode("SA00001SlsperID")
+                        .HQColumnShow("SlsperID,Name").DisplayField("SlsperID").ValueField("SlsperID").MultiSelect(true)
+                        .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 5").ForceSelection(true)
+                            .LabelWidth(160)
+                        .HQParam(new StoreParameterCollection()
+                    {
+                       new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchOld.getValue()", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData().ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+
+                        , HQ.Combo().ID("cboTDisplayID").Name("cboTDisplayID").HQProcedure("SA00001_pcTDisplay").HQLangCode("SA00001_TDisplay")
+                    .HQColumnShow("DisplayID,Descr,FromDate,ToDate").DisplayField("DisplayID").ValueField("DisplayID").MultiSelect(true)
+                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 5").ForceSelection(true)
+                        .LabelWidth(160)
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchOld.getValue()", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData().ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+
+                    , HQ.Combo().ID("cboAccumulatedID").Name("cboAccumulatedID").HQProcedure("SA00001_pcAccumulated").HQLangCode("SA00001_Accumulated")
+                    .HQColumnShow("SA00001_Accumulate,Descr,FromDate,ToDate").DisplayField("SA00001_Accumulate").ValueField("SA00001_Accumulate").MultiSelect(true)
+                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 5").ForceSelection(true)
+                        .LabelWidth(160)
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchOld.getValue()", Mode = ParameterMode.Raw }
+                    })
+                                .LoadData().ForceSelection(true)
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                    ) 
+            
         )
         .Listeners(lss =>
         {
             lss.Render.Handler = "HQ.common.control_render(this,'grdSys_CompanyAddr')";
         })
+
+
+
+          
+        
+        
     )//tab panel
+    
+     
+    
+    
 )
 
+@(X.Window()
+    .ID("winUsers")
+    .Hidden(true).Resizable(true).Maximizable(true)
+    .Width(500).Height(500)
+    .Layout(LayoutType.Fit)
+    .AutoScroll(true).Closable(true)
+    .Buttons(
+        X.Button().ID("btnAdd").Text(Util.GetLang("Add"))
+        .Listeners(p => p.Click.Fn = "btnAdd_Click")
+       , X.Button().ID("btnCancel").Text(Util.GetLang("Cancel"))
+        .Listeners(p => p.Click.Fn = "btnCancel_Click")
+    )
+    .Items(
+       X.GridPanel().ID("grdUsers")
+            .SelectionMemory(false)
+            .Store(
+                X.Store()
+                    .ID("stoUsers")
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(SA00001_pgLoadUsers_Result), "mdlSA00001_pgLoadUsers", ""))
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetUsers"))).AutoLoad(false)
+              )
+            .ColumnModel(
+                 X.RowNumbererColumn().Text(Util.GetLang("Index")).Width(50).Sortable(false)
+                , X.Column().Text(Util.GetLang("UserID")).DataIndex("UserName").Width(150)
+                , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(150)
+                , X.CheckColumn().ID("CheckUser").DataIndex("CheckUser").Width(30).Editable(true).HideTitleEl(true)
+                    .HeaderItems(
+                        HQ.Checkbox().ID("CheckUser_All").MarginSpec("0 0 0 7").Listeners(l => l.Change.Fn = "CheckUser_Change")
+                    )
+            )
+            .BottomBar(
+                X.PagingToolbar()
+                    .Items(
+                        X.Label("Page size:"),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("50")
+                        .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                        )
+                    .Plugins(X.ProgressBarPager())
+            )
+            .SelectionModel(
+                X.RowSelectionModel()
+                    .Mode(SelectionMode.Multi)
+             )
+        // .SortableColumns(false)
+            .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("UserName"),
+                    X.StringFilter().DataIndex("Name")
+                )
+            )
 
+    )
+)
 
 @(
  X.Window()
@@ -890,3 +1050,4 @@
     )
 
 )
+

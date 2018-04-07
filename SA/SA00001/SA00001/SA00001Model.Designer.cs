@@ -358,6 +358,121 @@ namespace SA00001
     
             return base.ExecuteFunction<SA00001_pdConfig_Result>("SA00001_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<SA00001_pgLoadUsers_Result> SA00001_pgLoadUsers(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<SA00001_pgLoadUsers_Result>("SA00001_pgLoadUsers", userIDParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="userManger">No Metadata Documentation available.</param>
+        /// <param name="branchOld">No Metadata Documentation available.</param>
+        /// <param name="slsperID">No Metadata Documentation available.</param>
+        /// <param name="displayID">No Metadata Documentation available.</param>
+        /// <param name="accumulateID">No Metadata Documentation available.</param>
+        public int SA00001_ppUserSales(global::System.String branchID, global::System.String userManger, global::System.String branchOld, global::System.String slsperID, global::System.String displayID, global::System.String accumulateID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userMangerParameter;
+            if (userManger != null)
+            {
+                userMangerParameter = new ObjectParameter("UserManger", userManger);
+            }
+            else
+            {
+                userMangerParameter = new ObjectParameter("UserManger", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchOldParameter;
+            if (branchOld != null)
+            {
+                branchOldParameter = new ObjectParameter("BranchOld", branchOld);
+            }
+            else
+            {
+                branchOldParameter = new ObjectParameter("BranchOld", typeof(global::System.String));
+            }
+    
+            ObjectParameter slsperIDParameter;
+            if (slsperID != null)
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
+            }
+            else
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
+            }
+    
+            ObjectParameter displayIDParameter;
+            if (displayID != null)
+            {
+                displayIDParameter = new ObjectParameter("DisplayID", displayID);
+            }
+            else
+            {
+                displayIDParameter = new ObjectParameter("DisplayID", typeof(global::System.String));
+            }
+    
+            ObjectParameter accumulateIDParameter;
+            if (accumulateID != null)
+            {
+                accumulateIDParameter = new ObjectParameter("AccumulateID", accumulateID);
+            }
+            else
+            {
+                accumulateIDParameter = new ObjectParameter("AccumulateID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("SA00001_ppUserSales", branchIDParameter, userMangerParameter, branchOldParameter, slsperIDParameter, displayIDParameter, accumulateIDParameter);
+        }
 
         #endregion
 
@@ -2515,6 +2630,21 @@ namespace SA00001
     [Serializable()]
     public partial class SA00001_pdConfig_Result : ComplexObject
     {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA00001_pdConfig_Result object.
+        /// </summary>
+        /// <param name="showProccess">Initial value of the ShowProccess property.</param>
+        public static SA00001_pdConfig_Result CreateSA00001_pdConfig_Result(global::System.Int32 showProccess)
+        {
+            SA00001_pdConfig_Result sA00001_pdConfig_Result = new SA00001_pdConfig_Result();
+            sA00001_pdConfig_Result.ShowProccess = showProccess;
+            return sA00001_pdConfig_Result;
+        }
+
+        #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2612,6 +2742,30 @@ namespace SA00001
         private Nullable<global::System.Boolean> _allowOwer;
         partial void OnallowOwerChanging(Nullable<global::System.Boolean> value);
         partial void OnallowOwerChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ShowProccess
+        {
+            get
+            {
+                return _ShowProccess;
+            }
+            set
+            {
+                OnShowProccessChanging(value);
+                ReportPropertyChanging("ShowProccess");
+                _ShowProccess = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowProccess");
+                OnShowProccessChanged();
+            }
+        }
+        private global::System.Int32 _ShowProccess;
+        partial void OnShowProccessChanging(global::System.Int32 value);
+        partial void OnShowProccessChanged();
 
         #endregion
 
@@ -3526,6 +3680,131 @@ namespace SA00001
         private Nullable<global::System.Double> _Lng;
         partial void OnLngChanging(Nullable<global::System.Double> value);
         partial void OnLngChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SAManager
+        {
+            get
+            {
+                return _SAManager;
+            }
+            set
+            {
+                OnSAManagerChanging(value);
+                ReportPropertyChanging("SAManager");
+                _SAManager = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SAManager");
+                OnSAManagerChanged();
+            }
+        }
+        private global::System.String _SAManager;
+        partial void OnSAManagerChanging(global::System.String value);
+        partial void OnSAManagerChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA00001Model", Name="SA00001_pgLoadUsers_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA00001_pgLoadUsers_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA00001_pgLoadUsers_Result object.
+        /// </summary>
+        /// <param name="userName">Initial value of the UserName property.</param>
+        public static SA00001_pgLoadUsers_Result CreateSA00001_pgLoadUsers_Result(global::System.String userName)
+        {
+            SA00001_pgLoadUsers_Result sA00001_pgLoadUsers_Result = new SA00001_pgLoadUsers_Result();
+            sA00001_pgLoadUsers_Result.UserName = userName;
+            return sA00001_pgLoadUsers_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String UserName
+        {
+            get
+            {
+                return _UserName;
+            }
+            set
+            {
+                OnUserNameChanging(value);
+                ReportPropertyChanging("UserName");
+                _UserName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("UserName");
+                OnUserNameChanged();
+            }
+        }
+        private global::System.String _UserName;
+        partial void OnUserNameChanging(global::System.String value);
+        partial void OnUserNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> CheckUser
+        {
+            get
+            {
+                return _CheckUser;
+            }
+            set
+            {
+                OnCheckUserChanging(value);
+                ReportPropertyChanging("CheckUser");
+                _CheckUser = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CheckUser");
+                OnCheckUserChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _CheckUser;
+        partial void OnCheckUserChanging(Nullable<global::System.Boolean> value);
+        partial void OnCheckUserChanged();
 
         #endregion
 

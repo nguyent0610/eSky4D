@@ -40,6 +40,8 @@ namespace SA00001.Controllers
                 allowSalesDistrict = objConfig.AllowSalesDistrict.HasValue ? objConfig.AllowSalesDistrict.Value : false;
                 allowAddress2= objConfig.allowAddress2.HasValue ? objConfig.allowAddress2.Value : false;
                 allowOwer = objConfig.allowOwer.HasValue ? objConfig.allowOwer.Value : false;
+
+                ViewBag.AllowProccess = objConfig.ShowProccess;
             }
 
             ViewBag.allowSalesState = allowSalesState;
@@ -55,6 +57,13 @@ namespace SA00001.Controllers
         {
             return PartialView();
         }
+
+
+        public ActionResult GetUsers()
+        {
+            return this.Store(_db.SA00001_pgLoadUsers(Current.UserName, Current.CpnyID, Current.LangID).ToList());
+        }
+
 
         public ActionResult GetSYS_Role()
         {
@@ -174,6 +183,18 @@ namespace SA00001.Controllers
                     }
                 }
                 _db.SaveChanges();
+
+                // sau khi save xong gọi tới hàm tạo user hoặc chuyển save, truyền xuống danh sách
+                Dictionary<string, string> dicData = new Dictionary<string, string>();
+                dicData.Add("@BranchID", cpnyNPP);
+                dicData.Add("@UserManger", data["txtManager"]);
+                dicData.Add("@BranchOld", data["cboBranchOld"]);
+                dicData.Add("@SlsperID", data["SlsperID"]);
+                dicData.Add("@DisplayID", data["DisplayID"]);
+                dicData.Add("@AccumulateID", data["AccumulateID"]);
+
+                Util.getDataTableFromProc("SA00000_ppUserSales", dicData, true);
+
                 return Json(new { success = true});
             }
             catch (Exception ex)
