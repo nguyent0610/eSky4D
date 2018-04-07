@@ -97,11 +97,12 @@ namespace INProcess
                     else
                         qty = inTran.Double("Qty") * inTran.Short("InvtMult") / inTran.Double("CnvFact");
 
-                    if (isTransfer) itemSite.QtyInTransit -= qty;
+                    var decimalPlace = inventory.LotSerTrack == "Q" ? 2 : 0;
 
-                    itemSite.QtyOnHand = Math.Round(itemSite.QtyOnHand + qty, 0);
-                    itemSite.QtyAvail = Math.Round(itemSite.QtyAvail + qty, 0);
-                    itemSite.AvgCost = Math.Round(itemSite.QtyOnHand > 0 ? (itemSite.TotCost + inTran.Double("ExtCost")) / itemSite.QtyOnHand :  itemSite.AvgCost, 0);
+                    if (isTransfer) itemSite.QtyInTransit -= qty;
+                    itemSite.QtyOnHand = Math.Round(itemSite.QtyOnHand + qty, decimalPlace);
+                    itemSite.QtyAvail = Math.Round(itemSite.QtyAvail + qty, decimalPlace);
+                    itemSite.AvgCost = Math.Round(itemSite.QtyOnHand > 0 ? (itemSite.TotCost + inTran.Double("ExtCost")) / itemSite.QtyOnHand : itemSite.AvgCost, decimalPlace);                    
                 }
                 itemSite.TotCost = Math.Round(itemSite.TotCost + inTran.Double("ExtCost"), 0);
                 itemSite.LUpd_DateTime = DateTime.Now;
@@ -113,7 +114,9 @@ namespace INProcess
                     DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", inTran.String("LineRef"));
                     foreach (DataRow lotRow in dtLot.Rows)
                     {
-                        qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 10);
+                        var decimalPlace = inventory.LotSerTrack == "Q" ? 2 : 0;
+                        qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 10);                       
+                        
                         if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr")))
                         {
                             objItemLot.Reset();
@@ -131,11 +134,17 @@ namespace INProcess
                             objItemLot.LUpd_Prog = Prog;
                             objItemLot.LUpd_User = User;
                             objItemLot.Add();
+                            // Thêm vào table IN_ItemPack dùng cho hàng dây thừng
+                            if (inventory.LotSerTrack == "Q")
+                            {
+                                sql.Insert_IN_ItemPack(branchID, batNbr, Prog, User, lotRow.String("RefNbr"), objItemLot.LotSerNbr, lotRow.String("INTranLineRef"));
+                            }
                         }
 
                         objItemLot.ExpDate = lotRow.Date("ExpDate");
-                        objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
-                        objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
+                        
+                        objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, decimalPlace);
+                        objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, decimalPlace);
                         objItemLot.Cost = itemSite.AvgCost * objItemLot.QtyOnHand;
 
                         objItemLot.LUpd_DateTime = DateTime.Now;

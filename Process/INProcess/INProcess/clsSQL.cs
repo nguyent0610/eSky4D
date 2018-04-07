@@ -334,6 +334,29 @@ namespace INProcess
 
                 throw ex;
             }
-        } 
+        }
+
+        public void Insert_IN_ItemPack(string branchID,string batNbr,string prog,string user, string refNbr,string LotSerNbr,string INTranLineRef)
+        {
+
+            try
+            {
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BatNbr", DbType.String, clsCommon.GetValueDBNull(batNbr), ParameterDirection.Input, 30));               
+                pc.Add(new ParamStruct("@RefNbr", DbType.String, clsCommon.GetValueDBNull(refNbr), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@LotSerNbr", DbType.String, clsCommon.GetValueDBNull(LotSerNbr), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@INTranLineRef", DbType.String, clsCommon.GetValueDBNull(INTranLineRef), ParameterDirection.Input,30));
+
+                pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
+                pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
+                mDal.ExecNonQuery("INProcess_ppInsertItemPack", CommandType.StoredProcedure, ref pc);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
     }
 }
