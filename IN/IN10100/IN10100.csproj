@@ -83,9 +83,6 @@
     <Reference Include="INProcess">
       <HintPath>..\..\..\..\..\Hao\20170504\NhuHao\DLL MVC moi\ND\INProcess.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\INProcess\INProcess\bin\Debug\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
@@ -389,7 +386,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

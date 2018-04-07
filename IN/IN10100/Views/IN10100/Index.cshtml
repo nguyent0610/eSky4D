@@ -39,7 +39,7 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>   
-@(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+@(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
 
@@ -218,7 +218,7 @@
     X.Store()
     .ID("stoCalcLot")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlCalcLot",""))
+        .Model(Util.GenerateModel(typeof(IN10100_pgIN_ItemLot_Result), "mdlCalcLot", ""))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetLot", "IN10100"))

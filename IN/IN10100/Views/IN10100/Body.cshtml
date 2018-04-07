@@ -457,13 +457,13 @@
                     )
                 
 
-                    , X.Column()
+                    , X.NumberColumn()
                     .DataIndex("Qty")
                     .Text(Util.GetLang("Qty"))
                     .Align(Alignment.Right)
                     .Width(100)
                     .Editor(HQ.NumberField().ID("txtTransQty").MaxValue(1000000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
-                    .Renderer("rdrTrans_QtyAmt")
+                    .Renderer("rendererQty")
                 
                 
                     , X.ComponentColumn()
@@ -477,7 +477,7 @@
                     , X.Column().ID("colQtyOnHand").DataIndex("QtyOnHand").Text(Util.GetLang("QtyOnHand")).Hidden(true)
                     .Width(110)
                     .Align(Alignment.Right)
-                    .Renderer("renderQtyAmt")  
+                        .Renderer("rendererQty")  
                 
                     , X.Column()
                     .DataIndex("UnitPrice")
@@ -534,7 +534,7 @@
                             .SelectedItems("50")
                             .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
                         )
-                        .Plugins(X.ProgressBarPager())
+                        .Plugins(X.ProgressBarPager()).HideRefresh(true)
                 )
                 .Plugins(
                     X.CellEditing().ClicksToEdit(1)
@@ -597,6 +597,8 @@
             .Editor(
                 X.ComboBox().ID("cboLotSerNbr").DataIndex("LotSerNbr")
                 .ValueField("LotSerNbr").DisplayField("LotSerNbr")
+                .MaxLength(25)
+                .EnforceMaxLength(true)
                 .SubmitValue(false)
                 .MinChars(1).TypeAhead(false).ForceSelection(false)
                 .TriggerAction(TriggerAction.All)
@@ -639,21 +641,24 @@
                 .StoreID("stoCalcLot")
             )
             .Width(120)
-                                     
-               
+
+            , X.Column().ID("colPackageID").DataIndex("PackageID").Text(Util.GetLang("PackageID")).Hidden(true)
+            .Width(70)
+            .Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
+            
             , X.Column().ID("colLotUnitDesc").DataIndex("UnitDesc").Text(Util.GetLang("Unit"))
             .Width(70)
                   
-            , X.Column().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("Qty"))
+            , X.NumberColumn().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("IN10100LotQty"))
             .Width(75)
             .Align(Alignment.Right)
-            .Renderer("renderQtyAmt") 
+            //.Renderer("renderQtyAmt") 
             .Editor(Html.X().NumberField().MaxValue(1000000).MinValue(0).DecimalPrecision(0))
 
-            , X.Column().ID("colLotQtyOnHand").DataIndex("QtyOnHand").Text(Util.GetLang("QtyOnHand")).Hidden(true)
-            .Width(110)
+            , X.NumberColumn().ID("colLotQtyOnHand").DataIndex("QtyOnHand").Text(Util.GetLang("QtyOnHand")).Hidden(true)
+            .Width(110).Format("0,000")
             .Align(Alignment.Right)
-            .Renderer("renderQtyAmt")     
+            .Renderer("rendererLotQty")     
                 
             , X.Column().ID("colLotPrice").DataIndex("UnitPrice").Text(Util.GetLang("Price"))
             .Width(110)
