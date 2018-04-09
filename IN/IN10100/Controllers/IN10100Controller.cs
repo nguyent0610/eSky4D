@@ -74,13 +74,16 @@ namespace IN10100.Controllers
             var showQtyOnhand = false;
             var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID && p.UserID == Current.UserName);
             var objConfig = _app.IN10100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            //var showPackage = false;
             if (objConfig != null)
             {
                 showQtyOnhand = objConfig.ShowQtyOnhand.HasValue && objConfig.ShowQtyOnhand.Value;
+                //showPackage = objConfig.ShowPackageID.HasValue && objConfig.ShowPackageID.Value;
             }
             ViewBag.INSite = userDft == null ? "" : userDft.INSite;
             ViewBag.BranchID = branchID;
             ViewBag.showQtyOnhand = showQtyOnhand;
+            //ViewBag.showPackage = showPackage;
             return View();
         }
 
