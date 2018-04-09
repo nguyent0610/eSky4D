@@ -58,6 +58,7 @@ namespace IN10100.Controllers
         private List<IN10100_pgReceiptLoad_Result> _lstTrans;
         private List<IN10100_pgLotTrans_Result> _lstLot;
         private IN_Setup _objIN;
+        private List<string> _lstLotPack = new List<string>();
         public ActionResult Index(string branchID)
         {
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
@@ -152,6 +153,7 @@ namespace IN10100.Controllers
 
             return this.Store(lstLot.OrderBy(p => p.LotSerNbr).ToList(), lstLot.Count);
         }
+   
         public ActionResult GetLotTrans(string branchID, string batNbr)
         {
             List<IN10100_pgLotTrans_Result> lstLotTrans = _app.IN10100_pgLotTrans(batNbr, branchID, Current.UserName, Current.CpnyID,Current.LangID).ToList(); //_app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
@@ -499,8 +501,9 @@ namespace IN10100.Controllers
                         }
 
 
-                        lotQty += Math.Round(item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact, decimalPlace);
+                        lotQty += item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact;
                     }
+                    lotQty = Math.Round(lotQty, decimalPlace);
                     double detQty = Math.Round(_lstTrans[i].UnitMultDiv == "M" ? _lstTrans[i].Qty * _lstTrans[i].CnvFact : _lstTrans[i].Qty / _lstTrans[i].CnvFact, decimalPlace);
                     if (detQty != lotQty)
                     {
@@ -536,6 +539,7 @@ namespace IN10100.Controllers
         {
             _objIN = _app.IN_Setup.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
             if (_objIN == null) _objIN = new IN_Setup();
+            _lstLotPack = _app.IN10100_pdLotPack(_objBatch.BatNbr, _objBatch.BranchID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             foreach (var tran in _lstTrans)
             {
 
@@ -579,6 +583,7 @@ namespace IN10100.Controllers
                         if (objPac != null)
                         {
                             _app.IN_PacTrans.DeleteObject(objPac);
+                            _lstLotPack.Remove(objPac.LotSerNbr);
                         }
                     }
                 }
@@ -600,6 +605,15 @@ namespace IN10100.Controllers
                 }
                 if (lotSerTrack == "Q")
                 {
+                    if (_lstLotPack.Any(x => x == lotCur.LotSerNbr))
+                    {
+                        throw new MessageException(MessageType.Message, "2018040901", "", new string[] { lotCur.LotSerNbr, lotCur.InvtID });
+                    }
+                    else
+                    {
+                        _lstLotPack.Add(lotCur.LotSerNbr);
+                    }
+
                     var pac = _app.IN_PacTrans.FirstOrDefault(p => p.BranchID == batch.BranchID && p.BatNbr == batch.BatNbr && p.INTranLineRef == lotCur.INTranLineRef && p.LotSerNbr == lotCur.LotSerNbr);
                     if (pac == null || lot.EntityState == EntityState.Deleted || lot.EntityState == EntityState.Detached)
                     {

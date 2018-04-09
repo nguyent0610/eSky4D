@@ -641,7 +641,7 @@
                 .StoreID("stoCalcLot")
             )
             .Width(120)
-
+          
             , X.Column().ID("colPackageID").DataIndex("PackageID").Text(Util.GetLang("PackageID")).Hidden(true)
             .Width(70)
             .Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
@@ -652,7 +652,7 @@
             , X.NumberColumn().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("IN10100LotQty"))
             .Width(75)
             .Align(Alignment.Right)
-            //.Renderer("renderQtyAmt") 
+            .Renderer("rendererLotQty") 
             .Editor(Html.X().NumberField().MaxValue(1000000).MinValue(0).DecimalPrecision(0))
 
             , X.NumberColumn().ID("colLotQtyOnHand").DataIndex("QtyOnHand").Text(Util.GetLang("QtyOnHand")).Hidden(true)

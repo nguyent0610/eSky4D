@@ -852,9 +852,9 @@ var grdLot_BeforeEdit = function (item, e) {
     if (App.grdLot.isLock) {
         return false;
     }
-    if (e.field == 'Qty' && HQ.currentDet && HQ.currentDet.data.LotSerTrack == _lotQ) {
-        return false;
-    }
+    //if (e.field == 'Qty' && HQ.currentDet && HQ.currentDet.data.LotSerTrack == _lotQ) {
+    //    return false;
+    //}
     if (e.field == 'PackageID' && (e.record.data.tstamp != '' || e.record.data.PackageID != '') && HQ.currentDet && HQ.currentDet.data.LotSerTrack == _lotQ) {
         return false;
     }
@@ -881,7 +881,18 @@ var grdLot_BeforeEdit = function (item, e) {
                 else
                     return true;
             }
-
+        }
+    } if (e.field == 'Qty') {
+        var discAmtCol = App.grdLot.down('[dataIndex=Qty]');
+        var discAmtField = discAmtCol.getEditor().field;
+        if (HQ.currentDet.data.LotSerTrack == _lotQ) {
+            App.colPackageID.show();
+            discAmtCol.format = "0,000.00";
+            discAmtField.decimalPrecision = 2;
+        } else {
+            discAmtCol.format = "0,000";
+            discAmtField.decimalPrecision = 0;
+            App.colPackageID.hide();
         }
     }
 };
@@ -914,16 +925,6 @@ var grdLot_Edit = function (item, e) {
             HQ.common.showBusy(true, 'Process...');
             HQ.numLot = 0;
             HQ.maxLot = 1;
-
-            var invt = HQ.currentDet.invt;
-            if (invt && invt.LotSerTrack == _lotQ) {
-                var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, 'PAC');
-                if (!Ext.isEmpty(cnv)) {
-                    e.record.data.Qty = cnv.CnvFact;
-                } else {
-                    return;
-                }
-            }
 
             App.stoItemLot.load({
                 params: { siteID: lot.SiteID, invtID: lot.InvtID, branchID: App.BranchID.getValue(), lotSerNbr: lot.LotSerNbr },
@@ -1344,7 +1345,7 @@ var calcLot = function (record, show) {
 var showLot = function (record, loadCombo) {
     HQ.currentDet = record;
     var lock = !((App.BatNbr.value && HQ.isUpdate) || (!App.BatNbr.value && HQ.isInsert)) || App.Status.getValue() != "H";
-    App.grdLot.isLock = lock;
+    
     if (loadCombo) {
         App.stoCalcLot.load({
             params: {
@@ -1374,6 +1375,7 @@ var showLot = function (record, loadCombo) {
     App.winLot.setTitle(record.data.InvtID + ' ' + (record.data.UnitMultDiv == "M" ? record.data.Qty * record.data.CnvFact : record.data.Qty / record.data.CnvFact) + ' ' + record.invt.StkUnit);
     HQ.focus = '';
     App.winLot.show();
+    App.grdLot.isLock = lock;
     setTimeout(function () {
         App.winLot.toFront();
         if (HQ.showQtyOnhand) {
@@ -1387,8 +1389,10 @@ var showLot = function (record, loadCombo) {
         if (HQ.currentDet.data.LotSerTrack == _lotQ) {
             App.colPackageID.show();
             discAmtCol.format = "0,000.00";
+            discAmtField.decimalPrecision = 2;
         } else {
             discAmtCol.format = "0,000";
+            discAmtField.decimalPrecision = 0;
             App.colPackageID.hide();
         }
         
