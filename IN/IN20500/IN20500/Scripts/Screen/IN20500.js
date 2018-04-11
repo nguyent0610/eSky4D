@@ -553,30 +553,36 @@ var chkLotSerRcptAuto_Change = function (sender, value, oldValue) {
 
 var setAllowBlankLot = function (value,special) {
     App.txtDfltLotSerNumLen.allowBlank = value;
-    App.txtDfltLotSerNumLen.isValid(!value);
+    App.txtDfltLotSerNumLen.validate();
     App.txtDfltLotSerNumVal.allowBlank = value;
-    App.txtDfltLotSerNumVal.isValid(!value);
+    App.txtDfltLotSerNumVal.validate();
     if (special == '1') {
         App.cboDfltLotSerAssign.allowBlank = true;
-        App.cboDfltLotSerAssign.isValid(false);
+        App.cboDfltLotSerAssign.validate();
         App.cboDfltLotSerMthd.allowBlank = true;
-        App.cboDfltLotSerMthd.isValid(false);
+        App.cboDfltLotSerMthd.validate();
     }
+    App.frmMain.validate();
 };
 
 var cboLotSerTrack_Change = function (sender, value) {
     if (value) {
-        if ((value == "L" || value == "S")) {
+        if ((value == "L" || value == "S" || value == 'Q')) {
             if (Ext.isEmpty(App.cboDfltLotSerAssign.getValue())) App.cboDfltLotSerAssign.setValue('R');
             App.tabDetail.child('#pnlLotSerial').tab.setDisabled(false);
             prefixvalue = App.txtDfltLotSerFxdVal.getValue();
             lastfixvalue = App.txtDfltLotSerNumVal.getValue();
             shownextlotserial = prefixvalue + lastfixvalue;
             App.lblShowNextLotSerial.setValue(shownextlotserial);
-            if(App.chkLotSerRcptAuto.checked == true)
+            if (App.chkLotSerRcptAuto.checked == true) {
                 setAllowBlankLot(false, '1');
-            else
+            }
+            else {
                 setAllowBlankLot(true, '1');
+            }
+            App.txtQRCnvFact.setMinValue(value == 'Q' ? 1 : 0);
+            App.txtQRCnvFact.validate();
+            App.txtQRCnvFact.setVisible(value == 'Q');
         } else {
             App.tabDetail.child('#pnlLotSerial').tab.setDisabled(true);
             setAllowBlankLot(true, '1');

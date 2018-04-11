@@ -274,6 +274,8 @@
                             .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                             .HQParam(new StoreParameterCollection() 
                             { 
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                             })
                             .LoadData()
@@ -597,6 +599,11 @@
                                 , HQ.NumberField().ID("txtDfltWarrantyDays").Name("txtDfltWarrantyDays").HQLangCode("WarrantyDays").DataIndex("WarrantyDays")
                                     .LabelWidth(160).Width(410).MarginSpec("5 0 0 0").DecimalPrecision(0).EnableKeyEvents(true)
                                     .Listeners(p=>p.KeyDown.Fn = "event_KeyDown")
+
+                                , HQ.NumberField().ID("txtQRCnvFact").Name("CnvFact").HQLangCode("IN20500QRCnvFact").DataIndex("CnvFact")
+                                    .LabelWidth(160).Width(410).MarginSpec("5 0 0 0").DecimalPrecision(0).EnableKeyEvents(true)
+                                    .Value(1).MinValue(1)
+                                    .Listeners(p => p.KeyDown.Fn = "event_KeyDown")
                             )
                         
                         , X.Container().Layout(LayoutType.VBox)

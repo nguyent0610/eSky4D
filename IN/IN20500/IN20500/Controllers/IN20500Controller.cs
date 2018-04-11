@@ -87,7 +87,7 @@ namespace IN20500.Controllers
         }
         public ActionResult GetIN_Inventory(string InvtID)
         {
-            return this.Store(_db.IN20500_pdHeader(InvtID).FirstOrDefault());
+            return this.Store(_db.IN20500_pdHeader(InvtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault());
         }
         public ActionResult GetCpny(string InvtID)
         {
@@ -179,7 +179,6 @@ namespace IN20500.Controllers
                                     header.Picture = newFileName;
 
                                     ZipFiles(FilePath, newFileName);
-
                                 }
                                 else if (Path.GetExtension(files[i].FileName).ToLower().Contains("mp4") || Path.GetExtension(files[i].FileName).ToLower().Contains("wmv") ||
                                          Path.GetExtension(files[i].FileName).ToLower().Contains("ppt") || Path.GetExtension(files[i].FileName).ToLower().Contains("pptx") ||
@@ -198,6 +197,7 @@ namespace IN20500.Controllers
                                     string newFileName = string.Format("{0}{1}", InvtID, Path.GetExtension(files[i].FileName));
                                     files[i].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
                                     header.Media = newFileName;
+                                    
                                 }
                             }
                         }
@@ -213,7 +213,6 @@ namespace IN20500.Controllers
                         }
                         DeleteFileInZip(header.Picture, FilePath);
                         header.Picture = string.Empty;
-
                     }
                     if (!string.IsNullOrWhiteSpace(header.Media) && string.IsNullOrWhiteSpace(curHeader.Media))
                     {
@@ -396,7 +395,10 @@ namespace IN20500.Controllers
                 t.ApproveStatus = Status;
             else
                 t.ApproveStatus = Handle;
-        
+
+            t.CnvFact = s.CnvFact > 0 ? s.CnvFact : 1;
+            t.VideoModifiedDate = s.VideoModifiedDate;
+            t.ImageModifiedDate = s.ImageModifiedDate;
         }
 
         private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z, List<SI_Hierarchy> lstSI_Hierarchy, List<IN_Inventory> lstIN_Inventory)
