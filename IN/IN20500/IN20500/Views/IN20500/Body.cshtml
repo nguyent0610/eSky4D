@@ -311,7 +311,7 @@
                                 lst.Change.Fn = "cboStkUnit_Change";
                                 //lst.Select.Fn = "filterStkUnit";
                                 lst.TriggerClick.Fn = "cboStkUnit_TriggerClick";
-                                lst.Focus.Handler = "this.forceSelection = true;";  
+                                lst.Focus.Handler = "this.forceSelection = App.cboLotSerTrack.getValue() != 'Q';";  
                             })
                         
                         , HQ.Combo().ID("cboDfltPOUnit").Name("cboDfltPOUnit").HQLangCode("POUnit").DataIndex("DfltPOUnit")
@@ -330,7 +330,7 @@
                             {
                                 lst.Expand.Handler = "if(Ext.isEmpty(App.cboStkUnit.getValue())) App.cboDfltPOUnit.collapse();";
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Focus.Handler = "this.forceSelection = true;";  
+                                lst.Focus.Handler = "this.forceSelection = App.cboLotSerTrack.getValue() != 'Q';";  
                             }) 
                         
                         , HQ.Combo().ID("cboDfltSOUnit").Name("cboDfltSOUnit").HQLangCode("SOUnit").DataIndex("DfltSOUnit")
@@ -349,7 +349,7 @@
                             {
                                 lst.Expand.Handler = "if(Ext.isEmpty(App.cboStkUnit.getValue())) App.cboDfltSOUnit.collapse();";
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Focus.Handler = "this.forceSelection = true;";  
+                                lst.Focus.Handler = "this.forceSelection = App.cboLotSerTrack.getValue() != 'Q';";  
                             }) 
                         
                         , HQ.Combo().ID("cboMaterialType").Name("cboMaterialType").HQLangCode("MaterialType").DataIndex("MaterialType")

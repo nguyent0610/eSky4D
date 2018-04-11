@@ -565,7 +565,7 @@ var setAllowBlankLot = function (value,special) {
     App.frmMain.validate();
 };
 
-var cboLotSerTrack_Change = function (sender, value) {
+var cboLotSerTrack_Change = function (sender, value, oldValue) {
     if (value) {
         if ((value == "L" || value == "S" || value == 'Q')) {
             if (Ext.isEmpty(App.cboDfltLotSerAssign.getValue())) App.cboDfltLotSerAssign.setValue('R');
@@ -580,13 +580,32 @@ var cboLotSerTrack_Change = function (sender, value) {
             else {
                 setAllowBlankLot(true, '1');
             }
-            App.txtQRCnvFact.setMinValue(value == 'Q' ? 1 : 0);
-            App.txtQRCnvFact.validate();
-            App.txtQRCnvFact.setVisible(value == 'Q');
+           
+            
         } else {
             App.tabDetail.child('#pnlLotSerial').tab.setDisabled(true);
             setAllowBlankLot(true, '1');
             
+        }
+        App.txtQRCnvFact.setMinValue(value == 'Q' ? 1 : 0);
+        App.txtQRCnvFact.validate();
+        App.txtQRCnvFact.setVisible(value == 'Q');
+
+        App.cboStkUnit.forceSelection = value != 'Q';
+        App.cboStkUnit.setReadOnly(value == 'Q')
+
+        App.cboDfltPOUnit.forceSelection = value != 'Q';
+        App.cboDfltPOUnit.setReadOnly(value == 'Q')
+        App.cboDfltSOUnit.forceSelection = value != 'Q';
+        App.cboDfltSOUnit.setReadOnly(value == 'Q')
+        if (value == 'Q') {
+            App.cboStkUnit.setValue('KG');
+            App.cboDfltPOUnit.setValue('KG');
+            App.cboDfltSOUnit.setValue('KG');
+        } else if (oldValue == 'Q') {
+            App.cboStkUnit.setValue('');
+            App.cboDfltPOUnit.setValue('');
+            App.cboDfltSOUnit.setValue('');
         }
     }
 };
