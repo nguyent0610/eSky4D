@@ -210,6 +210,7 @@
           <Property Name="SizeID" Type="varchar" MaxLength="10" />
           <Property Name="DisplayID" Type="varchar" MaxLength="10" />
           <Property Name="OUnit" Type="varchar(max)" />
+          <Property Name="Market" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="AR_NewCustomerInforHis">
           <Key>
@@ -672,6 +673,7 @@
           <Property Type="Boolean" Name="EditPhone" Nullable="true" />
           <Property Type="Int32" Name="ShowOUnit" Nullable="false" />
           <Property Type="Int32" Name="ShowMobile" Nullable="false" />
+          <Property Type="Boolean" Name="HideMarketRoute" Nullable="true" />
           </ComplexType>
         <ComplexType Name="AR20500_pcReason_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
@@ -718,7 +720,7 @@
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="CustID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="OutletName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="ContactName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Phone" Nullable="true" MaxLength="30" />
@@ -739,12 +741,12 @@
           <Property Type="String" Name="TradeType" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="Lat" Nullable="true" />
           <Property Type="Double" Name="Lng" Nullable="true" />
-          <Property Type="String" Name="ImageFileName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ImageFileName" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="Status" Nullable="true" MaxLength="2" />
           <Property Type="Int32" Name="IsActive" Nullable="true" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="true" Precision="23" />
-          <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="ApproveStatus" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="NewCustID" Nullable="true" MaxLength="50" />
           <Property Type="Boolean" Name="Checked" Nullable="false" />
@@ -799,6 +801,7 @@
           <Property Type="String" Name="SizeID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="DisplayID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="OUnit" Nullable="true" />
+          <Property Type="String" Name="Market" Nullable="true" MaxLength="30" />
         </ComplexType>
         <EntityType Name="AR_NewCustomerInforHis">
           <Key>
@@ -968,6 +971,7 @@
           <Property Name="BusinessName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="DeliveryUnit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DoNotPicReason" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Market" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1196,6 +1200,7 @@
                 <ScalarProperty Name="EditPhone" ColumnName="EditPhone" />
                 <ScalarProperty Name="ShowOUnit" ColumnName="ShowOUnit" />
                 <ScalarProperty Name="ShowMobile" ColumnName="ShowMobile" />
+                <ScalarProperty Name="HideMarketRoute" ColumnName="HideMarketRoute" />
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1328,6 +1333,7 @@
                 <ScalarProperty Name="SizeID" ColumnName="SizeID" />
                 <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
                 <ScalarProperty Name="OUnit" ColumnName="OUnit" />
+                <ScalarProperty Name="Market" ColumnName="Market" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1419,6 +1425,7 @@
           <EntitySetMapping Name="AR_NewCustomerInfor">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
               <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
+                <ScalarProperty Name="Market" ColumnName="Market" />
                 <ScalarProperty Name="DoNotPicReason" ColumnName="DoNotPicReason" />
                 <ScalarProperty Name="DeliveryUnit" ColumnName="DeliveryUnit" />
                 <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
@@ -1638,7 +1645,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="77" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="74" >
         <EntityTypeShape EntityType="AR20500Model.AR_CustomerLocation" Width="1.875" PointX="2.75" PointY="0.5" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteDet" Width="1.875" PointX="0.5" PointY="6.875" />
         <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.875" PointX="2.75" PointY="3.75" />

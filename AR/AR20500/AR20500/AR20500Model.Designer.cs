@@ -5611,6 +5611,30 @@ namespace AR20500
         private global::System.String _DoNotPicReason;
         partial void OnDoNotPicReasonChanging(global::System.String value);
         partial void OnDoNotPicReasonChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Market
+        {
+            get
+            {
+                return _Market;
+            }
+            set
+            {
+                OnMarketChanging(value);
+                ReportPropertyChanging("Market");
+                _Market = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Market");
+                OnMarketChanged();
+            }
+        }
+        private global::System.String _Market;
+        partial void OnMarketChanging(global::System.String value);
+        partial void OnMarketChanged();
 
         #endregion
 
@@ -10290,6 +10314,30 @@ namespace AR20500
         private global::System.Int32 _ShowMobile;
         partial void OnShowMobileChanging(global::System.Int32 value);
         partial void OnShowMobileChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideMarketRoute
+        {
+            get
+            {
+                return _HideMarketRoute;
+            }
+            set
+            {
+                OnHideMarketRouteChanging(value);
+                ReportPropertyChanging("HideMarketRoute");
+                _HideMarketRoute = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideMarketRoute");
+                OnHideMarketRouteChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideMarketRoute;
+        partial void OnHideMarketRouteChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideMarketRouteChanged();
 
         #endregion
 
@@ -10468,6 +10516,7 @@ namespace AR20500
         /// <param name="id">Initial value of the ID property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
+        /// <param name="slsperID">Initial value of the SlsperID property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="color">Initial value of the Color property.</param>
         /// <param name="custHT">Initial value of the CustHT property.</param>
@@ -10476,12 +10525,13 @@ namespace AR20500
         /// <param name="businessPic">Initial value of the BusinessPic property.</param>
         /// <param name="branchRouteID">Initial value of the BranchRouteID property.</param>
         /// <param name="visitsPerDay">Initial value of the VisitsPerDay property.</param>
-        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID, global::System.Int32 updateType, global::System.String businessPic, global::System.String branchRouteID, global::System.Int32 visitsPerDay)
+        public static AR20500_pgDetail_Result CreateAR20500_pgDetail_Result(global::System.Int32 id, global::System.String branchID, global::System.String custID, global::System.String slsperID, global::System.Boolean @checked, global::System.String color, global::System.String custHT, global::System.String eRPCustID, global::System.Int32 updateType, global::System.String businessPic, global::System.String branchRouteID, global::System.Int32 visitsPerDay)
         {
             AR20500_pgDetail_Result aR20500_pgDetail_Result = new AR20500_pgDetail_Result();
             aR20500_pgDetail_Result.ID = id;
             aR20500_pgDetail_Result.BranchID = branchID;
             aR20500_pgDetail_Result.CustID = custID;
+            aR20500_pgDetail_Result.SlsperID = slsperID;
             aR20500_pgDetail_Result.Checked = @checked;
             aR20500_pgDetail_Result.Color = color;
             aR20500_pgDetail_Result.CustHT = custHT;
@@ -11196,7 +11246,7 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SlsperID
         {
@@ -11208,7 +11258,7 @@ namespace AR20500
             {
                 OnSlsperIDChanging(value);
                 ReportPropertyChanging("SlsperID");
-                _SlsperID = StructuralObject.SetValidValue(value, true);
+                _SlsperID = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("SlsperID");
                 OnSlsperIDChanged();
             }
@@ -12512,6 +12562,30 @@ namespace AR20500
         private global::System.String _OUnit;
         partial void OnOUnitChanging(global::System.String value);
         partial void OnOUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Market
+        {
+            get
+            {
+                return _Market;
+            }
+            set
+            {
+                OnMarketChanging(value);
+                ReportPropertyChanging("Market");
+                _Market = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Market");
+                OnMarketChanged();
+            }
+        }
+        private global::System.String _Market;
+        partial void OnMarketChanging(global::System.String value);
+        partial void OnMarketChanged();
 
         #endregion
 

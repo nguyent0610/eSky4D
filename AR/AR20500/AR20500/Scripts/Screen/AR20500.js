@@ -11,6 +11,7 @@ var _slsFreq = '';
 var _isditContactName = false;
 var _fromDate;
 var _toDate;
+var _dis = "";
 var frmMain_BoxReady = function () {
     App.cboBrandID.store.reload();
     App.cboColSlsFreq1.store.reload();
@@ -26,7 +27,7 @@ var frmMain_BoxReady = function () {
     if (HQ.showBrandID) HQ.grid.show(App.grdCust, ['BrandID']);
     if (HQ.showSizeID) HQ.grid.show(App.grdCust, ['SizeID']);
     if (HQ.showTaxCode) HQ.grid.show(App.grdCust, ['TaxCode']);
-
+    if (HQ.hideMarketRoute) HQ.grid.hide(App.grdCust, ['Market']);
     if (HQ.showTypeCabinnets) {
         HQ.grid.show(App.grdCust, ['TypeCabinetsDescr']);
     }
@@ -155,6 +156,7 @@ var ColCheck_Header_Change = function (value) {
 
 var btnProcess_Click = function () {
     var count = 0;
+    App.grdCust.store.clearFilter();
     var allData = App.grdCust.store.snaptshot || App.grdCust.store.allData || App.grdCust.store.data;
     for (var i = 0; i < allData.length ; i++) {
         var data = allData.items[i].data;
@@ -166,6 +168,27 @@ var btnProcess_Click = function () {
         HQ.message.show(718);
     }
     if (App.cboHandle.getValue() && count > 0) {
+        var erroState = "";
+        var erroDistrict = "";
+        for (var i = 0; i < allData.length ; i++) {
+            if (allData.items[i].data.ColCheck) {
+                if(allData.items[i].data.State==""||allData.items[i].data.State==null){
+                    erroState = erroState + (allData.items[i].index + 1) + ",";
+                }
+                if (allData.items[i].data.District == "" || allData.items[i].data.District == null) {
+                    erroDistrict = erroDistrict + (allData.items[i].index + 1) + ",";
+                }
+            }
+        }
+        if (erroState != "") {
+            HQ.message.show(2018041211, [HQ.common.getLang('State'), erroState], '', true);
+            return;
+        }
+        else if (erroDistrict!="") {
+            HQ.message.show(2018041211, [HQ.common.getLang('District'), erroDistrict], '', true);
+            return;
+        }
+
         if ((App.cboHandle.getValue() == 'A' || App.cboHandle.getValue() == 'O') && App.cboUpdateType.getValue() == 0) {
             
             var rowerror = '';
@@ -519,7 +542,15 @@ var grdCust_BeforeEdit = function (item, e) {
             state = '@@';
         }
         App.cboColDistrict.store.filter('State', state);
-    } else if (e.field == 'ShopType') {
+    } else if (e.field == 'Market') {
+        App.cboMarket.store.clearFilter();
+        var StateDistrict = e.record.data.State + e.record.data.District;
+        if (e.record.data.District == "" || e.record.data.State == "")
+        {
+            StateDistrict = '@@';
+        }
+        App.cboMarket.store.filter('StateDistrict', StateDistrict);
+    }else if (e.field == 'ShopType') {
         App.cboColShopType.store.clearFilter();
         var channel = e.record.data.Channel;
         if (channel == '') {
@@ -535,8 +566,10 @@ var grdCust_BeforeEdit = function (item, e) {
         _slsperID = e.record.data.SlsperID;
         App.cboColOUnit.store.reload();
     }
+    if (e.field == 'District') {
+        _dis = e.record.data.District;
+    }
     
-
 };
 
 var grdCust_ValidateEdit = function (item, e) {
@@ -567,6 +600,7 @@ var grdCust_ValidateEdit = function (item, e) {
             return false;
         }        
     }
+
 };
 var grdCust_Edit = function (item, e, oldvalue, newvalue) {
     var det = e.record.data;
@@ -654,7 +688,14 @@ var grdCust_Edit = function (item, e, oldvalue, newvalue) {
             e.record.set('PJPID', '');
         }
     }
+    if (e.field == "District" || e.field == "State" || e.field == "Territory") {
+        if (_dis != e.value) {
+            App.cboMarket.store.reload();
+            e.record.set('Market', '');
+        }
+    }
     //HQ.grid.checkInsertKey(App.grdCust, e, keys);
+    App.cboMarket.store.clearFilter();
 };
 
 function isNumeric(n) {
@@ -1006,6 +1047,10 @@ var stringFilter = function (record) {
     else if (this.dataIndex == 'WeekofVisit') {
         App.cboColWeekofVisit.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboColWeekofVisit.store, "Code", "Descr");
+    }
+    else if (this.dataIndex == 'Market') {
+        App.cboMarket.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboMarket.store, "Market", "Descr");
     }
 }
 
@@ -1404,6 +1449,14 @@ var renderDistrict = function (value) {
     }
     return value;
 }
+
+var renderMarket = function (value) {
+    var obj = App.cboMarket.store.findRecord("Market", value);
+    if (obj) {
+        return obj.data.Descr;
+    }
+    return value;
+}
 var btnExport_Click = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
@@ -1601,7 +1654,6 @@ var cboHandle_Change = function () {
         App.grdCust.view.refresh();
     }
 }
-
 var checkEditDet = function () {
     if (App.cboHandle.store.data.length > 1 && Ext.isEmpty(App.cboHandle.getValue())) {
         HQ.message.show(1000, App.cboHandle.fieldLabel);

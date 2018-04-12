@@ -34,6 +34,7 @@ namespace AR20500.Controllers
         RPTEntities _dbRPT = Util.CreateObjectContext<RPTEntities>(false);
         private JsonResult mLogMessage;
         private FormCollection mForm;
+        
 
         private string _filePath;
         internal string FilePath
@@ -86,6 +87,7 @@ namespace AR20500.Controllers
 
         public ActionResult Index()
         {
+            bool hideMarketRoute = false;
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
             #region -Check config-                        
@@ -167,10 +169,16 @@ namespace AR20500.Controllers
             ViewBag.showOUnit = showOUnit;
             ViewBag.showMobile = showMobile;
             #endregion
+            var obj = _db.AR20500_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (obj != null)
+            {
+                hideMarketRoute = obj.HideMarketRoute.HasValue && obj.HideMarketRoute.Value;
+            }
+            ViewBag.hideMarketRoute = hideMarketRoute;
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -536,6 +544,7 @@ namespace AR20500.Controllers
             objNew.VisitsPerDay = item.VisitsPerDay;
             objNew.TaxCode = item.TaxCode;
             objNew.OUnit = item.OUnit;
+            objNew.Market = item.Market;
 
         }
 
@@ -733,6 +742,9 @@ namespace AR20500.Controllers
             objCust.TaxRegNbr = item.TaxCode;
             objCust.OUnit = item.OUnit;
             objCust.Mobile = item.Mobile;
+            objCust.Market = item.Market;
+            objCust.BillDistrict = item.District;
+            objCust.BillMarket = item.Market;
         }
         private void Update_SOAddress(ref AR_SOAddress objAR_SOAddress, AR_Customer objCust)
         {
