@@ -8,7 +8,7 @@ var fieldsCheckRequirePO_PriceCpny = ["CpnyID"];
 var fieldsLangCheckRequirePO_PriceCpny = ["CpnyID"];
 
 var _focusNo = 0;
-
+HQ.copy = false;
 //////////////////////////////////////////////////////////////////////
 
 var loadSourceCombo = function () {
@@ -111,6 +111,7 @@ var menuClick = function (command) {
                 } else {
                     PriceID = '';
                     App.cboPriceID.setValue('');
+                    HQ.copy = false;
                     HQ.isFirstLoad = true;
                 }
                 //App.cboPriceID.setValue("");
@@ -208,16 +209,29 @@ var chkPublic_Change = function (checkbox, checked) {
 };
 
 var cboPriceID_Change = function (sender, value) {
-    HQ.isFirstLoad = true;
-    if (sender.valueModels != null) {
-        App.stoPOPriceHeader.reload();
-    }
+    if (!HQ.copy) {
+        HQ.isFirstLoad = true;
+        if (sender.valueModels != null) {
+            App.stoPOPriceHeader.reload();
+        }
+    }    
 };
 
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
 var cboPriceID_Expand = function (sender, value) {
     if (HQ.isChange) {
         App.cboPriceID.collapse();
+    }
+};
+
+
+var cboPriceID_Blur = function (sender, value) {
+    if (HQ.copy) {
+        var recod = HQ.store.findRecord(App.cboPriceID.store, ['PriceID'], [App.cboPriceID.getValue()]);
+        if (recod != undefined) {
+            HQ.message.show(2018041213, App.cboPriceID.getValue(), '');
+            App.cboPriceID.setValue("");
+        }
     }
 };
 
@@ -235,7 +249,8 @@ var firstLoad = function () {
     HQ.isFirstLoad = true;
     HQ.util.checkAccessRight(); // kiểm tra các quyền update,insert,del
     //HQ.isFirstLoad = true;
-   // App.frmMain.isValid();
+    // App.frmMain.isValid();
+    App.btnCopy.setVisible(!HQ.hidebtnCopy);
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     loadSourceCombo();
 };
@@ -248,6 +263,17 @@ var frmChange = function () {
         if (App.cboPriceID.valueModels == null || HQ.isNew == true)
             App.cboPriceID.setReadOnly(false);
         else App.cboPriceID.setReadOnly(HQ.isChange);
+        if (HQ.isChange) {
+            App.btnCopy.disable();
+        }
+        else {
+            App.btnCopy.enable();
+        }
+        
+    }
+    if (HQ.copy) {
+        App.cboPriceID.setReadOnly(false);
+        
     }
 };
 
@@ -440,6 +466,22 @@ var save = function () {
                 return;
             }
         }
+        if (HQ.noPriceCalculation) {
+            var lstData = App.grdPO_Price.store.snapshot;
+            if (lstData != undefined) {
+                var erroDisc = "";
+                for (var i = 0; i < lstData.length; i++) {
+                    if (lstData.items[i].data.Disc < 0) {
+                        erroDisc = erroDisc + (lstData.items[i].index + 1) + ",";
+                    }
+                }
+                if (erroDisc != "") {
+                    HQ.message.show(2018041212, [HQ.common.getLang('Disc'), erroDisc], '', true);
+                    return;
+                }
+            }
+        }        
+
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("WaitMsg"),
             url: 'PO20100/Save',
@@ -448,12 +490,16 @@ var save = function () {
                 lstPOPriceHeader: Ext.encode([App.frmMain.getRecord().data]),
                 //lstPOPriceHeader: HQ.store.getData(App.frmMain.getRecord().store),
                 lstPO_Price: HQ.store.getData(App.stoPO_Price),
-                lstPO_PriceCpny: HQ.store.getData(App.stoPO_PriceCpny)
+                lstPO_PriceCpny: HQ.store.getData(App.stoPO_PriceCpny),
+                lstPO_PriceCopy: Ext.encode(App.stoPO_Price.getRecordsValues()),
+                lstPO_PriceCpnyCopy: Ext.encode(App.stoPO_PriceCpny.getRecordsValues()),
+                copy:HQ.copy
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 App.cboPriceID.getStore().reload();
-                 refresh("yes");
+                HQ.copy = false;
+                refresh("yes");                
                 //App.stoPO_Price.reload();
                 //App.stoPO_PriceCpny.reload();
             },
@@ -475,6 +521,7 @@ var deleteData = function (item) {
                     timeout: 1800000,
                     success: function (msg, data) {
                         App.cboPriceID.getStore().load();
+                        HQ.copy = false;
                         refresh("yes");
                     },
                     failure: function (msg, data) {
@@ -499,8 +546,24 @@ function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         menuClick("refresh");
+        HQ.copy = false;
     }
 };
+
+
+var btnCopy_click = function (btn, e, eOpts) {     
+    if (!HQ.isChange) {
+        HQ.copy = true;
+        App.cboPriceID.suspendEvents();
+        App.cboPriceID.setValue('');
+        App.Descr.setValue('');
+        App.cboPriceID.setReadOnly(false);
+        App.cboPriceID.forceSelection = false;
+        App.cboPriceID.resumeEvents();
+    }
+
+};
+
 
 //var tabPO_Setup_AfterRender = function (obj) {
 //    if (this.parentAutoLoadControl != null)

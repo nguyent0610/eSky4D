@@ -61,11 +61,13 @@
                     lst.TriggerClick.Fn = "cboPriceID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
                     lst.Change.Fn = "cboPriceID_Change";
                     lst.Expand.Fn = "cboPriceID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
+                    lst.Blur.Fn = "cboPriceID_Blur";
                 })
 
                 , HQ.TextBox().ID("Descr").Name("Descr").HQLangCode("Descr").Width(350).MaxLength(200).EnforceMaxLength(true).AllowBlank(false).MarginSpec("0 0 0 10").HQControlFocus("LastPONbr").HideLabel(true).Listeners(lst => { })
                 , HQ.Checkbox().ID("Status").Name("Status").HQLangCode("ACTIVE").MarginSpec("0 0 0 5")
-                  
+                 , HQ.Button().HQLangCode("Copy").Width(75).MarginSpec("0 0 0 10").ID("btnCopy").Listeners(l => l.Click.Fn = "btnCopy_click")
+
             ),
             X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
             .Items(
@@ -82,6 +84,8 @@
                 {
                     lst.Change.Fn = "chkPublic_Change";
                 })
+
+
             )
         )
         .Listeners(lss =>
@@ -131,7 +135,7 @@
                             .HQParam(new StoreParameterCollection() {
                                 new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw}
                                 ,new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw}
-                                ,new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}											                                              
+                                ,new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
                             })
                         .LoadData()
                         .Listeners(lst =>
@@ -212,7 +216,7 @@
                         X.NumericFilter().DataIndex("QtyBreak"),
                         X.NumericFilter().DataIndex("Price"),
                         X.NumericFilter().DataIndex("Disc")
-                                            
+
                     )
             )
             )
@@ -220,7 +224,7 @@
             {
                 lss.Render.Fn = "pnl_render";
             })
-        //tabpnlPrice
+            //tabpnlPrice
 
 
 
@@ -246,9 +250,9 @@
                     })
                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetPO_PriceCpny")))
                     .Listeners(l =>
-                        {
-                            l.Load.Fn = "stoPO_PriceCpny_Load";
-                        })
+                    {
+                        l.Load.Fn = "stoPO_PriceCpny_Load";
+                    })
                 )
                 .Listeners(p => p.BoxReady.Handler = "App.stoPO_PriceCpny.reload();")
                 .SortableColumns(false)

@@ -151,6 +151,8 @@
         </ComplexType>
         <ComplexType Name="PO20100_pdConfig_Result">
           <Property Type="Int32" Name="DecimalPrecision" Nullable="true" />
+          <Property Type="Boolean" Name="NoPriceCalculation" Nullable="true" />
+          <Property Type="Boolean" Name="hidebtnCopy" Nullable="true" />
         </ComplexType>
         <EntityType Name="PO_PriceCpny">
           <Key>
@@ -235,6 +237,8 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="PO20100Model.PO20100_pdConfig_Result">
                 <ScalarProperty Name="DecimalPrecision" ColumnName="DecimalPrecision" />
+                <ScalarProperty Name="NoPriceCalculation" ColumnName="NoPriceCalculation" />
+                <ScalarProperty Name="hidebtnCopy" ColumnName="hidebtnCopy" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

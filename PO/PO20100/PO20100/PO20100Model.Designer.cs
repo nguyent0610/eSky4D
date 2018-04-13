@@ -1160,6 +1160,54 @@ namespace PO20100
         private Nullable<global::System.Int32> _DecimalPrecision;
         partial void OnDecimalPrecisionChanging(Nullable<global::System.Int32> value);
         partial void OnDecimalPrecisionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> NoPriceCalculation
+        {
+            get
+            {
+                return _NoPriceCalculation;
+            }
+            set
+            {
+                OnNoPriceCalculationChanging(value);
+                ReportPropertyChanging("NoPriceCalculation");
+                _NoPriceCalculation = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("NoPriceCalculation");
+                OnNoPriceCalculationChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _NoPriceCalculation;
+        partial void OnNoPriceCalculationChanging(Nullable<global::System.Boolean> value);
+        partial void OnNoPriceCalculationChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> hidebtnCopy
+        {
+            get
+            {
+                return _hidebtnCopy;
+            }
+            set
+            {
+                OnhidebtnCopyChanging(value);
+                ReportPropertyChanging("hidebtnCopy");
+                _hidebtnCopy = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("hidebtnCopy");
+                OnhidebtnCopyChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _hidebtnCopy;
+        partial void OnhidebtnCopyChanging(Nullable<global::System.Boolean> value);
+        partial void OnhidebtnCopyChanged();
 
         #endregion
 
