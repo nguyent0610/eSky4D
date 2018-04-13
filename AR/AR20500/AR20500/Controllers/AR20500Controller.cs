@@ -280,6 +280,11 @@ namespace AR20500.Controllers
                     List<string> lstCustID = new List<string>();
                     foreach (var item in lstCust)
                     {
+                        bool isDupliApprove = false;
+                        if (askApprove == 1)
+                        {
+                            isDupliApprove = true;
+                        }
                         if (item.ColCheck == true)
                         {
                             _db = Util.CreateObjectContext<AR20500Entities>(false);
@@ -299,12 +304,14 @@ namespace AR20500.Controllers
                             var objCust = _db.AR_Customer.Where(x => x.CustId == item.NewCustID && x.BranchID == item.BranchID).FirstOrDefault();
                             if (objNew.Status == "H")
                             {
+                                
+                                
                                 if (objCust != null)
                                 {
-                                    Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, objCust.ProfilePic.PassNull() == string.Empty, objCust.BusinessPic.PassNull() == string.Empty);
+                                    Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, objCust.ProfilePic.PassNull() == string.Empty, objCust.BusinessPic.PassNull() == string.Empty, isDupliApprove);
                                 }else
 	                            {
-                                    Insert_NewCustHis(objNew, ref hisLineRef, 0, objNew.ProfilePic.PassNull() == string.Empty, objNew.BusinessPic.PassNull() == string.Empty);
+                                    Insert_NewCustHis(objNew, ref hisLineRef, 0, objNew.ProfilePic.PassNull() == string.Empty, objNew.BusinessPic.PassNull() == string.Empty, isDupliApprove);
 	                            }                                 
                             }
                             
@@ -454,11 +461,11 @@ namespace AR20500.Controllers
   
                             if (objCust != null)
                             {
-                                Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, objCust.ProfilePic.PassNull() == string.Empty, objCust.BusinessPic.PassNull() == string.Empty);
+                                Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, objCust.ProfilePic.PassNull() == string.Empty, objCust.BusinessPic.PassNull() == string.Empty,isDupliApprove);
                             }
                             else
                             {
-                                Insert_NewCustHis(objNew, ref hisLineRef, 0, objNew.ProfilePic.PassNull() == string.Empty, objNew.BusinessPic.PassNull() == string.Empty);
+                                Insert_NewCustHis(objNew, ref hisLineRef, 0, objNew.ProfilePic.PassNull() == string.Empty, objNew.BusinessPic.PassNull() == string.Empty, isDupliApprove);
                             }
                            // Insert_NewCustHis(objNew, ref hisLineRef, objCust.AllowEdit, item.EditProfilePic.Value, item.EditBusinessPic.Value);
 
@@ -548,7 +555,7 @@ namespace AR20500.Controllers
 
         }
 
-        private void Insert_NewCustHis(AR_NewCustomerInfor objNew, ref int hisLineRef, int allowEdit, bool isDelProfile, bool isDellBussPic)
+        private void Insert_NewCustHis(AR_NewCustomerInfor objNew, ref int hisLineRef, int allowEdit, bool isDelProfile, bool isDellBussPic,bool askApprove)
         {            
             var lineRefIdx = 1;
             if (hisLineRef > 0)
@@ -570,7 +577,7 @@ namespace AR20500.Controllers
                 BranchID = objNew.BranchID,
                 LineRef = lineRefIdx,
                 CustID = objNew.CustID,
-
+                IsDupliApprove= askApprove,
                 OutletName = objNew.OutletName,
                 ContactName = objNew.ContactName,
                 Phone = objNew.Phone,
@@ -1771,7 +1778,7 @@ namespace AR20500.Controllers
                             objNew.LUpd_User = Current.UserName;
 
                             int hisLineRef = 0;
-                            Insert_NewCustHis(objNew, ref hisLineRef, allowEdit, item.EditProfilePic.Value, item.EditBusinessPic.Value); // History  
+                            Insert_NewCustHis(objNew, ref hisLineRef, allowEdit, item.EditProfilePic.Value, item.EditBusinessPic.Value,false); // History  
 
                             _db.SaveChanges();
                         }

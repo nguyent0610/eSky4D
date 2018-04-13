@@ -132,22 +132,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_NewCustomerInforHis> AR_NewCustomerInforHis
-        {
-            get
-            {
-                if ((_AR_NewCustomerInforHis == null))
-                {
-                    _AR_NewCustomerInforHis = base.CreateObjectSet<AR_NewCustomerInforHis>("AR_NewCustomerInforHis");
-                }
-                return _AR_NewCustomerInforHis;
-            }
-        }
-        private ObjectSet<AR_NewCustomerInforHis> _AR_NewCustomerInforHis;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<AR_NewCustomerInfor> AR_NewCustomerInfor
         {
             get
@@ -176,6 +160,22 @@ namespace AR20500
             }
         }
         private ObjectSet<AR_Customer> _AR_Customer;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_NewCustomerInforHis> AR_NewCustomerInforHis
+        {
+            get
+            {
+                if ((_AR_NewCustomerInforHis == null))
+                {
+                    _AR_NewCustomerInforHis = base.CreateObjectSet<AR_NewCustomerInforHis>("AR_NewCustomerInforHis");
+                }
+                return _AR_NewCustomerInforHis;
+            }
+        }
+        private ObjectSet<AR_NewCustomerInforHis> _AR_NewCustomerInforHis;
 
         #endregion
 
@@ -214,14 +214,6 @@ namespace AR20500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the AR_NewCustomerInforHis EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_NewCustomerInforHis(AR_NewCustomerInforHis aR_NewCustomerInforHis)
-        {
-            base.AddObject("AR_NewCustomerInforHis", aR_NewCustomerInforHis);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the AR_NewCustomerInfor EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToAR_NewCustomerInfor(AR_NewCustomerInfor aR_NewCustomerInfor)
@@ -235,6 +227,14 @@ namespace AR20500
         public void AddToAR_Customer(AR_Customer aR_Customer)
         {
             base.AddObject("AR_Customer", aR_Customer);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_NewCustomerInforHis EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_NewCustomerInforHis(AR_NewCustomerInforHis aR_NewCustomerInforHis)
+        {
+            base.AddObject("AR_NewCustomerInforHis", aR_NewCustomerInforHis);
         }
 
         #endregion
@@ -5662,7 +5662,8 @@ namespace AR20500
         /// <param name="updateType">Initial value of the UpdateType property.</param>
         /// <param name="allowEdit">Initial value of the AllowEdit property.</param>
         /// <param name="visitsPerDay">Initial value of the VisitsPerDay property.</param>
-        public static AR_NewCustomerInforHis CreateAR_NewCustomerInforHis(global::System.Int32 id, global::System.String branchID, global::System.Int32 lineRef, global::System.String custID, global::System.Boolean @checked, global::System.Int32 updateType, global::System.Int32 allowEdit, global::System.Int32 visitsPerDay)
+        /// <param name="isDupliApprove">Initial value of the IsDupliApprove property.</param>
+        public static AR_NewCustomerInforHis CreateAR_NewCustomerInforHis(global::System.Int32 id, global::System.String branchID, global::System.Int32 lineRef, global::System.String custID, global::System.Boolean @checked, global::System.Int32 updateType, global::System.Int32 allowEdit, global::System.Int32 visitsPerDay, global::System.Boolean isDupliApprove)
         {
             AR_NewCustomerInforHis aR_NewCustomerInforHis = new AR_NewCustomerInforHis();
             aR_NewCustomerInforHis.ID = id;
@@ -5673,6 +5674,7 @@ namespace AR20500
             aR_NewCustomerInforHis.UpdateType = updateType;
             aR_NewCustomerInforHis.AllowEdit = allowEdit;
             aR_NewCustomerInforHis.VisitsPerDay = visitsPerDay;
+            aR_NewCustomerInforHis.IsDupliApprove = isDupliApprove;
             return aR_NewCustomerInforHis;
         }
 
@@ -7470,30 +7472,6 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String SizeID
-        {
-            get
-            {
-                return _SizeID;
-            }
-            set
-            {
-                OnSizeIDChanging(value);
-                ReportPropertyChanging("SizeID");
-                _SizeID = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SizeID");
-                OnSizeIDChanged();
-            }
-        }
-        private global::System.String _SizeID;
-        partial void OnSizeIDChanging(global::System.String value);
-        partial void OnSizeIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
         public global::System.String StandID
         {
             get
@@ -7542,6 +7520,30 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public global::System.String SizeID
+        {
+            get
+            {
+                return _SizeID;
+            }
+            set
+            {
+                OnSizeIDChanging(value);
+                ReportPropertyChanging("SizeID");
+                _SizeID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SizeID");
+                OnSizeIDChanged();
+            }
+        }
+        private global::System.String _SizeID;
+        partial void OnSizeIDChanging(global::System.String value);
+        partial void OnSizeIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.String DisplayID
         {
             get
@@ -7584,6 +7586,30 @@ namespace AR20500
         private global::System.String _OUnit;
         partial void OnOUnitChanging(global::System.String value);
         partial void OnOUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsDupliApprove
+        {
+            get
+            {
+                return _IsDupliApprove;
+            }
+            set
+            {
+                OnIsDupliApproveChanging(value);
+                ReportPropertyChanging("IsDupliApprove");
+                _IsDupliApprove = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsDupliApprove");
+                OnIsDupliApproveChanged();
+            }
+        }
+        private global::System.Boolean _IsDupliApprove;
+        partial void OnIsDupliApproveChanging(global::System.Boolean value);
+        partial void OnIsDupliApproveChanged();
 
         #endregion
 
