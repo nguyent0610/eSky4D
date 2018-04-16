@@ -58,6 +58,7 @@ namespace OM21100.Controllers
         private string _oldStatus = string.Empty;
         private int _lineRefnumber = 0;
         List<OM21100_ptTreeNode_Result> lstAllNode = new List<OM21100_ptTreeNode_Result>();
+        List<OM21100_ptTreeNodeCustomer_Result> lstAllNodeCustomer = new List<OM21100_ptTreeNodeCustomer_Result>();
         // GET: /OM21100/
         public ActionResult Index()
         {
@@ -472,6 +473,8 @@ namespace OM21100.Controllers
             return this.Direct();
         }
 
+
+
         [DirectMethod]
         public ActionResult OM21100GetTreeCustomer(string panelID)
         {
@@ -481,8 +484,6 @@ namespace OM21100.Controllers
 
             tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
             tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
-            tree.Fields.Add(new ModelField("BranchID", ModelFieldType.String));
-            tree.Fields.Add(new ModelField("Territory", ModelFieldType.String));
 
             tree.Border = false;
             tree.RootVisible = true;
@@ -490,76 +491,198 @@ namespace OM21100.Controllers
 
             Node node = new Node();
             node.NodeID = "Root";
+            node.Checked = false;
+
+            //lstAllNodeCustomer = _db.OM21100_ptTreeNodeCustomer(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            lstAllNodeCustomer = _db.OM21100_ptTreeNodeCustomer(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+
+
+            var maxLevel = lstAllNodeCustomer.Max(x => x.LevelID);
+            var lstFirst = lstAllNodeCustomer.Where(x => x.LevelID == maxLevel).ToList();
+            var crrLevel = maxLevel - 1;
+            if (lstFirst.Count > 0)
+            {
+                string crrParent = string.Empty;
+                Node parentNode = null;
+                bool isAddChild = false;// lstFirst.Where(x => x.ParentID != string.Empty).Count() > 0;
+                foreach (var it in lstFirst)
+                {
+                    var childNode = SetNodeValueCustomer(it, Ext.Net.Icon.UserHome);
+                    GetChildNodeCustomer(ref childNode, (int)crrLevel, it.Code);
+
+                    if (it.ParentID != crrParent)
+                    {
+                        crrParent = it.ParentID;
+                        parentNode.Children.Add(childNode);
+                        isAddChild = true;
+                        node.Children.Add(parentNode);
+                    }
+                    else
+                    {
+                        if (it.ParentID != string.Empty)
+                        {
+                            parentNode.Children.Add(childNode);
+                        }
+                    }
+                    if (!isAddChild)
+                    {
+                        node.Children.Add(childNode);
+                    }
+                }
+            }
+
+            node.Icon = Ext.Net.Icon.FolderHome;
+
             tree.Root.Add(node);
 
-            var lstChannel = _db.OM21100_ptChannel(Current.UserName, Current.CpnyID, Current.LangID).ToList();
-            var lstCust = _db.OM21100_ptCustomer(Current.UserName, Current.CpnyID, Current.LangID).ToList();
-            var lstCustClass = _db.OM21100_ptCustClass(Current.UserName, Current.CpnyID, Current.LangID).ToList();
-            if (lstChannel.Count() == 0)
-            {
-                node.Leaf = true;
-            }
-
-            foreach (var item in lstChannel)
-            {
-                string channel = item.Channel;
-                var nodeChannel = new Node();
-                nodeChannel.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = channel, Mode = ParameterMode.Value });
-                nodeChannel.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Channel", Mode = ParameterMode.Value });
-                //nodeTerritory.Cls = "tree-node-parent";
-                nodeChannel.Text = item.Descr;
-                nodeChannel.Checked = false;
-                nodeChannel.NodeID = "channel-" + channel;
-                //nodeTerritory.IconCls = "tree-parent-icon";
-
-                var lstCustClassInChannel = lstCustClass.Where(x => x.Channel == channel);//.ToList();
-                foreach (var custClass in lstCustClassInChannel)
-                {
-                    var nodeCussClass = new Node();
-                    nodeCussClass.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = custClass.ClassID, Mode = ParameterMode.Value });
-                    nodeCussClass.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "ClassID", Mode = ParameterMode.Value });
-                    nodeCussClass.Text = custClass.Descr;
-                    nodeCussClass.Checked = false;
-                    nodeCussClass.NodeID = "channel-custclassid-" + channel + "-" + custClass.ClassID;
-
-                    string custClassID = custClass.ClassID;
-                    var lstCustInCustClass = lstCust.Where(x => x.Channel == channel && x.ClassID == custClassID);//.ToList();
-                    foreach (var cust in lstCustInCustClass)
-                    {
-                        var nodeCust = new Node();
-                        nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = cust.CustID, Mode = ParameterMode.Value });
-                        nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "CustID", Mode = ParameterMode.Value });
-                        nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "BranchID", Value = cust.BranchID, Mode = ParameterMode.Value });
-                        nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "Territory", Value = cust.TerritoryName, Mode = ParameterMode.Value });
-                        //nodeCompany.Cls = "tree-node-parent";
-                        nodeCust.Text = cust.CustName;
-                        nodeCust.Checked = false;
-                        nodeCust.Leaf = true;
-                        nodeCust.NodeID = "channel-custclassid-custid" + channel + "-" + custClassID + "-" + cust.CustID;
-                        //nodeCompany.IconCls = "tree-parent-icon";
-                        nodeCussClass.Children.Add(nodeCust);
-                    }
-
-                    if (lstCustInCustClass.Count() == 0)
-                    {
-                        nodeCussClass.Leaf = true;
-                    }
-                    nodeChannel.Children.Add(nodeCussClass);
-                }
-                if (lstCustClassInChannel.Count() == 0)
-                {
-                    nodeChannel.Leaf = true;
-                }
-                node.Children.Add(nodeChannel);
-            }
-
             var treeBranch = X.GetCmp<Panel>(panelID);
-            tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelCustomer_checkChange";
 
+            //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
+            tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelCustomer_checkChange";
+            tree.Listeners.ItemCollapse.Fn = "tree_ItemCollapse";
             tree.AddTo(treeBranch);
 
             return this.Direct();
         }
+
+
+
+        //[DirectMethod]
+        //public ActionResult OM21100GetTreeCustomer(string panelID)
+        //{
+        //    TreePanel tree = new TreePanel();
+        //    tree.ID = "treePanelCustomer";
+        //    tree.ItemID = "treePanelCustomer";
+
+        //    tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+        //    tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+        //    tree.Fields.Add(new ModelField("BranchID", ModelFieldType.String));
+        //    tree.Fields.Add(new ModelField("Territory", ModelFieldType.String));
+
+        //    tree.Border = false;
+        //    tree.RootVisible = true;
+        //    tree.Animate = true;
+
+        //    Node node = new Node();
+        //    node.NodeID = "Root";
+        //    tree.Root.Add(node);
+
+        //    var lstChannel = _db.OM21100_ptChannel(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+        //    var lstCust = _db.OM21100_ptCustomer(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+        //    var lstCustClass = _db.OM21100_ptCustClass(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+        //    if (lstChannel.Count() == 0)
+        //    {
+        //        node.Leaf = true;
+        //    }
+
+        //    foreach (var item in lstChannel)
+        //    {
+        //        string channel = item.Channel;
+        //        var nodeChannel = new Node();
+        //        nodeChannel.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = channel, Mode = ParameterMode.Value });
+        //        nodeChannel.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Channel", Mode = ParameterMode.Value });
+        //        //nodeTerritory.Cls = "tree-node-parent";
+        //        nodeChannel.Text = item.Descr;
+        //        nodeChannel.Checked = false;
+        //        nodeChannel.NodeID = "channel-" + channel;
+        //        //nodeTerritory.IconCls = "tree-parent-icon";
+
+        //        var lstCustClassInChannel = lstCustClass.Where(x => x.Channel == channel);//.ToList();
+        //        foreach (var custClass in lstCustClassInChannel)
+        //        {
+        //            var nodeCussClass = new Node();
+        //            nodeCussClass.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = custClass.ClassID, Mode = ParameterMode.Value });
+        //            nodeCussClass.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "ClassID", Mode = ParameterMode.Value });
+        //            nodeCussClass.Text = custClass.Descr;
+        //            nodeCussClass.Checked = false;
+        //            nodeCussClass.NodeID = "channel-custclassid-" + channel + "-" + custClass.ClassID;
+
+        //            string custClassID = custClass.ClassID;
+        //            var lstCustInCustClass = lstCust.Where(x => x.Channel == channel && x.ClassID == custClassID);//.ToList();
+        //            foreach (var cust in lstCustInCustClass)
+        //            {
+        //                var nodeCust = new Node();
+        //                nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = cust.CustID, Mode = ParameterMode.Value });
+        //                nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "CustID", Mode = ParameterMode.Value });
+        //                nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "BranchID", Value = cust.BranchID, Mode = ParameterMode.Value });
+        //                nodeCust.CustomAttributes.Add(new ConfigItem() { Name = "Territory", Value = cust.TerritoryName, Mode = ParameterMode.Value });
+        //                //nodeCompany.Cls = "tree-node-parent";
+        //                nodeCust.Text = cust.CustName;
+        //                nodeCust.Checked = false;
+        //                nodeCust.Leaf = true;
+        //                nodeCust.NodeID = "channel-custclassid-custid" + channel + "-" + custClassID + "-" + cust.CustID;
+        //                //nodeCompany.IconCls = "tree-parent-icon";
+        //                nodeCussClass.Children.Add(nodeCust);
+        //            }
+
+        //            if (lstCustInCustClass.Count() == 0)
+        //            {
+        //                nodeCussClass.Leaf = true;
+        //            }
+        //            nodeChannel.Children.Add(nodeCussClass);
+        //        }
+        //        if (lstCustClassInChannel.Count() == 0)
+        //        {
+        //            nodeChannel.Leaf = true;
+        //        }
+        //        node.Children.Add(nodeChannel);
+        //    }
+
+        //    var treeBranch = X.GetCmp<Panel>(panelID);
+        //    tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelCustomer_checkChange";
+
+        //    tree.AddTo(treeBranch);
+
+        //    return this.Direct();
+        //}
+
+
+
+        private Node SetNodeValueCustomer(OM21100_ptTreeNodeCustomer_Result objNode, Ext.Net.Icon icon)
+        {
+            Node node = new Node();
+
+            Random rand = new Random();
+            node.NodeID = objNode.Code + objNode.ParentID + (rand.Next(999, 9999) + objNode.LevelID).ToString();
+            node.Checked = false;
+            node.Text = objNode.Descr;
+            node.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = objNode.Type, Mode = Ext.Net.ParameterMode.Value });
+            node.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = objNode.Code, Mode = Ext.Net.ParameterMode.Value });
+            node.Icon = objNode.LevelID != 0 ? icon : Ext.Net.Icon.Folder;
+            node.Leaf = objNode.LevelID == 0;// true;
+            node.IconCls = "tree-node-noicon";
+            return node;
+        }
+        private void GetChildNodeCustomer(ref Node crrNode, int level, string parrentID)
+        {
+            if (level >= 0)
+            {
+                var lstSub = lstAllNodeCustomer.Where(x => x.ParentID == parrentID && x.LevelID == level).ToList();
+
+                if (lstSub.Count > 0)
+                {
+                    var crrLevel = level - 1;
+                    string crrParent = string.Empty;
+                    foreach (var it in lstSub)
+                    {
+                        var childNode = SetNodeValueCustomer(it, Ext.Net.Icon.FolderGo);
+                        GetChildNodeCustomer(ref childNode, crrLevel, it.Code);
+                        crrNode.Children.Add(childNode);
+                    }
+                }
+                else
+                {
+                    crrNode.Leaf = true;
+                }
+            }
+            else
+            {
+                crrNode.Leaf = true;
+            }
+        }
+
+
+
         public ActionResult GetCompany(string discID, string discSeq)
         {
             var companies = _db.OM21100_pgCompany(discID, discSeq, Current.CpnyID).ToList();

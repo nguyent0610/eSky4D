@@ -1542,9 +1542,9 @@
                             .Listeners(l => l.Change.Fn = "DiscDefintion.Event.cboGCustID_Change")
                             .LoadData()
                         )
-                        , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("BranchID")
+                        , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("BranchID")//.Renderer("DiscDefintion.Process.renderCustomerName")
 
-                        , X.Column().Text(Util.GetLang("Territory")).DataIndex("TerritoryName")
+                        , X.Column().Text(Util.GetLang("Territory")).DataIndex("TerritoryName")//.Renderer("DiscDefintion.Process.renderCustomerName")
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")

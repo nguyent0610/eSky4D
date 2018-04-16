@@ -1770,6 +1770,21 @@ var DiscDefintion = {
             return returnValue;
         },
 
+        //.Renderer("DiscDefintion.Process.renderDpiiInvtName")
+        renderCustomerName: function (value, metaData, record, rowIndex, colIndex, store) {
+            var rec = HQ.store.findRecord(App.cboGCustID.store, ["CustID"], [record.data.CustID]);
+            var returnValue = value;
+            if (rec) {
+                if (metaData.column.dataIndex == "BranchID" && !record.data.BranchID) {
+                    returnValue = rec.data.BranchID;
+                }
+                else if (metaData.column.dataIndex == "TerritoryName" && !record.data.TerritoryName) {
+                    returnValue = rec.data.TerritoryName;
+                }
+            }
+            return returnValue;
+        },
+
         renderGInvtName: function (value, metaData, record, rowIndex, colIndex, store) {
             var rec = App.cboGInvtID.store.findRecord("InvtID", record.data.InvtID);
             var returnValue = value;
@@ -3751,6 +3766,13 @@ var DiscDefintion = {
                             var idx = App.grdDiscCust.store.getCount() - 1;
                             for (var i = 0; i < allNodeLength; i++) {
                                 if (allNodes[i].data.Type == "CustID") {
+                                    var branch = "";
+                                    var territory = "";
+                                    var rec = HQ.store.findRecord(App.cboGCustID.store, ["CustID"], [allNodes[i].data.RecID]);
+                                    if (rec != undefined) {
+                                        branch = rec.data.BranchID;
+                                        territory = rec.data.TerritoryName;
+                                    }
                                     var record = HQ.store.findInStore(App.grdDiscCust.store,
                                         ['DiscID', 'DiscSeq', 'CustID', 'BranchID'],
                                         [discId, discSeq, allNodes[i].data.RecID, allNodes[i].data.BranchID]);
@@ -3759,8 +3781,8 @@ var DiscDefintion = {
                                             DiscID: discId,
                                             DiscSeq: discSeq,
                                             CustID: allNodes[i].data.RecID,
-                                            BranchID: allNodes[i].data.BranchID,
-                                            TerritoryName: allNodes[i].data.Territory
+                                            BranchID: branch,
+                                            TerritoryName: territory
                                         }));
                                         idx++;
                                     }
@@ -3816,6 +3838,13 @@ var DiscDefintion = {
                             var idx = App.grdDiscCust.store.data.length > 0 ? App.grdDiscCust.store.data.length - 1 : 0;
                             allNodes.forEach(function (node) {
                                 if (node.attributes.Type == "CustID") {
+                                    var branch = "";
+                                    var territory = "";
+                                    var rec = HQ.store.findRecord(App.cboGCustID.store, ["CustID"], [node.attributes.RecID]);
+                                    if (rec != undefined) {
+                                        branch = rec.data.BranchID;
+                                        territory = rec.data.TerritoryName;
+                                    }
                                     var record = HQ.store.findInStore(App.grdDiscCust.store,
                                         ['DiscID', 'DiscSeq', 'CustID', 'BranchID'],
                                         [discId, discSeq, node.attributes.RecID, node.attributes.BranchID]);
@@ -3824,8 +3853,8 @@ var DiscDefintion = {
                                             DiscID: discId,
                                             DiscSeq: discSeq,
                                             CustID: node.attributes.RecID,
-                                            BranchID: node.attributes.BranchID,
-                                            TerritoryName: node.attributes.Territory
+                                            BranchID: branch,
+                                            TerritoryName: territory
                                         }));
                                     }
                                 }
