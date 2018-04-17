@@ -1,0 +1,221 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SI23900;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("Import")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";
+            })
+            , X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            })
+        }, "Print", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad()";
+    })
+    .Items(
+        X.Panel().ID("pnlGrid")
+        .Region(Region.Center)
+        .Layout(LayoutType.Border)
+        .Items(
+            X.GridPanel()
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .ID("grdApp_Market")//Dat ten id grid
+        //.SelectionMemory(false)
+            .Region(Region.Center).Flex(1)
+            .Store(
+                X.Store()
+                .ID("stoApp_Market").AutoLoad(false)
+                .PageSize(50)
+                .Model(Util.GenerateModel(typeof(SI23900_pgMarket_Result), "mdlSI23900_pgAppMarket", ""))
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetApp_Market")))
+                .Listeners(l =>
+                {
+                    l.Load.Fn = "stoApp_Market_Load";
+                    l.Update.Fn = "frmChange";
+                })
+            )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdApp_Market');")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40)
+                            , X.Column().Text(Util.GetLang("Zone")).DataIndex("Zone").Width(150).Renderer("Zone_render")
+                                .Editor(HQ.Combo().ID("cboZone").Name("cboZone").HQDBSys(false).HQProcedure("SI23900_pcZone").HQAutoLoad(true)
+                                   .HQColumnShow("Code,Descr")
+                                   .DisplayField("Descr")
+                                   .ValueField("Code")
+                                   .HQHeightWidth(400, 200)
+                                   .ForceSelection(true)
+                                   .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                   .Listeners(l => l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}")
+                                   .HQParam(new StoreParameterCollection()
+                            {
+                                 new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                            })
+                                   .LoadData()
+                    )
+                                , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(150).Renderer("Territory_render")
+                                                    .Editor(HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQDBSys(false).HQProcedure("SI23900_pcTerritory").HQAutoLoad(true)
+                                               .HQColumnShow("Territory,Descr")
+                                               .DisplayField("Descr")
+                                               .ValueField("Territory")
+                                       .HQHeightWidth(400, 200)
+                                       .ForceSelection(true)
+                                       .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                       .Listeners(l => l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}")
+                                       .HQParam(new StoreParameterCollection()
+                            {
+                                 new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                            })
+                         .LoadData()
+                        )
+                         , X.Column().Text(Util.GetLang("SubTerritory")).DataIndex("SubTerritory").Width(150).Renderer("SubTerritory_render")
+                               .Editor(HQ.Combo().ID("cboSubTerritory").Name("cboSubTerritory").HQDBSys(false).HQProcedure("SI23900_pcSubTerritory").HQAutoLoad(true)
+                               .HQColumnShow("Code,Descr")
+                               .DisplayField("Descr")
+                               .ValueField("Code")
+                               .HQHeightWidth(400, 200)
+                               .ForceSelection(true)
+                               .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                               .Listeners(l => l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}")
+                               .HQParam(new StoreParameterCollection()
+                            {
+                                 new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                            })
+                             .LoadData()
+                            )
+                    , X.Column().Text(Util.GetLang("State")).DataIndex("State").Width(150).Renderer("State_render")
+                        .Editor(HQ.Combo().ID("cboState").Name("cboState").HQDBSys(false).HQProcedure("SI23900_pcState").HQAutoLoad(true)
+                               .HQColumnShow("State,Descr")
+                               .DisplayField("Descr")
+                               .ValueField("State")
+                               .HQHeightWidth(400, 200)
+                               .ForceSelection(true)
+                               .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                               .Listeners(l => l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}")
+                               .HQParam(new StoreParameterCollection()
+                            {
+                                 new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                            })
+                               .LoadData()
+                )                
+                    , X.Column().Text(Util.GetLang("District")).DataIndex("District").Width(150).Renderer("District_render")
+                    .Editor(
+                                HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQDBSys(false).HQProcedure("SI23900_pcDistrictByState").HQAutoLoad(true)
+                               .HQColumnShow("District,Name")
+                               .DisplayField("Name")
+                               .ValueField("District")
+                           .HQHeightWidth(400, 200)
+                           .ForceSelection(true)
+                           .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                           .Listeners(l => l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}")
+                           .HQParam(new StoreParameterCollection()
+                            {
+                                 new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                //,new StoreParameter("@State", "_state", ParameterMode.Raw)
+                                
+                            })
+                           .LoadData()
+                    )
+                            , X.Column().Text(Util.GetLang("SI23900_MarketID")).DataIndex("Market").Width(150)
+                    .Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
+
+                            , X.Column().Text(Util.GetLang("SI23900_MarketName")).DataIndex("Descr").Width(200)
+                .Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
+
+                , X.CommandColumn().Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdApp_Market_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmApp_Market").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdApp_Market_BeforeEdit";
+                    ls.Edit.Fn = "grdApp_Market_Edit";
+                    ls.ValidateEdit.Fn = "grdApp_Market_ValidateEdit";
+                })
+            )
+
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("State").ValidateRecord(p => p.Fn = "stringState"),
+                        X.StringFilter().DataIndex("District").ValidateRecord(p => p.Fn = "stringDistrict"),
+                        X.StringFilter().DataIndex("Zone").ValidateRecord(p => p.Fn = "stringZone"),
+                        X.StringFilter().DataIndex("Territory").ValidateRecord(p => p.Fn = "stringTerritory"),
+                        X.StringFilter().DataIndex("SubTerritory").ValidateRecord(p => p.Fn = "stringSubTerritory"),
+                        X.StringFilter().DataIndex("Market"),
+                        X.StringFilter().DataIndex("Descr")
+                    )
+            )
+
+
+        ).Listeners(lst =>
+        {
+            lst.Render.Handler = "HQ.common.control_render(this,'grdApp_Territory')";
+        })
+    )
+))
