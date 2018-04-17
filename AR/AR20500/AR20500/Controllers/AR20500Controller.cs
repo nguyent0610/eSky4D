@@ -230,27 +230,27 @@ namespace AR20500.Controllers
                         var isCheckRefCustID = IsCheckRefCustID();
                         foreach (var item in lstCust)
                         {
-                            if (item.ColCheck == true && item.UpdateType == 0)
+                            if (item.ColCheck == true && item.UpdateType == 0 && handle != "D")
                             {
                                 if (isCheckRefCustID && !string.IsNullOrWhiteSpace(item.ERPCustID))
-                                {
-                                    string key = (item.BranchID + item.ERPCustID).ToUpper();
-                                    if (lstCustHT.Any(x => x == key))
-                                    {
-                                        throw new MessageException(MessageType.Message, "2017071401", "", parm: new string[] { item.BranchID, item.CustID, item.ERPCustID });
-                                    }
-                                    else
-                                    {
-                                        var obj = _db.AR_Customer.FirstOrDefault(x => x.BranchID == item.BranchID && x.RefCustID.ToUpper() == item.ERPCustID.ToUpper());
-                                        if (obj != null)
-                                        {
-                                            throw new MessageException(MessageType.Message, "2017071401", "", parm: new string[] { item.BranchID, item.CustID, item.ERPCustID });
-                                        }
-                                        if (!lstCustHT.Any(x => x == key))
-                                        {
-                                            lstCustHT.Add(key);
-                                        }
-                                    }
+                                {                                    
+                                     string key = (item.BranchID + item.ERPCustID).ToUpper();
+                                     if (lstCustHT.Any(x => x == key))
+                                     {
+                                         throw new MessageException(MessageType.Message, "2017071401", "", parm: new string[] { item.BranchID, item.CustID, item.ERPCustID });
+                                     }
+                                     else
+                                     {
+                                         var obj = _db.AR_Customer.FirstOrDefault(x => x.BranchID == item.BranchID && x.RefCustID.ToUpper() == item.ERPCustID.ToUpper());
+                                         if (obj != null)
+                                         {
+                                             throw new MessageException(MessageType.Message, "2017071401", "", parm: new string[] { item.BranchID, item.CustID, item.ERPCustID });
+                                         }
+                                         if (!lstCustHT.Any(x => x == key))
+                                         {
+                                             lstCustHT.Add(key);
+                                         }
+                                     }                                                                       
                                 }
                                 //Check dieu kien Name/Addr/Phone
                                 //var objCheck = _db.AR20500_ppCheckApprove(item.OutletName, item.Phone, item.Addr1, Current.LangID).FirstOrDefault();
