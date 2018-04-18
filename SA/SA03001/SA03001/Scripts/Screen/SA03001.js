@@ -167,7 +167,7 @@ var btnAddCustomer_Click = function () {
 var chkActiveAll_Change = function (sender, value, oldValue) {
     if (sender.hasFocus) {
         var store = App.stoBranch;
-        var allRecords = store.snapshot || store.allData || store.data;
+        var allRecords = store.allData;
         store.suspendEvents();
         allRecords.each(function (record) {
             record.set('Check', value);

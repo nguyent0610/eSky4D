@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="SYS_UserGroup">
           <Key>
             <PropertyRef Name="UserID" />
@@ -63,6 +63,14 @@
           <Property Name="CrtLmt" Type="float" Nullable="false" />
           <Property Name="CrtLmtInvoice" Type="float" Nullable="false" />
         </EntityType>
+        <Function Name="SA03001_pdCheckSaveUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="ListBranchID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ListTypeUser" Type="varchar(max)" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="SA03001_pgBranchAllByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -96,6 +104,14 @@
           </FunctionImport>
           <EntitySet Name="SYS_UserGroup" EntityType="SA03001Model.SYS_UserGroup" />
           <EntitySet Name="Users" EntityType="SA03001Model.User" />
+          <FunctionImport Name="SA03001_pdCheckSaveUser" ReturnType="Collection(SA03001Model.SA03001_pdCheckSaveUser_Result)">
+            <Parameter Name="User" Mode="In" Type="String" />
+            <Parameter Name="ListBranchID" Mode="In" Type="String" />
+            <Parameter Name="ListTypeUser" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="SA03001_pgLoadGrid_Result">
           <Property Type="String" Name="Manager" Nullable="false" MaxLength="30" />
@@ -122,6 +138,10 @@
           <Property Type="String" Name="PVNName" Nullable="true" MaxLength="400" />
           <Property Type="String" Name="Addr" Nullable="true" MaxLength="400" />
           <Property Type="Boolean" Name="Check" Nullable="true" />
+          <Property Type="String" Name="ZoneDescr" Nullable="true" MaxLength="400" />
+          <Property Type="String" Name="TerritoryDescr" Nullable="true" MaxLength="400" />
+          <Property Type="String" Name="SubTerritoryDescr" Nullable="true" MaxLength="400" />
+          <Property Type="String" Name="StateDescr" Nullable="true" MaxLength="400" />
         </ComplexType>
         <EntityType Name="SYS_UserGroup">
           <Key>
@@ -181,6 +201,12 @@
           <Property Name="CrtLmt" Type="Double" Nullable="false" />
           <Property Name="CrtLmtInvoice" Type="Double" Nullable="false" />
         </EntityType>
+        <ComplexType Name="SA03001_pdCheckSaveUser_Result">
+          <Property Type="Boolean" Name="CheckUser" Nullable="true" />
+          <Property Type="String" Name="TypeUser" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="1" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -218,6 +244,10 @@
                 <ScalarProperty Name="PVNName" ColumnName="PVNName" />
                 <ScalarProperty Name="Addr" ColumnName="Addr" />
                 <ScalarProperty Name="Check" ColumnName="Check" />
+                <ScalarProperty Name="ZoneDescr" ColumnName="ZoneDescr" />
+                <ScalarProperty Name="TerritoryDescr" ColumnName="TerritoryDescr" />
+                <ScalarProperty Name="SubTerritoryDescr" ColumnName="SubTerritoryDescr" />
+                <ScalarProperty Name="StateDescr" ColumnName="StateDescr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -280,6 +310,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SA03001_pdCheckSaveUser" FunctionName="eBiz4DWebSysModel.Store.SA03001_pdCheckSaveUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdCheckSaveUser_Result">
+                <ScalarProperty Name="CheckUser" ColumnName="CheckUser" />
+                <ScalarProperty Name="TypeUser" ColumnName="TypeUser" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

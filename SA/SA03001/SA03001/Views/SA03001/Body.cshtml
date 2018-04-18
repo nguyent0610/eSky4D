@@ -290,8 +290,8 @@
     .ID("winBranch")
     .Hidden(true)
     .Layout(LayoutType.Fit)
-    .Height(600)
-    .Width(800)
+    .Height(400)
+    .Width(500)
     .Maximized(false)
     .Modal(true)
     .Closable(true)
@@ -336,6 +336,10 @@
                         HQ.Checkbox().ID("chkActive_All").MarginSpec("0 0 0 32").Listeners(l=>l.Change.Fn="chkActiveAll_Change")
                     )
                // ,X.Column().Text(Util.GetLang("PVNName")).DataIndex("PVNName").Width(150).Sortable(false)
+                , X.Column().Text(Util.GetLang("ZoneDescr")).DataIndex("ZoneDescr").Width(120)
+                , X.Column().Text(Util.GetLang("TerritoryDescr")).DataIndex("TerritoryDescr").Width(120)
+                , X.Column().Text(Util.GetLang("SubTerritoryDescr")).DataIndex("SubTerritoryDescr").Width(120)
+                , X.Column().Text(Util.GetLang("StateDescr")).DataIndex("StateDescr").Width(120)
                 ,X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID").Width(120)
                 ,X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchName").Width(250)
                 ,X.Column().Text(Util.GetLang("Addr")).DataIndex("Addr").Width(270)
@@ -367,6 +371,10 @@
                 .Filters(
                     X.BooleanFilter().DataIndex("Check"),
                    // X.StringFilter().DataIndex("PVNName"),
+                    X.StringFilter().DataIndex("ZoneDescr"),
+                    X.StringFilter().DataIndex("TerritoryDescr"),
+                    X.StringFilter().DataIndex("SubTerritoryDescr"),
+                    X.StringFilter().DataIndex("StateDescr"),
                     X.StringFilter().DataIndex("BranchID"),
                     X.StringFilter().DataIndex("BranchName"),
                     X.StringFilter().DataIndex("Addr")

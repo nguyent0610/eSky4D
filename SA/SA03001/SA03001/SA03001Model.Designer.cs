@@ -213,6 +213,80 @@ namespace SA03001
     
             return base.ExecuteFunction<SA03001_pgBranchAllByUser_Result>("SA03001_pgBranchAllByUser", cpnyIDParameter, userIDParameter, langIDParameter, listBranchIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="user">No Metadata Documentation available.</param>
+        /// <param name="listBranchID">No Metadata Documentation available.</param>
+        /// <param name="listTypeUser">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<SA03001_pdCheckSaveUser_Result> SA03001_pdCheckSaveUser(global::System.String user, global::System.String listBranchID, global::System.String listTypeUser, global::System.String cpnyID, global::System.String userID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userParameter;
+            if (user != null)
+            {
+                userParameter = new ObjectParameter("User", user);
+            }
+            else
+            {
+                userParameter = new ObjectParameter("User", typeof(global::System.String));
+            }
+    
+            ObjectParameter listBranchIDParameter;
+            if (listBranchID != null)
+            {
+                listBranchIDParameter = new ObjectParameter("ListBranchID", listBranchID);
+            }
+            else
+            {
+                listBranchIDParameter = new ObjectParameter("ListBranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter listTypeUserParameter;
+            if (listTypeUser != null)
+            {
+                listTypeUserParameter = new ObjectParameter("ListTypeUser", listTypeUser);
+            }
+            else
+            {
+                listTypeUserParameter = new ObjectParameter("ListTypeUser", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<SA03001_pdCheckSaveUser_Result>("SA03001_pdCheckSaveUser", userParameter, listBranchIDParameter, listTypeUserParameter, cpnyIDParameter, userIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -1450,6 +1524,135 @@ namespace SA03001
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA03001Model", Name="SA03001_pdCheckSaveUser_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA03001_pdCheckSaveUser_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA03001_pdCheckSaveUser_Result object.
+        /// </summary>
+        /// <param name="typeUser">Initial value of the TypeUser property.</param>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="userID">Initial value of the UserID property.</param>
+        public static SA03001_pdCheckSaveUser_Result CreateSA03001_pdCheckSaveUser_Result(global::System.String typeUser, global::System.String branchID, global::System.String userID)
+        {
+            SA03001_pdCheckSaveUser_Result sA03001_pdCheckSaveUser_Result = new SA03001_pdCheckSaveUser_Result();
+            sA03001_pdCheckSaveUser_Result.TypeUser = typeUser;
+            sA03001_pdCheckSaveUser_Result.BranchID = branchID;
+            sA03001_pdCheckSaveUser_Result.UserID = userID;
+            return sA03001_pdCheckSaveUser_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> CheckUser
+        {
+            get
+            {
+                return _CheckUser;
+            }
+            set
+            {
+                OnCheckUserChanging(value);
+                ReportPropertyChanging("CheckUser");
+                _CheckUser = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CheckUser");
+                OnCheckUserChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _CheckUser;
+        partial void OnCheckUserChanging(Nullable<global::System.Boolean> value);
+        partial void OnCheckUserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String TypeUser
+        {
+            get
+            {
+                return _TypeUser;
+            }
+            set
+            {
+                OnTypeUserChanging(value);
+                ReportPropertyChanging("TypeUser");
+                _TypeUser = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("TypeUser");
+                OnTypeUserChanged();
+            }
+        }
+        private global::System.String _TypeUser;
+        partial void OnTypeUserChanging(global::System.String value);
+        partial void OnTypeUserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String UserID
+        {
+            get
+            {
+                return _UserID;
+            }
+            set
+            {
+                OnUserIDChanging(value);
+                ReportPropertyChanging("UserID");
+                _UserID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("UserID");
+                OnUserIDChanged();
+            }
+        }
+        private global::System.String _UserID;
+        partial void OnUserIDChanging(global::System.String value);
+        partial void OnUserIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="SA03001Model", Name="SA03001_pgBranchAllByUser_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -1576,6 +1779,102 @@ namespace SA03001
         private Nullable<global::System.Boolean> _Check;
         partial void OnCheckChanging(Nullable<global::System.Boolean> value);
         partial void OnCheckChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ZoneDescr
+        {
+            get
+            {
+                return _ZoneDescr;
+            }
+            set
+            {
+                OnZoneDescrChanging(value);
+                ReportPropertyChanging("ZoneDescr");
+                _ZoneDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ZoneDescr");
+                OnZoneDescrChanged();
+            }
+        }
+        private global::System.String _ZoneDescr;
+        partial void OnZoneDescrChanging(global::System.String value);
+        partial void OnZoneDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TerritoryDescr
+        {
+            get
+            {
+                return _TerritoryDescr;
+            }
+            set
+            {
+                OnTerritoryDescrChanging(value);
+                ReportPropertyChanging("TerritoryDescr");
+                _TerritoryDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TerritoryDescr");
+                OnTerritoryDescrChanged();
+            }
+        }
+        private global::System.String _TerritoryDescr;
+        partial void OnTerritoryDescrChanging(global::System.String value);
+        partial void OnTerritoryDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SubTerritoryDescr
+        {
+            get
+            {
+                return _SubTerritoryDescr;
+            }
+            set
+            {
+                OnSubTerritoryDescrChanging(value);
+                ReportPropertyChanging("SubTerritoryDescr");
+                _SubTerritoryDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SubTerritoryDescr");
+                OnSubTerritoryDescrChanged();
+            }
+        }
+        private global::System.String _SubTerritoryDescr;
+        partial void OnSubTerritoryDescrChanging(global::System.String value);
+        partial void OnSubTerritoryDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StateDescr
+        {
+            get
+            {
+                return _StateDescr;
+            }
+            set
+            {
+                OnStateDescrChanging(value);
+                ReportPropertyChanging("StateDescr");
+                _StateDescr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StateDescr");
+                OnStateDescrChanged();
+            }
+        }
+        private global::System.String _StateDescr;
+        partial void OnStateDescrChanging(global::System.String value);
+        partial void OnStateDescrChanged();
 
         #endregion
 

@@ -76,7 +76,16 @@ namespace SA03001.Controllers
                 string valueTstamp = data["valueTstamp"].PassNull();
                 //DateTime StartDate = DateTime.Parse(tmpStartDate);
                 //DateTime EndDate = DateTime.Parse(tmpEndDate);
-
+                var a = _db.SA03001_pdCheckSaveUser(userName, cpnyID, userType, Current.CpnyID, Current.UserName, Current.LangID).ToList();
+                if (a.Count>0)
+                {
+                    //if (a.CheckUser == true)
+                    //{
+                    //    string messageerorr = string.Format(Message.GetString("2018032711", null), a.UserID, a.BranchID, a.TypeUser);
+                    //    throw new MessageException(MessageType.Message, "20410", "", new string[] { messageerorr });
+                    //}
+                    
+                }
                 bool isNewUser = false;
 
                 if (data["isNewUser"].PassNull() == "true")
