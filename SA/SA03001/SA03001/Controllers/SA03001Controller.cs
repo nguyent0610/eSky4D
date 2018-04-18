@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -33,7 +33,7 @@ namespace SA03001.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -76,15 +76,23 @@ namespace SA03001.Controllers
                 string valueTstamp = data["valueTstamp"].PassNull();
                 //DateTime StartDate = DateTime.Parse(tmpStartDate);
                 //DateTime EndDate = DateTime.Parse(tmpEndDate);
-                var a = _db.SA03001_pdCheckSaveUser(userName, cpnyID, userType, Current.CpnyID, Current.UserName, Current.LangID).ToList();
-                if (a.Count>0)
+                var lstdataErro = _db.SA03001_pdCheckSaveUser(userName, cpnyID, userType, Current.CpnyID, Current.UserName, Current.LangID).ToList();
+                if (lstdataErro.Count>0)
                 {
-                    //if (a.CheckUser == true)
-                    //{
-                    //    string messageerorr = string.Format(Message.GetString("2018032711", null), a.UserID, a.BranchID, a.TypeUser);
-                    //    throw new MessageException(MessageType.Message, "20410", "", new string[] { messageerorr });
-                    //}
-                    
+                    string strUserID = "";
+                    string strBranchID = "";
+                    string strTypeUser = "";
+                    foreach (var item in lstdataErro)
+                    {
+                        strUserID = strUserID + item.UserID + ",";
+                        strBranchID = strBranchID + item.BranchID + ",";
+                        strTypeUser = strTypeUser + item.TypeUser + ",";
+                    }
+                    if (strUserID!="" && strBranchID!="" && strTypeUser!="")
+                    {
+                        string messageerorr = string.Format(Message.GetString("2018032711", null), strUserID, strBranchID, strTypeUser);
+                        throw new MessageException(MessageType.Message, "20410", "", new string[] { messageerorr });
+                    }
                 }
                 bool isNewUser = false;
 
