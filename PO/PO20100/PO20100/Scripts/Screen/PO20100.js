@@ -219,6 +219,7 @@ var cboPriceID_Change = function (sender, value) {
 
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
 var cboPriceID_Expand = function (sender, value) {
+    App.cboPriceID.store.clearFilter();
     if (HQ.isChange) {
         App.cboPriceID.collapse();
     }
@@ -348,7 +349,10 @@ var grdPO_Price_BeforeEdit = function (editor, e) {
             return false;
         }
     }
-
+    if(Ext.isEmpty(App.cboPriceID.getValue())){
+        HQ.message.show(2018041913, [HQ.common.getLang('PriceID')], '', true);
+        return false;
+    }
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
 };
 
@@ -376,9 +380,6 @@ var grdPO_Price_Edit = function (item, e) {
 
 var grdPO_Price_ValidateEdit = function (item, e) {
     //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
-
-
-
     return HQ.grid.checkValidateEdit(App.grdPO_Price, e, keys);
 };
 
@@ -554,12 +555,11 @@ function refresh(item) {
 var btnCopy_click = function (btn, e, eOpts) {     
     if (!HQ.isChange) {
         HQ.copy = true;
-        App.cboPriceID.suspendEvents();
+        App.cboPriceID.events['change'].suspend();
         App.cboPriceID.setValue('');
-        App.Descr.setValue('');
         App.cboPriceID.setReadOnly(false);
         App.cboPriceID.forceSelection = false;
-        App.cboPriceID.resumeEvents();
+        App.cboPriceID.events['change'].resume();
     }
 
 };
