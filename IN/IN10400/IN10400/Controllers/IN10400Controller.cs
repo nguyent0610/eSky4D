@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -511,8 +511,17 @@ namespace IN10400.Controllers
             {
                 throw new MessageException(MessageType.Message, "301");
             }
-                
 
+            // sau khi save xong gọi tới hàm tạo user hoặc chuyển save, truyền xuống danh sách
+            Dictionary<string, string> dicData = new Dictionary<string, string>();
+            dicData.Add("@UserName", Current.UserName);
+            dicData.Add("@CpnyID", Current.CpnyID);
+            dicData.Add("@LangID", Current.LangID.ToString());
+            dicData.Add("@BranchID", _objBatch.BranchID);
+            dicData.Add("@TranDate", _objBatch.DateEnt.ToDateShort().ToString());
+            dicData.Add("@BatNbr", _objBatch.BatNbr);
+
+            Util.getDataTableFromProc("IN10400_pdCheckCloseDateSetUp", dicData);
 
 
             //var cfgWrkDateChk = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);

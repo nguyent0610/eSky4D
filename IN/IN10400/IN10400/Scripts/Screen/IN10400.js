@@ -1570,11 +1570,13 @@ var handleTab = function (key) {
 var getQtyAvail = function (row) {
 
     var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [row.data.InvtID, row.data.SiteID]);
+    var cnvFact = row.data.CnvFact === 0 ? 1 : row.data.CnvFact;
     if (!Ext.isEmpty(site)) {
-        App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + (site.QtyAvail + calculateInvtTotal(row.data.InvtID, row.data.SiteID, "")));
+         
+        App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + HQ.util.mathRound((site.QtyAvail + calculateInvtTotal(row.data.InvtID, row.data.SiteID, "")) / cnvFact, 0));
     }
     else {
-        App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + (0 - calculateInvtTotal(row.data.InvtID, row.data.SiteID, "")));
+        App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + HQ.util.mathRound((0 - calculateInvtTotal(row.data.InvtID, row.data.SiteID, "")) / cnvFact, 0));
     }
 };
 
