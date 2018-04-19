@@ -16,6 +16,7 @@ namespace IN20100.Controllers
     [DirectController]
     [CustomAuthorize]
     [CheckSessionOut]
+
     public class IN20100Controller : Controller
     {
         private string _screenNbr = "IN20100";
