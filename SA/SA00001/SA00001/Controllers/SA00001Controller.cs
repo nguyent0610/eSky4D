@@ -17,7 +17,6 @@ namespace SA00001.Controllers
     [DirectController]
     [CustomAuthorize]
     [CheckSessionOut]
-
     public class SA00001Controller : Controller
     {
         private string _screenNbr = "SA00001";
@@ -187,14 +186,14 @@ namespace SA00001.Controllers
 
                 // sau khi save xong gọi tới hàm tạo user hoặc chuyển save, truyền xuống danh sách
                 Dictionary<string, string> dicData = new Dictionary<string, string>();
-                dicData.Add("@BranchID", cpnyNPP);
-                dicData.Add("@UserManger", data["txtManager"]);
-                dicData.Add("@BranchOld", data["cboBranchOld"]);
-                dicData.Add("@SlsperID", data["SlsperID"]);
-                dicData.Add("@DisplayID", data["DisplayID"]);
-                dicData.Add("@AccumulateID", data["AccumulateID"]);
+                dicData.Add("@BranchID", cpnyNPP ?? "");
+                dicData.Add("@UserManger", data["txtManager"] ?? "");
+                dicData.Add("@BranchOld", data["cboBranchOld"] ?? "");
+                dicData.Add("@SlsperID", data["SlsperID"] ?? "");
+                dicData.Add("@DisplayID", data["DisplayID"] ?? "");
+                dicData.Add("@AccumulateID", data["AccumulateID"] ?? "");
 
-                Util.getDataTableFromProc("SA00000_ppUserSales", dicData, true);
+                Util.getDataTableFromProc("SA00001_ppUserSales", dicData, true);
 
                 return Json(new { success = true});
             }
