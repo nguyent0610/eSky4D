@@ -131,7 +131,7 @@ namespace PJPProcess
             }
 
         }
-        public bool OM23800CreateMCP(string id)
+        public bool OM23800CreateMCP(string id, bool delOldSlsperID = false)
         {
             try
             {
@@ -151,7 +151,7 @@ namespace PJPProcess
                 try
                 {
                  
-                    System.Data.DataTable dt = objSql.GetListNewOM_SalesRouteMaster(id);//, "%", "%", "%", "%", "%");
+                    System.Data.DataTable dt = objSql.GetListNewOM_SalesRouteMaster(id, delOldSlsperID);//, "%", "%", "%", "%", "%");
                     //TRAN TRUNG HO: PJP sửa lại comit cho AR_Customer với OM_SalesRouteMaster trước,
                     //trước khi sinh OM_SalesRouteDet nếu sinh OM_SalesRouteDet có lỗi thi ko có rollback lại được OM_SalesRouteMaster với AR_Customer đã thay đổi trước đó
                     Dal.CommitTrans();

@@ -145,12 +145,13 @@ namespace PJPProcess
                 throw ex;
             }
         }
-        public DataTable GetListNewOM_SalesRouteMaster(string ID)
+        public DataTable GetListNewOM_SalesRouteMaster(string ID, bool delOldSlsperID = false)
         {
             try
             {
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@ID", DbType.String, clsCommon.GetValueDBNull(ID), ParameterDirection.Input, 2147483647));
+                pc.Add(new ParamStruct("@DelOldSlsperID", DbType.Boolean, clsCommon.GetValueDBNull(delOldSlsperID), ParameterDirection.Input, 2147483647));
                 return (_da.ExecDataTable("OM23800_GetNewOM_ImportMCP", CommandType.StoredProcedure, ref pc, ""));
             }
             catch (Exception ex)
