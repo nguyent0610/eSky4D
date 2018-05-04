@@ -15,7 +15,7 @@ var _applyType = {
 
 var ListCpnyID;
 var _source = 0;
-
+var _muc = 0;
 var Process = {
     renderCpnyName: function (value) {
         var record = App.cboCustID.store.findRecord("CustID", value);
@@ -851,9 +851,9 @@ var Event = {
                     App.colPoint.hide();
                 }
                 else if (cbo.getValue() == _applyType.Point) {
-                    App.pnlInvt.hide();
+                    App.pnlInvt.show();
                     App.colPoint.show();
-                    App.colLevelFrom.hide();
+                    App.colLevelFrom.show();
                     App.colLevelTo.hide();                    
                 }
             }
@@ -1355,6 +1355,7 @@ var Event = {
             }
         },
         grd_beforeEdit: function (editor, e) {
+            var lstTamp=App.grdLevel.store.data;
             if (HQ.isUpdate) {
                 if (App.frmMain.isValid()) {
                     var status = App.cboStatus.getValue();
@@ -1384,6 +1385,7 @@ var Event = {
             else {
                 return false;
             }
+            
         },
 
         grdSale_beforeEdit: function (editor, e) {
@@ -2819,3 +2821,68 @@ var AddRowDefaultOne = function (grd, e, keys) {
         }
     }
 }
+var stoAllocation_Load = function (sto) {
+    HQ.common.showBusy(false);
+    App.winAllocation.unmask();
+};
+var winAllocation_beforeShow = function () {
+ //   App.winLocation.mask();
+    App.winAllocation.mask();
+    App.winAllocation.setHeight(App.frmMain.getHeight() - 100);
+    App.winAllocation.setWidth(App.frmMain.getWidth() - 250);
+};
+var btnAllocation_Click = function (record) {
+    _muc = record.data.LevelID;
+    if (record.data.tstamp != "")
+    {
+        App.stoAllocation.reload();
+        App.winAllocation.show();
+        App.winAllocation.unmask();
+    }
+};
+
+var grdAllocation_beforeEdit = function (editor, e) {
+    if (App.cboStatus.value == "C")
+    {
+        return false;
+    }
+    return true;
+}
+var grdAllocation_edit = function (item, e) {
+   // HQ.grid.checkInsertKey(App.grdAllocation, e, keys);
+}
+var grdAllocation_validateEdit = function (item, e) {
+    //return HQ.grid.checkValidateEdit(App.grdAllocation, e, keys);
+}
+var btnOKAllocation_Click = function () {
+    App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'OM27700/SaveAllocation',
+            params: {
+                lstApp_Allocation: HQ.store.getData(App.stoAllocation)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isFirstLoad = true;
+                App.stoAllocation.reload();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    
+};
+var btnCancelAllocation_Click = function () {
+    App.winAllocation.hide();
+};
+var frmDetail_Change = function () {
+    var record = App.frmDetail.getRecord();
+    if (record) {
+        //App.frmDetail.updateRecord();
+        frmChange();
+    }
+}
+var grdApp_Allocation_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdAllocation);
+};
+

@@ -1,4 +1,4 @@
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Ext.Net;
 using Ext.Net.MVC;
 using HQ.eSkyFramework;
@@ -35,6 +35,7 @@ namespace OM27700.Controllers
         //private string _beginStatus = "H";
         private string _noneStatus = "N";
         private string _applyTypeQty = "Q";
+        private string _applyTypePoint="P";
         OM27700Entities _db = Util.CreateObjectContext<OM27700Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         List<OM27700_pcInventory_Result> _lstInventory = new List<OM27700_pcInventory_Result>();
@@ -53,7 +54,11 @@ namespace OM27700.Controllers
             ViewBag.dateNow = DateTime.Now.ToDateShort();
             return View();
         }
-
+        public ActionResult GetAllocation(string AccumulateID, string Muc)
+        {
+            var dataAllocation = this.Store(_db.OM27700_pgAllocation(AccumulateID, Current.CpnyID, Current.UserName, Current.LangID, Muc).ToList());
+            return this.Store(_db.OM27700_pgAllocation(AccumulateID, Current.CpnyID, Current.UserName, Current.LangID, Muc).ToList());
+        }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
@@ -575,7 +580,7 @@ namespace OM27700.Controllers
                     }
                     Save_Cpny(data, accumulateID);
                     Save_Level(data, accumulateID);
-                    if (inputAccumulate.ApplyType == _applyTypeQty)
+                    if (inputAccumulate.ApplyType == _applyTypeQty || inputAccumulate.ApplyType==_applyTypePoint)
                     {
                         Save_Invt(data, accumulateID);
                     }
@@ -1351,7 +1356,7 @@ namespace OM27700.Controllers
             accumulate.ToDate = inputAccumulate.ToDate;
             accumulate.ObjApply = inputAccumulate.ObjApply;
             accumulate.Status = inputAccumulate.Status;
-
+            accumulate.LevelCondition = inputAccumulate.LevelCondition;
             accumulate.LUpd_DateTime = DateTime.Now;
             accumulate.LUpd_Prog = _screenNbr;
             accumulate.LUpd_User = Current.UserName;
@@ -1390,6 +1395,89 @@ namespace OM27700.Controllers
             t.LUpd_User = Current.UserName;
         }
         #endregion
-       
+        [HttpPost]
+        public ActionResult SaveAllocation(FormCollection data)
+        {
+            try
+            {
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstApp_Allocation"]);
+                ChangeRecords<OM27700_pgAllocation_Result> lstOM_Allocation = dataHandler.BatchObjectData<OM27700_pgAllocation_Result>();
+
+                lstOM_Allocation.Created.AddRange(lstOM_Allocation.Updated);
+
+                foreach (OM27700_pgAllocation_Result del in lstOM_Allocation.Deleted)
+                {
+                    // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstOM_Allocation.Created.Where(p => p.CpnyID == del.CpnyID && p.AccumulateID==del.CpnyID && p.LevelID==del.LevelID).Count() > 0)
+                    {
+                        lstOM_Allocation.Created.Where(p => p.CpnyID == del.CpnyID && p.AccumulateID == del.CpnyID).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.OM_AccumulatedCpnyAlloctionLimit.ToList().Where(p => p.CpnyID == del.CpnyID && p.AccumulateID == del.AccumulateID && p.LevelID == del.LevelID).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.OM_AccumulatedCpnyAlloctionLimit.DeleteObject(objDel);
+                        }
+                    }
+                }
+
+                foreach (OM27700_pgAllocation_Result curLang in lstOM_Allocation.Created)
+                {
+                    if (curLang.CpnyID.PassNull() == "" && curLang.AccumulateID.PassNull()=="") continue;
+
+                    var lang = _db.OM_AccumulatedCpnyAlloctionLimit.Where(p => p.CpnyID.ToLower() == curLang.CpnyID.ToLower() && p.AccumulateID.ToLower()==curLang.AccumulateID.ToLower() && p.LevelID.ToLower()==curLang.LevelID.ToLower()).FirstOrDefault();
+
+                    if (lang != null)
+                    {
+                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        {
+                            Update_Language(lang, curLang, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        lang = new OM_AccumulatedCpnyAlloctionLimit();
+                        lang.ResetET();
+                        Update_Language(lang, curLang, true);
+                        _db.OM_AccumulatedCpnyAlloctionLimit.AddObject(lang);
+                    }
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+
+        private void Update_Language(OM_AccumulatedCpnyAlloctionLimit t, OM27700_pgAllocation_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.CpnyID = s.CpnyID;
+                t.AccumulateID = s.AccumulateID;
+                t.LevelID = s.LevelID;
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_USer = Current.UserName;
+            }
+            t.MaxLot = Convert.ToDouble(s.MaxLot);
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = Current.UserName;
+
+
+
+        }
+
+
     }
 }

@@ -100,22 +100,6 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_Inventory> IN_Inventory
-        {
-            get
-            {
-                if ((_IN_Inventory == null))
-                {
-                    _IN_Inventory = base.CreateObjectSet<IN_Inventory>("IN_Inventory");
-                }
-                return _IN_Inventory;
-            }
-        }
-        private ObjectSet<IN_Inventory> _IN_Inventory;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SI_Hierarchy> SI_Hierarchy
         {
             get
@@ -212,6 +196,22 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<OM_AccumulatedLevel> OM_AccumulatedLevel
+        {
+            get
+            {
+                if ((_OM_AccumulatedLevel == null))
+                {
+                    _OM_AccumulatedLevel = base.CreateObjectSet<OM_AccumulatedLevel>("OM_AccumulatedLevel");
+                }
+                return _OM_AccumulatedLevel;
+            }
+        }
+        private ObjectSet<OM_AccumulatedLevel> _OM_AccumulatedLevel;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<OM_Accumulated> OM_Accumulated
         {
             get
@@ -228,18 +228,34 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_AccumulatedLevel> OM_AccumulatedLevel
+        public ObjectSet<OM_AccumulatedCpnyAlloctionLimit> OM_AccumulatedCpnyAlloctionLimit
         {
             get
             {
-                if ((_OM_AccumulatedLevel == null))
+                if ((_OM_AccumulatedCpnyAlloctionLimit == null))
                 {
-                    _OM_AccumulatedLevel = base.CreateObjectSet<OM_AccumulatedLevel>("OM_AccumulatedLevel");
+                    _OM_AccumulatedCpnyAlloctionLimit = base.CreateObjectSet<OM_AccumulatedCpnyAlloctionLimit>("OM_AccumulatedCpnyAlloctionLimit");
                 }
-                return _OM_AccumulatedLevel;
+                return _OM_AccumulatedCpnyAlloctionLimit;
             }
         }
-        private ObjectSet<OM_AccumulatedLevel> _OM_AccumulatedLevel;
+        private ObjectSet<OM_AccumulatedCpnyAlloctionLimit> _OM_AccumulatedCpnyAlloctionLimit;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_Inventory> IN_Inventory
+        {
+            get
+            {
+                if ((_IN_Inventory == null))
+                {
+                    _IN_Inventory = base.CreateObjectSet<IN_Inventory>("IN_Inventory");
+                }
+                return _IN_Inventory;
+            }
+        }
+        private ObjectSet<IN_Inventory> _IN_Inventory;
 
         #endregion
 
@@ -259,14 +275,6 @@ namespace OM27700
         public void AddToSI_ApprovalFlowHandle(SI_ApprovalFlowHandle sI_ApprovalFlowHandle)
         {
             base.AddObject("SI_ApprovalFlowHandle", sI_ApprovalFlowHandle);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_Inventory EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_Inventory(IN_Inventory iN_Inventory)
-        {
-            base.AddObject("IN_Inventory", iN_Inventory);
         }
     
         /// <summary>
@@ -318,6 +326,14 @@ namespace OM27700
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the OM_AccumulatedLevel EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_AccumulatedLevel(OM_AccumulatedLevel oM_AccumulatedLevel)
+        {
+            base.AddObject("OM_AccumulatedLevel", oM_AccumulatedLevel);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the OM_Accumulated EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_Accumulated(OM_Accumulated oM_Accumulated)
@@ -326,11 +342,19 @@ namespace OM27700
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_AccumulatedLevel EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the OM_AccumulatedCpnyAlloctionLimit EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToOM_AccumulatedLevel(OM_AccumulatedLevel oM_AccumulatedLevel)
+        public void AddToOM_AccumulatedCpnyAlloctionLimit(OM_AccumulatedCpnyAlloctionLimit oM_AccumulatedCpnyAlloctionLimit)
         {
-            base.AddObject("OM_AccumulatedLevel", oM_AccumulatedLevel);
+            base.AddObject("OM_AccumulatedCpnyAlloctionLimit", oM_AccumulatedCpnyAlloctionLimit);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_Inventory EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_Inventory(IN_Inventory iN_Inventory)
+        {
+            base.AddObject("IN_Inventory", iN_Inventory);
         }
 
         #endregion
@@ -970,6 +994,69 @@ namespace OM27700
             }
     
             return base.ExecuteFunction<OM27700_pdConfig_Result>("OM27700_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="accumulateID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="muc">No Metadata Documentation available.</param>
+        public ObjectResult<OM27700_pgAllocation_Result> OM27700_pgAllocation(global::System.String accumulateID, global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String muc)
+        {
+            ObjectParameter accumulateIDParameter;
+            if (accumulateID != null)
+            {
+                accumulateIDParameter = new ObjectParameter("AccumulateID", accumulateID);
+            }
+            else
+            {
+                accumulateIDParameter = new ObjectParameter("AccumulateID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter mucParameter;
+            if (muc != null)
+            {
+                mucParameter = new ObjectParameter("Muc", muc);
+            }
+            else
+            {
+                mucParameter = new ObjectParameter("Muc", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM27700_pgAllocation_Result>("OM27700_pgAllocation", accumulateIDParameter, cpnyIDParameter, userNameParameter, langIDParameter, mucParameter);
         }
 
         #endregion
@@ -3755,6 +3842,30 @@ namespace OM27700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LevelCondition
+        {
+            get
+            {
+                return _LevelCondition;
+            }
+            set
+            {
+                OnLevelConditionChanging(value);
+                ReportPropertyChanging("LevelCondition");
+                _LevelCondition = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LevelCondition");
+                OnLevelConditionChanged();
+            }
+        }
+        private global::System.String _LevelCondition;
+        partial void OnLevelConditionChanging(global::System.String value);
+        partial void OnLevelConditionChanged();
 
         #endregion
 
@@ -3999,6 +4110,317 @@ namespace OM27700
         private global::System.String _Crtd_User;
         partial void OnCrtd_UserChanging(global::System.String value);
         partial void OnCrtd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="OM27700Model", Name="OM_AccumulatedCpnyAlloctionLimit")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class OM_AccumulatedCpnyAlloctionLimit : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM_AccumulatedCpnyAlloctionLimit object.
+        /// </summary>
+        /// <param name="accumulateID">Initial value of the AccumulateID property.</param>
+        /// <param name="levelID">Initial value of the LevelID property.</param>
+        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
+        /// <param name="maxLot">Initial value of the MaxLot property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static OM_AccumulatedCpnyAlloctionLimit CreateOM_AccumulatedCpnyAlloctionLimit(global::System.String accumulateID, global::System.String levelID, global::System.String cpnyID, global::System.Double maxLot, global::System.Byte[] tstamp)
+        {
+            OM_AccumulatedCpnyAlloctionLimit oM_AccumulatedCpnyAlloctionLimit = new OM_AccumulatedCpnyAlloctionLimit();
+            oM_AccumulatedCpnyAlloctionLimit.AccumulateID = accumulateID;
+            oM_AccumulatedCpnyAlloctionLimit.LevelID = levelID;
+            oM_AccumulatedCpnyAlloctionLimit.CpnyID = cpnyID;
+            oM_AccumulatedCpnyAlloctionLimit.MaxLot = maxLot;
+            oM_AccumulatedCpnyAlloctionLimit.tstamp = tstamp;
+            return oM_AccumulatedCpnyAlloctionLimit;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String AccumulateID
+        {
+            get
+            {
+                return _AccumulateID;
+            }
+            set
+            {
+                if (_AccumulateID != value)
+                {
+                    OnAccumulateIDChanging(value);
+                    ReportPropertyChanging("AccumulateID");
+                    _AccumulateID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("AccumulateID");
+                    OnAccumulateIDChanged();
+                }
+            }
+        }
+        private global::System.String _AccumulateID;
+        partial void OnAccumulateIDChanging(global::System.String value);
+        partial void OnAccumulateIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LevelID
+        {
+            get
+            {
+                return _LevelID;
+            }
+            set
+            {
+                if (_LevelID != value)
+                {
+                    OnLevelIDChanging(value);
+                    ReportPropertyChanging("LevelID");
+                    _LevelID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("LevelID");
+                    OnLevelIDChanged();
+                }
+            }
+        }
+        private global::System.String _LevelID;
+        partial void OnLevelIDChanging(global::System.String value);
+        partial void OnLevelIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyID
+        {
+            get
+            {
+                return _CpnyID;
+            }
+            set
+            {
+                if (_CpnyID != value)
+                {
+                    OnCpnyIDChanging(value);
+                    ReportPropertyChanging("CpnyID");
+                    _CpnyID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("CpnyID");
+                    OnCpnyIDChanged();
+                }
+            }
+        }
+        private global::System.String _CpnyID;
+        partial void OnCpnyIDChanging(global::System.String value);
+        partial void OnCpnyIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double MaxLot
+        {
+            get
+            {
+                return _MaxLot;
+            }
+            set
+            {
+                OnMaxLotChanging(value);
+                ReportPropertyChanging("MaxLot");
+                _MaxLot = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MaxLot");
+                OnMaxLotChanged();
+            }
+        }
+        private global::System.Double _MaxLot;
+        partial void OnMaxLotChanging(global::System.Double value);
+        partial void OnMaxLotChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Crtd_Datetime
+        {
+            get
+            {
+                return _Crtd_Datetime;
+            }
+            set
+            {
+                OnCrtd_DatetimeChanging(value);
+                ReportPropertyChanging("Crtd_Datetime");
+                _Crtd_Datetime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Crtd_Datetime");
+                OnCrtd_DatetimeChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Crtd_Datetime;
+        partial void OnCrtd_DatetimeChanging(Nullable<global::System.DateTime> value);
+        partial void OnCrtd_DatetimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_Prog
+        {
+            get
+            {
+                return _Crtd_Prog;
+            }
+            set
+            {
+                OnCrtd_ProgChanging(value);
+                ReportPropertyChanging("Crtd_Prog");
+                _Crtd_Prog = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Crtd_Prog");
+                OnCrtd_ProgChanged();
+            }
+        }
+        private global::System.String _Crtd_Prog;
+        partial void OnCrtd_ProgChanging(global::System.String value);
+        partial void OnCrtd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_USer
+        {
+            get
+            {
+                return _Crtd_USer;
+            }
+            set
+            {
+                OnCrtd_USerChanging(value);
+                ReportPropertyChanging("Crtd_USer");
+                _Crtd_USer = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Crtd_USer");
+                OnCrtd_USerChanged();
+            }
+        }
+        private global::System.String _Crtd_USer;
+        partial void OnCrtd_USerChanging(global::System.String value);
+        partial void OnCrtd_USerChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> LUpd_Datetime
+        {
+            get
+            {
+                return _LUpd_Datetime;
+            }
+            set
+            {
+                OnLUpd_DatetimeChanging(value);
+                ReportPropertyChanging("LUpd_Datetime");
+                _LUpd_Datetime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LUpd_Datetime");
+                OnLUpd_DatetimeChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _LUpd_Datetime;
+        partial void OnLUpd_DatetimeChanging(Nullable<global::System.DateTime> value);
+        partial void OnLUpd_DatetimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_Prog
+        {
+            get
+            {
+                return _LUpd_Prog;
+            }
+            set
+            {
+                OnLUpd_ProgChanging(value);
+                ReportPropertyChanging("LUpd_Prog");
+                _LUpd_Prog = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LUpd_Prog");
+                OnLUpd_ProgChanged();
+            }
+        }
+        private global::System.String _LUpd_Prog;
+        partial void OnLUpd_ProgChanging(global::System.String value);
+        partial void OnLUpd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_User
+        {
+            get
+            {
+                return _LUpd_User;
+            }
+            set
+            {
+                OnLUpd_UserChanging(value);
+                ReportPropertyChanging("LUpd_User");
+                _LUpd_User = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LUpd_User");
+                OnLUpd_UserChanged();
+            }
+        }
+        private global::System.String _LUpd_User;
+        partial void OnLUpd_UserChanging(global::System.String value);
+        partial void OnLUpd_UserChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -6418,10 +6840,12 @@ namespace OM27700
         /// <param name="recordID">Initial value of the RecordID property.</param>
         /// <param name="crtd_Datetime">Initial value of the Crtd_Datetime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="lUpd_Datetime">Initial value of the LUpd_Datetime property.</param>
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_Hierarchy CreateSI_Hierarchy(global::System.String nodeID, global::System.Int16 nodeLevel, global::System.String type, global::System.Int32 parentRecordID, global::System.Int32 recordID, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.Byte[] tstamp)
+        public static SI_Hierarchy CreateSI_Hierarchy(global::System.String nodeID, global::System.Int16 nodeLevel, global::System.String type, global::System.Int32 parentRecordID, global::System.Int32 recordID, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             SI_Hierarchy sI_Hierarchy = new SI_Hierarchy();
             sI_Hierarchy.NodeID = nodeID;
@@ -6431,8 +6855,10 @@ namespace OM27700
             sI_Hierarchy.RecordID = recordID;
             sI_Hierarchy.Crtd_Datetime = crtd_Datetime;
             sI_Hierarchy.Crtd_Prog = crtd_Prog;
+            sI_Hierarchy.Crtd_User = crtd_User;
             sI_Hierarchy.LUpd_Datetime = lUpd_Datetime;
             sI_Hierarchy.LUpd_Prog = lUpd_Prog;
+            sI_Hierarchy.LUpd_User = lUpd_User;
             sI_Hierarchy.tstamp = tstamp;
             return sI_Hierarchy;
         }
@@ -6648,7 +7074,7 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -6660,7 +7086,7 @@ namespace OM27700
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, true);
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -6720,7 +7146,7 @@ namespace OM27700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -6732,7 +7158,7 @@ namespace OM27700
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, true);
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -6788,6 +7214,30 @@ namespace OM27700
         private global::System.String _Descr1;
         partial void OnDescr1Changing(global::System.String value);
         partial void OnDescr1Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Sort
+        {
+            get
+            {
+                return _Sort;
+            }
+            set
+            {
+                OnSortChanging(value);
+                ReportPropertyChanging("Sort");
+                _Sort = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Sort");
+                OnSortChanged();
+            }
+        }
+        private global::System.String _Sort;
+        partial void OnSortChanging(global::System.String value);
+        partial void OnSortChanged();
 
         #endregion
 
@@ -7281,6 +7731,183 @@ namespace OM27700
         private global::System.Int32 _ShowPoint;
         partial void OnShowPointChanging(global::System.Int32 value);
         partial void OnShowPointChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM27700Model", Name="OM27700_pgAllocation_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM27700_pgAllocation_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM27700_pgAllocation_Result object.
+        /// </summary>
+        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        /// <param name="accumulateID">Initial value of the AccumulateID property.</param>
+        public static OM27700_pgAllocation_Result CreateOM27700_pgAllocation_Result(global::System.String cpnyID, global::System.Byte[] tstamp, global::System.String accumulateID)
+        {
+            OM27700_pgAllocation_Result oM27700_pgAllocation_Result = new OM27700_pgAllocation_Result();
+            oM27700_pgAllocation_Result.CpnyID = cpnyID;
+            oM27700_pgAllocation_Result.tstamp = tstamp;
+            oM27700_pgAllocation_Result.AccumulateID = accumulateID;
+            return oM27700_pgAllocation_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyID
+        {
+            get
+            {
+                return _CpnyID;
+            }
+            set
+            {
+                OnCpnyIDChanging(value);
+                ReportPropertyChanging("CpnyID");
+                _CpnyID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CpnyID");
+                OnCpnyIDChanged();
+            }
+        }
+        private global::System.String _CpnyID;
+        partial void OnCpnyIDChanging(global::System.String value);
+        partial void OnCpnyIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyName
+        {
+            get
+            {
+                return _CpnyName;
+            }
+            set
+            {
+                OnCpnyNameChanging(value);
+                ReportPropertyChanging("CpnyName");
+                _CpnyName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CpnyName");
+                OnCpnyNameChanged();
+            }
+        }
+        private global::System.String _CpnyName;
+        partial void OnCpnyNameChanging(global::System.String value);
+        partial void OnCpnyNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LevelID
+        {
+            get
+            {
+                return _LevelID;
+            }
+            set
+            {
+                OnLevelIDChanging(value);
+                ReportPropertyChanging("LevelID");
+                _LevelID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LevelID");
+                OnLevelIDChanged();
+            }
+        }
+        private global::System.String _LevelID;
+        partial void OnLevelIDChanging(global::System.String value);
+        partial void OnLevelIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String AccumulateID
+        {
+            get
+            {
+                return _AccumulateID;
+            }
+            set
+            {
+                OnAccumulateIDChanging(value);
+                ReportPropertyChanging("AccumulateID");
+                _AccumulateID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("AccumulateID");
+                OnAccumulateIDChanged();
+            }
+        }
+        private global::System.String _AccumulateID;
+        partial void OnAccumulateIDChanging(global::System.String value);
+        partial void OnAccumulateIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> MaxLot
+        {
+            get
+            {
+                return _MaxLot;
+            }
+            set
+            {
+                OnMaxLotChanging(value);
+                ReportPropertyChanging("MaxLot");
+                _MaxLot = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MaxLot");
+                OnMaxLotChanged();
+            }
+        }
+        private Nullable<global::System.Double> _MaxLot;
+        partial void OnMaxLotChanging(Nullable<global::System.Double> value);
+        partial void OnMaxLotChanged();
 
         #endregion
 

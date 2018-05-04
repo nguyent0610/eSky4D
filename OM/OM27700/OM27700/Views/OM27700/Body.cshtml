@@ -1,4 +1,4 @@
-@using Ext.Net;
+﻿@using Ext.Net;
 @using Ext.Net.MVC;
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
@@ -64,7 +64,7 @@
                             HQ.Combo().ID("cboAccumulateID")
                             .HQLangCode("ProcID").HQProcedure("OM27700_pcAccumulateID")
                             .HQColumnShow("AccumulateID,Descr,FromDate,ToDate")
-                            .HQHeightWidth(400, 300).ValueField("AccumulateID").DisplayField("AccumulateID")
+                            .HQHeightWidth(400, 300).ValueField("AccumulateID").DisplayField("AccumulateID").Width(350).LabelWidth(170)
                             .MaxLength(50).EnforceMaxLength(true).AllowBlank(false).AllowOnlyWhitespace(false)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection() { 
@@ -83,7 +83,7 @@
                             .HQLangCode("DisplayApplyFor").HQProcedure("OM27700_pcApplyFor")
                             .HQColumnShow("Code,Descr").DataIndex("ApplyFor")
                             .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
-                            .AllowBlank(false).AllowOnlyWhitespace(false).ForceSelection(true)
+                            .AllowBlank(false).AllowOnlyWhitespace(false).ForceSelection(true).Width(350).LabelWidth(170)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
@@ -95,6 +95,22 @@
                             {
                                 l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                             })
+                            , HQ.Combo().ID("cboLevelCondition")
+                            .HQLangCode("OM27700LevCondition").HQProcedure("OM27700_pcLevelCondition")
+                            .HQColumnShow("Code,Descr").DataIndex("LevelCondition")
+                            .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                            .AllowBlank(false).AllowOnlyWhitespace(false).ForceSelection(true).Width(350).LabelWidth(170)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .HQParam(new StoreParameterCollection() { 
+                            new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                            new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                            new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                            })
+                            .LoadData()
+                            .Listeners(l =>
+                            {
+                                l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                            })      
                         )
 
                         , X.Container().Layout(LayoutType.VBox)
@@ -123,11 +139,17 @@
                                 l.Change.Fn = "Event.Form.cboApplyType_change";
                                 l.TriggerClick.Fn = "Event.Form.cboApplyTypeTrigger_click";
                                 l.Expand.Fn = "Event.Form.cboApplyType_Expand";
-                            })                           
+                            })
+                             , HQ.DateField().ID("dtpRegisForm")
+                            .HQLangCode("RegisForm").DataIndex("RegisForm")
+                            .Listeners(l =>
+                            {
+                                l.Change.Fn = "Event.Form.dtpRegisForm_change";
+                            })                          
                         )
                     )
 
-                    , HQ.TextBox().ID("txtDescr")
+                    , HQ.TextBox().ID("txtDescr").Width(350).LabelWidth(170)
                     .HQLangCode("Descr").MaxLength(500).EnforceMaxLength(true)
                     .AllowBlank(false).AllowOnlyWhitespace(false).DataIndex("Descr")
                 ) // First Column
@@ -159,13 +181,9 @@
                     })
                     
                     .LoadData()
-                    
-                    ,HQ.DateField().ID("dtpRegisForm")
-                            .HQLangCode("RegisForm").DataIndex("RegisForm")
-                            .Listeners(l =>
-                            {
-                                l.Change.Fn = "Event.Form.dtpRegisForm_change";
-                            })
+                    , HQ.DateField().ID("dtpRegisTo")
+                    .HQLangCode("RegisTo").DataIndex("RegisTo")
+                   
                 ) // Second Column  
 
                 // Second Column
@@ -197,8 +215,7 @@
                         new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                     }).LoadData()
                     
-                    ,HQ.DateField().ID("dtpRegisTo")
-                            .HQLangCode("RegisTo").DataIndex("RegisTo")
+                   
                 ) // Second Column  
             )
             .Listeners(x =>
@@ -451,6 +468,12 @@
                                 })
                                     .LoadData()
                             )
+                                    , X.CommandColumn().Text(Util.GetLang("OM27700LAllocation")).Align(Alignment.Center).Width(150).DataIndex("Allocation")
+                                .Commands(
+                                    X.GridCommand().CommandName("Create").Text(Util.GetLang("OM27700_CAllocation")).MinWidth(150)
+                                )
+                                     .Listeners(l => l.Command.Handler = "btnAllocation_Click(record);")
+
                             , X.CommandColumn().Width(135)
                             .Commands(
                                 X.GridCommand()
@@ -1306,3 +1329,110 @@
     //.NotifyEnter(h => h.Fn = "notifyEnter")
     //.NotifyDrop(h => h.Fn = "notifyDrop")
 )*@
+@(
+ X.Window()
+    .ID("winAllocation")
+    .Hidden(true)
+    .Layout(LayoutType.Fit)
+    .AutoScroll(false)
+    .Height(500)
+    .Width(800)
+    .Maximized(false)
+    .Modal(true)
+    .Closable(false)
+    .Title(Util.GetLang("OM27700LAllocation"))
+    .Buttons(
+        X.Button().ID("btnOkAllocation").Text(Util.GetLang("Save")).Icon(Icon.FilmSave)
+       .Listeners(p => p.Click.Fn = "btnOKAllocation_Click")
+        , X.Button().ID("btnCancelAllocation").Text(Util.GetLang("Cancel")).Icon(Icon.BinClosed)
+        .Listeners(p => p.Click.Fn = "btnCancelAllocation_Click")
+    )
+    //.Items(
+    //    X.TabPanel().ID("tabDetail") //tab
+    //    .Layout(LayoutType.Border)
+    //    .Region(Region.Center)
+
+        .Items(
+        X.GridPanel().ID("grdAllocation")
+            .SelectionMemory(false)
+            .Store(
+                X.Store()
+                        .ID("stoAllocation")
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(OM27700_pgAllocation_Result), "mdlAllocation", ""))
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetAllocation"))).AutoLoad(false)
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("AccumulateID", "App.cboAccumulateID.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("Muc", "_muc", ParameterMode.Raw));
+                    })
+                    .Listeners(l =>
+                    {
+                        l.BeforeLoad.Handler = " HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));";
+                        l.Load.Fn = "stoAllocation_Load";
+                    })
+              )
+            .ColumnModel(
+            X.RowNumbererColumn().Text(Util.GetLang("Index")).Width(50).Sortable(false)
+                , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(100)
+                , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(200)
+                , X.Column().Text(Util.GetLang("LevelID")).DataIndex("LevelID").Width(100)
+                , X.Column().Text(Util.GetLang("OM27700LAllocation")).DataIndex("MaxLot").Width(200)
+                .Editor(HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0))
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "grdApp__Reject(record);")
+            )
+            .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.BeforeEdit.Fn = "grdAllocation_beforeEdit";
+                            ls.Edit.Fn = "grdAllocation_edit";
+                            ls.ValidateEdit.Fn = "grdAllocation_validateEdit";
+                        })
+                     ) 
+            .BottomBar(
+                X.PagingToolbar()
+                    .Items(
+                        X.Label("Page size:"),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("50")
+                        .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                        )
+                    .Plugins(X.ProgressBarPager())
+                    
+            )
+            .SelectionModel(
+                X.RowSelectionModel()
+                    .Mode(SelectionMode.Multi)
+             )
+        // .SortableColumns(false)
+            .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.BooleanFilter().DataIndex("Selected"),
+                    X.StringFilter().DataIndex("State"),
+                    X.StringFilter().DataIndex("Descr"),
+                    X.StringFilter().DataIndex("District"),
+                    X.StringFilter().DataIndex("DistrictName")
+                )
+            )
+    )//tab panel
+)
+
