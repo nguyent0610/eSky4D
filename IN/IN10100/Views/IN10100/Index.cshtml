@@ -26,14 +26,15 @@
     </style>
     <script>
 
-        HQ.cpnyID = '@ViewBag.BranchID';
+        HQ.cpnyID = '@ViewBag.branchID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
         HQ.businessDate = new Date();
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-        HQ.inSite = '@ViewBag.INSite';
+        HQ.inSite = '@ViewBag.inSite';
+        HQ.inWhseLoc = '@ViewBag.inWhseLoc';
         HQ.showQtyOnhand = HQ.util.toBool('@ViewBag.showQtyOnhand');
     </script>  
     <title>@ViewBag.Title</title>
@@ -123,7 +124,7 @@
     X.Store()
     .ID("stoItemSite")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN_ItemSite),"mdlItemSite",""))
+    .Model(Util.GenerateModel(typeof (IN_ItemLoc),"mdlItemSite",""))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetItemSite", "IN10100"))

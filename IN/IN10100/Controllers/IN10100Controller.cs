@@ -72,16 +72,20 @@ namespace IN10100.Controllers
 
             if (branchID == null) branchID = Current.CpnyID;
             var showQtyOnhand = false;
-            var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID && p.UserID == Current.UserName);
-            var objConfig = _app.IN10100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            //var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID && p.UserID == Current.UserName);
+            string inSite = string.Empty;
+            string inWhseLoc = string.Empty;
+            var objConfig = _app.IN10100_pdConfig(branchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             //var showPackage = false;
             if (objConfig != null)
             {
                 showQtyOnhand = objConfig.ShowQtyOnhand.HasValue && objConfig.ShowQtyOnhand.Value;
-                //showPackage = objConfig.ShowPackageID.HasValue && objConfig.ShowPackageID.Value;
+                inSite = objConfig.INSite.PassNull();
+                inWhseLoc = objConfig.INWhseLoc.PassNull();
             }
-            ViewBag.INSite = userDft == null ? "" : userDft.INSite;
-            ViewBag.BranchID = branchID;
+            ViewBag.inSite = inSite;
+            ViewBag.inWhseLoc = inWhseLoc;
+            ViewBag.branchID = branchID;
             ViewBag.showQtyOnhand = showQtyOnhand;
             //ViewBag.showPackage = showPackage;
             return View();
@@ -116,10 +120,20 @@ namespace IN10100.Controllers
             var lstLotTransfer = _app.IN10100_pdLotTrnsfer(branchID, trnsfrDocNbr, tranDate, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lstLotTransfer);
         }
-        public ActionResult GetItemSite(string invtID, string siteID)
+        public ActionResult GetItemSite(string invtID, string siteID, string whseLoc)
         {
-            var objSite = _app.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
-            return this.Store(objSite);
+            if (string.IsNullOrWhiteSpace(whseLoc))
+            {
+                var objSite = _app.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
+                return this.Store(objSite);
+            }
+            else
+            {
+                var objSite = _app.IN_ItemLoc.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID && p.WhseLoc == whseLoc);
+                return this.Store(objSite);
+            }
+            
+            
         }
         public ActionResult GetUnitConversion(string cpnyID)
         {
@@ -133,8 +147,8 @@ namespace IN10100.Controllers
         }
         public ActionResult GetUnit(string invtID)
         {
-            IN_Inventory invt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-            if (invt == null) invt = new IN_Inventory();
+            var invt = _app.IN10100_pdInventory(invtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (invt == null) invt = new IN10100_pdInventory_Result();
             List<IN10100_pcUnit_Result> lstUnit = _app.IN10100_pcUnit(invt.ClassID, invt.InvtID).ToList();
             return this.Store(lstUnit, lstUnit.Count);
         }
@@ -143,9 +157,9 @@ namespace IN10100.Controllers
             var objSetup = _app.IN_Setup.FirstOrDefault(p => p.SetupID == "IN" && p.BranchID == cpnyID);
             return this.Store(objSetup);
         }
-        public ActionResult GetLot(string siteID, string invtID, string batNbr, string branchID)
+        public ActionResult GetLot(string siteID, string whseLoc, string invtID, string batNbr, string branchID)
         {
-            var lstLot = _app.IN10100_pgIN_ItemLot(siteID, invtID, batNbr, branchID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            var lstLot = _app.IN10100_pgIN_ItemLot(siteID, invtID, batNbr, branchID, whseLoc, Current.UserName, Current.CpnyID, Current.LangID).ToList();
           //  List<IN_ItemLot> lstLot = new List<IN_ItemLot>();
 
             //List<IN_ItemLot> lstLotDB = _app.IN_ItemLot.Where(p => p.SiteID == siteID && p.InvtID == invtID).ToList();
@@ -162,23 +176,24 @@ namespace IN10100.Controllers
             List<IN10100_pgLotTrans_Result> lstLotTrans = _app.IN10100_pgLotTrans(batNbr, branchID, Current.UserName, Current.CpnyID,Current.LangID).ToList(); //_app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
             return this.Store(lstLotTrans.OrderBy(p => p.LotSerNbr).ToList(), lstLotTrans.Count);
         }
-        public ActionResult GetItemLot(string invtID, string siteID, string lotSerNbr, string branchID, string batNbr)
+        public ActionResult GetItemLot(string invtID, string siteID, string whseLoc, string lotSerNbr, string branchID, string batNbr)
         {
-            var lot = _app.IN_ItemLot.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr);
+            var lot = _app.IN_ItemLot.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID && p.WhseLoc == whseLoc && p.LotSerNbr == lotSerNbr);
 
             if (lot == null) lot = new IN_ItemLot()
             {
                 InvtID = invtID,
                 SiteID = siteID,
-                LotSerNbr = lotSerNbr
+                LotSerNbr = lotSerNbr,
+                WhseLoc = whseLoc.PassNull()
             };
 
-            var lotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr).ToList();
+            //var lotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr).ToList();
 
-            foreach (var item in lotTrans)
-            {
-                lot.QtyAvail += (item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact);
-            }
+            //foreach (var item in lotTrans)
+            //{
+            //    lot.QtyAvail += (item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact);
+            //}
 
             List<IN_ItemLot> lstLot = new List<IN_ItemLot>() { lot };
             return this.Store(lstLot, lstLot.Count);
@@ -485,7 +500,7 @@ namespace IN10100.Controllers
                 {
                     throw new MessageException("2525", new[] { _lstTrans[i].InvtID });
                 }
-                IN_Inventory objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                IN10100_pdInventory_Result objInvt = _app.IN10100_pdInventory(invtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                 if (objInvt != null && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack != "N")
                 {
                     var decimalPlace = objInvt.LotSerTrack == "Q" ? 2 : 0;
@@ -691,7 +706,7 @@ namespace IN10100.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
-
+            t.WhseLoc = s.WhseLoc;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
@@ -736,10 +751,10 @@ namespace IN10100.Controllers
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
-                t.WarrantyDate = DateTime.Now.ToDateShort();
+                
             }
-
-
+            t.WarrantyDate = s.WarrantyDate.Year >= 1900 ? s.WarrantyDate : new DateTime(1900, 1, 1);// DateTime.Now.ToDateShort();
+            t.WhseLoc = s.WhseLoc;
             t.UnitDesc = s.UnitDesc;
             t.ExpDate = s.ExpDate;
             t.InvtID = s.InvtID;
@@ -971,7 +986,7 @@ namespace IN10100.Controllers
                 int row = 5;
                 foreach (var item in lstDetail)
                 {
-                    var invt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
+                    var invt = _app.IN10100_pdInventory(item.InvtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                     if (invt != null && invt.LotSerTrack == "L")
                     {
                         var lstLot = _app.IN_LotTrans.Where(p => p.BranchID == item.BranchID && p.BatNbr == item.BatNbr && p.INTranLineRef == item.LineRef).ToList();
@@ -1027,7 +1042,7 @@ namespace IN10100.Controllers
                 {
                     try
                     {
-                        var lstInvtID = new List<IN_Inventory>();
+                        var lstInvtID = new List<IN10100_pdInventory_Result>();
 
                         Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
                         int lineRef = data["lineRef"].ToInt();
@@ -1040,7 +1055,7 @@ namespace IN10100.Controllers
                             {                                
                                 invtID = workSheet.Cells[i, 0].StringValue;
                                 if (invtID == string.Empty) break;
-                                var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                                var objInvt = _app.IN10100_pdInventory(invtID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
                                 if (objInvt == null)
                                 {
                                     message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
@@ -1143,7 +1158,7 @@ namespace IN10100.Controllers
                                 newLot.TranType = "RC";
                                 newLot.UnitDesc = workSheet.Cells[i, 2].StringValue;
                                 newLot.UnitMultDiv = "M";
-                                newLot.WarrantyDate = DateTime.Now;
+                                newLot.WarrantyDate = DateTime.Now.PassMin();
                                 //if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
                                 //{
                                 //    var item = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == newLot.SiteID && p.InvtID== newLot.InvtID);
