@@ -25,17 +25,18 @@
         }
     </style>
     <script>
-        HQ.cpnyID = '@Current.CpnyID';
-        HQ.langID = '@Current.LangID';
-        HQ.userName = '@Current.UserName';
-        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-        HQ.showSalesState = HQ.util.toBool('@ViewBag.showSalesState');
-        HQ.allowAddress2 = HQ.util.toBool('@ViewBag.allowAddress2');
-        HQ.allowOwer = HQ.util.toBool('@ViewBag.allowOwer');        
-        HQ.DatabaseName = '@Current.DBApp';
-        HQ.SA00000PP = '@ViewBag.SA00000PP';
+    HQ.cpnyID = '@Current.CpnyID';
+    HQ.langID = '@Current.LangID';
+    HQ.userName = '@Current.UserName';
+    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+    HQ.showSalesState = HQ.util.toBool('@ViewBag.showSalesState');
+    HQ.allowAddress2 = HQ.util.toBool('@ViewBag.allowAddress2');
+    HQ.showCountSiteID = HQ.util.toBool('@ViewBag.showCountSiteID');
+    HQ.allowOwer = HQ.util.toBool('@ViewBag.allowOwer');
+    HQ.DatabaseName = '@Current.DBApp';
+    HQ.SA00000PP = '@ViewBag.SA00000PP';
 
     </script>  
     <title>@ViewBag.Title</title>

@@ -36,22 +36,25 @@ namespace SA00000.Controllers
             bool showSalesState = false;
             bool allowAddress2 = false;
             bool allowOwer = false;
+            bool showCountSiteID = false;
             var objConfig = _db.SA00000_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
                 showSalesState = objConfig.Show.HasValue && objConfig.Show.Value;
                 allowAddress2 = objConfig.allowAddress2.HasValue && objConfig.allowAddress2.Value;
                 allowOwer = objConfig.allowOwer.HasValue && objConfig.allowOwer.Value;
+                showCountSiteID = objConfig.ShowCountSiteID.HasValue && objConfig.ShowCountSiteID.Value;
             }
 
             ViewBag.showSalesState = showSalesState;
             ViewBag.allowAddress2 = allowAddress2;
             ViewBag.allowOwer = allowOwer;
+            ViewBag.showCountSiteID = showCountSiteID;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-       // [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -238,12 +241,12 @@ namespace SA00000.Controllers
                 _db.SaveChanges();
                 // sau khi save xong gọi tới hàm tạo user hoặc chuyển save, truyền xuống danh sách
                 Dictionary<string, string> dicData = new Dictionary<string, string>();
-                dicData.Add("@BranchID", header.CpnyID);
-                dicData.Add("@UserManger", data["txtManager"]);
-                dicData.Add("@BranchOld", data["cboBranchOld"]);
-                dicData.Add("@SlsperID", data["cboSlsperID"]);
-                dicData.Add("@DisplayID", data["cboTDisplayID"]);
-                dicData.Add("@AccumulateID", data["cboAccumulatedID"]);
+                dicData.Add("@BranchID", header.CpnyID ?? "");
+                dicData.Add("@UserManger", data["txtManager"] ?? "");
+                dicData.Add("@BranchOld", data["cboBranchOld"] ?? "");
+                dicData.Add("@SlsperID", data["cboSlsperID"] ?? "");
+                dicData.Add("@DisplayID", data["cboTDisplayID"] ?? "");
+                dicData.Add("@AccumulateID", data["cboAccumulatedID"] ?? "");
 
                 Util.getDataTableFromProc("SA00000_ppUserSales", dicData, true);
                 return Json(new { success = true, CpnyID = CpnyID }, "text/html");
@@ -285,6 +288,7 @@ namespace SA00000.Controllers
             t.Lat = s.Lat;
             t.Status = status;
             t.Lng = s.Lng;
+            t.CountSiteID = s.CountSiteID;
             t.SalesDistrict = s.SalesDistrict;
             t.SalesState = s.SalesState;
             t.LUpd_DateTime = DateTime.Now;

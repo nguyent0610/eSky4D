@@ -1403,6 +1403,30 @@ namespace SA00000
         private global::System.String _SalesDistrict;
         partial void OnSalesDistrictChanging(global::System.String value);
         partial void OnSalesDistrictChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> CountSiteID
+        {
+            get
+            {
+                return _CountSiteID;
+            }
+            set
+            {
+                OnCountSiteIDChanging(value);
+                ReportPropertyChanging("CountSiteID");
+                _CountSiteID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CountSiteID");
+                OnCountSiteIDChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _CountSiteID;
+        partial void OnCountSiteIDChanging(Nullable<global::System.Int32> value);
+        partial void OnCountSiteIDChanged();
 
         #endregion
 
@@ -2426,6 +2450,30 @@ namespace SA00000
         private Nullable<global::System.Boolean> _allowOwer;
         partial void OnallowOwerChanging(Nullable<global::System.Boolean> value);
         partial void OnallowOwerChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowCountSiteID
+        {
+            get
+            {
+                return _ShowCountSiteID;
+            }
+            set
+            {
+                OnShowCountSiteIDChanging(value);
+                ReportPropertyChanging("ShowCountSiteID");
+                _ShowCountSiteID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowCountSiteID");
+                OnShowCountSiteIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowCountSiteID;
+        partial void OnShowCountSiteIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowCountSiteIDChanged();
 
         #endregion
 
@@ -3261,6 +3309,30 @@ namespace SA00000
         private global::System.String _Status;
         partial void OnStatusChanging(global::System.String value);
         partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> CountSiteID
+        {
+            get
+            {
+                return _CountSiteID;
+            }
+            set
+            {
+                OnCountSiteIDChanging(value);
+                ReportPropertyChanging("CountSiteID");
+                _CountSiteID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CountSiteID");
+                OnCountSiteIDChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _CountSiteID;
+        partial void OnCountSiteIDChanging(Nullable<global::System.Int32> value);
+        partial void OnCountSiteIDChanged();
 
         #endregion
 

@@ -58,6 +58,11 @@ var firstLoad = function () {
     App.txtSalesStateDescr.allowBlank = !HQ.showSalesState;
     App.cboOwner.allowBlank = !HQ.allowOwer;
     App.Address2.allowBlank = !HQ.allowAddress2;
+  
+    App.cboCountSiteID.allowBlank = !HQ.showCountSiteID;
+    //App.cboCountSiteID.isValid();
+    App.cboCountSiteID.setVisible(HQ.showCountSiteID);
+    App.cboCountSiteID.store.reload();
     App.frmMain.isValid();
     if (HQ.SA00000PP != '1') {
         App.tabDetail.child('#pnlHandle').tab.hide();
@@ -505,7 +510,7 @@ var stoLoad = function (sto) {
     else if (!HQ.isUpdate && !HQ.isNew) {
         HQ.common.lockItem(App.frmMain, true);
     }
-
+   
     App.cboBranchOld.setValue('');
     App.cboSlsperID.setValue('');
     App.txtManager.setValue('');
