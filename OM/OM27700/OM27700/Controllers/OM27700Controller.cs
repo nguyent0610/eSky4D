@@ -1118,7 +1118,7 @@ namespace OM27700.Controllers
                         lang.LevelID = currentCust.LevelID;
                         lang.InvtID = currentCust.InvtID;
                         lang.Qty = currentCust.Qty;
-
+                        lang.LevelID = currentCust.LevelID;
                         lang.LUpd_DateTime = DateTime.Now;
                         lang.LUpd_Prog = _screenNbr;
                         lang.LUpd_User = Current.UserName;

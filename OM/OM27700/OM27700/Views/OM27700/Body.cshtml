@@ -468,7 +468,7 @@
                                 })
                                     .LoadData()
                             )
-                                    , X.CommandColumn().Text(Util.GetLang("OM27700LAllocation")).Align(Alignment.Center).Width(150).DataIndex("Allocation")
+                                    , X.CommandColumn().Text(Util.GetLang("OM27700LAllocation")).Align(Alignment.Center).Width(150).DataIndex("Allocation").Hidden(true)
                                 .Commands(
                                     X.GridCommand().CommandName("Create").Text(Util.GetLang("OM27700_CAllocation")).MinWidth(150)
                                 )

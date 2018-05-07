@@ -853,8 +853,9 @@ var Event = {
                 else if (cbo.getValue() == _applyType.Point) {
                     App.pnlInvt.show();
                     App.colPoint.show();
-                    App.colLevelFrom.show();
-                    App.colLevelTo.hide();                    
+                    App.colLevelFrom.hide();
+                    App.colLevelTo.hide();
+                   // Process.showColumns(App.grdLevel, ["Bonus"], false);
                 }
             }
             else {
