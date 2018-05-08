@@ -283,7 +283,7 @@ var btnProcess_Click = function () {
                         waitMsg: HQ.common.getLang("Handle"),
                         method: 'POST',
                         url: 'AR20500/Process',
-                        timeout: 180000,
+                        timeout: 1800000,
                         params: {
                             lstCust: HQ.store.getAllData(App.grdCust.store, ['ColCheck'], [true]),
                             fromDate: HQ.bussinessDate,
@@ -295,6 +295,9 @@ var btnProcess_Click = function () {
                             App.stoCust.reload();
                         },
                         failure: function (msg, data) {
+                            if (data && data.response && data.response.status == 0) {
+                                btnProcess_Click();
+                            } else
                             HQ.message.process(msg, data, true);
                         }
                     });
@@ -318,7 +321,7 @@ var btnProcess_Click = function () {
                     waitMsg: HQ.common.getLang("Handle"),
                     method: 'POST',
                     url: 'AR20500/Process',
-                    timeout: 180000,
+                    timeout: 1800000,
                     params: {
                         lstCust: HQ.store.getAllData(App.grdCust.store, ['ColCheck'], [true]),
                         fromDate: HQ.bussinessDate,
@@ -330,6 +333,9 @@ var btnProcess_Click = function () {
                         App.stoCust.reload();
                     },
                     failure: function (msg, data) {
+                        if (data && data.response && data.response.status == 0) {
+                            btnProcess_Click();
+                        } else
                         HQ.message.process(msg, data, true);
                     }
                 });
@@ -362,7 +368,7 @@ var btnOKMCP_Click = function () {
                 waitMsg: HQ.common.getLang("Handle"),
                 method: 'POST',
                 url: 'AR20500/Process',
-                timeout: 180000,
+                timeout: 1800000,
                 params: {
                     lstCust: HQ.store.getAllData(App.grdCust.store, ['ColCheck'], [true]), //lstCust: Ext.encode(App.grdCust.store.getRecordsValues()),
                     fromDate: App.dteFromDate.getValue(),
@@ -375,6 +381,9 @@ var btnOKMCP_Click = function () {
                     App.stoCust.reload();
                 },
                 failure: function (msg, data) {
+                    if (data && data.response && data.response.status == 0) {
+                        btnOKMCP_Click();
+                    } else
                     HQ.message.process(msg, data, true);
                     //App.stoCust.reload();
                 }
@@ -418,7 +427,7 @@ var askApprove = function (item) {
             waitMsg: HQ.common.getLang("Handle"),
             method: 'POST',
             url: 'AR20500/Process',
-            timeout: 180000,
+            timeout: 1800000,
             params: {
                 lstCust: Ext.encode(App.grdCust.store.getRecordsValues()),
                 fromDate: _fromDate,
@@ -430,8 +439,12 @@ var askApprove = function (item) {
                 App.stoCust.reload();
             },
             failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
-                App.stoCust.reload();
+                if (data && data.response && data.response.status == 0) {
+                    askApprove('yes');
+                } else {
+                    HQ.message.process(msg, data, true);
+                    App.stoCust.reload();
+                }
             }
         });
     }
@@ -804,41 +817,45 @@ var isValidSel = function (data) {
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto, records, successful, eOpts) {
-    _Change = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'AR20500');
+    if (successful) {
+        _Change = HQ.store.isChange(sto);
+        HQ.common.changeData(HQ.isChange, 'AR20500');
 
-   
-    stoChanged(App.stoCust);
 
-    var markers = [];
-    records.forEach(function (record) {
-        var marker = {
-            "index": record.index,
-            "id": record.index + 1,
-            "title": record.data.CustID + ": " + record.data.OutletName,
-            "lat": record.data.Lat,
-            "lng": record.data.Lng,
-            "ImageFileName": record.data.ImageFileName,
-            "description":
-                '<div id="content">' +
-                    '<div id="siteNotice">' +
-                    '</div>' +
-                    '<h1 id="firstHeading" class="firstHeading">' +
-                        record.data.OutletName +
-                    '</h1>' +
-                    '<div id="bodyContent">' +
-                        '<p>' +
-                            record.data.Phone +
-                        '</p>' +
-                    '</div>' +
-                '</div>'
+        stoChanged(App.stoCust);
+
+        var markers = [];
+        records.forEach(function (record) {
+            var marker = {
+                "index": record.index,
+                "id": record.index + 1,
+                "title": record.data.CustID + ": " + record.data.OutletName,
+                "lat": record.data.Lat,
+                "lng": record.data.Lng,
+                "ImageFileName": record.data.ImageFileName,
+                "description":
+                    '<div id="content">' +
+                        '<div id="siteNotice">' +
+                        '</div>' +
+                        '<h1 id="firstHeading" class="firstHeading">' +
+                            record.data.OutletName +
+                        '</h1>' +
+                        '<div id="bodyContent">' +
+                            '<p>' +
+                                record.data.Phone +
+                            '</p>' +
+                        '</div>' +
+                    '</div>'
+            }
+            markers.push(marker);
+        });
+        if (records.length == 0) {
+            HQ.common.showBusy(false);
         }
-        markers.push(marker);
-    });
-    if (records.length == 0) {
+        Gmap.Process.drawMCP(markers, false);
+    } else {
         HQ.common.showBusy(false);
     }
-    Gmap.Process.drawMCP(markers, false);
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -1104,7 +1121,10 @@ var displayImage = function (imgControl, fileName) {
             }
         },
         failure: function (errorMsg, data) {
-            HQ.message.process(errorMsg, data, true);
+            if (errorMsg && errorMsg.status == 0) {
+                displayImage(imgControl, fileName);
+            } else
+                HQ.message.process(errorMsg, data, true);
         }
     });
 };
@@ -1463,7 +1483,7 @@ var btnExport_Click = function () {
             waitMsg: HQ.common.getLang("Exporting"),
             url: 'AR20500/ExportExcel',
             type: 'POST',
-            timeout: 1000000,
+            timeout: 1800000,
             clientValidation: false,
             params: {
                 reportNbr: 'RA205',
@@ -1476,7 +1496,10 @@ var btnExport_Click = function () {
                 window.location = 'AR20500/DownloadAndDelete?file=' + data.result.fileName;
             },
             failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
+                if (data && data.response && data.response.status == 0) {
+                    btnExport_Click();
+                } else
+                    HQ.message.process(msg, data, true);
             }
         });
     }
@@ -1511,7 +1534,7 @@ var btnSave_Click = function () {
             waitMsg: HQ.common.getLang("Handle"),
             method: 'POST',
             url: 'AR20500/SaveEdit',
-            timeout: 180000,
+            timeout: 1800000,
             params: {
                 lstCust: HQ.store.getAllData(App.grdCust.store, ['ColCheck'], [true])
             },
@@ -1530,6 +1553,9 @@ var btnSave_Click = function () {
                 App.stoCust.reload();
             },
             failure: function (msg, data) {
+                if (data && data.response && data.response.status == 0) {
+                    btnSave_Click();
+                } else
                 HQ.message.process(msg, data, true);
             }
         });
@@ -1546,7 +1572,7 @@ var confirmSave = function (item) {
             waitMsg: HQ.common.getLang("Handle"),
             method: 'POST',
             url: 'AR20500/SaveEdit',
-            timeout: 180000,
+            timeout: 1800000,
             params: {
                 lstCust: HQ.store.getAllData(App.grdCust.store, ['ColCheck'], [true])
             },
@@ -1563,6 +1589,9 @@ var confirmSave = function (item) {
                 App.stoCust.reload();
             },
             failure: function (msg, data) {
+                if (data && data.response && data.response.status == 0) {
+                    confirmSave('yes');
+                } else
                 HQ.message.process(msg, data, true);
             }
         });
