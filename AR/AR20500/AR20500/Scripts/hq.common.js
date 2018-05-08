@@ -7,7 +7,7 @@ Ext.override(Ext.net.DirectEvent, {
         if (Ext.isEmpty(errorMsg)) {
             errorMsg = response.responseText;
         }
-        if (response.status == 500 || response.status == 0) {
+        if (response.status == 500 || response.status == 0) {              
             //Ext.Msg.alert(HQ.common.getLang('Error'), HQ.common.getLang('ErrorConnectServer'));			
         }
         else {
