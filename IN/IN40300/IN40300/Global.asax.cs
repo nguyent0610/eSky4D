@@ -39,13 +39,13 @@ namespace IN40300
 
             Current.Authorize = false;
             Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString(); eBiz4DCloudSysKAO
+            Current.DBSys = "PhuThai_Test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString(); eBiz4DCloudSysKAO
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN40300"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";// "eBiz4DWebApp"; eBiz4DCloudAppKAO
+            Session["DBApp"] = Current.DBApp = "PhuThai_Test_eSky4DApp";// "eBiz4DWebApp"; eBiz4DCloudAppKAO
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "18501757";
             Session["Language"] = Current.Language = "vi";

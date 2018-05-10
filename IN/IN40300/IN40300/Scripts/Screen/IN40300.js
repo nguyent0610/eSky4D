@@ -29,6 +29,10 @@ var cboStatus_Change = function (value) {
     }
 };
 
+var cboSiteID_Collapse = function (value) {
+    App.cboWhseLoc.store.reload();
+}
+
 var btnLoad_Click = function () {
     if (HQ.form.checkRequirePass(App.frmMain)) {
         App.stoIN40100.reload();
@@ -221,4 +225,16 @@ var renderStatus = function (value, metaData, rec, rowIndex, colIndex, store) {
         return value;
     }
 };
+var joinParams = function (multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
+    }
+    else {
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
+        }
+    }
+    return returnValue;
+}
 ///////////////////////////////////////////////////////////////////////

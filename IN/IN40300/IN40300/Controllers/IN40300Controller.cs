@@ -119,6 +119,7 @@ namespace IN40300.Controllers
 
                 string param05 = data["cboInvtID"];
                 string param06 = data["cboSiteID"];
+                string WhseLoc = data["cboWhseLoc"];
                 string message = string.Empty;
                 DataAccess dal = Util.Dal();
                 INProcess.IN inventory = new INProcess.IN(_userName, _screenNbr, dal);
@@ -126,7 +127,7 @@ namespace IN40300.Controllers
                 {
                     dal.BeginTrans(IsolationLevel.ReadCommitted);
 
-                    message = inventory.IN40300_Release(lstLang, param01, param02, param03, param04, param05, param06);
+                    message = inventory.IN40300_Release(lstLang, param01, param02, param03, param04, param05, param06, WhseLoc);
 
                     dal.CommitTrans();
                 }
