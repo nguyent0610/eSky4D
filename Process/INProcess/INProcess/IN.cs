@@ -1225,7 +1225,7 @@ namespace INProcess
                 throw ex;
             }
         }
-        public string  IN40300_Release(List<string> lstLang, string parm01, string parm02, string parm03, string parm04, string parm05, string parm06)
+        public string IN40300_Release(List<string> lstLang, string parm01, string parm02, string parm03, string parm04, string parm05, string parm06, string WhseLoc)
         {
             clsSQL objSql = new clsSQL(Dal);
             string mMessage = string.Empty;
@@ -1244,13 +1244,13 @@ namespace INProcess
                 if(parm03=="1")
                 {
                     mMessage +=
-                        objSql.IN_Integrity_RebuildQtyonSO(Prog, User, parm05, parm06, 0, 0, 0) +
+                        objSql.IN_Integrity_RebuildQtyonSO(Prog, User, parm05, parm06, 0, 0, 0, WhseLoc) +
                         "\n";
                 }
                 if (parm04 == "1")
                 {
                     mMessage +=
-                        objSql.IN_Integrity_RebuildQtyCost(Prog, User, parm05, parm06, 0, 0, 0) +
+                        objSql.IN_Integrity_RebuildQtyCost(Prog, User, parm05, parm06, 0, 0, 0, WhseLoc) +
                         "\n";
                 }
             }

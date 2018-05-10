@@ -275,7 +275,7 @@ namespace INProcess
                 throw ex;
             }
         }
-        public string IN_Integrity_RebuildQtyonSO(string prog, string user,string invtID,string siteID,int qtyDecPl,int prcDecPl,int tranAmtDecPl)
+        public string IN_Integrity_RebuildQtyonSO(string prog, string user, string invtID, string siteID, int qtyDecPl, int prcDecPl, int tranAmtDecPl, string WhseLoc)
         {
             try
             {
@@ -287,6 +287,7 @@ namespace INProcess
                 pc.Add(new ParamStruct("@QtyDecPl", DbType.Int32, clsCommon.GetValueDBNull(qtyDecPl), ParameterDirection.Input, 10));
                 pc.Add(new ParamStruct("@PrcDecPl", DbType.Int32, clsCommon.GetValueDBNull(prcDecPl), ParameterDirection.Input, 10));
                 pc.Add(new ParamStruct("@TranAmtDecPl", DbType.Int32, clsCommon.GetValueDBNull(tranAmtDecPl), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@WhseLoc", DbType.String, clsCommon.GetValueDBNull(WhseLoc), ParameterDirection.Input, int.MaxValue));
                 DataTable dt=mDal.ExecDataTable("IN_Integrity_RebuildQtyonSO", CommandType.StoredProcedure, ref pc);
                 if (dt.Rows.Count == 0) return string.Empty;
                 else return dt.Rows[0]["Mess"].ToString();
@@ -297,7 +298,7 @@ namespace INProcess
                 throw ex;
             }
         }
-        public string IN_Integrity_RebuildQtyCost(string prog, string user, string invtID, string siteID, int qtyDecPl, int PrcDecPl, int tranAmtDecPl)
+        public string IN_Integrity_RebuildQtyCost(string prog, string user, string invtID, string siteID, int qtyDecPl, int PrcDecPl, int tranAmtDecPl, string WhseLoc)
         {
             try
             {
@@ -309,6 +310,7 @@ namespace INProcess
                 pc.Add(new ParamStruct("@QtyDecPl", DbType.Int32, clsCommon.GetValueDBNull(qtyDecPl), ParameterDirection.Input, 10));
                 pc.Add(new ParamStruct("@PrcDecPl", DbType.Int32, clsCommon.GetValueDBNull(PrcDecPl), ParameterDirection.Input, 10));
                 pc.Add(new ParamStruct("@TranAmtDecPl", DbType.Int32, clsCommon.GetValueDBNull(tranAmtDecPl), ParameterDirection.Input, 10));
+                pc.Add(new ParamStruct("@WhseLoc", DbType.String, clsCommon.GetValueDBNull(WhseLoc), ParameterDirection.Input, int.MaxValue));
                 DataTable dt = mDal.ExecDataTable("IN_Integrity_RebuildQtyCost", CommandType.StoredProcedure, ref pc);
                 if (dt.Rows.Count == 0) return string.Empty;
                 else return dt.Rows[0]["Mess"].ToString();
