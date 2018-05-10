@@ -38,17 +38,17 @@ namespace OM21200
             //Session["LangID"] = 1;
             Current.FormatDate = "dd/MM/yyyy";
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";
-            Current.DBSys = "VPMilk_Test_eSky4DSys";
+            Current.Server = "HOANGSAD";
+            Current.DBSys = "PhuThai_Test_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM21200"] = acc;
-            Session["DBApp"] = Current.DBApp = "VPMilk_Test_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "PhuThai_Test_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "vn";
+            Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 0;
         }
     }

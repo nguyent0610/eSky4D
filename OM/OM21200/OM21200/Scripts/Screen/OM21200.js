@@ -6,6 +6,12 @@ var fieldsLangCheckRequire = ["UserID", "DfltBranchID"];
 var _Source = 0;
 var _maxSource = 3;
 var _isLoadMaster = false;
+var OMWhseLoc = '';
+var INWhseLoc = '';
+var POWhseLoc = '';
+var DiscWhseLoc = '';
+var BranchWhseLoc = '';
+var POSMWhseLoc = '';
 
 var checkLoad = function (sto) {
     _Source += 1;
@@ -120,7 +126,30 @@ var grdUserDefault_BeforeEdit = function (editor, e) {
         App.cboDfltSupID.store.reload();
     else if (e.field == 'BranchSiteID')
         App.cboBranchSiteID.store.reload();
-
+    if (e.field == "OMWhseLoc") {
+        OMWhseLoc = e.record.data.OMSite;
+        App.cboOMWhseLoc.store.reload();
+    }
+    if (e.field == "INWhseLoc") {
+        INWhseLoc = e.record.data.INSite;
+        App.cboINWhseLOc.store.reload();
+    }
+    if (e.field == "POWhseLoc") {
+        POWhseLoc = e.record.data.POSite;
+        App.cboPOWhseLoc.store.reload();
+    }
+    if (e.field == "DiscWhseLoc") {
+        DiscWhseLoc = e.record.data.DiscSite;
+        App.cboDiscWhseLoc.store.reload();
+    }
+    if (e.field == "BranchWhseLoc") {
+        BranchWhseLoc = e.record.data.BranchSiteID;
+        App.cboBranchWhseLOcf.store.reload();
+    }
+    if (e.field == "POSMWhseLoc") {
+        POSMWhseLoc = e.record.data.POSMSite;
+        App.cboPOSMWhseLoc.store.reload();
+    }
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 

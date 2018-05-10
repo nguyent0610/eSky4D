@@ -240,6 +240,58 @@ namespace OM21200
     
             return base.ExecuteFunction<OM21200_pgLoadUserDefault_Result>("OM21200_pgLoadUserDefault", userNameParameter, cpnyIDParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
+        public ObjectResult<OM21200_pcLoadWhseLocAll_Result> OM21200_pcLoadWhseLocAll(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String siteID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM21200_pcLoadWhseLocAll_Result>("OM21200_pcLoadWhseLocAll", userNameParameter, cpnyIDParameter, langIDParameter, siteIDParameter);
+        }
 
         #endregion
 
@@ -757,6 +809,30 @@ namespace OM21200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public global::System.String BranchSiteID
+        {
+            get
+            {
+                return _BranchSiteID;
+            }
+            set
+            {
+                OnBranchSiteIDChanging(value);
+                ReportPropertyChanging("BranchSiteID");
+                _BranchSiteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchSiteID");
+                OnBranchSiteIDChanged();
+            }
+        }
+        private global::System.String _BranchSiteID;
+        partial void OnBranchSiteIDChanging(global::System.String value);
+        partial void OnBranchSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.String POSMSite
         {
             get
@@ -781,24 +857,144 @@ namespace OM21200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String BranchSiteID
+        public global::System.String INWhseLoc
         {
             get
             {
-                return _BranchSiteID;
+                return _INWhseLoc;
             }
             set
             {
-                OnBranchSiteIDChanging(value);
-                ReportPropertyChanging("BranchSiteID");
-                _BranchSiteID = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("BranchSiteID");
-                OnBranchSiteIDChanged();
+                OnINWhseLocChanging(value);
+                ReportPropertyChanging("INWhseLoc");
+                _INWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("INWhseLoc");
+                OnINWhseLocChanged();
             }
         }
-        private global::System.String _BranchSiteID;
-        partial void OnBranchSiteIDChanging(global::System.String value);
-        partial void OnBranchSiteIDChanged();
+        private global::System.String _INWhseLoc;
+        partial void OnINWhseLocChanging(global::System.String value);
+        partial void OnINWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String POWhseLoc
+        {
+            get
+            {
+                return _POWhseLoc;
+            }
+            set
+            {
+                OnPOWhseLocChanging(value);
+                ReportPropertyChanging("POWhseLoc");
+                _POWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("POWhseLoc");
+                OnPOWhseLocChanged();
+            }
+        }
+        private global::System.String _POWhseLoc;
+        partial void OnPOWhseLocChanging(global::System.String value);
+        partial void OnPOWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String OMWhseLoc
+        {
+            get
+            {
+                return _OMWhseLoc;
+            }
+            set
+            {
+                OnOMWhseLocChanging(value);
+                ReportPropertyChanging("OMWhseLoc");
+                _OMWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("OMWhseLoc");
+                OnOMWhseLocChanged();
+            }
+        }
+        private global::System.String _OMWhseLoc;
+        partial void OnOMWhseLocChanging(global::System.String value);
+        partial void OnOMWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String POSMWhseLoc
+        {
+            get
+            {
+                return _POSMWhseLoc;
+            }
+            set
+            {
+                OnPOSMWhseLocChanging(value);
+                ReportPropertyChanging("POSMWhseLoc");
+                _POSMWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("POSMWhseLoc");
+                OnPOSMWhseLocChanged();
+            }
+        }
+        private global::System.String _POSMWhseLoc;
+        partial void OnPOSMWhseLocChanging(global::System.String value);
+        partial void OnPOSMWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DiscWhseLoc
+        {
+            get
+            {
+                return _DiscWhseLoc;
+            }
+            set
+            {
+                OnDiscWhseLocChanging(value);
+                ReportPropertyChanging("DiscWhseLoc");
+                _DiscWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DiscWhseLoc");
+                OnDiscWhseLocChanged();
+            }
+        }
+        private global::System.String _DiscWhseLoc;
+        partial void OnDiscWhseLocChanging(global::System.String value);
+        partial void OnDiscWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BranchWhseLoc
+        {
+            get
+            {
+                return _BranchWhseLoc;
+            }
+            set
+            {
+                OnBranchWhseLocChanging(value);
+                ReportPropertyChanging("BranchWhseLoc");
+                _BranchWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchWhseLoc");
+                OnBranchWhseLocChanged();
+            }
+        }
+        private global::System.String _BranchWhseLoc;
+        partial void OnBranchWhseLocChanging(global::System.String value);
+        partial void OnBranchWhseLocChanged();
 
         #endregion
 
@@ -1702,6 +1898,111 @@ namespace OM21200
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM21200Model", Name="OM21200_pcLoadWhseLocAll_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM21200_pcLoadWhseLocAll_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM21200_pcLoadWhseLocAll_Result object.
+        /// </summary>
+        /// <param name="whseLoc">Initial value of the WhseLoc property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        /// <param name="siteID">Initial value of the SiteID property.</param>
+        public static OM21200_pcLoadWhseLocAll_Result CreateOM21200_pcLoadWhseLocAll_Result(global::System.String whseLoc, global::System.String descr, global::System.String siteID)
+        {
+            OM21200_pcLoadWhseLocAll_Result oM21200_pcLoadWhseLocAll_Result = new OM21200_pcLoadWhseLocAll_Result();
+            oM21200_pcLoadWhseLocAll_Result.WhseLoc = whseLoc;
+            oM21200_pcLoadWhseLocAll_Result.Descr = descr;
+            oM21200_pcLoadWhseLocAll_Result.SiteID = siteID;
+            return oM21200_pcLoadWhseLocAll_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SiteID
+        {
+            get
+            {
+                return _SiteID;
+            }
+            set
+            {
+                OnSiteIDChanging(value);
+                ReportPropertyChanging("SiteID");
+                _SiteID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SiteID");
+                OnSiteIDChanged();
+            }
+        }
+        private global::System.String _SiteID;
+        partial void OnSiteIDChanging(global::System.String value);
+        partial void OnSiteIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="OM21200Model", Name="OM21200_pgLoadUserDefault_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -2087,6 +2388,150 @@ namespace OM21200
         private global::System.String _POSMSite;
         partial void OnPOSMSiteChanging(global::System.String value);
         partial void OnPOSMSiteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String INWhseLoc
+        {
+            get
+            {
+                return _INWhseLoc;
+            }
+            set
+            {
+                OnINWhseLocChanging(value);
+                ReportPropertyChanging("INWhseLoc");
+                _INWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("INWhseLoc");
+                OnINWhseLocChanged();
+            }
+        }
+        private global::System.String _INWhseLoc;
+        partial void OnINWhseLocChanging(global::System.String value);
+        partial void OnINWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String POWhseLoc
+        {
+            get
+            {
+                return _POWhseLoc;
+            }
+            set
+            {
+                OnPOWhseLocChanging(value);
+                ReportPropertyChanging("POWhseLoc");
+                _POWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("POWhseLoc");
+                OnPOWhseLocChanged();
+            }
+        }
+        private global::System.String _POWhseLoc;
+        partial void OnPOWhseLocChanging(global::System.String value);
+        partial void OnPOWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String OMWhseLoc
+        {
+            get
+            {
+                return _OMWhseLoc;
+            }
+            set
+            {
+                OnOMWhseLocChanging(value);
+                ReportPropertyChanging("OMWhseLoc");
+                _OMWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("OMWhseLoc");
+                OnOMWhseLocChanged();
+            }
+        }
+        private global::System.String _OMWhseLoc;
+        partial void OnOMWhseLocChanging(global::System.String value);
+        partial void OnOMWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String POSMWhseLoc
+        {
+            get
+            {
+                return _POSMWhseLoc;
+            }
+            set
+            {
+                OnPOSMWhseLocChanging(value);
+                ReportPropertyChanging("POSMWhseLoc");
+                _POSMWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("POSMWhseLoc");
+                OnPOSMWhseLocChanged();
+            }
+        }
+        private global::System.String _POSMWhseLoc;
+        partial void OnPOSMWhseLocChanging(global::System.String value);
+        partial void OnPOSMWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DiscWhseLoc
+        {
+            get
+            {
+                return _DiscWhseLoc;
+            }
+            set
+            {
+                OnDiscWhseLocChanging(value);
+                ReportPropertyChanging("DiscWhseLoc");
+                _DiscWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DiscWhseLoc");
+                OnDiscWhseLocChanged();
+            }
+        }
+        private global::System.String _DiscWhseLoc;
+        partial void OnDiscWhseLocChanging(global::System.String value);
+        partial void OnDiscWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BranchWhseLoc
+        {
+            get
+            {
+                return _BranchWhseLoc;
+            }
+            set
+            {
+                OnBranchWhseLocChanging(value);
+                ReportPropertyChanging("BranchWhseLoc");
+                _BranchWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchWhseLoc");
+                OnBranchWhseLocChanged();
+            }
+        }
+        private global::System.String _BranchWhseLoc;
+        partial void OnBranchWhseLocChanging(global::System.String value);
+        partial void OnBranchWhseLocChanged();
 
         #endregion
 

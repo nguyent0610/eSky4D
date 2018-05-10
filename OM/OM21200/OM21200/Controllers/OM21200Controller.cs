@@ -137,6 +137,12 @@ namespace OM21200.Controllers
             t.WorkingDate = s.WorkingDate;
             t.DiscSite = s.DiscSite;
             t.POSMSite = s.POSMSite;
+            t.OMWhseLoc = s.OMWhseLoc;
+            t.INWhseLoc = s.INWhseLoc;
+            t.POWhseLoc = s.POWhseLoc;
+            t.DiscWhseLoc = s.DiscWhseLoc;
+            t.BranchWhseLoc = s.BranchWhseLoc;
+            t.POSMWhseLoc = s.POSMWhseLoc;
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
