@@ -89,6 +89,25 @@ namespace INProcess
                 throw ex;
             }
         }
+
+        public void IN11500_ReleaseBatch(string branchID, string batNbr, string prog, string user, string transType)
+        {
+            try
+            {
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));                
+                pc.Add(new ParamStruct("@BatNbr", DbType.String, clsCommon.GetValueDBNull(batNbr), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@ProgID", DbType.String, clsCommon.GetValueDBNull(prog), ParameterDirection.Input, 8));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@TransType", DbType.String, clsCommon.GetValueDBNull(transType), ParameterDirection.Input, 10));
+                mDal.ExecNonQuery("IN11500_ReleaseBatch", CommandType.StoredProcedure, ref pc);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
         public void IN10201_CancelBatch(string branchID, string batNbr, string prog, string user, string transType)
         {
             try
