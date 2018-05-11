@@ -306,26 +306,29 @@
                     })
 
 
-                        , HQ.Combo().ID("cboCountSiteID").Name("cboCountSiteID").HQProcedure("SA00000_pcCountSiteID").HQLangCode("SA00000CountSiteID")
-                        .HQColumnShow("Code").DisplayField("Code").ValueField("Code").DataIndex("CountSiteID")
-                        .HQAutoLoad(true)
-                            .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").ForceSelection(false)
-                            .HQParam(new StoreParameterCollection()
-                    {
-                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                    })
-                        .LoadData()
-                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        .Listeners(lst =>
-                        {
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                           // lst.Change.Fn = "cboCountry_Change";
-                            lst.Focus.Handler = "this.forceSelection = true;";
-                        })   
+                    //    , HQ.Combo().ID("cboCountSiteID").Name("cboCountSiteID").HQProcedure("SA00000_pcCountSiteID").HQLangCode("SA00000CountSiteID")
+                    //    .HQColumnShow("Code").DisplayField("Code").ValueField("Code").DataIndex("CountSiteID").AllowBlank(false)
+                    //    .HQAutoLoad(true)
+                    //    .EmptyText("")
+                    //    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").ForceSelection(false)
+                    //    .HQParam(new StoreParameterCollection()
+                    //{
+                    //    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                    //    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                    //    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    //})
+                    //    .LoadData()
+                    //    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    //    .Listeners(lst =>
+                    //    {
+                    //        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    //       // lst.Change.Fn = "cboCountry_Change";
+                    //        lst.Focus.Handler = "this.forceSelection = true;";
+                    //    })   
                         
-                        
+                
+                , HQ.NumberField().ID("CountSiteID").Name("CountSiteID").HQLangCode("SA00000CountSiteID").MarginSpec("5 0 0 0").Width(600).MinValue(1).MaxValue(4).DecimalPrecision(0).AllowBlank(false) 
+                           
                 , HQ.TextBox().ID("Plant").Name("Plant").HQLangCode("PLANT").MarginSpec("5 0 0 0").Width(600).MaxLength(4).EnforceMaxLength(true)
                 , HQ.TextBox().ID("DatabaseName").Name("DatabaseName").HQLangCode("DATABASENAME").MarginSpec("5 0 0 0").Width(600).ReadOnly(true)
 

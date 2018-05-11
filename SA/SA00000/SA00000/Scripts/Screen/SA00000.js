@@ -59,10 +59,10 @@ var firstLoad = function () {
     App.cboOwner.allowBlank = !HQ.allowOwer;
     App.Address2.allowBlank = !HQ.allowAddress2;
   
-    App.cboCountSiteID.allowBlank = !HQ.showCountSiteID;
+    App.CountSiteID.allowBlank = !HQ.showCountSiteID;
     //App.cboCountSiteID.isValid();
-    App.cboCountSiteID.setVisible(HQ.showCountSiteID);
-    App.cboCountSiteID.store.reload();
+    App.CountSiteID.setVisible(HQ.showCountSiteID);
+    //App.cboCountSiteID.store.reload();
     App.frmMain.isValid();
     if (HQ.SA00000PP != '1') {
         App.tabDetail.child('#pnlHandle').tab.hide();
@@ -486,16 +486,18 @@ var stoLoad = function (sto) {
         HQ.store.insertBlank(sto, "CpnyID");
         record = sto.getAt(0);
         record.data.DatabaseName = HQ.DatabaseName;
+        record.data.CountSiteID = 1;
         HQ.isNew = true;//record la new    
         App.cboCpnyID.forceSelection = false;
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboCpnyID.focus(true);//focus ma khi tao moi
+        
         sto.commitChanges();
     }
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
     App.stoSys_CompanyAddr.reload();
-
+    
     if (App.cboCountry.value == record.data.Country) {
         cboCountry_Change(App.cboCountry, record.data.Country);
     }
@@ -514,6 +516,7 @@ var stoLoad = function (sto) {
     App.cboBranchOld.setValue('');
     App.cboSlsperID.setValue('');
     App.txtManager.setValue('');
+    
 };
 
 /////////////////////////////// GIRD Sys_CompanyAddr /////////////////////////////////

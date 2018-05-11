@@ -247,6 +247,7 @@ namespace SA00000.Controllers
                 dicData.Add("@SlsperID", data["cboSlsperID"] ?? "");
                 dicData.Add("@DisplayID", data["cboTDisplayID"] ?? "");
                 dicData.Add("@AccumulateID", data["cboAccumulatedID"] ?? "");
+                dicData.Add("@UserID",_userName);
 
                 Util.getDataTableFromProc("SA00000_ppUserSales", dicData, true);
                 return Json(new { success = true, CpnyID = CpnyID }, "text/html");
