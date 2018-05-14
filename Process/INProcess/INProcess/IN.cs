@@ -263,7 +263,7 @@ namespace INProcess
                 throw ex;
             }
         }
-        public bool IN10200_Release(string branchID, string batNbr)
+        public bool IN10200_Release(string branchID, string batNbr, bool showWhseLoc)
         {
             try
             {
@@ -300,11 +300,13 @@ namespace INProcess
 
                 clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
                 clsIN_ItemSite objSite = new clsIN_ItemSite(Dal);
+                clsIN_ItemLoc objLoc = new clsIN_ItemLoc(Dal);
                 foreach (DataRow tran in lstTrans.Rows)
                 {
                     objInvt.GetByKey(tran.String("InvtID"));
                     objSite.GetByKey(tran.String("InvtID"), tran.String("SiteID"));
-                    
+                    objLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc"));
+
                     if (objInvt.ValMthd == "F" || objInvt.ValMthd == "L")
                     {
                         int negQty = 1;
@@ -324,8 +326,7 @@ namespace INProcess
                         if (tran.String("UnitMultDiv") == "M" || string.IsNullOrEmpty(tran.String("UnitMultDiv")))
                             qty = Math.Abs(tran.Double("Qty") * tran.Short("InvtMult") * tran.Double("CnvFact"));
                         else
-                            qty = Math.Abs(tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact"));
-
+                            qty = Math.Abs(tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact"));                        
                         if (lstFL.Rows.Count > 0)
                         {
                             int count = 0;
@@ -434,13 +435,66 @@ namespace INProcess
                     objSite.LUpd_User = User;
                     objSite.Update();
 
+
+                    ///////////////////////////////////////////////////////////Cập nhật vào table IN_ItemLoc
+
+                    if (showWhseLoc)
+                    {
+                        if (!objLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc").PassNull()))
+                        {
+                            throw new MessageException(MessageType.Message, "606");
+                        }
+
+                        if (objInvt.StkItem == 1)
+                        {
+                            if (tran.String("UnitMultDiv") == "M" || string.IsNullOrEmpty(tran.String("UnitMultDiv")))
+                                qty = tran.Double("Qty") * tran.Short("InvtMult") * tran.Double("CnvFact");
+                            else
+                                qty = tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
+                        }
+                        if (!objSetup.NegQty && Math.Round(objLoc.QtyOnHand + qty, 0) < 0)
+                        {
+                            throw new MessageException(MessageType.Message, "2018051411", "", new[] { objLoc.InvtID, objLoc.SiteID, objLoc.WhseLoc });
+                        }
+
+                        if (tran.String("JrnlType") == "IN" || (tran.String("JrnlType") == "OM" && Prog == "OM10300"))
+                        {
+                            objLoc.QtyAllocIN = Math.Round(objLoc.QtyAllocIN + qty, 0);
+                            objLoc.QtyOnHand = Math.Round(objLoc.QtyOnHand + qty, 0);
+                            objLoc.AvgCost = Math.Round(objLoc.QtyOnHand != 0
+                                               ? (objLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult")) / objLoc.QtyOnHand
+                                               : objLoc.AvgCost, 0);
+                        }
+                        else if (tran.String("JrnlType") == "OM" || Prog != "OM10300")
+                        {
+                            objLoc.QtyShipNotInv = Math.Round(objLoc.QtyShipNotInv + (tran.String("TranType") == "IN" ? qty : 0), 0);
+                            objLoc.QtyOnHand = Math.Round(objLoc.QtyOnHand + qty, 0);
+                            objLoc.QtyAvail = Math.Round(objLoc.QtyAvail + (tran.String("TranType") == "CM" ? qty : 0), 0);
+                        }
+                        if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0) < 0)
+                        {
+                            throw new MessageException(MessageType.Message, "2018051411", "", new[] { objLoc.InvtID, objLoc.SiteID, objLoc.WhseLoc });
+                        }
+
+                        objLoc.TotCost = Math.Round(objLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        objLoc.LUpd_DateTime = DateTime.Now;
+                        objLoc.LUpd_Prog = Prog;
+                        objLoc.LUpd_User = User;
+                        objLoc.Update();
+
+                    }
+
+                    
+
+                    ///////////////////////////////////////
+
                     if (objInvt.StkItem == 1 && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N")
                     {
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
                             qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
-                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc").PassNull(), lotRow.String("LotSerNbr")))
                             {
                                 objItemLot.Reset();
                                 objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
@@ -462,7 +516,7 @@ namespace INProcess
                                 objItemLot.Add();
                             }
 
-                       
+
 
                             if (!objSetup.NegQty && objItemLot.QtyOnHand + qty < 0)
                             {
@@ -512,11 +566,11 @@ namespace INProcess
                 throw ex;
             }
         }
-        public bool IN10200_Cancel(string branchID, string batNbr)
+        public bool IN10200_Cancel(string branchID, string batNbr, bool showWhseLoc)
         {
             try
             {
-                Issue_Cancel(branchID, batNbr, string.Empty, true);
+                Issue_Cancel(branchID, batNbr, string.Empty, true, showWhseLoc);
                 return true;
             }
             catch (Exception ex)
@@ -1260,7 +1314,7 @@ namespace INProcess
             }         
             return mMessage;
         }
-        public bool Issue_Cancel(string branchID, string batNbr, string rcptNbr, bool release)
+        public bool Issue_Cancel(string branchID, string batNbr, string rcptNbr, bool release, bool showWhseLoc)
         {
             try
             {
@@ -1286,6 +1340,7 @@ namespace INProcess
 
                 clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
                 clsIN_ItemSite objItem = new clsIN_ItemSite(Dal);
+                clsIN_ItemLoc objItemLoc = new clsIN_ItemLoc(Dal);
                 clsIN_ItemCost cost = new clsIN_ItemCost(Dal);
                 clsSQL sql = new clsSQL(Dal);
                 foreach (DataRow tran in lstTrans.Rows)
@@ -1318,13 +1373,41 @@ namespace INProcess
                     objItem.LUpd_User = User;
                     objItem.Update();
 
+                    if (showWhseLoc)
+                    {
+                        if (!objItemLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc").PassNull()))
+                        {
+                            throw new MessageException(MessageType.Message, "606");
+
+                        }
+                        if (objInvt.StkItem == 1)
+                        {
+                            if (tran.String("UnitMultDiv") == "M" || string.IsNullOrEmpty(tran.String("UnitMultDiv")))
+                                qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") * tran.Double("CnvFact");
+                            else
+                                qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
+
+                            objItemLoc.QtyAvail = Math.Round(objItemLoc.QtyAvail + qty, 0);
+                            objItemLoc.QtyOnHand = Math.Round(objItemLoc.QtyOnHand + qty, 0);
+                            objItemLoc.AvgCost = Math.Round(objItemLoc.QtyOnHand != 0 ? (objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult")) / objItemLoc.QtyOnHand :
+                                objItemLoc.AvgCost, 0);
+
+                        }
+                        objItemLoc.TotCost = Math.Round(objItemLoc.TotCost - tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                        objItemLoc.LUpd_DateTime = DateTime.Now;
+                        objItemLoc.LUpd_Prog = Prog;
+                        objItemLoc.LUpd_User = User;
+                        objItemLoc.Update();
+                    }   
+
+
                     if (objInvt.StkItem == 1 && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N")
                     {
                         DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
                         foreach (DataRow lotRow in dtLot.Rows)
                         {
                             qty = -1 * Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
-                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc"), lotRow.String("LotSerNbr")))
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("WhseLoc").PassNull(), lotRow.String("LotSerNbr")))
                             {
                                 objItemLot.Reset();
                                 objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
