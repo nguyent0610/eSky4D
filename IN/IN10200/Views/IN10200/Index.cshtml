@@ -35,6 +35,7 @@
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
         HQ.inSite = '@ViewBag.INSite';
         showFromSite = HQ.util.toBool('@ViewBag.showFromSite');
+        HQ.showWhseLoc = HQ.util.toBool('@ViewBag.showWhseLoc');    
         HQ.showQtyOnhand = HQ.util.toBool('@ViewBag.showQtyOnhand');
     </script>  
     <title>@ViewBag.Title</title>
@@ -120,7 +121,8 @@
     })
     .Parameters(ps => { 
         ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
-        ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw)); 
+        ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("whseLoc", "App.cboWhseLoc.getValue()", ParameterMode.Raw));
     })
 )
 
