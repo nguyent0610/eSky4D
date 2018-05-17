@@ -1,5 +1,5 @@
 '-- ------------------------------------------------------------
-'-- Class name    :  clsIN_ItemLot
+'-- Class name    :  clsIN_ItemLoc
 '-- Created date  :  05/03/2018
 '-- Created by    :  
 '-- Updated by    :  
@@ -10,33 +10,23 @@
 Imports HQFramework
 Imports HQFramework.DAL
 Imports HQFramework.Common
-Public Class clsIN_ItemLot
+Public Class clsIN_ItemLoc
 #Region "Constants"
-	Private Const PP_IN_ItemLot As String = "PP_IN_ItemLot"
+	Private Const PP_IN_ItemLoc As String = "PP_IN_ItemLoc"
 #End Region 
 
 #Region "Member Variables"
-	Private mvarSiteID As System.String
-
 	Private mvarInvtID As System.String
+
+	Private mvarSiteID As System.String
 
 	Private mvarWhseLoc As System.String
 
-	Private mvarLotSerNbr As System.String
-
-	Private mvarCost As System.Double
-
-	Private mvarExpDate As System.DateTime
-
-	Private mvarLIFODate As System.DateTime
-
-	Private mvarMfgrLotSerNbr As System.String
+	Private mvarAvgCost As System.Double
 
 	Private mvarQtyAlloc As System.Double
 
 	Private mvarQtyAllocIN As System.Double
-
-	Private mvarQtyAllocOther As System.Double
 
 	Private mvarQtyAllocPORet As System.Double
 
@@ -44,13 +34,29 @@ Public Class clsIN_ItemLot
 
 	Private mvarQtyAvail As System.Double
 
+	Private mvarQtyInTransit As System.Double
+
+	Private mvarQtyOnBO As System.Double
+
 	Private mvarQtyOnHand As System.Double
+
+	Private mvarQtyOnPO As System.Double
+
+	Private mvarQtyOnTransferOrders As System.Double
+
+	Private mvarQtyOnSO As System.Double
 
 	Private mvarQtyShipNotInv As System.Double
 
-	Private mvarWarrantyDate As System.DateTime
+	Private mvarStkItem As System.Int16
 
-	Private mvarPackageID As System.String
+	Private mvarTotCost As System.Double
+
+	Private mvarLastPurchaseDate As System.DateTime
+
+	Private mvarLastPurchasePrice As System.Double
+
+	Private mvarQtyUncosted As System.Double
 
 	Private mvarCrtd_DateTime As System.DateTime
 
@@ -81,21 +87,21 @@ Public Class clsIN_ItemLot
 #End Region 
 
 #Region "Public Properties"
-	Public Property SiteID() As System.String
-		Get
-			Return mvarSiteID
-		End Get
-		Set(ByVal Value As System.String)
-			mvarSiteID = Value
-		End Set
-	End Property
-
 	Public Property InvtID() As System.String
 		Get
 			Return mvarInvtID
 		End Get
 		Set(ByVal Value As System.String)
 			mvarInvtID = Value
+		End Set
+	End Property
+
+	Public Property SiteID() As System.String
+		Get
+			Return mvarSiteID
+		End Get
+		Set(ByVal Value As System.String)
+			mvarSiteID = Value
 		End Set
 	End Property
 
@@ -108,48 +114,12 @@ Public Class clsIN_ItemLot
 		End Set
 	End Property
 
-	Public Property LotSerNbr() As System.String
+	Public Property AvgCost() As System.Double
 		Get
-			Return mvarLotSerNbr
-		End Get
-		Set(ByVal Value As System.String)
-			mvarLotSerNbr = Value
-		End Set
-	End Property
-
-	Public Property Cost() As System.Double
-		Get
-			Return mvarCost
+			Return mvarAvgCost
 		End Get
 		Set(ByVal Value As System.Double)
-			mvarCost = Value
-		End Set
-	End Property
-
-	Public Property ExpDate() As System.DateTime
-		Get
-			Return mvarExpDate
-		End Get
-		Set(ByVal Value As System.DateTime)
-			mvarExpDate = Value
-		End Set
-	End Property
-
-	Public Property LIFODate() As System.DateTime
-		Get
-			Return mvarLIFODate
-		End Get
-		Set(ByVal Value As System.DateTime)
-			mvarLIFODate = Value
-		End Set
-	End Property
-
-	Public Property MfgrLotSerNbr() As System.String
-		Get
-			Return mvarMfgrLotSerNbr
-		End Get
-		Set(ByVal Value As System.String)
-			mvarMfgrLotSerNbr = Value
+			mvarAvgCost = Value
 		End Set
 	End Property
 
@@ -168,15 +138,6 @@ Public Class clsIN_ItemLot
 		End Get
 		Set(ByVal Value As System.Double)
 			mvarQtyAllocIN = Value
-		End Set
-	End Property
-
-	Public Property QtyAllocOther() As System.Double
-		Get
-			Return mvarQtyAllocOther
-		End Get
-		Set(ByVal Value As System.Double)
-			mvarQtyAllocOther = Value
 		End Set
 	End Property
 
@@ -207,12 +168,57 @@ Public Class clsIN_ItemLot
 		End Set
 	End Property
 
+	Public Property QtyInTransit() As System.Double
+		Get
+			Return mvarQtyInTransit
+		End Get
+		Set(ByVal Value As System.Double)
+			mvarQtyInTransit = Value
+		End Set
+	End Property
+
+	Public Property QtyOnBO() As System.Double
+		Get
+			Return mvarQtyOnBO
+		End Get
+		Set(ByVal Value As System.Double)
+			mvarQtyOnBO = Value
+		End Set
+	End Property
+
 	Public Property QtyOnHand() As System.Double
 		Get
 			Return mvarQtyOnHand
 		End Get
 		Set(ByVal Value As System.Double)
 			mvarQtyOnHand = Value
+		End Set
+	End Property
+
+	Public Property QtyOnPO() As System.Double
+		Get
+			Return mvarQtyOnPO
+		End Get
+		Set(ByVal Value As System.Double)
+			mvarQtyOnPO = Value
+		End Set
+	End Property
+
+	Public Property QtyOnTransferOrders() As System.Double
+		Get
+			Return mvarQtyOnTransferOrders
+		End Get
+		Set(ByVal Value As System.Double)
+			mvarQtyOnTransferOrders = Value
+		End Set
+	End Property
+
+	Public Property QtyOnSO() As System.Double
+		Get
+			Return mvarQtyOnSO
+		End Get
+		Set(ByVal Value As System.Double)
+			mvarQtyOnSO = Value
 		End Set
 	End Property
 
@@ -225,21 +231,48 @@ Public Class clsIN_ItemLot
 		End Set
 	End Property
 
-	Public Property WarrantyDate() As System.DateTime
+	Public Property StkItem() As System.Int16
 		Get
-			Return mvarWarrantyDate
+			Return mvarStkItem
 		End Get
-		Set(ByVal Value As System.DateTime)
-			mvarWarrantyDate = Value
+		Set(ByVal Value As System.Int16)
+			mvarStkItem = Value
 		End Set
 	End Property
 
-	Public Property PackageID() As System.String
+	Public Property TotCost() As System.Double
 		Get
-			Return mvarPackageID
+			Return mvarTotCost
 		End Get
-		Set(ByVal Value As System.String)
-			mvarPackageID = Value
+		Set(ByVal Value As System.Double)
+			mvarTotCost = Value
+		End Set
+	End Property
+
+	Public Property LastPurchaseDate() As System.DateTime
+		Get
+			Return mvarLastPurchaseDate
+		End Get
+		Set(ByVal Value As System.DateTime)
+			mvarLastPurchaseDate = Value
+		End Set
+	End Property
+
+	Public Property LastPurchasePrice() As System.Double
+		Get
+			Return mvarLastPurchasePrice
+		End Get
+		Set(ByVal Value As System.Double)
+			mvarLastPurchasePrice = Value
+		End Set
+	End Property
+
+	Public Property QtyUncosted() As System.Double
+		Get
+			Return mvarQtyUncosted
+		End Get
+		Set(ByVal Value As System.Double)
+			mvarQtyUncosted = Value
 		End Set
 	End Property
 
@@ -314,24 +347,27 @@ Public Class clsIN_ItemLot
 		Try
 			Dim pc As New ParamCollection
 			pc.Add(New ParamStruct("@Action", DbType.String, "AddNew", ParameterDirection.Input,50 ))
-			pc.Add(New ParamStruct("@SiteID", DbType.String,clsCommon.GetValueDBNull(Me.mvarSiteID), ParameterDirection.Input,30 ))
 			pc.Add(New ParamStruct("@InvtID", DbType.String,clsCommon.GetValueDBNull(Me.mvarInvtID), ParameterDirection.Input,30 ))
+			pc.Add(New ParamStruct("@SiteID", DbType.String,clsCommon.GetValueDBNull(Me.mvarSiteID), ParameterDirection.Input,30 ))
 			pc.Add(New ParamStruct("@WhseLoc", DbType.String,clsCommon.GetValueDBNull(Me.mvarWhseLoc), ParameterDirection.Input,10 ))
-			pc.Add(New ParamStruct("@LotSerNbr", DbType.String,clsCommon.GetValueDBNull(Me.mvarLotSerNbr), ParameterDirection.Input,25 ))
-			pc.Add(New ParamStruct("@Cost", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarCost), ParameterDirection.Input,8 ))
-			pc.Add(New ParamStruct("@ExpDate", DbType.DateTime,clsCommon.GetValueDBNull(Me.mvarExpDate.Date), ParameterDirection.Input,16 ))
-			pc.Add(New ParamStruct("@LIFODate", DbType.DateTime,clsCommon.GetValueDBNull(Me.mvarLIFODate.Date), ParameterDirection.Input,16 ))
-			pc.Add(New ParamStruct("@MfgrLotSerNbr", DbType.String,clsCommon.GetValueDBNull(Me.mvarMfgrLotSerNbr), ParameterDirection.Input,25 ))
+			pc.Add(New ParamStruct("@AvgCost", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarAvgCost), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@QtyAlloc", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyAlloc), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@QtyAllocIN", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyAllocIN), ParameterDirection.Input,8 ))
-			pc.Add(New ParamStruct("@QtyAllocOther", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyAllocOther), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@QtyAllocPORet", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyAllocPORet), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@QtyAllocSO", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyAllocSO), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@QtyAvail", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyAvail), ParameterDirection.Input,8 ))
+			pc.Add(New ParamStruct("@QtyInTransit", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyInTransit), ParameterDirection.Input,8 ))
+			pc.Add(New ParamStruct("@QtyOnBO", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyOnBO), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@QtyOnHand", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyOnHand), ParameterDirection.Input,8 ))
+			pc.Add(New ParamStruct("@QtyOnPO", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyOnPO), ParameterDirection.Input,8 ))
+			pc.Add(New ParamStruct("@QtyOnTransferOrders", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyOnTransferOrders), ParameterDirection.Input,8 ))
+			pc.Add(New ParamStruct("@QtyOnSO", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyOnSO), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@QtyShipNotInv", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyShipNotInv), ParameterDirection.Input,8 ))
-			pc.Add(New ParamStruct("@WarrantyDate", DbType.DateTime,clsCommon.GetValueDBNull(Me.mvarWarrantyDate.Date), ParameterDirection.Input,16 ))
-			pc.Add(New ParamStruct("@PackageID", DbType.String,clsCommon.GetValueDBNull(Me.mvarPackageID), ParameterDirection.Input,100 ))
+			pc.Add(New ParamStruct("@StkItem", DbType.int16,clsCommon.GetValueDBNull(Me.mvarStkItem), ParameterDirection.Input,2 ))
+			pc.Add(New ParamStruct("@TotCost", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarTotCost), ParameterDirection.Input,8 ))
+			pc.Add(New ParamStruct("@LastPurchaseDate", DbType.DateTime,clsCommon.GetValueDBNull(Me.mvarLastPurchaseDate.Date), ParameterDirection.Input,16 ))
+			pc.Add(New ParamStruct("@LastPurchasePrice", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarLastPurchasePrice), ParameterDirection.Input,8 ))
+			pc.Add(New ParamStruct("@QtyUncosted", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQtyUncosted), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@Crtd_DateTime", DbType.DateTime,clsCommon.GetValueDBNull(Me.mvarCrtd_DateTime), ParameterDirection.Input,16 ))
 			pc.Add(New ParamStruct("@Crtd_Prog", DbType.String,clsCommon.GetValueDBNull(Me.mvarCrtd_Prog), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@Crtd_User", DbType.String,clsCommon.GetValueDBNull(Me.mvarCrtd_User), ParameterDirection.Input,30 ))
@@ -339,9 +375,9 @@ Public Class clsIN_ItemLot
 			pc.Add(New ParamStruct("@LUpd_Prog", DbType.String,clsCommon.GetValueDBNull(Me.mvarLUpd_Prog), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@LUpd_User", DbType.String,clsCommon.GetValueDBNull(Me.mvarLUpd_User), ParameterDirection.Input,30 ))
 			pc.Add(New ParamStruct("@tstamp", DbType.String,clsCommon.GetValueDBNull(Me.mvartstamp), ParameterDirection.Input,18 ))
-			DAL.ExecPreparedSQL(PP_IN_ItemLot, CommandType.StoredProcedure, pc,"")
-		Me.mvarSiteID = clsCommon.GetValue(pc.Item("@SiteID").Value, mvarSiteID.GetType().FullName)
-		Return (Me.mvarSiteID <> String.Empty )
+			DAL.ExecPreparedSQL(PP_IN_ItemLoc, CommandType.StoredProcedure, pc,"")
+		Me.mvarInvtID = clsCommon.GetValue(pc.Item("@InvtID").Value, mvarInvtID.GetType().FullName)
+		Return (Me.mvarInvtID <> String.Empty )
 		Catch ex As Exception
 			Throw ex 
 		End Try
@@ -351,24 +387,27 @@ Public Class clsIN_ItemLot
 		Try
 			Dim pc As New ParamCollection
 			pc.Add(New ParamStruct("@Action", DbType.String, "Update", ParameterDirection.Input,50 ))
-			 pc.Add(New ParamStruct("@SiteID",DbType.String, clsCommon.GetValueDBNull(me.mvarSiteID), ParameterDirection.Input,30 ))
 			 pc.Add(New ParamStruct("@InvtID",DbType.String, clsCommon.GetValueDBNull(me.mvarInvtID), ParameterDirection.Input,30 ))
+			 pc.Add(New ParamStruct("@SiteID",DbType.String, clsCommon.GetValueDBNull(me.mvarSiteID), ParameterDirection.Input,30 ))
 			 pc.Add(New ParamStruct("@WhseLoc",DbType.String, clsCommon.GetValueDBNull(me.mvarWhseLoc), ParameterDirection.Input,10 ))
-			 pc.Add(New ParamStruct("@LotSerNbr",DbType.String, clsCommon.GetValueDBNull(me.mvarLotSerNbr), ParameterDirection.Input,25 ))
-			 pc.Add(New ParamStruct("@Cost",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarCost), ParameterDirection.Input,8 ))
-			 pc.Add(New ParamStruct("@ExpDate",DbType.DateTime, clsCommon.GetValueDBNull(me.mvarExpDate.Date), ParameterDirection.Input,16 ))
-			 pc.Add(New ParamStruct("@LIFODate",DbType.DateTime, clsCommon.GetValueDBNull(me.mvarLIFODate.Date), ParameterDirection.Input,16 ))
-			 pc.Add(New ParamStruct("@MfgrLotSerNbr",DbType.String, clsCommon.GetValueDBNull(me.mvarMfgrLotSerNbr), ParameterDirection.Input,25 ))
+			 pc.Add(New ParamStruct("@AvgCost",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarAvgCost), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@QtyAlloc",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyAlloc), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@QtyAllocIN",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyAllocIN), ParameterDirection.Input,8 ))
-			 pc.Add(New ParamStruct("@QtyAllocOther",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyAllocOther), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@QtyAllocPORet",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyAllocPORet), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@QtyAllocSO",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyAllocSO), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@QtyAvail",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyAvail), ParameterDirection.Input,8 ))
+			 pc.Add(New ParamStruct("@QtyInTransit",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyInTransit), ParameterDirection.Input,8 ))
+			 pc.Add(New ParamStruct("@QtyOnBO",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyOnBO), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@QtyOnHand",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyOnHand), ParameterDirection.Input,8 ))
+			 pc.Add(New ParamStruct("@QtyOnPO",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyOnPO), ParameterDirection.Input,8 ))
+			 pc.Add(New ParamStruct("@QtyOnTransferOrders",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyOnTransferOrders), ParameterDirection.Input,8 ))
+			 pc.Add(New ParamStruct("@QtyOnSO",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyOnSO), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@QtyShipNotInv",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyShipNotInv), ParameterDirection.Input,8 ))
-			 pc.Add(New ParamStruct("@WarrantyDate",DbType.DateTime, clsCommon.GetValueDBNull(me.mvarWarrantyDate.Date), ParameterDirection.Input,16 ))
-			 pc.Add(New ParamStruct("@PackageID",DbType.String, clsCommon.GetValueDBNull(me.mvarPackageID), ParameterDirection.Input,100 ))
+			 pc.Add(New ParamStruct("@StkItem",DbType.int16, clsCommon.GetValueDBNull(me.mvarStkItem), ParameterDirection.Input,2 ))
+			 pc.Add(New ParamStruct("@TotCost",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarTotCost), ParameterDirection.Input,8 ))
+			 pc.Add(New ParamStruct("@LastPurchaseDate",DbType.DateTime, clsCommon.GetValueDBNull(me.mvarLastPurchaseDate.Date), ParameterDirection.Input,16 ))
+			 pc.Add(New ParamStruct("@LastPurchasePrice",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarLastPurchasePrice), ParameterDirection.Input,8 ))
+			 pc.Add(New ParamStruct("@QtyUncosted",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQtyUncosted), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@Crtd_DateTime",DbType.DateTime, clsCommon.GetValueDBNull(me.mvarCrtd_DateTime), ParameterDirection.Input,16 ))
 			 pc.Add(New ParamStruct("@Crtd_Prog",DbType.String, clsCommon.GetValueDBNull(me.mvarCrtd_Prog), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@Crtd_User",DbType.String, clsCommon.GetValueDBNull(me.mvarCrtd_User), ParameterDirection.Input,30 ))
@@ -376,46 +415,42 @@ Public Class clsIN_ItemLot
 			 pc.Add(New ParamStruct("@LUpd_Prog",DbType.String, clsCommon.GetValueDBNull(me.mvarLUpd_Prog), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@LUpd_User",DbType.String, clsCommon.GetValueDBNull(me.mvarLUpd_User), ParameterDirection.Input,30 ))
 			 pc.Add(New ParamStruct("@tstamp",DbType.String, clsCommon.GetValueDBNull(me.mvartstamp), ParameterDirection.Input,18 ))
-			Return (DAL.ExecNonQuery(PP_IN_ItemLot, CommandType.StoredProcedure, pc,"") > 0)
+			Return (DAL.ExecNonQuery(PP_IN_ItemLoc, CommandType.StoredProcedure, pc,"") > 0)
 		Catch ex As Exception
 			Throw ex 
 		End Try
 	End Function
-	Public Function Delete(ByVal SiteID As System.String, ByVal InvtID As System.String, ByVal WhseLoc As System.String, ByVal LotSerNbr As System.String) as Boolean 
+	Public Function Delete(ByVal InvtID As System.String, ByVal SiteID As System.String, ByVal WhseLoc As System.String) as Boolean 
 		Dim DAL As DataAccess = m_Dal
 		Try
 			Dim pc As New ParamCollection
 			pc.Add(New ParamStruct("@Action", DbType.String, "Delete", ParameterDirection.Input,50 ))
-			pc.Add(New ParamStruct("@SiteID",DbType.String, clsCommon.GetValueDBNull(SiteID), ParameterDirection.Input,30 ))
 			pc.Add(New ParamStruct("@InvtID",DbType.String, clsCommon.GetValueDBNull(InvtID), ParameterDirection.Input,30 ))
+			pc.Add(New ParamStruct("@SiteID",DbType.String, clsCommon.GetValueDBNull(SiteID), ParameterDirection.Input,30 ))
 			pc.Add(New ParamStruct("@WhseLoc",DbType.String, clsCommon.GetValueDBNull(WhseLoc), ParameterDirection.Input,10 ))
-			pc.Add(New ParamStruct("@LotSerNbr",DbType.String, clsCommon.GetValueDBNull(LotSerNbr), ParameterDirection.Input,25 ))
-			Return (DAL.ExecNonQuery(PP_IN_ItemLot, CommandType.StoredProcedure, pc,"") > 0)
+			Return (DAL.ExecNonQuery(PP_IN_ItemLoc, CommandType.StoredProcedure, pc,"") > 0)
 		Catch ex As Exception
 			Throw ex 
 		End Try
 	End Function
-	Public Function GetAll(ByVal SiteID As System.String, ByVal InvtID As System.String, ByVal WhseLoc As System.String, ByVal LotSerNbr As System.String) as DataTable 
+	Public Function GetAll(ByVal InvtID As System.String, ByVal SiteID As System.String, ByVal WhseLoc As System.String) as DataTable 
 		Dim DAL As DataAccess = m_Dal
 		Try
 			Dim pc As New ParamCollection
 			Dim ds As New DataSet
 			pc.Add(New ParamStruct("@Action", DbType.String, "GetListData", ParameterDirection.Input,50 ))
-			pc.Add(New ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(SiteID), ParameterDirection.Input, 30 ))
 			pc.Add(New ParamStruct("@InvtID", DbType.String, clsCommon.GetValueDBNull(InvtID), ParameterDirection.Input, 30 ))
+			pc.Add(New ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(SiteID), ParameterDirection.Input, 30 ))
 			pc.Add(New ParamStruct("@WhseLoc", DbType.String, clsCommon.GetValueDBNull(WhseLoc), ParameterDirection.Input, 10 ))
-			pc.Add(New ParamStruct("@LotSerNbr", DbType.String, clsCommon.GetValueDBNull(LotSerNbr), ParameterDirection.Input, 25 ))
-			ds = DAL.ExecDataSet(PP_IN_ItemLot, CommandType.StoredProcedure, pc,"")
-			Dim keys(3) As DataColumn
+			ds = DAL.ExecDataSet(PP_IN_ItemLoc, CommandType.StoredProcedure, pc,"")
+			Dim keys(2) As DataColumn
 			Dim column As DataColumn
-			column = ds.Tables(0).Columns("SiteID")
-			Keys(0) = column
 			column = ds.Tables(0).Columns("InvtID")
+			Keys(0) = column
+			column = ds.Tables(0).Columns("SiteID")
 			Keys(1) = column
 			column = ds.Tables(0).Columns("WhseLoc")
 			Keys(2) = column
-			column = ds.Tables(0).Columns("LotSerNbr")
-			Keys(3) = column
 			ds.Tables(0).PrimaryKey = Keys
 			Return ds.Tables(0)
 		Catch ex As Exception
@@ -423,24 +458,27 @@ Public Class clsIN_ItemLot
 		End Try
 	End Function
 	Public Sub Reset()
-		mvarSiteID = String.Empty
 		mvarInvtID = String.Empty
+		mvarSiteID = String.Empty
 		mvarWhseLoc = String.Empty
-		mvarLotSerNbr = String.Empty
-		mvarCost = 0
-		mvarExpDate = Today
-		mvarLIFODate = Today
-		mvarMfgrLotSerNbr = String.Empty
+		mvarAvgCost = 0
 		mvarQtyAlloc = 0
 		mvarQtyAllocIN = 0
-		mvarQtyAllocOther = 0
 		mvarQtyAllocPORet = 0
 		mvarQtyAllocSO = 0
 		mvarQtyAvail = 0
+		mvarQtyInTransit = 0
+		mvarQtyOnBO = 0
 		mvarQtyOnHand = 0
+		mvarQtyOnPO = 0
+		mvarQtyOnTransferOrders = 0
+		mvarQtyOnSO = 0
 		mvarQtyShipNotInv = 0
-		mvarWarrantyDate = Today
-		mvarPackageID = String.Empty
+		mvarStkItem = 0
+		mvarTotCost = 0
+		mvarLastPurchaseDate = Today
+		mvarLastPurchasePrice = 0
+		mvarQtyUncosted = 0
 		mvarCrtd_DateTime = Today
 		mvarCrtd_Prog = String.Empty
 		mvarCrtd_User = String.Empty
@@ -449,17 +487,16 @@ Public Class clsIN_ItemLot
 		mvarLUpd_User = String.Empty
 		mvartstamp = String.Empty
 	End Sub
-	Public Function GetByKey(ByVal SiteID As System.String, ByVal InvtID As System.String, ByVal WhseLoc As System.String, ByVal LotSerNbr As System.String) as Boolean 
+	Public Function GetByKey(ByVal InvtID As System.String, ByVal SiteID As System.String, ByVal WhseLoc As System.String) as Boolean 
 		Dim DAL As DataAccess = m_Dal
 		Dim ds As New DataSet 
 		Try
 			Dim pc As New ParamCollection
 			pc.Add(New ParamStruct("@Action", DbType.String, "GetData_ByKey", ParameterDirection.Input,50 ))
-			pc.Add(New ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(SiteID), ParameterDirection.InputOutput, 30 ))
 			pc.Add(New ParamStruct("@InvtID", DbType.String, clsCommon.GetValueDBNull(InvtID), ParameterDirection.InputOutput, 30 ))
+			pc.Add(New ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(SiteID), ParameterDirection.InputOutput, 30 ))
 			pc.Add(New ParamStruct("@WhseLoc", DbType.String, clsCommon.GetValueDBNull(WhseLoc), ParameterDirection.InputOutput, 10 ))
-			pc.Add(New ParamStruct("@LotSerNbr", DbType.String, clsCommon.GetValueDBNull(LotSerNbr), ParameterDirection.InputOutput, 25 ))
-			ds = DAL.ExecDataSet(PP_IN_ItemLot, CommandType.StoredProcedure, pc,"")
+			ds = DAL.ExecDataSet(PP_IN_ItemLoc, CommandType.StoredProcedure, pc,"")
 			me.Reset()
 			If ds Is Nothing Then
 				Return False
@@ -474,24 +511,27 @@ Public Class clsIN_ItemLot
 		Return False
 	End Function
 	Public Sub FillData(row as DataRow)
-		mvarSiteID =  clsCommon.GetValue(row("SiteID"), mvarSiteID.GetType().FullName)
 		mvarInvtID =  clsCommon.GetValue(row("InvtID"), mvarInvtID.GetType().FullName)
+		mvarSiteID =  clsCommon.GetValue(row("SiteID"), mvarSiteID.GetType().FullName)
 		mvarWhseLoc =  clsCommon.GetValue(row("WhseLoc"), mvarWhseLoc.GetType().FullName)
-		mvarLotSerNbr =  clsCommon.GetValue(row("LotSerNbr"), mvarLotSerNbr.GetType().FullName)
-		mvarCost =  clsCommon.GetValue(row("Cost"), mvarCost.GetType().FullName)
-		mvarExpDate =  clsCommon.GetValue(row("ExpDate"), mvarExpDate.GetType().FullName)
-		mvarLIFODate =  clsCommon.GetValue(row("LIFODate"), mvarLIFODate.GetType().FullName)
-		mvarMfgrLotSerNbr =  clsCommon.GetValue(row("MfgrLotSerNbr"), mvarMfgrLotSerNbr.GetType().FullName)
+		mvarAvgCost =  clsCommon.GetValue(row("AvgCost"), mvarAvgCost.GetType().FullName)
 		mvarQtyAlloc =  clsCommon.GetValue(row("QtyAlloc"), mvarQtyAlloc.GetType().FullName)
 		mvarQtyAllocIN =  clsCommon.GetValue(row("QtyAllocIN"), mvarQtyAllocIN.GetType().FullName)
-		mvarQtyAllocOther =  clsCommon.GetValue(row("QtyAllocOther"), mvarQtyAllocOther.GetType().FullName)
 		mvarQtyAllocPORet =  clsCommon.GetValue(row("QtyAllocPORet"), mvarQtyAllocPORet.GetType().FullName)
 		mvarQtyAllocSO =  clsCommon.GetValue(row("QtyAllocSO"), mvarQtyAllocSO.GetType().FullName)
 		mvarQtyAvail =  clsCommon.GetValue(row("QtyAvail"), mvarQtyAvail.GetType().FullName)
+		mvarQtyInTransit =  clsCommon.GetValue(row("QtyInTransit"), mvarQtyInTransit.GetType().FullName)
+		mvarQtyOnBO =  clsCommon.GetValue(row("QtyOnBO"), mvarQtyOnBO.GetType().FullName)
 		mvarQtyOnHand =  clsCommon.GetValue(row("QtyOnHand"), mvarQtyOnHand.GetType().FullName)
+		mvarQtyOnPO =  clsCommon.GetValue(row("QtyOnPO"), mvarQtyOnPO.GetType().FullName)
+		mvarQtyOnTransferOrders =  clsCommon.GetValue(row("QtyOnTransferOrders"), mvarQtyOnTransferOrders.GetType().FullName)
+		mvarQtyOnSO =  clsCommon.GetValue(row("QtyOnSO"), mvarQtyOnSO.GetType().FullName)
 		mvarQtyShipNotInv =  clsCommon.GetValue(row("QtyShipNotInv"), mvarQtyShipNotInv.GetType().FullName)
-		mvarWarrantyDate =  clsCommon.GetValue(row("WarrantyDate"), mvarWarrantyDate.GetType().FullName)
-		mvarPackageID =  clsCommon.GetValue(row("PackageID"), mvarPackageID.GetType().FullName)
+		mvarStkItem =  clsCommon.GetValue(row("StkItem"), mvarStkItem.GetType().FullName)
+		mvarTotCost =  clsCommon.GetValue(row("TotCost"), mvarTotCost.GetType().FullName)
+		mvarLastPurchaseDate =  clsCommon.GetValue(row("LastPurchaseDate"), mvarLastPurchaseDate.GetType().FullName)
+		mvarLastPurchasePrice =  clsCommon.GetValue(row("LastPurchasePrice"), mvarLastPurchasePrice.GetType().FullName)
+		mvarQtyUncosted =  clsCommon.GetValue(row("QtyUncosted"), mvarQtyUncosted.GetType().FullName)
 		mvarCrtd_DateTime =  clsCommon.GetValue(row("Crtd_DateTime"), mvarCrtd_DateTime.GetType().FullName)
 		mvarCrtd_Prog =  clsCommon.GetValue(row("Crtd_Prog"), mvarCrtd_Prog.GetType().FullName)
 		mvarCrtd_User =  clsCommon.GetValue(row("Crtd_User"), mvarCrtd_User.GetType().FullName)

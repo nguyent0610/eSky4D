@@ -1,5 +1,5 @@
 '-- ------------------------------------------------------------
-'-- Class name    :  clsIN_LotTrans
+'-- Class name    :  clsIN_PacTrans
 '-- Created date  :  05/03/2018
 '-- Created by    :  
 '-- Updated by    :  
@@ -10,9 +10,9 @@
 Imports HQFramework
 Imports HQFramework.DAL
 Imports HQFramework.Common
-Public Class clsIN_LotTrans
+Public Class clsIN_PacTrans
 #Region "Constants"
-	Private Const PP_IN_LotTrans As String = "PP_IN_LotTrans"
+	Private Const PP_IN_PacTrans As String = "PP_IN_PacTrans"
 #End Region 
 
 #Region "Member Variables"
@@ -26,31 +26,11 @@ Public Class clsIN_LotTrans
 
 	Private mvarINTranLineRef As System.String
 
-	Private mvarExpDate As System.DateTime
-
-	Private mvarInvtID As System.String
-
-	Private mvarInvtMult As System.Int16
-
-	Private mvarKitID As System.String
-
-	Private mvarMfgrLotSerNbr As System.String
-
-	Private mvarQty As System.Double
+	Private mvarPackageID As System.String
 
 	Private mvarSiteID As System.String
 
-	Private mvarToSiteID As System.String
-
-	Private mvarTranDate As System.DateTime
-
-	Private mvarTranType As System.String
-
-	Private mvarUnitCost As System.Double
-
-	Private mvarUnitPrice As System.Double
-
-	Private mvarWarrantyDate As System.DateTime
+	Private mvarInvtID As System.String
 
 	Private mvarCrtd_Prog As System.String
 
@@ -65,18 +45,6 @@ Public Class clsIN_LotTrans
 	Private mvarLUpd_DateTime As System.DateTime
 
 	Private mvartstamp As System.String
-
-	Private mvarUnitDesc As System.String
-
-	Private mvarCnvFact As System.Double
-
-	Private mvarUnitMultDiv As System.String
-
-	Private mvarWhseLoc As System.String
-
-	Private mvarToWhseLoc As System.String
-
-	Private mvarReason As System.String
 
 #End Region 
 
@@ -138,57 +106,12 @@ Public Class clsIN_LotTrans
 		End Set
 	End Property
 
-	Public Property ExpDate() As System.DateTime
+	Public Property PackageID() As System.String
 		Get
-			Return mvarExpDate
-		End Get
-		Set(ByVal Value As System.DateTime)
-			mvarExpDate = Value
-		End Set
-	End Property
-
-	Public Property InvtID() As System.String
-		Get
-			Return mvarInvtID
+			Return mvarPackageID
 		End Get
 		Set(ByVal Value As System.String)
-			mvarInvtID = Value
-		End Set
-	End Property
-
-	Public Property InvtMult() As System.Int16
-		Get
-			Return mvarInvtMult
-		End Get
-		Set(ByVal Value As System.Int16)
-			mvarInvtMult = Value
-		End Set
-	End Property
-
-	Public Property KitID() As System.String
-		Get
-			Return mvarKitID
-		End Get
-		Set(ByVal Value As System.String)
-			mvarKitID = Value
-		End Set
-	End Property
-
-	Public Property MfgrLotSerNbr() As System.String
-		Get
-			Return mvarMfgrLotSerNbr
-		End Get
-		Set(ByVal Value As System.String)
-			mvarMfgrLotSerNbr = Value
-		End Set
-	End Property
-
-	Public Property Qty() As System.Double
-		Get
-			Return mvarQty
-		End Get
-		Set(ByVal Value As System.Double)
-			mvarQty = Value
+			mvarPackageID = Value
 		End Set
 	End Property
 
@@ -201,57 +124,12 @@ Public Class clsIN_LotTrans
 		End Set
 	End Property
 
-	Public Property ToSiteID() As System.String
+	Public Property InvtID() As System.String
 		Get
-			Return mvarToSiteID
+			Return mvarInvtID
 		End Get
 		Set(ByVal Value As System.String)
-			mvarToSiteID = Value
-		End Set
-	End Property
-
-	Public Property TranDate() As System.DateTime
-		Get
-			Return mvarTranDate
-		End Get
-		Set(ByVal Value As System.DateTime)
-			mvarTranDate = Value
-		End Set
-	End Property
-
-	Public Property TranType() As System.String
-		Get
-			Return mvarTranType
-		End Get
-		Set(ByVal Value As System.String)
-			mvarTranType = Value
-		End Set
-	End Property
-
-	Public Property UnitCost() As System.Double
-		Get
-			Return mvarUnitCost
-		End Get
-		Set(ByVal Value As System.Double)
-			mvarUnitCost = Value
-		End Set
-	End Property
-
-	Public Property UnitPrice() As System.Double
-		Get
-			Return mvarUnitPrice
-		End Get
-		Set(ByVal Value As System.Double)
-			mvarUnitPrice = Value
-		End Set
-	End Property
-
-	Public Property WarrantyDate() As System.DateTime
-		Get
-			Return mvarWarrantyDate
-		End Get
-		Set(ByVal Value As System.DateTime)
-			mvarWarrantyDate = Value
+			mvarInvtID = Value
 		End Set
 	End Property
 
@@ -318,60 +196,6 @@ Public Class clsIN_LotTrans
 		End Set
 	End Property
 
-	Public Property UnitDesc() As System.String
-		Get
-			Return mvarUnitDesc
-		End Get
-		Set(ByVal Value As System.String)
-			mvarUnitDesc = Value
-		End Set
-	End Property
-
-	Public Property CnvFact() As System.Double
-		Get
-			Return mvarCnvFact
-		End Get
-		Set(ByVal Value As System.Double)
-			mvarCnvFact = Value
-		End Set
-	End Property
-
-	Public Property UnitMultDiv() As System.String
-		Get
-			Return mvarUnitMultDiv
-		End Get
-		Set(ByVal Value As System.String)
-			mvarUnitMultDiv = Value
-		End Set
-	End Property
-
-	Public Property WhseLoc() As System.String
-		Get
-			Return mvarWhseLoc
-		End Get
-		Set(ByVal Value As System.String)
-			mvarWhseLoc = Value
-		End Set
-	End Property
-
-	Public Property ToWhseLoc() As System.String
-		Get
-			Return mvarToWhseLoc
-		End Get
-		Set(ByVal Value As System.String)
-			mvarToWhseLoc = Value
-		End Set
-	End Property
-
-	Public Property Reason() As System.String
-		Get
-			Return mvarReason
-		End Get
-		Set(ByVal Value As System.String)
-			mvarReason = Value
-		End Set
-	End Property
-
 #End Region 
 
 #Region "Public Methods"
@@ -385,19 +209,9 @@ Public Class clsIN_LotTrans
 			pc.Add(New ParamStruct("@RefNbr", DbType.String,clsCommon.GetValueDBNull(Me.mvarRefNbr), ParameterDirection.Input,15 ))
 			pc.Add(New ParamStruct("@LotSerNbr", DbType.String,clsCommon.GetValueDBNull(Me.mvarLotSerNbr), ParameterDirection.Input,25 ))
 			pc.Add(New ParamStruct("@INTranLineRef", DbType.String,clsCommon.GetValueDBNull(Me.mvarINTranLineRef), ParameterDirection.Input,5 ))
-			pc.Add(New ParamStruct("@ExpDate", DbType.DateTime,clsCommon.GetValueDBNull(Me.mvarExpDate.Date), ParameterDirection.Input,16 ))
-			pc.Add(New ParamStruct("@InvtID", DbType.String,clsCommon.GetValueDBNull(Me.mvarInvtID), ParameterDirection.Input,30 ))
-			pc.Add(New ParamStruct("@InvtMult", DbType.int16,clsCommon.GetValueDBNull(Me.mvarInvtMult), ParameterDirection.Input,2 ))
-			pc.Add(New ParamStruct("@KitID", DbType.String,clsCommon.GetValueDBNull(Me.mvarKitID), ParameterDirection.Input,30 ))
-			pc.Add(New ParamStruct("@MfgrLotSerNbr", DbType.String,clsCommon.GetValueDBNull(Me.mvarMfgrLotSerNbr), ParameterDirection.Input,25 ))
-			pc.Add(New ParamStruct("@Qty", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarQty), ParameterDirection.Input,8 ))
+			pc.Add(New ParamStruct("@PackageID", DbType.String,clsCommon.GetValueDBNull(Me.mvarPackageID), ParameterDirection.Input,100 ))
 			pc.Add(New ParamStruct("@SiteID", DbType.String,clsCommon.GetValueDBNull(Me.mvarSiteID), ParameterDirection.Input,30 ))
-			pc.Add(New ParamStruct("@ToSiteID", DbType.String,clsCommon.GetValueDBNull(Me.mvarToSiteID), ParameterDirection.Input,30 ))
-			pc.Add(New ParamStruct("@TranDate", DbType.DateTime,clsCommon.GetValueDBNull(Me.mvarTranDate.Date), ParameterDirection.Input,16 ))
-			pc.Add(New ParamStruct("@TranType", DbType.String,clsCommon.GetValueDBNull(Me.mvarTranType), ParameterDirection.Input,2 ))
-			pc.Add(New ParamStruct("@UnitCost", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarUnitCost), ParameterDirection.Input,8 ))
-			pc.Add(New ParamStruct("@UnitPrice", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarUnitPrice), ParameterDirection.Input,8 ))
-			pc.Add(New ParamStruct("@WarrantyDate", DbType.DateTime,clsCommon.GetValueDBNull(Me.mvarWarrantyDate.Date), ParameterDirection.Input,16 ))
+			pc.Add(New ParamStruct("@InvtID", DbType.String,clsCommon.GetValueDBNull(Me.mvarInvtID), ParameterDirection.Input,30 ))
 			pc.Add(New ParamStruct("@Crtd_Prog", DbType.String,clsCommon.GetValueDBNull(Me.mvarCrtd_Prog), ParameterDirection.Input,8 ))
 			pc.Add(New ParamStruct("@Crtd_User", DbType.String,clsCommon.GetValueDBNull(Me.mvarCrtd_User), ParameterDirection.Input,30 ))
 			pc.Add(New ParamStruct("@Crtd_DateTime", DbType.DateTime,clsCommon.GetValueDBNull(Me.mvarCrtd_DateTime), ParameterDirection.Input,16 ))
@@ -405,13 +219,7 @@ Public Class clsIN_LotTrans
 			pc.Add(New ParamStruct("@LUpd_User", DbType.String,clsCommon.GetValueDBNull(Me.mvarLUpd_User), ParameterDirection.Input,30 ))
 			pc.Add(New ParamStruct("@LUpd_DateTime", DbType.DateTime,clsCommon.GetValueDBNull(Me.mvarLUpd_DateTime), ParameterDirection.Input,16 ))
 			pc.Add(New ParamStruct("@tstamp", DbType.String,clsCommon.GetValueDBNull(Me.mvartstamp), ParameterDirection.Input,18 ))
-			pc.Add(New ParamStruct("@UnitDesc", DbType.String,clsCommon.GetValueDBNull(Me.mvarUnitDesc), ParameterDirection.Input,10 ))
-			pc.Add(New ParamStruct("@CnvFact", DbType.Decimal,clsCommon.GetValueDBNull(Me.mvarCnvFact), ParameterDirection.Input,8 ))
-			pc.Add(New ParamStruct("@UnitMultDiv", DbType.String,clsCommon.GetValueDBNull(Me.mvarUnitMultDiv), ParameterDirection.Input,1 ))
-			pc.Add(New ParamStruct("@WhseLoc", DbType.String,clsCommon.GetValueDBNull(Me.mvarWhseLoc), ParameterDirection.Input,10 ))
-			pc.Add(New ParamStruct("@ToWhseLoc", DbType.String,clsCommon.GetValueDBNull(Me.mvarToWhseLoc), ParameterDirection.Input,10 ))
-			pc.Add(New ParamStruct("@Reason", DbType.String,clsCommon.GetValueDBNull(Me.mvarReason), ParameterDirection.Input,200 ))
-			DAL.ExecPreparedSQL(PP_IN_LotTrans, CommandType.StoredProcedure, pc,"")
+			DAL.ExecPreparedSQL(PP_IN_PacTrans, CommandType.StoredProcedure, pc,"")
 		Me.mvarBranchID = clsCommon.GetValue(pc.Item("@BranchID").Value, mvarBranchID.GetType().FullName)
 		Return (Me.mvarBranchID <> String.Empty )
 		Catch ex As Exception
@@ -428,19 +236,9 @@ Public Class clsIN_LotTrans
 			 pc.Add(New ParamStruct("@RefNbr",DbType.String, clsCommon.GetValueDBNull(me.mvarRefNbr), ParameterDirection.Input,15 ))
 			 pc.Add(New ParamStruct("@LotSerNbr",DbType.String, clsCommon.GetValueDBNull(me.mvarLotSerNbr), ParameterDirection.Input,25 ))
 			 pc.Add(New ParamStruct("@INTranLineRef",DbType.String, clsCommon.GetValueDBNull(me.mvarINTranLineRef), ParameterDirection.Input,5 ))
-			 pc.Add(New ParamStruct("@ExpDate",DbType.DateTime, clsCommon.GetValueDBNull(me.mvarExpDate.Date), ParameterDirection.Input,16 ))
-			 pc.Add(New ParamStruct("@InvtID",DbType.String, clsCommon.GetValueDBNull(me.mvarInvtID), ParameterDirection.Input,30 ))
-			 pc.Add(New ParamStruct("@InvtMult",DbType.int16, clsCommon.GetValueDBNull(me.mvarInvtMult), ParameterDirection.Input,2 ))
-			 pc.Add(New ParamStruct("@KitID",DbType.String, clsCommon.GetValueDBNull(me.mvarKitID), ParameterDirection.Input,30 ))
-			 pc.Add(New ParamStruct("@MfgrLotSerNbr",DbType.String, clsCommon.GetValueDBNull(me.mvarMfgrLotSerNbr), ParameterDirection.Input,25 ))
-			 pc.Add(New ParamStruct("@Qty",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarQty), ParameterDirection.Input,8 ))
+			 pc.Add(New ParamStruct("@PackageID",DbType.String, clsCommon.GetValueDBNull(me.mvarPackageID), ParameterDirection.Input,100 ))
 			 pc.Add(New ParamStruct("@SiteID",DbType.String, clsCommon.GetValueDBNull(me.mvarSiteID), ParameterDirection.Input,30 ))
-			 pc.Add(New ParamStruct("@ToSiteID",DbType.String, clsCommon.GetValueDBNull(me.mvarToSiteID), ParameterDirection.Input,30 ))
-			 pc.Add(New ParamStruct("@TranDate",DbType.DateTime, clsCommon.GetValueDBNull(me.mvarTranDate.Date), ParameterDirection.Input,16 ))
-			 pc.Add(New ParamStruct("@TranType",DbType.String, clsCommon.GetValueDBNull(me.mvarTranType), ParameterDirection.Input,2 ))
-			 pc.Add(New ParamStruct("@UnitCost",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarUnitCost), ParameterDirection.Input,8 ))
-			 pc.Add(New ParamStruct("@UnitPrice",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarUnitPrice), ParameterDirection.Input,8 ))
-			 pc.Add(New ParamStruct("@WarrantyDate",DbType.DateTime, clsCommon.GetValueDBNull(me.mvarWarrantyDate.Date), ParameterDirection.Input,16 ))
+			 pc.Add(New ParamStruct("@InvtID",DbType.String, clsCommon.GetValueDBNull(me.mvarInvtID), ParameterDirection.Input,30 ))
 			 pc.Add(New ParamStruct("@Crtd_Prog",DbType.String, clsCommon.GetValueDBNull(me.mvarCrtd_Prog), ParameterDirection.Input,8 ))
 			 pc.Add(New ParamStruct("@Crtd_User",DbType.String, clsCommon.GetValueDBNull(me.mvarCrtd_User), ParameterDirection.Input,30 ))
 			 pc.Add(New ParamStruct("@Crtd_DateTime",DbType.DateTime, clsCommon.GetValueDBNull(me.mvarCrtd_DateTime), ParameterDirection.Input,16 ))
@@ -448,13 +246,7 @@ Public Class clsIN_LotTrans
 			 pc.Add(New ParamStruct("@LUpd_User",DbType.String, clsCommon.GetValueDBNull(me.mvarLUpd_User), ParameterDirection.Input,30 ))
 			 pc.Add(New ParamStruct("@LUpd_DateTime",DbType.DateTime, clsCommon.GetValueDBNull(me.mvarLUpd_DateTime), ParameterDirection.Input,16 ))
 			 pc.Add(New ParamStruct("@tstamp",DbType.String, clsCommon.GetValueDBNull(me.mvartstamp), ParameterDirection.Input,18 ))
-			 pc.Add(New ParamStruct("@UnitDesc",DbType.String, clsCommon.GetValueDBNull(me.mvarUnitDesc), ParameterDirection.Input,10 ))
-			 pc.Add(New ParamStruct("@CnvFact",DbType.Decimal, clsCommon.GetValueDBNull(me.mvarCnvFact), ParameterDirection.Input,8 ))
-			 pc.Add(New ParamStruct("@UnitMultDiv",DbType.String, clsCommon.GetValueDBNull(me.mvarUnitMultDiv), ParameterDirection.Input,1 ))
-			 pc.Add(New ParamStruct("@WhseLoc",DbType.String, clsCommon.GetValueDBNull(me.mvarWhseLoc), ParameterDirection.Input,10 ))
-			 pc.Add(New ParamStruct("@ToWhseLoc",DbType.String, clsCommon.GetValueDBNull(me.mvarToWhseLoc), ParameterDirection.Input,10 ))
-			 pc.Add(New ParamStruct("@Reason",DbType.String, clsCommon.GetValueDBNull(me.mvarReason), ParameterDirection.Input,200 ))
-			Return (DAL.ExecNonQuery(PP_IN_LotTrans, CommandType.StoredProcedure, pc,"") > 0)
+			Return (DAL.ExecNonQuery(PP_IN_PacTrans, CommandType.StoredProcedure, pc,"") > 0)
 		Catch ex As Exception
 			Throw ex 
 		End Try
@@ -469,7 +261,7 @@ Public Class clsIN_LotTrans
 			pc.Add(New ParamStruct("@RefNbr",DbType.String, clsCommon.GetValueDBNull(RefNbr), ParameterDirection.Input,15 ))
 			pc.Add(New ParamStruct("@LotSerNbr",DbType.String, clsCommon.GetValueDBNull(LotSerNbr), ParameterDirection.Input,25 ))
 			pc.Add(New ParamStruct("@INTranLineRef",DbType.String, clsCommon.GetValueDBNull(INTranLineRef), ParameterDirection.Input,5 ))
-			Return (DAL.ExecNonQuery(PP_IN_LotTrans, CommandType.StoredProcedure, pc,"") > 0)
+			Return (DAL.ExecNonQuery(PP_IN_PacTrans, CommandType.StoredProcedure, pc,"") > 0)
 		Catch ex As Exception
 			Throw ex 
 		End Try
@@ -485,7 +277,7 @@ Public Class clsIN_LotTrans
 			pc.Add(New ParamStruct("@RefNbr", DbType.String, clsCommon.GetValueDBNull(RefNbr), ParameterDirection.Input, 15 ))
 			pc.Add(New ParamStruct("@LotSerNbr", DbType.String, clsCommon.GetValueDBNull(LotSerNbr), ParameterDirection.Input, 25 ))
 			pc.Add(New ParamStruct("@INTranLineRef", DbType.String, clsCommon.GetValueDBNull(INTranLineRef), ParameterDirection.Input, 5 ))
-			ds = DAL.ExecDataSet(PP_IN_LotTrans, CommandType.StoredProcedure, pc,"")
+			ds = DAL.ExecDataSet(PP_IN_PacTrans, CommandType.StoredProcedure, pc,"")
 			Dim keys(4) As DataColumn
 			Dim column As DataColumn
 			column = ds.Tables(0).Columns("BranchID")
@@ -510,19 +302,9 @@ Public Class clsIN_LotTrans
 		mvarRefNbr = String.Empty
 		mvarLotSerNbr = String.Empty
 		mvarINTranLineRef = String.Empty
-		mvarExpDate = Today
-		mvarInvtID = String.Empty
-		mvarInvtMult = 0
-		mvarKitID = String.Empty
-		mvarMfgrLotSerNbr = String.Empty
-		mvarQty = 0
+		mvarPackageID = String.Empty
 		mvarSiteID = String.Empty
-		mvarToSiteID = String.Empty
-		mvarTranDate = Today
-		mvarTranType = String.Empty
-		mvarUnitCost = 0
-		mvarUnitPrice = 0
-		mvarWarrantyDate = Today
+		mvarInvtID = String.Empty
 		mvarCrtd_Prog = String.Empty
 		mvarCrtd_User = String.Empty
 		mvarCrtd_DateTime = Today
@@ -530,12 +312,6 @@ Public Class clsIN_LotTrans
 		mvarLUpd_User = String.Empty
 		mvarLUpd_DateTime = Today
 		mvartstamp = String.Empty
-		mvarUnitDesc = String.Empty
-		mvarCnvFact = 0
-		mvarUnitMultDiv = String.Empty
-		mvarWhseLoc = String.Empty
-		mvarToWhseLoc = String.Empty
-		mvarReason = String.Empty
 	End Sub
 	Public Function GetByKey(ByVal BranchID As System.String, ByVal BatNbr As System.String, ByVal RefNbr As System.String, ByVal LotSerNbr As System.String, ByVal INTranLineRef As System.String) as Boolean 
 		Dim DAL As DataAccess = m_Dal
@@ -548,7 +324,7 @@ Public Class clsIN_LotTrans
 			pc.Add(New ParamStruct("@RefNbr", DbType.String, clsCommon.GetValueDBNull(RefNbr), ParameterDirection.InputOutput, 15 ))
 			pc.Add(New ParamStruct("@LotSerNbr", DbType.String, clsCommon.GetValueDBNull(LotSerNbr), ParameterDirection.InputOutput, 25 ))
 			pc.Add(New ParamStruct("@INTranLineRef", DbType.String, clsCommon.GetValueDBNull(INTranLineRef), ParameterDirection.InputOutput, 5 ))
-			ds = DAL.ExecDataSet(PP_IN_LotTrans, CommandType.StoredProcedure, pc,"")
+			ds = DAL.ExecDataSet(PP_IN_PacTrans, CommandType.StoredProcedure, pc,"")
 			me.Reset()
 			If ds Is Nothing Then
 				Return False
@@ -568,19 +344,9 @@ Public Class clsIN_LotTrans
 		mvarRefNbr =  clsCommon.GetValue(row("RefNbr"), mvarRefNbr.GetType().FullName)
 		mvarLotSerNbr =  clsCommon.GetValue(row("LotSerNbr"), mvarLotSerNbr.GetType().FullName)
 		mvarINTranLineRef =  clsCommon.GetValue(row("INTranLineRef"), mvarINTranLineRef.GetType().FullName)
-		mvarExpDate =  clsCommon.GetValue(row("ExpDate"), mvarExpDate.GetType().FullName)
-		mvarInvtID =  clsCommon.GetValue(row("InvtID"), mvarInvtID.GetType().FullName)
-		mvarInvtMult =  clsCommon.GetValue(row("InvtMult"), mvarInvtMult.GetType().FullName)
-		mvarKitID =  clsCommon.GetValue(row("KitID"), mvarKitID.GetType().FullName)
-		mvarMfgrLotSerNbr =  clsCommon.GetValue(row("MfgrLotSerNbr"), mvarMfgrLotSerNbr.GetType().FullName)
-		mvarQty =  clsCommon.GetValue(row("Qty"), mvarQty.GetType().FullName)
+		mvarPackageID =  clsCommon.GetValue(row("PackageID"), mvarPackageID.GetType().FullName)
 		mvarSiteID =  clsCommon.GetValue(row("SiteID"), mvarSiteID.GetType().FullName)
-		mvarToSiteID =  clsCommon.GetValue(row("ToSiteID"), mvarToSiteID.GetType().FullName)
-		mvarTranDate =  clsCommon.GetValue(row("TranDate"), mvarTranDate.GetType().FullName)
-		mvarTranType =  clsCommon.GetValue(row("TranType"), mvarTranType.GetType().FullName)
-		mvarUnitCost =  clsCommon.GetValue(row("UnitCost"), mvarUnitCost.GetType().FullName)
-		mvarUnitPrice =  clsCommon.GetValue(row("UnitPrice"), mvarUnitPrice.GetType().FullName)
-		mvarWarrantyDate =  clsCommon.GetValue(row("WarrantyDate"), mvarWarrantyDate.GetType().FullName)
+		mvarInvtID =  clsCommon.GetValue(row("InvtID"), mvarInvtID.GetType().FullName)
 		mvarCrtd_Prog =  clsCommon.GetValue(row("Crtd_Prog"), mvarCrtd_Prog.GetType().FullName)
 		mvarCrtd_User =  clsCommon.GetValue(row("Crtd_User"), mvarCrtd_User.GetType().FullName)
 		mvarCrtd_DateTime =  clsCommon.GetValue(row("Crtd_DateTime"), mvarCrtd_DateTime.GetType().FullName)
@@ -588,12 +354,6 @@ Public Class clsIN_LotTrans
 		mvarLUpd_User =  clsCommon.GetValue(row("LUpd_User"), mvarLUpd_User.GetType().FullName)
 		mvarLUpd_DateTime =  clsCommon.GetValue(row("LUpd_DateTime"), mvarLUpd_DateTime.GetType().FullName)
 		mvartstamp =  clsCommon.GetValue(row("tstamp"), mvartstamp.GetType().FullName)
-		mvarUnitDesc =  clsCommon.GetValue(row("UnitDesc"), mvarUnitDesc.GetType().FullName)
-		mvarCnvFact =  clsCommon.GetValue(row("CnvFact"), mvarCnvFact.GetType().FullName)
-		mvarUnitMultDiv =  clsCommon.GetValue(row("UnitMultDiv"), mvarUnitMultDiv.GetType().FullName)
-		mvarWhseLoc =  clsCommon.GetValue(row("WhseLoc"), mvarWhseLoc.GetType().FullName)
-		mvarToWhseLoc =  clsCommon.GetValue(row("ToWhseLoc"), mvarToWhseLoc.GetType().FullName)
-		mvarReason =  clsCommon.GetValue(row("Reason"), mvarReason.GetType().FullName)
 	End Sub
 #End Region 
 

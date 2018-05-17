@@ -134,11 +134,14 @@
     <Compile Include="AppTables\clsIN_InventoryMap.vb" />
     <Compile Include="AppTables\clsIN_InvtCpny.vb" />
     <Compile Include="AppTables\clsIN_ItemCost.vb" />
+    <Compile Include="AppTables\clsIN_ItemLoc.vb" />
     <Compile Include="AppTables\clsIN_ItemLot.vb" />
+    <Compile Include="AppTables\clsIN_ItemPack.vb" />
     <Compile Include="AppTables\clsIN_ItemSalary.vb" />
     <Compile Include="AppTables\clsIN_ItemSite.vb" />
     <Compile Include="AppTables\clsIN_Kit.vb" />
     <Compile Include="AppTables\clsIN_LotTrans.vb" />
+    <Compile Include="AppTables\clsIN_PacTrans.vb" />
     <Compile Include="AppTables\clsIN_POSM.vb" />
     <Compile Include="AppTables\clsIN_POSMBranch.vb" />
     <Compile Include="AppTables\clsIN_POSMCust.vb" />
@@ -340,7 +343,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
