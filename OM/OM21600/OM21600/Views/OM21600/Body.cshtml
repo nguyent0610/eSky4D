@@ -25,25 +25,56 @@
     })
     .Items(
         ////Thiet ke giao dien o day
-     
+
             X.Panel().Region(Region.North)
             .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'header');")
             .Items(
-                HQ.Combo().ID("cboCpnyID").Name("cboCnpyID").DataIndex("CpnyID").HQLangCode("CpnyID").HQProcedure("OM21600_pcLoadBranchAllByUser").AllowBlank(false)
-                .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID").Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
-                    .HQControlFocus("grdSalesRoute").ForceSelection(true)
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName ", Mode = ParameterMode.Raw }
+                 X.Container()
+                    .Layout(LayoutType.VBox)
+                        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                    .Items(
+                        X.Container().Layout(LayoutType.HBox).Flex(1)
+                        .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
+                        .Items(
+                        HQ.Combo().ID("cboTerritory").Name("cboTerritory").DataIndex("Territory").HQLangCode("Territory").HQProcedure("OM21600_pcTerritory")
+                        .HQColumnShow("Territory,Descr").DisplayField("Descr").ValueField("Territory").Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
+                         .ForceSelection(true).MultiSelect(true)
+                        .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                    })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(l =>
+                        {
+                            l.TriggerClick.Fn = "cboTerritory_TriggerClick";
+                            l.Collapse.Fn = "cboTerritory_Collapse";
+                        })
+                        .LoadData()
+                    , HQ.Combo().ID("cboCpnyID").Name("cboCnpyID").DataIndex("CpnyID").HQLangCode("OM21600_CpnyID").HQProcedure("OM21600_pcBranchRoute")
+                    .HQColumnShow("BranchRouteID,Descr").DisplayField("Descr").ValueField("BranchRouteID").Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
+                    .HQControlFocus("grdSalesRoute").ForceSelection(true).MultiSelect(true)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        ,new StoreParameter("@Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw)
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(l=>{
+                    .Listeners(l =>
+                    {
                         l.Change.Fn = "cboCpnyID_Change";
                         l.TriggerClick.Fn = "cboCpnyID_TriggerClick";
                         l.Expand.Fn = "cboCpnyID_Expand";
                         l.Select.Fn = "cboCpnyID_Select";
+                        //l.Blur.Fn = "cboCpnyID_Blur";
+                        l.Collapse.Fn = "cboCpnyID_Collapse";
                     })
                     .LoadData()
+
                     )
+                )
+            )
             , X.Panel()
             .Region(Region.Center)
             .Layout(LayoutType.Border)
@@ -58,35 +89,80 @@
                     .PageSize(50)
                     .Model(Util.GenerateModel(typeof(OM21600_pgLoadSalesRoute_Result), "mdlOM21600_pgLoadSalesRoute", "Code"))
                     .ServerProxy(
-                 
-                        X.AjaxProxy()                
-                        .Url(Url.Action("GetSalesRoute", "OM21600"))                
+
+                        X.AjaxProxy()
+                        .Url(Url.Action("GetSalesRoute", "OM21600"))
                         .ActionMethods(action =>
                         {
                             action.Read = HttpMethod.POST;
                         })
-                        .Reader(X.JsonReader().Root("data").TotalProperty("totaldata")) 
+                        .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
                     )
                     .Parameters(ps =>
-                                {
-                                    ps.Add(new StoreParameter("CpnyID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
-                   
-                                })
+                    {
+                        ps.Add(new StoreParameter("CpnyID", "joinParams(App.cboCpnyID)", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
+
+                    })
                     .Listeners(l =>
                     {
                         l.BeforeLoad.Fn = "stoBeforeLoad";
                         l.Load.Fn = "stoLoad";
-                        l.Update.Fn = "frmChange";                 
+                        l.Update.Fn = "frmChange";
                     })
                 )
                 .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSalesRoute');")
                 .SortableColumns(false)
                 .ColumnModel(
-                    X.RowNumbererColumn().Width(40),
+                    X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
+                     X.Column().ID("BranchRouteID").Text(Util.GetLang("BranchRouteID")).DataIndex("BranchRouteID").Width(150)
+                                            .Editor(HQ.Combo().ID("cboBranchRouteID").Name("cboBranchRouteID").HQDBSys(false).HQProcedure("OM21600_pcBranchRouteID")//.HQAutoLoad(true)
+                                           .HQColumnShow("BranchRouteID,Descr")
+                                       .DisplayField("BranchRouteID")
+                                           .ValueField("BranchRouteID")
+                                       .HQHeightWidth(400, 200)
+                                       .ForceSelection(true)
+                                       .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                       .Listeners(l => l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}")
+                                       .HQParam(new StoreParameterCollection()
+                            {
+                                 new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                ,new StoreParameter("@Territory", "joinParams(App.cboTerritory)", ParameterMode.Raw)
+                                ,new StoreParameter("@BranchRouteID", "joinParams(App.cboCpnyID)", ParameterMode.Raw)
+                            })
+                                       .LoadData()
+      
+                            )
+
+
+                                , X.Column().ID("DescrBranch").Text(Util.GetLang("OM21600DescrBranch")).DataIndex("DescrBranch").Width(150),
                     X.Column().ID("SalesRouteID").Text(Util.GetLang("SalesRouteID")).DataIndex("SalesRouteID").Width(150)
-                            .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
-                    X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
+                            .Editor(Html.X().TextField().MaxLength(15).EnforceMaxLength(true)),
+                        X.Column().Text(Util.GetLang("Descr")).DataIndex("DescrSales").Width(300)
                             .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),
+
+                    X.Column().ID("RouteType").DataIndex("RouteType").Text(Util.GetLang("RouteType")).Width(150).Renderer("renderRouteType")
+                        .Editor(
+                            HQ.Combo().ID("cboRouteType")
+                            .Name("cboRouteType").HQProcedure("OM21600_pcRouteType")
+                            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                            .Width(300).HQHeightWidth(400, 300).ForceSelection(true)
+                            .HQDBSys(false)
+                            .HQAutoLoad(true)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            })
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                            })
+                            .LoadData()
+                        ),
                     X.CommandColumn()
                     .Width(150)
                     .Commands(
@@ -110,9 +186,9 @@
                         .Items("1", "2", "10", "20", "30", "50")
                         .SelectedItems("50")
                         .Listeners(l =>
-                            {
-                                l.Select.Fn = "HQ.grid.onPageSelect";                   
-                            })
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
                     )
                     .Plugins(X.ProgressBarPager())
                 )
@@ -133,12 +209,15 @@
                         .Local(true)
                         .Filters(
                             X.StringFilter().DataIndex("SalesRouteID"),
-                            X.StringFilter().DataIndex("Descr")
+                            X.StringFilter().DataIndex("BranchRouteID"),
+                            X.StringFilter().DataIndex("DescrBranch"),
+                            X.StringFilter().DataIndex("DescrSales"),
+                            X.StringFilter().DataIndex("RouteType")
                         )
                 )
             )
-        
-     
+
+
     )
 )
 )

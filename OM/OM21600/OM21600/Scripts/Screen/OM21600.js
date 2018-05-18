@@ -1,8 +1,8 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
-var keys = ['SalesRouteID'];
-var fieldsCheckRequire = ["SalesRouteID"];
-var fieldsLangCheckRequire = ["SalesRouteID"];
+var keys = ['BranchRouteID', 'SalesRouteID'];
 
+var fieldsCheckRequire = ["BranchRouteID", "SalesRouteID"];
+var fieldsLangCheckRequire = ["BranchRouteID", "SalesRouteID"];
 var _Source = 0;
 var _maxSource = 1;
 var _isLoadMaster = false;
@@ -121,27 +121,39 @@ var firstLoad = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
 
     App.cboCpnyID.getStore().addListener('load', checkLoad);
+    if (HQ.requiredRouteType && HQ.allowRouteType) {
+        fieldsCheckRequire = ["SalesRouteID", "RouteType"];
+        fieldsLangCheckRequire = ["SalesRouteID", "RouteType"];
+    }
 };
 
 var cboCpnyID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoSalesRoute.loading) {
         App.stoSalesRoute.reload();
+        
+
     }
 };
 
-var cboCpnyID_Select = function (sender, value) {
+var cboCpnyID_Blur = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoSalesRoute.loading) {
         App.stoSalesRoute.reload();
     }
 };
+var cboCpnyID_Select = function (sender, value) {
+    //HQ.isFirstLoad = true;
+    //if (sender.valueModels != null && !App.stoSalesRoute.loading) {
+    //    App.stoSalesRoute.reload();
+    //}
+};
 
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
 var cboCpnyID_Expand = function (sender, value) {
-    if (HQ.isChange) {
-        App.cboCpnyID.collapse();
-    }
+    //if (HQ.isChange) {
+    //    App.cboCpnyID.collapse();
+    //}
 };
 
 //khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
@@ -151,11 +163,39 @@ var cboCpnyID_TriggerClick = function (sender, value) {
     }
     else {
         App.cboCpnyID.setValue('');
-        //App.stoSalesRoute.reload();
     }
 
 };
+var cboTerritory_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
 
+        App.cboTerritory.setValue('');
+        //App.cboCpnyID.setValue('');
+        //App.cboCpnyID.store.clearFilter();
+        //App.cboCpnyID.store.filter("Territory", '@@@@@@@@@');
+        //App.cboCpnyID.store.reload();
+        App.cboCpnyID.store.reload();
+        App.grdSalesRoute.store.reload();
+
+    }
+};
+var cboTerritory_Collapse = function (sender, value) {
+    App.cboCpnyID.store.reload();
+    //code = "@@@@@@@"
+    //if (App.cboTerritory.getValue() != '') {
+    //    code = App.cboTerritory.getValue();
+    //}
+    //App.cboCpnyID.setValue('');
+    //App.cboCpnyID.store.clearFilter();
+    //App.cboCpnyID.store.filter("Territory", code);
+    App.cboBranchRouteID.store.reload();
+};
+var cboCpnyID_Collapse = function (sender, value) {
+    App.cboBranchRouteID.store.reload();
+};
 
 
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
@@ -202,26 +242,63 @@ var stoLoad = function (sto) {
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+    App.grdSalesRoute.columns[5].setVisible(HQ.allowRouteType);
 };
 
 var grdSalesRoute_BeforeEdit = function (editor, e) {
-    return HQ.grid.checkBeforeEdit(e, keys);
+    
+    //if (App.grdSalesRoute.selModel.selected.items[0].data.tstamp != null && App.grdSalesRoute.selModel.selected.items[0].data.tstamp != "") {
+    //    App.cboRouteType.setReadOnly(true);
+    //}
+    //else {
+    //    App.cboRouteType.setReadOnly(false);
+    //}
+
+    if (e != undefined && e.field == "RouteType") {
+        if (App.grdSalesRoute.selModel.selected.items[0].data.tstamp != null && App.grdSalesRoute.selModel.selected.items[0].data.tstamp != "") {
+            return false;
+        }
+        
+    }
+    else
+        return HQ.grid.checkBeforeEdit(e, keys);
 };
 
 var grdSalesRoute_Edit = function (item, e) {
+    if (e.field == "BranchRouteID") {
+        var a = HQ.store.findRecord(App.cboBranchRouteID.store, ['BranchRouteID'], [e.value]);
+        if (e.value != "" && e.value != null) {
+            e.record.set('DescrBranch', a.data.Descr);
+        }
+        else {
+            e.record.set('DescrBranch', "");
+        }
+    }
     HQ.grid.checkInsertKey(App.grdSalesRoute, e, keys);
     frmChange();
 };
 
 var grdSalesRoute_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdSalesRoute, e, keys);
+   
+    return checkValidateEdit(App.grdSalesRoute, e, keys);
 };
 
 var grdSalesRoute_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSalesRoute);
     frmChange();
 };
-
+var joinParams = function (multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
+    }
+    else {
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
+        }
+    }
+    return returnValue;
+};
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
 var save = function () {
@@ -247,14 +324,32 @@ var save = function () {
 
 var deleteData = function (item) {
     if (item == "yes") {
+        var key = 0;
         if (HQ.focus == "header") {
-            App.grdSalesRoute.getStore().removeAll();
-            frmChange();
-            HQ.grid.insert(App.grdSalesRoute, keys);
+            var indexcolum = '';
+            var check = '';
+            var lstDelete = App.grdSalesRoute.store.allData;
+            for (var i = 0; i < lstDelete.length; i++) {
+                indexcolum = indexcolum + (lstDelete.items[i].index + 1) + ",";
+                check = check + lstDelete.items[i].data.SalesRouteID + ",";
+            }
+            checkDeleteData(indexcolum, check, key);
+            
         }
         else {
-            App.grdSalesRoute.deleteSelected();
-            frmChange();
+
+            var indexcolum = '';
+            var check = '';
+            var lstSelete = App.grdSalesRoute.selModel.selected;
+            for (var i = 0; i < lstSelete.length; i++) {
+                indexcolum = indexcolum + (lstSelete.items[i].index + 1) + ",";
+                check = check + lstSelete.items[i].data.SalesRouteID + ",";
+            }
+            key = 1;
+            checkDeleteData(indexcolum, check,key);
+
+            //App.grdSalesRoute.deleteSelected();
+            //frmChange();
         }
     }
 };
@@ -269,11 +364,74 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
+var renderRouteType = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboRouteType.findRecord("Code", rec.data.RouteType);
+    if (record) {
+        return record.data.Descr;
+    }
+    else {
+        return value;
+    }
+};
+
+
+var stringFilterRouteType = function (record) {
+
+    if (this.dataIndex == 'RouteType') {
+        App.cboRouteType.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboRouteType.store, "Code", "Descr");
+    }
+
+    return HQ.grid.filterString(record, this);
+}
 
 
 
+var checkValidateEdit = function (grd, e, keys) {
+    if (keys.indexOf(e.field) != -1) {
 
+        var regex = /^(\w*(\d|[a-zA-Z]|[\_@()+-.]))*$/;
+        //var regex = /\@^(\w*(\d|[a-zA-Z]))[\_]*$/
+        if (e.value) {
+            if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+                HQ.message.show(2017120509, e.column.text);
+                return false;
+            }
+        }
+        if (HQ.grid.checkDuplicate(grd, e, keys)) {
+            HQ.message.show(1112, e.value);
+            return false;
+        }
 
+    }
+}
 
+var checkDeleteData = function (indexColum, check,key) {
 
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'OM21600/CheckDelete',
+            params: {
+                lstIndexColum: indexColum,
+                lstCheck: check
+            },
+            success: function (msg, data) {
+                if (key == 1) {
+                    App.grdSalesRoute.deleteSelected();
+                }
+                else {
+                    App.grdSalesRoute.getStore().removeAll();
+                    HQ.grid.insert(App.grdSalesRoute, keys);
+                }
+               
+                frmChange();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
 

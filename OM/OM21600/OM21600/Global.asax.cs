@@ -38,17 +38,17 @@ namespace OM21600
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";
-            Current.DBSys = "eSky4DSys";
+            Current.Server = "TRUONGSAD";
+            Current.DBSys = "Kido_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM21600"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "Kido_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "en";
+            Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 0;
         }
     }
