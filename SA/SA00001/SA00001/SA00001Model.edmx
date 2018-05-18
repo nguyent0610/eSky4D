@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="SYS_Company">
           <Key>
             <PropertyRef Name="CpnyID" />
@@ -46,6 +46,7 @@
           <Property Name="Lng" Type="float" />
           <Property Name="SalesState" Type="varchar(max)" />
           <Property Name="SalesDistrict" Type="varchar(max)" />
+          <Property Name="CountSiteID" Type="int" />
         </EntityType>
         <EntityType Name="Sys_CompanyAddr">
           <Key>
@@ -117,8 +118,8 @@
           <Parameter Name="UserManger" Type="varchar(max)" Mode="In" />
           <Parameter Name="BranchOld" Type="varchar" Mode="In" />
           <Parameter Name="SlsperID" Type="varchar(max)" Mode="In" />
-          <Parameter Name="DisplayID" Type="varchar" Mode="In" />
-          <Parameter Name="AccumulateID" Type="varchar" Mode="In" />
+          <Parameter Name="DisplayID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="AccumulateID" Type="varchar(max)" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="SYS_Company" EntityType="Self.SYS_Company" Schema="dbo" store:Type="Tables" />
@@ -132,12 +133,6 @@
           <EntitySet Name="Sys_CompanyAddr" EntityType="SA00001Model.Sys_CompanyAddr" />
           <FunctionImport Name="SA000001_pgCompanyAddr" ReturnType="Collection(SA00001Model.SA000001_pgCompanyAddr_Result)">
           <Parameter Name="CpnyID" Mode="In" Type="String" />
-          </FunctionImport>
-          <EntitySet Name="SYS_Company" EntityType="SA00001Model.SYS_Company" />
-          <FunctionImport Name="SA00001_pgLoadGridCompany" ReturnType="Collection(SA00001Model.SA00001_pgLoadGridCompany_Result)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="SA00001_pgState" ReturnType="Collection(SA00001Model.SA00001_pgState_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -171,6 +166,12 @@
             <Parameter Name="SlsperID" Mode="In" Type="String" />
             <Parameter Name="DisplayID" Mode="In" Type="String" />
             <Parameter Name="AccumulateID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="SYS_Company" EntityType="SA00001Model.SYS_Company" />
+          <FunctionImport Name="SA00001_pgLoadGridCompany" ReturnType="Collection(SA00001Model.SA00001_pgLoadGridCompany_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Sys_CompanyAddr">
@@ -227,6 +228,33 @@
           <Property Type="String" Name="Zip" Nullable="true" MaxLength="10" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
+        <ComplexType Name="SA00001_pgState_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="TerritoryName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="State" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="SA00001_pgDistrict_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="District" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="DistrictName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="State" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="SA00001_pdConfig_Result">
+          <Property Type="Boolean" Name="AllowSalesState" Nullable="true" />
+          <Property Type="Boolean" Name="AllowSalesDistrict" Nullable="true" />
+          <Property Type="Boolean" Name="allowAddress2" Nullable="true" />
+          <Property Type="Boolean" Name="allowOwer" Nullable="true" />
+          <Property Type="Int32" Name="ShowProccess" Nullable="false" />
+          <Property Type="Boolean" Name="CountSiteID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SA00001_pgLoadUsers_Result">
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="503" />
+          <Property Type="Boolean" Name="CheckUser" Nullable="true" />
+        </ComplexType>
         <EntityType Name="SYS_Company">
           <Key>
             <PropertyRef Name="CpnyID" />
@@ -268,6 +296,7 @@
           <Property Name="Lng" Type="Double" />
           <Property Name="SalesState" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SalesDistrict" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CountSiteID" Type="Int32" />
         </EntityType>
         <ComplexType Name="SA00001_pgLoadGridCompany_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -300,33 +329,8 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="Double" Name="Lat" Nullable="true" />
           <Property Type="Double" Name="Lng" Nullable="true" />
+          <Property Type="Int32" Name="CountSiteID" Nullable="true" />
           <Property Type="String" Name="SAManager" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="SA00001_pgState_Result">
-          <Property Type="Boolean" Name="Selected" Nullable="true" />
-          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="TerritoryName" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="State" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
-        </ComplexType>
-        <ComplexType Name="SA00001_pgDistrict_Result">
-          <Property Type="Boolean" Name="Selected" Nullable="true" />
-          <Property Type="String" Name="District" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="DistrictName" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="State" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
-        </ComplexType>
-        <ComplexType Name="SA00001_pdConfig_Result">
-          <Property Type="Boolean" Name="AllowSalesState" Nullable="true" />
-          <Property Type="Boolean" Name="AllowSalesDistrict" Nullable="true" />
-          <Property Type="Boolean" Name="allowAddress2" Nullable="true" />
-          <Property Type="Boolean" Name="allowOwer" Nullable="true" />
-          <Property Type="Int32" Name="ShowProccess" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="SA00001_pgLoadUsers_Result">
-          <Property Type="String" Name="UserName" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="503" />
-          <Property Type="Boolean" Name="CheckUser" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -392,9 +396,54 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00001_pgState" FunctionName="eBiz4DWebSysModel.Store.SA00001_pgState">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00001Model.SA00001_pgState_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="TerritoryName" ColumnName="TerritoryName" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00001_pgDistrict" FunctionName="eBiz4DWebSysModel.Store.SA00001_pgDistrict">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00001Model.SA00001_pgDistrict_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00001_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SA00001_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00001Model.SA00001_pdConfig_Result">
+                <ScalarProperty Name="AllowSalesState" ColumnName="AllowSalesState" />
+                <ScalarProperty Name="AllowSalesDistrict" ColumnName="AllowSalesDistrict" />
+                <ScalarProperty Name="allowAddress2" ColumnName="allowAddress2" />
+                <ScalarProperty Name="allowOwer" ColumnName="allowOwer" />
+                <ScalarProperty Name="ShowProccess" ColumnName="ShowProccess" />
+                <ScalarProperty Name="CountSiteID" ColumnName="CountSiteID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00001_pgLoadUsers" FunctionName="eBiz4DWebSysModel.Store.SA00001_pgLoadUsers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00001Model.SA00001_pgLoadUsers_Result">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CheckUser" ColumnName="CheckUser" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00001_ppUserSales" FunctionName="eBiz4DWebSysModel.Store.SA00001_ppUserSales" />
           <EntitySetMapping Name="SYS_Company">
             <EntityTypeMapping TypeName="SA00001Model.SYS_Company">
               <MappingFragment StoreEntitySet="SYS_Company">
+                <ScalarProperty Name="CountSiteID" ColumnName="CountSiteID" />
                 <ScalarProperty Name="SalesDistrict" ColumnName="SalesDistrict" />
                 <ScalarProperty Name="SalesState" ColumnName="SalesState" />
                 <ScalarProperty Name="Lng" ColumnName="Lng" />
@@ -468,53 +517,11 @@
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Lat" ColumnName="Lat" />
                 <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="CountSiteID" ColumnName="CountSiteID" />
                 <ScalarProperty Name="SAManager" ColumnName="SAManager" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SA00001_pgState" FunctionName="eBiz4DWebSysModel.Store.SA00001_pgState">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA00001Model.SA00001_pgState_Result">
-                <ScalarProperty Name="Selected" ColumnName="Selected" />
-                <ScalarProperty Name="Territory" ColumnName="Territory" />
-                <ScalarProperty Name="TerritoryName" ColumnName="TerritoryName" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SA00001_pgDistrict" FunctionName="eBiz4DWebSysModel.Store.SA00001_pgDistrict">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA00001Model.SA00001_pgDistrict_Result">
-                <ScalarProperty Name="Selected" ColumnName="Selected" />
-                <ScalarProperty Name="District" ColumnName="District" />
-                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SA00001_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SA00001_pdConfig">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA00001Model.SA00001_pdConfig_Result">
-                <ScalarProperty Name="AllowSalesState" ColumnName="AllowSalesState" />
-                <ScalarProperty Name="AllowSalesDistrict" ColumnName="AllowSalesDistrict" />
-                <ScalarProperty Name="allowAddress2" ColumnName="allowAddress2" />
-                <ScalarProperty Name="allowOwer" ColumnName="allowOwer" />
-                <ScalarProperty Name="ShowProccess" ColumnName="ShowProccess" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SA00001_pgLoadUsers" FunctionName="eBiz4DWebSysModel.Store.SA00001_pgLoadUsers">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA00001Model.SA00001_pgLoadUsers_Result">
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CheckUser" ColumnName="CheckUser" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SA00001_ppUserSales" FunctionName="eBiz4DWebSysModel.Store.SA00001_ppUserSales" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -536,7 +543,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="72" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="68" >
         <EntityTypeShape EntityType="SA00001Model.Sys_CompanyAddr" Width="2" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SA00001Model.SYS_Company" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>

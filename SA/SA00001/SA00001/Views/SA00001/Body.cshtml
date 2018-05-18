@@ -499,6 +499,28 @@
 
                                     , HQ.NumberField().ID("Deposit").Name("Deposit").HQLangCode("Deposit").MarginSpec("5 0 0 0").Width(600).MinValue(0).DecimalPrecision(0)//.Hidden(true)
                                     , HQ.NumberField().ID("CreditLimit").Name("CreditLimit").HQLangCode("CreditLimit").MarginSpec("5 0 0 0").Width(600).MinValue(0).DecimalPrecision(0)//.Hidden(true)
+
+                                    //, HQ.Combo().ID("cboCountSiteID").Name("cboCountSiteID").HQProcedure("SA00001_pcCountSiteID").HQLangCode("SA00001CountSiteID")
+                                    //    .HQColumnShow("Code").DisplayField("Code").ValueField("Code").DataIndex("CountSiteID")
+                                    //    .HQAutoLoad(true)
+                                    //        .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").ForceSelection(false)
+                                    //        .HQParam(new StoreParameterCollection()
+                                    //    {
+                                    //        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                    //        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                    //        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    //    })
+                                    //            .LoadData()
+                                    //    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    //    .Listeners(lst =>
+                                    //    {
+                                    //        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    //        // lst.Change.Fn = "cboCountry_Change";
+                                    //        lst.Focus.Handler = "this.forceSelection = true;";
+                                    //    })   
+
+                                    , HQ.NumberField().ID("CountSiteID").Name("CountSiteID").HQLangCode("SA00001CountSiteID").MarginSpec("5 0 0 0").Width(600).MinValue(0).MaxValue(4).DecimalPrecision(0).AllowBlank(false)
+
                                     , HQ.NumberField().ID("MaxValue").Name("MaxValue").HQLangCode("SA0000MaxValue").MarginSpec("5 0 20 0").Width(600).MinValue(0).DecimalPrecision(0).Hidden(true)
                                 )
                             )

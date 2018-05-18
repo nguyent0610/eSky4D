@@ -83,6 +83,7 @@ var menuClick = function (command) {
             App.txtSalesDistrictDescr.setValue('');
             App.txtSalesState.setValue('');
             App.txtSalesStateDescr.setValue('');
+            App.CountSiteID.setValue('');
 
             App.txtSAManager.setValue('');
             App.txtManager.setValue('');
@@ -99,6 +100,8 @@ var menuClick = function (command) {
             App.btnSalesDistrict.setVisible(HQ.allowSalesDistrict);
             App.txtSalesDistrictDescr.allowBlank = !HQ.allowSalesDistrict;
             App.txtSalesStateDescr.allowBlank = !HQ.allowSalesState;
+            App.CountSiteID.setVisible(HQ.CountSiteID);
+            App.CountSiteID.allowBlank = !HQ.CountSiteID;
             App.cboOwner.allowBlank = !HQ.allowOwer;
             App.cboOwner.isValid();
             App.Address2.allowBlank = !HQ.allowAddress2;
@@ -128,11 +131,11 @@ var menuClick = function (command) {
             }
             break;
         case "save":
-            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoSYS_Cpny, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
-                    save();
+                if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                    if (HQ.store.checkRequirePass(App.stoSYS_Cpny, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                        save();
+                    }
                 }
-            }
             break;
         case "print":
             break;
@@ -243,6 +246,10 @@ var save = function () {
         HQ.message.show(15, App.txtSalesStateDescr.fieldLabel);
         return;
     }
+    if (Ext.isEmpty(App.CountSiteID.getValue()) && HQ.CountSiteID) {
+        HQ.message.show(15, App.CountSiteID.fieldLabel);
+        return;
+    }
     if (HQ.util.checkEmail(App.Email.getValue())) {
         if (App.frmDetail.isValid()) {
             App.frmDetail.updateRecord();
@@ -331,6 +338,8 @@ var btnEdit_Click = function (record) {
     App.btnSalesDistrict.setVisible(HQ.allowSalesDistrict);
     App.txtSalesDistrictDescr.allowBlank = !HQ.allowSalesDistrict;
     App.txtSalesStateDescr.allowBlank = !HQ.allowSalesState;
+    App.CountSiteID.setVisible(HQ.CountSiteID);
+    App.CountSiteID.allowBlank = !HQ.CountSiteID;
     App.frmDetail.validate();
 
     App.txtSAManager.setValue(record.data.SAManager);
@@ -368,13 +377,44 @@ var btnLocationOK_Click = function () {
     //if (HQ.isUpdate == false && HQ.isInsert) {
     //    return;
     //}
-    if (HQ.form.checkRequirePass(App.frmDetail)) {
-        if (App.txtCpnyID.getValue() == "") {
-            HQ.message.show(15, App.txtCpnyID.fieldLabel);
-            return;
+    if (App.CountSiteID.allowBlank == false)
+    {
+        if (App.CountSiteID.getValue() != '1' && App.CountSiteID.getValue() != '2' && App.CountSiteID.getValue() != '3' && App.CountSiteID.getValue() != '4') {
+            if (App.CountSiteID.getValue() != null) {
+                HQ.message.show(2018051160);
+                return;
+            }
+            else {
+                if (HQ.form.checkRequirePass(App.frmDetail)) {
+                    if (App.txtCpnyID.getValue() == "") {
+                        HQ.message.show(15, App.txtCpnyID.fieldLabel);
+                        return;
+                    }
+                }
+            }
         }
-        save();
+        else {
+            if (HQ.form.checkRequirePass(App.frmDetail)) {
+                if (App.txtCpnyID.getValue() == "") {
+                    HQ.message.show(15, App.txtCpnyID.fieldLabel);
+                    return;
+                }
+                save();
+            }
+        }
     }
+    else
+    {
+        if (HQ.form.checkRequirePass(App.frmDetail)) {
+            if (App.txtCpnyID.getValue() == "") {
+                HQ.message.show(15, App.txtCpnyID.fieldLabel);
+                return;
+            }
+            save();
+        }
+    }
+    
+   
 
     
 };
@@ -392,6 +432,7 @@ var cboCountry_Change = function (sender, e, oldValue) {
             App.txtSalesDistrictDescr.setValue("");
             App.txtSalesState.setValue("");
             App.txtSalesStateDescr.setValue("");
+            App.CountSiteID.setValue("");
         }
     }
 

@@ -39,13 +39,13 @@ namespace SA00001
 
             Current.Authorize = false;
             Current.Server = "TRUONGSAD";
-            Current.DBSys = "ND_Test_eSky4DSys";
+            Current.DBSys = "Kido_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM41300"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_Test_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "Kido_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "C000058";
             Session["Language"] = Current.Language = "vi";

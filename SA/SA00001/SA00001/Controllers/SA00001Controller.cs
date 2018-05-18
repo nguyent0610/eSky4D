@@ -31,6 +31,7 @@ namespace SA00001.Controllers
                 , allowSalesDistrict = false;
             bool allowAddress2 = false;
             bool allowOwer = false;
+            bool CountSiteID = false;
 
 
             var objConfig = _db.SA00001_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
@@ -40,6 +41,7 @@ namespace SA00001.Controllers
                 allowSalesDistrict = objConfig.AllowSalesDistrict.HasValue ? objConfig.AllowSalesDistrict.Value : false;
                 allowAddress2= objConfig.allowAddress2.HasValue ? objConfig.allowAddress2.Value : false;
                 allowOwer = objConfig.allowOwer.HasValue ? objConfig.allowOwer.Value : false;
+                CountSiteID = objConfig.CountSiteID.HasValue ? objConfig.CountSiteID.Value : false;
 
                 ViewBag.AllowProccess = objConfig.ShowProccess;
             }
@@ -48,6 +50,7 @@ namespace SA00001.Controllers
             ViewBag.allowSalesDistrict = allowSalesDistrict;
             ViewBag.allowAddress2 = allowAddress2;
             ViewBag.allowOwer = allowOwer;
+            ViewBag.CountSiteID = CountSiteID;
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -90,8 +93,7 @@ namespace SA00001.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-            try
-            {
+           
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Cpny"]);
                 ChangeRecords<SA00001_pgLoadGridCompany_Result> lstSYS_Cpny = dataHandler.BatchObjectData<SA00001_pgLoadGridCompany_Result>();
                 lstSYS_Cpny.Created.AddRange(lstSYS_Cpny.Updated);
@@ -192,10 +194,13 @@ namespace SA00001.Controllers
                 dicData.Add("@SlsperID", data["SlsperID"] ?? "");
                 dicData.Add("@DisplayID", data["DisplayID"] ?? "");
                 dicData.Add("@AccumulateID", data["AccumulateID"] ?? "");
+                dicData.Add("@UserID", _userName);
 
-                Util.getDataTableFromProc("SA00001_ppUserSales", dicData, true);
+                Util.getDataTableFromProc("SA00001_ppUserSales", dicData,true);
 
                 return Json(new { success = true});
+                try
+                {
             }
             catch (Exception ex)
             {
@@ -241,6 +246,7 @@ namespace SA00001.Controllers
             t.Zone = s.Zone;
             t.Lat = s.Lat;
             t.Lng = s.Lng;
+            t.CountSiteID = s.CountSiteID;
 
         }
 

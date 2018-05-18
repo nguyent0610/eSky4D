@@ -143,47 +143,6 @@ namespace SA00001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<SA00001_pgLoadGridCompany_Result> SA00001_pgLoadGridCompany(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<SA00001_pgLoadGridCompany_Result>("SA00001_pgLoadGridCompany", userNameParameter, cpnyIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
@@ -472,6 +431,47 @@ namespace SA00001
             }
     
             return base.ExecuteFunction("SA00001_ppUserSales", branchIDParameter, userMangerParameter, branchOldParameter, slsperIDParameter, displayIDParameter, accumulateIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<SA00001_pgLoadGridCompany_Result> SA00001_pgLoadGridCompany(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<SA00001_pgLoadGridCompany_Result>("SA00001_pgLoadGridCompany", userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -1423,6 +1423,30 @@ namespace SA00001
         private global::System.String _SalesDistrict;
         partial void OnSalesDistrictChanging(global::System.String value);
         partial void OnSalesDistrictChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> CountSiteID
+        {
+            get
+            {
+                return _CountSiteID;
+            }
+            set
+            {
+                OnCountSiteIDChanging(value);
+                ReportPropertyChanging("CountSiteID");
+                _CountSiteID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CountSiteID");
+                OnCountSiteIDChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _CountSiteID;
+        partial void OnCountSiteIDChanging(Nullable<global::System.Int32> value);
+        partial void OnCountSiteIDChanged();
 
         #endregion
 
@@ -2766,6 +2790,30 @@ namespace SA00001
         private global::System.Int32 _ShowProccess;
         partial void OnShowProccessChanging(global::System.Int32 value);
         partial void OnShowProccessChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> CountSiteID
+        {
+            get
+            {
+                return _CountSiteID;
+            }
+            set
+            {
+                OnCountSiteIDChanging(value);
+                ReportPropertyChanging("CountSiteID");
+                _CountSiteID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CountSiteID");
+                OnCountSiteIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _CountSiteID;
+        partial void OnCountSiteIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnCountSiteIDChanged();
 
         #endregion
 
@@ -3680,6 +3728,30 @@ namespace SA00001
         private Nullable<global::System.Double> _Lng;
         partial void OnLngChanging(Nullable<global::System.Double> value);
         partial void OnLngChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> CountSiteID
+        {
+            get
+            {
+                return _CountSiteID;
+            }
+            set
+            {
+                OnCountSiteIDChanging(value);
+                ReportPropertyChanging("CountSiteID");
+                _CountSiteID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CountSiteID");
+                OnCountSiteIDChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _CountSiteID;
+        partial void OnCountSiteIDChanging(Nullable<global::System.Int32> value);
+        partial void OnCountSiteIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
