@@ -43,33 +43,33 @@
 </head>
 <body>   
     @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
-        @X.GridFilters()<!--Khi cache cho grid-->
-        @X.ProgressBarPager()<!--Khi cache cho grid -->   
-        @(
-            X.Store().ID("stoSYS_Company").AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(SA00000_pdHeader_Result), "mdlSYS_Company", "CnpyID"))       
-            .Proxy(
-                    X.AjaxProxy()                
-                    .Url(Url.Action("GetSYS_Company", "SA00000"))                
-                    .ActionMethods(action =>
-                    {
-                        action.Read = HttpMethod.POST;
-                    })
-                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-                )
-            .Parameters(ps =>
-            {
-                ps.Add(new StoreParameter("CpnyID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
-            })      
-            .Listeners(l =>
+    @X.GridFilters()<!--Khi cache cho grid-->
+    @X.ProgressBarPager()<!--Khi cache cho grid -->   
+    @(
+        X.Store().ID("stoSYS_Company").AutoLoad(false)
+        .Model(Util.GenerateModel(typeof(SA00000_pdHeader_Result), "mdlSYS_Company", "CnpyID"))       
+        .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetSYS_Company", "SA00000"))                
+                .ActionMethods(action =>
                 {
-                    l.BeforeLoad.Fn = "stoBeforeLoad";
-                    l.Load.Fn = "stoLoad";                   
-                }
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
             )
+        .Parameters(ps =>
+        {
+            ps.Add(new StoreParameter("CpnyID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+        })      
+        .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";                   
+            }
         )
-        <!-- Gọi hàm Body trong SA00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
-        @{Html.RenderAction("Body", new {lang=Current.LangID});}
+    )
+    <!-- Gọi hàm Body trong SA00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
+    @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>
 </html>
  
