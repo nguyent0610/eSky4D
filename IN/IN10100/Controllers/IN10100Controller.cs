@@ -75,6 +75,7 @@ namespace IN10100.Controllers
             //var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID && p.UserID == Current.UserName);
             string inSite = string.Empty;
             string inWhseLoc = string.Empty;
+            int showWhseLoc = 0;
             var objConfig = _app.IN10100_pdConfig(branchID, Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             //var showPackage = false;
             if (objConfig != null)
@@ -82,11 +83,13 @@ namespace IN10100.Controllers
                 showQtyOnhand = objConfig.ShowQtyOnhand.HasValue && objConfig.ShowQtyOnhand.Value;
                 inSite = objConfig.INSite.PassNull();
                 inWhseLoc = objConfig.INWhseLoc.PassNull();
+                showWhseLoc = objConfig.ShowWhseLoc.Value;
             }
             ViewBag.inSite = inSite;
             ViewBag.inWhseLoc = inWhseLoc;
             ViewBag.branchID = branchID;
             ViewBag.showQtyOnhand = showQtyOnhand;
+            ViewBag.showWhseLoc = showWhseLoc;
             //ViewBag.showPackage = showPackage;
             return View();
         }

@@ -68,7 +68,7 @@
                     .BlankText(Util.GetLangPrefix("Input", "BranchID"))
                     .MaxLength(30)
                     .EnforceMaxLength(true).Tag("X").ReadOnly(true)
-                    .Width(220)
+                    .Width(250)
                     .HQControlFocus("BatNbr")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
 
@@ -161,7 +161,7 @@
                     .ValueField("Code")
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "Status"))
-                    .Width(220)
+                    .Width(250)
                     .LabelWidth(90)
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true).Tag("X")
@@ -182,7 +182,7 @@
                 .Items(
                     HQ.TextBox().ID("RefNbr")
                     .HQLangCode("PerPost/RcptNbr")
-                    .Width(220).Tag("X")
+                    .Width(250).Tag("X")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
 
                     HQ.Combo().ID("TrnsferNbr")
@@ -242,7 +242,7 @@
                     .ValueField("Code")
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "Handle"))
-                    .Width(220)
+                    .Width(250)
                     .LabelWidth(90)
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)
@@ -269,7 +269,7 @@
                     .HQLangCode("IntNbr")
                     .MaxLength(10)
                     .EnforceMaxLength(true)
-                    .Width(220)
+                    .Width(250)
                     .HQControlFocus("DateEnt")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
 
@@ -312,7 +312,7 @@
                     HQ.TextBox().ID("RvdBatNbr")
                     .HQLangCode("CancelledBatNbr").Tag("X")
                     .LabelWidth(90)
-                    .Width(220)
+                    .Width(250)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                 )
                 ,
@@ -322,7 +322,7 @@
                 .Items(
                     HQ.NumberField().ID("TotQty")
                     .HQLangCode("TotQ")
-                    .Width(220)
+                    .Width(250)
                     .DecimalPrecision(0).Tag("X")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
 
@@ -364,7 +364,7 @@
                     .ValueField("ReasonCD")
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "ReasonCD"))
-                    .Width(220)
+                    .Width(250)
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)
                     .LabelWidth(90)
@@ -393,7 +393,7 @@
                 .HQControlFocus("BatNbr")
                 .MarginSpec("0 0 10 0")
                 .BlankText(Util.GetLangPrefix("Input", "TranDate"))
-                .Width(720)
+                .Width(750)
                 .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                 ,
 
@@ -695,7 +695,7 @@
             .Renderer("renderQtyAmt")
 
 
-            , HQ.DateColumn().DataIndex("WarrantyDate").Text(Util.GetLang("WarrantyDate")).Editor(HQ.DateField().Format(Current.FormatDate)).Format(Current.FormatDate)
+            , HQ.DateColumn().DataIndex("WarrantyDate").Text(Util.GetLang("IN10100WarrantyDate")).Editor(HQ.DateField().Format(Current.FormatDate)).Format(Current.FormatDate).Renderer("rendererWarrantyDate") 
             , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(HQ.DateField().Format(Current.FormatDate)).Format(Current.FormatDate)
             , X.NumberColumn().DataIndex("PctExpDate").Text(Util.GetLang("PctExpDate"))
             .Width(75)

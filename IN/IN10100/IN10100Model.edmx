@@ -1099,6 +1099,7 @@
           <Property Type="Boolean" Name="ShowQtyOnhand" Nullable="true" />
           <Property Type="String" Name="INSite" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="INWhseLoc" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="ShowWhseLoc" Nullable="true" />
         </ComplexType>
         <EntityType Name="IN_ItemPack">
           <Key>
@@ -1805,6 +1806,7 @@
                 <ScalarProperty Name="ShowQtyOnhand" ColumnName="ShowQtyOnhand" />
                 <ScalarProperty Name="INSite" ColumnName="INSite" />
                 <ScalarProperty Name="INWhseLoc" ColumnName="INWhseLoc" />
+                <ScalarProperty Name="ShowWhseLoc" ColumnName="ShowWhseLoc" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
