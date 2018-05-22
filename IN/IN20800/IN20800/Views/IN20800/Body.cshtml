@@ -1,0 +1,243 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN20800;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        l.FieldChange.Fn = "frmChange";
+    })
+    .Items(
+     ////Thiet ke giao dien o day
+     X.Panel().Region(Region.West).ID("pnlWest")
+        .Layout(LayoutType.Border).Flex(1).Split(true).CollapseMode(CollapseMode.Mini)
+        .Items(
+            X.TreePanel().ID("treeKitID").MultiSelect(false)
+            .Width(300).Region(Region.Center).Flex(1).AutoScroll(true)
+            .Title(Util.GetLang("Tree"))
+            .Split(true) 
+            .Border(false)
+            .SelectionModel(X.TreeSelectionModel().ID("slmtreeKitID").Mode(SelectionMode.Multi))
+            .Listeners(lst =>
+            {
+                lst.Select.Fn = "nodeSelected_Change";
+                lst.BeforeItemExpand.Handler = "this.el.mask('Loading...', 'x-mask-loading'); Ext.suspendLayouts();";
+                lst.AfterItemExpand.Handler = "Ext.resumeLayouts(true); this.el.unmask();node_expand(this)";
+            })
+            .BottomBar(
+                X.Toolbar()
+                .Items(
+                    X.ToolbarFill()
+                    
+                    , HQ.Button().ID("btnExpand1")
+                    .HQLangCode("Expand")
+                    .Icon(Icon.BulletTogglePlus)
+                    .Handler("btnExpandKitID_click")
+
+                    , X.ToolbarSpacer()
+                    , X.ToolbarSeparator()
+                    , X.ToolbarSpacer()
+
+                    , HQ.Button().ID("btnCollapse1")
+                    .HQLangCode("Collapse")
+                    .Icon(Icon.BulletToggleMinus)
+                    .Handler("btnCollapseKitID_click")
+
+                    , X.ToolbarFill()
+                )
+            )
+        ).Listeners(lss =>
+        {
+            lss.Render.Handler = "HQ.common.control_render(this,'header')";
+        })   
+        
+        ,X.Panel().Region(Region.Center).Layout(LayoutType.Border).Flex(2).Items(
+        X.Panel().ID("pnlHeader")
+        .Region(Region.North)
+        .Layout(LayoutType.VBox)
+        .AutoScroll(true)
+        .Items(
+        // Row 1
+            X.Container().Layout(LayoutType.HBox)
+                .Items(
+                   
+                     HQ.Combo().ID("cboKitID").Name("cboKitID").DataIndex("KitID").MarginSpec("5 0 5 0").Width(250).MaxLength(30).EnforceMaxLength(true)
+                        .HQLangCode("KitID").HQDBSys(false).HQProcedure("IN20800_pcKitID")
+                        .HQColumnShow("KitID").ForceSelection(true).AllowBlank(false)
+                        .DisplayField("KitID").ValueField("KitID").HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(ls =>
+                        {
+                            ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            ls.TriggerClick.Fn = "cboKitID_TriggerClick";
+                            ls.Change.Fn = "cboKitID_change";
+                            ls.Select.Fn = "cboKitID_select";
+                        })
+                        .LoadData()
+                        , HQ.TextBox().ID("txtKitName").Name("txtKitName").MarginSpec("5 0 5 0").Width(400).HQLangCode("IN20800KitName").Tag('X')
+                        ,HQ.Checkbox().ID("chkPack").Name("chkPack").DataIndex("Pack").HQLangCode("IN20800Pack").MarginSpec("5 0 5 10")
+                        ,
+                            HQ.Combo().ID("cboInvt").Name("cboInvt").Hidden(true)
+                                .HQLangCode("InvtID").HQDBSys(false).HQProcedure("IN20800_pdInvtID")
+                                .HQColumnShow("InvtID").ForceSelection(true)
+                                    .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                            .LoadData()
+                )
+        )
+        .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'pnlHeader')")
+       
+        , X.GridPanel().ID("grdIN_Component")
+        .Scroll(ScrollMode.Both).Layout(LayoutType.Fit)
+        .View(X.GridView().TrackOver(false))
+        .Region(Region.Center).AutoScroll(true)
+        .SelectionMemory(false)
+        .Weight(900)
+        .Store(
+                X.Store()
+                .ID("stoIN_Component")
+                .PageSize(50).AutoLoad(false)
+                .Model(Util.GenerateModel(typeof(IN20800_pgLoadIN_Kit_Result), "mdlIN20800_pgLoadIN_Kit", ""))
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("KitID", "App.cboKitID.getValue()", ParameterMode.Raw));
+                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetIN_Component")))
+                    .Listeners(p =>
+                    {
+                        p.BeforeLoad.Fn = "stoBeforeLoad";
+                        p.Load.Fn = "stoLoad_IN_Component";
+                        p.Update.Fn = "stoIN_ComponentChanged";
+                    })
+            )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdGetIN_Component');")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(300).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
+                        
+                X.Column().Text(Util.GetLang("ComponentID")).DataIndex("ComponentID")
+                        .Editor(
+                            HQ.Combo().ID("cboInvtID")
+                            .HQProcedure("IN20800_pcInventory")
+                            .HQColumnShow("InvtID,Descr")
+                            .HQHeightWidth(400, 300)
+                            .ValueField("InvtID").DisplayField("InvtID")
+                            .ForceSelection(true).SelectOnFocus(true)//.AllowBlank(false)
+                            .HQParam(new StoreParameterCollection() { 
+                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                            .Listeners(ls =>
+                            {
+                                ls.Change.Fn = "cboInvtID_change";
+                            })
+                            .LoadData()
+                        )
+                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
+                    
+                    , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("ComponentQty").Width(150).Format("00").Editor(Html.X().NumberField().MinValue(1).AllowBlank(false)).Align(Alignment.Right)
+                    
+                    , X.Column().Text(Util.GetLang("StkUnit")).DataIndex("Unit")
+                        .Editor(
+                            HQ.Combo().ID("cboUnit")
+                            .HQProcedure("IN20800_pcUnit")
+                            .HQColumnShow("FromUnit")
+                            .HQHeightWidth(400, 300)
+                            .ValueField("FromUnit").DisplayField("FromUnit")
+                            .ForceSelection(true).SelectOnFocus(true).AllowBlank(false)
+                            .HQParam(new StoreParameterCollection() { 
+                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@InvtID",Value = "_InvtID",Mode = ParameterMode.Raw}
+                            })
+                            .LoadData()
+                            )
+                        , X.NumberColumn().Text(Util.GetLang("IN20800Price")).DataIndex("Price").ID("Price").Width(150).Format("00").Editor(Html.X().NumberField().MinValue(1)).Align(Alignment.Right)
+                , X.CommandColumn()
+                .Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdIN_Component_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmIN_BundleItem")
+            .Mode(SelectionMode.Multi))
+            .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdIN_Component_BeforeEdit";
+                    ls.Edit.Fn = "grdIN_Component_Edit";
+                    ls.ValidateEdit.Fn = "grdIN_Component_ValidateEdit";
+                })
+            )
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("ComponentID"),
+                        X.StringFilter().DataIndex("Descr"),
+                        X.NumericFilter().DataIndex("ComponentQty"),
+                        X.StringFilter().DataIndex("Unit")
+                            )
+                    )
+            .Listeners(lst =>
+                    {
+                        lst.Render.Handler = "HQ.common.control_render(this,'grdIN_Component')";
+                        lst.Activate.Handler = "HQ.focus = 'grdIN_Component';";
+                    })
+                    )                
+    )// frmMain
+)
+)
