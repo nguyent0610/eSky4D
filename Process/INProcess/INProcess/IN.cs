@@ -263,7 +263,7 @@ namespace INProcess
                 throw ex;
             }
         }
-        public bool IN10200_Release(string branchID, string batNbr, bool showWhseLoc)
+        public bool IN10200_Release(string branchID, string batNbr)
         {
             try
             {
@@ -438,7 +438,7 @@ namespace INProcess
 
                     ///////////////////////////////////////////////////////////Cập nhật vào table IN_ItemLoc
 
-                    if (showWhseLoc)
+                    if (tran.String("WhseLoc").PassNull()!="")
                     {
                         if (!objLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc").PassNull()))
                         {
@@ -481,9 +481,7 @@ namespace INProcess
                         objLoc.LUpd_Prog = Prog;
                         objLoc.LUpd_User = User;
                         objLoc.Update();
-
                     }
-
                     
 
                     ///////////////////////////////////////
@@ -566,11 +564,11 @@ namespace INProcess
                 throw ex;
             }
         }
-        public bool IN10200_Cancel(string branchID, string batNbr, bool showWhseLoc)
+        public bool IN10200_Cancel(string branchID, string batNbr)
         {
             try
             {
-                Issue_Cancel(branchID, batNbr, string.Empty, true, showWhseLoc);
+                Issue_Cancel(branchID, batNbr, string.Empty, true);
                 return true;
             }
             catch (Exception ex)
@@ -1314,7 +1312,7 @@ namespace INProcess
             }         
             return mMessage;
         }
-        public bool Issue_Cancel(string branchID, string batNbr, string rcptNbr, bool release, bool showWhseLoc)
+        public bool Issue_Cancel(string branchID, string batNbr, string rcptNbr, bool release)
         {
             try
             {
@@ -1373,7 +1371,7 @@ namespace INProcess
                     objItem.LUpd_User = User;
                     objItem.Update();
 
-                    if (showWhseLoc)
+                    if (tran.String("WhseLoc").PassNull()!="")
                     {
                         if (!objItemLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc").PassNull()))
                         {
