@@ -34,8 +34,9 @@
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
         HQ.inSite = '@ViewBag.INSite';
+        HQ.WhseLoc = '@ViewBag.WhseLoc';
         showFromSite = HQ.util.toBool('@ViewBag.showFromSite');
-        HQ.showWhseLoc = HQ.util.toBool('@ViewBag.showWhseLoc');    
+        HQ.showWhseLoc = @ViewBag.showWhseLoc;    
         HQ.showQtyOnhand = HQ.util.toBool('@ViewBag.showQtyOnhand');
     </script>  
     <title>@ViewBag.Title</title>
@@ -95,7 +96,7 @@
     X.Store()
     .ID("stoCalcLot")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlCalcLot",""))
+    .Model(Util.GenerateModel(typeof (IN10200_pdGetLot_Result),"mdlCalcLot",""))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetLot", "IN10200"))
@@ -130,7 +131,7 @@
     X.Store()
     .ID("stoItemLot")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlItemLot",""))
+        .Model(Util.GenerateModel(typeof(IN10200_pdGetItemLot_Result), "mdlItemLot", ""))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetItemLot", "IN10200"))
