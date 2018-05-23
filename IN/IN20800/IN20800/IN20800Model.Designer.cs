@@ -295,6 +295,58 @@ namespace IN20800
     
             return base.ExecuteFunction<global::System.String>("IN20800_pdInvtID", cpnyIDParameter, userNameParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="kitID">No Metadata Documentation available.</param>
+        public ObjectResult<IN20800_pdCheckKit_Result> IN20800_pdCheckKit(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String kitID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter kitIDParameter;
+            if (kitID != null)
+            {
+                kitIDParameter = new ObjectParameter("KitID", kitID);
+            }
+            else
+            {
+                kitIDParameter = new ObjectParameter("KitID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN20800_pdCheckKit_Result>("IN20800_pdCheckKit", cpnyIDParameter, userNameParameter, langIDParameter, kitIDParameter);
+        }
 
         #endregion
 
@@ -957,6 +1009,30 @@ namespace IN20800
         private global::System.Boolean _Pack;
         partial void OnPackChanging(global::System.Boolean value);
         partial void OnPackChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PriceType
+        {
+            get
+            {
+                return _PriceType;
+            }
+            set
+            {
+                OnPriceTypeChanging(value);
+                ReportPropertyChanging("PriceType");
+                _PriceType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PriceType");
+                OnPriceTypeChanged();
+            }
+        }
+        private global::System.String _PriceType;
+        partial void OnPriceTypeChanging(global::System.String value);
+        partial void OnPriceTypeChanged();
 
         #endregion
 
@@ -1049,6 +1125,44 @@ namespace IN20800
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN20800Model", Name="IN20800_pdCheckKit_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN20800_pdCheckKit_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> CheckKit
+        {
+            get
+            {
+                return _CheckKit;
+            }
+            set
+            {
+                OnCheckKitChanging(value);
+                ReportPropertyChanging("CheckKit");
+                _CheckKit = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CheckKit");
+                OnCheckKitChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _CheckKit;
+        partial void OnCheckKitChanging(Nullable<global::System.Boolean> value);
+        partial void OnCheckKitChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="IN20800Model", Name="IN20800_pdConfig_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -1103,6 +1217,30 @@ namespace IN20800
         private Nullable<global::System.Boolean> _Pack;
         partial void OnPackChanging(Nullable<global::System.Boolean> value);
         partial void OnPackChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowPriceType
+        {
+            get
+            {
+                return _ShowPriceType;
+            }
+            set
+            {
+                OnShowPriceTypeChanging(value);
+                ReportPropertyChanging("ShowPriceType");
+                _ShowPriceType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowPriceType");
+                OnShowPriceTypeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowPriceType;
+        partial void OnShowPriceTypeChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowPriceTypeChanged();
 
         #endregion
 

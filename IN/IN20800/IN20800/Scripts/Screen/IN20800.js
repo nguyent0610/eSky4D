@@ -42,6 +42,7 @@ var firstLoad = function () {
     if (HQ.isUpdate == false && HQ.isInsert == false && HQ.isDelete == false) {
         App.menuClickbtnSave.disable();
     }
+    App.cboPriceType.setVisible(HQ.showPricetype);
     //App.txtKitName.setReadOnly(true);
     //HQ.common.showBusy(false);
 };
@@ -97,8 +98,9 @@ var menuClick = function (command) {
                         App.stoKitID.reload();
                     });
                 }
-                else
+                else {
                     App.grdIN_Component.store.reload();
+                }                    
             }
             break;
         case "new":
@@ -148,7 +150,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoIN_Component, keys, fieldsCheckRequire, fieldsLangCheckRequire))
+                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoIN_Component, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     if (HQ.util.checkSpecialChar(App.cboKitID.getValue()) == true) {
                         save();
                     }
@@ -159,7 +161,7 @@ var menuClick = function (command) {
                     }
                     HQ.isFirstLoad = true;
                 }
-            
+            }
             break;
         case "print":
             break;
@@ -180,37 +182,17 @@ var frmChange = function () {
     else {
         App.cboKitID.setReadOnly(HQ.isChange);
     }
-
-    //HQ.isChange = HQ.store.isChange(App.stoKitID);
-    //HQ.common.changeData(HQ.isChange, 'IN20800');
-    //if (App.cboKitID.valueModels == null || HQ.isNew == true) {
-    //    App.cboKitID.setReadOnly(false);
-    //}
-    //else {
-    //    if (HQ.focus == "pnlHeader") {
-    //        HQ.isChange = HQ.store.isChange(App.stoKitID);
-    //        App.cboKitID.setReadOnly(HQ.isChange);
-    //    }
-    //    else {
-    //        if (HQ.focus == "grdIN_Component") {
-    //            HQ.isChange = HQ.store.isChange(App.stoIN_Component);
-    //            App.cboKitID.setReadOnly(HQ.isChange);
-    //        }
-    //    }
-    //}
 };
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
 };
 
 var stoChanged = function () {
-
     HQ.common.changeData(HQ.isChange, 'IN20800');
 };
 var stoLoad = function (sto) {
     HQ.isNew = false;
-    HQ.common.lockItem(App.frmMain, false);
-    
+    HQ.common.lockItem(App.frmMain, false);    
     //App.cboKitID.forceSelection = false;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "KitID");
@@ -268,7 +250,7 @@ var cboKitID_TriggerClick = function (sender, value) {
         HQ.message.show(150, '', '');
     }
     else {
-        menuClick('new');
+        App.cboKitID.setValue("");
         App.cboKitID.store.reload();
     }
 };
@@ -300,6 +282,10 @@ var cboInvtID_change = function (sender, value) {
     App.cboUnit.store.reload();
 };
 var grdIN_Component_BeforeEdit = function (editor, e) {
+    if (Ext.isEmpty(App.cboKitID.getValue())) {
+        HQ.message.show(15, App.cboKitID.fieldLabel);
+        return false;
+    }
     var a = App.cboInvt.store.data;
     for(var i=0;i<a.length;i++)
     {
@@ -328,7 +314,7 @@ var grdIN_Component_Edit = function (item, e) {
         e.record.set("ComponentQty", 0);
         e.record.set("Unit", '');
     }
-    //checkInsertKey(App.grdIN_Component, e, keys);
+    checkInsertKey(App.grdIN_Component, e, keys);
     frmChange();
 };
 
@@ -351,11 +337,27 @@ var grdIN_Component_Reject = function (record) {
 };
 var save = function () {
     if (HQ.isInsert) {
-        if (App.stoIN_Component.getCount() == 0) {
+        var lstData = App.grdIN_Component.store.snapshot;
+        if (lstData == undefined) {
             HQ.message.show(2018051460, '', '');
             App.grdIN_Component.focus();
             return;
         }
+        else {
+            var keysave = false;
+            for (var i = 0; i < lstData.length; i++) {
+                if (lstData.items[i].data.ComponentID != "" && lstData.items[i].data.ComponentID != null) {
+                    keysave = true;
+                    break;
+                }
+            }
+            if (!keysave) {
+                HQ.message.show(2018051460, '', '');
+                App.grdIN_Component.focus();
+                return;
+            }
+        }
+        
     }
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
@@ -409,7 +411,6 @@ function refresh(item) {
         }
         HQ.isChange = false;
         HQ.isFirstLoad = true;
-
         App.stoKitID.reload();
     }
 };
@@ -461,6 +462,12 @@ var ReloadTree = function (type, valueKitID) {
 };
 var nodeSelected_Change = function (store, operation, options) {
     if (HQ.isChange) {
+        var nodeID = App.cboKitID.getValue();
+        if (App.slmtreeKitID.selected.items.length == 0 || (App.slmtreeKitID.selected.items.length > 0 && App.slmtreeKitID.selected.items[0].data.id != nodeID))
+            searchNode(nodeID);
+        setTimeout(function () {
+            App.slmtreeKitID.view.refresh();
+        },1000);        
         HQ.message.show(150);
         return false;
     }
@@ -474,8 +481,8 @@ var nodeSelected_Change = function (store, operation, options) {
             App.cboKitID.setValue(HQ.KitID);
         }
     }
-
     Ext.resumeLayouts(true);
+    
 };
 var collapseAll = function (tree) {
     this.updateTreeView(tree, function (root) {

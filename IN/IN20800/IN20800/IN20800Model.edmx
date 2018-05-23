@@ -38,11 +38,18 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="Pack" Type="bit" Nullable="false" />
+          <Property Name="PriceType" Type="varchar" MaxLength="5" />
         </EntityType>
         <Function Name="IN20800_pcKitID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="IN20800_pdCheckKit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="KitID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN20800_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -81,7 +88,6 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="IN_Component" EntityType="IN20800Model.IN_Component" />
-          <EntitySet Name="IN_Kit" EntityType="IN20800Model.IN_Kit" />
           <FunctionImport Name="IN20800_pdConfig" ReturnType="Collection(IN20800Model.IN20800_pdConfig_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -91,6 +97,13 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <EntitySet Name="IN_Kit" EntityType="IN20800Model.IN_Kit" />
+          <FunctionImport Name="IN20800_pdCheckKit" ReturnType="Collection(IN20800Model.IN20800_pdCheckKit_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="KitID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN20800_pgLoadIN_Kit_Result">
@@ -124,6 +137,11 @@
           <Property Name="Unit" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="Price" Type="Double" />
         </EntityType>
+        <ComplexType Name="IN20800_pdConfig_Result">
+          <Property Type="Boolean" Name="Price" Nullable="true" />
+          <Property Type="Boolean" Name="Pack" Nullable="true" />
+          <Property Type="Boolean" Name="ShowPriceType" Nullable="true" />
+        </ComplexType>
         <EntityType Name="IN_Kit">
           <Key>
             <PropertyRef Name="KitID" />
@@ -139,10 +157,10 @@
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="Pack" Type="Boolean" Nullable="false" />
+          <Property Name="PriceType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="IN20800_pdConfig_Result">
-          <Property Type="Boolean" Name="Price" Nullable="true" />
-          <Property Type="Boolean" Name="Pack" Nullable="true" />
+        <ComplexType Name="IN20800_pdCheckKit_Result">
+          <Property Type="Boolean" Name="CheckKit" Nullable="true" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -189,9 +207,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN20800_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN20800_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20800Model.IN20800_pdConfig_Result">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Pack" ColumnName="Pack" />
+                <ScalarProperty Name="ShowPriceType" ColumnName="ShowPriceType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN20800_pdInvtID" FunctionName="eBiz4DWebSysModel.Store.IN20800_pdInvtID" />
           <EntitySetMapping Name="IN_Kit">
             <EntityTypeMapping TypeName="IN20800Model.IN_Kit">
               <MappingFragment StoreEntitySet="IN_Kit">
+                <ScalarProperty Name="PriceType" ColumnName="PriceType" />
                 <ScalarProperty Name="Pack" ColumnName="Pack" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -206,15 +235,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN20800_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN20800_pdConfig">
+          <FunctionImportMapping FunctionImportName="IN20800_pdCheckKit" FunctionName="eBiz4DWebSysModel.Store.IN20800_pdCheckKit" >
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IN20800Model.IN20800_pdConfig_Result">
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Pack" ColumnName="Pack" />
+              <ComplexTypeMapping TypeName="IN20800Model.IN20800_pdCheckKit_Result">
+                <ScalarProperty Name="CheckKit" ColumnName="CheckKit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN20800_pdInvtID" FunctionName="eBiz4DWebSysModel.Store.IN20800_pdInvtID" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

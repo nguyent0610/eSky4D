@@ -30,13 +30,15 @@ namespace IN20800.Controllers
         {
             bool Price = false;
             bool Pack = false;
+            bool showPricetype = false;
             var objConfig = _db.IN20800_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
                 Price = objConfig.Price.HasValue ? objConfig.Price.Value : false;
                 Pack = objConfig.Pack.HasValue ? objConfig.Pack.Value : false;
+                showPricetype = objConfig.ShowPriceType.HasValue ? objConfig.ShowPriceType.Value:false;
             }
-
+            ViewBag.showPricetype = showPricetype;
             ViewBag.Price = Price;
             ViewBag.Pack = Pack;
 
@@ -76,6 +78,19 @@ namespace IN20800.Controllers
                 {
                     if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
+                        if(header.Pack!= curHeader.Pack || header.PriceType!=curHeader.PriceType)
+                        {
+                            var objcheck = _db.IN20800_pdCheckKit(Current.CpnyID, Current.UserName, Current.LangID, KitID).FirstOrDefault();
+                            bool check = true;
+                            if (objcheck != null)
+                            {
+                                check = objcheck.CheckKit ?? true;
+                            }
+                            if (!check)
+                            {
+                                throw new MessageException(MessageType.Message, "2018052311");
+                            }
+                        }
                         UpdatingHeader(ref header, curHeader);
                     }
                     else
@@ -99,6 +114,16 @@ namespace IN20800.Controllers
                 #region Delete IN_Component
                 foreach (IN20800_pgLoadIN_Kit_Result del in lstIN_Component.Deleted)
                 {
+                    var objcheck = _db.IN20800_pdCheckKit(Current.CpnyID, Current.UserName, Current.LangID, KitID).FirstOrDefault();
+                    bool check = true;
+                    if (objcheck != null)
+                    {
+                        check = objcheck.CheckKit ?? true;
+                    }
+                    if (!check)
+                    {
+                        throw new MessageException(MessageType.Message, "2018052311");
+                    }
 
                     if (lstIN_Component.Created.Where(p => p.KitID.ToLower().Trim() == del.KitID.ToLower().Trim() && p.ComponentID.ToLower().Trim() == del.ComponentID.ToLower().Trim()).Count() > 0)
                     {
@@ -120,7 +145,16 @@ namespace IN20800.Controllers
                 foreach (IN20800_pgLoadIN_Kit_Result createKitDetail in lstIN_ComponentCreate)
                 {
                     if (KitID == "" || createKitDetail.ComponentID == "") continue;
-
+                    var objcheck = _db.IN20800_pdCheckKit(Current.CpnyID, Current.UserName, Current.LangID, KitID).FirstOrDefault();
+                    bool check = true;
+                    if (objcheck != null)
+                    {
+                        check = objcheck.CheckKit ?? true;
+                    }
+                    if (!check)
+                    {
+                        throw new MessageException(MessageType.Message, "2018052311");
+                    }
                     var createKit = _db.IN_Component.FirstOrDefault(p => p.KitID == KitID && p.ComponentID == createKitDetail.ComponentID);
                     if (createKit != null)
                     {
@@ -158,7 +192,16 @@ namespace IN20800.Controllers
             try
             {
                 string KitID = data["cboKitID"].PassNull();
-
+                var  objcheck = _db.IN20800_pdCheckKit(Current.CpnyID,Current.UserName,Current.LangID,KitID).FirstOrDefault();
+                bool check = true;
+                if (objcheck != null)
+                {
+                    check = objcheck.CheckKit ?? true;
+                }
+                if (!check) 
+                {
+                    throw new MessageException(MessageType.Message, "2018052311");
+                }
                 //get header
                 var obj = _db.IN_Kit.FirstOrDefault(p => p.KitID == KitID);
                 if (obj != null)
@@ -189,6 +232,7 @@ namespace IN20800.Controllers
             pg.KitID = inputPG.KitID;
             pg.Pack = inputPG.Pack;
             pg.Active =true;
+            pg.PriceType = inputPG.PriceType;
             pg.LUpd_DateTime = DateTime.Now;
             pg.LUpd_Prog = _screenNbr;
             pg.LUpd_User = Current.UserName;

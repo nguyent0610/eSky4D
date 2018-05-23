@@ -31,7 +31,7 @@
             X.TreePanel().ID("treeKitID").MultiSelect(false)
             .Width(300).Region(Region.Center).Flex(1).AutoScroll(true)
             .Title(Util.GetLang("Tree"))
-            .Split(true) 
+            .Split(true)
             .Border(false)
             .SelectionModel(X.TreeSelectionModel().ID("slmtreeKitID").Mode(SelectionMode.Multi))
             .Listeners(lst =>
@@ -44,7 +44,7 @@
                 X.Toolbar()
                 .Items(
                     X.ToolbarFill()
-                    
+
                     , HQ.Button().ID("btnExpand1")
                     .HQLangCode("Expand")
                     .Icon(Icon.BulletTogglePlus)
@@ -65,24 +65,24 @@
         ).Listeners(lss =>
         {
             lss.Render.Handler = "HQ.common.control_render(this,'header')";
-        })   
-        
+        })
+
         ,X.Panel().Region(Region.Center).Layout(LayoutType.Border).Flex(2).Items(
         X.Panel().ID("pnlHeader")
         .Region(Region.North)
         .Layout(LayoutType.VBox)
         .AutoScroll(true)
         .Items(
-        // Row 1
+            // Row 1
             X.Container().Layout(LayoutType.HBox)
                 .Items(
-                   
+
                      HQ.Combo().ID("cboKitID").Name("cboKitID").DataIndex("KitID").MarginSpec("5 0 5 0").Width(250).MaxLength(30).EnforceMaxLength(true)
                         .HQLangCode("KitID").HQDBSys(false).HQProcedure("IN20800_pcKitID")
                         .HQColumnShow("KitID").ForceSelection(true).AllowBlank(false)
                         .DisplayField("KitID").ValueField("KitID").HQHeightWidth(400, 300)
-                        .HQParam(new StoreParameterCollection() 
-                        { 
+                        .HQParam(new StoreParameterCollection()
+                        {
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -90,21 +90,40 @@
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(ls =>
                         {
-                            ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            //ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                             ls.TriggerClick.Fn = "cboKitID_TriggerClick";
                             ls.Change.Fn = "cboKitID_change";
                             ls.Select.Fn = "cboKitID_select";
                         })
                         .LoadData()
                         , HQ.TextBox().ID("txtKitName").Name("txtKitName").MarginSpec("5 0 5 0").Width(400).HQLangCode("IN20800KitName").Tag('X')
-                        ,HQ.Checkbox().ID("chkPack").Name("chkPack").DataIndex("Pack").HQLangCode("IN20800Pack").MarginSpec("5 0 5 10")
-                        ,
-                            HQ.Combo().ID("cboInvt").Name("cboInvt").Hidden(true)
+
+                        , HQ.Combo().ID("cboPriceType").Name("cboPriceType").MarginSpec("5 0 5 0").DataIndex("PriceType")
+                        .HQLangCode("PriceType").HQDBSys(false).HQProcedure("IN20800_pcPriceType")
+                        .HQColumnShow("Code,Desrc").ForceSelection(true)
+                        .DisplayField("Desrc").ValueField("Code").HQHeightWidth(400, 300)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .Listeners(ls =>
+                        {
+                            ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            
+                        })
+                        .LoadData()
+
+                        , HQ.Checkbox().ID("chkPack").Name("chkPack").DataIndex("Pack").HQLangCode("IN20800Pack").MarginSpec("5 0 5 10")
+
+                        ,HQ.Combo().ID("cboInvt").Name("cboInvt").Hidden(true)
                                 .HQLangCode("InvtID").HQDBSys(false).HQProcedure("IN20800_pdInvtID")
                                 .HQColumnShow("InvtID").ForceSelection(true)
                                     .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
-                            .HQParam(new StoreParameterCollection() 
-                        { 
+                            .HQParam(new StoreParameterCollection()
+                        {
                             new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -113,7 +132,7 @@
                 )
         )
         .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'pnlHeader')")
-       
+
         , X.GridPanel().ID("grdIN_Component")
         .Scroll(ScrollMode.Both).Layout(LayoutType.Fit)
         .View(X.GridView().TrackOver(false))
@@ -141,7 +160,7 @@
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(300).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
-                        
+
                 X.Column().Text(Util.GetLang("ComponentID")).DataIndex("ComponentID")
                         .Editor(
                             HQ.Combo().ID("cboInvtID")
@@ -150,7 +169,7 @@
                             .HQHeightWidth(400, 300)
                             .ValueField("InvtID").DisplayField("InvtID")
                             .ForceSelection(true).SelectOnFocus(true)//.AllowBlank(false)
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                 new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -162,9 +181,9 @@
                             .LoadData()
                         )
                     , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
-                    
-                    , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("ComponentQty").Width(150).Format("00").Editor(Html.X().NumberField().MinValue(1).AllowBlank(false)).Align(Alignment.Right)
-                    
+
+                    , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("ComponentQty").Width(150).Format("0,000").Editor(Html.X().NumberField().MinValue(1).AllowBlank(false)).Align(Alignment.Right)
+
                     , X.Column().Text(Util.GetLang("StkUnit")).DataIndex("Unit")
                         .Editor(
                             HQ.Combo().ID("cboUnit")
@@ -173,7 +192,7 @@
                             .HQHeightWidth(400, 300)
                             .ValueField("FromUnit").DisplayField("FromUnit")
                             .ForceSelection(true).SelectOnFocus(true).AllowBlank(false)
-                            .HQParam(new StoreParameterCollection() { 
+                            .HQParam(new StoreParameterCollection() {
                                 new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
@@ -181,7 +200,7 @@
                             })
                             .LoadData()
                             )
-                        , X.NumberColumn().Text(Util.GetLang("IN20800Price")).DataIndex("Price").ID("Price").Width(150).Format("00").Editor(Html.X().NumberField().MinValue(1)).Align(Alignment.Right)
+                        , X.NumberColumn().Text(Util.GetLang("IN20800Price")).DataIndex("Price").ID("Price").Width(150).Format("0,000").Editor(Html.X().NumberField().MinValue(1)).Align(Alignment.Right)
                 , X.CommandColumn()
                 .Width(150)
                 .Commands(
@@ -206,9 +225,9 @@
                 .Items("1", "2", "10", "20", "30", "50")
                 .SelectedItems("50")
                 .Listeners(l =>
-                    {
-                        l.Select.Fn = "HQ.grid.onPageSelect";
-                    })
+                {
+                    l.Select.Fn = "HQ.grid.onPageSelect";
+                })
             )
             .Plugins(X.ProgressBarPager())
             )
@@ -233,11 +252,11 @@
                             )
                     )
             .Listeners(lst =>
-                    {
-                        lst.Render.Handler = "HQ.common.control_render(this,'grdIN_Component')";
-                        lst.Activate.Handler = "HQ.focus = 'grdIN_Component';";
-                    })
-                    )                
+            {
+                lst.Render.Handler = "HQ.common.control_render(this,'grdIN_Component')";
+                lst.Activate.Handler = "HQ.focus = 'grdIN_Component';";
+            })
+                    )
     )// frmMain
 )
 )
