@@ -212,22 +212,6 @@ namespace IN10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_ItemSite> IN_ItemSite
-        {
-            get
-            {
-                if ((_IN_ItemSite == null))
-                {
-                    _IN_ItemSite = base.CreateObjectSet<IN_ItemSite>("IN_ItemSite");
-                }
-                return _IN_ItemSite;
-            }
-        }
-        private ObjectSet<IN_ItemSite> _IN_ItemSite;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_Transfer> IN_Transfer
         {
             get
@@ -256,6 +240,22 @@ namespace IN10200
             }
         }
         private ObjectSet<OM_UserDefault> _OM_UserDefault;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_ItemSite> IN_ItemSite
+        {
+            get
+            {
+                if ((_IN_ItemSite == null))
+                {
+                    _IN_ItemSite = base.CreateObjectSet<IN_ItemSite>("IN_ItemSite");
+                }
+                return _IN_ItemSite;
+            }
+        }
+        private ObjectSet<IN_ItemSite> _IN_ItemSite;
 
         #endregion
 
@@ -334,14 +334,6 @@ namespace IN10200
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the IN_ItemSite EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_ItemSite(IN_ItemSite iN_ItemSite)
-        {
-            base.AddObject("IN_ItemSite", iN_ItemSite);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the IN_Transfer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToIN_Transfer(IN_Transfer iN_Transfer)
@@ -355,6 +347,14 @@ namespace IN10200
         public void AddToOM_UserDefault(OM_UserDefault oM_UserDefault)
         {
             base.AddObject("OM_UserDefault", oM_UserDefault);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_ItemSite EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_ItemSite(IN_ItemSite iN_ItemSite)
+        {
+            base.AddObject("IN_ItemSite", iN_ItemSite);
         }
 
         #endregion
@@ -3659,6 +3659,30 @@ namespace IN10200
         private global::System.Double _CnvFact;
         partial void OnCnvFactChanging(global::System.Double value);
         partial void OnCnvFactChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> KitType
+        {
+            get
+            {
+                return _KitType;
+            }
+            set
+            {
+                OnKitTypeChanging(value);
+                ReportPropertyChanging("KitType");
+                _KitType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("KitType");
+                OnKitTypeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _KitType;
+        partial void OnKitTypeChanging(Nullable<global::System.Boolean> value);
+        partial void OnKitTypeChanged();
 
         #endregion
 

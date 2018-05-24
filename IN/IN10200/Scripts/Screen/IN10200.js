@@ -373,13 +373,16 @@ var cboFromToSiteID_Change = function (item, newValue, oldValue) {
 };
 
 var cboSiteID_Change = function (item, newValue, oldValue) {
+    App.cboWhseLoc.store.reload();
     if (App.cboFromToSiteID.getValue() == App.cboSiteID.getValue()) {
         App.cboSiteID.setValue('');
     }
-    if (newValue != oldValue) {
-        App.cboWhseLoc.setValue("");
-        App.cboWhseLoc.store.reload();
-    }
+    if (item.hasFocus) {
+        if (newValue != oldValue) {
+            App.cboWhseLoc.setValue("");
+            App.cboWhseLoc.store.reload();
+        }
+    }    
 };
 
 var btnLot_Click = function () {

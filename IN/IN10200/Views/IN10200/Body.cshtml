@@ -136,10 +136,10 @@
                 .Width(110)
                 .Align(Alignment.Right)
                 .Renderer("renderQtyAmt")
-
-                , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate"))
-
-                , HQ.DateColumn().ID("WarrantyDate").DataIndex("WarrantyDate").Text(Util.GetLang("WarrantyDate"))
+                
+                , HQ.DateColumn().ID("WarrantyDate").DataIndex("WarrantyDate").Text(Util.GetLang("IN10200WarrantyDate"))
+                
+                , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate"))                
 
                 , X.NumberColumn().ID("PercentExpDate").DataIndex("PercentExpDate").Text(Util.GetLang("PercentExpDate")).Format("0,000.00")
                 
@@ -366,7 +366,7 @@
                     .BlankText(Util.GetLangPrefix("Input", "IN10200WhseLoc"))
                     .Width(250)
                     .HQHeightWidth(400, 300)
-                    .ForceSelection(true)
+                    .ForceSelection(false)
                     .LabelWidth(90)
                     .HQParam(new StoreParameterCollection()
                     {                        
@@ -381,7 +381,9 @@
                     .Listeners(lst =>
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        lst.Focus.Handler = "HQ.focus='batch';";
+                        lst.Focus.Handler = "HQ.focus='batch'; App.cboWhseLoc.forceSelection=true";
+                        lst.Collapse.Handler = "App.cboWhseLoc.forceSelection=false";
+                        
                     }),                   
                     
 
