@@ -836,31 +836,27 @@ namespace INProcess
             {
                 double qty = 0;
                 string lineRef = string.Empty;
-
+                string User = string.Empty;
+                string prog = string.Empty;
                 clsIN_Setup objSetup = new clsIN_Setup(Dal);
                 objSetup.GetByKey(branchID, "IN");
-
                 clsIN_Trans objTran = new clsIN_Trans(Dal);
                 DataTable lstTrans = objTran.GetAll(branchID, batNbr, "%", "%");
                 clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
                 clsIN_LotTrans objLot = new clsIN_LotTrans(Dal);
-              
-                string User = string.Empty;
-                string prog = string.Empty;
+                clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
+                clsIN_ItemSite objItem = new clsIN_ItemSite(Dal);
+                clsIN_ItemLoc objItemLoc = new clsIN_ItemLoc(Dal);
+                clsSQL sql = new clsSQL(Dal);
                 if (lstTrans.Rows.Count > 0)
                 {
                     User = lstTrans.Rows[0].String("LUpd_User");
                     prog = lstTrans.Rows[0].String("LUpd_Prog");
-                }
-
-                clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
-                clsIN_ItemSite objItem = new clsIN_ItemSite(Dal);
-                clsSQL sql = new clsSQL(Dal);
+                }               
 
                 foreach (DataRow tran in lstTrans.Rows)
                 {
                     objInvt.GetByKey(tran.String("InvtID"));
-
                     if (!objItem.GetByKey(tran.String("InvtID"),tran.String("SiteID")))
                     {
                         throw new MessageException(MessageType.Message, "606");
@@ -891,6 +887,38 @@ namespace INProcess
                     objItem.LUpd_User = User;
                     objItem.Update();
 
+                    //// IN_ItemLoc
+                    if (!objItemLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc")))
+                    {
+                        throw new MessageException(MessageType.Message, "2018052414");
+                    }
+                    if (objInvt.StkItem == 1)
+                    {
+                        if (tran.String("UnitMultDiv") == "M" || tran.String("UnitMultDiv").PassNull() == string.Empty)
+                            qty = tran.Double("Qty") * tran.Short("InvtMult") * tran.Double("CnvFact");
+                        else
+                            qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
+
+                        //objItemLoc.QtyAllocIN = Math.Round(objItemLoc.QtyAllocIN + qty, 0);
+                        objItemLoc.QtyOnHand = Math.Round(objItemLoc.QtyOnHand + qty, 0);
+                        if (qty < 0) objItemLoc.QtyAllocIN = Math.Round(objItemLoc.QtyAllocIN + qty, 0);
+                        if (qty > 0)
+                        {
+                            objItemLoc.QtyAvail = Math.Round(objItemLoc.QtyAvail + qty, 0);
+                        }
+                    }
+                    if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLoc.TotCost + tran.Double("ExtCost"), 0) < 0)
+                    {
+                        throw new MessageException(MessageType.Message, "2018052413", "", new[] { objItemLoc.InvtID, objItemLoc.SiteID });
+                    }
+                    objItemLoc.TotCost = Math.Round(objItemLoc.TotCost + tran.Double("ExtCost"), 0);
+                    objItemLoc.AvgCost = Math.Round(objItemLoc.QtyOnHand == 0 ? objItemLoc.AvgCost : objItemLoc.TotCost / objItemLoc.QtyOnHand, 0); // tinh lai AvgCost 20160624
+                    objItemLoc.LUpd_DateTime = DateTime.Now;
+                    objItemLoc.LUpd_Prog = prog;
+                    objItemLoc.LUpd_User = User;
+                    objItemLoc.Update();
+
+                    //////
 
                     ///them lot 20160527
                     if (objInvt.StkItem == 1 && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N")
@@ -909,27 +937,19 @@ namespace INProcess
                                 objItemLot.ExpDate = lotRow.Date("ExpDate");
                                 objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
                                 objItemLot.LIFODate = lotRow.Date("ExpDate");
-
                                 objItemLot.MfgrLotSerNbr = lotRow.String("MfgrLotSerNbr");
-
                                 objItemLot.Crtd_DateTime = DateTime.Now;
                                 objItemLot.Crtd_Prog = Prog;
                                 objItemLot.Crtd_User = User;
-
                                 objItemLot.LUpd_DateTime = DateTime.Now;
                                 objItemLot.LUpd_Prog = Prog;
                                 objItemLot.LUpd_User = User;
                                 objItemLot.Add();
                             }
-
-
-
                             if (!objSetup.NegQty && objItemLot.QtyOnHand + qty < 0)
                             {
-                                throw new MessageException(MessageType.Message, "608", "", new[] { objItemLot.InvtID, objItemLot.SiteID + "-" + objItemLot.LotSerNbr });
-                            }
-
-                           
+                                throw new MessageException(MessageType.Message, "2018052413", "", new[] { objItemLot.InvtID, objItemLot.SiteID + "-" + objItemLot.LotSerNbr,objItemLot.WhseLoc });
+                            }                          
                             
                             objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
                             if (qty<0) objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
@@ -937,7 +957,6 @@ namespace INProcess
                             {                           
                                 objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
                             }
-
                             objItemLot.Cost = objItem.TotCost * objItemLot.QtyOnHand;
                             objItemLot.LUpd_DateTime = DateTime.Now;
                             objItemLot.LUpd_Prog = Prog;
@@ -945,9 +964,7 @@ namespace INProcess
                             objItemLot.Update();
                         }
                     }
-
                 }
-
                 sql.IN_ReleaseBatch(branchID, batNbr, Prog, User);
                 return true;
             }
