@@ -515,7 +515,7 @@ var Main = {
         },
 
         checkExistRequiredValue: function(){
-            if (App.chkRequiredType.getValue()) {
+            if (App.cboRequiredType.getValue() == 'Q' || App.cboRequiredType.getValue() == 'N') {
                 var hasData = false;
                 App.grdDiscItem.store.data.each(function (item) {                    
                     if (!Ext.isEmpty(item.data.InvtID) && item.data.RequiredValue > 0) {
@@ -752,7 +752,8 @@ var Main = {
             }
             
             HQ.common.setRequire(App.frmMain);
-            App.chkRequiredType.setVisible(HQ.showRequiredType);
+            //App.chkRequiredType.setVisible(HQ.showRequiredType);
+            App.cboRequiredType.setVisible(HQ.showRequiredType);
             if (!HQ.hidechkPctDiscountByLevel) {
                 App.chkPctDiscountByLevel.hide();
             }
@@ -2073,7 +2074,7 @@ var DiscDefintion = {
 
             var discSeqRec = sto.getAt(0);
             App.frmDiscSeqInfo.loadRecord(discSeqRec);
-            txtRequiredType_Change();
+            //txtRequiredType_Change();
             _seqLoad = discSeqRec.data.DiscSeq;
 
             if (discSeqRec.data.tstamp) {
@@ -2095,7 +2096,8 @@ var DiscDefintion = {
                 App.cboBudgetID.setReadOnly(false);
                 App.txtSeqDescr.setReadOnly(false);
                 App.chkExactQty.setReadOnly(false);
-                App.chkRequiredType.setReadOnly(false);
+                App.cboRequiredType.setReadOnly(false);
+                //App.chkRequiredType.setReadOnly(false);
                 App.btnUpload.enable();
                 App.chkStockPromotion.setReadOnly(false);
                 //App.btnTmpUpload.enable();
@@ -2111,7 +2113,8 @@ var DiscDefintion = {
                 App.cboBudgetID.setReadOnly(true);
                 App.txtSeqDescr.setReadOnly(true);
                 App.chkExactQty.setReadOnly(true);
-                App.chkRequiredType.setReadOnly(true);
+                App.cboRequiredType.setReadOnly(true);
+                //App.chkRequiredType.setReadOnly(true);
                 App.btnUpload.disable();
                 App.chkStockPromotion.setReadOnly(true);
                 //App.btnTmpUpload.enable();
@@ -2204,11 +2207,11 @@ var DiscDefintion = {
                     App.chkPctDiscountByLevel.disable();
                 }                
                 if (App.cboDiscType.getValue() == 'G' && App.cboDiscClass.getValue() == 'II' && App.cboBreakBy.getValue() == 'Q') {
-                    App.chkRequiredType.enable();
+                    //App.chkRequiredType.enable();
                 }
                 else {
-                    App.chkRequiredType.disable();
-                    App.chkRequiredType.setValue(false);
+                    //App.chkRequiredType.disable();
+                    //App.chkRequiredType.setValue(false);
                 }
             }
             //if (!frmRec.data.tstamp) {
@@ -2345,13 +2348,20 @@ var DiscDefintion = {
 
 
             if (App.cboDiscType.getValue() == 'G' && App.cboDiscClass.getValue() == 'II' && App.cboBreakBy.getValue() == 'Q') {
-                App.chkRequiredType.enable();
+                //App.chkRequiredType.enable();
             }
             else {
-                App.chkRequiredType.disable();
-                App.chkRequiredType.setValue(false);
+                //App.chkRequiredType.disable();
+                //App.chkRequiredType.setValue(false);
             }
-
+            if (App.cboDiscType.getValue() == 'G' && cbo.value == 'II')
+            {
+                App.cboRequiredType.show();
+            }
+            else
+            {
+                App.cboRequiredType.hide();
+            }
 
             //if (App.cboProAplForItem.value == "M"
             //        && cbo.value
@@ -2501,11 +2511,11 @@ var DiscDefintion = {
             //// App.chkRequiredType.setVisible(isEnableRequiredType);
 
             if (App.cboDiscType.getValue() == 'G' && App.cboDiscClass.getValue() == 'II' && App.cboBreakBy.getValue() == 'Q') {
-                App.chkRequiredType.enable();
+                //App.chkRequiredType.enable();
             }
             else {
-                App.chkRequiredType.disable();
-                App.chkRequiredType.setValue(false);
+                //App.chkRequiredType.disable();
+                //App.chkRequiredType.setValue(false);
             }
         },
 
@@ -4395,52 +4405,58 @@ var btnImport_Click = function (sender, e) {
         sender.reset();
     }
 };
+var cboRequiredType_Change = function () {
+    if(App.cboRequiredType.getValue() == 'Q' || App.cboRequiredType.getValue() == 'N')
+        HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
+    else 
+        HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
 
-var chkRequiredType_Change = function () {
-    var reqType = '';
+};
+//var chkRequiredType_Change = function () {
+//    var reqType = '';
     
-    if (App.chkRequiredType.getValue() && App.cboDiscType.getValue() == 'G') {
-        reqType = 'Q';
-        HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
-    } else {
-        HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
-    }
+//    if (App.chkRequiredType.getValue() && App.cboDiscType.getValue() == 'G') {
+//        reqType = 'Q';
+//        HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
+//    } else {
+//        HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
+//    }
 
-    //var isEnableRequiredType = (!App['pnlDPII'].isDisabled() && cbo.value == "Q");
-    //if (!isEnableRequiredType) {
-    //    App.chkRequiredType.setValue(false);
-    //    //App.txtRequiredType.setValue('');
-    //    HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
-    //} else {
-    //    HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
-    //}
+//    //var isEnableRequiredType = (!App['pnlDPII'].isDisabled() && cbo.value == "Q");
+//    //if (!isEnableRequiredType) {
+//    //    App.chkRequiredType.setValue(false);
+//    //    //App.txtRequiredType.setValue('');
+//    //    HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
+//    //} else {
+//    //    HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
+//    //}
 
 
-    App.txtRequiredType.events['change'].suspend();
-    App.txtRequiredType.setValue(reqType);
-    App.txtRequiredType.events['change'].resume();
-}
+//    App.txtRequiredType.events['change'].suspend();
+//    App.txtRequiredType.setValue(reqType);
+//    App.txtRequiredType.events['change'].resume();
+//}
 
-var txtRequiredType_Change = function () {
-    var isCheck = false;
-    if (App.txtRequiredType.getValue() == 'Q' && App.cboDiscType.getValue() == 'G') {
-        isCheck = true;
-        HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
-    } else {
-        HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
-    }
-    App.chkRequiredType.events['change'].suspend();
-    App.chkRequiredType.setValue(isCheck);
-    App.chkRequiredType.events['change'].resume();
-}
+//var txtRequiredType_Change = function () {
+//    var isCheck = false;
+//    if (App.txtRequiredType.getValue() == 'Q' && App.cboDiscType.getValue() == 'G') {
+//        isCheck = true;
+//        HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
+//    } else {
+//        HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
+//    }
+//    App.chkRequiredType.events['change'].suspend();
+//    App.chkRequiredType.setValue(isCheck);
+//    App.chkRequiredType.events['change'].resume();
+//}
 var Status_Change = function () {
     App.cboHandle.store.reload();
     if (App.cboStatus.getValue() == "C") {
-        App.chkRequiredType.setReadOnly(true);
+        //App.chkRequiredType.setReadOnly(true);
         App.chkPctDiscountByLevel.setReadOnly(true);
     }
     else {
-        App.chkRequiredType.setReadOnly(false);
+        //App.chkRequiredType.setReadOnly(false);
         App.chkPctDiscountByLevel.setReadOnly(false);
     }
 }

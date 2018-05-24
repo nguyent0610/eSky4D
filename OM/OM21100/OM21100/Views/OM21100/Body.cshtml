@@ -235,7 +235,7 @@
                                             {
                                                 l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                                 l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
-                                            })
+                                            })                                         
                                         ) // Container
 
                                         // Second Column
@@ -403,25 +403,24 @@
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                         })
 
-
                                     ) // Container
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
                                     .Items(
-                                        HQ.Checkbox().ID("chkRequiredType")
-                                        .MarginSpec("5 5 0 10")
-                                        .BoxLabel(Util.GetLang("RequiredType"))
-                                        .Listeners(l =>
-                                        {
-                                            l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
-                                            l.Change.Fn = "chkRequiredType_Change";
-                                        })
-                                        , X.Hidden().ID("txtRequiredType").DataIndex("RequiredType")
-                                        .Listeners(l =>
-                                        {
+                                        //HQ.Checkbox().ID("chkRequiredType")
+                                        //.MarginSpec("5 5 0 10")
+                                        //.BoxLabel(Util.GetLang("RequiredType"))
+                                        //.Listeners(l =>
+                                        //{
+                                        //    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                        //    l.Change.Fn = "chkRequiredType_Change";
+                                        //})
+                                        //, X.Hidden().ID("txtRequiredType").DataIndex("RequiredType")
+                                        //.Listeners(l =>
+                                        //{
 
-                                            l.Change.Fn = "txtRequiredType_Change";
-                                        })
-                                        , HQ.Checkbox().ID("chkExactQty")
+                                        //    l.Change.Fn = "txtRequiredType_Change";
+                                        //})
+                                        HQ.Checkbox().ID("chkExactQty")
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")
                                         .Listeners(l =>
@@ -465,12 +464,30 @@
                                     .MarginSpec("0 5 0 5")
                                     .HQLangCode("DescrDiscSeq").DataIndex("Descr")
 
-                                    .StyleSpec("text-align:left").Width(820)
+                                    .StyleSpec("text-align:left").Width(545)
                                     //.MaxLength(50).EnforceMaxLength(true)
                                     .AllowBlank(false)
                                     .Listeners(l =>
                                     {
                                         l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                    })
+                                    , HQ.Combo().ID("cboRequiredType")
+                                    .MarginSpec("0 0 5 5")
+                                    .HQLangCode("TypeRequired").HQProcedure("OM21100_pcRequiredType").HQColumnShow("Code,Descr")
+                                    .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("RequiredType")
+                                    .ForceSelection(true)
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .HQParam(new StoreParameterCollection() {
+                                    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                    new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                    })
+                                    .LoadData()
+                                    .Listeners(l =>
+                                    {
+                                        l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                        l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                        l.Change.Fn = "cboRequiredType_Change";
                                     })
                                 //, HQ.Checkbox().ID("chkExactQty")
                                 //.MarginSpec("0 5 5 8")
@@ -1048,8 +1065,8 @@
                             .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() {
                                  new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
-                                                 ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
-                                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                             })
                             .LoadData()
                         )

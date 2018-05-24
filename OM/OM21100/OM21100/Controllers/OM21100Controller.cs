@@ -101,7 +101,7 @@ namespace OM21100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -2491,7 +2491,7 @@ namespace OM21100.Controllers
                     Update_DiscItem(discItem, currentItem, true);
                     _db.OM_DiscItem.AddObject(discItem);
                 }
-                discItem.RequiredValue = inputSeq.RequiredType == "Q" ? currentItem.RequiredValue : 0;
+                discItem.RequiredValue = inputSeq.RequiredType == "Q" || inputSeq.RequiredType == "N" ? currentItem.RequiredValue : 0;
             }
 
             if (inputSeq.DiscClass == "II")
