@@ -25,16 +25,18 @@
         }
     </style>
     <script>
-        
+
         HQ.cpnyID = '@ViewBag.BranchID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
         HQ.businessDate = new Date()
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');  
-        HQ.inSite = '@ViewBag.INSite'
- 
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.inSite = '@ViewBag.INSite';
+        HQ.WhseLoc = '@ViewBag.WhseLoc';
+        HQ.showWhseLoc = @ViewBag.showWhseLoc;
+
     </script>  
     <title>@ViewBag.Title</title>
 </head>
@@ -193,7 +195,7 @@
     X.Store()
     .ID("stoCalcLot")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlCalcLot",""))
+    .Model(Util.GenerateModel(typeof (IN10400_pdGetLot_Result),"mdlCalcLot",""))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetLot", "IN10400"))
@@ -207,7 +209,7 @@
     X.Store()
     .ID("stoLotTrans")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN_LotTrans),"mdlLotTrans","",true))
+    .Model(Util.GenerateModel(typeof (IN10400_pgIN_LotTrans_Result),"mdlLotTrans","",true))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetLotTrans", "IN10400"))
@@ -217,9 +219,10 @@
     .Listeners(p => {
         p.Load.Fn = "stoDetail_Load";
     })
-    .Parameters(ps => { 
+    .Parameters(ps => {
         ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
-        ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw)); 
+        ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("whseLoc", "App.cboWhseLoc.getValue()", ParameterMode.Raw));
     })
 )
 
@@ -227,7 +230,7 @@
     X.Store()
     .ID("stoItemLot")
     .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlItemLot",""))
+    .Model(Util.GenerateModel(typeof (IN10400_pdGetLot_Result),"mdlItemLot",""))
     .Proxy(
         X.AjaxProxy()
         .Url(Url.Action("GetItemLot", "IN10400"))
