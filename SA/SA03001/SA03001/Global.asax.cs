@@ -38,14 +38,14 @@ namespace SA03001
             //Session["Language"] = Current.Language = "vi";
             //Session["LangID"] = 1;
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";//"EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "Kido_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "HOANGSAD";//"EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();TRUONGSAD
+            Current.DBSys = "ND_Test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["SA03001"] = acc;
-            Session["DBApp"] = Current.DBApp = "Kido_eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "ND_Test_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "9999";
             Session["Language"] = Current.Language = "vi";

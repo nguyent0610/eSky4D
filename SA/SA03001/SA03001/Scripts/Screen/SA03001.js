@@ -26,6 +26,14 @@ var menuClick = function (command) {
             break;
         case "new":
             if (HQ.isInsert) {
+                if (HQ.IsShowUserTypes) {
+                    App.cboUserTypes.hide();
+                    App.conHide.show();
+                }
+                else {
+                    App.cboUserTypes.show();
+                    App.conHide.hide();
+                }
                 App.winLocation.setTitle("New")
                 App.winLocation.show();
                 App.txtUserName.setReadOnly(false);
@@ -40,6 +48,11 @@ var menuClick = function (command) {
                 App.cboManager.setValue("");
                 App.txtFailedLoginCount.setValue(0);
                 App.cboUserGroup.setValue("");
+                App.dtpBeginDay.setValue(new Date());
+                App.dtpStartWork.setValue(new Date());
+                App.dtpEndWork.setValue(new Date());
+                App.txtExpireDay.setValue(0);
+                App.cboStatus.setValue('IN');
                 HQ.isNew = true;
 
             }
@@ -95,7 +108,7 @@ var stoLoad = function (sto) {
         HQ.isFirstLoad = false;
     }
     HQ.common.showBusy(false);// su dung khi cuoi cung
-
+    HQ.grid.hide(App.grdUser, App.stoUser.data.items[0].data.HideColumn.split(','));
    
 };
 
@@ -141,6 +154,14 @@ var grdPO_CostPurchasePrice_Reject = function (record) {
     stoChanged(App.stoPO_CostPurchasePrice);
 };
 var btnEdit_Click = function (record) {
+    if (HQ.IsShowUserTypes) {
+        App.cboUserTypes.hide();
+        App.conHide.show();
+    }
+    else {
+        App.cboUserTypes.show();
+        App.conHide.hide();
+    }
     _tstamp = record.data.tstamp;
     App.frmDetail.loadRecord(record);
     App.txtCpnyID.setValue(record.data.CpnyID.split(','));
@@ -164,6 +185,12 @@ var btnAddCustomer_Click = function () {
 
     App.winBranch.show();
 };
+var btnReplace_Click = function () {
+
+};
+//var btnUpdate_Click = function () {
+
+//};
 var chkActiveAll_Change = function (sender, value, oldValue) {
     if (sender.hasFocus) {
         var store = App.stoBranch;
@@ -179,6 +206,13 @@ var chkActiveAll_Change = function (sender, value, oldValue) {
         }
     }
 };
+var dtpStartWork_Change = function (dtp, newValue, oldValue, eOpts) {
+    App.dtpEndWork.setMinValue(App.dtpStartWork.getValue());
+    if (App.dtpEndWork.getValue() < App.dtpStartWork.getValue()) {
+        App.dtpEndWork.setValue(App.dtpStartWork.getValue());
+    }
+};
+
 var btnBranchOK_Click = function () {
     var res = "";
     var store = App.stoBranch;
@@ -221,11 +255,13 @@ var btnLocationOK_Click = function () {
         HQ.message.show(15, App.txtPassWord.fieldLabel);
         return;
     }
-    if (App.txtCpnyID.getValue() == null)
-    {
-        HQ.message.show(15, App.txtPassWord.fieldLabel);
-        return;
+    if (HQ.IsRequiredCpny) {
+        if (App.txtCpnyID.getValue() == null) {
+            HQ.message.show(15, App.txtPassWord.fieldLabel);
+            return;
+        }
     }
+   
     if (App.cboUserTypes.getValue() == null)
     {
         HQ.message.show(15, App.cboUserTypes.fieldLabel);
@@ -246,8 +282,28 @@ var save = function () {
         return;
 
     }
-    if (Ext.isEmpty(App.txtCpnyID.getValue())) {
-        HQ.message.show(15, App.txtCpnyID.fieldLabel);
+    if (HQ.IsRequiredCpny) {
+        if (Ext.isEmpty(App.txtCpnyID.getValue())) {
+            HQ.message.show(15, App.txtCpnyID.fieldLabel);
+            return;
+        }
+    }
+    if (Ext.isEmpty(App.cboStatus.getValue())) {
+        HQ.message.show(15, App.cboStatus.fieldLabel);
+        return;
+    }
+    if (!HQ.IsShowUserTypes) {
+        if (Ext.isEmpty(App.cboUserTypes.value[0])) {
+            HQ.message.show(15, App.cboUserTypes.fieldLabel);
+            return;
+        }
+    }
+    if (Ext.isEmpty(App.dtpStartWork.getValue())) {
+        HQ.message.show(15, App.dtpStartWork.fieldLabel);
+        return;
+    }
+    if (Ext.isEmpty(App.dtpEndWork.getValue())) {
+        HQ.message.show(15, App.dtpEndWork.fieldLabel);
         return;
     }
     if (!HQ.util.checkEmail(App.txtEmail.getValue()))

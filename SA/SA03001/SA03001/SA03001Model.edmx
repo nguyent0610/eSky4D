@@ -5,6 +5,23 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="SYS_Configurations">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="DateVal" Type="datetime" Nullable="false" />
+          <Property Name="FloatVal" Type="float" Nullable="false" />
+          <Property Name="IntVal" Type="int" Nullable="false" />
+          <Property Name="TextVal" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="SYS_UserGroup">
           <Key>
             <PropertyRef Name="UserID" />
@@ -62,7 +79,14 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CrtLmt" Type="float" Nullable="false" />
           <Property Name="CrtLmtInvoice" Type="float" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="2" />
+          <Property Name="StartWork" Type="datetime" />
+          <Property Name="EndWork" Type="datetime" />
         </EntityType>
+        <Function Name="SA03001_pdBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="SA03001_pdCheckSaveUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="ListBranchID" Type="varchar(max)" Mode="In" />
@@ -70,6 +94,27 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="SA03001_pdConfigHideShow" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="SA03001_pdDSM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="SA03001_pdDSR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="DSM" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SA03001_pdTAA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="SA03001_pgBranchAllByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -82,7 +127,13 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="SA03001_ptTreeNode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SYS_Configurations" EntityType="Self.SYS_Configurations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SYS_UserGroup" EntityType="Self.SYS_UserGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -103,13 +154,44 @@
             <Parameter Name="ListBranchID" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="SYS_UserGroup" EntityType="SA03001Model.SYS_UserGroup" />
-          <EntitySet Name="Users" EntityType="SA03001Model.User" />
           <FunctionImport Name="SA03001_pdCheckSaveUser" ReturnType="Collection(SA03001Model.SA03001_pdCheckSaveUser_Result)">
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="ListBranchID" Mode="In" Type="String" />
             <Parameter Name="ListTypeUser" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <EntitySet Name="Users" EntityType="SA03001Model.User" />
+          <FunctionImport Name="SA03001_pdBranch" ReturnType="Collection(SA03001Model.SA03001_pdBranch_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="SYS_Configurations" EntityType="SA03001Model.SYS_Configurations" />
+          <FunctionImport Name="SA03001_pdDSM" ReturnType="Collection(SA03001Model.SA03001_pdDSM_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="SA03001_ptTreeNode" ReturnType="Collection(SA03001Model.SA03001_ptTreeNode_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="SA03001_pdDSR" ReturnType="Collection(SA03001Model.SA03001_pdDSR_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="DSM" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA03001_pdTAA" ReturnType="Collection(SA03001Model.SA03001_pdTAA_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA03001_pdConfigHideShow" ReturnType="Collection(SA03001Model.SA03001_pdConfigHideShow_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
@@ -131,6 +213,15 @@
           <Property Type="DateTime" Name="StartDate" Nullable="true" />
           <Property Type="DateTime" Name="EndDate" Nullable="true" />
           <Property Type="String" Name="tstamp" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="StatusDescr" Nullable="true" MaxLength="14" />
+          <Property Type="String" Name="PositionDescr" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="JobTitle" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="StartWork" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="EndWork" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="BeginDay" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="ExpireDay" Nullable="false" />
+          <Property Type="String" Name="HideColumn" Nullable="false" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="SA03001_pgBranchAllByUser_Result">
           <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
@@ -158,6 +249,12 @@
           <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="SA03001_pdCheckSaveUser_Result">
+          <Property Type="Boolean" Name="CheckUser" Nullable="true" />
+          <Property Type="String" Name="TypeUser" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="1" />
+        </ComplexType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserName" />
@@ -200,12 +297,74 @@
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="CrtLmt" Type="Double" Nullable="false" />
           <Property Name="CrtLmtInvoice" Type="Double" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="StartWork" Type="DateTime" Precision="3" />
+          <Property Name="EndWork" Type="DateTime" Precision="3" />
         </EntityType>
-        <ComplexType Name="SA03001_pdCheckSaveUser_Result">
-          <Property Type="Boolean" Name="CheckUser" Nullable="true" />
-          <Property Type="String" Name="TypeUser" Nullable="false" MaxLength="1" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="1" />
-          <Property Type="String" Name="UserID" Nullable="false" MaxLength="1" />
+        <ComplexType Name="SA03001_pdBranch_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <EntityType Name="SYS_Configurations">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DateVal" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FloatVal" Type="Double" Nullable="false" />
+          <Property Name="IntVal" Type="Int32" Nullable="false" />
+          <Property Name="TextVal" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="SA03001_pdDSM_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Position" Nullable="true" MaxLength="2" />
+          <Property Type="Double" Name="Lat" Nullable="true" />
+          <Property Type="Double" Name="Lng" Nullable="true" />
+          <Property Type="String" Name="Color" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Data" Nullable="true" MaxLength="94" />
+        </ComplexType>
+        <ComplexType Name="SA03001_ptTreeNode_Result">
+          <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ParentName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SupID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Color" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="Level" Nullable="false" />
+          <Property Type="String" Name="Data" Nullable="false" MaxLength="34" />
+          <Property Type="String" Name="NoteType" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Position" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="SA03001_pdDSR_Result">
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="Double" Name="LastDay" Nullable="true" />
+          <Property Type="Double" Name="Lat" Nullable="true" />
+          <Property Type="Double" Name="Lng" Nullable="true" />
+          <Property Type="String" Name="Color" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Data" Nullable="true" MaxLength="94" />
+        </ComplexType>
+        <ComplexType Name="SA03001_pdTAA_Result">
+          <Property Type="String" Name="PGID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="PGName" Nullable="true" MaxLength="30" />
+          <Property Type="Double" Name="LastDay" Nullable="true" />
+          <Property Type="Double" Name="Lat" Nullable="true" />
+          <Property Type="Double" Name="Lng" Nullable="true" />
+          <Property Type="String" Name="Color" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Data" Nullable="true" MaxLength="94" />
+        </ComplexType>
+        <ComplexType Name="SA03001_pdConfigHideShow_Result">
+          <Property Type="Boolean" Name="UserTypes" Nullable="true" />
+          <Property Type="Boolean" Name="CpnyID" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -233,6 +392,15 @@
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusDescr" ColumnName="StatusDescr" />
+                <ScalarProperty Name="PositionDescr" ColumnName="PositionDescr" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="StartWork" ColumnName="StartWork" />
+                <ScalarProperty Name="EndWork" ColumnName="EndWork" />
+                <ScalarProperty Name="BeginDay" ColumnName="BeginDay" />
+                <ScalarProperty Name="ExpireDay" ColumnName="ExpireDay" />
+                <ScalarProperty Name="HideColumn" ColumnName="HideColumn" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -266,9 +434,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SA03001_pdCheckSaveUser" FunctionName="eBiz4DWebSysModel.Store.SA03001_pdCheckSaveUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdCheckSaveUser_Result">
+                <ScalarProperty Name="CheckUser" ColumnName="CheckUser" />
+                <ScalarProperty Name="TypeUser" ColumnName="TypeUser" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="SA03001Model.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="EndWork" ColumnName="EndWork" />
+                <ScalarProperty Name="StartWork" ColumnName="StartWork" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CrtLmtInvoice" ColumnName="CrtLmtInvoice" />
                 <ScalarProperty Name="CrtLmt" ColumnName="CrtLmt" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -310,13 +491,93 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA03001_pdCheckSaveUser" FunctionName="eBiz4DWebSysModel.Store.SA03001_pdCheckSaveUser">
+          <FunctionImportMapping FunctionImportName="SA03001_pdBranch" FunctionName="eBiz4DWebSysModel.Store.SA03001_pdBranch">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdCheckSaveUser_Result">
-                <ScalarProperty Name="CheckUser" ColumnName="CheckUser" />
-                <ScalarProperty Name="TypeUser" ColumnName="TypeUser" />
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdBranch_Result">
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="SYS_Configurations">
+            <EntityTypeMapping TypeName="SA03001Model.SYS_Configurations">
+              <MappingFragment StoreEntitySet="SYS_Configurations">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="TextVal" ColumnName="TextVal" />
+                <ScalarProperty Name="IntVal" ColumnName="IntVal" />
+                <ScalarProperty Name="FloatVal" ColumnName="FloatVal" />
+                <ScalarProperty Name="DateVal" ColumnName="DateVal" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SA03001_pdDSM" FunctionName="eBiz4DWebSysModel.Store.SA03001_pdDSM">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdDSM_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA03001_ptTreeNode" FunctionName="eBiz4DWebSysModel.Store.SA03001_ptTreeNode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_ptTreeNode_Result">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ParentName" ColumnName="ParentName" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="SupID" ColumnName="SupID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA03001_pdDSR" FunctionName="eBiz4DWebSysModel.Store.SA03001_pdDSR">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdDSR_Result">
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LastDay" ColumnName="LastDay" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA03001_pdTAA" FunctionName="eBiz4DWebSysModel.Store.SA03001_pdTAA">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdTAA_Result">
+                <ScalarProperty Name="PGID" ColumnName="PGID" />
+                <ScalarProperty Name="PGName" ColumnName="PGName" />
+                <ScalarProperty Name="LastDay" ColumnName="LastDay" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA03001_pdConfigHideShow" FunctionName="eBiz4DWebSysModel.Store.SA03001_pdConfigHideShow">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdConfigHideShow_Result">
+                <ScalarProperty Name="UserTypes" ColumnName="UserTypes" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -344,6 +605,7 @@
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="102" >
         <EntityTypeShape EntityType="SA03001Model.SYS_UserGroup" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SA03001Model.User" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="SA03001Model.SYS_Configurations" Width="1.5" PointX="0.75" PointY="4.75" />
       </Diagram>
     </Diagrams>
   </Designer>
