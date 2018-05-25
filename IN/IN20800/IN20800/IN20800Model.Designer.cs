@@ -177,47 +177,6 @@ namespace IN20800
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<IN20800_pcKitID_Result> IN20800_pcKitID(global::System.String cpnyID, global::System.String userID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<IN20800_pcKitID_Result>("IN20800_pcKitID", cpnyIDParameter, userIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
         public ObjectResult<IN20800_pdConfig_Result> IN20800_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
@@ -346,6 +305,47 @@ namespace IN20800
             }
     
             return base.ExecuteFunction<IN20800_pdCheckKit_Result>("IN20800_pdCheckKit", cpnyIDParameter, userNameParameter, langIDParameter, kitIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<IN20800_ptKitID_Result> IN20800_ptKitID(global::System.String cpnyID, global::System.String userID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<IN20800_ptKitID_Result>("IN20800_ptKitID", cpnyIDParameter, userIDParameter, langIDParameter);
         }
 
         #endregion
@@ -1046,85 +1046,6 @@ namespace IN20800
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="IN20800Model", Name="IN20800_pcKitID_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class IN20800_pcKitID_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new IN20800_pcKitID_Result object.
-        /// </summary>
-        /// <param name="kitID">Initial value of the KitID property.</param>
-        /// <param name="descr">Initial value of the Descr property.</param>
-        public static IN20800_pcKitID_Result CreateIN20800_pcKitID_Result(global::System.String kitID, global::System.String descr)
-        {
-            IN20800_pcKitID_Result iN20800_pcKitID_Result = new IN20800_pcKitID_Result();
-            iN20800_pcKitID_Result.KitID = kitID;
-            iN20800_pcKitID_Result.Descr = descr;
-            return iN20800_pcKitID_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String KitID
-        {
-            get
-            {
-                return _KitID;
-            }
-            set
-            {
-                OnKitIDChanging(value);
-                ReportPropertyChanging("KitID");
-                _KitID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("KitID");
-                OnKitIDChanged();
-            }
-        }
-        private global::System.String _KitID;
-        partial void OnKitIDChanging(global::System.String value);
-        partial void OnKitIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Descr
-        {
-            get
-            {
-                return _Descr;
-            }
-            set
-            {
-                OnDescrChanging(value);
-                ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Descr");
-                OnDescrChanged();
-            }
-        }
-        private global::System.String _Descr;
-        partial void OnDescrChanging(global::System.String value);
-        partial void OnDescrChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="IN20800Model", Name="IN20800_pdCheckKit_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -1444,6 +1365,83 @@ namespace IN20800
         private Nullable<global::System.Double> _Price;
         partial void OnPriceChanging(Nullable<global::System.Double> value);
         partial void OnPriceChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN20800Model", Name="IN20800_ptKitID_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN20800_ptKitID_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN20800_ptKitID_Result object.
+        /// </summary>
+        /// <param name="kitID">Initial value of the KitID property.</param>
+        public static IN20800_ptKitID_Result CreateIN20800_ptKitID_Result(global::System.String kitID)
+        {
+            IN20800_ptKitID_Result iN20800_ptKitID_Result = new IN20800_ptKitID_Result();
+            iN20800_ptKitID_Result.KitID = kitID;
+            return iN20800_ptKitID_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String KitID
+        {
+            get
+            {
+                return _KitID;
+            }
+            set
+            {
+                OnKitIDChanging(value);
+                ReportPropertyChanging("KitID");
+                _KitID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("KitID");
+                OnKitIDChanged();
+            }
+        }
+        private global::System.String _KitID;
+        partial void OnKitIDChanging(global::System.String value);
+        partial void OnKitIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
 
         #endregion
 

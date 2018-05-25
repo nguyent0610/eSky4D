@@ -261,7 +261,7 @@ namespace IN20800.Controllers
         #endregion
 
 
-        private Node createNode(Node root, List<IN20800_pcKitID_Result> lstUsers)
+        private Node createNode(Node root, List<IN20800_ptKitID_Result> lstUsers)
         {
             var node = new Node();
 
@@ -281,7 +281,7 @@ namespace IN20800.Controllers
         public ActionResult ReloadTreeIN20800()
         {
             var root = new Node() { };
-            List<IN20800_pcKitID_Result> lstKitID = _db.IN20800_pcKitID(Current.CpnyID,Current.UserName,Current.LangID).ToList();
+            List<IN20800_ptKitID_Result> lstKitID = _db.IN20800_ptKitID(Current.CpnyID, Current.UserName, Current.LangID).ToList();
             Node node = createNode(root, lstKitID);
             this.GetCmp<TreePanel>("treeKitID").SetRootNode(node);
             return this.Direct();

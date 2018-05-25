@@ -40,11 +40,6 @@
           <Property Name="Pack" Type="bit" Nullable="false" />
           <Property Name="PriceType" Type="varchar" MaxLength="5" />
         </EntityType>
-        <Function Name="IN20800_pcKitID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
-          <Parameter Name="UserID" Type="varchar" Mode="In" />
-          <Parameter Name="LangID" Type="smallint" Mode="In" />
-        </Function>
         <Function Name="IN20800_pdCheckKit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -67,6 +62,11 @@
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="KitID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="IN20800_ptKitID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="IN_Component" EntityType="Self.IN_Component" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IN_Kit" EntityType="Self.IN_Kit" Schema="dbo" store:Type="Tables" />
@@ -81,11 +81,6 @@
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="KitID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="IN20800_pcKitID" ReturnType="Collection(IN20800Model.IN20800_pcKitID_Result)">
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="UserID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="IN_Component" EntityType="IN20800Model.IN_Component" />
           <FunctionImport Name="IN20800_pdConfig" ReturnType="Collection(IN20800Model.IN20800_pdConfig_Result)">
@@ -105,6 +100,11 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="KitID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="IN20800_ptKitID" ReturnType="Collection(IN20800Model.IN20800_ptKitID_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN20800_pgLoadIN_Kit_Result">
           <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" />
@@ -114,10 +114,6 @@
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="Double" Name="Price" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="IN20800_pcKitID_Result">
-          <Property Type="String" Name="KitID" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="Descr" Nullable="false" MaxLength="1" />
         </ComplexType>
         <EntityType Name="IN_Component">
           <Key>
@@ -162,6 +158,10 @@
         <ComplexType Name="IN20800_pdCheckKit_Result">
           <Property Type="Boolean" Name="CheckKit" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="IN20800_ptKitID_Result">
+          <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -178,14 +178,6 @@
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN20800_pcKitID" FunctionName="eBiz4DWebSysModel.Store.IN20800_pcKitID" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN20800Model.IN20800_pcKitID_Result">
-                <ScalarProperty Name="KitID" ColumnName="KitID" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -239,6 +231,14 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN20800Model.IN20800_pdCheckKit_Result">
                 <ScalarProperty Name="CheckKit" ColumnName="CheckKit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN20800_ptKitID" FunctionName="eBiz4DWebSysModel.Store.IN20800_ptKitID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20800Model.IN20800_ptKitID_Result">
+                <ScalarProperty Name="KitID" ColumnName="KitID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -256,9 +256,22 @@ var cboKitID_TriggerClick = function (sender, value) {
 };
 var cboKitID_change = function (sender, value) {
     HQ.isFirstLoad = true;
+    
     if (sender.valueModels != null && !App.stoKitID.loading) {
-        //KitID = value;
-        App.stoKitID.reload();
+        var allNodes = getLeafNodes(App.treeKitID.getRootNode());
+        var key = false;
+        for (var i = 0; i < allNodes.length; i++) {
+            if (allNodes[0].data.id == value) {
+                key = true;
+            }
+        }
+        if (key) {
+            App.stoKitID.reload();
+        }
+        else {
+            App.stoKitID.reload();
+            App.treeKitID.getSelectionModel().deselectAll();
+        }
     }
     var record = HQ.store.findRecord(App.cboKitID.store, ["KitID"], [App.cboKitID.getValue()]);
     if(record!=undefined)
@@ -268,14 +281,26 @@ var cboKitID_change = function (sender, value) {
     else
     {
         App.txtKitName.setValue('');
-    }
-   
+    }   
 };
 var cboKitID_select = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoKitID.loading) {
         //KitID = value;
-        App.stoKitID.reload();
+        var allNodes = getLeafNodes(App.treeKitID.getRootNode());
+        var key = false;
+        for (var i = 0; i < allNodes.length; i++) {
+            if (allNodes[0].data.id == value) {
+                key = true;
+            }
+        }
+        if (key) {
+            App.stoKitID.reload();
+        }
+        else {
+            App.stoKitID.reload();
+            App.treeKitID.getSelectionModel().deselectAll();
+        }
     }
 };
 var cboInvtID_change = function (sender, value) {
@@ -522,3 +547,20 @@ var btnCollapseKitID_click = function (btn, e, eOpts) {
     collapseAll(App.treeKitID);
 };
 
+var getLeafNodes = function (node) {
+    var childNodes = [];
+    node.eachChild(function (child) {
+        if (child.isLeaf()) {
+            childNodes.push(child);
+        }
+        else {
+            var children = DiscDefintion.Process.getLeafNodes(child);
+            if (children.length) {
+                children.forEach(function (nill) {
+                    childNodes.push(nill);
+                });
+            }
+        }
+    });
+    return childNodes;
+};
