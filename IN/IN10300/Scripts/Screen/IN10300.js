@@ -379,12 +379,14 @@ var eventNew = function (sto, grd, keys) {
 }
 
 var btnLot_Click = function () {
-    if (Ext.isEmpty(this.record.invt)) {
-        this.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [this.record.data.InvtID]);
-    }
+    if (!Ext.isEmpty(this.record.invt)) {
+        if (Ext.isEmpty(this.record.invt)) {
+            this.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [this.record.data.InvtID]);
+        }
 
-    if (!Ext.isEmpty(this.record.invt.LotSerTrack) && this.record.invt.LotSerTrack != 'N' && !Ext.isEmpty(this.record.data.UnitDesc)) {
-        showLot(this.record, true);
+        if (!Ext.isEmpty(this.record.invt.LotSerTrack) && this.record.invt.LotSerTrack != 'N' && !Ext.isEmpty(this.record.data.UnitDesc)) {
+            showLot(this.record, true);
+        }
     }
 }
 var btnLotOK_Click = function () {
@@ -605,7 +607,6 @@ var cboAdvanceType_Change = function (item, newValue, oldValue) {
             App.cboToSiteID.setValue('');
             App.cboSiteID.store.reload();
             App.cboToSiteID.store.reload();
-
         }
     }
     if(App.cboBatNbr.getValue() != null && App.cboBatNbr.getValue() != '')
@@ -616,17 +617,17 @@ var cboAdvanceType_Change = function (item, newValue, oldValue) {
     }
 }
 
-
 var cboToSiteID_Change = function () {
-    if (App.cboToSiteID.getValue() == App.cboSiteID.getValue()) {
-        App.cboToSiteID.setValue('');
-    }
+    //if (App.cboToSiteID.getValue() == App.cboSiteID.getValue()) {
+    //    App.cboToSiteID.setValue('');
+    //}
+    App.cboToWhseLoc.store.reload();
     App.cboTransInvtID.store.reload();
 }
 var cboSiteID_Change = function (sender, e) {
-    if (App.cboToSiteID.getValue() == App.cboSiteID.getValue()) {
-        App.cboSiteID.setValue('');
-    }
+    //if (App.cboToSiteID.getValue() == App.cboSiteID.getValue()) {
+    //    App.cboSiteID.setValue('');
+    //}
     if (sender.valueModels != undefined && sender.valueModels.length > 0) {
         //if (sender.valueModels[0].data.SiteType == true) {
         //    showHideControll("yes");
@@ -636,6 +637,22 @@ var cboSiteID_Change = function (sender, e) {
         //}
     }
     App.cboToSiteID.store.reload();
+    App.cboWhseLoc.store.reload();
+    App.cboTransInvtID.store.reload();
+}
+
+var cboWhseLoc_Change = function (sender, e) {
+    if (App.cboToSiteID.getValue() == App.cboSiteID.getValue() && App.cboWhseLoc.getValue() == App.cboToWhseLoc.getValue()) {
+        App.cboWhseLoc.setValue('');
+    }
+    App.cboToWhseLoc.store.reload();
+    App.cboTransInvtID.store.reload();
+}
+var cboToWhseLoc_Change = function () {
+    if (App.cboToSiteID.getValue() == App.cboSiteID.getValue() && App.cboWhseLoc.getValue() == App.cboToWhseLoc.getValue()) {
+        App.cboToWhseLoc.setValue('');
+    }
+    App.cboToWhseLoc.store.reload();
     App.cboTransInvtID.store.reload();
 }
 
@@ -741,6 +758,9 @@ var grdTrans_BeforeEdit = function (item, e) {
         e.record.data.BatNbr = HQ.objBatch.data.BatNbr;
         e.record.data.TranDate = App.txtTranDate.getValue();
         e.record.data.SiteID = App.cboSiteID.getValue();
+        e.record.data.ToSiteID = App.cboToSiteID.getValue();
+        e.record.data.WhseLoc = App.cboWhseLoc.getValue();
+        e.record.data.ToWhseLoc = App.cboToWhseLoc.getValue();
         e.record.commit();
     }
 
@@ -930,7 +950,8 @@ var bindTran = function () {
 
     var newDisplay = Ext.create("App.mdlTrans", {
         InvtID: '',
-        RptExpDate: HQ.businessDate
+        RptExpDate: HQ.businessDate,
+        AdvanceType: ''
     });
 
     if (App.cboStatus.getValue() == 'H')//trạng thái đang chờ xử lý thì cho thêm dòng mới, còn xử lý hoàn tất thì không cho thêm('H' là chờ xử lý, còn 'C' là xử lý hoàn tất)
@@ -1285,6 +1306,8 @@ var calcLot = function (record) {
 
                             newLot.data.INTranLineRef = det.LineRef;
                             newLot.data.SiteID = det.SiteID;
+                            newLot.data.WhseLoc = det.WhseLoc;
+                            newLot.data.ToWhseLoc = det.ToWhseLoc;
                             newLot.data.InvtID = det.InvtID;
                             newLot.data.InvtMult = -1;
                             if ((det.UnitMultDiv == "M" ? newQty / det.CnvFact : newQty * det.CnvFact) % 1 > 0) {
@@ -1494,7 +1517,8 @@ var checkExitEdit = function (row) {
 
         trans.ReasonCD = App.cboReasonCD.getValue();
         trans.SiteID = App.cboSiteID.getValue();
-
+        trans.WhseLoc = App.cboWhseLoc.getValue();
+        trans.ToWhseLoc = App.cboToWhseLoc.getValue();
         var invt = row.record.invt;
         var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
 
@@ -1744,7 +1768,8 @@ var checkTransAdd = function () {
     App.cboToSiteID.setReadOnly(flat);
     App.cboToCpnyID.setReadOnly(flat);
     App.cboTransferType.setReadOnly(flat);
-    
+    App.cboWhseLoc.setReadOnly(flat);
+    App.cboToWhseLoc.setReadOnly(flat);
 }
 var getQtyAvail = function (row) {
 

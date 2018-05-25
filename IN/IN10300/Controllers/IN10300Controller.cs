@@ -70,6 +70,7 @@ namespace IN10300.Controllers
 
             bool showImprtExprt = false;
             var objConfig = _app.IN10300_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            var requiredWhseLoc = 0;
             if (objConfig != null)
             {
                 hideRptExpDate = objConfig.HideRptExpDate.HasValue ? objConfig.HideRptExpDate.Value : false;
@@ -82,6 +83,7 @@ namespace IN10300.Controllers
                 isSetDefaultSiteID = objConfig.IsSetDefaultSiteID.HasValue ? objConfig.IsSetDefaultSiteID.Value : false;
                 dflReasonCD = objConfig.DflReasonCD.HasValue ? objConfig.DflReasonCD.Value : false;
                 showImprtExprt = objConfig.ShowImprtExprt.HasValue ? objConfig.ShowImprtExprt.Value : false;
+                requiredWhseLoc = objConfig.RequiredWhseLoc;
             }           
             ViewBag.hideRptExpDate = hideRptExpDate;
             ViewBag.hideWarehouss = hideWarehouss;
@@ -97,7 +99,7 @@ namespace IN10300.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -107,7 +109,7 @@ namespace IN10300.Controllers
         {
             query = query ?? string.Empty;
             if (page != 1) query = string.Empty;
-            var lstBatch = _app.IN10300_pcBatch(branchID, query, start, start + 20).ToList();
+            var lstBatch = _app.IN10300_pcBatch(Current.UserName, Current.CpnyID, Current.LangID, branchID, query, start, start + 20).ToList();
             var paging = new Paging<IN10300_pcBatch_Result>(lstBatch, lstBatch.Count > 0 ? lstBatch[0].TotalRecords.Value : 0);
             return this.Store(paging.Data, paging.TotalRecords);
         }
@@ -132,7 +134,7 @@ namespace IN10300.Controllers
         public ActionResult GetTrans(string batNbr, string branchID, string refNbr)
         {
             
-            var lstTrans = _app.IN10300_pgTransferLoad(batNbr, branchID, "%", refNbr).ToList();
+            var lstTrans = _app.IN10300_pgTransferLoad(Current.UserName, Current.CpnyID, Current.LangID, batNbr, branchID, "%", refNbr).ToList();
             return this.Store(lstTrans);
         }
 
@@ -212,9 +214,7 @@ namespace IN10300.Controllers
         }
         public ActionResult GetUnit(string invtID)
         {
-            IN_Inventory invt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-            if (invt == null) invt = new IN_Inventory();
-            List<IN10300_pcUnit_Result> lstUnit = _app.IN10300_pcUnit(invt.ClassID, invt.InvtID).ToList();
+            List<IN10300_pcUnit_Result> lstUnit = _app.IN10300_pcUnit(Current.CpnyID, Current.UserName, Current.LangID, invtID).ToList();
             return this.Store(lstUnit, lstUnit.Count);
         }
 
@@ -234,7 +234,7 @@ namespace IN10300.Controllers
         {
             try
             {
-                _advanceType = data["cboAdvanceType"];
+                _advanceType = data["cboAdvanceType"].PassNull();
                 _form = data;
                 SaveData(data);
 
@@ -568,7 +568,7 @@ namespace IN10300.Controllers
                     throw new MessageException("2525", new[] { _lstTrans[i].InvtID });
                 }
 
-                IN_Inventory objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                var objInvt = GetInvt(invtID);
                 if (objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack != "N")
                 {
                     var lstLot = _lstLot.Where(p => p.INTranLineRef == _lstTrans[i].LineRef).ToList();
@@ -756,9 +756,11 @@ namespace IN10300.Controllers
             t.ToCpnyID = _objBatch.ToCpnyID.PassNull();
             t.ExpectedDate = _objBatch.ExpectedDate.ToDateShort();
 
+            t.WhseLoc = _objBatch.WhseLoc;
+            t.ToWhseLoc = _objBatch.ToWhseLoc;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
-            t.LUpd_User = _userName;
+            t.LUpd_User = _userName;         
         }
 
         private void Update_Trans(IN_Transfer transfer, IN_Trans t, IN10300_pgTransferLoad_Result s, bool isNew)
@@ -773,11 +775,12 @@ namespace IN10300.Controllers
 
             newQty = s.UnitMultDiv == "D" ? s.Qty / s.CnvFact : s.Qty * s.CnvFact;
 
+            // update IN_ItemSite
             UpdateINAlloc(t.InvtID, t.SiteID, oldQty, 0);
-
             UpdateINAlloc(s.InvtID, s.SiteID, 0, newQty);
-
-            
+            // Update IN_ItemLoc
+            UpdateINAllocWhseLoc(t.InvtID, t.SiteID, oldQty, 0);
+            UpdateINAllocWhseLoc(s.InvtID, s.SiteID, 0, newQty);
 
             if (isNew)
             {
@@ -796,7 +799,8 @@ namespace IN10300.Controllers
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
-
+            t.WhseLoc = s.WhseLoc;
+            t.ToWhseLoc = s.ToWhseLoc;
             t.RptExpDate = s.RptExpDate;
             t.CnvFact = s.CnvFact;
             t.ExtCost = s.ExtCost;
@@ -857,7 +861,9 @@ namespace IN10300.Controllers
             {
                 throw new MessageException("1043", new string[] { s.InvtID + " " + s.LotSerNbr, s.SiteID });
             }
-
+            t.WhseLoc = s.WhseLoc;
+            t.ToWhseLoc = s.ToWhseLoc;
+            t.Reason = s.Reason;
             t.UnitDesc = s.UnitDesc;
             t.ExpDate = s.ExpDate;
             t.InvtID = s.InvtID;
@@ -887,7 +893,7 @@ namespace IN10300.Controllers
         {
             try
             {
-                var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                var objInvt = GetInvt(invtID);
                 if (objInvt != null && objInvt.StkItem == 1)
                 {
                     var objSite = _app.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
@@ -909,10 +915,36 @@ namespace IN10300.Controllers
                 throw ex;
             }
         }
+
+        private bool UpdateINAllocWhseLoc(string invtID, string siteID, double oldQty, double newQty)
+        {
+            try
+            {
+                var objInvt = GetInvt(invtID);
+                if (objInvt != null && objInvt.StkItem == 1)
+                {
+                    var objWhseLoc = _app.IN_ItemLoc.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
+                    if (objWhseLoc == null) objWhseLoc = new IN_ItemLoc() { InvtID = invtID, SiteID = siteID };
+
+                    if (!_objIN.NegQty && newQty > 0 && objWhseLoc.QtyAvail + oldQty - newQty < 0)
+                    {
+                        throw new MessageException(MessageType.Message, "608", "", new string[] { invtID, siteID });
+                    }
+                    objWhseLoc.QtyAllocIN = Math.Round(objWhseLoc.QtyAllocIN + newQty - oldQty, 0);
+                    objWhseLoc.QtyAvail = Math.Round(objWhseLoc.QtyAvail - newQty + oldQty, 0);
+
+                    return true;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         private bool UpdateAllocLot(string invtID, string siteID, string lotSerNbr, double oldQty, double newQty, int decQty)
         {
-            IN_Inventory objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-            if (objInvt == null) objInvt = new IN_Inventory();
+            var objInvt = GetInvt(invtID);
             if (objInvt.StkItem == 1)
             {
                 var objItemLot = _app.IN_ItemLot.FirstOrDefault(p => p.SiteID == siteID && p.InvtID == invtID && p.LotSerNbr == lotSerNbr);
@@ -932,6 +964,15 @@ namespace IN10300.Controllers
             return true;
         }
 
+        private IN10300_pdIN_Inventory_Result GetInvt(string invtID)
+        {
+            var objInvt = _app.IN10300_pdIN_Inventory(Current.CpnyID, Current.UserName, Current.LangID, invtID).FirstOrDefault();
+            if (objInvt == null)
+            {
+                objInvt = new IN10300_pdIN_Inventory_Result();
+            } 
+            return objInvt;
+        }
         #region Export
         [HttpPost]
         public ActionResult Export(FormCollection data)
@@ -1169,7 +1210,7 @@ namespace IN10300.Controllers
         //        }
         //    }
         //}
-        #endregion
+        
 
 
         private void SetCellValueGridHeader(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
@@ -1211,7 +1252,7 @@ namespace IN10300.Controllers
             return File(fullPath, "application/vnd.ms-excel", file);
         }
 
-
+        #endregion
 
         #region Import
         [HttpPost]
@@ -1753,7 +1794,7 @@ namespace IN10300.Controllers
             }
             return _logMessage;
         }
-        #endregion
+        
         private void Save_BatchImport(IN10300_pdGetDataSite_Result itemsite, IN10300_pdHeader_Result item, string lstinvtid)
         {
             Batch batch;            
@@ -1917,7 +1958,7 @@ namespace IN10300.Controllers
             t.RefBatNbr = itemHeader.RefBatNbr;
             t.ListDiscSeq = itemHeader.LstDiscSep;
             t.NoteID = 0;
-            t.AdvanceType = null;
+            t.AdvanceType = string.Empty;
             t.Comment = itemHeader.Comment.PassNull();
             t.ReasonCD = "KM";
             t.RcptDate = itemHeader.RcptDate.ToDateShort();
@@ -2040,7 +2081,7 @@ namespace IN10300.Controllers
                 throw ex;
             }
         }
-
+        #endregion
         [HttpPost]
         public ActionResult Report(FormCollection data)
         {
