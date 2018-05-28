@@ -476,7 +476,7 @@ namespace OM21100.Controllers
 
 
         [DirectMethod]
-        public ActionResult OM21100GetTreeCustomer(string panelID)
+        public ActionResult OM21100GetTreeCustomer(string panelID, string lstCpnyID)
         {
             TreePanel tree = new TreePanel();
             tree.ID = "treePanelCustomer";
@@ -494,7 +494,7 @@ namespace OM21100.Controllers
             node.Checked = false;
 
             //lstAllNodeCustomer = _db.OM21100_ptTreeNodeCustomer(Current.UserName, Current.CpnyID, Current.LangID).ToList();
-            lstAllNodeCustomer = _db.OM21100_ptTreeNodeCustomer(Current.UserName, Current.CpnyID, Current.LangID).ToList();
+            lstAllNodeCustomer = _db.OM21100_ptTreeNodeCustomer(Current.UserName, Current.CpnyID, Current.LangID, lstCpnyID).ToList();
 
 
             var maxLevel = lstAllNodeCustomer.Max(x => x.LevelID);
@@ -2492,6 +2492,7 @@ namespace OM21100.Controllers
                     _db.OM_DiscItem.AddObject(discItem);
                 }
                 discItem.RequiredValue = inputSeq.RequiredType == "Q" || inputSeq.RequiredType == "N" ? currentItem.RequiredValue : 0;
+                discItem.RequiredValueAmount = inputSeq.RequiredType == "A" ? currentItem.RequiredValueAmount : 0;
             }
 
             if (inputSeq.DiscClass == "II")

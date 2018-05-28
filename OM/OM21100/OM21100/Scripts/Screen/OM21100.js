@@ -8,6 +8,7 @@ var _selBranchID = '';
 var _selTerritory = '';
 var keys1 = ['CpnyID'];
 var invtIDRender = '';
+var lstCpnyID = [];
 var Main = {
 
     Process: {
@@ -531,7 +532,23 @@ var Main = {
             }
             return true;
         },
-
+        checkExistRequiredValueAmount: function () {
+            if (App.cboRequiredType.getValue() == 'A') {
+                var hasData = false;
+                App.grdDiscItem.store.data.each(function (item) {
+                    if (!Ext.isEmpty(item.data.InvtID) && item.data.RequiredValueAmount > 0) {
+                        hasData = true;
+                        return false;
+                    }
+                });
+                if (!hasData) {
+                    App.tabMain.setActiveTab(1);
+                    HQ.message.show(2018011101, [HQ.grid.findColumnNameByIndex(App.grdDiscItem.columns, 'RequiredValueAmount'), HQ.common.getLang('DPII')], '', true);
+                    return false;
+                }
+            }
+            return true;
+        },
         getChangedFilteredData: function (store) {
             var data = store.data,
                 changedData
@@ -557,64 +574,66 @@ var Main = {
                         if (Main.Process.checkHasData()) {
                             if (Main.Process.checkEntireRequire()) {
                                 if (Main.Process.checkExistRequiredValue()) {
-                                    App.frmDiscDefintionTop.updateRecord();
-                                    App.frmDiscSeqInfo.updateRecord();
-                                    App.frmMain.submit({
-                                        waitMsg: HQ.common.getLang("SavingData"),
-                                        url: 'OM21100/SaveData',
-                                        timeout: 10000000,
-                                        params: {
-                                            isAddDiscount: HQ.allowAddDiscount,
-                                            isNewDiscID: _isNewDisc,
-                                            isNewDiscSeq: _isNewSeq,
-                                            lstDiscInfo: Ext.encode([App.frmDiscDefintionTop.getRecord().data]),
-                                            lstDiscBreakChange: HQ.store.getData(App.grdDiscBreak.store),
-                                            lstFreeItemChange: Main.Process.getChangedFilteredData(App.grdFreeItem.store),
-                                            lstCompanyChange: HQ.store.getData(App.grdCompany.store),
-                                            lstDiscItemChange: HQ.store.getData(App.grdDiscItem.store),
-                                            lstBundleChange: HQ.store.getData(App.grdBundle.store),
-                                            lstDiscCustClassChange: HQ.store.getData(App.grdDiscCustClass.store),
-                                            lstDiscCustChange: HQ.store.getData(App.grdDiscCust.store),
-                                            lstDiscItemClassChange: HQ.store.getData(App.grdDiscItemClass.store),
+                                    if (Main.Process.checkExistRequiredValueAmount()) {
+                                        App.frmDiscDefintionTop.updateRecord();
+                                        App.frmDiscSeqInfo.updateRecord();
+                                        App.frmMain.submit({
+                                            waitMsg: HQ.common.getLang("SavingData"),
+                                            url: 'OM21100/SaveData',
+                                            timeout: 10000000,
+                                            params: {
+                                                isAddDiscount: HQ.allowAddDiscount,
+                                                isNewDiscID: _isNewDisc,
+                                                isNewDiscSeq: _isNewSeq,
+                                                lstDiscInfo: Ext.encode([App.frmDiscDefintionTop.getRecord().data]),
+                                                lstDiscBreakChange: HQ.store.getData(App.grdDiscBreak.store),
+                                                lstFreeItemChange: Main.Process.getChangedFilteredData(App.grdFreeItem.store),
+                                                lstCompanyChange: HQ.store.getData(App.grdCompany.store),
+                                                lstDiscItemChange: HQ.store.getData(App.grdDiscItem.store),
+                                                lstBundleChange: HQ.store.getData(App.grdBundle.store),
+                                                lstDiscCustClassChange: HQ.store.getData(App.grdDiscCustClass.store),
+                                                lstDiscCustChange: HQ.store.getData(App.grdDiscCust.store),
+                                                lstDiscItemClassChange: HQ.store.getData(App.grdDiscItemClass.store),
 
-                                            lstDiscSeqInfo: (function () {
-                                                App.stoDiscSeqInfo.each(function (item) {
-                                                    item.data.Active = App.chkActive.value ? 1 : 0;
-                                                    item.data.Promo = App.chkDiscTerm.value ? 1 : 0;
-                                                });
-                                                return Ext.encode(App.stoDiscSeqInfo.getRecordsValues());
-                                            })(),
-                                            lstDiscBreak: Ext.encode(App.grdDiscBreak.store.getRecordsValues()), // data
-                                            lstFreeItem: Ext.encode(Main.Process.getRecordValues(App.grdFreeItem.store.snapshot.getRange())), // record.data
-                                            lstCompany: Ext.encode(App.grdCompany.store.getRecordsValues()),
-                                            lstDiscItem: Ext.encode(App.grdDiscItem.store.getRecordsValues()),
-                                            lstBundle: Ext.encode(App.grdBundle.store.getRecordsValues()),
-                                            lstDiscCustClass: Ext.encode(App.grdDiscCustClass.store.getRecordsValues()),
-                                            lstDiscCust: Ext.encode(App.grdDiscCust.store.getRecordsValues()),
-                                            lstDiscItemClass: Ext.encode(App.grdDiscItemClass.store.getRecordsValues()),
-                                            lstDiscCustCate: Ext.encode(App.grdDiscCustCate.store.getRecordsValues()),
-                                            lstDiscChannel: Ext.encode(App.grdDiscChannel.store.getRecordsValues()),
-                                            lstDiscCustCateChange: HQ.store.getData(App.grdDiscCustCate.store),
-                                            lstDiscChannelChange: HQ.store.getData(App.grdDiscChannel.store),
-                                        },
-                                        success: function (msg, data) {
-                                            if (data.result.msgCode) {
-                                                HQ.message.show(data.result.msgCode);
+                                                lstDiscSeqInfo: (function () {
+                                                    App.stoDiscSeqInfo.each(function (item) {
+                                                        item.data.Active = App.chkActive.value ? 1 : 0;
+                                                        item.data.Promo = App.chkDiscTerm.value ? 1 : 0;
+                                                    });
+                                                    return Ext.encode(App.stoDiscSeqInfo.getRecordsValues());
+                                                })(),
+                                                lstDiscBreak: Ext.encode(App.grdDiscBreak.store.getRecordsValues()), // data
+                                                lstFreeItem: Ext.encode(Main.Process.getRecordValues(App.grdFreeItem.store.snapshot.getRange())), // record.data
+                                                lstCompany: Ext.encode(App.grdCompany.store.getRecordsValues()),
+                                                lstDiscItem: Ext.encode(App.grdDiscItem.store.getRecordsValues()),
+                                                lstBundle: Ext.encode(App.grdBundle.store.getRecordsValues()),
+                                                lstDiscCustClass: Ext.encode(App.grdDiscCustClass.store.getRecordsValues()),
+                                                lstDiscCust: Ext.encode(App.grdDiscCust.store.getRecordsValues()),
+                                                lstDiscItemClass: Ext.encode(App.grdDiscItemClass.store.getRecordsValues()),
+                                                lstDiscCustCate: Ext.encode(App.grdDiscCustCate.store.getRecordsValues()),
+                                                lstDiscChannel: Ext.encode(App.grdDiscChannel.store.getRecordsValues()),
+                                                lstDiscCustCateChange: HQ.store.getData(App.grdDiscCustCate.store),
+                                                lstDiscChannelChange: HQ.store.getData(App.grdDiscChannel.store),
+                                            },
+                                            success: function (msg, data) {
+                                                if (data.result.msgCode) {
+                                                    HQ.message.show(data.result.msgCode);
+                                                }
+                                                else {
+                                                    HQ.message.show(201405071);
+                                                }
+                                                Main.Process.reloadAllData();
+                                            },
+                                            failure: function (msg, data) {
+                                                if (data.result.msgCode) {
+                                                    HQ.message.show(data.result.msgCode);
+                                                }
+                                                else {
+                                                    HQ.message.process(msg, data, true);
+                                                }
                                             }
-                                            else {
-                                                HQ.message.show(201405071);
-                                            }
-                                            Main.Process.reloadAllData();
-                                        },
-                                        failure: function (msg, data) {
-                                            if (data.result.msgCode) {
-                                                HQ.message.show(data.result.msgCode);
-                                            }
-                                            else {
-                                                HQ.message.process(msg, data, true);
-                                            }
-                                        }
-                                    });
+                                        });
+                                    }
                                 }
                             }
                         }
@@ -2210,6 +2229,7 @@ var DiscDefintion = {
                     //App.chkRequiredType.enable();
                 }
                 else {
+                    App.cboRequiredType.setVisible(HQ.showRequiredType);
                     //App.chkRequiredType.disable();
                     //App.chkRequiredType.setValue(false);
                 }
@@ -2354,15 +2374,14 @@ var DiscDefintion = {
                 //App.chkRequiredType.disable();
                 //App.chkRequiredType.setValue(false);
             }
-            if (App.cboDiscType.getValue() == 'G' && cbo.value == 'II')
-            {
-                App.cboRequiredType.show();
+            if (HQ.showRequiredType) {
+                if (App.cboDiscType.getValue() == 'G' && cbo.value == 'II') {
+                    App.cboRequiredType.show();
+                }
+                else {
+                    App.cboRequiredType.hide();
+                }
             }
-            else
-            {
-                App.cboRequiredType.hide();
-            }
-
             //if (App.cboProAplForItem.value == "M"
             //        && cbo.value
             //        && cbo.value.substring(1) != "I") {
@@ -2742,7 +2761,11 @@ var DiscDefintion = {
 
         treeCustomer_AfterRender: function (id) {
             HQ.common.showBusy(true, HQ.waitMsg);
-            App.direct.OM21100GetTreeCustomer(id, {
+            for (var i = 0; i < App.grdCompany.store.getRecordsValues().length; i++) {
+                if (App.grdCompany.store.getRecordsValues()[i].CpnyID != "")
+                    lstCpnyID.push(App.grdCompany.store.getRecordsValues()[i].CpnyID);
+            }
+            App.direct.OM21100GetTreeCustomer(id, lstCpnyID.join(','), {
                 success: function (result) {
                     App.treePanelCustomer.getRootNode().expand();
                     HQ.common.showBusy(false, HQ.waitMsg);
@@ -4406,10 +4429,14 @@ var btnImport_Click = function (sender, e) {
     }
 };
 var cboRequiredType_Change = function () {
-    if(App.cboRequiredType.getValue() == 'Q' || App.cboRequiredType.getValue() == 'N')
+    if (App.cboRequiredType.getValue() == 'Q' || App.cboRequiredType.getValue() == 'N') {
         HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
-    else 
+        HQ.grid.hide(App.grdDiscItem, ['RequiredValueAmount']);
+    }
+    else {
         HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
+        HQ.grid.show(App.grdDiscItem, ['RequiredValueAmount']);
+    }
 
 };
 //var chkRequiredType_Change = function () {
@@ -4578,7 +4605,10 @@ var rowindex = function (lineRef) {
     return index;
 }
 
-
+function tabMain_Change(obj, tab, c, func){
+    if(tab.id == "pnlDPCC")
+        DiscDefintion.Event.treeCustomer_AfterRender('treeCustomer');
+}
 
 
 
