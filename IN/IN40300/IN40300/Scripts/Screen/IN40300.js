@@ -21,9 +21,9 @@ var cboStatus_Change = function (value) {
         HQ.message.show(20150303, '', 'refresh');
     } else {
         //App.grdIN40300.store.removeAll();
-        App.stoIN40300.each(function (item) {
-            item.set("ColCheck", false);
-        });
+        //App.stoIN40300.each(function (item) {
+        //    item.set("ColCheck", false);
+        //});
         App.ColCheck_Header.setValue(false);
         App.cboHandle.store.reload();
     }
@@ -51,11 +51,11 @@ var firstLoad = function () {
 
 var ColCheck_Header_Change = function (value, rowIndex, checked) {
     if (value) {
-        App.stoIN40300.each(function (item) {
-            if (item.data.Status == App.cboStatus.getValue()) {
-                item.set("ColCheck", value.checked);
-            }
-        });
+        //App.stoIN40300.each(function (item) {
+        //    if (item.data.Status == App.cboStatus.getValue()) {
+        //        item.set("ColCheck", value.checked);
+        //    }
+        //});
     }
 };
 var btnProccess_Click = function (type) {
@@ -126,22 +126,22 @@ var btnProccess_Click = function (type) {
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            HQ.grid.first(App.grdIN40300);
+            //HQ.grid.first(App.grdIN40300);
             break;
         case "prev":
-            HQ.grid.prev(App.grdIN40300);
+            //HQ.grid.prev(App.grdIN40300);
             break;
         case "next":
-            HQ.grid.next(App.grdIN40300);
+            //HQ.grid.next(App.grdIN40300);
             break;
         case "last":
-            HQ.grid.last(App.grdIN40300);
+           // HQ.grid.last(App.grdIN40300);
             break;
         case "refresh":
             if (_Change) {
                 HQ.message.show(20150303, '', 'refresh');
             } else {
-                App.stoIN40300.reload();
+               // App.stoIN40300.reload();
             }
             break;
         case "new":
@@ -159,31 +159,31 @@ var menuClick = function (command) {
 
 };
 
-var grdIN40300_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdIN40300, e, keys);
-};
+//var grdIN40300_ValidateEdit = function (item, e) {
+//    return HQ.grid.checkValidateEdit(App.grdIN40300, e, keys);
+//};
 
-var grdIN40300_BeforeEdit = function (editor, e) {
-    if (e.field == 'ColCheck' && e.record.data.Status == App.cboStatus.getValue()) {
-        return true;
-    }
+//var grdIN40300_BeforeEdit = function (editor, e) {
+//    if (e.field == 'ColCheck' && e.record.data.Status == App.cboStatus.getValue()) {
+//        return true;
+//    }
 
-    if (e.record.data.isEdit == '1' && e.field != 'ColCheck') {
-        return true;
-    }
-    return false;
-};
+//    if (e.record.data.isEdit == '1' && e.field != 'ColCheck') {
+//        return true;
+//    }
+//    return false;
+//};
 
-var grdIN40300_Edit = function (item, e) {
-    if (e.record.data.StkQty < e.record.data.ApproveQty || e.record.data.ApproveQty < 0) {
-        e.record.set("ApproveQty", e.record.data.StkQty);
-    }
-};
+//var grdIN40300_Edit = function (item, e) {
+//    if (e.record.data.StkQty < e.record.data.ApproveQty || e.record.data.ApproveQty < 0) {
+//        e.record.set("ApproveQty", e.record.data.StkQty);
+//    }
+//};
 
-var grdIN40300_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdIN40300);
-    stoChanged(App.stoIN40300);
-};
+//var grdIN40300_Reject = function (record) {
+//    HQ.grid.checkReject(record, App.grdIN40300);
+//    //stoChanged(App.stoIN40300);
+//};
 
 var stoChanged = function (sto) {
     _Change = HQ.store.isChange(sto);
@@ -204,7 +204,7 @@ var stoLoad = function (sto) {
     //if (record.data.Status = 'H') {
     //    record.data.ApproveQty = record.data.StkQty;
     //}
-    stoChanged(App.stoIN40300);
+    //stoChanged(App.stoIN40300);
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -212,7 +212,7 @@ var stoLoad = function (sto) {
 function refresh(item) {
     if (item == 'yes') {
         _Change = false;
-        App.stoIN40300.reload();
+       // App.stoIN40300.reload();
     }
 };
 

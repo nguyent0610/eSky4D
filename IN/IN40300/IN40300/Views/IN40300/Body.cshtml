@@ -18,7 +18,7 @@
         .ID("frmMain")
         .BodyPadding(0)
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar("Print,Save,New,Delete", true, ""))
+        .TopBar(Util.SetupToolbar("Print,Save,New,Delete,Refresh", true, ""))
         .Layout(LayoutType.Border)
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
         .Listeners(lst =>
@@ -41,7 +41,7 @@
                         , HQ.Checkbox().ID("chkCalQty").HQLangCode("INRebuildQtyCost")
                         , HQ.Checkbox().ID("chkCalSOQty").HQLangCode("INRebuildOnSOQty")
                     )
-                    
+
                     , X.Container().Layout(LayoutType.VBox)
                     .Items(
                         HQ.Combo().ID("cboSiteID").Name("cboSiteID").Width(250)
@@ -61,10 +61,10 @@
                                 lst.Collapse.Fn = "cboSiteID_Collapse";
                             })
                             .LoadData()
-                            
+
                         ,HQ.Combo().ID("cboWhseLoc").Name("cboWhseLoc").Width(250)
                             .HQLangCode("IN40300_WhseLoc").HQDBSys(false).HQProcedure("IN40300_pcWhseLoc")
-                            .HQColumnShow("WhseLoc,Descr").ForceSelection(true).AllowBlank(false).MultiSelect(true)
+                            .HQColumnShow("WhseLoc,Descr").ForceSelection(true).MultiSelect(true)
                             .DisplayField("WhseLoc").ValueField("WhseLoc").HQHeightWidth(400, 300)
                             .HQParam(new StoreParameterCollection() {
                                 new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
@@ -78,8 +78,8 @@
                                 lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                                 lst.Focus.Handler = "this.forceSelection=true;";
                             })
-                            .LoadData()    
-                            
+                            .LoadData()
+
                         , HQ.Combo().ID("cboInvtID").Name("cboInvtID").Width(250)
                             .HQLangCode("InvtID").HQDBSys(false).HQProcedure("IN40300_pcInventoryActiveByBranch")
                             .HQColumnShow("InvtID,Descr").ForceSelection(true)//.AllowBlank(false)
@@ -96,16 +96,16 @@
                                 lst.Focus.Handler = "this.forceSelection=true;";
                             })
                             .LoadData()
-                            
+
                         , HQ.Button().ID("btnRebuildINTrans").HQLangCode("Handle").MarginSpec("0 0 32 105").Width(145)
                             .Listeners(p =>
                             {
                                 p.Click.Handler = "btnProccess_Click(1)";
                             })
                     )
-                    
+
                 )//RebuildINTrans
-                
+
                 , X.FieldSet().Layout(LayoutType.HBox).MarginSpec("0 0 5 5")
                 .Title(Util.GetLang("RebuildINBat"))
                 .LayoutConfig(new HBoxLayoutConfig { Align=HBoxAlign.Stretch, Pack = BoxPack.Center })
@@ -134,7 +134,7 @@
                                 p.Click.Handler = "btnProccess_Click(2);";
                             })
                     )
-           
+
                 )//RebuildINBat
             )//pnl Header
             ,X.Panel().ID("pnlDet")
