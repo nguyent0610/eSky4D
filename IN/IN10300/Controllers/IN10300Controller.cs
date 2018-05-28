@@ -41,9 +41,9 @@ namespace IN10300.Controllers
         List<IN_MaxTranfers> _lstIN_MaxTranfers = new List<IN_MaxTranfers>();
         List<IN_Transfer> _lstIN_Transfer = new List<IN_Transfer>();
         List<IN_Trans> _lstIN_Trans = new List<IN_Trans>();
-            
-        
-        private List<IN_LotTrans> _lstLot;
+
+
+        private List<IN10300_pgIN_LotTrans_Result> _lstLot;
         private IN_Setup _objIN;
         private string _branch = "";
         private string _advanceType = "";
@@ -70,7 +70,7 @@ namespace IN10300.Controllers
 
             bool showImprtExprt = false;
             var objConfig = _app.IN10300_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-            var requiredWhseLoc = 0;
+            var showWhseLoc = 0;
             if (objConfig != null)
             {
                 hideRptExpDate = objConfig.HideRptExpDate.HasValue ? objConfig.HideRptExpDate.Value : false;
@@ -83,7 +83,7 @@ namespace IN10300.Controllers
                 isSetDefaultSiteID = objConfig.IsSetDefaultSiteID.HasValue ? objConfig.IsSetDefaultSiteID.Value : false;
                 dflReasonCD = objConfig.DflReasonCD.HasValue ? objConfig.DflReasonCD.Value : false;
                 showImprtExprt = objConfig.ShowImprtExprt.HasValue ? objConfig.ShowImprtExprt.Value : false;
-                requiredWhseLoc = objConfig.RequiredWhseLoc;
+                showWhseLoc = objConfig.showWhseLoc;
             }           
             ViewBag.hideRptExpDate = hideRptExpDate;
             ViewBag.hideWarehouss = hideWarehouss;
@@ -96,6 +96,7 @@ namespace IN10300.Controllers
             ViewBag.dflReasonCD = dflReasonCD;
             ViewBag.showImprtExprt = showImprtExprt;
             ViewBag.BranchID = branchID;
+            ViewBag.showWhseLoc = showWhseLoc;
             return View();
         }
 
@@ -138,69 +139,122 @@ namespace IN10300.Controllers
             return this.Store(lstTrans);
         }
 
-        public ActionResult GetLot(string invtID, string siteID, string batNbr, string branchID)
+        public ActionResult GetLot(string invtID, string siteID, string batNbr, string branchID, string whseLoc, int showWhseLoc)
         {
-            List<IN_ItemLot> lstLot = new List<IN_ItemLot>();
-
-            List<IN_ItemLot> lstLotDB = _app.IN_ItemLot.Where(p => p.SiteID == siteID && p.InvtID == invtID && p.QtyAvail > 0).ToList();
-
-            foreach (var item in lstLotDB)
+            List<IN10300_pdGetLot_Result> lstLot = new List<IN10300_pdGetLot_Result>();
+            List<IN10300_pdGetLot_Result> lstLotDB = new List<IN10300_pdGetLot_Result>();
+            if (showWhseLoc == 2 || (whseLoc.PassNull() != "" && showWhseLoc == 1))
             {
-                lstLot.Add(item);
-            }
-
-            List<IN_LotTrans> lstLotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID).ToList();
-            foreach (var item in lstLotTrans)
-            {
-                var lot = lstLot.FirstOrDefault(p => p.LotSerNbr == item.LotSerNbr);
-                if (lot == null)
+                lstLotDB = _app.IN10300_pdGetLot(siteID, invtID, Current.UserName, Current.CpnyID, Current.LangID).Where(p => p.QtyAvail > 0 && p.WhseLoc==whseLoc).ToList();
+                foreach (var item in lstLotDB)
                 {
-                    var lotDB = _app.IN_ItemLot.FirstOrDefault(p => p.SiteID == siteID && p.InvtID == invtID && p.LotSerNbr == item.LotSerNbr);
-                    lotDB.QtyAvail = item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact;
-                    lstLot.Add(lotDB);
-                }
-                else
-                {
-                    lot.QtyAvail += item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact;
+                    lstLot.Add(item);
                 }
 
-
+                List<IN_LotTrans> lstLotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.WhseLoc==whseLoc).ToList();
+                foreach (var item in lstLotTrans)
+                {
+                    var lot = lstLot.FirstOrDefault(p => p.LotSerNbr == item.LotSerNbr);
+                    if (lot == null)
+                    {
+                        var lotDB = _app.IN10300_pdGetLot(siteID,invtID,Current.UserName,Current.CpnyID,Current.LangID).FirstOrDefault(p => p.LotSerNbr == item.LotSerNbr && p.WhseLoc==whseLoc);
+                        lotDB.QtyAvail = item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact;
+                        lstLot.Add(lotDB);
+                    }
+                    else
+                    {
+                        lot.QtyAvail += item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact;
+                    }
+                }
             }
+            else
+            {
+                lstLotDB = _app.IN10300_pdGetLot(siteID, invtID, Current.UserName, Current.CpnyID, Current.LangID).Where(p => p.QtyAvail > 0).ToList();
+                foreach (var item in lstLotDB)
+                {
+                    lstLot.Add(item);
+                }
+
+                List<IN_LotTrans> lstLotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID).ToList();
+                foreach (var item in lstLotTrans)
+                {
+                    var lot = lstLot.FirstOrDefault(p => p.LotSerNbr == item.LotSerNbr);
+                    if (lot == null)
+                    {
+                        var lotDB = _app.IN10300_pdGetLot(siteID,invtID,Current.UserName,Current.CpnyID,Current.LangID).FirstOrDefault(p => p.LotSerNbr == item.LotSerNbr);
+                        lotDB.QtyAvail = item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact;
+                        lstLot.Add(lotDB);
+                    }
+                    else
+                    {
+                        lot.QtyAvail += item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact;
+                    }
+                }
+            }            
             lstLot = lstLot.OrderBy(p => p.ExpDate).ThenBy(p => p.LotSerNbr).ToList();
             return this.Store(lstLot, lstLot.Count);
             //return this.Store(lstLot.OrderBy(p => p.LotSerNbr).ToList(), lstLot.Count);
         }
         public ActionResult GetLotTrans(string branchID, string batNbr)
         {
-            List<IN_LotTrans> lstLotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.ToSiteID!="").ToList();
+            List<IN10300_pgIN_LotTrans_Result> lstLotTrans = _app.IN10300_pgIN_LotTrans(batNbr,branchID,Current.UserName,Current.CpnyID,Current.LangID).Where(p => p.ToSiteID!="").ToList();
             return this.Store(lstLotTrans.OrderBy(p => p.LotSerNbr).ToList(), lstLotTrans.Count);
         }
-        public ActionResult GetItemLot(string invtID, string siteID, string lotSerNbr, string branchID, string batNbr)
+        public ActionResult GetItemLot(string invtID, string siteID, string lotSerNbr, string branchID, string batNbr, string whseLoc, int showWhseLoc)
         {
-            var lot = _app.IN_ItemLot.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr);
-
-            if (lot == null) lot = new IN_ItemLot()
+            var lot = new IN10300_pdGetLot_Result();
+            if (showWhseLoc == 2 || (showWhseLoc == 1 && whseLoc.PassNull() != ""))
             {
-                InvtID = invtID,
-                SiteID = siteID,
-                LotSerNbr = lotSerNbr
-            };
+                lot = _app.IN10300_pdGetLot(siteID,invtID,Current.UserName,Current.CpnyID,Current.LangID).FirstOrDefault(p => p.LotSerNbr == lotSerNbr && p.WhseLoc==whseLoc);
 
-            var lotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr).ToList();
+                if (lot == null) lot = new IN10300_pdGetLot_Result()
+                {
+                    InvtID = invtID,
+                    SiteID = siteID,
+                    LotSerNbr = lotSerNbr
+                };
 
-            foreach (var item in lotTrans)
-            {
-                lot.QtyAvail += (item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact);
+                var lotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr && p.WhseLoc==whseLoc).ToList();
+
+                foreach (var item in lotTrans)
+                {
+                    lot.QtyAvail += (item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact);
+                }
             }
+            else
+            {
+                lot = _app.IN10300_pdGetLot(siteID,invtID,Current.UserName,Current.CpnyID,Current.LangID).FirstOrDefault(p => p.LotSerNbr == lotSerNbr);
 
-            List<IN_ItemLot> lstLot = new List<IN_ItemLot>() { lot };
+                if (lot == null) lot = new IN10300_pdGetLot_Result()
+                {
+                    InvtID = invtID,
+                    SiteID = siteID,
+                    LotSerNbr = lotSerNbr
+                };
+
+                var lotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.LotSerNbr == lotSerNbr).ToList();
+
+                foreach (var item in lotTrans)
+                {
+                    lot.QtyAvail += (item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact);
+                }
+            }
+            List<IN10300_pdGetLot_Result> lstLot = new List<IN10300_pdGetLot_Result>() { lot };
             return this.Store(lstLot, lstLot.Count);
         }
         
-        public ActionResult GetItemSite(string invtID, string siteID)
+        public ActionResult GetItemSite(string invtID, string siteID,string whseLoc,int showWhseLoc)
         {
-            var objSite = _app.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
-            return this.Store(objSite);
+            if (showWhseLoc == 2 || (showWhseLoc == 1 && whseLoc.PassNull() != ""))
+            {
+                var objSite = _app.IN_ItemLoc.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID && p.WhseLoc==whseLoc);
+                return this.Store(objSite);
+            }
+            else
+            {
+                var objSite = _app.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
+                return this.Store(objSite);
+            }                       
         }
         public ActionResult GetUnitConversion()
         {
@@ -287,6 +341,10 @@ namespace IN10300.Controllers
                     oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
                     UpdateINAlloc(trans.InvtID, trans.SiteID, oldQty, 0);
 
+                    if (!string.IsNullOrWhiteSpace(trans.WhseLoc.PassNull()))
+                    {
+                        UpdateINAllocWhseLoc(trans.InvtID, trans.SiteID,trans.WhseLoc, oldQty, 0);
+                    }
                     _app.IN_Trans.DeleteObject(trans);
                 }
 
@@ -297,7 +355,7 @@ namespace IN10300.Controllers
 
                     oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
 
-                    UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
+                    UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr,lot.WhseLoc, oldQty, 0, 0);
 
                     _app.IN_LotTrans.DeleteObject(lot);
                 }
@@ -350,7 +408,10 @@ namespace IN10300.Controllers
                    
                     oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
                     UpdateINAlloc(trans.InvtID, trans.SiteID, oldQty, 0);
-                    
+                    if (!string.IsNullOrWhiteSpace(trans.WhseLoc.PassNull()))
+                    {
+                        UpdateINAllocWhseLoc(trans.InvtID, trans.SiteID, trans.WhseLoc, oldQty, 0);
+                    }    
                     lstTrans.Remove(trans);
                     _app.IN_Trans.DeleteObject(trans);
                 }
@@ -361,7 +422,7 @@ namespace IN10300.Controllers
                     double oldQty = 0;
 
                     oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
-                    UpdateAllocLot(lot.InvtID, lot.SiteID,lot.LotSerNbr, oldQty, 0,0);
+                    UpdateAllocLot(lot.InvtID, lot.SiteID,lot.LotSerNbr,lot.WhseLoc, oldQty, 0,0);
 
                     _app.IN_LotTrans.DeleteObject(lot);
                 }
@@ -379,8 +440,6 @@ namespace IN10300.Controllers
                     batch.LUpd_Prog = _screenNbr;
                     batch.LUpd_User = _userName;
                 }
-
-
                 _app.SaveChanges();
 
                 string tstamp = "";
@@ -417,7 +476,7 @@ namespace IN10300.Controllers
             if (_lstLot == null)
             {
                 var lotHandler = new StoreDataHandler(data["lstLot"]);
-                _lstLot = lotHandler.ObjectData<IN_LotTrans>().Where(p => Util.PassNull(p.INTranLineRef) != string.Empty && Util.PassNull(p.LotSerNbr) != string.Empty && Util.PassNull(p.InvtID) != string.Empty).ToList();
+                _lstLot = lotHandler.ObjectData<IN10300_pgIN_LotTrans_Result>().Where(p => Util.PassNull(p.INTranLineRef) != string.Empty && Util.PassNull(p.LotSerNbr) != string.Empty && Util.PassNull(p.InvtID) != string.Empty).ToList();
             }
 
             _objBatch = data.ConvertToObject<IN10300_pcBatch_Result>();
@@ -427,7 +486,6 @@ namespace IN10300.Controllers
 
             if (_app.IN10300_ppCheckCloseDate(Current.UserName,Current.CpnyID,Current.LangID,_objBatch.BranchID, _objBatch.TranDate.ToDateShort(), "IN10300").FirstOrDefault() == "0")
                 throw new MessageException(MessageType.Message, "301");
-
             //var cfgWrkDateChk = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
             //if (cfgWrkDateChk != null && cfgWrkDateChk.WrkDateChk)
             //{
@@ -457,7 +515,6 @@ namespace IN10300.Controllers
                 {
                     throw new MessageException(MessageType.Message, "2015020802", "", new[] { batch.BatNbr });
                 }
-
             }
             else
             {
@@ -490,7 +547,6 @@ namespace IN10300.Controllers
                 CheckData();
 
                 Save_Batch(batch);
-
             }
             _app.SaveChanges();
 
@@ -499,8 +555,7 @@ namespace IN10300.Controllers
                 DataAccess dal = Util.Dal();
                 INProcess.IN inventory = new INProcess.IN(_userName, _screenNbr, dal);
                 try
-                {
-                   
+                {                   
                     if (_handle == "R")
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
@@ -603,7 +658,6 @@ namespace IN10300.Controllers
                 {
                     throw new MessageException(MessageType.Message, "19");
                 }
-
                 Update_Batch(batch, false);
             }
             else
@@ -613,7 +667,6 @@ namespace IN10300.Controllers
                 Update_Batch(batch, true);
                 _app.Batches.AddObject(batch);
             }
-
             Save_Transfer(batch);
         }
 
@@ -644,7 +697,6 @@ namespace IN10300.Controllers
             if (_objIN == null) _objIN = new IN_Setup();
             foreach (var trans in _lstTrans)
             {
-
                 var transDB = _app.IN_Trans.FirstOrDefault(p =>
                                 p.BatNbr == transfer.BatNbr && p.RefNbr == transfer.RefNbr &&
                                 p.BranchID == transfer.BranchID && p.LineRef == trans.LineRef);
@@ -676,7 +728,7 @@ namespace IN10300.Controllers
                 {
                     var oldQty = item.UnitMultDiv == "D" ? item.Qty / item.CnvFact : item.Qty * item.CnvFact;
 
-                    UpdateAllocLot(item.InvtID, item.SiteID, item.LotSerNbr, oldQty, 0, 0);
+                    UpdateAllocLot(item.InvtID, item.SiteID, item.LotSerNbr,item.WhseLoc, oldQty, 0, 0);
 
                     _app.IN_LotTrans.DeleteObject(item);
                 }
@@ -755,7 +807,6 @@ namespace IN10300.Controllers
             t.Source = "IN";
             t.ToCpnyID = _objBatch.ToCpnyID.PassNull();
             t.ExpectedDate = _objBatch.ExpectedDate.ToDateShort();
-
             t.WhseLoc = _objBatch.WhseLoc;
             t.ToWhseLoc = _objBatch.ToWhseLoc;
             t.LUpd_DateTime = DateTime.Now;
@@ -779,23 +830,19 @@ namespace IN10300.Controllers
             UpdateINAlloc(t.InvtID, t.SiteID, oldQty, 0);
             UpdateINAlloc(s.InvtID, s.SiteID, 0, newQty);
             // Update IN_ItemLoc
-            UpdateINAllocWhseLoc(t.InvtID, t.SiteID, oldQty, 0);
-            UpdateINAllocWhseLoc(s.InvtID, s.SiteID, 0, newQty);
-
+            UpdateINAllocWhseLoc(t.InvtID, t.SiteID,t.WhseLoc, oldQty, 0);
+            UpdateINAllocWhseLoc(s.InvtID, s.SiteID,s.WhseLoc, 0, newQty);
             if (isNew)
             {
                 t.ResetET();
-
                 t.LineRef = s.LineRef;
                 t.BranchID = transfer.BranchID;
                 t.BatNbr = transfer.BatNbr;
                 t.RefNbr = transfer.RefNbr;
-
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
-
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
@@ -825,7 +872,7 @@ namespace IN10300.Controllers
             t.UnitMultDiv = s.UnitMultDiv;
             t.UnitPrice = Math.Round(s.UnitPrice, 0);
         }
-        private bool Update_Lot(IN_LotTrans t, IN_LotTrans s, IN_Transfer transfer, IN_Trans tran, bool isNew)
+        private bool Update_Lot(IN_LotTrans t, IN10300_pgIN_LotTrans_Result s, IN_Transfer transfer, IN_Trans tran, bool isNew)
         {
 
             if (isNew)
@@ -836,17 +883,14 @@ namespace IN10300.Controllers
                 t.INTranLineRef = s.INTranLineRef;
                 t.LotSerNbr = s.LotSerNbr;
                 t.RefNbr = tran.RefNbr;
-
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
-
                 t.WarrantyDate = DateTime.Now.ToDateShort();
             }
 
             double oldQty = 0;
             double newQty = 0;
-
            
             if (!isNew)
                 oldQty = s.UnitMultDiv == "D" ? t.Qty / t.CnvFact : t.Qty * t.CnvFact;
@@ -855,9 +899,9 @@ namespace IN10300.Controllers
 
             newQty = s.UnitMultDiv == "D" ? s.Qty / s.CnvFact : s.Qty * s.CnvFact;
 
-            UpdateAllocLot(t.InvtID, t.SiteID, t.LotSerNbr, oldQty, 0, 0);
+            UpdateAllocLot(t.InvtID, t.SiteID, t.LotSerNbr,t.WhseLoc, oldQty, 0, 0);
 
-            if (!UpdateAllocLot(s.InvtID, s.SiteID, t.LotSerNbr, 0, newQty, 0))
+            if (!UpdateAllocLot(s.InvtID, s.SiteID, t.LotSerNbr,s.WhseLoc, 0, newQty, 0))
             {
                 throw new MessageException("1043", new string[] { s.InvtID + " " + s.LotSerNbr, s.SiteID });
             }
@@ -871,17 +915,13 @@ namespace IN10300.Controllers
             t.Qty = s.Qty;
             t.ToSiteID = tran.ToSiteID;
             t.SiteID = s.SiteID;
-
             t.MfgrLotSerNbr = s.MfgrLotSerNbr.PassNull();
             t.TranType = tran.TranType;
-
             t.TranDate = tran.TranDate;
             t.CnvFact = s.CnvFact;
             t.UnitCost = s.UnitCost;
             t.UnitPrice = s.UnitPrice;
-
             t.UnitMultDiv = s.UnitMultDiv;
-
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
             t.LUpd_DateTime = DateTime.Now;
@@ -916,23 +956,21 @@ namespace IN10300.Controllers
             }
         }
 
-        private bool UpdateINAllocWhseLoc(string invtID, string siteID, double oldQty, double newQty)
+        private bool UpdateINAllocWhseLoc(string invtID, string siteID,string whseLoc, double oldQty, double newQty)
         {
             try
             {
                 var objInvt = GetInvt(invtID);
                 if (objInvt != null && objInvt.StkItem == 1)
                 {
-                    var objWhseLoc = _app.IN_ItemLoc.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
+                    var objWhseLoc = _app.IN_ItemLoc.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID && p.WhseLoc==whseLoc);
                     if (objWhseLoc == null) objWhseLoc = new IN_ItemLoc() { InvtID = invtID, SiteID = siteID };
-
                     if (!_objIN.NegQty && newQty > 0 && objWhseLoc.QtyAvail + oldQty - newQty < 0)
                     {
                         throw new MessageException(MessageType.Message, "608", "", new string[] { invtID, siteID });
                     }
                     objWhseLoc.QtyAllocIN = Math.Round(objWhseLoc.QtyAllocIN + newQty - oldQty, 0);
                     objWhseLoc.QtyAvail = Math.Round(objWhseLoc.QtyAvail - newQty + oldQty, 0);
-
                     return true;
                 }
                 return true;
@@ -942,12 +980,12 @@ namespace IN10300.Controllers
                 throw ex;
             }
         }
-        private bool UpdateAllocLot(string invtID, string siteID, string lotSerNbr, double oldQty, double newQty, int decQty)
+        private bool UpdateAllocLot(string invtID, string siteID, string lotSerNbr, string whseLoc, double oldQty, double newQty, int decQty)
         {
             var objInvt = GetInvt(invtID);
             if (objInvt.StkItem == 1)
             {
-                var objItemLot = _app.IN_ItemLot.FirstOrDefault(p => p.SiteID == siteID && p.InvtID == invtID && p.LotSerNbr == lotSerNbr);
+                var objItemLot = _app.IN_ItemLot.FirstOrDefault(p => p.SiteID == siteID && p.InvtID == invtID && p.LotSerNbr == lotSerNbr && p.WhseLoc == whseLoc);
                 if (objItemLot != null)
                 {
                     if (!_objIN.NegQty && newQty > 0 && objItemLot.QtyAvail + oldQty - newQty < 0)
@@ -2073,7 +2111,7 @@ namespace IN10300.Controllers
 
                     oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
 
-                    UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
+                    UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr,lot.WhseLoc, oldQty, 0, 0);
                 }
             }
             catch (Exception ex)

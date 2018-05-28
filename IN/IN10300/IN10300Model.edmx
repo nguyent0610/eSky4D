@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="Batch">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -504,6 +504,13 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="IN10300_pdGetLot" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="IN10300_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -544,6 +551,13 @@
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="SiteID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN10300_pgIN_LotTrans" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="IN10300_pgLotTransVanSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -629,11 +643,6 @@
             <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="IN_LotTrans" EntityType="IN10300Model.IN_LotTrans" />
-          <FunctionImport Name="IN10300_pdConfig" ReturnType="Collection(IN10300Model.IN10300_pdConfig_Result)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
           <FunctionImport Name="IN10300_pgIN_ItemSite" ReturnType="Collection(IN10300Model.IN10300_pgIN_ItemSite_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -765,6 +774,25 @@
             <Parameter Name="InvtID" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="IN_MaxTranfers" EntityType="IN10300Model.IN_MaxTranfers" />
+          <FunctionImport Name="IN10300_pdConfig" ReturnType="Collection(IN10300Model.IN10300_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="IN10300_pdGetLot" ReturnType="Collection(IN10300Model.IN10300_pdGetLot_Result)">
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="IN10300_pgIN_LotTrans" ReturnType="Collection(IN10300Model.IN10300_pgIN_LotTrans_Result)">
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="IN_Setup">
           <Key>
@@ -1007,19 +1035,6 @@
           <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
-        <ComplexType Name="IN10300_pdConfig_Result">
-          <Property Type="Boolean" Name="AllowDescrBlank" Nullable="true" />
-          <Property Type="Boolean" Name="AllowNoteBlank" Nullable="true" />
-          <Property Type="Boolean" Name="IsSetDefaultShipViaID" Nullable="true" />
-          <Property Type="Boolean" Name="HideRptExpDate" Nullable="true" />
-          <Property Type="Boolean" Name="HideWarehous" Nullable="true" />
-          <Property Type="Boolean" Name="ReadOnlyReasonCD" Nullable="true" />
-          <Property Type="Boolean" Name="IsSetDefaultSiteID" Nullable="true" />
-          <Property Type="Boolean" Name="HideExpectedDateRcptDate" Nullable="true" />
-          <Property Type="Boolean" Name="DflReasonCD" Nullable="true" />
-          <Property Type="Boolean" Name="ShowImprtExprt" Nullable="true" />
-          <Property Type="Int32" Name="RequiredWhseLoc" Nullable="false" />
-        </ComplexType>
         <ComplexType Name="IN10300_pgIN_ItemSite_Result">
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="BranchID" Nullable="true" MaxLength="30" />
@@ -1095,6 +1110,7 @@
           <Property Type="String" Name="WorkingDate" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="InvcNote" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="LastInvcNbr" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="INWhseLoc" Nullable="true" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="IN10300_pdPrice_Result">
           <Property Type="Double" Name="Price" Nullable="true" />
@@ -1432,6 +1448,70 @@
           <Property Name="Lupd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="IN10300_pdConfig_Result">
+          <Property Type="Boolean" Name="AllowDescrBlank" Nullable="true" />
+          <Property Type="Boolean" Name="AllowNoteBlank" Nullable="true" />
+          <Property Type="Boolean" Name="IsSetDefaultShipViaID" Nullable="true" />
+          <Property Type="Boolean" Name="IsSetDefaultSiteID" Nullable="true" />
+          <Property Type="Boolean" Name="HideRptExpDate" Nullable="true" />
+          <Property Type="Boolean" Name="HideWarehous" Nullable="true" />
+          <Property Type="Boolean" Name="ReadOnlyReasonCD" Nullable="true" />
+          <Property Type="Boolean" Name="DflReasonCD" Nullable="true" />
+          <Property Type="Boolean" Name="HideExpectedDateRcptDate" Nullable="true" />
+          <Property Type="Boolean" Name="ShowImprtExprt" Nullable="true" />
+          <Property Type="Int32" Name="showWhseLoc" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="IN10300_pdGetLot_Result">
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="WhseLoc" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="LotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="Double" Name="Cost" Nullable="false" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="16" />
+          <Property Type="DateTime" Name="LIFODate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="MfgrLotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="Double" Name="QtyAlloc" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocIN" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocOther" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocPORet" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocSO" Nullable="false" />
+          <Property Type="Double" Name="QtyAvail" Nullable="false" />
+          <Property Type="Double" Name="QtyOnHand" Nullable="false" />
+          <Property Type="Double" Name="QtyShipNotInv" Nullable="false" />
+          <Property Type="DateTime" Name="WarrantyDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="PackageID" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="QtyAllocPDASO" Nullable="false" />
+          <Property Type="Double" Name="PercentExpDate" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN10300_pgIN_LotTrans_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="LotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="INTranLineRef" Nullable="false" MaxLength="5" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="Int16" Name="InvtMult" Nullable="false" />
+          <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="MfgrLotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ToSiteID" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="TranDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="TranType" Nullable="false" MaxLength="2" />
+          <Property Type="Double" Name="UnitCost" Nullable="false" />
+          <Property Type="Double" Name="UnitPrice" Nullable="false" />
+          <Property Type="DateTime" Name="WarrantyDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
+          <Property Type="String" Name="UnitDesc" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="CnvFact" Nullable="false" />
+          <Property Type="String" Name="UnitMultDiv" Nullable="true" MaxLength="1" />
+          <Property Type="Double" Name="QtyOnHand" Nullable="false" />
+          <Property Type="Double" Name="PercentExpDate" Nullable="true" />
+          <Property Type="String" Name="WhseLoc" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ToWhseLoc" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Reason" Nullable="true" MaxLength="200" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1689,23 +1769,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="IN10300_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdConfig">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdConfig_Result">
-                <ScalarProperty Name="AllowDescrBlank" ColumnName="AllowDescrBlank" />
-                <ScalarProperty Name="AllowNoteBlank" ColumnName="AllowNoteBlank" />
-                <ScalarProperty Name="IsSetDefaultShipViaID" ColumnName="IsSetDefaultShipViaID" />
-                <ScalarProperty Name="HideRptExpDate" ColumnName="HideRptExpDate" />
-                <ScalarProperty Name="HideWarehous" ColumnName="HideWarehous" />
-                <ScalarProperty Name="ReadOnlyReasonCD" ColumnName="ReadOnlyReasonCD" />
-                <ScalarProperty Name="IsSetDefaultSiteID" ColumnName="IsSetDefaultSiteID" />
-                <ScalarProperty Name="HideExpectedDateRcptDate" ColumnName="HideExpectedDateRcptDate" />
-                <ScalarProperty Name="DflReasonCD" ColumnName="DflReasonCD" />
-                <ScalarProperty Name="ShowImprtExprt" ColumnName="ShowImprtExprt" />
-                <ScalarProperty Name="RequiredWhseLoc" ColumnName="RequiredWhseLoc" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN10300_pgIN_ItemSite" FunctionName="eBiz4DWebSysModel.Store.IN10300_pgIN_ItemSite">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN10300Model.IN10300_pgIN_ItemSite_Result">
@@ -1792,6 +1855,7 @@
                 <ScalarProperty Name="WorkingDate" ColumnName="WorkingDate" />
                 <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
                 <ScalarProperty Name="LastInvcNbr" ColumnName="LastInvcNbr" />
+                <ScalarProperty Name="INWhseLoc" ColumnName="INWhseLoc" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2172,6 +2236,82 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN10300_pdConfig" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdConfig">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdConfig_Result">
+                <ScalarProperty Name="AllowDescrBlank" ColumnName="AllowDescrBlank" />
+                <ScalarProperty Name="AllowNoteBlank" ColumnName="AllowNoteBlank" />
+                <ScalarProperty Name="IsSetDefaultShipViaID" ColumnName="IsSetDefaultShipViaID" />
+                <ScalarProperty Name="IsSetDefaultSiteID" ColumnName="IsSetDefaultSiteID" />
+                <ScalarProperty Name="HideRptExpDate" ColumnName="HideRptExpDate" />
+                <ScalarProperty Name="HideWarehous" ColumnName="HideWarehous" />
+                <ScalarProperty Name="ReadOnlyReasonCD" ColumnName="ReadOnlyReasonCD" />
+                <ScalarProperty Name="DflReasonCD" ColumnName="DflReasonCD" />
+                <ScalarProperty Name="HideExpectedDateRcptDate" ColumnName="HideExpectedDateRcptDate" />
+                <ScalarProperty Name="ShowImprtExprt" ColumnName="ShowImprtExprt" />
+                <ScalarProperty Name="showWhseLoc" ColumnName="showWhseLoc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10300_pdGetLot" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdGetLot">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdGetLot_Result">
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
+                <ScalarProperty Name="LotSerNbr" ColumnName="LotSerNbr" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="LIFODate" ColumnName="LIFODate" />
+                <ScalarProperty Name="MfgrLotSerNbr" ColumnName="MfgrLotSerNbr" />
+                <ScalarProperty Name="QtyAlloc" ColumnName="QtyAlloc" />
+                <ScalarProperty Name="QtyAllocIN" ColumnName="QtyAllocIN" />
+                <ScalarProperty Name="QtyAllocOther" ColumnName="QtyAllocOther" />
+                <ScalarProperty Name="QtyAllocPORet" ColumnName="QtyAllocPORet" />
+                <ScalarProperty Name="QtyAllocSO" ColumnName="QtyAllocSO" />
+                <ScalarProperty Name="QtyAvail" ColumnName="QtyAvail" />
+                <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
+                <ScalarProperty Name="QtyShipNotInv" ColumnName="QtyShipNotInv" />
+                <ScalarProperty Name="WarrantyDate" ColumnName="WarrantyDate" />
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="QtyAllocPDASO" ColumnName="QtyAllocPDASO" />
+                <ScalarProperty Name="PercentExpDate" ColumnName="PercentExpDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10300_pgIN_LotTrans" FunctionName="eBiz4DWebSysModel.Store.IN10300_pgIN_LotTrans">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pgIN_LotTrans_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="LotSerNbr" ColumnName="LotSerNbr" />
+                <ScalarProperty Name="INTranLineRef" ColumnName="INTranLineRef" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="InvtMult" ColumnName="InvtMult" />
+                <ScalarProperty Name="KitID" ColumnName="KitID" />
+                <ScalarProperty Name="MfgrLotSerNbr" ColumnName="MfgrLotSerNbr" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="ToSiteID" ColumnName="ToSiteID" />
+                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
+                <ScalarProperty Name="TranType" ColumnName="TranType" />
+                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="WarrantyDate" ColumnName="WarrantyDate" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+                <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
+                <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
+                <ScalarProperty Name="PercentExpDate" ColumnName="PercentExpDate" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
+                <ScalarProperty Name="ToWhseLoc" ColumnName="ToWhseLoc" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
