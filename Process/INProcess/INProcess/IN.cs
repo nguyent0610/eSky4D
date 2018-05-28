@@ -664,6 +664,64 @@ namespace INProcess
                             objToItem.Update();
                         }
 
+                        ////// IN_ItemLoc
+                        if (!string.IsNullOrWhiteSpace(tran.String("WhseLoc").PassNull()))
+                        {
+                            if (!objItemLoc.GetByKey(tran["InvtID"].ToString(), tran["SiteID"].ToString(), tran["WhseLoc"].ToString()))
+                            {
+                                throw new MessageException(MessageType.Message, "606");
+                            }
+                            if (objInvt.StkItem == 1)
+                            {
+                                if (tran.String("UnitMultDiv") == "M" || tran.String("UnitMultDiv").PassNull() == string.Empty)
+                                    qty = tran.Double("Qty") * tran.Short("InvtMult") * tran.Double("CnvFact");
+                                else
+                                    qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
+
+                                objItemLoc.QtyAllocIN = Math.Round(objItemLoc.QtyAllocIN + qty, 0);
+                                objItemLoc.QtyOnHand = Math.Round(objItemLoc.QtyOnHand + qty, 0);
+                                objItemLoc.AvgCost = Math.Round(objItemLoc.QtyOnHand != 0 ? (objItemLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult")) / objItemLoc.QtyOnHand
+                                            : objItemLoc.AvgCost, 0);
+                            }
+                            if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0) < 0)
+                            {
+                                throw new MessageException(MessageType.Message, "607", "", new[] { objItemLoc.InvtID, objItemLoc.SiteID });
+                            }
+
+                            objItemLoc.TotCost = Math.Round(objItemLoc.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
+                            objItemLoc.LUpd_DateTime = DateTime.Now;
+                            objItemLoc.LUpd_Prog = prog;
+                            objItemLoc.LUpd_User = User;
+                            objItemLoc.Update();                          
+                        
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(tran.String("ToWhseLoc").PassNull()))
+                        {
+                            clsIN_ItemLoc objToItemLoc = new clsIN_ItemLoc(Dal);
+                            if (!objToItemLoc.GetByKey(tran.String("InvtID"), tran.String("ToSiteID"), tran.String("ToWhseLoc")))
+                            {
+                                objToItemLoc.Reset();
+                                objToItemLoc.LastPurchaseDate = DateTime.Now.Short();
+                                objToItemLoc.InvtID = tran.String("InvtID");
+                                objToItemLoc.StkItem = objInvt.StkItem;
+                                objToItemLoc.WhseLoc = tran.String("ToWhseLoc");
+                                objToItemLoc.SiteID = tran.String("ToSiteID");
+                                objToItemLoc.LUpd_DateTime = objToItem.Crtd_DateTime = DateTime.Now;
+                                objToItemLoc.LUpd_Prog = objToItem.Crtd_Prog = prog;
+                                objToItemLoc.LUpd_User = objToItem.Crtd_User = User;
+                                objToItemLoc.Add();
+                            }
+                            if (objInvt.StkItem == 1 && transfer.String("TransferType") == "2")
+                            {
+                                objToItemLoc.QtyInTransit = Math.Round(objToItemLoc.QtyInTransit + Math.Abs(qty), 0);
+                                objToItemLoc.Update();
+                            }
+                        }
+
+                        /////////
+
+
                         if (objInvt.StkItem == 1 && transfer.String("TransferType") == "1")
                         {
                             if (lineRef == string.Empty)
@@ -2978,7 +3036,6 @@ namespace INProcess
                 throw ex;
             }
         }
-
         private int GetDecimalPlace(string lotSerTrack)
         {
             return (lotSerTrack != "Q" ? 0 : 2);
