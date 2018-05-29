@@ -127,10 +127,25 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="SA03001_ppUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="UserNameOld" Type="varchar" Mode="In" />
+          <Parameter Name="UserNameNew" Type="varchar" Mode="In" />
+          <Parameter Name="LstSlsperID" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="SA03001_ptTreeNode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="UserNameOld" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SA03001_ptTreeNodeUserReplace" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="UserNameNew" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="SYS_Configurations" EntityType="Self.SYS_Configurations" Schema="dbo" store:Type="Tables" />
@@ -174,11 +189,6 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <FunctionImport Name="SA03001_ptTreeNode" ReturnType="Collection(SA03001Model.SA03001_ptTreeNode_Result)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="CpnyID" Mode="In" Type="String" />
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
           <FunctionImport Name="SA03001_pdDSR" ReturnType="Collection(SA03001Model.SA03001_pdDSR_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -193,6 +203,26 @@
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="SA03001_ppUpdate" ReturnType="Collection(String)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="UserNameOld" Mode="In" Type="String" />
+            <Parameter Name="UserNameNew" Mode="In" Type="String" />
+            <Parameter Name="LstSlsperID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA03001_ptTreeNode" ReturnType="Collection(SA03001Model.SA03001_ptTreeNode_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="UserNameOld" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA03001_ptTreeNodeUserReplace" ReturnType="Collection(SA03001Model.SA03001_ptTreeNodeUserReplace_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="UserNameNew" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="SA03001_pgLoadGrid_Result">
@@ -332,18 +362,6 @@
           <Property Type="String" Name="Color" Nullable="true" MaxLength="6" />
           <Property Type="String" Name="Data" Nullable="true" MaxLength="94" />
         </ComplexType>
-        <ComplexType Name="SA03001_ptTreeNode_Result">
-          <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="ParentName" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="SupID" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="Color" Nullable="false" MaxLength="1" />
-          <Property Type="Int32" Name="Level" Nullable="false" />
-          <Property Type="String" Name="Data" Nullable="false" MaxLength="34" />
-          <Property Type="String" Name="NoteType" Nullable="false" MaxLength="1" />
-          <Property Type="String" Name="Position" Nullable="false" MaxLength="1" />
-        </ComplexType>
         <ComplexType Name="SA03001_pdDSR_Result">
           <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
@@ -365,6 +383,30 @@
         <ComplexType Name="SA03001_pdConfigHideShow_Result">
           <Property Type="Boolean" Name="UserTypes" Nullable="true" />
           <Property Type="Boolean" Name="CpnyID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SA03001_ptTreeNode_Result">
+          <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ParentName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SupID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Color" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="Level" Nullable="false" />
+          <Property Type="String" Name="Data" Nullable="false" MaxLength="34" />
+          <Property Type="String" Name="NoteType" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Position" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="SA03001_ptTreeNodeUserReplace_Result">
+          <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ParentName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SupID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Color" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="Level" Nullable="false" />
+          <Property Type="String" Name="Data" Nullable="false" MaxLength="34" />
+          <Property Type="String" Name="NoteType" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Position" Nullable="false" MaxLength="1" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -531,22 +573,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SA03001_ptTreeNode" FunctionName="eBiz4DWebSysModel.Store.SA03001_ptTreeNode">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA03001Model.SA03001_ptTreeNode_Result">
-                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="ParentName" ColumnName="ParentName" />
-                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
-                <ScalarProperty Name="SupID" ColumnName="SupID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Color" ColumnName="Color" />
-                <ScalarProperty Name="Level" ColumnName="Level" />
-                <ScalarProperty Name="Data" ColumnName="Data" />
-                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SA03001_pdDSR" FunctionName="eBiz4DWebSysModel.Store.SA03001_pdDSR">
             <ResultMapping>
               <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdDSR_Result">
@@ -578,6 +604,39 @@
               <ComplexTypeMapping TypeName="SA03001Model.SA03001_pdConfigHideShow_Result">
                 <ScalarProperty Name="UserTypes" ColumnName="UserTypes" />
                 <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA03001_ppUpdate" FunctionName="eBiz4DWebSysModel.Store.SA03001_ppUpdate" />
+          <FunctionImportMapping FunctionImportName="SA03001_ptTreeNode" FunctionName="eBiz4DWebSysModel.Store.SA03001_ptTreeNode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_ptTreeNode_Result">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ParentName" ColumnName="ParentName" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="SupID" ColumnName="SupID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA03001_ptTreeNodeUserReplace" FunctionName="eBiz4DWebSysModel.Store.SA03001_ptTreeNodeUserReplace">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA03001Model.SA03001_ptTreeNodeUserReplace_Result">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ParentName" ColumnName="ParentName" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="SupID" ColumnName="SupID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

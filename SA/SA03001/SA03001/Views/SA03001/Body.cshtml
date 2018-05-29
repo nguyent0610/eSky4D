@@ -22,7 +22,7 @@
     //.TopBar(Util.SetupToolbar("Print,Save,Delete", true, ""))
         .TopBar(Util.SetupToolbar(new AbstractComponent[]{
             X.Button()
-            .ID("btnReplace").Text("Replace").Hidden(true)
+            .ID("btnReplace").Text("Replace")
             .Icon(Icon.TextReplace)
             .Listeners(p=>{
                 p.Click.Fn = "btnReplace_Click";              
@@ -86,6 +86,8 @@
                 ,X.Column().Text(Util.GetLang("UserGroup")).DataIndex("UserGroup").Width(120)   
                  
                 ,X.CheckColumn().Text(Util.GetLang("Blocked")).DataIndex("Blocked").StopSelection(false).Editable(false).Width(70)
+
+                , X.DateColumn().Text(Util.GetLang("SA03001BeginDay")).DataIndex("BeginDay").Width(160)
                 
                 ,X.DateColumn().Text(Util.GetLang("BlockedTime")).DataIndex("BlockedTime").Width(160)  
                 
@@ -95,7 +97,6 @@
                 , X.Column().Text(Util.GetLang("Position")).DataIndex("PositionDescr").Width(120)
                 , X.DateColumn().Text(Util.GetLang("StartWork")).DataIndex("StartWork").Width(160)
                 , X.DateColumn().Text(Util.GetLang("EndWork")).DataIndex("EndWork").Width(160)
-                , X.DateColumn().Text(Util.GetLang("BeginDay")).DataIndex("BeginDay").Width(160)
                 , X.NumberColumn().Text(Util.GetLang("ExpireDay")).DataIndex("ExpireDay").Width(160).Format("00")  
                 //,X.CommandColumn().Width(150)
                 //.Commands(
@@ -151,13 +152,13 @@
                         X.StringFilter().DataIndex("UserTypes"),
                         X.StringFilter().DataIndex("UserGroup"),
                         X.BooleanFilter().DataIndex("Blocked"),
+                        X.DateFilter().DataIndex("BeginDay"),
                         X.DateFilter().DataIndex("BlockedTime")
                         ,X.NumericFilter().DataIndex("FailedLoginCount")
                         ,X.DateFilter().DataIndex("LastLoggedIn")
                         , X.StringFilter().DataIndex("PositionDescr")
                         , X.DateFilter().DataIndex("StartWork")
                         , X.DateFilter().DataIndex("EndWork")
-                        , X.DateFilter().DataIndex("BeginDay")
                         , X.NumericFilter().DataIndex("ExpireDay")
                     )
             )
@@ -450,7 +451,7 @@
     )
     
 )
-@*@(
+@(
  X.Window()
     .ID("winReplace")
     .Hidden(true)
@@ -460,7 +461,7 @@
     .Closable(true)
     //.AutoScroll(true)
     .Buttons(
-        X.Button().ID("btnUpdate").Text(Util.GetLang("Update"))
+        X.Button().ID("btnUpdate").Text(Util.GetLang("Update")).Icon(Icon.ArrowRefresh)
            .Listeners(p => p.Click.Fn = "btnUpdate_Click")
     )
     .BottomBar(
@@ -471,92 +472,62 @@
         )
     )
     .Items(
-            X.Panel().ID("pnlTreeAVC").Title(Util.GetLang("Phân Cấp")).Region(Region.West)
-                .Layout(LayoutType.Fit).Flex(1)
-            .MinWidth(150).Split(true).AutoScroll(true)
-            .Listeners(lst =>
-            {
-                lst.Render.Handler = "HQ.common.control_render(this,'');";
-            })
-                .DirectEvents(de =>
-                {
-                    de.AfterRender.ExtraParams.Add(new Parameter("lstbranchID", "040100005,", ParameterMode.Raw));
-                    de.AfterRender.Url = Url.Action("SA03001_GetTreeData");
-                    de.AfterRender.CleanRequest = true;
-                    de.AfterRender.Method = HttpMethod.POST;
-                    de.AfterRender.Success = "";
-                    de.AfterRender.Timeout = 60000;
-                    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                    de.AfterRender.EventMask.ShowMask = true;
-                    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                    de.AfterRender.EventMask.MinDelay = 500;
-                    de.BeforeExpand.Success = "";
-                    de.Expand.Success = "";
-
-                })
-            .BottomBar(
-                X.Toolbar()
-                .Items(
-                      X.ToolbarFill()
-                    , X.ToolbarSpacer()
-                    , HQ.Button()
-                    .ID("btnTreeExpand")
-                    .HQLangCode("Expand")
-                    .Icon(Icon.BulletPlus)
-                     .Handler(" App.frmMain.mask();Ext.suspendLayouts(); expandAll();Ext.resumeLayouts(true); App.frmMain.unmask();")
-                    , X.ToolbarSeparator()
-                    , X.ToolbarSpacer()
-                    , HQ.Button()
-                    .ID("btnCollapse")
-                    .HQLangCode("Collapse")
-                    .Icon(Icon.BulletMinus)
-                    .Handler("collapseAll();")
-
-                    , X.ToolbarFill()
-                )
-            ).MinHeight(12).AutoShow(true)
-          ,
-                X.Panel().ID("pnlTreeAVC1").Title(Util.GetLang("Phân Cấp")).Region(Region.Center)
-                .Listeners(lst =>
-                {
-                    lst.Render.Handler = "HQ.common.control_render(this,'');";
-                })
-                    .DirectEvents(de =>
-                    {
-                        de.AfterRender.ExtraParams.Add(new Parameter("lstbranchID", "040100072,", ParameterMode.Raw));
-                        de.AfterRender.Url = Url.Action("SA03001_GetTreeData");
-                        de.AfterRender.CleanRequest = true;
-                        de.AfterRender.Method = HttpMethod.POST;
-                        de.AfterRender.Success = "";
-                        de.AfterRender.Timeout = 60000;
-                        de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                        de.AfterRender.EventMask.ShowMask = true;
-                        de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                        de.AfterRender.EventMask.MinDelay = 500;
-                        de.BeforeExpand.Success = "";
-                        de.Expand.Success = "";
-
-                    })
-                .BottomBar(
-                    X.Toolbar()
-                    .Items(
-                        X.ToolbarFill()
-                        , X.ToolbarSpacer()
-                        , HQ.Button()
-                        .ID("btnTreeExpand1")
-                        .HQLangCode("Expand")
-                        .Icon(Icon.BulletPlus)
-                        .Handler(" App.frmMain.mask();Ext.suspendLayouts(); expandAll();Ext.resumeLayouts(true); App.frmMain.unmask();")
-                        , X.ToolbarSeparator()
-                        , X.ToolbarSpacer()
-                        , HQ.Button()
-                        .ID("btnCollapse1")
-                        .HQLangCode("Collapse")
-                        .Icon(Icon.BulletMinus)
-                        .Handler("collapseAll();")
-
-                        , X.ToolbarFill()
+            X.Panel().ID("pnlUserNameOld")
+            .Region(Region.West).Border(false)
+            .Layout(LayoutType.Border).Flex(1)
+            .Items(
+                        X.Panel().ID("pnlHeader")
+                        .Region(Region.North)
+                        .Height(40)
+                        .AutoScroll(true)
+                        .Items(
+                                HQ.TextBox().ID("txtUserNameOld").HQLangCode("Nhân viên bị thay thế").MarginSpec("5 0 0 10").Width(300).ReadOnly(true).Tag("X")
+                        )       
+                        , X.Panel().ID("pnlTreeAVC").Title(Util.GetLang("Phân Cấp")).Region(Region.Center)
+                        .Layout(LayoutType.Fit)
+                        .Split(true).AutoScroll(true)
+                        .Listeners(lst =>
+                        {
+                            //lst.AfterRender.Handler = "treeAVC_AfterRender('pnlTreeAVC');";
+                        })
                     )
-                ).MinHeight(12).AutoShow(true)
+            , X.Panel().ID("pnlUserNameNew")
+            .Region(Region.Center).Border(false)
+            .Layout(LayoutType.Border)
+            .Items(
+
+                    X.Panel().ID("pnlHeaderUserReplace")
+                    .Region(Region.North)
+                    .Height(40)
+                    .AutoScroll(true)
+                    .Items(
+                            HQ.Combo().ID("cboUserBy").Name("cboUserBy").MarginSpec("5 0 0 0").Width(300)
+                            .HQLangCode("Thay thế bởi").HQDBSys(true).HQProcedure("SA03001_pcUserIDBy").HQisPaging(true).PageSize(20)
+                            .HQColumnShow("UserName,Name").ForceSelection(true).AllowBlank(false)
+                            .DisplayField("Name").ValueField("UserName").HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() 
+                            { 
+                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@UserIDOld", Value = "_userName", Mode = ParameterMode.Raw }
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(ls =>
+                            {
+                                ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                ls.Change.Fn = "cboUserBy_Change";
+                                //ls.Select.Fn = "cboUserBy_Select";
+                            })
+                            .LoadData()
+                        )
+                    , X.Panel().ID("pnlTreeAVCUserReplace").Title(Util.GetLang("Phân Cấp")).Region(Region.Center)
+                    .Layout(LayoutType.Fit)
+                    .Split(true).AutoScroll(true)
+                    .Listeners(lst =>
+                    {
+                        //lst.AfterRender.Handler = "treeAVC_AfterRender1('pnlTreeAVC1');";
+                    })
+                )           
     )
- )*@
+ )

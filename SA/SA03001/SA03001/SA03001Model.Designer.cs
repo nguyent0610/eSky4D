@@ -397,47 +397,6 @@ namespace SA03001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<SA03001_ptTreeNode_Result> SA03001_ptTreeNode(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<SA03001_ptTreeNode_Result>("SA03001_ptTreeNode", userNameParameter, cpnyIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="dSM">No Metadata Documentation available.</param>
@@ -556,6 +515,184 @@ namespace SA03001
             }
     
             return base.ExecuteFunction<SA03001_pdConfigHideShow_Result>("SA03001_pdConfigHideShow", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="userNameOld">No Metadata Documentation available.</param>
+        /// <param name="userNameNew">No Metadata Documentation available.</param>
+        /// <param name="lstSlsperID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> SA03001_ppUpdate(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String userNameOld, global::System.String userNameNew, global::System.String lstSlsperID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter userNameOldParameter;
+            if (userNameOld != null)
+            {
+                userNameOldParameter = new ObjectParameter("UserNameOld", userNameOld);
+            }
+            else
+            {
+                userNameOldParameter = new ObjectParameter("UserNameOld", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameNewParameter;
+            if (userNameNew != null)
+            {
+                userNameNewParameter = new ObjectParameter("UserNameNew", userNameNew);
+            }
+            else
+            {
+                userNameNewParameter = new ObjectParameter("UserNameNew", typeof(global::System.String));
+            }
+    
+            ObjectParameter lstSlsperIDParameter;
+            if (lstSlsperID != null)
+            {
+                lstSlsperIDParameter = new ObjectParameter("LstSlsperID", lstSlsperID);
+            }
+            else
+            {
+                lstSlsperIDParameter = new ObjectParameter("LstSlsperID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("SA03001_ppUpdate", userNameParameter, cpnyIDParameter, langIDParameter, userNameOldParameter, userNameNewParameter, lstSlsperIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="userNameOld">No Metadata Documentation available.</param>
+        public ObjectResult<SA03001_ptTreeNode_Result> SA03001_ptTreeNode(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String userNameOld)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter userNameOldParameter;
+            if (userNameOld != null)
+            {
+                userNameOldParameter = new ObjectParameter("UserNameOld", userNameOld);
+            }
+            else
+            {
+                userNameOldParameter = new ObjectParameter("UserNameOld", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<SA03001_ptTreeNode_Result>("SA03001_ptTreeNode", userNameParameter, cpnyIDParameter, langIDParameter, userNameOldParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="userNameNew">No Metadata Documentation available.</param>
+        public ObjectResult<SA03001_ptTreeNodeUserReplace_Result> SA03001_ptTreeNodeUserReplace(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String userNameNew)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter userNameNewParameter;
+            if (userNameNew != null)
+            {
+                userNameNewParameter = new ObjectParameter("UserNameNew", userNameNew);
+            }
+            else
+            {
+                userNameNewParameter = new ObjectParameter("UserNameNew", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<SA03001_ptTreeNodeUserReplace_Result>("SA03001_ptTreeNodeUserReplace", userNameParameter, cpnyIDParameter, langIDParameter, userNameNewParameter);
         }
 
         #endregion
@@ -4015,6 +4152,285 @@ namespace SA03001
             sA03001_ptTreeNode_Result.NoteType = noteType;
             sA03001_ptTreeNode_Result.Position = position;
             return sA03001_ptTreeNode_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ParentID
+        {
+            get
+            {
+                return _ParentID;
+            }
+            set
+            {
+                OnParentIDChanging(value);
+                ReportPropertyChanging("ParentID");
+                _ParentID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ParentID");
+                OnParentIDChanged();
+            }
+        }
+        private global::System.String _ParentID;
+        partial void OnParentIDChanging(global::System.String value);
+        partial void OnParentIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ParentName
+        {
+            get
+            {
+                return _ParentName;
+            }
+            set
+            {
+                OnParentNameChanging(value);
+                ReportPropertyChanging("ParentName");
+                _ParentName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ParentName");
+                OnParentNameChanged();
+            }
+        }
+        private global::System.String _ParentName;
+        partial void OnParentNameChanging(global::System.String value);
+        partial void OnParentNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SlsperID
+        {
+            get
+            {
+                return _SlsperID;
+            }
+            set
+            {
+                OnSlsperIDChanging(value);
+                ReportPropertyChanging("SlsperID");
+                _SlsperID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SlsperID");
+                OnSlsperIDChanged();
+            }
+        }
+        private global::System.String _SlsperID;
+        partial void OnSlsperIDChanging(global::System.String value);
+        partial void OnSlsperIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SupID
+        {
+            get
+            {
+                return _SupID;
+            }
+            set
+            {
+                OnSupIDChanging(value);
+                ReportPropertyChanging("SupID");
+                _SupID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SupID");
+                OnSupIDChanged();
+            }
+        }
+        private global::System.String _SupID;
+        partial void OnSupIDChanging(global::System.String value);
+        partial void OnSupIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Color
+        {
+            get
+            {
+                return _Color;
+            }
+            set
+            {
+                OnColorChanging(value);
+                ReportPropertyChanging("Color");
+                _Color = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Color");
+                OnColorChanged();
+            }
+        }
+        private global::System.String _Color;
+        partial void OnColorChanging(global::System.String value);
+        partial void OnColorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Level
+        {
+            get
+            {
+                return _Level;
+            }
+            set
+            {
+                OnLevelChanging(value);
+                ReportPropertyChanging("Level");
+                _Level = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Level");
+                OnLevelChanged();
+            }
+        }
+        private global::System.Int32 _Level;
+        partial void OnLevelChanging(global::System.Int32 value);
+        partial void OnLevelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Data
+        {
+            get
+            {
+                return _Data;
+            }
+            set
+            {
+                OnDataChanging(value);
+                ReportPropertyChanging("Data");
+                _Data = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Data");
+                OnDataChanged();
+            }
+        }
+        private global::System.String _Data;
+        partial void OnDataChanging(global::System.String value);
+        partial void OnDataChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String NoteType
+        {
+            get
+            {
+                return _NoteType;
+            }
+            set
+            {
+                OnNoteTypeChanging(value);
+                ReportPropertyChanging("NoteType");
+                _NoteType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NoteType");
+                OnNoteTypeChanged();
+            }
+        }
+        private global::System.String _NoteType;
+        partial void OnNoteTypeChanging(global::System.String value);
+        partial void OnNoteTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Position
+        {
+            get
+            {
+                return _Position;
+            }
+            set
+            {
+                OnPositionChanging(value);
+                ReportPropertyChanging("Position");
+                _Position = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Position");
+                OnPositionChanged();
+            }
+        }
+        private global::System.String _Position;
+        partial void OnPositionChanging(global::System.String value);
+        partial void OnPositionChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA03001Model", Name="SA03001_ptTreeNodeUserReplace_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA03001_ptTreeNodeUserReplace_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA03001_ptTreeNodeUserReplace_Result object.
+        /// </summary>
+        /// <param name="slsperID">Initial value of the SlsperID property.</param>
+        /// <param name="color">Initial value of the Color property.</param>
+        /// <param name="level">Initial value of the Level property.</param>
+        /// <param name="data">Initial value of the Data property.</param>
+        /// <param name="noteType">Initial value of the NoteType property.</param>
+        /// <param name="position">Initial value of the Position property.</param>
+        public static SA03001_ptTreeNodeUserReplace_Result CreateSA03001_ptTreeNodeUserReplace_Result(global::System.String slsperID, global::System.String color, global::System.Int32 level, global::System.String data, global::System.String noteType, global::System.String position)
+        {
+            SA03001_ptTreeNodeUserReplace_Result sA03001_ptTreeNodeUserReplace_Result = new SA03001_ptTreeNodeUserReplace_Result();
+            sA03001_ptTreeNodeUserReplace_Result.SlsperID = slsperID;
+            sA03001_ptTreeNodeUserReplace_Result.Color = color;
+            sA03001_ptTreeNodeUserReplace_Result.Level = level;
+            sA03001_ptTreeNodeUserReplace_Result.Data = data;
+            sA03001_ptTreeNodeUserReplace_Result.NoteType = noteType;
+            sA03001_ptTreeNodeUserReplace_Result.Position = position;
+            return sA03001_ptTreeNodeUserReplace_Result;
         }
 
         #endregion

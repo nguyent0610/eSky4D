@@ -4,6 +4,8 @@ var keys = ['UserName'];
 var _CustID = '';
 var _tstamp = '';
 var _selBranch = [];
+var _userName = '';
+var dsr = [];
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
 
@@ -186,11 +188,33 @@ var btnAddCustomer_Click = function () {
     App.winBranch.show();
 };
 var btnReplace_Click = function () {
-
+    if (App.slmUser.selected.items[0] != undefined) {
+        _userName = App.slmUser.selected.items[0].data.UserName;
+        App.txtUserNameOld.setValue(_userName);
+        App.cboUserBy.store.reload();
+        treeAVC_AfterRender('pnlTreeAVC', _userName);
+        App.winReplace.show();
+    }
 };
-//var btnUpdate_Click = function () {
-
-//};
+var btnUpdate_Click = function () {
+    getSelected();
+    if (Ext.isEmpty(App.cboUserBy.getValue()))
+    {
+        HQ.message.show(15, App.cboUserBy.fieldLabel);
+        return;
+    }
+    if (dsr.join(',') == "")
+    {
+        HQ.message.show(2018052801);
+        return;
+    }
+    App.direct.UpdateSalesForce(App.txtUserNameOld.getValue(), App.cboUserBy.getValue(), dsr.join(','), {
+        success: function (result) {
+            treeAVC_AfterRender('pnlTreeAVC', App.txtUserNameOld.getValue());
+            treeAVC_AfterRenderUserReplace('pnlTreeAVCUserReplace', App.cboUserBy.getValue());
+        }
+    });
+};
 var chkActiveAll_Change = function (sender, value, oldValue) {
     if (sender.hasFocus) {
         var store = App.stoBranch;
@@ -212,7 +236,16 @@ var dtpStartWork_Change = function (dtp, newValue, oldValue, eOpts) {
         App.dtpEndWork.setValue(App.dtpStartWork.getValue());
     }
 };
-
+var cboUserBy_Change = function (sender, value, oldValue) {
+    if (sender.valueModels != null) {
+        treeAVC_AfterRenderUserReplace('pnlTreeAVCUserReplace', value);
+    }
+};
+var cboUserBy_Select = function (sender, value, oldValue) {
+    if (sender.valueModels != null) {
+        treeAVC_AfterRenderUserReplace('pnlTreeAVCUserReplace', value[0].data.UserName);
+    }
+};
 var btnBranchOK_Click = function () {
     var res = "";
     var store = App.stoBranch;
@@ -252,12 +285,12 @@ var btnLocationOK_Click = function () {
     }
     if (App.txtEmail.getValue() == null)
     {
-        HQ.message.show(15, App.txtPassWord.fieldLabel);
+        HQ.message.show(15, App.txtEmail.fieldLabel);
         return;
     }
     if (HQ.IsRequiredCpny) {
         if (App.txtCpnyID.getValue() == null) {
-            HQ.message.show(15, App.txtPassWord.fieldLabel);
+            HQ.message.show(15, App.txtCpnyID.fieldLabel);
             return;
         }
     }
@@ -361,3 +394,74 @@ var expand = function (cbo, delimiter) {
     if (cbo.getValue())
         cbo.setValue(cbo.getValue().toString().replace(new RegExp(' ', 'g'), '').replace(new RegExp(delimiter, 'g'), ',').split(','));
 };
+
+var treeAVC_AfterRender = function (id, userNameOld) {
+    App.direct.SA03001_GetTreeData(id, userNameOld, {
+        success: function (result) {
+
+        }
+    });
+};
+
+var treeAVC_AfterRenderUserReplace = function (id, userNameNew) {
+    App.direct.SA03001_GetTreeDataUserReplace(id, userNameNew, {
+        success: function (result) {
+
+        }
+    });
+};
+var treePanelAVC_checkChange = function (node, checked) {
+    if (node.hasChildNodes()) {
+        node.eachChild(function (childNode) {
+            childNode.set('checked', checked);
+            treePanelAVC_checkChange(childNode, checked);
+        });
+    }    
+};
+var getDeepAllLeafNodes = function (node, onlyLeaf) {
+    var allNodes = new Array();
+    if (!Ext.value(node, false)) {
+        return [];
+    }
+    if (node.isLeaf()) {
+        return node;
+    } else {
+        allNodes = allNodes.concat(node.childNodes);
+    }
+    return allNodes;
+};
+var getSelected = function () {
+    dsr = [];
+    var allNodes = getDeepAllLeafNodes(App.treeAVC.getRootNode(), true);
+        allNodes.forEach(function (node) {
+            if (node.data.checked) {
+                if (node.data.Type != 'B') {
+                    var index = dsr.indexOf(node.data.Data);
+                    if (index == -1) {
+                        dsr.push(node.data.Data);
+                    }
+                }
+
+                if (node.childNodes.length > 0) {
+                    getChildSelected(node);
+                }
+            }
+        });
+}
+
+var getChildSelected = function (node) {
+    for (var i = 0; i < node.childNodes.length; i++) {
+        if (node.childNodes[i].data.checked) {
+            if (node.childNodes[i].data.Type != 'B') {
+                var index = dsr.indexOf(node.childNodes[i].data.Data);
+                if (index == -1) {
+                    dsr.push(node.childNodes[i].data.Data);
+                }
+            }
+        }
+
+        if (node.childNodes[i].childNodes.length) {
+            getChildSelected(node.childNodes[i]);
+        }
+    }
+}
