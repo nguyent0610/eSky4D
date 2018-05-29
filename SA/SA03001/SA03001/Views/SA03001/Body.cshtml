@@ -490,6 +490,28 @@
                         {
                             //lst.AfterRender.Handler = "treeAVC_AfterRender('pnlTreeAVC');";
                         })
+                        .BottomBar(
+                                X.Toolbar()
+                                .Items(
+                                    X.ToolbarFill()
+
+                                    , HQ.Button()
+                                    .HQLangCode("Expand")
+                                    .Icon(Icon.BulletTogglePlus)
+                                    .Handler("btnExpand_click")
+
+                                    , X.ToolbarSpacer()
+                                    , X.ToolbarSeparator()
+                                    , X.ToolbarSpacer()
+
+                                    , HQ.Button()
+                                    .HQLangCode("Collapse")
+                                    .Icon(Icon.BulletToggleMinus)
+                                    .Handler("btnCollapse_click")
+
+                                    , X.ToolbarFill()
+                                )
+                            ) 
                     )
             , X.Panel().ID("pnlUserNameNew")
             .Region(Region.Center).Border(false)
@@ -528,6 +550,28 @@
                     {
                         //lst.AfterRender.Handler = "treeAVC_AfterRender1('pnlTreeAVC1');";
                     })
-                )           
+                    .BottomBar(
+                                X.Toolbar()
+                                .Items(
+                                    X.ToolbarFill()
+
+                                    , HQ.Button()
+                                    .HQLangCode("Expand")
+                                    .Icon(Icon.BulletTogglePlus)
+                                    .Handler("btnUserReplaceExpand_click")
+
+                                    , X.ToolbarSpacer()
+                                    , X.ToolbarSeparator()
+                                    , X.ToolbarSpacer()
+
+                                    , HQ.Button()
+                                    .HQLangCode("Collapse")
+                                    .Icon(Icon.BulletToggleMinus)
+                                    .Handler("btnUserReplaceCollapse_click")
+
+                                    , X.ToolbarFill()
+                                )
+                        ) 
+            )           
     )
  )

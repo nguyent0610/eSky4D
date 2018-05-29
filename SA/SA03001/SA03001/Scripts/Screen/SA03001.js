@@ -465,3 +465,19 @@ var getChildSelected = function (node) {
         }
     }
 }
+var btnExpand_click = function (btn, e, eOpts) {
+    App.treeAVC.expandAll();
+};
+
+var btnCollapse_click = function (btn, e, eOpts) {
+    App.treeAVC.collapseAll();
+};
+var btnUserReplaceExpand_click = function (btn, e, eOpts) {
+    App.treeAVCUserReplace.expandAll();
+};
+
+var btnUserReplaceCollapse_click = function (btn, e, eOpts) {
+    App.treeAVCUserReplace.collapseAll();
+};
+
+
