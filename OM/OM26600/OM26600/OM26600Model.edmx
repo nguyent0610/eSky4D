@@ -4,65 +4,93 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="OM_Truck" EntityType="eBiz4DWebSysModel.Store.OM_Truck" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="OM_Truck">
           <Key>
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="Code" />
+            <PropertyRef Name="TypeOfVehicle" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="Code" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Descr" Type="nvarchar" Nullable="false" MaxLength="250" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="WeightMax" Type="float" />
+          <Property Name="ValueMax" Type="float" />
+          <Property Name="TypeOfVehicle" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <Function Name="OM26600_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="OM26600_pgOM_Truck" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="OM_Truck" EntityType="Self.OM_Truck" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OM26600Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="OM26600Entities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="OM_Truck" EntityType="OM26600Model.OM_Truck" />
           <FunctionImport Name="OM26600_pgOM_Truck" ReturnType="Collection(OM26600Model.OM26600_pgOM_Truck_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="OM_Truck" EntityType="OM26600Model.OM_Truck" />
+          <FunctionImport Name="OM26600_pdConfig" ReturnType="Collection(OM26600Model.OM26600_pdConfig_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
-        <EntityType Name="OM_Truck">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="Code" />
-          </Key>
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Descr" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="0" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="0" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-        </EntityType>
         <ComplexType Name="OM26600_pgOM_Truck_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="false" MaxLength="250" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="TypeOfVehicle" Nullable="false" MaxLength="50" />
+          <Property Type="Double" Name="WeightMax" Nullable="true" />
+          <Property Type="Double" Name="ValueMax" Nullable="true" />
+          <Property Type="Int32" Name="Selected" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="OM_Truck">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TypeOfVehicle" />
+          </Key>
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Descr" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="WeightMax" Type="Double" />
+          <Property Name="ValueMax" Type="Double" />
+          <Property Name="TypeOfVehicle" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="OM26600_pdConfig_Result">
+          <Property Type="Boolean" Name="Descr" Nullable="true" />
+          <Property Type="Boolean" Name="TypeOfVehicle" Nullable="true" />
+          <Property Type="Boolean" Name="WeightMax" Nullable="true" />
+          <Property Type="Boolean" Name="ValueMax" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -70,9 +98,27 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="OM26600Entities" >
-        <EntitySetMapping Name="OM_Truck">
+          <FunctionImportMapping FunctionImportName="OM26600_pgOM_Truck" FunctionName="eBiz4DWebSysModel.Store.OM26600_pgOM_Truck">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM26600Model.OM26600_pgOM_Truck_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="TypeOfVehicle" ColumnName="TypeOfVehicle" />
+                <ScalarProperty Name="WeightMax" ColumnName="WeightMax" />
+                <ScalarProperty Name="ValueMax" ColumnName="ValueMax" />
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OM_Truck">
             <EntityTypeMapping TypeName="OM26600Model.OM_Truck">
               <MappingFragment StoreEntitySet="OM_Truck">
+                <ScalarProperty Name="TypeOfVehicle" ColumnName="TypeOfVehicle" />
+                <ScalarProperty Name="ValueMax" ColumnName="ValueMax" />
+                <ScalarProperty Name="WeightMax" ColumnName="WeightMax" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -86,14 +132,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="OM26600_pgOM_Truck" FunctionName="eBiz4DWebSysModel.Store.OM26600_pgOM_Truck">
+          <FunctionImportMapping FunctionImportName="OM26600_pdConfig" FunctionName="eBiz4DWebSysModel.Store.OM26600_pdConfig">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="OM26600Model.OM26600_pgOM_Truck_Result">
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
+              <ComplexTypeMapping TypeName="OM26600Model.OM26600_pdConfig_Result">
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="TypeOfVehicle" ColumnName="TypeOfVehicle" />
+                <ScalarProperty Name="WeightMax" ColumnName="WeightMax" />
+                <ScalarProperty Name="ValueMax" ColumnName="ValueMax" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -119,7 +164,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="OM26600Model.OM_Truck" Width="1.5" PointX="2.4923679728491082" PointY="4.1669755746456678" />
+        <EntityTypeShape EntityType="OM26600Model.OM_Truck" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

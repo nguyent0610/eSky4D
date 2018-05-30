@@ -23,11 +23,28 @@ namespace OM26600.Controllers
 
         public ActionResult Index()
         {
+            bool Descr = false;
+            bool TypeOfVehicle = false;
+            bool WeightMax = false;
+            bool ValueMax = false;
+
+            var objConfig = _db.OM26600_pdConfig(Current.CpnyID,Current.UserName,Current.LangID).FirstOrDefault();
+            if(objConfig!=null)
+            {
+                Descr = objConfig.Descr.HasValue ? objConfig.Descr.Value : false;
+                TypeOfVehicle = objConfig.TypeOfVehicle.HasValue ? objConfig.TypeOfVehicle.Value : false;
+                WeightMax = objConfig.WeightMax.HasValue ? objConfig.WeightMax.Value : false;
+                ValueMax = objConfig.ValueMax.HasValue ? objConfig.ValueMax.Value : false;
+            }
+            ViewBag.Descr = Descr;
+            ViewBag.TypeOfVehicle = TypeOfVehicle;
+            ViewBag.WeightMax = WeightMax;
+            ViewBag.ValueMax = ValueMax;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -105,13 +122,15 @@ namespace OM26600.Controllers
             {
                 t.BranchID = s.BranchID;
                 t.Code = s.Code;
+                t.TypeOfVehicle = s.TypeOfVehicle;
                 t.Crtd_User = Current.UserName;
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
             t.Descr = s.Descr;
- 
+            t.ValueMax = s.ValueMax;
+            t.WeightMax = s.WeightMax;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;

@@ -137,6 +137,47 @@ namespace OM26600
     
             return base.ExecuteFunction<OM26600_pgOM_Truck_Result>("OM26600_pgOM_Truck", userIDParameter, cpnyIDParameter, langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM26600_pdConfig_Result> OM26600_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM26600_pdConfig_Result>("OM26600_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -169,7 +210,8 @@ namespace OM26600
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_Truck CreateOM_Truck(global::System.String branchID, global::System.String code, global::System.String descr, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="typeOfVehicle">Initial value of the TypeOfVehicle property.</param>
+        public static OM_Truck CreateOM_Truck(global::System.String branchID, global::System.String code, global::System.String descr, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String typeOfVehicle)
         {
             OM_Truck oM_Truck = new OM_Truck();
             oM_Truck.BranchID = branchID;
@@ -182,6 +224,7 @@ namespace OM26600
             oM_Truck.LUpd_Prog = lUpd_Prog;
             oM_Truck.LUpd_User = lUpd_User;
             oM_Truck.tstamp = tstamp;
+            oM_Truck.TypeOfVehicle = typeOfVehicle;
             return oM_Truck;
         }
 
@@ -434,6 +477,81 @@ namespace OM26600
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> WeightMax
+        {
+            get
+            {
+                return _WeightMax;
+            }
+            set
+            {
+                OnWeightMaxChanging(value);
+                ReportPropertyChanging("WeightMax");
+                _WeightMax = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WeightMax");
+                OnWeightMaxChanged();
+            }
+        }
+        private Nullable<global::System.Double> _WeightMax;
+        partial void OnWeightMaxChanging(Nullable<global::System.Double> value);
+        partial void OnWeightMaxChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> ValueMax
+        {
+            get
+            {
+                return _ValueMax;
+            }
+            set
+            {
+                OnValueMaxChanging(value);
+                ReportPropertyChanging("ValueMax");
+                _ValueMax = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ValueMax");
+                OnValueMaxChanged();
+            }
+        }
+        private Nullable<global::System.Double> _ValueMax;
+        partial void OnValueMaxChanging(Nullable<global::System.Double> value);
+        partial void OnValueMaxChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String TypeOfVehicle
+        {
+            get
+            {
+                return _TypeOfVehicle;
+            }
+            set
+            {
+                if (_TypeOfVehicle != value)
+                {
+                    OnTypeOfVehicleChanging(value);
+                    ReportPropertyChanging("TypeOfVehicle");
+                    _TypeOfVehicle = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("TypeOfVehicle");
+                    OnTypeOfVehicleChanged();
+                }
+            }
+        }
+        private global::System.String _TypeOfVehicle;
+        partial void OnTypeOfVehicleChanging(global::System.String value);
+        partial void OnTypeOfVehicleChanged();
 
         #endregion
 
@@ -443,6 +561,116 @@ namespace OM26600
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM26600Model", Name="OM26600_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM26600_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Descr;
+        partial void OnDescrChanging(Nullable<global::System.Boolean> value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> TypeOfVehicle
+        {
+            get
+            {
+                return _TypeOfVehicle;
+            }
+            set
+            {
+                OnTypeOfVehicleChanging(value);
+                ReportPropertyChanging("TypeOfVehicle");
+                _TypeOfVehicle = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TypeOfVehicle");
+                OnTypeOfVehicleChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _TypeOfVehicle;
+        partial void OnTypeOfVehicleChanging(Nullable<global::System.Boolean> value);
+        partial void OnTypeOfVehicleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> WeightMax
+        {
+            get
+            {
+                return _WeightMax;
+            }
+            set
+            {
+                OnWeightMaxChanging(value);
+                ReportPropertyChanging("WeightMax");
+                _WeightMax = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WeightMax");
+                OnWeightMaxChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _WeightMax;
+        partial void OnWeightMaxChanging(Nullable<global::System.Boolean> value);
+        partial void OnWeightMaxChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ValueMax
+        {
+            get
+            {
+                return _ValueMax;
+            }
+            set
+            {
+                OnValueMaxChanging(value);
+                ReportPropertyChanging("ValueMax");
+                _ValueMax = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ValueMax");
+                OnValueMaxChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ValueMax;
+        partial void OnValueMaxChanging(Nullable<global::System.Boolean> value);
+        partial void OnValueMaxChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -461,13 +689,17 @@ namespace OM26600
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="descr">Initial value of the Descr property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM26600_pgOM_Truck_Result CreateOM26600_pgOM_Truck_Result(global::System.String branchID, global::System.String code, global::System.String descr, global::System.Byte[] tstamp)
+        /// <param name="typeOfVehicle">Initial value of the TypeOfVehicle property.</param>
+        /// <param name="selected">Initial value of the Selected property.</param>
+        public static OM26600_pgOM_Truck_Result CreateOM26600_pgOM_Truck_Result(global::System.String branchID, global::System.String code, global::System.String descr, global::System.Byte[] tstamp, global::System.String typeOfVehicle, global::System.Int32 selected)
         {
             OM26600_pgOM_Truck_Result oM26600_pgOM_Truck_Result = new OM26600_pgOM_Truck_Result();
             oM26600_pgOM_Truck_Result.BranchID = branchID;
             oM26600_pgOM_Truck_Result.Code = code;
             oM26600_pgOM_Truck_Result.Descr = descr;
             oM26600_pgOM_Truck_Result.tstamp = tstamp;
+            oM26600_pgOM_Truck_Result.TypeOfVehicle = typeOfVehicle;
+            oM26600_pgOM_Truck_Result.Selected = selected;
             return oM26600_pgOM_Truck_Result;
         }
 
@@ -594,6 +826,102 @@ namespace OM26600
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String TypeOfVehicle
+        {
+            get
+            {
+                return _TypeOfVehicle;
+            }
+            set
+            {
+                OnTypeOfVehicleChanging(value);
+                ReportPropertyChanging("TypeOfVehicle");
+                _TypeOfVehicle = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("TypeOfVehicle");
+                OnTypeOfVehicleChanged();
+            }
+        }
+        private global::System.String _TypeOfVehicle;
+        partial void OnTypeOfVehicleChanging(global::System.String value);
+        partial void OnTypeOfVehicleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> WeightMax
+        {
+            get
+            {
+                return _WeightMax;
+            }
+            set
+            {
+                OnWeightMaxChanging(value);
+                ReportPropertyChanging("WeightMax");
+                _WeightMax = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WeightMax");
+                OnWeightMaxChanged();
+            }
+        }
+        private Nullable<global::System.Double> _WeightMax;
+        partial void OnWeightMaxChanging(Nullable<global::System.Double> value);
+        partial void OnWeightMaxChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> ValueMax
+        {
+            get
+            {
+                return _ValueMax;
+            }
+            set
+            {
+                OnValueMaxChanging(value);
+                ReportPropertyChanging("ValueMax");
+                _ValueMax = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ValueMax");
+                OnValueMaxChanged();
+            }
+        }
+        private Nullable<global::System.Double> _ValueMax;
+        partial void OnValueMaxChanging(Nullable<global::System.Double> value);
+        partial void OnValueMaxChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Selected
+        {
+            get
+            {
+                return _Selected;
+            }
+            set
+            {
+                OnSelectedChanging(value);
+                ReportPropertyChanging("Selected");
+                _Selected = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Selected");
+                OnSelectedChanged();
+            }
+        }
+        private global::System.Int32 _Selected;
+        partial void OnSelectedChanging(global::System.Int32 value);
+        partial void OnSelectedChanged();
 
         #endregion
 

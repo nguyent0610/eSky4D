@@ -1,10 +1,10 @@
 //// Declare //////////////////////////////////////////////////////////
-var keys = ['BranchID', 'Code'];
-var fieldsCheckRequire = ["BranchID", "Code", "Descr"];
-var fieldsLangCheckRequire = ["BranchID", "OM26600Code", "Descr"];
+var keys = ['BranchID', 'Code', 'TypeOfVehicle'];
+var fieldsCheckRequire = ["BranchID", "Code", 'TypeOfVehicle'];
+var fieldsLangCheckRequire = ["BranchID", "OM26600Code", 'TypeOfVehicle'];
 
 var _Source = 0;
-var _maxSource = 1;
+var _maxSource = 2;
 
 var checkLoad = function () {
     _Source += 1;
@@ -70,9 +70,14 @@ var menuClick = function (command) {
             break;
         case "delete":
             if (App.slmData.selected.items[0] != undefined) {
-                var rowindex = HQ.grid.indexSelect(App.grdOM_Truck);
-                if (rowindex != '')
-                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdOM_Truck), ''], 'deleteData', true)
+                if (App.grdOM_Truck.selModel.selected.items[0].data.Selected == 1) {
+                    HQ.message.show(2018053060, [HQ.common.getLang('OM26600Code')], '', true);
+                }
+                else {
+                    var rowindex = HQ.grid.indexSelect(App.grdOM_Truck);
+                    if (rowindex != '')
+                        HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdOM_Truck), ''], 'deleteData', true)
+                }
             }
             break;
         case "save":
@@ -95,17 +100,26 @@ var firstLoad = function () {
 
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
     App.cboBranchID.getStore().addListener('load', checkLoad);
+    App.cboTypeVehicle.getStore().addListener('load', checkLoad);
     HQ.isFirstLoad = true;
     HQ.util.checkAccessRight();
+    App.grdOM_Truck.columns[2].setVisible(HQ.TypeOfVehicle);
+    App.grdOM_Truck.columns[4].setVisible(HQ.Descr);
+    App.grdOM_Truck.columns[5].setVisible(HQ.WeightMax);
+    App.grdOM_Truck.columns[6].setVisible(HQ.ValueMax);
 };
 var grdOM_Truck_BeforeEdit = function (editor, e) {
+    if (e.record.data.Selected == 1)
+    {
+        return false;
+    }
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdOM_Truck_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdOM_Truck, e, keys);
 };
 var grdOM_Truck_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdOM_Truck, e, keys);
+    return checkValidateEdit(App.grdOM_Truck, e, keys);
 };
 var grdOM_Truck_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdOM_Truck);
@@ -131,12 +145,11 @@ var save = function () {
         });
     }
 };
-var deleteData = function (item) {
-    if (item == "yes") {
-        App.grdOM_Truck.deleteSelected();
-        stoOM_Truck_changed(App.stoOM_Truck);
-      
-    }
+var deleteData = function (item) {  
+        if (item == "yes") {
+            App.grdOM_Truck.deleteSelected();
+            stoOM_Truck_changed(App.stoOM_Truck);
+        }   
 };
 var refresh = function (item) {
     if (item == 'yes') {
@@ -152,9 +165,42 @@ var renderBranchName = function (value, metaData, record, row, col, store, gridV
     }
     return r.data.BranchName;
 };
+
+var renderTypeVehicle = function (value, metaData, record, row, col, store, gridView) {
+    var r = HQ.store.findRecord(App.cboTypeVehicle.store, ['Code'], [record.data.TypeOfVehicle])
+    if (Ext.isEmpty(r)) {
+        return value;
+    }
+    return r.data.Descr;
+};
 var stringFilter = function (record) {
     if (this.dataIndex == 'BranchID') {
         App.cboBranchID.store.clearFilter();
         return HQ.grid.filterComboDescr(record, this, App.cboBranchID.store, "BranchID", "BranchName");
     }
-}
+    if (this.dataIndex == 'TypeOfVehicle')
+    {
+        App.cboTypeVehicle.store.clearFilter();
+        return HQ.grid.filterComboDescr(record, this, App.cboTypeVehicle.store, "Code", "Descr");
+    }
+};
+var checkValidateEdit = function (grd, e, keys, isCheckSpecialChar) {
+    //if (keys.indexOf(e.field) != -1) {
+    //    var regex = /^(\w*(\d|[a-zA-Z]|[\_. -] ))*$/
+    //    if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
+    //    if (isCheckSpecialChar) {
+    //        if (e.value)
+    //            if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+    //                HQ.message.show(20140811, e.column.text);
+    //                return false;
+    //            }
+    //    }
+    //    if (HQ.grid.checkDuplicate(grd, e, keys)) {
+    //        if (e.column.xtype == "datecolumn")
+    //            HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+    //        else HQ.message.show(1112, e.value);
+    //        return false;
+    //    }
+
+    //}
+};

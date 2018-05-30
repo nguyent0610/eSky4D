@@ -64,10 +64,37 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";                       
                     })
                 )    
-            , X.Column().ID("Code").Text(Util.GetLang("OM26600Code")).DataIndex("Code").Width(150)
-                .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)) 
-            , X.Column().ID("Descr").Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
-                .Editor(Html.X().TextField().MaxLength(250).EnforceMaxLength(true))        
+            ,
+                X.Column().ID("TypeVehicle").Text(Util.GetLang("OM26600TypeVehicle")).DataIndex("TypeOfVehicle").Width(150).Renderer("renderTypeVehicle")//.Hidden(true)
+                .Editor(
+                        HQ.Combo().ID("cboTypeVehicle").Name("cboTypeVehicle").HQProcedure("OM26600_pcTypeVehicle").HQAutoLoad(true).HQDBSys(false)
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").ForceSelection(true)
+                        .Width(500).HQHeightWidth(500, 400)
+                        .HQParam(new StoreParameterCollection() 
+                    {
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },  
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },                                        
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                        .AllowBlank(true).ForceSelection(true)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    )
+            , X.Column().ID("Code").Text(Util.GetLang("OM26600Code")).DataIndex("Code").Width(150)//.Hidden(true)
+                .Editor(Html.X().TextField().MaxLength(15).EnforceMaxLength(true)) 
+                
+            , X.Column().ID("Descr").Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)//.Hidden(true)
+                .Editor(Html.X().TextField().MaxLength(250).EnforceMaxLength(true))
+                
+            , X.NumberColumn().Text(Util.GetLang("OM26600WeightMax")).DataIndex("WeightMax").Width(100).Format("0,000.0").Align(Alignment.Right)
+                .Editor(X.NumberField().DecimalPrecision(1).MinValue(0))     
+            
+            , X.NumberColumn().Text(Util.GetLang("OM26600ValueMax")).DataIndex("ValueMax").Width(100).Format("0,000.0").Align(Alignment.Right)
+                .Editor(X.NumberField().DecimalPrecision(1).MinValue(0))  
                                                            
             ,X.CommandColumn()
             .Width(150)
@@ -116,7 +143,10 @@
                 .Filters(
                         X.StringFilter().DataIndex("BranchID").ValidateRecord(p => p.Fn = "stringFilter"),
                         X.StringFilter().DataIndex("Code"),
-                        X.StringFilter().DataIndex("Descr")
+                        X.StringFilter().DataIndex("Descr"),
+                        X.StringFilter().DataIndex("TypeOfVehicle").ValidateRecord(p=>p.Fn="stringFilter"),
+                        X.NumericFilter().DataIndex("WeightMax"),
+                        X.NumericFilter().DataIndex("ValueMax")
                 )
         )
     )
