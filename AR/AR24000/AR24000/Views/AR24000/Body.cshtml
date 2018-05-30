@@ -1,0 +1,173 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using AR24000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        l.FieldChange.Fn = "frmChange";
+    })
+    .Items(
+        X.Panel().ID("pnlHeader")
+        .Region(Region.North)
+        .Layout(LayoutType.HBox)
+        .AutoScroll(true)
+        .Items(
+            X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                .Items(  
+                    HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQProcedure("AR24000_pcCpnyID").HQAutoLoad(true).HQLangCode("Branch")
+                    .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyName").ValueField("CpnyID")
+                    .Width(250).HQHeightWidth(500, 400).AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .ForceSelection(true).HQDBSys(false)
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboCpnyID_Change";
+                    })
+            )
+        )
+        .Listeners(ls =>
+        {
+            ls.Render.Handler = "HQ.common.control_render(this,'header')";
+        })
+    , X.Panel().ID("PnlMapCustomer")
+    .Layout(LayoutType.Border).Region(Region.Center)
+    .Items(
+
+          X.GridPanel().ID("grdMapCustomer")
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .Flex(1).Region(Region.Center).AutoScroll(true)
+            .SelectionMemory(false)
+            .Store(
+                X.Store()
+                .ID("stoLoadMapCustomer")
+                .PageSize(50).AutoLoad(false)
+                .Model(Util.GenerateModel(typeof(AR24000_pgMapCustomer_Result), "mdlAR24000_pgMapCustomer", ""))
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetMapCustomer")))
+                .Listeners(p =>
+                {
+                    p.Load.Fn = "stoLoadMapCustomer";
+                })
+            )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdMapCustomer');")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(300).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
+                 X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID").Width(100)
+                .Editor(
+                    HQ.Combo().ID("cboCustID").Name("cboCustID").Tag("X")
+                    .HQDBSys(false).HQProcedure("AR24000_pcCustomer")
+                    .HQColumnShow("CustID,CustName").ForceSelection(true).AllowBlank(false)
+                    .DisplayField("CustID").ValueField("CustID").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(ls =>
+                    {
+                        ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                    })
+                    .LoadData()
+                )
+                , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(100) 
+                ,X.Column().Text(Util.GetLang("AR24000CustIDVen")).DataIndex("CustID_Vendor").Width(200)
+                .Editor(
+                        X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true).SelectOnFocus(true)
+                )
+                , X.Column().Text(Util.GetLang("AR24000CustNameVen")).DataIndex("Name_Vendor").Width(200)
+                .Editor(
+                        X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true).SelectOnFocus(true)
+                )
+                
+                , X.CommandColumn()
+                .Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdMapCustomer_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmMapCustomer")
+            .Mode(SelectionMode.Multi))
+            .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdMapCustomer_BeforeEdit";
+                    ls.Edit.Fn = "grdMapCustomer_Edit";
+                    ls.ValidateEdit.Fn = "grdMapCustomer_ValidateEdit";
+                })
+            )
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+
+                                X.StringFilter().DataIndex("CustID_Vendor"),
+                                X.StringFilter().DataIndex("Name_Vendor"),
+                                X.StringFilter().DataIndex("CustID"),
+                                X.StringFilter().DataIndex("CustName")
+                            )
+                    )
+            .Listeners(lst =>
+                    {
+                        lst.Activate.Handler = "HQ.focus = 'grdMapCustomer';";
+                    })
+            )
+        )
+
+     )//pnlGrid
+ )
