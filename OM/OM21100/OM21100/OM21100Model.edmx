@@ -525,7 +525,6 @@
           <Property Name="QtyStockAdvance" Type="float" />
           <Property Name="QtyLimit" Type="float" />
           <Property Name="PerStockAdvance" Type="float" />
-          <Property Name="RequiredValueAmount" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscItemClass">
           <Key>
@@ -1151,13 +1150,13 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="OM_DiscFreeItem" EntityType="OM21100Model.OM_DiscFreeItem" />
-          <EntitySet Name="OM_DiscItem" EntityType="OM21100Model.OM_DiscItem" />
           <FunctionImport Name="OM21100_ptTreeNodeCustomer" ReturnType="Collection(OM21100Model.OM21100_ptTreeNodeCustomer_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="ListCpnyID" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="OM_DiscItem" EntityType="OM21100Model.OM_DiscItem" />
         </EntityContainer>
         <ComplexType Name="OM21100_pgDiscItemClass_Result">
           <Property Type="String" Name="DiscID" Nullable="false" MaxLength="10" />
@@ -1229,7 +1228,6 @@
           <Property Type="Double" Name="QtyStockAdvance" Nullable="true" />
           <Property Type="Double" Name="QtyLimit" Nullable="true" />
           <Property Type="Double" Name="PerStockAdvance" Nullable="true" />
-          <Property Type="Double" Name="RequiredValueAmount" Nullable="false" />
         </ComplexType>
         <ComplexType Name="OM21100_pgCompany_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -2075,6 +2073,13 @@
           <Property Name="TypeUnit" Type="Int32" />
           <Property Name="Priority" Type="Int32" Nullable="false" />
         </EntityType>
+        <ComplexType Name="OM21100_ptTreeNodeCustomer_Result">
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ParentID" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="LevelID" Nullable="true" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="100" />
+        </ComplexType>
         <EntityType Name="OM_DiscItem">
           <Key>
             <PropertyRef Name="DiscID" />
@@ -2103,15 +2108,7 @@
           <Property Name="QtyStockAdvance" Type="Double" />
           <Property Name="QtyLimit" Type="Double" />
           <Property Name="PerStockAdvance" Type="Double" />
-          <Property Name="RequiredValueAmount" Type="Double" Nullable="false" />
         </EntityType>
-        <ComplexType Name="OM21100_ptTreeNodeCustomer_Result">
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="ParentID" Nullable="true" MaxLength="100" />
-          <Property Type="Int32" Name="LevelID" Nullable="true" />
-          <Property Type="String" Name="Type" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Code" Nullable="true" MaxLength="100" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2206,7 +2203,6 @@
                 <ScalarProperty Name="QtyStockAdvance" ColumnName="QtyStockAdvance" />
                 <ScalarProperty Name="QtyLimit" ColumnName="QtyLimit" />
                 <ScalarProperty Name="PerStockAdvance" ColumnName="PerStockAdvance" />
-                <ScalarProperty Name="RequiredValueAmount" ColumnName="RequiredValueAmount" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -3142,10 +3138,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM21100_ptTreeNodeCustomer" FunctionName="eBiz4DWebAppModel.Store.OM21100_ptTreeNodeCustomer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21100Model.OM21100_ptTreeNodeCustomer_Result">
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="OM_DiscItem">
             <EntityTypeMapping TypeName="OM21100Model.OM_DiscItem">
               <MappingFragment StoreEntitySet="OM_DiscItem">
-                <ScalarProperty Name="RequiredValueAmount" ColumnName="RequiredValueAmount" />
                 <ScalarProperty Name="PerStockAdvance" ColumnName="PerStockAdvance" />
                 <ScalarProperty Name="QtyLimit" ColumnName="QtyLimit" />
                 <ScalarProperty Name="QtyStockAdvance" ColumnName="QtyStockAdvance" />
@@ -3171,17 +3177,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="OM21100_ptTreeNodeCustomer" FunctionName="eBiz4DWebAppModel.Store.OM21100_ptTreeNodeCustomer">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM21100Model.OM21100_ptTreeNodeCustomer_Result">
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

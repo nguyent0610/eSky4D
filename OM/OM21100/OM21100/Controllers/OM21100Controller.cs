@@ -2491,8 +2491,7 @@ namespace OM21100.Controllers
                     Update_DiscItem(discItem, currentItem, true);
                     _db.OM_DiscItem.AddObject(discItem);
                 }
-                discItem.RequiredValue = inputSeq.RequiredType == "Q" || inputSeq.RequiredType == "N" ? currentItem.RequiredValue : 0;
-                discItem.RequiredValueAmount = inputSeq.RequiredType == "A" ? currentItem.RequiredValueAmount : 0;
+                discItem.RequiredValue = inputSeq.RequiredType == "Q" || inputSeq.RequiredType == "N" || inputSeq.RequiredType == "A"  ? currentItem.RequiredValue : 0;
             }
 
             if (inputSeq.DiscClass == "II")

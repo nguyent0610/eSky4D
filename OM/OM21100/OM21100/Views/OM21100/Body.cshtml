@@ -1115,11 +1115,11 @@
                         .Editor(
                             X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                         )
-                        , X.NumberColumn().Text(Util.GetLang("RequiredValueAmount")).DataIndex("RequiredValueAmount").Hidden(true)
-                        .Align(Alignment.Right).Format("0,000")
-                        .Editor(
-                            X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
-                        )
+                        //, X.NumberColumn().Text(Util.GetLang("RequiredValueAmount")).DataIndex("RequiredValueAmount").Hidden(true)
+                        //.Align(Alignment.Right).Format("0,000")
+                        //.Editor(
+                        //    X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                        //)
                         , X.NumberColumn().Text(Util.GetLang("OM21100QtyLimit")).DataIndex("QtyLimit").ID("colQtyLimit").Hidden(true)
                         .Align(Alignment.Right).Format("0,000")
                         .Editor(
@@ -1580,7 +1580,8 @@
                             .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw),
-                                new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
+                                new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw),
+                                new StoreParameter("@LstCpnyID","lstCpnyID.join(',')",ParameterMode.Raw)
                             })
                             .Listeners(l => l.Change.Fn = "DiscDefintion.Event.cboGCustID_Change")
                             .LoadData()

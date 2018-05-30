@@ -12725,8 +12725,7 @@ namespace OM21100
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="qtyType">Initial value of the QtyType property.</param>
         /// <param name="requiredValue">Initial value of the RequiredValue property.</param>
-        /// <param name="requiredValueAmount">Initial value of the RequiredValueAmount property.</param>
-        public static OM_DiscItem CreateOM_DiscItem(global::System.String discID, global::System.String discSeq, global::System.String invtID, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String qtyType, global::System.Int32 requiredValue, global::System.Double requiredValueAmount)
+        public static OM_DiscItem CreateOM_DiscItem(global::System.String discID, global::System.String discSeq, global::System.String invtID, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String qtyType, global::System.Int32 requiredValue)
         {
             OM_DiscItem oM_DiscItem = new OM_DiscItem();
             oM_DiscItem.DiscID = discID;
@@ -12745,7 +12744,6 @@ namespace OM21100
             oM_DiscItem.tstamp = tstamp;
             oM_DiscItem.QtyType = qtyType;
             oM_DiscItem.RequiredValue = requiredValue;
-            oM_DiscItem.RequiredValueAmount = requiredValueAmount;
             return oM_DiscItem;
         }
 
@@ -13289,30 +13287,6 @@ namespace OM21100
         private Nullable<global::System.Double> _PerStockAdvance;
         partial void OnPerStockAdvanceChanging(Nullable<global::System.Double> value);
         partial void OnPerStockAdvanceChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Double RequiredValueAmount
-        {
-            get
-            {
-                return _RequiredValueAmount;
-            }
-            set
-            {
-                OnRequiredValueAmountChanging(value);
-                ReportPropertyChanging("RequiredValueAmount");
-                _RequiredValueAmount = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("RequiredValueAmount");
-                OnRequiredValueAmountChanged();
-            }
-        }
-        private global::System.Double _RequiredValueAmount;
-        partial void OnRequiredValueAmountChanging(global::System.Double value);
-        partial void OnRequiredValueAmountChanged();
 
         #endregion
 
@@ -20030,8 +20004,7 @@ namespace OM21100
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="requiredValue">Initial value of the RequiredValue property.</param>
         /// <param name="qtytype">Initial value of the Qtytype property.</param>
-        /// <param name="requiredValueAmount">Initial value of the RequiredValueAmount property.</param>
-        public static OM21100_pgDiscItem_Result CreateOM21100_pgDiscItem_Result(global::System.String discID, global::System.String discSeq, global::System.Byte[] tstamp, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.String invtID, global::System.Int32 requiredValue, global::System.String qtytype, global::System.Double requiredValueAmount)
+        public static OM21100_pgDiscItem_Result CreateOM21100_pgDiscItem_Result(global::System.String discID, global::System.String discSeq, global::System.Byte[] tstamp, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.String invtID, global::System.Int32 requiredValue, global::System.String qtytype)
         {
             OM21100_pgDiscItem_Result oM21100_pgDiscItem_Result = new OM21100_pgDiscItem_Result();
             oM21100_pgDiscItem_Result.DiscID = discID;
@@ -20044,7 +20017,6 @@ namespace OM21100
             oM21100_pgDiscItem_Result.InvtID = invtID;
             oM21100_pgDiscItem_Result.RequiredValue = requiredValue;
             oM21100_pgDiscItem_Result.Qtytype = qtytype;
-            oM21100_pgDiscItem_Result.RequiredValueAmount = requiredValueAmount;
             return oM21100_pgDiscItem_Result;
         }
 
@@ -20435,30 +20407,6 @@ namespace OM21100
         private Nullable<global::System.Double> _PerStockAdvance;
         partial void OnPerStockAdvanceChanging(Nullable<global::System.Double> value);
         partial void OnPerStockAdvanceChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Double RequiredValueAmount
-        {
-            get
-            {
-                return _RequiredValueAmount;
-            }
-            set
-            {
-                OnRequiredValueAmountChanging(value);
-                ReportPropertyChanging("RequiredValueAmount");
-                _RequiredValueAmount = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("RequiredValueAmount");
-                OnRequiredValueAmountChanged();
-            }
-        }
-        private global::System.Double _RequiredValueAmount;
-        partial void OnRequiredValueAmountChanging(global::System.Double value);
-        partial void OnRequiredValueAmountChanged();
 
         #endregion
 
