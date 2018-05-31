@@ -2511,7 +2511,9 @@ var DiscDefintion = {
            //     //HQ.grid.show(App.grdDiscItem, ['RequiredValue']);
            // }
             //// App.chkRequiredType.setVisible(isEnableRequiredType);
-
+            if (App.cboRequiredType.getValue() != 'Q' || App.cboRequiredType.getValue() != 'N' || App.cboRequiredType.getValue() != 'A') {
+                HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
+            }
             if (App.cboDiscType.getValue() == 'G' && App.cboDiscClass.getValue() == 'II' && App.cboBreakBy.getValue() == 'Q') {
                 //App.chkRequiredType.enable();
             }
