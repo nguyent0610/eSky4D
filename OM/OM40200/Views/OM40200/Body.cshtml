@@ -113,7 +113,8 @@
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "FromDate"))
                     .Width(250)
-                    .HQControlFocus("txtToDate"),
+                    .HQControlFocus("txtToDate")
+                    .Format(Current.FormatDate),
                     
                     HQ.Combo().ID("cboCustomer")
                     .HQLangCode("CustID")
@@ -154,6 +155,7 @@
                     .BlankText(Util.GetLangPrefix("Input", "ToDate"))
                     .Width(250)
                     .HQControlFocus("cboBranchID")
+                    .Format(Current.FormatDate)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
                     
                     HQ.Combo().ID("cboSlsperID")
@@ -257,7 +259,8 @@
                 HQ.DateColumn()
                 .DataIndex("OrderDate")
                 .Width(100)
-                .Text(Util.GetLang("OrderDate")),
+                .Text(Util.GetLang("OrderDate"))
+                .Format(Current.FormatDate),
                 
                 X.Column()
                 .DataIndex("OrigOrderNbr")
@@ -267,7 +270,8 @@
                 HQ.DateColumn()
                 .DataIndex("ShipDate")
                 .Width(100)
-                .Text(Util.GetLang("ShipDate")),
+                .Text(Util.GetLang("ShipDate"))
+                .Format(Current.FormatDate),
                 
                 X.Column()
                 .DataIndex("CustID")
@@ -279,7 +283,7 @@
               
                 X.Column()
                 .DataIndex("SlsPerID")
-                .Text(Util.GetLang("SlsPerID")),
+                .Text(Util.GetLang("SlsperID")),
                 
                 X.Column()
                 .DataIndex("DeliveryID")

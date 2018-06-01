@@ -35,7 +35,6 @@ var frmMain_BoxReady = function () {
     HQ.numSource = 0;
     HQ.maxSource = 5;
 
-
     App.cboBranchID.getStore().addListener('load', store_Load);
     App.cboProcessType.getStore().addListener('load', store_Load);
     App.cboCustomer.getStore().addListener('load', store_Load);
@@ -129,6 +128,7 @@ var btnLoad_Click = function () {
         HQ.message.show(2016070401, [App.txtFromDate.fieldLabel, App.txtToDate.fieldLabel], '', true);
         return;
     }
+    if (App.chkHeader != null) App.chkHeader.checked = false;
     App.stoOrder.reload();
 }
 
@@ -151,11 +151,15 @@ var cboBranchID_Change = function () {
 var grdOrder_HeaderClick = function (ct, column, e, t) {
     if (Ext.fly(t).hasCls("my-header-checkbox")) {
         App.chkHeader = t;
-        App.stoOrder.data.each(function (item) {
+        var checked = t.checked ? true : false;
+        var store = App.stoOrder.snapshot || App.stoOrder.allData || App.stoOrder.data;
+        App.stoOrder.suspendEvent();
+        store.each(function (item) {
             if (!item.data.NotValid) {
-                item.data.Sel = t.checked ? true : false;
+                item.data.Sel = checked;
             }
         });
+        App.stoOrder.resumeEvents();
         App.grdOrder.view.refresh();
     }
 };

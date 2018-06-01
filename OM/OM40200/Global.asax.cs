@@ -38,14 +38,15 @@ namespace OM40200
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "TRUONGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "ND_TEST_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = "PHUTHAI_TEST_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM40200"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_TEST_eSky4DApp";// "eBiz4DWebApp";
+            Current.FormatDate = "MM-dd-yyyy";
+            Session["DBApp"] = Current.DBApp = "PHUTHAI_TEST_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "KOWILN";
             Session["Language"] = Current.Language = "vi";
