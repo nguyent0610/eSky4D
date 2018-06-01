@@ -39,14 +39,14 @@ namespace OM40100
 
             Current.Authorize = false;
             Current.Server = "HOANGSAD";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "PhuThai_Test_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             Current.FormatDate = "dd.MM.yyyy";
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM40100"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "PhuThai_Test_eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";

@@ -59,17 +59,19 @@
                     .Listeners(lst =>
                     {
                         lst.Change.Fn = "cboProcessType_Change";
-                    }),
+                    }),     
 
                     HQ.Combo().ID("cboBranchID").Name("BranchID").HQLangCode("BranchName")
                     .HQProcedure("OM40100_pcBranch").HQColumnShow("BranchID,BranchName,Addr")
-                    .DisplayField("BranchID").ValueField("BranchID")
-                    .Width(230).LabelWidth(120).HQHeightWidth(400, 300)
+                    .DisplayField("BranchName").ValueField("BranchID")
+                    .Width(290).LabelWidth(120).HQHeightWidth(400, 300)
                     .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "BranchID"))
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                     })
                     .Listeners(p => {
+                        p.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         p.Change.Fn = "cboBranchID_Change";
                     })
                     .ForceSelection(true)
@@ -77,13 +79,13 @@
                     .HQControlFocus("cboCustomer"),
 
                     HQ.Combo().ID("cboDeliveryID")
-                    .HQLangCode("DeliveryID")
+                    .HQLangCode("DeliveryMan")
                     .HQProcedure("OM40100_pcDeliveryID")
                     .HQColumnShow("SlsperID,Name")
-                    .DisplayField("SlsperID")
+                    .DisplayField("Name")
                     .ValueField("SlsperID")
-                    .Width(200)
-                    .LabelWidth(90)
+                    .Width(290)
+                    .LabelWidth(140)
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -107,15 +109,16 @@
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "FromDate"))
                     .Width(250)
-                    .HQControlFocus("txtToDate"),
+                    .HQControlFocus("txtToDate")
+                    .Format(Current.FormatDate),
 
                     HQ.Combo().ID("cboCustomer")
-                    .HQLangCode("CustID")
+                    .HQLangCode("CustName")
                     .HQProcedure("OM40100_pcCustomer")
                     .HQColumnShow("CustID,Name")
-                    .DisplayField("CustID")
+                    .DisplayField("Name")
                     .ValueField("CustID")
-                    .Width(230)
+                    .Width(290)
                     .LabelWidth(120)
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)
@@ -133,9 +136,9 @@
                     X.Button()
                     .ID("btnLoad")
                     .Text(Util.GetLang("LoadData"))
-                    .Width(105)
+                    .Width(145)
                     .Icon(Icon.ArrowRefresh)
-                    .MarginSpec("0 0 0 95")
+                    .MarginSpec("0 0 0 145")
                     .Listeners(l => l.Click.Fn = "btnLoad_Click")
                 ),
 
@@ -148,15 +151,16 @@
                     .BlankText(Util.GetLangPrefix("Input", "ToDate"))
                     .Width(250)
                     .HQControlFocus("cboBranchID")
+                    .Format(Current.FormatDate)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
 
                     HQ.Combo().ID("cboSlsperID")
-                    .HQLangCode("SlsperID")
+                    .HQLangCode("SlsName")
                     .HQProcedure("OM40100_pcSalesPerson")
                     .HQColumnShow("SlsperID,Name")
-                    .DisplayField("SlsperID")
+                    .DisplayField("Name")
                     .ValueField("SlsperID")
-                    .Width(230)
+                    .Width(290)
                     .LabelWidth(120)
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)
@@ -169,13 +173,14 @@
                     .Listeners(lst =>
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                    }),
+                    })
+                    ,
 
                     X.Button()
                     .ID("btnProcess")
                     .Text(Util.GetLang("Handle"))
-                    .Width(105)
-                    .MarginSpec("0 0 10 95")
+                    .Width(145)
+                    .MarginSpec("0 0 10 145")
                     .Icon(Icon.Disk)
                     .Listeners(l => l.Click.Fn = "btnProcess_Click")
                 )
@@ -218,7 +223,8 @@
                 HQ.DateColumn()
                 .DataIndex("OrderDate")
                 .Width(100)
-                .Text(Util.GetLang("OrderDate")),
+                .Text(Util.GetLang("OrderDate"))
+                .Format(Current.FormatDate),
 
                 X.Column()
                 .DataIndex("OrigOrderNbr")
@@ -228,7 +234,8 @@
                 HQ.DateColumn()
                 .DataIndex("ShipDate")
                 .Width(100)
-                .Text(Util.GetLang("ShipDate")),
+                .Text(Util.GetLang("ShipDate"))
+                .Format(Current.FormatDate),
 
                 X.Column()
                 .DataIndex("CustID")
@@ -240,7 +247,7 @@
 
                 X.Column()
                 .DataIndex("SlsPerID")
-                .Text(Util.GetLang("SlsPerID")),
+                .Text(Util.GetLang("SlsperID")),
 
                 X.Column()
                 .DataIndex("DeliveryID")
@@ -255,7 +262,8 @@
                 HQ.DateColumn()
                 .DataIndex("DocDate")
                 .Width(100)
-                .Text(Util.GetLang("DocDate")),
+                .Text(Util.GetLang("DocDate"))
+                .Format(Current.FormatDate),
 
                 X.Column()
                 .DataIndex("RefNbr")
