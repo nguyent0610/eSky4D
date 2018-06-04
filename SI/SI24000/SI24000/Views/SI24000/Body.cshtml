@@ -1,0 +1,100 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SI24000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)
+    .Listeners(p =>
+             {
+               p.BoxReady.Handler = "firstLoad();";
+             })
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdSI_SalesSelling")
+        .SelectionMemory(false)
+        .Store(
+            X.Store()
+            .ID("stoSI_SalesSelling")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(SI24000_pgLoadSalesSelling_Result), "mdlSI24000_pgLoadSalesSelling", "Code"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_SalesSelling"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "frmChange";                 
+            })
+        )
+        .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSI_SalesSelling');")
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40),
+            X.Column().ID("Code").Text(Util.GetLang("SI24000Code")).DataIndex("Code").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(200).EnforceMaxLength(true)),
+            X.CommandColumn().Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdSI_SalesSelling_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmSI_SalesSelling").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdSI_SalesSelling_BeforeEdit";
+                ls.Edit.Fn = "grdSI_SalesSelling_Edit";
+                ls.ValidateEdit.Fn = "grdSI_SalesSelling_ValidateEdit";
+
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("Code"),
+                    X.StringFilter().DataIndex("Descr")
+                )
+        )
+    )
+))
