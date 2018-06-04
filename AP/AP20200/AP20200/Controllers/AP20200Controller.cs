@@ -1,4 +1,4 @@
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Ext.Net;
 using Ext.Net.MVC;
 using HQ.eSkyFramework;
@@ -34,9 +34,9 @@ namespace AP20200.Controllers
             return PartialView();
         }
         // Get collection of Vendor for binding data (Ajax)
-        public ActionResult GetAPVendorHeader(string vendID)
+        public ActionResult GetAPVendorHeader(string vendID, string branchID)
         {
-            var vendor = _db.AP_Vendor.FirstOrDefault(p => p.VendID == vendID);
+            var vendor = _db.AP_Vendor.FirstOrDefault(p => p.VendID == vendID && p.BranchID == branchID);
             return this.Store(vendor);
         }
         [HttpPost]
@@ -51,6 +51,11 @@ namespace AP20200.Controllers
 
                 #region Save AP_Vendor
                 var header = _db.AP_Vendor.FirstOrDefault(p => p.VendID == vendID);
+                var checkVenID = _db.AP_Vendor.Where(p => p.VendID == vendID && p.BranchID != curHeader.BranchID).Count();
+                if (checkVenID == 1)
+                {
+                    throw new MessageException(MessageType.Message, "20180604");
+                }
                 if (header != null)
                 {
                     if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
@@ -109,6 +114,8 @@ namespace AP20200.Controllers
         }
         private void UpdatingHeader(ref AP_Vendor t, AP_Vendor s)
         {
+            t.BranchID = s.BranchID;
+            t.VendType = s.VendType;
             t.Addr1 = s.Addr1;
             t.Addr2 = s.Addr2;
             t.Attn = s.Attn;

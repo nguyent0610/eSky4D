@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////////////////
 //// Declare ///////////////////////////////////////////////////////////
 var _Source = 0;
-var _maxSource = 12;
+var _maxSource = 14;
 var _isLoadMaster = false;
 var VendID = '';
 
@@ -13,6 +13,15 @@ var checkLoad = function (sto) {
         _isLoadMaster = true;
         _Source = 0;
         App.stoVendor.reload();
+        if (App.stoAP20200_pdConfigShowBranch.data.items[0].data.Result == false) {
+            App.cboBranchID.setVisible(false);
+            App.cboBranchID.allowBlank = true;
+            App.cboBranchID.setValue("MD");
+        }
+        else {
+            App.cboBranchID.setVisible(true);
+            App.cboBranchID.allowBlank = false;
+        }
         HQ.common.showBusy(false);
     }
 };
@@ -30,8 +39,9 @@ var stoLoad = function (sto) {
     App.cboState.forceSelection = false;
 
     if (sto.data.length == 0) {
-        HQ.store.insertBlank(sto, "VendID");
+        HQ.store.insertBlank(sto, "VendID,BranchID");
         record = sto.getAt(0);
+        record.set('BranchID', App.cboBranchID.getValue());
         record.set('Status', 'A');
         record.set('TaxDflt', 'A');
         record.set('MOQType', 'Q');
@@ -78,6 +88,9 @@ var firstLoad = function () {
     App.cboTaxId02.getStore().addListener('load', checkLoad);
     App.cboTaxId03.getStore().addListener('load', checkLoad);
     App.cboMOQType.getStore().addListener('load', checkLoad);
+    App.cboVendType.getStore().addListener('load', checkLoad);
+    App.stoAP20200_pdConfigShowBranch.addListener('load', checkLoad);
+    App.stoAP20200_pdConfigShowBranch.reload();
 };
 
 var menuClick = function (command) {
@@ -108,6 +121,7 @@ var menuClick = function (command) {
                     HQ.message.show(150, '', 'refresh');
                 } else {
                     App.cboVendID.setValue('');
+                    App.cboVendID.store.reload();
                     App.stoVendor.reload();
                 }
             }
@@ -166,19 +180,35 @@ var cboVendID_Select = function (sender, value) {
     }
 };
 
-//khi nhan combo xo ra, neu da thay doi thi ko xo ra
-var cboVendID_Expand = function (sender, value) {
-    if (HQ.isChange) {
-        App.cboVendID.collapse();
+////khi nhan combo xo ra, neu da thay doi thi ko xo ra
+//var cboVendID_Expand = function (sender, value) {
+//    if (HQ.isChange) {
+//        App.cboVendID.collapse();
+//    }
+//};
+
+var cboBranchID_Change = function (sender, value) {
+    if (sender.valueModels != null ) {
+        App.cboVendID.store.reload();
     }
 };
-
 //khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
 var cboVendID_TriggerClick = function (sender, value) {
     if (HQ.isChange) {
         HQ.message.show(150, '', '');
     }
     else {
+        App.cboVendID.setValue('');
+        App.cboVendID.store.reload();
+    }
+};
+
+var cboBranchID_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        App.cboBranchID.setValue('');
         App.cboVendID.setValue('');
     }
 };
@@ -300,6 +330,7 @@ var save = function () {
             }
         });
     }
+
 };
 // Submit the deleted data into server side
 var deleteData = function (item) {

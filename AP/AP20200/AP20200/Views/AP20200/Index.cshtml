@@ -57,6 +57,7 @@
             .Parameters(ps =>
             {
                 ps.Add(new StoreParameter("vendID", "App.cboVendID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
             })
             .Listeners(l =>
                 {
@@ -65,6 +66,14 @@
                 }
             )
         )
+
+        @Html.HQ().Store().ID("stoAP20200_pdConfigShowBranch").HQProcedure("AP20200_pdConfigShowBranch").HQDBSys(false).AutoLoad(false).HQParam(new StoreParameterCollection() {
+                                                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                                                                        , new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                                                                        , new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+						                            }).LoadData()
+
+
         <!-- Gọi hàm Body trong AP20200Controller để dựng view Body.cshtml, mục đích tạo cache. -->
         @{ Html.RenderAction("Body", new { lang = Current.LangID });}   
     </body>

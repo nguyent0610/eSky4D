@@ -30,7 +30,25 @@
             .Layout(LayoutType.VBox)
             .AutoScroll(true)
             .Items(
-                HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("VendID")
+                    HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQLangCode("BranchID")
+                    .HQProcedure("AP20200_pcBranch").HQAutoLoad(true).MaxLength(15).EnforceMaxLength(true)
+                    .HQColumnShow("BranchID,BranchName,Addr").DisplayField("BranchName").ValueField("BranchID")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").DataIndex("BranchID")
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Fn = "cboBranchID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra     
+                        lst.Change.Fn = "cboBranchID_Change";//khi thay doi du lieu
+                    })
+            
+                  ,  HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("VendID")
                     .HQProcedure("AP20200_pcGetVendor").HQAutoLoad(true).MaxLength(15).EnforceMaxLength(true)
                     .HQColumnShow("VendID,Name,Address").DisplayField("VendID").ValueField("VendID")
                     .AllowBlank(false)
@@ -38,6 +56,7 @@
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
@@ -46,7 +65,25 @@
                         lst.TriggerClick.Fn = "cboVendID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
                         lst.Change.Fn = "cboVendID_Change";//khi thay doi du lieu
                         lst.Select.Fn = "cboVendID_Select";
-                        lst.Expand.Fn = "cboVendID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?          
+                        //lst.Expand.Fn = "cboVendID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?          
+                    })
+                    
+                ,  HQ.Combo().ID("cboVendType").Name("cboVendType").HQLangCode("VendType")
+                    .HQProcedure("AP20200_pcVendType").HQAutoLoad(true).MaxLength(30).EnforceMaxLength(true)
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("VendType")
+                    .AllowBlank(false)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";//khi nhan X xoa du lieu goi ham de kiem tra        
                     })
                         
                 , HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("Name").DataIndex("Name")
