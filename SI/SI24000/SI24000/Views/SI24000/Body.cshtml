@@ -34,7 +34,7 @@
             X.Store()
             .ID("stoSI_SalesSelling")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(SI24000_pgLoadSalesSelling_Result), "mdlSI24000_pgLoadSalesSelling", "Code"))
+            .Model(Util.GenerateModel(typeof(SI24000_pgLoadCategory_Result), "mdlSI24000_pgLoadSalesSelling", "Code"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_SalesSelling"))).AutoLoad(false)
             .Listeners(l =>
             {

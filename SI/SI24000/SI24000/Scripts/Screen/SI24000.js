@@ -138,7 +138,7 @@ var save = function () {
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'SI24000/Save',
             params: {
-                lstSI_SalesSelling: HQ.store.getData(App.stoSI_SalesSelling)
+                lstSI_Category: HQ.store.getData(App.stoSI_SalesSelling)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);

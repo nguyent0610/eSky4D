@@ -36,7 +36,7 @@ namespace SI24000.Controllers
         }
         public ActionResult GetSI_SalesSelling()
         {           
-            return this.Store(_db.SI24000_pgLoadSalesSelling(Current.CpnyID, Current.UserName, Current.LangID).ToList());
+            return this.Store(_db.SI24000_pgLoadCategory(Current.CpnyID, Current.UserName, Current.LangID).ToList());
         }
         [HttpPost]
         public ActionResult Save(FormCollection data)
@@ -46,10 +46,10 @@ namespace SI24000.Controllers
             {
 
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_SalesSelling"]);
-                ChangeRecords<SI24000_pgLoadSalesSelling_Result> lstLang = dataHandler.BatchObjectData<SI24000_pgLoadSalesSelling_Result>();
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_Category"]);
+                ChangeRecords<SI24000_pgLoadCategory_Result> lstLang = dataHandler.BatchObjectData<SI24000_pgLoadCategory_Result>();
                 lstLang.Created.AddRange(lstLang.Updated);
-                foreach (SI24000_pgLoadSalesSelling_Result del in lstLang.Deleted)
+                foreach (SI24000_pgLoadCategory_Result del in lstLang.Deleted)
                 {
                     // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     if (lstLang.Created.Where(p => p.Code == del.Code.ToUpper().Trim()).Count() > 0)
@@ -58,19 +58,19 @@ namespace SI24000.Controllers
                     }
                     else
                     {
-                        var objDel = _db.SI_SalesSelling.ToList().Where(p => p.Code == del.Code.ToUpper().Trim()).FirstOrDefault();
+                        var objDel = _db.SI_Category.ToList().Where(p => p.Code == del.Code.ToUpper().Trim()).FirstOrDefault();
                         if (objDel != null)
                         {
-                            _db.SI_SalesSelling.DeleteObject(objDel);
+                            _db.SI_Category.DeleteObject(objDel);
                         }
                     }
                 }
 
-                foreach (SI24000_pgLoadSalesSelling_Result curLang in lstLang.Created)
+                foreach (SI24000_pgLoadCategory_Result curLang in lstLang.Created)
                 {
                     if (curLang.Code.PassNull() == "") continue;
 
-                    var lang = _db.SI_SalesSelling.Where(p => p.Code == curLang.Code.ToUpper().Trim()).FirstOrDefault();
+                    var lang = _db.SI_Category.Where(p => p.Code == curLang.Code.ToUpper().Trim()).FirstOrDefault();
 
                     if (lang != null)
                     {
@@ -85,9 +85,9 @@ namespace SI24000.Controllers
                     }
                     else
                     {
-                        lang = new SI_SalesSelling();
+                        lang = new SI_Category();
                         Update_Language(lang, curLang, true);
-                        _db.SI_SalesSelling.AddObject(lang);
+                        _db.SI_Category.AddObject(lang);
                     }
                 }
 
@@ -101,7 +101,7 @@ namespace SI24000.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        private void Update_Language(SI_SalesSelling t, SI24000_pgLoadSalesSelling_Result s, bool isNew)
+        private void Update_Language(SI_Category t, SI24000_pgLoadCategory_Result s, bool isNew)
         {
             if (isNew)
             {

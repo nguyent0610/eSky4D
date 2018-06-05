@@ -68,29 +68,29 @@ namespace SI24000
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<SI_SalesSelling> SI_SalesSelling
+        public ObjectSet<SI_Category> SI_Category
         {
             get
             {
-                if ((_SI_SalesSelling == null))
+                if ((_SI_Category == null))
                 {
-                    _SI_SalesSelling = base.CreateObjectSet<SI_SalesSelling>("SI_SalesSelling");
+                    _SI_Category = base.CreateObjectSet<SI_Category>("SI_Category");
                 }
-                return _SI_SalesSelling;
+                return _SI_Category;
             }
         }
-        private ObjectSet<SI_SalesSelling> _SI_SalesSelling;
+        private ObjectSet<SI_Category> _SI_Category;
 
         #endregion
 
         #region AddTo Methods
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the SI_SalesSelling EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the SI_Category EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToSI_SalesSelling(SI_SalesSelling sI_SalesSelling)
+        public void AddToSI_Category(SI_Category sI_Category)
         {
-            base.AddObject("SI_SalesSelling", sI_SalesSelling);
+            base.AddObject("SI_Category", sI_Category);
         }
 
         #endregion
@@ -103,7 +103,7 @@ namespace SI24000
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<SI24000_pgLoadSalesSelling_Result> SI24000_pgLoadSalesSelling(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        public ObjectResult<SI24000_pgLoadCategory_Result> SI24000_pgLoadCategory(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -135,7 +135,7 @@ namespace SI24000
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<SI24000_pgLoadSalesSelling_Result>("SI24000_pgLoadSalesSelling", cpnyIDParameter, userNameParameter, langIDParameter);
+            return base.ExecuteFunction<SI24000_pgLoadCategory_Result>("SI24000_pgLoadCategory", cpnyIDParameter, userNameParameter, langIDParameter);
         }
 
         #endregion
@@ -149,15 +149,15 @@ namespace SI24000
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="SI24000Model", Name="SI_SalesSelling")]
+    [EdmEntityTypeAttribute(NamespaceName="SI24000Model", Name="SI_Category")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class SI_SalesSelling : EntityObject
+    public partial class SI_Category : EntityObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new SI_SalesSelling object.
+        /// Create a new SI_Category object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="lUpd_Datetime">Initial value of the LUpd_Datetime property.</param>
@@ -167,18 +167,18 @@ namespace SI24000
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_SalesSelling CreateSI_SalesSelling(global::System.String code, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp)
+        public static SI_Category CreateSI_Category(global::System.String code, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp)
         {
-            SI_SalesSelling sI_SalesSelling = new SI_SalesSelling();
-            sI_SalesSelling.Code = code;
-            sI_SalesSelling.LUpd_Datetime = lUpd_Datetime;
-            sI_SalesSelling.LUpd_Prog = lUpd_Prog;
-            sI_SalesSelling.LUpd_User = lUpd_User;
-            sI_SalesSelling.Crtd_Datetime = crtd_Datetime;
-            sI_SalesSelling.Crtd_Prog = crtd_Prog;
-            sI_SalesSelling.Crtd_User = crtd_User;
-            sI_SalesSelling.tstamp = tstamp;
-            return sI_SalesSelling;
+            SI_Category sI_Category = new SI_Category();
+            sI_Category.Code = code;
+            sI_Category.LUpd_Datetime = lUpd_Datetime;
+            sI_Category.LUpd_Prog = lUpd_Prog;
+            sI_Category.LUpd_User = lUpd_User;
+            sI_Category.Crtd_Datetime = crtd_Datetime;
+            sI_Category.Crtd_Prog = crtd_Prog;
+            sI_Category.Crtd_User = crtd_User;
+            sI_Category.tstamp = tstamp;
+            return sI_Category;
         }
 
         #endregion
@@ -416,15 +416,15 @@ namespace SI24000
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="SI24000Model", Name="SI24000_pgLoadSalesSelling_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="SI24000Model", Name="SI24000_pgLoadCategory_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class SI24000_pgLoadSalesSelling_Result : ComplexObject
+    public partial class SI24000_pgLoadCategory_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new SI24000_pgLoadSalesSelling_Result object.
+        /// Create a new SI24000_pgLoadCategory_Result object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="lUpd_Datetime">Initial value of the LUpd_Datetime property.</param>
@@ -434,18 +434,18 @@ namespace SI24000
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI24000_pgLoadSalesSelling_Result CreateSI24000_pgLoadSalesSelling_Result(global::System.String code, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp)
+        public static SI24000_pgLoadCategory_Result CreateSI24000_pgLoadCategory_Result(global::System.String code, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp)
         {
-            SI24000_pgLoadSalesSelling_Result sI24000_pgLoadSalesSelling_Result = new SI24000_pgLoadSalesSelling_Result();
-            sI24000_pgLoadSalesSelling_Result.Code = code;
-            sI24000_pgLoadSalesSelling_Result.LUpd_Datetime = lUpd_Datetime;
-            sI24000_pgLoadSalesSelling_Result.LUpd_Prog = lUpd_Prog;
-            sI24000_pgLoadSalesSelling_Result.LUpd_User = lUpd_User;
-            sI24000_pgLoadSalesSelling_Result.Crtd_Datetime = crtd_Datetime;
-            sI24000_pgLoadSalesSelling_Result.Crtd_Prog = crtd_Prog;
-            sI24000_pgLoadSalesSelling_Result.Crtd_User = crtd_User;
-            sI24000_pgLoadSalesSelling_Result.tstamp = tstamp;
-            return sI24000_pgLoadSalesSelling_Result;
+            SI24000_pgLoadCategory_Result sI24000_pgLoadCategory_Result = new SI24000_pgLoadCategory_Result();
+            sI24000_pgLoadCategory_Result.Code = code;
+            sI24000_pgLoadCategory_Result.LUpd_Datetime = lUpd_Datetime;
+            sI24000_pgLoadCategory_Result.LUpd_Prog = lUpd_Prog;
+            sI24000_pgLoadCategory_Result.LUpd_User = lUpd_User;
+            sI24000_pgLoadCategory_Result.Crtd_Datetime = crtd_Datetime;
+            sI24000_pgLoadCategory_Result.Crtd_Prog = crtd_Prog;
+            sI24000_pgLoadCategory_Result.Crtd_User = crtd_User;
+            sI24000_pgLoadCategory_Result.tstamp = tstamp;
+            return sI24000_pgLoadCategory_Result;
         }
 
         #endregion

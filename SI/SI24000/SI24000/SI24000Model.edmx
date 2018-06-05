@@ -5,7 +5,7 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityType Name="SI_SalesSelling">
+        <EntityType Name="SI_Category">
           <Key>
             <PropertyRef Name="Code" />
           </Key>
@@ -19,27 +19,27 @@
           <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
-        <Function Name="SI24000_pgLoadSalesSelling" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="SI24000_pgLoadCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="SI_SalesSelling" EntityType="Self.SI_SalesSelling" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SI_Category" EntityType="Self.SI_Category" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SI24000Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SI24000Entities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="SI_SalesSelling" EntityType="SI24000Model.SI_SalesSelling" />
-          <FunctionImport Name="SI24000_pgLoadSalesSelling" ReturnType="Collection(SI24000Model.SI24000_pgLoadSalesSelling_Result)">
+          <EntitySet Name="SI_Category" EntityType="SI24000Model.SI_Category" />
+          <FunctionImport Name="SI24000_pgLoadCategory" ReturnType="Collection(SI24000Model.SI24000_pgLoadCategory_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
-        <EntityType Name="SI_SalesSelling">
+        <EntityType Name="SI_Category">
           <Key>
             <PropertyRef Name="Code" />
           </Key>
@@ -53,7 +53,7 @@
           <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="SI24000_pgLoadSalesSelling_Result">
+        <ComplexType Name="SI24000_pgLoadCategory_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="23" />
@@ -70,9 +70,9 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SI24000Entities" >
-          <EntitySetMapping Name="SI_SalesSelling">
-            <EntityTypeMapping TypeName="SI24000Model.SI_SalesSelling">
-              <MappingFragment StoreEntitySet="SI_SalesSelling">
+          <EntitySetMapping Name="SI_Category">
+            <EntityTypeMapping TypeName="SI24000Model.SI_Category">
+              <MappingFragment StoreEntitySet="SI_Category">
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
@@ -85,9 +85,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SI24000_pgLoadSalesSelling" FunctionName="eBiz4DWebSysModel.Store.SI24000_pgLoadSalesSelling">
+          <FunctionImportMapping FunctionImportName="SI24000_pgLoadCategory" FunctionName="eBiz4DWebSysModel.Store.SI24000_pgLoadCategory">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="SI24000Model.SI24000_pgLoadSalesSelling_Result">
+              <ComplexTypeMapping TypeName="SI24000Model.SI24000_pgLoadCategory_Result">
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
@@ -122,7 +122,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="SI24000Model.SI_SalesSelling" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SI24000Model.SI_Category" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
