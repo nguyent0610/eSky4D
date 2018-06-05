@@ -1,0 +1,146 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN20400;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(p =>
+             {
+               p.BoxReady.Handler = "firstLoad();";
+             })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader").Region(Region.North).MarginSpec("0 0 10 0")
+        .Listeners(lst =>
+               {
+
+                   lst.Render.Handler = "HQ.common.control_render(this,'header')";
+
+               })
+        .Items(
+            X.Container().Layout(LayoutType.VBox)
+            .Items(
+                HQ.Combo().ID("cboSiteID").Name("cboSiteID").HQLangCode("SiteID").DataIndex("SiteID")
+                    .HQProcedure("IN20400_pcSiteID").HQAutoLoad(true).MaxLength(30).EnforceMaxLength(true)
+                    .HQColumnShow("SiteId,Name").DisplayField("Name").ValueField("SiteId")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Fn = "cboSiteID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra     
+                        lst.Change.Fn = "cboSiteID_Change";
+                    })
+            )
+        )
+        , X.TabPanel().ID("tabDetail")
+        .Region(Region.Center)
+        .Items(
+                X.Panel().ID("pnlDetail").Layout(LayoutType.Fit).Title(Util.GetLang("About"))
+                .Listeners(lst =>
+               {
+
+                   lst.Render.Handler = "HQ.common.control_render(this,'grdIN_SiteLocation')";
+
+               })
+                .Items(
+                X.GridPanel()
+                .Scroll(ScrollMode.Both).Layout(LayoutType.Fit)
+                .View(X.GridView().TrackOver(false))
+                .ID("grdIN_SiteLocation")
+                .SelectionMemory(false)
+                .Store(
+                    X.Store()
+                    .ID("stoIN_SiteLocation")
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(IN20400_pgLoadSiteLocation_Result), "mdlIN20400_pgLoadSiteLocation_Result", ""))
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetIN_SiteLocation"))).AutoLoad(false)
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("siteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "frmChange";
+                    })
+                )
+                .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdIN_SiteLocation');")
+                .SortableColumns(false)
+                .ColumnModel(
+                    X.RowNumbererColumn().Width(40),
+                    X.Column().ID("WhseLoc").Text(Util.GetLang("WhseLoc")).DataIndex("WhseLoc").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true)),
+                    X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(30).EnforceMaxLength(true)),
+                    X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "grdIN_SiteLocation_Reject(record);")
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmIN_SiteLocation").Mode(SelectionMode.Multi))
+                .BottomBar(
+                    X.PagingToolbar()
+                    .Items(
+                        X.Label("Page size:"),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("50")
+                        .Listeners(l =>
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
+                    )
+                    .Plugins(X.ProgressBarPager())
+                )
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdIN_SiteLocation_BeforeEdit";
+                        ls.Edit.Fn = "grdIN_SiteLocation_Edit";
+                        ls.ValidateEdit.Fn = "grdIN_SiteLocation_ValidateEdit";
+
+                    })
+                )
+
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("WhseLoc"),
+                            X.StringFilter().DataIndex("Descr")
+                        )
+                )
+             )
+        )    
+    )
+)
+)
