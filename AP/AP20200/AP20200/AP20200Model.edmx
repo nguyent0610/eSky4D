@@ -7,12 +7,10 @@
     <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AP_Vendor">
           <Key>
-            <PropertyRef Name="BranchID" />
             <PropertyRef Name="VendID" />
+            <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="VendID" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="VendType" Type="varchar" MaxLength="30" />
           <Property Name="Addr1" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Addr2" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" Nullable="false" />
@@ -60,6 +58,8 @@
           <Property Name="PmtMethod" Type="nvarchar" MaxLength="200" />
           <Property Name="MOQVal" Type="float" Nullable="false" />
           <Property Name="MOQType" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="VendType" Type="varchar" MaxLength="1" />
         </EntityType>
         <Function Name="AP20200_pcCityByCountryState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Country" Type="varchar" Mode="In" />
@@ -72,6 +72,7 @@
         </Function>
         <Function Name="AP20200_pcGetVendor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="AP20200_pcMOQType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LangID" Type="smallint" Mode="In" />
@@ -111,6 +112,7 @@
           </FunctionImport>
           <FunctionImport Name="AP20200_pcGetVendor" ReturnType="Collection(AP20200Model.AP20200_pcGetVendor_Result)">
           <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AP20200_pcMOQType" ReturnType="Collection(AP20200Model.AP20200_pcMOQType_Result)">
           <Parameter Name="LangID" Mode="In" Type="Int16" />
@@ -184,12 +186,10 @@
         </ComplexType>
         <EntityType Name="AP_Vendor">
           <Key>
-            <PropertyRef Name="BranchID" />
             <PropertyRef Name="VendID" />
+            <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="VendID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="VendType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Addr1" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Addr2" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Attn" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -237,6 +237,8 @@
           <Property Name="PmtMethod" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="MOQVal" Type="Double" Nullable="false" />
           <Property Name="MOQType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="VendType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -341,6 +343,8 @@
           <EntitySetMapping Name="AP_Vendor">
             <EntityTypeMapping TypeName="AP20200Model.AP_Vendor">
               <MappingFragment StoreEntitySet="AP_Vendor">
+                <ScalarProperty Name="VendType" ColumnName="VendType" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="MOQType" ColumnName="MOQType" />
                 <ScalarProperty Name="MOQVal" ColumnName="MOQVal" />
                 <ScalarProperty Name="PmtMethod" ColumnName="PmtMethod" />
@@ -388,9 +392,7 @@
                 <ScalarProperty Name="Attn" ColumnName="Attn" />
                 <ScalarProperty Name="Addr2" ColumnName="Addr2" />
                 <ScalarProperty Name="Addr1" ColumnName="Addr1" />
-                <ScalarProperty Name="VendType" ColumnName="VendType" />
                 <ScalarProperty Name="VendID" ColumnName="VendID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -416,7 +418,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="72">
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="64">
         <EntityTypeShape EntityType="AP20200Model.AP_Vendor" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>

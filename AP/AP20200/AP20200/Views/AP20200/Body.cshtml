@@ -31,7 +31,7 @@
             .AutoScroll(true)
             .Items(
                     HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQLangCode("BranchID")
-                    .HQProcedure("AP20200_pcBranch").HQAutoLoad(true).MaxLength(15).EnforceMaxLength(true)
+                    .HQProcedure("AP20200_pcBranch").HQAutoLoad(true).MaxLength(30).EnforceMaxLength(true)
                     .HQColumnShow("BranchID,BranchName,Addr").DisplayField("BranchName").ValueField("BranchID")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").DataIndex("BranchID")
                     .HQParam(new StoreParameterCollection() 

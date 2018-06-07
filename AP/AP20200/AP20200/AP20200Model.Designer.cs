@@ -166,7 +166,8 @@ namespace AP20200
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
-        public ObjectResult<AP20200_pcGetVendor_Result> AP20200_pcGetVendor(global::System.String userID)
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<AP20200_pcGetVendor_Result> AP20200_pcGetVendor(global::System.String userID, global::System.String branchID)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -178,7 +179,17 @@ namespace AP20200
                 userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AP20200_pcGetVendor_Result>("AP20200_pcGetVendor", userIDParameter);
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<AP20200_pcGetVendor_Result>("AP20200_pcGetVendor", userIDParameter, branchIDParameter);
         }
     
         /// <summary>
@@ -335,7 +346,6 @@ namespace AP20200
         /// <summary>
         /// Create a new AP_Vendor object.
         /// </summary>
-        /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="vendID">Initial value of the VendID property.</param>
         /// <param name="addr1">Initial value of the Addr1 property.</param>
         /// <param name="addr2">Initial value of the Addr2 property.</param>
@@ -376,10 +386,10 @@ namespace AP20200
         /// <param name="crLmt">Initial value of the CrLmt property.</param>
         /// <param name="mOQVal">Initial value of the MOQVal property.</param>
         /// <param name="mOQType">Initial value of the MOQType property.</param>
-        public static AP_Vendor CreateAP_Vendor(global::System.String branchID, global::System.String vendID, global::System.String addr1, global::System.String addr2, global::System.String attn, global::System.String city, global::System.String classID, global::System.String country, global::System.String eMailAddr, global::System.String expAcct, global::System.String expSub, global::System.String fax, global::System.String phone, global::System.String remitCity, global::System.String remitCountry, global::System.String remitFax, global::System.String remitPhone, global::System.String remitSalut, global::System.String remitZip, global::System.String salut, global::System.String state, global::System.String status, global::System.String taxDflt, global::System.String taxId00, global::System.String taxId01, global::System.String taxId02, global::System.String taxId03, global::System.String taxLocId, global::System.String taxRegNbr, global::System.String terms, global::System.String zip, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double crLmt, global::System.Double mOQVal, global::System.String mOQType)
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static AP_Vendor CreateAP_Vendor(global::System.String vendID, global::System.String addr1, global::System.String addr2, global::System.String attn, global::System.String city, global::System.String classID, global::System.String country, global::System.String eMailAddr, global::System.String expAcct, global::System.String expSub, global::System.String fax, global::System.String phone, global::System.String remitCity, global::System.String remitCountry, global::System.String remitFax, global::System.String remitPhone, global::System.String remitSalut, global::System.String remitZip, global::System.String salut, global::System.String state, global::System.String status, global::System.String taxDflt, global::System.String taxId00, global::System.String taxId01, global::System.String taxId02, global::System.String taxId03, global::System.String taxLocId, global::System.String taxRegNbr, global::System.String terms, global::System.String zip, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double crLmt, global::System.Double mOQVal, global::System.String mOQType, global::System.String branchID)
         {
             AP_Vendor aP_Vendor = new AP_Vendor();
-            aP_Vendor.BranchID = branchID;
             aP_Vendor.VendID = vendID;
             aP_Vendor.Addr1 = addr1;
             aP_Vendor.Addr2 = addr2;
@@ -420,39 +430,13 @@ namespace AP20200
             aP_Vendor.CrLmt = crLmt;
             aP_Vendor.MOQVal = mOQVal;
             aP_Vendor.MOQType = mOQType;
+            aP_Vendor.BranchID = branchID;
             return aP_Vendor;
         }
 
         #endregion
 
         #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String BranchID
-        {
-            get
-            {
-                return _BranchID;
-            }
-            set
-            {
-                if (_BranchID != value)
-                {
-                    OnBranchIDChanging(value);
-                    ReportPropertyChanging("BranchID");
-                    _BranchID = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("BranchID");
-                    OnBranchIDChanged();
-                }
-            }
-        }
-        private global::System.String _BranchID;
-        partial void OnBranchIDChanging(global::System.String value);
-        partial void OnBranchIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -480,30 +464,6 @@ namespace AP20200
         private global::System.String _VendID;
         partial void OnVendIDChanging(global::System.String value);
         partial void OnVendIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String VendType
-        {
-            get
-            {
-                return _VendType;
-            }
-            set
-            {
-                OnVendTypeChanging(value);
-                ReportPropertyChanging("VendType");
-                _VendType = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("VendType");
-                OnVendTypeChanged();
-            }
-        }
-        private global::System.String _VendType;
-        partial void OnVendTypeChanging(global::System.String value);
-        partial void OnVendTypeChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1632,6 +1592,57 @@ namespace AP20200
         private global::System.String _MOQType;
         partial void OnMOQTypeChanging(global::System.String value);
         partial void OnMOQTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                if (_BranchID != value)
+                {
+                    OnBranchIDChanging(value);
+                    ReportPropertyChanging("BranchID");
+                    _BranchID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("BranchID");
+                    OnBranchIDChanged();
+                }
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String VendType
+        {
+            get
+            {
+                return _VendType;
+            }
+            set
+            {
+                OnVendTypeChanging(value);
+                ReportPropertyChanging("VendType");
+                _VendType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("VendType");
+                OnVendTypeChanged();
+            }
+        }
+        private global::System.String _VendType;
+        partial void OnVendTypeChanging(global::System.String value);
+        partial void OnVendTypeChanged();
 
         #endregion
 
