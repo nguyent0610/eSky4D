@@ -29,24 +29,26 @@
           <Property Name="DatabaseName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Deposit" Type="float" Nullable="false" />
           <Property Name="CreditLimit" Type="float" Nullable="false" />
           <Property Name="MaxValue" Type="float" Nullable="false" />
           <Property Name="Type" Type="varchar" MaxLength="50" />
-          <Property Name="State" Type="varchar" MaxLength="10" />
+          <Property Name="State" Type="varchar(max)" />
           <Property Name="ReturnLimit" Type="smallint" />
           <Property Name="Zone" Type="varchar" MaxLength="10" />
-          <Property Name="Status" Type="varchar" MaxLength="2" />
           <Property Name="Lat" Type="float" />
           <Property Name="Lng" Type="float" />
+          <Property Name="Status" Type="varchar" MaxLength="2" />
           <Property Name="SalesState" Type="varchar(max)" />
           <Property Name="SalesDistrict" Type="varchar(max)" />
           <Property Name="CountSiteID" Type="int" />
+          <Property Name="DateStopUsing" Type="datetime" />
+          <Property Name="ReasonStopUsing" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Sys_CompanyAddr">
           <Key>
@@ -64,7 +66,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="250" />
           <Property Name="Phone" Type="varchar" MaxLength="30" />
           <Property Name="Salut" Type="nvarchar" MaxLength="30" />
-          <Property Name="State" Type="varchar" MaxLength="4" />
+          <Property Name="State" Type="varchar(max)" />
           <Property Name="TaxId00" Type="varchar" MaxLength="10" />
           <Property Name="TaxId01" Type="varchar" MaxLength="10" />
           <Property Name="TaxId02" Type="varchar" MaxLength="10" />
@@ -74,10 +76,10 @@
           <Property Name="Zip" Type="varchar" MaxLength="10" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <Function Name="SA000001_pgCompanyAddr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -120,6 +122,7 @@
           <Parameter Name="SlsperID" Type="varchar(max)" Mode="In" />
           <Parameter Name="DisplayID" Type="varchar(max)" Mode="In" />
           <Parameter Name="AccumulateID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="SYS_Company" EntityType="Self.SYS_Company" Schema="dbo" store:Type="Tables" />
@@ -166,13 +169,14 @@
             <Parameter Name="SlsperID" Mode="In" Type="String" />
             <Parameter Name="DisplayID" Mode="In" Type="String" />
             <Parameter Name="AccumulateID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="SYS_Company" EntityType="SA00001Model.SYS_Company" />
           <FunctionImport Name="SA00001_pgLoadGridCompany" ReturnType="Collection(SA00001Model.SA00001_pgLoadGridCompany_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="SYS_Company" EntityType="SA00001Model.SYS_Company" />
         </EntityContainer>
         <EntityType Name="Sys_CompanyAddr">
           <Key>
@@ -190,7 +194,7 @@
           <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Phone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Salut" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="State" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="TaxId00" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TaxId01" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TaxId02" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -200,10 +204,10 @@
           <Property Name="Zip" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <ComplexType Name="SA000001_pgCompanyAddr_Result">
@@ -255,49 +259,6 @@
           <Property Type="String" Name="Name" Nullable="true" MaxLength="503" />
           <Property Type="Boolean" Name="CheckUser" Nullable="true" />
         </ComplexType>
-        <EntityType Name="SYS_Company">
-          <Key>
-            <PropertyRef Name="CpnyID" />
-          </Key>
-          <Property Name="CpnyID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="CpnyName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Address1" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="Address2" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="Tel" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Fax" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="TaxRegNbr" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Channel" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Territory" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Country" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="City" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="District" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="CpnyType" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Owner" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Plant" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
-          <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="Deposit" Type="Double" Nullable="false" />
-          <Property Name="CreditLimit" Type="Double" Nullable="false" />
-          <Property Name="MaxValue" Type="Double" Nullable="false" />
-          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="State" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ReturnLimit" Type="Int16" />
-          <Property Name="Zone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="Lat" Type="Double" />
-          <Property Name="Lng" Type="Double" />
-          <Property Name="SalesState" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="SalesDistrict" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="CountSiteID" Type="Int32" />
-        </EntityType>
         <ComplexType Name="SA00001_pgLoadGridCompany_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
@@ -331,7 +292,54 @@
           <Property Type="Double" Name="Lng" Nullable="true" />
           <Property Type="Int32" Name="CountSiteID" Nullable="true" />
           <Property Type="String" Name="SAManager" Nullable="true" />
+          <Property Type="DateTime" Name="DateStopUsing" Nullable="true" Precision="23" />
+          <Property Type="String" Name="ReasonStopUsing" Nullable="true" />
         </ComplexType>
+        <EntityType Name="SYS_Company">
+          <Key>
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Name="CpnyID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CpnyName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TaxRegNbr" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Channel" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Territory" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="District" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CpnyType" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Owner" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Plant" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Deposit" Type="Double" Nullable="false" />
+          <Property Name="CreditLimit" Type="Double" Nullable="false" />
+          <Property Name="MaxValue" Type="Double" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ReturnLimit" Type="Int16" />
+          <Property Name="Zone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Lat" Type="Double" />
+          <Property Name="Lng" Type="Double" />
+          <Property Name="Status" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="SalesState" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SalesDistrict" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CountSiteID" Type="Int32" />
+          <Property Name="DateStopUsing" Type="DateTime" Precision="3" />
+          <Property Name="ReasonStopUsing" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -440,50 +448,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SA00001_ppUserSales" FunctionName="eBiz4DWebSysModel.Store.SA00001_ppUserSales" />
-          <EntitySetMapping Name="SYS_Company">
-            <EntityTypeMapping TypeName="SA00001Model.SYS_Company">
-              <MappingFragment StoreEntitySet="SYS_Company">
-                <ScalarProperty Name="CountSiteID" ColumnName="CountSiteID" />
-                <ScalarProperty Name="SalesDistrict" ColumnName="SalesDistrict" />
-                <ScalarProperty Name="SalesState" ColumnName="SalesState" />
-                <ScalarProperty Name="Lng" ColumnName="Lng" />
-                <ScalarProperty Name="Lat" ColumnName="Lat" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Zone" ColumnName="Zone" />
-                <ScalarProperty Name="ReturnLimit" ColumnName="ReturnLimit" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
-                <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
-                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
-                <ScalarProperty Name="Plant" ColumnName="Plant" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
-                <ScalarProperty Name="District" ColumnName="District" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="Territory" ColumnName="Territory" />
-                <ScalarProperty Name="Channel" ColumnName="Channel" />
-                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Address2" ColumnName="Address2" />
-                <ScalarProperty Name="Address1" ColumnName="Address1" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
-                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="SA00001_pgLoadGridCompany" FunctionName="eBiz4DWebSysModel.Store.SA00001_pgLoadGridCompany">
             <ResultMapping>
               <ComplexTypeMapping TypeName="SA00001Model.SA00001_pgLoadGridCompany_Result">
@@ -519,9 +483,57 @@
                 <ScalarProperty Name="Lng" ColumnName="Lng" />
                 <ScalarProperty Name="CountSiteID" ColumnName="CountSiteID" />
                 <ScalarProperty Name="SAManager" ColumnName="SAManager" />
+                <ScalarProperty Name="DateStopUsing" ColumnName="DateStopUsing" />
+                <ScalarProperty Name="ReasonStopUsing" ColumnName="ReasonStopUsing" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="SYS_Company">
+            <EntityTypeMapping TypeName="SA00001Model.SYS_Company">
+              <MappingFragment StoreEntitySet="SYS_Company">
+                <ScalarProperty Name="ReasonStopUsing" ColumnName="ReasonStopUsing" />
+                <ScalarProperty Name="DateStopUsing" ColumnName="DateStopUsing" />
+                <ScalarProperty Name="CountSiteID" ColumnName="CountSiteID" />
+                <ScalarProperty Name="SalesDistrict" ColumnName="SalesDistrict" />
+                <ScalarProperty Name="SalesState" ColumnName="SalesState" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
+                <ScalarProperty Name="ReturnLimit" ColumnName="ReturnLimit" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
+                <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
+                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -368,7 +368,8 @@ namespace SA00001
         /// <param name="slsperID">No Metadata Documentation available.</param>
         /// <param name="displayID">No Metadata Documentation available.</param>
         /// <param name="accumulateID">No Metadata Documentation available.</param>
-        public int SA00001_ppUserSales(global::System.String branchID, global::System.String userManger, global::System.String branchOld, global::System.String slsperID, global::System.String displayID, global::System.String accumulateID)
+        /// <param name="userID">No Metadata Documentation available.</param>
+        public int SA00001_ppUserSales(global::System.String branchID, global::System.String userManger, global::System.String branchOld, global::System.String slsperID, global::System.String displayID, global::System.String accumulateID, global::System.String userID)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -430,7 +431,17 @@ namespace SA00001
                 accumulateIDParameter = new ObjectParameter("AccumulateID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction("SA00001_ppUserSales", branchIDParameter, userMangerParameter, branchOldParameter, slsperIDParameter, displayIDParameter, accumulateIDParameter);
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("SA00001_ppUserSales", branchIDParameter, userMangerParameter, branchOldParameter, slsperIDParameter, displayIDParameter, accumulateIDParameter, userIDParameter);
         }
     
         /// <summary>
@@ -1309,30 +1320,6 @@ namespace SA00001
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String Status
-        {
-            get
-            {
-                return _Status;
-            }
-            set
-            {
-                OnStatusChanging(value);
-                ReportPropertyChanging("Status");
-                _Status = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Status");
-                OnStatusChanged();
-            }
-        }
-        private global::System.String _Status;
-        partial void OnStatusChanging(global::System.String value);
-        partial void OnStatusChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
         public Nullable<global::System.Double> Lat
         {
             get
@@ -1375,6 +1362,30 @@ namespace SA00001
         private Nullable<global::System.Double> _Lng;
         partial void OnLngChanging(Nullable<global::System.Double> value);
         partial void OnLngChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.String _Status;
+        partial void OnStatusChanging(global::System.String value);
+        partial void OnStatusChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1447,6 +1458,54 @@ namespace SA00001
         private Nullable<global::System.Int32> _CountSiteID;
         partial void OnCountSiteIDChanging(Nullable<global::System.Int32> value);
         partial void OnCountSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> DateStopUsing
+        {
+            get
+            {
+                return _DateStopUsing;
+            }
+            set
+            {
+                OnDateStopUsingChanging(value);
+                ReportPropertyChanging("DateStopUsing");
+                _DateStopUsing = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DateStopUsing");
+                OnDateStopUsingChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _DateStopUsing;
+        partial void OnDateStopUsingChanging(Nullable<global::System.DateTime> value);
+        partial void OnDateStopUsingChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ReasonStopUsing
+        {
+            get
+            {
+                return _ReasonStopUsing;
+            }
+            set
+            {
+                OnReasonStopUsingChanging(value);
+                ReportPropertyChanging("ReasonStopUsing");
+                _ReasonStopUsing = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ReasonStopUsing");
+                OnReasonStopUsingChanged();
+            }
+        }
+        private global::System.String _ReasonStopUsing;
+        partial void OnReasonStopUsingChanging(global::System.String value);
+        partial void OnReasonStopUsingChanged();
 
         #endregion
 
@@ -3776,6 +3835,54 @@ namespace SA00001
         private global::System.String _SAManager;
         partial void OnSAManagerChanging(global::System.String value);
         partial void OnSAManagerChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> DateStopUsing
+        {
+            get
+            {
+                return _DateStopUsing;
+            }
+            set
+            {
+                OnDateStopUsingChanging(value);
+                ReportPropertyChanging("DateStopUsing");
+                _DateStopUsing = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DateStopUsing");
+                OnDateStopUsingChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _DateStopUsing;
+        partial void OnDateStopUsingChanging(Nullable<global::System.DateTime> value);
+        partial void OnDateStopUsingChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ReasonStopUsing
+        {
+            get
+            {
+                return _ReasonStopUsing;
+            }
+            set
+            {
+                OnReasonStopUsingChanging(value);
+                ReportPropertyChanging("ReasonStopUsing");
+                _ReasonStopUsing = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ReasonStopUsing");
+                OnReasonStopUsingChanged();
+            }
+        }
+        private global::System.String _ReasonStopUsing;
+        partial void OnReasonStopUsingChanging(global::System.String value);
+        partial void OnReasonStopUsingChanged();
 
         #endregion
 

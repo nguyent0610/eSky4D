@@ -247,6 +247,8 @@ namespace SA00001.Controllers
             t.Lat = s.Lat;
             t.Lng = s.Lng;
             t.CountSiteID = s.CountSiteID;
+            t.DateStopUsing = s.DateStopUsing;
+            t.ReasonStopUsing = s.ReasonStopUsing;
 
         }
 

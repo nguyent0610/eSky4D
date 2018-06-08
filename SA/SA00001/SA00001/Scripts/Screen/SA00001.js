@@ -149,7 +149,6 @@ var firstLoad = function () {
     HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     App.frmMain.isValid();
-
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     checkLoad();    
 };
@@ -324,6 +323,22 @@ var btnEdit_Click = function (record) {
    
 
     App.txtCpnyID.setReadOnly(true);
+    if (App.cboStatus.getValue() == "IN") {
+        App.dtpStopUsing.setReadOnly(false);
+        App.txtReasonStopUsing.setReadOnly(false);
+        App.dtpStopUsing.setValue(HQ.bussinessDate);
+        App.dtpStopUsing.allowBlank = false;
+        App.txtReasonStopUsing.allowBlank = false;
+        App.txtReasonStopUsing.isValid();
+    }
+    else {
+        App.dtpStopUsing.setReadOnly(true);
+        App.txtReasonStopUsing.setReadOnly(true);
+        App.dtpStopUsing.allowBlank = true;
+        App.txtReasonStopUsing.allowBlank = true;
+        App.txtReasonStopUsing.isValid();
+        App.dtpStopUsing.setValue('');
+    }
     App.winLocation.setTitle("Edit");
     HQ.isNew = false;
     App.winLocation.show();
@@ -459,11 +474,30 @@ var cboCountry_Change = function (sender, e, oldValue) {
 var cboZone_Change = function (sender, e, oldValue) {
     if (sender.hasFocus || (oldValue != undefined)) {
         if (e != oldValue) {
-            App.cboTerritory.setValue("");            
+          //  App.cboTerritory.setValue("");            
         }
     }
 };
-
+var cboStatus_Change = function (sender, e, oldValue) {
+    if(App.cboStatus.getValue()=="IN")
+    {
+        App.dtpStopUsing.setReadOnly(false);
+        App.txtReasonStopUsing.setReadOnly(false);
+        App.dtpStopUsing.setValue(HQ.bussinessDate);
+        App.dtpStopUsing.allowBlank = false;
+        App.txtReasonStopUsing.allowBlank = false;
+        App.txtReasonStopUsing.isValid();
+    }
+    else
+    {
+        App.dtpStopUsing.setReadOnly(true);
+        App.txtReasonStopUsing.setReadOnly(true);
+        App.dtpStopUsing.allowBlank = true;
+        App.txtReasonStopUsing.allowBlank = true;
+        App.txtReasonStopUsing.isValid();
+        App.dtpStopUsing.setValue('');
+    }
+}
 //var cboTerritory_Change = function (sender, e) {
 //    if (sender.hasFocus) {
 //        //App.cboState.getStore().load(function () {
