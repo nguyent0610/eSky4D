@@ -669,6 +669,11 @@
                             X.CheckColumn().ID("chkUpdBussPic").DataIndex("EditBusinessPic").Width(50).Editable(true).Text(Util.GetLang("AR20500EditBussPic")).Align(Alignment.Center).Width(100)
                             , X.CheckColumn().ID("chkUpdProfilePic").DataIndex("EditProfilePic").Width(70).Editable(true).Text(Util.GetLang("AR20500EditProPic")).Align(Alignment.Center).Width(100)
                         )
+                        //Them thoi gian
+
+                        , X.DateColumn().Text(Util.GetLang("AR20500Date1")).DataIndex("Date1").Format(Current.FormatDate).Format(Current.FormatDate + " HH:mm").Width(150)
+                        , X.DateColumn().Text(Util.GetLang("AR20500Date2")).DataIndex("Date2").Format(Current.FormatDate).Format(Current.FormatDate + " HH:mm").Width(150)
+                        //end them thoi gian
                         , X.CommandColumn().Width(130)
                         .Commands(
                             X.GridCommand()

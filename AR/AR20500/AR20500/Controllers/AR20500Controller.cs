@@ -34,7 +34,8 @@ namespace AR20500.Controllers
         RPTEntities _dbRPT = Util.CreateObjectContext<RPTEntities>(false);
         private JsonResult mLogMessage;
         private FormCollection mForm;
-        
+        private string handle =string.Empty;
+        private string status = string.Empty;
 
         private string _filePath;
         internal string FilePath
@@ -216,8 +217,8 @@ namespace AR20500.Controllers
 
                 if (!access.Update && !access.Insert)
                     throw new MessageException(MessageType.Message, "728");
-                string handle = data["cboHandle"];
-                string status = data["cboStatus"];
+                handle = data["cboHandle"];
+                status = data["cboStatus"];
                 string updateType = data["cboUpdateType"];
                 string custlist = "";
                 List<string> lstCustHT = new List<string>();
@@ -552,6 +553,20 @@ namespace AR20500.Controllers
             objNew.TaxCode = item.TaxCode;
             objNew.OUnit = item.OUnit;
             objNew.Market = item.Market;
+            if (status == "H")
+            {
+                if(handle=="O" || handle=="D")
+                {
+                    objNew.Date1 = DateTime.Now;
+                }
+            }
+            else if(status=="O")
+            {
+                if(handle=="A" || handle=="D")
+                {
+                    objNew.Date2 = DateTime.Now;
+                }
+            }
 
         }
 
@@ -652,7 +667,9 @@ namespace AR20500.Controllers
                 Crtd_Datetime = DateTime.Now,
                 VisitsPerDay = objNew.VisitsPerDay,
                 TypeCabinets = objNew.TypeCabinets,
-                OUnit = objNew.OUnit
+                OUnit = objNew.OUnit,
+                Date1=objNew.Date1,
+                Date2=objNew.Date2
             };
             _db.AR_NewCustomerInforHis.AddObject(objHis);
         }
@@ -1881,64 +1898,64 @@ namespace AR20500.Controllers
             return false;
         }
 
-        [HttpPost]
-        public ActionResult ExportExcel(FormCollection data, string reportNbr, string ReportName)
-        {
-            try
-            {
-                ////RPTController rpt = new RPTController();
-                ////return rpt.ExportExcelDirect(185, "IN_ItemList");
-                //string ReportName = "IN_ItemList";
-                int ReportID = UpdateRPT(data, reportNbr, ReportName);
+        //[HttpPost]
+        //public ActionResult ExportExcel(FormCollection data, string reportNbr, string ReportName)
+        //{
+        //    try
+        //    {
+        //        ////RPTController rpt = new RPTController();
+        //        ////return rpt.ExportExcelDirect(185, "IN_ItemList");
+        //        //string ReportName = "IN_ItemList";
+        //        int ReportID = UpdateRPT(data, reportNbr, ReportName);
 
 
-                var objRPT_peGetName = _dbRPT.RPT_peGetName(ReportID).FirstOrDefault();
-                string nameReport = objRPT_peGetName.NameExport == "" ? ReportName + ReportID : objRPT_peGetName.NameExport;
+        //        var objRPT_peGetName = _dbRPT.RPT_peGetName(ReportID).FirstOrDefault();
+        //        string nameReport = objRPT_peGetName.NameExport == "" ? ReportName + ReportID : objRPT_peGetName.NameExport;
 
-                string strConnection = EntityConnectionStringHelper.Build(
-                                              Current.Server,
-                                              Current.DBApp,
-                                              "HQ.eSkySysModel");
-                EntityConnectionStringBuilder entityBuilder =
-                    new EntityConnectionStringBuilder(strConnection);
+        //        string strConnection = EntityConnectionStringHelper.Build(
+        //                                      Current.Server,
+        //                                      Current.DBApp,
+        //                                      "HQ.eSkySysModel");
+        //        EntityConnectionStringBuilder entityBuilder =
+        //            new EntityConnectionStringBuilder(strConnection);
 
-                var report = new StiReport();
+        //        var report = new StiReport();
 
-                report.Load(Server.MapPath("~/Reports/" + ReportName + ".mrt"));
+        //        report.Load(Server.MapPath("~/Reports/" + ReportName + ".mrt"));
 
-                string provider = ConfigurationManager.AppSettings["SQLNCLI"] ?? "SQLNCLI11.0";
-                report.Dictionary.Databases.Clear();
-                //report.Dictionary.Databases.Add(new Stimulsoft.Report.Dictionary.StiSqlDatabase("Data", entityBuilder.ProviderConnectionString + ";Connect Timeout=60000" + (objRPT_peGetName.isReadOnly != "1" ? "" : ";ApplicationIntent=ReadOnly")));//
-                report.Dictionary.Databases.Add(new Stimulsoft.Report.Dictionary.StiOleDbDatabase("Data", @"Provider=" + provider + ";" + entityBuilder.ProviderConnectionString + ";Connect Timeout=60000;General Timeout=6000" + (objRPT_peGetName.isReadOnly != "1" ? "" : ";Application Intent=ReadOnly")));//Data Source=MARSSVR\SQL2012;Initial Catalog=eBiz4DWebApp;Persist Security Info=True;User ID=sa;Password=P@ssw0rd;MultipleActiveResultSets=True;Application Name=EntityFramework"));           
+        //        string provider = ConfigurationManager.AppSettings["SQLNCLI"] ?? "SQLNCLI11.0";
+        //        report.Dictionary.Databases.Clear();
+        //        //report.Dictionary.Databases.Add(new Stimulsoft.Report.Dictionary.StiSqlDatabase("Data", entityBuilder.ProviderConnectionString + ";Connect Timeout=60000" + (objRPT_peGetName.isReadOnly != "1" ? "" : ";ApplicationIntent=ReadOnly")));//
+        //        report.Dictionary.Databases.Add(new Stimulsoft.Report.Dictionary.StiOleDbDatabase("Data", @"Provider=" + provider + ";" + entityBuilder.ProviderConnectionString + ";Connect Timeout=60000;General Timeout=6000" + (objRPT_peGetName.isReadOnly != "1" ? "" : ";Application Intent=ReadOnly")));//Data Source=MARSSVR\SQL2012;Initial Catalog=eBiz4DWebApp;Persist Security Info=True;User ID=sa;Password=P@ssw0rd;MultipleActiveResultSets=True;Application Name=EntityFramework"));           
 
-                for (int j = 0; j < report.Dictionary.DataSources.Count; j++)
-                {
-                    ((StiOleDbSource)report.Dictionary.DataSources[j]).CommandTimeout = 600000;
-                    ((StiOleDbSource)report.Dictionary.DataSources[j]).Parameters[0].Expression = ReportID.ToString();
-                    ((StiOleDbSource)report.Dictionary.DataSources[j]).Parameters[0].Type = 2;
-                    ((StiOleDbSource)report.Dictionary.DataSources[j]).SqlCommand = ((StiOleDbSource)report.Dictionary.DataSources[j]).ToString();
-                }
-                report.Compile();
+        //        for (int j = 0; j < report.Dictionary.DataSources.Count; j++)
+        //        {
+        //            ((StiOleDbSource)report.Dictionary.DataSources[j]).CommandTimeout = 600000;
+        //            ((StiOleDbSource)report.Dictionary.DataSources[j]).Parameters[0].Expression = ReportID.ToString();
+        //            ((StiOleDbSource)report.Dictionary.DataSources[j]).Parameters[0].Type = 2;
+        //            ((StiOleDbSource)report.Dictionary.DataSources[j]).SqlCommand = ((StiOleDbSource)report.Dictionary.DataSources[j]).ToString();
+        //        }
+        //        report.Compile();
 
-                report.Render(false);
-                //report.Dictionary.Variables.Clear();
-                Stream stream = new MemoryStream();
-                //report.ExportDocument(StiExportFormat.Excel2007, stream);
-                //stream.Flush();
-                //stream.Position = 0;
-                //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = nameReport + ".xlsx" };
+        //        report.Render(false);
+        //        //report.Dictionary.Variables.Clear();
+        //        Stream stream = new MemoryStream();
+        //        //report.ExportDocument(StiExportFormat.Excel2007, stream);
+        //        //stream.Flush();
+        //        //stream.Position = 0;
+        //        //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = nameReport + ".xlsx" };
 
-                var fileName = nameReport + DateTime.Now.ToString("yyyyMMddHHmm") + ReportID + ".xlsx";
-                string fullPath = Path.Combine(Server.MapPath("~/temp"), fileName);
-                report.ExportDocument(StiExportFormat.Excel2007, fullPath);
-                return Json(new { success = true, fileName = fileName, errorMessage = "" });
-            }
-            catch(Exception ex)
-            {
-                return Json(new { success = false, type = "error", errorMsg = ex.Message });
+        //        var fileName = nameReport + DateTime.Now.ToString("yyyyMMddHHmm") + ReportID + ".xlsx";
+        //        string fullPath = Path.Combine(Server.MapPath("~/temp"), fileName);
+        //        report.ExportDocument(StiExportFormat.Excel2007, fullPath);
+        //        return Json(new { success = true, fileName = fileName, errorMessage = "" });
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        return Json(new { success = false, type = "error", errorMsg = ex.Message });
                
-            }
-        }
+        //    }
+        //}
         [HttpGet]
         [DeleteFileAttribute] //Action Filter, it will auto delete the file after download,I will explain it later
         public ActionResult DownloadAndDelete(string file)
