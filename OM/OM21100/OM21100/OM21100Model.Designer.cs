@@ -13287,6 +13287,30 @@ namespace OM21100
         private Nullable<global::System.Double> _PerStockAdvance;
         partial void OnPerStockAdvanceChanging(Nullable<global::System.Double> value);
         partial void OnPerStockAdvanceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> CoefficientCnv
+        {
+            get
+            {
+                return _CoefficientCnv;
+            }
+            set
+            {
+                OnCoefficientCnvChanging(value);
+                ReportPropertyChanging("CoefficientCnv");
+                _CoefficientCnv = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CoefficientCnv");
+                OnCoefficientCnvChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _CoefficientCnv;
+        partial void OnCoefficientCnvChanging(Nullable<global::System.Int32> value);
+        partial void OnCoefficientCnvChanged();
 
         #endregion
 
@@ -17015,6 +17039,30 @@ namespace OM21100
         private Nullable<global::System.Boolean> _HidechkStockPromotion;
         partial void OnHidechkStockPromotionChanging(Nullable<global::System.Boolean> value);
         partial void OnHidechkStockPromotionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideCoefficientCnv
+        {
+            get
+            {
+                return _HideCoefficientCnv;
+            }
+            set
+            {
+                OnHideCoefficientCnvChanging(value);
+                ReportPropertyChanging("HideCoefficientCnv");
+                _HideCoefficientCnv = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideCoefficientCnv");
+                OnHideCoefficientCnvChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideCoefficientCnv;
+        partial void OnHideCoefficientCnvChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideCoefficientCnvChanged();
 
         #endregion
 
@@ -20407,6 +20455,30 @@ namespace OM21100
         private Nullable<global::System.Double> _PerStockAdvance;
         partial void OnPerStockAdvanceChanging(Nullable<global::System.Double> value);
         partial void OnPerStockAdvanceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> CoefficientCnv
+        {
+            get
+            {
+                return _CoefficientCnv;
+            }
+            set
+            {
+                OnCoefficientCnvChanging(value);
+                ReportPropertyChanging("CoefficientCnv");
+                _CoefficientCnv = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CoefficientCnv");
+                OnCoefficientCnvChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _CoefficientCnv;
+        partial void OnCoefficientCnvChanging(Nullable<global::System.Int32> value);
+        partial void OnCoefficientCnvChanged();
 
         #endregion
 

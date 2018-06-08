@@ -525,6 +525,7 @@
           <Property Name="QtyStockAdvance" Type="float" />
           <Property Name="QtyLimit" Type="float" />
           <Property Name="PerStockAdvance" Type="float" />
+          <Property Name="CoefficientCnv" Type="int" />
         </EntityType>
         <EntityType Name="OM_DiscItemClass">
           <Key>
@@ -1228,6 +1229,7 @@
           <Property Type="Double" Name="QtyStockAdvance" Nullable="true" />
           <Property Type="Double" Name="QtyLimit" Nullable="true" />
           <Property Type="Double" Name="PerStockAdvance" Nullable="true" />
+          <Property Type="Int32" Name="CoefficientCnv" Nullable="true" />
         </ComplexType>
         <ComplexType Name="OM21100_pgCompany_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -1667,6 +1669,7 @@
           <Property Type="Boolean" Name="HideQtyType" Nullable="true" />
           <Property Type="Boolean" Name="HidechkPctDiscountByLevel" Nullable="true" />
           <Property Type="Boolean" Name="HidechkStockPromotion" Nullable="true" />
+          <Property Type="Boolean" Name="HideCoefficientCnv" Nullable="true" />
         </ComplexType>
         <EntityType Name="IN_Setup">
           <Key>
@@ -2108,6 +2111,7 @@
           <Property Name="QtyStockAdvance" Type="Double" />
           <Property Name="QtyLimit" Type="Double" />
           <Property Name="PerStockAdvance" Type="Double" />
+          <Property Name="CoefficientCnv" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2203,6 +2207,7 @@
                 <ScalarProperty Name="QtyStockAdvance" ColumnName="QtyStockAdvance" />
                 <ScalarProperty Name="QtyLimit" ColumnName="QtyLimit" />
                 <ScalarProperty Name="PerStockAdvance" ColumnName="PerStockAdvance" />
+                <ScalarProperty Name="CoefficientCnv" ColumnName="CoefficientCnv" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2708,6 +2713,7 @@
                 <ScalarProperty Name="HideQtyType" ColumnName="HideQtyType" />
                 <ScalarProperty Name="HidechkPctDiscountByLevel" ColumnName="HidechkPctDiscountByLevel" />
                 <ScalarProperty Name="HidechkStockPromotion" ColumnName="HidechkStockPromotion" />
+                <ScalarProperty Name="HideCoefficientCnv" ColumnName="HideCoefficientCnv" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -3152,6 +3158,7 @@
           <EntitySetMapping Name="OM_DiscItem">
             <EntityTypeMapping TypeName="OM21100Model.OM_DiscItem">
               <MappingFragment StoreEntitySet="OM_DiscItem">
+                <ScalarProperty Name="CoefficientCnv" ColumnName="CoefficientCnv" />
                 <ScalarProperty Name="PerStockAdvance" ColumnName="PerStockAdvance" />
                 <ScalarProperty Name="QtyLimit" ColumnName="QtyLimit" />
                 <ScalarProperty Name="QtyStockAdvance" ColumnName="QtyStockAdvance" />

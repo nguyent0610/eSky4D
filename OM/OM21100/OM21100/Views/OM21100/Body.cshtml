@@ -1110,6 +1110,11 @@
                             .LoadData()
                         //.Listeners(x => x.Expand.Handler = "this.store.reload();")
                         )
+                        , X.NumberColumn().Text(Util.GetLang("CoefficientCnv")).DataIndex("CoefficientCnv").ID("colCoefficientCnv").Hidden(true)
+                        .Align(Alignment.Right).Format("0,000")
+                        .Editor(
+                            X.NumberField().SelectOnFocus(true).MinValue(1).DecimalPrecision(0)
+                        )
                         , X.NumberColumn().Text(Util.GetLang("RequiredValue")).DataIndex("RequiredValue").Hidden(true)
                         .Align(Alignment.Right).Format("0,000")
                         .Editor(

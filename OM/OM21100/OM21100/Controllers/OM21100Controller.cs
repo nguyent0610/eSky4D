@@ -75,7 +75,8 @@ namespace OM21100.Controllers
                 , showRequiredType = false
                 , hidechkPctDiscountByLevel = false
                 , hideQtyType = false
-                , hidechkStockPromotion = false;
+                , hidechkStockPromotion = false
+                , hideCoefficientCnv = false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -88,6 +89,7 @@ namespace OM21100.Controllers
                 hideQtyType = objConfig.HideQtyType.HasValue && objConfig.HideQtyType.Value;
                 hidechkPctDiscountByLevel = objConfig.HidechkPctDiscountByLevel.HasValue && objConfig.HidechkPctDiscountByLevel.Value;
                 hidechkStockPromotion = objConfig.HidechkStockPromotion.HasValue && objConfig.HidechkStockPromotion.Value;
+                hideCoefficientCnv = objConfig.HideCoefficientCnv.HasValue && objConfig.HideCoefficientCnv.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -98,6 +100,7 @@ namespace OM21100.Controllers
             ViewBag.hideQtyType = hideQtyType;
             ViewBag.hidechkPctDiscountByLevel = hidechkPctDiscountByLevel;
             ViewBag.hidechkStockPromotion = hidechkStockPromotion;
+            ViewBag.hideCoefficientCnv = hideCoefficientCnv;
             return View();
         }
 
@@ -2876,6 +2879,8 @@ namespace OM21100.Controllers
                 t.QtyLimit = s.QtyLimit;
                 t.QtyStockAdvance = s.QtyStockAdvance;
                 t.PerStockAdvance=s.PerStockAdvance;
+                t.CoefficientCnv = s.CoefficientCnv;
+
                 t.DiscType = s.DiscType;
                 t.LUpd_DateTime = DateTime.Now;
                 t.LUpd_Prog = _screenNbr;

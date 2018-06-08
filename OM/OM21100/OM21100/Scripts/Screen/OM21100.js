@@ -956,7 +956,8 @@ var Main = {
                     if (successful) {
                         var newData = {
                             DiscID: discId,
-                            DiscSeq: discSeq
+                            DiscSeq: discSeq,
+                            CoefficientCnv: 1
                         };
 
                         if (idxLref != -1) {
@@ -1120,7 +1121,8 @@ var Main = {
                     var newData = {
                         DiscID: discId,
                         DiscSeq: discSeq,
-                        PerStockAdvance:100
+                        PerStockAdvance: 100,
+                        CoefficientCnv: 1
                     };
                     if (idxLref != -1) {
                         newData.LineRef = HQ.store.lastLineRef(e.store);
@@ -4626,6 +4628,10 @@ function tabMain_Change(obj, tab, c, func){
                     HQ.grid.hide(App.grdDiscItem, ['RequiredValue']);
             }
         }
+        if(HQ.hideCoefficientCnv)
+            HQ.grid.show(App.grdDiscItem, ['CoefficientCnv']);
+        else
+            HQ.grid.hide(App.grdDiscItem, ['CoefficientCnv']);
     }
 }
 
