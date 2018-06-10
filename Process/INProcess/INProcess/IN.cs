@@ -39,7 +39,7 @@ namespace INProcess
             clsIN_Trans tran = new clsIN_Trans(Dal);
             clsIN_Inventory inventory = new clsIN_Inventory(Dal);
             clsIN_ItemSite itemSite = new clsIN_ItemSite(Dal);
-            clsIN_ItemLoc itemLoc = new clsIN_ItemLoc(Dal);
+            clsIN_ItemLoc itemLoc;
             clsIN_LotTrans objLot = new clsIN_LotTrans(Dal);
             clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
             setup.GetByKey(branchID, "IN");
@@ -90,6 +90,7 @@ namespace INProcess
                 #region -Save IN_itemLoc-
                 if (!string.IsNullOrWhiteSpace(inTran.String("WhseLoc")))
                 {
+                    itemLoc = new clsIN_ItemLoc(Dal);
                     if (!itemLoc.GetByKey(inTran.String("InvtID"), inTran.String("SiteID"), inTran.String("WhseLoc")))
                     {
                         Insert_IN_ItemLoc(ref itemLoc, inTran.String("InvtID"), inventory.StkItem, inTran.String("SiteID"), inTran.String("WhseLoc"), 0);
@@ -280,7 +281,7 @@ namespace INProcess
                 DataTable lstTrans = objTran.GetAll(branchID, batNbr, "%", "%");
                 clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
                 clsIN_LotTrans objLot = new clsIN_LotTrans(Dal);
-                clsIN_ItemLoc objItemLoc = new clsIN_ItemLoc(Dal);
+                //clsIN_ItemLoc objItemLoc = new clsIN_ItemLoc(Dal);
                 DateTime? tranDate = DateTime.Now;
                 if (lstTrans.Rows.Count > 0)
                 {
@@ -300,13 +301,16 @@ namespace INProcess
 
                 clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
                 clsIN_ItemSite objSite = new clsIN_ItemSite(Dal);
-                clsIN_ItemLoc objLoc = new clsIN_ItemLoc(Dal);
+                clsIN_ItemLoc objLoc;
                 foreach (DataRow tran in lstTrans.Rows)
                 {
                     objInvt.GetByKey(tran.String("InvtID"));
                     objSite.GetByKey(tran.String("InvtID"), tran.String("SiteID"));
-                    objLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc"));
-
+                    if (tran.String("WhseLoc").PassNull() != "")
+                    {
+                        objLoc = new clsIN_ItemLoc(Dal);
+                        objLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc"));
+                    }
                     if (objInvt.ValMthd == "F" || objInvt.ValMthd == "L")
                     {
                         int negQty = 1;
@@ -440,6 +444,7 @@ namespace INProcess
 
                     if (tran.String("WhseLoc").PassNull()!="")
                     {
+                        objLoc = new clsIN_ItemLoc(Dal);
                         if (!objLoc.GetByKey(tran.String("InvtID"), tran.String("SiteID"), tran.String("WhseLoc").PassNull()))
                         {
                             throw new MessageException(MessageType.Message, "606");
@@ -603,7 +608,7 @@ namespace INProcess
                 clsIN_ItemSite objItem = new clsIN_ItemSite(Dal);
                 clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
 
-                clsIN_ItemLoc objItemLoc = new clsIN_ItemLoc(Dal);
+                clsIN_ItemLoc objItemLoc;
                 clsSQL sql = new clsSQL(Dal);
 
                 foreach (DataRow transfer in lstTransfer.Rows)
@@ -667,6 +672,7 @@ namespace INProcess
                         ////// IN_ItemLoc
                         if (!string.IsNullOrWhiteSpace(tran.String("WhseLoc").PassNull()))
                         {
+                            objItemLoc = new clsIN_ItemLoc(Dal);
                             if (!objItemLoc.GetByKey(tran["InvtID"].ToString(), tran["SiteID"].ToString(), tran["WhseLoc"].ToString()))
                             {
                                 throw new MessageException(MessageType.Message, "606");
