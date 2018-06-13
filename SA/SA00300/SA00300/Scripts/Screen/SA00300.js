@@ -48,6 +48,12 @@ var firstLoad = function () {
     App.HomeScreenNbr.getStore().addListener('load', checkLoad);
     App.cboGroupIDGroup.getStore().addListener('load', checkLoad);
     App.cboGroupIDCompany.getStore().addListener('load', checkLoad);
+    if (HQ.hidePromotionApproval) {
+        App.PromotionApproval.hide();
+    }
+    else {
+        App.PromotionApproval.show();
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -611,5 +617,21 @@ var checkCrtLmtInvoice = function () {
     if (App.CrtLmtInvoice.value < 0) {
         App.CrtLmtInvoice.setValue(0)
     }
+};
+
+
+var txtPromotionApprovalTo_Focus = function () {
+    if (App.txtPromotionApprovalFrom.getValue() != null) {
+        App.txtPromotionApprovalTo.setMinValue(App.txtPromotionApprovalFrom.getValue());
+        App.txtPromotionApprovalTo.isValid();
+    }
+};
+var txtPromotionApprovalFrom_Change = function (item) {
+    if (item.hasFocus == true) {
+        if (App.txtPromotionApprovalFrom.getValue() > App.txtPromotionApprovalTo.getValue()) {
+            App.txtPromotionApprovalTo.setValue(0);
+        }
+    }
+    
 };
 ///////////////////////////////////

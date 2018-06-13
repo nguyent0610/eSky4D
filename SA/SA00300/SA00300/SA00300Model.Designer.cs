@@ -206,6 +206,47 @@ namespace SA00300
     
             return base.ExecuteFunction<SA00300_pgLoadSYS_UserGroup_Result>("SA00300_pgLoadSYS_UserGroup", userIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<SA00300_pdConfig_Result> SA00300_pdConfig(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<SA00300_pdConfig_Result>("SA00300_pdConfig", cpnyIDParameter, userNameParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -1103,9 +1144,10 @@ namespace SA00300
         /// <param name="beginDay">Initial value of the BeginDay property.</param>
         /// <param name="checkFirstLogin">Initial value of the CheckFirstLogin property.</param>
         /// <param name="multiLogin">Initial value of the MultiLogin property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="crtLmt">Initial value of the CrtLmt property.</param>
         /// <param name="crtLmtInvoice">Initial value of the CrtLmtInvoice property.</param>
-        public static User CreateUser(global::System.String userName, global::System.Boolean blocked, global::System.Boolean loggedIn, global::System.Int32 expireDay, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Boolean checkFirstLogin, global::System.Boolean multiLogin, global::System.Double crtLmt, global::System.Double crtLmtInvoice)
+        public static User CreateUser(global::System.String userName, global::System.Boolean blocked, global::System.Boolean loggedIn, global::System.Int32 expireDay, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Boolean checkFirstLogin, global::System.Boolean multiLogin, global::System.Byte[] tstamp, global::System.Double crtLmt, global::System.Double crtLmtInvoice)
         {
             User user = new User();
             user.UserName = userName;
@@ -1116,6 +1158,7 @@ namespace SA00300
             user.BeginDay = beginDay;
             user.CheckFirstLogin = checkFirstLogin;
             user.MultiLogin = multiLogin;
+            user.tstamp = tstamp;
             user.CrtLmt = crtLmt;
             user.CrtLmtInvoice = crtLmtInvoice;
             return user;
@@ -1971,7 +2014,7 @@ namespace SA00300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Byte[] tstamp
         {
@@ -2039,6 +2082,54 @@ namespace SA00300
         private global::System.Double _CrtLmtInvoice;
         partial void OnCrtLmtInvoiceChanging(global::System.Double value);
         partial void OnCrtLmtInvoiceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> PromotionApprovalFrom
+        {
+            get
+            {
+                return _PromotionApprovalFrom;
+            }
+            set
+            {
+                OnPromotionApprovalFromChanging(value);
+                ReportPropertyChanging("PromotionApprovalFrom");
+                _PromotionApprovalFrom = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PromotionApprovalFrom");
+                OnPromotionApprovalFromChanged();
+            }
+        }
+        private Nullable<global::System.Double> _PromotionApprovalFrom;
+        partial void OnPromotionApprovalFromChanging(Nullable<global::System.Double> value);
+        partial void OnPromotionApprovalFromChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> PromotionApprovalTo
+        {
+            get
+            {
+                return _PromotionApprovalTo;
+            }
+            set
+            {
+                OnPromotionApprovalToChanging(value);
+                ReportPropertyChanging("PromotionApprovalTo");
+                _PromotionApprovalTo = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PromotionApprovalTo");
+                OnPromotionApprovalToChanged();
+            }
+        }
+        private Nullable<global::System.Double> _PromotionApprovalTo;
+        partial void OnPromotionApprovalToChanging(Nullable<global::System.Double> value);
+        partial void OnPromotionApprovalToChanged();
 
         #endregion
 
@@ -2048,6 +2139,44 @@ namespace SA00300
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA00300Model", Name="SA00300_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA00300_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HidePromotionApproval
+        {
+            get
+            {
+                return _HidePromotionApproval;
+            }
+            set
+            {
+                OnHidePromotionApprovalChanging(value);
+                ReportPropertyChanging("HidePromotionApproval");
+                _HidePromotionApproval = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HidePromotionApproval");
+                OnHidePromotionApprovalChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HidePromotionApproval;
+        partial void OnHidePromotionApprovalChanging(Nullable<global::System.Boolean> value);
+        partial void OnHidePromotionApprovalChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

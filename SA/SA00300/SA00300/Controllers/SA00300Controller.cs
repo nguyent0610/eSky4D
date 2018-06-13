@@ -46,11 +46,18 @@ namespace SA00300.Controllers
             var objSA02500CheckAdmin = _db.SYS_Configurations.FirstOrDefault(p => p.Code == "SA02500CheckAdmin");
             ViewBag.TextVal = objSA02500Check == null ? "0" : objSA02500Check.TextVal;
             ViewBag.TextValAdmin = objSA02500CheckAdmin == null ? "0" : objSA02500CheckAdmin.TextVal;
+            bool hidePromotionApproval = false;
+            var objConfig = _db.SA00300_pdConfig(Current.CpnyID,Current.UserName,Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                hidePromotionApproval = objConfig.HidePromotionApproval.HasValue && objConfig.HidePromotionApproval.Value;
+            }
+            ViewBag.hidePromotionApproval = hidePromotionApproval;
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -360,7 +367,8 @@ namespace SA00300.Controllers
             t.CheckFirstLogin = s.CheckFirstLogin;
             t.CrtLmt = s.CrtLmt;
             t.CrtLmtInvoice = s.CrtLmtInvoice;
-
+            t.PromotionApprovalFrom = s.PromotionApprovalFrom ?? 0;
+            t.PromotionApprovalTo = s.PromotionApprovalTo ?? 0;
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;

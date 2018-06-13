@@ -35,6 +35,8 @@
         HQ.bussinessDate = new Date('@DateTime.Now.Date');
         HQ.TextVal = '@ViewBag.TextVal';
         HQ.TextValAdmin = '@ViewBag.TextValAdmin';
+        HQ.hidePromotionApproval = HQ.util.toBool('@ViewBag.hidePromotionApproval');
+        
     </script>  
     <title>@ViewBag.Title</title>
 </head>
@@ -65,6 +67,7 @@
             )
         )
         <!-- Gọi hàm Body trong SA00300Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
+        <input type="password" name="password" id="password" value="" style="width: 1px;height: 1px;">
         @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>
 </html>

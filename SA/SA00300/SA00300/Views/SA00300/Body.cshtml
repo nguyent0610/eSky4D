@@ -151,7 +151,7 @@
                             .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
                             .LoadData().Width(500)
                         , HQ.Checkbox().ID("CheckFirstLogin").Name("CheckFirstLogin").HQLangCode("CheckFirstLogin").MarginSpec("3 0 0 205")                                            
-                        , HQ.Combo().ID("HomeScreenNbr").Name("HomeScreenNbr").MarginSpec("3 0 5 0")
+                        , HQ.Combo().ID("HomeScreenNbr").Name("HomeScreenNbr").MarginSpec("3 0 0 0")
                             .HQLangCode("HomeScreenNbr").HQDBSys(true).HQProcedure("SA00300_pcSYS_Screen")
                             .HQColumnShow("Code,Descr")
                             .DisplayField("Descr")
@@ -160,6 +160,23 @@
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
                             .LoadData().Width(500)
+
+                        , X.Container().ID("PromotionApproval").Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                        .Items(
+                            HQ.NumberField().ID("txtPromotionApprovalFrom").Name("txtPromotionApprovalFrom").HQLangCode("PromotionApproval").Width(345).Tag("X").DataIndex("PromotionApprovalFrom").MarginSpec("0 0 0 0").FieldStyle("text-align: right").MinValue(0)
+                            .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "txtPromotionApprovalFrom_Change";
+                                //lst.Blur.Fn = "txtLat_Blur";
+                            })
+
+                            , HQ.NumberField().ID("txtPromotionApprovalTo").Name("txtPromotionApprovalTo").FieldLabel("-").LabelSeparator("").LabelWidth(5).Width(155).Tag("X").DataIndex("PromotionApprovalTo").FieldStyle("text-align: right").MinValue(0)
+                            .Listeners(lst =>
+                            {
+                                lst.Focus.Fn = "txtPromotionApprovalTo_Focus";
+                                lst.Blur.Handler = "App.txtPromotionApprovalTo.setMinValue(0);";
+                            })
+                        )
                                    
                                 //,HQ.TextBox().ID("AutoID").Name("AutoID").HQLangCode("AutoID").MarginSpec("3 0 0 0").HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})                                                                                                                                                
                                 //,HQ.TextBox().ID("Images").Name("Images").HQLangCode("Images").MarginSpec("3 0 0 0").HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})
