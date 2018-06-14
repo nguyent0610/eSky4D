@@ -240,7 +240,7 @@ var stoBeforeLoad = function (sto) {
 
 function save() {
     if (HQ.isInsert || HQ.isUpdate) {
-        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/;
+        var regex = /^(\-)|(\w*(\d|[a-zA-Z]))[\_]*$/;
         var value = App.cboSiteId.getValue();
         if (!HQ.util.passNull(value.toString()).match(regex)) {
             HQ.message.show(20140811, App.cboSiteId.fieldLabel, '');
