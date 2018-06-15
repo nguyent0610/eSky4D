@@ -133,7 +133,20 @@ var menuClick = function (command) {
                 if (HQ.isDelete) {
                     if (HQ.focus == 'pnlHeader') {
                         if (App.cboKitID.getValue()) {
-                            HQ.message.show(11, '', 'deleteData');
+                            keydelete = true;
+                            var a = App.cboInvt.store.data;
+                            for (var i = 0; i < a.length; i++) {
+                                if (App.cboKitID.getValue() == a.items[i].data.InvtID) {                                    
+                                    keydelete= false;
+                                }
+                            }
+                            if (keydelete) {
+                                HQ.message.show(11, '', 'deleteData');
+                            }
+                            else {
+                                HQ.message.show(2018061514, [App.cboKitID.getValue()], '', true);
+                            }
+                            
                         } else {
                             menuClick('new');
                         }
@@ -440,6 +453,12 @@ deleteData = function (item) {
                 url: 'IN20800/Delete',
                 timeout: 7200,
                 success: function (msg, data) {
+                    App.direct.ReloadTreeIN20800({
+                        success: function (result) {
+                            App.treeKitID.getRootNode().expand();
+                            HQ.common.showBusy(false, HQ.waitMsg);
+                        }
+                    });
                     App.cboKitID.getStore().load();
                     menuClick("new");
                 },
