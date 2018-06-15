@@ -126,7 +126,8 @@
                         {
                             new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@kitID", Value = "App.cboKitID.getValue()", Mode = ParameterMode.Raw }
                         })
                             .LoadData()
                 )
@@ -167,7 +168,9 @@
                             .HQProcedure("IN20800_pcInventory")
                             .HQColumnShow("InvtID,Descr")
                             .HQHeightWidth(400, 300)
+                            .HQisPaging(true).PageSize(25)
                             .ValueField("InvtID").DisplayField("InvtID")
+                            
                             .ForceSelection(true).SelectOnFocus(true)//.AllowBlank(false)
                             .HQParam(new StoreParameterCollection() {
                                 new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },

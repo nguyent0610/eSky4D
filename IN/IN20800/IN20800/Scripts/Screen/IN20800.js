@@ -1,8 +1,8 @@
 //// Declare ///////////////////////////////////////////////////////////
 var keys = ['ComponentID'];//khoa của lưới
 var values = [''];
-var fieldsCheckRequire = ["ComponentID", "ComponentQty", "Unit"];
-var fieldsLangCheckRequire = ["ComponentID", "Qty", "StkUnit"];
+var fieldsCheckRequire = ["ComponentID", "ComponentQty", "Unit", "Price"];
+var fieldsLangCheckRequire = ["ComponentID", "ComponentQty", "StkUnit", "Price"];
 var _Source = 0;
 var _maxSource = 2;
 var _isLoadMaster = false;
@@ -43,6 +43,7 @@ var firstLoad = function () {
         App.menuClickbtnSave.disable();
     }
     App.cboPriceType.setVisible(HQ.showPricetype);
+    App.cboInvtID.store.reload()
     //App.txtKitName.setReadOnly(true);
     //HQ.common.showBusy(false);
 };
@@ -281,7 +282,8 @@ var cboKitID_change = function (sender, value) {
     else
     {
         App.txtKitName.setValue('');
-    }   
+    }
+    App.cboInvt.store.reload();
 };
 var cboKitID_select = function (sender, value) {
     HQ.isFirstLoad = true;
@@ -351,6 +353,12 @@ var checkInsertKey = function (grd, e, keys) {
 };
 
 var grdIN_Component_ValidateEdit = function (item, e) {
+    if (e.field == "ComponentID") {
+        if (e.value == App.cboKitID.getValue()) {
+            HQ.message.show(2018061512, '', '');
+            return false;
+        }
+    }
     return HQ.grid.checkValidateEdit(App.grdIN_Component, e, keys,false);
 };
 var grdIN_Component_Reject = function (record) {
@@ -384,6 +392,20 @@ var save = function () {
         }
         
     }
+
+    var lstData = App.grdIN_Component.store.snapshot || App.grdIN_Component.store.allData || App.grdIN_Component.store.data;
+    var lineEror = "";
+    for (var i = 0; i < lstData.length; i++) {
+        if (lstData.items[i].data.ComponentID != "" && lstData.items[i].data.Price == 0) {
+            lineEror = lineEror+ (i + 1) + ",";
+        }
+    }
+    
+    if (lineEror != "") {
+        HQ.message.show(2018061513, [lineEror], '', true);
+        return false;
+    }
+
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("WaitMsg"),
@@ -395,6 +417,12 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                App.direct.ReloadTreeIN20800({
+                    success: function (result) {
+                        App.treeKitID.getRootNode().expand();
+                        HQ.common.showBusy(false, HQ.waitMsg);
+                    }
+                });
                 App.stoKitID.reload();
             },
             failure: function (msg, data) {
