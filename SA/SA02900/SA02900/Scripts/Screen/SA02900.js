@@ -3,7 +3,6 @@ var _index = 0;
 var keysTop = ['AppFolID', 'RoleID', 'Status'];
 var fieldsCheckRequireTop = ["AppFolID", "RoleID", "Status", "LangStatus"];
 var fieldsLangCheckRequireTop = ["AppFolID", "RoleID", "Status", "LangStatus"];
-
 var keysBot = ['Handle'];
 var fieldsCheckRequireBot = ["Handle"];
 var fieldsLangCheckRequireBot = ["Handle"];
@@ -20,6 +19,7 @@ var _isLoadMaster = false;
 var _Status = '';
 var _AppFolID = '';
 var _RoleID = '';
+var _BranchID = '';
 
 var _focusNo = 0;
 var _topChange = false;
@@ -42,6 +42,9 @@ var checkLoad = function (sto) {
         _isLoadMaster = true;
         _Source = 0;
         App.stoTop.reload();
+        App.cboLangStatus.store.reload();
+        if (HQ.isFlagBranchID)
+            keysTop = ['BranchID', 'AppFolID', 'RoleID', 'Status'];
         HQ.common.showBusy(false);
     }
 };
@@ -64,6 +67,10 @@ var firstLoad = function () {
     App.cboParam03.getStore().addListener('load', checkLoad);
     App.cboParam04.getStore().addListener('load', checkLoad);
     App.cboParam05.getStore().addListener('load', checkLoad);
+    if (HQ.isShowLoadData)
+        App.pnlHeader.show();
+    else
+        App.pnlHeader.hide();
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -165,7 +172,18 @@ var frmChange = function () {
     HQ.isChange = HQ.store.isChange(App.stoTop) == false ? (HQ.isChange = HQ.store.isChange(App.stoBot)) : true;
 
     HQ.common.changeData(HQ.isChange, 'SA02900');
-
+    if (HQ.isShowLoadData) {
+        if (HQ.isChange) {
+            App.cboAppFol.setReadOnly(true);
+            App.cboRole.setReadOnly(true);
+            App.btnLoadData.setDisabled(true);
+        }
+        else {
+            App.cboAppFol.setReadOnly(HQ.isChange);
+            App.cboRole.setReadOnly(HQ.isChange);
+            App.btnLoadData.enable(false);
+        }
+    }
     _topChange = HQ.store.isChange(App.stoTop);
     _botChange = HQ.store.isChange(App.stoBot);
 };
@@ -202,7 +220,8 @@ var stoLoad = function (sto) {
     else if (!HQ.isUpdate && !HQ.isNew) {
         HQ.common.lockItem(App.frmMain, true);
     }
-
+    if (App.stoTop.data.items[0].data.HideColumn != "")
+        HQ.grid.hide(App.grdTop, App.stoTop.data.items[0].data.HideColumn.split(','));
 
 };
 
@@ -229,7 +248,8 @@ var stoLoadBot = function (sto) {
         App.grdTop.getSelectionModel().select(_index);
         //HQ.isFirstLoad = false;
     }
-    
+    if (App.stoBot.data.items[0].data.HideColumn != "")
+        HQ.grid.hide(App.grdBot, App.stoBot.data.items[0].data.HideColumn.split(','));
 };
 
 var GridTop_Change = function (sender, e) {
@@ -238,11 +258,14 @@ var GridTop_Change = function (sender, e) {
     _index = App.slmTopGrid.getCurrentPosition().row;
     
 };
-
+var btnLoadData_Click = function () {
+    App.stoTop.reload();
+};
 function filterBot() {
     _AppFolID = App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.AppFolID;
     _RoleID = App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.RoleID;
     _Status = App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.Status;
+    _BranchID = App.slmTopGrid.selected.items[0] == undefined ? '' : App.slmTopGrid.selected.items[0].data.BranchID;
     var grid = App.grdBot;
     grid.getFilterPlugin().clearFilters();
     grid.getFilterPlugin().getFilter('AppFolID').setValue([_AppFolID, '']);
@@ -251,6 +274,8 @@ function filterBot() {
     grid.getFilterPlugin().getFilter('RoleID').setActive(true);
     grid.getFilterPlugin().getFilter('Status').setValue([_Status, '']);
     grid.getFilterPlugin().getFilter('Status').setActive(true);
+    grid.getFilterPlugin().getFilter('BranchID').setValue([_BranchID, '']);
+    grid.getFilterPlugin().getFilter('BranchID').setActive(true);
     
     //var store = App.stoBot;
     //store.clearFilter();
@@ -277,7 +302,6 @@ var cboAppFolID_Change = function (value) {
     var k = value.displayTplData[0].DescrScreen;
     App.slmTopGrid.selected.items[0].set('DescrScreen', k);
 };
-
 //Top Grid
 var grdTop_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keysTop);
@@ -288,7 +312,20 @@ var grdTop_Edit = function (item, e) {
     _AppFolID = e.record.data.AppFolID;
     _RoleID = e.record.data.RoleID;
     _Status = e.record.data.Status;
-
+    _BranchID = e.record.data.BranchID;
+    if (e.field == 'LangStatus')
+    {
+        var objLangStatus = HQ.store.findInStore(App.cboLangStatus.store, ['Code'], [e.value]);
+        if (objLangStatus != undefined) {
+            e.record.set('Lang00', objLangStatus.Lang00);
+            e.record.set('Lang01', objLangStatus.Lang01);
+        }
+        else
+        {
+            e.record.set('Lang00', '');
+            e.record.set('Lang01', '');
+        }
+    }
     frmChange();
 };
 var grdTop_ValidateEdit = function (item, e) {
@@ -302,7 +339,12 @@ var grdTop_Reject = function (record) {
 
 //Bot Grid
 var grdBot_BeforeEdit = function (editor, e) {
-    if (_AppFolID == '' || _RoleID == '' || _Status == '') return false;
+    if (HQ.isFlagBranchID) {
+        if (_BranchID == ''|| _AppFolID == '' || _RoleID == '' || _Status == '') return false;
+    }
+    else {
+        if (_AppFolID == '' || _RoleID == '' || _Status == '') return false;
+    }
     return HQ.grid.checkBeforeEdit(e, keysBot);
 };
 var grdBot_Edit = function (item, e) {
@@ -315,6 +357,7 @@ var grdBot_Edit = function (item, e) {
             e.record.set('AppFolID',_AppFolID);
             e.record.set('RoleID', _RoleID);
             e.record.set('Status', _Status);
+            e.record.set('BranchID', _BranchID);
         }
     }
     HQ.grid.checkInsertKey(App.grdBot, e, keysBot);

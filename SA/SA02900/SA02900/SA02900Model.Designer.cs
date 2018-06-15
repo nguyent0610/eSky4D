@@ -124,8 +124,18 @@ namespace SA02900
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectResult<SA02900_pgSI_ApprovalFlowHandle_Result> SA02900_pgSI_ApprovalFlowHandle()
+        {
+            return base.ExecuteFunction<SA02900_pgSI_ApprovalFlowHandle_Result>("SA02900_pgSI_ApprovalFlowHandle");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         /// <param name="langid">No Metadata Documentation available.</param>
-        public ObjectResult<SA02900_pgSI_ApprovalFlowStatus_Result> SA02900_pgSI_ApprovalFlowStatus(Nullable<global::System.Int16> langid)
+        /// <param name="appFolID">No Metadata Documentation available.</param>
+        /// <param name="roleID">No Metadata Documentation available.</param>
+        public ObjectResult<SA02900_pgSI_ApprovalFlowStatus_Result> SA02900_pgSI_ApprovalFlowStatus(Nullable<global::System.Int16> langid, global::System.String appFolID, global::System.String roleID)
         {
             ObjectParameter langidParameter;
             if (langid.HasValue)
@@ -137,15 +147,68 @@ namespace SA02900
                 langidParameter = new ObjectParameter("langid", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<SA02900_pgSI_ApprovalFlowStatus_Result>("SA02900_pgSI_ApprovalFlowStatus", langidParameter);
+            ObjectParameter appFolIDParameter;
+            if (appFolID != null)
+            {
+                appFolIDParameter = new ObjectParameter("AppFolID", appFolID);
+            }
+            else
+            {
+                appFolIDParameter = new ObjectParameter("AppFolID", typeof(global::System.String));
+            }
+    
+            ObjectParameter roleIDParameter;
+            if (roleID != null)
+            {
+                roleIDParameter = new ObjectParameter("RoleID", roleID);
+            }
+            else
+            {
+                roleIDParameter = new ObjectParameter("RoleID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<SA02900_pgSI_ApprovalFlowStatus_Result>("SA02900_pgSI_ApprovalFlowStatus", langidParameter, appFolIDParameter, roleIDParameter);
         }
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SA02900_pgSI_ApprovalFlowHandle_Result> SA02900_pgSI_ApprovalFlowHandle()
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<SA02900_pdConfig_Result> SA02900_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
-            return base.ExecuteFunction<SA02900_pgSI_ApprovalFlowHandle_Result>("SA02900_pgSI_ApprovalFlowHandle");
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<SA02900_pdConfig_Result>("SA02900_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
         }
 
         #endregion
@@ -180,7 +243,8 @@ namespace SA02900
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_ApprovalFlowHandle CreateSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static SI_ApprovalFlowHandle CreateSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID)
         {
             SI_ApprovalFlowHandle sI_ApprovalFlowHandle = new SI_ApprovalFlowHandle();
             sI_ApprovalFlowHandle.AppFolID = appFolID;
@@ -194,6 +258,7 @@ namespace SA02900
             sI_ApprovalFlowHandle.LUpd_Prog = lUpd_Prog;
             sI_ApprovalFlowHandle.LUpd_User = lUpd_User;
             sI_ApprovalFlowHandle.tstamp = tstamp;
+            sI_ApprovalFlowHandle.BranchID = branchID;
             return sI_ApprovalFlowHandle;
         }
 
@@ -836,6 +901,33 @@ namespace SA02900
         private global::System.String _ProcContent;
         partial void OnProcContentChanging(global::System.String value);
         partial void OnProcContentChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                if (_BranchID != value)
+                {
+                    OnBranchIDChanging(value);
+                    ReportPropertyChanging("BranchID");
+                    _BranchID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("BranchID");
+                    OnBranchIDChanged();
+                }
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
 
         #endregion
 
@@ -865,7 +957,8 @@ namespace SA02900
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_ApprovalFlowStatus CreateSI_ApprovalFlowStatus(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static SI_ApprovalFlowStatus CreateSI_ApprovalFlowStatus(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID)
         {
             SI_ApprovalFlowStatus sI_ApprovalFlowStatus = new SI_ApprovalFlowStatus();
             sI_ApprovalFlowStatus.AppFolID = appFolID;
@@ -878,6 +971,7 @@ namespace SA02900
             sI_ApprovalFlowStatus.LUpd_Prog = lUpd_Prog;
             sI_ApprovalFlowStatus.LUpd_User = lUpd_User;
             sI_ApprovalFlowStatus.tstamp = tstamp;
+            sI_ApprovalFlowStatus.BranchID = branchID;
             return sI_ApprovalFlowStatus;
         }
 
@@ -1181,6 +1275,33 @@ namespace SA02900
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                if (_BranchID != value)
+                {
+                    OnBranchIDChanging(value);
+                    ReportPropertyChanging("BranchID");
+                    _BranchID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("BranchID");
+                    OnBranchIDChanged();
+                }
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
 
         #endregion
 
@@ -1190,6 +1311,68 @@ namespace SA02900
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA02900Model", Name="SA02900_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA02900_pdConfig_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> isShowLoadData
+        {
+            get
+            {
+                return _isShowLoadData;
+            }
+            set
+            {
+                OnisShowLoadDataChanging(value);
+                ReportPropertyChanging("isShowLoadData");
+                _isShowLoadData = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("isShowLoadData");
+                OnisShowLoadDataChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _isShowLoadData;
+        partial void OnisShowLoadDataChanging(Nullable<global::System.Boolean> value);
+        partial void OnisShowLoadDataChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> isFlagBranchID
+        {
+            get
+            {
+                return _isFlagBranchID;
+            }
+            set
+            {
+                OnisFlagBranchIDChanging(value);
+                ReportPropertyChanging("isFlagBranchID");
+                _isFlagBranchID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("isFlagBranchID");
+                OnisFlagBranchIDChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _isFlagBranchID;
+        partial void OnisFlagBranchIDChanging(Nullable<global::System.Boolean> value);
+        partial void OnisFlagBranchIDChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -1209,7 +1392,9 @@ namespace SA02900
         /// <param name="status">Initial value of the Status property.</param>
         /// <param name="handle">Initial value of the Handle property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SA02900_pgSI_ApprovalFlowHandle_Result CreateSA02900_pgSI_ApprovalFlowHandle_Result(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.Byte[] tstamp)
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="hideColumn">Initial value of the HideColumn property.</param>
+        public static SA02900_pgSI_ApprovalFlowHandle_Result CreateSA02900_pgSI_ApprovalFlowHandle_Result(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.Byte[] tstamp, global::System.String branchID, global::System.String hideColumn)
         {
             SA02900_pgSI_ApprovalFlowHandle_Result sA02900_pgSI_ApprovalFlowHandle_Result = new SA02900_pgSI_ApprovalFlowHandle_Result();
             sA02900_pgSI_ApprovalFlowHandle_Result.AppFolID = appFolID;
@@ -1217,6 +1402,8 @@ namespace SA02900
             sA02900_pgSI_ApprovalFlowHandle_Result.Status = status;
             sA02900_pgSI_ApprovalFlowHandle_Result.Handle = handle;
             sA02900_pgSI_ApprovalFlowHandle_Result.tstamp = tstamp;
+            sA02900_pgSI_ApprovalFlowHandle_Result.BranchID = branchID;
+            sA02900_pgSI_ApprovalFlowHandle_Result.HideColumn = hideColumn;
             return sA02900_pgSI_ApprovalFlowHandle_Result;
         }
 
@@ -1703,6 +1890,54 @@ namespace SA02900
         private global::System.String _ProcContent;
         partial void OnProcContentChanging(global::System.String value);
         partial void OnProcContentChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String HideColumn
+        {
+            get
+            {
+                return _HideColumn;
+            }
+            set
+            {
+                OnHideColumnChanging(value);
+                ReportPropertyChanging("HideColumn");
+                _HideColumn = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("HideColumn");
+                OnHideColumnChanged();
+            }
+        }
+        private global::System.String _HideColumn;
+        partial void OnHideColumnChanging(global::System.String value);
+        partial void OnHideColumnChanged();
 
         #endregion
 
@@ -1724,14 +1959,22 @@ namespace SA02900
         /// <param name="appFolID">Initial value of the AppFolID property.</param>
         /// <param name="roleID">Initial value of the RoleID property.</param>
         /// <param name="status">Initial value of the Status property.</param>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="lang00">Initial value of the Lang00 property.</param>
+        /// <param name="lang01">Initial value of the Lang01 property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SA02900_pgSI_ApprovalFlowStatus_Result CreateSA02900_pgSI_ApprovalFlowStatus_Result(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.Byte[] tstamp)
+        /// <param name="hideColumn">Initial value of the HideColumn property.</param>
+        public static SA02900_pgSI_ApprovalFlowStatus_Result CreateSA02900_pgSI_ApprovalFlowStatus_Result(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String branchID, global::System.String lang00, global::System.String lang01, global::System.Byte[] tstamp, global::System.String hideColumn)
         {
             SA02900_pgSI_ApprovalFlowStatus_Result sA02900_pgSI_ApprovalFlowStatus_Result = new SA02900_pgSI_ApprovalFlowStatus_Result();
             sA02900_pgSI_ApprovalFlowStatus_Result.AppFolID = appFolID;
             sA02900_pgSI_ApprovalFlowStatus_Result.RoleID = roleID;
             sA02900_pgSI_ApprovalFlowStatus_Result.Status = status;
+            sA02900_pgSI_ApprovalFlowStatus_Result.BranchID = branchID;
+            sA02900_pgSI_ApprovalFlowStatus_Result.Lang00 = lang00;
+            sA02900_pgSI_ApprovalFlowStatus_Result.Lang01 = lang01;
             sA02900_pgSI_ApprovalFlowStatus_Result.tstamp = tstamp;
+            sA02900_pgSI_ApprovalFlowStatus_Result.HideColumn = hideColumn;
             return sA02900_pgSI_ApprovalFlowStatus_Result;
         }
 
@@ -1888,6 +2131,78 @@ namespace SA02900
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Lang00
+        {
+            get
+            {
+                return _Lang00;
+            }
+            set
+            {
+                OnLang00Changing(value);
+                ReportPropertyChanging("Lang00");
+                _Lang00 = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Lang00");
+                OnLang00Changed();
+            }
+        }
+        private global::System.String _Lang00;
+        partial void OnLang00Changing(global::System.String value);
+        partial void OnLang00Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Lang01
+        {
+            get
+            {
+                return _Lang01;
+            }
+            set
+            {
+                OnLang01Changing(value);
+                ReportPropertyChanging("Lang01");
+                _Lang01 = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Lang01");
+                OnLang01Changed();
+            }
+        }
+        private global::System.String _Lang01;
+        partial void OnLang01Changing(global::System.String value);
+        partial void OnLang01Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
         public global::System.Byte[] tstamp
         {
             get
@@ -1906,6 +2221,30 @@ namespace SA02900
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String HideColumn
+        {
+            get
+            {
+                return _HideColumn;
+            }
+            set
+            {
+                OnHideColumnChanging(value);
+                ReportPropertyChanging("HideColumn");
+                _HideColumn = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("HideColumn");
+                OnHideColumnChanged();
+            }
+        }
+        private global::System.String _HideColumn;
+        partial void OnHideColumnChanging(global::System.String value);
+        partial void OnHideColumnChanged();
 
         #endregion
 

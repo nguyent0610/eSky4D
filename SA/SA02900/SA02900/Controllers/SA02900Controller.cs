@@ -20,22 +20,30 @@ namespace SA02900.Controllers
         private string _screenNbr = "SA02900";
         private string _userName = Current.UserName;
         SA02900Entities _db = Util.CreateObjectContext<SA02900Entities>(false);
-
+        private bool isShowLoadData = false, isFlagBranchID= false;
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            var objConfig = _db.SA02900_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                isShowLoadData = objConfig.isShowLoadData.ToBool();
+                isFlagBranchID = objConfig.isFlagBranchID.ToBool();
+            }
+            ViewBag.isShowLoadData = isShowLoadData;
+            ViewBag.isFlagBranchID = isFlagBranchID;
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetTopGrid()
+        public ActionResult GetTopGrid(string appFolID, string roleID)
         {
-            return this.Store(_db.SA02900_pgSI_ApprovalFlowStatus(Current.LangID).ToList());
+            return this.Store(_db.SA02900_pgSI_ApprovalFlowStatus(Current.LangID, appFolID, roleID).ToList());
         }
 
         public ActionResult GetBotGrid()
@@ -59,7 +67,7 @@ namespace SA02900.Controllers
 
                 foreach (var objold in lstOld_SI_ApprovalFlowStatus)
                 {
-                    if (lstTopGrid.Where(p => p.AppFolID.ToLower() == objold.AppFolID.ToLower()
+                    if (lstTopGrid.Where(p => p.BranchID .ToLower() == objold.BranchID.ToLower() && p.AppFolID.ToLower() == objold.AppFolID.ToLower()
                                         && p.RoleID.ToLower() == objold.RoleID.ToLower()
                                         && p.Status.ToLower() == objold.Status.ToLower()).FirstOrDefault() == null)
                     {
@@ -72,7 +80,7 @@ namespace SA02900.Controllers
                     if (item.AppFolID.PassNull() == "" 
                         || item.RoleID.PassNull() == "" 
                         || item.Status.PassNull() == "") continue;
-                    var obj = _db.SI_ApprovalFlowStatus.FirstOrDefault(p => p.AppFolID.ToLower() == item.AppFolID.ToLower()
+                    var obj = _db.SI_ApprovalFlowStatus.FirstOrDefault(p => p.BranchID.ToLower() == p.BranchID.ToLower() && p.AppFolID.ToLower() == item.AppFolID.ToLower()
                                                                         && p.RoleID.ToLower() == item.RoleID.ToLower()
                                                                         && p.Status.ToLower() == item.Status.ToLower());
                     if (obj != null)
@@ -95,7 +103,7 @@ namespace SA02900.Controllers
 
                 foreach (var objold in lstOld_SI_ApprovalFlowHandle)
                 {
-                    if (lstBotGrid.Where(p => p.Handle.ToLower() == objold.Handle.ToLower()
+                    if (lstBotGrid.Where(p => p.Handle.ToLower() == objold.Handle.ToLower() && p.BranchID.ToLower() == objold.BranchID.ToLower()
                                             && p.Status.ToLower() == objold.Status.ToLower()
                                             && p.RoleID.ToLower() == objold.RoleID.ToLower()
                                             && p.AppFolID.ToLower() == objold.AppFolID.ToLower()).FirstOrDefault() == null)
@@ -111,7 +119,7 @@ namespace SA02900.Controllers
                         || item.RoleID.PassNull() == ""
                         || item.AppFolID.PassNull() == "") continue;
 
-                    var obj = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle.ToLower() == item.Handle.ToLower()
+                    var obj = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle.ToLower() == item.Handle.ToLower() && p.BranchID.ToLower() == item.BranchID.ToLower()
                                                                     && p.Status.ToLower() == item.Status.ToLower()
                                                                     && p.RoleID.ToLower() == item.RoleID.ToLower()
                                                                     && p.AppFolID.ToLower() == item.AppFolID.ToLower());
@@ -146,6 +154,7 @@ namespace SA02900.Controllers
                 t.AppFolID = s.AppFolID;
                 t.RoleID = s.RoleID;
                 t.Status = s.Status;
+                t.BranchID = s.BranchID;
                 t.Crtd_Datetime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
@@ -166,6 +175,7 @@ namespace SA02900.Controllers
                 t.RoleID = s.RoleID;
                 t.Status = s.Status;
                 t.Handle = s.Handle;
+                t.BranchID = s.BranchID;
                 t.Crtd_Datetime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;

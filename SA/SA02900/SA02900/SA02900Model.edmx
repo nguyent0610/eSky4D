@@ -11,6 +11,7 @@
             <PropertyRef Name="RoleID" />
             <PropertyRef Name="Status" />
             <PropertyRef Name="Handle" />
+            <PropertyRef Name="BranchID" />
           </Key>
           <Property Name="AppFolID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="RoleID" Type="nvarchar" MaxLength="30" Nullable="false" />
@@ -38,12 +39,14 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="MailApprove" Type="varchar" MaxLength="100" />
           <Property Name="ProcContent" Type="varchar" MaxLength="100" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="SI_ApprovalFlowStatus">
           <Key>
             <PropertyRef Name="AppFolID" />
             <PropertyRef Name="RoleID" />
             <PropertyRef Name="Status" />
+            <PropertyRef Name="BranchID" />
           </Key>
           <Property Name="AppFolID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="RoleID" Type="nvarchar" MaxLength="30" Nullable="false" />
@@ -57,10 +60,18 @@
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
+        <Function Name="SA02900_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="SA02900_pgSI_ApprovalFlowHandle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SA02900_pgSI_ApprovalFlowStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="langid" Type="smallint" Mode="In" />
+          <Parameter Name="AppFolID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RoleID" Type="nvarchar(max)" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="Self.SI_ApprovalFlowHandle" Schema="dbo" store:Type="Tables" />
@@ -71,75 +82,20 @@
     <edmx:ConceptualModels>
       <Schema Namespace="SA02900Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SA02900Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="SA02900_pgSI_ApprovalFlowHandle" ReturnType="Collection(SA02900Model.SA02900_pgSI_ApprovalFlowHandle_Result)" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="SA02900Model.SI_ApprovalFlowHandle" />
           <EntitySet Name="SI_ApprovalFlowStatus" EntityType="SA02900Model.SI_ApprovalFlowStatus" />
           <FunctionImport Name="SA02900_pgSI_ApprovalFlowStatus" ReturnType="Collection(SA02900Model.SA02900_pgSI_ApprovalFlowStatus_Result)">
-          <Parameter Name="langid" Mode="In" Type="Int16" />
+            <Parameter Name="langid" Mode="In" Type="Int16" />
+            <Parameter Name="AppFolID" Mode="In" Type="String" />
+            <Parameter Name="RoleID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="SA02900_pgSI_ApprovalFlowHandle" ReturnType="Collection(SA02900Model.SA02900_pgSI_ApprovalFlowHandle_Result)" />
+          <FunctionImport Name="SA02900_pdConfig" ReturnType="Collection(SA02900Model.SA02900_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
-        <EntityType Name="SI_ApprovalFlowHandle">
-          <Key>
-            <PropertyRef Name="AppFolID" />
-            <PropertyRef Name="RoleID" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="Handle" />
-          </Key>
-          <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Handle" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LangHandle" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ToStatus" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ProcName" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ContentApprove" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="MailSubject" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="MailTo" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="MailCC" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Param00" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Param01" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Param02" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Param03" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Param04" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Param05" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="String" Name="MailApprove" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ProcContent" MaxLength="100" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="SI_ApprovalFlowStatus">
-          <Key>
-            <PropertyRef Name="AppFolID" />
-            <PropertyRef Name="RoleID" />
-            <PropertyRef Name="Status" />
-          </Key>
-          <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Descr" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="LangStatus" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-        </EntityType>
-        <ComplexType Name="SA02900_pgSI_ApprovalFlowStatus_Result">
-          <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="DescrScreen" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="400" />
-          <Property Type="String" Name="LangStatus" Nullable="true" MaxLength="50" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-        </ComplexType>
         <ComplexType Name="SA02900_pgSI_ApprovalFlowHandle_Result">
           <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" />
@@ -161,6 +117,82 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="MailApprove" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="ProcContent" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="HideColumn" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <EntityType Name="SI_ApprovalFlowHandle">
+          <Key>
+            <PropertyRef Name="AppFolID" />
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="Handle" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="AppFolID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="RoleID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Handle" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="LangHandle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ToStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ProcName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ContentApprove" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MailSubject" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="MailTo" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="MailCC" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="Param00" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Param01" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Param02" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Param03" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Param04" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Param05" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Crtd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="MailApprove" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProcContent" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SI_ApprovalFlowStatus">
+          <Key>
+            <PropertyRef Name="AppFolID" />
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="AppFolID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="RoleID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Descr" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="LangStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="SA02900_pgSI_ApprovalFlowStatus_Result">
+          <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="DescrScreen" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="400" />
+          <Property Type="String" Name="LangStatus" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Lang00" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Lang01" Nullable="false" MaxLength="100" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="HideColumn" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="SA02900_pdConfig_Result">
+          <Property Type="Boolean" Name="isShowLoadData" Nullable="true" />
+          <Property Type="Boolean" Name="isFlagBranchID" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -168,9 +200,38 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SA02900Entities" >
+          <FunctionImportMapping FunctionImportName="SA02900_pgSI_ApprovalFlowHandle" FunctionName="eBiz4DWebSysModel.Store.SA02900_pgSI_ApprovalFlowHandle">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA02900Model.SA02900_pgSI_ApprovalFlowHandle_Result">
+                <ScalarProperty Name="AppFolID" ColumnName="AppFolID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Handle" ColumnName="Handle" />
+                <ScalarProperty Name="LangHandle" ColumnName="LangHandle" />
+                <ScalarProperty Name="ToStatus" ColumnName="ToStatus" />
+                <ScalarProperty Name="ProcName" ColumnName="ProcName" />
+                <ScalarProperty Name="ContentApprove" ColumnName="ContentApprove" />
+                <ScalarProperty Name="MailSubject" ColumnName="MailSubject" />
+                <ScalarProperty Name="MailTo" ColumnName="MailTo" />
+                <ScalarProperty Name="MailCC" ColumnName="MailCC" />
+                <ScalarProperty Name="Param00" ColumnName="Param00" />
+                <ScalarProperty Name="Param01" ColumnName="Param01" />
+                <ScalarProperty Name="Param02" ColumnName="Param02" />
+                <ScalarProperty Name="Param03" ColumnName="Param03" />
+                <ScalarProperty Name="Param04" ColumnName="Param04" />
+                <ScalarProperty Name="Param05" ColumnName="Param05" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="MailApprove" ColumnName="MailApprove" />
+                <ScalarProperty Name="ProcContent" ColumnName="ProcContent" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="HideColumn" ColumnName="HideColumn" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="SI_ApprovalFlowHandle">
             <EntityTypeMapping TypeName="SA02900Model.SI_ApprovalFlowHandle">
               <MappingFragment StoreEntitySet="SI_ApprovalFlowHandle">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="ProcContent" ColumnName="ProcContent" />
                 <ScalarProperty Name="MailApprove" ColumnName="MailApprove" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -203,6 +264,7 @@
           <EntitySetMapping Name="SI_ApprovalFlowStatus">
             <EntityTypeMapping TypeName="SA02900Model.SI_ApprovalFlowStatus">
               <MappingFragment StoreEntitySet="SI_ApprovalFlowStatus">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -227,33 +289,19 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="LangStatus" ColumnName="LangStatus" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Lang00" ColumnName="Lang00" />
+                <ScalarProperty Name="Lang01" ColumnName="Lang01" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="HideColumn" ColumnName="HideColumn" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SA02900_pgSI_ApprovalFlowHandle" FunctionName="eBiz4DWebSysModel.Store.SA02900_pgSI_ApprovalFlowHandle">
+          <FunctionImportMapping FunctionImportName="SA02900_pdConfig" FunctionName="eBiz4DWebSysModel.Store.SA02900_pdConfig">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="SA02900Model.SA02900_pgSI_ApprovalFlowHandle_Result">
-                <ScalarProperty Name="AppFolID" ColumnName="AppFolID" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Handle" ColumnName="Handle" />
-                <ScalarProperty Name="LangHandle" ColumnName="LangHandle" />
-                <ScalarProperty Name="ToStatus" ColumnName="ToStatus" />
-                <ScalarProperty Name="ProcName" ColumnName="ProcName" />
-                <ScalarProperty Name="ContentApprove" ColumnName="ContentApprove" />
-                <ScalarProperty Name="MailSubject" ColumnName="MailSubject" />
-                <ScalarProperty Name="MailTo" ColumnName="MailTo" />
-                <ScalarProperty Name="MailCC" ColumnName="MailCC" />
-                <ScalarProperty Name="Param00" ColumnName="Param00" />
-                <ScalarProperty Name="Param01" ColumnName="Param01" />
-                <ScalarProperty Name="Param02" ColumnName="Param02" />
-                <ScalarProperty Name="Param03" ColumnName="Param03" />
-                <ScalarProperty Name="Param04" ColumnName="Param04" />
-                <ScalarProperty Name="Param05" ColumnName="Param05" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="MailApprove" ColumnName="MailApprove" />
-                <ScalarProperty Name="ProcContent" ColumnName="ProcContent" />
+              <ComplexTypeMapping TypeName="SA02900Model.SA02900_pdConfig_Result">
+                <ScalarProperty Name="isShowLoadData" ColumnName="isShowLoadData" />
+                <ScalarProperty Name="isFlagBranchID" ColumnName="isFlagBranchID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -279,8 +327,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="95" >
-        <EntityTypeShape EntityType="SA02900Model.SI_ApprovalFlowHandle" Width="2.25" PointX="1.875" PointY="21.875" />
-        <EntityTypeShape EntityType="SA02900Model.SI_ApprovalFlowStatus" Width="2.375" PointX="4.5" PointY="22.75" />
+        <EntityTypeShape EntityType="SA02900Model.SI_ApprovalFlowHandle" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SA02900Model.SI_ApprovalFlowStatus" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -25,14 +25,15 @@
         }
     </style>
     <script>
-       
+
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-
+        HQ.isShowLoadData = HQ.util.toBool('@ViewBag.isShowLoadData');
+        HQ.isFlagBranchID = HQ.util.toBool('@ViewBag.isFlagBranchID');
     </script>  
     <title>@ViewBag.Title</title>
 </head>
