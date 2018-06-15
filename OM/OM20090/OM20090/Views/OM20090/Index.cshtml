@@ -1,0 +1,77 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM20090;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM20090";
+    var acc = Session["OM20090"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/screen/OM20090.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.dateNow = new Date('@DateTime.Now.Date');
+        </script>
+
+        <style type="text/css">
+            .hightlight-rowRed .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+                 background-color: #99FFFF !important; 
+             }
+        </style>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
+
+        @(
+            X.Store().ID("stoHeaderSurvey")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20090_pdHeaderSurvey_Result), "mdlOM20090_pdHeaderSurvey",""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetHeaderSurvey", "OM20090"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("surveyID", "App.cboSurveyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("branchID", "App.cboDistributor.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";                   
+                }
+            )
+        )
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong OM20090Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>

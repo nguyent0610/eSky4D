@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="OM_CompetitorSurveyCriteria">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SurveyID" />
+            <PropertyRef Name="CriteriaID" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SurveyID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CriteriaID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Required" Type="bit" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
+          <Property Name="Crtd_Datetime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Datetime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OM_CompetitorSurveyHeader">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SurveyID" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SurveyID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SurveyName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="FromDate" Type="datetime" Nullable="false" />
+          <Property Name="ToDate" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
+          <Property Name="Crtd_Datetime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Datetime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OM_CompetitorSurveyInvt">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SurveyID" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="CompInvtID" />
+            <PropertyRef Name="CompID" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SurveyID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CompInvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CompID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
+          <Property Name="Crtd_Datetime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Datetime" Type="datetime" />
+        </EntityType>
+        <Function Name="OM20090_pdHeaderSurvey" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="SurveyID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM20090_pgCompetitorInvt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM20090_pgCompetitorSurveyCriteria" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="SurveyID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM20090_pgCompetitorSurveyInvt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="SurveyID" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="OM_CompetitorSurveyCriteria" EntityType="Self.OM_CompetitorSurveyCriteria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_CompetitorSurveyHeader" EntityType="Self.OM_CompetitorSurveyHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_CompetitorSurveyInvt" EntityType="Self.OM_CompetitorSurveyInvt" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM20090Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="OM20090Entities" p1:LazyLoadingEnabled="true">
+          <FunctionImport Name="OM20090_pgCompetitorInvt" ReturnType="Collection(OM20090Model.OM20090_pgCompetitorInvt_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM20090_pgCompetitorSurveyCriteria" ReturnType="Collection(OM20090Model.OM20090_pgCompetitorSurveyCriteria_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SurveyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM20090_pdHeaderSurvey" ReturnType="Collection(OM20090Model.OM20090_pdHeaderSurvey_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SurveyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="OM_CompetitorSurveyCriteria" EntityType="OM20090Model.OM_CompetitorSurveyCriteria" />
+          <EntitySet Name="OM_CompetitorSurveyInvt" EntityType="OM20090Model.OM_CompetitorSurveyInvt" />
+          <EntitySet Name="OM_CompetitorSurveyHeader" EntityType="OM20090Model.OM_CompetitorSurveyHeader" />
+          <FunctionImport Name="OM20090_pgCompetitorSurveyInvt" ReturnType="Collection(OM20090Model.OM20090_pgCompetitorSurveyInvt_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SurveyID" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="OM20090_pgCompetitorInvt_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="OM20090_pgCompetitorSurveyCriteria_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SurveyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CriteriaID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CriteriaName" Nullable="false" MaxLength="200" />
+          <Property Type="Boolean" Name="Required" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="OM20090_pdHeaderSurvey_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SurveyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SurveyName" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="FromDate" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="ToDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+        </ComplexType>
+        <EntityType Name="OM_CompetitorSurveyCriteria">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SurveyID" />
+            <PropertyRef Name="CriteriaID" />
+          </Key>
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SurveyID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CriteriaID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Required" Type="Boolean" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_Datetime" Type="DateTime" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Datetime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="OM_CompetitorSurveyInvt">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SurveyID" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="CompInvtID" />
+            <PropertyRef Name="CompID" />
+          </Key>
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SurveyID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CompInvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CompID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_Datetime" Type="DateTime" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Datetime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="OM_CompetitorSurveyHeader">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SurveyID" />
+          </Key>
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SurveyID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SurveyName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ToDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_Datetime" Type="DateTime" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Datetime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <ComplexType Name="OM20090_pgCompetitorSurveyInvt_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SurveyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CompInvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CompInvtName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="CompID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CompName" Nullable="false" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="OM20090Entities">
+          <FunctionImportMapping FunctionImportName="OM20090_pgCompetitorInvt" FunctionName="eBiz4DWebAppModel.Store.OM20090_pgCompetitorInvt">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20090Model.OM20090_pgCompetitorInvt_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20090_pgCompetitorSurveyCriteria" FunctionName="eBiz4DWebAppModel.Store.OM20090_pgCompetitorSurveyCriteria">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20090Model.OM20090_pgCompetitorSurveyCriteria_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="SurveyID" ColumnName="SurveyID" />
+                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
+                <ScalarProperty Name="CriteriaName" ColumnName="CriteriaName" />
+                <ScalarProperty Name="Required" ColumnName="Required" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20090_pdHeaderSurvey" FunctionName="eBiz4DWebAppModel.Store.OM20090_pdHeaderSurvey">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20090Model.OM20090_pdHeaderSurvey_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="SurveyID" ColumnName="SurveyID" />
+                <ScalarProperty Name="SurveyName" ColumnName="SurveyName" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OM_CompetitorSurveyCriteria">
+            <EntityTypeMapping TypeName="OM20090Model.OM_CompetitorSurveyCriteria">
+              <MappingFragment StoreEntitySet="OM_CompetitorSurveyCriteria">
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="Required" ColumnName="Required" />
+                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
+                <ScalarProperty Name="SurveyID" ColumnName="SurveyID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_CompetitorSurveyInvt">
+            <EntityTypeMapping TypeName="OM20090Model.OM_CompetitorSurveyInvt">
+              <MappingFragment StoreEntitySet="OM_CompetitorSurveyInvt">
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="CompID" ColumnName="CompID" />
+                <ScalarProperty Name="CompInvtID" ColumnName="CompInvtID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="SurveyID" ColumnName="SurveyID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_CompetitorSurveyHeader">
+            <EntityTypeMapping TypeName="OM20090Model.OM_CompetitorSurveyHeader">
+              <MappingFragment StoreEntitySet="OM_CompetitorSurveyHeader">
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="SurveyName" ColumnName="SurveyName" />
+                <ScalarProperty Name="SurveyID" ColumnName="SurveyID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM20090_pgCompetitorSurveyInvt" FunctionName="eBiz4DWebAppModel.Store.OM20090_pgCompetitorSurveyInvt">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20090Model.OM20090_pgCompetitorSurveyInvt_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="SurveyID" ColumnName="SurveyID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="CompInvtID" ColumnName="CompInvtID" />
+                <ScalarProperty Name="CompInvtName" ColumnName="CompInvtName" />
+                <ScalarProperty Name="CompID" ColumnName="CompID" />
+                <ScalarProperty Name="CompName" ColumnName="CompName" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="83">
+        <EntityTypeShape EntityType="OM20090Model.OM_CompetitorSurveyCriteria" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM20090Model.OM_CompetitorSurveyInvt" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM20090Model.OM_CompetitorSurveyHeader" Width="1.5" PointX="0.75" PointY="4.75" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

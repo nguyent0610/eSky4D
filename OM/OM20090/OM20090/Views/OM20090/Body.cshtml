@@ -1,0 +1,441 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM20090;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Border)
+        .ID("frmMain")
+        .TrackResetOnLoad(true)
+        //.DefaultAnchor("100%")
+        //.BodyPadding(10)
+        .DefaultButton("btnLoad")
+        .BodyBorder(0)//.AutoScroll(true)
+        .TopBar(Util.SetupToolbar("close,print", true, "Event.Form.menuClick"))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 120; })
+        .Listeners(l =>
+        {
+            l.BoxReady.Handler = "firstLoad();";
+        })
+        .Items(
+            X.Panel().ID("pnlHeader")
+            .Layout(LayoutType.HBox).Region(Region.North)//.MinWidth(1005)
+            .AutoScroll(true)
+            .Listeners(lst =>
+            {
+
+               lst.Render.Handler = "HQ.common.control_render(this,'header')";
+
+            })
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
+            .Items(
+
+                // First Column
+                X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboDistributor").AllowBlank(false)
+                     .HQLangCode("Distributor").HQProcedure("OM20090_pcDistributor")
+                        .HQColumnShow("BranchID,CpnyName").ValueField("BranchID").DisplayField("BranchID")
+                    .HQHeightWidth(400, 300).ForceSelection(true)//.AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw) 
+                        , new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        l.Change.Fn = "Event.Form.cboDistributor_change";
+                    })
+
+                    ,HQ.TextBox().ID("txtBranchName").Name("txtBranchName").HQLangCode("OM20090BranchName").ReadOnly(true)
+                    .Width(300).MaxLength(200).EnforceMaxLength(true)
+                    
+                  
+                ) // First Column
+                
+                ,X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    //HQ.TextBox().ID("txtSurveyID").Name("txtSurveyID").HQLangCode("SurveyID").DataIndex("SurveyID")
+                    //.Width(300).AllowBlank(false).MaxLength(30).EnforceMaxLength(true)
+                    //.Listeners(lst =>
+                    //{
+                    //    lst.Change.Fn = "txtName_Change";
+                    //})
+                    HQ.Combo().ID("cboSurveyID").AllowBlank(false)
+                    .HQLangCode("SurveyID").HQProcedure("OM20090_pcSurveyID")
+                    .HQColumnShow("SurveyID,SurveyName,FromDate,ToDate,Status").ValueField("SurveyID").DisplayField("SurveyID").MaxLength(30)
+                    .HQHeightWidth(400, 300).ForceSelection(true)//.AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw) 
+                        , new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                        , new StoreParameter("@BranchID", "App.cboDistributor.getValue()", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        l.Change.Fn = "Event.Form.cboSurveyID_change";
+                    })
+                    
+                    ,HQ.TextBox().ID("txtSurCompetitorName").Name("txtSurCompetitorName").HQLangCode("SurCompetitorName").DataIndex("SurveyName")
+                    .AllowBlank(false).MaxLength(20).EnforceMaxLength(true)
+                )
+
+                // Second Column
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                .MinWidth(200).Width(235)//.Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.DateField().ID("dtpFromDate")
+                        .HQLangCode("FromDate").Format(Current.FormatDate).DataIndex("FromDate")
+                        .Listeners(l => l.Change.Fn = "Event.Form.dtpFromDate_change")
+
+                    , HQ.DateField().ID("dtpToDate").Format(Current.FormatDate).DataIndex("ToDate")
+                        .HQLangCode("ToDate")
+                    
+                   
+                ) // Second Column
+
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                //.MinWidth(250)//.Flex(1)
+                .Items(
+                    HQ.Combo().ID("cboStatus")
+                    .HQLangCode("Status").HQProcedure("OM20090_pcStatus").ReadOnly(true)
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
+                    .HQHeightWidth(400, 300).ForceSelection(true).DataIndex("Status")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.Change.Fn = "Event.Form.cboStatus_Change";
+                    })
+                    
+                    ,HQ.Combo().ID("cboHandle")
+                    .HQLangCode("Handle").HQProcedure("OM20090_pcHandle")//.HQFirstDefault(true)
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr").AllowBlank(false)
+                    .HQHeightWidth(400, 300).ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                        ,new StoreParameter("@Status", "App.cboStatus.getValue()", ParameterMode.Raw)  
+                        ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)  
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    
+                    //, HQ.Button().ID("btnLoad")
+                    //    .HQLangCode("LoadData").Icon(Icon.ArrowRefresh).Width(152).MarginSpec("0 0 0 124")
+                    //    .Handler("Event.Form.btnLoad_click")
+                )                
+            ) // pnlHeader
+            ,X.TabPanel().ID("tbInvt").Region(Region.Center)
+            .Items (
+                X.Panel().ID("pnlInvt").Title(Util.GetLang("SaleProduct")).Layout(LayoutType.Fit).Region(Region.Center)
+                .Listeners(lst =>
+                {
+
+                   lst.Render.Handler = "HQ.common.control_render(this,'SaleProduct')";
+
+                })
+                .Items(
+                    X.GridPanel().ID("grdInvt").Region(Region.Center)
+                    //.Region(Region.Center)
+                    .Scroll(ScrollMode.Both)
+                    .SelectionMemory(false)
+                    // .MinWidth(1005)
+                    .Flex(5)
+                    //.MinHeight(200)
+                    //.Padding(10)
+                    .View(X.GridView().TrackOver(false).AllowCopy(true))
+                    .SortableColumns(false).ColumnLines(true)
+                    .Store(
+                        X.Store()
+                        .ID("stoSaleProduct")
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(OM20090_pgCompetitorInvt_Result), "mdlCompetitorInvt", "", false))       
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCompetitorInvt"))).AutoLoad(false)
+                        .Listeners(p=>p.Load.Fn="Event.Grid.stoDet_load" )
+                    )
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40)//.Listeners(x => 	x.AfterRender.Handler = "this.resizable = true")
+                        , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(300)
+                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Flex(1)          
+                    )
+                    .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))
+                    .Listeners(lst => lst.Select.Fn = "slmDet_select")
+                    .BottomBar(
+                        X.PagingToolbar()
+                        .Items(
+                            X.Label("Page size:"),
+                            X.ToolbarSpacer(10),
+                            X.ComboBox()
+                            .Width(80)
+                            .Items("1", "2", "10", "20", "30", "50")
+                            .SelectedItems("50")
+                            .Listeners(l =>
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";                   
+                                })
+                        )
+                        .Plugins(X.ProgressBarPager())
+                    )
+                    .Features(
+                        X.GridFilters().Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("InvtID")
+                            , X.StringFilter().DataIndex("Descr")                                      
+                        )
+                    ) // grdDet
+                )
+                
+                , X.Panel().ID("pnlCondition").Title(Util.GetLang("condition")).Layout(LayoutType.Fit).Region(Region.Center)
+                .Listeners(lst =>
+                {
+
+                    lst.Render.Handler = "HQ.common.control_render(this,'Condition')";
+
+                })
+                .Items(
+                    X.GridPanel().ID("grdSurveyCriteria").Region(Region.Center)
+                    //.Region(Region.Center)
+                    .Scroll(ScrollMode.Both)
+                    // .MinWidth(1005)
+                    .Flex(5)
+                    //.MinHeight(200)
+                    //.Padding(10)
+                    .View(X.GridView().TrackOver(false).AllowCopy(true))
+                    .SortableColumns(false).ColumnLines(true)
+                    .Store(
+                            X.Store()
+                            .ID("stoSurveyCriteria")
+                            .PageSize(50)
+                            .Model(Util.GenerateModel(typeof(OM20090_pgCompetitorSurveyCriteria_Result), "mdlSurveyCriteria", "", false))        
+                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSurveyCriteria"))).AutoLoad(false)
+                            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "App.cboDistributor.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("surveyID", "App.cboSurveyID.getValue()", ParameterMode.Raw));
+                            }) 
+                             .Listeners(p=>p.Load.Fn="Event.Grid.stoSurveyCriteria_load" )
+                        )
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40)//.Listeners(x => 	x.AfterRender.Handler = "this.resizable = true")
+                        , X.Column().Text(Util.GetLang("CriteriaID")).DataIndex("CriteriaID").Width(150)
+                        .Editor(
+                                HQ.Combo().ID("cboCriteriaID")
+                                 .HQProcedure("OM20090_pgCompetitorCriteria")
+                                 .HQColumnShow("CriteriaID,CriteriaName").ValueField("CriteriaID").DisplayField("CriteriaID")
+                                 .HQHeightWidth(400, 300).ForceSelection(true)//.AllowBlank(false)
+                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                 .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw) 
+                                    , new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                                    , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                                 })
+                                 .LoadData()
+                            )
+                        , X.Column().Text(Util.GetLang("CriteriaName")).DataIndex("CriteriaName").Width(400)         
+                        , X.CheckColumn().Text(Util.GetLang("Required")).DataIndex("Required").Editable(true)
+                        
+                         ,X.CommandColumn().Width(150)
+                            .Commands(
+                                X.GridCommand()
+                                .Text(Util.GetLang("Reject"))
+                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                .CommandName("reject")
+                                .Icon(Icon.ArrowUndo)
+                                
+                            )
+                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")       
+                            .Listeners(l => l.Command.Handler = "Event.Grid.stoSurveyCriteria_Reject(record);")      
+                    )
+                    .SelectionModel(X.RowSelectionModel().ID("slmSurveyCriteria").Mode(SelectionMode.Single))
+                    .BottomBar(
+                        X.PagingToolbar()
+                        .Items(
+                            X.Label("Page size:"),
+                            X.ToolbarSpacer(10),
+                            X.ComboBox()
+                            .Width(80)
+                            .Items("1", "2", "10", "20", "30", "50")
+                            .SelectedItems("50")
+                            .Listeners(l =>
+                                {
+                                    l.Select.Fn = "HQ.grid.onPageSelect";                   
+                                })
+                        )
+                        .Plugins(X.ProgressBarPager())
+                    )
+                    .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "Event.Grid.stoSurveyCriteria_BeforeEdit";
+                                ls.Edit.Fn = "Event.Grid.stoSurveyCriteria_Edit";
+                                ls.ValidateEdit.Fn = "Event.Grid.stoSurveyCriteria_ValidateEdit";
+
+                            })
+                        )
+                    .Features(
+                        X.GridFilters().Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("CriteriaID")
+                            , X.StringFilter().DataIndex("CriteriaName") 
+                            , X.BooleanFilter().DataIndex("Required")                                       
+                        )
+                    ) // grdDet
+                )
+            )
+            ,X.TabPanel().ID("tbSurveyInvt").Region(Region.South).Flex(2)
+            .Items (
+                    X.Panel().ID("pnlSurveyInvt").Title(Util.GetLang("SurveyInvt")).Layout(LayoutType.Fit)
+                    .Listeners(lst =>
+                    {
+
+                        lst.Render.Handler = "HQ.common.control_render(this,'SurveyInvt')";
+
+                    })
+                    .Region(Region.Center)
+                    .Items(
+                        X.GridPanel().ID("grdSurveyInvt")
+                        .Frame(false)
+                        .Scroll(ScrollMode.Both)
+                        // .MinWidth(1005)
+                        //.Height(275)
+                        .Flex(3)
+                        .View(X.GridView().TrackOver(false).AllowCopy(true))
+                        .SortableColumns(false).ColumnLines(true)
+                        .Store(
+                            X.Store()
+                            .ID("stoSurveyInvt")
+                            .PageSize(50)
+                            .Model(Util.GenerateModel(typeof(OM20090_pgCompetitorSurveyInvt_Result), "mdlSurveyInvt", "", false))   
+                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSurveyInvt"))).AutoLoad(false)
+                            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "App.cboDistributor.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("surveyID", "App.cboSurveyID.getValue()", ParameterMode.Raw));
+                                //ps.Add(new StoreParameter("invtID", "App.slmDet.selected.items[0] != undefined ? App.slmDet.selected.items[0].data.CompInvtID : null", ParameterMode.Raw));
+                
+                            })   
+                            .Listeners(p=>p.Load.Fn="Event.Grid.stoSurveyInvt_load" )
+                        )
+                        //.StoreID("stoSurveyInvt")
+                        .ColumnModel(
+                            X.RowNumbererColumn().Renderer("rendererRowNbr").Width(40).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true")
+                            , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(140).Hidden(true)
+                            , X.Column().Text(Util.GetLang("CompID")).DataIndex("CompID").Width(140)
+                            .Editor(
+                                HQ.Combo().ID("cboCompID")
+                                 .HQProcedure("OM20090_pcCompetitorVendor")
+                                 .HQColumnShow("CompID,CompName").ValueField("CompID").DisplayField("CompID")
+                                 .HQHeightWidth(400, 300).ForceSelection(true)//.AllowBlank(false)
+                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                 .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw) 
+                                    , new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                                    , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                                 })
+                                 .LoadData()
+                            )
+                            , X.Column().Text(Util.GetLang("CompName")).DataIndex("CompName").Width(150)
+
+                            , X.Column().Text(Util.GetLang("CompInvtID")).DataIndex("CompInvtID").Width(140)
+                            .Editor(
+                                HQ.Combo().ID("cboCompInvtID")
+                                 .HQProcedure("OM20090_pcCompetitorInvt")
+                                 .HQColumnShow("CompInvtID,CompInvtName").ValueField("CompInvtID").DisplayField("CompInvtID")
+                                 .HQHeightWidth(400, 300).ForceSelection(true)//.AllowBlank(false)
+                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                 .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw) 
+                                    , new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                                    , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                                 })
+                                 .LoadData()
+                            )
+                            , X.Column().Text(Util.GetLang("CompInvtName")).DataIndex("CompInvtName").Width(150)  
+                            
+                            ,X.CommandColumn().Width(150)
+                            .Commands(
+                                X.GridCommand()
+                                .Text(Util.GetLang("Reject"))
+                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                .CommandName("reject")
+                                .Icon(Icon.ArrowUndo)
+                                
+                            )
+                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")       
+                            .Listeners(l => l.Command.Handler = "Event.Grid.grdSurveyInvt_Reject(record);")                  
+                        )
+                        .SelectionModel(X.RowSelectionModel().ID("slmDetailDet").Mode(SelectionMode.Single))
+                        .BottomBar(
+                            X.PagingToolbar()
+                            .Items(
+                                X.Label("Page size:"),
+                                X.ToolbarSpacer(10),
+                                X.ComboBox()
+                                .Width(80)
+                                .Items("1", "2", "10", "20", "30", "50")
+                                .SelectedItems("50")
+                                .Listeners(l =>
+                                    {
+                                        l.Select.Fn = "HQ.grid.onPageSelect";
+                                    })
+                            )
+                            .Plugins(X.ProgressBarPager())
+                        )
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "Event.Grid.grdSurveyInvt_BeforeEdit";
+                                ls.Edit.Fn = "Event.Grid.grdSurveyInvt_Edit";
+                                ls.ValidateEdit.Fn = "Event.Grid.grdSurveyInvt_ValidateEdit";
+
+                            })
+                        )
+                        .Features(
+                            X.GridFilters().Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("InvtID")
+                                , X.StringFilter().DataIndex("CompID")
+                                , X.StringFilter().DataIndex("CompName")
+
+                                , X.StringFilter().DataIndex("CompInvtID")
+                                , X.StringFilter().DataIndex("CompInvtName")
+                            )
+                        ) // grdDet
+                  )
+            )
+        )
+        //.Listeners(lst =>
+        //{
+        //    lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
+        //})// Form: frmMain
+    )
+)
