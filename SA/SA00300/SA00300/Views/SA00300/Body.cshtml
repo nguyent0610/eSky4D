@@ -82,11 +82,13 @@
                             .HQHeightWidth(400, 300)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst => 
-                            {
+                            {                       
                                 lst.Change.Fn = "CpnyIDHand_Change";
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue(); GetAllCompany();}";
                                 lst.Expand.Handler = "HQ.combo.expand(this,',');";
-                                lst.Focus.Handler = "this.forceSelection = true;"; 
+                                lst.Focus.Handler = "this.forceSelection = true;";
+                                lst.Blur.Handler = "this.forceSelection = false;";
+                                
                             })
                             .LoadData().Width(500)
                                 

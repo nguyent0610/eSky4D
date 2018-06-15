@@ -334,6 +334,7 @@ var stoLoad = function (sto) {
 
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
+    HQ.combo.expand(App.CpnyIDHand, ',')
     App.stoSYS_UserGroup.reload();
     App.fupImages.reset();
     if (record.data.Images) {
