@@ -442,7 +442,7 @@ var grdPO_PriceCpny_Reject = function (record) {
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.updateRecord();
-        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/;
+        var regex = /^(\w*(\d|([a-zA-Z])|-|\_))*$/;
         var value = App.cboPriceID.getValue();
         if (!HQ.util.passNull(value.toString()).match(regex)) {
             HQ.message.show(20140811, App.cboPriceID.fieldLabel, '');
