@@ -104,6 +104,58 @@ namespace IN20400
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="siteID">No Metadata Documentation available.</param>
+        public ObjectResult<IN20400_pdCheckSiteID_Result> IN20400_pdCheckSiteID(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String siteID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN20400_pdCheckSiteID_Result>("IN20400_pdCheckSiteID", cpnyIDParameter, userNameParameter, langIDParameter, siteIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
         public ObjectResult<IN20400_pgLoadSiteLocation_Result> IN20400_pgLoadSiteLocation(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String siteID)
         {
             ObjectParameter cpnyIDParameter;
@@ -510,6 +562,68 @@ namespace IN20400
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN20400Model", Name="IN20400_pdCheckSiteID_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN20400_pdCheckSiteID_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SiteID
+        {
+            get
+            {
+                return _SiteID;
+            }
+            set
+            {
+                OnSiteIDChanging(value);
+                ReportPropertyChanging("SiteID");
+                _SiteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SiteID");
+                OnSiteIDChanged();
+            }
+        }
+        private global::System.String _SiteID;
+        partial void OnSiteIDChanging(global::System.String value);
+        partial void OnSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="IN20400Model", Name="IN20400_pgLoadSiteLocation_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -520,6 +634,7 @@ namespace IN20400
         /// <summary>
         /// Create a new IN20400_pgLoadSiteLocation_Result object.
         /// </summary>
+        /// <param name="siteID">Initial value of the SiteID property.</param>
         /// <param name="whseLoc">Initial value of the WhseLoc property.</param>
         /// <param name="descr">Initial value of the Descr property.</param>
         /// <param name="salesAllowed">Initial value of the SalesAllowed property.</param>
@@ -531,10 +646,10 @@ namespace IN20400
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        /// <param name="siteID">Initial value of the SiteID property.</param>
-        public static IN20400_pgLoadSiteLocation_Result CreateIN20400_pgLoadSiteLocation_Result(global::System.String whseLoc, global::System.String descr, global::System.Boolean salesAllowed, global::System.Boolean issueAllowed, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String siteID)
+        public static IN20400_pgLoadSiteLocation_Result CreateIN20400_pgLoadSiteLocation_Result(global::System.String siteID, global::System.String whseLoc, global::System.String descr, global::System.Boolean salesAllowed, global::System.Boolean issueAllowed, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             IN20400_pgLoadSiteLocation_Result iN20400_pgLoadSiteLocation_Result = new IN20400_pgLoadSiteLocation_Result();
+            iN20400_pgLoadSiteLocation_Result.SiteID = siteID;
             iN20400_pgLoadSiteLocation_Result.WhseLoc = whseLoc;
             iN20400_pgLoadSiteLocation_Result.Descr = descr;
             iN20400_pgLoadSiteLocation_Result.SalesAllowed = salesAllowed;
@@ -546,13 +661,36 @@ namespace IN20400
             iN20400_pgLoadSiteLocation_Result.LUpd_Prog = lUpd_Prog;
             iN20400_pgLoadSiteLocation_Result.LUpd_User = lUpd_User;
             iN20400_pgLoadSiteLocation_Result.tstamp = tstamp;
-            iN20400_pgLoadSiteLocation_Result.SiteID = siteID;
             return iN20400_pgLoadSiteLocation_Result;
         }
 
         #endregion
 
         #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SiteID
+        {
+            get
+            {
+                return _SiteID;
+            }
+            set
+            {
+                OnSiteIDChanging(value);
+                ReportPropertyChanging("SiteID");
+                _SiteID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SiteID");
+                OnSiteIDChanged();
+            }
+        }
+        private global::System.String _SiteID;
+        partial void OnSiteIDChanging(global::System.String value);
+        partial void OnSiteIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -817,30 +955,6 @@ namespace IN20400
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String SiteID
-        {
-            get
-            {
-                return _SiteID;
-            }
-            set
-            {
-                OnSiteIDChanging(value);
-                ReportPropertyChanging("SiteID");
-                _SiteID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("SiteID");
-                OnSiteIDChanged();
-            }
-        }
-        private global::System.String _SiteID;
-        partial void OnSiteIDChanging(global::System.String value);
-        partial void OnSiteIDChanged();
 
         #endregion
 

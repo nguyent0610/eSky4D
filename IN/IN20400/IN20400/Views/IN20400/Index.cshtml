@@ -37,6 +37,29 @@
 <body>   
     @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
     
+    @(
+        X.Store().ID("stoCheckSiteID")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(IN20400_pdCheckSiteID_Result), "mdlIN20400_pdCheckSiteID", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetSiteID", "IN20400"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("siteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
+            })
+            
+            )
+        )
+
+
+
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         <!-- Gọi hàm Body trong IN20400Controller để dựng view Body.cshtml, mục đích tạo cache. -->            

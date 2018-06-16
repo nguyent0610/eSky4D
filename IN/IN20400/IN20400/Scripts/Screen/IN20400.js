@@ -83,8 +83,12 @@ var menuClick = function (command) {
         case "delete":
             if (HQ.focus == 'header') {
                 if (App.cboSiteID.getValue() != null) {
-
-                    HQ.message.show(11, '', 'deleteData');
+                    if (App.stoCheckSiteID.data.length > 0) {
+                        HQ.message.show(2018061611, [App.cboSiteID.getValue()], '',true);
+                    }
+                    else {
+                        HQ.message.show(11, '', 'deleteData');
+                    }                   
 
                 } else {
 
@@ -131,6 +135,7 @@ var cboSiteID_TriggerClick = function (sender, value) {
 var cboSiteID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     App.stoIN_SiteLocation.reload();
+    App.stoCheckSiteID.reload();
 };
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
@@ -179,6 +184,7 @@ var grdIN_SiteLocation_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdIN_SiteLocation, e, keys);
 };
 var grdIN_SiteLocation_ValidateEdit = function (item, e) {
+
     return checkValidateEditIN20400(App.grdIN_SiteLocation, e, keys);
 };
 var grdIN_SiteLocation_Reject = function (record) {
@@ -216,7 +222,6 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         if (HQ.focus == 'header') {
-
             if (App.frmMain.isValid()) {
 
                 App.frmMain.submit({
@@ -225,29 +230,33 @@ var deleteData = function (item) {
                     timeout: 7200,
 
                     success: function (msg, data) {
-
                         App.cboSiteID.setValue("");
-
                     },
 
                     failure: function (msg, data) {
-
                         HQ.message.process(msg, data, true);
 
                     }
-
                 });
-
             }
-
-
-
         }
         else if (HQ.focus == 'grdIN_SiteLocation') {
-            App.grdIN_SiteLocation.deleteSelected();
-            frmChange();
+            var lstDel = App.grdIN_SiteLocation.selModel.selected.items;
+            var line = "";
+            for (var i = 0; i < lstDel.length; i++) {
+                var obj = HQ.store.findRecord(App.stoCheckSiteID, ['WhseLoc'], [lstDel[i].data.WhseLoc]);
+                if (obj != undefined) {
+                    line = line + (i + 1) + ",";
+                }
+            }
+            if (line != "") {
+                HQ.message.show(2018061612, [line], '', true);
+            }
+            else {
+                App.grdIN_SiteLocation.deleteSelected();
+                frmChange();
+            }            
         }
-
     }
 };
 
@@ -264,7 +273,7 @@ function refresh(item) {
 
 var checkValidateEditIN20400 = function (grd, e, keys, isCheckSpecialChar) {
     if (keys.indexOf(e.field) != -1) {
-        var regex = /^[a-zA-Z0-9)\(._]+$/
+        var regex = /^(\w*(\d|[a-zA-Z]|[\_@()+-.]))*$/;
         if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
         if (isCheckSpecialChar) {
             if (e.value)
@@ -282,6 +291,10 @@ var checkValidateEditIN20400 = function (grd, e, keys, isCheckSpecialChar) {
 
     }
 }
+
+
+
+
 ///////////////////////////////////
 
 

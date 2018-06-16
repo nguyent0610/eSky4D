@@ -21,7 +21,6 @@ namespace IN20400.Controllers
     public class IN20400Controller : Controller
     {
         private string _screenNbr = "IN20400";
-        private string _userName = Current.UserName;
         IN20400Entities _db = Util.CreateObjectContext<IN20400Entities>(false);
         public ActionResult Index()
         {
@@ -38,14 +37,18 @@ namespace IN20400.Controllers
         {
             return this.Store(_db.IN20400_pgLoadSiteLocation(Current.CpnyID, Current.UserName, Current.LangID, siteID).ToList());
         }
+
+        public ActionResult GetSiteID(string siteID)
+        {
+            return this.Store(_db.IN20400_pdCheckSiteID(Current.CpnyID, Current.UserName, Current.LangID, siteID).ToList());
+        }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-
             try
             {
                 string siteID = data["cboSiteID"].PassNull();
-
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstIN_SiteLocation"]);
                 ChangeRecords<IN20400_pgLoadSiteLocation_Result> lstLang = dataHandler.BatchObjectData<IN20400_pgLoadSiteLocation_Result>();
                 lstLang.Created.AddRange(lstLang.Updated);
@@ -92,7 +95,6 @@ namespace IN20400.Controllers
                 }
 
                 _db.SaveChanges();
-
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -109,48 +111,37 @@ namespace IN20400.Controllers
                 t.WhseLoc = s.WhseLoc.ToUpper().Trim();
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
-                t.Crtd_User = _userName;
+                t.Crtd_User = Current.UserName;
             }
             t.Descr = s.Descr;
             t.SalesAllowed = true;
             t.IssueAllowed = true;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
-            t.LUpd_User = _userName;
+            t.LUpd_User = Current.UserName ?? "";
         }
 
         [HttpPost]
 
         public ActionResult DeleteAll(FormCollection data)
         {
-
             try
             {
-
                 string SiteID = data["cboSiteID"].ToUpper().PassNull();
-
-
                 var lstSite = _db.IN_SiteLocation.Where(p => p.SiteID == SiteID).ToList();
 
                 foreach (var item in lstSite)
                 {
-
                     _db.IN_SiteLocation.DeleteObject(item);
-
                 }
                 _db.SaveChanges();
-
                 return Util.CreateMessage(MessageProcess.Delete, SiteID);
-
             }
 
             catch (Exception ex)
             {
-
                 if (ex is MessageException) return (ex as MessageException).ToMessage();
-
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-
             }
 
         }

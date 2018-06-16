@@ -36,8 +36,8 @@
             .Items(
                 HQ.Combo().ID("cboSiteID").Name("cboSiteID").HQLangCode("SiteID").DataIndex("SiteID")
                     .HQProcedure("IN20400_pcSiteID").HQAutoLoad(true).MaxLength(30).EnforceMaxLength(true)
-                    .HQColumnShow("SiteId,Name").DisplayField("Name").ValueField("SiteId")
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .HQColumnShow("SiteId,Name").DisplayField("Name").ValueField("SiteId").ForceSelection(true)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0").AllowBlank(false)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
@@ -49,11 +49,11 @@
                     .Listeners(lst =>
                     {
                         lst.TriggerClick.Fn = "cboSiteID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra     
-                        lst.Change.Fn = "cboSiteID_Change";
+                        lst.Change.Fn = "cboSiteID_Change";                       
                     })
             )
         )
-        , X.TabPanel().ID("tabDetail")
+        , X.TabPanel().ID("tabDetail").MarginSpec("5 0 0 0")
         .Region(Region.Center)
         .Items(
                 X.Panel().ID("pnlDetail").Layout(LayoutType.Fit).Title(Util.GetLang("About"))
@@ -90,7 +90,7 @@
                 .ColumnModel(
                     X.RowNumbererColumn().Width(40),
                     X.Column().ID("WhseLoc").Text(Util.GetLang("WhseLoc")).DataIndex("WhseLoc").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true)),
-                    X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(30).EnforceMaxLength(true)),
+                    X.Column().Text(Util.GetLang("IN20400Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(30).EnforceMaxLength(true)),
                     X.CommandColumn().Width(150)
                     .Commands(
                         X.GridCommand()

@@ -23,6 +23,12 @@
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <Function Name="IN20400_pdCheckSiteID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="IN20400_pgLoadSiteLocation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -38,6 +44,12 @@
       <Schema Namespace="IN20400Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="IN20400Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="IN_SiteLocation" EntityType="IN20400Model.IN_SiteLocation" />
+          <FunctionImport Name="IN20400_pdCheckSiteID" ReturnType="Collection(IN20400Model.IN20400_pdCheckSiteID_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="IN20400_pgLoadSiteLocation" ReturnType="Collection(IN20400Model.IN20400_pgLoadSiteLocation_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -63,7 +75,12 @@
           <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="IN20400_pdCheckSiteID_Result">
+          <Property Type="String" Name="SiteID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="WhseLoc" Nullable="true" MaxLength="10" />
+        </ComplexType>
         <ComplexType Name="IN20400_pgLoadSiteLocation_Result">
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="WhseLoc" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
           <Property Type="Boolean" Name="SalesAllowed" Nullable="false" />
@@ -75,7 +92,6 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -101,9 +117,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN20400_pdCheckSiteID" FunctionName="eBiz4DWebSysModel.Store.IN20400_pdCheckSiteID" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20400Model.IN20400_pdCheckSiteID_Result">
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN20400_pgLoadSiteLocation" FunctionName="eBiz4DWebSysModel.Store.IN20400_pgLoadSiteLocation">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN20400Model.IN20400_pgLoadSiteLocation_Result">
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
                 <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="SalesAllowed" ColumnName="SalesAllowed" />
@@ -115,7 +140,6 @@
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
