@@ -149,6 +149,7 @@ var firstLoad = function () {
 var frmChange = function () {
     HQ.isChange = HQ.store.isChange(App.stoIN_SiteLocation);
     HQ.common.changeData(HQ.isChange, 'IN20400');//co thay doi du lieu gan * tren tab title header
+    App.cboSiteID.setReadOnly(HQ.isChange);
 };
 function refresh(item) {
     if (item == 'yes') {
@@ -180,8 +181,9 @@ var stoBeforeLoad = function (sto) {
 var grdIN_SiteLocation_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
-var grdIN_SiteLocation_Edit = function (item, e) {
+var grdIN_SiteLocation_Edit = function (item, e) {    
     HQ.grid.checkInsertKey(App.grdIN_SiteLocation, e, keys);
+    frmChange();
 };
 var grdIN_SiteLocation_ValidateEdit = function (item, e) {
 
