@@ -31,7 +31,7 @@
             .AutoScroll(true)
             .Items(
                     HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQLangCode("BranchID")
-                    .HQProcedure("AP20200_pcBranch").HQAutoLoad(true).MaxLength(30).EnforceMaxLength(true)
+                    .HQProcedure("AP20200_pcBranch").HQAutoLoad(true).MaxLength(30).EnforceMaxLength(true).ForceSelection(true)
                     .HQColumnShow("BranchID,BranchName,Addr").DisplayField("BranchName").ValueField("BranchID")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").DataIndex("BranchID")
                     .HQParam(new StoreParameterCollection() 
@@ -71,7 +71,7 @@
                 ,  HQ.Combo().ID("cboVendType").Name("cboVendType").HQLangCode("VendType")
                     .HQProcedure("AP20200_pcVendType").HQAutoLoad(true).MaxLength(30).EnforceMaxLength(true)
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("VendType")
-                    .AllowBlank(false)
+                    .AllowBlank(false).ForceSelection(true)
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .HQParam(new StoreParameterCollection() 
                     { 
@@ -213,10 +213,10 @@
                         .Width(300).MarginSpec("5 0 0 0").MaxLength(200).EnforceMaxLength(true)
 
                     , HQ.NumberField().ID("txtCrlmt").Name("txtCrlmt").HQLangCode("CrLmt").DataIndex("CrLmt")
-                        .Width(300).MarginSpec("5 0 0 0")
+                        .Width(300).MarginSpec("5 0 0 0").MinValue(0)
 
                     , HQ.NumberField().ID("txtMOQVal").Name("txtMOQVal").HQLangCode("MOQVal").DataIndex("MOQVal")
-                        .Width(300).MarginSpec("5 0 0 0")
+                        .Width(300).MarginSpec("5 0 0 0").MinValue(0)
 
                     , HQ.Combo().ID("cboMOQType").Name("cboMOQType").HQLangCode("MOQType").HQProcedure("AP20200_pcMOQType").AllowBlank(false).HQAutoLoad(true).ForceSelection(true)
                         .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").Width(300).DataIndex("MOQType")
@@ -242,10 +242,10 @@
                     X.Panel().Layout(LayoutType.VBox).Region(Region.West).Title(Util.GetLang("MainAddress")).TitleAlign(TitleAlign.Right).Border(false).MarginSpec("0 10 0 0")
                     .Items(
                         HQ.TextBox().ID("txtShipName").Name("txtShipName").HQLangCode("Name")//.DataIndex("Name")
-                            .Width(300).MarginSpec("5 0 0 0").ReadOnly(true).Enable(false)
+                            .Width(300).MarginSpec("5 0 0 0").ReadOnly(true).Enable(false).MaxLength(200).EnforceMaxLength(true)
 
                         , HQ.TextBox().ID("txtAttn").Name("txtAttn").HQLangCode("Attn").DataIndex("Attn")
-                            .Width(300).MarginSpec("5 0 0 0")
+                            .Width(300).MarginSpec("5 0 0 0").MaxLength(200).EnforceMaxLength(true)
 
                         , HQ.TextBox().ID("txtSalut").Name("txtSalut").HQLangCode("Salut").DataIndex("Salut")
                             .Width(300).MarginSpec("5 0 0 0")
@@ -301,10 +301,10 @@
                             })
                                             
                         , HQ.TextBox().ID("txtShipZip").Name("txtShipZip").HQLangCode("Zip").DataIndex("Zip")
-                            .Width(300).MarginSpec("5 0 0 0")
+                            .Width(300).MarginSpec("5 0 0 0").MaxLength(10).EnforceMaxLength(true)
 
                         , HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("Phone").DataIndex("Phone")
-                            .Width(300).MarginSpec("5 0 0 0")
+                            .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
 
                         , HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("Fax").DataIndex("Fax")
                             .Width(300).MarginSpec("5 0 0 0")
@@ -319,10 +319,10 @@
                     , X.Panel().Layout(LayoutType.VBox).Region(Region.Center).Title(Util.GetLang("Shipping Address")).Border(false)
                     .Items(
                         HQ.TextBox().ID("txtBillName").Name("txtBillName").DataIndex("RemitName").HQLangCode("Name").HideLabel(true)
-                        .Width(150).MarginSpec("5 0 0 0")
+                            .Width(150).MarginSpec("5 0 0 0").MaxLength(200).EnforceMaxLength(true)
 
                         , HQ.TextBox().ID("txtBillAttn").Name("txtBillAttn").DataIndex("RemitAttn").HQLangCode("Attn").HideLabel(true)
-                            .Width(150).MarginSpec("5 0 0 0")
+                            .Width(150).MarginSpec("5 0 0 0").MaxLength(200).EnforceMaxLength(true)
 
                         , HQ.TextBox().ID("txtBillSalut").Name("txtBillSalut").DataIndex("RemitSalut").HQLangCode("Salut").HideLabel(true)
                             .Width(150).MarginSpec("5 0 0 0")
@@ -377,10 +377,10 @@
                             })
                                         
                         , HQ.TextBox().ID("txtBillZip").Name("txtBillZip").DataIndex("RemitZip").HQLangCode("Zip").HideLabel(true)
-                            .Width(150).MarginSpec("5 0 0 0")
+                            .Width(150).MarginSpec("5 0 0 0").MaxLength(10).EnforceMaxLength(true)
 
                         , HQ.TextBox().ID("txtBillPhone").Name("txtBillPhone").DataIndex("RemitPhone").HQLangCode("Phone").HideLabel(true)
-                            .Width(150).MarginSpec("5 0 0 0")
+                            .Width(150).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
 
                         , HQ.TextBox().ID("txtBillFax").Name("txtBillFax").DataIndex("RemitFax").HQLangCode("Fax").HideLabel(true)
                             .Width(150).MarginSpec("5 0 0 0")

@@ -138,8 +138,14 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain)) {
-                    save();
-                }
+                    if (HQ.util.checkSpecialChar(App.cboVendID.getValue()) == true)
+                        save();
+                    else {
+                        HQ.message.show(20140811, App.cboVendID.fieldLabel);
+                        App.cboVendID.focus();
+                        App.cboVendID.selectText();
+                    }
+                }             
             }
             break;
         case "print":
