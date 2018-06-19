@@ -2064,7 +2064,8 @@ var DiscDefintion = {
                 App.cboDiscClass.setReadOnly(false);
                 App.cboDiscType.setReadOnly(false);
             }
-            
+            App.cboDpiiInvtID.store.reload();
+            App.cboFreeItemID.store.reload();
             Main.Event.frmMain_fieldChange();
         },
 
@@ -2170,6 +2171,8 @@ var DiscDefintion = {
             App.grdDiscCustCate.getStore().reload();
             App.grdDiscChannel.getStore().reload();
             App.grdDiscBreak.store.reload();
+            App.cboDpiiInvtID.store.reload();
+            App.cboFreeItemID.store.reload();
             Main.Event.frmMain_fieldChange();
         },
 
@@ -4510,7 +4513,7 @@ var dteStartDate_Change = function (item) {
                 App.dteEndDate.setValue('');
             }
             else {
-                App.dteEndDate.setMinValue(App.dteStartDate.getValue());
+                //App.dteEndDate.setMinValue(App.dteStartDate.getValue());
                 if (b != "" && b != null) {
                     if (a > b) {
                         App.dteEndDate.setValue('');
@@ -4520,6 +4523,15 @@ var dteStartDate_Change = function (item) {
         }        
     }   
 }
+var dteEndDate_Change = function () {
+    App.dteStartDate.setMaxValue(App.dteEndDate.getValue());
+    if (App.dteEndDate.getValue() != null) {
+         if (App.dteEndDate.getValue() < App.dteStartDate.getValue()) {
+                App.dteStartDate.setValue(App.dteEndDate.getValue());
+            }
+    }
+   
+}
 var dteEndDate_Focus = function () {
     if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
         HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
@@ -4527,7 +4539,7 @@ var dteEndDate_Focus = function () {
     }
     else {
 
-        App.dteEndDate.setMinValue(App.dteStartDate.getValue());
+        //App.dteEndDate.setMinValue(App.dteStartDate.getValue());
     }
 }
 var chkDonateGroupProduct_Change = function (chk, newValue, oldValue, eOpts) {
@@ -4582,7 +4594,7 @@ var chkDonateGroupProduct_Change = function (chk, newValue, oldValue, eOpts) {
                     if ((lstFreeItemcheck.items[i].data.GroupItem != null && lstFreeItemcheck.items[i].data.GroupItem != "") || (lstFreeItemcheck.items[i].data.Priority > 0)) {
                         HQ.message.show(2018022211, '', '', true);
                         chk.suspendEvents();
-                        //App.chkDonateGroupProduct.setValue(false);
+                        App.chkDonateGroupProduct.setValue(oldValue);
                         chk.resumeEvents();
                         return false;
                         break;
@@ -4632,6 +4644,13 @@ function tabMain_Change(obj, tab, c, func){
             HQ.grid.show(App.grdDiscItem, ['CoefficientCnv']);
         else
             HQ.grid.hide(App.grdDiscItem, ['CoefficientCnv']);
+    }
+    if (tab.id == "pnlDiscDefintion")
+    {
+        if (App.stoDiscItem.data.length == 1 && App.stoDiscItem.data.items[0].data.InvtID == "")
+            App.cboRequiredType.setReadOnly(false);
+        else
+            App.cboRequiredType.setReadOnly(true);
     }
 }
 

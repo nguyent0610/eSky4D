@@ -292,6 +292,7 @@
                                                 {
                                                     //l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                                     l.Focus.Fn = "dteEndDate_Focus";
+                                                    l.Change.Fn = "dteEndDate_Change";
 
                                                 })
                                             ,
@@ -710,7 +711,7 @@
                                         //X.RowNumbererColumn().Width(40)
                                         X.Column().Text(Util.GetLang("InvtID")).DataIndex("FreeItemID")
                                         .Editor(
-                                            HQ.Combo().ID("cboFreeItemID")
+                                            HQ.Combo().ID("cboFreeItemID").PageSize(20).HQisPaging(true)
                                             .HQProcedure("OM21100_pcInventoryActiveByBranchFree")
                                             .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color")
                                             .HQHeightWidth(400, 300)
@@ -1079,7 +1080,7 @@
                         X.RowNumbererColumn().Width(40)
                         , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(110)
                         .Editor(
-                            HQ.Combo().ID("cboDpiiInvtID")
+                            HQ.Combo().ID("cboDpiiInvtID").PageSize(20).HQisPaging(true)
                             .HQProcedure("OM21100_pcInventoryActiveByBranch")
                             .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color")
                             .HQHeightWidth(400, 400)
