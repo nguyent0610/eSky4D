@@ -10670,17 +10670,19 @@ namespace IN10400
         /// <param name="invtMult">Initial value of the InvtMult property.</param>
         /// <param name="qty">Initial value of the Qty property.</param>
         /// <param name="rlsed">Initial value of the Rlsed property.</param>
+        /// <param name="siteID">Initial value of the SiteID property.</param>
         /// <param name="tranAmt">Initial value of the TranAmt property.</param>
         /// <param name="tranFee">Initial value of the TranFee property.</param>
         /// <param name="tranDate">Initial value of the TranDate property.</param>
         /// <param name="unitCost">Initial value of the UnitCost property.</param>
         /// <param name="unitPrice">Initial value of the UnitPrice property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="barCode">Initial value of the BarCode property.</param>
-        /// <param name="stkQty">Initial value of the StkQty property.</param>
         /// <param name="isChanged">Initial value of the IsChanged property.</param>
-        public static IN10400_pgAdjustmentLoad_Result CreateIN10400_pgAdjustmentLoad_Result(global::System.String batNbr, global::System.String branchID, global::System.String lineRef, global::System.String refNbr, global::System.Double cnvFact, global::System.Double extCost, global::System.Int16 invtMult, global::System.Double qty, global::System.Int16 rlsed, global::System.Double tranAmt, global::System.Double tranFee, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.String barCode, global::System.Double stkQty, global::System.String isChanged)
+        public static IN10400_pgAdjustmentLoad_Result CreateIN10400_pgAdjustmentLoad_Result(global::System.String batNbr, global::System.String branchID, global::System.String lineRef, global::System.String refNbr, global::System.Double cnvFact, global::System.Double extCost, global::System.Int16 invtMult, global::System.Double qty, global::System.Int16 rlsed, global::System.String siteID, global::System.Double tranAmt, global::System.Double tranFee, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime crtd_DateTime, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_User, global::System.String barCode, global::System.String isChanged)
         {
             IN10400_pgAdjustmentLoad_Result iN10400_pgAdjustmentLoad_Result = new IN10400_pgAdjustmentLoad_Result();
             iN10400_pgAdjustmentLoad_Result.BatNbr = batNbr;
@@ -10692,15 +10694,17 @@ namespace IN10400
             iN10400_pgAdjustmentLoad_Result.InvtMult = invtMult;
             iN10400_pgAdjustmentLoad_Result.Qty = qty;
             iN10400_pgAdjustmentLoad_Result.Rlsed = rlsed;
+            iN10400_pgAdjustmentLoad_Result.SiteID = siteID;
             iN10400_pgAdjustmentLoad_Result.TranAmt = tranAmt;
             iN10400_pgAdjustmentLoad_Result.TranFee = tranFee;
             iN10400_pgAdjustmentLoad_Result.TranDate = tranDate;
             iN10400_pgAdjustmentLoad_Result.UnitCost = unitCost;
             iN10400_pgAdjustmentLoad_Result.UnitPrice = unitPrice;
             iN10400_pgAdjustmentLoad_Result.Crtd_DateTime = crtd_DateTime;
+            iN10400_pgAdjustmentLoad_Result.Crtd_User = crtd_User;
             iN10400_pgAdjustmentLoad_Result.LUpd_DateTime = lUpd_DateTime;
+            iN10400_pgAdjustmentLoad_Result.LUpd_User = lUpd_User;
             iN10400_pgAdjustmentLoad_Result.BarCode = barCode;
-            iN10400_pgAdjustmentLoad_Result.StkQty = stkQty;
             iN10400_pgAdjustmentLoad_Result.IsChanged = isChanged;
             return iN10400_pgAdjustmentLoad_Result;
         }
@@ -11096,7 +11100,7 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SiteID
         {
@@ -11108,7 +11112,7 @@ namespace IN10400
             {
                 OnSiteIDChanging(value);
                 ReportPropertyChanging("SiteID");
-                _SiteID = StructuralObject.SetValidValue(value, true);
+                _SiteID = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("SiteID");
                 OnSiteIDChanged();
             }
@@ -11432,7 +11436,7 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -11444,7 +11448,7 @@ namespace IN10400
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, true);
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -11504,7 +11508,7 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -11516,7 +11520,7 @@ namespace IN10400
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, true);
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -11576,9 +11580,9 @@ namespace IN10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Double StkQty
+        public Nullable<global::System.Double> StkQty
         {
             get
             {
@@ -11593,8 +11597,8 @@ namespace IN10400
                 OnStkQtyChanged();
             }
         }
-        private global::System.Double _StkQty;
-        partial void OnStkQtyChanging(global::System.Double value);
+        private Nullable<global::System.Double> _StkQty;
+        partial void OnStkQtyChanging(Nullable<global::System.Double> value);
         partial void OnStkQtyChanged();
     
         /// <summary>
@@ -11620,6 +11624,30 @@ namespace IN10400
         private global::System.String _IsChanged;
         partial void OnIsChangedChanging(global::System.String value);
         partial void OnIsChangedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
 
         #endregion
 

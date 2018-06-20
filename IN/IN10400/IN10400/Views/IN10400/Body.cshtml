@@ -187,7 +187,7 @@
                     .Items(
                        HQ.TextBox().ID("txtDescr").Name("Descr").HQLangCode("Descr").Width(600).DataIndex("Descr").AllowBlank(false).Listeners(p => p.Focus.Handler = "HQ.focus='batch';").MaxLength(100).EnforceMaxLength(true)
                        , HQ.Combo().ID("cboWhseLoc").Name("WhseLoc").HQLangCode("WhseLoc").AllowBlank(false)
-                            .HQProcedure("IN10400_pcWhseLoc")//.DataIndex("SiteID")
+                            .HQProcedure("IN10400_pcWhseLoc").DataIndex("WhseLoc")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                             .Width(300).HQHeightWidth(400, 200).HQAutoLoad(true)
                             .HQDBSys(false).ForceSelection(true)
@@ -247,6 +247,7 @@
                             .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID").HQProcedure("IN10400_pcInventoryActiveByBranch")
                             .Width(300).HQHeightWidth(400, 600)
                             .HQDBSys(false).ForceSelection(true).HQAutoLoad(true)
+                            .HQisPaging(true).PageSize(20)
                             .HQParam(new StoreParameterCollection()
                             {
                                 new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
@@ -258,7 +259,7 @@
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-
+                                
                             })
                     )
 

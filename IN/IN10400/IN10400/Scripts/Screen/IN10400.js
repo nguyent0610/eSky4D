@@ -241,6 +241,7 @@ var btnPopupOk_Click = function () {
     } else {
         HQ.message.show(1000, [HQ.common.getLang('branchid')], '', true);
     }
+  
 };
 var grdTrans_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdTrans);
@@ -263,6 +264,11 @@ var grdTrans_BeforeEdit = function (editor, e) {
             HQ.message.show(1000, [HQ.common.getLang('WhseLoc')], '', true);
             return false;
         }
+    }
+
+    if (Ext.isEmpty(App.cboReasonCD.getValue())) {
+        HQ.message.show(15, [App.cboReasonCD.fieldLabel], '', true);
+        return false;
     }
 
     var key = e.field;
@@ -295,6 +301,9 @@ var grdTrans_BeforeEdit = function (editor, e) {
         if (!Ext.isEmpty(invt) && invt.ValMthd == 'T') {
             return false;
         }
+    }
+    if (App.cboStatus.getValue() == "C") {
+        return false;
     }
     App.cboTransUnitDesc.setValue('');
 };
@@ -410,6 +419,10 @@ var grdTrans_ValidateEdit = function (item, e) {
 };
 
 var grdLot_BeforeEdit = function (item, e) {
+    if (App.cboStatus.getValue() == "R") {
+        return false;
+    }
+
     if (App.grdLot.isLock) {
         return false;
     }
@@ -583,6 +596,7 @@ var bindTran = function () {
     if (App.stoTrans.data.items.length > 0) {
         var objFirst = App.stoTrans.data.items[0].data;
         App.cboSiteID.setValue(objFirst.SiteID);
+        App.cboWhseLoc.setValue(objFirst.WhseLoc);
         //App.cboSlsperID.setValue(objFirst.SlsperID);
     }
     App.lblQtyAvail.setText('');
@@ -595,6 +609,7 @@ var bindTran = function () {
     App.grdTrans.isChange = false;
     HQ.common.showBusy(false, HQ.waitMsg);
     setChange(false);
+
 };
 
 var btnLot_Click = function () {
@@ -1703,8 +1718,10 @@ var deleteLot = function (item) {
 
 
 var cboSiteID_Change = function (item, newValue, oldValue) {
-    if (newValue != oldValue) {
+    if (newValue != oldValue && item.hasFocus) {
         App.cboWhseLoc.setValue("");
-        App.cboWhseLoc.store.reload();
+       
     }
+    App.cboWhseLoc.store.reload();
+    App.cboInventory.store.reload();
 };

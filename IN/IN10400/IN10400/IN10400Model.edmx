@@ -754,7 +754,7 @@
           <Property Type="Int16" Name="Rlsed" Nullable="false" />
           <Property Type="String" Name="ShipperID" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="ShipperLineRef" Nullable="true" MaxLength="5" />
-          <Property Type="String" Name="SiteID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="ToSiteID" Nullable="true" MaxLength="30" />
           <Property Type="Double" Name="TranAmt" Nullable="false" />
@@ -768,14 +768,15 @@
           <Property Type="Double" Name="UnitPrice" Nullable="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="23" />
           <Property Type="String" Name="Crtd_Prog" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="Crtd_User" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="23" />
           <Property Type="String" Name="LUpd_Prog" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="LUpd_User" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="tstamp" Nullable="true" />
           <Property Type="String" Name="BarCode" Nullable="false" MaxLength="30" />
-          <Property Type="Double" Name="StkQty" Nullable="false" />
+          <Property Type="Double" Name="StkQty" Nullable="true" />
           <Property Type="String" Name="IsChanged" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="WhseLoc" Nullable="true" MaxLength="10" />
         </ComplexType>
         <EntityType Name="IN_ItemLoc">
           <Key>
@@ -1322,6 +1323,7 @@
                 <ScalarProperty Name="BarCode" ColumnName="BarCode" />
                 <ScalarProperty Name="StkQty" ColumnName="StkQty" />
                 <ScalarProperty Name="IsChanged" ColumnName="IsChanged" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

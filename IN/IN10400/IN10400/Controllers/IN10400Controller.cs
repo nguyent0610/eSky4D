@@ -582,11 +582,13 @@ namespace IN10400.Controllers
             _objBatch.Status = _objBatch.Status.PassNull() == string.Empty ? "H" : _objBatch.Status;
 
             var tam = _app.IN10400_pdCheckCloseDateSetUp(Current.CpnyID, Current.UserName, Current.LangID, _objBatch.BranchID, _objBatch.DateEnt.ToDateShort(), _objBatch.BatNbr).FirstOrDefault();
-            if(tam!=null)
-            if (tam.CheckCloseDateSetUp == false)
+            if (tam != null)
             {
-                throw new MessageException(MessageType.Message, "301");
-            }
+                if (tam.CheckCloseDateSetUp == false)
+                {
+                    throw new MessageException(MessageType.Message, "301");
+                }
+            }            
             // sau khi save xong gọi tới hàm tạo user hoặc chuyển save, truyền xuống danh sách
             Dictionary<string, string> dicData = new Dictionary<string, string>();
             dicData.Add("@UserName", Current.UserName);
@@ -928,13 +930,14 @@ namespace IN10400.Controllers
                 {
                     newQty =  Math.Abs(s.UnitMultDiv == "D" ? s.Qty / s.CnvFact : s.Qty * s.CnvFact);
                 }
-                UpdateINAlloc(t.InvtID, t.SiteID, oldQty, 0);
-                UpdateINAlloc(s.InvtID, s.SiteID, 0, newQty);
                 if (_whseLoc.PassNull() != "")
                 {
                     UpdateIN_ItemLoc(t.InvtID, t.SiteID, _whseLoc, oldQty, 0);
-                    UpdateIN_ItemLoc(s.InvtID, s.SiteID, _whseLoc, 0, newQty);  
-                }                              
+                    UpdateIN_ItemLoc(s.InvtID, s.SiteID, _whseLoc, 0, newQty);
+                }
+                UpdateINAlloc(t.InvtID, t.SiteID, oldQty, 0);
+                UpdateINAlloc(s.InvtID, s.SiteID, 0, newQty);
+                                             
             }
 
             if (isNew)
