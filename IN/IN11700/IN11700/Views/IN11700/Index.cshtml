@@ -1,0 +1,184 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN11700;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "IN11700";
+    var acc = Session["IN11700"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình IN11700.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/IN11700.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+
+    HQ.cpnyID = '@Current.CpnyID';
+    HQ.langID = '@Current.LangID';
+    HQ.userName = '@Current.UserName';
+    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+    HQ.allowExport = HQ.util.toBool('@ViewBag.allowExport');
+    HQ.allowImport = HQ.util.toBool('@ViewBag.allowImport');
+    HQ.showWhseLoc = @ViewBag.showWhseLoc;
+    HQ.bussinessDate = new Date('@DateTime.Now.Date');
+        //HQ.isDelete = false;
+        //HQ.isInsert = true;
+        //HQ.isUpdate = false;
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+   @(
+ X.Store().ID("stoBatch")
+    .AutoLoad(false).PageSize(20)
+    .Model(Util.GenerateModel(typeof(IN11700_pcBatch_Result), "mdlBatch", "BatNbr"))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetBatch", "IN11700"))
+        .ActionMethods(action =>
+        {
+            action.Read = HttpMethod.POST;
+        })
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Parameters(ps =>
+    {
+        ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+    })
+        .Listeners(p =>
+        {
+            p.Load.Fn = "stoBatch_Load";
+           // p.BeforeLoad.Fn = "stoBatch_BeforeLoad";
+        })
+)
+    @(
+ X.Store()
+    .ID("stoLotTrans")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN11700_pgIN_LotTrans_Result), "mdlLotTrans", "", true))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLotTrans", "IN11700"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Listeners(p =>
+    {
+        p.Load.Fn = "stoDetail_Load";
+    })
+    .Parameters(ps =>
+    {
+        ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("whseLoc", "App.cboSiteTPLocation.getValue()", ParameterMode.Raw));
+    })
+    )
+    @(
+ X.Store()
+    .ID("stoLotTrans4Save")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN11700_pgIN_LotTrans_Result), "mdlLotTrans4Save", "", true))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLotTrans", "IN11700"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Listeners(p =>
+    {
+        p.Load.Fn = "stoDetail_Load";
+    })
+    .Parameters(ps =>
+    {
+        ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("whseLoc", "App.cboSiteTPLocation.getValue()", ParameterMode.Raw));
+    })
+    )
+    @(
+ X.Store()
+    .ID("stoCalcLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN11700_pdGetLot_Result), "mdlCalcLot", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLot", "IN11700"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+    )
+    @(
+ X.Store()
+    .ID("stoUnit")
+    .Model(Util.GenerateModel(typeof(IN11700_pcUnit_Result), "mdlUnit", "FromUnit"))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetUnit", "IN11700"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data"))
+    )
+    )
+@(
+ X.Store()
+    .ID("stoItemLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN11700_pdGetLot_Result), "mdlItemLot", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemLot", "IN11700"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+@(
+ X.Store()
+    .ID("stoItemSite")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN_ItemSite), "mdlItemSite", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemSite", "IN10400"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
+@(X.Store().ID("stoComponent4Save")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN11700_pgComponent_Result),"mdlComponent4Save",""))
+    .ServerProxy( 
+        X.AjaxProxy()
+        .ActionMethods(action =>
+        {
+            action.Read = HttpMethod.POST;   
+        })
+        .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+   )
+)
+
+
+
+
+
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        <!-- Gọi hàm Body trong IN11700Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
+        @{Html.RenderAction("Body",new {lang=Current.LangID});}   
+    
+</body>
+</html>
+ 
