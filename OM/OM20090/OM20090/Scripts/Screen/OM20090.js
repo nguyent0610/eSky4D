@@ -20,7 +20,7 @@ var fieldsLangSurveyInvt = ["CompID", "CompInvtID"];
 
 var fieldsCheckSurveyCriteria = ["CriteriaID"];
 var fieldsLangSurveyCriteria = ["CriteriaID"];
-
+var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -115,29 +115,12 @@ var stoLoad = function (sto) {
 ////////////
 
 var Process = {
-    //joinParams: function (multiCombo) {
-    //    var returnValue = "";
-    //    if (multiCombo.value && multiCombo.value.length) {
-    //        returnValue = multiCombo.value.join();
-    //    }
-    //    else {
-    //        if (multiCombo.getValue()) {
-    //            returnValue = multiCombo.rawValue;
-    //        }
-    //    }
-    //    return returnValue;
-    //}
     
   
 };
 
 var Event = {
     Form: {
-        //frmMain_boxReady: function () {
-        //        App.frmMain.enable();
-        //        App.dtpFromDate.setValue(HQ.dateNow);
-        //        App.dtpToDate.setValue(HQ.dateNow);
-        //},
 
         cboDistributor_change: function (cbo, newValue, oldValue, eOpts) {
             if (newValue != null && newValue != "") {
@@ -151,7 +134,13 @@ var Event = {
             App.cboSurveyID.store.reload();
         },
 
+
         cboSurveyID_change: function (sender, value) {
+            //if (!HQ.util.passNull(value) == '' && !HQ.util.passNull(value.toString()).match(regex)) {
+            //    HQ.message.show(20140811);
+            //    App.cboSurveyID.setValue("");
+            //    return false;
+            //}
             HQ.isFirstLoad = true;
             if (sender.valueModels != null && !App.stoHeaderSurvey.loading) {
                 App.stoHeaderSurvey.reload();
@@ -167,31 +156,6 @@ var Event = {
             App.dtpToDate.setMinValue(newValue);
             App.dtpToDate.validate();
         },
-
-        //btnLoad_click: function (btn, e) {
-        //    if (App.frmMain.isValid()) {
-
-                
-        //        HQ.common.showBusy(true, HQ.waitMsg, App.frmMain);
-        //        _numSource = 0;
-        //        App.grdDet.store.reload();
-        //        _filterInfo.distributor = Process.joinParams(App.cboDistributor);
-        //        _filterInfo.slsperID = Process.joinParams(App.cboSlsperID);
-        //        _filterInfo.fromDate = App.dtpFromDate.value;
-        //        _filterInfo.toDate = App.dtpToDate.value;
-        //        App.grdDetailDet.store.reload();
-        //    }
-        //},
-
-      
-
-        //btnHideTrigger_click: function (ctr) {
-        //    ctr.clearValue();
-        //    if (ctr.id == "cboDistributor") {    
-        //        App.cboDistributor.store.clearFilter();
-        //    }
-            
-        //},
 
         menuClick : function (command) {
             switch (command) {
@@ -395,6 +359,7 @@ var Event = {
             if (HQ.isFirstLoad) {
                 if (HQ.isInsert) {
                     HQ.store.insertBlank(sto, keysSurveyCriteria);
+                    HQ.isFirstLoad = false;
                 }
             }
             frmChange();
@@ -420,9 +385,14 @@ var Event = {
                     e.record.set('CompInvtName', objCompInvtID.CompInvtName);
                 }
             }
+            frmChange();
         },
 
         grdSurveyInvt_BeforeEdit: function (editor, e) {
+            if (App.dtpToDate.getValue() < App.dtpFromDate.getValue()) {
+                HQ.message.show(2018062001);
+                return false;
+            }
             if (HQ.form.checkRequirePass(App.frmMain) && App.cboStatus.getValue() == _beginStatus) {
                 return HQ.grid.checkBeforeEdit(e, keysSurveyInvt);
             }
@@ -451,10 +421,14 @@ var Event = {
                     e.record.set('CriteriaName', objCompID.CriteriaName);
                 }
             }
-            
+            frmChange();
         },
 
         stoSurveyCriteria_BeforeEdit: function (editor, e) {
+            if (App.dtpToDate.getValue() < App.dtpFromDate.getValue()) {
+                HQ.message.show(2018062001);
+                return false;
+            }
             if (HQ.form.checkRequirePass(App.frmMain) && App.cboStatus.getValue() == _beginStatus) {
                 return HQ.grid.checkBeforeEdit(e, keysSurveyCriteria);
             }
@@ -486,7 +460,12 @@ var refresh = function (item) {
 var save = function () {
 
     App.frmMain.getForm().updateRecord();
-
+    if (!HQ.util.passNull(App.cboSurveyID.getValue()) == '' && !HQ.util.passNull(App.cboSurveyID.getValue().toString()).match(regex)) {
+        HQ.message.show(20140811, App.cboSurveyID.fieldLabel);
+        App.cboSurveyID.validate();
+        App.cboSurveyID.focus();
+        return false;
+    }
     if (App.frmMain.isValid()) {
         App.stoSurveyInvt.clearFilter();
         App.frmMain.submit({

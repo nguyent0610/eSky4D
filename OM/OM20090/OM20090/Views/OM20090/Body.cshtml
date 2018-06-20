@@ -25,6 +25,7 @@
         .Listeners(l =>
         {
             l.BoxReady.Handler = "firstLoad();";
+            l.FieldChange.Fn = "frmChange";
         })
         .Items(
             X.Panel().ID("pnlHeader")
@@ -77,7 +78,7 @@
                     //})
                     HQ.Combo().ID("cboSurveyID").AllowBlank(false)
                     .HQLangCode("SurveyID").HQProcedure("OM20090_pcSurveyID")
-                    .HQColumnShow("SurveyID,SurveyName,FromDate,ToDate,Status").ValueField("SurveyID").DisplayField("SurveyID").MaxLength(30)
+                    .HQColumnShow("SurveyID,SurveyName,FromDate,ToDate,Status").ValueField("SurveyID").DisplayField("SurveyID").MaxLength(30).EnforceMaxLength(true)
                     .HQHeightWidth(400, 300).ForceSelection(true)//.AllowBlank(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
@@ -94,7 +95,7 @@
                     })
                     
                     ,HQ.TextBox().ID("txtSurCompetitorName").Name("txtSurCompetitorName").HQLangCode("SurCompetitorName").DataIndex("SurveyName")
-                    .AllowBlank(false).MaxLength(20).EnforceMaxLength(true)
+                    .AllowBlank(false).MaxLength(200).EnforceMaxLength(true)
                 )
 
                 // Second Column
@@ -181,7 +182,7 @@
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)//.Listeners(x => 	x.AfterRender.Handler = "this.resizable = true")
                         , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(300)
-                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Flex(1)          
+                        , X.Column().Text(Util.GetLang("OM20090InvtName")).DataIndex("Descr").Flex(1)          
                     )
                     .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))
                     .Listeners(lst => lst.Select.Fn = "slmDet_select")
