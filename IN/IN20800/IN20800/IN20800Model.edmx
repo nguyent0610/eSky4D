@@ -39,6 +39,9 @@
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="Pack" Type="bit" Nullable="false" />
           <Property Name="PriceType" Type="varchar" MaxLength="5" />
+          <Property Name="Duration" Type="bit" />
+          <Property Name="FromDate" Type="date" />
+          <Property Name="ToDate" Type="date" />
         </EntityType>
         <Function Name="IN20800_pdCheckKit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -55,6 +58,7 @@
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="kitID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IN20800_pgLoadIN_Kit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -92,8 +96,8 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="kitID" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="IN_Kit" EntityType="IN20800Model.IN_Kit" />
           <FunctionImport Name="IN20800_pdCheckKit" ReturnType="Collection(IN20800Model.IN20800_pdCheckKit_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -105,6 +109,7 @@
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="IN_Kit" EntityType="IN20800Model.IN_Kit" />
         </EntityContainer>
         <ComplexType Name="IN20800_pgLoadIN_Kit_Result">
           <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" />
@@ -137,6 +142,14 @@
           <Property Type="Boolean" Name="Price" Nullable="true" />
           <Property Type="Boolean" Name="Pack" Nullable="true" />
           <Property Type="Boolean" Name="ShowPriceType" Nullable="true" />
+          <Property Type="Boolean" Name="ShowCheckDuration" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN20800_pdCheckKit_Result">
+          <Property Type="Boolean" Name="CheckKit" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN20800_ptKitID_Result">
+          <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
         </ComplexType>
         <EntityType Name="IN_Kit">
           <Key>
@@ -154,14 +167,10 @@
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="Pack" Type="Boolean" Nullable="false" />
           <Property Name="PriceType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Duration" Type="Boolean" />
+          <Property Name="FromDate" Type="DateTime" Precision="0" />
+          <Property Name="ToDate" Type="DateTime" Precision="0" />
         </EntityType>
-        <ComplexType Name="IN20800_pdCheckKit_Result">
-          <Property Type="Boolean" Name="CheckKit" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="IN20800_ptKitID_Result">
-          <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -205,28 +214,11 @@
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Pack" ColumnName="Pack" />
                 <ScalarProperty Name="ShowPriceType" ColumnName="ShowPriceType" />
+                <ScalarProperty Name="ShowCheckDuration" ColumnName="ShowCheckDuration" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN20800_pdInvtID" FunctionName="eBiz4DWebSysModel.Store.IN20800_pdInvtID" />
-          <EntitySetMapping Name="IN_Kit">
-            <EntityTypeMapping TypeName="IN20800Model.IN_Kit">
-              <MappingFragment StoreEntitySet="IN_Kit">
-                <ScalarProperty Name="PriceType" ColumnName="PriceType" />
-                <ScalarProperty Name="Pack" ColumnName="Pack" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Explode" ColumnName="Explode" />
-                <ScalarProperty Name="KitID" ColumnName="KitID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="IN20800_pdCheckKit" FunctionName="eBiz4DWebSysModel.Store.IN20800_pdCheckKit" >
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN20800Model.IN20800_pdCheckKit_Result">
@@ -242,6 +234,27 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="IN_Kit">
+            <EntityTypeMapping TypeName="IN20800Model.IN_Kit">
+              <MappingFragment StoreEntitySet="IN_Kit">
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="PriceType" ColumnName="PriceType" />
+                <ScalarProperty Name="Pack" ColumnName="Pack" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Explode" ColumnName="Explode" />
+                <ScalarProperty Name="KitID" ColumnName="KitID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

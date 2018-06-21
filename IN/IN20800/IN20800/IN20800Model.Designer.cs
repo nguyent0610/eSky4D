@@ -220,7 +220,8 @@ namespace IN20800
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> IN20800_pdInvtID(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
+        /// <param name="kitID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> IN20800_pdInvtID(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String kitID)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -252,7 +253,17 @@ namespace IN20800
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<global::System.String>("IN20800_pdInvtID", cpnyIDParameter, userNameParameter, langIDParameter);
+            ObjectParameter kitIDParameter;
+            if (kitID != null)
+            {
+                kitIDParameter = new ObjectParameter("kitID", kitID);
+            }
+            else
+            {
+                kitIDParameter = new ObjectParameter("kitID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("IN20800_pdInvtID", cpnyIDParameter, userNameParameter, langIDParameter, kitIDParameter);
         }
     
         /// <summary>
@@ -1033,6 +1044,78 @@ namespace IN20800
         private global::System.String _PriceType;
         partial void OnPriceTypeChanging(global::System.String value);
         partial void OnPriceTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Duration
+        {
+            get
+            {
+                return _Duration;
+            }
+            set
+            {
+                OnDurationChanging(value);
+                ReportPropertyChanging("Duration");
+                _Duration = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Duration");
+                OnDurationChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Duration;
+        partial void OnDurationChanging(Nullable<global::System.Boolean> value);
+        partial void OnDurationChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> FromDate
+        {
+            get
+            {
+                return _FromDate;
+            }
+            set
+            {
+                OnFromDateChanging(value);
+                ReportPropertyChanging("FromDate");
+                _FromDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FromDate");
+                OnFromDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _FromDate;
+        partial void OnFromDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnFromDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> ToDate
+        {
+            get
+            {
+                return _ToDate;
+            }
+            set
+            {
+                OnToDateChanging(value);
+                ReportPropertyChanging("ToDate");
+                _ToDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ToDate");
+                OnToDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _ToDate;
+        partial void OnToDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnToDateChanged();
 
         #endregion
 
@@ -1162,6 +1245,30 @@ namespace IN20800
         private Nullable<global::System.Boolean> _ShowPriceType;
         partial void OnShowPriceTypeChanging(Nullable<global::System.Boolean> value);
         partial void OnShowPriceTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowCheckDuration
+        {
+            get
+            {
+                return _ShowCheckDuration;
+            }
+            set
+            {
+                OnShowCheckDurationChanging(value);
+                ReportPropertyChanging("ShowCheckDuration");
+                _ShowCheckDuration = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowCheckDuration");
+                OnShowCheckDurationChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowCheckDuration;
+        partial void OnShowCheckDurationChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowCheckDurationChanged();
 
         #endregion
 

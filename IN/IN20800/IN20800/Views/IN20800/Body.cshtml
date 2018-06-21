@@ -29,7 +29,7 @@
         .Layout(LayoutType.Border).Flex(1).Split(true).CollapseMode(CollapseMode.Mini)
         .Items(
             X.TreePanel().ID("treeKitID").MultiSelect(false)
-            .Width(300).Region(Region.Center).Flex(1).AutoScroll(true)
+            .Width(250).Region(Region.Center).Flex(1).AutoScroll(true)
             .Title(Util.GetLang("Tree"))
             .Split(true)
             .Border(false)
@@ -74,10 +74,13 @@
         .AutoScroll(true)
         .Items(
             // Row 1
-            X.Container().Layout(LayoutType.HBox)
+            X.Container()
+            .Layout(LayoutType.VBox)
+            .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+            .Items(
+                X.Container().Layout(LayoutType.HBox)
                 .Items(
-
-                     HQ.Combo().ID("cboKitID").Name("cboKitID").MarginSpec("5 0 5 0").Width(250).MaxLength(30).EnforceMaxLength(true)
+                     HQ.Combo().ID("cboKitID").Name("cboKitID").MarginSpec("5 0 5 0").MaxLength(30).EnforceMaxLength(true)
                         .HQLangCode("KitID").HQDBSys(false).HQProcedure("IN20800_pcKitID")
                         .HQColumnShow("KitID").ForceSelection(true).AllowBlank(false)
                         .DisplayField("KitID").ValueField("KitID").HQHeightWidth(400, 300)
@@ -97,8 +100,12 @@
                         })
                         .LoadData()
                         , HQ.TextBox().ID("txtKitName").Name("txtKitName").MarginSpec("5 0 5 0").Width(400).HQLangCode("IN20800KitName").Tag('X')
-
-                        , HQ.Combo().ID("cboPriceType").Name("cboPriceType").MarginSpec("5 0 5 0").DataIndex("PriceType")
+                    
+                )
+                
+                ,X.Container().Layout(LayoutType.HBox)
+                .Items(
+                    HQ.Combo().ID("cboPriceType").Name("cboPriceType").MarginSpec("0 0 5 0").DataIndex("PriceType")
                         .HQLangCode("PriceType").HQDBSys(false).HQProcedure("IN20800_pcPriceType")
                         .HQColumnShow("Code,Desrc").ForceSelection(true)
                         .DisplayField("Desrc").ValueField("Code").HQHeightWidth(400, 300)
@@ -112,25 +119,47 @@
                         .Listeners(ls =>
                         {
                             ls.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
-                            
+
                         })
                         .LoadData()
 
-                        , HQ.Checkbox().ID("chkPack").Name("chkPack").DataIndex("Pack").HQLangCode("IN20800Pack").MarginSpec("5 0 5 10")
+                    , HQ.Checkbox().ID("chkPack").Name("chkPack").DataIndex("Pack").HQLangCode("IN20800Pack").MarginSpec("0 0 5 105")
 
-                        ,HQ.Combo().ID("cboInvt").Name("cboInvt").Hidden(true)
-                                .HQLangCode("InvtID").HQDBSys(false).HQProcedure("IN20800_pdInvtID")
-                                .HQColumnShow("InvtID").ForceSelection(true)
-                                    .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
-                            .HQParam(new StoreParameterCollection()
+                    , HQ.Checkbox().ID("chkDuration").Name("chkDuration").DataIndex("Duration").HQLangCode("IN20800chkDuration").MarginSpec("0 0 5 100")
+                        .Listeners(ls =>
+                        {
+                            ls.Change.Fn = "chkDuration_Change";
+                        })
+                    
+                    , HQ.Combo().ID("cboInvt").Name("cboInvt").Hidden(true)
+                        .HQLangCode("InvtID").HQDBSys(false).HQProcedure("IN20800_pdInvtID")
+                        .HQColumnShow("InvtID").ForceSelection(true)
+                        .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection()
                         {
                             new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@kitID", Value = "App.cboKitID.getValue()", Mode = ParameterMode.Raw }
                         })
-                            .LoadData()
+                        .LoadData()
                 )
+                
+                ,X.Container().Layout(LayoutType.HBox)
+                .Items(
+                    HQ.DateField().HQLangCode("IN20800FromDate").Name("FromDate").DataIndex("FromDate").ID("txtFromDate").AllowBlank(false).MarginSpec("0 0 5 0").Hidden(true)
+                    .Listeners(ls =>
+                    {
+                        ls.Change.Fn = "txtFromDate_Change";
+                    })
+                    , HQ.DateField().HQLangCode("IN20800ToDate").Name("ToDate").DataIndex("ToDate").ID("txtToDate").AllowBlank(false).MarginSpec("0 0 5 0").Hidden(true)
+                    .Listeners(ls =>
+                    {
+                        ls.Focus.Fn = "txtToDate_Focus";
+                        //ls.Blur.Fn = "txtToDate_Blur";
+                    })
+                )
+            )                  
         )
         .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'pnlHeader')")
 
@@ -163,47 +192,47 @@
                 X.RowNumbererColumn().MinWidth(20).Width(30).MaxWidth(300).Listeners(x => x.AfterRender.Handler = "this.resizable = true"),
 
                 X.Column().Text(Util.GetLang("ComponentID")).DataIndex("ComponentID")
-                        .Editor(
-                            HQ.Combo().ID("cboInvtID")
-                            .HQProcedure("IN20800_pcInventory")
-                            .HQColumnShow("InvtID,Descr")
-                            .HQHeightWidth(400, 300)
-                            .HQisPaging(true).PageSize(25)
-                            .ValueField("InvtID").DisplayField("InvtID")
-                            
-                            .ForceSelection(true).SelectOnFocus(true)//.AllowBlank(false)
-                            .HQParam(new StoreParameterCollection() {
-                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                            })
-                            .Listeners(ls =>
-                            {
-                                ls.Change.Fn = "cboInvtID_change";
-                            })
-                            .LoadData()
-                        )
-                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
+                .Editor(
+                    HQ.Combo().ID("cboInvtID")
+                    .HQProcedure("IN20800_pcInventory")
+                    .HQColumnShow("InvtID,Descr")
+                    .HQHeightWidth(400, 300)
+                    .HQisPaging(true).PageSize(25)
+                    .ValueField("InvtID").DisplayField("InvtID")
+                    
+                    .ForceSelection(true).SelectOnFocus(true)//.AllowBlank(false)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .Listeners(ls =>
+                    {
+                        ls.Change.Fn = "cboInvtID_change";
+                    })
+                    .LoadData()
+                )
+                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
 
-                    , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("ComponentQty").Width(150).Format("0,000").Editor(Html.X().NumberField().MinValue(1).AllowBlank(false)).Align(Alignment.Right)
+                , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("ComponentQty").Width(150).Format("0,000").Editor(Html.X().NumberField().MinValue(1).AllowBlank(false)).Align(Alignment.Right)
 
-                    , X.Column().Text(Util.GetLang("StkUnit")).DataIndex("Unit")
-                        .Editor(
-                            HQ.Combo().ID("cboUnit")
-                            .HQProcedure("IN20800_pcUnit")
-                            .HQColumnShow("FromUnit")
-                            .HQHeightWidth(400, 300)
-                            .ValueField("FromUnit").DisplayField("FromUnit")
-                            .ForceSelection(true).SelectOnFocus(true).AllowBlank(false)
-                            .HQParam(new StoreParameterCollection() {
-                                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
-                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
-                                new StoreParameter() { Name = "@InvtID",Value = "_InvtID",Mode = ParameterMode.Raw}
-                            })
-                            .LoadData()
-                            )
-                        , X.NumberColumn().Text(Util.GetLang("IN20800Price")).DataIndex("Price").ID("Price").Width(150).Format("0,000").Editor(Html.X().NumberField().MinValue(1)).Align(Alignment.Right)
+                , X.Column().Text(Util.GetLang("StkUnit")).DataIndex("Unit")
+                .Editor(
+                    HQ.Combo().ID("cboUnit")
+                    .HQProcedure("IN20800_pcUnit")
+                    .HQColumnShow("FromUnit")
+                    .HQHeightWidth(400, 300)
+                    .ValueField("FromUnit").DisplayField("FromUnit")
+                    .ForceSelection(true).SelectOnFocus(true).AllowBlank(false)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@InvtID",Value = "_InvtID",Mode = ParameterMode.Raw}
+                    })
+                    .LoadData()
+                )
+                , X.NumberColumn().Text(Util.GetLang("IN20800Price")).DataIndex("Price").ID("Price").Width(150).Format("0,000").Editor(Html.X().NumberField().MinValue(1)).Align(Alignment.Right)
                 , X.CommandColumn()
                 .Width(150)
                 .Commands(

@@ -44,6 +44,12 @@ var firstLoad = function () {
     }
     App.cboPriceType.setVisible(HQ.showPricetype);
     App.cboInvtID.store.reload()
+    if (HQ.showCheckDuration) {
+        App.chkDuration.setVisible(true);
+    }
+    else {
+        App.chkDuration.setVisible(false);
+    }
     //App.txtKitName.setReadOnly(true);
     //HQ.common.showBusy(false);
 };
@@ -270,7 +276,8 @@ var cboKitID_TriggerClick = function (sender, value) {
 };
 var cboKitID_change = function (sender, value) {
     HQ.isFirstLoad = true;
-    
+    var tam = new Date(1900, 0, 1);
+    App.txtToDate.setMinValue(tam);
     if (sender.valueModels != null && !App.stoKitID.loading) {
         var allNodes = getLeafNodes(App.treeKitID.getRootNode());
         var key = false;
@@ -610,4 +617,48 @@ var getLeafNodes = function (node) {
         }
     });
     return childNodes;
+};
+
+var chkDuration_Change = function (item, e) {
+    if (App.chkDuration.getValue() && HQ.showCheckDuration) {
+        App.txtFromDate.show();
+        App.txtToDate.show();
+        App.txtFromDate.allowBlank = false;
+        App.txtToDate.allowBlank = false;
+        App.txtFromDate.isValid();
+        App.txtToDate.isValid();
+    }
+    else {
+        App.txtToDate.hide();
+        App.txtFromDate.hide();
+        App.txtFromDate.allowBlank = true;
+        App.txtToDate.allowBlank = true;
+        App.txtFromDate.isValid();
+        App.txtToDate.isValid();
+    }
+};
+
+var txtToDate_Focus = function (item, e) {
+    try {
+        App.txtToDate.setMinValue(App.txtFromDate.getValue());
+    }
+    catch (err) {
+        var tam = new Date(1900, 0, 1);
+        App.txtToDate.setMinValue(tam);
+    }
+};
+
+var txtFromDate_Change = function (item, e) {
+    if (item.hasFocus) {
+        try {
+            if (App.txtFromDate.getValue() != null || App.txtToDate.getValue() != null) {
+                if (App.txtFromDate.getValue() > App.txtToDate.getValue()) {
+                    App.txtToDate.setValue('');
+                }
+            }
+        }
+        catch (err) {
+
+        }
+    }    
 };
