@@ -4,8 +4,8 @@ var keysTop = ['AppFolID', 'RoleID', 'Status'];
 var fieldsCheckRequireTop = ["AppFolID", "RoleID", "Status", "LangStatus"];
 var fieldsLangCheckRequireTop = ["AppFolID", "RoleID", "Status", "LangStatus"];
 var keysBot = ['Handle'];
-var fieldsCheckRequireBot = ["Handle"];
-var fieldsLangCheckRequireBot = ["Handle"];
+var fieldsCheckRequireBot = ["Handle", "LangHandle", "ToStatus"];
+var fieldsLangCheckRequireBot = ["Handle", "LangHandle", "ToStatus"];
 
 //var _listFilter = [];
 //var _totalCount = 0;
@@ -24,6 +24,8 @@ var _BranchID = '';
 var _focusNo = 0;
 var _topChange = false;
 var _botChange = false;
+var _langStatus = '';
+var _langHandle = '';
 var pnl_render = function (cmd) {
     cmd.getEl().on('mousedown', function () {
         if (cmd.id == 'pnlTop') {
@@ -43,6 +45,7 @@ var checkLoad = function (sto) {
         _Source = 0;
         App.stoTop.reload();
         App.cboLangStatus.store.reload();
+        App.cboLangHandle.store.reload();
         if (HQ.isFlagBranchID)
             keysTop = ['BranchID', 'AppFolID', 'RoleID', 'Status'];
         HQ.common.showBusy(false);
@@ -155,7 +158,30 @@ var menuClick = function (command) {
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.store.checkRequirePass(App.stoTop, keysTop, fieldsCheckRequireTop, fieldsLangCheckRequireTop)
                     && HQ.store.checkRequirePass(App.stoBot, keysBot, fieldsCheckRequireBot, fieldsLangCheckRequireBot)) {
-                    save();
+                    
+                    var lstTop = App.grdTop.store.snapshot || App.grdTop.store.allData || App.grdTop.store.data;
+                    var lstBot = App.grdBot.store.snapshot || App.grdBot.store.allData || App.grdBot.store.data
+                    var error = "";
+                    if (lstTop != undefined) {
+                        for (var i = 0;i< lstTop.length; i++) {
+                            var objRecord = HQ.store.findInStore(App.stoBot, ['BranchID', 'AppFolID'], [lstTop.items[i].data.BranchID, lstTop.items[i].data.AppFolID]);
+                            if(objRecord==undefined){
+                                error += (i + 1) + ", ";
+                            }
+                        }
+                    }
+
+
+                    if (error != "")
+                    {
+                        HQ.message.show(2018062163, [error], '', true);
+                        
+                    }
+                    else
+                    {
+                        save();
+                    }
+                    
                 }
             }
             break;
@@ -233,7 +259,9 @@ var stoLoadBot = function (sto) {
 
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keysBot);
+            var obj = HQ.store.findInStore(sto, ['Status'], ['']);
+            if (!obj)
+                HQ.store.insertBlank(sto, keysBot);
         }
         HQ.isFirstLoad = false;
     }
@@ -302,8 +330,13 @@ var cboAppFolID_Change = function (value) {
     var k = value.displayTplData[0].DescrScreen;
     App.slmTopGrid.selected.items[0].set('DescrScreen', k);
 };
+var cboLangStatus_Select = function(value)
+{
+    _langStatus = value.rawValue;
+}
 //Top Grid
 var grdTop_BeforeEdit = function (editor, e) {
+    //_langStatus = e.record.data.LangStatus;
     return HQ.grid.checkBeforeEdit(e, keysTop);
 };
 var grdTop_Edit = function (item, e) {
@@ -326,10 +359,19 @@ var grdTop_Edit = function (item, e) {
             e.record.set('Lang01', '');
         }
     }
+    if (e.field == "LangStatus") {
+        _langStatus = e.record.data.LangStatus;
+        var objLangStatus = HQ.store.findInStore(App.cboLangStatus.store, ['Code'], [_langStatus]);
+        if (objLangStatus == undefined) {
+            HQ.message.show(2018062164, [HQ.common.getLang("LangStatus"), _langStatus], '', true);
+            e.record.set("LangStatus", '');
+        }
+    }
+
     frmChange();
 };
 var grdTop_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdTop, e, keysTop);
+    return HQ.grid.checkValidateEdit(App.grdTop, e, ['AppFolID', 'RoleID', 'Status']);
 };
 var grdTop_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdTop);
@@ -360,6 +402,43 @@ var grdBot_Edit = function (item, e) {
             e.record.set('BranchID', _BranchID);
         }
     }
+    if (e.field == 'LangHandle')
+    {
+
+        if (checkValidateEdit(App.grdBot, e, ['LangHandle']) == false)
+        {
+            e.record.set("LangHandle", '');
+        }
+        var objLangHandle = HQ.store.findInStore(App.cboLangHandle.store, ['Code'], [e.value]);
+        if (objLangHandle != undefined) {
+            e.record.set('Lang00', objLangHandle.Lang00);
+            e.record.set('Lang01', objLangHandle.Lang01);
+        }
+        else {
+            e.record.set('Lang00', '');
+            e.record.set('Lang01', '');
+        }
+        if (e.field == "LangHandle") {
+            _langHandle = e.record.data.LangHandle;
+            var objLangHandle = HQ.store.findInStore(App.cboLangHandle.store, ['Code'], [_langHandle]);
+            if (objLangHandle == undefined) {
+                HQ.message.show(2018062164, [HQ.common.getLang("LangHandle"), _langHandle], '', true);
+                e.record.set("LangHandle", '');
+            }
+        }
+        return checkValidateEdit(App.grdBot, e, ['LangHandle']);
+       
+    }
+
+    if (e.field == 'ToStatus')
+    {
+        if (checkValidateEdit(App.grdBot, e, ['ToStatus']) == false)
+        {
+            e.record.set('ToStatus','')
+        }
+        return checkValidateEdit(App.grdBot, e, ['ToStatus']);
+    }
+
     HQ.grid.checkInsertKey(App.grdBot, e, keysBot);
     
     //var grid = App.grdBot;
@@ -388,7 +467,7 @@ var grdBot_Edit = function (item, e) {
     frmChange();
 };
 var grdBot_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdBot, e, ['Handle','AppFolID', 'RoleID', 'Status']);
+    return HQ.grid.checkValidateEdit(App.grdBot, e, keysBot);
 };
 var grdBot_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdBot);
@@ -465,6 +544,19 @@ var deleteData = function (item) {
         }
     }
 };
+var checkValidateEdit = function (grd, e, keys, isCheckSpecialChar) {
+    if (keys.indexOf(e.field) != -1) {
+        var regex = /^(\w*(\d|[a-zA-Z]|[\_@()+-.]))*$/;
+        if (isCheckSpecialChar == undefined) isCheckSpecialChar = true;
+        if (isCheckSpecialChar) {
+            if (e.value)
+                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+                    HQ.message.show(20140811, e.column.text);
+                    return false;
+                }
+        }
+    }
+}
 // Submit the deleted data into server side
 //function deleteData(item) {
 //    if (item == 'yes') {

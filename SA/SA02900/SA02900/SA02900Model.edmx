@@ -118,7 +118,9 @@
           <Property Type="String" Name="MailApprove" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="ProcContent" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="HideColumn" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="HideColumn" Nullable="false" MaxLength="47" />
+          <Property Type="String" Name="Lang00" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Lang01" Nullable="false" MaxLength="100" />
         </ComplexType>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -225,6 +227,8 @@
                 <ScalarProperty Name="ProcContent" ColumnName="ProcContent" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="HideColumn" ColumnName="HideColumn" />
+                <ScalarProperty Name="Lang00" ColumnName="Lang00" />
+                <ScalarProperty Name="Lang01" ColumnName="Lang01" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -326,7 +330,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="95" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="84" >
         <EntityTypeShape EntityType="SA02900Model.SI_ApprovalFlowHandle" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SA02900Model.SI_ApprovalFlowStatus" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>
