@@ -473,7 +473,7 @@ namespace IN10100.Controllers
             if (_form["isTransfer"].ToBool())
             {
                 string refNbr = _lstTrans[0].RefNbr;
-                var transfer = _app.IN_Transfer.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.TrnsfrDocNbr == refNbr);
+                var transfer = _app.IN_Transfer.FirstOrDefault(p => p.ToCpnyID == _objBatch.BranchID && p.TrnsfrDocNbr == refNbr);
                 if (transfer == null || transfer.Status != "I")
                 {
                     throw new MessageException(MessageType.Message, "2015020901", "", new[] { _lstTrans[0].RefNbr });
@@ -709,7 +709,7 @@ namespace IN10100.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
-            t.WhseLoc = s.WhseLoc;
+            t.WhseLoc = _form["cboWhseLoc"].PassNull();
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;

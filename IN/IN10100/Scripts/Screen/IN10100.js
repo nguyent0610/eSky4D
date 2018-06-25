@@ -196,7 +196,10 @@ var checkExitEditLot = function (row) {
         }
         var pctExpDate = 0;
         if (HQ.currentDet.data.WarrantyDays != 0) {
-            pctExpDate = HQ.util.mathRound(Ext.isEmpty(lot.WarrantyDate) ? 0 : 100 * (HQ.currentDet.data.WarrantyDays - inDay(lot.WarrantyDate, lot.ExpDate)) / HQ.currentDet.data.WarrantyDays, 2);
+            if (lot.WarrantyDate.getFullYear() == '1900')
+                pctExpDate = 0;
+            else
+                pctExpDate = HQ.util.mathRound(Ext.isEmpty(lot.WarrantyDate) ? 0 : 100 * (HQ.currentDet.data.WarrantyDays - inDay(lot.WarrantyDate, new Date())) / HQ.currentDet.data.WarrantyDays, 2);
         }
         lot.PctExpDate = pctExpDate;
     }
@@ -269,7 +272,7 @@ var frmMain_FieldChange = function (item, field, newValue, oldValue) {
         return;
     }
     if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
-    if (Object.keys(App.stoBatch.getChangedData()).length > 0 || App.grdTrans.isChange == true) {
+    if (Object.keys(App.stoBatch.getChangedData()).length > 0 || App.grdTrans.isChange == true || HQ.store.isChange(App.stoTrans) == true) {
         setChange(true);
     } else {
         setChange(false);
@@ -561,7 +564,7 @@ var btnLotOK_Click = function () {
         if (lstData != undefined) {
             for (var i = 0; i < lstData.length; i++) {
                 if (lstData.items[i].data.LotSerNbr != "" && lstData.items[i].data.LotSerNbr != null && lstData.items[i].data.WarrantyDate != null && lstData.items[i].data.WarrantyDate != "" && lstData.items[i].data.ExpDate != null && lstData.items[i].data.ExpDate != "") {
-                    if (lstData.items[i].data.WarrantyDate > lstData.items[i].data.ExpDate) {
+                    if (dateToString(lstData.items[i].data.WarrantyDate, 'dd-MM-yyyy') > dateToString(lstData.items[i].data.ExpDate, 'dd-MM-yyyy')) {
                         lsterro = lsterro + (i + 1).toString() + ",";
                     }
                 }
@@ -744,6 +747,7 @@ var cboTrnsferNbr_Change = function () {
 
 var grdTrans_BeforeEdit = function (item, e) {
     if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
+    if (!HQ.form.checkRequirePass(App.frmMain)) return false;
     if (App.Status.getValue() != 'H') {
         return false;
     }
@@ -1147,6 +1151,7 @@ var bindTransfer = function () {
         newLot.data.UnitMultDiv = item.data.UnitMultDiv;
         newLot.data.UnitPrice = item.data.UnitPrice;
         newLot.data.CnvFact = item.data.CnvFact;
+        newLot.data.WhseLoc = item.data.WhseLoc;
         newLot.commit();
         HQ.store.insertRecord(App.stoLotTrans, "LotSerNbr", newLot, true);
     });
@@ -1549,11 +1554,13 @@ var rendererQty = function (value, meta, record) {
 }
 
 var rendererWarrantyDate = function (value, meta, record) {
-    var date = new Date(1900, 1, 0);
-    if (record.data.WarrantyDate == date) {
-        return '';
-    } else {
-        return Ext.util.Format.date(value, 'Y/m/d');
+    var date = new Date(1900, 0, 1);
+    if (record.data.WarrantyDate != null) {
+        if (record.data.WarrantyDate.toDateString() == date.toDateString() && record.data.LotSerNbr != "") {
+            return '';
+        } else {
+            return Ext.util.Format.date(value, 'd-m-Y');
+        }
     }
 }
 
@@ -1701,6 +1708,10 @@ var checkExitEdit = function (row) {
             trans.TranAmt = trans.Qty * trans.UnitPrice;
         calcLot(row.record, false);
     }
+    else if (key == "PosmID" && HQ.store.isChange(App.stoTrans) == true)
+    {
+        setChange(true);
+    }
     trans.ExtCost = trans.TranAmt;
     trans.UnitCost = trans.UnitPrice;
     row.record.commit();
@@ -1733,7 +1744,8 @@ var checkTransAdd = function () {
     else if (!HQ.isUpdate && !HQ.isNew) {
         flat = true;
     }
-    App.SlsperID.setReadOnly(App.Status.getValue() != 'H');
+    //App.SlsperID.setReadOnly(App.Status.getValue() != 'H');
+    App.SlsperID.setReadOnly(flat);
     App.FromToSiteID.setReadOnly(HQ.isTransfer || App.Status.getValue() != 'H');
     App.SiteID.setReadOnly(flat);
     App.cboWhseLoc.setReadOnly(flat);
@@ -1810,6 +1822,14 @@ var inDay = function (day1, day2) {
     var t1 = day1.getTime();
     var t2 = day2.getTime();
     return parseInt((t2 - t1) / (24 * 3600 * 1000));
+}
+dateToString: function dateToString(date, format) {
+    if (date == null) return '';
+    if (format == 'dd-MM-yyyy') {
+        return (date.getMonth() + 1).toString() + '-' + date.getDate().toString() + '-' + date.getFullYear().toString();
+    }
+    return ''
+
 }
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////

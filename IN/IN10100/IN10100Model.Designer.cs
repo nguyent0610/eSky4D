@@ -12834,6 +12834,30 @@ namespace IN10100
         private global::System.String _tstamp;
         partial void OntstampChanging(global::System.String value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
 
         #endregion
 
@@ -12898,7 +12922,7 @@ namespace IN10100
         /// <param name="invtMult">Initial value of the InvtMult property.</param>
         /// <param name="qty">Initial value of the Qty property.</param>
         /// <param name="rlsed">Initial value of the Rlsed property.</param>
-        /// <param name="toSiteID">Initial value of the ToSiteID property.</param>
+        /// <param name="siteID">Initial value of the SiteID property.</param>
         /// <param name="tranAmt">Initial value of the TranAmt property.</param>
         /// <param name="tranFee">Initial value of the TranFee property.</param>
         /// <param name="unitCost">Initial value of the UnitCost property.</param>
@@ -12912,7 +12936,7 @@ namespace IN10100
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="barCode">Initial value of the BarCode property.</param>
         /// <param name="isChanged">Initial value of the IsChanged property.</param>
-        public static IN10100_pdTrnsfer_Result CreateIN10100_pdTrnsfer_Result(global::System.String branchID, global::System.String batNbr, global::System.String lineRef, global::System.Double cnvFact, global::System.Double extCost, global::System.Int32 invtMult, global::System.Double qty, global::System.Int32 rlsed, global::System.String toSiteID, global::System.Double tranAmt, global::System.Double tranFee, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.String tstamp, global::System.String barCode, global::System.String isChanged)
+        public static IN10100_pdTrnsfer_Result CreateIN10100_pdTrnsfer_Result(global::System.String branchID, global::System.String batNbr, global::System.String lineRef, global::System.Double cnvFact, global::System.Double extCost, global::System.Int32 invtMult, global::System.Double qty, global::System.Int32 rlsed, global::System.String siteID, global::System.Double tranAmt, global::System.Double tranFee, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.String tstamp, global::System.String barCode, global::System.String isChanged)
         {
             IN10100_pdTrnsfer_Result iN10100_pdTrnsfer_Result = new IN10100_pdTrnsfer_Result();
             iN10100_pdTrnsfer_Result.BranchID = branchID;
@@ -12923,7 +12947,7 @@ namespace IN10100
             iN10100_pdTrnsfer_Result.InvtMult = invtMult;
             iN10100_pdTrnsfer_Result.Qty = qty;
             iN10100_pdTrnsfer_Result.Rlsed = rlsed;
-            iN10100_pdTrnsfer_Result.ToSiteID = toSiteID;
+            iN10100_pdTrnsfer_Result.SiteID = siteID;
             iN10100_pdTrnsfer_Result.TranAmt = tranAmt;
             iN10100_pdTrnsfer_Result.TranFee = tranFee;
             iN10100_pdTrnsfer_Result.UnitCost = unitCost;
@@ -13307,7 +13331,7 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SiteID
         {
@@ -13319,7 +13343,7 @@ namespace IN10100
             {
                 OnSiteIDChanging(value);
                 ReportPropertyChanging("SiteID");
-                _SiteID = StructuralObject.SetValidValue(value, true);
+                _SiteID = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("SiteID");
                 OnSiteIDChanged();
             }
@@ -13355,7 +13379,7 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String ToSiteID
         {
@@ -13367,7 +13391,7 @@ namespace IN10100
             {
                 OnToSiteIDChanging(value);
                 ReportPropertyChanging("ToSiteID");
-                _ToSiteID = StructuralObject.SetValidValue(value, false);
+                _ToSiteID = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("ToSiteID");
                 OnToSiteIDChanged();
             }
@@ -13807,6 +13831,30 @@ namespace IN10100
         private global::System.String _IsChanged;
         partial void OnIsChangedChanging(global::System.String value);
         partial void OnIsChangedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
 
         #endregion
 

@@ -874,9 +874,9 @@
           <Property Type="Int32" Name="Rlsed" Nullable="false" />
           <Property Type="String" Name="ShipperID" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="ShipperLineRef" Nullable="true" MaxLength="5" />
-          <Property Type="String" Name="SiteID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="ToSiteID" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ToSiteID" Nullable="true" MaxLength="30" />
           <Property Type="Double" Name="TranAmt" Nullable="false" />
           <Property Type="Double" Name="TranFee" Nullable="false" />
           <Property Type="DateTime" Name="TranDate" Nullable="true" Precision="16" />
@@ -893,8 +893,9 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="tstamp" Nullable="false" MaxLength="1" />
-          <Property Type="String" Name="BarCode" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="BarCode" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="IsChanged" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="WhseLoc" Nullable="true" MaxLength="10" />
         </ComplexType>
         <EntityType Name="RPTRunning">
           <Key>
@@ -975,8 +976,8 @@
           <Property Type="String" Name="KitID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="MfgrLotSerNbr" Nullable="false" MaxLength="25" />
           <Property Type="Double" Name="Qty" Nullable="false" />
-          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="ToSiteID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ToSiteID" Nullable="false" MaxLength="30" />
           <Property Type="DateTime" Name="TranDate" Nullable="false" Precision="16" />
           <Property Type="String" Name="TranType" Nullable="false" MaxLength="2" />
           <Property Type="Double" Name="UnitCost" Nullable="false" />
@@ -986,6 +987,7 @@
           <Property Type="Double" Name="CnvFact" Nullable="false" />
           <Property Type="String" Name="UnitMultDiv" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="tstamp" Nullable="true" />
+          <Property Type="String" Name="WhseLoc" Nullable="true" MaxLength="10" />
         </ComplexType>
         <EntityType Name="IN_Trans">
           <Key>
@@ -1579,6 +1581,7 @@
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="BarCode" ColumnName="BarCode" />
                 <ScalarProperty Name="IsChanged" ColumnName="IsChanged" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1678,6 +1681,7 @@
                 <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
                 <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
