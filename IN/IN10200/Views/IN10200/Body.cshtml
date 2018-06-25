@@ -136,8 +136,8 @@
                 .Width(110)
                 .Align(Alignment.Right)
                 .Renderer("renderQtyAmt")
-                
-                , HQ.DateColumn().ID("WarrantyDate").DataIndex("WarrantyDate").Text(Util.GetLang("IN10200WarrantyDate"))
+
+                , HQ.DateColumn().ID("WarrantyDate").DataIndex("WarrantyDate").Text(Util.GetLang("IN10200WarrantyDate")).Format(Current.FormatDate).Renderer("rendererWarrantyDate") 
                 
                 , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate"))                
 
@@ -570,6 +570,7 @@
 
                 X.Hidden().ID("tstamp")
             )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'batch')")
             ,
         X.Panel()
         .Border(true)

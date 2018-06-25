@@ -93,7 +93,7 @@ namespace IN10200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -228,7 +228,15 @@ namespace IN10200.Controllers
                     if (lot.TranType == "II")
                     {
                         oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
-                        UpdateAllocLot(lot.InvtID, lot.SiteID,lot.LotSerNbr, oldQty, 0,0);
+                        if (lot.WhseLoc.PassNull() != "")
+                        {
+                            UpdateAllocLot_WhseLoc(_whseLoc, lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
+                        }
+                        else
+                        {
+                            UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
+                        }
+                        //UpdateAllocLot(lot.InvtID, lot.SiteID,lot.LotSerNbr, oldQty, 0,0);
                     }
                     _app.IN_LotTrans.DeleteObject(lot);
                 }
@@ -297,7 +305,15 @@ namespace IN10200.Controllers
                         if (lot.TranType == "II")
                         {
                             oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
-                            UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
+                            if (lot.WhseLoc.PassNull() != "")
+                            {
+                                UpdateAllocLot_WhseLoc(_whseLoc, lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
+                            }
+                            else
+                            {
+                                UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
+                            }
+                            //UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
                         }
                         _app.IN_LotTrans.DeleteObject(lot);
                     }    
@@ -943,7 +959,7 @@ namespace IN10200.Controllers
         //    return this.Store(lstLot, lstLot.Count);
         //}
 
-        public ActionResult GetLot(string invtID, string siteID, string batNbr, string branchID, string whseLoc, int showWhseLoc)
+        public ActionResult GetLot(string invtID, string siteID, string batNbr, string branchID, string whseLoc, int showWhseLoc, int cnvFact)
         {
             List<IN10200_pdGetLot_Result> lstLot = new List<IN10200_pdGetLot_Result>();
             List<IN10200_pdGetLot_Result> lstLotDB = new List<IN10200_pdGetLot_Result>();
@@ -966,6 +982,7 @@ namespace IN10200.Controllers
             }
             foreach (var item in lstLotDB)
             {
+                item.QtyAvail = Math.Floor(item.QtyAvail / cnvFact);
                 lstLot.Add(item);
             }
             foreach (var item in lstLotTrans)
@@ -1029,7 +1046,7 @@ namespace IN10200.Controllers
                 lot.QtyAvail += (item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact);
             }
 
-            List<IN10200_pdGetItemLot_Result> lstLot = new List<IN10200_pdGetItemLot_Result>() { lot };
+            List<IN10200_pdGetItemLot_Result> lstLot = new List<IN10200_pdGetItemLot_Result>() { lot };          
             return this.Store(lstLot, lstLot.Count);
         }
        
@@ -1061,6 +1078,7 @@ namespace IN10200.Controllers
                 string siteID = _lstTrans[i].SiteID;
                 double editQty = 0;
                 double qtyTot = 0;
+                if (_lstTrans[i].InvtID.PassNull() == "") continue;
                 if (_lstTrans[i].Qty == 0)
                 {
                     throw new MessageException("1000", new[] { Util.GetLang("Qty") });
@@ -1399,7 +1417,7 @@ namespace IN10200.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
 
-                t.WarrantyDate = DateTime.Now.ToDateShort();
+                t.WarrantyDate = s.WarrantyDate;//DateTime.Now.ToDateShort();
             }
 
             double oldQty = 0;

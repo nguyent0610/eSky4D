@@ -1089,6 +1089,7 @@
           <Property Type="String" Name="PosmID" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="ClassID" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="QtyOnHand" Nullable="false" />
+          <Property Type="String" Name="WhseLoc" Nullable="true" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="IN10200_pdConfig_Result">
           <Property Type="Boolean" Name="ShowQtyOnhand" Nullable="true" />
@@ -1717,6 +1718,7 @@
                 <ScalarProperty Name="PosmID" ColumnName="PosmID" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
+                <ScalarProperty Name="WhseLoc" ColumnName="WhseLoc" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
