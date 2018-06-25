@@ -76,7 +76,10 @@ namespace OM21100.Controllers
                 , hidechkPctDiscountByLevel = false
                 , hideQtyType = false
                 , hidechkStockPromotion = false
-                , hideCoefficientCnv = false;
+                , hideCoefficientCnv = false
+                , hideExcludePromo = false
+                , hidePriorityPromo = false
+                , hideIsDeductQtyAmt = false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -90,6 +93,9 @@ namespace OM21100.Controllers
                 hidechkPctDiscountByLevel = objConfig.HidechkPctDiscountByLevel.HasValue && objConfig.HidechkPctDiscountByLevel.Value;
                 hidechkStockPromotion = objConfig.HidechkStockPromotion.HasValue && objConfig.HidechkStockPromotion.Value;
                 hideCoefficientCnv = objConfig.HideCoefficientCnv.HasValue && objConfig.HideCoefficientCnv.Value;
+                hideExcludePromo = objConfig.HideExcludePromo.HasValue && objConfig.HideExcludePromo.Value;
+                hidePriorityPromo = objConfig.HidePriorityPromo.HasValue && objConfig.HidePriorityPromo.Value;
+                hideIsDeductQtyAmt = objConfig.HideIsDeductQtyAmt.HasValue && objConfig.HideIsDeductQtyAmt.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -101,6 +107,9 @@ namespace OM21100.Controllers
             ViewBag.hidechkPctDiscountByLevel = hidechkPctDiscountByLevel;
             ViewBag.hidechkStockPromotion = hidechkStockPromotion;
             ViewBag.hideCoefficientCnv = hideCoefficientCnv;
+            ViewBag.hideExcludePromo = hideExcludePromo;
+            ViewBag.hidePriorityPromo = hidePriorityPromo;
+            ViewBag.hideIsDeductQtyAmt = hideIsDeductQtyAmt;
             return View();
         }
 
@@ -2440,6 +2449,7 @@ namespace OM21100.Controllers
         private void Save_DiscItem(FormCollection data, SI_ApprovalFlowHandle handle, string branches, OM_DiscSeq inputSeq)
         {
             var discType = data["cboDiscType"];
+            var priorityPromo = data["txtPriorityPromo"];
             var discItemHandler = new StoreDataHandler(data["lstDiscItem"]);
             var lstDiscItem = discItemHandler.ObjectData<OM21100_pgDiscItem_Result>()
                         .Where(p => Util.PassNull(p.InvtID) != string.Empty)
@@ -2482,6 +2492,14 @@ namespace OM21100.Controllers
                                     p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq &&
                                     p.InvtID == currentItem.InvtID
                                 select p).FirstOrDefault();
+                var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                if (objConfig.HidePriorityPromo.Value == true)
+                {
+                    var objDuplicatePriorityPromo = _db.OM21100_ppCheckdDuplicatePriorityPromo(inputSeq.DiscID, inputSeq.DiscSeq, discType, priorityPromo.ToInt()).FirstOrDefault();
+                    if (objDuplicatePriorityPromo.ToString() == "1")
+                        throw new MessageException("2018062101", new[] { priorityPromo, discType });
+                }
+                
                 if (discItem != null)
                 {
                     currentItem.DiscType = discType;
@@ -2880,6 +2898,7 @@ namespace OM21100.Controllers
                 t.QtyStockAdvance = s.QtyStockAdvance;
                 t.PerStockAdvance=s.PerStockAdvance;
                 t.CoefficientCnv = s.CoefficientCnv;
+                t.PriorityInvt = s.PriorityInvt;
 
                 t.DiscType = s.DiscType;
                 t.LUpd_DateTime = DateTime.Now;
@@ -3034,6 +3053,9 @@ namespace OM21100.Controllers
                 updatedDiscSeq.Status = handle;
             }
             updatedDiscSeq.RequiredType = inputDiscSeq.RequiredType;
+            updatedDiscSeq.ExcludePromo = inputDiscSeq.ExcludePromo;
+            updatedDiscSeq.PriorityPromo = inputDiscSeq.PriorityPromo;
+            updatedDiscSeq.IsDeductQtyAmt = inputDiscSeq.IsDeductQtyAmt;
 
             updatedDiscSeq.LUpd_DateTime = DateTime.Now;
             updatedDiscSeq.LUpd_Prog = _screenNbr;
