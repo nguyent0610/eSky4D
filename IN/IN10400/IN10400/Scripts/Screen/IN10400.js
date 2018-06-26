@@ -1128,6 +1128,7 @@ var checkExitEdit = function (row) {
 
         trans.ReasonCD = App.cboReasonCD.getValue();
         trans.SiteID = App.cboSiteID.getValue();
+        trans.WhseLoc = App.cboWhseLoc.getValue();
 
         var invt = row.record.invt;
         var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
@@ -1206,7 +1207,7 @@ var checkExitEdit = function (row) {
             site.InvtID = trans.InvtID;
             trans.Qty = 0;
             row.record.commit();
-            HQ.message.show(2016042101, [trans.InvtID, trans.SiteID], '', true);
+            HQ.message.show(2018052411, [trans.InvtID, trans.SiteID, trans.WhseLoc], '', true);
             //App.grdTrans.view.loadMask.hide();
             HQ.common.showBusy(false);
             //App.grdTrans.view.loadMask.setDisabled(false)
@@ -1259,7 +1260,7 @@ var checkExitEdit = function (row) {
             site.InvtID = trans.InvtID;
             trans.TranAmt = 0;
             row.record.commit();
-            HQ.message.show(2016042101, [trans.InvtID, trans.SiteID], '', true);
+            HQ.message.show(2018052411, [trans.InvtID, trans.SiteID, trans.WhseLoc], '', true);
             //App.grdTrans.view.loadMask.hide();
             HQ.common.showBusy(false);
             // App.grdTrans.view.loadMask.setDisabled(false)
@@ -1725,3 +1726,13 @@ var cboSiteID_Change = function (item, newValue, oldValue) {
     App.cboWhseLoc.store.reload();
     App.cboInventory.store.reload();
 };
+var rendererWarrantyDate = function (value, meta, record) {
+    var date = new Date(1900, 0, 1);
+    if (record.data.WarrantyDate != null) {
+        if (record.data.WarrantyDate.toDateString() == date.toDateString() && record.data.LotSerNbr != "") {
+            return '';
+        } else {
+            return Ext.util.Format.date(value, 'd-m-Y');
+        }
+    }
+}

@@ -22,7 +22,7 @@
             X.Toolbar()
             .Items(
                 X.ToolbarFill(),
-                X.Label().ID("lblQtyAvail").Width(200).MarginSpec("0 0 0 30")
+                X.Label().ID("lblQtyAvail").Width(250).MarginSpec("0 0 0 30")
             )
         )
         .Layout(LayoutType.Border)
@@ -457,7 +457,7 @@
             .Align(Alignment.Right)
             .Renderer("renderQtyAmt")
 
-            , HQ.DateColumn().ID("WarrantyDate").DataIndex("WarrantyDate").Text(Util.GetLang("IN10400WarrantyDate"))//.Editor(HQ.DateField()) 
+            , HQ.DateColumn().ID("WarrantyDate").DataIndex("WarrantyDate").Text(Util.GetLang("IN10400WarrantyDate")).Format(Current.FormatDate).Renderer("rendererWarrantyDate") //.Editor(HQ.DateField()) 
              
             , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(HQ.DateField())
 
