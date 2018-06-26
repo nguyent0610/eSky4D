@@ -100,7 +100,7 @@ namespace IN10300.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -886,7 +886,7 @@ namespace IN10300.Controllers
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
-                t.WarrantyDate = DateTime.Now.ToDateShort();
+                t.WarrantyDate = s.WarrantyDate;//DateTime.Now.ToDateShort();
             }
 
             double oldQty = 0;

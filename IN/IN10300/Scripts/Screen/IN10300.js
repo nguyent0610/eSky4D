@@ -670,6 +670,9 @@ var cboSiteID_Change = function (sender, e) {
 
 var cboWhseLoc_Change = function (sender, e) {
     if (App.cboToSiteID.getValue() == App.cboSiteID.getValue() && App.cboWhseLoc.getValue() == App.cboToWhseLoc.getValue()) {
+        if (App.cboToSiteID.getValue() != '' && App.cboSiteID.getValue() != '' && App.cboWhseLoc.getValue() != '' && App.cboToWhseLoc.getValue() != '') {
+            HQ.message.show(2018062201, [App.cboSiteID.getValue(), App.cboWhseLoc.getValue(), App.cboToSiteID.getValue(), App.cboToWhseLoc.getValue()], '', true);
+        }
         App.cboWhseLoc.setValue('');
     }
     App.cboToWhseLoc.store.reload();
@@ -677,6 +680,9 @@ var cboWhseLoc_Change = function (sender, e) {
 }
 var cboToWhseLoc_Change = function () {
     if (App.cboToSiteID.getValue() == App.cboSiteID.getValue() && App.cboWhseLoc.getValue() == App.cboToWhseLoc.getValue()) {
+        if (App.cboToSiteID.getValue() != '' && App.cboSiteID.getValue() != '' && App.cboWhseLoc.getValue() != '' && App.cboToWhseLoc.getValue() != '') {
+            HQ.message.show(2018062201, [App.cboSiteID.getValue(), App.cboWhseLoc.getValue(), App.cboToSiteID.getValue(), App.cboToWhseLoc.getValue()], '', true);
+        }
         App.cboToWhseLoc.setValue('');
     }
     App.cboToWhseLoc.store.reload();
@@ -1386,6 +1392,17 @@ var calcLot = function (record) {
                 }
             });
         } else {
+            App.stoLotTrans.clearFilter();
+            App.stoLotTrans.data.each(function (item) {
+                if (item.data.INTranLineRef == record.data.LineRef) {
+                    item.data.UnitDesc = record.data.UnitDesc;
+                    item.data.CnvFact = record.data.CnvFact;
+                    item.data.UnitMultDiv = record.data.UnitMultDiv;
+                    item.data.QtyOnHand = record.data.QtyOnHand;
+                    item.data.UnitCost = item.data.UnitPrice = record.data.UnitPrice;
+                    item.commit();
+                }
+            });
             showLot(record, true);
         }
     }
@@ -1415,6 +1432,7 @@ var showLot = function (record, loadCombo) {
 
     var newRow = Ext.create('App.mdlLotTrans');
     newRow.data.INTranLineRef = record.data.LineRef;
+    newRow.data.UnitDesc = record.data.UnitDesc;
     newRow.data.InvtMult = record.data.InvtMult;
     newRow.data.TranType = record.data.TranType;
     newRow.data.WarrantyDate = record.data.WarrantyDate;
@@ -2019,5 +2037,15 @@ var btnImport_Click = function (sender, e) {
     else {
         HQ.message.show('2014070701', ext, '');
         sender.reset();
+    }
+}
+var rendererWarrantyDate = function (value, meta, record) {
+    var date = new Date(1900, 0, 1);
+    if (record.data.WarrantyDate != null) {
+        if (record.data.WarrantyDate.toDateString() == date.toDateString() && record.data.LotSerNbr != "") {
+            return '';
+        } else {
+            return Ext.util.Format.date(value, 'd-m-Y');
+        }
     }
 }
