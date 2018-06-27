@@ -125,7 +125,7 @@
                                 .HQLangCode("DiscClass").HQProcedure("OM21100_pcDiscClass").HQColumnShow("Code,Descr")
                                 .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
                                 .Editable(false).AllowBlank(false).DataIndex("DiscClass")//ForceSelection(true)
-                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection() {
                                 new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                                 ,new StoreParameter("@DiscType", "App.cboDiscType.getValue()", ParameterMode.Raw)
@@ -398,9 +398,45 @@
                                             l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                             l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                             l.Blur.Handler = "this.forceSelection = false";
-                                            l.Expand.Handler = "HQ.combo.expand(App.cboExcludePromo, ',')";
+                                            l.Expand.Handler = "HQ.combo.expand(App.cboExcludePromo, ';')";
                                         })
                                         , HQ.NumberField().ID("txtPriorityPromo").Name("txtPriorityPromo").HQLangCode("PriorityPromo").DataIndex("PriorityPromo").MarginSpec("5 5 0 5").DecimalPrecision(0).MinValue(0).Hidden(true)
+                                        , HQ.Combo().ID("cboSubBreakType")
+                                        .MarginSpec("5 5 0 5")//.Hidden(true)
+                                        .HQLangCode("SubBreakType").HQProcedure("OM21100_pcSubBreakType").HQColumnShow("Code,Descr")
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("SubBreakType")
+                                        .ForceSelection(true)
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .HQParam(new StoreParameterCollection() {
+                                        new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                        new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+                                        .Listeners(l =>
+                                        {
+                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                            l.Change.Fn = "DiscDefintion.Event.cboSubBreakType_change";
+                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                        })
+                                        , HQ.Combo().ID("cboBreakBoundType")
+                                        .MarginSpec("5 5 0 5")//.Hidden(true)
+                                        .HQLangCode("BreakBoundType").HQProcedure("OM21100_pcBreakBoundType").HQColumnShow("Code,Descr")
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("BreakBoundType")
+                                        .ForceSelection(true)
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .HQParam(new StoreParameterCollection() {
+                                        new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                        new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+                                        .Listeners(l =>
+                                        {
+                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                            l.Change.Fn = "DiscDefintion.Event.cboBreakBoundType_change";
+                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                        })
                                     )
                                  
                                     // Forth Column
@@ -501,7 +537,15 @@
                                     ) // Container
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
                                     .Items(
-                                        HQ.Checkbox().ID("chkStockPromotion")//.Hidden(true)
+                                        HQ.Checkbox().ID("chkConvertDiscAmtToFreeItem")//.Hidden(true)
+                                        .MarginSpec("5 5 0 10")
+                                        .BoxLabel(Util.GetLang("ConvertDiscAmtToFrItem")).DataIndex("ConvertDiscAmtToFreeItem")
+                                        .Listeners(l =>
+                                        {
+                                            l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            l.Change.Fn = "DiscDefintion.Event.chkConvertDiscAmtToFreeItem_Change";
+                                        })
+                                       , HQ.Checkbox().ID("chkStockPromotion")//.Hidden(true)
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("StockPromotion")).DataIndex("StockPromotion")
                                         .Listeners(l =>
@@ -524,7 +568,9 @@
                                     .Listeners(l =>
                                     {
                                         l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
-                                    })                                   
+                                    })
+                                    , HQ.Button().ID("btnSubBreakItem").MarginSpec("0 5 0 120").Width(150).HQLangCode("SubBreakItem")
+                                    .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItem_Click")                           
                                 //, HQ.Checkbox().ID("chkExactQty")
                                 //.MarginSpec("0 5 5 8")
                                 //.BoxLabel(Util.GetLang("OM21100ExactQty")).DataIndex("ExactQty")
@@ -559,12 +605,48 @@
                                         X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                                     )
 
+                                    , X.NumberColumn().Text(Util.GetLang("BreakQtyUpper")).DataIndex("BreakQtyUpper").Hidden(true)
+                                    .Align(Alignment.Right).Format("0,000")
+                                    .Editor(
+                                        X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                    )
+
                                     , X.NumberColumn().Text(Util.GetLang("BreakAmt")).DataIndex("BreakAmt")
                                     .Align(Alignment.Right).Format("0,000")
                                     .Editor(
                                         X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                                     )
 
+                                    , X.NumberColumn().Text(Util.GetLang("BreakAmtUpper")).DataIndex("BreakAmtUpper").Hidden(true)
+                                    .Align(Alignment.Right).Format("0,000")
+                                    .Editor(
+                                        X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                    )
+
+                                    , X.NumberColumn().Text(Util.GetLang("SubBreakQty")).DataIndex("SubBreakQty").Hidden(true)
+                                    .Align(Alignment.Right).Format("0,000")
+                                    .Editor(
+                                        X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                    )
+
+                                    , X.NumberColumn().Text(Util.GetLang("SubBreakQtyUpper")).DataIndex("SubBreakQtyUpper").Hidden(true)
+                                    .Align(Alignment.Right).Format("0,000")
+                                    .Editor(
+                                        X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                    )
+
+                                    , X.NumberColumn().Text(Util.GetLang("SubBreakAmt")).DataIndex("SubBreakAmt").Hidden(true)
+                                    .Align(Alignment.Right).Format("0,000")
+                                    .Editor(
+                                        X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                    )
+
+                                    , X.NumberColumn().Text(Util.GetLang("SubBreakAmtUpper")).DataIndex("SubBreakAmtUpper").Hidden(true)
+                                    .Align(Alignment.Right).Format("0,000")
+                                    .Editor(
+                                        X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
+                                    )
+                                    
                                     , X.NumberColumn().Text(Util.GetLang("Discount")).DataIndex("DiscAmt")
                                     .Align(Alignment.Right).Format("0,000.00")
                                     .Editor(
@@ -768,6 +850,12 @@
                                             HQ.NumberField().SelectOnFocus(true).MinValue(1).DecimalPrecision(0)
                                         )
 
+                                        , X.NumberColumn().Text(Util.GetLang("Price")).DataIndex("Price").Hidden(true)
+                                        .Align(Alignment.Right).Format("0,000.00")
+                                        .Editor(
+                                            HQ.NumberField().SelectOnFocus(true).MinValue(1).DecimalPrecision(2)
+                                        )
+                                        
                                         , X.Column().Text(Util.GetLang("BudgetID")).DataIndex("FreeItemBudgetID")
                                         .Editor(
                                             HQ.Combo().ID("cboGFreeItemBudgetID")
@@ -1995,4 +2083,113 @@
             )
     )
 
+)
+@(
+    X.Window()
+    .ID("winSubBreakItem")
+    .Hidden(true)
+    .Layout(LayoutType.Fit)
+    .Height(400)
+    .Width(600)
+    .Maximized(false)
+    .Modal(true)
+    .Closable(true)
+    .Buttons(       
+        X.Button().ID("btnSubBreakItemDelete").Text(Util.GetLang("Delete"))
+        .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItemDelete_Click")
+        , X.Button().ID("btnSubBreakItemOK").Text(Util.GetLang("Closed"))
+        .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItemOK_Click")
+    )   
+    .Items(
+            X.GridPanel().ID("grdSubBreakItem")
+            .SortableColumns(false)
+            .Store(
+                X.Store()
+                    .ID("stoSubBreakItem")
+                    .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(OM21100_pgDiscSubBreakItem_Result), "mdlBranch", ""))
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSubBreakItem"))).AutoLoad(false)
+                        .Parameters(ps =>
+                        {
+                            ps.Add(new StoreParameter("DiscID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("DiscSeq", "App.cboDiscSeq.getValue()", ParameterMode.Raw));
+                        })
+                    .Listeners(l =>
+                    {
+                        l.Load.Fn = "Main.Event.stoSubBreakItem_Load";
+                    })
+                )
+            .ColumnModel(
+                X.RowNumbererColumn().Text(Util.GetLang("Index")).Width(50).Sortable(false)
+                , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID")
+                .Editor(
+                    HQ.Combo().ID("cboInvtIDSubBreakItem").PageSize(20).HQisPaging(true)
+                    .HQProcedure("OM21100_pcInventoryDiscSubBreakItem")
+                    .HQColumnShow("InvtID,Descr,StkUnit")
+                    .HQHeightWidth(400, 300)
+                    .ValueField("InvtID").DisplayField("InvtID")
+                    .ForceSelection(true).SelectOnFocus(true)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
+                        ,new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+
+                    })
+                    .LoadData()
+                )
+
+                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
+
+                , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDesc").Hidden(true)
+                , X.CommandColumn().Width(130)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "Main.Event.grdSubBreakItem_reject(this, record);")   
+            )
+            .BottomBar(
+                X.PagingToolbar()
+                    .Items(
+                        X.Label("Page size:"),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("50")
+                        .Listeners(l =>
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
+                        )
+                    .Plugins(X.ProgressBarPager())
+            )
+            .SelectionModel(
+                X.RowSelectionModel().ID("slmSubBreakItem")
+                .Mode(SelectionMode.Multi)
+                )
+            .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "Main.Event.grdSubBreakItem_beforeEdit";
+                        ls.Edit.Fn = "Main.Event.grdSubBreakItem_edit";
+                        ls.ValidateEdit.Fn = "Main.Event.grdSubBreakItem_validateEdit";
+                    })
+            )
+            .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("InvtID"),
+                    X.StringFilter().DataIndex("Descr")
+
+                )
+            )
+    )
 )

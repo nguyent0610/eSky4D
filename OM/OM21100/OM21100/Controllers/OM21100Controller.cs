@@ -79,7 +79,10 @@ namespace OM21100.Controllers
                 , hideCoefficientCnv = false
                 , hideExcludePromo = false
                 , hidePriorityPromo = false
-                , hideIsDeductQtyAmt = false;
+                , hideIsDeductQtyAmt = false
+                , hideSubBreakType = false
+                , hideBreakBoundType = false
+                , hideConvertDiscAmtToFreeItem = false;
 
             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -96,6 +99,9 @@ namespace OM21100.Controllers
                 hideExcludePromo = objConfig.HideExcludePromo.HasValue && objConfig.HideExcludePromo.Value;
                 hidePriorityPromo = objConfig.HidePriorityPromo.HasValue && objConfig.HidePriorityPromo.Value;
                 hideIsDeductQtyAmt = objConfig.HideIsDeductQtyAmt.HasValue && objConfig.HideIsDeductQtyAmt.Value;
+                hideSubBreakType = objConfig.HideSubBreakType.HasValue && objConfig.HideSubBreakType.Value;
+                hideBreakBoundType = objConfig.HideBreakBoundType.HasValue && objConfig.HideBreakBoundType.Value;
+                hideConvertDiscAmtToFreeItem = objConfig.HideConvertDiscAmtToFreeItem.HasValue && objConfig.HideConvertDiscAmtToFreeItem.Value;
             }
 
             ViewBag.allowExport = allowExport;
@@ -110,10 +116,13 @@ namespace OM21100.Controllers
             ViewBag.hideExcludePromo = hideExcludePromo;
             ViewBag.hidePriorityPromo = hidePriorityPromo;
             ViewBag.hideIsDeductQtyAmt = hideIsDeductQtyAmt;
+            ViewBag.hideSubBreakType = hideSubBreakType;
+            ViewBag.hideBreakBoundType = hideBreakBoundType;
+            ViewBag.hideConvertDiscAmtToFreeItem = hideConvertDiscAmtToFreeItem;
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -142,7 +151,11 @@ namespace OM21100.Controllers
             var freeItems = _db.OM21100_pgFreeItem(Current.UserName,Current.CpnyID,Current.LangID,discID, discSeq, "").ToList();
             return this.Store(freeItems);
         }
-
+        public ActionResult GetSubBreakItem(string discID, string discSeq)
+        {
+            var subBreakItem = _db.OM21100_pgDiscSubBreakItem(Current.UserName, Current.CpnyID, Current.LangID, discID, discSeq).ToList();
+            return this.Store(subBreakItem);
+        }
         [DirectMethod]
         public ActionResult OM21100GetTreeBranch(string panelID)
         {
@@ -799,6 +812,7 @@ namespace OM21100.Controllers
                         else
                         {
                             updateDiscount(ref disc, inputDisc, false, roles);
+                            saveDiscSubBreakItem(data, discID, discSeq);
                             saveDiscSeq(data, disc, inputDiscSeq, isNewDiscSeq); 
                             return Json(new { success = true, msgCode = 201405071, tstamp = disc.tstamp.ToHex() });
                         }
@@ -811,6 +825,7 @@ namespace OM21100.Controllers
                             disc = new OM_Discount();
                             updateDiscount(ref disc, inputDisc, true, roles);
                             _db.OM_Discount.AddObject(disc);
+                            saveDiscSubBreakItem(data, discID, discSeq);
                             saveDiscSeq(data, disc, inputDiscSeq, isNewDiscSeq);
                         }
                         else
@@ -1974,7 +1989,55 @@ namespace OM21100.Controllers
 
             Save_FreeItem(data, handle, branches, inputSeq);
         }
+        private void saveDiscSubBreakItem(FormCollection data, string discID, string discSeq)
+        {
+            StoreDataHandler dataHandler = new StoreDataHandler(data["lstDiscSubBreakItem"]);
+            ChangeRecords<OM21100_pgDiscSubBreakItem_Result> lstDiscSubBreakItem = dataHandler.BatchObjectData<OM21100_pgDiscSubBreakItem_Result>();
+            lstDiscSubBreakItem.Created.AddRange(lstDiscSubBreakItem.Updated);
+            foreach (OM21100_pgDiscSubBreakItem_Result del in lstDiscSubBreakItem.Deleted)
+            {
+                // neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                if (lstDiscSubBreakItem.Created.Where(p => p.DiscID == discID && p.DiscSeq == discSeq && p.InvtID == del.InvtID).Count() > 0)
+                {
+                    lstDiscSubBreakItem.Created.Where(p => p.DiscID == discID && p.DiscSeq == discSeq && p.InvtID == del.InvtID).FirstOrDefault().tstamp = del.tstamp;
+                }
+                else
+                {
+                    var objDel = _db.OM_DiscSubBreakItem.ToList().Where(p => p.DiscID == discID && p.DiscSeq == discSeq && p.InvtID == del.InvtID).FirstOrDefault();
+                    if (objDel != null)
+                    {
+                        _db.OM_DiscSubBreakItem.DeleteObject(objDel);
+                    }
+                }
+            }
 
+            foreach (OM21100_pgDiscSubBreakItem_Result item in lstDiscSubBreakItem.Created)
+            {
+                if (item.InvtID.PassNull() == "") continue;
+
+                var obj = _db.OM_DiscSubBreakItem.Where(p => p.DiscID == discID && p.DiscSeq == discSeq && p.InvtID == item.InvtID).FirstOrDefault();
+
+                if (obj != null)
+                {
+                    if (obj.tstamp.ToHex() == item.tstamp.ToHex())
+                    {
+                        updateDiscSubBreakItem(obj, item, false, discID, discSeq);
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
+                }
+                else
+                {
+                    obj = new OM_DiscSubBreakItem();
+                    updateDiscSubBreakItem(obj, item, true, discID, discSeq);
+                    _db.OM_DiscSubBreakItem.AddObject(obj);
+                }
+            }
+
+            _db.SaveChanges();
+        }
         private void Update_Break(OM_DiscBreak t, OM21100_pgDiscBreak_Result s, bool isNew)
         {
             try
@@ -1995,6 +2058,12 @@ namespace OM21100.Controllers
                 t.BreakQty = s.BreakQty;
                 t.DiscAmt = s.DiscAmt;
                 t.Descr = s.Descr;
+                t.BreakQtyUpper = s.BreakQtyUpper;
+                t.BreakAmtUpper = s.BreakAmtUpper;
+                t.SubBreakQty = s.SubBreakQty;
+                t.SubBreakAmt = s.SubBreakQty;
+                t.SubBreakQtyUpper = s.SubBreakQtyUpper;
+                t.SubBreakAmtUpper = s.SubBreakAmtUpper;
 
                 t.LUpd_DateTime = DateTime.Now;
                 t.LUpd_Prog = _screenNbr;
@@ -2497,7 +2566,7 @@ namespace OM21100.Controllers
                 {
                     var objDuplicatePriorityPromo = _db.OM21100_ppCheckdDuplicatePriorityPromo(inputSeq.DiscID, inputSeq.DiscSeq, discType, priorityPromo.ToInt()).FirstOrDefault();
                     if (objDuplicatePriorityPromo.ToString() == "1")
-                        throw new MessageException("2018062101", new[] { priorityPromo, discType });
+                        throw new MessageException(MessageType.Message, "2018062101", "", new[] { priorityPromo, discType });
                 }
                 
                 if (discItem != null)
@@ -2975,6 +3044,8 @@ namespace OM21100.Controllers
                 t.FreeItemBudgetID = s.FreeItemBudgetID;
                 t.FreeItemQty = s.FreeItemQty;
                 t.UnitDescr = s.UnitDescr;
+                t.Price = s.Price;
+
                 t.LUpd_DateTime = DateTime.Now;
                 t.LUpd_Prog = _screenNbr;
                 t.LUpd_User = Current.UserName;
@@ -3056,6 +3127,8 @@ namespace OM21100.Controllers
             updatedDiscSeq.ExcludePromo = inputDiscSeq.ExcludePromo;
             updatedDiscSeq.PriorityPromo = inputDiscSeq.PriorityPromo;
             updatedDiscSeq.IsDeductQtyAmt = inputDiscSeq.IsDeductQtyAmt;
+            updatedDiscSeq.BreakBoundType = inputDiscSeq.BreakBoundType;
+            updatedDiscSeq.SubBreakType = inputDiscSeq.SubBreakType;
 
             updatedDiscSeq.LUpd_DateTime = DateTime.Now;
             updatedDiscSeq.LUpd_Prog = _screenNbr;
@@ -3086,7 +3159,24 @@ namespace OM21100.Controllers
             //updatedDiscount.Crtd_Role = Current.UserName;
             updatedDiscount.LUpd_User = Current.UserName;
         }
+        private void updateDiscSubBreakItem(OM_DiscSubBreakItem t, OM21100_pgDiscSubBreakItem_Result s, bool isNew, string discID, string discSeq)
+        {
+            if (isNew)
+            {
+                t.DiscID = discID;
+                t.DiscSeq = discSeq;
+                t.InvtID = s.InvtID;
 
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = Current.UserName;
+            }
+            t.UnitDesc = s.UnitDesc;
+
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = Current.UserName;
+        }
         private Node createNode(Node root, OM21100_pdSI_Hierarchy_Result inactiveHierachy, int level, string nodeType)
         {
             var node = new Node();

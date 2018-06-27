@@ -390,6 +390,12 @@
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="200" />
           <Property Name="MaxLot" Type="float" Nullable="false" />
+          <Property Name="BreakQtyUpper" Type="float" Nullable="false" />
+          <Property Name="BreakAmtUpper" Type="float" Nullable="false" />
+          <Property Name="SubBreakAmt" Type="float" Nullable="false" />
+          <Property Name="SubBreakQty" Type="float" Nullable="false" />
+          <Property Name="SubBreakQtyUpper" Type="float" Nullable="false" />
+          <Property Name="SubBreakAmtUpper" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscChannel">
           <Key>
@@ -496,6 +502,7 @@
           <Property Name="GroupItem" Type="varchar" MaxLength="30" />
           <Property Name="TypeUnit" Type="int" />
           <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscItem">
           <Key>
@@ -608,6 +615,27 @@
           <Property Name="PriorityPromo" Type="int" Nullable="false" />
           <Property Name="IsDeductQtyAmt" Type="bit" Nullable="false" />
           <Property Name="ExcludePromo" Type="varchar" MaxLength="4000" />
+          <Property Name="SubBreakType" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="BreakBoundType" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="ConvertDiscAmtToFreeItem" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OM_DiscSubBreakItem">
+          <Key>
+            <PropertyRef Name="DiscID" />
+            <PropertyRef Name="DiscSeq" />
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Name="DiscID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DiscSeq" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="UnitDesc" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_OrdDisc">
           <Key>
@@ -832,6 +860,13 @@
           <Parameter Name="DiscID" Type="varchar" Mode="In" />
           <Parameter Name="DiscSeq" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="OM21100_pgDiscSubBreakItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="DiscID" Type="varchar" Mode="In" />
+          <Parameter Name="DiscSeq" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="OM21100_pgFreeItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -924,6 +959,7 @@
           <EntitySet Name="OM_DiscItemClass" EntityType="Self.OM_DiscItemClass" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_Discount" EntityType="Self.OM_Discount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_DiscSeq" EntityType="Self.OM_DiscSeq" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_DiscSubBreakItem" EntityType="Self.OM_DiscSubBreakItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OM_OrdDisc" EntityType="Self.OM_OrdDisc" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="Self.SI_ApprovalFlowHandle" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -1046,7 +1082,6 @@
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <EntitySet Name="OM_DiscBreak" EntityType="OM21100Model.OM_DiscBreak" />
           <FunctionImport Name="OM21100_pcStatus" ReturnType="Collection(OM21100Model.OM21100_pcStatus_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
@@ -1160,7 +1195,6 @@
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
-          <EntitySet Name="OM_DiscFreeItem" EntityType="OM21100Model.OM_DiscFreeItem" />
           <FunctionImport Name="OM21100_ptTreeNodeCustomer" ReturnType="Collection(OM21100Model.OM21100_ptTreeNodeCustomer_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
@@ -1174,6 +1208,16 @@
             <Parameter Name="DiscSeq" Mode="In" Type="String" />
             <Parameter Name="DiscType" Mode="In" Type="String" />
             <Parameter Name="PriorityPromo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="OM_DiscBreak" EntityType="OM21100Model.OM_DiscBreak" />
+          <EntitySet Name="OM_DiscFreeItem" EntityType="OM21100Model.OM_DiscFreeItem" />
+          <EntitySet Name="OM_DiscSubBreakItem" EntityType="OM21100Model.OM_DiscSubBreakItem" />
+          <FunctionImport Name="OM21100_pgDiscSubBreakItem" ReturnType="Collection(OM21100Model.OM21100_pgDiscSubBreakItem_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="DiscID" Mode="In" Type="String" />
+            <Parameter Name="DiscSeq" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM21100_pgDiscItemClass_Result">
@@ -1264,6 +1308,12 @@
           <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="Double" Name="MaxLot" Nullable="false" />
+          <Property Type="Double" Name="BreakQtyUpper" Nullable="false" />
+          <Property Type="Double" Name="BreakAmtUpper" Nullable="false" />
+          <Property Type="Double" Name="SubBreakAmt" Nullable="false" />
+          <Property Type="Double" Name="SubBreakQty" Nullable="false" />
+          <Property Type="Double" Name="SubBreakQtyUpper" Nullable="false" />
+          <Property Type="Double" Name="SubBreakAmtUpper" Nullable="false" />
         </ComplexType>
         <EntityType Name="OM_Discount">
           <Key>
@@ -1556,28 +1606,6 @@
           <Property Type="String" Name="DiscSeq" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="true" />
         </ComplexType>
-        <EntityType Name="OM_DiscBreak">
-          <Key>
-            <PropertyRef Name="DiscID" />
-            <PropertyRef Name="DiscSeq" />
-            <PropertyRef Name="LineRef" />
-          </Key>
-          <Property Name="DiscID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DiscSeq" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LineRef" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="BreakAmt" Type="Double" Nullable="false" />
-          <Property Name="BreakQty" Type="Double" Nullable="false" />
-          <Property Name="DiscAmt" Type="Double" Nullable="false" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Name="Descr" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="MaxLot" Type="Double" Nullable="false" />
-        </EntityType>
         <ComplexType Name="OM21100_pcStatus_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
@@ -1691,6 +1719,9 @@
           <Property Type="Boolean" Name="HideExcludePromo" Nullable="true" />
           <Property Type="Boolean" Name="HidePriorityPromo" Nullable="true" />
           <Property Type="Boolean" Name="HideIsDeductQtyAmt" Nullable="true" />
+          <Property Type="Boolean" Name="HideSubBreakType" Nullable="true" />
+          <Property Type="Boolean" Name="HideBreakBoundType" Nullable="true" />
+          <Property Type="Boolean" Name="HideConvertDiscAmtToFreeItem" Nullable="true" />
         </ComplexType>
         <EntityType Name="IN_Setup">
           <Key>
@@ -1903,6 +1934,7 @@
           <Property Type="String" Name="GroupItem" Nullable="true" MaxLength="30" />
           <Property Type="Int32" Name="Priority" Nullable="false" />
           <Property Type="Int32" Name="TypeUnit" Nullable="true" />
+          <Property Type="Double" Name="Price" Nullable="false" />
         </ComplexType>
         <EntityType Name="Batch">
           <Key>
@@ -2030,32 +2062,6 @@
           <Property Name="WhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="ToWhseLoc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
-        <EntityType Name="OM_DiscFreeItem">
-          <Key>
-            <PropertyRef Name="DiscID" />
-            <PropertyRef Name="DiscSeq" />
-            <PropertyRef Name="LineRef" />
-            <PropertyRef Name="FreeItemID" />
-          </Key>
-          <Property Name="DiscID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DiscSeq" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LineRef" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="FreeItemID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="FreeItemBudgetID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="FreeItemQty" Type="Double" Nullable="false" />
-          <Property Name="FreeITemSiteID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="UnitDescr" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Name="GroupItem" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="TypeUnit" Type="Int32" />
-          <Property Name="Priority" Type="Int32" Nullable="false" />
-        </EntityType>
         <ComplexType Name="OM21100_ptTreeNodeCustomer_Result">
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="500" />
           <Property Type="String" Name="ParentID" Nullable="true" MaxLength="100" />
@@ -2138,7 +2144,91 @@
           <Property Name="PriorityPromo" Type="Int32" Nullable="false" />
           <Property Name="IsDeductQtyAmt" Type="Boolean" Nullable="false" />
           <Property Name="ExcludePromo" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="SubBreakType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="BreakBoundType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ConvertDiscAmtToFreeItem" Type="Boolean" Nullable="false" />
         </EntityType>
+        <EntityType Name="OM_DiscBreak">
+          <Key>
+            <PropertyRef Name="DiscID" />
+            <PropertyRef Name="DiscSeq" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="DiscID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DiscSeq" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LineRef" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="BreakAmt" Type="Double" Nullable="false" />
+          <Property Name="BreakQty" Type="Double" Nullable="false" />
+          <Property Name="DiscAmt" Type="Double" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Name="Descr" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MaxLot" Type="Double" Nullable="false" />
+          <Property Name="BreakQtyUpper" Type="Double" Nullable="false" />
+          <Property Name="BreakAmtUpper" Type="Double" Nullable="false" />
+          <Property Name="SubBreakAmt" Type="Double" Nullable="false" />
+          <Property Name="SubBreakQty" Type="Double" Nullable="false" />
+          <Property Name="SubBreakQtyUpper" Type="Double" Nullable="false" />
+          <Property Name="SubBreakAmtUpper" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OM_DiscFreeItem">
+          <Key>
+            <PropertyRef Name="DiscID" />
+            <PropertyRef Name="DiscSeq" />
+            <PropertyRef Name="LineRef" />
+            <PropertyRef Name="FreeItemID" />
+          </Key>
+          <Property Name="DiscID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DiscSeq" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LineRef" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="FreeItemID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="FreeItemBudgetID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="FreeItemQty" Type="Double" Nullable="false" />
+          <Property Name="FreeITemSiteID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="UnitDescr" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Name="GroupItem" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="TypeUnit" Type="Int32" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OM_DiscSubBreakItem">
+          <Key>
+            <PropertyRef Name="DiscID" />
+            <PropertyRef Name="DiscSeq" />
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Name="DiscID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DiscSeq" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="UnitDesc" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="OM21100_pgDiscSubBreakItem_Result">
+          <Property Type="String" Name="DiscID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="DiscSeq" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="UnitDesc" Nullable="false" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2259,6 +2349,12 @@
                 <ScalarProperty Name="LineRef" ColumnName="LineRef" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="MaxLot" ColumnName="MaxLot" />
+                <ScalarProperty Name="BreakQtyUpper" ColumnName="BreakQtyUpper" />
+                <ScalarProperty Name="BreakAmtUpper" ColumnName="BreakAmtUpper" />
+                <ScalarProperty Name="SubBreakAmt" ColumnName="SubBreakAmt" />
+                <ScalarProperty Name="SubBreakQty" ColumnName="SubBreakQty" />
+                <ScalarProperty Name="SubBreakQtyUpper" ColumnName="SubBreakQtyUpper" />
+                <ScalarProperty Name="SubBreakAmtUpper" ColumnName="SubBreakAmtUpper" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2595,27 +2691,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="OM_DiscBreak">
-            <EntityTypeMapping TypeName="OM21100Model.OM_DiscBreak">
-              <MappingFragment StoreEntitySet="OM_DiscBreak">
-                <ScalarProperty Name="MaxLot" ColumnName="MaxLot" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="DiscAmt" ColumnName="DiscAmt" />
-                <ScalarProperty Name="BreakQty" ColumnName="BreakQty" />
-                <ScalarProperty Name="BreakAmt" ColumnName="BreakAmt" />
-                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
-                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
-                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="OM21100_pcStatus" FunctionName="eBiz4DWebAppModel.Store.OM21100_pcStatus">
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM21100Model.OM21100_pcStatus_Result">
@@ -2744,6 +2819,9 @@
                 <ScalarProperty Name="HideExcludePromo" ColumnName="HideExcludePromo" />
                 <ScalarProperty Name="HidePriorityPromo" ColumnName="HidePriorityPromo" />
                 <ScalarProperty Name="HideIsDeductQtyAmt" ColumnName="HideIsDeductQtyAmt" />
+                <ScalarProperty Name="HideSubBreakType" ColumnName="HideSubBreakType" />
+                <ScalarProperty Name="HideBreakBoundType" ColumnName="HideBreakBoundType" />
+                <ScalarProperty Name="HideConvertDiscAmtToFreeItem" ColumnName="HideConvertDiscAmtToFreeItem" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2982,6 +3060,7 @@
                 <ScalarProperty Name="GroupItem" ColumnName="GroupItem" />
                 <ScalarProperty Name="Priority" ColumnName="Priority" />
                 <ScalarProperty Name="TypeUnit" ColumnName="TypeUnit" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -3109,30 +3188,6 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="OM21100_pdDelDataErroRealse" FunctionName="eBiz4DWebAppModel.Store.OM21100_pdDelDataErroRealse" />
-          <EntitySetMapping Name="OM_DiscFreeItem">
-            <EntityTypeMapping TypeName="OM21100Model.OM_DiscFreeItem">
-              <MappingFragment StoreEntitySet="OM_DiscFreeItem">
-                <ScalarProperty Name="Priority" ColumnName="Priority" />
-                <ScalarProperty Name="TypeUnit" ColumnName="TypeUnit" />
-                <ScalarProperty Name="GroupItem" ColumnName="GroupItem" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="UnitDescr" ColumnName="UnitDescr" />
-                <ScalarProperty Name="FreeITemSiteID" ColumnName="FreeITemSiteID" />
-                <ScalarProperty Name="FreeItemQty" ColumnName="FreeItemQty" />
-                <ScalarProperty Name="FreeItemBudgetID" ColumnName="FreeItemBudgetID" />
-                <ScalarProperty Name="FreeItemID" ColumnName="FreeItemID" />
-                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
-                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
-                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="OM21100_ptTreeNodeCustomer" FunctionName="eBiz4DWebAppModel.Store.OM21100_ptTreeNodeCustomer">
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM21100Model.OM21100_ptTreeNodeCustomer_Result">
@@ -3177,6 +3232,9 @@
           <EntitySetMapping Name="OM_DiscSeq">
             <EntityTypeMapping TypeName="OM21100Model.OM_DiscSeq">
               <MappingFragment StoreEntitySet="OM_DiscSeq">
+                <ScalarProperty Name="ConvertDiscAmtToFreeItem" ColumnName="ConvertDiscAmtToFreeItem" />
+                <ScalarProperty Name="BreakBoundType" ColumnName="BreakBoundType" />
+                <ScalarProperty Name="SubBreakType" ColumnName="SubBreakType" />
                 <ScalarProperty Name="ExcludePromo" ColumnName="ExcludePromo" />
                 <ScalarProperty Name="IsDeductQtyAmt" ColumnName="IsDeductQtyAmt" />
                 <ScalarProperty Name="PriorityPromo" ColumnName="PriorityPromo" />
@@ -3220,6 +3278,87 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="OM21100_ppCheckdDuplicatePriorityPromo" FunctionName="eBiz4DWebAppModel.Store.OM21100_ppCheckdDuplicatePriorityPromo" />
+          <EntitySetMapping Name="OM_DiscBreak">
+            <EntityTypeMapping TypeName="OM21100Model.OM_DiscBreak">
+              <MappingFragment StoreEntitySet="OM_DiscBreak">
+                <ScalarProperty Name="SubBreakAmtUpper" ColumnName="SubBreakAmtUpper" />
+                <ScalarProperty Name="SubBreakQtyUpper" ColumnName="SubBreakQtyUpper" />
+                <ScalarProperty Name="SubBreakQty" ColumnName="SubBreakQty" />
+                <ScalarProperty Name="SubBreakAmt" ColumnName="SubBreakAmt" />
+                <ScalarProperty Name="BreakAmtUpper" ColumnName="BreakAmtUpper" />
+                <ScalarProperty Name="BreakQtyUpper" ColumnName="BreakQtyUpper" />
+                <ScalarProperty Name="MaxLot" ColumnName="MaxLot" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="DiscAmt" ColumnName="DiscAmt" />
+                <ScalarProperty Name="BreakQty" ColumnName="BreakQty" />
+                <ScalarProperty Name="BreakAmt" ColumnName="BreakAmt" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
+                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_DiscFreeItem">
+            <EntityTypeMapping TypeName="OM21100Model.OM_DiscFreeItem">
+              <MappingFragment StoreEntitySet="OM_DiscFreeItem">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="TypeUnit" ColumnName="TypeUnit" />
+                <ScalarProperty Name="GroupItem" ColumnName="GroupItem" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="UnitDescr" ColumnName="UnitDescr" />
+                <ScalarProperty Name="FreeITemSiteID" ColumnName="FreeITemSiteID" />
+                <ScalarProperty Name="FreeItemQty" ColumnName="FreeItemQty" />
+                <ScalarProperty Name="FreeItemBudgetID" ColumnName="FreeItemBudgetID" />
+                <ScalarProperty Name="FreeItemID" ColumnName="FreeItemID" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
+                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_DiscSubBreakItem">
+            <EntityTypeMapping TypeName="OM21100Model.OM_DiscSubBreakItem">
+              <MappingFragment StoreEntitySet="OM_DiscSubBreakItem">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
+                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM21100_pgDiscSubBreakItem" FunctionName="eBiz4DWebAppModel.Store.OM21100_pgDiscSubBreakItem">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21100Model.OM21100_pgDiscSubBreakItem_Result">
+                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
+                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -3253,7 +3392,6 @@
         <EntityTypeShape EntityType="OM21100Model.OM_OrdDisc" Width="1.5" PointX="7.375" PointY="0.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscChannel" Width="1.5" PointX="9" PointY="0.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscCustCate" Width="1.5" PointX="9" PointY="3.75" />
-        <EntityTypeShape EntityType="OM21100Model.OM_DiscBreak" Width="1.5" PointX="11.375" PointY="6.75" />
         <EntityTypeShape EntityType="OM21100Model.IN_Inventory" Width="1.5" PointX="13.375" PointY="0.75" />
         <EntityTypeShape EntityType="OM21100Model.IN_Setup" Width="1.5" PointX="15.375" PointY="10.75" />
         <EntityTypeShape EntityType="OM21100Model.IN_ItemSite" Width="1.5" PointX="17.375" PointY="0.75" />
@@ -3262,9 +3400,11 @@
         <EntityTypeShape EntityType="OM21100Model.Batch" Width="1.5" PointX="9.375" PointY="13.75" />
         <EntityTypeShape EntityType="OM21100Model.IN_Transfer" Width="1.5" PointX="3.375" PointY="14.75" />
         <EntityTypeShape EntityType="OM21100Model.IN_Trans" Width="1.5" PointX="19.375" PointY="0.75" />
-        <EntityTypeShape EntityType="OM21100Model.OM_DiscFreeItem" Width="1.5" PointX="6.375" PointY="13.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscItem" Width="1.5" PointX="0.75" PointY="14.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscSeq" Width="1.5" PointX="17.75" PointY="15.75" />
+        <EntityTypeShape EntityType="OM21100Model.OM_DiscBreak" Width="1.5" PointX="6.375" PointY="13.75" />
+        <EntityTypeShape EntityType="OM21100Model.OM_DiscFreeItem" Width="1.5" PointX="5.375" PointY="19.75" />
+        <EntityTypeShape EntityType="OM21100Model.OM_DiscSubBreakItem" Width="1.5" PointX="19.375" PointY="10.75" />
       </Diagram>
     </Diagrams>
   </Designer>

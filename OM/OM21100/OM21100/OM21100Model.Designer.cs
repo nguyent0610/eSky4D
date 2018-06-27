@@ -228,22 +228,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_DiscBreak> OM_DiscBreak
-        {
-            get
-            {
-                if ((_OM_DiscBreak == null))
-                {
-                    _OM_DiscBreak = base.CreateObjectSet<OM_DiscBreak>("OM_DiscBreak");
-                }
-                return _OM_DiscBreak;
-            }
-        }
-        private ObjectSet<OM_DiscBreak> _OM_DiscBreak;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_Inventory> IN_Inventory
         {
             get
@@ -372,22 +356,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_DiscFreeItem> OM_DiscFreeItem
-        {
-            get
-            {
-                if ((_OM_DiscFreeItem == null))
-                {
-                    _OM_DiscFreeItem = base.CreateObjectSet<OM_DiscFreeItem>("OM_DiscFreeItem");
-                }
-                return _OM_DiscFreeItem;
-            }
-        }
-        private ObjectSet<OM_DiscFreeItem> _OM_DiscFreeItem;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_DiscItem> OM_DiscItem
         {
             get
@@ -416,6 +384,54 @@ namespace OM21100
             }
         }
         private ObjectSet<OM_DiscSeq> _OM_DiscSeq;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_DiscBreak> OM_DiscBreak
+        {
+            get
+            {
+                if ((_OM_DiscBreak == null))
+                {
+                    _OM_DiscBreak = base.CreateObjectSet<OM_DiscBreak>("OM_DiscBreak");
+                }
+                return _OM_DiscBreak;
+            }
+        }
+        private ObjectSet<OM_DiscBreak> _OM_DiscBreak;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_DiscFreeItem> OM_DiscFreeItem
+        {
+            get
+            {
+                if ((_OM_DiscFreeItem == null))
+                {
+                    _OM_DiscFreeItem = base.CreateObjectSet<OM_DiscFreeItem>("OM_DiscFreeItem");
+                }
+                return _OM_DiscFreeItem;
+            }
+        }
+        private ObjectSet<OM_DiscFreeItem> _OM_DiscFreeItem;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_DiscSubBreakItem> OM_DiscSubBreakItem
+        {
+            get
+            {
+                if ((_OM_DiscSubBreakItem == null))
+                {
+                    _OM_DiscSubBreakItem = base.CreateObjectSet<OM_DiscSubBreakItem>("OM_DiscSubBreakItem");
+                }
+                return _OM_DiscSubBreakItem;
+            }
+        }
+        private ObjectSet<OM_DiscSubBreakItem> _OM_DiscSubBreakItem;
 
         #endregion
 
@@ -502,14 +518,6 @@ namespace OM21100
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_DiscBreak EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_DiscBreak(OM_DiscBreak oM_DiscBreak)
-        {
-            base.AddObject("OM_DiscBreak", oM_DiscBreak);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the IN_Inventory EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToIN_Inventory(IN_Inventory iN_Inventory)
@@ -574,14 +582,6 @@ namespace OM21100
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_DiscFreeItem EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_DiscFreeItem(OM_DiscFreeItem oM_DiscFreeItem)
-        {
-            base.AddObject("OM_DiscFreeItem", oM_DiscFreeItem);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the OM_DiscItem EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_DiscItem(OM_DiscItem oM_DiscItem)
@@ -595,6 +595,30 @@ namespace OM21100
         public void AddToOM_DiscSeq(OM_DiscSeq oM_DiscSeq)
         {
             base.AddObject("OM_DiscSeq", oM_DiscSeq);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_DiscBreak EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_DiscBreak(OM_DiscBreak oM_DiscBreak)
+        {
+            base.AddObject("OM_DiscBreak", oM_DiscBreak);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_DiscFreeItem EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_DiscFreeItem(OM_DiscFreeItem oM_DiscFreeItem)
+        {
+            base.AddObject("OM_DiscFreeItem", oM_DiscFreeItem);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_DiscSubBreakItem EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_DiscSubBreakItem(OM_DiscSubBreakItem oM_DiscSubBreakItem)
+        {
+            base.AddObject("OM_DiscSubBreakItem", oM_DiscSubBreakItem);
         }
 
         #endregion
@@ -2498,6 +2522,69 @@ namespace OM21100
             }
     
             return base.ExecuteFunction<global::System.String>("OM21100_ppCheckdDuplicatePriorityPromo", discIDParameter, discSeqParameter, discTypeParameter, priorityPromoParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="discID">No Metadata Documentation available.</param>
+        /// <param name="discSeq">No Metadata Documentation available.</param>
+        public ObjectResult<OM21100_pgDiscSubBreakItem_Result> OM21100_pgDiscSubBreakItem(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String discID, global::System.String discSeq)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter discIDParameter;
+            if (discID != null)
+            {
+                discIDParameter = new ObjectParameter("DiscID", discID);
+            }
+            else
+            {
+                discIDParameter = new ObjectParameter("DiscID", typeof(global::System.String));
+            }
+    
+            ObjectParameter discSeqParameter;
+            if (discSeq != null)
+            {
+                discSeqParameter = new ObjectParameter("DiscSeq", discSeq);
+            }
+            else
+            {
+                discSeqParameter = new ObjectParameter("DiscSeq", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM21100_pgDiscSubBreakItem_Result>("OM21100_pgDiscSubBreakItem", userNameParameter, cpnyIDParameter, langIDParameter, discIDParameter, discSeqParameter);
         }
 
         #endregion
@@ -10526,7 +10613,13 @@ namespace OM21100
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="maxLot">Initial value of the MaxLot property.</param>
-        public static OM_DiscBreak CreateOM_DiscBreak(global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.Double breakAmt, global::System.Double breakQty, global::System.Double discAmt, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double maxLot)
+        /// <param name="breakQtyUpper">Initial value of the BreakQtyUpper property.</param>
+        /// <param name="breakAmtUpper">Initial value of the BreakAmtUpper property.</param>
+        /// <param name="subBreakAmt">Initial value of the SubBreakAmt property.</param>
+        /// <param name="subBreakQty">Initial value of the SubBreakQty property.</param>
+        /// <param name="subBreakQtyUpper">Initial value of the SubBreakQtyUpper property.</param>
+        /// <param name="subBreakAmtUpper">Initial value of the SubBreakAmtUpper property.</param>
+        public static OM_DiscBreak CreateOM_DiscBreak(global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.Double breakAmt, global::System.Double breakQty, global::System.Double discAmt, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double maxLot, global::System.Double breakQtyUpper, global::System.Double breakAmtUpper, global::System.Double subBreakAmt, global::System.Double subBreakQty, global::System.Double subBreakQtyUpper, global::System.Double subBreakAmtUpper)
         {
             OM_DiscBreak oM_DiscBreak = new OM_DiscBreak();
             oM_DiscBreak.DiscID = discID;
@@ -10543,6 +10636,12 @@ namespace OM21100
             oM_DiscBreak.LUpd_User = lUpd_User;
             oM_DiscBreak.tstamp = tstamp;
             oM_DiscBreak.MaxLot = maxLot;
+            oM_DiscBreak.BreakQtyUpper = breakQtyUpper;
+            oM_DiscBreak.BreakAmtUpper = breakAmtUpper;
+            oM_DiscBreak.SubBreakAmt = subBreakAmt;
+            oM_DiscBreak.SubBreakQty = subBreakQty;
+            oM_DiscBreak.SubBreakQtyUpper = subBreakQtyUpper;
+            oM_DiscBreak.SubBreakAmtUpper = subBreakAmtUpper;
             return oM_DiscBreak;
         }
 
@@ -10918,6 +11017,150 @@ namespace OM21100
         private global::System.Double _MaxLot;
         partial void OnMaxLotChanging(global::System.Double value);
         partial void OnMaxLotChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double BreakQtyUpper
+        {
+            get
+            {
+                return _BreakQtyUpper;
+            }
+            set
+            {
+                OnBreakQtyUpperChanging(value);
+                ReportPropertyChanging("BreakQtyUpper");
+                _BreakQtyUpper = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("BreakQtyUpper");
+                OnBreakQtyUpperChanged();
+            }
+        }
+        private global::System.Double _BreakQtyUpper;
+        partial void OnBreakQtyUpperChanging(global::System.Double value);
+        partial void OnBreakQtyUpperChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double BreakAmtUpper
+        {
+            get
+            {
+                return _BreakAmtUpper;
+            }
+            set
+            {
+                OnBreakAmtUpperChanging(value);
+                ReportPropertyChanging("BreakAmtUpper");
+                _BreakAmtUpper = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("BreakAmtUpper");
+                OnBreakAmtUpperChanged();
+            }
+        }
+        private global::System.Double _BreakAmtUpper;
+        partial void OnBreakAmtUpperChanging(global::System.Double value);
+        partial void OnBreakAmtUpperChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double SubBreakAmt
+        {
+            get
+            {
+                return _SubBreakAmt;
+            }
+            set
+            {
+                OnSubBreakAmtChanging(value);
+                ReportPropertyChanging("SubBreakAmt");
+                _SubBreakAmt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SubBreakAmt");
+                OnSubBreakAmtChanged();
+            }
+        }
+        private global::System.Double _SubBreakAmt;
+        partial void OnSubBreakAmtChanging(global::System.Double value);
+        partial void OnSubBreakAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double SubBreakQty
+        {
+            get
+            {
+                return _SubBreakQty;
+            }
+            set
+            {
+                OnSubBreakQtyChanging(value);
+                ReportPropertyChanging("SubBreakQty");
+                _SubBreakQty = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SubBreakQty");
+                OnSubBreakQtyChanged();
+            }
+        }
+        private global::System.Double _SubBreakQty;
+        partial void OnSubBreakQtyChanging(global::System.Double value);
+        partial void OnSubBreakQtyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double SubBreakQtyUpper
+        {
+            get
+            {
+                return _SubBreakQtyUpper;
+            }
+            set
+            {
+                OnSubBreakQtyUpperChanging(value);
+                ReportPropertyChanging("SubBreakQtyUpper");
+                _SubBreakQtyUpper = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SubBreakQtyUpper");
+                OnSubBreakQtyUpperChanged();
+            }
+        }
+        private global::System.Double _SubBreakQtyUpper;
+        partial void OnSubBreakQtyUpperChanging(global::System.Double value);
+        partial void OnSubBreakQtyUpperChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double SubBreakAmtUpper
+        {
+            get
+            {
+                return _SubBreakAmtUpper;
+            }
+            set
+            {
+                OnSubBreakAmtUpperChanging(value);
+                ReportPropertyChanging("SubBreakAmtUpper");
+                _SubBreakAmtUpper = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SubBreakAmtUpper");
+                OnSubBreakAmtUpperChanged();
+            }
+        }
+        private global::System.Double _SubBreakAmtUpper;
+        partial void OnSubBreakAmtUpperChanging(global::System.Double value);
+        partial void OnSubBreakAmtUpperChanged();
 
         #endregion
 
@@ -12282,7 +12525,8 @@ namespace OM21100
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="priority">Initial value of the Priority property.</param>
-        public static OM_DiscFreeItem CreateOM_DiscFreeItem(global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.String freeItemID, global::System.Double freeItemQty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Int32 priority)
+        /// <param name="price">Initial value of the Price property.</param>
+        public static OM_DiscFreeItem CreateOM_DiscFreeItem(global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.String freeItemID, global::System.Double freeItemQty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Int32 priority, global::System.Double price)
         {
             OM_DiscFreeItem oM_DiscFreeItem = new OM_DiscFreeItem();
             oM_DiscFreeItem.DiscID = discID;
@@ -12298,6 +12542,7 @@ namespace OM21100
             oM_DiscFreeItem.LUpd_User = lUpd_User;
             oM_DiscFreeItem.tstamp = tstamp;
             oM_DiscFreeItem.Priority = priority;
+            oM_DiscFreeItem.Price = price;
             return oM_DiscFreeItem;
         }
 
@@ -12748,6 +12993,30 @@ namespace OM21100
         private global::System.Int32 _Priority;
         partial void OnPriorityChanging(global::System.Int32 value);
         partial void OnPriorityChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Price
+        {
+            get
+            {
+                return _Price;
+            }
+            set
+            {
+                OnPriceChanging(value);
+                ReportPropertyChanging("Price");
+                _Price = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Price");
+                OnPriceChanged();
+            }
+        }
+        private global::System.Double _Price;
+        partial void OnPriceChanging(global::System.Double value);
+        partial void OnPriceChanged();
 
         #endregion
 
@@ -14127,7 +14396,10 @@ namespace OM21100
         /// <param name="prorateAmtType">Initial value of the ProrateAmtType property.</param>
         /// <param name="priorityPromo">Initial value of the PriorityPromo property.</param>
         /// <param name="isDeductQtyAmt">Initial value of the IsDeductQtyAmt property.</param>
-        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty, global::System.Boolean excludeOtherDisc, global::System.Boolean pctDiscountByLevel, global::System.String requiredType, global::System.Boolean isRequiredQty, global::System.String choiceType, global::System.String prorateAmtType, global::System.Int32 priorityPromo, global::System.Boolean isDeductQtyAmt)
+        /// <param name="subBreakType">Initial value of the SubBreakType property.</param>
+        /// <param name="breakBoundType">Initial value of the BreakBoundType property.</param>
+        /// <param name="convertDiscAmtToFreeItem">Initial value of the ConvertDiscAmtToFreeItem property.</param>
+        public static OM_DiscSeq CreateOM_DiscSeq(global::System.String discID, global::System.String discSeq, global::System.Int16 active, global::System.DateTime endDate, global::System.Int16 promo, global::System.DateTime startDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String proAplForItem, global::System.Boolean autoFreeItem, global::System.Boolean allowEditDisc, global::System.String status, global::System.DateTime pOStartDate, global::System.DateTime pOEndDate, global::System.Boolean pOUse, global::System.Boolean exactQty, global::System.Boolean excludeOtherDisc, global::System.Boolean pctDiscountByLevel, global::System.String requiredType, global::System.Boolean isRequiredQty, global::System.String choiceType, global::System.String prorateAmtType, global::System.Int32 priorityPromo, global::System.Boolean isDeductQtyAmt, global::System.String subBreakType, global::System.String breakBoundType, global::System.Boolean convertDiscAmtToFreeItem)
         {
             OM_DiscSeq oM_DiscSeq = new OM_DiscSeq();
             oM_DiscSeq.DiscID = discID;
@@ -14159,6 +14431,9 @@ namespace OM21100
             oM_DiscSeq.ProrateAmtType = prorateAmtType;
             oM_DiscSeq.PriorityPromo = priorityPromo;
             oM_DiscSeq.IsDeductQtyAmt = isDeductQtyAmt;
+            oM_DiscSeq.SubBreakType = subBreakType;
+            oM_DiscSeq.BreakBoundType = breakBoundType;
+            oM_DiscSeq.ConvertDiscAmtToFreeItem = convertDiscAmtToFreeItem;
             return oM_DiscSeq;
         }
 
@@ -15107,6 +15382,401 @@ namespace OM21100
         private global::System.String _ExcludePromo;
         partial void OnExcludePromoChanging(global::System.String value);
         partial void OnExcludePromoChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SubBreakType
+        {
+            get
+            {
+                return _SubBreakType;
+            }
+            set
+            {
+                OnSubBreakTypeChanging(value);
+                ReportPropertyChanging("SubBreakType");
+                _SubBreakType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SubBreakType");
+                OnSubBreakTypeChanged();
+            }
+        }
+        private global::System.String _SubBreakType;
+        partial void OnSubBreakTypeChanging(global::System.String value);
+        partial void OnSubBreakTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BreakBoundType
+        {
+            get
+            {
+                return _BreakBoundType;
+            }
+            set
+            {
+                OnBreakBoundTypeChanging(value);
+                ReportPropertyChanging("BreakBoundType");
+                _BreakBoundType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BreakBoundType");
+                OnBreakBoundTypeChanged();
+            }
+        }
+        private global::System.String _BreakBoundType;
+        partial void OnBreakBoundTypeChanging(global::System.String value);
+        partial void OnBreakBoundTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean ConvertDiscAmtToFreeItem
+        {
+            get
+            {
+                return _ConvertDiscAmtToFreeItem;
+            }
+            set
+            {
+                OnConvertDiscAmtToFreeItemChanging(value);
+                ReportPropertyChanging("ConvertDiscAmtToFreeItem");
+                _ConvertDiscAmtToFreeItem = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ConvertDiscAmtToFreeItem");
+                OnConvertDiscAmtToFreeItemChanged();
+            }
+        }
+        private global::System.Boolean _ConvertDiscAmtToFreeItem;
+        partial void OnConvertDiscAmtToFreeItemChanging(global::System.Boolean value);
+        partial void OnConvertDiscAmtToFreeItemChanged();
+
+        #endregion
+
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="OM21100Model", Name="OM_DiscSubBreakItem")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class OM_DiscSubBreakItem : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM_DiscSubBreakItem object.
+        /// </summary>
+        /// <param name="discID">Initial value of the DiscID property.</param>
+        /// <param name="discSeq">Initial value of the DiscSeq property.</param>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        /// <param name="unitDesc">Initial value of the UnitDesc property.</param>
+        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
+        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
+        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static OM_DiscSubBreakItem CreateOM_DiscSubBreakItem(global::System.String discID, global::System.String discSeq, global::System.String invtID, global::System.String unitDesc, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        {
+            OM_DiscSubBreakItem oM_DiscSubBreakItem = new OM_DiscSubBreakItem();
+            oM_DiscSubBreakItem.DiscID = discID;
+            oM_DiscSubBreakItem.DiscSeq = discSeq;
+            oM_DiscSubBreakItem.InvtID = invtID;
+            oM_DiscSubBreakItem.UnitDesc = unitDesc;
+            oM_DiscSubBreakItem.Crtd_DateTime = crtd_DateTime;
+            oM_DiscSubBreakItem.Crtd_Prog = crtd_Prog;
+            oM_DiscSubBreakItem.Crtd_User = crtd_User;
+            oM_DiscSubBreakItem.LUpd_DateTime = lUpd_DateTime;
+            oM_DiscSubBreakItem.LUpd_Prog = lUpd_Prog;
+            oM_DiscSubBreakItem.LUpd_User = lUpd_User;
+            oM_DiscSubBreakItem.tstamp = tstamp;
+            return oM_DiscSubBreakItem;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DiscID
+        {
+            get
+            {
+                return _DiscID;
+            }
+            set
+            {
+                if (_DiscID != value)
+                {
+                    OnDiscIDChanging(value);
+                    ReportPropertyChanging("DiscID");
+                    _DiscID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("DiscID");
+                    OnDiscIDChanged();
+                }
+            }
+        }
+        private global::System.String _DiscID;
+        partial void OnDiscIDChanging(global::System.String value);
+        partial void OnDiscIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DiscSeq
+        {
+            get
+            {
+                return _DiscSeq;
+            }
+            set
+            {
+                if (_DiscSeq != value)
+                {
+                    OnDiscSeqChanging(value);
+                    ReportPropertyChanging("DiscSeq");
+                    _DiscSeq = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("DiscSeq");
+                    OnDiscSeqChanged();
+                }
+            }
+        }
+        private global::System.String _DiscSeq;
+        partial void OnDiscSeqChanging(global::System.String value);
+        partial void OnDiscSeqChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                if (_InvtID != value)
+                {
+                    OnInvtIDChanging(value);
+                    ReportPropertyChanging("InvtID");
+                    _InvtID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("InvtID");
+                    OnInvtIDChanged();
+                }
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String UnitDesc
+        {
+            get
+            {
+                return _UnitDesc;
+            }
+            set
+            {
+                OnUnitDescChanging(value);
+                ReportPropertyChanging("UnitDesc");
+                _UnitDesc = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("UnitDesc");
+                OnUnitDescChanged();
+            }
+        }
+        private global::System.String _UnitDesc;
+        partial void OnUnitDescChanging(global::System.String value);
+        partial void OnUnitDescChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime Crtd_DateTime
+        {
+            get
+            {
+                return _Crtd_DateTime;
+            }
+            set
+            {
+                OnCrtd_DateTimeChanging(value);
+                ReportPropertyChanging("Crtd_DateTime");
+                _Crtd_DateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Crtd_DateTime");
+                OnCrtd_DateTimeChanged();
+            }
+        }
+        private global::System.DateTime _Crtd_DateTime;
+        partial void OnCrtd_DateTimeChanging(global::System.DateTime value);
+        partial void OnCrtd_DateTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_Prog
+        {
+            get
+            {
+                return _Crtd_Prog;
+            }
+            set
+            {
+                OnCrtd_ProgChanging(value);
+                ReportPropertyChanging("Crtd_Prog");
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Crtd_Prog");
+                OnCrtd_ProgChanged();
+            }
+        }
+        private global::System.String _Crtd_Prog;
+        partial void OnCrtd_ProgChanging(global::System.String value);
+        partial void OnCrtd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_User
+        {
+            get
+            {
+                return _Crtd_User;
+            }
+            set
+            {
+                OnCrtd_UserChanging(value);
+                ReportPropertyChanging("Crtd_User");
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Crtd_User");
+                OnCrtd_UserChanged();
+            }
+        }
+        private global::System.String _Crtd_User;
+        partial void OnCrtd_UserChanging(global::System.String value);
+        partial void OnCrtd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime LUpd_DateTime
+        {
+            get
+            {
+                return _LUpd_DateTime;
+            }
+            set
+            {
+                OnLUpd_DateTimeChanging(value);
+                ReportPropertyChanging("LUpd_DateTime");
+                _LUpd_DateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LUpd_DateTime");
+                OnLUpd_DateTimeChanged();
+            }
+        }
+        private global::System.DateTime _LUpd_DateTime;
+        partial void OnLUpd_DateTimeChanging(global::System.DateTime value);
+        partial void OnLUpd_DateTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_Prog
+        {
+            get
+            {
+                return _LUpd_Prog;
+            }
+            set
+            {
+                OnLUpd_ProgChanging(value);
+                ReportPropertyChanging("LUpd_Prog");
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LUpd_Prog");
+                OnLUpd_ProgChanged();
+            }
+        }
+        private global::System.String _LUpd_Prog;
+        partial void OnLUpd_ProgChanging(global::System.String value);
+        partial void OnLUpd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_User
+        {
+            get
+            {
+                return _LUpd_User;
+            }
+            set
+            {
+                OnLUpd_UserChanging(value);
+                ReportPropertyChanging("LUpd_User");
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LUpd_User");
+                OnLUpd_UserChanged();
+            }
+        }
+        private global::System.String _LUpd_User;
+        partial void OnLUpd_UserChanging(global::System.String value);
+        partial void OnLUpd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
 
         #endregion
 
@@ -17325,6 +17995,78 @@ namespace OM21100
         private Nullable<global::System.Boolean> _HideIsDeductQtyAmt;
         partial void OnHideIsDeductQtyAmtChanging(Nullable<global::System.Boolean> value);
         partial void OnHideIsDeductQtyAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideSubBreakType
+        {
+            get
+            {
+                return _HideSubBreakType;
+            }
+            set
+            {
+                OnHideSubBreakTypeChanging(value);
+                ReportPropertyChanging("HideSubBreakType");
+                _HideSubBreakType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideSubBreakType");
+                OnHideSubBreakTypeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideSubBreakType;
+        partial void OnHideSubBreakTypeChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideSubBreakTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideBreakBoundType
+        {
+            get
+            {
+                return _HideBreakBoundType;
+            }
+            set
+            {
+                OnHideBreakBoundTypeChanging(value);
+                ReportPropertyChanging("HideBreakBoundType");
+                _HideBreakBoundType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideBreakBoundType");
+                OnHideBreakBoundTypeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideBreakBoundType;
+        partial void OnHideBreakBoundTypeChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideBreakBoundTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HideConvertDiscAmtToFreeItem
+        {
+            get
+            {
+                return _HideConvertDiscAmtToFreeItem;
+            }
+            set
+            {
+                OnHideConvertDiscAmtToFreeItemChanging(value);
+                ReportPropertyChanging("HideConvertDiscAmtToFreeItem");
+                _HideConvertDiscAmtToFreeItem = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HideConvertDiscAmtToFreeItem");
+                OnHideConvertDiscAmtToFreeItemChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HideConvertDiscAmtToFreeItem;
+        partial void OnHideConvertDiscAmtToFreeItemChanging(Nullable<global::System.Boolean> value);
+        partial void OnHideConvertDiscAmtToFreeItemChanged();
 
         #endregion
 
@@ -18784,7 +19526,13 @@ namespace OM21100
         /// <param name="lineRef">Initial value of the LineRef property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="maxLot">Initial value of the MaxLot property.</param>
-        public static OM21100_pgDiscBreak_Result CreateOM21100_pgDiscBreak_Result(global::System.Double breakAmt, global::System.Double breakQty, global::System.Double discAmt, global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.Byte[] tstamp, global::System.Double maxLot)
+        /// <param name="breakQtyUpper">Initial value of the BreakQtyUpper property.</param>
+        /// <param name="breakAmtUpper">Initial value of the BreakAmtUpper property.</param>
+        /// <param name="subBreakAmt">Initial value of the SubBreakAmt property.</param>
+        /// <param name="subBreakQty">Initial value of the SubBreakQty property.</param>
+        /// <param name="subBreakQtyUpper">Initial value of the SubBreakQtyUpper property.</param>
+        /// <param name="subBreakAmtUpper">Initial value of the SubBreakAmtUpper property.</param>
+        public static OM21100_pgDiscBreak_Result CreateOM21100_pgDiscBreak_Result(global::System.Double breakAmt, global::System.Double breakQty, global::System.Double discAmt, global::System.String discID, global::System.String discSeq, global::System.String lineRef, global::System.Byte[] tstamp, global::System.Double maxLot, global::System.Double breakQtyUpper, global::System.Double breakAmtUpper, global::System.Double subBreakAmt, global::System.Double subBreakQty, global::System.Double subBreakQtyUpper, global::System.Double subBreakAmtUpper)
         {
             OM21100_pgDiscBreak_Result oM21100_pgDiscBreak_Result = new OM21100_pgDiscBreak_Result();
             oM21100_pgDiscBreak_Result.BreakAmt = breakAmt;
@@ -18795,6 +19543,12 @@ namespace OM21100
             oM21100_pgDiscBreak_Result.LineRef = lineRef;
             oM21100_pgDiscBreak_Result.tstamp = tstamp;
             oM21100_pgDiscBreak_Result.MaxLot = maxLot;
+            oM21100_pgDiscBreak_Result.BreakQtyUpper = breakQtyUpper;
+            oM21100_pgDiscBreak_Result.BreakAmtUpper = breakAmtUpper;
+            oM21100_pgDiscBreak_Result.SubBreakAmt = subBreakAmt;
+            oM21100_pgDiscBreak_Result.SubBreakQty = subBreakQty;
+            oM21100_pgDiscBreak_Result.SubBreakQtyUpper = subBreakQtyUpper;
+            oM21100_pgDiscBreak_Result.SubBreakAmtUpper = subBreakAmtUpper;
             return oM21100_pgDiscBreak_Result;
         }
 
@@ -19017,6 +19771,150 @@ namespace OM21100
         private global::System.Double _MaxLot;
         partial void OnMaxLotChanging(global::System.Double value);
         partial void OnMaxLotChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double BreakQtyUpper
+        {
+            get
+            {
+                return _BreakQtyUpper;
+            }
+            set
+            {
+                OnBreakQtyUpperChanging(value);
+                ReportPropertyChanging("BreakQtyUpper");
+                _BreakQtyUpper = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("BreakQtyUpper");
+                OnBreakQtyUpperChanged();
+            }
+        }
+        private global::System.Double _BreakQtyUpper;
+        partial void OnBreakQtyUpperChanging(global::System.Double value);
+        partial void OnBreakQtyUpperChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double BreakAmtUpper
+        {
+            get
+            {
+                return _BreakAmtUpper;
+            }
+            set
+            {
+                OnBreakAmtUpperChanging(value);
+                ReportPropertyChanging("BreakAmtUpper");
+                _BreakAmtUpper = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("BreakAmtUpper");
+                OnBreakAmtUpperChanged();
+            }
+        }
+        private global::System.Double _BreakAmtUpper;
+        partial void OnBreakAmtUpperChanging(global::System.Double value);
+        partial void OnBreakAmtUpperChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double SubBreakAmt
+        {
+            get
+            {
+                return _SubBreakAmt;
+            }
+            set
+            {
+                OnSubBreakAmtChanging(value);
+                ReportPropertyChanging("SubBreakAmt");
+                _SubBreakAmt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SubBreakAmt");
+                OnSubBreakAmtChanged();
+            }
+        }
+        private global::System.Double _SubBreakAmt;
+        partial void OnSubBreakAmtChanging(global::System.Double value);
+        partial void OnSubBreakAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double SubBreakQty
+        {
+            get
+            {
+                return _SubBreakQty;
+            }
+            set
+            {
+                OnSubBreakQtyChanging(value);
+                ReportPropertyChanging("SubBreakQty");
+                _SubBreakQty = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SubBreakQty");
+                OnSubBreakQtyChanged();
+            }
+        }
+        private global::System.Double _SubBreakQty;
+        partial void OnSubBreakQtyChanging(global::System.Double value);
+        partial void OnSubBreakQtyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double SubBreakQtyUpper
+        {
+            get
+            {
+                return _SubBreakQtyUpper;
+            }
+            set
+            {
+                OnSubBreakQtyUpperChanging(value);
+                ReportPropertyChanging("SubBreakQtyUpper");
+                _SubBreakQtyUpper = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SubBreakQtyUpper");
+                OnSubBreakQtyUpperChanged();
+            }
+        }
+        private global::System.Double _SubBreakQtyUpper;
+        partial void OnSubBreakQtyUpperChanging(global::System.Double value);
+        partial void OnSubBreakQtyUpperChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double SubBreakAmtUpper
+        {
+            get
+            {
+                return _SubBreakAmtUpper;
+            }
+            set
+            {
+                OnSubBreakAmtUpperChanging(value);
+                ReportPropertyChanging("SubBreakAmtUpper");
+                _SubBreakAmtUpper = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SubBreakAmtUpper");
+                OnSubBreakAmtUpperChanged();
+            }
+        }
+        private global::System.Double _SubBreakAmtUpper;
+        partial void OnSubBreakAmtUpperChanging(global::System.Double value);
+        partial void OnSubBreakAmtUpperChanged();
 
         #endregion
 
@@ -21088,6 +21986,187 @@ namespace OM21100
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM21100Model", Name="OM21100_pgDiscSubBreakItem_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM21100_pgDiscSubBreakItem_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM21100_pgDiscSubBreakItem_Result object.
+        /// </summary>
+        /// <param name="discID">Initial value of the DiscID property.</param>
+        /// <param name="discSeq">Initial value of the DiscSeq property.</param>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        /// <param name="unitDesc">Initial value of the UnitDesc property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static OM21100_pgDiscSubBreakItem_Result CreateOM21100_pgDiscSubBreakItem_Result(global::System.String discID, global::System.String discSeq, global::System.String invtID, global::System.String unitDesc, global::System.Byte[] tstamp)
+        {
+            OM21100_pgDiscSubBreakItem_Result oM21100_pgDiscSubBreakItem_Result = new OM21100_pgDiscSubBreakItem_Result();
+            oM21100_pgDiscSubBreakItem_Result.DiscID = discID;
+            oM21100_pgDiscSubBreakItem_Result.DiscSeq = discSeq;
+            oM21100_pgDiscSubBreakItem_Result.InvtID = invtID;
+            oM21100_pgDiscSubBreakItem_Result.UnitDesc = unitDesc;
+            oM21100_pgDiscSubBreakItem_Result.tstamp = tstamp;
+            return oM21100_pgDiscSubBreakItem_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DiscID
+        {
+            get
+            {
+                return _DiscID;
+            }
+            set
+            {
+                OnDiscIDChanging(value);
+                ReportPropertyChanging("DiscID");
+                _DiscID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DiscID");
+                OnDiscIDChanged();
+            }
+        }
+        private global::System.String _DiscID;
+        partial void OnDiscIDChanging(global::System.String value);
+        partial void OnDiscIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DiscSeq
+        {
+            get
+            {
+                return _DiscSeq;
+            }
+            set
+            {
+                OnDiscSeqChanging(value);
+                ReportPropertyChanging("DiscSeq");
+                _DiscSeq = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DiscSeq");
+                OnDiscSeqChanged();
+            }
+        }
+        private global::System.String _DiscSeq;
+        partial void OnDiscSeqChanging(global::System.String value);
+        partial void OnDiscSeqChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String UnitDesc
+        {
+            get
+            {
+                return _UnitDesc;
+            }
+            set
+            {
+                OnUnitDescChanging(value);
+                ReportPropertyChanging("UnitDesc");
+                _UnitDesc = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("UnitDesc");
+                OnUnitDescChanged();
+            }
+        }
+        private global::System.String _UnitDesc;
+        partial void OnUnitDescChanging(global::System.String value);
+        partial void OnUnitDescChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="OM21100Model", Name="OM21100_pgFreeItem_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -21111,7 +22190,8 @@ namespace OM21100
         /// <param name="freeItemID">Initial value of the FreeItemID property.</param>
         /// <param name="freeItemQty">Initial value of the FreeItemQty property.</param>
         /// <param name="priority">Initial value of the Priority property.</param>
-        public static OM21100_pgFreeItem_Result CreateOM21100_pgFreeItem_Result(global::System.String discID, global::System.String discSeq, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.String lineRef, global::System.String freeItemID, global::System.Double freeItemQty, global::System.Int32 priority)
+        /// <param name="price">Initial value of the Price property.</param>
+        public static OM21100_pgFreeItem_Result CreateOM21100_pgFreeItem_Result(global::System.String discID, global::System.String discSeq, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.String lineRef, global::System.String freeItemID, global::System.Double freeItemQty, global::System.Int32 priority, global::System.Double price)
         {
             OM21100_pgFreeItem_Result oM21100_pgFreeItem_Result = new OM21100_pgFreeItem_Result();
             oM21100_pgFreeItem_Result.DiscID = discID;
@@ -21127,6 +22207,7 @@ namespace OM21100
             oM21100_pgFreeItem_Result.FreeItemID = freeItemID;
             oM21100_pgFreeItem_Result.FreeItemQty = freeItemQty;
             oM21100_pgFreeItem_Result.Priority = priority;
+            oM21100_pgFreeItem_Result.Price = price;
             return oM21100_pgFreeItem_Result;
         }
 
@@ -21565,6 +22646,30 @@ namespace OM21100
         private Nullable<global::System.Int32> _TypeUnit;
         partial void OnTypeUnitChanging(Nullable<global::System.Int32> value);
         partial void OnTypeUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Price
+        {
+            get
+            {
+                return _Price;
+            }
+            set
+            {
+                OnPriceChanging(value);
+                ReportPropertyChanging("Price");
+                _Price = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Price");
+                OnPriceChanged();
+            }
+        }
+        private global::System.Double _Price;
+        partial void OnPriceChanging(global::System.Double value);
+        partial void OnPriceChanged();
 
         #endregion
 
