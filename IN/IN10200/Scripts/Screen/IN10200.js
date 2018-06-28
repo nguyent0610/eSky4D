@@ -353,7 +353,7 @@ var cboBatNbr_Change = function (item, newValue, oldValue) {
         bindBatch(record);
     } else {
         if (HQ.recentRecord != record) {
-
+            App.cboBatNbr.store.reload();
         }
         else {
         }
@@ -1303,6 +1303,7 @@ var deleteTrans = function (item) {
                     HQ.message.process(msg, data, true);
                     HQ.isChange = false;
                     HQ.common.changeData(HQ.isChange, 'IN10200');
+                    App.stoBatch.reload();
                 },
                 failure: function (msg, data) {
                     HQ.message.process(msg, data, true);
