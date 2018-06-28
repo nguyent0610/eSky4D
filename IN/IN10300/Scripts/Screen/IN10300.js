@@ -1364,7 +1364,7 @@ var calcLot = function (record) {
                                 newLot.data.UnitMultDiv = 'M';
                                 newLot.data.Qty = newQty;
                                 newLot.data.UnitDesc = options.row.invt.StkUnit;
-                                if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+                                if (record.invt.ValMthd == "A" || record.invt.ValMthd == "E") {
                                     newLot.data.UnitPrice = newLot.data.UnitCost = site.AvgCost;
                                 } else {
                                     newLot.data.UnitPrice = newLot.data.UnitCost = 0;
