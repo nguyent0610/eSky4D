@@ -2189,6 +2189,7 @@ var DiscDefintion = {
                 App.cboRequiredType.setReadOnly(true);
                 App.cboSubBreakType.setReadOnly(true);
                 App.cboBreakBoundType.setReadOnly(true);
+                App.chkConvertDiscAmtToFreeItem.setReadOnly(true);
             }
             else {
                 App.cboBreakBy.setReadOnly(false);
@@ -2196,6 +2197,7 @@ var DiscDefintion = {
                 App.cboRequiredType.setReadOnly(false);
                 App.cboSubBreakType.setReadOnly(false);
                 App.cboBreakBoundType.setReadOnly(false);
+                App.chkConvertDiscAmtToFreeItem.setReadOnly(false)
             }
 
             if (discSeqRec.data.Status == _holdStatus) {
@@ -4254,7 +4256,7 @@ var DiscDefintion = {
                                 return false;
                         }
 
-                        if (App.cboBreakBy.value == "A" && (e.field == "BreakQty" && e.field == 'BreakQtyUpper')) {
+                        if (App.cboBreakBy.value == "A" && (e.field == "BreakQty" || e.field == 'BreakQtyUpper')) {
                             return false;
                         }
                         else if (App.cboBreakBy.value == "Q" && App.cboDiscClass.value != "BB"
@@ -4266,7 +4268,7 @@ var DiscDefintion = {
                             || App.cboDiscClass.value == "TB") && e.field == "BreakQty") {
                             return false;
                         } else if (e.field == "DiscAmt") {
-                            if (App.grdFreeItem.store.getCount() > 1
+                            if (App.grdFreeItem.store.getCount() > 1 && App.chkConvertDiscAmtToFreeItem.getValue() == false
                                 && App.grdFreeItem.store.data.items[0].data.LineRef == e.record.data.LineRef
                                 && !Ext.isEmpty(App.grdFreeItem.store.data.items[0].data.FreeItemID)) {
                                 //console.log(App.grdFreeItem.store.data.items[0].data.FreeItemID);
@@ -4289,7 +4291,7 @@ var DiscDefintion = {
                                         }
                                     }
                                 }
-                                if (hasFreeItem) {
+                                if (hasFreeItem && App.chkConvertDiscAmtToFreeItem.getValue() == false) {
                                     return false;
                                 }
                             }
@@ -4340,7 +4342,7 @@ var DiscDefintion = {
                         // Dòng đã KM tiền thì ko tặng hàng
                         var selRec = App.slmDiscBreak.getSelection();
                         if (selRec) {
-                            if (selRec[0].data.DiscAmt) {
+                            if (selRec[0].data.DiscAmt && App.chkConvertDiscAmtToFreeItem.getValue() == false) {
                                 return false;
                             }
                         }
@@ -4356,7 +4358,7 @@ var DiscDefintion = {
                                     break;
                                 }
                             }
-                            if (!isAllowInsert) {
+                            if (!isAllowInsert && App.chkConvertDiscAmtToFreeItem.getValue() == false) {
                                 return false;
                             }
                         }

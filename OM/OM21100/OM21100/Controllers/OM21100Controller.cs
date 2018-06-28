@@ -3129,6 +3129,7 @@ namespace OM21100.Controllers
             updatedDiscSeq.IsDeductQtyAmt = inputDiscSeq.IsDeductQtyAmt;
             updatedDiscSeq.BreakBoundType = inputDiscSeq.BreakBoundType;
             updatedDiscSeq.SubBreakType = inputDiscSeq.SubBreakType;
+            updatedDiscSeq.ConvertDiscAmtToFreeItem = inputDiscSeq.ConvertDiscAmtToFreeItem;
 
             updatedDiscSeq.LUpd_DateTime = DateTime.Now;
             updatedDiscSeq.LUpd_Prog = _screenNbr;
