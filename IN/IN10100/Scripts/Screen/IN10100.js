@@ -695,7 +695,7 @@ var cboBatNbr_Change = function (item, newValue, oldValue) {
             //showMask();
             //defaultOnNew();
             //setOrderTypeContrainst();
-
+            App.BatNbr.store.reload();
         }
         else {
         }
@@ -1342,6 +1342,15 @@ var deleteHeader = function (item) {
 };
 var deleteTrans = function (item) {
     if (item == 'yes') {
+        var count = 0;
+        for (var i = 0; i < App.stoTrans.data.length; i++) {
+            if (App.stoTrans.data.items[i].data.InvtID != '')
+                count++;
+        }
+        if (count == 1) {
+            HQ.message.show(2018062501);
+            return false;
+        }
         if (App.BatNbr.value) {
             App.stoLotTrans.clearFilter();
             App.frmMain.submit({
