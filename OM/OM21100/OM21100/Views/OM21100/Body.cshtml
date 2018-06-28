@@ -528,7 +528,7 @@
 
                                         , HQ.Checkbox().ID("chkIsDeductQtyAmt")
                                         .MarginSpec("5 5 0 10").Hidden(true)
-                                        .BoxLabel(Util.GetLang("OM21100IsDeductQtyAmt")).DataIndex("IsDeductQtyAmt")
+                                        .BoxLabel(Util.GetLang("OM21100IsDedQtyAmt")).DataIndex("IsDeductQtyAmt")
                                         .Listeners(l =>
                                         {
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
@@ -539,7 +539,7 @@
                                     .Items(
                                         HQ.Checkbox().ID("chkConvertDiscAmtToFreeItem")//.Hidden(true)
                                         .MarginSpec("5 5 0 10")
-                                        .BoxLabel(Util.GetLang("ConvertDiscAmtToFrItem")).DataIndex("ConvertDiscAmtToFreeItem")
+                                        .BoxLabel(Util.GetLang("CnvDiscAmtToFrItem")).DataIndex("ConvertDiscAmtToFreeItem")
                                         .Listeners(l =>
                                         {
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
