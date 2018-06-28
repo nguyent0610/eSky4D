@@ -154,6 +154,10 @@ var firstLoad = function () {
     } else {
         App.tabDetail.child('#pnlCompetitor').tab.show();
     }
+    if (HQ.showVendorBuyer) {
+        App.txtVendorID.setVisible(true);
+        App.txtBuyerID.setVisible(true);
+    }
 };
 
 var menuClick = function (command) {
@@ -1688,7 +1692,7 @@ var expandParentNode = function (node) {
     }
     Ext.resumeLayouts();
 };
-
+var isFirstLoad = false;
 var tabDetail_Change = function (tabPanel, newCard, oldCard, eOpts) {
     HQ.focus = tabPanel.activeTab.id;
 };

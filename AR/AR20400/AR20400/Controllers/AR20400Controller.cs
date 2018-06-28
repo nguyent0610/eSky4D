@@ -121,6 +121,7 @@ namespace AR20400.Controllers
             var reqOUnit = false;
             var reqSlsperson = false;
             var showCompetitor = false;
+            var showVendorBuyer = false;
             var objConfig = _db.AR20400_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
             if (objConfig != null)
             {
@@ -132,6 +133,7 @@ namespace AR20400.Controllers
                 reqSlsperson = objConfig.RequiredSlsperID.HasValue && objConfig.RequiredSlsperID.Value;
                 reqOUnit = !hideOUnit && objConfig.RequiredOUnit.HasValue && objConfig.RequiredOUnit.Value;
                 showCompetitor = objConfig.ShowCompetitor.HasValue && objConfig.ShowCompetitor.Value;
+                showVendorBuyer = objConfig.ShowVendorBuyer ?? false;
             }
             ViewBag.hideCity = hideCity;
             ViewBag.hideColumn = hideColumn;
@@ -141,6 +143,7 @@ namespace AR20400.Controllers
             ViewBag.reqSlsperson = reqSlsperson;
             ViewBag.reqOUnit = reqOUnit;
             ViewBag.showCompetitor = showCompetitor;
+            ViewBag.showVendorBuyer = showVendorBuyer;
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -728,6 +731,8 @@ namespace AR20400.Controllers
             t.BrandID = s.BrandID;
             t.Market = s.Market;
             t.BillMarket = s.BillMarket;
+            t.VendorID = s.VendorID;
+            t.BuyerID = s.BuyerID;
 
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

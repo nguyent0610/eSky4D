@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_CustAdvTool">
           <Key>
             <PropertyRef Name="CustID" />
@@ -53,6 +53,7 @@
           <Property Name="TaxID01" Type="varchar" MaxLength="10" />
           <Property Name="TaxID02" Type="varchar" MaxLength="10" />
           <Property Name="TaxID03" Type="varchar" MaxLength="10" />
+          <Property Name="PrefixCustID" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="AR_CustDisplayMethod">
           <Key>
@@ -98,19 +99,17 @@
           <Property Name="CustId" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="CustName" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Addr1" Type="nvarchar(max)" />
-          <Property Name="Addr2" Type="nvarchar" MaxLength="100" />
+          <Property Name="Addr2" Type="nvarchar(max)" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
-          <Property Name="BillWard" Type="nvarchar" MaxLength="100" />
           <Property Name="BillAddr1" Type="nvarchar(max)" />
-          <Property Name="BillAddr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="BillAddr2" Type="nvarchar(max)" />
           <Property Name="BillAttn" Type="nvarchar" MaxLength="200" />
           <Property Name="BillCity" Type="varchar" MaxLength="10" />
-          <Property Name="BillDistrict" Type="nvarchar" MaxLength="30" />
           <Property Name="BillCountry" Type="varchar" MaxLength="3" />
           <Property Name="BillFax" Type="varchar" MaxLength="30" />
           <Property Name="BillName" Type="nvarchar" MaxLength="200" />
           <Property Name="BillPhone" Type="varchar" MaxLength="30" />
-          <Property Name="BillSalut" Type="nvarchar(max)" />
+          <Property Name="BillSalut" Type="nvarchar" MaxLength="50" />
           <Property Name="BillState" Type="varchar" MaxLength="10" />
           <Property Name="BillZip" Type="varchar" MaxLength="10" />
           <Property Name="Channel" Type="varchar" MaxLength="10" />
@@ -137,11 +136,10 @@
           <Property Name="ParentRecordID" Type="int" Nullable="false" />
           <Property Name="Phone" Type="varchar" MaxLength="30" />
           <Property Name="PriceClassID" Type="varchar" MaxLength="10" />
-          <Property Name="Salut" Type="nvarchar(max)" />
+          <Property Name="Salut" Type="nvarchar" MaxLength="100" />
           <Property Name="ShopType" Type="varchar" MaxLength="10" />
           <Property Name="SiteId" Type="varchar" MaxLength="10" />
           <Property Name="SlsperId" Type="varchar" MaxLength="30" />
-          <Property Name="Ward" Type="nvarchar" MaxLength="100" />
           <Property Name="State" Type="varchar" MaxLength="10" />
           <Property Name="Status" Type="varchar" MaxLength="1" />
           <Property Name="SupID" Type="varchar" MaxLength="30" />
@@ -170,24 +168,37 @@
           <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="EstablishDate" Type="date" />
           <Property Name="Birthdate" Type="date" />
-          <Property Name="InActive" Type="nvarchar" MaxLength="100" />
-          <Property Name="SellProduct" Type="varchar" MaxLength="10" />
           <Property Name="RefCustID" Type="varchar" MaxLength="50" />
-          <Property Name="ProfilePic" Type="varchar" MaxLength="100" />
-          <Property Name="SubTerritory" Type="varchar" MaxLength="10" />
+          <Property Name="SellProduct" Type="varchar" MaxLength="10" />
+          <Property Name="InActive" Type="nvarchar" MaxLength="100" />
           <Property Name="LastOrderDate" Type="datetime" />
           <Property Name="SearchName" Type="nvarchar(max)" />
+          <Property Name="Classification" Type="varchar" MaxLength="10" />
+          <Property Name="Chain" Type="varchar" MaxLength="10" />
+          <Property Name="Ward" Type="nvarchar" MaxLength="100" />
+          <Property Name="DeliveryUnit" Type="varchar" MaxLength="30" />
+          <Property Name="SalesProvince" Type="varchar" MaxLength="30" />
+          <Property Name="BusinessName" Type="nvarchar" MaxLength="200" />
+          <Property Name="BusinessPic" Type="varchar" MaxLength="100" />
+          <Property Name="ProfilePic" Type="varchar" MaxLength="100" />
+          <Property Name="SubTerritory" Type="varchar" MaxLength="10" />
+          <Property Name="PhotoCode" Type="varchar" MaxLength="2000" />
           <Property Name="AllowEdit" Type="int" Nullable="false" />
-          <Property Name="BusinessPic" Type="nvarchar" MaxLength="100" />
+          <Property Name="BillWard" Type="nvarchar" MaxLength="100" />
+          <Property Name="BillDistrict" Type="nvarchar" MaxLength="30" />
+          <Property Name="PPCPassword" Type="varchar" MaxLength="100" />
           <Property Name="TypeCabinets" Type="varchar" MaxLength="100" />
           <Property Name="StandID" Type="varchar" MaxLength="10" />
-          <Property Name="DisplayID" Type="varchar" MaxLength="10" />
-          <Property Name="SizeID" Type="varchar" MaxLength="10" />
           <Property Name="BrandID" Type="varchar(max)" />
-          <Property Name="OUnit" Type="varchar(max)" />
+          <Property Name="SizeID" Type="varchar" MaxLength="10" />
+          <Property Name="DisplayID" Type="varchar" MaxLength="10" />
           <Property Name="Mobile" Type="varchar" MaxLength="20" />
           <Property Name="Market" Type="varchar" MaxLength="30" />
           <Property Name="BillMarket" Type="varchar" MaxLength="30" />
+          <Property Name="OUnit" Type="varchar(max)" />
+          <Property Name="LocationCheckType" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="VendorID" Type="nvarchar" MaxLength="30" />
+          <Property Name="BuyerID" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="AR_CustomerChild">
           <Key>
@@ -344,7 +355,7 @@
           <Property Name="SOName" Type="nvarchar" MaxLength="200" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
           <Property Name="Addr1" Type="nvarchar(max)" />
-          <Property Name="Addr2" Type="nvarchar" MaxLength="100" />
+          <Property Name="Addr2" Type="nvarchar(max)" />
           <Property Name="City" Type="varchar" MaxLength="10" />
           <Property Name="State" Type="varchar" MaxLength="10" />
           <Property Name="Zip" Type="varchar" MaxLength="10" />
@@ -357,7 +368,7 @@
           <Property Name="TaxId01" Type="varchar" MaxLength="10" />
           <Property Name="TaxId02" Type="varchar" MaxLength="10" />
           <Property Name="TaxId03" Type="varchar" MaxLength="10" />
-          <Property Name="SiteId" Type="varchar" MaxLength="10" />
+          <Property Name="SiteId" Type="varchar" MaxLength="30" />
           <Property Name="ShipViaID" Type="varchar" MaxLength="15" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
@@ -417,16 +428,17 @@
           <Property Name="RecordID" Type="int" Nullable="false" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Descr1" Type="nvarchar" MaxLength="200" />
+          <Property Name="Sort" Type="varchar" MaxLength="10" />
         </EntityType>
         <Function Name="AR20400_pcMarket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="District" Type="varchar" Mode="In" />
         </Function>
@@ -620,8 +632,8 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="AR20400_pcMarket" ReturnType="Collection(AR20400Model.AR20400_pcMarket_Result)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="District" Mode="In" Type="String" />
           </FunctionImport>
@@ -674,6 +686,7 @@
           <Property Type="String" Name="TaxID01" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxID02" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxID03" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PrefixCustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_CustDisplayMethod">
           <Key>
@@ -849,7 +862,7 @@
           <Property Type="String" Name="SOName" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Attn" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Addr1" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr2" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="City" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Zip" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -862,7 +875,7 @@
           <Property Type="String" Name="TaxId01" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxId02" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxId03" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SiteId" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SiteId" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ShipViaID" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
@@ -922,12 +935,13 @@
           <Property Type="Int32" Name="RecordID" Nullable="false" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="Descr1" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Sort" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="AR20400_pgAR_CustAdvTool_Result">
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
@@ -1050,7 +1064,7 @@
           <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
           <Property Type="String" Name="Phone" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="PriceClassID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Salut" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Salut" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="ShopType" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SiteId" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="30" />
@@ -1094,9 +1108,11 @@
           <Property Type="String" Name="OUnit" Nullable="true" />
           <Property Type="String" Name="Market" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="BillMarket" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="VendorID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BuyerID" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="AR20400_pdConfig_Result">
-          <Property Type="String" Name="hideColumn" Nullable="false" MaxLength="32" />
+          <Property Type="String" Name="hideColumn" Nullable="false" MaxLength="1" />
           <Property Type="Boolean" Name="hideCity" Nullable="true" />
           <Property Type="Boolean" Name="hideOUnit" Nullable="true" />
           <Property Type="Boolean" Name="RequiredChannel" Nullable="true" />
@@ -1104,6 +1120,7 @@
           <Property Type="Boolean" Name="RequiredOUnit" Nullable="true" />
           <Property Type="Boolean" Name="RequiredSlsperID" Nullable="true" />
           <Property Type="Boolean" Name="ShowCompetitor" Nullable="true" />
+          <Property Type="Boolean" Name="ShowVendorBuyer" Nullable="true" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1113,11 +1130,11 @@
           <Property Name="CustId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CustName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Addr1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Addr2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Addr2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Attn" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="BillWard" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="BillAddr1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BillAddr2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BillAddr2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BillAttn" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="BillCity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="BillDistrict" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
@@ -1125,7 +1142,7 @@
           <Property Name="BillFax" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="BillName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="BillPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BillSalut" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BillSalut" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BillState" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="BillZip" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Channel" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -1152,7 +1169,7 @@
           <Property Name="ParentRecordID" Type="Int32" Nullable="false" />
           <Property Name="Phone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="PriceClassID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Salut" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Salut" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ShopType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="SiteId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="SlsperId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -1193,7 +1210,7 @@
           <Property Name="LastOrderDate" Type="DateTime" Precision="3" />
           <Property Name="SearchName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AllowEdit" Type="Int32" Nullable="false" />
-          <Property Name="BusinessPic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BusinessPic" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="TypeCabinets" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="StandID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="DisplayID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -1203,6 +1220,16 @@
           <Property Name="Mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Market" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="BillMarket" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Classification" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Chain" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryUnit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SalesProvince" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PhotoCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="PPCPassword" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LocationCheckType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="VendorID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BuyerID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="AR20400_pgCompetitor_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
@@ -1249,6 +1276,7 @@
           <EntitySetMapping Name="AR_CustClass">
             <EntityTypeMapping TypeName="AR20400Model.AR_CustClass">
               <MappingFragment StoreEntitySet="AR_CustClass">
+                <ScalarProperty Name="PrefixCustID" ColumnName="PrefixCustID" />
                 <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
                 <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
                 <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />
@@ -1508,6 +1536,7 @@
           <EntitySetMapping Name="SI_Hierarchy">
             <EntityTypeMapping TypeName="AR20400Model.SI_Hierarchy">
               <MappingFragment StoreEntitySet="SI_Hierarchy">
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
                 <ScalarProperty Name="Descr1" ColumnName="Descr1" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
@@ -1726,6 +1755,8 @@
                 <ScalarProperty Name="OUnit" ColumnName="OUnit" />
                 <ScalarProperty Name="Market" ColumnName="Market" />
                 <ScalarProperty Name="BillMarket" ColumnName="BillMarket" />
+                <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+                <ScalarProperty Name="BuyerID" ColumnName="BuyerID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1740,12 +1771,23 @@
                 <ScalarProperty Name="RequiredOUnit" ColumnName="RequiredOUnit" />
                 <ScalarProperty Name="RequiredSlsperID" ColumnName="RequiredSlsperID" />
                 <ScalarProperty Name="ShowCompetitor" ColumnName="ShowCompetitor" />
+                <ScalarProperty Name="ShowVendorBuyer" ColumnName="ShowVendorBuyer" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="BuyerID" ColumnName="BuyerID" />
+                <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+                <ScalarProperty Name="LocationCheckType" ColumnName="LocationCheckType" />
+                <ScalarProperty Name="PPCPassword" ColumnName="PPCPassword" />
+                <ScalarProperty Name="PhotoCode" ColumnName="PhotoCode" />
+                <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+                <ScalarProperty Name="SalesProvince" ColumnName="SalesProvince" />
+                <ScalarProperty Name="DeliveryUnit" ColumnName="DeliveryUnit" />
+                <ScalarProperty Name="Chain" ColumnName="Chain" />
+                <ScalarProperty Name="Classification" ColumnName="Classification" />
                 <ScalarProperty Name="BillMarket" ColumnName="BillMarket" />
                 <ScalarProperty Name="Market" ColumnName="Market" />
                 <ScalarProperty Name="Mobile" ColumnName="Mobile" />
@@ -1899,7 +1941,7 @@
         <EntityTypeShape EntityType="AR20400Model.AR_SOAddress" Width="1.5" PointX="8.75" PointY="9.75" />
         <EntityTypeShape EntityType="AR20400Model.SI_ApprovalFlowHandle" Width="1.5" PointX="10.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20400Model.SI_Hierarchy" Width="1.5" PointX="4.75" PointY="10.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_CustomerChild" Width="1.5" PointX="11.705361747977026" PointY="31.158244683946595" />
+        <EntityTypeShape EntityType="AR20400Model.AR_CustomerChild" Width="1.5" PointX="6.5" PointY="16.25" />
         <EntityTypeShape EntityType="AR20400Model.AR_Customer" Width="1.5" PointX="11.375" PointY="7.75" />
       </Diagram>
     </Diagrams>
