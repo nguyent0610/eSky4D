@@ -86,7 +86,7 @@
                 .Editor(
                     HQ.Combo().ID("cboCustID").Name("cboCustID").Tag("X")
                     .HQDBSys(false).HQProcedure("AR24000_pcCustomer")
-                    .HQColumnShow("CustID,CustName").ForceSelection(true).AllowBlank(false)
+                    .HQColumnShow("CustID,CustName").ForceSelection(true)
                     .DisplayField("CustID").ValueField("CustID").HQHeightWidth(400, 300)
                     .HQParam(new StoreParameterCollection() 
                     { 
@@ -104,11 +104,11 @@
                 , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(100) 
                 ,X.Column().Text(Util.GetLang("AR24000CustIDVen")).DataIndex("CustID_Vendor").Width(200)
                 .Editor(
-                        X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true).SelectOnFocus(true)
+                        X.TextField().MaxLength(30).EnforceMaxLength(true).SelectOnFocus(true)
                 )
                 , X.Column().Text(Util.GetLang("AR24000CustNameVen")).DataIndex("Name_Vendor").Width(200)
                 .Editor(
-                        X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true).SelectOnFocus(true)
+                        X.TextField().MaxLength(250).EnforceMaxLength(true).SelectOnFocus(true)
                 )
                 
                 , X.CommandColumn()

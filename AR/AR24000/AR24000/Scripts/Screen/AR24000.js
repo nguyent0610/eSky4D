@@ -3,8 +3,8 @@ var _Source = 0;
 var _maxSource = 2;
 var _isLoadMaster = false;
 var keys = ['CustID','CustID_Vendor'];
-var fieldsCheckRequire = ['CustID','CustID_Vendor'];
-var fieldsLangCheckRequire = ['CustID', 'CustID_Vendor'];
+var fieldsCheckRequire = ['CustID','CustID_Vendor','Name_Vendor'];
+var fieldsLangCheckRequire = ['CustID','AR24000CustIDVen','AR24000CustNameVen'];
 var _status = '';
 //// Store /////////////////////////////////////////////////////////////
 var checkLoad = function (sto) {
@@ -137,6 +137,11 @@ var btnAssess_Click = function () {
 };
 
 var grdMapCustomer_BeforeEdit = function (item, e) {
+    if (App.cboCpnyID.getValue() == "" || App.cboCpnyID.getValue()==null)
+    {
+        HQ.message.show(2018061860);
+        return false;
+    }
     if(e.field=="CustID")
     {
         var code = "@@@@@@";
@@ -147,7 +152,14 @@ var grdMapCustomer_BeforeEdit = function (item, e) {
         }
         App.cboCustID.store.filter("BranchID", code);
     }
-
+    if (e.field == "CustID" && e.record.data.CustID != "")
+    {
+        return false;
+    }
+    if (e.record.data.CustID != "")
+    {
+        App.cboCpnyID.setReadOnly(true);
+    }
     if (!HQ.grid.checkBeforeEdit(e, keys))
         return false;
 };
@@ -158,12 +170,15 @@ var grdMapCustomer_Edit = function (item, e) {
     {
         e.record.set("CustName", s.data.CustName);
     }
-  
     HQ.grid.checkInsertKey(App.grdMapCustomer, e, keys);
     frmChange();
 };
 var grdMapCustomer_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdMapCustomer, e, keys, true);
+    if (e.field == "CustID_Vendor")
+    {
+        return HQ.grid.checkValidateEdit(App.grdMapCustomer, e, keys, true);
+    }
+    
 };
 var grdMapCustomer_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdMapCustomer);
@@ -186,12 +201,14 @@ var save = function () {
                 HQ.isFirstLoad = true;
                 HQ.message.show(201405071);
                 App.stoLoadMapCustomer.reload();
+                
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
             }
         });
     }
+    App.cboCpnyID.setReadOnly(false);
 };
 var deleteData = function (item) {
     if (item == "yes") {
@@ -204,5 +221,6 @@ function refresh(item) {
         HQ.isChange = false;
         HQ.isFirstLoad = true;
         App.stoLoadMapCustomer.reload();
+        App.cboCpnyID.setReadOnly(false);
     }
 };

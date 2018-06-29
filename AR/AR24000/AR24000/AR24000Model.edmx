@@ -127,7 +127,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="27" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="88" >
         <EntityTypeShape EntityType="AR24000Model.AR_CustomerMap" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
