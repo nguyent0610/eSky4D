@@ -880,6 +880,8 @@
           <Parameter Name="DiscSeq" Type="varchar" Mode="In" />
           <Parameter Name="DiscType" Type="varchar" Mode="In" />
           <Parameter Name="PriorityPromo" Type="int" Mode="In" />
+          <Parameter Name="LstInvtID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="LstItemClass" Type="varchar(max)" Mode="In" />
         </Function>
         <Function Name="OM21100_ppCompanyCheck" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -1203,12 +1205,6 @@
           </FunctionImport>
           <EntitySet Name="OM_DiscItem" EntityType="OM21100Model.OM_DiscItem" />
           <EntitySet Name="OM_DiscSeq" EntityType="OM21100Model.OM_DiscSeq" />
-          <FunctionImport Name="OM21100_ppCheckdDuplicatePriorityPromo" ReturnType="Collection(String)">
-            <Parameter Name="DiscID" Mode="In" Type="String" />
-            <Parameter Name="DiscSeq" Mode="In" Type="String" />
-            <Parameter Name="DiscType" Mode="In" Type="String" />
-            <Parameter Name="PriorityPromo" Mode="In" Type="Int32" />
-          </FunctionImport>
           <EntitySet Name="OM_DiscBreak" EntityType="OM21100Model.OM_DiscBreak" />
           <EntitySet Name="OM_DiscFreeItem" EntityType="OM21100Model.OM_DiscFreeItem" />
           <EntitySet Name="OM_DiscSubBreakItem" EntityType="OM21100Model.OM_DiscSubBreakItem" />
@@ -1218,6 +1214,14 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="DiscID" Mode="In" Type="String" />
             <Parameter Name="DiscSeq" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21100_ppCheckdDuplicatePriorityPromo" ReturnType="Collection(OM21100Model.OM21100_ppCheckdDuplicatePriorityPromo_Result)">
+            <Parameter Name="DiscID" Mode="In" Type="String" />
+            <Parameter Name="DiscSeq" Mode="In" Type="String" />
+            <Parameter Name="DiscType" Mode="In" Type="String" />
+            <Parameter Name="PriorityPromo" Mode="In" Type="Int32" />
+            <Parameter Name="LstInvtID" Mode="In" Type="String" />
+            <Parameter Name="LstItemClass" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM21100_pgDiscItemClass_Result">
@@ -1286,12 +1290,12 @@
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="UnitDesc" Nullable="true" MaxLength="30" />
           <Property Type="Int32" Name="RequiredValue" Nullable="false" />
-          <Property Type="String" Name="Qtytype" Nullable="false" MaxLength="1" />
           <Property Type="Double" Name="QtyStockAdvance" Nullable="true" />
           <Property Type="Double" Name="QtyLimit" Nullable="true" />
           <Property Type="Double" Name="PerStockAdvance" Nullable="true" />
           <Property Type="Int32" Name="CoefficientCnv" Nullable="false" />
           <Property Type="Int32" Name="PriorityInvt" Nullable="false" />
+          <Property Type="String" Name="QtyType" Nullable="false" MaxLength="1" />
         </ComplexType>
         <ComplexType Name="OM21100_pgCompany_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -2229,6 +2233,10 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
         </ComplexType>
+        <ComplexType Name="OM21100_ppCheckdDuplicatePriorityPromo_Result">
+          <Property Type="String" Name="Result" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="ResultDiscID" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2319,12 +2327,12 @@
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
                 <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
                 <ScalarProperty Name="RequiredValue" ColumnName="RequiredValue" />
-                <ScalarProperty Name="Qtytype" ColumnName="Qtytype" />
                 <ScalarProperty Name="QtyStockAdvance" ColumnName="QtyStockAdvance" />
                 <ScalarProperty Name="QtyLimit" ColumnName="QtyLimit" />
                 <ScalarProperty Name="PerStockAdvance" ColumnName="PerStockAdvance" />
                 <ScalarProperty Name="CoefficientCnv" ColumnName="CoefficientCnv" />
                 <ScalarProperty Name="PriorityInvt" ColumnName="PriorityInvt" />
+                <ScalarProperty Name="QtyType" ColumnName="QtyType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -3277,7 +3285,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="OM21100_ppCheckdDuplicatePriorityPromo" FunctionName="eBiz4DWebAppModel.Store.OM21100_ppCheckdDuplicatePriorityPromo" />
           <EntitySetMapping Name="OM_DiscBreak">
             <EntityTypeMapping TypeName="OM21100Model.OM_DiscBreak">
               <MappingFragment StoreEntitySet="OM_DiscBreak">
@@ -3356,6 +3363,14 @@
                 <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21100_ppCheckdDuplicatePriorityPromo" FunctionName="eBiz4DWebAppModel.Store.OM21100_ppCheckdDuplicatePriorityPromo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21100Model.OM21100_ppCheckdDuplicatePriorityPromo_Result">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="ResultDiscID" ColumnName="ResultDiscID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

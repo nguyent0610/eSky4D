@@ -2475,58 +2475,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="discID">No Metadata Documentation available.</param>
-        /// <param name="discSeq">No Metadata Documentation available.</param>
-        /// <param name="discType">No Metadata Documentation available.</param>
-        /// <param name="priorityPromo">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> OM21100_ppCheckdDuplicatePriorityPromo(global::System.String discID, global::System.String discSeq, global::System.String discType, Nullable<global::System.Int32> priorityPromo)
-        {
-            ObjectParameter discIDParameter;
-            if (discID != null)
-            {
-                discIDParameter = new ObjectParameter("DiscID", discID);
-            }
-            else
-            {
-                discIDParameter = new ObjectParameter("DiscID", typeof(global::System.String));
-            }
-    
-            ObjectParameter discSeqParameter;
-            if (discSeq != null)
-            {
-                discSeqParameter = new ObjectParameter("DiscSeq", discSeq);
-            }
-            else
-            {
-                discSeqParameter = new ObjectParameter("DiscSeq", typeof(global::System.String));
-            }
-    
-            ObjectParameter discTypeParameter;
-            if (discType != null)
-            {
-                discTypeParameter = new ObjectParameter("DiscType", discType);
-            }
-            else
-            {
-                discTypeParameter = new ObjectParameter("DiscType", typeof(global::System.String));
-            }
-    
-            ObjectParameter priorityPromoParameter;
-            if (priorityPromo.HasValue)
-            {
-                priorityPromoParameter = new ObjectParameter("PriorityPromo", priorityPromo);
-            }
-            else
-            {
-                priorityPromoParameter = new ObjectParameter("PriorityPromo", typeof(global::System.Int32));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("OM21100_ppCheckdDuplicatePriorityPromo", discIDParameter, discSeqParameter, discTypeParameter, priorityPromoParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
@@ -2585,6 +2533,80 @@ namespace OM21100
             }
     
             return base.ExecuteFunction<OM21100_pgDiscSubBreakItem_Result>("OM21100_pgDiscSubBreakItem", userNameParameter, cpnyIDParameter, langIDParameter, discIDParameter, discSeqParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="discID">No Metadata Documentation available.</param>
+        /// <param name="discSeq">No Metadata Documentation available.</param>
+        /// <param name="discType">No Metadata Documentation available.</param>
+        /// <param name="priorityPromo">No Metadata Documentation available.</param>
+        /// <param name="lstInvtID">No Metadata Documentation available.</param>
+        /// <param name="lstItemClass">No Metadata Documentation available.</param>
+        public ObjectResult<OM21100_ppCheckdDuplicatePriorityPromo_Result> OM21100_ppCheckdDuplicatePriorityPromo(global::System.String discID, global::System.String discSeq, global::System.String discType, Nullable<global::System.Int32> priorityPromo, global::System.String lstInvtID, global::System.String lstItemClass)
+        {
+            ObjectParameter discIDParameter;
+            if (discID != null)
+            {
+                discIDParameter = new ObjectParameter("DiscID", discID);
+            }
+            else
+            {
+                discIDParameter = new ObjectParameter("DiscID", typeof(global::System.String));
+            }
+    
+            ObjectParameter discSeqParameter;
+            if (discSeq != null)
+            {
+                discSeqParameter = new ObjectParameter("DiscSeq", discSeq);
+            }
+            else
+            {
+                discSeqParameter = new ObjectParameter("DiscSeq", typeof(global::System.String));
+            }
+    
+            ObjectParameter discTypeParameter;
+            if (discType != null)
+            {
+                discTypeParameter = new ObjectParameter("DiscType", discType);
+            }
+            else
+            {
+                discTypeParameter = new ObjectParameter("DiscType", typeof(global::System.String));
+            }
+    
+            ObjectParameter priorityPromoParameter;
+            if (priorityPromo.HasValue)
+            {
+                priorityPromoParameter = new ObjectParameter("PriorityPromo", priorityPromo);
+            }
+            else
+            {
+                priorityPromoParameter = new ObjectParameter("PriorityPromo", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter lstInvtIDParameter;
+            if (lstInvtID != null)
+            {
+                lstInvtIDParameter = new ObjectParameter("LstInvtID", lstInvtID);
+            }
+            else
+            {
+                lstInvtIDParameter = new ObjectParameter("LstInvtID", typeof(global::System.String));
+            }
+    
+            ObjectParameter lstItemClassParameter;
+            if (lstItemClass != null)
+            {
+                lstItemClassParameter = new ObjectParameter("LstItemClass", lstItemClass);
+            }
+            else
+            {
+                lstItemClassParameter = new ObjectParameter("LstItemClass", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM21100_ppCheckdDuplicatePriorityPromo_Result>("OM21100_ppCheckdDuplicatePriorityPromo", discIDParameter, discSeqParameter, discTypeParameter, priorityPromoParameter, lstInvtIDParameter, lstItemClassParameter);
         }
 
         #endregion
@@ -21211,10 +21233,10 @@ namespace OM21100
         /// <param name="bundleQty">Initial value of the BundleQty property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="requiredValue">Initial value of the RequiredValue property.</param>
-        /// <param name="qtytype">Initial value of the Qtytype property.</param>
         /// <param name="coefficientCnv">Initial value of the CoefficientCnv property.</param>
         /// <param name="priorityInvt">Initial value of the PriorityInvt property.</param>
-        public static OM21100_pgDiscItem_Result CreateOM21100_pgDiscItem_Result(global::System.String discID, global::System.String discSeq, global::System.Byte[] tstamp, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.String invtID, global::System.Int32 requiredValue, global::System.String qtytype, global::System.Int32 coefficientCnv, global::System.Int32 priorityInvt)
+        /// <param name="qtyType">Initial value of the QtyType property.</param>
+        public static OM21100_pgDiscItem_Result CreateOM21100_pgDiscItem_Result(global::System.String discID, global::System.String discSeq, global::System.Byte[] tstamp, global::System.Int16 active, global::System.Double bundleAmt, global::System.Int16 bundleNbr, global::System.Double bundleQty, global::System.String invtID, global::System.Int32 requiredValue, global::System.Int32 coefficientCnv, global::System.Int32 priorityInvt, global::System.String qtyType)
         {
             OM21100_pgDiscItem_Result oM21100_pgDiscItem_Result = new OM21100_pgDiscItem_Result();
             oM21100_pgDiscItem_Result.DiscID = discID;
@@ -21226,9 +21248,9 @@ namespace OM21100
             oM21100_pgDiscItem_Result.BundleQty = bundleQty;
             oM21100_pgDiscItem_Result.InvtID = invtID;
             oM21100_pgDiscItem_Result.RequiredValue = requiredValue;
-            oM21100_pgDiscItem_Result.Qtytype = qtytype;
             oM21100_pgDiscItem_Result.CoefficientCnv = coefficientCnv;
             oM21100_pgDiscItem_Result.PriorityInvt = priorityInvt;
+            oM21100_pgDiscItem_Result.QtyType = qtyType;
             return oM21100_pgDiscItem_Result;
         }
 
@@ -21527,30 +21549,6 @@ namespace OM21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Qtytype
-        {
-            get
-            {
-                return _Qtytype;
-            }
-            set
-            {
-                OnQtytypeChanging(value);
-                ReportPropertyChanging("Qtytype");
-                _Qtytype = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Qtytype");
-                OnQtytypeChanged();
-            }
-        }
-        private global::System.String _Qtytype;
-        partial void OnQtytypeChanging(global::System.String value);
-        partial void OnQtytypeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public Nullable<global::System.Double> QtyStockAdvance
@@ -21667,6 +21665,30 @@ namespace OM21100
         private global::System.Int32 _PriorityInvt;
         partial void OnPriorityInvtChanging(global::System.Int32 value);
         partial void OnPriorityInvtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String QtyType
+        {
+            get
+            {
+                return _QtyType;
+            }
+            set
+            {
+                OnQtyTypeChanging(value);
+                ReportPropertyChanging("QtyType");
+                _QtyType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("QtyType");
+                OnQtyTypeChanged();
+            }
+        }
+        private global::System.String _QtyType;
+        partial void OnQtyTypeChanging(global::System.String value);
+        partial void OnQtyTypeChanged();
 
         #endregion
 
@@ -22670,6 +22692,68 @@ namespace OM21100
         private global::System.Double _Price;
         partial void OnPriceChanging(global::System.Double value);
         partial void OnPriceChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM21100Model", Name="OM21100_ppCheckdDuplicatePriorityPromo_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM21100_ppCheckdDuplicatePriorityPromo_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Result
+        {
+            get
+            {
+                return _Result;
+            }
+            set
+            {
+                OnResultChanging(value);
+                ReportPropertyChanging("Result");
+                _Result = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Result");
+                OnResultChanged();
+            }
+        }
+        private global::System.String _Result;
+        partial void OnResultChanging(global::System.String value);
+        partial void OnResultChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ResultDiscID
+        {
+            get
+            {
+                return _ResultDiscID;
+            }
+            set
+            {
+                OnResultDiscIDChanging(value);
+                ReportPropertyChanging("ResultDiscID");
+                _ResultDiscID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ResultDiscID");
+                OnResultDiscIDChanged();
+            }
+        }
+        private global::System.String _ResultDiscID;
+        partial void OnResultDiscIDChanging(global::System.String value);
+        partial void OnResultDiscIDChanged();
 
         #endregion
 

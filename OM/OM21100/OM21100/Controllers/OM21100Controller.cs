@@ -122,7 +122,7 @@ namespace OM21100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -137,6 +137,11 @@ namespace OM21100.Controllers
         public ActionResult GetDiscSeqInfo(string discID, string discSeq)
         {
             var discSeqInfo = _db.OM_DiscSeq.FirstOrDefault(x => x.DiscID == discID && x.DiscSeq == discSeq);
+            if (discSeqInfo != null)
+            {
+                var excludePromo = discSeqInfo.ExcludePromo.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                discSeqInfo.ExcludePromo = string.Join(",", excludePromo);
+            }
             return this.Store(discSeqInfo);
         }
 
@@ -790,6 +795,8 @@ namespace OM21100.Controllers
                                 .FirstOrDefault(p => p.DiscID == discID && p.DiscSeq == discSeq);
                     if (inputDiscSeq != null)
                     {
+                        var excludePromo = inputDiscSeq.ExcludePromo.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                        inputDiscSeq.ExcludePromo = string.Join(";", excludePromo);
                         inputDiscSeq.DiscClass = inputDisc.DiscClass;
                     }
                     var tam = _db.OM_DiscSeq.Where(p => p.DiscID == discID && p.DiscSeq == discSeq && p.Active == 1 && p.Status == "C" && inputDiscSeq.StockPromotion==true).FirstOrDefault();
@@ -919,6 +926,11 @@ namespace OM21100.Controllers
                         {
                             _db.OM_DiscChannel.DeleteObject(item);
                         }
+                        var lstDiscSubBreakItem = (from p in _db.OM_DiscSubBreakItem where p.DiscID.ToUpper() == discID select p).ToList();
+                        foreach (var item in lstDiscSubBreakItem)
+                        {
+                            _db.OM_DiscSubBreakItem.DeleteObject(item);
+                        }
                         Submit_Data(null, "", null);
                         return Json(new { success = true });
                     }
@@ -997,6 +1009,11 @@ namespace OM21100.Controllers
                         foreach (var item in lstDiscChannel)
                         {
                             _db.OM_DiscChannel.DeleteObject(item);
+                        }
+                        var lstDiscSubBreakItem = (from p in _db.OM_DiscSubBreakItem where p.DiscID.ToUpper() == discID && p.DiscSeq.ToUpper() == discSeq select p).ToList();
+                        foreach (var item in lstDiscSubBreakItem)
+                        {
+                            _db.OM_DiscSubBreakItem.DeleteObject(item);
                         }
                         Submit_Data(null, "", null);
                         return Json(new { success = true });
@@ -1309,7 +1326,8 @@ namespace OM21100.Controllers
         private void saveDiscSeq(FormCollection data, OM_Discount inputDisc, OM_DiscSeq inputDiscSeq, bool isNewDiscSeq)
         {
             var handle = data["cboHandle"];
-
+            var discType = data["cboDiscType"];
+            var priorityPromo = data["txtPriorityPromo"];
             var discBreakHandler = new StoreDataHandler(data["lstDiscBreak"]);
             var lstDiscBreak = discBreakHandler.ObjectData<OM21100_pgDiscBreak_Result>()
                         .Where(p => Util.PassNull(p.LineRef) != string.Empty
@@ -1344,6 +1362,11 @@ namespace OM21100.Controllers
             var freeItemChangeHandler = new StoreDataHandler(data["lstFreeItemChange"]);
             var lstFreeItemChange = freeItemChangeHandler.BatchObjectData<OM21100_pgFreeItem_Result>();
 
+            var discItemClassHandler = new StoreDataHandler(data["lstDiscItemClass"]);
+            var lstDiscItemClass = discItemClassHandler.ObjectData<OM21100_pgDiscItemClass_Result>()
+                        .Where(p => Util.PassNull(p.ClassID) != string.Empty)
+                        .ToList();
+
             var roles = _sys.Users.FirstOrDefault(x => x.UserName.ToLower() == Current.UserName.ToLower()).UserTypes.Split(',');
 
             var totalRow = lstDiscBreak.Count;
@@ -1363,7 +1386,26 @@ namespace OM21100.Controllers
                     throw new MessageException(MessageType.Message, "1798");
                 }
             }
-
+            var objConfigPriorityPromo = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+            if (objConfigPriorityPromo.HidePriorityPromo.Value == true)
+            {
+                var lstDisItem = "";
+                var lstDisItemClass = "";
+                foreach (var item in lstDiscItem)
+                {
+                    lstDisItem += item.InvtID + ",";
+                }
+                foreach (var item in lstDiscItemClass)
+                {
+                    lstDisItemClass += item.ClassID + ",";
+                }
+                var objDuplicatePriorityPromo = _db.OM21100_ppCheckdDuplicatePriorityPromo(inputDiscSeq.DiscID, inputDiscSeq.DiscSeq, discType, priorityPromo.ToInt(),
+                   lstDisItem,
+                   lstDisItemClass
+                    ).FirstOrDefault();
+                if (objDuplicatePriorityPromo.Result == "1")
+                    throw new MessageException(MessageType.Message, "2018062101", "", new[] { inputDiscSeq.DiscID + "-" + inputDiscSeq.DiscSeq, objDuplicatePriorityPromo.ResultDiscID });
+            }
             //if (!roles.Contains("HO") && !roles.Contains("DIST") && isNewDiscSeq)
             //{
             //    lstCompany.Add(new OM21100_pgCompany_Result() { CpnyID = Current.CpnyID });
@@ -2061,7 +2103,7 @@ namespace OM21100.Controllers
                 t.BreakQtyUpper = s.BreakQtyUpper;
                 t.BreakAmtUpper = s.BreakAmtUpper;
                 t.SubBreakQty = s.SubBreakQty;
-                t.SubBreakAmt = s.SubBreakQty;
+                t.SubBreakAmt = s.SubBreakAmt;
                 t.SubBreakQtyUpper = s.SubBreakQtyUpper;
                 t.SubBreakAmtUpper = s.SubBreakAmtUpper;
 
@@ -2561,13 +2603,13 @@ namespace OM21100.Controllers
                                     p.DiscID == inputSeq.DiscID && p.DiscSeq == inputSeq.DiscSeq &&
                                     p.InvtID == currentItem.InvtID
                                 select p).FirstOrDefault();
-                var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
-                if (objConfig.HidePriorityPromo.Value == true)
-                {
-                    var objDuplicatePriorityPromo = _db.OM21100_ppCheckdDuplicatePriorityPromo(inputSeq.DiscID, inputSeq.DiscSeq, discType, priorityPromo.ToInt()).FirstOrDefault();
-                    if (objDuplicatePriorityPromo.ToString() == "1")
-                        throw new MessageException(MessageType.Message, "2018062101", "", new[] { priorityPromo, discType });
-                }
+                //var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+                //if (objConfig.HidePriorityPromo.Value == true)
+                //{
+                //    var objDuplicatePriorityPromo = _db.OM21100_ppCheckdDuplicatePriorityPromo(inputSeq.DiscID, inputSeq.DiscSeq, discType, priorityPromo.ToInt()).FirstOrDefault();
+                //    if (objDuplicatePriorityPromo.ToString() == "1")
+                //        throw new MessageException(MessageType.Message, "2018062101", "", new[] { priorityPromo, discType });
+                //}
                 
                 if (discItem != null)
                 {

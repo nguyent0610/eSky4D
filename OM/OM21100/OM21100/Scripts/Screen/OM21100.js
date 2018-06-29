@@ -551,6 +551,45 @@ var Main = {
                     //var status = App.cboStatus.value;
 
                     //if (status == _holdStatus) {
+                    if (App.stoDiscBreak.data.items[0].data.SubBreakQty != 0 && App.stoSubBreakItem.data.items[0].data.InvtID == '')
+                    {
+                        HQ.message.show(2018062901);
+                        return false;
+                    }
+                    if (App.cboSubBreakType.getValue() == 'Q' && App.stoDiscBreak.data.items[0].data.SubBreakQty == 0)
+                    {
+                        HQ.message.show(2018062902);//Khi chọn "Điều kiện 2" <> "Bình Thường" => buộc phải nhập field "SL or Số Tiền Cho Điều Kiện 2" > 0 ở tab Điều Kiện
+                        return false;
+                    }
+                    if (App.cboSubBreakType.getValue() == 'A' && App.stoDiscBreak.data.items[0].data.SubBreakAmt == 0) {
+                        HQ.message.show(2018062907);//Khi chọn "Điều kiện 2" <> "Bình Thường" => buộc phải nhập field "SL or Số Tiền Cho Điều Kiện 2" > 0 ở tab Điều Kiện
+                        return false;
+                    }
+                    if (App.cboSubBreakType.getValue() != 'N' && App.cboBreakBoundType.getValue() != 'L')
+                    {                       
+                        if (App.stoDiscBreak.data.items[0].data.SubBreakQty != 0 && App.stoDiscBreak.data.items[0].data.SubBreakQtyUpper != 0
+                         && (App.stoDiscBreak.data.items[0].data.SubBreakQty > App.stoDiscBreak.data.items[0].data.SubBreakQtyUpper)) {
+                            HQ.message.show(2018062905);
+                            return false;
+                        }
+                        if (App.stoDiscBreak.data.items[0].data.SubBreakAmt != 0 && App.stoDiscBreak.data.items[0].data.SubBreakAmtUpper != 0
+                        && (App.stoDiscBreak.data.items[0].data.SubBreakAmt > App.stoDiscBreak.data.items[0].data.SubBreakAmtUpper)) {
+                            HQ.message.show(2018062906);
+                            return false;
+                        }
+                    }
+                    if (App.cboBreakBoundType.getValue() != 'L') {
+                        if (App.stoDiscBreak.data.items[0].data.BreakQty != 0 && App.stoDiscBreak.data.items[0].data.BreakQtyUpper != 0
+                           && (App.stoDiscBreak.data.items[0].data.BreakQty > App.stoDiscBreak.data.items[0].data.BreakQtyUpper)) {
+                            HQ.message.show(2018062903);
+                            return false;
+                        }
+                        if (App.stoDiscBreak.data.items[0].data.BreakAmt != 0 && App.stoDiscBreak.data.items[0].data.BreakAmtUpper != 0
+                           && (App.stoDiscBreak.data.items[0].data.BreakAmt > App.stoDiscBreak.data.items[0].data.BreakAmtUpper)) {
+                            HQ.message.show(2018062904);
+                            return false;
+                        }
+                    }
                     if (App.cboDiscID.valueModels == null && !HQ.allowAddDiscount) {
                         HQ.message.show(2017113005, '', '');
                     }
@@ -1884,6 +1923,13 @@ var DiscDefintion = {
 
             return returnValue;
         },
+        renderQtyType : function (value, metaData, record, row, col, store, gridView) {
+            var r = HQ.store.findRecord(App.cboQtyType.store, ['Code'], [record.data.QtyType])
+            if (Ext.isEmpty(r)) {
+                return value;
+            }
+            return r.data.Descr;
+        },
 
         indexSelect: function (grd) {
             var index = '';
@@ -2216,6 +2262,7 @@ var DiscDefintion = {
                 //App.chkRequiredType.setReadOnly(false);
                 App.btnUpload.enable();
                 App.chkStockPromotion.setReadOnly(false);
+                App.chkIsDeductQtyAmt.setReadOnly(false);
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.enable();               
             }
@@ -2235,6 +2282,7 @@ var DiscDefintion = {
                 //App.chkRequiredType.setReadOnly(true);
                 App.btnUpload.disable();
                 App.chkStockPromotion.setReadOnly(true);
+                App.chkIsDeductQtyAmt.setReadOnly(true);
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.disable();
             }
@@ -2480,11 +2528,11 @@ var DiscDefintion = {
             else {
                 //App.chkRequiredType.disable();
                 //App.chkRequiredType.setValue(false);
-            }
-            if (App.cboDiscType.getValue() == 'G' && (App.cboDiscClass.getValue() == 'II' || App.cboDiscClass.getValue() == 'PP'))
-                App.chkConvertDiscAmtToFreeItem.enable();
-            else
-                App.chkConvertDiscAmtToFreeItem.disable();
+            }            
+            //if (App.cboDiscType.getValue() == 'G' && (App.cboDiscClass.getValue() == 'II' || App.cboDiscClass.getValue() == 'PP'))
+            //    App.chkConvertDiscAmtToFreeItem.enable();
+            //else
+            //    App.chkConvertDiscAmtToFreeItem.disable();
             if (HQ.showRequiredType) {
                 if (App.cboDiscType.getValue() == 'G' && cbo.value == 'II') {
                     App.cboRequiredType.show();
@@ -2675,7 +2723,10 @@ var DiscDefintion = {
             } else {
                 App.chkExactQty.enable();
             }
-
+            if ((App.cboDiscClass.getValue() != 'BB' || App.cboDiscClass.getValue() != 'CB' || App.cboDiscClass.getValue() != 'TB') && App.cboBreakBy.getValue() == 'A')
+                App.chkExactQty.disable();
+            else
+                App.chkExactQty.enable();
             var isEnableRequiredType = (!App['pnlDPII'].isDisabled() && cbo.value == "Q");
             
             if (App.cboDiscType.getValue() == 'G' && App.cboDiscClass.getValue() == 'II' && App.cboBreakBy.getValue() == 'Q') {
@@ -2706,6 +2757,9 @@ var DiscDefintion = {
                     if (App.cboBreakBoundType.getValue() == 'L') {
                         HQ.grid.show(App.grdDiscBreak, ['SubBreakAmt']);
                         HQ.grid.hide(App.grdDiscBreak, ['SubBreakAmtUpper']);
+                        if (App.stoDiscBreak.data.length > 0) {
+                            App.stoDiscBreak.data.items[0].set('SubBreakAmtUpper', 0);
+                        }
                     }
                     else if (App.cboBreakBoundType.getValue() == 'B')
                     {
@@ -2714,11 +2768,18 @@ var DiscDefintion = {
                     }
                     HQ.grid.hide(App.grdDiscBreak, ['SubBreakQty']);
                     HQ.grid.hide(App.grdDiscBreak, ['SubBreakQtyUpper']);
+                    if (App.stoDiscBreak.data.length > 0) {
+                        App.stoDiscBreak.data.items[0].set('SubBreakQty', 0);
+                        App.stoDiscBreak.data.items[0].set('SubBreakQtyUpper', 0);
+                    }
                 }
                 else if (cbo.value == 'Q') {
                     if (App.cboBreakBoundType.getValue() == 'L') {
                         HQ.grid.show(App.grdDiscBreak, ['SubBreakQty']);
                         HQ.grid.hide(App.grdDiscBreak, ['SubBreakQtyUpper']);
+                        if (App.stoDiscBreak.data.length > 0) {
+                            App.stoDiscBreak.data.items[0].set('SubBreakQtyUpper', 0);
+                        }
                     }
                     else if (App.cboBreakBoundType.getValue() == 'B') {
                         HQ.grid.show(App.grdDiscBreak, ['SubBreakQty']);
@@ -2726,6 +2787,10 @@ var DiscDefintion = {
                     }
                     HQ.grid.hide(App.grdDiscBreak, ['SubBreakAmt']);
                     HQ.grid.hide(App.grdDiscBreak, ['SubBreakAmtUpper']);
+                    if (App.stoDiscBreak.data.length > 0) {
+                        App.stoDiscBreak.data.items[0].set('SubBreakAmt', 0);
+                        App.stoDiscBreak.data.items[0].set('SubBreakAmtUpper', 0);
+                    }
                 }
             }
             else {
@@ -2767,6 +2832,8 @@ var DiscDefintion = {
             {
                 HQ.grid.hide(App.grdDiscBreak, ['BreakQtyUpper']);
                 HQ.grid.hide(App.grdDiscBreak, ['BreakAmtUpper']);
+                HQ.grid.hide(App.grdDiscBreak, ['SubBreakAmtUpper']);
+                HQ.grid.hide(App.grdDiscBreak, ['SubBreakQtyUpper']);
             }
         },
         cboProAplForItem_change: function (cbo, newValue, oldValue, eOpts) {
@@ -2821,7 +2888,9 @@ var DiscDefintion = {
                 }
             //}
         },
-
+        cboInvtIDSubBreakItem_Change: function(){
+            App.cboSubBreakItemUnitDescr.store.reload();
+        },
         cboProAplForItem_Expand: function () {
             var store = App.cboProAplForItem.store;
             store.clearFilter();
@@ -2905,6 +2974,7 @@ var DiscDefintion = {
         chkAutoFreeItem_Change: function (chk, newValue, oldValue, eOpts) {
             if (newValue) {
                 App.chkDonateGroupProduct.disable();
+                App.chkConvertDiscAmtToFreeItem.disable();
             }
             else {
                 var check=true;
@@ -2916,9 +2986,11 @@ var DiscDefintion = {
                 }
                 if (check) {
                     App.chkDonateGroupProduct.enable();
+                    App.chkConvertDiscAmtToFreeItem.enable();
                 }
                 else {
                     App.chkDonateGroupProduct.disable();
+                    App.chkConvertDiscAmtToFreeItem.disable();
                 }
 
             }
@@ -2952,10 +3024,23 @@ var DiscDefintion = {
             }
         },
         chkConvertDiscAmtToFreeItem_Change: function (chk, newValue, oldValue, eOpts) {
-            if(newValue)
+            if(newValue){
+                if (!App.chkAutoFreeItem.getValue()) {
+                    App.chkAutoFreeItem.disable();
+                }
                 HQ.grid.show(App.grdFreeItem, ['Price']);
-            else
+                HQ.grid.show(App.grdFreeItem, ['Priority']);
+            }
+            else {
                 HQ.grid.hide(App.grdFreeItem, ['Price']);
+                HQ.grid.hide(App.grdFreeItem, ['Priority']);
+                if (App.cboProAplForItem.getValue() != 'M') {
+                    App.chkAutoFreeItem.enable();
+                }
+                else {
+                    App.chkAutoFreeItem.disable();
+                }
+            }
         },
         cboGCustID_Change: function (item, newValue, oldValue, eOpts) {
             _selBranchID = '';
@@ -2963,6 +3048,15 @@ var DiscDefintion = {
             if (item.valueModels != undefined && item.valueModels[0]) {
                 _selBranchID = item.valueModels[0].data.BranchID;
                 _selTerritory = item.valueModels[0].data.TerritoryName;
+            }
+            else
+            {
+                var obj = HQ.store.findInStore(App.cboGCustID.store, ['CustID'], [newValue]);
+                if(obj != undefined)
+                {
+                    _selBranchID = obj.BranchID;
+                    _selTerritory = obj.TerritoryName;
+                }
             }
         },
 
@@ -4306,7 +4400,10 @@ var DiscDefintion = {
 
                         //    //return false;
                         //}
-                        
+                        if (App.cboSubBreakType.getValue() != 'N')
+                        {
+                            if (e.rowIdx != 0) return false;
+                        }
                         return HQ.grid.checkInput(e, keys);
                     }
                     else {
@@ -4402,9 +4499,10 @@ var DiscDefintion = {
                     DiscSeq: discSeq,
                     LineRef: HQ.store.lastLineRef(e.store)
                 };
-
-                var newRec = Ext.create(e.store.model.modelName, newData);
-                HQ.store.insertRecord(e.store, (keys.length ? keys : totalKeys), newRec, false);
+                if (App.cboSubBreakType.getValue() == 'N') {
+                    var newRec = Ext.create(e.store.model.modelName, newData);
+                    HQ.store.insertRecord(e.store, (keys.length ? keys : totalKeys), newRec, false);
+                }
 
                 if (!App.cboDiscClass.readOnly) {
                     App.cboDiscClass.setReadOnly(true);

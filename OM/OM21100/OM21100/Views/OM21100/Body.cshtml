@@ -155,10 +155,10 @@
                                 X.FormPanel().ID("frmDiscSeqInfo")
                                 .Layout(LayoutType.VBox)
                                 .Region(Region.North)
-                                .AutoScroll(true)
+                                .AutoScroll(true)                                
                                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Left }).Border(false)
                                 .Items(
-
+                                    //X.Panel().AutoScroll(true).Layout(LayoutType.VBox).Items(
                                     X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")//.Flex(1)
                                                                                                // .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
                                     .Items(
@@ -386,6 +386,7 @@
                                         .HQLangCode("ExcludePromo").HQProcedure("OM21100_pcExcludePromo").HQColumnShow("DiscID,DiscSeq,Descr")
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("ExcludePromo")
                                         .ForceSelection(false).MultiSelect(true)
+                                        .LabelSeparator(";")                                    
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                         .HQParam(new StoreParameterCollection() {
                                         new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
@@ -579,6 +580,7 @@
                                 //    l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                 //})
                                 )
+                                //)
                             )
                             .Listeners(ls =>
                             {
@@ -1250,6 +1252,7 @@
                         , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq")
 
                         , X.Column().Text(Util.GetLang("OM21100QtyType")).DataIndex("QtyType").ID("colQtyType").Hidden(true)
+                        .Renderer("DiscDefintion.Process.renderQtyType")
                         .Editor(
                             HQ.Combo().ID("cboQtyType").HQAutoLoad(true)
                             .HQProcedure("OM21100_pcQtyType").HQColumnShow("Code,Descr")//ok
@@ -2094,8 +2097,8 @@
     .Maximized(false)
     .Modal(true)
     .Closable(true)
-    .Buttons(       
-        X.Button().ID("btnSubBreakItemDelete").Text(Util.GetLang("Delete"))
+    .Buttons(
+        X.Button().ID("btnSubBreakItemDelete").Text(Util.GetLang("btnDelete"))
         .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItemDelete_Click")
         , X.Button().ID("btnSubBreakItemOK").Text(Util.GetLang("Closed"))
         .Listeners(p => p.Click.Fn = "DiscDefintion.Event.btnSubBreakItemOK_Click")
@@ -2135,12 +2138,30 @@
                         , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
 
                     })
+                    .Listeners(
+                        x =>
+                        {
+                            x.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            x.Change.Fn = "DiscDefintion.Event.cboInvtIDSubBreakItem_Change";
+                        }
+                        )
                     .LoadData()
                 )
 
                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
 
-                , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDesc").Hidden(true)
+                , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDesc")//.Hidden(true)
+                .Editor(
+                        HQ.Combo().ID("cboSubBreakItemUnitDescr")
+                        .HQProcedure("OM21100_pcUnitSubBreakItem").HQColumnShow("FromUnit,ClassID")//ok
+                        .HQHeightWidth(400, 300)
+                        .ValueField("FromUnit").DisplayField("FromUnit")
+                        .ForceSelection(true).SelectOnFocus(true)
+                        .HQParam(new StoreParameterCollection() {
+                        new StoreParameter("@InvtID","App.slmSubBreakItem.selected.items[0]==undefined ? '':  App.slmSubBreakItem.selected.items[0].data.InvtID",ParameterMode.Raw)
+                    })
+                    .LoadData()
+                )
                 , X.CommandColumn().Width(130)
                 .Commands(
                     X.GridCommand()
@@ -2187,7 +2208,8 @@
                 .Local(true)
                 .Filters(
                     X.StringFilter().DataIndex("InvtID"),
-                    X.StringFilter().DataIndex("Descr")
+                    X.StringFilter().DataIndex("Descr"),
+                    X.StringFilter().DataIndex("UnitDesc")
 
                 )
             )
