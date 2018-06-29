@@ -103,6 +103,8 @@
           <Property Name="ProType" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ImageModifiedDate" Type="datetime" />
           <Property Name="VideoModifiedDate" Type="datetime" />
+          <Property Name="CnvFact" Type="float" />
+          <Property Name="KitType" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_Accumulated">
           <Key>
@@ -301,10 +303,10 @@
           <Property Name="RecordID" Type="int" Nullable="false" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Descr1" Type="nvarchar" MaxLength="200" />
           <Property Name="Sort" Type="varchar" MaxLength="10" />
@@ -387,6 +389,11 @@
         <Function Name="OM27700_ptTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM27700_ptTreeNode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
         <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
@@ -500,6 +507,11 @@
           </FunctionImport>
           <EntitySet Name="OM_AccumulatedCpnyAlloctionLimit" EntityType="OM27700Model.OM_AccumulatedCpnyAlloctionLimit" />
           <EntitySet Name="IN_Inventory" EntityType="OM27700Model.IN_Inventory" />
+          <FunctionImport Name="OM27700_ptTreeNode" ReturnType="Collection(OM27700Model.OM27700_ptTreeNode_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
           <Key>
@@ -572,10 +584,10 @@
           <Property Type="Int32" Name="RecordID" Nullable="false" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Name="Descr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Sort" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -892,7 +904,16 @@
           <Property Name="ProType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="ImageModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="VideoModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="CnvFact" Type="Double" />
+          <Property Name="KitType" Type="Boolean" Nullable="false" />
         </EntityType>
+        <ComplexType Name="OM27700_ptTreeNode_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="LevelID" Nullable="true" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="10" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1263,6 +1284,8 @@
           <EntitySetMapping Name="IN_Inventory">
             <EntityTypeMapping TypeName="OM27700Model.IN_Inventory">
               <MappingFragment StoreEntitySet="IN_Inventory">
+                <ScalarProperty Name="KitType" ColumnName="KitType" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
                 <ScalarProperty Name="VideoModifiedDate" ColumnName="VideoModifiedDate" />
                 <ScalarProperty Name="ImageModifiedDate" ColumnName="ImageModifiedDate" />
                 <ScalarProperty Name="ProType" ColumnName="ProType" />
@@ -1338,6 +1361,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM27700_ptTreeNode" FunctionName="eBiz4DWebAppModel.Store.OM27700_ptTreeNode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM27700Model.OM27700_ptTreeNode_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

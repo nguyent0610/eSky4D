@@ -40,10 +40,14 @@ namespace OM27700.Controllers
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         List<OM27700_pcInventory_Result> _lstInventory = new List<OM27700_pcInventory_Result>();
         List<SI_Hierarchy> _lstSI_Hierarchy = new List<SI_Hierarchy>();
+        List<OM27700_ptTreeNode_Result> _lstAllNode = new List<OM27700_ptTreeNode_Result>();
         // GET: /OM27700/
         public ActionResult Index()
         {
             Util.InitRight(_screenNbr);
+            var objConfigurations = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "MCPBranchRoute");
+            if (objConfigurations != null)
+                ViewBag.TreeCompany = objConfigurations.IntVal;
             var showPoint = 0;
             var objConfig = _db.OM27700_pdConfig(Current.CpnyID, Current.UserName, Current.LangID).FirstOrDefault();
             if (objConfig != null)
@@ -71,6 +75,67 @@ namespace OM27700.Controllers
         [DirectMethod]
         public ActionResult OM27700GetTreeBranch(string panelID)
         {
+            //TreePanel tree = new TreePanel();
+            //tree.ID = "treePanelBranch";
+            //tree.ItemID = "treePanelBranch";
+
+            //tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+            //tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+
+            //tree.Border = false;
+            //tree.RootVisible = true;
+            //tree.Animate = true;
+
+            //Node node = new Node();
+            //node.NodeID = "Root";
+            //tree.Root.Add(node);
+
+            //var lstTerritories = _db.OM27700_ptTerritory(Current.CpnyID, Current.UserName, Current.LangID).ToList();//tam thoi
+            //var companies = _db.OM27700_ptCompany("", Current.CpnyID, Current.UserName, Current.LangID).ToList();
+
+            //foreach (var item in lstTerritories)
+            //{
+            //    var nodeTerritory = new Node();
+            //    nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = item.Territory, Mode = ParameterMode.Value });
+            //    nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Territory", Mode = ParameterMode.Value });
+            //    //nodeTerritory.Cls = "tree-node-parent";
+            //    nodeTerritory.Text = item.Descr;
+            //    nodeTerritory.Checked = false;
+            //    nodeTerritory.NodeID = "territory-" + item.Territory;
+            //    //nodeTerritory.IconCls = "tree-parent-icon";
+
+            //    var lstCompaniesInTerr = companies.Where(x => x.Territory == item.Territory);
+            //    foreach (var company in lstCompaniesInTerr)
+            //    {
+                    
+            //        var nodeCompany = new Node();
+            //        nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = company.CpnyID, Mode = ParameterMode.Value });
+            //        nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Company", Mode = ParameterMode.Value });
+            //        //nodeCompany.Cls = "tree-node-parent";
+            //        nodeCompany.Text = company.CpnyID + "-" + company.CpnyName;
+            //        nodeCompany.Checked = false;
+            //        nodeCompany.Leaf = true;
+            //        nodeCompany.NodeID = "territory-company-" + item.Territory + "-" + company.CpnyID;
+            //        //nodeCompany.IconCls = "tree-parent-icon";
+
+            //        nodeTerritory.Children.Add(nodeCompany);
+
+            //    }
+            //    if (lstCompaniesInTerr.Count() == 0)
+            //    {
+            //        nodeTerritory.Leaf = true;
+            //    }
+            //    node.Children.Add(nodeTerritory);
+            //}
+
+            //var treeBranch = X.GetCmp<Panel>(panelID);
+
+            ////tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
+            //tree.Listeners.CheckChange.Fn = "Event.Tree.treePanelBranch_checkChange";
+
+            //tree.AddTo(treeBranch);
+
+            //return this.Direct();
             TreePanel tree = new TreePanel();
             tree.ID = "treePanelBranch";
             tree.ItemID = "treePanelBranch";
@@ -84,56 +149,100 @@ namespace OM27700.Controllers
 
             Node node = new Node();
             node.NodeID = "Root";
-            tree.Root.Add(node);
+            node.Checked = false;
 
-            var lstTerritories = _db.OM27700_ptTerritory(Current.CpnyID, Current.UserName, Current.LangID).ToList();//tam thoi
-            var companies = _db.OM27700_ptCompany("", Current.CpnyID, Current.UserName, Current.LangID).ToList();
+            _lstAllNode = _db.OM27700_ptTreeNode(Current.UserName, Current.CpnyID, Current.LangID).ToList();
 
-            foreach (var item in lstTerritories)
+
+            var maxLevel = _lstAllNode.Max(x => x.LevelID);
+            var lstFirst = _lstAllNode.Where(x => x.LevelID == maxLevel).ToList();
+            var crrLevel = maxLevel - 1;
+            if (lstFirst.Count > 0)
             {
-                var nodeTerritory = new Node();
-                nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = item.Territory, Mode = ParameterMode.Value });
-                nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Territory", Mode = ParameterMode.Value });
-                //nodeTerritory.Cls = "tree-node-parent";
-                nodeTerritory.Text = item.Descr;
-                nodeTerritory.Checked = false;
-                nodeTerritory.NodeID = "territory-" + item.Territory;
-                //nodeTerritory.IconCls = "tree-parent-icon";
-
-                var lstCompaniesInTerr = companies.Where(x => x.Territory == item.Territory);
-                foreach (var company in lstCompaniesInTerr)
+                string crrParent = string.Empty;
+                Node parentNode = null;
+                bool isAddChild = false;// lstFirst.Where(x => x.ParentID != string.Empty).Count() > 0;
+                foreach (var it in lstFirst)
                 {
-                    
-                    var nodeCompany = new Node();
-                    nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = company.CpnyID, Mode = ParameterMode.Value });
-                    nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Company", Mode = ParameterMode.Value });
-                    //nodeCompany.Cls = "tree-node-parent";
-                    nodeCompany.Text = company.CpnyID + "-" + company.CpnyName;
-                    nodeCompany.Checked = false;
-                    nodeCompany.Leaf = true;
-                    nodeCompany.NodeID = "territory-company-" + item.Territory + "-" + company.CpnyID;
-                    //nodeCompany.IconCls = "tree-parent-icon";
+                    var childNode = SetNodeValue(it, Ext.Net.Icon.UserHome);
+                    GetChildNode(ref childNode, (int)crrLevel, it.Code);
 
-                    nodeTerritory.Children.Add(nodeCompany);
-
+                    if (it.ParentID != crrParent)
+                    {
+                        crrParent = it.ParentID;
+                        parentNode.Children.Add(childNode);
+                        isAddChild = true;
+                        node.Children.Add(parentNode);
+                    }
+                    else
+                    {
+                        if (it.ParentID != string.Empty)
+                        {
+                            parentNode.Children.Add(childNode);
+                        }
+                    }
+                    if (!isAddChild)
+                    {
+                        node.Children.Add(childNode);
+                    }
                 }
-                if (lstCompaniesInTerr.Count() == 0)
-                {
-                    nodeTerritory.Leaf = true;
-                }
-                node.Children.Add(nodeTerritory);
             }
+
+            node.Icon = Ext.Net.Icon.FolderHome;
+
+            tree.Root.Add(node);
 
             var treeBranch = X.GetCmp<Panel>(panelID);
 
             //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
             tree.Listeners.CheckChange.Fn = "Event.Tree.treePanelBranch_checkChange";
-
+            tree.Listeners.ItemCollapse.Fn = "tree_ItemCollapse";
             tree.AddTo(treeBranch);
 
             return this.Direct();
         }
+        private Node SetNodeValue(OM27700_ptTreeNode_Result objNode, Ext.Net.Icon icon)
+        {
+            Node node = new Node();
 
+            Random rand = new Random();
+            node.NodeID = objNode.Code + objNode.ParentID + (rand.Next(999, 9999) + objNode.LevelID).ToString();
+            node.Checked = false;
+            node.Text = objNode.Descr;
+            node.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = objNode.Type, Mode = Ext.Net.ParameterMode.Value });
+            node.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = objNode.Code, Mode = Ext.Net.ParameterMode.Value });
+            node.Icon = objNode.LevelID != 0 ? icon : Ext.Net.Icon.Folder;
+            node.Leaf = objNode.LevelID == 0;// true;
+            node.IconCls = "tree-node-noicon";
+            return node;
+        }
+        private void GetChildNode(ref Node crrNode, int level, string parrentID)
+        {
+            if (level >= 0)
+            {
+                var lstSub = _lstAllNode.Where(x => x.ParentID == parrentID && x.LevelID == level).ToList();
+
+                if (lstSub.Count > 0)
+                {
+                    var crrLevel = level - 1;
+                    string crrParent = string.Empty;
+                    foreach (var it in lstSub)
+                    {
+                        var childNode = SetNodeValue(it, Ext.Net.Icon.FolderGo);
+                        GetChildNode(ref childNode, crrLevel, it.Code);
+                        crrNode.Children.Add(childNode);
+                    }
+                }
+                else
+                {
+                    crrNode.Leaf = true;
+                }
+            }
+            else
+            {
+                crrNode.Leaf = true;
+            }
+        }
         public ActionResult GetAccumulateById(string accumulateID)
         {
             var accumulate = _db.OM_Accumulated.FirstOrDefault(x => x.AccumulateID == accumulateID);

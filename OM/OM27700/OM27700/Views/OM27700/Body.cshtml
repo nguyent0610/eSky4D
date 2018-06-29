@@ -337,9 +337,9 @@
                             , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID")
                             .Editor(
                                 HQ.Combo().ID("cboGCpnyID")
-                                .HQProcedure("OM27700_pcCompany").HQColumnShow("CpnyID,CpnyName")
-                                .HQHeightWidth(400, 300)
-                                .ValueField("CpnyID").DisplayField("CpnyID")
+                                .HQProcedure("OM27700_pcCompany").HQColumnShow("BranchRouteID,BranchRouteDescr,CpnyID,CpnyName")
+                                .HQHeightWidth(400, 500)
+                                .ValueField("BranchRouteID").DisplayField("BranchRouteID")
                                 .ForceSelection(true)
                                 .HQParam(new StoreParameterCollection() { 
                                     new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
