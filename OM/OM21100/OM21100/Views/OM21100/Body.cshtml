@@ -188,7 +188,8 @@
                                                 l.Change.Fn = "DiscDefintion.Event.cboDiscSeq_change";
                                                 l.Blur.Fn = "DiscDefintion.Event.cboDiscSeq_change";
                                                 l.Select.Fn = "DiscDefintion.Event.cboDiscSeq_select";
-                                                l.Expand.Handler = "App.cboDiscSeq.store.clearFilter();";
+                                                //l.Expand.Handler = "App.cboDiscSeq.store.clearFilter();";
+                                                l.Collapse.Handler = "App.cboDiscSeq.store.clearFilter();";
                                             })
 
                                             , HQ.Combo().ID("cboDiscFor")
@@ -396,7 +397,7 @@
                                         .Listeners(l =>
                                         {
                                             l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
-                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandComboExcludePromo";
                                             l.Blur.Handler = "this.forceSelection = false";
                                             l.Expand.Handler = "HQ.combo.expand(App.cboExcludePromo, ';')";
                                         })

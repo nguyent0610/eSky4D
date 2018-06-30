@@ -2324,6 +2324,7 @@ var DiscDefintion = {
         cboDiscID_change: function (cbo, newValue, oldValue, eOpts) {
             //var selRec = HQ.store.findInStore(cbo.store, ["DiscID"], [cbo.getValue()]);
             //if (selRec || !_isNewDisc) {
+            //App.cboDiscSeq.store.clearFilter();
             if (HQ.util.passNull(cbo.getValue()) != _discLoad && !cbo.hasFocus) {
                 App.stoDiscInfo.reload();
                 App.cboDiscSeq.store.load(function () {
@@ -2921,9 +2922,14 @@ var DiscDefintion = {
                 HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
                 return false;
             }
+        },
+        checkExpandComboExcludePromo: function () {
+            if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
+                HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
+                return false;
+            }
             App.cboExcludePromo.forceSelection = true;
         },
-
         checkChangeCheckBox: function(chk, newValue, oldValue, eOpts) {
             if (Ext.isEmpty(App.cboDiscSeq.getValue())) {
                 HQ.message.show(15, [App.cboDiscSeq.fieldLabel], '', true);
