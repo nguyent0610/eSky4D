@@ -862,7 +862,7 @@ var Main = {
                 else {
                     HQ.common.changeData(false, 'OM21100');
                 }
-                App.cboDiscID.setReadOnly(HQ.isChange0);
+                App.cboDiscID.setReadOnly(HQ.isChange);
                 App.cboDiscSeq.setReadOnly(HQ.isChange);
 
                 if (HQ.isChange && !App.cboDiscClass.readOnly || !Ext.isEmpty(App.cboDiscSeq.getValue())) {
@@ -4503,10 +4503,10 @@ var DiscDefintion = {
                     DiscSeq: discSeq,
                     LineRef: HQ.store.lastLineRef(e.store)
                 };
-                if (App.cboSubBreakType.getValue() == 'N') {
+                //if (App.cboSubBreakType.getValue() == 'N') {
                     var newRec = Ext.create(e.store.model.modelName, newData);
                     HQ.store.insertRecord(e.store, (keys.length ? keys : totalKeys), newRec, false);
-                }
+                //}
 
                 if (!App.cboDiscClass.readOnly) {
                     App.cboDiscClass.setReadOnly(true);
