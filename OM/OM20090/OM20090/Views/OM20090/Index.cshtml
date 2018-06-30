@@ -68,6 +68,23 @@
                 }
             )
         )
+
+
+        @(X.Store().ID("stoDel4Save")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20090_pgCompetitorSurveyInvt_Result), "mdlDel4Save", ""))
+            .ServerProxy( 
+                X.AjaxProxy()
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;   
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+           )
+        )
+
+
+
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 

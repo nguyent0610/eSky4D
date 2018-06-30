@@ -38,9 +38,9 @@ namespace OM20090.Controllers
             return PartialView();
         }
 
-        public ActionResult GetCompetitorInvt()
+        public ActionResult GetCompetitorInvt(string branchID, string surveyID)
         {
-            var dets = _db.OM20090_pgCompetitorInvt(Current.CpnyID, Current.UserName, Current.LangID).ToList();
+            var dets = _db.OM20090_pgCompetitorInvt(Current.CpnyID, Current.UserName, Current.LangID, branchID, surveyID).ToList();
             return this.Store(dets);
         }
 
@@ -74,6 +74,9 @@ namespace OM20090.Controllers
 
                 var curHeader = dataHandler.ObjectData<OM_CompetitorSurveyHeader>().FirstOrDefault();
 
+
+                StoreDataHandler dataHandlerDel = new StoreDataHandler(data["lstDel"]);
+                List<OM20090_pgCompetitorSurveyInvt_Result> lstDel = dataHandlerDel.ObjectData<OM20090_pgCompetitorSurveyInvt_Result>();
                 curHeader.SurveyID = data["cboSurveyID"].PassNull().ToUpper().Trim();
                 curHeader.BranchID = data["cboDistributor"];
                 string invtID = data["invtID"];
@@ -144,6 +147,31 @@ namespace OM20090.Controllers
 
 
                 #region Save OM_CompetitorSurveyInvt
+
+                foreach (OM20090_pgCompetitorSurveyInvt_Result deleted in lstDel)
+                {
+                    if (lstSurveyInvt.Created.Where(p => p.BranchID == curHeader.BranchID && p.SurveyID == curHeader.SurveyID.ToUpper().Trim() && p.InvtID == deleted.InvtID && p.CompInvtID == deleted.CompID && p.CompID == deleted.CompID).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    {
+
+                        lstSurveyInvt.Created.Where(p => p.BranchID == curHeader.BranchID && p.SurveyID == curHeader.SurveyID.ToUpper().Trim() && p.InvtID == deleted.InvtID && p.CompInvtID == deleted.CompID && p.CompID == deleted.CompID).FirstOrDefault().tstamp = deleted.tstamp;
+
+                    }
+
+                    else
+                    {
+
+                        var objDelete = _db.OM_CompetitorSurveyInvt.FirstOrDefault(p => p.BranchID == curHeader.BranchID && p.SurveyID == curHeader.SurveyID.ToUpper().Trim() && p.InvtID == deleted.InvtID && p.CompInvtID == deleted.CompInvtID && p.CompID == deleted.CompID);
+
+                        if (objDelete != null)
+                        {
+
+                            _db.OM_CompetitorSurveyInvt.DeleteObject(objDelete);
+
+                        }
+
+                    }
+                }
+
 
                 foreach (OM20090_pgCompetitorSurveyInvt_Result deleted in lstSurveyInvt.Deleted)
                 {

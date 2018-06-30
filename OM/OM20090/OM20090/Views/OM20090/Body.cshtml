@@ -107,7 +107,7 @@
                         .HQLangCode("FromDate").Format(Current.FormatDate).DataIndex("FromDate")
                         .Listeners(l => l.Change.Fn = "Event.Form.dtpFromDate_change")
 
-                    , HQ.DateField().ID("dtpToDate").Format(Current.FormatDate).DataIndex("ToDate")
+                    , HQ.DateField().ID("dtpToDate").Format(Current.FormatDate).DataIndex("ToDate").AllowBlank(false)
                         .HQLangCode("ToDate")
                     
                    
@@ -178,11 +178,41 @@
                         .Model(Util.GenerateModel(typeof(OM20090_pgCompetitorInvt_Result), "mdlCompetitorInvt", "", false))       
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCompetitorInvt"))).AutoLoad(false)
                         .Listeners(p=>p.Load.Fn="Event.Grid.stoDet_load" )
+                        .Parameters(ps =>
+                        {
+                            ps.Add(new StoreParameter("branchID", "App.cboDistributor.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("surveyID", "App.cboSurveyID.getValue()", ParameterMode.Raw));
+                        }) 
                     )
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)//.Listeners(x => 	x.AfterRender.Handler = "this.resizable = true")
                         , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(300)
-                        , X.Column().Text(Util.GetLang("OM20090InvtName")).DataIndex("Descr").Flex(1)          
+                        .Editor(
+                                HQ.Combo().ID("cboInvtID")
+                                 .HQProcedure("OM20090_pcInvtID")
+                                 .HQColumnShow("InvtID,Descr").ValueField("InvtID").DisplayField("InvtID")
+                                 .HQHeightWidth(400, 300).ForceSelection(true)//.AllowBlank(false)
+                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                 .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw) 
+                                    , new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                                    , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                                 })
+                                 .LoadData()
+                            )
+                        
+                        , X.Column().Text(Util.GetLang("OM20090InvtName")).DataIndex("Descr").Flex(1) 
+                        //,X.CommandColumn().Width(150)
+                        //    .Commands(
+                        //        X.GridCommand()
+                        //        .Text(Util.GetLang("Reject"))
+                        //        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        //        .CommandName("reject")
+                        //        .Icon(Icon.ArrowUndo)
+                                
+                        //    )
+                        //    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                        //        .Listeners(l => l.Command.Handler = "Event.Grid.grdInvt_Reject(record);")           
                     )
                     .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))
                     .Listeners(lst => lst.Select.Fn = "slmDet_select")
@@ -202,6 +232,17 @@
                         )
                         .Plugins(X.ProgressBarPager())
                     )
+                    .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "Event.Grid.grdInvt_BeforeEdit";
+                                ls.Edit.Fn = "Event.Grid.grdInvt_Edit";
+                                ls.ValidateEdit.Fn = "Event.Grid.grdInvt_ValidateEdit";
+
+                            })
+                        )
                     .Features(
                         X.GridFilters().Local(true)
                         .Filters(
@@ -423,7 +464,7 @@
                         .Features(
                             X.GridFilters().Local(true)
                             .Filters(
-                                X.StringFilter().DataIndex("InvtID")
+                                X.ListFilter().DataIndex("InvtID")
                                 , X.StringFilter().DataIndex("CompID")
                                 , X.StringFilter().DataIndex("CompName")
 

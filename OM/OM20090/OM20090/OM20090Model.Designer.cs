@@ -151,47 +151,6 @@ namespace OM20090
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userName">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<OM20090_pgCompetitorInvt_Result> OM20090_pgCompetitorInvt(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userNameParameter;
-            if (userName != null)
-            {
-                userNameParameter = new ObjectParameter("UserName", userName);
-            }
-            else
-            {
-                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<OM20090_pgCompetitorInvt_Result>("OM20090_pgCompetitorInvt", cpnyIDParameter, userNameParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="userName">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="surveyID">No Metadata Documentation available.</param>
         public ObjectResult<OM20090_pgCompetitorSurveyCriteria_Result> OM20090_pgCompetitorSurveyCriteria(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String surveyID)
@@ -373,6 +332,69 @@ namespace OM20090
             }
     
             return base.ExecuteFunction<OM20090_pgCompetitorSurveyInvt_Result>("OM20090_pgCompetitorSurveyInvt", cpnyIDParameter, userNameParameter, langIDParameter, branchIDParameter, surveyIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="surveyID">No Metadata Documentation available.</param>
+        public ObjectResult<OM20090_pgCompetitorInvt_Result> OM20090_pgCompetitorInvt(global::System.String cpnyID, global::System.String userName, Nullable<global::System.Int16> langID, global::System.String branchID, global::System.String surveyID)
+        {
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter surveyIDParameter;
+            if (surveyID != null)
+            {
+                surveyIDParameter = new ObjectParameter("SurveyID", surveyID);
+            }
+            else
+            {
+                surveyIDParameter = new ObjectParameter("SurveyID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM20090_pgCompetitorInvt_Result>("OM20090_pgCompetitorInvt", cpnyIDParameter, userNameParameter, langIDParameter, branchIDParameter, surveyIDParameter);
         }
 
         #endregion
@@ -707,16 +729,14 @@ namespace OM20090
         /// </summary>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="surveyID">Initial value of the SurveyID property.</param>
-        /// <param name="surveyName">Initial value of the SurveyName property.</param>
         /// <param name="fromDate">Initial value of the FromDate property.</param>
         /// <param name="toDate">Initial value of the ToDate property.</param>
         /// <param name="status">Initial value of the Status property.</param>
-        public static OM_CompetitorSurveyHeader CreateOM_CompetitorSurveyHeader(global::System.String branchID, global::System.String surveyID, global::System.String surveyName, global::System.DateTime fromDate, global::System.DateTime toDate, global::System.String status)
+        public static OM_CompetitorSurveyHeader CreateOM_CompetitorSurveyHeader(global::System.String branchID, global::System.String surveyID, global::System.DateTime fromDate, global::System.DateTime toDate, global::System.String status)
         {
             OM_CompetitorSurveyHeader oM_CompetitorSurveyHeader = new OM_CompetitorSurveyHeader();
             oM_CompetitorSurveyHeader.BranchID = branchID;
             oM_CompetitorSurveyHeader.SurveyID = surveyID;
-            oM_CompetitorSurveyHeader.SurveyName = surveyName;
             oM_CompetitorSurveyHeader.FromDate = fromDate;
             oM_CompetitorSurveyHeader.ToDate = toDate;
             oM_CompetitorSurveyHeader.Status = status;
@@ -784,7 +804,7 @@ namespace OM20090
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String SurveyName
         {
@@ -796,7 +816,7 @@ namespace OM20090
             {
                 OnSurveyNameChanging(value);
                 ReportPropertyChanging("SurveyName");
-                _SurveyName = StructuralObject.SetValidValue(value, false);
+                _SurveyName = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("SurveyName");
                 OnSurveyNameChanged();
             }
