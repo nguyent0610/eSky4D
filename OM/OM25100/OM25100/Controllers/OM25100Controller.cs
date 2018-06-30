@@ -46,14 +46,14 @@ namespace OM25100.Controllers
             ViewBag.showTabSalesClassDetail = showTabSalesClassDetail;
             return View();
         }
-        
+
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        #region -Get data-                
+        #region -Get data-
 
         public ActionResult GetMCCodeHeader(string CycleNbr, string KPI)
         {
@@ -78,21 +78,21 @@ namespace OM25100.Controllers
             var lstKPISales_All = _db.OM25100_pgKPISales_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory, TypeStaff).ToList();
             return this.Store(lstKPISales_All);
         }
-		public ActionResult GetKPICustomer_All(string CycleNbr, string KPI, string Zone, string Territory)
-		{
-			var lstKPISales_All = _db.OM25100_pgKPICustomer_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
-			return this.Store(lstKPISales_All);
-		}
-		public ActionResult GetKPICustomer_Class(string CycleNbr, string KPI, string Zone, string Territory)
-		{
-			var lstKPISales_Class = _db.OM25100_pgKPICustomer_Class(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
-			return this.Store(lstKPISales_Class);
-		}
-		public ActionResult GetKPICustomer_Invt(string CycleNbr, string KPI, string Zone, string Territory)
-		{
-			var lstKPISales_Invt = _db.OM25100_pgKPICustomer_Invt(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
-			return this.Store(lstKPISales_Invt);
-		}
+        public ActionResult GetKPICustomer_All(string CycleNbr, string KPI, string Zone, string Territory)
+        {
+            var lstKPISales_All = _db.OM25100_pgKPICustomer_All(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
+            return this.Store(lstKPISales_All);
+        }
+        public ActionResult GetKPICustomer_Class(string CycleNbr, string KPI, string Zone, string Territory)
+        {
+            var lstKPISales_Class = _db.OM25100_pgKPICustomer_Class(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
+            return this.Store(lstKPISales_Class);
+        }
+        public ActionResult GetKPICustomer_Invt(string CycleNbr, string KPI, string Zone, string Territory)
+        {
+            var lstKPISales_Invt = _db.OM25100_pgKPICustomer_Invt(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
+            return this.Store(lstKPISales_Invt);
+        }
         public ActionResult GetKPISales_Class(string CycleNbr, string KPI, string Zone, string Territory)
         {
             var lstKPISales_Class = _db.OM25100_pgKPISales_Class(Current.UserName, Current.CpnyID, Current.LangID, CycleNbr, KPI, Zone, Territory).ToList();
@@ -108,7 +108,7 @@ namespace OM25100.Controllers
             var lstKPICondition = _db.OM25100_pgKPICondition(CycleNbr, KPI, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lstKPICondition);
         }
-         public ActionResult GetKPISalesClassDetail(string CycleNbr, string KPI)
+        public ActionResult GetKPISalesClassDetail(string CycleNbr, string KPI)
         {
             var lstKPICondition = _db.OM25100_pgSalesClassDetail(CycleNbr, KPI, Current.UserName, Current.CpnyID, Current.LangID).ToList();
             return this.Store(lstKPICondition);
@@ -123,7 +123,7 @@ namespace OM25100.Controllers
             {
                 string CycleNbr = data["cboCycleNbr"].PassNull();
                 string KPI = data["cboKPI"].PassNull();
-				string handle = data["cboHandle"].PassNull();
+                string handle = data["cboHandle"].PassNull();
                 string appFor = data["cboApplyFor"].PassNull();
                 string appTo = data["cboApplyTo"].PassNull();
 
@@ -154,17 +154,17 @@ namespace OM25100.Controllers
                 ChangeRecords<OM25100_pgKPISales_Invt_Result> stoOM_KPISales_Invt = dataHander_grid5.BatchObjectData<OM25100_pgKPISales_Invt_Result>();
                 stoOM_KPISales_Invt.Created.AddRange(stoOM_KPISales_Invt.Updated);
 
-				StoreDataHandler dataHander_grid6 = new StoreDataHandler(data["stoOM_KPICustomer_All"]);
-				ChangeRecords<OM25100_pgKPICustomer_All_Result> stoOM_KPICustomer_All = dataHander_grid6.BatchObjectData<OM25100_pgKPICustomer_All_Result>();
-				stoOM_KPICustomer_All.Created.AddRange(stoOM_KPICustomer_All.Updated);
+                StoreDataHandler dataHander_grid6 = new StoreDataHandler(data["stoOM_KPICustomer_All"]);
+                ChangeRecords<OM25100_pgKPICustomer_All_Result> stoOM_KPICustomer_All = dataHander_grid6.BatchObjectData<OM25100_pgKPICustomer_All_Result>();
+                stoOM_KPICustomer_All.Created.AddRange(stoOM_KPICustomer_All.Updated);
 
-				StoreDataHandler dataHander_grid7 = new StoreDataHandler(data["stoOM_KPICustomer_Class"]);
-				ChangeRecords<OM25100_pgKPICustomer_Class_Result> stoOM_KPICustomer_Class = dataHander_grid7.BatchObjectData<OM25100_pgKPICustomer_Class_Result>();
-				stoOM_KPICustomer_Class.Created.AddRange(stoOM_KPICustomer_Class.Updated);
+                StoreDataHandler dataHander_grid7 = new StoreDataHandler(data["stoOM_KPICustomer_Class"]);
+                ChangeRecords<OM25100_pgKPICustomer_Class_Result> stoOM_KPICustomer_Class = dataHander_grid7.BatchObjectData<OM25100_pgKPICustomer_Class_Result>();
+                stoOM_KPICustomer_Class.Created.AddRange(stoOM_KPICustomer_Class.Updated);
 
-				StoreDataHandler dataHander_grid8 = new StoreDataHandler(data["stoOM_KPICustomer_Invt"]);
-				ChangeRecords<OM25100_pgKPICustomer_Invt_Result> stoOM_KPICustomer_Invt = dataHander_grid8.BatchObjectData<OM25100_pgKPICustomer_Invt_Result>();
-				stoOM_KPICustomer_Invt.Created.AddRange(stoOM_KPICustomer_Invt.Updated);
+                StoreDataHandler dataHander_grid8 = new StoreDataHandler(data["stoOM_KPICustomer_Invt"]);
+                ChangeRecords<OM25100_pgKPICustomer_Invt_Result> stoOM_KPICustomer_Invt = dataHander_grid8.BatchObjectData<OM25100_pgKPICustomer_Invt_Result>();
+                stoOM_KPICustomer_Invt.Created.AddRange(stoOM_KPICustomer_Invt.Updated);
 
                 StoreDataHandler dataHander_gridCondition = new StoreDataHandler(data["stoOM_KPICondition"]);
                 ChangeRecords<OM25100_pgKPICondition_Result> stoOM_KPICondition = dataHander_gridCondition.BatchObjectData<OM25100_pgKPICondition_Result>();
@@ -186,14 +186,14 @@ namespace OM25100.Controllers
                         UpdatingHeader(ref header, curHeader);
                         if (handle != "N" && handle != "")
                         {
-                            if(handle=="C")
+                            if (handle == "C")
                             {
                                 header.Status = handle;
                             }
-							if (handle == "A")
-							{
-								header.Status = "C";
-							}
+                            if (handle == "A")
+                            {
+                                header.Status = "C";
+                            }
                             if (handle == "H")
                             {
                                 header.Status = handle;
@@ -222,7 +222,7 @@ namespace OM25100.Controllers
                     header.ResetET();
                     //header.Status = handle;
                     header.CycleNbr = CycleNbr;
-                    header.KPI = KPI;                   
+                    header.KPI = KPI;
                     header.Crtd_DateTime = DateTime.Now;
                     header.Crtd_Prog = _screenNbr;
                     header.Crtd_User = Current.UserName;
@@ -234,15 +234,15 @@ namespace OM25100.Controllers
                 #region OM_KPICpny_All
                 foreach (OM25100_pgKPICpny_All_Result del in stoOM_KPICpny_All.Deleted)
                 {
-                    if (stoOM_KPICpny_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                    if (stoOM_KPICpny_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == del.KPI.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        stoOM_KPICpny_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        stoOM_KPICpny_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.OM_KPICpny_All.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        var objDel = _db.OM_KPICpny_All.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper()).FirstOrDefault();
                         if (objDel != null)
                         {
@@ -257,7 +257,7 @@ namespace OM25100.Controllers
                 {
                     if (curItem.BranchID.PassNull() == "") continue;
 
-                    var objCountry = _db.OM_KPICpny_All.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper() 
+                    var objCountry = _db.OM_KPICpny_All.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == curItem.KPI.ToUpper()).FirstOrDefault();
 
                     if (objCountry != null)
@@ -277,7 +277,7 @@ namespace OM25100.Controllers
                         Update_OM_KPICpny_All(objCountry, curItem, true);
                         objCountry.CycleNbr = CycleNbr;
                         objCountry.KPI = KPI;
-                        
+
                         _db.OM_KPICpny_All.AddObject(objCountry);
                     }
                 }
@@ -286,15 +286,15 @@ namespace OM25100.Controllers
                 #region OM25100_pgKPICpny_Class
                 foreach (OM25100_pgKPICpny_Class_Result del in stoOM_KPICpny_Class.Deleted)
                 {
-                    if (stoOM_KPICpny_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                    if (stoOM_KPICpny_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == del.KPI.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        stoOM_KPICpny_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        stoOM_KPICpny_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.OM_KPICpny_Class.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        var objDel = _db.OM_KPICpny_Class.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).FirstOrDefault();
                         if (objDel != null)
                         {
@@ -309,7 +309,7 @@ namespace OM25100.Controllers
                 {
                     if (curItem.BranchID.PassNull() == "") continue;
 
-                    var objCountry = _db.OM_KPICpny_Class.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper() 
+                    var objCountry = _db.OM_KPICpny_Class.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.ClassID.ToUpper() == curItem.ClassID.ToUpper()).FirstOrDefault();
 
                     if (objCountry != null)
@@ -338,15 +338,15 @@ namespace OM25100.Controllers
                 #region OM25100_pgKPICpny_Invt
                 foreach (OM25100_pgKPICpny_Invt_Result del in stoOM_KPICpny_Invt.Deleted)
                 {
-                    if (stoOM_KPICpny_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                    if (stoOM_KPICpny_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == del.KPI.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        stoOM_KPICpny_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        stoOM_KPICpny_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.OM_KPICpny_Invt.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        var objDel = _db.OM_KPICpny_Invt.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).FirstOrDefault();
                         if (objDel != null)
                         {
@@ -361,7 +361,7 @@ namespace OM25100.Controllers
                 {
                     if (curItem.BranchID.PassNull() == "") continue;
 
-                    var objCountry = _db.OM_KPICpny_Invt.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper() 
+                    var objCountry = _db.OM_KPICpny_Invt.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.InvtID.ToUpper() == curItem.InvtID.ToUpper()).FirstOrDefault();
 
                     if (objCountry != null)
@@ -390,15 +390,15 @@ namespace OM25100.Controllers
                 #region OM_KPISales_All
                 foreach (OM25100_pgKPISales_All_Result del in stoOM_KPISales_All.Deleted)
                 {
-                    if (stoOM_KPISales_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                    if (stoOM_KPISales_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == del.KPI.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        stoOM_KPISales_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        stoOM_KPISales_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.OM_KPISales_All.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        var objDel = _db.OM_KPISales_All.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
                         if (objDel != null)
                         {
@@ -413,7 +413,7 @@ namespace OM25100.Controllers
                 {
                     if (curItem.BranchID.PassNull() == "") continue;
 
-                    var objCountry = _db.OM_KPISales_All.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper() 
+                    var objCountry = _db.OM_KPISales_All.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
 
                     if (objCountry != null)
@@ -442,15 +442,15 @@ namespace OM25100.Controllers
                 #region OM_KPISales_Class
                 foreach (OM25100_pgKPISales_Class_Result del in stoOM_KPISales_Class.Deleted)
                 {
-                    if (stoOM_KPISales_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                    if (stoOM_KPISales_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == del.KPI.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        stoOM_KPISales_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        stoOM_KPISales_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.OM_KPISales_Class.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        var objDel = _db.OM_KPISales_Class.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper()).FirstOrDefault();
                         if (objDel != null)
                         {
@@ -465,7 +465,7 @@ namespace OM25100.Controllers
                 {
                     if (curItem.BranchID.PassNull() == "") continue;
 
-                    var objCountry = _db.OM_KPISales_Class.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper() 
+                    var objCountry = _db.OM_KPISales_Class.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper() && p.ClassID.ToUpper() == curItem.ClassID.ToUpper()).FirstOrDefault();
 
                     if (objCountry != null)
@@ -494,15 +494,15 @@ namespace OM25100.Controllers
                 #region OM_KPISales_Invt
                 foreach (OM25100_pgKPISales_Invt_Result del in stoOM_KPISales_Invt.Deleted)
                 {
-                    if (stoOM_KPISales_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                    if (stoOM_KPISales_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == del.KPI.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        stoOM_KPISales_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        stoOM_KPISales_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.OM_KPISales_Invt.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper() 
+                        var objDel = _db.OM_KPISales_Invt.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
                             && p.KPI.ToUpper() == del.KPI.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper()).FirstOrDefault();
                         if (objDel != null)
                         {
@@ -517,7 +517,7 @@ namespace OM25100.Controllers
                 {
                     if (curItem.BranchID.PassNull() == "") continue;
 
-                    var objCountry = _db.OM_KPISales_Invt.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper() 
+                    var objCountry = _db.OM_KPISales_Invt.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
                         && p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper() && p.InvtID.ToUpper() == curItem.InvtID.ToUpper()).FirstOrDefault();
 
                     if (objCountry != null)
@@ -537,163 +537,163 @@ namespace OM25100.Controllers
                         Update_OM_KPISales_Invt(objCountry, curItem, true);
                         objCountry.CycleNbr = CycleNbr;
                         objCountry.KPI = KPI;
-                        
+
                         _db.OM_KPISales_Invt.AddObject(objCountry);
                     }
                 }
                 #endregion
 
-				#region OM_KPICustomer_All
-				foreach (OM25100_pgKPICustomer_All_Result del in stoOM_KPICustomer_All.Deleted)
-				{
-					if (stoOM_KPICustomer_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == del.KPI.ToUpper()&&p.CustID.ToUpper()==del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
-					{
-						stoOM_KPICustomer_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
-					}
-					else
-					{
-						var objDel = _db.OM_KPICustomer_All.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
-						if (objDel != null)
-						{
-							_db.OM_KPICustomer_All.DeleteObject(objDel);
-						}
-					}
-				}
+                #region OM_KPICustomer_All
+                foreach (OM25100_pgKPICustomer_All_Result del in stoOM_KPICustomer_All.Deleted)
+                {
+                    if (stoOM_KPICustomer_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+                        && p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    {
+                        stoOM_KPICustomer_All.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+                            && p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.OM_KPICustomer_All.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+                            && p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.OM_KPICustomer_All.DeleteObject(objDel);
+                        }
+                    }
+                }
 
 
 
-				foreach (OM25100_pgKPICustomer_All_Result curItem in stoOM_KPICustomer_All.Created)
-				{
-					if (curItem.BranchID.PassNull() == "" || curItem.CustID == "") continue;
+                foreach (OM25100_pgKPICustomer_All_Result curItem in stoOM_KPICustomer_All.Created)
+                {
+                    if (curItem.BranchID.PassNull() == "" || curItem.CustID == "") continue;
 
-					var objCountry = _db.OM_KPICustomer_All.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
+                    var objCountry = _db.OM_KPICustomer_All.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
+                        && p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
 
-					if (objCountry != null)
-					{
-						if (objCountry.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
-						{
-							Update_OM_KPICustomer_All(objCountry, curItem, false);
-						}
-						else
-						{
-							throw new MessageException(MessageType.Message, "19");
-						}
-					}
-					else
-					{
-						objCountry = new OM_KPICustomer_All();
-						Update_OM_KPICustomer_All(objCountry, curItem, true);
-						objCountry.CycleNbr = CycleNbr;
-						objCountry.KPI = KPI;
+                    if (objCountry != null)
+                    {
+                        if (objCountry.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
+                        {
+                            Update_OM_KPICustomer_All(objCountry, curItem, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        objCountry = new OM_KPICustomer_All();
+                        Update_OM_KPICustomer_All(objCountry, curItem, true);
+                        objCountry.CycleNbr = CycleNbr;
+                        objCountry.KPI = KPI;
 
-						_db.OM_KPICustomer_All.AddObject(objCountry);
-					}
-				}
-				#endregion
+                        _db.OM_KPICustomer_All.AddObject(objCountry);
+                    }
+                }
+                #endregion
 
-				#region OM_KPICustomer_Class
-				foreach (OM25100_pgKPICustomer_Class_Result del in stoOM_KPICustomer_Class.Deleted)
-				{
-					if (stoOM_KPICustomer_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
-					{
-						stoOM_KPICustomer_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
-					}
-					else
-					{
-						var objDel = _db.OM_KPICustomer_Class.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
-						if (objDel != null)
-						{
-							_db.OM_KPICustomer_Class.DeleteObject(objDel);
-						}
-					}
-				}
+                #region OM_KPICustomer_Class
+                foreach (OM25100_pgKPICustomer_Class_Result del in stoOM_KPICustomer_Class.Deleted)
+                {
+                    if (stoOM_KPICustomer_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+                        && p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    {
+                        stoOM_KPICustomer_Class.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+                            && p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.OM_KPICustomer_Class.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+                            && p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.ClassID.ToUpper() == del.ClassID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.OM_KPICustomer_Class.DeleteObject(objDel);
+                        }
+                    }
+                }
 
-				foreach (OM25100_pgKPICustomer_Class_Result curItem in stoOM_KPICustomer_Class.Created)
-				{
+                foreach (OM25100_pgKPICustomer_Class_Result curItem in stoOM_KPICustomer_Class.Created)
+                {
                     if (curItem.BranchID.PassNull() == "" || curItem.CustID == "" || curItem.ClassID == "") continue;
 
-					var objCountry = _db.OM_KPICustomer_Class.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.ClassID.ToUpper() == curItem.ClassID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
+                    var objCountry = _db.OM_KPICustomer_Class.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
+                        && p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.ClassID.ToUpper() == curItem.ClassID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
 
-					if (objCountry != null)
-					{
-						if (objCountry.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
-						{
-							Update_OM_KPICustomer_Class(objCountry, curItem, false);
-						}
-						else
-						{
-							throw new MessageException(MessageType.Message, "19");
-						}
-					}
-					else
-					{
-						objCountry = new OM_KPICustomer_Class();
-						Update_OM_KPICustomer_Class(objCountry, curItem, true);
-						objCountry.CycleNbr = CycleNbr;
-						objCountry.KPI = KPI;
+                    if (objCountry != null)
+                    {
+                        if (objCountry.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
+                        {
+                            Update_OM_KPICustomer_Class(objCountry, curItem, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        objCountry = new OM_KPICustomer_Class();
+                        Update_OM_KPICustomer_Class(objCountry, curItem, true);
+                        objCountry.CycleNbr = CycleNbr;
+                        objCountry.KPI = KPI;
 
-						_db.OM_KPICustomer_Class.AddObject(objCountry);
-					}
-				}
-				#endregion
+                        _db.OM_KPICustomer_Class.AddObject(objCountry);
+                    }
+                }
+                #endregion
 
-				#region OM_KPICustomer_Invt
-				foreach (OM25100_pgKPICustomer_Invt_Result del in stoOM_KPICustomer_Invt.Deleted)
-				{
-					if (stoOM_KPICustomer_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper() && p.SlsperId.ToUpper() == p.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
-					{
-						stoOM_KPICustomer_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
-					}
-					else
-					{
-						var objDel = _db.OM_KPICustomer_Invt.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
-							&& p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
-						if (objDel != null)
-						{
-							_db.OM_KPICustomer_Invt.DeleteObject(objDel);
-						}
-					}
-				}
+                #region OM_KPICustomer_Invt
+                foreach (OM25100_pgKPICustomer_Invt_Result del in stoOM_KPICustomer_Invt.Deleted)
+                {
+                    if (stoOM_KPICustomer_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+                        && p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper() && p.SlsperId.ToUpper() == p.SlsperId.ToUpper()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    {
+                        stoOM_KPICustomer_Invt.Created.Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+                            && p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault().tstamp = del.tstamp;
+                    }
+                    else
+                    {
+                        var objDel = _db.OM_KPICustomer_Invt.ToList().Where(p => p.BranchID == del.BranchID && p.CycleNbr.ToUpper() == del.CycleNbr.ToUpper()
+                            && p.KPI.ToUpper() == del.KPI.ToUpper() && p.CustID.ToUpper() == del.CustID.ToUpper() && p.InvtID.ToUpper() == del.InvtID.ToUpper() && p.SlsperId.ToUpper() == del.SlsperId.ToUpper()).FirstOrDefault();
+                        if (objDel != null)
+                        {
+                            _db.OM_KPICustomer_Invt.DeleteObject(objDel);
+                        }
+                    }
+                }
 
-				foreach (OM25100_pgKPICustomer_Invt_Result curItem in stoOM_KPICustomer_Invt.Created)
-				{
-					if (curItem.BranchID.PassNull() == "" || curItem.CustID == "" || curItem.InvtID == "") continue;
+                foreach (OM25100_pgKPICustomer_Invt_Result curItem in stoOM_KPICustomer_Invt.Created)
+                {
+                    if (curItem.BranchID.PassNull() == "" || curItem.CustID == "" || curItem.InvtID == "") continue;
 
-					var objCountry = _db.OM_KPICustomer_Invt.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
-						&& p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.InvtID.ToUpper() == curItem.InvtID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
+                    var objCountry = _db.OM_KPICustomer_Invt.Where(p => p.BranchID == curItem.BranchID && p.CycleNbr.ToUpper() == curItem.CycleNbr.ToUpper()
+                        && p.KPI.ToUpper() == curItem.KPI.ToUpper() && p.CustID.ToUpper() == curItem.CustID.ToUpper() && p.InvtID.ToUpper() == curItem.InvtID.ToUpper() && p.SlsperId.ToUpper() == curItem.SlsperId.ToUpper()).FirstOrDefault();
 
-					if (objCountry != null)
-					{
-						if (objCountry.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
-						{
-							Update_OM_KPICustomer_Invt(objCountry, curItem, false);
-						}
-						else
-						{
-							throw new MessageException(MessageType.Message, "19");
-						}
-					}
-					else
-					{
-						objCountry = new OM_KPICustomer_Invt();
-						Update_OM_KPICustomer_Invt(objCountry, curItem, true);
-						objCountry.CycleNbr = CycleNbr;
-						objCountry.KPI = KPI;
+                    if (objCountry != null)
+                    {
+                        if (objCountry.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
+                        {
+                            Update_OM_KPICustomer_Invt(objCountry, curItem, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        objCountry = new OM_KPICustomer_Invt();
+                        Update_OM_KPICustomer_Invt(objCountry, curItem, true);
+                        objCountry.CycleNbr = CycleNbr;
+                        objCountry.KPI = KPI;
 
-						_db.OM_KPICustomer_Invt.AddObject(objCountry);
-					}
-				}
-				#endregion
+                        _db.OM_KPICustomer_Invt.AddObject(objCountry);
+                    }
+                }
+                #endregion
 
                 #region OM_KPICondition
                 foreach (var del in stoOM_KPICondition.Deleted)
@@ -724,7 +724,7 @@ namespace OM25100.Controllers
                     {
                         if (objCondition.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
                         {
-                             Update_OM_KPICondition(ref objCondition, curItem, false);
+                            Update_OM_KPICondition(ref objCondition, curItem, false);
                         }
                         else
                         {
@@ -824,13 +824,13 @@ namespace OM25100.Controllers
                 string CycleNbr = data["cboCycleNbr"].PassNull();
                 string KPI = data["cboKPI"].PassNull();
 
-                var obj = _db.OM_KPIHeader.FirstOrDefault(p => p.CycleNbr == CycleNbr && p.KPI==KPI);
+                var obj = _db.OM_KPIHeader.FirstOrDefault(p => p.CycleNbr == CycleNbr && p.KPI == KPI);
                 if (obj != null)
                 {
                     _db.OM_KPIHeader.DeleteObject(obj);
                 }
 
-                var lstTargetGroupDet = _db.OM_KPICpny_All.Where(p => p.CycleNbr == CycleNbr && p.KPI==KPI).ToList();
+                var lstTargetGroupDet = _db.OM_KPICpny_All.Where(p => p.CycleNbr == CycleNbr && p.KPI == KPI).ToList();
                 foreach (var OjbGroupDet in lstTargetGroupDet)
                 {
                     _db.OM_KPICpny_All.DeleteObject(OjbGroupDet);
@@ -886,10 +886,10 @@ namespace OM25100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-                        
+
         private void UpdatingHeader(ref OM_KPIHeader t, OM_KPIHeader s)
         {
-            t.Status = s.Status;           
+            t.Status = s.Status;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
@@ -968,25 +968,25 @@ namespace OM25100.Controllers
             t.LUpd_User = _userName;
         }
 
-		private void Update_OM_KPICustomer_All(OM_KPICustomer_All t, OM25100_pgKPICustomer_All_Result s, bool isNew)
-		{
-			if (isNew)
-			{
-				t.CycleNbr = s.CycleNbr;
-				t.KPI = s.KPI;
-				t.BranchID = s.BranchID;				
-				t.CustID = s.CustID;
+        private void Update_OM_KPICustomer_All(OM_KPICustomer_All t, OM25100_pgKPICustomer_All_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.CycleNbr = s.CycleNbr;
+                t.KPI = s.KPI;
+                t.BranchID = s.BranchID;
+                t.CustID = s.CustID;
                 t.SlsperId = s.SlsperId;
-				t.Crtd_DateTime = DateTime.Now;
-				t.Crtd_Prog = _screenNbr;
-				t.Crtd_User = _userName;
-			}
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
 
-			t.Target = s.Target;
-			t.LUpd_DateTime = DateTime.Now;
-			t.LUpd_Prog = _screenNbr;
-			t.LUpd_User = _userName;
-		}
+            t.Target = s.Target;
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
 
         private void Update_OM_KPISales_Class(OM_KPISales_Class t, OM25100_pgKPISales_Class_Result s, bool isNew)
         {
@@ -1028,46 +1028,46 @@ namespace OM25100.Controllers
             t.LUpd_User = _userName;
         }
 
-		private void Update_OM_KPICustomer_Class(OM_KPICustomer_Class t, OM25100_pgKPICustomer_Class_Result s, bool isNew)
-		{
-			if (isNew)
-			{
-				t.CycleNbr = s.CycleNbr;
-				t.KPI = s.KPI;
-				t.BranchID = s.BranchID;
-				t.CustID = s.CustID;				
-				t.ClassID = s.ClassID;
+        private void Update_OM_KPICustomer_Class(OM_KPICustomer_Class t, OM25100_pgKPICustomer_Class_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.CycleNbr = s.CycleNbr;
+                t.KPI = s.KPI;
+                t.BranchID = s.BranchID;
+                t.CustID = s.CustID;
+                t.ClassID = s.ClassID;
                 t.SlsperId = s.SlsperId;
-				t.Crtd_DateTime = DateTime.Now;
-				t.Crtd_Prog = _screenNbr;
-				t.Crtd_User = _userName;
-			}
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
 
-			t.Target = s.Target;
-			t.LUpd_DateTime = DateTime.Now;
-			t.LUpd_Prog = _screenNbr;
-			t.LUpd_User = _userName;
-		}
+            t.Target = s.Target;
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
 
-		private void Update_OM_KPICustomer_Invt(OM_KPICustomer_Invt t, OM25100_pgKPICustomer_Invt_Result s, bool isNew)
-		{
-			if (isNew)
-			{
-				t.CycleNbr = s.CycleNbr;
-				t.KPI = s.KPI;
-				t.BranchID = s.BranchID;
-				t.CustID = s.CustID;				
-				t.InvtID = s.InvtID;
+        private void Update_OM_KPICustomer_Invt(OM_KPICustomer_Invt t, OM25100_pgKPICustomer_Invt_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.CycleNbr = s.CycleNbr;
+                t.KPI = s.KPI;
+                t.BranchID = s.BranchID;
+                t.CustID = s.CustID;
+                t.InvtID = s.InvtID;
                 t.SlsperId = s.SlsperId;
-				t.Crtd_DateTime = DateTime.Now;
-				t.Crtd_Prog = _screenNbr;
-				t.Crtd_User = _userName;
-			}
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
 
-			t.Target = s.Target;
-			t.LUpd_DateTime = DateTime.Now;
-			t.LUpd_Prog = _screenNbr;
-			t.LUpd_User = _userName;
+            t.Target = s.Target;
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
         }
 
         private void Update_OM_KPICondition(ref OM_KPICondition t, OM25100_pgKPICondition_Result s, bool isNew)
@@ -1079,7 +1079,7 @@ namespace OM25100.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = Current.UserName;
             }
-            
+
             t.Type = s.Type;
             t.Descr = s.Descr;
             t.Value1 = s.Value1;
@@ -1112,6 +1112,7 @@ namespace OM25100.Controllers
             try
             {
                 string KPIheader = data["cboKPI"].PassNull();
+                string CycleHeader = data["cboCycleNbr"].PassNull();
                 string appFor = data["cboApplyFor"].PassNull();
                 string appTo = data["cboApplyTo"].PassNull();
 
@@ -1245,6 +1246,7 @@ namespace OM25100.Controllers
                         string errorKPI = string.Empty;
                         string errorKPInotExists = string.Empty;
                         string errorKPIotherType = string.Empty;
+                        string errorCycleCheckSeleted = string.Empty;
                         string errorBranchID = string.Empty;
                         string errorBranchIDnotExists = string.Empty;
                         string errorTargetFormat = string.Empty;
@@ -1258,7 +1260,7 @@ namespace OM25100.Controllers
                         string errorCustIDnotExists = string.Empty;
                         string errorStatus = string.Empty;
 
-                        var lstCycle = _db.OM25100_piCycle(_userName, _cpnyID,Current.LangID).ToList();
+                        var lstCycle = _db.OM25100_piCycle(_userName, _cpnyID, Current.LangID).ToList();
                         var lstKPI = _db.OM25100_piKPI(_userName, _cpnyID, Current.LangID).ToList();
                         var lstBranch = _db.OM25100_piBranchID(_userName, _cpnyID, Current.LangID).ToList();
                         var lstClass = _db.OM25100_piClassID(_userName, _cpnyID, Current.LangID).ToList();
@@ -1386,7 +1388,12 @@ namespace OM25100.Controllers
                             }
                             else
                             {
-                                if (lstCycle.FirstOrDefault(p => p.CycleNbr == CycleNbr) == null)
+                                if (CycleNbr != CycleHeader)
+                                {
+                                    errorCycleCheckSeleted += (i + 1).ToString() + ",";
+                                    flagCheck = true;
+                                }
+                                else if (lstCycle.FirstOrDefault(p => p.CycleNbr == CycleNbr) == null)
                                 {
                                     errorCycleNbrnotExists += (i + 1).ToString() + ",";
                                     flagCheck = true;
@@ -1555,7 +1562,7 @@ namespace OM25100.Controllers
                                             }
                                         }
                                     }
-                                    
+
                                 }
                             }
                             else if (appFor == "CUS")
@@ -1720,7 +1727,7 @@ namespace OM25100.Controllers
                                         recordItem.Target = Convert.ToDouble(Target);
                                         recordItem.LUpd_DateTime = DateTime.Now;
                                         recordItem.LUpd_Prog = _screenNbr;
-                                        recordItem.LUpd_User = _userName;                                        
+                                        recordItem.LUpd_User = _userName;
                                     }
                                 }
                                 else if (appTo == "I")
@@ -1748,7 +1755,7 @@ namespace OM25100.Controllers
 
                                             recordItem.Crtd_DateTime = DateTime.Now;
                                             recordItem.Crtd_Prog = _screenNbr;
-                                            recordItem.Crtd_User =  _userName;
+                                            recordItem.Crtd_User = _userName;
                                             _db.OM_KPICpny_Invt.AddObject(recordItem);
                                             lstOM_KPICpny_Invt.Add(recordItem);
                                         }
@@ -1786,12 +1793,12 @@ namespace OM25100.Controllers
                                             recordItem.Crtd_User = _userName;
                                             _db.OM_KPICpny_Class.AddObject(recordItem);
                                             lstOM_KPICpny_Class.Add(recordItem);
-                                        }                                        
+                                        }
                                         recordItem.Target = Convert.ToDouble(Target);
                                         recordItem.LUpd_DateTime = DateTime.Now;
                                         recordItem.LUpd_Prog = _screenNbr;
                                         recordItem.LUpd_User = _userName;
-                                        
+
                                     }
                                 }
                                 #endregion
@@ -1833,7 +1840,7 @@ namespace OM25100.Controllers
                                         recordItem.LUpd_DateTime = DateTime.Now;
                                         recordItem.LUpd_Prog = _screenNbr;
                                         recordItem.LUpd_User = _userName;
-                                       
+
                                     }
                                 }
                                 else if (appTo == "I")
@@ -1873,7 +1880,7 @@ namespace OM25100.Controllers
                                         recordItem.LUpd_DateTime = DateTime.Now;
                                         recordItem.LUpd_Prog = _screenNbr;
                                         recordItem.LUpd_User = _userName;
-                                       
+
                                     }
                                 }
                                 else if (appTo == "G")
@@ -1913,14 +1920,14 @@ namespace OM25100.Controllers
                                         recordItem.LUpd_DateTime = DateTime.Now;
                                         recordItem.LUpd_Prog = _screenNbr;
                                         recordItem.LUpd_User = _userName;
-                                       
+
                                     }
                                 }
                                 #endregion
                             }
                             else if (appFor == "CUS")
                             {
-                                #region -Customer-                                                                
+                                #region -Customer-
                                 if (appTo == "A")
                                 {
                                     //OM_KPICustomer_All
@@ -1952,11 +1959,11 @@ namespace OM25100.Controllers
                                             recordItem.Crtd_User = _userName;
                                             _db.OM_KPICustomer_All.AddObject(recordItem);
                                             lstOM_KPICustomer_All.Add(recordItem);
-                                        }                                        
+                                        }
                                         recordItem.Target = Convert.ToDouble(Target);
                                         recordItem.LUpd_DateTime = DateTime.Now;
                                         recordItem.LUpd_Prog = _screenNbr;
-                                        recordItem.LUpd_User = _userName;                                       
+                                        recordItem.LUpd_User = _userName;
                                     }
                                 }
                                 else if (appTo == "I")
@@ -1993,11 +2000,11 @@ namespace OM25100.Controllers
                                             recordItem.Crtd_User = _userName;
                                             _db.OM_KPICustomer_Invt.AddObject(recordItem);
                                             lstOM_KPICustomer_Invt.Add(recordItem);
-                                        }                                        
+                                        }
                                         recordItem.Target = Convert.ToDouble(Target);
                                         recordItem.LUpd_DateTime = DateTime.Now;
                                         recordItem.LUpd_Prog = _screenNbr;
-                                        recordItem.LUpd_User = _userName;                                        
+                                        recordItem.LUpd_User = _userName;
                                     }
                                 }
                                 else if (appTo == "G")
@@ -2038,7 +2045,7 @@ namespace OM25100.Controllers
                                         recordItem.Target = Convert.ToDouble(Target);
                                         recordItem.LUpd_DateTime = DateTime.Now;
                                         recordItem.LUpd_Prog = _screenNbr;
-                                        recordItem.LUpd_User = _userName;                                        
+                                        recordItem.LUpd_User = _userName;
                                     }
                                 }
                                 #endregion
@@ -2051,6 +2058,7 @@ namespace OM25100.Controllers
                         message += errorKPI == "" ? "" : string.Format(Message.GetString("2016091412", null), "KPI", errorKPI);
                         message += errorKPInotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "KPI", errorKPInotExists);
                         message += errorKPIotherType == "" ? "" : string.Format(Message.GetString("2017011811", null), errorKPIotherType);
+                        message += errorCycleCheckSeleted == "" ? "" : string.Format(Message.GetString("2018063001", null), errorCycleCheckSeleted);
                         message += errorBranchID == "" ? "" : string.Format(Message.GetString("2016091412", null), "BranchID", errorBranchID);
                         message += errorBranchIDnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "BranchID", errorBranchIDnotExists);
                         message += errorTargetFormat == "" ? "" : string.Format(Message.GetString("2016091415", null), "Target", errorTargetFormat);
