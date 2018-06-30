@@ -23,7 +23,7 @@ var _lstAR_LTTContractDetail;
 var CustId = '';
 var _focusNo = 0;
 var _Source = 0;
-var _maxSource = 30;
+var _maxSource = 31;
 var _isLoadMaster = false;
 
 var _hiddenTree = '';
@@ -123,6 +123,8 @@ var firstLoad = function () {
     App.cboCodeDisplay.getStore().addListener('load', checkLoad);
     App.cboSellingProd1.getStore().addListener('load', checkLoad);
     App.cboSubTerritory.getStore().addListener('load', checkLoad);
+    App.cboMarket.getStore().addListener('load', checkLoad);
+  //  App.cboBillMarket.getStore().addListener('load', checkLoad);
     //App.cboCustId.getStore().addListener('load', stoCustId_Load);
     if (!Ext.isEmpty(HQ.hideColumn)) {
         var lstHide = HQ.hideColumn.split(',');
@@ -871,7 +873,7 @@ var save = function () {
                                 }
                                 App.cboCustId.setValue(CustId);
                                 if(!App.stoAR_Customer.loading)
-                                App.stoAR_Customer.reload();
+                                    App.stoAR_Customer.reload();
                             }
                            
                         }
@@ -1305,7 +1307,11 @@ var filterComboCityDistrict = function (sender, e) {
         App.cboCity.setValue('');
         App.cboDistrict.setValue('');
     }
-    var code = App.cboCountry.getValue() + App.cboState.getValue();
+    var code="@@@@@@";
+    if (App.cboCountry.getValue() != '' && App.cboState.getValue() != '')
+    {
+        code = App.cboCountry.getValue() + App.cboState.getValue();
+    }
     App.cboCity.store.clearFilter();
     App.cboCity.store.filter("CountryState", code);
     App.cboDistrict.store.clearFilter();
@@ -1331,18 +1337,47 @@ var cboDistrict_Change = function (sender, e) {
         else {
             _district = '';
         }
-    }    
+    }
     var tam = _addr1 + ", " + _addr2 + ", " + _ward + ", " + _market + ", " + _district + ", " + _state + ", " + _country;
     App.txtAddr.setValue(tam);
-    var code = App.cboDistrict.getValue();
+    var code1 = "@@@@@@@";
+    if (App.cboDistrict.getValue() != '' && App.cboState.getValue() != '')
+    {
+        code1 = App.cboState.getValue() + App.cboDistrict.getValue();
+    }
     App.cboMarket.setValue('');
     App.cboMarket.store.clearFilter();
-    
-    if (App.cboDistrict.value != '')
-    {
-        App.cboMarket.store.filter("District", code);
+    App.cboMarket.store.filter("StateDistrict", code1);
+
+}
+var cboDistrict_Expand = function (sender, e) {   
+    var code = "@@@@@@@";
+    if (App.cboCountry.getValue() != '' && App.cboState.getValue() != '') {
+        code = App.cboCountry.getValue() + App.cboState.getValue();
     }
-    //App.cboMarket.store.reload();  
+    setTimeout(function () {
+        App.cboCity.store.clearFilter();
+        App.cboCity.store.filter("CountryState", code);
+        App.cboDistrict.store.clearFilter();
+        App.cboDistrict.store.filter("CountryState", code);
+    }, 1);
+    
+}
+var cboMarket_Expand = function (sender, e) {
+
+    
+    var code1 = "@@@@@@@";
+    if (App.cboDistrict.getValue() != '' && App.cboState.getValue() != '') {
+        code1 = App.cboState.getValue() + App.cboDistrict.getValue();
+    }
+    setTimeout(function () {
+        App.cboMarket.store.clearFilter();
+        App.cboMarket.store.filter("StateDistrict", code1);
+    },1);
+
+}
+var cboMarket_Collapse= function (sender, e) {
+  //  Ext.suspendLayouts();
 }
 var cboMarket_Chang = function (sender, e) {
     if (sender.valueModels != null) {
@@ -1432,11 +1467,16 @@ var filterComboBillCity = function (sender, e) {
         App.cboBillCity.setValue('');
         App.cboBillDistrict.setValue('');
     }
-    var code = App.cboBillCountry.getValue() + App.cboBillState.getValue();
+    var code = "@@@@@@@@";
+    if (App.cboBillCountry.getValue() != '' && App.cboBillState.getValue() != '')
+    {
+        code = App.cboBillCountry.getValue() + App.cboBillState.getValue();
+    }
     App.cboBillCity.store.clearFilter();
     App.cboBillCity.store.filter("CountryState", code);
     App.cboBillDistrict.store.clearFilter();
     App.cboBillDistrict.store.filter("CountryState", code);
+    App.cboBillMarket.store.filter("StateDistrict", code);
     if (sender.valueModels != null) {
         if (sender.valueModels.length > 0) {
             _stateBill = sender.valueModels[0].data.Descr;
@@ -1448,7 +1488,19 @@ var filterComboBillCity = function (sender, e) {
     var tam = _addr1Bill + ", " + _addr2Bill + ", " + _wardBill + ", " +_marketBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
     App.txtBillAddr.setValue(tam);
 };
-
+var cboBillDistrict_Expand = function (sender, e) {
+    var code = "@@@@@@@@";
+    if (App.cboBillCountry.getValue() != '' && App.cboBillState.getValue() != '') {
+        code = App.cboBillCountry.getValue() + App.cboBillState.getValue();
+    }
+    setTimeout(function () {
+        App.cboBillCity.store.clearFilter();
+        App.cboBillCity.store.filter("CountryState", code);
+        App.cboBillDistrict.store.clearFilter();
+        App.cboBillDistrict.store.filter("CountryState", code);
+    },1)
+    
+};
 
 var cboBillDistrict_Change = function (sender, e) {
     if (sender.valueModels != null) {
@@ -1461,14 +1513,36 @@ var cboBillDistrict_Change = function (sender, e) {
     }
     var tam = _addr1Bill + ", " + _addr2Bill + ", " + _wardBill + ", " + _marketBill + ", " + _districtBill + ", " + _stateBill + ", " + _countryBill;
     App.txtBillAddr.setValue(tam);
-    var code = App.cboBillDistrict.getValue();
+    var code = "@@@@@@@";
+    if (App.cboBillDistrict.value != '' && App.cboBillState.value != '')
+    {
+        code = App.cboBillState.getValue()+ App.cboBillDistrict.getValue();
+    }
     App.cboBillMarket.setValue('');
     App.cboBillMarket.store.clearFilter();
-    if (App.cboBillDistrict.value != '') {
-        App.cboBillMarket.store.filter("District", code);
-    }
-}
+    App.cboBillMarket.store.filter("StateDistrict", code);
 
+  
+    var code1 = "@@@@@@@";
+    if (App.cboDistrict.getValue() != '' && App.cboState.getValue() != '') {
+        code1 = App.cboState.getValue() + App.cboDistrict.getValue();
+    }
+    App.cboBillMarket.setValue('');
+    App.cboMarket.store.clearFilter();
+    App.cboMarket.store.filter("StateDistrict", code1);
+}
+var cboBillMarket_Expand = function (sender, e) {
+    
+    var code = "@@@@@@@";
+    if (App.cboBillDistrict.value != '' && App.cboBillState.value != '')
+    {
+        code = App.cboBillState.getValue()+ App.cboBillDistrict.getValue();
+    }
+    setTimeout(function () {
+        App.cboBillMarket.store.clearFilter();
+        App.cboBillMarket.store.filter("StateDistrict", code);
+    },1);
+}
 var stoCheckAutoCustID_Load = function () {
     if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1') {
         _Flag = "1";
@@ -1692,7 +1766,7 @@ var expandParentNode = function (node) {
     }
     Ext.resumeLayouts();
 };
-var isFirstLoad = false;
+
 var tabDetail_Change = function (tabPanel, newCard, oldCard, eOpts) {
     HQ.focus = tabPanel.activeTab.id;
 };
