@@ -139,7 +139,7 @@ namespace OM21100.Controllers
             var discSeqInfo = _db.OM_DiscSeq.FirstOrDefault(x => x.DiscID == discID && x.DiscSeq == discSeq);
             if (discSeqInfo != null)
             {
-                var excludePromo = discSeqInfo.ExcludePromo.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] excludePromo = discSeqInfo.ExcludePromo.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                 discSeqInfo.ExcludePromo = string.Join(",", excludePromo);
             }
             return this.Store(discSeqInfo);
@@ -795,9 +795,72 @@ namespace OM21100.Controllers
                                 .FirstOrDefault(p => p.DiscID == discID && p.DiscSeq == discSeq);
                     if (inputDiscSeq != null)
                     {
-                        var excludePromo = inputDiscSeq.ExcludePromo.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                        string[] excludePromoOld = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID == inputDiscSeq.DiscID && p.DiscSeq == inputDiscSeq.DiscSeq).ExcludePromo.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] excludePromo = inputDiscSeq.ExcludePromo.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                        string lstAddNew = "", lstDuplicate = "";                        
+
                         inputDiscSeq.ExcludePromo = string.Join(";", excludePromo);
                         inputDiscSeq.DiscClass = inputDisc.DiscClass;
+
+                        for (int i = 0; i < excludePromo.Length; i++)
+                        {
+                            var item = excludePromoOld.Where(p=>p == excludePromo[i]).FirstOrDefault();
+                            if(item == "" || item == null)
+                            {
+                                lstAddNew += excludePromo[i] + ",";
+                            }
+                            else
+                                lstDuplicate += item + ","; 
+                        }
+                        string[] lstAddNewTmp = lstAddNew.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] lstDuplicateTmp = lstDuplicate.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach(var item in lstAddNewTmp)
+                        {
+                            string[] itemTmp = item.Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
+                            var discIDAdd = itemTmp[0];
+                            var discSeqAdd = itemTmp[1];
+                            var objitem = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID == discIDAdd && p.DiscSeq == discSeqAdd);
+                            if (objitem != null)
+                            {
+                                if (objitem.ExcludePromo != "")
+                                    objitem.ExcludePromo += ";" + inputDiscSeq.DiscID + "#" + inputDiscSeq.DiscSeq;//string.Join(";", inputDiscSeq.DiscID + "#" + inputDiscSeq.DiscSeq);//
+                                else
+                                {
+                                    objitem.ExcludePromo += inputDiscSeq.DiscID + "#" + inputDiscSeq.DiscSeq;
+                                    //objitem.ExcludePromo.Substring(0, objitem.ExcludePromo.Length - 1);
+                                }
+                            }
+                        }
+                        foreach (var item in excludePromoOld)
+                        {
+                            var objitemDuplicate = lstDuplicateTmp.Where(p => p == item).FirstOrDefault();
+                            if (objitemDuplicate == "" || objitemDuplicate == null)
+                            {
+                                string[] itemTmp = item.Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
+                                var discIDDel = itemTmp[0];
+                                var discSeqDel= itemTmp[1];
+                                var objitem = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID == discIDDel && p.DiscSeq == discSeqDel);
+                                if (objitem != null)
+                                {
+                                    string[] objitemTmp = objitem.ExcludePromo.Split(new[] { inputDiscSeq.DiscID + "#" + inputDiscSeq.DiscSeq }, StringSplitOptions.None);
+                                    var flag = false;
+                                    foreach (var i in objitemTmp)
+                                    {
+                                        if (i != "")
+                                        {
+                                            objitem.ExcludePromo = string.Join(";", i);
+                                            flag = true;
+                                        }
+                                    }
+                                    if (!flag) objitem.ExcludePromo = "";
+                                    else { 
+                                    var a = objitem.ExcludePromo;
+                                    objitem.ExcludePromo= a.Substring(0, a.Length-1);
+                                    }
+                                }
+                            }
+                        }
+
                     }
                     var tam = _db.OM_DiscSeq.Where(p => p.DiscID == discID && p.DiscSeq == discSeq && p.Active == 1 && p.Status == "C" && inputDiscSeq.StockPromotion==true).FirstOrDefault();
                     if (tam != null)
