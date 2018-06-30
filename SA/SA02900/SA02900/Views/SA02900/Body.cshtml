@@ -84,8 +84,8 @@
                 .Parameters(ps =>
                 {
                     //ps.Add(new StoreParameter("langid", "HQ.langID", ParameterMode.Raw));
-                    ps.Add(new StoreParameter("AppFolID", "App.cboAppFol.getValue().join(',')", ParameterMode.Raw));
-                    ps.Add(new StoreParameter("RoleID", "App.cboRole.getValue().join(',')", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("AppFolID", "joinParams(App.cboAppFol)", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("RoleID", "joinParams(App.cboRole)", ParameterMode.Raw));
                 })
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetTopGrid"))).AutoLoad(false)
                 .Listeners(l =>

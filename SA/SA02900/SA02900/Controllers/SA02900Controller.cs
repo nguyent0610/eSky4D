@@ -154,7 +154,14 @@ namespace SA02900.Controllers
                 t.AppFolID = s.AppFolID;
                 t.RoleID = s.RoleID;
                 t.Status = s.Status;
-                t.BranchID = s.BranchID;
+                if(s.BranchID.PassNull()=="")
+                {
+                    t.BranchID = "*";
+                }
+                else
+                {
+                    t.BranchID = s.BranchID;
+                }
                 t.Crtd_Datetime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;

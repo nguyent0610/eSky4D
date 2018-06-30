@@ -228,9 +228,13 @@ var stoLoad = function (sto) {
 
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            if (sto.allData.items[sto.allData.items.length - 1].data.AppFolID != '' ||
-                sto.allData.items[sto.allData.items.length - 1].data.RoleID != '' ||
-                sto.allData.items[sto.allData.items.length - 1].data.Status != '') {
+            //if (sto.allData.items[sto.allData.items.length - 1].data.AppFolID != '' ||
+            //    sto.allData.items[sto.allData.items.length - 1].data.RoleID != '' ||
+            //    sto.allData.items[sto.allData.items.length - 1].data.Status != '') {
+            //    HQ.store.insertBlank(sto, keysTop);
+            //}
+            var record = HQ.store.findRecord(sto, keysTop, ['']);
+            if (!record) {
                 HQ.store.insertBlank(sto, keysTop);
             }
         }
@@ -327,8 +331,15 @@ function filterBot() {
 };
 
 var cboAppFolID_Change = function (value) {
-    var k = value.displayTplData[0].DescrScreen;
-    App.slmTopGrid.selected.items[0].set('DescrScreen', k);
+    if (value.displayTplData[0] != undefined)
+    {
+        var k = value.displayTplData[0].DescrScreen;
+        App.slmTopGrid.selected.items[0].set('DescrScreen', k);
+    }
+    else
+    {
+        App.slmTopGrid.selected.items[0].set('DescrScreen', '');
+    }
 };
 var cboLangStatus_Select = function(value)
 {
@@ -530,7 +541,19 @@ var save = function () {
 //            });
 //    }
 //};
+var joinParams = function (multiCombo) {
+    var returnValue = "";
+    if (multiCombo.value && multiCombo.value.length) {
+        returnValue = multiCombo.value.join();
+    }
+    else {
+        if (multiCombo.getValue()) {
+            returnValue = multiCombo.rawValue;
+        }
+    }
 
+    return returnValue;
+}
 var deleteData = function (item) {
     if (item == "yes") {
         if (_focusNo == 0) {
