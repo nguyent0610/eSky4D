@@ -1097,6 +1097,7 @@ namespace INProcess
                 clsIN_Trans objTran = new clsIN_Trans(Dal);
                 clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
                 clsIN_ItemSite objItem = new clsIN_ItemSite(Dal);
+                clsIN_ItemLoc objItemLoc = new clsIN_ItemLoc(Dal);
                 clsIN_UnitConversion objCnv = new clsIN_UnitConversion(Dal);
                 var totAmt = 0.0;
                 foreach (DataRow tagDetail in lstTagDetail.Rows)
@@ -1123,6 +1124,7 @@ namespace INProcess
                         RefNbr = refNbr,
                         Rlsed = 1,
                         SiteID = tagDetail.String("SiteID"),
+                        WhseLoc=tagDetail.String("WhseLoc"),
                         LineRef = lineRef                        
                     };                   
 
@@ -1131,20 +1133,34 @@ namespace INProcess
                     {
                         lineRef = "0" + lineRef;
                     }
+                    //Cập nhật vào IN_ItemSite
+                    if (tagDetail.String("WhseLoc").PassNull() != "")
+                    {
+                        if (objItemLoc.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID"), tagDetail.String("WhseLoc")))
+                        {
+                            objItemLoc.QtyOnHand = objItemLoc.QtyOnHand + tagDetail.Double("OffsetEAQty");
+                            objItemLoc.QtyAvail = objItemLoc.QtyAvail + tagDetail.Double("OffsetEAQty");
+                            //objItem.QtyOnHand += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
+                            //objItem.QtyAvail += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
+                            objItemLoc.LUpd_DateTime = System.DateTime.Now;
+                            objItemLoc.LUpd_Prog = tagDetail.String("LUpd_Prog");
+                            objItemLoc.LUpd_User = tagDetail.String("LUpd_User");
+                            objItemLoc.Update();
+                        }
+                    }
+
                     if (objItem.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID")))
                     {
                         objItem.QtyOnHand = objItem.QtyOnHand + tagDetail.Double("OffsetEAQty");
                         objItem.QtyAvail = objItem.QtyAvail + tagDetail.Double("OffsetEAQty");
                         //objItem.QtyOnHand += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
                         //objItem.QtyAvail += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
-
                         objItem.LUpd_DateTime = System.DateTime.Now;
                         objItem.LUpd_Prog = tagDetail.String("LUpd_Prog");
                         objItem.LUpd_User = tagDetail.String("LUpd_User");
                         objItem.Update();
                         
-                    }
-                   
+                    }                   
 
                     newTran.UnitDesc = objInvt.StkUnit;
                     // newTran.Qty += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;                    
@@ -1187,6 +1203,7 @@ namespace INProcess
                                     MfgrLotSerNbr = "",
                                     Qty = newTran.Qty,
                                     SiteID = newTran.SiteID,
+                                    WhseLoc=newTran.WhseLoc.PassNull(),
                                     ToSiteID = newTran.ToSiteID,
                                     TranDate = newTran.TranDate,
                                     TranType = newTran.TranType,
@@ -1207,7 +1224,7 @@ namespace INProcess
                                 objItemLot.Reset();                               
                                 objItemLot.InvtID = objItem.InvtID;
                                 objItemLot.SiteID = objItem.SiteID;
-                                objItemLot.WhseLoc = newTran.WhseLoc;
+                                objItemLot.WhseLoc = newTran.WhseLoc.PassNull();
                                 objItemLot.LotSerNbr = lotNbr;
                                // objItemLot.Cost = newTran.UnitCost;
                                 
@@ -1277,8 +1294,7 @@ namespace INProcess
                                         objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail - valTran, 0);
                                         
                                         objItemLot.Cost = objItem.TotCost * Math.Abs(objItemLot.QtyOnHand);
-                                        objItemLot.Update();
-        
+                                        objItemLot.Update();        
                                         qty = 0;
                                         isBreak = true;
                                     }
@@ -1296,6 +1312,8 @@ namespace INProcess
                                         MfgrLotSerNbr = "",
                                         Qty = -valTran,
                                         SiteID = newTran.SiteID,
+                                        WhseLoc = newTran.WhseLoc.PassNull(),
+                                        ToWhseLoc= newTran.ToWhseLoc.PassNull(),
                                         ToSiteID = newTran.ToSiteID,
                                         TranDate = newTran.TranDate,
                                         TranType = newTran.TranType,
@@ -1305,7 +1323,6 @@ namespace INProcess
                                         Crtd_DateTime = DateTime.Now,
                                         Crtd_Prog = tagDetail.String("Crtd_Prog"),
                                         Crtd_User = tagDetail.String("Crtd_User"),
-
                                         LUpd_DateTime = DateTime.Now,
                                         LUpd_Prog = tagDetail.String("LUpd_Prog"),
                                         LUpd_User = tagDetail.String("LUpd_User"),
@@ -1319,9 +1336,17 @@ namespace INProcess
                                         break; 
                                     }
                                 }
-                                if (qty > 0)
+                                
+                                if (qty > 0 )
                                 {
-                                    throw new MessageException(MessageType.Message, "608", "", new[] { objItemLot.InvtID, objItemLot.SiteID});
+                                    if (tagDetail.String("WhseLoc").PassNull() == "")
+                                    {
+                                        throw new MessageException(MessageType.Message, "2018063011", "", new[] { objItemLot.InvtID, objItemLot.SiteID,objItemLot.WhseLoc });
+                                    }
+                                    else
+                                    {
+                                        throw new MessageException(MessageType.Message, "608", "", new[] { objItemLot.InvtID, objItemLot.SiteID});
+                                    }                                    
                                 }                                
                             }                            
                         }
