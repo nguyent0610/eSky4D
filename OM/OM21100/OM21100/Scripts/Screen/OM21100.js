@@ -551,43 +551,44 @@ var Main = {
                     //var status = App.cboStatus.value;
 
                     //if (status == _holdStatus) {
-                    if (App.stoDiscBreak.data.items[0].data.SubBreakQty != 0 && App.stoSubBreakItem.data.items[0].data.InvtID == '')
-                    {
-                        HQ.message.show(2018062901);
-                        return false;
-                    }
-                    if (App.cboSubBreakType.getValue() == 'Q' && App.stoDiscBreak.data.items[0].data.SubBreakQty == 0)
-                    {
-                        HQ.message.show(2018062902);//Khi chọn "Điều kiện 2" <> "Bình Thường" => buộc phải nhập field "SL or Số Tiền Cho Điều Kiện 2" > 0 ở tab Điều Kiện
-                        return false;
-                    }
-                    if (App.cboSubBreakType.getValue() == 'A' && App.stoDiscBreak.data.items[0].data.SubBreakAmt == 0) {
-                        HQ.message.show(2018062907);//Khi chọn "Điều kiện 2" <> "Bình Thường" => buộc phải nhập field "SL or Số Tiền Cho Điều Kiện 2" > 0 ở tab Điều Kiện
-                        return false;
-                    }
-                    if (App.cboSubBreakType.getValue() != 'N' && App.cboBreakBoundType.getValue() != 'L')
-                    {                       
-                        if (App.stoDiscBreak.data.items[0].data.SubBreakQty != 0 && App.stoDiscBreak.data.items[0].data.SubBreakQtyUpper != 0
-                         && (App.stoDiscBreak.data.items[0].data.SubBreakQty > App.stoDiscBreak.data.items[0].data.SubBreakQtyUpper)) {
-                            HQ.message.show(2018062905);
-                            return false;
-                        }
-                        if (App.stoDiscBreak.data.items[0].data.SubBreakAmt != 0 && App.stoDiscBreak.data.items[0].data.SubBreakAmtUpper != 0
-                        && (App.stoDiscBreak.data.items[0].data.SubBreakAmt > App.stoDiscBreak.data.items[0].data.SubBreakAmtUpper)) {
-                            HQ.message.show(2018062906);
-                            return false;
-                        }
-                    }
-                    if (App.cboBreakBoundType.getValue() != 'L') {
-                        if (App.stoDiscBreak.data.items[0].data.BreakQty != 0 && App.stoDiscBreak.data.items[0].data.BreakQtyUpper != 0
-                           && (App.stoDiscBreak.data.items[0].data.BreakQty > App.stoDiscBreak.data.items[0].data.BreakQtyUpper)) {
-                            HQ.message.show(2018062903);
-                            return false;
-                        }
-                        if (App.stoDiscBreak.data.items[0].data.BreakAmt != 0 && App.stoDiscBreak.data.items[0].data.BreakAmtUpper != 0
-                           && (App.stoDiscBreak.data.items[0].data.BreakAmt > App.stoDiscBreak.data.items[0].data.BreakAmtUpper)) {
-                            HQ.message.show(2018062904);
-                            return false;
+                    for (var i = 0; i < App.stoDiscBreak.data.length; i++) {
+                        if (App.stoDiscBreak.data.items[i].data.BreakQty != 0 || App.stoDiscBreak.data.items[i].data.BreakAmt != 0) {
+                            if (App.stoDiscBreak.data.items[i].data.SubBreakQty != 0 && App.stoSubBreakItem.data.items[i].data.InvtID == '') {
+                                HQ.message.show(2018062901);
+                                return false;
+                            }
+                            if (App.cboSubBreakType.getValue() == 'Q' && App.stoDiscBreak.data.items[i].data.SubBreakQty == 0) {
+                                HQ.message.show(2018062902);//Khi chọn "Điều kiện 2" <> "Bình Thường" => buộc phải nhập field "SL or Số Tiền Cho Điều Kiện 2" > 0 ở tab Điều Kiện
+                                return false;
+                            }
+                            if (App.cboSubBreakType.getValue() == 'A' && App.stoDiscBreak.data.items[i].data.SubBreakAmt == 0) {
+                                HQ.message.show(2018062907);//Khi chọn "Điều kiện 2" <> "Bình Thường" => buộc phải nhập field "SL or Số Tiền Cho Điều Kiện 2" > 0 ở tab Điều Kiện
+                                return false;
+                            }
+                            if (App.cboSubBreakType.getValue() != 'N' && App.cboBreakBoundType.getValue() != 'L') {
+                                if (App.stoDiscBreak.data.items[i].data.SubBreakQty != 0 && App.stoDiscBreak.data.items[i].data.SubBreakQtyUpper != 0
+                                 && (App.stoDiscBreak.data.items[i].data.SubBreakQty > App.stoDiscBreak.data.items[i].data.SubBreakQtyUpper)) {
+                                    HQ.message.show(2018062905);
+                                    return false;
+                                }
+                                if (App.stoDiscBreak.data.items[i].data.SubBreakAmt != 0 && App.stoDiscBreak.data.items[i].data.SubBreakAmtUpper != 0
+                                && (App.stoDiscBreak.data.items[i].data.SubBreakAmt > App.stoDiscBreak.data.items[i].data.SubBreakAmtUpper)) {
+                                    HQ.message.show(2018062906);
+                                    return false;
+                                }
+                            }
+                            if (App.cboBreakBoundType.getValue() != 'L') {
+                                if (App.stoDiscBreak.data.items[i].data.BreakQty != 0 && App.stoDiscBreak.data.items[i].data.BreakQtyUpper != 0
+                                   && (App.stoDiscBreak.data.items[i].data.BreakQty > App.stoDiscBreak.data.items[i].data.BreakQtyUpper)) {
+                                    HQ.message.show(2018062903);
+                                    return false;
+                                }
+                                if (App.stoDiscBreak.data.items[i].data.BreakAmt != 0 && App.stoDiscBreak.data.items[i].data.BreakAmtUpper != 0
+                                   && (App.stoDiscBreak.data.items[i].data.BreakAmt > App.stoDiscBreak.data.items[i].data.BreakAmtUpper)) {
+                                    HQ.message.show(2018062904);
+                                    return false;
+                                }
+                            }
                         }
                     }
                     if (App.cboDiscID.valueModels == null && !HQ.allowAddDiscount) {
@@ -953,6 +954,7 @@ var Main = {
                     }
                     else {
                         App.chkDonateGroupProduct.enable();
+                        App.chkConvertDiscAmtToFreeItem.enable();
                     }
                 }
                 else {
@@ -971,6 +973,7 @@ var Main = {
                     }
                     if (check) {
                         App.chkDonateGroupProduct.enable();
+                        App.chkConvertDiscAmtToFreeItem.enable();
                     }
                     else {
                         App.chkDonateGroupProduct.disable();
@@ -2619,6 +2622,7 @@ var DiscDefintion = {
             if (HQ.util.passNull(cbo.getValue()) != _seqLoad && !cbo.hasFocus) {
                 App.chkAutoFreeItem.enable();
                 App.chkDonateGroupProduct.enable();
+                App.chkConvertDiscAmtToFreeItem.enable();
                 App.stoDiscSeqInfo.reload();
                 var enddate = new Date(1900, 01, 1);
                 App.dteEndDate.setMinValue(enddate);
@@ -4400,10 +4404,10 @@ var DiscDefintion = {
 
                         //    //return false;
                         //}
-                        if (App.cboSubBreakType.getValue() != 'N')
-                        {
-                            if (e.rowIdx != 0) return false;
-                        }
+                        //if (App.cboSubBreakType.getValue() != 'N')
+                        //{
+                        //    if (e.rowIdx != 0) return false;
+                        //}
                         return HQ.grid.checkInput(e, keys);
                     }
                     else {

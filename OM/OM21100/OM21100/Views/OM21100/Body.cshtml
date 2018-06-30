@@ -385,8 +385,7 @@
                                         .MarginSpec("5 5 0 5").Hidden(true)
                                         .HQLangCode("ExcludePromo").HQProcedure("OM21100_pcExcludePromo").HQColumnShow("DiscID,DiscSeq,Descr")
                                         .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("ExcludePromo")
-                                        .ForceSelection(false).MultiSelect(true)
-                                        .LabelSeparator(";")                                    
+                                        .ForceSelection(false).MultiSelect(true)                              
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                         .HQParam(new StoreParameterCollection() {
                                         new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),

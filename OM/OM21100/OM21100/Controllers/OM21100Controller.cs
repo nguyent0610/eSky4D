@@ -820,7 +820,7 @@ namespace OM21100.Controllers
                         {
                             updateDiscount(ref disc, inputDisc, false, roles);
                             saveDiscSubBreakItem(data, discID, discSeq);
-                            saveDiscSeq(data, disc, inputDiscSeq, isNewDiscSeq); 
+                            saveDiscSeq(data, disc, inputDiscSeq, isNewDiscSeq);
                             return Json(new { success = true, msgCode = 201405071, tstamp = disc.tstamp.ToHex() });
                         }
                     }
@@ -2078,7 +2078,7 @@ namespace OM21100.Controllers
                 }
             }
 
-            _db.SaveChanges();
+            //_db.SaveChanges();
         }
         private void Update_Break(OM_DiscBreak t, OM21100_pgDiscBreak_Result s, bool isNew)
         {
