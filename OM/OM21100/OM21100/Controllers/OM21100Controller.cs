@@ -122,7 +122,7 @@ namespace OM21100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -795,7 +795,11 @@ namespace OM21100.Controllers
                                 .FirstOrDefault(p => p.DiscID == discID && p.DiscSeq == discSeq);
                     if (inputDiscSeq != null)
                     {
-                        string[] excludePromoOld = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID == inputDiscSeq.DiscID && p.DiscSeq == inputDiscSeq.DiscSeq).ExcludePromo.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        string[] excludePromoOld = new string[] { };
+                        var objOM_DiscSeq = _db.OM_DiscSeq.FirstOrDefault(p => p.DiscID == inputDiscSeq.DiscID && p.DiscSeq == inputDiscSeq.DiscSeq);
+                        if(objOM_DiscSeq != null)
+                            excludePromoOld = objOM_DiscSeq.ExcludePromo.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                         string[] excludePromo = inputDiscSeq.ExcludePromo.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
                         string lstAddNew = "", lstDuplicate = "";                        
 
