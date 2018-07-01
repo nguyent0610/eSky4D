@@ -103,6 +103,7 @@ var menuClick = function (command) {
                         HQ.isChange = false;
                         App.cboTagID.setValue('');
                         App.cboSiteID.setValue('');
+                        App.cboWhseLoc.setValue('');
                         App.stoIN_TagHeader.reload();
                     }
                 } else {
@@ -171,6 +172,7 @@ var stoChanged = function (sto) {
 
 //load store khi co su thay doi TagID
 var stoIN_TagHeader_Load = function (sto) {
+    App.cboWhseLoc.store.clearFilter();
     App.txtTotQty.setValue(0);
     HQ.isFirstLoad = true;
     HQ.isNew = false;
@@ -180,12 +182,19 @@ var stoIN_TagHeader_Load = function (sto) {
         record.data.Status = _beginStatus;
         record.data.TranDate = HQ.bussinessDate;
         record.data.SiteID = HQ.dftSiteID;
+        if (HQ.showWhseLoc != 0) {
+            record.data.WhseLoc = HQ.dftWhseLoc;
+        }
         HQ.isNew = true;//record la new    
         App.cboSiteID.store.clearFilter();
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboTagID.focus(true);//focus ma khi tao moi
         sto.commitChanges();
-    }    
+        App.cboType.setReadOnly(false);
+    }
+    else {
+        App.cboType.setReadOnly(true);
+    }
     var record = sto.getAt(0);
     if (record.data.Status != _beginStatus) {
         lockControl(true);
@@ -194,7 +203,7 @@ var stoIN_TagHeader_Load = function (sto) {
     }
     if (App.cboTagID.getValue() != null) {
         App.cboClassID.setReadOnly(true);
-        App.btnLoad.disable();
+        App.btnLoad.disable();        
     }
     else {
         App.cboClassID.setReadOnly(false);
@@ -240,6 +249,7 @@ var stoIN_TagHeader_Load = function (sto) {
         HQ.common.showBusy(false);
     }
     App.cboSiteID.setReadOnly(!HQ.isNew);
+    App.cboWhseLoc.setReadOnly(!HQ.isNew);
 };
 
 var lockControl = function (value) {
@@ -301,19 +311,36 @@ var cboBranchID_Select = function (sender, value) {
 };
 
 var cboTagID_Change = function (sender, value) {
+    App.cboWhseLoc.store.clearFilter();
     HQ.isFirstLoad = true;
     if (sender.valueModels != null) {
         var siteID = sender.valueModels[0] ? sender.valueModels[0].data.SiteID : '';
+        var whseLoc = sender.valueModels[0] ? sender.valueModels[0].data.WhseLoc : '';
         App.cboSiteID.setValue(siteID);
+        if (HQ.showWhseLoc != 0) {
+            App.cboWhseLoc.setValue(whseLoc);
+        }
         App.stoIN_TagHeader.reload();       
     } 
 };
 
+
+var cboWhseLoc_Focus = function (sender, value) {
+    App.cboWhseLoc.store.clearFilter();
+    App.cboWhseLoc.store.filter('SiteID', new RegExp('^' + Ext.escapeRe(App.cboSiteID.getValue()) + '$'));
+};
+
 var cboTagID_Select = function (sender, value) {
+    App.cboWhseLoc.store.clearFilter();
     HQ.isFirstLoad = true;
     if (sender.valueModels != null && !App.stoIN_TagHeader.loading) {
         var siteID = sender.valueModels[0] ? sender.valueModels[0].data.SiteID : '';
+        var whseLoc = sender.valueModels[0] ? sender.valueModels[0].data.WhseLoc : '';
         App.cboSiteID.setValue(siteID);
+        App.cboWhseLoc.store.reload();
+        if (HQ.showWhseLoc != 0) {
+            App.cboWhseLoc.setValue(whseLoc);
+        }
         App.stoIN_TagHeader.reload();      
     }
 };
@@ -327,8 +354,20 @@ var cboReasonCD_Change = function (sender, value) {
 };
 
 var cboSiteID_Change = function (sender, value) {
+    if (sender.hasFocus) {
+        App.cboWhseLoc.setValue('');
+    }
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-   // App.cboInvtID.store.reload();    
+    // App.cboInvtID.store.reload();    
+    App.cboWhseLoc.store.clearFilter();
+    App.cboInvtID.getStore().load(function () {
+        HQ.common.showBusy(false);
+    });
+};
+
+
+var cboWhseLoc_Change = function (sender, value) {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));  
     App.cboInvtID.getStore().load(function () {
         HQ.common.showBusy(false);
     });
@@ -341,6 +380,29 @@ var firstLoad = function () {
   //  App.stoIN_TagHeader.getStore().addListener('load', cboTagStoreLoad);
     loadSourceCombo();
     HQ.util.checkAccessRight();
+    if (HQ.showType) {
+        App.cboType.setVisible(true);
+    }
+    else {
+        App.cboType.setVisible(false);
+    }
+    if (HQ.showWhseLoc == 0) {
+        App.cboWhseLoc.setVisible(false);
+        App.cboWhseLoc.allowBlank = true;
+        App.colWhseLoc.hide();
+    }
+    else {
+        App.colWhseLoc.show();
+        App.cboWhseLoc.setVisible(true);
+        if (HQ.showWhseLoc == 2) {
+            App.cboWhseLoc.allowBlank = false;
+
+        }
+        else {
+            App.cboWhseLoc.allowBlank = true;
+        }        
+    }
+    App.cboWhseLoc.isValid();
 };
 
 ////////////Kiem tra combo chinh CpnyID
@@ -355,6 +417,7 @@ var frmChange = function () {
         if (App.cboTagID.valueModels == null || HQ.isNew == true) {
             App.cboTagID.setReadOnly(false);
             App.cboSiteID.setReadOnly(App.stoIN_TagDetail.data.length > 0 && HQ.store.isChange(App.stoIN_TagDetail));
+
             isSetSite = true;
         }
         else {
@@ -363,6 +426,7 @@ var frmChange = function () {
     }
     if (!isSetSite) {
         App.cboSiteID.setReadOnly(!HQ.isNew);
+        App.cboWhseLoc.setReadOnly(!HQ.isNew);
     }    
 };
 
@@ -398,6 +462,9 @@ var grdIN_TagDetail_Edit = function (item, e) {
         if (record) {
             e.record.set('InvtName', record.InvtName);
             e.record.set('SiteID', App.cboSiteID.getValue());
+            if (HQ.showWhseLoc != 0) {
+                e.record.set('WhseLoc', App.cboWhseLoc.getValue());
+            }            
             e.record.set('EAUnit', record.EAUnit);
             e.record.set('BookEAQty', record.BookEAQty);
             e.record.set("OffsetEAQty", e.record.data.ActualEAQty - e.record.data.BookEAQty);
@@ -683,6 +750,7 @@ function importData(c)
                                 newTrans.set('InvtID', record.InvtID);
                                 newTrans.set('InvtName', record.InvtName);
                                 newTrans.set('SiteID', App.cboSiteID.getValue());
+                                newTrans.set('WhseLoc', App.cboWhseLoc.getValue());
                                 newTrans.set('EAUnit', record.EAUnit);
                                 newTrans.set('BookEAQty', record.BookEAQty);
                                 newTrans.set("OffsetEAQty",item.ActualEAQty - record.BookEAQty );

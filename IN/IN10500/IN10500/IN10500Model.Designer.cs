@@ -84,38 +84,6 @@ namespace IN10500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_TagDetail> IN_TagDetail
-        {
-            get
-            {
-                if ((_IN_TagDetail == null))
-                {
-                    _IN_TagDetail = base.CreateObjectSet<IN_TagDetail>("IN_TagDetail");
-                }
-                return _IN_TagDetail;
-            }
-        }
-        private ObjectSet<IN_TagDetail> _IN_TagDetail;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<IN_TagHeader> IN_TagHeader
-        {
-            get
-            {
-                if ((_IN_TagHeader == null))
-                {
-                    _IN_TagHeader = base.CreateObjectSet<IN_TagHeader>("IN_TagHeader");
-                }
-                return _IN_TagHeader;
-            }
-        }
-        private ObjectSet<IN_TagHeader> _IN_TagHeader;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_ItemSite> IN_ItemSite
         {
             get
@@ -176,6 +144,38 @@ namespace IN10500
             }
         }
         private ObjectSet<IN_Inventory> _IN_Inventory;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_TagHeader> IN_TagHeader
+        {
+            get
+            {
+                if ((_IN_TagHeader == null))
+                {
+                    _IN_TagHeader = base.CreateObjectSet<IN_TagHeader>("IN_TagHeader");
+                }
+                return _IN_TagHeader;
+            }
+        }
+        private ObjectSet<IN_TagHeader> _IN_TagHeader;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_TagDetail> IN_TagDetail
+        {
+            get
+            {
+                if ((_IN_TagDetail == null))
+                {
+                    _IN_TagDetail = base.CreateObjectSet<IN_TagDetail>("IN_TagDetail");
+                }
+                return _IN_TagDetail;
+            }
+        }
+        private ObjectSet<IN_TagDetail> _IN_TagDetail;
 
         #endregion
 
@@ -187,22 +187,6 @@ namespace IN10500
         public void AddToSI_ApprovalFlowHandle(SI_ApprovalFlowHandle sI_ApprovalFlowHandle)
         {
             base.AddObject("SI_ApprovalFlowHandle", sI_ApprovalFlowHandle);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_TagDetail EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_TagDetail(IN_TagDetail iN_TagDetail)
-        {
-            base.AddObject("IN_TagDetail", iN_TagDetail);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_TagHeader EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_TagHeader(IN_TagHeader iN_TagHeader)
-        {
-            base.AddObject("IN_TagHeader", iN_TagHeader);
         }
     
         /// <summary>
@@ -235,6 +219,22 @@ namespace IN10500
         public void AddToIN_Inventory(IN_Inventory iN_Inventory)
         {
             base.AddObject("IN_Inventory", iN_Inventory);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_TagHeader EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_TagHeader(IN_TagHeader iN_TagHeader)
+        {
+            base.AddObject("IN_TagHeader", iN_TagHeader);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_TagDetail EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_TagDetail(IN_TagDetail iN_TagDetail)
+        {
+            base.AddObject("IN_TagDetail", iN_TagDetail);
         }
 
         #endregion
@@ -310,7 +310,7 @@ namespace IN10500
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> IN10500_pdDefaultSite(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        public ObjectResult<IN10500_pdDefaultSite_Result> IN10500_pdDefaultSite(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -342,7 +342,7 @@ namespace IN10500
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<global::System.String>("IN10500_pdDefaultSite", userIDParameter, cpnyIDParameter, langIDParameter);
+            return base.ExecuteFunction<IN10500_pdDefaultSite_Result>("IN10500_pdDefaultSite", userIDParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
@@ -384,102 +384,6 @@ namespace IN10500
             }
     
             return base.ExecuteFunction<Nullable<global::System.Boolean>>("IN10500_pdAddNewInvtRight", userIDParameter, cpnyIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="tagID">No Metadata Documentation available.</param>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="siteID">No Metadata Documentation available.</param>
-        /// <param name="reasonCD">No Metadata Documentation available.</param>
-        /// <param name="classID">No Metadata Documentation available.</param>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<IN10500_pgLoadGrid_Result> IN10500_pgLoadGrid(global::System.String tagID, global::System.String branchID, global::System.String siteID, global::System.String reasonCD, global::System.String classID, global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter tagIDParameter;
-            if (tagID != null)
-            {
-                tagIDParameter = new ObjectParameter("TagID", tagID);
-            }
-            else
-            {
-                tagIDParameter = new ObjectParameter("TagID", typeof(global::System.String));
-            }
-    
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter siteIDParameter;
-            if (siteID != null)
-            {
-                siteIDParameter = new ObjectParameter("SiteID", siteID);
-            }
-            else
-            {
-                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
-            }
-    
-            ObjectParameter reasonCDParameter;
-            if (reasonCD != null)
-            {
-                reasonCDParameter = new ObjectParameter("ReasonCD", reasonCD);
-            }
-            else
-            {
-                reasonCDParameter = new ObjectParameter("ReasonCD", typeof(global::System.String));
-            }
-    
-            ObjectParameter classIDParameter;
-            if (classID != null)
-            {
-                classIDParameter = new ObjectParameter("ClassID", classID);
-            }
-            else
-            {
-                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<IN10500_pgLoadGrid_Result>("IN10500_pgLoadGrid", tagIDParameter, branchIDParameter, siteIDParameter, reasonCDParameter, classIDParameter, userIDParameter, cpnyIDParameter, langIDParameter);
         }
     
         /// <summary>
@@ -563,6 +467,165 @@ namespace IN10500
         {
             return base.ExecuteFunction<global::System.String>("IN10500_peUnit");
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10500_pdConfig_Result> IN10500_pdConfig(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<IN10500_pdConfig_Result>("IN10500_pdConfig", userNameParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="tagID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
+        /// <param name="whseLoc">No Metadata Documentation available.</param>
+        /// <param name="project">No Metadata Documentation available.</param>
+        /// <param name="reasonCD">No Metadata Documentation available.</param>
+        /// <param name="classID">No Metadata Documentation available.</param>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<IN10500_pgLoadGrid_Result> IN10500_pgLoadGrid(global::System.String tagID, global::System.String branchID, global::System.String siteID, global::System.String whseLoc, global::System.String project, global::System.String reasonCD, global::System.String classID, global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter tagIDParameter;
+            if (tagID != null)
+            {
+                tagIDParameter = new ObjectParameter("TagID", tagID);
+            }
+            else
+            {
+                tagIDParameter = new ObjectParameter("TagID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            ObjectParameter whseLocParameter;
+            if (whseLoc != null)
+            {
+                whseLocParameter = new ObjectParameter("WhseLoc", whseLoc);
+            }
+            else
+            {
+                whseLocParameter = new ObjectParameter("WhseLoc", typeof(global::System.String));
+            }
+    
+            ObjectParameter projectParameter;
+            if (project != null)
+            {
+                projectParameter = new ObjectParameter("Project", project);
+            }
+            else
+            {
+                projectParameter = new ObjectParameter("Project", typeof(global::System.String));
+            }
+    
+            ObjectParameter reasonCDParameter;
+            if (reasonCD != null)
+            {
+                reasonCDParameter = new ObjectParameter("ReasonCD", reasonCD);
+            }
+            else
+            {
+                reasonCDParameter = new ObjectParameter("ReasonCD", typeof(global::System.String));
+            }
+    
+            ObjectParameter classIDParameter;
+            if (classID != null)
+            {
+                classIDParameter = new ObjectParameter("ClassID", classID);
+            }
+            else
+            {
+                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<IN10500_pgLoadGrid_Result>("IN10500_pgLoadGrid", tagIDParameter, branchIDParameter, siteIDParameter, whseLocParameter, projectParameter, reasonCDParameter, classIDParameter, userNameParameter, cpnyIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -616,8 +679,10 @@ namespace IN10500
         /// <param name="approveStatus">Initial value of the ApproveStatus property.</param>
         /// <param name="category">Initial value of the Category property.</param>
         /// <param name="brand">Initial value of the Brand property.</param>
+        /// <param name="proGroup">Initial value of the ProGroup property.</param>
         /// <param name="proType">Initial value of the ProType property.</param>
-        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proType)
+        /// <param name="cnvFact">Initial value of the CnvFact property.</param>
+        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType, global::System.Double cnvFact)
         {
             IN_Inventory iN_Inventory = new IN_Inventory();
             iN_Inventory.InvtID = invtID;
@@ -651,7 +716,9 @@ namespace IN10500
             iN_Inventory.ApproveStatus = approveStatus;
             iN_Inventory.Category = category;
             iN_Inventory.Brand = brand;
+            iN_Inventory.ProGroup = proGroup;
             iN_Inventory.ProType = proType;
+            iN_Inventory.CnvFact = cnvFact;
             return iN_Inventory;
         }
 
@@ -2297,7 +2364,7 @@ namespace IN10500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String ProGroup
         {
@@ -2309,7 +2376,7 @@ namespace IN10500
             {
                 OnProGroupChanging(value);
                 ReportPropertyChanging("ProGroup");
-                _ProGroup = StructuralObject.SetValidValue(value, true);
+                _ProGroup = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("ProGroup");
                 OnProGroupChanged();
             }
@@ -2389,6 +2456,54 @@ namespace IN10500
         private Nullable<global::System.DateTime> _VideoModifiedDate;
         partial void OnVideoModifiedDateChanging(Nullable<global::System.DateTime> value);
         partial void OnVideoModifiedDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double CnvFact
+        {
+            get
+            {
+                return _CnvFact;
+            }
+            set
+            {
+                OnCnvFactChanging(value);
+                ReportPropertyChanging("CnvFact");
+                _CnvFact = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CnvFact");
+                OnCnvFactChanged();
+            }
+        }
+        private global::System.Double _CnvFact;
+        partial void OnCnvFactChanging(global::System.Double value);
+        partial void OnCnvFactChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> KitType
+        {
+            get
+            {
+                return _KitType;
+            }
+            set
+            {
+                OnKitTypeChanging(value);
+                ReportPropertyChanging("KitType");
+                _KitType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("KitType");
+                OnKitTypeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _KitType;
+        partial void OnKitTypeChanging(Nullable<global::System.Boolean> value);
+        partial void OnKitTypeChanged();
 
         #endregion
 
@@ -2434,7 +2549,8 @@ namespace IN10500
         /// <param name="qtyUncosted">Initial value of the QtyUncosted property.</param>
         /// <param name="lastPurchaseDate">Initial value of the LastPurchaseDate property.</param>
         /// <param name="lastPurchasePrice">Initial value of the LastPurchasePrice property.</param>
-        public static IN_ItemSite CreateIN_ItemSite(global::System.String invtID, global::System.String siteID, global::System.Double avgCost, global::System.Double qtyAlloc, global::System.Double qtyAllocIN, global::System.Double qtyAllocPORet, global::System.Double qtyAllocSO, global::System.Double qtyAvail, global::System.Double qtyInTransit, global::System.Double qtyOnBO, global::System.Double qtyOnHand, global::System.Double qtyOnPO, global::System.Double qtyOnTransferOrders, global::System.Double qtyOnSO, global::System.Double qtyShipNotInv, global::System.Int16 stkItem, global::System.Double totCost, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Double qtyUncosted, global::System.DateTime lastPurchaseDate, global::System.Double lastPurchasePrice)
+        /// <param name="qtyAllocPDASO">Initial value of the QtyAllocPDASO property.</param>
+        public static IN_ItemSite CreateIN_ItemSite(global::System.String invtID, global::System.String siteID, global::System.Double avgCost, global::System.Double qtyAlloc, global::System.Double qtyAllocIN, global::System.Double qtyAllocPORet, global::System.Double qtyAllocSO, global::System.Double qtyAvail, global::System.Double qtyInTransit, global::System.Double qtyOnBO, global::System.Double qtyOnHand, global::System.Double qtyOnPO, global::System.Double qtyOnTransferOrders, global::System.Double qtyOnSO, global::System.Double qtyShipNotInv, global::System.Int16 stkItem, global::System.Double totCost, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Double qtyUncosted, global::System.DateTime lastPurchaseDate, global::System.Double lastPurchasePrice, global::System.Double qtyAllocPDASO)
         {
             IN_ItemSite iN_ItemSite = new IN_ItemSite();
             iN_ItemSite.InvtID = invtID;
@@ -2463,6 +2579,7 @@ namespace IN10500
             iN_ItemSite.QtyUncosted = qtyUncosted;
             iN_ItemSite.LastPurchaseDate = lastPurchaseDate;
             iN_ItemSite.LastPurchasePrice = lastPurchasePrice;
+            iN_ItemSite.QtyAllocPDASO = qtyAllocPDASO;
             return iN_ItemSite;
         }
 
@@ -3123,6 +3240,30 @@ namespace IN10500
         private global::System.Double _LastPurchasePrice;
         partial void OnLastPurchasePriceChanging(global::System.Double value);
         partial void OnLastPurchasePriceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double QtyAllocPDASO
+        {
+            get
+            {
+                return _QtyAllocPDASO;
+            }
+            set
+            {
+                OnQtyAllocPDASOChanging(value);
+                ReportPropertyChanging("QtyAllocPDASO");
+                _QtyAllocPDASO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("QtyAllocPDASO");
+                OnQtyAllocPDASOChanged();
+            }
+        }
+        private global::System.Double _QtyAllocPDASO;
+        partial void OnQtyAllocPDASOChanging(global::System.Double value);
+        partial void OnQtyAllocPDASOChanged();
 
         #endregion
 
@@ -3777,6 +3918,30 @@ namespace IN10500
         private global::System.String _SiteID;
         partial void OnSiteIDChanging(global::System.String value);
         partial void OnSiteIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
 
         #endregion
 
@@ -4220,6 +4385,54 @@ namespace IN10500
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Type
+        {
+            get
+            {
+                return _Type;
+            }
+            set
+            {
+                OnTypeChanging(value);
+                ReportPropertyChanging("Type");
+                _Type = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Type");
+                OnTypeChanged();
+            }
+        }
+        private global::System.String _Type;
+        partial void OnTypeChanging(global::System.String value);
+        partial void OnTypeChanged();
 
         #endregion
 
@@ -5434,7 +5647,8 @@ namespace IN10500
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI_ApprovalFlowHandle CreateSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static SI_ApprovalFlowHandle CreateSI_ApprovalFlowHandle(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.String handle, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String branchID)
         {
             SI_ApprovalFlowHandle sI_ApprovalFlowHandle = new SI_ApprovalFlowHandle();
             sI_ApprovalFlowHandle.AppFolID = appFolID;
@@ -5448,6 +5662,7 @@ namespace IN10500
             sI_ApprovalFlowHandle.LUpd_Prog = lUpd_Prog;
             sI_ApprovalFlowHandle.LUpd_User = lUpd_User;
             sI_ApprovalFlowHandle.tstamp = tstamp;
+            sI_ApprovalFlowHandle.BranchID = branchID;
             return sI_ApprovalFlowHandle;
         }
 
@@ -6090,6 +6305,33 @@ namespace IN10500
         private global::System.String _ProcContent;
         partial void OnProcContentChanging(global::System.String value);
         partial void OnProcContentChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                if (_BranchID != value)
+                {
+                    OnBranchIDChanging(value);
+                    ReportPropertyChanging("BranchID");
+                    _BranchID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("BranchID");
+                    OnBranchIDChanged();
+                }
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
 
         #endregion
 
@@ -6099,6 +6341,169 @@ namespace IN10500
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10500Model", Name="IN10500_pdConfig_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10500_pdConfig_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN10500_pdConfig_Result object.
+        /// </summary>
+        /// <param name="project">Initial value of the Project property.</param>
+        public static IN10500_pdConfig_Result CreateIN10500_pdConfig_Result(global::System.String project)
+        {
+            IN10500_pdConfig_Result iN10500_pdConfig_Result = new IN10500_pdConfig_Result();
+            iN10500_pdConfig_Result.Project = project;
+            return iN10500_pdConfig_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ShowWhseLoc
+        {
+            get
+            {
+                return _ShowWhseLoc;
+            }
+            set
+            {
+                OnShowWhseLocChanging(value);
+                ReportPropertyChanging("ShowWhseLoc");
+                _ShowWhseLoc = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowWhseLoc");
+                OnShowWhseLocChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ShowWhseLoc;
+        partial void OnShowWhseLocChanging(Nullable<global::System.Int32> value);
+        partial void OnShowWhseLocChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ShowType
+        {
+            get
+            {
+                return _ShowType;
+            }
+            set
+            {
+                OnShowTypeChanging(value);
+                ReportPropertyChanging("ShowType");
+                _ShowType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShowType");
+                OnShowTypeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ShowType;
+        partial void OnShowTypeChanging(Nullable<global::System.Boolean> value);
+        partial void OnShowTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Project
+        {
+            get
+            {
+                return _Project;
+            }
+            set
+            {
+                OnProjectChanging(value);
+                ReportPropertyChanging("Project");
+                _Project = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Project");
+                OnProjectChanged();
+            }
+        }
+        private global::System.String _Project;
+        partial void OnProjectChanging(global::System.String value);
+        partial void OnProjectChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10500Model", Name="IN10500_pdDefaultSite_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10500_pdDefaultSite_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String INSite
+        {
+            get
+            {
+                return _INSite;
+            }
+            set
+            {
+                OnINSiteChanging(value);
+                ReportPropertyChanging("INSite");
+                _INSite = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("INSite");
+                OnINSiteChanged();
+            }
+        }
+        private global::System.String _INSite;
+        partial void OnINSiteChanging(global::System.String value);
+        partial void OnINSiteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String INWhseLoc
+        {
+            get
+            {
+                return _INWhseLoc;
+            }
+            set
+            {
+                OnINWhseLocChanging(value);
+                ReportPropertyChanging("INWhseLoc");
+                _INWhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("INWhseLoc");
+                OnINWhseLocChanged();
+            }
+        }
+        private global::System.String _INWhseLoc;
+        partial void OnINWhseLocChanging(global::System.String value);
+        partial void OnINWhseLocChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -6478,6 +6883,30 @@ namespace IN10500
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WhseLoc
+        {
+            get
+            {
+                return _WhseLoc;
+            }
+            set
+            {
+                OnWhseLocChanging(value);
+                ReportPropertyChanging("WhseLoc");
+                _WhseLoc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WhseLoc");
+                OnWhseLocChanged();
+            }
+        }
+        private global::System.String _WhseLoc;
+        partial void OnWhseLocChanging(global::System.String value);
+        partial void OnWhseLocChanged();
 
         #endregion
 

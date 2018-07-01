@@ -57,11 +57,15 @@
     HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
     HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
     HQ.dftSiteID = '@ViewBag.DftSiteID';
-
     HQ.branchID = '@ViewBag.BranchID';
     HQ.TagID = '@ViewBag.TagID';
     HQ.SiteID = '@ViewBag.SiteID';
+    HQ.dftWhseLoc = '@ViewBag.dftWhseLoc';
+    HQ.showWhseLoc = @ViewBag.showWhseLoc;
     HQ.allowAddNewInvtID = HQ.util.toBool('@ViewBag.allowAddNewInvtID');
+    HQ.showType = HQ.util.toBool('@ViewBag.showType');
+    HQ.Project = '@ViewBag.project';
+
     @*HQ.right = '@ViewBag.Right';*@
 </script>  
     <title>@ViewBag.Title</title>

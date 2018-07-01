@@ -36,26 +36,49 @@ namespace IN10500.Controllers
         {
             LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
             Util.InitRight(_screenNbr);
+            string dftSiteID = "";
+            string dftWhseLoc = "";
+            string project = "";
+            bool showType = false;
+            bool allowAddNewInvtID = false;
+            int showWhseLoc = 0;
             var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
             if (BranchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
             {
                 return View("Popup");
             }
             if (BranchID == null) BranchID = Current.CpnyID;
-            var dftSiteID = _app.IN10500_pdDefaultSite(Current.UserName, BranchID, Current.LangID).FirstOrDefault().PassNull();
-            bool allowAddNewInvtID = false;
+            var objDft = _app.IN10500_pdDefaultSite(Current.UserName, BranchID, Current.LangID).FirstOrDefault();
+
+            if (objDft != null)
+            {
+                dftSiteID = objDft.INSite.PassNull();
+                dftWhseLoc = objDft.INWhseLoc.PassNull();
+            }
+            
             var right = _sys.SYS_Configurations.FirstOrDefault(x => x.Code.ToUpper() == "ALLOWADDNEWINVTID");
             if (right != null)
             {
                 allowAddNewInvtID = right.IntVal == 1 ? true : false;
             }
-            // var right = _db.IN10500_pdAddNewInvtRight(Current.UserName, BranchID, Current.LangID).FirstOrDefault();
+            // var right = _db.IN10500_pdAddNewInvtRight(Current.UserName, BranchID, Current.LangID).FirstOrDefault();            
+            var objConfig = _app.IN10500_pdConfig(Current.UserName,Current.CpnyID,Current.LangID).FirstOrDefault();
+            if (objConfig != null)
+            {
+                showWhseLoc = objConfig.ShowWhseLoc.Value;
+                showType = objConfig.ShowType.HasValue && objConfig.ShowType.Value;
+                project = objConfig.Project.PassNull();
+            }
 
             ViewBag.BranchID = BranchID;
             ViewBag.DftSiteID = dftSiteID;
+            ViewBag.dftWhseLoc = dftWhseLoc;
+            ViewBag.showWhseLoc = showWhseLoc;
             ViewBag.TagID = TagID.PassNull();
             ViewBag.SiteID = SiteID.PassNull();
             ViewBag.allowAddNewInvtID = allowAddNewInvtID;
+            ViewBag.showType = showType;
+            ViewBag.project = project;
             return View();
         }
 
@@ -71,10 +94,10 @@ namespace IN10500.Controllers
             return this.Store(data);
         }
 
-        public ActionResult GetIN_TagDetail(string TagID, string BranchID, string SiteID, string ReasonCD, string ClassID)
+        public ActionResult GetIN_TagDetail(string TagID, string BranchID, string SiteID, string ReasonCD, string ClassID, string WhseLoc, string Project)
         {
             _app.CommandTimeout = int.MaxValue;
-            var data = _app.IN10500_pgLoadGrid(TagID, BranchID, SiteID, ReasonCD, ClassID, Current.UserName, Current.CpnyID, Current.LangID);
+            var data = _app.IN10500_pgLoadGrid(TagID, BranchID, SiteID,WhseLoc,Project, ReasonCD, ClassID, Current.UserName, Current.CpnyID, Current.LangID);
             return this.Store(data);
         }
         [DirectMethod]
@@ -231,7 +254,7 @@ namespace IN10500.Controllers
                         INProcess.IN inpr = new INProcess.IN(Current.UserName, _screenNbr, dal);
 
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!inpr.IN10500_Release(curHeader.TAGID, curHeader.BranchID, header.SiteID))
+                        if (!inpr.IN10500_Release(curHeader.TAGID, curHeader.BranchID, header.SiteID,header.WhseLoc))
                         {
                             dal.RollbackTrans();
                         }
@@ -298,6 +321,8 @@ namespace IN10500.Controllers
             t.ReasonCD = s.ReasonCD;
             t.INBatNbr = s.INBatNbr;
             t.TranDate = s.TranDate;
+            t.WhseLoc = s.WhseLoc;
+            t.Type = s.Type;
             t.Note = s.Note;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
@@ -315,6 +340,7 @@ namespace IN10500.Controllers
             t.OffsetEAQty = s.OffsetEAQty;
             t.StkQtyUnder1Month = s.StkQtyUnder1Month;
             t.ReasonCD = s.ReasonCD;
+            t.WhseLoc = s.WhseLoc;
             t.Notes = s.Notes;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
@@ -497,6 +523,7 @@ namespace IN10500.Controllers
                 pc.Add(new ParamStruct("@TagID", DbType.String, clsCommon.GetValueDBNull(data["cboTagID"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["cboBranchID"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(data["cboSiteID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@WhseLoc", DbType.String, clsCommon.GetValueDBNull(data["cboWhseLoc"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@ReasonCD", DbType.String, clsCommon.GetValueDBNull(data["cboReasonCD"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@ClassID", DbType.String, clsCommon.GetValueDBNull(data["cboClassID"].PassNull()), ParameterDirection.Input, 30));
                 DataTable dt = dal.ExecDataTable("IN10500_peExport", CommandType.StoredProcedure, ref pc);
