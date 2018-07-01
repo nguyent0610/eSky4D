@@ -1043,7 +1043,7 @@ namespace INProcess
                 throw ex;
             }
         }
-        public bool IN10500_Release(string tagID, string branchID, string siteID)
+        public bool IN10500_Release(string tagID, string branchID, string siteID,string whseLoc)
         {
             try
             {
@@ -1258,14 +1258,19 @@ namespace INProcess
                             else // Kiểm tra trừ vào IN_ItemLot
                             {
                                 var qty = Math.Abs(tagDetail.Double("OffsetEAQty"));
-                                DataView dv = objItemLot.GetAll(siteID, objItem.InvtID, "%", "%").DefaultView;
+                                DataView dv = new DataView();
+                                if (whseLoc.PassNull() == "")
+                                {
+                                    dv = objItemLot.GetAll(siteID, objItem.InvtID, "%", "%").DefaultView;
+                                }
+                                else
+                                {
+                                    dv = objItemLot.GetAll(siteID, objItem.InvtID, whseLoc, "%").DefaultView;
+                                }
+                                
                                 dv.Sort = "ExpDate ASC";
                                 DataTable lstLotTran = dv.ToTable();
                                 var valTran = 0.0;
-                                foreach (DataRow itmLot in lstLotTran.Rows)
-                                {
-
-                                }
                                 foreach (DataRow itmLot in lstLotTran.Rows)
                                 {
                                     var qtyAvail = itmLot.Double("QtyAvail");
@@ -1339,7 +1344,7 @@ namespace INProcess
                                 
                                 if (qty > 0 )
                                 {
-                                    if (tagDetail.String("WhseLoc").PassNull() == "")
+                                    if (tagDetail.String("WhseLoc").PassNull() != "")
                                     {
                                         throw new MessageException(MessageType.Message, "2018063011", "", new[] { objItemLot.InvtID, objItemLot.SiteID,objItemLot.WhseLoc });
                                     }
