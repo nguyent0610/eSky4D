@@ -2058,7 +2058,7 @@ namespace OM25100.Controllers
                         message += errorKPI == "" ? "" : string.Format(Message.GetString("2016091412", null), "KPI", errorKPI);
                         message += errorKPInotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "KPI", errorKPInotExists);
                         message += errorKPIotherType == "" ? "" : string.Format(Message.GetString("2017011811", null), errorKPIotherType);
-                        message += errorCycleCheckSeleted == "" ? "" : string.Format(Message.GetString("2018063001", null), errorCycleCheckSeleted);
+                        message += errorCycleCheckSeleted == "" ? "" : string.Format(Message.GetString("20180704", null), "Cycle", errorCycleCheckSeleted);
                         message += errorBranchID == "" ? "" : string.Format(Message.GetString("2016091412", null), "BranchID", errorBranchID);
                         message += errorBranchIDnotExists == "" ? "" : string.Format(Message.GetString("2016091413", null), "BranchID", errorBranchIDnotExists);
                         message += errorTargetFormat == "" ? "" : string.Format(Message.GetString("2016091415", null), "Target", errorTargetFormat);
