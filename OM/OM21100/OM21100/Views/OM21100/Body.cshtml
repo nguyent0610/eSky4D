@@ -2128,7 +2128,7 @@
                 X.Store()
                     .ID("stoSubBreakItem")
                     .PageSize(50)
-                        .Model(Util.GenerateModel(typeof(OM21100_pgDiscSubBreakItem_Result), "mdlBranch", ""))
+                        .Model(Util.GenerateModel(typeof(OM21100_pgDiscSubBreakItem_Result), "mdlSubBreakItem", ""))
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSubBreakItem"))).AutoLoad(false)
                         .Parameters(ps =>
                         {

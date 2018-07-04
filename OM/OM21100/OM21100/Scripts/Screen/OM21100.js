@@ -1076,9 +1076,12 @@ var Main = {
         stoSubBreakItem_Load: function (sto, records, successful, eOpts) {
             var record = HQ.store.findInStore(sto, ['InvtID'], ['']);
             if (!record) {
-                if (HQ.isInsert) {
-                    HQ.store.insertRecord(App.stoSubBreakItem, ['InvtID'], ['']);
-                }
+                var subBreakItem = Ext.create("App.mdlSubBreakItem", {
+                    InvtID: '',
+                    Descr: '',
+                    UnitDesc: ''
+                });
+                sto.insert(0, subBreakItem);
             }
         },
 
