@@ -378,6 +378,7 @@
                                             l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
                                             l.Change.Fn = "cboRequiredType_Change";
                                         })
+                                        
                                     ) // Container
                                     , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
                                     .MinWidth(200)
@@ -510,14 +511,31 @@
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                         })
                                         , HQ.Checkbox().ID("chkPctDiscountByLevel")
-                                        .MarginSpec("5 5 0 10")
+                                        .MarginSpec("5 5 0 10").Hidden(true)
                                         .BoxLabel(Util.GetLang("PctDiscountByLevel")).DataIndex("PctDiscountByLevel")
                                         .Listeners(l =>
                                         {
 
                                             l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                         })
-
+                                        , HQ.Combo().ID("cboProrateAmtType")
+                                        .MarginSpec("5 5 0 0")
+                                        .HQLangCode("ProrateAmtType").HQProcedure("OM21100_pcProrateAmtType").HQColumnShow("Code,Descr").HQAutoLoad(true)
+                                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").DataIndex("ProrateAmtType").LabelWidth(130)
+                                        //.ForceSelection(true)
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .HQParam(new StoreParameterCollection() {
+                                            new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw),
+                                            new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                            new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                        })
+                                        .LoadData()
+                                        .Listeners(l =>
+                                        {
+                                            l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
+                                            l.Focus.Fn = "DiscDefintion.Event.checkExpandCombo";
+                                            //l.Change.Fn = "cboRequiredType_Change";
+                                        })
                                         , HQ.Checkbox().ID("chkDonateGroupProduct")//.Hidden(true)
                                         .MarginSpec("5 5 0 10")
                                         .BoxLabel(Util.GetLang("DonateGroupProduct")).DataIndex("DonateGroupProduct")

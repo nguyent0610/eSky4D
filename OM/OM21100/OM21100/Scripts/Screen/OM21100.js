@@ -822,16 +822,18 @@ var Main = {
             if (App.chkPctDiscountByLevel != undefined) {
                 App.chkPctDiscountByLevel.disable();
             }
-            
+            //App.cboProrateAmtType.setValue("L");
             HQ.common.setRequire(App.frmMain);
             //App.chkRequiredType.setVisible(HQ.showRequiredType);
             App.cboRequiredType.setVisible(HQ.showRequiredType);
             if (!HQ.hidechkPctDiscountByLevel) {
                 App.chkPctDiscountByLevel.hide();
+                App.cboProrateAmtType.hide();
             }
             if (!HQ.hidechkStockPromotion) {
                 App.chkStockPromotion.hide();
             }
+           
         },
 
         frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {

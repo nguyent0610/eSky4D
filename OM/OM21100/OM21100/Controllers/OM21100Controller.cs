@@ -59,6 +59,7 @@ namespace OM21100.Controllers
         private int _lineRefnumber = 0;
         List<OM21100_ptTreeNode_Result> lstAllNode = new List<OM21100_ptTreeNode_Result>();
         List<OM21100_ptTreeNodeCustomer_Result> lstAllNodeCustomer = new List<OM21100_ptTreeNodeCustomer_Result>();
+        private string prorateAmtType = string.Empty;
         // GET: /OM21100/
         public ActionResult Index()
         {
@@ -73,7 +74,7 @@ namespace OM21100.Controllers
                 , allowExport = false
                 , addSameKind = true
                 , showRequiredType = false
-                , hidechkPctDiscountByLevel = false
+                ,hidechkPctDiscountByLevel = false
                 , hideQtyType = false
                 , hidechkStockPromotion = false
                 , hideCoefficientCnv = false
@@ -1395,6 +1396,7 @@ namespace OM21100.Controllers
             var handle = data["cboHandle"];
             var discType = data["cboDiscType"];
             var priorityPromo = data["txtPriorityPromo"];
+            prorateAmtType = data["cboProrateAmtType"];
             var discBreakHandler = new StoreDataHandler(data["lstDiscBreak"]);
             var lstDiscBreak = discBreakHandler.ObjectData<OM21100_pgDiscBreak_Result>()
                         .Where(p => Util.PassNull(p.LineRef) != string.Empty
@@ -3193,6 +3195,12 @@ namespace OM21100.Controllers
 
         private void updateDiscSeq(ref OM_DiscSeq updatedDiscSeq, OM_DiscSeq inputDiscSeq, bool isNew, string[] roles, string handle)
         {
+            bool hidechkPctDiscountByLevel = false;
+             var objConfig = _db.OM21100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+             if (objConfig != null)
+             {
+                 hidechkPctDiscountByLevel = objConfig.HidechkPctDiscountByLevel.HasValue && objConfig.HidechkPctDiscountByLevel.Value;
+             }
             if (isNew)
             {
                 updatedDiscSeq.ResetET();
@@ -3228,6 +3236,14 @@ namespace OM21100.Controllers
             updatedDiscSeq.ExactQty = inputDiscSeq.ExactQty;
             updatedDiscSeq.ExcludeOtherDisc = inputDiscSeq.ExcludeOtherDisc;
             updatedDiscSeq.PctDiscountByLevel = inputDiscSeq.PctDiscountByLevel;
+            if (hidechkPctDiscountByLevel == false || prorateAmtType.PassNull()=="")
+            {
+                updatedDiscSeq.ProrateAmtType = "L";
+            }
+            else
+            {
+                updatedDiscSeq.ProrateAmtType = prorateAmtType;
+            }
             if (!string.IsNullOrEmpty(handle) && handle != "N" && updatedDiscSeq.Status != handle)
             {
                 updatedDiscSeq.Status = handle;
