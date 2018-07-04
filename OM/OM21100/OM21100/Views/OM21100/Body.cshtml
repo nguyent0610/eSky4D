@@ -543,7 +543,7 @@
                                         .BoxLabel(Util.GetLang("CnvDiscAmtToFrItem")).DataIndex("ConvertDiscAmtToFreeItem")
                                         .Listeners(l =>
                                         {
-                                            l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
+                                            //l.Focus.Fn = "DiscDefintion.Event.checkChangeCheckBox";
                                             l.Change.Fn = "DiscDefintion.Event.chkConvertDiscAmtToFreeItem_Change";
                                         })
                                        , HQ.Checkbox().ID("chkStockPromotion")//.Hidden(true)
