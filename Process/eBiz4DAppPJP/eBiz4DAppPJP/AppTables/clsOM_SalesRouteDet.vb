@@ -9,6 +9,7 @@
 '-- Import Libraries --
 Imports HQFramework
 Imports HQFramework.DAL
+Imports HQFramework.Common
 Public Class clsOM_SalesRouteDet
 #Region "Constants"
 	Private Const PP_OM_SalesRouteDet As String = "PP_OM_SalesRouteDet"
