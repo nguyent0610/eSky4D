@@ -1141,6 +1141,7 @@ var Main = {
         },
 
         grdSubBreakItem_beforeEdit: function (editor, e) {
+            if (App.cboStatus.getValue() != _holdStatus) return false;
             if (HQ.isUpdate == false && !HQ.isNew) {
                 return false;
             }
@@ -2186,13 +2187,15 @@ var DiscDefintion = {
             }
         },
         btnSubBreakItemDelete_Click: function (sender, e) {
-            if (App.slmSubBreakItem.selected.items[0] != undefined) {
+            if (App.cboStatus.getValue() == _holdStatus) {
                 if (App.slmSubBreakItem.selected.items[0] != undefined) {
-                    if (App.slmSubBreakItem.selected.items[0].data.InvtID != "") {
-                        HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSubBreakItem)], 'DiscDefintion.Event.deleteDataSubBreakItem', true);
+                    if (App.slmSubBreakItem.selected.items[0] != undefined) {
+                        if (App.slmSubBreakItem.selected.items[0].data.InvtID != "") {
+                            HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSubBreakItem)], 'DiscDefintion.Event.deleteDataSubBreakItem', true);
+                        }
                     }
                 }
-            }
+            }           
         },
         deleteDataSubBreakItem: function(item){
             if (item == "yes") {
@@ -2309,7 +2312,7 @@ var DiscDefintion = {
                 App.chkConvertDiscAmtToFreeItem.setReadOnly(false);
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.enable();
-                App.btnSubBreakItem.enable();
+                //App.btnSubBreakItem.enable();
             }
             else {
                 App.cboProAplForItem.setReadOnly(true);
@@ -2331,7 +2334,7 @@ var DiscDefintion = {
                 App.chkConvertDiscAmtToFreeItem.setReadOnly(true);
                 //App.btnTmpUpload.enable();
                 App.btnDelImg.disable();
-                App.btnSubBreakItem.disable();
+                //App.btnSubBreakItem.disable();
             }
 
             HQ.gridSource = 0;
