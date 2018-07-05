@@ -920,6 +920,7 @@ namespace INProcess
 
                 foreach (DataRow tran in lstTrans.Rows)
                 {
+                    objInvt.GetByKey(tran.String("InvtID"));
                     //// IN_ItemLoc
                     if (tran.String("WhseLoc").PassNull() != "")
                     {
@@ -957,7 +958,7 @@ namespace INProcess
                     //////
 
 
-                    objInvt.GetByKey(tran.String("InvtID"));
+                    //objInvt.GetByKey(tran.String("InvtID"));
                     if (!objItem.GetByKey(tran.String("InvtID"),tran.String("SiteID")))
                     {
                         throw new MessageException(MessageType.Message, "606");
