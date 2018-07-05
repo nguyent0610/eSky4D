@@ -116,6 +116,7 @@
                             .Listeners(lst =>
                             {
                                 lst.Focus.Handler = "HQ.focus='batch';";
+                                lst.Change.Handler = "App.cboHandle.store.reload()";
                             })
                     )
                 ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 3 0")
@@ -149,6 +150,7 @@
                             .HQParam(new StoreParameterCollection()
                             {
                                  new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                 new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw }
                             })
                             .LoadData()
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })

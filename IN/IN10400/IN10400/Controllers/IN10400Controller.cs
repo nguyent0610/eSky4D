@@ -65,7 +65,7 @@ namespace IN10400.Controllers
 
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -134,7 +134,7 @@ namespace IN10400.Controllers
             }            
         }
 
-        public ActionResult GetLot(string invtID, string siteID, string batNbr, string branchID,string whseLoc,int showWhseLoc)
+        public ActionResult GetLot(string invtID, string siteID, string batNbr, string branchID, string whseLoc, int showWhseLoc, int cnvFact)
         {
             List<IN10400_pdGetLot_Result> lstLot = new List<IN10400_pdGetLot_Result>();
             //List<IN_ItemLot> lstLotDB = _app.IN_ItemLot.Where(p => p.SiteID == siteID && p.InvtID == invtID && p.QtyAvail > 0).ToList();
@@ -143,6 +143,7 @@ namespace IN10400.Controllers
                 List<IN10400_pdGetLot_Result> lstLotDB = _app.IN10400_pdGetLot(siteID, invtID, Current.UserName, Current.CpnyID, Current.LangID).Where(p=>p.WhseLoc==whseLoc).ToList();
                 foreach (var item in lstLotDB)
                 {
+                    item.QtyAvail = Math.Floor(item.QtyAvail / cnvFact);
                     lstLot.Add(item);
                 }
                 List<IN_LotTrans> lstLotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID && p.WhseLoc==whseLoc).ToList();
@@ -166,6 +167,7 @@ namespace IN10400.Controllers
                 List<IN10400_pdGetLot_Result> lstLotDB = _app.IN10400_pdGetLot(siteID, invtID, Current.UserName, Current.CpnyID, Current.LangID).ToList();
                 foreach (var item in lstLotDB)
                 {
+                    item.QtyAvail = Math.Floor(item.QtyAvail / cnvFact);
                     lstLot.Add(item);
                 }
                 List<IN_LotTrans> lstLotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.InvtID == invtID && p.SiteID == siteID).ToList();

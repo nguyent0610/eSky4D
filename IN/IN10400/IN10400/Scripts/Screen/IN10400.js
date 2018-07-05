@@ -556,7 +556,7 @@ var cboBatNbr_Change = function (item, newValue, oldValue) {
         bindBatch(record);
     } else {
         if (HQ.recentRecord != record) {
-
+            App.cboBatNbr.store.reload();
         }
         else {
         }
@@ -705,7 +705,8 @@ var showLot = function (record, loadCombo) {
                 branchID: App.txtBranchID.getValue(),
                 batNbr: App.cboBatNbr.getValue(),
                 whseLoc: App.cboWhseLoc.getValue(),
-                showWhseLoc: HQ.showWhseLoc
+                showWhseLoc: HQ.showWhseLoc,
+                cnvFact: record.data.CnvFact
             }
         });
     }
@@ -764,6 +765,15 @@ var deleteHeader = function (item) {
 
 var deleteTrans = function (item) {
     if (item == 'yes') {
+        var count = 0;
+        for (var i = 0; i < App.stoTrans.data.length; i++) {
+            if (App.stoTrans.data.items[i].data.InvtID != '')
+                count++;
+        }
+        if (count == 1) {
+            HQ.message.show(2018062501);
+            return false;
+        }
         var det = App.smlTrans.selected.items[0].data;
         App.stoLotTrans.clearFilter();
         for (i = App.stoLotTrans.data.items.length - 1; i >= 0; i--) {
@@ -1655,7 +1665,8 @@ var getLotQtyAvail = function (row) {
     if (!Ext.isEmpty(lot)) {
         if (qty <= 0) {
             qty = Math.abs(qty);
-            qtyAvail = HQ.util.mathRound(row.data.UnitMultDiv == "M" ? (lot.QtyAvail - qty) / row.data.CnvFact : (lot.QtyAvail - qty) * row.data.CnvFact, 2);
+            qtyAvail = (lot.QtyAvail - qty);
+            //qtyAvail = HQ.util.mathRound(row.data.UnitMultDiv == "M" ? (lot.QtyAvail - qty) / row.data.CnvFact : (lot.QtyAvail - qty) * row.data.CnvFact, 2);
             if (qtyAvail < 0) {
                 HQ.message.show(1043, [row.data.InvtID + " " + row.data.LotSerNbr, row.data.SiteID], "", true);
                 qty = 0;
@@ -1699,8 +1710,10 @@ var getLotQtyAvail = function (row) {
             qtyAvail = 0;
         }
     }
-    App.lblLotQtyAvail.setText("Lot " + row.data.LotSerNbr + " - " + HQ.common.getLang('qtyavail') + ": " + qtyAvail + " " + row.data.UnitDesc);
-
+    if(qtyAvail > 0)
+        App.lblLotQtyAvail.setText("Lot " + row.data.LotSerNbr + " - " + HQ.common.getLang('qtyavail') + ": " + HQ.util.mathFloor(qtyAvail/row.data.CnvFact, 0) + " " + row.data.UnitDesc);
+    else
+        App.lblLotQtyAvail.setText("Lot " + row.data.LotSerNbr + " - " + HQ.common.getLang('qtyavail') + ": " + qtyAvail + " " + row.data.UnitDesc);
 };
 
 var renderRowNumber = function (value, meta, record) {
