@@ -397,7 +397,7 @@ var eventNew = function (sto, grd, keys) {
 }
 
 var btnLot_Click = function () {
-    if (!Ext.isEmpty(this.record.invt)) {
+    //if (!Ext.isEmpty(this.record.invt)) {
         if (Ext.isEmpty(this.record.invt)) {
             this.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [this.record.data.InvtID]);
         }
@@ -405,7 +405,7 @@ var btnLot_Click = function () {
         if (!Ext.isEmpty(this.record.invt.LotSerTrack) && this.record.invt.LotSerTrack != 'N' && !Ext.isEmpty(this.record.data.UnitDesc)) {
             showLot(this.record, true);
         }
-    }
+    //}
 }
 var btnLotOK_Click = function () {
     if (!App.grdLot.isLock) {
@@ -1313,7 +1313,8 @@ var calcLot = function (record) {
                     branchID: App.txtBranchID.getValue(),
                     batNbr: App.cboBatNbr.getValue(),
                     whseLoc: App.cboWhseLoc.getValue(),
-                    showWhseLoc: HQ.showWhseLoc
+                    showWhseLoc: HQ.showWhseLoc,
+                    cnvFact: det.CnvFact
                 },
                 det: record.data,
                 row: record,
@@ -1363,9 +1364,9 @@ var calcLot = function (record) {
                                 newLot.data.CnvFact = 1;
                                 newLot.data.UnitMultDiv = 'M';
                                 newLot.data.Qty = newQty;
-                                newLot.data.UnitDesc = options.row.invt.StkUnit;
+                                newLot.data.UnitDesc = det.UnitDesc;
                                 if (record.invt.ValMthd == "A" || record.invt.ValMthd == "E") {
-                                    newLot.data.UnitPrice = newLot.data.UnitCost = site.AvgCost;
+                                    newLot.data.UnitPrice = newLot.data.UnitCost = Math.round(det.UnitMultDiv == "M" ? det.UnitPrice / det.CnvFact : det.UnitPrice * det.CnvFact);
                                 } else {
                                     newLot.data.UnitPrice = newLot.data.UnitCost = 0;
                                 }
@@ -1421,7 +1422,8 @@ var showLot = function (record, loadCombo) {
                 branchID: App.txtBranchID.getValue(),
                 batNbr: App.cboBatNbr.getValue(),
                 whseLoc: App.cboWhseLoc.getValue(),
-                showWhseLoc: HQ.showWhseLoc
+                showWhseLoc: HQ.showWhseLoc,
+                cnvFact: record.data.CnvFact
             }
         });
     }

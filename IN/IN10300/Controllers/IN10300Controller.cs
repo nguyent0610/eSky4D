@@ -139,7 +139,7 @@ namespace IN10300.Controllers
             return this.Store(lstTrans);
         }
 
-        public ActionResult GetLot(string invtID, string siteID, string batNbr, string branchID, string whseLoc, int showWhseLoc)
+        public ActionResult GetLot(string invtID, string siteID, string batNbr, string branchID, string whseLoc, int showWhseLoc, int cnvFact)
         {
             List<IN10300_pdGetLot_Result> lstLot = new List<IN10300_pdGetLot_Result>();
             List<IN10300_pdGetLot_Result> lstLotDB = new List<IN10300_pdGetLot_Result>();
@@ -148,6 +148,7 @@ namespace IN10300.Controllers
                 lstLotDB = _app.IN10300_pdGetLot(siteID, invtID, Current.UserName, Current.CpnyID, Current.LangID).Where(p => p.QtyAvail > 0 && p.WhseLoc==whseLoc).ToList();
                 foreach (var item in lstLotDB)
                 {
+                    item.QtyAvail = Math.Floor(item.QtyAvail / cnvFact);
                     lstLot.Add(item);
                 }
 
@@ -172,6 +173,7 @@ namespace IN10300.Controllers
                 lstLotDB = _app.IN10300_pdGetLot(siteID, invtID, Current.UserName, Current.CpnyID, Current.LangID).Where(p => p.QtyAvail > 0).ToList();
                 foreach (var item in lstLotDB)
                 {
+                    item.QtyAvail = Math.Floor(item.QtyAvail / cnvFact);
                     lstLot.Add(item);
                 }
 

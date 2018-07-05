@@ -463,7 +463,7 @@
                                 .BlankText(Util.GetLangPrefix("Input", "ToSite"))
                                 .Width(250)
                                 .HQHeightWidth(400, 300)
-                                .ForceSelection(true)
+                                .ForceSelection(false)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection(){
                                     new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
@@ -481,7 +481,8 @@
                                     lst.Expand.Handler = "if(Ext.isEmpty(App.cboToCpnyID.getValue())) App.cboToSiteID.collapse();";
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();} App.cboToWhseLoc.setValue('');";
                                     lst.Change.Fn = "cboToSiteID_Change";
-                                    lst.Focus.Handler = "HQ.focus='batch';";
+                                    lst.Focus.Handler = "HQ.focus='batch';App.cboToSiteID.forceSelection=true;";
+                                    lst.Blur.Handler = "App.cboToSiteID.forceSelection=false;";
                                 })                            
                             
                             ,HQ.Combo().ID("cboToWhseLoc")// Vị Trí kho chuyển
@@ -638,7 +639,7 @@
                                 .Layout(LayoutType.VBox)
                                 .Items(                                                            
                                      HQ.DateField().ID("txtExpectedDate")
-                                         .DataIndex("ExpectedDate").Tag("X")
+                                         .DataIndex("ExpectedDate")//.Tag("X")
                                          .Name("ExpectedDate")
                                          .HQLangCode("ExpectedDate")
                                          .AllowBlank(false)
