@@ -180,6 +180,7 @@ namespace PJPProcess
                         objmaster.WeekofVisit = r["WeekofVisit"].ToString();
                         objmaster.Crtd_User = Current.UserName;
                         objmaster.Crtd_Prog = "OM23800";
+                        objmaster.ExtendRoute = r["ExtendRoute"].ToBool();
                         if (Convert.ToBoolean(r["Del"]))
                         {
                            
@@ -211,6 +212,7 @@ namespace PJPProcess
                                     dtRow["VisitDate"] = objdetail.VisitDate; ;
                                     dtRow["DayofWeek"] = objdetail.DayofWeek;
                                     dtRow["WeekNbr"] = objdetail.WeekNbr;
+                                    dtRow["ExtendRoute"] = objdetail.ExtendRoute;
                                     dtOm_SalesRouteDet.Rows.Add(dtRow);
                                 }
                             }
@@ -1010,6 +1012,7 @@ namespace PJPProcess
                         objOM_SalesRouteDet.LUpd_Datetime = DateTime.Now;
                         objOM_SalesRouteDet.LUpd_Prog = user;
                         objOM_SalesRouteDet.LUpd_User = user;
+                        objOM_SalesRouteDet.ExtendRoute = objSaleMaster.ExtendRoute;
                         dMon = GetDateFromDayofWeek(Fromdate.Year, i, "Monday");
                         dTue = GetDateFromDayofWeek(Fromdate.Year, i, "Tuesday");
                         dWed = GetDateFromDayofWeek(Fromdate.Year, i, "Wednesday");
@@ -1218,6 +1221,7 @@ namespace PJPProcess
             objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
             objOM_SalesRouteDet1.LUpd_Prog = prog;
             objOM_SalesRouteDet1.LUpd_User = user;
+            objOM_SalesRouteDet1.ExtendRoute = objSaleMaster.ExtendRoute;
             return objOM_SalesRouteDet1;
         }
 
