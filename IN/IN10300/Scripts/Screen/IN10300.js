@@ -450,7 +450,7 @@ var btnLotOK_Click = function () {
         var lineQty = (det.UnitMultDiv == "M" ? qty / det.CnvFact : det.Qty * det.CnvFact)
         if (lineQty % 1 > 0) {
             App.winLot.record.data.Qty = qty;
-            App.winLot.record.data.UnitDesc = App.winLot.record.invt.StkUnit;
+            //App.winLot.record.data.UnitDesc = App.winLot.record.invt.StkUnit;
             App.winLot.record.data.UnitRate = 1;
             App.winLot.record.data.UnitMultDiv = "M";
             if (App.winLot.record.invt.ValMthd == "A" || App.winLot.record.invt.ValMthd == "E") {
